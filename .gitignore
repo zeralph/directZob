@@ -1,0 +1,7 @@
+.vs
+x64/Debug
+x64/Release
+fontExport/.vs
+fontExport/Debug
+fontExport/Release
+fontExport/obj
