@@ -85,7 +85,7 @@ void Matrix4x4::Mul(const Matrix4x4* m)
 							(m_data[2][2] * m->m_data[2][2]) +
 							(m_data[1][3] * m->m_data[3][2]);
 
-	tmpMul.m_data[2][3] =	(m_data[3][0] * m->m_data[0][2]) +
+	tmpMul.m_data[3][2] =	(m_data[3][0] * m->m_data[0][2]) +
 							(m_data[3][1] * m->m_data[1][2]) +
 							(m_data[3][2] * m->m_data[2][2]) +
 							(m_data[3][3] * m->m_data[3][2]);
