@@ -30,6 +30,7 @@
     <ClInclude Include="TextureTest.h" />
     <ClInclude Include="Types.h" />
     <ClInclude Include="Vector2.h" />
+    <ClInclude Include="Vector3.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Color.cpp" />
@@ -39,6 +40,7 @@
     <ClCompile Include="Matrix4x4.cpp" />
     <ClCompile Include="Text2D.cpp" />
     <ClCompile Include="Vector2.cpp" />
+    <ClCompile Include="Vector3.cpp" />
     <ClCompile Include="WinMiniFB.c" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

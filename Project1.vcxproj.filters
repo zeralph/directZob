@@ -27,9 +27,6 @@
     <ClCompile Include="main.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="Matrix4x4.cpp">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClCompile>
     <ClCompile Include="Text2D.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
@@ -37,6 +34,12 @@
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="Vector2.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Vector3.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Matrix4x4.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
@@ -49,9 +52,6 @@
     </ClInclude>
     <ClInclude Include="Engine.h">
       <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Matrix4x4.h">
-      <Filter>Fichiers sources</Filter>
     </ClInclude>
     <ClInclude Include="text2D.h">
       <Filter>Fichiers d%27en-tête</Filter>
@@ -72,6 +72,12 @@
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="TextureTestAlpha.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector3.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="Matrix4x4.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>

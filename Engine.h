@@ -11,6 +11,7 @@
 #include "Matrix4x4.h"
 #include <stdarg.h>
 #include "Vector2.h"
+#include "Vector3.h"
 #include "Texture.h"
 
 class Engine
