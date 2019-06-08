@@ -13,7 +13,7 @@
 #include "Vector2.h"
 #include "Vector3.h"
 #include "Texture.h"
-
+#include "Camera.h"
 class Engine
 {
 public:
@@ -38,7 +38,13 @@ public:
 	void DrawString(const Matrix2x2* matrix, std::string s, const uint color, BufferData* bufferData);
 	void DrawChar(const Matrix2x2* matrix, char c, const uint color, BufferData* bufferData);
 	void DrawBuffer(const Matrix2x2* matrix, const uint color, const uint* buffer, const int bufferWidth, const int bufferHeight, BufferData* bufferData);
+
+	void DrawTriangle(const Vector2* va, const Vector2* vb, const Vector2* vc, const uint color, BufferData* bufferData);
+
 	void GetPixelColor(Color* color, int x, int y);
+
+	const Camera* GetCamera() const { return m_camera; }
+
 	int Update();
 	inline ulong GetCurrentFrame() {return m_currentFrame;}
 	inline float GetFps() { return m_fps; }
@@ -53,7 +59,6 @@ private:
 
 	void FillBottomFlatTriangle(Vector2* v1, Vector2* v2, Vector2* v3, const uint color, BufferData* bufferData);
 	void FillTopFlatTriangle(Vector2* v1, Vector2* v2, Vector2* v3, const uint color, BufferData* bufferData);
-	void DrawTriangle(const Vector2* va, const Vector2* vb, const Vector2* vc, const uint color, BufferData* bufferData);
 	void sortVerticesAscendingByY(Vector2* v1, Vector2* v2, Vector2* v3);
 	void DrawHorizontalLine(const float x1, const float x2, const float y, const uint color, BufferData* bufferData);
 	int m_width;
@@ -63,7 +68,7 @@ private:
 	float m_fps;
 	ulong m_currentFrame;
 	uint* m_buffer;
-
+	Camera* m_camera;
 	BufferData m_bufferData;
 
 };

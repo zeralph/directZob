@@ -7,6 +7,8 @@ public:
 	Camera();
 	~Camera();
 
+	void setProjectionMatrix(const float angleOfView, const float near, const float far);
+
 	inline const Matrix4x4* GetViewMatrix() const { return &m_viewMatrix; }
 	inline const Matrix4x4* GetProjectionMatrix() const {return &m_projMatrix;}
 

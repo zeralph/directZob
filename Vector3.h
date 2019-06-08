@@ -11,6 +11,8 @@ public:
 	static const Vector3 Vector3Y;
 	static const Vector3 Vector3Z;
 
+	inline void Normalize() {if (w != 1) {x /= w; y /= w; z /= w; w = 1.0f;};}
+
 	bool operator== (const Vector3& v) { return (x == v.x && y == v.y && v.z == z && w == v.w); }
 
 public:

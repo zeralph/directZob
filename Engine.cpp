@@ -17,6 +17,10 @@ Engine::Engine(int width, int height)
 	m_bufferData.buffer = m_buffer;
 	m_bufferData.size = m_width * m_height;
 	m_tick = clock();
+
+	m_camera = new Camera();
+	m_camera->setProjectionMatrix(90.0f, 0.01f, 100.0f);
+
 }
 
 Engine::~Engine()
@@ -316,7 +320,7 @@ void Engine::DrawTriangle(const Vector2* va, const Vector2* vb, const Vector2* v
 void Engine::DrawHorizontalLine(const float x1, const float x2, const float y, const uint color, BufferData* bufferData)
 {
 	int k;
-	float alpha = Color::GetAlpha(color);
+	float alpha = 1;// Color::GetAlpha(color);
 	uint* buffer = bufferData->buffer;
 	if (alpha != 0 &&y>=0 && y<m_height)
 	{
