@@ -23,9 +23,9 @@ int main()
 		rot += 0.8f;
 		//rot = 47.00;
 		m.Identity();
-		m.SetTranslation(-150, -150);
+		m.SetTranslation(-300, -300);
 		m.SetScale(64, 64);
-		m.SetRotation(rot);
+		//m.SetRotation(rot);
 		m_engine->DrawTexture(&m, testTest, m_engine->GetBufferData());
 
 		for (int i = 100; i < 250; i += 8)
@@ -34,7 +34,7 @@ int main()
 			m_engine->DrawLine((float)i, 0, (float)i, 600, Color::Red.GetRawValue(), m_engine->GetBufferData());
 		}
 
-		m.Identity();
+		m.Identity(); 
 		m.SetTranslation(500, 500);
 		m_engine->DrawChar(&m, 'A', Color::White.GetRawValue(), m_engine->GetBufferData());
 
