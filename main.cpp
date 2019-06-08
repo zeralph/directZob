@@ -1,6 +1,8 @@
 #include "Engine.h"
+#include "Cube.h"
 #include "TextureTest.h"
 #include "TextureTestAlpha.h"
+
 int main()
 {
 	Engine* m_engine = new Engine(800, 600);
@@ -14,6 +16,7 @@ int main()
 	char frameCharBuffer[sizeof(ulong)];
 	const TextureTestAlpha* testTest = new TextureTestAlpha();
 	Matrix2x2 m;
+	Cube cube;
 	int state;
 	for (;;)
 	{
@@ -26,7 +29,7 @@ int main()
 		m.SetTranslation(-300, -300);
 		m.SetScale(64, 64);
 		//m.SetRotation(rot);
-		m_engine->DrawTexture(&m, testTest, m_engine->GetBufferData());
+		//m_engine->DrawTexture(&m, testTest, m_engine->GetBufferData());
 
 		for (int i = 100; i < 250; i += 8)
 		{
@@ -59,10 +62,13 @@ int main()
 			m.SetScale(1, 1);
 			m.SetShear(0.5, 0);
 			m.SetRotation(rot);
-			m_engine->DrawTexture(&m, testTest, m_engine->GetBufferData());
+			//m_engine->DrawTexture(&m, testTest, m_engine->GetBufferData());
 		}
 
-
+		cube.Init();
+		cube.SetSCale(0.5f, 0.5f, 1);
+		cube.SetRotation(rot, rot, rot);
+		cube.Draw(m_engine);
 
 
 		state = m_engine->Update();

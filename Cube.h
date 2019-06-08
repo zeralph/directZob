@@ -3,33 +3,30 @@
 #include "Vector3.h"
 #include "Matrix4x4.h"
 #include "Engine.h"
+#include "Color.h"
 
 class Cube
 {
 public:
 	Cube();
 	~Cube();
+	void Init();
+	inline void SetSCale(float x, float y, float z) { m_modelMatrix.SetScale(x, y, z); }
+	inline void SetRotation(float x, float y, float z) { m_modelMatrix.SetRotation(x, y, z); }
 
 	void Draw(Engine* engine);
 
 private:
 
-	Matrix4x4	m_modelMatrix;
 
-	Vector3 m_vertices[8] = {	Vector3(-1.0f, 1.0f, -1.0f), 
-								Vector3(1.0f, 1.0f, -1.0f), 
-								Vector3(1.0f, -1.0f, -1.0f), 
-								Vector3(-1.0f, -1.0f, -1.0f), 
-								Vector3(-1.0f, 1.0f, 1.0f), 
-								Vector3(1.0f, 1.0f, 1.0f), 
-								Vector3(1.0f, -1.0f, 1.0f), 
-								Vector3(-1.0f, -1.0f, 1.0f) 
-							};
-	uint m_verticesIndex[36] = {0, 1, 3, 1, 2, 3, 
-								1, 5, 2, 5, 6, 2,
-								5, 4, 6, 4, 7, 6,
-								4, 0, 7, 0, 3, 7,
-								4, 5, 0, 5, 1, 0,
-								7, 6, 3, 6, 2, 3,
-							};
+	inline void ReinitVertices() { memcpy(&m_vertices, &m_verticesData, sizeof(Vector3) * NB_VERTICES); };
+
+	static const uint NB_VERTICES = 8;
+	static const uint NB_VERTICES_INDEX = 36;
+
+	Matrix4x4	m_modelMatrix;
+	Vector3		m_vertices[NB_VERTICES];
+
+	static const Vector3 m_verticesData[NB_VERTICES];
+	static const uint m_verticesIndex[NB_VERTICES_INDEX];
 };

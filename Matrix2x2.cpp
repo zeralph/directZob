@@ -3,10 +3,6 @@
 #include <stdio.h>
 #include <string.h>
 
-#ifndef M_PI
-#define M_PI 3.14159265358979323846
-#endif
-
 static Matrix2x2 tmp;
 static Matrix2x2 tmpMul;
 static float identityArray[9] = {1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f};
