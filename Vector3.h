@@ -13,6 +13,9 @@ public:
 
 	inline void Normalize() {if (w != 1) {x /= w; y /= w; z /= w; w = 1.0f;};}
 
+	static float Dot(const Vector3* v1, const Vector3* v2);
+	static Vector3 Cross(const Vector3* v1, const Vector3* v2);
+
 	bool operator== (const Vector3& v) { return (x == v.x && y == v.y && v.z == z && w == v.w); }
 
 public:

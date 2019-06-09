@@ -174,15 +174,15 @@ void Engine::DrawLine(const float xa, const float ya, const float xb, const floa
 	}
 }
 
-void Engine::CopyBuffer(uint* source, uint * dest, float blend)
+void Engine::CopyBuffer(uint* source, uint * dest)
 {
 	int v, r, g, b;
 	for (int i = 0; i < m_width*m_height; i++)
 	{
 		v = source[i];
-		r = (int)(float)((v & 0xFF0000) >> 16) *blend;
-		g = (int)(float)((v & 0x00FF00) >> 8) *blend;
-		b = (int)(float)((v & 0x0000FF)) *blend;
+		r = (int)(float)((v & 0xFF0000) >> 16);
+		g = (int)(float)((v & 0x00FF00) >> 8);
+		b = (int)(float)((v & 0x0000FF));
 		dest[i] = MFB_RGB(r, g, b);
 	}
 }
@@ -208,15 +208,15 @@ void Engine::DrawTexture(const Matrix2x2* matrix, const Texture* texture, Buffer
 	Matrix2x2 m;
 	const uint w = texture->GetWidth();
 	const uint h = texture->GetHeight();
-	for (int j = 0; j < h; j++)
+	for (uint j = 0; j < h; j++)
 	{
-		for (int i = 0; i < w; i++)
+		for (uint i = 0; i < w; i++)
 		{
 			v = { (float)i, (float)j };
 			m.CopyFrom(matrix);
-			m.SetTranslation(i, j);
+			m.SetTranslation((float)i, (float)j);
 			int c = texture->GetData()[j * w + i];
-			DrawPixel(&m, c, w / 2, h / 2, bufferData);
+			DrawPixel(&m, c, (float)(w / 2), (float)(h / 2), bufferData);
 		}
 	}
 }
@@ -235,8 +235,8 @@ void Engine::DrawBuffer(const Matrix2x2* matrix, const uint color, const uint* b
 				v.x = (float)i;
 				v.y = (float)j;
 				m.CopyFrom(matrix);
-				m.SetTranslation(i, j);
-				DrawPixel(&m, color, bufferWidth / 2, bufferHeight / 2, bufferData);
+				m.SetTranslation((float)i, (float)j);
+				DrawPixel(&m, color, (float)(bufferWidth / 2), (float)(bufferHeight / 2), bufferData);
 			}
 		}
 	}
@@ -260,6 +260,11 @@ void Engine::DrawPixel(const Matrix2x2* matrix, const uint color, const float dx
 
 void Engine::FillBottomFlatTriangle(Vector2* v1, Vector2* v2, Vector2* v3, const uint color, BufferData* bufferData)
 {
+	float xMin = fmin(v1->x, fmin(v2->x, v3->x));
+	float xMax = fmax(v1->x, fmax(v2->x, v3->x));
+	float yMin = fmin(v1->y, fmin(v2->y, v3->y));
+	float yMax = fmax(v1->y, fmax(v2->y, v3->y));
+
 	float invslope1 = (v2->x - v1->x) / (v2->y - v1->y);
 	float invslope2 = (v3->x - v1->x) / (v3->y - v1->y);
 
@@ -270,6 +275,130 @@ void Engine::FillBottomFlatTriangle(Vector2* v1, Vector2* v2, Vector2* v3, const
 		DrawHorizontalLine((int)curx1, (int)curx2, scanlineY, color, bufferData);
 		curx1 += invslope1;
 		curx2 += invslope2;
+	}
+}
+
+
+void Engine::DrawTriangle2(const Vector2* va, const Vector2* vb, const Vector2* vc, const Texture* tex, BufferData* bufferData)
+{
+	Vector2 v1 = Vector2((int)va->x, (int)va->y);
+	Vector2 v2 = Vector2((int)vb->x, (int)vb->y);
+	Vector2 v3 = Vector2((int)vc->x, (int)vc->y);
+
+	/* at first sort the three vertices by y-coordinate ascending so v1 is the topmost vertice */
+	sortVerticesAscendingByY(&v1, &v2, &v3);
+
+	/* here we know that v1.y <= v2.y <= v3.y */
+	/* check for trivial case of bottom-flat triangle */
+	if (v2.y == v3.y)
+	{
+		FillBottomFlatTriangle2(&v1, &v2, &v3, tex, bufferData);
+	}
+	/* check for trivial case of top-flat triangle */
+	else if (v1.y == v2.y)
+	{
+		FillTopFlatTriangle2(&v1, &v2, &v3, tex, bufferData);
+	}
+	else
+	{
+		/* general case - split the triangle in a topflat and bottom-flat one */
+		Vector2 v4 = Vector2((int)(v1.x + ((float)(v2.y - v1.y) / (float)(v3.y - v1.y)) * (v3.x - v1.x)), v2.y);
+		FillBottomFlatTriangle2(&v1, &v2, &v4, tex, bufferData);
+		FillTopFlatTriangle2(&v2, &v4, &v3, tex, bufferData);
+	}
+}
+
+void Engine::FillBottomFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, const Texture* tex,  BufferData* bufferData)
+{
+	uint* buffer = bufferData->buffer;
+	float xMin = fmin(v1->x, fmin(v2->x, v3->x));
+	float xMax = fmax(v1->x, fmax(v2->x, v3->x));
+	float yMin = fmin(v1->y, fmin(v2->y, v3->y));
+	float yMax = fmax(v1->y, fmax(v2->y, v3->y));
+
+	float invslope1 = (v2->x - v1->x) / (v2->y - v1->y);
+	float invslope2 = (v3->x - v1->x) / (v3->y - v1->y);
+
+	float curx1 = v1->x;
+	float curx2 = v1->x;
+	for (int scanlineY = v1->y; scanlineY <= v2->y; scanlineY++)
+	{
+		int k;
+		if (scanlineY >= 0 && scanlineY < m_height)
+		{
+			if (curx1 != curx2)
+			{
+				float a = fmin(curx1, curx2);
+				float b = fmax(curx1, curx2);
+				b++;
+				a = (int)(a < 0.0f ? 0.0f : a);
+				b = (int)(b > m_width ? m_width : b);
+				for (int i = a; i < b; i++)
+				{
+					float u = (float)(b - i) / (float)(b - a);
+					float v = (float)(v2->y - scanlineY) / (float)(v2->y - v1->y);
+
+					//v = 1.0f / (1.0f / (yMin * (1.0f - v)) + (1.0f / yMax) * v);
+					//u = v * ((xMin / yMin) * (1.0f - u) + (xMax / yMax) * u);
+					//u = (float)(xMax - i) / (float)(xMax - xMin);
+					// v = (float)(yMax - scanlineY) / (float)(yMax - yMin);
+
+					v = 1.0f - v;
+
+					u *= (int)tex->GetWidth();
+					v *= (int)tex->GetHeight();
+
+					uint z = (int)v * tex->GetHeight() +(int)u;
+					uint c = tex->GetData()[z];
+					if(c == 0) c = 0xFFFF;
+					k = scanlineY * m_width + i;
+					buffer[k] = c;
+				}
+			}
+		}
+		curx1 += invslope1;
+		curx2 += invslope2;
+	}
+}
+
+void Engine::FillTopFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, const Texture* tex, BufferData* bufferData)
+{
+	uint* buffer = bufferData->buffer;
+	float xMin = fmin(v1->x, fmin(v2->x, v3->x));
+	float xMax = fmax(v1->x, fmax(v2->x, v3->x));
+	float yMin = fmin(v1->y, fmin(v2->y, v3->y));
+	float yMax = fmax(v1->y, fmax(v2->y, v3->y));
+
+	float invslope1 = (v3->x - v1->x) / (v3->y - v1->y);
+	float invslope2 = (v3->x - v2->x) / (v3->y - v2->y);
+
+	float curx1 = v3->x;
+	float curx2 = v3->x;
+	for (int scanlineY = v3->y; scanlineY > v1->y; scanlineY--)
+	{
+		int k;
+		if (scanlineY >= 0 && scanlineY < m_height)
+		{
+			if (curx1 != curx2)
+			{
+				float a = fmin(curx1, curx2);
+				float b = fmax(curx1, curx2);
+				b++;
+				a = (int)(a < 0.0f ? 0.0f : a);
+				b = (int)(b > m_width ? m_width : b);
+				for (int i = a; i < b; i++)
+				{
+					int u = (int)((float)(b - i) / (b - a) * tex->GetWidth());
+					int v = (int)((float)(v1->y - scanlineY) / (v1->y - v3->y) * tex->GetHeight());
+					int z = v * tex->GetHeight() + u;
+					uint c = tex->GetData()[z];
+					k = scanlineY * m_width + i;
+					buffer[k] = c;
+				}
+			}
+		}
+		curx1 -= invslope1;
+		curx2 -= invslope2;
 	}
 }
 

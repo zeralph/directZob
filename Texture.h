@@ -9,6 +9,6 @@ public:
 
 	const uint width = 64;
 	const uint height = 64;
-	const uint* data = NULL;
+	//const uint* data = NULL;
 	//const uint* data = &internal_data[0];
 };

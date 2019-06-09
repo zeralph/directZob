@@ -26,11 +26,18 @@ public:
 		uint* buffer;
 	};
 
+	enum CullMode
+	{
+		None = 0,
+		CullClockwiseFace,
+		CullCounterClockwiseFace
+	};
+
 	Engine(int width, int height);
 	~Engine();
 
 	void ClearBuffer(const Color* color);
-	void CopyBuffer(uint* source, uint * dest, float blend);
+	void CopyBuffer(uint* source, uint * dest);
 	void DrawPixel(const Matrix2x2* matrix, const uint color, const float dx, const float dy, BufferData* bufferData);
 	void DrawTexture(const Matrix2x2* matrix, const Texture* texture, BufferData* bufferData);
 	void DrawLine(const float xa, const float  ya, const float xb, const float yb, const uint c, BufferData* bufferData);
@@ -40,6 +47,8 @@ public:
 	void DrawBuffer(const Matrix2x2* matrix, const uint color, const uint* buffer, const int bufferWidth, const int bufferHeight, BufferData* bufferData);
 
 	void DrawTriangle(const Vector2* va, const Vector2* vb, const Vector2* vc, const uint color, BufferData* bufferData);
+	void DrawTriangle2(const Vector2* va, const Vector2* vb, const Vector2* vc, const Texture* tex, BufferData* bufferData);
+
 
 	void GetPixelColor(Color* color, int x, int y);
 
@@ -61,6 +70,10 @@ private:
 	void FillTopFlatTriangle(Vector2* v1, Vector2* v2, Vector2* v3, const uint color, BufferData* bufferData);
 	void sortVerticesAscendingByY(Vector2* v1, Vector2* v2, Vector2* v3);
 	void DrawHorizontalLine(const float x1, const float x2, const float y, const uint color, BufferData* bufferData);
+
+	void FillTopFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, const Texture* tex, BufferData* bufferData);
+	void FillBottomFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, const Texture* tex, BufferData* bufferData);
+
 	int m_width;
 	int m_height;
 	int m_curBuffer;
