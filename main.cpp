@@ -22,8 +22,14 @@ int main()
 	{
 		frame++;
 		m_engine->ClearBuffer(&Color::Black);
+		m.Identity();
+		m.SetTranslation(5, 5);
+		frameCharBuffer[0] = '\0';
+		_ultoa_s((long)m_engine->GetFps(), frameCharBuffer, 10);
+		m_engine->DrawString(&m, frameCharBuffer, Color::White.GetRawValue(), m_engine->GetBufferData());
 
-		rot += 0.08f;
+		rot += 0.48f;
+		
 		//rot = 47.00;
 		m.Identity();
 		m.SetTranslation(-300, -300);
@@ -45,13 +51,6 @@ int main()
 		//m_engine->DrawString(&m, "123\n456", Color::Magenta.GetRawValue(), m_engine->GetBufferData());
 		//m_engine->DrawCircle((float)x, (float)y, 50, Color::White.GetRawValue(), m_engine->GetBufferData());
 		
-		//m.Identity();
-		//m.SetTranslation(5, 5);
-		//frameCharBuffer[0] = '\0';
-		//_ultoa_s((long)m_engine->GetFps(), frameCharBuffer, 10);
-		//m_engine->DrawString(&m, frameCharBuffer, Color::White.GetRawValue(), m_engine->GetBufferData());
-
-
 		for (int i = 0; i < 50; i++)
 		{
 			m.Identity();
