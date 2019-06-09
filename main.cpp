@@ -16,14 +16,14 @@ int main()
 	char frameCharBuffer[sizeof(ulong)];
 	const TextureTestAlpha* testTest = new TextureTestAlpha();
 	Matrix2x2 m;
-	Cube cube;
+	Cube cube = Cube(testTest);
 	int state;
 	for (;;)
 	{
 		frame++;
 		m_engine->ClearBuffer(&Color::Black);
 
-		rot += 0.8f;
+		rot += 0.08f;
 		//rot = 47.00;
 		m.Identity();
 		m.SetTranslation(-300, -300);
@@ -31,28 +31,25 @@ int main()
 		//m.SetRotation(rot);
 		//m_engine->DrawTexture(&m, testTest, m_engine->GetBufferData());
 
-		for (int i = 100; i < 250; i += 8)
-		{
-			m_engine->DrawLine(0, (float)i, 800, (float)i, Color::Red.GetRawValue(), m_engine->GetBufferData());
-			m_engine->DrawLine((float)i, 0, (float)i, 600, Color::Red.GetRawValue(), m_engine->GetBufferData());
-		}
+		m_engine->DrawLine(0, 300, 800, 300, Color::White.GetRawValue(), m_engine->GetBufferData());
+		m_engine->DrawLine(400, 0, 400, 600, Color::White.GetRawValue(), m_engine->GetBufferData());
 
 		m.Identity(); 
 		m.SetTranslation(500, 500);
-		m_engine->DrawChar(&m, 'A', Color::White.GetRawValue(), m_engine->GetBufferData());
+		//m_engine->DrawChar(&m, 'A', Color::White.GetRawValue(), m_engine->GetBufferData());
 
 		m.Identity();
 		m.SetTranslation(100, 500);
 		m.SetScale(1, 1);
 		m.SetRotation(rot);
-		m_engine->DrawString(&m, "123\n456", Color::Magenta.GetRawValue(), m_engine->GetBufferData());
-		m_engine->DrawCircle((float)x, (float)y, 50, Color::White.GetRawValue(), m_engine->GetBufferData());
+		//m_engine->DrawString(&m, "123\n456", Color::Magenta.GetRawValue(), m_engine->GetBufferData());
+		//m_engine->DrawCircle((float)x, (float)y, 50, Color::White.GetRawValue(), m_engine->GetBufferData());
 		
-		m.Identity();
-		m.SetTranslation(5, 5);
-		frameCharBuffer[0] = '\0';
-		_ultoa_s((long)m_engine->GetFps(), frameCharBuffer, 10);
-		m_engine->DrawString(&m, frameCharBuffer, Color::White.GetRawValue(), m_engine->GetBufferData());
+		//m.Identity();
+		//m.SetTranslation(5, 5);
+		//frameCharBuffer[0] = '\0';
+		//_ultoa_s((long)m_engine->GetFps(), frameCharBuffer, 10);
+		//m_engine->DrawString(&m, frameCharBuffer, Color::White.GetRawValue(), m_engine->GetBufferData());
 
 
 		for (int i = 0; i < 50; i++)
@@ -64,10 +61,26 @@ int main()
 			m.SetRotation(rot);
 			//m_engine->DrawTexture(&m, testTest, m_engine->GetBufferData());
 		}
-
+		int starty = -6;
+		/*
+		for (int j = starty; j <= -starty; j += 4)
+		{
+			int startx = -8;
+			for (int i = startx; i <= -startx; i += 4)
+			{
+				Cube c = Cube(testTest);
+				c.Init();
+				c.SetSCale(0.1f, 0.1f, 0.1f);
+				c.SetTranslation(i, j, 0);
+				c.SetRotation(rot, rot, rot);
+				//c.SetRotation(45, 45, 45);
+				c.Draw(m_engine);
+			}
+		}
+		*/
 		cube.Init();
 		cube.SetSCale(0.5f, 0.5f, 1);
-		cube.SetRotation(rot, rot, rot);
+		cube.SetRotation(0, 0, rot);
 		cube.Draw(m_engine);
 
 
