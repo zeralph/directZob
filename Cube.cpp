@@ -46,7 +46,7 @@ void Cube::Draw(Engine* engine)
 	int h2 = bData->height/ 2;
 	int triangleIndex = 0;
 	uint color = 0;
-	for (int i = 0; i < NB_VERTICES_INDEX; i+=3)
+	for (int i = 0; i < 3/*NB_VERTICES_INDEX*/; i+=3)
 	{
 		triangleIndex = i / 3;
 		if (Vector3::Dot(&m_normals[triangleIndex], camZ) < 0)
@@ -66,9 +66,9 @@ void Cube::Draw(Engine* engine)
 
 			engine->DrawTriangle2(&a, &b, &c, m_texture, bData);
 
-			engine->DrawLine(a.x, a.y, b.x, b.y, color, bData);
-			engine->DrawLine(b.x, b.y, c.x, c.y, color, bData);
-			engine->DrawLine(c.x, c.y, a.x, a.y, color, bData);
+			engine->DrawLine(a.x, a.y, b.x, b.y, 0xFF0000, bData);
+			engine->DrawLine(b.x, b.y, c.x, c.y, 0x00FF00, bData);
+			engine->DrawLine(c.x, c.y, a.x, a.y, 0x0000FF, bData);
 		}
 	}
 }
