@@ -29,7 +29,7 @@ int main()
 		m_engine->DrawString(&m, frameCharBuffer, Color::White.GetRawValue(), m_engine->GetBufferData());
 
 		rot += 0.48f;
-		
+		rot = 45.0f;
 		//rot = 47.00;
 		m.Identity();
 		m.SetTranslation(-300, -300);
