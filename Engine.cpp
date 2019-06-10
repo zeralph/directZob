@@ -387,7 +387,7 @@ void Engine::FillBottomFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, cons
 					
 
 					uint z = (int)v * tex->GetHeight() + (int)u;
-					uint c = tex->GetData()[z];
+					uint c = 0;// tex->GetData()[z];
 					if(c == 0) c = 0xFFFF;
 					k = scanlineY * m_width + i;
 					buffer[k] = c;
@@ -397,6 +397,16 @@ void Engine::FillBottomFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, cons
 		curx1 += invslope1;
 		curx2 += invslope2;
 	}
+
+	Matrix2x2 m;
+	m.SetTranslation(v1->x, v1->y);
+	DrawChar(&m, '1', 0xFFFFFF, bufferData);
+	m.Identity();
+	m.SetTranslation(v2->x, v2->y);
+	DrawChar(&m, '2', 0xFFFFFF, bufferData);
+	m.Identity();
+	m.SetTranslation(v3->x, v3->y);
+	DrawChar(&m, '3', 0xFFFFFF, bufferData);
 }
 
 void Engine::FillTopFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, const Texture* tex, BufferData* bufferData)
