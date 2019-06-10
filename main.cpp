@@ -5,7 +5,7 @@
 
 int main()
 {
-	Engine* m_engine = new Engine(800, 600);
+	Engine* m_engine = new Engine(600, 600);
 	int x = m_engine->Width() / 2;
 	int y = m_engine->Height() / 2;
 	int dx = 1;
@@ -24,11 +24,11 @@ int main()
 		m_engine->ClearBuffer(&Color::Black);
 		m.Identity();
 		m.SetTranslation(5, 5);
-		frameCharBuffer[0] = '\0';
-		_ultoa_s((long)m_engine->GetFps(), frameCharBuffer, 10);
-		m_engine->DrawString(&m, frameCharBuffer, Color::White.GetRawValue(), m_engine->GetBufferData());
+		//frameCharBuffer[0] = '\0';
+		//_ultoa_s((long)m_engine->GetFps(), frameCharBuffer, 10);
+		//m_engine->DrawString(&m, frameCharBuffer, Color::White.GetRawValue(), m_engine->GetBufferData());
 
-		rot += 0.48f;
+		rot += 0.1f;
 		//rot = 45.0f;
 		//rot = 47.00;
 		m.Identity();
