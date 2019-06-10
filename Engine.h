@@ -71,8 +71,8 @@ private:
 	void sortVerticesAscendingByY(Vector2* v1, Vector2* v2, Vector2* v3);
 	void DrawHorizontalLine(const float x1, const float x2, const float y, const uint color, BufferData* bufferData);
 
-	void FillTopFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, const Texture* tex, BufferData* bufferData);
-	void FillBottomFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, const Texture* tex, BufferData* bufferData);
+	void FillTopFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, const Vector2* du, const Vector2* dv, const float* lu, const float* lv, const Texture* tex, BufferData* bufferData);
+	void FillBottomFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, const Vector2* du, const Vector2* dv, const float* lu, const float* lv, const Texture* tex, BufferData* bufferData);
 
 	int m_width;
 	int m_height;
