@@ -321,6 +321,15 @@ void Engine::FillBottomFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, cons
 
 	float curx1 = v1->x;
 	float curx2 = v1->x;
+
+	Vector2 dv1 = Vector2(v2->x - v1->x, v2->y - v1->y);
+	Vector2 dv2 = Vector2(v3->x - v1->x, v3->y - v1->y);
+	Vector2 dvp1 = Vector2(0, 0);
+	Vector2 dvp2 = Vector2(0, 0);
+	float lv1 = dv1.lenght();
+	float lv2 = dv2.lenght();
+	
+
 	for (int scanlineY = v1->y; scanlineY <= v2->y; scanlineY++)
 	{
 		int k;
@@ -335,20 +344,49 @@ void Engine::FillBottomFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, cons
 				b = (int)(b > m_width ? m_width : b);
 				for (int i = a; i < b; i++)
 				{
-					float u = (float)(b - i) / (float)(b - a);
-					float v = (float)(v2->y - scanlineY) / (float)(v2->y - v1->y);
+					dvp1.x = dvp2.x = i - v1->x;
+					dvp1.y = dvp2.y = scanlineY - v1->y;
 
-					//v = 1.0f / (1.0f / (yMin * (1.0f - v)) + (1.0f / yMax) * v);
-					//u = v * ((xMin / yMin) * (1.0f - u) + (xMax / yMax) * u);
-					//u = (float)(xMax - i) / (float)(xMax - xMin);
-					// v = (float)(yMax - scanlineY) / (float)(yMax - yMin);
+					float u = dv1.Dot(&dvp1) / (lv1);
+					float v = dv2.Dot(&dvp2) / (lv2);
 
-					v = 1.0f - v;
+					dvp1.x = u * dv1.x;
+					dvp1.y = u * dv1.y;
 
-					u *= (int)tex->GetWidth();
-					v *= (int)tex->GetHeight();
+					dvp2.x = v * dv2.x;
+					dvp2.y = v * dv2.y;
 
-					uint z = (int)v * tex->GetHeight() +(int)u;
+					if ( dv1.x != 0.0f)
+					{
+						u = (dvp1.x / dv1.x)* tex->GetWidth();
+					}
+					else if (dv1.y != 0.0f)
+					{
+						u = (dvp1.y / dv1.y)* tex->GetWidth();
+					}
+					else
+					{
+						int g = 0;
+						g++;
+					}
+
+					if (dv2.x != 0.0f)
+					{
+						v = (dvp2.y / dv2.y)* tex->GetHeight();
+					}
+					else if (dv2.y != 0.0f)
+					{
+						v = (dvp2.y / dv2.y)* tex->GetHeight();
+					}
+					else
+					{
+						int g = 0;
+						g++;
+					}
+
+					
+
+					uint z = (int)v * tex->GetHeight() + (int)u;
 					uint c = tex->GetData()[z];
 					if(c == 0) c = 0xFFFF;
 					k = scanlineY * m_width + i;
