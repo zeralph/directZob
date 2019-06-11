@@ -287,21 +287,12 @@ void Engine::DrawTriangle2(const Vector2* va, const Vector2* vb, const Vector2* 
 
 	/* at first sort the three vertices by y-coordinate ascending so v1 is the topmost vertice */
 	sortVerticesAscendingByY(&v1, &v2, &v3);
-	Matrix2x2 m;
+	
 	/*UV computation*/
-	//Vector2 dv = Vector2(v1.x - v2.x, v1.y - v2.y);
-	//Vector2 du = Vector2(v3.x - v2.x, v3.y - v2.y);
-
-	Vector2 dv = Vector2((int)(vb->x - va->x), (int)(vb->y - va->y));
-	Vector2 du = Vector2((int)(vc->x - va->x), (int)(vc->y - va->y));
-
-	//dv.Norm();
-	//du.Norm();
-
+	Vector2 du = Vector2((int)(vb->x - va->x), (int)(vb->y - va->y));
+	Vector2 dv = Vector2((int)(vc->x - va->x), (int)(vc->y - va->y));
 	float lu = du.lenght();
 	float lv = dv.lenght();
-	//du.Norm();
-	//dv.Norm();
 
 	/* here we know that v1.y <= v2.y <= v3.y */
 	/* check for trivial case of bottom-flat triangle */
@@ -320,10 +311,8 @@ void Engine::DrawTriangle2(const Vector2* va, const Vector2* vb, const Vector2* 
 		Vector2 v4 = Vector2((int)(v1.x + ((float)(v2.y - v1.y) / (float)(v3.y - v1.y)) * (v3.x - v1.x)), v2.y);
 		FillBottomFlatTriangle2(&v1, &v2, &v4, &du, &dv, &lu, &lv, tex, bufferData);
 		FillTopFlatTriangle2(&v2, &v4, &v3, &du, &dv, &lu, &lv, tex, bufferData);
-		m.Identity();
-		m.SetTranslation(v4.x, v4.y);
-		DrawChar(&m, '4', 0xFFFFFF, bufferData);
 	}
+	Matrix2x2 m;
 	/*
 	m.Identity();
 	m.SetTranslation(va->x, va->y);
@@ -371,10 +360,12 @@ void Engine::FillBottomFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, cons
 				{
 					pu.x = pv.x = (int)(i - v2->x);
 					pu.y = pv.y = (int)(-v2->y + scanlineY);
-					//pu.Norm();
-					//pv.Norm();
 					float u = (pu.Dot(du) / (*lu));
 					float v = (pv.Dot(dv) / (*lv));
+					if (v < 0)
+						v = 1 + v;
+					if (u < 0)
+						u = 1 + u;
 					u *= tex->GetWidth();
 					v *= tex->GetHeight();
 					int z = (int)v * tex->GetHeight() + (int)u;
@@ -413,14 +404,19 @@ void Engine::FillTopFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, const V
 				b = (int)(b > m_width ? m_width : b);
 				for (int i = a; i < b; i++)
 				{			
-					pu.x = pv.x = (int)(i - v2->x);
+					pu.x = pv.x = (int)(i - v1->x);
 					pu.y = pv.y = (int)(-v2->y + scanlineY);
 					float u = (pu.Dot(du) / (*lu));
 					float v = (pv.Dot(dv) / (*lv));
+					static float f = 0.5f;
+					if (v < 0)
+						v = 1 + v;
+					if (u < 0)
+						u = 1 + u;
 					u *= tex->GetWidth();
 					v *= tex->GetHeight();
 					int z = (int)v * tex->GetHeight() + (int)u;
-					uint c = tex->GetData()[z];
+					uint c = tex->GetData()[z > 0 ? z : 0];
 					if (c == 0) c = 0xFFFF;
 					k = scanlineY * m_width + i;
 					buffer[k] = c;

@@ -79,7 +79,8 @@ int main()
 		*/
 		cube.Init();
 		cube.SetSCale(0.5f, 0.5f, 1);
-		cube.SetRotation(0, 0, rot);
+		cube.SetRotation(rot, rot, rot);
+		cube.SetRotation(0, 0, 45);
 		cube.Draw(m_engine);
 
 

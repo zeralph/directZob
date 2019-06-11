@@ -47,6 +47,7 @@ void Cube::Draw(Engine* engine)
 	int triangleIndex = 0;
 	uint color = 0;
 	for (int i = 0; i < NB_VERTICES_INDEX; i+=3)
+	//for (int i = 0; i < 3; i += 3)
 	{
 		triangleIndex = i / 3;
 		if (Vector3::Dot(&m_normals[triangleIndex], camZ) < 0)
