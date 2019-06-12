@@ -291,8 +291,17 @@ void Engine::DrawTriangle2(const Vector2* va, const Vector2* vb, const Vector2* 
 	/*UV computation*/
 	Vector2 du = Vector2((int)(vb->x - va->x), (int)(vb->y - va->y));
 	Vector2 dv = Vector2((int)(vc->x - va->x), (int)(vc->y - va->y));
-	float lu = du.lenght();
-	float lv = dv.lenght();
+	float lu = du.sqrtLenght();
+	float lv = dv.sqrtLenght();
+
+	lu = 1.0f / (vb->x - va->x) ;
+	lv = 1.0f / (vc->y - va->y);
+
+	du.x = abs((1.0f) / (v1.y - v2.y));
+	du.y = abs((1.0f) / (v3.x - v2.x));
+
+	du.x = 0.00001f;
+	du.y = 0.00001f;
 
 	/* here we know that v1.y <= v2.y <= v3.y */
 	/* check for trivial case of bottom-flat triangle */
@@ -312,8 +321,12 @@ void Engine::DrawTriangle2(const Vector2* va, const Vector2* vb, const Vector2* 
 		FillBottomFlatTriangle2(&v1, &v2, &v4, &du, &dv, &lu, &lv, tex, bufferData);
 		FillTopFlatTriangle2(&v2, &v4, &v3, &du, &dv, &lu, &lv, tex, bufferData);
 	}
+	float s = 300;
+	DrawLine(s, s, s + du.x, s + du.y, Color::Red.GetRawValue(), bufferData);
+	DrawLine(s, s, s + dv.x, s + dv.y, Color::Green.GetRawValue(), bufferData);
+
 	Matrix2x2 m;
-	/*
+	
 	m.Identity();
 	m.SetTranslation(va->x, va->y);
 	DrawChar(&m, 'A', 0xFFFFFF, bufferData);
@@ -323,7 +336,7 @@ void Engine::DrawTriangle2(const Vector2* va, const Vector2* vb, const Vector2* 
 	m.Identity();
 	m.SetTranslation(vc->x, vc->y);
 	DrawChar(&m, 'C', 0xFFFFFF, bufferData);
-	*/
+	/*
 	m.Identity();
 	m.SetTranslation(v1.x, v1.y);
 	DrawChar(&m, '1', 0xFFFFFF, bufferData);
@@ -333,6 +346,7 @@ void Engine::DrawTriangle2(const Vector2* va, const Vector2* vb, const Vector2* 
 	m.Identity();
 	m.SetTranslation(v3.x, v3.y);
 	DrawChar(&m, '3', 0xFFFFFF, bufferData);
+	*/
 }
 
 void Engine::FillBottomFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, const Vector2* du, const Vector2* dv, const float* lu, const float* lv, const Texture* tex,  BufferData* bufferData)
@@ -342,8 +356,10 @@ void Engine::FillBottomFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, cons
 	float invslope2 = (v3->x - v1->x) / (v3->y - v1->y);
 	float curx1 = v1->x;
 	float curx2 = v1->x;
-	Vector2 pu, pv;
-
+	float u = 0.0f;
+	float v = 0.0f;
+	float dx = 0.0f;
+	float dy = 0.0f;
 	for (int scanlineY = v1->y; scanlineY <= v2->y; scanlineY++)
 	{
 		int k;
@@ -356,29 +372,36 @@ void Engine::FillBottomFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, cons
 				b++;
 				a = (int)(a < 0.0f ? 0.0f : a);
 				b = (int)(b > m_width ? m_width : b);
+				dy = 0.0f;
 				for (int i = a; i < b; i++)
 				{
-					pu.x = pv.x = (int)(i - v2->x);
-					pu.y = pv.y = (int)(-v2->y + scanlineY);
-					float u = (pu.Dot(du) / (*lu));
-					float v = (pv.Dot(dv) / (*lv));
-					if (v < 0)
-						v = 1 + v;
-					if (u < 0)
-						u = 1 + u;
-					u *= tex->GetWidth();
-					v *= tex->GetHeight();
-					int z = (int)v * tex->GetHeight() + (int)u;
+					float cu, cv;
+					u = u + *lu;
+					cu = (u + v*dx) * tex->GetWidth();
+					cv = (v + u*dy) * tex->GetHeight();
+					cu = (int)cu % tex->GetWidth() /2;
+					cv = (int)cv % tex->GetHeight() ;
+					int z = cv * tex->GetWidth() + (int)cu;
 					uint c = tex->GetData()[z > 0 ? z :0 ];
 					if(c == 0) c = 0xFFFF;
 					k = scanlineY * m_width + i;
 					buffer[k] = c;
+					dx += du->x;
+					dy += du->y;
 				}
 			}
 		}
+		v = v + *lv;
+		u = 0.0f;
 		curx1 += invslope1;
 		curx2 += invslope2;
 	}
+
+	Matrix2x2 m;
+	Vector2 t = Vector2(150, 380);
+	m.Identity();
+	m.SetTranslation(t.x, t.y);
+	DrawChar(&m, '0', 0xFF0000, bufferData);
 }
 
 void Engine::FillTopFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, const Vector2* du, const Vector2* dv, const float* lu, const float* lv, const Texture* tex, BufferData* bufferData)
@@ -388,8 +411,10 @@ void Engine::FillTopFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, const V
 	float invslope2 = (v3->x - v2->x) / (v3->y - v2->y);
 	float curx1 = v3->x;
 	float curx2 = v3->x;
-	Vector2 pu, pv;
-
+	float u = 0.0f;
+	float v = 0.0f;
+	float dx = 0.0f;
+	float dy = 0.0f;
 	for (int scanlineY = v3->y; scanlineY > v1->y; scanlineY--)
 	{
 		int k;
@@ -402,27 +427,27 @@ void Engine::FillTopFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, const V
 				b++;
 				a = (int)(a < 0.0f ? 0.0f : a);
 				b = (int)(b > m_width ? m_width : b);
+				dy = 0.0f;
 				for (int i = a; i < b; i++)
 				{			
-					pu.x = pv.x = (int)(i - v1->x);
-					pu.y = pv.y = (int)(-v2->y + scanlineY);
-					float u = (pu.Dot(du) / (*lu));
-					float v = (pv.Dot(dv) / (*lv));
-					static float f = 0.5f;
-					if (v < 0)
-						v = 1 + v;
-					if (u < 0)
-						u = 1 + u;
-					u *= tex->GetWidth();
-					v *= tex->GetHeight();
-					int z = (int)v * tex->GetHeight() + (int)u;
+					float cu, cv;
+					u = u + *lu;
+					cu = (u + v*dx) * tex->GetWidth();
+					cv = (v + u*dy) * tex->GetHeight();
+					cu = (int)cu % tex->GetWidth();
+					cv = (int)cv % tex->GetHeight();
+					int z = cv * tex->GetWidth() + (int)cu;
 					uint c = tex->GetData()[z > 0 ? z : 0];
 					if (c == 0) c = 0xFFFF;
 					k = scanlineY * m_width + i;
 					buffer[k] = c;
+					dy += du->y;
 				}
 			}
-		}
+		}		
+		v = v + *lv;
+		u = 0.0f;
+		dx += du->x;
 		curx1 -= invslope1;
 		curx2 -= invslope2;
 	}
