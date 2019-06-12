@@ -8,6 +8,15 @@
 class Cube
 {
 public:
+
+	struct Vertice
+	{
+		Vector3 position;
+		Vector3 normal;
+		Vector2 uv;
+		uint color;
+	};
+
 	Cube(const Texture* tex);
 	~Cube();
 	void Init();
@@ -29,6 +38,8 @@ private:
 	Matrix4x4	m_modelMatrix;
 	Vector3		m_vertices[NB_VERTICES];
 	Vector3		m_normals[NB_TRIANGLES];
+
+	//static const Vertice m_vertices[NB_TRIANGLES];
 
 	static const Vector3 m_verticesData[NB_VERTICES];
 	static const Vector3 m_normalsData[NB_TRIANGLES];
