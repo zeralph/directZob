@@ -31,15 +31,22 @@ public:
 		Vector2* ua;
 		Vector2* ub;
 		Vector2* uc;
+
+		float area;
+
+		void ComputeArea() 
+		{ 
+			area = (vc->x - va->x) * (vb->y - va->y) - (vc->y - va->y) * (vb->x - va->x); 
+		}
 	};
 
 
 	struct UvData
 	{
 		float area;
-		const Vector2* va;
-		const Vector2* vb;
-		const Vector2* vc;
+		const Vector3* va;
+		const Vector3* vb;
+		const Vector3* vc;
 		const Vector2* uva;
 		const Vector2* uvb;
 		const Vector2* uvc;
@@ -74,7 +81,7 @@ public:
 	void DrawBuffer(const Matrix2x2* matrix, const uint color, const uint* buffer, const int bufferWidth, const int bufferHeight, BufferData* bufferData);
 
 	void DrawTriangle(const Vector2* va, const Vector2* vb, const Vector2* vc, const uint color, BufferData* bufferData);
-	void DrawTriangle2(const Vector2* va, const Vector2* vb, const Vector2* vc, const Vector2* uva, const Vector2* uvb, const Vector2* uvc, const Texture* tex, BufferData* bufferData);
+	void DrawTriangle2(const Triangle* t, const Texture* tex, BufferData* bufferData);
 
 
 	void GetPixelColor(Color* color, int x, int y);
@@ -103,9 +110,9 @@ private:
 	void FillTopFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, const UvData* uvData, const Texture* tex, BufferData* bufferData);
 	void FillBottomFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, const UvData* uvData, const Texture* tex, BufferData* bufferData);
 
-	void FillBufferPIxel(const Vector2* p, const UvData* uvData, const Texture* texData, BufferData* bufferData);
+	void FillBufferPIxel(const Vector3* p, const UvData* uvData, const Texture* texData, BufferData* bufferData);
 
-	inline float edgeFunction(const Vector2* a, const Vector2* b, const Vector2* c) {return (c->x - a->x) * (b->y - a->y) - (c->y - a->y) * (b->x - a->x);}
+	inline float edgeFunction(const Vector3* a, const Vector3* b, const Vector3* c) {return (c->x - a->x) * (b->y - a->y) - (c->y - a->y) * (b->x - a->x);}
 
 
 
