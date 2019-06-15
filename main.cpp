@@ -6,7 +6,9 @@
 
 int main()
 {
+	std::cout << "Init engine";
 	Engine* m_engine = new Engine(800, 800);
+	std::cout << " OK\n";
 	int x = m_engine->Width() / 2;
 	int y = m_engine->Height() / 2;
 	int dx = 1;
