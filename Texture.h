@@ -3,8 +3,8 @@
 class Texture
 {
 public:
-	virtual const uint GetWidth() const { return width; }
-	virtual const uint GetHeight() const { return height; }
+	virtual inline const uint GetWidth() const { return width; }
+	virtual inline const uint GetHeight() const { return height; }
 	virtual const uint* GetData() const = 0;
 
 	const uint width = 64;

@@ -2,10 +2,11 @@
 #include "Cube.h"
 #include "TextureTest.h"
 #include "TextureTestAlpha.h"
+#include "Mesh.h"
 
 int main()
 {
-	Engine* m_engine = new Engine(600, 600);
+	Engine* m_engine = new Engine(800, 800);
 	int x = m_engine->Width() / 2;
 	int y = m_engine->Height() / 2;
 	int dx = 1;
@@ -18,17 +19,21 @@ int main()
 	Matrix2x2 m;
 	Cube cube = Cube(testTest);
 	int state;
+
+	//Mesh* mesh = new Mesh(&std::string("F:/_GIT/DirectZob/resources/cube.obj"), testTest);
+	Mesh* mesh = new Mesh(&std::string("F:/_GIT/DirectZob/resources/sphere.obj"), testTest);
+
 	for (;;)
 	{
 		frame++;
-		m_engine->ClearBuffer(&Color::Black);
+		m_engine->ClearBuffer(&Color::Grey);
 		m.Identity();
 		m.SetTranslation(5, 5);
 		//frameCharBuffer[0] = '\0';
 		//_ultoa_s((long)m_engine->GetFps(), frameCharBuffer, 10);
 		//m_engine->DrawString(&m, frameCharBuffer, Color::White.GetRawValue(), m_engine->GetBufferData());
 
-		rot += 0.1f;
+		
 		//rot = 45.0f;
 		//rot = 47.00;
 		m.Identity();
@@ -77,15 +82,20 @@ int main()
 			}
 		}
 		*/
+		rot += 0.5f;
 		cube.Init();
 		cube.SetSCale(0.5f, 0.5f, 1);
-		rot = 45;
+		//rot = 45;
 		//rot = 0;
-		//cube.SetRotation(rot, rot, 0);
-		cube.SetRotation(0, 0, rot);
+		//cube.SetRotation(rot, rot, rot);
+		//cube.SetRotation(0, 0, rot);
 		//cube.SetRotation(0, rot, 0);
-		cube.Draw(m_engine);
+		//cube.Draw(m_engine);
 
+		mesh->Init();
+		mesh->SetSCale(0.05f, 0.05f, 1);
+		mesh->SetRotation(rot, rot, rot);
+		mesh->Draw(m_engine);
 
 		state = m_engine->Update();
 
