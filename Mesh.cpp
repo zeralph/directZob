@@ -170,6 +170,10 @@ void Mesh::Draw(Engine* engine)
 	int triangleIndex = 0;
 	uint color = 0;
 	Vector3 n;
+
+	Vector3 light = Vector3(1.0f, 1.0f, -1.0f);
+	light.Normalize();
+
 	for (int i = 0; i < m_nbFaces; i ++)
 	{
 		Engine::Triangle* t = &m_triangles[i];
@@ -178,6 +182,7 @@ void Mesh::Draw(Engine* engine)
 		if (Vector3::Dot(t->na, camZ) < 0)
 		{
 			t->ComputeArea();
+			t->ComputeLighting(&light);
 			engine->DrawTriangle2(t, m_texture, bData);
 		}
 	}

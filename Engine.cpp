@@ -259,11 +259,6 @@ void Engine::DrawPixel(const Matrix2x2* matrix, const uint color, const float dx
 
 void Engine::FillBottomFlatTriangle(Vector2* v1, Vector2* v2, Vector2* v3, const uint color, BufferData* bufferData)
 {
-	float xMin = fmin(v1->x, fmin(v2->x, v3->x));
-	float xMax = fmax(v1->x, fmax(v2->x, v3->x));
-	float yMin = fmin(v1->y, fmin(v2->y, v3->y));
-	float yMax = fmax(v1->y, fmax(v2->y, v3->y));
-
 	float invslope1 = (v2->x - v1->x) / (v2->y - v1->y);
 	float invslope2 = (v3->x - v1->x) / (v3->y - v1->y);
 
@@ -286,38 +281,29 @@ void Engine::DrawTriangle2(const Triangle* t, const Texture* tex, BufferData* bu
 
 	/* at first sort the three vertices by y-coordinate ascending so v1 is the topmost vertice */
 	sortVerticesAscendingByY(&v1, &v2, &v3);
-	
-	/*UV computation*/
-	UvData uvData;
-	uvData.area = t->area;
-	uvData.va = t->va;
-	uvData.vb = t->vb;
-	uvData.vc = t->vc;
-	uvData.uva = t->ua;
-	uvData.uvb = t->ub;
-	uvData.uvc = t->uc;
+
 
 	/* here we know that v1.y <= v2.y <= v3.y */
 	/* check for trivial case of bottom-flat triangle */
 	if (v2.y == v3.y)
 	{
-		FillBottomFlatTriangle2(&v1, &v2, &v3, &uvData, tex, bufferData);
+		FillBottomFlatTriangle2(&v1, &v2, &v3, t, tex, bufferData);
 	}
 	/* check for trivial case of top-flat triangle */
 	else if (v1.y == v2.y)
 	{
-		FillTopFlatTriangle2(&v1, &v2, &v3, &uvData, tex, bufferData);
+		FillTopFlatTriangle2(&v1, &v2, &v3, t, tex, bufferData);
 	}
 	else
 	{
 		/* general case - split the triangle in a topflat and bottom-flat one */
 		Vector2 v4 = Vector2((int)(v1.x + ((float)(v2.y - v1.y) / (float)(v3.y - v1.y)) * (v3.x - v1.x)), v2.y);
-		FillBottomFlatTriangle2(&v1, &v2, &v4, &uvData, tex, bufferData);
-		FillTopFlatTriangle2(&v2, &v4, &v3, &uvData, tex, bufferData);
+		FillBottomFlatTriangle2(&v1, &v2, &v4, t, tex, bufferData);
+		FillTopFlatTriangle2(&v2, &v4, &v3, t, tex, bufferData);
 	}
 }
 
-void Engine::FillBottomFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, const UvData* uvData, const Texture* tex,  BufferData* bufferData)
+void Engine::FillBottomFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, const Triangle* t, const Texture* tex,  BufferData* bufferData)
 {
 	if (v1->y < 0)
 	{
@@ -344,7 +330,7 @@ void Engine::FillBottomFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, cons
 				for (int i = a; i < b; i++)
 				{
 					Vector3 p = Vector3(i, scanlineY, 0);
-					FillBufferPIxel(&p, uvData, tex, bufferData);
+					FillBufferPIxel(&p, t, tex, bufferData);
 				}
 			}
 		}
@@ -353,7 +339,7 @@ void Engine::FillBottomFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, cons
 	}
 }
 
-void Engine::FillTopFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, const UvData* uvData, const Texture* tex, BufferData* bufferData)
+void Engine::FillTopFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, const Triangle* t, const Texture* tex, BufferData* bufferData)
 {
 	uint* buffer = bufferData->buffer;
 	float invslope1 = (v3->x - v1->x) / (v3->y - v1->y);
@@ -375,7 +361,7 @@ void Engine::FillTopFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, const U
 				for (int i = a; i < b; i++)
 				{			
 					Vector3 p = Vector3(i, scanlineY, 0);
-					FillBufferPIxel(&p, uvData, tex, bufferData);
+					FillBufferPIxel(&p, t, tex, bufferData);
 				}
 			}
 		}		
@@ -384,35 +370,48 @@ void Engine::FillTopFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, const U
 	}
 }
 
-void Engine::FillBufferPIxel(const Vector3* p, const UvData* uvData, const Texture* texData, BufferData* bufferData)
+void Engine::FillBufferPIxel(const Vector3* p, const Triangle* t, const Texture* texData, BufferData* bufferData)
 {
 	
-	float w0 = edgeFunction(uvData->va, uvData->vb, p);
-	float w1 = edgeFunction(uvData->vb, uvData->vc, p);
-	float w2 = edgeFunction(uvData->vc, uvData->va, p);
+	float w2 = edgeFunction(t->va, t->vb, p);
+	float w0 = edgeFunction(t->vb, t->vc, p);
+	float w1 = edgeFunction(t->vc, t->va, p);
 	//if (w0 >= 0 && w1 >= 0 && w2 >= 0) 
 	{
-		w0 /= uvData->area;
-		w1 /= uvData->area;
-		w2 /= uvData->area;
+		w0 /= t->area;
+		w1 /= t->area;
+		w2 /= t->area;
 		//if (w0 < 0) w0 = 1.0f - w0;
 		//if (w1 < 0) w1 = 1.0f - w1;
 		//if (w2 < 0) w2 = 1.0f - w2;
 
-		float s = w0 * uvData->uva->x + w1 * uvData->uvb->x + w2 * uvData->uvc->x;
-		float t = w0 * uvData->uva->y + w1 * uvData->uvb->y + w2 * uvData->uvc->y;
+		float su = w0 * t->ua->x + w1 * t->ub->x + w2 * t->uc->x;
+		float tu = w0 * t->ua->y + w1 * t->ub->y + w2 * t->uc->y;
 
-		s = (int)(s * texData->width);
-		t = (int)(t * texData->height);
-		s = (int)s % texData->width;
-		t = (int)t % texData->height;
-		int cr = ((w0 * 1.0f + w1 * 0.0f + w2 * 0.0f) * 255.0f);
-		int cg = ((w0 * 0.0f + w1 * 1.0f + w2 * 0.0f) * 255.0f);
-		int cb = ((w0 * 0.0f + w1 * 0.0f + w2 * 1.0f) * 255.0f);
-		uint c = (cr << 16) + (cg << 8) + cb;
+		su = (int)(su * texData->width);
+		tu = (int)(tu * texData->height);
+		su = (int)su % texData->width;
+		tu = (int)tu % texData->height;
 
-		c = t * texData->width + s;
+		float cl = ((w0 * t->la + w1 * t->lb + w2 * t->lc));
+		//uint c = (cl << 16) + (cl << 8) + cl;
+
+		
+		uint c = tu * texData->width + su;
 		c = texData->GetData()[c];
+		  c = 0xFFFFFF;
+		int cr = (c & 0xFF0000) >> 16;
+		int cg = (c & 0x00FF00) >> 8;
+		int cb = (c & 0x0000FF) >> 0;
+		cr *= cl;
+		cg *= cl;
+		cb *= cl;
+		cr = (int)(cr);
+		cb = (int)(cg);
+		cg = (int)(cb);
+		c = (cr << 16) + (cg << 8) + cb;
+		//c = tu * texData->width + su;
+		//c = texData->GetData()[c];
 		int k = p->y * m_width + p->x;
 		bufferData->buffer[k] = c;
 	}
