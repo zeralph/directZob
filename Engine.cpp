@@ -278,28 +278,24 @@ void Engine::FillBottomFlatTriangle(Vector2* v1, Vector2* v2, Vector2* v3, const
 }
 
 
-void Engine::DrawTriangle2(const Vector2* va, const Vector2* vb, const Vector2* vc, const Vector2* uva, const Vector2* uvb, const Vector2* uvc, const Texture* tex, BufferData* bufferData)
+void Engine::DrawTriangle2(const Triangle* t, const Texture* tex, BufferData* bufferData)
 {
-	Vector2 v1 = Vector2((int)va->x, (int)va->y);
-	Vector2 v2 = Vector2((int)vb->x, (int)vb->y);
-	Vector2 v3 = Vector2((int)vc->x, (int)vc->y);
-
-	Vector2 ua = Vector2(0, 0);
-	Vector2 ub = Vector2(0, 1);
-	Vector2 uc = Vector2(1, 1);
+	Vector2 v1 = Vector2((int)t->va->x, (int)t->va->y);
+	Vector2 v2 = Vector2((int)t->vb->x, (int)t->vb->y);
+	Vector2 v3 = Vector2((int)t->vc->x, (int)t->vc->y);
 
 	/* at first sort the three vertices by y-coordinate ascending so v1 is the topmost vertice */
 	sortVerticesAscendingByY(&v1, &v2, &v3);
 	
 	/*UV computation*/
 	UvData uvData;
-	uvData.area = edgeFunction(va, vb, vc);
-	uvData.va = va;
-	uvData.vb = vb;
-	uvData.vc = vc;
-	uvData.uva = uva;
-	uvData.uvb = uvb;
-	uvData.uvc = uvc;
+	uvData.area = t->area;
+	uvData.va = t->va;
+	uvData.vb = t->vb;
+	uvData.vc = t->vc;
+	uvData.uva = t->ua;
+	uvData.uvb = t->ub;
+	uvData.uvc = t->uc;
 
 	/* here we know that v1.y <= v2.y <= v3.y */
 	/* check for trivial case of bottom-flat triangle */
@@ -347,7 +343,7 @@ void Engine::FillBottomFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, cons
 				b = (int)(b > m_width ? m_width : b);
 				for (int i = a; i < b; i++)
 				{
-					Vector2 p = Vector2(i, scanlineY);
+					Vector3 p = Vector3(i, scanlineY, 0);
 					FillBufferPIxel(&p, uvData, tex, bufferData);
 				}
 			}
@@ -378,7 +374,7 @@ void Engine::FillTopFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, const U
 				b = (int)(b > m_width ? m_width : b);
 				for (int i = a; i < b; i++)
 				{			
-					Vector2 p = Vector2(i, scanlineY);
+					Vector3 p = Vector3(i, scanlineY, 0);
 					FillBufferPIxel(&p, uvData, tex, bufferData);
 				}
 			}
@@ -388,7 +384,7 @@ void Engine::FillTopFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, const U
 	}
 }
 
-void Engine::FillBufferPIxel(const Vector2* p, const UvData* uvData, const Texture* texData, BufferData* bufferData)
+void Engine::FillBufferPIxel(const Vector3* p, const UvData* uvData, const Texture* texData, BufferData* bufferData)
 {
 	
 	float w0 = edgeFunction(uvData->va, uvData->vb, p);

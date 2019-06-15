@@ -69,7 +69,7 @@ void Cube::Draw(Engine* engine)
 			uvb = m_uvsData[i * 3+1];
 			uvc = m_uvsData[i * 3+2];
 
-			engine->DrawTriangle2(&a, &b, &c, &uva, &uvb, &uvc, m_texture, bData);
+//			engine->DrawTriangle2(&a, &b, &c, &uva, &uvb, &uvc, m_texture, bData);
 		}
 	}
 }

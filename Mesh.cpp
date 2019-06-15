@@ -177,17 +177,8 @@ void Mesh::Draw(Engine* engine)
 //TODO : only one normal
 		if (Vector3::Dot(t->na, camZ) < 0)
 		{
-
-			a.x = (t->va->x);
-			a.y = (t->va->y);
-
-			b.x = (t->vb->x);
-			b.y = (t->vb->y);
-
-			c.x = (t->vc->x);
-			c.y = (t->vc->y);
- 
-			engine->DrawTriangle2(&a, &b, &c, t->ua, t->ub, t->uc, m_texture, bData);
+			t->ComputeArea();
+			engine->DrawTriangle2(t, m_texture, bData);
 		}
 	}
 }
