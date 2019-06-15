@@ -19,8 +19,7 @@ Engine::Engine(int width, int height)
 	m_tick = clock();
 
 	m_camera = new Camera();
-	m_camera->setProjectionMatrix(90.0f, 0.01f, 100.0f);
-
+	m_camera->setProjectionMatrix(90.0f, width, height, 0.1f, 100.0f);
 }
 
 Engine::~Engine()

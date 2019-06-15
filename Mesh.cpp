@@ -17,7 +17,8 @@ Mesh::Mesh(const std::string* path, const Texture* tex)
 	std::ifstream file(path->c_str(), ios::in);
 	std::string line;
 	if (!file.is_open()) {
-		return; // or better, throw exception.
+		std::cout << " ERROR\n";
+		return; 
 	}
 	while (getline(file, line))
 	{
@@ -146,14 +147,19 @@ void Mesh::Draw(Engine* engine)
 	Engine::BufferData* bData = engine->GetBufferData();
 
 	Vector2 a, b, c, uva, uvb, uvc;
-	Matrix4x4 m = m_modelMatrix;
 	const Camera* cam = engine->GetCamera();
 	const Matrix4x4* p = cam->GetProjectionMatrix();
+	const Matrix4x4* s = cam->GetScreenMatrix();
 	const Vector3* camZ = cam->GetEyeVector();
+	float w = (float)bData->width / 2.0f;
+	float h = (float)bData->height / 2.0f;
 	for (int i = 0; i < m_nbVertices; i++)
 	{
 		m_modelMatrix.Mul(&m_vertices[i]);
 		p->Mul(&m_vertices[i]);
+		s->Mul(&m_vertices[i]);
+		//m_vertices[i].x = (m_vertices[i].x + 1.0f) * w;
+		//m_vertices[i].y = (m_vertices[i].y + 1.0f) * h;
 	}
 	for (int i = 0; i < m_nbNormals; i++)
 	{
@@ -172,15 +178,15 @@ void Mesh::Draw(Engine* engine)
 		if (Vector3::Dot(t->na, camZ) < 0)
 		{
 
-			a.x = (t->va->x + 1.0f) * (float)w2;
-			a.y = (t->va->y + 1.0f) * (float)h2;
+			a.x = (t->va->x);
+			a.y = (t->va->y);
 
-			b.x = (t->vb->x + 1.0f) * (float)w2;
-			b.y = (t->vb->y + 1.0f) * (float)h2;
+			b.x = (t->vb->x);
+			b.y = (t->vb->y);
 
-			c.x = (t->vc->x + 1.0f) * (float)w2;
-			c.y = (t->vc->y + 1.0f) * (float)h2;
-
+			c.x = (t->vc->x);
+			c.y = (t->vc->y);
+ 
 			engine->DrawTriangle2(&a, &b, &c, t->ua, t->ub, t->uc, m_texture, bData);
 		}
 	}
