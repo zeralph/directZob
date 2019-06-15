@@ -28,7 +28,7 @@ void Cube::Draw(Engine* engine)
 {
 	Engine::BufferData* bData = engine->GetBufferData();
 
-	Vector2 a, b, c;
+	Vector2 a, b, c, uva, uvb, uvc;
 	Matrix4x4 m = m_modelMatrix;
 	const Camera* cam = engine->GetCamera();
 	const Matrix4x4* p = cam->GetProjectionMatrix();
@@ -46,8 +46,8 @@ void Cube::Draw(Engine* engine)
 	int h2 = bData->height/ 2;
 	int triangleIndex = 0;
 	uint color = 0;
-	//for (int i = 0; i < NB_VERTICES_INDEX; i+=3)
-	for (int i = 0; i < 3; i += 3)
+	for (int i = 0; i < NB_VERTICES_INDEX; i+=3)
+	//for (int i = 0; i < 3; i += 3)
 	{
 		triangleIndex = i / 3;
 		if (Vector3::Dot(&m_normals[triangleIndex], camZ) < 0)
@@ -65,11 +65,11 @@ void Cube::Draw(Engine* engine)
 			c.x = (m_vertices[ic].x + 1.0f) * (float)w2;
 			c.y = (m_vertices[ic].y + 1.0f) * (float)h2;
 
-			engine->DrawTriangle2(&a, &b, &c, m_texture, bData);
+			uva = m_uvsData[i * 3];
+			uvb = m_uvsData[i * 3+1];
+			uvc = m_uvsData[i * 3+2];
 
-			engine->DrawLine(a.x, a.y, b.x, b.y, 0xFF0000, bData);
-			engine->DrawLine(b.x, b.y, c.x, c.y, 0x00FF00, bData);
-			engine->DrawLine(c.x, c.y, a.x, a.y, 0x0000FF, bData);
+			engine->DrawTriangle2(&a, &b, &c, &uva, &uvb, &uvc, m_texture, bData);
 		}
 	}
 }
@@ -84,12 +84,33 @@ const Vector3 Cube::m_verticesData[NB_VERTICES] = {	Vector3(-1.0f, 1.0f, -1.0f),
 													Vector3(1.0f, -1.0f, 1.0f),
 													Vector3(-1.0f, -1.0f, 1.0f)
 												};
-const uint Cube::m_verticesIndex[NB_VERTICES_INDEX] = {	0, 1, 3, 1, 2, 3,
-														1, 5, 2, 5, 6, 2,
-														5, 4, 6, 4, 7, 6,
-														4, 0, 7, 0, 3, 7,
-														4, 5, 0, 5, 1, 0,
-														7, 6, 3, 6, 2, 3,
+const Vector2 Cube::m_uvsData[NB_TRIANGLES * 3] = { Vector2(0,0), Vector2(1,0), Vector2(0,1), 
+													Vector2(1,1), Vector2(1,0), Vector2(0,0),
+													Vector2(0,0), Vector2(1,0), Vector2(0,1),
+													Vector2(1,0), Vector2(1,1), Vector2(0,1),
+													Vector2(0,0), Vector2(1,0), Vector2(0,1),
+													Vector2(1,0), Vector2(1,1), Vector2(0,1),
+													Vector2(0,0), Vector2(1,0), Vector2(0,1),
+													Vector2(1,0), Vector2(1,1), Vector2(0,1),
+													Vector2(0,0), Vector2(1,0), Vector2(0,1),
+													Vector2(1,0), Vector2(1,1), Vector2(0,1),
+													Vector2(0,0), Vector2(1,0), Vector2(0,1),
+													Vector2(1,0), Vector2(1,1), Vector2(0,1)
+													};
+
+
+const uint Cube::m_verticesIndex[NB_VERTICES_INDEX] = {	0, 1, 3, 
+														2, 1, 3,
+														1, 5, 2, 
+														5, 6, 2,
+														5, 4, 6, 
+														4, 7, 6,
+														4, 0, 7, 
+														0, 3, 7,
+														4, 5, 0, 
+														5, 1, 0,
+														7, 6, 3, 
+														6, 2, 3,
 													};
 
 const Vector3 Cube::m_normalsData[NB_TRIANGLES] = {	Vector3(0.0f, 0.0f, -1.0f),

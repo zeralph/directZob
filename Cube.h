@@ -29,7 +29,7 @@ public:
 private:
 
 
-	inline void ReinitVertices();;
+	inline void ReinitVertices();
 
 	static const uint NB_VERTICES = 8;
 	static const uint NB_TRIANGLES = 12;
@@ -39,9 +39,11 @@ private:
 	Vector3		m_vertices[NB_VERTICES];
 	Vector3		m_normals[NB_TRIANGLES];
 
+
 	//static const Vertice m_vertices[NB_TRIANGLES];
 
 	static const Vector3 m_verticesData[NB_VERTICES];
+	static const Vector2 m_uvsData[NB_TRIANGLES*3];
 	static const Vector3 m_normalsData[NB_TRIANGLES];
 	static const uint m_colorsData[NB_TRIANGLES];
 	static const uint m_verticesIndex[NB_VERTICES_INDEX];
