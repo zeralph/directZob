@@ -23,7 +23,8 @@ int main()
 	int state;
 
 	//Mesh* mesh = new Mesh(&std::string("F:/_GIT/DirectZob/resources/cube.obj"), testTest);
-	Mesh* mesh = new Mesh(&std::string("D:/_GIT/directZob/resources/sphere.obj"), testTest);
+	//Mesh* mesh = new Mesh(&std::string("D:/_GIT/directZob/resources/sphere.obj"), testTest);
+	Mesh* mesh = new Mesh(&std::string("D:/_GIT/directZob/resources/teapot.obj"), testTest);
 
 	for (;;)
 	{
