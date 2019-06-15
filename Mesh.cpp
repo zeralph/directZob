@@ -5,6 +5,7 @@ using namespace std;
 
 Mesh::Mesh(const std::string* path, const Texture* tex)
 {
+	std::cout << "Load mesh " << path->c_str();
 	m_texture = tex;
 	m_nbVertices = 0;
 	m_nbUvs = 0;
@@ -108,6 +109,8 @@ Mesh::Mesh(const std::string* path, const Texture* tex)
 	}
 	memcpy(m_verticesData, m_vertices, sizeof(Vector3) * m_nbVertices);
 	memcpy(m_normalsData, m_normals, sizeof(Vector3) * m_nbNormals);
+
+	std::cout << " OK\n";
 }
 
 Mesh::~Mesh()
