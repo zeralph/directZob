@@ -1,6 +1,6 @@
 #include "Engine.h"
 #include "Cube.h"
-#include "TextureTest.h"
+#include "Texture.h"
 #include "TextureTestAlpha.h"
 #include "Mesh.h"
 
@@ -17,14 +17,15 @@ int main()
 	long frame = 0;
 	float rot = 0.0;
 	char frameCharBuffer[sizeof(ulong)];
-	const TextureTestAlpha* testTest = new TextureTestAlpha();
+
 	Matrix2x2 m;
-	Cube cube = Cube(testTest);
 	int state;
 
-	//Mesh* mesh = new Mesh(&std::string("F:/_GIT/DirectZob/resources/cube.obj"), testTest);
-	//Mesh* mesh = new Mesh(&std::string("D:/_GIT/directZob/resources/sphere.obj"), testTest);
-	Mesh* mesh = new Mesh(&std::string("D:/_GIT/directZob/resources/teapot.obj"), testTest);
+	Texture* tex = new Texture("D:/_GIT/directZob/resources/4096_earth.png");
+
+	Mesh* mesh = new Mesh("D:/_GIT/directZob/resources/earth.obj", tex);
+	//Mesh* mesh = new Mesh(&std::string("D:/_GIT/directZob/resources/camaro.obj"), testTest);
+	//Mesh* mesh = new Mesh("D:/_GIT/directZob/resources/LowPolyFiatUNO.obj", tex);
 
 	for (;;)
 	{
@@ -85,19 +86,13 @@ int main()
 			}
 		}
 		*/
-		rot += 0.5f;
-		cube.Init();
-		cube.SetSCale(0.5f, 0.5f, 1);
-		//rot = 45;
-		//rot = 0;
-		//cube.SetRotation(rot, rot, rot);
-		//cube.SetRotation(0, 0, rot);
-		//cube.SetRotation(0, rot, 0);
-		//cube.Draw(m_engine);
+		rot += 0.25f;
 
 		mesh->Init();
-		mesh->SetSCale(0.05f, 0.05f, 1);
-		mesh->SetRotation(rot, rot, rot);
+		//mesh->SetTranslation(0,0.25f,0);
+		static float scale = 0.0025f;
+		mesh->SetSCale(scale, scale, scale);
+		mesh->SetRotation(0, rot, 180);
 		mesh->Draw(m_engine);
 
 		state = m_engine->Update();

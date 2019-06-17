@@ -16,7 +16,7 @@ void Camera::setProjectionMatrix(const float angleOfView, const float width, con
 {
 	float w = width / 2.0f;
 	float h = height / 2.0f;
-	float scale =  1 / tan(angleOfView * 0.5 * M_PI / 180);
+	float scale =  1.0f / (float)tan(angleOfView * 0.5 * M_PI / 180.0);
 	m_projMatrix.Identity();
 	m_projMatrix.SetData(0, 0, scale * w); // scale the x coordinates of the projected point
 	m_projMatrix.SetData(1, 1, scale * h); // scale the y coordinates of the projected point

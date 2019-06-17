@@ -305,16 +305,13 @@ void Engine::DrawTriangle2(const Triangle* t, const Texture* tex, BufferData* bu
 
 void Engine::FillBottomFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, const Triangle* t, const Texture* tex,  BufferData* bufferData)
 {
-	if (v1->y < 0)
-	{
-		int yy = 0;
-		yy++;
-	}
 	uint* buffer = bufferData->buffer;
+	Vector3 p;
 	float invslope1 = (v2->x - v1->x) / (v2->y - v1->y);
 	float invslope2 = (v3->x - v1->x) / (v3->y - v1->y);
 	float curx1 = v1->x;
 	float curx2 = v1->x;
+	float a, b;
 	for (int scanlineY = v1->y; scanlineY <= v2->y; scanlineY++)
 	{
 		int k;
@@ -322,14 +319,16 @@ void Engine::FillBottomFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, cons
 		{
 			if (curx1 != curx2)
 			{
-				float a = fmin(curx1, curx2);
-				float b = fmax(curx1, curx2);
+				a = fmin(curx1, curx2);
+				b = fmax(curx1, curx2);
 				b++;
 				a = (int)(a < 0.0f ? 0.0f : a);
 				b = (int)(b > m_width ? m_width : b);
 				for (int i = a; i < b; i++)
 				{
-					Vector3 p = Vector3(i, scanlineY, 0);
+					p.x = i;
+					p.y = scanlineY;
+					p.z = 0;
 					FillBufferPIxel(&p, t, tex, bufferData);
 				}
 			}
@@ -342,25 +341,28 @@ void Engine::FillBottomFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, cons
 void Engine::FillTopFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, const Triangle* t, const Texture* tex, BufferData* bufferData)
 {
 	uint* buffer = bufferData->buffer;
+	Vector3 p;
 	float invslope1 = (v3->x - v1->x) / (v3->y - v1->y);
 	float invslope2 = (v3->x - v2->x) / (v3->y - v2->y);
 	float curx1 = v3->x;
 	float curx2 = v3->x;
+	float a, b;
 	for (int scanlineY = v3->y; scanlineY > v1->y; scanlineY--)
 	{
-		int k;
 		if (scanlineY >= 0 && scanlineY < m_height)
 		{
 			if (curx1 != curx2)
 			{
-				float a = fmin(curx1, curx2);
-				float b = fmax(curx1, curx2);
+				a = fmin(curx1, curx2);
+				b = fmax(curx1, curx2);
 				b++;
 				a = (int)(a < 0.0f ? 0.0f : a);
 				b = (int)(b > m_width ? m_width : b);
 				for (int i = a; i < b; i++)
 				{			
-					Vector3 p = Vector3(i, scanlineY, 0);
+					p.x = i;
+					p.y = scanlineY;
+					p.z = 0;
 					FillBufferPIxel(&p, t, tex, bufferData);
 				}
 			}
@@ -376,43 +378,28 @@ void Engine::FillBufferPIxel(const Vector3* p, const Triangle* t, const Texture*
 	float w2 = edgeFunction(t->va, t->vb, p);
 	float w0 = edgeFunction(t->vb, t->vc, p);
 	float w1 = edgeFunction(t->vc, t->va, p);
-	//if (w0 >= 0 && w1 >= 0 && w2 >= 0) 
+	float su, tu, cl, r, g, b, a;
+	uint c, k;
+	if (w0 >= 0 || w1 >= 0 || w2 >= 0) 
 	{
 		w0 /= t->area;
 		w1 /= t->area;
 		w2 /= t->area;
-		//if (w0 < 0) w0 = 1.0f - w0;
-		//if (w1 < 0) w1 = 1.0f - w1;
-		//if (w2 < 0) w2 = 1.0f - w2;
-
-		float su = w0 * t->ua->x + w1 * t->ub->x + w2 * t->uc->x;
-		float tu = w0 * t->ua->y + w1 * t->ub->y + w2 * t->uc->y;
-
-		su = (int)(su * texData->width);
-		tu = (int)(tu * texData->height);
-		su = (int)su % texData->width;
-		tu = (int)tu % texData->height;
-
-		float cl = ((w0 * t->la + w1 * t->lb + w2 * t->lc));
-		//uint c = (cl << 16) + (cl << 8) + cl;
-
-		
-		uint c = tu * texData->width + su;
-		c = texData->GetData()[c];
-		  c = 0xFFFFFF;
-		int cr = (c & 0xFF0000) >> 16;
-		int cg = (c & 0x00FF00) >> 8;
-		int cb = (c & 0x0000FF) >> 0;
-		cr *= cl;
-		cg *= cl;
-		cb *= cl;
-		cr = (int)(cr);
-		cb = (int)(cg);
-		cg = (int)(cb);
-		c = (cr << 16) + (cg << 8) + cb;
-		//c = tu * texData->width + su;
-		//c = texData->GetData()[c];
-		int k = p->y * m_width + p->x;
+		su = w0 * t->ua->x + w1 * t->ub->x + w2 * t->uc->x;
+		tu = w0 * t->ua->y + w1 * t->ub->y + w2 * t->uc->y;
+		tu = 1.0f - tu;
+		su = (int)(su * texData->GetWidth());
+		tu = (int)(tu * texData->GetHeight());
+		su = (int)su % texData->GetWidth();
+		tu = (int)tu % texData->GetHeight();
+		cl = ((w0 * t->la + w1 * t->lb + w2 * t->lc));
+		c = (tu * texData->GetWidth() + su) * 4;
+		r = texData->GetData()[c] * cl;
+		g = texData->GetData()[c+1] * cl;
+		b = texData->GetData()[c+2] * cl;
+		a = texData->GetData()[c+3] * cl;
+		c = ((int)(r*255) << 16) + ((int)(g*255) << 8) + (int)(b*255);
+		k = p->y * m_width + p->x;
 		bufferData->buffer[k] = c;
 	}
 }

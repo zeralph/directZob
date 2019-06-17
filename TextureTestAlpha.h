@@ -2,7 +2,7 @@
 #include"Types.h"
 #include "Texture.h"
 
-class TextureTestAlpha : public Texture
+class TextureTestAlpha
 {
 public:
 
