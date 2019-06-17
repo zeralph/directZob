@@ -6,7 +6,7 @@ class TextureTest : public Texture
 {
 public:
 
-	const uint* GetData() const { return &internal_data[0]; };
+	const float* GetData() const { NULL; };
 
 	const uint width = 64;
 	const uint height = 64;

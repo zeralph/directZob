@@ -1,14 +1,21 @@
 #pragma once
 #include "Types.h"
+#include "lodepng.h"
+#include <string>
+
 class Texture
 {
 public:
-	virtual inline const uint GetWidth() const { return width; }
-	virtual inline const uint GetHeight() const { return height; }
-	virtual const uint* GetData() const = 0;
 
-	const uint width = 64;
-	const uint height = 64;
-	//const uint* data = NULL;
+	Texture(const char* path);
+
+	inline const uint GetWidth() const { return m_width; }
+	inline const uint GetHeight() const { return m_height; }
+	inline const float* GetData() const { return data; }
+
+private:
+	uint m_width = 0;
+	uint m_height = 0;
+	float* data = NULL;
 	//const uint* data = &internal_data[0];
 };

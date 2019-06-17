@@ -3,18 +3,21 @@
 
 using namespace std;
 
-Mesh::Mesh(const std::string* path, const Texture* tex)
+Mesh::Mesh(const char* path, const Texture* tex):
+m_texture(tex),
+m_nbVertices(0),
+m_nbUvs(0),
+m_nbNormals(0),
+m_nbFaces(0),
+m_vertices(NULL),
+m_normals(NULL),
+m_uvs(NULL)
 {
-	std::cout << "Load mesh " << path->c_str();
-	m_texture = tex;
-	m_nbVertices = 0;
-	m_nbUvs = 0;
-	m_nbNormals = 0;
-	m_nbFaces = 0;
-	m_vertices = NULL;
+	std::cout << "Load mesh " << path;
+
 	std::string::size_type sz;
 	// Open the file.
-	std::ifstream file(path->c_str(), ios::in);
+	std::ifstream file(path, ios::in);
 	std::string line;
 	if (!file.is_open()) {
 		std::cout << " ERROR\n";
@@ -33,7 +36,9 @@ Mesh::Mesh(const std::string* path, const Texture* tex)
 		}
 		else if (line[0] == 'f')
 		{
-			m_nbFaces++;
+			vector<string> v;
+			SplitEntry(&line, &v, ' ');
+			m_nbFaces+= (uint)v.size() -3;
 		}
 	}
 	file.clear();
@@ -82,30 +87,10 @@ Mesh::Mesh(const std::string* path, const Texture* tex)
 		}
 		else if (line[0] == 'f')
 		{
-			std::vector<string> vec;
-			std::vector<string> vec2;
-			SplitEntry(&line, &vec, ' ');
-			Engine::Triangle t;
-
-			SplitEntry(&vec[1], &vec2, '/');
-			t.va = &m_vertices[std::stoi(vec2[0], &sz)-1];
-			t.ua = &m_uvs[std::stoi(vec2[1], &sz)-1];
-			t.na = &m_normals[std::stoi(vec2[2], &sz)-1];
-
-			vec2.clear();
-			SplitEntry(&vec[2], &vec2, '/');
-			t.vb = &m_vertices[std::stoi(vec2[0], &sz)-1];
-			t.ub = &m_uvs[std::stoi(vec2[1], &sz)-1];
-			t.nb = &m_normals[std::stoi(vec2[2], &sz)-1];
-
-			vec2.clear();
-			SplitEntry(&vec[3], &vec2, '/');
-			t.vc = &m_vertices[std::stoi(vec2[0], &sz)-1];
-			t.uc = &m_uvs[std::stoi(vec2[1], &sz)-1];
-			t.nc = &m_normals[std::stoi(vec2[2], &sz)-1];
-
-			m_triangles[curface] = t;
-			curface++;
+			vector<string> v;
+			SplitEntry(&line, &v, ' ');
+			v.erase(v.begin());
+			CreateTriangles(&v, m_triangles, curface);
 		}
 	}
 	memcpy(m_verticesData, m_vertices, sizeof(Vector3) * m_nbVertices);
@@ -118,7 +103,7 @@ Mesh::~Mesh()
 {
 }
 
-void Mesh::SplitEntry(std::string* s, std::vector<std::string>* v, char delim)
+void Mesh::SplitEntry(const std::string* s, std::vector<std::string>* v, const char delim)
 {
 	std::size_t current, previous = 0;
 	current = s->find(delim);
@@ -153,7 +138,7 @@ void Mesh::Draw(Engine* engine)
 	const Vector3* camZ = cam->GetEyeVector();
 	float w = (float)bData->width / 2.0f;
 	float h = (float)bData->height / 2.0f;
-	for (int i = 0; i < m_nbVertices; i++)
+	for (uint i = 0; i < m_nbVertices; i++)
 	{
 		m_modelMatrix.Mul(&m_vertices[i]);
 		p->Mul(&m_vertices[i]);
@@ -161,9 +146,10 @@ void Mesh::Draw(Engine* engine)
 		//m_vertices[i].x = (m_vertices[i].x + 1.0f) * w;
 		//m_vertices[i].y = (m_vertices[i].y + 1.0f) * h;
 	}
-	for (int i = 0; i < m_nbNormals; i++)
+	for (uint i = 0; i < m_nbNormals; i++)
 	{
 		m_modelMatrix.Mul(&m_normals[i]);
+		m_normals[i].Normalize();
 	}
 	int w2 = bData->width / 2;
 	int h2 = bData->height / 2;
@@ -171,7 +157,7 @@ void Mesh::Draw(Engine* engine)
 	uint color = 0;
 	Vector3 n;
 
-	Vector3 light = Vector3(1.0f, 1.0f, -1.0f);
+	Vector3 light = Vector3(0.0f, 0.0f, -1.0f);
 	light.Normalize();
 
 	for (int i = 0; i < m_nbFaces; i ++)
@@ -185,5 +171,61 @@ void Mesh::Draw(Engine* engine)
 			t->ComputeLighting(&light);
 			engine->DrawTriangle2(t, m_texture, bData);
 		}
+	}
+}
+
+
+void Mesh::CreateTriangles(const std::vector<std::string>* line, Engine::Triangle* tArray, size_t &tArrayIdx)
+{
+	size_t nbFaces = line->size() - 2;
+	int a, b, c = 0;
+	std::vector<std::string> vec;
+	for (size_t i = 0; i < nbFaces; i++)
+	{
+		if (i % 2 == 0)
+		{
+			a = i + 0;
+			b = i + 1;
+			c = i + 2;
+		}
+		else
+		{
+			a = i - 1;
+			b = i + 1;
+			c = i + 2;
+		}
+
+		Engine::Triangle t;
+		std::string::size_type sz;
+
+		vec.clear();
+		SplitEntry(&line->at(a), &vec, '/');
+		t.va = &m_vertices[std::stoi(vec[0], &sz) - 1];
+		if (vec[1].size() > 0)
+			t.ua = &m_uvs[std::stoi(vec[1], &sz) - 1];
+		else
+			t.ua = &Vector2(0, 0);
+		t.na = &m_normals[std::stoi(vec[2], &sz) - 1];
+
+		vec.clear();
+		SplitEntry(&line->at(b), &vec, '/');
+		t.vb = &m_vertices[std::stoi(vec[0], &sz) - 1];
+		if (vec[1].size() > 0)
+			t.ub = &m_uvs[std::stoi(vec[1], &sz) - 1];
+		else
+			t.ub = &Vector2(0, 0);
+		t.nb = &m_normals[std::stoi(vec[2], &sz) - 1];
+
+		vec.clear();
+		SplitEntry(&line->at(c), &vec, '/');
+		t.vc = &m_vertices[std::stoi(vec[0], &sz) - 1];
+		if (vec[1].size() > 0)
+			t.uc = &m_uvs[std::stoi(vec[1], &sz) - 1];
+		else
+			t.uc = &Vector2(0, 0);
+		t.nc = &m_normals[std::stoi(vec[2], &sz) - 1];
+
+		tArray[tArrayIdx] = t;
+		tArrayIdx++;
 	}
 }

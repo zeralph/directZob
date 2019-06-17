@@ -12,8 +12,7 @@ class Mesh
 {
 public:
 
-
-	Mesh(const std::string* path, const Texture* tex);
+	Mesh(const char* path, const Texture* tex);
 	~Mesh();
 	void Draw(Engine* engine);
 	void Init();
@@ -22,25 +21,27 @@ public:
 	inline void SetRotation(float x, float y, float z) { m_modelMatrix.SetRotation(x, y, z); }
 	inline void SetTranslation(float x, float y, float z) { m_modelMatrix.SetTranslation(x, y, z); }
 
-	Vector3* m_vertices;
-	Vector3* m_normals;
+	Vector3* m_vertices = NULL;
+	Vector3* m_normals = NULL;
 
-	Vector3* m_verticesData;
-	Vector3* m_normalsData;
+	Vector3* m_verticesData = NULL;
+	Vector3* m_normalsData = NULL;
 
-	Vector2* m_uvs;
-	Engine::Triangle* m_triangles;
+	Vector2* m_uvs = NULL;
+	Engine::Triangle* m_triangles = NULL;
+
 private:
-	void SplitEntry(std::string* s, std::vector<std::string>* v, char delim);
+	void SplitEntry(const std::string* s, std::vector<std::string>* v, const char delim);
+	void CreateTriangles(const std::vector<std::string>* line, Engine::Triangle* tArray, size_t &tArrayIdx);
 	inline void ReinitVertices();
 
-	uint m_nbVertices;
-	uint m_nbUvs;
-	uint m_nbNormals;
-	uint m_nbFaces;
+	uint m_nbVertices = 0;
+	uint m_nbUvs = 0;
+	uint m_nbNormals = 0;
+	uint m_nbFaces = 0;
 
 	Matrix4x4	m_modelMatrix;
 
-	const Texture* m_texture;
+	const Texture* m_texture = NULL;
 };
 

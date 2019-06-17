@@ -1,4 +1,5 @@
 #pragma once
+#include <math.h>
 class Vector3
 {
 public:
@@ -11,7 +12,14 @@ public:
 	static const Vector3 Vector3Y;
 	static const Vector3 Vector3Z;
 
-	inline void Normalize() {if (w != 1) {x /= w; y /= w; z /= w; w = 1.0f;};}
+	inline void Normalize() 
+	{
+		float f = (float)sqrt((float)(x * x) + (float)(y * y) + (float)(z * z));
+		x /= f; 
+		y /= f; 
+		z /= f;
+		w = 1.0f;
+	}
 
 	static float Dot(const Vector3* v1, const Vector3* v2);
 	static Vector3 Cross(const Vector3* v1, const Vector3* v2);
