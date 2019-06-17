@@ -13,11 +13,12 @@ public:
 
 	inline const Matrix4x4* GetViewMatrix() const { return &m_viewMatrix; }
 	inline const Matrix4x4* GetProjectionMatrix() const {return &m_projMatrix;}
-	inline const Matrix4x4* GetScreenMatrix() const { return &m_screenMatrix; }
+
+	inline void SetPosition(const Vector3* p) { m_viewMatrix.Identity(); m_viewMatrix.SetTranslation(p->x, p->y, p->z); }
+
 private:
 
 	Matrix4x4 m_viewMatrix;
 	Matrix4x4 m_projMatrix;
-	Matrix4x4 m_screenMatrix;
 };
 
