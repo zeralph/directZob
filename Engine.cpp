@@ -7,7 +7,10 @@ Engine::Engine(int width, int height)
 	m_currentFrame = 0;
 	m_width = width;
 	m_height = height;
+	m_zNear = 0.01f;
+	m_zFar = 1000.0f;
 	m_buffer = (uint*)malloc(sizeof(uint) * m_width * m_height);
+	m_zBuffer = (float*)malloc(sizeof(float) * m_width * m_height);
 	m_curBuffer = 0;
 	int result = mfb_open("Noise Test", m_width, m_height);
 	m_fps = 0.0;
@@ -15,16 +18,24 @@ Engine::Engine(int width, int height)
 	m_bufferData.height = m_height;
 	m_bufferData.width = m_width;
 	m_bufferData.buffer = m_buffer;
+	m_bufferData.zBuffer = m_zBuffer;
 	m_bufferData.size = m_width * m_height;
 	m_tick = clock();
 
 	m_camera = new Camera();
-	m_camera->setProjectionMatrix(90.0f, width, height, 0.1f, 100.0f);
+	m_camera->setProjectionMatrix(90.0f, width, height, m_zNear, m_zFar);
 }
 
 Engine::~Engine()
 {
 
+}
+
+void Engine::ClearBuffer(const Color* color)
+{
+	uint v = color->GetRawValue();
+	memset(m_buffer, v, sizeof(uint) * m_width * m_height);
+	memset(m_zBuffer, 0, sizeof(float) * m_width * m_height);
 }
 
 int Engine::Update()
@@ -183,15 +194,6 @@ void Engine::CopyBuffer(uint* source, uint * dest)
 		g = (int)(float)((v & 0x00FF00) >> 8);
 		b = (int)(float)((v & 0x0000FF));
 		dest[i] = MFB_RGB(r, g, b);
-	}
-}
-
-void Engine::ClearBuffer(const Color* color)
-{
-	int v = color->GetRawValue();
-	for (int i = 0; i < m_width*m_height; i++)
-	{
-		m_buffer[i] = v;
 	}
 }
 
@@ -378,29 +380,37 @@ void Engine::FillBufferPIxel(const Vector3* p, const Triangle* t, const Texture*
 	float w2 = edgeFunction(t->va, t->vb, p);
 	float w0 = edgeFunction(t->vb, t->vc, p);
 	float w1 = edgeFunction(t->vc, t->va, p);
-	float su, tu, cl, r, g, b, a;
+	float su, tu, cl, r, g, b, a, z;
 	uint c, k;
 	if (w0 >= 0 || w1 >= 0 || w2 >= 0) 
 	{
 		w0 /= t->area;
 		w1 /= t->area;
 		w2 /= t->area;
-		su = w0 * t->ua->x + w1 * t->ub->x + w2 * t->uc->x;
-		tu = w0 * t->ua->y + w1 * t->ub->y + w2 * t->uc->y;
-		tu = 1.0f - tu;
-		su = (int)(su * texData->GetWidth());
-		tu = (int)(tu * texData->GetHeight());
-		su = (int)su % texData->GetWidth();
-		tu = (int)tu % texData->GetHeight();
-		cl = ((w0 * t->la + w1 * t->lb + w2 * t->lc));
-		c = (tu * texData->GetWidth() + su) * 4;
-		r = texData->GetData()[c] * cl;
-		g = texData->GetData()[c+1] * cl;
-		b = texData->GetData()[c+2] * cl;
-		a = texData->GetData()[c+3] * cl;
-		c = ((int)(r*255) << 16) + ((int)(g*255) << 8) + (int)(b*255);
+
+		z = 1.0f / (t->va->z * w0 + t->vb->z * w1 + t->vc->z * w2);
 		k = p->y * m_width + p->x;
-		bufferData->buffer[k] = c;
+		//if (z>=m_zNear && z<=m_zFar && z < bufferData->zBuffer[k])
+		float zf = (bufferData->zBuffer[k] == 0.0f)?m_zFar: bufferData->zBuffer[k];
+		if(z>=m_zNear && z<m_zFar && z <zf)
+		{
+			bufferData->zBuffer[k] = z;
+			su = w0 * t->ua->x + w1 * t->ub->x + w2 * t->uc->x;
+			tu = w0 * t->ua->y + w1 * t->ub->y + w2 * t->uc->y;
+			tu = 1.0f - tu;
+			su = (int)(su * texData->GetWidth());
+			tu = (int)(tu * texData->GetHeight());
+			su = (int)su % texData->GetWidth();
+			tu = (int)tu % texData->GetHeight();
+			cl = ((w0 * t->la + w1 * t->lb + w2 * t->lc));
+			c = (tu * texData->GetWidth() + su) * 4;
+			r = texData->GetData()[c] * cl;
+			g = texData->GetData()[c + 1] * cl;
+			b = texData->GetData()[c + 2] * cl;
+			a = texData->GetData()[c + 3] * cl;
+			c = ((int)(r * 255) << 16) + ((int)(g * 255) << 8) + (int)(b * 255);
+			bufferData->buffer[k] = c;
+		}
 	}
 }
 

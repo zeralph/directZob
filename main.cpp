@@ -21,16 +21,20 @@ int main()
 	Matrix2x2 m;
 	int state;
 
-	Texture* tex = new Texture("D:/_GIT/directZob/resources/4096_earth.png");
+	Texture* tex = new Texture("D:/_GIT/directZob/resources/landscape.png");
 
-	Mesh* mesh = new Mesh("D:/_GIT/directZob/resources/earth.obj", tex);
-	//Mesh* mesh = new Mesh(&std::string("D:/_GIT/directZob/resources/camaro.obj"), testTest);
+	//Mesh* mesh = new Mesh("D:/_GIT/directZob/resources/earth.obj", tex);
+	Mesh* mesh = new Mesh("D:/_GIT/directZob/resources/man.obj", tex);
 	//Mesh* mesh = new Mesh("D:/_GIT/directZob/resources/LowPolyFiatUNO.obj", tex);
 
 	for (;;)
 	{
 		frame++;
 		m_engine->ClearBuffer(&Color::Grey);
+
+
+		m_engine->GetCamera()->SetPosition(&Vector3(0, 0, -10));
+
 		m.Identity();
 		m.SetTranslation(5, 5);
 		//frameCharBuffer[0] = '\0';
@@ -86,11 +90,11 @@ int main()
 			}
 		}
 		*/
-		rot += 0.25f;
+		rot += 1.5f;
 
 		mesh->Init();
-		//mesh->SetTranslation(0,0.25f,0);
-		static float scale = 0.0025f;
+		mesh->SetTranslation(0,1,0);
+		static float scale = 0.05f;
 		mesh->SetSCale(scale, scale, scale);
 		mesh->SetRotation(0, rot, 180);
 		mesh->Draw(m_engine);

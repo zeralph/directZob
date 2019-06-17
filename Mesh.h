@@ -18,7 +18,7 @@ public:
 	void Init();
 
 	inline void SetSCale(float x, float y, float z) { m_modelMatrix.SetScale(x, y, z); }
-	inline void SetRotation(float x, float y, float z) { m_modelMatrix.SetRotation(x, y, z); }
+	inline void SetRotation(float x, float y, float z) { m_modelMatrix.SetRotation(x, y, z); m_modelMatrixRotationOnly.SetRotation(x, y, z); }
 	inline void SetTranslation(float x, float y, float z) { m_modelMatrix.SetTranslation(x, y, z); }
 
 	Vector3* m_vertices = NULL;
@@ -41,7 +41,7 @@ private:
 	uint m_nbFaces = 0;
 
 	Matrix4x4	m_modelMatrix;
-
+	Matrix4x4	m_modelMatrixRotationOnly;
 	const Texture* m_texture = NULL;
 };
 
