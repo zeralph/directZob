@@ -118,6 +118,7 @@ void Mesh::SplitEntry(const std::string* s, std::vector<std::string>* v, const c
 void Mesh::Init()
 {
 	m_modelMatrix.Identity();
+	m_modelMatrixRotationOnly.Identity();
 	ReinitVertices();
 }
 
@@ -133,22 +134,20 @@ void Mesh::Draw(Engine* engine)
 
 	Vector2 a, b, c, uva, uvb, uvc;
 	const Camera* cam = engine->GetCamera();
-	const Matrix4x4* p = cam->GetProjectionMatrix();
-	const Matrix4x4* s = cam->GetScreenMatrix();
+	const Matrix4x4* view = cam->GetViewMatrix();
+	const Matrix4x4* proj = cam->GetProjectionMatrix();
 	const Vector3* camZ = cam->GetEyeVector();
 	float w = (float)bData->width / 2.0f;
 	float h = (float)bData->height / 2.0f;
 	for (uint i = 0; i < m_nbVertices; i++)
 	{
 		m_modelMatrix.Mul(&m_vertices[i]);
-		p->Mul(&m_vertices[i]);
-		s->Mul(&m_vertices[i]);
-		//m_vertices[i].x = (m_vertices[i].x + 1.0f) * w;
-		//m_vertices[i].y = (m_vertices[i].y + 1.0f) * h;
+		view->Mul(&m_vertices[i]);
+		proj->Mul(&m_vertices[i]);
 	}
 	for (uint i = 0; i < m_nbNormals; i++)
 	{
-		m_modelMatrix.Mul(&m_normals[i]);
+		m_modelMatrixRotationOnly.Mul(&m_normals[i]);
 		m_normals[i].Normalize();
 	}
 	int w2 = bData->width / 2;
@@ -157,21 +156,25 @@ void Mesh::Draw(Engine* engine)
 	uint color = 0;
 	Vector3 n;
 
-	Vector3 light = Vector3(0.0f, 0.0f, -1.0f);
+	Vector3 light = Vector3(0.0f, -1.0f, -1.0f);
 	light.Normalize();
-
+	uint drawnFaces = 0;
 	for (int i = 0; i < m_nbFaces; i ++)
 	{
 		Engine::Triangle* t = &m_triangles[i];
-		//n = t->na + t->nb;
-//TODO : only one normal
+		n.Set(t->na);
+		n.Add(t->nb);
+		n.Add(t->nc);
+		n.Div(3.0f);
 		if (Vector3::Dot(t->na, camZ) < 0)
 		{
 			t->ComputeArea();
 			t->ComputeLighting(&light);
 			engine->DrawTriangle2(t, m_texture, bData);
+			drawnFaces++;
 		}
 	}
+	drawnFaces;
 }
 
 

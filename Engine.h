@@ -57,6 +57,7 @@ public:
 		uint height;
 		uint size;
 		uint* buffer;
+		float* zBuffer;
 	};
 
 	enum CullMode
@@ -85,7 +86,7 @@ public:
 
 	void GetPixelColor(Color* color, int x, int y);
 
-	const Camera* GetCamera() const { return m_camera; }
+	Camera* GetCamera() { return m_camera; }
 
 	int Update();
 	inline ulong GetCurrentFrame() {return m_currentFrame;}
@@ -116,11 +117,14 @@ private:
 
 	int m_width;
 	int m_height;
+	float m_zNear;
+	float m_zFar;
 	int m_curBuffer;
 	clock_t	m_tick;
 	float m_fps;
 	ulong m_currentFrame;
 	uint* m_buffer;
+	float* m_zBuffer;
 	Camera* m_camera;
 	BufferData m_bufferData;
 

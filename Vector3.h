@@ -23,7 +23,9 @@ public:
 
 	static float Dot(const Vector3* v1, const Vector3* v2);
 	static Vector3 Cross(const Vector3* v1, const Vector3* v2);
-
+	inline void Add(const Vector3* v) { x += v->x; y += v->y; z += v->z; }
+	inline void Div(float f) { x /= f; y /= f; z /= f; }
+	inline void Set(const Vector3* v) { x = v->x; y = v->y; z = v->z; }
 	bool operator== (const Vector3& v) { return (x == v.x && y == v.y && v.z == z && w == v.w); }
 
 public:
