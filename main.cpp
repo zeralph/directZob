@@ -32,76 +32,21 @@ int main()
 		frame++;
 		m_engine->ClearBuffer(&Color::Grey);
 
-		static float fov = 90.0f;
+		static float fov = 45.0f;
 		m_engine->GetCamera()->setProjectionMatrix(fov, 800, 600, 0.01f, 1000.0f);
 
-		m_engine->GetCamera()->SetPosition(&Vector3(0, 0, -10));
+		m_engine->DrawGrid();
 
-		m.Identity();
-		m.SetTranslation(5, 5);
-		//frameCharBuffer[0] = '\0';
-		//_ultoa_s((long)m_engine->GetFps(), frameCharBuffer, 10);
-		//m_engine->DrawString(&m, frameCharBuffer, Color::White.GetRawValue(), m_engine->GetBufferData());
-
-		
-		//rot = 45.0f;
-		//rot = 47.00;
-		m.Identity();
-		m.SetTranslation(-300, -300);
-		m.SetScale(64, 64);
-		//m.SetRotation(rot);
-		//m_engine->DrawTexture(&m, testTest, m_engine->GetBufferData());
-
-		m_engine->DrawLine(0, 300, 800, 300, Color::White.GetRawValue(), m_engine->GetBufferData());
-		m_engine->DrawLine(400, 0, 400, 600, Color::White.GetRawValue(), m_engine->GetBufferData());
-
-		m.Identity(); 
-		m.SetTranslation(500, 500);
-		//m_engine->DrawChar(&m, 'A', Color::White.GetRawValue(), m_engine->GetBufferData());
-
-		m.Identity();
-		m.SetTranslation(100, 500);
-		m.SetScale(1, 1);
-		m.SetRotation(rot);
-		//m_engine->DrawString(&m, "123\n456", Color::Magenta.GetRawValue(), m_engine->GetBufferData());
-		//m_engine->DrawCircle((float)x, (float)y, 50, Color::White.GetRawValue(), m_engine->GetBufferData());
-		
-		for (int i = 0; i < 50; i++)
-		{
-			m.Identity();
-			m.SetTranslation((float)(i*64), 300);
-			m.SetScale(1, 1);
-			m.SetShear(0.5, 0);
-			m.SetRotation(rot);
-			//m_engine->DrawTexture(&m, testTest, m_engine->GetBufferData());
-		}
-		int starty = -6;
-		/*
-		for (int j = starty; j <= -starty; j += 4)
-		{
-			int startx = -8;
-			for (int i = startx; i <= -startx; i += 4)
-			{
-				Cube c = Cube(testTest);
-				c.Init();
-				c.SetSCale(0.1f, 0.1f, 0.1f);
-				c.SetTranslation(i, j, 0);
-				c.SetRotation(rot, rot, rot);
-				//c.SetRotation(45, 45, 45);
-				c.Draw(m_engine);
-			}
-		}
-		*/
 		rot += 1.5f;
 
 		mesh->Init();
 		static float tx = 0;
-		static float ty = 0;
-		static float tz = 0;
+		static float ty = -10;
+		static float tz = 10;
 		mesh->SetTranslation(tx, ty, tz);
 		static float scale = 1.0f;// 0.5f;
 		//mesh->SetSCale(scale, scale, scale);
-		//mesh->SetRotation(0, rot, 180);
+		mesh->SetRotation(0, rot, 0);
 		mesh->Draw(m_engine);
 
 		state = m_engine->Update();

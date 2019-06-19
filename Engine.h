@@ -83,8 +83,12 @@ public:
 	void DrawTriangle(const Vector2* va, const Vector2* vb, const Vector2* vc, const uint color, BufferData* bufferData);
 	void DrawTriangle2(const Triangle* t, const Texture* tex, BufferData* bufferData);
 
+	void DrawGrid();
+
 
 	void GetPixelColor(Color* color, int x, int y);
+
+	void Draw3DLine(const Vector3* v1, const Vector3* v2, const uint c, BufferData* bufferData);
 
 	Camera* GetCamera() { return m_camera; }
 

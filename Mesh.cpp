@@ -142,11 +142,11 @@ void Mesh::Draw(Engine* engine)
 	for (uint i = 0; i < m_nbVertices; i++)
 	{
 		m_modelMatrix.Mul(&m_vertices[i]);
-		//view->Mul(&m_vertices[i]);
+		view->Mul(&m_vertices[i]);
 		proj->Mul(&m_vertices[i]);
 
-		//m_vertices[i].x = (m_vertices[i].x + 1) * w;
-		//m_vertices[i].y = (m_vertices[i].y + 1) * h;
+		m_vertices[i].x = (m_vertices[i].x / m_vertices[i].z + 1) * w;
+		m_vertices[i].y = (m_vertices[i].y / m_vertices[i].z + 1) * h;
 
 	}
 	for (uint i = 0; i < m_nbNormals; i++)
@@ -170,12 +170,15 @@ void Mesh::Draw(Engine* engine)
 		n.Add(t->nb);
 		n.Add(t->nc);
 		n.Div(3.0f);
-		if (Vector3::Dot(t->na, camZ) < 0)
+		if ((t->va->z < 0 && t->vb->z < 0 && t->vc->z < 0))
 		{
-			t->ComputeArea();
-			t->ComputeLighting(&light);
-			engine->DrawTriangle2(t, m_texture, bData);
-			drawnFaces++;
+			if (Vector3::Dot(t->na, camZ) < 0.5)
+			{
+				t->ComputeArea();
+				t->ComputeLighting(&light);
+				engine->DrawTriangle2(t, m_texture, bData);
+				drawnFaces++;
+			}
 		}
 	}
 	drawnFaces;
