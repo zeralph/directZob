@@ -23,8 +23,9 @@ int main()
 
 	Texture* tex = new Texture("D:/_PERSO/directZob/resources/landscape.png");
 
+	Mesh* mesh = NULL;
 	//Mesh* mesh = new Mesh("D:/_PERSO/directZob/resources/earth.obj", tex);
-	Mesh* mesh = new Mesh("D:/_PERSO/directZob/resources/man.obj", tex);
+	mesh = new Mesh("D:/_PERSO/directZob/resources/man.obj", tex);
 	//Mesh* mesh = new Mesh("D:/_GIT/directZob/resources/LowPolyFiatUNO.obj", tex);
 
 	for (;;)
@@ -33,22 +34,28 @@ int main()
 		m_engine->ClearBuffer(&Color::Grey);
 
 		static float fov = 45.0f;
+		static Vector3 from = Vector3(1, 1, -2);
+		static Vector3 to = Vector3(00, 00, 00);
+		static Vector3 up = Vector3(0, 1, 0);
 		m_engine->GetCamera()->setProjectionMatrix(fov, 800, 600, 0.01f, 1000.0f);
-
+		m_engine->GetCamera()->SetLookAt(&from, &to, &up);
+		//m_engine->GetCamera()->SetPosition(&from);
 		m_engine->DrawGrid();
 
 		rot += 1.5f;
 
-		mesh->Init();
-		static float tx = 0;
-		static float ty = -10;
-		static float tz = 10;
-		mesh->SetTranslation(tx, ty, tz);
-		static float scale = 1.0f;// 0.5f;
-		//mesh->SetSCale(scale, scale, scale);
-		mesh->SetRotation(0, rot, 0);
-		mesh->Draw(m_engine);
-
+		if (mesh)
+		{
+			mesh->Init();
+			static float tx = 0;
+			static float ty = 0;
+			static float tz = 0;
+			mesh->SetTranslation(tx, ty, tz);
+			static float scale = 1.0f / 15.0f;// 0.5f;
+			mesh->SetSCale(scale, scale, scale);
+			mesh->SetRotation(0, rot, 0);
+			mesh->Draw(m_engine);
+		}
 		state = m_engine->Update();
 
 		if (state < 0)

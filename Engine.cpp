@@ -133,17 +133,17 @@ void Engine::DrawGrid()
 	for (float i = -1; i <= 1; i += 0.1f)
 	{
 		a.x = b.x = i;
-		a.y = b.y = -0.5f;
-		a.z = 1;
-		b.z = -1;
+		a.y = b.y = 0.0f;
+		a.z = -1;
+		b.z = 1;
 		Draw3DLine(&a, &b, 0xFFFFFF, GetBufferData());
 	}
 	for (float i = -1; i <= 1; i += 0.1f)
 	{
 		a.z = b.z = i;
-		a.y = b.y = -0.5f;
-		a.x = 1;
-		b.x = -1;
+		a.y = b.y = 0.0f;
+		a.x = -1;
+		b.x = 1;
 		Draw3DLine(&a, &b, 0xFFFFFF, GetBufferData());
 	}
 
@@ -160,17 +160,35 @@ void Engine::Draw3DLine(const Vector3* v1, const Vector3* v2, const uint c, Buff
 
 	m_camera->GetViewMatrix()->Mul(&a);
 	m_camera->GetProjectionMatrix()->Mul(&a);
-
+	
+	if (a.w != 1)
+	{
+		//a.x /= a.w;
+		//a.y /= a.w;
+		//a/.z /= a.w;
+		//a.w /= a.w;
+	}
+	
 	m_camera->GetViewMatrix()->Mul(&b);
 	m_camera->GetProjectionMatrix()->Mul(&b);
-
+	
+	if (b.w != 1)
+	{
+		//b.x /= b.w;
+		//b.y /= b.w;
+		//b.z /= b.w;
+		//b.w /= b.w;
+	}
+	
 	a.x = (a.x / a.z + 1) * m_width / 2.0f;
 	a.y = (a.y / a.z + 1) * m_height / 2.0f;
 
 	b.x = (b.x / b.z + 1) * m_width / 2.0f;
 	b.y = (b.y / b.z + 1) * m_height / 2.0f;
-
-	DrawLine(a.x, a.y, b.x, b.y, c, bufferData);
+	if(a.z <0 || b.z < 0)
+	{
+		DrawLine(a.x, a.y, b.x, b.y, c, bufferData);
+	}
 }
 
 void Engine::DrawLine(const float xa, const float ya, const float xb, const float yb, const uint c, BufferData* bufferData)

@@ -11,6 +11,36 @@ Camera::~Camera()
 {
 
 }
+
+
+
+void Camera::SetLookAt(const Vector3* from, const Vector3* to, const Vector3* tmp)
+{
+	Vector3 forward = Vector3(to->x - from->x, to->y - from->y, to->z - from->z);
+	forward.Normalize();
+	Vector3 right = Vector3::Cross(tmp, &forward);
+	Vector3 up = Vector3::Cross(&forward, &right);
+
+	m_viewMatrix.Identity();
+
+	m_viewMatrix.SetData(0, 0, right.x);
+	m_viewMatrix.SetData(0, 1, right.y);
+	m_viewMatrix.SetData(0, 2, right.z);
+
+	m_viewMatrix.SetData(1, 0, up.x);
+	m_viewMatrix.SetData(1, 1, up.y);
+	m_viewMatrix.SetData(1, 2, up.z);
+
+	m_viewMatrix.SetData(2, 0, forward.x);
+	m_viewMatrix.SetData(2, 1, forward.y);
+	m_viewMatrix.SetData(2, 2, forward.z);
+
+	m_viewMatrix.SetData(0, 3, -from->x);
+	m_viewMatrix.SetData(1, 3, -from->y);
+	m_viewMatrix.SetData(2, 3, -from->z);
+}
+
+
 /*
 void Camera::setProjectionMatrix(const float angleOfView, const float width, const float height, const float near, const float far)
 {
