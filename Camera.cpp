@@ -86,7 +86,7 @@ void Camera::setProjectionMatrix(const float angleOfView, const float width, con
 	m_projMatrix.SetData(2, 0, 0);
 	m_projMatrix.SetData(2, 1, 0);
 	m_projMatrix.SetData(2, 2, -(f + n) / (f - n));
-	m_projMatrix.SetData(2, 3, -(2 * f) / (f - n));
+	m_projMatrix.SetData(2, 3, -(2 * f * n) / (f - n));
 
 	m_projMatrix.SetData(3, 0, 0);
 	m_projMatrix.SetData(3, 1, 0);
