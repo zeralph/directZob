@@ -43,25 +43,25 @@ void Camera::setProjectionMatrix(const float angleOfView, const float width, con
 	b = -t;
 //	//http://www.songho.ca/opengl/gl_projectionmatrix.html
 	m_projMatrix.Identity();
-	m_projMatrix.SetData(0, 0, 2 / (r - l));
+	m_projMatrix.SetData(0, 0, n/r);
 	m_projMatrix.SetData(0, 1, 0); 
 	m_projMatrix.SetData(0, 2, 0);
-	m_projMatrix.SetData(0, 3, -1 / (r - l));
+	m_projMatrix.SetData(0, 3, 0);
 
 	m_projMatrix.SetData(1, 0, 0);
-	m_projMatrix.SetData(1, 1, 2 / (t - b));
+	m_projMatrix.SetData(1, 1, n/t);
 	m_projMatrix.SetData(1, 2, 0);
-	m_projMatrix.SetData(1, 3, -(t + b) / (t - b));
+	m_projMatrix.SetData(1, 3, 0);
 
 	m_projMatrix.SetData(2, 0, 0);
 	m_projMatrix.SetData(2, 1, 0);
-	m_projMatrix.SetData(2, 2, -2 / (f - n));
-	m_projMatrix.SetData(2, 3, -(f + n) / (f - n));
+	m_projMatrix.SetData(2, 2, -(f + n) / (f - n));
+	m_projMatrix.SetData(2, 3, -(2 * f) / (f - n));
 
 	m_projMatrix.SetData(3, 0, 0);
 	m_projMatrix.SetData(3, 1, 0);
-	m_projMatrix.SetData(3, 2, 0);
-	m_projMatrix.SetData(3, 3, 1);
+	m_projMatrix.SetData(3, 2, -1);
+	m_projMatrix.SetData(3, 3, 0);
 
 
 }

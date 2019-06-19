@@ -126,6 +126,53 @@ void Engine::DrawCircle(const float xc, const float yc, const float r, const uin
 	*/
 }
 
+void Engine::DrawGrid()
+{
+	Vector3 a;
+	Vector3 b;
+	for (float i = -1; i <= 1; i += 0.1f)
+	{
+		a.x = b.x = i;
+		a.y = b.y = -0.5f;
+		a.z = 1;
+		b.z = -1;
+		Draw3DLine(&a, &b, 0xFFFFFF, GetBufferData());
+	}
+	for (float i = -1; i <= 1; i += 0.1f)
+	{
+		a.z = b.z = i;
+		a.y = b.y = -0.5f;
+		a.x = 1;
+		b.x = -1;
+		Draw3DLine(&a, &b, 0xFFFFFF, GetBufferData());
+	}
+
+	Draw3DLine(&Vector3::Vector3Zero, &Vector3::Vector3X, 0xFF0000, GetBufferData());
+	Draw3DLine(&Vector3::Vector3Zero, &Vector3::Vector3Y, 0x00FF00, GetBufferData());
+	Draw3DLine(&Vector3::Vector3Zero, &Vector3::Vector3Z, 0x0000FF, GetBufferData());
+
+}
+
+void Engine::Draw3DLine(const Vector3* v1, const Vector3* v2, const uint c, BufferData* bufferData)
+{
+	Vector3 a = Vector3(v1);
+	Vector3 b = Vector3(v2);
+
+	m_camera->GetViewMatrix()->Mul(&a);
+	m_camera->GetProjectionMatrix()->Mul(&a);
+
+	m_camera->GetViewMatrix()->Mul(&b);
+	m_camera->GetProjectionMatrix()->Mul(&b);
+
+	a.x = (a.x / a.z + 1) * m_width / 2.0f;
+	a.y = (a.y / a.z + 1) * m_height / 2.0f;
+
+	b.x = (b.x / b.z + 1) * m_width / 2.0f;
+	b.y = (b.y / b.z + 1) * m_height / 2.0f;
+
+	DrawLine(a.x, a.y, b.x, b.y, c, bufferData);
+}
+
 void Engine::DrawLine(const float xa, const float ya, const float xb, const float yb, const uint c, BufferData* bufferData)
 {
 	float x1 = xa;
@@ -155,26 +202,27 @@ void Engine::DrawLine(const float xa, const float ya, const float xb, const floa
 	int y = (int)y1;
 
 	const int maxX = (int)x2;
-
 	for (int x = (int)x1; x < maxX; x++)
 	{
-		if (steep)
+		if (x >= 0 && x <= m_width && y>=0 && y<m_height)
 		{
-			uint k = x * bufferData->width + y;
-			if (k < bufferData->size)
+			if (steep)
 			{
-				buffer[k] = c;
+				uint k = x * bufferData->width + y;
+				if (k < bufferData->size)
+				{
+					buffer[k] = c;
+				}
+			}
+			else
+			{
+				uint k = y * bufferData->width + x;
+				if (k < bufferData->size)
+				{
+					buffer[k] = c;
+				}
 			}
 		}
-		else
-		{
-			uint k = y * bufferData->width + x;
-			if (k < bufferData->size)
-			{
-				buffer[k] = c;
-			}
-		}
-
 		error -= dy;
 		if (error < 0)
 		{
@@ -388,11 +436,11 @@ void Engine::FillBufferPIxel(const Vector3* p, const Triangle* t, const Texture*
 		w1 /= t->area;
 		w2 /= t->area;
 
-		z = 1.0f / (t->va->z * w0 + t->vb->z * w1 + t->vc->z * w2);
+		z = -1.0f / (t->va->z * w0 + t->vb->z * w1 + t->vc->z * w2);
 		k = p->y * m_width + p->x;
 		//if (z>=m_zNear && z<=m_zFar && z < bufferData->zBuffer[k])
-		float zf = (bufferData->zBuffer[k] == 0.0f)?m_zFar: bufferData->zBuffer[k];
-//		if(z>=m_zNear && z<m_zFar && z <zf)
+		//float zf = (bufferData->zBuffer[k] == 0.0f)?m_zFar: bufferData->zBuffer[k];
+		if(z>=m_zNear && z<m_zFar && z > bufferData->zBuffer[k])
 		{
 			bufferData->zBuffer[k] = z;
 			su = w0 * t->ua->x + w1 * t->ub->x + w2 * t->uc->x;

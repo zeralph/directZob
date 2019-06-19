@@ -19,6 +19,14 @@ Vector3::Vector3(float x, float y, float z) :
 
 }
 
+Vector3::Vector3(const Vector3* v)
+{
+	x = v->x;
+	y = v->y;
+	z = v->z;
+	w = v-> w;
+}
+
 Vector3 Vector3::Cross(const Vector3* v1, const Vector3* v2)
 {
 	Vector3 r;
