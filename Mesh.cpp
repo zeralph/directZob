@@ -142,8 +142,12 @@ void Mesh::Draw(Engine* engine)
 	for (uint i = 0; i < m_nbVertices; i++)
 	{
 		m_modelMatrix.Mul(&m_vertices[i]);
-		view->Mul(&m_vertices[i]);
+		//view->Mul(&m_vertices[i]);
 		proj->Mul(&m_vertices[i]);
+
+		//m_vertices[i].x = (m_vertices[i].x + 1) * w;
+		//m_vertices[i].y = (m_vertices[i].y + 1) * h;
+
 	}
 	for (uint i = 0; i < m_nbNormals; i++)
 	{

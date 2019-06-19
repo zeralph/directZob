@@ -7,7 +7,7 @@
 int main()
 {
 	std::cout << "Init engine";
-	Engine* m_engine = new Engine(800, 800);
+	Engine* m_engine = new Engine(800, 600);
 	std::cout << " OK\n";
 	int x = m_engine->Width() / 2;
 	int y = m_engine->Height() / 2;
@@ -21,10 +21,10 @@ int main()
 	Matrix2x2 m;
 	int state;
 
-	Texture* tex = new Texture("D:/_GIT/directZob/resources/landscape.png");
+	Texture* tex = new Texture("D:/_PERSO/directZob/resources/landscape.png");
 
-	//Mesh* mesh = new Mesh("D:/_GIT/directZob/resources/earth.obj", tex);
-	Mesh* mesh = new Mesh("D:/_GIT/directZob/resources/man.obj", tex);
+	//Mesh* mesh = new Mesh("D:/_PERSO/directZob/resources/earth.obj", tex);
+	Mesh* mesh = new Mesh("D:/_PERSO/directZob/resources/man.obj", tex);
 	//Mesh* mesh = new Mesh("D:/_GIT/directZob/resources/LowPolyFiatUNO.obj", tex);
 
 	for (;;)
@@ -32,6 +32,8 @@ int main()
 		frame++;
 		m_engine->ClearBuffer(&Color::Grey);
 
+		static float fov = 90.0f;
+		m_engine->GetCamera()->setProjectionMatrix(fov, 800, 600, 0.01f, 1000.0f);
 
 		m_engine->GetCamera()->SetPosition(&Vector3(0, 0, -10));
 
@@ -93,10 +95,13 @@ int main()
 		rot += 1.5f;
 
 		mesh->Init();
-		mesh->SetTranslation(0,1,0);
-		static float scale = 0.05f;
-		mesh->SetSCale(scale, scale, scale);
-		mesh->SetRotation(0, rot, 180);
+		static float tx = 0;
+		static float ty = 0;
+		static float tz = 0;
+		mesh->SetTranslation(tx, ty, tz);
+		static float scale = 1.0f;// 0.5f;
+		//mesh->SetSCale(scale, scale, scale);
+		//mesh->SetRotation(0, rot, 180);
 		mesh->Draw(m_engine);
 
 		state = m_engine->Update();
