@@ -14,7 +14,9 @@ public:
 	inline const Matrix4x4* GetViewMatrix() const { return &m_viewMatrix; }
 	inline const Matrix4x4* GetProjectionMatrix() const {return &m_projMatrix;}
 
-	inline void SetPosition(const Vector3* p) { m_viewMatrix.Identity(); m_viewMatrix.SetTranslation(p->x, p->y, p->z); }
+
+	void SetLookAt(const Vector3* from, const Vector3* to, const Vector3* tmp);
+	inline void SetPosition(const Vector3* p) { m_viewMatrix.Identity(); m_viewMatrix.SetTranslation(-p->x,-p->y, -p->z); }
 
 private:
 
