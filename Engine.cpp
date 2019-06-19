@@ -392,7 +392,7 @@ void Engine::FillBufferPIxel(const Vector3* p, const Triangle* t, const Texture*
 		k = p->y * m_width + p->x;
 		//if (z>=m_zNear && z<=m_zFar && z < bufferData->zBuffer[k])
 		float zf = (bufferData->zBuffer[k] == 0.0f)?m_zFar: bufferData->zBuffer[k];
-		if(z>=m_zNear && z<m_zFar && z <zf)
+//		if(z>=m_zNear && z<m_zFar && z <zf)
 		{
 			bufferData->zBuffer[k] = z;
 			su = w0 * t->ua->x + w1 * t->ub->x + w2 * t->uc->x;
