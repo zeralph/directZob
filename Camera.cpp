@@ -19,25 +19,51 @@ void Camera::SetLookAt(const Vector3* from, const Vector3* to, const Vector3* tm
 	Vector3 forward = Vector3(to->x - from->x, to->y - from->y, to->z - from->z);
 	forward.Normalize();
 	Vector3 right = Vector3::Cross(tmp, &forward);
+	right.Normalize();
 	Vector3 up = Vector3::Cross(&forward, &right);
-
+	up.Normalize();
 	m_viewMatrix.Identity();
+	static bool b = true;
+	if (b)
+	{
+		m_viewMatrix.SetData(0, 0, right.x);
+		m_viewMatrix.SetData(0, 1, right.y);
+		m_viewMatrix.SetData(0, 2, right.z);
+		//m_viewMatrix.SetData(0, 3, -from->x);
 
-	m_viewMatrix.SetData(0, 0, right.x);
-	m_viewMatrix.SetData(0, 1, right.y);
-	m_viewMatrix.SetData(0, 2, right.z);
+		m_viewMatrix.SetData(1, 0, up.x);
+		m_viewMatrix.SetData(1, 1, up.y);
+		m_viewMatrix.SetData(1, 2, up.z);
+		//m_viewMatrix.SetData(1, 3, -from->y);
 
-	m_viewMatrix.SetData(1, 0, up.x);
-	m_viewMatrix.SetData(1, 1, up.y);
-	m_viewMatrix.SetData(1, 2, up.z);
+		m_viewMatrix.SetData(2, 0, forward.x);
+		m_viewMatrix.SetData(2, 1, forward.y);
+		m_viewMatrix.SetData(2, 2, forward.z);
+		//m_viewMatrix.SetData(2, 3, -from->z);
 
-	m_viewMatrix.SetData(2, 0, forward.x);
-	m_viewMatrix.SetData(2, 1, forward.y);
-	m_viewMatrix.SetData(2, 2, forward.z);
+		m_viewMatrix.SetData(0, 3, -right.x * from->x - right.y * from->y - right.z * from->z);
+		m_viewMatrix.SetData(1, 3, -up.x * from->x - up.y * from->y - up.z * from->z);
+		m_viewMatrix.SetData(2, 3, -forward.x * from->x - forward.y * from->y - forward.z * from->z);
+	}
+	else
+	{
+		m_viewMatrix.SetData(0, 0, right.x);
+		m_viewMatrix.SetData(0, 1, right.y);
+		m_viewMatrix.SetData(0, 2, right.z);
+		
 
-	m_viewMatrix.SetData(0, 3, -from->x);
-	m_viewMatrix.SetData(1, 3, -from->y);
-	m_viewMatrix.SetData(2, 3, -from->z);
+		m_viewMatrix.SetData(1, 0, up.x);
+		m_viewMatrix.SetData(1, 1, up.y);
+		m_viewMatrix.SetData(1, 2, up.z);
+
+		m_viewMatrix.SetData(2, 0, forward.x);
+		m_viewMatrix.SetData(2, 1, forward.y);
+		m_viewMatrix.SetData(2, 2, forward.z);
+
+		m_viewMatrix.SetData(0, 3, from->x);
+		m_viewMatrix.SetData(1, 3, from->y);
+		m_viewMatrix.SetData(2, 3, from->z);
+	}
 }
 
 

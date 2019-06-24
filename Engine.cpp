@@ -130,20 +130,20 @@ void Engine::DrawGrid()
 {
 	Vector3 a;
 	Vector3 b;
-	for (float i = -1; i <= 1; i += 0.1f)
+	for (float i = -10; i <= 10; i += 1.0f)
 	{
 		a.x = b.x = i;
 		a.y = b.y = 0.0f;
-		a.z = -1;
-		b.z = 1;
+		a.z = -10;
+		b.z = 10;
 		Draw3DLine(&a, &b, 0xFFFFFF, GetBufferData());
 	}
-	for (float i = -1; i <= 1; i += 0.1f)
+	for (float i = -10; i <= 10; i += 1.0f)
 	{
 		a.z = b.z = i;
 		a.y = b.y = 0.0f;
-		a.x = -1;
-		b.x = 1;
+		a.x = -10;
+		b.x = 10;
 		Draw3DLine(&a, &b, 0xFFFFFF, GetBufferData());
 	}
 
@@ -222,7 +222,7 @@ void Engine::DrawLine(const float xa, const float ya, const float xb, const floa
 	const int maxX = (int)x2;
 	for (int x = (int)x1; x < maxX; x++)
 	{
-		if (x >= 0 && x <= m_width && y>=0 && y<m_height)
+		if (x >= 0 && x <m_width && y>=0 && y<m_height)
 		{
 			if (steep)
 			{
@@ -454,11 +454,11 @@ void Engine::FillBufferPIxel(const Vector3* p, const Triangle* t, const Texture*
 		w1 /= t->area;
 		w2 /= t->area;
 
-		z = -1.0f / (t->va->z * w0 + t->vb->z * w1 + t->vc->z * w2);
+		z = 1.0f / (t->va->z * w0 + t->vb->z * w1 + t->vc->z * w2);
 		k = p->y * m_width + p->x;
 		//if (z>=m_zNear && z<=m_zFar && z < bufferData->zBuffer[k])
-		//float zf = (bufferData->zBuffer[k] == 0.0f)?m_zFar: bufferData->zBuffer[k];
-		if(z>=m_zNear && z<m_zFar && z > bufferData->zBuffer[k])
+		float zf = (bufferData->zBuffer[k] == 0.0f)?m_zFar: bufferData->zBuffer[k];
+		if(z>=m_zNear && z<m_zFar && z < zf)
 		{
 			bufferData->zBuffer[k] = z;
 			su = w0 * t->ua->x + w1 * t->ub->x + w2 * t->uc->x;

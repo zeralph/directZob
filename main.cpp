@@ -21,11 +21,11 @@ int main()
 	Matrix2x2 m;
 	int state;
 
-	Texture* tex = new Texture("D:/_PERSO/directZob/resources/landscape.png");
+	Texture* tex = new Texture("F:/_GIT/directZob/resources/landscape.png");
 
 	Mesh* mesh = NULL;
 	//Mesh* mesh = new Mesh("D:/_PERSO/directZob/resources/earth.obj", tex);
-	mesh = new Mesh("D:/_PERSO/directZob/resources/man.obj", tex);
+	mesh = new Mesh("F:/_GIT/directZob/resources/man.obj", tex);
 	//Mesh* mesh = new Mesh("D:/_GIT/directZob/resources/LowPolyFiatUNO.obj", tex);
 
 	for (;;)
@@ -34,9 +34,9 @@ int main()
 		m_engine->ClearBuffer(&Color::Grey);
 
 		static float fov = 45.0f;
-		static Vector3 from = Vector3(1, 1, -2);
+		static Vector3 from = Vector3(2, 1, -4);
 		static Vector3 to = Vector3(00, 00, 00);
-		static Vector3 up = Vector3(0, 1, 0);
+		static Vector3 up = Vector3(0, 01, 0);
 		m_engine->GetCamera()->setProjectionMatrix(fov, 800, 600, 0.01f, 1000.0f);
 		m_engine->GetCamera()->SetLookAt(&from, &to, &up);
 		//m_engine->GetCamera()->SetPosition(&from);

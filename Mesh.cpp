@@ -143,7 +143,14 @@ void Mesh::Draw(Engine* engine)
 	{
 		m_modelMatrix.Mul(&m_vertices[i]);
 		view->Mul(&m_vertices[i]);
+		m_vertices[i].x = m_vertices[i].x / m_vertices[i].w;
+		m_vertices[i].y = m_vertices[i].y / m_vertices[i].w;
+		m_vertices[i].z = m_vertices[i].z / m_vertices[i].w;
 		proj->Mul(&m_vertices[i]);
+
+		m_vertices[i].x = m_vertices[i].x / m_vertices[i].w;
+		m_vertices[i].y = m_vertices[i].y / m_vertices[i].w;
+		m_vertices[i].z = m_vertices[i].z / m_vertices[i].w;
 
 		m_vertices[i].x = (m_vertices[i].x / m_vertices[i].z + 1) * w;
 		m_vertices[i].y = (m_vertices[i].y / m_vertices[i].z + 1) * h;
@@ -170,9 +177,9 @@ void Mesh::Draw(Engine* engine)
 		n.Add(t->nb);
 		n.Add(t->nc);
 		n.Div(3.0f);
-		if ((t->va->z < 0 && t->vb->z < 0 && t->vc->z < 0))
+//		if ((t->va->z < 0 && t->vb->z < 0 && t->vc->z < 0))
 		{
-			if (Vector3::Dot(t->na, camZ) < 0.5)
+//			if (Vector3::Dot(t->na, camZ) < 0.5)
 			{
 				t->ComputeArea();
 				t->ComputeLighting(&light);
