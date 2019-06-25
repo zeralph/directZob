@@ -16,7 +16,9 @@ public:
 
 
 	void SetLookAt(const Vector3* from, const Vector3* to, const Vector3* tmp);
-	inline void SetPosition(const Vector3* p) { m_viewMatrix.Identity(); m_viewMatrix.SetTranslation(-p->x,-p->y, -p->z); }
+	inline void InitView() { m_viewMatrix.Identity();  }
+	inline void SetPosition(const Vector3* p) { m_viewMatrix.SetTranslation(-p->x,-p->y, -p->z); }
+	inline void SetRotation(const Vector3* p) {m_viewMatrix.SetRotation(-p->x, -p->y, -p->z); }
 
 private:
 

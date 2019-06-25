@@ -12,6 +12,7 @@ Engine::Engine(int width, int height)
 	m_buffer = (uint*)malloc(sizeof(uint) * m_width * m_height);
 	m_zBuffer = (float*)malloc(sizeof(float) * m_width * m_height);
 	m_curBuffer = 0;
+	m_showZBuffer = false;
 	m_fps = 0.0;
 	m_bufferData.height = m_height;
 	m_bufferData.width = m_width;
@@ -20,8 +21,8 @@ Engine::Engine(int width, int height)
 	m_bufferData.size = m_width * m_height;
 	m_tick = clock();
 
-	m_camera = new Camera();
-	m_camera->setProjectionMatrix(90.0f, width, height, m_zNear, m_zFar);
+	//m_camera = new Camera();
+	//m_camera->setProjectionMatrix(90.0f, width, height, m_zNear, m_zFar);
 }
 
 Engine::~Engine()
@@ -45,7 +46,7 @@ void Engine::Resize(int width, int height)
 	m_bufferData.zBuffer = m_zBuffer;
 	m_bufferData.size = m_width * m_height;
 	m_tick = clock();
-	m_camera->setProjectionMatrix(90.0f, width, height, m_zNear, m_zFar);
+//	m_camera->setProjectionMatrix(90.0f, width, height, m_zNear, m_zFar);
 }
 
 void Engine::ClearBuffer(const Color* color)
@@ -57,8 +58,7 @@ void Engine::ClearBuffer(const Color* color)
 
 int Engine::Update(struct Window *window)
 {	
-	bool bDrawZBuffer = false;
-	if (bDrawZBuffer)
+	if (m_showZBuffer)
 	{
 		uint c;
 		for (int i = 0; i < m_width*m_height; i++)
@@ -75,39 +75,6 @@ int Engine::Update(struct Window *window)
 	m_fps = (float)CLOCKS_PER_SEC / (float)(t - m_tick);
 	m_tick = t;
 	return r;
-}
-
-void Engine::DrawString(const Matrix2x2* matrix, std::string s, const uint color, BufferData* bufferData)
-{
-	Matrix2x2 m(matrix);
-	int w = Text2D::GetCharWidth();
-	int h = Text2D::GetCharHeight();
-	Vector2 initialTransaltion = m.GetTranslation();
-	uint* buffer = bufferData->buffer;
-	for (int i = 0; i < s.length(); i++)
-	{
-		m.SetTranslation((float)w, 0);
-		if (s[i] == '\n')
-		{
-			m.CopyFrom(matrix);
-			m.SetTranslation(0, (float)h);
-			continue;
-		}
-		DrawChar(&m, s[i], color, bufferData);
-	}
-}
-
-void Engine::DrawChar(const Matrix2x2* matrix, char c, const uint color, BufferData* bufferData)
-{
-	const uint* b = Text2D::GetCharBuffer(c);
-	int w = Text2D::GetCharWidth();
-	int h = Text2D::GetCharHeight();
-	if (matrix)
-	{
-		//Matrix2x2 m = *matrix;
-		//m.SetTransaltion(-w / 2, -h / 2);
-		DrawBuffer(matrix, color, b, w, h, bufferData);
-	}
 }
 
 void Engine::DrawCircle(const float xc, const float yc, const float r, const uint c, BufferData* bufferData)
@@ -154,7 +121,7 @@ void Engine::DrawCircle(const float xc, const float yc, const float r, const uin
 	*/
 }
 
-void Engine::DrawGrid()
+void Engine::DrawGrid(const Camera* camera)
 {
 	Vector3 a;
 	Vector3 b;
@@ -164,7 +131,7 @@ void Engine::DrawGrid()
 		a.y = b.y = 0.0f;
 		a.z = -10;
 		b.z = 10;
-		Draw3DLine(&a, &b, 0xFFFFFF, GetBufferData());
+		Draw3DLine(camera, &a, &b, 0xFFFFFF, GetBufferData());
 	}
 	for (float i = -10; i <= 10; i += 1.0f)
 	{
@@ -172,22 +139,22 @@ void Engine::DrawGrid()
 		a.y = b.y = 0.0f;
 		a.x = -10;
 		b.x = 10;
-		Draw3DLine(&a, &b, 0xFFFFFF, GetBufferData());
+		Draw3DLine(camera, &a, &b, 0xFFFFFF, GetBufferData());
 	}
 
-	Draw3DLine(&Vector3::Vector3Zero, &Vector3::Vector3X, 0xFF0000, GetBufferData());
-	Draw3DLine(&Vector3::Vector3Zero, &Vector3::Vector3Y, 0x00FF00, GetBufferData());
-	Draw3DLine(&Vector3::Vector3Zero, &Vector3::Vector3Z, 0x0000FF, GetBufferData());
+	Draw3DLine(camera, &Vector3::Vector3Zero, &Vector3::Vector3X, 0xFF0000, GetBufferData());
+	Draw3DLine(camera, &Vector3::Vector3Zero, &Vector3::Vector3Y, 0x00FF00, GetBufferData());
+	Draw3DLine(camera, &Vector3::Vector3Zero, &Vector3::Vector3Z, 0x0000FF, GetBufferData());
 
 }
 
-void Engine::Draw3DLine(const Vector3* v1, const Vector3* v2, const uint c, BufferData* bufferData)
+void Engine::Draw3DLine(const Camera* camera, const Vector3* v1, const Vector3* v2, const uint c, BufferData* bufferData)
 {
 	Vector3 a = Vector3(v1);
 	Vector3 b = Vector3(v2);
 
-	m_camera->GetViewMatrix()->Mul(&a);
-	m_camera->GetProjectionMatrix()->Mul(&a);
+	camera->GetViewMatrix()->Mul(&a);
+	camera->GetProjectionMatrix()->Mul(&a);
 	
 	if (a.w != 1)
 	{
@@ -197,8 +164,8 @@ void Engine::Draw3DLine(const Vector3* v1, const Vector3* v2, const uint c, Buff
 		//a.w /= a.w;
 	}
 	
-	m_camera->GetViewMatrix()->Mul(&b);
-	m_camera->GetProjectionMatrix()->Mul(&b);
+	camera->GetViewMatrix()->Mul(&b);
+	camera->GetProjectionMatrix()->Mul(&b);
 	
 	if (b.w != 1)
 	{
@@ -397,6 +364,7 @@ void Engine::DrawTriangle2(const Triangle* t, const Texture* tex, BufferData* bu
 		FillBottomFlatTriangle2(&v1, &v2, &v4, t, tex, bufferData);
 		FillTopFlatTriangle2(&v2, &v4, &v3, t, tex, bufferData);
 	}
+	m_drawnTriangles++;
 }
 
 void Engine::FillBottomFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, const Triangle* t, const Texture* tex,  BufferData* bufferData)

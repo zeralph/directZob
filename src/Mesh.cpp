@@ -128,15 +128,14 @@ void Mesh::ReinitVertices()
 	memcpy(m_normals, m_normalsData, sizeof(Vector3) * m_nbNormals);
 }
 
-void Mesh::Draw(Engine* engine)
+void Mesh::Draw(const Camera* camera, Engine* engine)
 {
 	Engine::BufferData* bData = engine->GetBufferData();
 
 	Vector2 a, b, c, uva, uvb, uvc;
-	const Camera* cam = engine->GetCamera();
-	const Matrix4x4* view = cam->GetViewMatrix();
-	const Matrix4x4* proj = cam->GetProjectionMatrix();
-	const Vector3* camZ = cam->GetEyeVector();
+	const Matrix4x4* view = camera->GetViewMatrix();
+	const Matrix4x4* proj = camera->GetProjectionMatrix();
+	const Vector3* camZ = camera->GetEyeVector();
 	float w = (float)bData->width / 2.0f;
 	float h = (float)bData->height / 2.0f;
 	for (uint i = 0; i < m_nbVertices; i++)
@@ -177,14 +176,17 @@ void Mesh::Draw(Engine* engine)
 		n.Add(t->nb);
 		n.Add(t->nc);
 		n.Div(3.0f);
-//		if ((t->va->z < 0 && t->vb->z < 0 && t->vc->z < 0))
+		if  (t->va->z > 1 || t->vb->z > 1 || t->vc->z > 1)
 		{
-//			if (Vector3::Dot(t->na, camZ) < 0.5)
+			if (Vector3::Dot(t->na, camZ) < 0.5)
 			{
 				t->ComputeArea();
-				t->ComputeLighting(&light);
-				engine->DrawTriangle2(t, m_texture, bData);
-				drawnFaces++;
+				if (t->area > 0 )
+				{
+					t->ComputeLighting(&light);
+					engine->DrawTriangle2(t, m_texture, bData);
+					drawnFaces++;
+				}
 			}
 		}
 	}

@@ -24,15 +24,15 @@ inline void Cube::ReinitVertices()
 	memcpy(&m_normals, &m_normalsData, sizeof(Vector3) * NB_TRIANGLES);
 };
 
-void Cube::Draw(Engine* engine)
+void Cube::Draw(const Camera* camera, Engine* engine)
 {
+
 	Engine::BufferData* bData = engine->GetBufferData();
 
 	Vector2 a, b, c, uva, uvb, uvc;
 	Matrix4x4 m = m_modelMatrix;
-	const Camera* cam = engine->GetCamera();
-	const Matrix4x4* p = cam->GetProjectionMatrix();
-	const Vector3* camZ = cam->GetEyeVector();
+	const Matrix4x4* p = camera->GetProjectionMatrix();
+	const Vector3* camZ = camera->GetEyeVector();
 	for (int i = 0; i < NB_VERTICES; i++)
 	{
 		m_modelMatrix.Mul(&m_vertices[i]);

@@ -1,22 +1,33 @@
 #include <windows.h>
 #include <string>
 #include <iostream>
+#include <algorithm>
 #include "Engine.h"
 #include "Cube.h"
 #include "Texture.h"
 #include "TextureTestAlpha.h"
 #include "Mesh.h"
+#include "text2D.h"
 
 #define kUnused(var) (void) var;
 #define WIDTH  800
 #define HEIGHT 600
 
+#define CLAMP(n, low, max) n <= low ? low : n >= max ? max : n;
+
 static char buffer[MAX_PATH];
 
 Engine* m_engine = NULL;
-static Vector3 camPos = Vector3(2, 1, -4);
+Camera* m_lookAtCam = NULL;
+Camera* m_FPSCam = NULL;
+Camera* m_curCam = NULL;
+static Vector3 camPos = Vector3(0, 1.70f, -4);
+static Vector3 camRot = Vector3(0, 0, 0);
 static Vector3 camTarget = Vector3(00, 00, 00);
 static Vector3 up = Vector3(0, 01, 0);
+
+static int m_mouseLastX;
+static int m_mouseLastY;
 
 std::string ExePath() {
 	char b[MAX_PATH];
@@ -67,11 +78,23 @@ void keyboard(struct Window *window, Key key, KeyMod mod, bool isPressed) {
 	}
 	else if (key == KB_KEY_KP_SUBTRACT)
 	{
-		camPos.x = camPos.x - 0.1f;
+		camPos.y = camPos.y - 0.1f;
 	}
 	else if (key == KB_KEY_KP_ADD)
 	{
-		camPos.x = camPos.x + 0.1f;
+		camPos.y = camPos.y + 0.1f;
+	}
+	else if (key == KB_KEY_F1)
+	{
+		m_curCam = m_FPSCam;
+	}
+	else if (key == KB_KEY_F2)
+	{
+		m_curCam = m_lookAtCam;
+	}
+	else if (key == KB_KEY_C)
+	{
+		m_engine->ToggleZbufferOutput();
 	}
 }
 
@@ -91,10 +114,25 @@ void mouse_btn(struct Window *window, MouseButton button, KeyMod mod, bool isPre
 	fprintf(stdout, "%s > mouse_btn: button: %d (pressed: %d) [KeyMod: %x]\n", window_title, button, isPressed, mod);
 }
 
-void mouse_move(struct Window *window, int x, int y) {
+void mouse_move(struct Window *window, int x, int y) 
+{
 	kUnused(window);
-	kUnused(x);
-	kUnused(y);
+	if (m_mouseLastX < 0)
+	{
+		m_mouseLastX = x;
+	}
+	if (m_mouseLastY < 0)
+	{
+		m_mouseLastY = y;
+	}
+	int dx = m_mouseLastX - x;
+	int dy = m_mouseLastY - y;
+	//fprintf(stdout, "mouse %i %i", dx, dy);
+	camRot.x += -dy * 0.1f;
+	camRot.y += dx * 0.1f;
+	camRot.y = CLAMP(camRot.y, -90, 90);
+	m_mouseLastX = x;
+	m_mouseLastY = y;
 }
 
 void mouse_scroll(struct Window *window, KeyMod mod, float deltaX, float deltaY) {
@@ -128,27 +166,44 @@ int main()
 	long frame = 0;
 	float rot = 0.0;
 	char frameCharBuffer[sizeof(ulong)];
-
+	m_mouseLastX = -1;
+	m_mouseLastY = -1;
 	Matrix2x2 m;
 	int state;
 	Mesh* mesh = NULL;
+	Text2D* text = NULL;
 	std::string path = ExePath();
 	std::string file = path + "\\..\\..\\resources\\landscape.png";
 	Texture* tex = new Texture(file.c_str());
-	file = path + "\\..\\..\\resources\\man.obj";
+	file = path + "\\..\\..\\resources\\font2.png";
+	Texture* fontTex = new Texture(file.c_str());
+	file = path + "\\..\\..\\resources\\LowPolyFiatUNO.obj";
 	mesh = new Mesh(file.c_str(), tex);
+
+	text = new Text2D(m_engine, fontTex, 32, 8);
+
+	m_lookAtCam = new Camera();
+	m_FPSCam = new Camera();
+
+	m_curCam = m_FPSCam;
 
 	for (;;)
 	{
+		m_engine->ResetCounters();
 		frame++;
 		m_engine->ClearBuffer(&Color::Grey);
 
 		static float fov = 45.0f;
-		m_engine->GetCamera()->setProjectionMatrix(fov, m_engine->Width(), m_engine->Height(), 0.01f, 1000.0f);
-		m_engine->GetCamera()->SetLookAt(&camPos, &camTarget, &up);
-		m_engine->DrawGrid();
+		m_lookAtCam->setProjectionMatrix(fov, m_engine->Width(), m_engine->Height(), 0.01f, 1000.0f);
+		m_lookAtCam->InitView();
+		m_lookAtCam->SetLookAt(&camPos, &camTarget, &up);
 
-		
+		m_FPSCam->setProjectionMatrix(fov, m_engine->Width(), m_engine->Height(), 0.01f, 1000.0f);
+		m_FPSCam->InitView();
+		m_FPSCam->SetPosition(&camPos);
+		m_FPSCam->SetRotation(&camRot);
+
+		m_engine->DrawGrid(m_curCam);
 
 		if (mesh)
 		{
@@ -161,9 +216,23 @@ int main()
 			static float scale = 1.0f / 15.0f;// 0.5f;
 			mesh->SetSCale(scale, scale, scale);
 			mesh->SetRotation(0, rot, 0);
-			mesh->Draw(m_engine);
+			mesh->Draw(m_curCam, m_engine);
 		}
+		snprintf(buffer, MAX_PATH, "Triangles : %lu", m_engine->GetNbDrawnTriangles());
+		text->Print(0, 0, 1, &std::string(buffer), 0xFFFFFFFF);
+
+		snprintf(buffer, MAX_PATH, "FPS : %.2f", m_engine->GetFps());
+		text->Print(0, 8, 1, &std::string(buffer), 0xFFFFFFFF);
+
+		snprintf(buffer, MAX_PATH, "Cam pos : %.2f, %.2f, %.2f", camPos.x, camPos.y, camPos.z);
+		text->Print(0, 16, 1, &std::string(buffer) , 0xFFFFFFFF);
+
+		snprintf(buffer, MAX_PATH, "Cam rot : %.2f, %.2f, %.2f", camRot.x, camRot.y, camRot.z);
+		text->Print(0, 24, 1, &std::string(buffer), 0xFFFFFFFF);
+
+		
 		state = m_engine->Update(window);
+
 
 		if (state < 0)
 			break;
