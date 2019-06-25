@@ -37,7 +37,7 @@ void Color::Set(uint a, uint r, uint g, uint b)
 	m_r = r;
 	m_b = b;
 	m_g = g;
-	m_value = MFB_ARGB(a, r, g, b);
+	m_value = MFB_RGB(r, g, b);
 }
 
 void Color::Set(uint rawValue)

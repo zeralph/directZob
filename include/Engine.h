@@ -79,7 +79,7 @@ public:
 	void DrawString(const Matrix2x2* matrix, std::string s, const uint color, BufferData* bufferData);
 	void DrawChar(const Matrix2x2* matrix, char c, const uint color, BufferData* bufferData);
 	void DrawBuffer(const Matrix2x2* matrix, const uint color, const uint* buffer, const int bufferWidth, const int bufferHeight, BufferData* bufferData);
-
+	void Resize(int width, int height);
 	void DrawTriangle(const Vector2* va, const Vector2* vb, const Vector2* vc, const uint color, BufferData* bufferData);
 	void DrawTriangle2(const Triangle* t, const Texture* tex, BufferData* bufferData);
 
@@ -92,7 +92,7 @@ public:
 
 	Camera* GetCamera() { return m_camera; }
 
-	int Update();
+	int Update(struct Window *window);
 	inline ulong GetCurrentFrame() {return m_currentFrame;}
 	inline float GetFps() { return m_fps; }
 	inline int Width() { return m_width; }

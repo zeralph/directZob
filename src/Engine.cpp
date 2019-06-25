@@ -12,9 +12,7 @@ Engine::Engine(int width, int height)
 	m_buffer = (uint*)malloc(sizeof(uint) * m_width * m_height);
 	m_zBuffer = (float*)malloc(sizeof(float) * m_width * m_height);
 	m_curBuffer = 0;
-	int result = mfb_open("Noise Test", m_width, m_height);
 	m_fps = 0.0;
-
 	m_bufferData.height = m_height;
 	m_bufferData.width = m_width;
 	m_bufferData.buffer = m_buffer;
@@ -31,6 +29,25 @@ Engine::~Engine()
 
 }
 
+void Engine::Resize(int width, int height)
+{
+	m_width = width;
+	m_height = height;
+
+	delete m_buffer;
+	delete m_zBuffer;
+	m_buffer = (uint*)malloc(sizeof(uint) * m_width * m_height);
+	m_zBuffer = (float*)malloc(sizeof(float) * m_width * m_height);
+
+	m_bufferData.height = m_height;
+	m_bufferData.width = m_width;
+	m_bufferData.buffer = m_buffer;
+	m_bufferData.zBuffer = m_zBuffer;
+	m_bufferData.size = m_width * m_height;
+	m_tick = clock();
+	m_camera->setProjectionMatrix(90.0f, width, height, m_zNear, m_zFar);
+}
+
 void Engine::ClearBuffer(const Color* color)
 {
 	uint v = color->GetRawValue();
@@ -38,10 +55,21 @@ void Engine::ClearBuffer(const Color* color)
 	memset(m_zBuffer, 0, sizeof(float) * m_width * m_height);
 }
 
-int Engine::Update()
+int Engine::Update(struct Window *window)
 {	
+	bool bDrawZBuffer = false;
+	if (bDrawZBuffer)
+	{
+		uint c;
+		for (int i = 0; i < m_width*m_height; i++)
+		{
+			c = (uint)(m_zBuffer[i] * 255.0f);
+			c = (c << 16) + (c << 8) + c;
+			m_buffer[i] = c;
+		}
+	}
 	int r;
-	r = mfb_update(m_buffer);
+	r = mfb_update(window, m_buffer);
 	m_currentFrame++;
 	clock_t t = clock();
 	m_fps = (float)CLOCKS_PER_SEC / (float)(t - m_tick);
