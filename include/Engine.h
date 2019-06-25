@@ -4,7 +4,6 @@
 #include <math.h>
 #include <stdlib.h> 
 #include "Color.h"
-#include "text2D.h"
 #include <string>
 #include <ctime>
 #include "Matrix2x2.h"
@@ -76,30 +75,28 @@ public:
 	void DrawTexture(const Matrix2x2* matrix, const Texture* texture, BufferData* bufferData);
 	void DrawLine(const float xa, const float  ya, const float xb, const float yb, const uint c, BufferData* bufferData);
 	void DrawCircle(const float xc, const float yc, const float r, const uint c, BufferData* bufferData);
-	void DrawString(const Matrix2x2* matrix, std::string s, const uint color, BufferData* bufferData);
-	void DrawChar(const Matrix2x2* matrix, char c, const uint color, BufferData* bufferData);
 	void DrawBuffer(const Matrix2x2* matrix, const uint color, const uint* buffer, const int bufferWidth, const int bufferHeight, BufferData* bufferData);
 	void Resize(int width, int height);
 	void DrawTriangle(const Vector2* va, const Vector2* vb, const Vector2* vc, const uint color, BufferData* bufferData);
 	void DrawTriangle2(const Triangle* t, const Texture* tex, BufferData* bufferData);
 
-	void DrawGrid();
+	void DrawGrid(const Camera* camera);
 
-
+	void ToggleZbufferOutput() {m_showZBuffer = !m_showZBuffer;}
 	void GetPixelColor(Color* color, int x, int y);
 
-	void Draw3DLine(const Vector3* v1, const Vector3* v2, const uint c, BufferData* bufferData);
-
-	Camera* GetCamera() { return m_camera; }
+	void Draw3DLine(const Camera* camera, const Vector3* v1, const Vector3* v2, const uint c, BufferData* bufferData);
 
 	int Update(struct Window *window);
 	inline ulong GetCurrentFrame() {return m_currentFrame;}
 	inline float GetFps() { return m_fps; }
-	inline int Width() { return m_width; }
-	inline int Height() { return m_height; }
+	inline const uint Width() const { return m_width; }
+	inline const uint Height() const { return m_height; }
 
-	
-
+	inline const uint GetNbTriangles() const {return m_sceneTriangles;}
+	inline const uint GetNbDrawnTriangles() const { return m_drawnTriangles; }
+		
+	inline void ResetCounters() {m_sceneTriangles = 0; m_drawnTriangles = 0;}
 	inline BufferData* GetBufferData() { return &m_bufferData; }
 
 private:
@@ -129,7 +126,8 @@ private:
 	ulong m_currentFrame;
 	uint* m_buffer;
 	float* m_zBuffer;
-	Camera* m_camera;
 	BufferData m_bufferData;
-
+	bool m_showZBuffer;
+	uint m_sceneTriangles;
+	uint m_drawnTriangles;
 };

@@ -14,7 +14,7 @@ public:
 
 	Mesh(const char* path, const Texture* tex);
 	~Mesh();
-	void Draw(Engine* engine);
+	void Draw(const Camera* camera, Engine* engine);
 	void Init();
 
 	inline void SetSCale(float x, float y, float z) { m_modelMatrix.SetScale(x, y, z); }

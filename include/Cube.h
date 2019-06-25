@@ -3,6 +3,7 @@
 #include "Vector3.h"
 #include "Matrix4x4.h"
 #include "Engine.h"
+#include "Camera.h"
 #include "Color.h"
 
 class Cube
@@ -24,7 +25,7 @@ public:
 	inline void SetRotation(float x, float y, float z) { m_modelMatrix.SetRotation(x, y, z); }
 	inline void SetTranslation(float x, float y, float z) { m_modelMatrix.SetTranslation(x, y, z); }
 
-	void Draw(Engine* engine);
+	void Draw(const Camera* camera, Engine* engine);
 
 private:
 
