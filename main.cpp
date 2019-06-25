@@ -1,8 +1,20 @@
+#include <windows.h>
+#include <string>
+#include <iostream>
 #include "Engine.h"
 #include "Cube.h"
 #include "Texture.h"
 #include "TextureTestAlpha.h"
 #include "Mesh.h"
+
+static char buffer[MAX_PATH];
+
+std::string ExePath() {
+	char b[MAX_PATH];
+	GetModuleFileName(NULL, b, MAX_PATH);
+	std::string::size_type pos = std::string(b).find_last_of("\\/");
+	return std::string(b).substr(0, pos);
+}
 
 int main()
 {
@@ -20,13 +32,12 @@ int main()
 
 	Matrix2x2 m;
 	int state;
-
-	Texture* tex = new Texture("F:/_GIT/directZob/resources/landscape.png");
-
 	Mesh* mesh = NULL;
-	//Mesh* mesh = new Mesh("D:/_PERSO/directZob/resources/earth.obj", tex);
-	mesh = new Mesh("F:/_GIT/directZob/resources/man.obj", tex);
-	//Mesh* mesh = new Mesh("D:/_GIT/directZob/resources/LowPolyFiatUNO.obj", tex);
+	std::string path = ExePath();
+	std::string file = path + "\\..\\..\\resources\\landscape.png";
+	Texture* tex = new Texture(file.c_str());
+	file = path + "\\..\\..\\resources\\man.obj";
+	mesh = new Mesh(file.c_str(), tex);
 
 	for (;;)
 	{
@@ -39,13 +50,13 @@ int main()
 		static Vector3 up = Vector3(0, 01, 0);
 		m_engine->GetCamera()->setProjectionMatrix(fov, 800, 600, 0.01f, 1000.0f);
 		m_engine->GetCamera()->SetLookAt(&from, &to, &up);
-		//m_engine->GetCamera()->SetPosition(&from);
 		m_engine->DrawGrid();
 
-		rot += 1.5f;
+		
 
 		if (mesh)
 		{
+			rot += 1.5f;
 			mesh->Init();
 			static float tx = 0;
 			static float ty = 0;
@@ -66,3 +77,4 @@ int main()
 
 	return 0;
 }
+
