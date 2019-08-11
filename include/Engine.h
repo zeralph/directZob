@@ -47,6 +47,9 @@ public:
 			la = fmax(0.0f, Vector3::Dot(na, v));
 			lb = fmax(0.0f, Vector3::Dot(na, v));
 			lc = fmax(0.0f, Vector3::Dot(na, v));
+			la = 0.5f;
+			lb = 0.5f;
+			lc = 0.5f;
 		}
 	};
 
@@ -110,7 +113,7 @@ private:
 
 	void FillTopFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, const Triangle* t, const Texture* tex, BufferData* bufferData);
 	void FillBottomFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, const Triangle* t, const Texture* tex, BufferData* bufferData);
-	void FillBufferPIxel(const Vector3* p, const Triangle* t, const Texture* texData, BufferData* bufferData);
+	void FillBufferPixel(const Vector3* p, const Triangle* t, const Texture* texData, BufferData* bufferData);
 
 	inline float edgeFunction(const Vector3* a, const Vector3* b, const Vector3* c) {return (c->x - a->x) * (b->y - a->y) - (c->y - a->y) * (b->x - a->x);}
 
