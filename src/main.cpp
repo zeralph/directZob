@@ -12,7 +12,7 @@
 #define kUnused(var) (void) var;
 #define WIDTH  800
 #define HEIGHT 600
-
+#define TARGET_MS_PER_FRAME 33.33f
 #define CLAMP(n, low, max) n <= low ? low : n >= max ? max : n;
 
 static char buffer[MAX_PATH];
@@ -21,10 +21,10 @@ Engine* m_engine = NULL;
 Camera* m_lookAtCam = NULL;
 Camera* m_FPSCam = NULL;
 Camera* m_curCam = NULL;
-static Vector3 camPos = Vector3(0, 1.70f, -4);
+static Vector3 camPos = Vector3(0, 2.5f, -10);
 static Vector3 camRot = Vector3(0, 0, 0);
 static Vector3 camTarget = Vector3(00, 00, 00);
-static Vector3 up = Vector3(0, 01, 0);
+static Vector3 up = Vector3(0, -1, 0);
 
 static int m_mouseLastX;
 static int m_mouseLastY;
@@ -47,8 +47,8 @@ void active(struct Window *window, bool isActive) {
 void resize(struct Window *window, int width, int height) {
 	uint32_t x = 0;
 	uint32_t y = 0;
-	m_engine->Resize(width, height);
-	mfb_set_viewport(window, x, y, width, height);
+	//m_engine->Resize(width, height);
+	//mfb_set_viewport(window, x, y, width, height);
 }
 
 void keyboard(struct Window *window, Key key, KeyMod mod, bool isPressed) {
@@ -173,12 +173,13 @@ int main()
 	Mesh* mesh = NULL;
 	Text2D* text = NULL;
 	std::string path = ExePath();
-	std::string file = path + "\\..\\..\\resources\\landscape.png";
+	std::string file = path + "\\..\\..\\resources\\cottage_diffuse.png";
 	Texture* tex = new Texture(file.c_str());
 	file = path + "\\..\\..\\resources\\font2.png";
 	Texture* fontTex = new Texture(file.c_str());
-	file = path + "\\..\\..\\resources\\LowPolyFiatUNO.obj";
-	mesh = new Mesh(file.c_str(), tex);
+	file = path + "\\..\\..\\resources\\cottage_obj.obj";
+	//file = path + "\\..\\..\\resources\\camaro.obj";
+	//mesh = new Mesh(file.c_str(), tex);
 
 	text = new Text2D(m_engine, fontTex, 32, 8);
 
@@ -201,7 +202,7 @@ int main()
 		m_FPSCam->setProjectionMatrix(fov, m_engine->Width(), m_engine->Height(), 0.01f, 1000.0f);
 		m_FPSCam->InitView();
 		m_FPSCam->SetPosition(&camPos);
-		m_FPSCam->SetRotation(&camRot);
+		//FPSCam->SetRotation(&camRot);
 
 		m_engine->DrawGrid(m_curCam);
 
@@ -213,7 +214,7 @@ int main()
 			static float ty = 0;
 			static float tz = 0;
 			mesh->SetTranslation(tx, ty, tz);
-			static float scale = 1.0f / 15.0f;// 0.5f;
+			static float scale = 1.0f;// 1.0f / 15.0f;// 0.5f;
 			mesh->SetSCale(scale, scale, scale);
 			mesh->SetRotation(0, rot, 0);
 			mesh->Draw(m_curCam, m_engine);
@@ -221,19 +222,28 @@ int main()
 		snprintf(buffer, MAX_PATH, "Triangles : %lu", m_engine->GetNbDrawnTriangles());
 		text->Print(0, 0, 1, &std::string(buffer), 0xFFFFFFFF);
 
-		snprintf(buffer, MAX_PATH, "FPS : %.2f", m_engine->GetFps());
-		text->Print(0, 8, 1, &std::string(buffer), 0xFFFFFFFF);
-
 		snprintf(buffer, MAX_PATH, "Cam pos : %.2f, %.2f, %.2f", camPos.x, camPos.y, camPos.z);
-		text->Print(0, 16, 1, &std::string(buffer) , 0xFFFFFFFF);
+		text->Print(0, 8, 1, &std::string(buffer), 0xFFFFFFFF);
 
 		snprintf(buffer, MAX_PATH, "Cam rot : %.2f, %.2f, %.2f", camRot.x, camRot.y, camRot.z);
 		text->Print(0, 24, 1, &std::string(buffer), 0xFFFFFFFF);
 
 		
+		
+
+		snprintf(buffer, MAX_PATH, "FPS : %.2f", m_engine->GetFps());
+		float t = m_engine->GetFps();
+		t = (1.0f / t) * 1000.0f;
+		if (t < TARGET_MS_PER_FRAME)
+		{
+			text->Print(0, 16, 1, &std::string(buffer), 0xFF00FF00);
+			Sleep(TARGET_MS_PER_FRAME - t);
+		}
+		else
+		{
+			text->Print(0, 16, 1, &std::string(buffer), 0xFFFF0000);
+		}
 		state = m_engine->Update(window);
-
-
 		if (state < 0)
 			break;
 	}

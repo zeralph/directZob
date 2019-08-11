@@ -125,10 +125,12 @@ void Engine::DrawGrid(const Camera* camera)
 {
 	Vector3 a;
 	Vector3 b;
-	for (float i = -10; i <= 10; i += 1.0f)
+	for (float i = -10; i < 10; i += 1.0f)
 	{
-		a.x = b.x = i;
-		a.y = b.y = 0.0f;
+		a.x = i;
+		b.x = i;
+		a.y = 0.0f;
+		b.y = 0.0f;
 		a.z = -10;
 		b.z = 10;
 		Draw3DLine(camera, &a, &b, 0xFFFFFF, GetBufferData());
@@ -145,7 +147,11 @@ void Engine::DrawGrid(const Camera* camera)
 	Draw3DLine(camera, &Vector3::Vector3Zero, &Vector3::Vector3X, 0xFF0000, GetBufferData());
 	Draw3DLine(camera, &Vector3::Vector3Zero, &Vector3::Vector3Y, 0x00FF00, GetBufferData());
 	Draw3DLine(camera, &Vector3::Vector3Zero, &Vector3::Vector3Z, 0x0000FF, GetBufferData());
-
+	a.x = b.x = 1;
+	a.y = b.y = 0.0f;
+	a.z = -10;
+	b.z = 10;
+	//Draw3DLine(camera, &Vector3::Vector3Zero, &Vector3::Vector3Z, 0xFFFFFF, GetBufferData());
 }
 
 void Engine::Draw3DLine(const Camera* camera, const Vector3* v1, const Vector3* v2, const uint c, BufferData* bufferData)
@@ -155,35 +161,70 @@ void Engine::Draw3DLine(const Camera* camera, const Vector3* v1, const Vector3* 
 
 	camera->GetViewMatrix()->Mul(&a);
 	camera->GetProjectionMatrix()->Mul(&a);
-	
-	if (a.w != 1)
-	{
-		//a.x /= a.w;
-		//a.y /= a.w;
-		//a/.z /= a.w;
-		//a.w /= a.w;
-	}
-	
 	camera->GetViewMatrix()->Mul(&b);
 	camera->GetProjectionMatrix()->Mul(&b);
+
+
+	
+
+	if(a.w < m_zNear && b.w < m_zNear)
+	{
+		return;
+	}
+	else if (a.w < m_zNear || b.w < m_zNear)
+	{
+		if (a.w < m_zNear)
+		{
+			float n = (a.w - m_zNear) / (a.w - b.w);
+			a.x = (n * a.x) + ((1 - n) * b.x);
+			a.y = (n * a.y) + ((1 - n) * b.y);
+			a.z = (n * a.z) + ((1 - n) * b.z);
+			a.w = m_zNear;
+		}
+		else
+		{
+			float n = (b.w - m_zNear) / (b.w - a.w);
+			b.x = (n * b.x) + ((1 - n) * a.x);
+			b.y = (n * b.y) + ((1 - n) * a.y);
+			b.z = (n * b.z) + ((1 - n) * a.z);
+			b.w = m_zNear;
+		}
+	}
+
+
+
+	if (a.w != 1)
+	{
+		a.x /= a.w;
+		a.y /= a.w;
+		a.z /= a.w;
+		a.w /= a.w;
+	}
+	
+	
 	
 	if (b.w != 1)
 	{
-		//b.x /= b.w;
-		//b.y /= b.w;
-		//b.z /= b.w;
-		//b.w /= b.w;
+		b.x /= b.w;
+		b.y /= b.w;
+		b.z /= b.w;
+		b.w /= b.w;
 	}
-	
-	a.x = (a.x / a.z + 1) * m_width / 2.0f;
-	a.y = (a.y / a.z + 1) * m_height / 2.0f;
 
-	b.x = (b.x / b.z + 1) * m_width / 2.0f;
-	b.y = (b.y / b.z + 1) * m_height / 2.0f;
-	if(a.z <0 || b.z < 0)
-	{
+	//a.x = (a.x / a.z + 1) * m_width / 2.0f;
+	//a.y = (a.y / a.z + 1) * m_height / 2.0f;
+
+	//b.x = (b.x / b.z + 1) * m_width / 2.0f;
+	//b.y = (b.y / b.z + 1) * m_height / 2.0f;
+
+	a.x = (a.x + 1) * m_width / 2.0f;
+	a.y = (a.y + 1) * m_height / 2.0f;
+
+	b.x = (b.x + 1) * m_width / 2.0f;
+	b.y = (b.y + 1) * m_height / 2.0f;
+
 		DrawLine(a.x, a.y, b.x, b.y, c, bufferData);
-	}
+
 }
 
 void Engine::DrawLine(const float xa, const float ya, const float xb, const float yb, const uint c, BufferData* bufferData)
@@ -392,8 +433,8 @@ void Engine::FillBottomFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, cons
 				{
 					p.x = i;
 					p.y = scanlineY;
-					p.z = 0;
-					FillBufferPIxel(&p, t, tex, bufferData);
+					p.z = -1;
+					FillBufferPixel(&p, t, tex, bufferData);
 				}
 			}
 		}
@@ -426,8 +467,8 @@ void Engine::FillTopFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, const T
 				{			
 					p.x = i;
 					p.y = scanlineY;
-					p.z = 0;
-					FillBufferPIxel(&p, t, tex, bufferData);
+					p.z = -1;
+					FillBufferPixel(&p, t, tex, bufferData);
 				}
 			}
 		}		
@@ -436,7 +477,7 @@ void Engine::FillTopFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, const T
 	}
 }
 
-void Engine::FillBufferPIxel(const Vector3* p, const Triangle* t, const Texture* texData, BufferData* bufferData)
+void Engine::FillBufferPixel(const Vector3* p, const Triangle* t, const Texture* texData, BufferData* bufferData)
 {
 	
 	float w2 = edgeFunction(t->va, t->vb, p);
@@ -464,12 +505,13 @@ void Engine::FillBufferPIxel(const Vector3* p, const Triangle* t, const Texture*
 			tu = (int)(tu * texData->GetHeight());
 			su = (int)su % texData->GetWidth();
 			tu = (int)tu % texData->GetHeight();
-			cl = ((w0 * t->la + w1 * t->lb + w2 * t->lc));
+			cl = ((w0 * t->la + w1 * t->lb + w2 * t->lc)) + 0.5f;
 			c = (tu * texData->GetWidth() + su) * 4;
-			r = texData->GetData()[c] * cl;
-			g = texData->GetData()[c + 1] * cl;
-			b = texData->GetData()[c + 2] * cl;
-			a = texData->GetData()[c + 3] * cl;
+			const float* d = texData->GetData();
+			r = d[c] * cl;
+			g = d[c + 1] * cl;
+			b = d[c + 2] * cl;
+			a = d[c + 3] * cl;
 			c = ((int)(r * 255) << 16) + ((int)(g * 255) << 8) + (int)(b * 255);
 			bufferData->buffer[k] = c;
 		}

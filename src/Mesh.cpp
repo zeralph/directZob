@@ -142,11 +142,11 @@ void Mesh::Draw(const Camera* camera, Engine* engine)
 	{
 		m_modelMatrix.Mul(&m_vertices[i]);
 		view->Mul(&m_vertices[i]);
-		m_vertices[i].x = m_vertices[i].x / m_vertices[i].w;
-		m_vertices[i].y = m_vertices[i].y / m_vertices[i].w;
-		m_vertices[i].z = m_vertices[i].z / m_vertices[i].w;
-		proj->Mul(&m_vertices[i]);
+		//m_vertices[i].x = m_vertices[i].x / m_vertices[i].w;
+		//m_vertices[i].y = m_vertices[i].y / m_vertices[i].w;
+		//m_vertices[i].z = m_vertices[i].z / m_vertices[i].w;
 
+		proj->Mul(&m_vertices[i]);
 		m_vertices[i].x = m_vertices[i].x / m_vertices[i].w;
 		m_vertices[i].y = m_vertices[i].y / m_vertices[i].w;
 		m_vertices[i].z = m_vertices[i].z / m_vertices[i].w;
@@ -176,12 +176,13 @@ void Mesh::Draw(const Camera* camera, Engine* engine)
 		n.Add(t->nb);
 		n.Add(t->nc);
 		n.Div(3.0f);
-		if  (t->va->z > 1 || t->vb->z > 1 || t->vc->z > 1)
+		//if  (t->va->z > 1 || t->vb->z > 1 || t->vc->z > 1)
+		if ((t->va->w > 0 && t->vb->w > 0 && t->vc->w > 0 ) || (t->va->w < 0 && t->vb->w < 0 && t->vc->w < 0))
 		{
-			if (Vector3::Dot(t->na, camZ) < 0.5)
+			if (Vector3::Dot(&n, camZ) < 0.5f)
 			{
 				t->ComputeArea();
-				if (t->area > 0 )
+				if (t->area > 0)
 				{
 					t->ComputeLighting(&light);
 					engine->DrawTriangle2(t, m_texture, bData);
@@ -224,7 +225,9 @@ void Mesh::CreateTriangles(const std::vector<std::string>* line, Engine::Triangl
 			t.ua = &m_uvs[std::stoi(vec[1], &sz) - 1];
 		else
 			t.ua = &Vector2(0, 0);
+		
 		t.na = &m_normals[std::stoi(vec[2], &sz) - 1];
+		//t.na = &Vector3(0,0,1);
 
 		vec.clear();
 		SplitEntry(&line->at(b), &vec, '/');
@@ -234,6 +237,7 @@ void Mesh::CreateTriangles(const std::vector<std::string>* line, Engine::Triangl
 		else
 			t.ub = &Vector2(0, 0);
 		t.nb = &m_normals[std::stoi(vec[2], &sz) - 1];
+		//t.nb = &Vector3(0, 0, 1);
 
 		vec.clear();
 		SplitEntry(&line->at(c), &vec, '/');
@@ -243,7 +247,7 @@ void Mesh::CreateTriangles(const std::vector<std::string>* line, Engine::Triangl
 		else
 			t.uc = &Vector2(0, 0);
 		t.nc = &m_normals[std::stoi(vec[2], &sz) - 1];
-
+		//t.nc = &Vector3(0, 0, 1);
 		tArray[tArrayIdx] = t;
 		tArrayIdx++;
 	}
