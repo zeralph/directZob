@@ -12,8 +12,41 @@ Camera::~Camera()
 
 }
 
+void Camera::SetLookAt(const Vector3* eye, const Vector3* at, const Vector3* up)
+{
+	Vector3 zaxis = Vector3(eye->x - at->x, eye->y - at->y, eye->z - at->z);
+	zaxis.Normalize();
+	Vector3 xaxis = Vector3::Cross(&zaxis, up);
+	xaxis.Normalize();
+	Vector3 yaxis = Vector3::Cross(&xaxis, &zaxis);
 
+	zaxis.x = -zaxis.x;
+	zaxis.y = -zaxis.y;
+	zaxis.z = -zaxis.z;
+//	zaxis.w = -zaxis.w;
 
+	m_viewMatrix.SetData(0, 0, xaxis.x);
+	m_viewMatrix.SetData(0, 1, xaxis.y);
+	m_viewMatrix.SetData(0, 2, xaxis.z);
+	m_viewMatrix.SetData(0, 3, Vector3::Dot(&xaxis, eye));
+
+	m_viewMatrix.SetData(1, 0, yaxis.x);
+	m_viewMatrix.SetData(1, 1, yaxis.y);
+	m_viewMatrix.SetData(1, 2, yaxis.z);
+	m_viewMatrix.SetData(1, 3, Vector3::Dot(&yaxis, eye));
+
+	m_viewMatrix.SetData(2, 0, zaxis.x);
+	m_viewMatrix.SetData(2, 1, zaxis.y);
+	m_viewMatrix.SetData(2, 2, zaxis.z);
+	m_viewMatrix.SetData(2, 3, Vector3::Dot(&zaxis, eye));
+
+	m_viewMatrix.SetData(3, 0, 0);
+	m_viewMatrix.SetData(3, 1, 0);
+	m_viewMatrix.SetData(3, 2, 0);
+	m_viewMatrix.SetData(3, 3, 1);
+}
+
+/*
 void Camera::SetLookAt(const Vector3* from, const Vector3* to, const Vector3* tmp)
 {
 	Vector3 forward = Vector3(to->x - from->x, to->y - from->y, to->z - from->z);
@@ -23,7 +56,7 @@ void Camera::SetLookAt(const Vector3* from, const Vector3* to, const Vector3* tm
 	Vector3 up = Vector3::Cross(&forward, &right);
 	up.Normalize();
 	m_viewMatrix.Identity();
-	static bool b = false;
+	static bool b = true;
 	if (b)
 	{
 		m_viewMatrix.SetData(0, 0, right.x);
@@ -68,7 +101,29 @@ void Camera::SetLookAt(const Vector3* from, const Vector3* to, const Vector3* tm
 		m_viewMatrix.SetData(3, 3, 1);
 	}
 }
+*/
+void Camera::InitView()
+{
+	m_viewMatrix.SetData(0, 0, 1);
+	m_viewMatrix.SetData(0, 1, 0);
+	m_viewMatrix.SetData(0, 2, 0);
+	m_viewMatrix.SetData(0, 3, 0);
 
+	m_viewMatrix.SetData(1, 0, 0);
+	m_viewMatrix.SetData(1, 1, 1);
+	m_viewMatrix.SetData(1, 2, 0);
+	m_viewMatrix.SetData(1, 3, 0);
+
+	m_viewMatrix.SetData(2, 0, 0);
+	m_viewMatrix.SetData(2, 1, 0);
+	m_viewMatrix.SetData(2, 2, 1);
+	m_viewMatrix.SetData(2, 3, 0);
+
+	m_viewMatrix.SetData(3, 0, 0);
+	m_viewMatrix.SetData(3, 1, 0);
+	m_viewMatrix.SetData(3, 2, 0);
+	m_viewMatrix.SetData(3, 3, 1);
+};
 
 /*
 void Camera::setProjectionMatrix(const float angleOfView, const float width, const float height, const float near, const float far)

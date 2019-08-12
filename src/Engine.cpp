@@ -79,46 +79,6 @@ int Engine::Update(struct Window *window)
 
 void Engine::DrawCircle(const float xc, const float yc, const float r, const uint c, BufferData* bufferData)
 {
-	/*
-	float x = 0, y = r;
-	float d = 3 - 2 * r;
-	float scaleX = 1.0;
-	float scaleY = 1.0;
-	DrawPixel(xc + x, yc + y, c);
-	DrawPixel(xc - x, yc + y, c);
-	DrawPixel(xc + x, yc - y, c);
-	DrawPixel(xc - x, yc - y, c);
-	DrawPixel(xc + y, yc + x, c);
-	DrawPixel(xc - y, yc + x, c);
-	DrawPixel(xc + y, yc - x, c);
-	DrawPixel(xc - y, yc - x, c);
-	while (y >= x)
-	{
-		// for each pixel we will 
-		// draw all eight pixels 
-
-		x++;
-
-		// check for decision parameter 
-		// and correspondingly  
-		// update d, x, y 
-		if (d > 0)
-		{
-			y--;
-			d = d + 4 * (x - y) + 10;
-		}
-		else
-			d = d + 4 * x + 6;
-		DrawPixel(xc + x, yc + y, c);
-		DrawPixel(xc - x, yc + y, c);
-		DrawPixel(xc + x, yc - y, c);
-		DrawPixel(xc - x, yc - y, c);
-		DrawPixel(xc + y, yc + x, c);
-		DrawPixel(xc - y, yc + x, c);
-		DrawPixel(xc + y, yc - x, c);
-		DrawPixel(xc - y, yc - x, c);
-	}
-	*/
 }
 
 void Engine::DrawGrid(const Camera* camera)
@@ -167,7 +127,7 @@ void Engine::Draw3DLine(const Camera* camera, const Vector3* v1, const Vector3* 
 
 	
 
-	if(a.w < m_zNear && b.w < m_zNear)
+	if(a.w > m_zNear && b.w > m_zNear)
 	{
 		return;
 	}
@@ -223,7 +183,7 @@ void Engine::Draw3DLine(const Camera* camera, const Vector3* v1, const Vector3* 
 	b.x = (b.x + 1) * m_width / 2.0f;
 	b.y = (b.y + 1) * m_height / 2.0f;
 
-		DrawLine(a.x, a.y, b.x, b.y, c, bufferData);
+	DrawLine(a.x, a.y, b.x, b.y, c, bufferData);
 
 }
 

@@ -21,13 +21,15 @@ Engine* m_engine = NULL;
 Camera* m_lookAtCam = NULL;
 Camera* m_FPSCam = NULL;
 Camera* m_curCam = NULL;
-static Vector3 camPos = Vector3(0, 2.5f, -10);
+static Vector3 camPos = Vector3(0, 1, 0);
 static Vector3 camRot = Vector3(0, 0, 0);
-static Vector3 camTarget = Vector3(00, 00, 00);
-static Vector3 up = Vector3(0, -1, 0);
+static Vector3 camTarget = Vector3(0, 1, 1);
+static Vector3 up = Vector3(0, 1, 0);
 
 static int m_mouseLastX;
 static int m_mouseLastY;
+static bool g_bShowGrid = true;
+static bool g_bShowMeshes = true;
 
 std::string ExePath() {
 	char b[MAX_PATH];
@@ -95,6 +97,14 @@ void keyboard(struct Window *window, Key key, KeyMod mod, bool isPressed) {
 	else if (key == KB_KEY_C)
 	{
 		m_engine->ToggleZbufferOutput();
+	}
+	else if (key == KB_KEY_S)
+	{
+		g_bShowMeshes = !g_bShowMeshes;
+	}
+	else if (key == KB_KEY_G)
+	{
+		g_bShowGrid = !g_bShowGrid;
 	}
 }
 
@@ -179,11 +189,11 @@ int main()
 	Texture* fontTex = new Texture(file.c_str());
 	file = path + "\\..\\..\\resources\\cottage_obj.obj";
 	//file = path + "\\..\\..\\resources\\camaro.obj";
-	//mesh = new Mesh(file.c_str(), tex);
+	mesh = new Mesh(file.c_str(), tex);
 
 	text = new Text2D(m_engine, fontTex, 32, 8);
 
-	m_lookAtCam = new Camera();
+	//m_lookAtCam = new Camera();
 	m_FPSCam = new Camera();
 
 	m_curCam = m_FPSCam;
@@ -195,18 +205,23 @@ int main()
 		m_engine->ClearBuffer(&Color::Grey);
 
 		static float fov = 45.0f;
-		m_lookAtCam->setProjectionMatrix(fov, m_engine->Width(), m_engine->Height(), 0.01f, 1000.0f);
-		m_lookAtCam->InitView();
-		m_lookAtCam->SetLookAt(&camPos, &camTarget, &up);
+		//m_lookAtCam->setProjectionMatrix(fov, m_engine->Width(), m_engine->Height(), 0.01f, 1000.0f);
+		//m_lookAtCam->InitView();
+		//m_lookAtCam->SetLookAt(&camPos, &camTarget, &up);
 
 		m_FPSCam->setProjectionMatrix(fov, m_engine->Width(), m_engine->Height(), 0.01f, 1000.0f);
 		m_FPSCam->InitView();
-		m_FPSCam->SetPosition(&camPos);
+		//camTarget = camPos;
+		//camTarget.z = camTarget.z + 1;
+		m_FPSCam->SetLookAt(&camPos, &camTarget, &up);
+		//m_FPSCam->SetPosition(&camPos);
 		//FPSCam->SetRotation(&camRot);
 
-		m_engine->DrawGrid(m_curCam);
-
-		if (mesh)
+		if (g_bShowGrid)
+		{
+			m_engine->DrawGrid(m_curCam);
+		}
+		if (mesh && g_bShowMeshes)
 		{
 			rot += 1.5f;
 			mesh->Init();
@@ -214,7 +229,7 @@ int main()
 			static float ty = 0;
 			static float tz = 0;
 			mesh->SetTranslation(tx, ty, tz);
-			static float scale = 1.0f;// 1.0f / 15.0f;// 0.5f;
+			static float scale = 0.25f;// 1.0f / 15.0f;// 0.5f;
 			mesh->SetSCale(scale, scale, scale);
 			mesh->SetRotation(0, rot, 0);
 			mesh->Draw(m_curCam, m_engine);
