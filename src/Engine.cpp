@@ -77,10 +77,6 @@ int Engine::Update(struct Window *window)
 	return r;
 }
 
-void Engine::DrawCircle(const float xc, const float yc, const float r, const uint c, BufferData* bufferData)
-{
-}
-
 void Engine::DrawGrid(const Camera* camera)
 {
 	Vector3 a;
@@ -124,67 +120,28 @@ void Engine::Draw3DLine(const Camera* camera, const Vector3* v1, const Vector3* 
 	camera->GetViewMatrix()->Mul(&b);
 	camera->GetProjectionMatrix()->Mul(&b);
 
-
-	
-
-	if(a.w > m_zNear && b.w > m_zNear)
+	if (ClipSegment(&a, &b))
 	{
-		return;
-	}
-	else if (a.w < m_zNear || b.w < m_zNear)
-	{
-		if (a.w < m_zNear)
+		if (a.w != 1)
 		{
-			float n = (a.w - m_zNear) / (a.w - b.w);
-			a.x = (n * a.x) + ((1 - n) * b.x);
-			a.y = (n * a.y) + ((1 - n) * b.y);
-			a.z = (n * a.z) + ((1 - n) * b.z);
-			a.w = m_zNear;
+			a.x /= a.w;
+			a.y /= a.w;
+			a.z /= a.w;
+			a.w /= a.w;
 		}
-		else
+		if (b.w != 1)
 		{
-			float n = (b.w - m_zNear) / (b.w - a.w);
-			b.x = (n * b.x) + ((1 - n) * a.x);
-			b.y = (n * b.y) + ((1 - n) * a.y);
-			b.z = (n * b.z) + ((1 - n) * a.z);
-			b.w = m_zNear;
+			b.x /= b.w;
+			b.y /= b.w;
+			b.z /= b.w;
+			b.w /= b.w;
 		}
+		a.x = (a.x + 1) * m_width / 2.0f;
+		a.y = (a.y + 1) * m_height / 2.0f;
+		b.x = (b.x + 1) * m_width / 2.0f;
+		b.y = (b.y + 1) * m_height / 2.0f;
+		DrawLine(a.x, a.y, b.x, b.y, c, bufferData);
 	}
-
-
-
-	if (a.w != 1)
-	{
-		a.x /= a.w;
-		a.y /= a.w;
-		a.z /= a.w;
-		a.w /= a.w;
-	}
-	
-	
-	
-	if (b.w != 1)
-	{
-		b.x /= b.w;
-		b.y /= b.w;
-		b.z /= b.w;
-		b.w /= b.w;
-	}
-
-	//a.x = (a.x / a.z + 1) * m_width / 2.0f;
-	//a.y = (a.y / a.z + 1) * m_height / 2.0f;
-
-	//b.x = (b.x / b.z + 1) * m_width / 2.0f;
-	//b.y = (b.y / b.z + 1) * m_height / 2.0f;
-
-	a.x = (a.x + 1) * m_width / 2.0f;
-	a.y = (a.y + 1) * m_height / 2.0f;
-
-	b.x = (b.x + 1) * m_width / 2.0f;
-	b.y = (b.y + 1) * m_height / 2.0f;
-
-	DrawLine(a.x, a.y, b.x, b.y, c, bufferData);
-
 }
 
 void Engine::DrawLine(const float xa, const float ya, const float xb, const float yb, const uint c, BufferData* bufferData)
@@ -265,62 +222,6 @@ void Engine::GetPixelColor(Color* color, int x, int y)
 	color->Set(m_buffer[i]);
 }
 
-void Engine::DrawTexture(const Matrix2x2* matrix, const Texture* texture, BufferData* bufferData)
-{
-	Vector2 v = { 0, 0 };
-	Matrix2x2 m;
-	const uint w = texture->GetWidth();
-	const uint h = texture->GetHeight();
-	for (uint j = 0; j < h; j++)
-	{
-		for (uint i = 0; i < w; i++)
-		{
-			v = { (float)i, (float)j };
-			m.CopyFrom(matrix);
-			m.SetTranslation((float)i, (float)j);
-			int c = texture->GetData()[j * w + i];
-			DrawPixel(&m, c, (float)(w / 2), (float)(h / 2), bufferData);
-		}
-	}
-}
-
-void Engine::DrawBuffer(const Matrix2x2* matrix, const uint color, const uint* buffer, const int bufferWidth, const int bufferHeight, BufferData* bufferData)
-{
-	Vector2 v = Vector2::Vector2Zero;
-	Matrix2x2 m;
-	
-	for (int j = 0; j < bufferHeight; j++)
-	{
-		for (int i = 0; i < bufferWidth; i++)
-		{
-			if (buffer[j * bufferHeight + i] != 0)
-			{
-				v.x = (float)i;
-				v.y = (float)j;
-				m.CopyFrom(matrix);
-				m.SetTranslation((float)i, (float)j);
-				DrawPixel(&m, color, (float)(bufferWidth / 2), (float)(bufferHeight / 2), bufferData);
-			}
-		}
-	}
-}
-
-void Engine::DrawPixel(const Matrix2x2* matrix, const uint color, const float dx, const float dy, BufferData* bufferData)
-{
-	Vector2 a = Vector2::Vector2Zero;
-	Vector2 b = Vector2::Vector2Y;
-	Vector2 d = Vector2::Vector2X;
-	Vector2 c = Vector2::Vector2One;
-
-	matrix->Mul(&a);
-	matrix->Mul(&b);
-	matrix->Mul(&c);
-	matrix->Mul(&d);
-
-	DrawTriangle(&a, &b, &c, color, bufferData);
-	DrawTriangle(&a, &c, &d, color, bufferData);
-}
-
 void Engine::FillBottomFlatTriangle(Vector2* v1, Vector2* v2, Vector2* v3, const uint color, BufferData* bufferData)
 {
 	float invslope1 = (v2->x - v1->x) / (v2->y - v1->y);
@@ -336,8 +237,35 @@ void Engine::FillBottomFlatTriangle(Vector2* v1, Vector2* v2, Vector2* v3, const
 	}
 }
 
+bool Engine::ClipSegment(Vector3* a, Vector3* b)
+{
+	if (a->w < m_zNear && b->w < m_zNear)
+	{
+		return false;
+	}
+	else if (a->w < m_zNear || b->w < m_zNear)
+	{
+		if (a->w < m_zNear)
+		{
+			float n = (a->w - m_zNear) / (a->w - b->w);
+			a->x = (n * a->x) + ((1 - n) * b->x);
+			a->y = (n * a->y) + ((1 - n) * b->y);
+			a->z = (n * a->z) + ((1 - n) * b->z);
+			a->w = m_zNear;
+		}
+		else
+		{
+			float n = (b->w - m_zNear) / (b->w - a->w);
+			b->x = (n * b->x) + ((1 - n) * a->x);
+			b->y = (n * b->y) + ((1 - n) * a->y);
+			b->z = (n * b->z) + ((1 - n) * a->z);
+			b->w = m_zNear;
+		}
+	}
+	return true;
+}
 
-void Engine::DrawTriangle2(const Triangle* t, const Texture* tex, BufferData* bufferData)
+void Engine::DrawTriangle(const Triangle* t, const Texture* tex, BufferData* bufferData)
 {
 	Vector2 v1 = Vector2((int)t->va->x, (int)t->va->y);
 	Vector2 v2 = Vector2((int)t->vb->x, (int)t->vb->y);
@@ -490,35 +418,6 @@ void Engine::FillTopFlatTriangle(Vector2* v1, Vector2* v2, Vector2* v3, const ui
 		DrawHorizontalLine((int)curx1, (int)curx2, scanlineY, color, bufferData);
 		curx1 -= invslope1;
 		curx2 -= invslope2;
-	}
-}
-
-void Engine::DrawTriangle(const Vector2* va, const Vector2* vb, const Vector2* vc, const uint color, BufferData* bufferData)
-{
-	Vector2 v1 = Vector2( (int)va->x, (int)va->y );
-	Vector2 v2 = Vector2( (int)vb->x, (int)vb->y );
-	Vector2 v3 = Vector2( (int)vc->x, (int)vc->y );
-
-	/* at first sort the three vertices by y-coordinate ascending so v1 is the topmost vertice */
-	sortVerticesAscendingByY(&v1, &v2, &v3);
-
-	/* here we know that v1.y <= v2.y <= v3.y */
-	/* check for trivial case of bottom-flat triangle */
-	if (v2.y == v3.y)
-	{
-		FillBottomFlatTriangle(&v1, &v2, &v3, color, bufferData);
-	}
-	/* check for trivial case of top-flat triangle */
-	else if (v1.y == v2.y)
-	{
-		FillTopFlatTriangle(&v1, &v2, &v3, color, bufferData);
-	}
-	else
-	{
-		/* general case - split the triangle in a topflat and bottom-flat one */
-		Vector2 v4 = Vector2( (int)(v1.x + ((float)(v2.y - v1.y) / (float)(v3.y - v1.y)) * (v3.x - v1.x)), v2.y );
-		FillBottomFlatTriangle(&v1, &v2, &v4, color, bufferData);
-		FillTopFlatTriangle(&v2, &v4, &v3, color, bufferData);
 	}
 }
 

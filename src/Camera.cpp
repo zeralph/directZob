@@ -1,6 +1,8 @@
 #include "Camera.h"
 #include <math.h>
 
+
+
 Camera::Camera()
 {
 	m_projMatrix.Identity();
@@ -44,6 +46,10 @@ void Camera::SetLookAt(const Vector3* eye, const Vector3* at, const Vector3* up)
 	m_viewMatrix.SetData(3, 1, 0);
 	m_viewMatrix.SetData(3, 2, 0);
 	m_viewMatrix.SetData(3, 3, 1);
+
+	m_cameraPosition.x = m_viewMatrix.GetValue(0, 3);
+	m_cameraPosition.y = m_viewMatrix.GetValue(1, 3);
+	m_cameraPosition.z = m_viewMatrix.GetValue(2, 3);
 }
 
 /*
@@ -128,29 +134,13 @@ void Camera::InitView()
 /*
 void Camera::setProjectionMatrix(const float angleOfView, const float width, const float height, const float near, const float far)
 {
-	float w = width / 2.0f;
-	float h = height / 2.0f;
-	float scale =  1.0f / (float)tan(angleOfView * 0.5 * M_PI / 180.0);
-	m_projMatrix.Identity();
-	m_projMatrix.SetData(0, 0, scale * w); // scale the x coordinates of the projected point
-	m_projMatrix.SetData(1, 1, scale * h); // scale the y coordinates of the projected point
-	m_projMatrix.SetData(2, 2, -far / (far - near)); // used to remap z to (0,1]
-	m_projMatrix.SetData(3, 2, -far * near / (far - near)); // used to remap z (0,1]
-	m_projMatrix.SetData(2, 3, -1); // set w = -z
-	m_projMatrix.SetData(3, 3, 0);
-	m_projMatrix.SetData(0, 3, w);
-	m_projMatrix.SetData(1, 3, h);
-}
-*/
-void Camera::setProjectionMatrix(const float angleOfView, const float width, const float height, const float near, const float far)
-{
 	float n, f, t, r,w, h, imageAspectRatio, scale;
 	n = near;
 	f = far;
 	w = width / 2.0f;
 	h = height / 2.0f;
 	imageAspectRatio = w / h;
-	scale = tan(angleOfView * 0.5 * M_PI / 180) * n;
+	scale = -tan(angleOfView * 0.5 * M_PI / 180.0) * n;
 	r = imageAspectRatio * scale;
 	t = scale;
 
@@ -177,4 +167,32 @@ void Camera::setProjectionMatrix(const float angleOfView, const float width, con
 	m_projMatrix.SetData(3, 3, 0);
 
 
+}
+*/
+
+void Camera::setProjectionMatrix(const float angleOfView, const float width, const float height, const float near, const float far)
+{
+	const float ar = width / height;
+	const float zRange = near - far;
+	const float tanHalfFOV = tanf(angleOfView / 2.0 * M_PI / 180.0);
+
+	m_projMatrix.SetData(0, 0, 1.0f / (tanHalfFOV * ar));
+	m_projMatrix.SetData(0, 1, 0.0f);
+	m_projMatrix.SetData(0, 2, 0.0f);
+	m_projMatrix.SetData(0, 3, 0.0f);
+
+	m_projMatrix.SetData(1, 0, 0.0f);
+	m_projMatrix.SetData(1, 1, 1.0f / tanHalfFOV);
+	m_projMatrix.SetData(1, 2, 0.0f);
+	m_projMatrix.SetData(1, 3, 0.0f);
+
+	m_projMatrix.SetData(2, 0, 0.0f);
+	m_projMatrix.SetData(2, 1, 0.0f);
+	m_projMatrix.SetData(2, 2, (-near - far) / zRange);
+	m_projMatrix.SetData(2, 3, 2.0f * far * near / zRange);
+
+	m_projMatrix.SetData(3, 0, 0.0f);
+	m_projMatrix.SetData(3, 1, 0.0f);
+	m_projMatrix.SetData(3, 2, 1.0f);
+	m_projMatrix.SetData(3, 3, 0.0f);
 }

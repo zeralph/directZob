@@ -74,14 +74,9 @@ public:
 
 	void ClearBuffer(const Color* color);
 	void CopyBuffer(uint* source, uint * dest);
-	void DrawPixel(const Matrix2x2* matrix, const uint color, const float dx, const float dy, BufferData* bufferData);
-	void DrawTexture(const Matrix2x2* matrix, const Texture* texture, BufferData* bufferData);
 	void DrawLine(const float xa, const float  ya, const float xb, const float yb, const uint c, BufferData* bufferData);
-	void DrawCircle(const float xc, const float yc, const float r, const uint c, BufferData* bufferData);
-	void DrawBuffer(const Matrix2x2* matrix, const uint color, const uint* buffer, const int bufferWidth, const int bufferHeight, BufferData* bufferData);
 	void Resize(int width, int height);
-	void DrawTriangle(const Vector2* va, const Vector2* vb, const Vector2* vc, const uint color, BufferData* bufferData);
-	void DrawTriangle2(const Triangle* t, const Texture* tex, BufferData* bufferData);
+	void DrawTriangle(const Triangle* t, const Texture* tex, BufferData* bufferData);
 
 	void DrawGrid(const Camera* camera);
 
@@ -89,7 +84,7 @@ public:
 	void GetPixelColor(Color* color, int x, int y);
 
 	void Draw3DLine(const Camera* camera, const Vector3* v1, const Vector3* v2, const uint c, BufferData* bufferData);
-
+	bool ClipSegment(Vector3* a, Vector3* b);
 	int Update(struct Window *window);
 	inline ulong GetCurrentFrame() {return m_currentFrame;}
 	inline float GetFps() { return m_fps; }
@@ -102,13 +97,16 @@ public:
 	inline void ResetCounters() {m_sceneTriangles = 0; m_drawnTriangles = 0;}
 	inline BufferData* GetBufferData() { return &m_bufferData; }
 
+	inline const float GetZNear() { return m_zNear; }
+	inline const float GetZFar() { return m_zFar; }
+
 private:
 
 	void FillBottomFlatTriangle(Vector2* v1, Vector2* v2, Vector2* v3, const uint color, BufferData* bufferData);
 	void FillTopFlatTriangle(Vector2* v1, Vector2* v2, Vector2* v3, const uint color, BufferData* bufferData);
 	void sortVerticesAscendingByY(Vector2* v1, Vector2* v2, Vector2* v3);
 	void sortVerticesAscendingByY(Vector2* v1, Vector2* v2, Vector2* v3, Vector2* uv1, Vector2* uv2, Vector2* uv3);
-
+	
 	void DrawHorizontalLine(const float x1, const float x2, const float y, const uint color, BufferData* bufferData);
 
 	void FillTopFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, const Triangle* t, const Texture* tex, BufferData* bufferData);
