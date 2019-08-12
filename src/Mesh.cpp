@@ -138,6 +138,8 @@ void Mesh::Draw(const Camera* camera, Engine* engine)
 	const Vector3* camZ = camera->GetEyeVector();
 	float w = (float)bData->width / 2.0f;
 	float h = (float)bData->height / 2.0f;
+	float near = engine->GetZNear();
+	float far = engine->GetZFar();
 	for (uint i = 0; i < m_nbVertices; i++)
 	{
 		m_modelMatrix.Mul(&m_vertices[i]);
@@ -177,15 +179,15 @@ void Mesh::Draw(const Camera* camera, Engine* engine)
 		n.Add(t->nc);
 		n.Div(3.0f);
 		//if  (t->va->z > 1 || t->vb->z > 1 || t->vc->z > 1)
-		if ((t->va->w > 0 && t->vb->w > 0 && t->vc->w > 0 ) || (t->va->w < 0 && t->vb->w < 0 && t->vc->w < 0))
+		if ((t->va->w > near && t->vb->w > near && t->vc->w > near))
 		{
-			if (Vector3::Dot(&n, camZ) < 0.5f)
+			if (Vector3::Dot(&n, camZ) > 0.2f)
 			{
 				t->ComputeArea();
 				if (t->area > 0)
 				{
 					t->ComputeLighting(&light);
-					engine->DrawTriangle2(t, m_texture, bData);
+					engine->DrawTriangle(t, m_texture, bData);
 					drawnFaces++;
 				}
 			}
