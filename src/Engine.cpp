@@ -20,7 +20,7 @@ Engine::Engine(int width, int height)
 	m_bufferData.zBuffer = m_zBuffer;
 	m_bufferData.size = m_width * m_height;
 	m_tick = clock();
-
+	m_nbPixels = 0;
 	//m_camera = new Camera();
 	//m_camera->setProjectionMatrix(90.0f, width, height, m_zNear, m_zFar);
 }
@@ -71,6 +71,7 @@ int Engine::Update(struct Window *window)
 	int r;
 	r = mfb_update(window, m_buffer);
 	m_currentFrame++;
+	m_nbPixels = 0;
 	clock_t t = clock();
 	m_fps = (float)CLOCKS_PER_SEC / (float)(t - m_tick);
 	m_tick = t;
@@ -383,7 +384,8 @@ void Engine::FillBufferPixel(const Vector3* p, const Triangle* t, const Texture*
 		k = p->y * m_width + p->x;
 		//if (z>=m_zNear && z<=m_zFar && z < bufferData->zBuffer[k])
 		float zf = (bufferData->zBuffer[k] == 0.0f)?m_zFar: bufferData->zBuffer[k];
-		if(z>=m_zNear && z<m_zFar && z < zf)
+		zf = bufferData->zBuffer[k];
+		if(z>=m_zNear && z<m_zFar && z > zf)
 		{
 			bufferData->zBuffer[k] = z;
 			su = w0 * t->ua->x + w1 * t->ub->x + w2 * t->uc->x;
@@ -393,7 +395,7 @@ void Engine::FillBufferPixel(const Vector3* p, const Triangle* t, const Texture*
 			tu = (int)(tu * texData->GetHeight());
 			su = (int)su % texData->GetWidth();
 			tu = (int)tu % texData->GetHeight();
-			cl = ((w0 * t->la + w1 * t->lb + w2 * t->lc)) + 0.5f;
+			cl = ((w0 * t->la + w1 * t->lb + w2 * t->lc)) + 0.1f;
 			c = (tu * texData->GetWidth() + su) * 4;
 			const float* d = texData->GetData();
 			r = d[c] * cl;
@@ -402,6 +404,7 @@ void Engine::FillBufferPixel(const Vector3* p, const Triangle* t, const Texture*
 			a = d[c + 3] * cl;
 			c = ((int)(r * 255) << 16) + ((int)(g * 255) << 8) + (int)(b * 255);
 			bufferData->buffer[k] = c;
+			m_nbPixels++;
 		}
 	}
 }

@@ -168,7 +168,7 @@ void Mesh::Draw(const Camera* camera, Engine* engine)
 	uint color = 0;
 	Vector3 n;
 
-	Vector3 light = Vector3(0.0f, -1.0f, -1.0f);
+	Vector3 light = Vector3(0.0f, 0.0f, 1.0f);
 	light.Normalize();
 	uint drawnFaces = 0;
 	for (int i = 0; i < m_nbFaces; i ++)
@@ -181,7 +181,7 @@ void Mesh::Draw(const Camera* camera, Engine* engine)
 		//if  (t->va->z > 1 || t->vb->z > 1 || t->vc->z > 1)
 		if ((t->va->w > near && t->vb->w > near && t->vc->w > near))
 		{
-			if (Vector3::Dot(&n, camZ) > 0.2f)
+			if (Vector3::Dot(&n, camZ) > -0.2f)
 			{
 				t->ComputeArea();
 				if (t->area > 0)

@@ -23,7 +23,7 @@ Camera* m_FPSCam = NULL;
 Camera* m_curCam = NULL;
 
 static Vector3 camRot = Vector3(0, 0, 0);
-static Vector3 camPos = Vector3(0, 0.1f, 0);
+static Vector3 camPos = Vector3(0, -1.0f, -10);
 static Vector3 camTarget = Vector3(0, 0.1f, 1.0f);
 static Vector3 up = Vector3(0, 1.0f, 0);
 
@@ -79,11 +79,11 @@ void keyboard(struct Window *window, Key key, KeyMod mod, bool isPressed) {
 	{
 		camPos.x = camPos.x + 0.1f;
 	}
-	else if (key == KB_KEY_KP_SUBTRACT)
+	else if (key == KB_KEY_PAGE_DOWN)
 	{
 		camPos.y = camPos.y - 0.1f;
 	}
-	else if (key == KB_KEY_KP_ADD)
+	else if (key == KB_KEY_PAGE_UP)
 	{
 		camPos.y = camPos.y + 0.1f;
 	}
@@ -212,7 +212,7 @@ int main()
 
 		m_FPSCam->setProjectionMatrix(fov, m_engine->Width(), m_engine->Height(), 0.01f, 1000.0f);
 		m_FPSCam->InitView();
-		//camTarget = camPos;
+		camTarget = camPos;
 		camTarget.z = camTarget.z + 1.0f;
 		m_FPSCam->SetLookAt(&camPos, &camTarget, &up);
 		//m_FPSCam->SetPosition(&camPos);
@@ -245,7 +245,8 @@ int main()
 		snprintf(buffer, MAX_PATH, "Cam rot : %.2f, %.2f, %.2f", camRot.x, camRot.y, camRot.z);
 		text->Print(0, 24, 1, &std::string(buffer), 0xFFFFFFFF);
 
-		
+		snprintf(buffer, MAX_PATH, "Nb pixels : %i", m_engine->GetNbPixels());
+		text->Print(0, 32, 1, &std::string(buffer), 0xFFFFFFFF);
 		
 
 		snprintf(buffer, MAX_PATH, "FPS : %.2f", m_engine->GetFps());
