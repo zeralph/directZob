@@ -16,16 +16,21 @@ Camera::~Camera()
 
 void Camera::SetLookAt(const Vector3* eye, const Vector3* at, const Vector3* up)
 {
-	Vector3 zaxis = Vector3(eye->x - at->x, eye->y - at->y, eye->z - at->z);
+	//Vector3 zaxis = Vector3(eye->x - at->x, eye->y - at->y, eye->z - at->z);
+	
+	Vector3 zaxis = Vector3(at->x - eye->x, at->y - eye->y, at->z - eye->z);
+	
 	zaxis.Normalize();
 	Vector3 xaxis = Vector3::Cross(&zaxis, up);
 	xaxis.Normalize();
+	
 	Vector3 yaxis = Vector3::Cross(&xaxis, &zaxis);
-
-	zaxis.x = -zaxis.x;
-	zaxis.y = -zaxis.y;
-	zaxis.z = -zaxis.z;
+zaxis.x = -zaxis.x;
+zaxis.y = -zaxis.y;
+zaxis.z = -zaxis.z;
 //	zaxis.w = -zaxis.w;
+
+
 
 	m_viewMatrix.SetData(0, 0, xaxis.x);
 	m_viewMatrix.SetData(0, 1, xaxis.y);
@@ -47,9 +52,9 @@ void Camera::SetLookAt(const Vector3* eye, const Vector3* at, const Vector3* up)
 	m_viewMatrix.SetData(3, 2, 0);
 	m_viewMatrix.SetData(3, 3, 1);
 
-	m_cameraPosition.x = m_viewMatrix.GetValue(0, 3);
-	m_cameraPosition.y = m_viewMatrix.GetValue(1, 3);
-	m_cameraPosition.z = m_viewMatrix.GetValue(2, 3);
+	m_cameraPosition.x = -m_viewMatrix.GetValue(0, 3);
+	m_cameraPosition.y = -m_viewMatrix.GetValue(1, 3);
+	m_cameraPosition.z = -m_viewMatrix.GetValue(2, 3);
 }
 
 /*
@@ -174,7 +179,7 @@ void Camera::setProjectionMatrix(const float angleOfView, const float width, con
 {
 	const float ar = width / height;
 	const float zRange = near - far;
-	const float tanHalfFOV = tanf(angleOfView / 2.0 * M_PI / 180.0);
+	const float tanHalfFOV = -tanf(angleOfView / 2.0 * M_PI / 180.0);
 
 	m_projMatrix.SetData(0, 0, 1.0f / (tanHalfFOV * ar));
 	m_projMatrix.SetData(0, 1, 0.0f);

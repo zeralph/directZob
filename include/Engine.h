@@ -47,9 +47,9 @@ public:
 			la = fmax(0.0f, Vector3::Dot(na, v));
 			lb = fmax(0.0f, Vector3::Dot(na, v));
 			lc = fmax(0.0f, Vector3::Dot(na, v));
-			la = 0.5f;
-			lb = 0.5f;
-			lc = 0.5f;
+			//la = 0.5f;
+			//lb = 0.5f;
+			//lc = 0.5f;
 		}
 	};
 
@@ -99,7 +99,7 @@ public:
 
 	inline const float GetZNear() { return m_zNear; }
 	inline const float GetZFar() { return m_zFar; }
-
+	inline const ulong GetNbPixels() { return m_nbPixels; }
 private:
 
 	void FillBottomFlatTriangle(Vector2* v1, Vector2* v2, Vector2* v3, const uint color, BufferData* bufferData);
@@ -131,4 +131,5 @@ private:
 	bool m_showZBuffer;
 	uint m_sceneTriangles;
 	uint m_drawnTriangles;
+	ulong m_nbPixels;
 };
