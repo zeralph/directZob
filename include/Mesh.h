@@ -7,6 +7,7 @@
 #include "Vector2.h"
 #include "Types.h"
 #include "Engine.h"
+#include "Triangle.h"
 
 class Mesh
 {
@@ -28,11 +29,11 @@ public:
 	Vector3* m_normalsData = NULL;
 
 	Vector2* m_uvs = NULL;
-	Engine::Triangle* m_triangles = NULL;
+	Triangle* m_triangles = NULL;
 
 private:
 	void SplitEntry(const std::string* s, std::vector<std::string>* v, const char delim);
-	void CreateTriangles(const std::vector<std::string>* line, Engine::Triangle* tArray, size_t &tArrayIdx);
+	void CreateTriangles(const std::vector<std::string>* line, Triangle* tArray, size_t &tArrayIdx, const Texture* tex);
 	inline void ReinitVertices();
 
 	uint m_nbVertices = 0;

@@ -27,7 +27,7 @@ inline void Cube::ReinitVertices()
 void Cube::Draw(const Camera* camera, Engine* engine)
 {
 
-	Engine::BufferData* bData = engine->GetBufferData();
+	BufferData* bData = engine->GetBufferData();
 
 	Vector2 a, b, c, uva, uvb, uvc;
 	Matrix4x4 m = m_modelMatrix;

@@ -30,10 +30,12 @@
     <ClInclude Include="include\MiniFB.h" />
     <ClInclude Include="include\MiniFB_cpp.h" />
     <ClInclude Include="include\MiniFB_enums.h" />
+    <ClInclude Include="include\Rasterizer.h" />
     <ClInclude Include="include\text2D.h" />
     <ClInclude Include="include\Texture.h" />
     <ClInclude Include="include\TextureTest.h" />
     <ClInclude Include="include\TextureTestAlpha.h" />
+    <ClInclude Include="include\Triangle.h" />
     <ClInclude Include="include\Types.h" />
     <ClInclude Include="include\Vector2.h" />
     <ClInclude Include="include\Vector3.h" />
@@ -54,8 +56,10 @@
     <ClCompile Include="src\MiniFB_common.c" />
     <ClCompile Include="src\MiniFB_cpp.cpp" />
     <ClCompile Include="src\MiniFB_internal.c" />
+    <ClCompile Include="src\Rasterizer.cpp" />
     <ClCompile Include="src\Text2D.cpp" />
     <ClCompile Include="src\Texture.cpp" />
+    <ClCompile Include="src\Triangle.cpp" />
     <ClCompile Include="src\Vector2.cpp" />
     <ClCompile Include="src\Vector3.cpp" />
     <ClCompile Include="src\WinMiniFB.c" />

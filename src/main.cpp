@@ -12,7 +12,7 @@
 #define kUnused(var) (void) var;
 #define WIDTH  800
 #define HEIGHT 600
-#define TARGET_MS_PER_FRAME 33.33f
+#define TARGET_MS_PER_FRAME 33.33f / 2.0f
 #define CLAMP(n, low, max) n <= low ? low : n >= max ? max : n;
 
 static char buffer[MAX_PATH];
@@ -224,7 +224,7 @@ int main()
 		}
 		if (mesh && g_bShowMeshes)
 		{
-			rot += 1.5f;
+			rot += 0.5f;
 			mesh->Init();
 			static float tx = 0;
 			static float ty = 0;

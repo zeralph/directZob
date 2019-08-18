@@ -8,4 +8,13 @@ typedef char u8;
 typedef unsigned int uint;
 typedef unsigned long ulong;
 
+struct BufferData
+{
+	uint width;
+	uint height;
+	uint size;
+	uint* buffer;
+	float* zBuffer;
+};
+
 
