@@ -49,7 +49,7 @@ m_uvs(NULL)
 	m_uvs = (Vector2*)malloc(sizeof(Vector2) * m_nbUvs);
 	m_normals = (Vector3*)malloc(sizeof(Vector3) * m_nbNormals);
 	m_normalsData = (Vector3*)malloc(sizeof(Vector3) * m_nbNormals);
-	m_triangles = (Engine::Triangle*)malloc(sizeof(Engine::Triangle) * m_nbFaces);
+	m_triangles = (Triangle*)malloc(sizeof(Triangle) * m_nbFaces);
 	
 	
 	size_t curVertice = 0;
@@ -90,7 +90,7 @@ m_uvs(NULL)
 			vector<string> v;
 			SplitEntry(&line, &v, ' ');
 			v.erase(v.begin());
-			CreateTriangles(&v, m_triangles, curface);
+			CreateTriangles(&v, m_triangles, curface, tex);
 		}
 	}
 	memcpy(m_verticesData, m_vertices, sizeof(Vector3) * m_nbVertices);
@@ -130,7 +130,7 @@ void Mesh::ReinitVertices()
 
 void Mesh::Draw(const Camera* camera, Engine* engine)
 {
-	Engine::BufferData* bData = engine->GetBufferData();
+	BufferData* bData = engine->GetBufferData();
 
 	Vector2 a, b, c, uva, uvb, uvc;
 	const Matrix4x4* view = camera->GetViewMatrix();
@@ -173,7 +173,7 @@ void Mesh::Draw(const Camera* camera, Engine* engine)
 	uint drawnFaces = 0;
 	for (int i = 0; i < m_nbFaces; i ++)
 	{
-		Engine::Triangle* t = &m_triangles[i];
+		Triangle* t = &m_triangles[i];
 		n.Set(t->na);
 		n.Add(t->nb);
 		n.Add(t->nc);
@@ -187,7 +187,8 @@ void Mesh::Draw(const Camera* camera, Engine* engine)
 				if (t->area > 0)
 				{
 					t->ComputeLighting(&light);
-					engine->DrawTriangle(t, m_texture, bData);
+					engine->QueueTriangle(t);
+//					engine->DrawTriangle(t, bData);
 					drawnFaces++;
 				}
 			}
@@ -197,7 +198,7 @@ void Mesh::Draw(const Camera* camera, Engine* engine)
 }
 
 
-void Mesh::CreateTriangles(const std::vector<std::string>* line, Engine::Triangle* tArray, size_t &tArrayIdx)
+void Mesh::CreateTriangles(const std::vector<std::string>* line, Triangle* tArray, size_t &tArrayIdx, const Texture* tex)
 {
 	size_t nbFaces = line->size() - 2;
 	int a, b, c = 0;
@@ -217,7 +218,7 @@ void Mesh::CreateTriangles(const std::vector<std::string>* line, Engine::Triangl
 			c = i + 2;
 		}
 
-		Engine::Triangle t;
+		Triangle t;
 		std::string::size_type sz;
 
 		vec.clear();
@@ -249,8 +250,11 @@ void Mesh::CreateTriangles(const std::vector<std::string>* line, Engine::Triangl
 		else
 			t.uc = &Vector2(0, 0);
 		t.nc = &m_normals[std::stoi(vec[2], &sz) - 1];
+		
+		t.tex = tex;
 		//t.nc = &Vector3(0, 0, 1);
 		tArray[tArrayIdx] = t;
 		tArrayIdx++;
+		
 	}
 }

@@ -2,6 +2,7 @@
 #include <algorithm>
 #include "TextureTest.h"
 
+
 Engine::Engine(int width, int height)
 {
 	m_currentFrame = 0;
@@ -21,6 +22,12 @@ Engine::Engine(int width, int height)
 	m_bufferData.size = m_width * m_height;
 	m_tick = clock();
 	m_nbPixels = 0;
+
+	m_rasterQueue1.clear();
+	m_rasterQueue2.clear();
+
+	m_rasterizer1 = new Rasterizer(m_width, 0, m_height/2, m_zNear, m_zFar);
+	m_rasterizer2 = new Rasterizer(m_width, m_height / 2, m_height, m_zNear, m_zFar);
 	//m_camera = new Camera();
 	//m_camera->setProjectionMatrix(90.0f, width, height, m_zNear, m_zFar);
 }
@@ -46,7 +53,7 @@ void Engine::Resize(int width, int height)
 	m_bufferData.zBuffer = m_zBuffer;
 	m_bufferData.size = m_width * m_height;
 	m_tick = clock();
-//	m_camera->setProjectionMatrix(90.0f, width, height, m_zNear, m_zFar);
+	//	m_camera->setProjectionMatrix(90.0f, width, height, m_zNear, m_zFar);
 }
 
 void Engine::ClearBuffer(const Color* color)
@@ -54,10 +61,16 @@ void Engine::ClearBuffer(const Color* color)
 	uint v = color->GetRawValue();
 	memset(m_buffer, v, sizeof(uint) * m_width * m_height);
 	memset(m_zBuffer, 0, sizeof(float) * m_width * m_height);
+	m_rasterQueue1.clear();
+	m_rasterQueue2.clear();
 }
 
 int Engine::Update(struct Window *window)
-{	
+{
+
+	m_rasterizer1->Render(&m_rasterQueue1, &m_bufferData);
+	m_rasterizer2->Render(&m_rasterQueue2, &m_bufferData);
+
 	if (m_showZBuffer)
 	{
 		uint c;
@@ -68,7 +81,7 @@ int Engine::Update(struct Window *window)
 			m_buffer[i] = c;
 		}
 	}
-	int r;
+	int r = 0;
 	r = mfb_update(window, m_buffer);
 	m_currentFrame++;
 	m_nbPixels = 0;
@@ -176,7 +189,7 @@ void Engine::DrawLine(const float xa, const float ya, const float xb, const floa
 	const int maxX = (int)x2;
 	for (int x = (int)x1; x < maxX; x++)
 	{
-		if (x >= 0 && x <m_width && y>=0 && y<m_height)
+		if (x >= 0 && x < m_width && y >= 0 && y < m_height)
 		{
 			if (steep)
 			{
@@ -223,21 +236,6 @@ void Engine::GetPixelColor(Color* color, int x, int y)
 	color->Set(m_buffer[i]);
 }
 
-void Engine::FillBottomFlatTriangle(Vector2* v1, Vector2* v2, Vector2* v3, const uint color, BufferData* bufferData)
-{
-	float invslope1 = (v2->x - v1->x) / (v2->y - v1->y);
-	float invslope2 = (v3->x - v1->x) / (v3->y - v1->y);
-
-	float curx1 = v1->x;
-	float curx2 = v1->x;
-	for (int scanlineY = v1->y; scanlineY <= v2->y; scanlineY++)
-	{
-		DrawHorizontalLine((int)curx1, (int)curx2, scanlineY, color, bufferData);
-		curx1 += invslope1;
-		curx2 += invslope2;
-	}
-}
-
 bool Engine::ClipSegment(Vector3* a, Vector3* b)
 {
 	if (a->w < m_zNear && b->w < m_zNear)
@@ -266,161 +264,22 @@ bool Engine::ClipSegment(Vector3* a, Vector3* b)
 	return true;
 }
 
-void Engine::DrawTriangle(const Triangle* t, const Texture* tex, BufferData* bufferData)
+void Engine::QueueTriangle(const Triangle* t)
 {
-	Vector2 v1 = Vector2((int)t->va->x, (int)t->va->y);
-	Vector2 v2 = Vector2((int)t->vb->x, (int)t->vb->y);
-	Vector2 v3 = Vector2((int)t->vc->x, (int)t->vc->y);
-
-	/* at first sort the three vertices by y-coordinate ascending so v1 is the topmost vertice */
-	sortVerticesAscendingByY(&v1, &v2, &v3);
-
-
-	/* here we know that v1.y <= v2.y <= v3.y */
-	/* check for trivial case of bottom-flat triangle */
-	if (v2.y == v3.y)
+	float min = std::min<float>(t->va->y, std::min<float>(t->vb->y, t->vc->y));
+	float max = std::max<float>(t->va->y, std::max<float>(t->vb->y, t->vc->y));
+	if (min < m_height / 2 && max < m_height / 2)
 	{
-		FillBottomFlatTriangle2(&v1, &v2, &v3, t, tex, bufferData);
+		m_rasterQueue1.push_back(t);
 	}
-	/* check for trivial case of top-flat triangle */
-	else if (v1.y == v2.y)
+	else if (min >= m_height / 2 && max >= m_height / 2)
 	{
-		FillTopFlatTriangle2(&v1, &v2, &v3, t, tex, bufferData);
+		m_rasterQueue2.push_back(t);
 	}
 	else
 	{
-		/* general case - split the triangle in a topflat and bottom-flat one */
-		Vector2 v4 = Vector2((int)(v1.x + ((float)(v2.y - v1.y) / (float)(v3.y - v1.y)) * (v3.x - v1.x)), v2.y);
-		FillBottomFlatTriangle2(&v1, &v2, &v4, t, tex, bufferData);
-		FillTopFlatTriangle2(&v2, &v4, &v3, t, tex, bufferData);
-	}
-	m_drawnTriangles++;
-}
-
-void Engine::FillBottomFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, const Triangle* t, const Texture* tex,  BufferData* bufferData)
-{
-	uint* buffer = bufferData->buffer;
-	Vector3 p;
-	float invslope1 = (v2->x - v1->x) / (v2->y - v1->y);
-	float invslope2 = (v3->x - v1->x) / (v3->y - v1->y);
-	float curx1 = v1->x;
-	float curx2 = v1->x;
-	float a, b;
-	for (int scanlineY = v1->y; scanlineY <= v2->y; scanlineY++)
-	{
-		int k;
-		if (scanlineY >= 0 && scanlineY < m_height)
-		{
-			if (curx1 != curx2)
-			{
-				a = fmin(curx1, curx2);
-				b = fmax(curx1, curx2);
-				b++;
-				a = (int)(a < 0.0f ? 0.0f : a);
-				b = (int)(b > m_width ? m_width : b);
-				for (int i = a; i < b; i++)
-				{
-					p.x = i;
-					p.y = scanlineY;
-					p.z = -1;
-					FillBufferPixel(&p, t, tex, bufferData);
-				}
-			}
-		}
-		curx1 += invslope1;
-		curx2 += invslope2;
-	}
-}
-
-void Engine::FillTopFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, const Triangle* t, const Texture* tex, BufferData* bufferData)
-{
-	uint* buffer = bufferData->buffer;
-	Vector3 p;
-	float invslope1 = (v3->x - v1->x) / (v3->y - v1->y);
-	float invslope2 = (v3->x - v2->x) / (v3->y - v2->y);
-	float curx1 = v3->x;
-	float curx2 = v3->x;
-	float a, b;
-	for (int scanlineY = v3->y; scanlineY > v1->y; scanlineY--)
-	{
-		if (scanlineY >= 0 && scanlineY < m_height)
-		{
-			if (curx1 != curx2)
-			{
-				a = fmin(curx1, curx2);
-				b = fmax(curx1, curx2);
-				b++;
-				a = (int)(a < 0.0f ? 0.0f : a);
-				b = (int)(b > m_width ? m_width : b);
-				for (int i = a; i < b; i++)
-				{			
-					p.x = i;
-					p.y = scanlineY;
-					p.z = -1;
-					FillBufferPixel(&p, t, tex, bufferData);
-				}
-			}
-		}		
-		curx1 -= invslope1;
-		curx2 -= invslope2;
-	}
-}
-
-void Engine::FillBufferPixel(const Vector3* p, const Triangle* t, const Texture* texData, BufferData* bufferData)
-{
-	
-	float w2 = edgeFunction(t->va, t->vb, p);
-	float w0 = edgeFunction(t->vb, t->vc, p);
-	float w1 = edgeFunction(t->vc, t->va, p);
-	float su, tu, cl, r, g, b, a, z;
-	uint c, k;
-	if (w0 >= 0 || w1 >= 0 || w2 >= 0) 
-	{
-		w0 /= t->area;
-		w1 /= t->area;
-		w2 /= t->area;
-
-		z = 1.0f / (t->va->z * w0 + t->vb->z * w1 + t->vc->z * w2);
-		k = p->y * m_width + p->x;
-		//if (z>=m_zNear && z<=m_zFar && z < bufferData->zBuffer[k])
-		float zf = (bufferData->zBuffer[k] == 0.0f)?m_zFar: bufferData->zBuffer[k];
-		zf = bufferData->zBuffer[k];
-		if(z>=m_zNear && z<m_zFar && z > zf)
-		{
-			bufferData->zBuffer[k] = z;
-			su = w0 * t->ua->x + w1 * t->ub->x + w2 * t->uc->x;
-			tu = w0 * t->ua->y + w1 * t->ub->y + w2 * t->uc->y;
-			tu = 1.0f - tu;
-			su = (int)(su * texData->GetWidth());
-			tu = (int)(tu * texData->GetHeight());
-			su = (int)su % texData->GetWidth();
-			tu = (int)tu % texData->GetHeight();
-			cl = ((w0 * t->la + w1 * t->lb + w2 * t->lc)) + 0.1f;
-			c = (tu * texData->GetWidth() + su) * 4;
-			const float* d = texData->GetData();
-			r = d[c] * cl;
-			g = d[c + 1] * cl;
-			b = d[c + 2] * cl;
-			a = d[c + 3] * cl;
-			c = ((int)(r * 255) << 16) + ((int)(g * 255) << 8) + (int)(b * 255);
-			bufferData->buffer[k] = c;
-			m_nbPixels++;
-		}
-	}
-}
-
-void Engine::FillTopFlatTriangle(Vector2* v1, Vector2* v2, Vector2* v3, const uint color, BufferData* bufferData)
-{
-	float invslope1 = (v3->x - v1->x) / (v3->y - v1->y);
-	float invslope2 = (v3->x - v2->x) / (v3->y - v2->y);
-
-	float curx1 = v3->x;
-	float curx2 = v3->x;
-	for (int scanlineY = v3->y; scanlineY > v1->y; scanlineY--)
-	{
-		DrawHorizontalLine((int)curx1, (int)curx2, scanlineY, color, bufferData);
-		curx1 -= invslope1;
-		curx2 -= invslope2;
+		m_rasterQueue1.push_back(t);
+		m_rasterQueue2.push_back(t);
 	}
 }
 
@@ -429,7 +288,7 @@ void Engine::DrawHorizontalLine(const float x1, const float x2, const float y, c
 	int k;
 	float alpha = 1;// Color::GetAlpha(color);
 	uint* buffer = bufferData->buffer;
-	if (alpha != 0 &&y>=0 && y<m_height)
+	if (alpha != 0 && y >= 0 && y < m_height)
 	{
 		if (x1 != x2)
 		{
@@ -445,34 +304,5 @@ void Engine::DrawHorizontalLine(const float x1, const float x2, const float y, c
 				buffer[k] = color;
 			}
 		}
-	}
-}
-
-void Engine::sortVerticesAscendingByY(Vector2* v1, Vector2* v2, Vector2* v3)
-{
-	if (v3->y < v2->y)
-	{
-		std::swap(*v2, *v3);
-	}
-	if (v2->y < v1->y) std::swap(*v1, *v2);
-	if (v3->y < v2->y) std::swap(*v2, *v3);
-}
-
-void Engine::sortVerticesAscendingByY(Vector2* v1, Vector2* v2, Vector2* v3, Vector2* uv1, Vector2* uv2, Vector2* uv3)
-{
-	if (v3->y < v2->y)
-	{
-		std::swap(*v2, *v3);
-		std::swap(*uv2, *uv3);
-	}
-	if (v2->y < v1->y)
-	{
-		std::swap(*v1, *v2);
-		std::swap(*uv1, *uv2);
-	}
-	if (v3->y < v2->y)
-	{
-		std::swap(*v2, *v3);
-		std::swap(*uv2, *uv3);
 	}
 }
