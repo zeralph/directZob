@@ -9,19 +9,46 @@ Rasterizer::Rasterizer(uint width, uint startHeight, uint endHeight, float zNear
 	m_zNear = zNear;
 	m_zFar = zFar;
 	m_width = width;
+	m_start = false;
+	//std::thread t(&Rasterizer::Run, this);
+	//t.detach();
 }
 
+void Rasterizer::Run()
+{
+	//while(true)
+	{
+		if (m_start)
+		{
+			Render();
+			m_start = false;
+		}
+	}
+}
+
+void Rasterizer::Start(const std::vector<const Triangle*>* triangles, BufferData* bufferData)
+{
+	m_triangles = triangles;
+	m_bufferData = bufferData;
+	m_start = true;
+	//std::thread t(&Rasterizer::Run, this);
+}
 
 Rasterizer::~Rasterizer()
 {
 }
 
-void Rasterizer::Render(const std::vector<const Triangle*> *triangles, BufferData* bufferData)
+bool Rasterizer::Ended()
 {
-	for (int i = 0; i < triangles->size(); i++)
+	return m_start == false;
+}
+
+void Rasterizer::Render()
+{
+	for (int i = 0; i < m_triangles->size(); i++)
 	{
-		const Triangle* t = triangles->at(i);
-		DrawTriangle(t, bufferData);
+		const Triangle* t = m_triangles->at(i);
+		DrawTriangle(t, m_bufferData);
 	}
 }
 
@@ -143,9 +170,7 @@ void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* t, BufferData
 
 		z = 1.0f / (t->va->z * w0 + t->vb->z * w1 + t->vc->z * w2);
 		k = p->y * m_width + p->x;
-		//if (z>=m_zNear && z<=m_zFar && z < bufferData->zBuffer[k])
-		float zf = (bufferData->zBuffer[k] == 0.0f) ? m_zFar : bufferData->zBuffer[k];
-		zf = bufferData->zBuffer[k];
+		float zf = bufferData->zBuffer[k];
 		if (z >= m_zNear && z<m_zFar && z > zf)
 		{
 			bufferData->zBuffer[k] = z;

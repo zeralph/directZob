@@ -1,7 +1,8 @@
 #include "Engine.h"
 #include <algorithm>
 #include "TextureTest.h"
-
+#include <thread> 
+#include <windows.h>
 
 Engine::Engine(int width, int height)
 {
@@ -28,6 +29,7 @@ Engine::Engine(int width, int height)
 
 	m_rasterizer1 = new Rasterizer(m_width, 0, m_height/2, m_zNear, m_zFar);
 	m_rasterizer2 = new Rasterizer(m_width, m_height / 2, m_height, m_zNear, m_zFar);
+	//std::thread r2(&m_rasterizer2->Render);
 	//m_camera = new Camera();
 	//m_camera->setProjectionMatrix(90.0f, width, height, m_zNear, m_zFar);
 }
@@ -67,9 +69,14 @@ void Engine::ClearBuffer(const Color* color)
 
 int Engine::Update(struct Window *window)
 {
+	m_rasterizer1->Start(&m_rasterQueue1, &m_bufferData);
+	m_rasterizer2->Start(&m_rasterQueue2, &m_bufferData);
 
-	m_rasterizer1->Render(&m_rasterQueue1, &m_bufferData);
-	m_rasterizer2->Render(&m_rasterQueue2, &m_bufferData);
+	std::thread t1(&Rasterizer::Run, m_rasterizer1);
+	std::thread t2(&Rasterizer::Run, m_rasterizer2);
+
+	t1.join();
+	t2.join();
 
 	if (m_showZBuffer)
 	{
