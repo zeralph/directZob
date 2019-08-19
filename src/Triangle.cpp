@@ -16,6 +16,8 @@ Triangle::Triangle()
 	ua = NULL;
 	ub = NULL;
 	uc = NULL;
+
+	draw = false;
 }
 
 

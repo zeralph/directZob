@@ -128,18 +128,16 @@ void Mesh::ReinitVertices()
 	memcpy(m_normals, m_normalsData, sizeof(Vector3) * m_nbNormals);
 }
 
-void Mesh::Draw(const Camera* camera, Engine* engine)
+void Mesh::Update(const Camera* camera, const BufferData* bData)
 {
-	BufferData* bData = engine->GetBufferData();
-
 	Vector2 a, b, c, uva, uvb, uvc;
 	const Matrix4x4* view = camera->GetViewMatrix();
 	const Matrix4x4* proj = camera->GetProjectionMatrix();
 	const Vector3* camZ = camera->GetEyeVector();
 	float w = (float)bData->width / 2.0f;
 	float h = (float)bData->height / 2.0f;
-	float near = engine->GetZNear();
-	float far = engine->GetZFar();
+	float near = bData->zNear;
+	float far = bData->zFar;
 	for (uint i = 0; i < m_nbVertices; i++)
 	{
 		m_modelMatrix.Mul(&m_vertices[i]);
@@ -178,7 +176,7 @@ void Mesh::Draw(const Camera* camera, Engine* engine)
 		n.Add(t->nb);
 		n.Add(t->nc);
 		n.Div(3.0f);
-		//if  (t->va->z > 1 || t->vb->z > 1 || t->vc->z > 1)
+		t->draw = false;
 		if ((t->va->w > near && t->vb->w > near && t->vc->w > near))
 		{
 			if (Vector3::Dot(&n, camZ) > -0.2f)
@@ -187,8 +185,8 @@ void Mesh::Draw(const Camera* camera, Engine* engine)
 				if (t->area > 0)
 				{
 					t->ComputeLighting(&light);
-					engine->QueueTriangle(t);
-//					engine->DrawTriangle(t, bData);
+					//engine->QueueTriangle(t);
+					t->draw = true;
 					drawnFaces++;
 				}
 			}

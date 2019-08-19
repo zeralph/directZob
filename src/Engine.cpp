@@ -18,17 +18,28 @@ Engine::Engine(int width, int height)
 	m_fps = 0.0;
 	m_bufferData.height = m_height;
 	m_bufferData.width = m_width;
+	m_bufferData.zNear = m_zNear;
+	m_bufferData.zFar= m_zFar;
 	m_bufferData.buffer = m_buffer;
 	m_bufferData.zBuffer = m_zBuffer;
 	m_bufferData.size = m_width * m_height;
 	m_tick = clock();
 	m_nbPixels = 0;
+	m_renderTimeMS = 0;
+	m_geometryTimeMS = 0;
 
-	m_rasterQueue1.clear();
-	m_rasterQueue2.clear();
 
-	m_rasterizer1 = new Rasterizer(m_width, 0, m_height/2, m_zNear, m_zFar);
-	m_rasterizer2 = new Rasterizer(m_width, m_height / 2, m_height, m_zNear, m_zFar);
+	int h = m_height / NB_RASTERIZERS;
+	int h0 = 0;
+	for (int i = 0; i < NB_RASTERIZERS; i++)
+	{
+		m_rasterizers[i] = new Rasterizer(m_width, h0, h0+h, m_zNear, m_zFar);
+		m_rasterTriangleQueues[i].clear();
+		m_rasterLineQueues[i].clear();
+		h0 += h;
+	}
+	
+	//m_rasterizer2 = new Rasterizer(m_width, m_height / 2, m_height, m_zNear, m_zFar);
 	//std::thread r2(&m_rasterizer2->Render);
 	//m_camera = new Camera();
 	//m_camera->setProjectionMatrix(90.0f, width, height, m_zNear, m_zFar);
@@ -37,6 +48,11 @@ Engine::Engine(int width, int height)
 Engine::~Engine()
 {
 
+}
+
+void Engine::Add(Mesh* mesh)
+{
+	m_meshes.push_back(mesh);
 }
 
 void Engine::Resize(int width, int height)
@@ -53,6 +69,8 @@ void Engine::Resize(int width, int height)
 	m_bufferData.width = m_width;
 	m_bufferData.buffer = m_buffer;
 	m_bufferData.zBuffer = m_zBuffer;
+	m_bufferData.zNear = m_zNear;
+	m_bufferData.zFar = m_zFar;
 	m_bufferData.size = m_width * m_height;
 	m_tick = clock();
 	//	m_camera->setProjectionMatrix(90.0f, width, height, m_zNear, m_zFar);
@@ -63,20 +81,51 @@ void Engine::ClearBuffer(const Color* color)
 	uint v = color->GetRawValue();
 	memset(m_buffer, v, sizeof(uint) * m_width * m_height);
 	memset(m_zBuffer, 0, sizeof(float) * m_width * m_height);
-	m_rasterQueue1.clear();
-	m_rasterQueue2.clear();
+	for (int i = 0; i < NB_RASTERIZERS; i++)
+	{
+		m_rasterTriangleQueues[i].clear();
+		m_rasterLineQueues[i].clear();
+	}
 }
 
-int Engine::Update(struct Window *window)
+int Engine::Update(struct Window *window, const Camera* camera)
 {
-	m_rasterizer1->Start(&m_rasterQueue1, &m_bufferData);
-	m_rasterizer2->Start(&m_rasterQueue2, &m_bufferData);
+	clock_t t;
+	t = clock();
+	m_sceneTriangles = 0;
+	m_drawnTriangles = 0;
+	for (int i = 0; i < m_meshes.size(); i++)
+	{
+		Mesh* m = m_meshes.at(i);
+		m->Update(camera, &m_bufferData);
+		for (int j = 0; j < m->GetNbTriangles(); j++)
+		{
+			const Triangle* t = &m->GetTrianglesList()[j];
+			if (t->draw)
+			{
+				this->QueueTriangle(t);
+				m_drawnTriangles++;
+			}
+			m_sceneTriangles++;
+		}
+	}
+	m_geometryTimeMS = (float)(clock() - t) / CLOCKS_PER_SEC * 1000;
 
-	std::thread t1(&Rasterizer::Run, m_rasterizer1);
-	std::thread t2(&Rasterizer::Run, m_rasterizer2);
+	t = clock();
+	for (int i = 0; i < NB_RASTERIZERS; i++)
+	{
+		m_rasterizers[i]->Start(&m_rasterTriangleQueues[i], &m_rasterLineQueues[i], &m_bufferData);
 
-	t1.join();
-	t2.join();
+	}
+	for (int i = 0; i < NB_RASTERIZERS; i++)
+	{
+		m_rasterThreads[i] = std::thread(&Rasterizer::Run, m_rasterizers[i]);
+	}
+	for (int i = 0; i < NB_RASTERIZERS; i++)
+	{
+		m_rasterThreads[i].join();
+	}
+	m_renderTimeMS = (float)(clock() - t) / CLOCKS_PER_SEC * 1000;
 
 	if (m_showZBuffer)
 	{
@@ -92,8 +141,7 @@ int Engine::Update(struct Window *window)
 	r = mfb_update(window, m_buffer);
 	m_currentFrame++;
 	m_nbPixels = 0;
-	clock_t t = clock();
-	m_fps = (float)CLOCKS_PER_SEC / (float)(t - m_tick);
+	m_fps = (float)CLOCKS_PER_SEC / (float)(clock() - m_tick);
 	m_tick = t;
 	return r;
 }
@@ -110,7 +158,7 @@ void Engine::DrawGrid(const Camera* camera)
 		b.y = 0.0f;
 		a.z = -10;
 		b.z = 10;
-		Draw3DLine(camera, &a, &b, 0xFFFFFF, GetBufferData());
+		QueueLine(camera, &a, &b, 0xFFFFFF, GetBufferData());
 	}
 	for (float i = -10; i <= 10; i += 1.0f)
 	{
@@ -118,20 +166,20 @@ void Engine::DrawGrid(const Camera* camera)
 		a.y = b.y = 0.0f;
 		a.x = -10;
 		b.x = 10;
-		Draw3DLine(camera, &a, &b, 0xFFFFFF, GetBufferData());
+		QueueLine(camera, &a, &b, 0xFFFFFF, GetBufferData());
 	}
 
-	Draw3DLine(camera, &Vector3::Vector3Zero, &Vector3::Vector3X, 0xFF0000, GetBufferData());
-	Draw3DLine(camera, &Vector3::Vector3Zero, &Vector3::Vector3Y, 0x00FF00, GetBufferData());
-	Draw3DLine(camera, &Vector3::Vector3Zero, &Vector3::Vector3Z, 0x0000FF, GetBufferData());
+	QueueLine(camera, &Vector3::Vector3Zero, &Vector3::Vector3X, 0xFF0000, GetBufferData());
+	QueueLine(camera, &Vector3::Vector3Zero, &Vector3::Vector3Y, 0x00FF00, GetBufferData());
+	QueueLine(camera, &Vector3::Vector3Zero, &Vector3::Vector3Z, 0x0000FF, GetBufferData());
 	a.x = b.x = 1;
 	a.y = b.y = 0.0f;
 	a.z = -10;
 	b.z = 10;
-	//Draw3DLine(camera, &Vector3::Vector3Zero, &Vector3::Vector3Z, 0xFFFFFF, GetBufferData());
+	//QueueLine(camera, &Vector3::Vector3Zero, &Vector3::Vector3Z, 0xFFFFFF, GetBufferData());
 }
 
-void Engine::Draw3DLine(const Camera* camera, const Vector3* v1, const Vector3* v2, const uint c, BufferData* bufferData)
+void Engine::QueueLine(const Camera* camera, const Vector3* v1, const Vector3* v2, const uint c, BufferData* bufferData)
 {
 	Vector3 a = Vector3(v1);
 	Vector3 b = Vector3(v2);
@@ -161,66 +209,42 @@ void Engine::Draw3DLine(const Camera* camera, const Vector3* v1, const Vector3* 
 		a.y = (a.y + 1) * m_height / 2.0f;
 		b.x = (b.x + 1) * m_width / 2.0f;
 		b.y = (b.y + 1) * m_height / 2.0f;
-		DrawLine(a.x, a.y, b.x, b.y, c, bufferData);
-	}
-}
-
-void Engine::DrawLine(const float xa, const float ya, const float xb, const float yb, const uint c, BufferData* bufferData)
-{
-	float x1 = xa;
-	float x2 = xb;
-	float y1 = ya;
-	float y2 = yb;
-	uint* buffer = bufferData->buffer;
-	const bool steep = abs(y2 - y1) > abs(x2 - x1);
-	if (steep)
-	{
-		std::swap(x1, y1);
-		std::swap(x2, y2);
-	}
-
-	if (x1 > x2)
-	{
-		std::swap(x1, x2);
-		std::swap(y1, y2);
-	}
-
-	const float dx = x2 - x1;
-	const float dy = abs(y2 - y1);
-	float scaleX = 1.0;
-	float scaleY = 1.0;
-	float error = dx / 2.0f;
-	const int ystep = (y1 < y2) ? 1 : -1;
-	int y = (int)y1;
-
-	const int maxX = (int)x2;
-	for (int x = (int)x1; x < maxX; x++)
-	{
-		if (x >= 0 && x < m_width && y >= 0 && y < m_height)
+		Line2D l;
+		l.xa = a.x;
+		l.xb = b.x;
+		l.ya = a.y;
+		l.yb = b.y;
+		l.c = c;
+		int min = std::min<int>(a.y, b.y);
+		int max = std::max<int>(a.y, b.y);
+		min = std::max<int>(min, 0);
+		max = std::min<int>(max, m_height);
+		min /= m_height / NB_RASTERIZERS;
+		max /= m_height / NB_RASTERIZERS;
+		if (min == max)
 		{
-			if (steep)
-			{
-				uint k = x * bufferData->width + y;
-				if (k < bufferData->size)
-				{
-					buffer[k] = c;
-				}
-			}
-			else
-			{
-				uint k = y * bufferData->width + x;
-				if (k < bufferData->size)
-				{
-					buffer[k] = c;
-				}
-			}
+			int y = 0;
+			y++;
 		}
-		error -= dy;
-		if (error < 0)
+		for (int i = min; i < max; i++)
 		{
-			y += ystep;
-			error += dx;
+			m_rasterLineQueues[i].push_back(l);
 		}
+		/*
+		if (min < m_height / 2 && max < m_height / 2)
+		{
+			m_rasterLineQueue1.push_back(l);
+		}
+		else if (min >= m_height / 2 && max >= m_height / 2)
+		{
+			m_rasterLineQueue2.push_back(l);
+		}
+		else
+		{
+			m_rasterLineQueue1.push_back(l);
+			m_rasterLineQueue2.push_back(l);
+		}
+		*/
 	}
 }
 
@@ -273,21 +297,33 @@ bool Engine::ClipSegment(Vector3* a, Vector3* b)
 
 void Engine::QueueTriangle(const Triangle* t)
 {
-	float min = std::min<float>(t->va->y, std::min<float>(t->vb->y, t->vc->y));
-	float max = std::max<float>(t->va->y, std::max<float>(t->vb->y, t->vc->y));
+	int min = std::min<int>(t->va->y, std::min<int>(t->vb->y, t->vc->y));
+	int max = std::max<int>(t->va->y, std::max<int>(t->vb->y, t->vc->y));
+	min = std::max<int>(min, 0);
+	max = std::min<int>(max, m_height);
+	min /= m_height / NB_RASTERIZERS;
+	max /= m_height / NB_RASTERIZERS;
+
+	for (int i = min; i <= max; i++)
+	{
+		m_rasterTriangleQueues[i].push_back(t);
+	}
+
+	/*
 	if (min < m_height / 2 && max < m_height / 2)
 	{
-		m_rasterQueue1.push_back(t);
+		m_rasterTriangleQueue1.push_back(t);
 	}
 	else if (min >= m_height / 2 && max >= m_height / 2)
 	{
-		m_rasterQueue2.push_back(t);
+		m_rasterTriangleQueue2.push_back(t);
 	}
 	else
 	{
-		m_rasterQueue1.push_back(t);
-		m_rasterQueue2.push_back(t);
+		m_rasterTriangleQueue1.push_back(t);
+		m_rasterTriangleQueue2.push_back(t);
 	}
+	*/
 }
 
 void Engine::DrawHorizontalLine(const float x1, const float x2, const float y, const uint color, BufferData* bufferData)
