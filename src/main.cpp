@@ -12,7 +12,7 @@
 #define kUnused(var) (void) var;
 #define WIDTH  800
 #define HEIGHT 600
-#define TARGET_MS_PER_FRAME 33.33f / 2.0f
+#define TARGET_MS_PER_FRAME 0//33.33f / 2.0f
 #define CLAMP(n, low, max) n <= low ? low : n >= max ? max : n;
 
 static char buffer[MAX_PATH];
@@ -184,7 +184,7 @@ int main()
 	Mesh* mesh = NULL;
 	Text2D* text = NULL;
 	std::string path = ExePath();
-	std::string file = path + "\\..\\..\\resources\\cottage_diffuse.png";
+	std::string file = path + "\\..\\..\\resources\\cottage_diffuse_256.png";
 	Texture* tex = new Texture(file.c_str());
 	file = path + "\\..\\..\\resources\\font2.png";
 	Texture* fontTex = new Texture(file.c_str());
