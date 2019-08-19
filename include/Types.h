@@ -13,8 +13,18 @@ struct BufferData
 	uint width;
 	uint height;
 	uint size;
+	float zNear;
+	float zFar;
 	uint* buffer;
 	float* zBuffer;
 };
 
+struct Line2D
+{
+	float xa;
+	float xb;
+	float ya;
+	float yb;
+	float c;
+};
 

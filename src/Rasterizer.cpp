@@ -9,46 +9,95 @@ Rasterizer::Rasterizer(uint width, uint startHeight, uint endHeight, float zNear
 	m_zNear = zNear;
 	m_zFar = zFar;
 	m_width = width;
-	m_start = false;
-	//std::thread t(&Rasterizer::Run, this);
-	//t.detach();
 }
 
 void Rasterizer::Run()
 {
-	//while(true)
-	{
-		if (m_start)
-		{
-			Render();
-			m_start = false;
-		}
-	}
+		Render();
 }
 
-void Rasterizer::Start(const std::vector<const Triangle*>* triangles, BufferData* bufferData)
+void Rasterizer::Start(const std::vector<const Triangle*>* triangles, const std::vector<Line2D>* lines, BufferData* bufferData)
 {
+	m_lines = lines;
 	m_triangles = triangles;
 	m_bufferData = bufferData;
-	m_start = true;
-	//std::thread t(&Rasterizer::Run, this);
 }
 
 Rasterizer::~Rasterizer()
 {
 }
 
-bool Rasterizer::Ended()
-{
-	return m_start == false;
-}
-
 void Rasterizer::Render()
 {
+	for (int i = 0; i < m_lines->size(); i++)
+	{
+		const Line2D l = m_lines->at(i);
+		DrawLine(&l, m_bufferData);
+	}
 	for (int i = 0; i < m_triangles->size(); i++)
 	{
 		const Triangle* t = m_triangles->at(i);
 		DrawTriangle(t, m_bufferData);
+	}
+}
+
+
+void Rasterizer::DrawLine(const Line2D* l, BufferData* bufferData)
+{
+	float x1 = l->xa;
+	float x2 = l->xb;
+	float y1 = l->ya;
+	float y2 = l->yb;
+	uint* buffer = bufferData->buffer;
+	const bool steep = abs(y2 - y1) > abs(x2 - x1);
+	if (steep)
+	{
+		std::swap(x1, y1);
+		std::swap(x2, y2);
+	}
+
+	if (x1 > x2)
+	{
+		std::swap(x1, x2);
+		std::swap(y1, y2);
+	}
+
+	const float dx = x2 - x1;
+	const float dy = abs(y2 - y1);
+	float scaleX = 1.0;
+	float scaleY = 1.0;
+	float error = dx / 2.0f;
+	const int ystep = (y1 < y2) ? 1 : -1;
+	int y = (int)y1;
+
+	const int maxX = (int)x2;
+	for (int x = (int)x1; x < maxX; x++)
+	{
+		if (x >= 0 && x < m_width && y >= m_startHeight && y < m_height)
+		{
+			if (steep)
+			{
+				uint k = x * bufferData->width + y;
+				if (k < bufferData->size)
+				{
+					buffer[k] = l->c;
+				}
+			}
+			else
+			{
+				uint k = y * bufferData->width + x;
+				if (k < bufferData->size)
+				{
+					buffer[k] = l->c;
+				}
+			}
+		}
+		error -= dy;
+		if (error < 0)
+		{
+			y += ystep;
+			error += dx;
+		}
 	}
 }
 

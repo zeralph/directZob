@@ -29,6 +29,8 @@ public:
 	float lb;
 	float lc;
 
+	bool draw;
+
 	inline void ComputeArea()
 	{
 		area = (vc->x - va->x) * (vb->y - va->y) - (vc->y - va->y) * (vb->x - va->x);
