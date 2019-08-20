@@ -39,6 +39,8 @@ void Rasterizer::Render()
 		const Triangle* t = m_triangles->at(i);
 		DrawTriangle(t, m_bufferData);
 	}
+	m_lines = NULL;
+	m_triangles = NULL;
 }
 
 

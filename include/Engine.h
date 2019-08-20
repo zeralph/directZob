@@ -17,11 +17,19 @@
 #include "Rasterizer.h"
 #include "Mesh.h"
 
-#define NB_RASTERIZERS 4
+#define NB_RASTERIZERS 2
 
 class Engine
 {
 public:
+
+	template <typename t>
+	t clamp2(t x, t min, t max)
+	{
+		if (x < min) x = min;
+		if (x > max) x = max;
+		return x;
+	}
 
 	enum CullMode
 	{

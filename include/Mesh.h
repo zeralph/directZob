@@ -22,7 +22,7 @@ public:
 	inline void SetRotation(float x, float y, float z) { m_modelMatrix.SetRotation(x, y, z); m_modelMatrixRotationOnly.SetRotation(x, y, z); }
 	inline void SetTranslation(float x, float y, float z) { m_modelMatrix.SetTranslation(x, y, z); }
 
-	const Triangle* GetTrianglesList() const { return m_triangles; }
+	const std::vector<Triangle>* GetTrianglesList() const { return &m_triangles; }
 	const uint GetNbTriangles() const { return m_nbFaces; }
 
 	Vector3* m_vertices = NULL;
@@ -32,11 +32,11 @@ public:
 	Vector3* m_normalsData = NULL;
 
 	Vector2* m_uvs = NULL;
-	Triangle* m_triangles = NULL;
+	std::vector<Triangle> m_triangles;
 
 private:
 	void SplitEntry(const std::string* s, std::vector<std::string>* v, const char delim);
-	void CreateTriangles(const std::vector<std::string>* line, Triangle* tArray, size_t &tArrayIdx, const Texture* tex);
+	void CreateTriangles(const std::vector<std::string>* line, std::vector<Triangle>* t, size_t& tArrayIdx, const Texture* tex);
 	inline void ReinitVertices();
 
 	uint m_nbVertices = 0;

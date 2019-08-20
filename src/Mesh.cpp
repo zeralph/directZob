@@ -49,7 +49,7 @@ m_uvs(NULL)
 	m_uvs = (Vector2*)malloc(sizeof(Vector2) * m_nbUvs);
 	m_normals = (Vector3*)malloc(sizeof(Vector3) * m_nbNormals);
 	m_normalsData = (Vector3*)malloc(sizeof(Vector3) * m_nbNormals);
-	m_triangles = (Triangle*)malloc(sizeof(Triangle) * m_nbFaces);
+	m_triangles.clear();
 	
 	
 	size_t curVertice = 0;
@@ -90,7 +90,7 @@ m_uvs(NULL)
 			vector<string> v;
 			SplitEntry(&line, &v, ' ');
 			v.erase(v.begin());
-			CreateTriangles(&v, m_triangles, curface, tex);
+			CreateTriangles(&v, &m_triangles, curface, tex);
 		}
 	}
 	memcpy(m_verticesData, m_vertices, sizeof(Vector3) * m_nbVertices);
@@ -196,7 +196,7 @@ void Mesh::Update(const Camera* camera, const BufferData* bData)
 }
 
 
-void Mesh::CreateTriangles(const std::vector<std::string>* line, Triangle* tArray, size_t &tArrayIdx, const Texture* tex)
+void Mesh::CreateTriangles(const std::vector<std::string>* line, std::vector<Triangle>* tList, size_t &tArrayIdx, const Texture* tex)
 {
 	size_t nbFaces = line->size() - 2;
 	int a, b, c = 0;
@@ -251,7 +251,7 @@ void Mesh::CreateTriangles(const std::vector<std::string>* line, Triangle* tArra
 		
 		t.tex = tex;
 		//t.nc = &Vector3(0, 0, 1);
-		tArray[tArrayIdx] = t;
+		tList->push_back(t);
 		tArrayIdx++;
 		
 	}

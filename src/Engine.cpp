@@ -3,6 +3,7 @@
 #include "TextureTest.h"
 #include <thread> 
 #include <windows.h>
+#include <assert.h> 
 
 Engine::Engine(int width, int height)
 {
@@ -98,9 +99,10 @@ int Engine::Update(struct Window *window, const Camera* camera)
 	{
 		Mesh* m = m_meshes.at(i);
 		m->Update(camera, &m_bufferData);
-		for (int j = 0; j < m->GetNbTriangles(); j++)
+		const std::vector<Triangle>* tList = m->GetTrianglesList();
+		for (int j = 0; j < tList->size(); j++)
 		{
-			const Triangle* t = &m->GetTrianglesList()[j];
+			const Triangle* t = &tList->at(j);
 			if (t->draw)
 			{
 				this->QueueTriangle(t);
@@ -217,8 +219,8 @@ void Engine::QueueLine(const Camera* camera, const Vector3* v1, const Vector3* v
 		l.c = c;
 		int min = std::min<int>(a.y, b.y);
 		int max = std::max<int>(a.y, b.y);
-		min = std::max<int>(min, 0);
-		max = std::min<int>(max, m_height);
+		min = clamp2(min, 0, m_height - 1);
+		max = clamp2(max, 0, m_height - 1);
 		min /= m_height / NB_RASTERIZERS;
 		max /= m_height / NB_RASTERIZERS;
 		if (min == max)
@@ -226,7 +228,7 @@ void Engine::QueueLine(const Camera* camera, const Vector3* v1, const Vector3* v
 			int y = 0;
 			y++;
 		}
-		for (int i = min; i < max; i++)
+		for (int i = min; i <= max; i++)
 		{
 			m_rasterLineQueues[i].push_back(l);
 		}
@@ -299,11 +301,16 @@ void Engine::QueueTriangle(const Triangle* t)
 {
 	int min = std::min<int>(t->va->y, std::min<int>(t->vb->y, t->vc->y));
 	int max = std::max<int>(t->va->y, std::max<int>(t->vb->y, t->vc->y));
-	min = std::max<int>(min, 0);
-	max = std::min<int>(max, m_height);
+	min = clamp2(min, 0, m_height - 1);
+	max = clamp2(max, 0, m_height - 1);
 	min /= m_height / NB_RASTERIZERS;
 	max /= m_height / NB_RASTERIZERS;
 
+	assert(min >= 0);
+	assert(min < NB_RASTERIZERS);
+	assert(max >= 0);
+	assert(max < NB_RASTERIZERS);
+	assert(min <= max);
 	for (int i = min; i <= max; i++)
 	{
 		m_rasterTriangleQueues[i].push_back(t);

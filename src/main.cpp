@@ -10,9 +10,9 @@
 #include "text2D.h"
 
 #define kUnused(var) (void) var;
-#define WIDTH  800
-#define HEIGHT 600
-#define TARGET_MS_PER_FRAME 0//33.33f / 2.0f
+#define WIDTH  1920 / 2
+#define HEIGHT 1080 / 2
+#define TARGET_MS_PER_FRAME 33.33f
 #define CLAMP(n, low, max) n <= low ? low : n >= max ? max : n;
 
 static char buffer[MAX_PATH];
@@ -191,17 +191,19 @@ int main()
 	Text2D* text = NULL;
 	std::string path = ExePath();
 	std::string file = path + "\\..\\..\\resources\\cottage_diffuse.png";
-	Texture* tex = new Texture(file.c_str());
+	Texture* texCottage = new Texture(file.c_str());
+	file = path + "\\..\\..\\resources\\earth.png";
+	Texture* texEarth = new Texture(file.c_str());
 	file = path + "\\..\\..\\resources\\font2.png";
 	Texture* fontTex = new Texture(file.c_str());
 	file = path + "\\..\\..\\resources\\cottage_obj.obj";
-	mesh = new Mesh(file.c_str(), tex);
+	mesh = new Mesh(file.c_str(), texCottage);
 	file = path + "\\..\\..\\resources\\camaro.obj";
-	mesh2 = new Mesh(file.c_str(), tex);
+	mesh2 = new Mesh(file.c_str(), texCottage);
 	file = path + "\\..\\..\\resources\\man.obj";
-	mesh3 = new Mesh(file.c_str(), tex);
+	mesh3 = new Mesh(file.c_str(), texCottage);
 	file = path + "\\..\\..\\resources\\sphere.obj";
-	mesh4 = new Mesh(file.c_str(), tex);
+	mesh4 = new Mesh(file.c_str(), texEarth);
 	m_engine->Add(mesh);
 	m_engine->Add(mesh2);
 	m_engine->Add(mesh3);
