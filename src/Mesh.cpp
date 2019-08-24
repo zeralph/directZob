@@ -9,6 +9,7 @@ m_nbVertices(0),
 m_nbUvs(0),
 m_nbNormals(0),
 m_nbFaces(0),
+m_hasNormals(false),
 m_vertices(NULL),
 m_normals(NULL),
 m_uvs(NULL)
@@ -43,7 +44,14 @@ m_uvs(NULL)
 	}
 	file.clear();
 	file.seekg(0, ios::beg);
-
+	if (m_nbNormals > 0)
+	{
+		m_hasNormals = true;
+	}
+	else
+	{
+		m_nbNormals = 1;
+	}
 	m_vertices = (Vector3*)malloc(sizeof(Vector3) * m_nbVertices);
 	m_verticesData = (Vector3*)malloc(sizeof(Vector3) * m_nbVertices);
 	m_uvs = (Vector2*)malloc(sizeof(Vector2) * m_nbUvs);
@@ -51,6 +59,10 @@ m_uvs(NULL)
 	m_normalsData = (Vector3*)malloc(sizeof(Vector3) * m_nbNormals);
 	m_triangles.clear();
 	
+	if (!m_hasNormals)
+	{
+		m_normals[0] = Vector3(0, 0, 1);
+	}
 	
 	size_t curVertice = 0;
 	size_t curNormal = 0;
@@ -166,7 +178,7 @@ void Mesh::Update(const Camera* camera, const BufferData* bData)
 	uint color = 0;
 	Vector3 n;
 
-	Vector3 light = Vector3(0.0f, 0.0f, 1.0f);
+	Vector3 light = Vector3(0.1f, 1.0f, 0.1f);
 	light.Normalize();
 	uint drawnFaces = 0;
 	for (int i = 0; i < m_nbFaces; i ++)
@@ -177,7 +189,7 @@ void Mesh::Update(const Camera* camera, const BufferData* bData)
 		n.Add(t->nc);
 		n.Div(3.0f);
 		t->draw = false;
-		if ((t->va->w > near && t->vb->w > near && t->vc->w > near))
+		if ((t->va->w > near && t->vb->w > near && t->vc->w > near) && (t->va->w < far && t->vb->w < far && t->vc->w < far))
 		{
 			if (Vector3::Dot(&n, camZ) > -0.2f)
 			{
@@ -226,9 +238,14 @@ void Mesh::CreateTriangles(const std::vector<std::string>* line, std::vector<Tri
 			t.ua = &m_uvs[std::stoi(vec[1], &sz) - 1];
 		else
 			t.ua = &Vector2(0, 0);
-		
-		t.na = &m_normals[std::stoi(vec[2], &sz) - 1];
-		//t.na = &Vector3(0,0,1);
+		if (m_hasNormals)
+		{
+			t.na = &m_normals[std::stoi(vec[2], &sz) - 1];
+		}
+		else
+		{
+			t.na = &m_normals[0];
+		}
 
 		vec.clear();
 		SplitEntry(&line->at(b), &vec, '/');
@@ -237,8 +254,14 @@ void Mesh::CreateTriangles(const std::vector<std::string>* line, std::vector<Tri
 			t.ub = &m_uvs[std::stoi(vec[1], &sz) - 1];
 		else
 			t.ub = &Vector2(0, 0);
-		t.nb = &m_normals[std::stoi(vec[2], &sz) - 1];
-		//t.nb = &Vector3(0, 0, 1);
+		if (m_hasNormals)
+		{
+			t.nb = &m_normals[std::stoi(vec[2], &sz) - 1];
+		}
+		else
+		{
+			t.nb = &m_normals[0];
+		}
 
 		vec.clear();
 		SplitEntry(&line->at(c), &vec, '/');
@@ -247,10 +270,16 @@ void Mesh::CreateTriangles(const std::vector<std::string>* line, std::vector<Tri
 			t.uc = &m_uvs[std::stoi(vec[1], &sz) - 1];
 		else
 			t.uc = &Vector2(0, 0);
-		t.nc = &m_normals[std::stoi(vec[2], &sz) - 1];
-		
+		if (m_hasNormals)
+		{
+			t.nc = &m_normals[std::stoi(vec[2], &sz) - 1];
+		}
+		else
+		{
+			t.nc = &m_normals[0];
+		}
 		t.tex = tex;
-		//t.nc = &Vector3(0, 0, 1);
+		//
 		tList->push_back(t);
 		tArrayIdx++;
 		
