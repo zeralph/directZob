@@ -188,26 +188,39 @@ int main()
 	Mesh* mesh2 = NULL;
 	Mesh* mesh3 = NULL;
 	Mesh* mesh4 = NULL;
+	Mesh* mesh5 = NULL;
 	Text2D* text = NULL;
 	std::string path = ExePath();
-	std::string file = path + "\\..\\..\\resources\\cottage_diffuse.png";
+	
+	std::string file;
+	file = path + "\\..\\..\\resources\\cottage_diffuse_256.png";
 	Texture* texCottage = new Texture(file.c_str());
-	file = path + "\\..\\..\\resources\\earth.png";
+
+	
+	file = path + "\\..\\..\\resources\\earth_256.png";
 	Texture* texEarth = new Texture(file.c_str());
 	file = path + "\\..\\..\\resources\\font2.png";
 	Texture* fontTex = new Texture(file.c_str());
+	
 	file = path + "\\..\\..\\resources\\cottage_obj.obj";
-	mesh = new Mesh(file.c_str(), texCottage);
+	 //mesh = new Mesh(file.c_str(), texCottage);
 	file = path + "\\..\\..\\resources\\camaro.obj";
-	mesh2 = new Mesh(file.c_str(), texCottage);
+	//mesh2 = new Mesh(file.c_str(), texCottage);
 	file = path + "\\..\\..\\resources\\man.obj";
-	mesh3 = new Mesh(file.c_str(), texCottage);
+	//mesh3 = new Mesh(file.c_str(), texCottage);
 	file = path + "\\..\\..\\resources\\sphere.obj";
-	mesh4 = new Mesh(file.c_str(), texEarth);
+	//mesh4 = new Mesh(file.c_str(), texEarth);
+	
+	file = path + "\\..\\..\\resources\\beach.obj";
+	mesh5 = new Mesh(file.c_str(), texEarth);
+	
+
 	m_engine->Add(mesh);
 	m_engine->Add(mesh2);
 	m_engine->Add(mesh3);
 	m_engine->Add(mesh4);
+	m_engine->Add(mesh5);
+
 	text = new Text2D(m_engine, fontTex, 32, 8);
 
 	//m_lookAtCam = new Camera();
@@ -275,6 +288,15 @@ int main()
 				mesh4->SetSCale(scale, scale, scale);
 				mesh4->SetRotation(rot, rot + 30, rot);
 				//mesh4->Draw(m_curCam, m_engine);
+			}
+			if (mesh5)
+			{
+				mesh5->Init();
+				//mesh5->SetTranslation(5, 5, -2);
+				mesh5->SetSCale(scale, scale, scale);
+				//mesh5->SetRotation(rot, rot + 30, rot);
+				mesh5->SetRotation(0, 90, 0);
+				//mesh5->Draw(m_curCam, m_engine);
 			}
 		}
 		snprintf(buffer, MAX_PATH, "Triangles : %lu / %lu", m_engine->GetNbDrawnTriangles(), m_engine->GetNbTriangles());

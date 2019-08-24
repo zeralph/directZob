@@ -10,8 +10,8 @@ Engine::Engine(int width, int height)
 	m_currentFrame = 0;
 	m_width = width;
 	m_height = height;
-	m_zNear = 0.01f;
-	m_zFar = 1000.0f;
+	m_zNear = Z_NEAR;
+	m_zFar = Z_FAR;
 	m_buffer = (uint*)malloc(sizeof(uint) * m_width * m_height);
 	m_zBuffer = (float*)malloc(sizeof(float) * m_width * m_height);
 	m_curBuffer = 0;
@@ -53,7 +53,8 @@ Engine::~Engine()
 
 void Engine::Add(Mesh* mesh)
 {
-	m_meshes.push_back(mesh);
+	if(mesh)
+		m_meshes.push_back(mesh);
 }
 
 void Engine::Resize(int width, int height)

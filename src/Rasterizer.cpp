@@ -222,7 +222,8 @@ void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* t, BufferData
 		z = 1.0f / (t->va->z * w0 + t->vb->z * w1 + t->vc->z * w2);
 		k = p->y * m_width + p->x;
 		float zf = bufferData->zBuffer[k];
-		if (z >= m_zNear && z<m_zFar && z > zf)
+
+		if (/*z >= m_zNear && z<=m_zFar && */z > zf)
 		{
 			bufferData->zBuffer[k] = z;
 			su = w0 * t->ua->x + w1 * t->ub->x + w2 * t->uc->x;

@@ -43,7 +43,7 @@ private:
 	uint m_nbUvs = 0;
 	uint m_nbNormals = 0;
 	uint m_nbFaces = 0;
-
+	bool m_hasNormals = false;
 	Matrix4x4	m_modelMatrix;
 	Matrix4x4	m_modelMatrixRotationOnly;
 	const Texture* m_texture = NULL;
