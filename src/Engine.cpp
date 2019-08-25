@@ -39,7 +39,10 @@ Engine::Engine(int width, int height)
 		m_rasterLineQueues[i].clear();
 		h0 += h;
 	}
-
+	for (int i = 0; i < NB_RASTERIZERS; i++)
+	{
+		m_rasterizers[i]->Init();
+	}
 	//m_rasterizer2 = new Rasterizer(m_width, m_height / 2, m_height, m_zNear, m_zFar);
 	//std::thread r2(&m_rasterizer2->Render);
 	//m_camera = new Camera();

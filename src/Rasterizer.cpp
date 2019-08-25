@@ -5,8 +5,6 @@ static float fogDecal = -0.6f;
 
 Rasterizer::Rasterizer(uint width, uint startHeight, uint endHeight, float zNear, float zFar)
 {
-	m_thread = std::thread(&Rasterizer::Run, this);
-	m_thread.detach();
 	m_startHeight = startHeight;
 	m_height = endHeight;
 	m_zNear = zNear;
@@ -14,6 +12,12 @@ Rasterizer::Rasterizer(uint width, uint startHeight, uint endHeight, float zNear
 	m_width = width;
 	m_run = true;
 	m_started = false;
+}
+
+void Rasterizer::Init()
+{
+	m_thread = std::thread(&Rasterizer::Run, this);
+	m_thread.detach();
 }
 
 void Rasterizer::Run()

@@ -28,6 +28,7 @@ public:
 
 	void Start(const std::vector<const Triangle*>* triangles, const std::vector<Line2D>* lines, BufferData* bufferData);
 	void End() { m_run = false; }
+	void Init();
 	void Run();
 	void Render() const;
 	void Clear();
