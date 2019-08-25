@@ -84,7 +84,12 @@ void Engine::Resize(int width, int height)
 void Engine::ClearBuffer(const Color* color)
 {
 	uint v = color->GetRawValue();
-	memset(m_buffer, v, sizeof(uint) * m_width * m_height);
+	v = 0x3F95FF;
+	for (int i = 0; i < m_width * m_height; i++)
+	{
+		m_buffer[i] = v;
+	}
+	//memset(m_buffer, v, sizeof(uint) * m_width * m_height);
 	memset(m_zBuffer, 0, sizeof(float) * m_width * m_height);
 	for (int i = 0; i < NB_RASTERIZERS; i++)
 	{

@@ -1,5 +1,8 @@
 #include "Rasterizer.h"
 
+static Vector3 sFog = Vector3(1.0f, 1.0f, 0.95f);
+static float fogDecal = -0.6f;
+
 Rasterizer::Rasterizer(uint width, uint startHeight, uint endHeight, float zNear, float zFar)
 {
 	m_thread = std::thread(&Rasterizer::Run, this);
@@ -237,9 +240,21 @@ void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* t, BufferData
 		k = p->y * m_width + p->x;
 		float zf = bufferData->zBuffer[k];
 
+		static float zmin = 1000;
+		static float zmax = 0;
+
 		if (/*z >= m_zNear && z<=m_zFar && */z > zf)
 		{
 			bufferData->zBuffer[k] = z;
+			if (zmin > z)
+			{
+				zmin = z;
+			}
+			if (zmax < z)
+			{
+				zmax = z;
+			}
+
 			su = w0 * t->ua->x + w1 * t->ub->x + w2 * t->uc->x;
 			tu = w0 * t->ua->y + w1 * t->ub->y + w2 * t->uc->y;
 			tu = 1.0f - tu;
@@ -249,11 +264,25 @@ void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* t, BufferData
 			tu = (int)tu % texData->GetHeight();
 			cl = ((w0 * t->la + w1 * t->lb + w2 * t->lc)) + 0.1f;
 			c = (uint)(((uint)tu * (uint)texData->GetWidth() + (uint)su) * 4);
+
 			const float* d = texData->GetData();
 			r = d[c] * cl;
 			g = d[c + 1] * cl;
 			b = d[c + 2] * cl;
 			a = d[c + 3] * cl;
+
+
+			//fog	
+			float f = (zmax - z) / (zmax - zmin);
+			f += fogDecal;
+			f = clamp2(f, 0.0f, 1.0f);
+	
+			r = f * sFog.x + (1.0f - f) * r;
+			g = f * sFog.y + (1.0f - f) * g;
+			b = f * sFog.z + (1.0f - f) * b;
+
+			//a = f * a + (1.0f - f) * sFog.z;
+
 			c = ((int)(r * 255) << 16) + ((int)(g * 255) << 8) + (int)(b * 255);
 			bufferData->buffer[k] = c;
 //			m_nbPixels++;

@@ -12,6 +12,15 @@
 class Rasterizer
 {
 public:
+
+	template <typename t>
+	t clamp2(t x, t min, t max) const
+	{
+		if (x < min) x = min;
+		if (x > max) x = max;
+		return x;
+	}
+
 	void DrawTriangle(const Triangle* t, BufferData* bufferData) const;
 	void DrawLine(const Line2D* l, BufferData* bufferData) const;
 	Rasterizer(uint width, uint startHeight, uint endHeight, float zNear, float zFar);
