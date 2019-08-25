@@ -1,19 +1,28 @@
 #include "Rasterizer.h"
 
-
-
 Rasterizer::Rasterizer(uint width, uint startHeight, uint endHeight, float zNear, float zFar)
 {
+	m_thread = std::thread(&Rasterizer::Run, this);
+	m_thread.detach();
 	m_startHeight = startHeight;
 	m_height = endHeight;
 	m_zNear = zNear;
 	m_zFar = zFar;
 	m_width = width;
+	m_run = true;
+	m_started = false;
 }
 
 void Rasterizer::Run()
 {
-		Render();
+	while (m_run)
+	{
+		if (m_started)
+		{
+			Render();
+			m_started = false;
+		}
+	}
 }
 
 void Rasterizer::Start(const std::vector<const Triangle*>* triangles, const std::vector<Line2D>* lines, BufferData* bufferData)
@@ -21,13 +30,20 @@ void Rasterizer::Start(const std::vector<const Triangle*>* triangles, const std:
 	m_lines = lines;
 	m_triangles = triangles;
 	m_bufferData = bufferData;
+	m_started = true;
 }
 
 Rasterizer::~Rasterizer()
 {
 }
 
-void Rasterizer::Render()
+void Rasterizer::Clear()
+{
+	m_lines = NULL;
+	m_triangles = NULL;
+}
+
+void Rasterizer::Render() const
 {
 	for (int i = 0; i < m_lines->size(); i++)
 	{
@@ -39,12 +55,10 @@ void Rasterizer::Render()
 		const Triangle* t = m_triangles->at(i);
 		DrawTriangle(t, m_bufferData);
 	}
-	m_lines = NULL;
-	m_triangles = NULL;
 }
 
 
-void Rasterizer::DrawLine(const Line2D* l, BufferData* bufferData)
+void Rasterizer::DrawLine(const Line2D* l, BufferData* bufferData) const
 {
 	float x1 = l->xa;
 	float x2 = l->xb;
@@ -103,7 +117,7 @@ void Rasterizer::DrawLine(const Line2D* l, BufferData* bufferData)
 	}
 }
 
-void Rasterizer::DrawTriangle(const Triangle* t, BufferData* bufferData)
+void Rasterizer::DrawTriangle(const Triangle* t, BufferData* bufferData) const
 {
 	Vector2 v1 = Vector2((int)t->va->x, (int)t->va->y);
 	Vector2 v2 = Vector2((int)t->vb->x, (int)t->vb->y);
@@ -134,7 +148,7 @@ void Rasterizer::DrawTriangle(const Triangle* t, BufferData* bufferData)
 //	m_drawnTriangles++;
 }
 
-void Rasterizer::FillBottomFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, const Triangle* t, BufferData* bufferData)
+void Rasterizer::FillBottomFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, const Triangle* t, BufferData* bufferData) const
 {
 	uint* buffer = bufferData->buffer;
 	Vector3 p;
@@ -169,7 +183,7 @@ void Rasterizer::FillBottomFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, 
 	}
 }
 
-void Rasterizer::FillTopFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, const Triangle* t, BufferData* bufferData)
+void Rasterizer::FillTopFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, const Triangle* t, BufferData* bufferData) const
 {
 	uint* buffer = bufferData->buffer;
 	Vector3 p;
@@ -203,7 +217,7 @@ void Rasterizer::FillTopFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, con
 	}
 }
 
-void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* t, BufferData* bufferData)
+void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* t, BufferData* bufferData) const
 {
 
 	float w2 = edgeFunction(t->va, t->vb, p);
@@ -211,7 +225,7 @@ void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* t, BufferData
 	float w1 = edgeFunction(t->vc, t->va, p);
 	float su, tu, cl, r, g, b, a, z;
 	uint c, k;
-	if (w0 >= 0 || w1 >= 0 || w2 >= 0)
+	//if (w0 >= 0 || w1 >= 0 || w2 >= 0)
 	{
 		w0 /= t->area;
 		w1 /= t->area;
@@ -234,7 +248,7 @@ void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* t, BufferData
 			su = (int)su % texData->GetWidth();
 			tu = (int)tu % texData->GetHeight();
 			cl = ((w0 * t->la + w1 * t->lb + w2 * t->lc)) + 0.1f;
-			c = (tu * texData->GetWidth() + su) * 4;
+			c = (uint)(((uint)tu * (uint)texData->GetWidth() + (uint)su) * 4);
 			const float* d = texData->GetData();
 			r = d[c] * cl;
 			g = d[c + 1] * cl;
@@ -247,7 +261,7 @@ void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* t, BufferData
 	}
 }
 
-void Rasterizer::sortVerticesAscendingByY(Vector2* v1, Vector2* v2, Vector2* v3)
+void Rasterizer::sortVerticesAscendingByY(Vector2* v1, Vector2* v2, Vector2* v3) const
 {
 	if (v3->y < v2->y)
 	{
@@ -257,7 +271,7 @@ void Rasterizer::sortVerticesAscendingByY(Vector2* v1, Vector2* v2, Vector2* v3)
 	if (v3->y < v2->y) std::swap(*v2, *v3);
 }
 
-void Rasterizer::sortVerticesAscendingByY(Vector2* v1, Vector2* v2, Vector2* v3, Vector2* uv1, Vector2* uv2, Vector2* uv3)
+void Rasterizer::sortVerticesAscendingByY(Vector2* v1, Vector2* v2, Vector2* v3, Vector2* uv1, Vector2* uv2, Vector2* uv3) const
 {
 	if (v3->y < v2->y)
 	{

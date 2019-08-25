@@ -168,7 +168,7 @@ int main()
 	mfb_mouse_button_callback(window, mouse_btn);
 	mfb_mouse_move_callback(window, mouse_move);
 	mfb_mouse_scroll_callback(window, mouse_scroll);
-	std::cout << " OK\n";
+	std::cout << " OK"<< std::thread::hardware_concurrency()  << "\n";
 	std::cout << "Init engine";
 	m_engine = new Engine(WIDTH, HEIGHT);
 	std::cout << " OK\n";
@@ -203,7 +203,7 @@ int main()
 	Texture* fontTex = new Texture(file.c_str());
 	
 	file = path + "\\..\\..\\resources\\cottage_obj.obj";
-	 //mesh = new Mesh(file.c_str(), texCottage);
+	//mesh = new Mesh(file.c_str(), texCottage);
 	file = path + "\\..\\..\\resources\\camaro.obj";
 	//mesh2 = new Mesh(file.c_str(), texCottage);
 	file = path + "\\..\\..\\resources\\man.obj";
@@ -211,8 +211,10 @@ int main()
 	file = path + "\\..\\..\\resources\\sphere.obj";
 	//mesh4 = new Mesh(file.c_str(), texEarth);
 	
+	file = path + "\\..\\..\\resources\\beach.png";
+	Texture* texBeach = new Texture(file.c_str());
 	file = path + "\\..\\..\\resources\\beach.obj";
-	mesh5 = new Mesh(file.c_str(), texEarth);
+	mesh5 = new Mesh(file.c_str(), texBeach);
 	
 
 	m_engine->Add(mesh);
@@ -293,7 +295,7 @@ int main()
 			{
 				mesh5->Init();
 				//mesh5->SetTranslation(5, 5, -2);
-				mesh5->SetSCale(scale, scale, scale);
+				mesh5->SetSCale(1, 1, 1);
 				//mesh5->SetRotation(rot, rot + 30, rot);
 				mesh5->SetRotation(0, 90, 0);
 				//mesh5->Draw(m_curCam, m_engine);
@@ -325,6 +327,7 @@ int main()
 		{
 			text->Print(0, 16, 1, &std::string(buffer), 0xFFFF0000);
 		}
+
 		state = m_engine->Update(window, m_curCam);
 		if (state < 0)
 			break;

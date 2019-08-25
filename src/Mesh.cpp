@@ -191,7 +191,7 @@ void Mesh::Update(const Camera* camera, const BufferData* bData)
 		t->draw = false;
 		if ((t->va->w > near && t->vb->w > near && t->vc->w > near) && (t->va->w < far && t->vb->w < far && t->vc->w < far))
 		{
-			if (Vector3::Dot(&n, camZ) > -0.2f)
+			if (Vector3::Dot(&n, camZ) > -0.5f)
 			{
 				t->ComputeArea();
 				if (t->area > 0)
