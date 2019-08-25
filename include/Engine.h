@@ -17,7 +17,7 @@
 #include "Rasterizer.h"
 #include "Mesh.h"
 
-#define NB_RASTERIZERS 4
+#define NB_RASTERIZERS 3
 #define Z_NEAR 0.1f
 #define Z_FAR 100.0f;
 
@@ -87,8 +87,8 @@ private:
 	//std::vector<Line2D> m_rasterLineQueue2;
 
 	Rasterizer* m_rasterizers[NB_RASTERIZERS];
-	//Rasterizer* m_rasterizer2;
-	std::thread m_rasterThreads[NB_RASTERIZERS];
+
+	bool RasterizersEnded() const;
 
 	int m_width;
 	int m_height;

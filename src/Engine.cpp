@@ -28,7 +28,7 @@ Engine::Engine(int width, int height)
 	m_nbPixels = 0;
 	m_renderTimeMS = 0;
 	m_geometryTimeMS = 0;
-
+	
 
 	int h = m_height / NB_RASTERIZERS;
 	int h0 = 0;
@@ -39,7 +39,7 @@ Engine::Engine(int width, int height)
 		m_rasterLineQueues[i].clear();
 		h0 += h;
 	}
-	
+
 	//m_rasterizer2 = new Rasterizer(m_width, m_height / 2, m_height, m_zNear, m_zFar);
 	//std::thread r2(&m_rasterizer2->Render);
 	//m_camera = new Camera();
@@ -48,12 +48,15 @@ Engine::Engine(int width, int height)
 
 Engine::~Engine()
 {
-
+	for (int i = 0; i < NB_RASTERIZERS; i++)
+	{
+		m_rasterizers[i]->End();
+	}
 }
 
 void Engine::Add(Mesh* mesh)
 {
-	if(mesh)
+	if (mesh)
 		m_meshes.push_back(mesh);
 }
 
@@ -90,7 +93,7 @@ void Engine::ClearBuffer(const Color* color)
 	}
 }
 
-int Engine::Update(struct Window *window, const Camera* camera)
+int Engine::Update(struct Window* window, const Camera* camera)
 {
 	clock_t t;
 	t = clock();
@@ -120,13 +123,15 @@ int Engine::Update(struct Window *window, const Camera* camera)
 		m_rasterizers[i]->Start(&m_rasterTriangleQueues[i], &m_rasterLineQueues[i], &m_bufferData);
 
 	}
-	for (int i = 0; i < NB_RASTERIZERS; i++)
+	bool bWait = true;
+	while(bWait)
 	{
-		m_rasterThreads[i] = std::thread(&Rasterizer::Run, m_rasterizers[i]);
-	}
-	for (int i = 0; i < NB_RASTERIZERS; i++)
-	{
-		m_rasterThreads[i].join();
+		bWait = false;
+		for (int i = 0; i < NB_RASTERIZERS; i++)
+		{
+			bWait |= m_rasterizers[i]->m_started;
+		}
+		Sleep(1);
 	}
 	m_renderTimeMS = (float)(clock() - t) / CLOCKS_PER_SEC * 1000;
 
@@ -147,6 +152,16 @@ int Engine::Update(struct Window *window, const Camera* camera)
 	m_fps = (float)CLOCKS_PER_SEC / (float)(clock() - m_tick);
 	m_tick = t;
 	return r;
+}
+
+bool Engine::RasterizersEnded() const
+{
+	bool bWait = false;
+	for (int i = 0; i < NB_RASTERIZERS; i++)
+	{
+		bWait |= m_rasterizers[i]->m_started;
+	}
+	return !bWait;
 }
 
 void Engine::DrawGrid(const Camera* camera)
