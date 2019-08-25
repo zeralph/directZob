@@ -159,9 +159,9 @@ void Mesh::Update(const Camera* camera, const BufferData* bData)
 		//m_vertices[i].z = m_vertices[i].z / m_vertices[i].w;
 
 		proj->Mul(&m_vertices[i]);
-		m_vertices[i].x = m_vertices[i].x / m_vertices[i].w;
-		m_vertices[i].y = m_vertices[i].y / m_vertices[i].w;
-		m_vertices[i].z = m_vertices[i].z / m_vertices[i].w;
+		//m_vertices[i].x = m_vertices[i].x / m_vertices[i].w;
+		//m_vertices[i].y = m_vertices[i].y / m_vertices[i].w;
+		//m_vertices[i].z = m_vertices[i].z / m_vertices[i].w;
 
 		m_vertices[i].x = (m_vertices[i].x / m_vertices[i].z + 1) * w;
 		m_vertices[i].y = (m_vertices[i].y / m_vertices[i].z + 1) * h;

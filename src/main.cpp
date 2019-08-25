@@ -23,7 +23,7 @@ Camera* m_FPSCam = NULL;
 Camera* m_curCam = NULL;
 
 static Vector3 camRot = Vector3(0, 0, 0);
-static Vector3 camPos = Vector3(0, -1.0f, -10);
+static Vector3 camPos = Vector3(0, -2.40f, -50);
 static Vector3 camTarget = Vector3(0, 0.1f, 1.0f);
 static Vector3 up = Vector3(0, 1.0f, 0);
 
@@ -211,9 +211,9 @@ int main()
 	file = path + "\\..\\..\\resources\\sphere.obj";
 	//mesh4 = new Mesh(file.c_str(), texEarth);
 	
-	file = path + "\\..\\..\\resources\\beach.png";
+	file = path + "\\..\\..\\resources\\beach2.png";
 	Texture* texBeach = new Texture(file.c_str());
-	file = path + "\\..\\..\\resources\\beach.obj";
+	file = path + "\\..\\..\\resources\\beach2.obj";
 	mesh5 = new Mesh(file.c_str(), texBeach);
 	
 
@@ -233,7 +233,8 @@ int main()
 	for (;;)
 	{
 		frame++;
-		m_engine->ClearBuffer(&Color::Grey);
+		//m_engine->ClearBuffer(&Color(255,63,149,255));
+		m_engine->ClearBuffer(&Color::White);
 
 		static float fov = 45.0f;
 		//m_lookAtCam->setProjectionMatrix(fov, m_engine->Width(), m_engine->Height(), 0.01f, 1000.0f);
