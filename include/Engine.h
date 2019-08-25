@@ -17,7 +17,7 @@
 #include "Rasterizer.h"
 #include "Mesh.h"
 
-#define NB_RASTERIZERS 3
+#define NB_RASTERIZERS 6
 #define Z_NEAR 0.1f
 #define Z_FAR 100.0f;
 
