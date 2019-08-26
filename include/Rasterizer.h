@@ -6,7 +6,13 @@
 #include "Matrix4x4.h"
 #include "Triangle.h"
 #include <thread> 
-#include <shared_mutex>
+#ifdef LINUX
+	#include <unistd.h>
+#else
+	#include <windows.h>
+#endif //LINUX
+
+#include <windows.h>
 		
 
 class Rasterizer
