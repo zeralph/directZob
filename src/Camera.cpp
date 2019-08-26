@@ -3,15 +3,27 @@
 
 
 
-Camera::Camera()
+Camera::Camera(const char* name, Vector3 position, Vector3 target, Vector3 up, float fov, BufferData* bufferData)
 {
+	m_name = name;
+	m_cameraPosition = position;
+	m_cameraTarget = target;
+	m_cameraUp = up;
+	m_fov = fov;
+	m_bufferData = bufferData;
 	m_projMatrix.Identity();
 	m_viewMatrix.Identity();
 }
 
 Camera::~Camera()
 {
+}
 
+void Camera::Update()
+{
+	setProjectionMatrix(m_fov, m_bufferData->width, m_bufferData->height, m_bufferData->zNear, m_bufferData->zFar);
+	InitView();
+	SetLookAt(&m_cameraPosition, &m_cameraTarget, &m_cameraUp);
 }
 
 void Camera::SetLookAt(const Vector3* eye, const Vector3* at, const Vector3* up)
@@ -25,12 +37,9 @@ void Camera::SetLookAt(const Vector3* eye, const Vector3* at, const Vector3* up)
 	xaxis.Normalize();
 	
 	Vector3 yaxis = Vector3::Cross(&xaxis, &zaxis);
-zaxis.x = -zaxis.x;
-zaxis.y = -zaxis.y;
-zaxis.z = -zaxis.z;
-//	zaxis.w = -zaxis.w;
-
-
+	zaxis.x = -zaxis.x;
+	zaxis.y = -zaxis.y;
+	zaxis.z = -zaxis.z;
 
 	m_viewMatrix.SetData(0, 0, xaxis.x);
 	m_viewMatrix.SetData(0, 1, xaxis.y);
@@ -51,10 +60,6 @@ zaxis.z = -zaxis.z;
 	m_viewMatrix.SetData(3, 1, 0);
 	m_viewMatrix.SetData(3, 2, 0);
 	m_viewMatrix.SetData(3, 3, 1);
-
-	m_cameraPosition.x = -m_viewMatrix.GetValue(0, 3);
-	m_cameraPosition.y = -m_viewMatrix.GetValue(1, 3);
-	m_cameraPosition.z = -m_viewMatrix.GetValue(2, 3);
 }
 
 /*

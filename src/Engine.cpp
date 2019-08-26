@@ -2,7 +2,11 @@
 #include <algorithm>
 #include "TextureTest.h"
 #include <thread> 
+#ifdef LINUX
+#include <unistd.h>
+#else
 #include <windows.h>
+#endif //LINUX
 #include <assert.h> 
 
 Engine::Engine(int width, int height)
@@ -81,7 +85,6 @@ void Engine::Resize(int width, int height)
 	m_bufferData.zFar = m_zFar;
 	m_bufferData.size = m_width * m_height;
 	m_tick = clock();
-	//	m_camera->setProjectionMatrix(90.0f, width, height, m_zNear, m_zFar);
 }
 
 void Engine::ClearBuffer(const Color* color)
@@ -91,9 +94,9 @@ void Engine::ClearBuffer(const Color* color)
 	for (int i = 0; i < m_width * m_height; i++)
 	{
 		m_buffer[i] = v;
+		m_zBuffer[i] = 0;
 	}
-	//memset(m_buffer, v, sizeof(uint) * m_width * m_height);
-	memset(m_zBuffer, 0, sizeof(float) * m_width * m_height);
+	//memset(m_zBuffer, 0, sizeof(float) * m_width * m_height);
 	for (int i = 0; i < NB_RASTERIZERS; i++)
 	{
 		m_rasterTriangleQueues[i].clear();

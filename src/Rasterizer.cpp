@@ -29,6 +29,10 @@ void Rasterizer::Run()
 			Render();
 			m_started = false;
 		}
+		else
+		{
+			Sleep(1);
+		}
 	}
 }
 

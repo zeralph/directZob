@@ -1,4 +1,10 @@
+//#define LINUX 
+
+#ifdef LINUX
+#include <unistd.h>
+#else
 #include <windows.h>
+#endif //LINUX
 #include <string>
 #include <iostream>
 #include <algorithm>
@@ -18,14 +24,9 @@
 static char buffer[MAX_PATH];
 
 Engine* m_engine = NULL;
-Camera* m_lookAtCam = NULL;
+Camera* m_freeCam = NULL;
 Camera* m_FPSCam = NULL;
 Camera* m_curCam = NULL;
-
-static Vector3 camRot = Vector3(0, 0, 0);
-static Vector3 camPos = Vector3(0, -2.40f, -50);
-static Vector3 camTarget = Vector3(0, 0.1f, 1.0f);
-static Vector3 up = Vector3(0, 1.0f, 0);
 
 static int m_mouseLastX;
 static int m_mouseLastY;
@@ -71,7 +72,7 @@ void keyboard(struct Window *window, Key key, KeyMod mod, bool isPressed) {
 		}
 		else if (key == KB_KEY_F2)
 		{
-			m_curCam = m_lookAtCam;
+			m_curCam = m_freeCam;
 		}
 		else if (key == KB_KEY_C)
 		{
@@ -86,6 +87,7 @@ void keyboard(struct Window *window, Key key, KeyMod mod, bool isPressed) {
 			g_bShowGrid = !g_bShowGrid;
 		}
 	}
+	/*
 	if (key == KB_KEY_DOWN)
 	{
 		camPos.z = camPos.z - 0.1f;
@@ -110,6 +112,7 @@ void keyboard(struct Window *window, Key key, KeyMod mod, bool isPressed) {
 	{
 		camPos.y = camPos.y + 0.1f;
 	}
+	*/
 }
 
 void char_input(struct Window *window, unsigned int charCode) {
@@ -142,9 +145,9 @@ void mouse_move(struct Window *window, int x, int y)
 	int dx = m_mouseLastX - x;
 	int dy = m_mouseLastY - y;
 	//fprintf(stdout, "mouse %i %i", dx, dy);
-	camRot.x += -dy * 0.1f;
-	camRot.y += dx * 0.1f;
-	camRot.y = CLAMP(camRot.y, -90, 90);
+	//camRot.x += -dy * 0.1f;
+	//camRot.y += dx * 0.1f;
+	//camRot.y = CLAMP(camRot.y, -90, 90);
 	m_mouseLastX = x;
 	m_mouseLastY = y;
 }
@@ -225,8 +228,13 @@ int main()
 
 	text = new Text2D(m_engine, fontTex, 32, 8);
 
-	//m_lookAtCam = new Camera();
-	m_FPSCam = new Camera();
+
+	static Vector3 camRot = Vector3(0, 0, 0);
+	static Vector3 camPos = Vector3(0, -2.40f, -50);
+	static Vector3 camTarget = Vector3(0, 0.1f, 1.0f);
+	static Vector3 up = Vector3(0, 1.0f, 0);
+	m_FPSCam = new Camera("FPS cam", Vector3(0, -2.40f, -50), Vector3(0, -2.40f, -49), Vector3(0, 1.0f, 0), 45.0f, m_engine->GetBufferData());
+	m_freeCam = new Camera("Free cam", Vector3(20.0f, -20.0f, -20.0f), Vector3(0, 0, 0), Vector3(0, 1.0f, 0), 45.0f, m_engine->GetBufferData());
 
 	m_curCam = m_FPSCam;
 
@@ -236,18 +244,8 @@ int main()
 		//m_engine->ClearBuffer(&Color(255,63,149,255));
 		m_engine->ClearBuffer(&Color::White);
 
-		static float fov = 45.0f;
-		//m_lookAtCam->setProjectionMatrix(fov, m_engine->Width(), m_engine->Height(), 0.01f, 1000.0f);
-		//m_lookAtCam->InitView();
-		//m_lookAtCam->SetLookAt(&camPos, &camTarget, &up);
-
-		m_FPSCam->setProjectionMatrix(fov, m_engine->Width(), m_engine->Height(), 0.01f, 1000.0f);
-		m_FPSCam->InitView();
-		camTarget = camPos;
-		camTarget.z = camTarget.z + 1.0f;
-		m_FPSCam->SetLookAt(&camPos, &camTarget, &up);
-		//m_FPSCam->SetPosition(&camPos);
-		//FPSCam->SetRotation(&camRot);
+		m_freeCam->Update();
+		m_FPSCam->Update();
 
 		if (g_bShowGrid)
 		{
@@ -306,15 +304,9 @@ int main()
 		text->Print(0, 0, 1, &std::string(buffer), 0xFFFFFFFF);
 
 		const Vector3* cp = m_curCam->GetPosition();
-		snprintf(buffer, MAX_PATH, "Cam pos : %.2f, %.2f, %.2f", cp->x, cp->y, cp->z);
+		const Vector3* ct = m_curCam->GetTarget();
+		snprintf(buffer, MAX_PATH, "Cam %s pos :  %.2f, %.2f, %.2f, tar : %.2f, %.2f, %.2f", m_curCam->GetName(), cp->x, cp->y, cp->z, ct->x, ct->y, ct->z);
 		text->Print(0, 8, 1, &std::string(buffer), 0xFFFFFFFF);
-
-		snprintf(buffer, MAX_PATH, "Cam rot : %.2f, %.2f, %.2f", camRot.x, camRot.y, camRot.z);
-		text->Print(0, 24, 1, &std::string(buffer), 0xFFFFFFFF);
-
-		snprintf(buffer, MAX_PATH, "Nb pixels : %i", m_engine->GetNbPixels());
-		text->Print(0, 32, 1, &std::string(buffer), 0xFFFFFFFF);
-		
 
 		snprintf(buffer, MAX_PATH, "FPS : %.2f, render : %.2fms, geom : %.2f", m_engine->GetFps(), m_engine->GetRenderTime(), m_engine->GetGeometryTime());
 		float t = m_engine->GetFps();
