@@ -3,12 +3,11 @@
 static Vector3 sFog = Vector3(1.0f, 1.0f, 0.95f);
 static float fogDecal = -0.6f;
 
-Rasterizer::Rasterizer(uint width, uint startHeight, uint endHeight, float zNear, float zFar)
+Rasterizer::Rasterizer(uint width, uint startHeight, uint endHeight, BufferData* bufferData)
 {
 	m_startHeight = startHeight;
+	m_bufferData = bufferData;
 	m_height = endHeight;
-	m_zNear = zNear;
-	m_zFar = zFar;
 	m_width = width;
 	m_run = true;
 	m_started = false;
@@ -36,11 +35,10 @@ void Rasterizer::Run()
 	}
 }
 
-void Rasterizer::Start(const std::vector<const Triangle*>* triangles, const std::vector<Line2D>* lines, BufferData* bufferData)
+void Rasterizer::Start(const std::vector<const Triangle*>* triangles, const std::vector<Line2D>* lines)
 {
 	m_lines = lines;
 	m_triangles = triangles;
-	m_bufferData = bufferData;
 	m_started = true;
 }
 
@@ -59,23 +57,23 @@ void Rasterizer::Render() const
 	for (int i = 0; i < m_lines->size(); i++)
 	{
 		const Line2D l = m_lines->at(i);
-		DrawLine(&l, m_bufferData);
+		DrawLine(&l);
 	}
 	for (int i = 0; i < m_triangles->size(); i++)
 	{
 		const Triangle* t = m_triangles->at(i);
-		DrawTriangle(t, m_bufferData);
+		DrawTriangle(t);
 	}
 }
 
 
-void Rasterizer::DrawLine(const Line2D* l, BufferData* bufferData) const
+void Rasterizer::DrawLine(const Line2D* l) const
 {
 	float x1 = l->xa;
 	float x2 = l->xb;
 	float y1 = l->ya;
 	float y2 = l->yb;
-	uint* buffer = bufferData->buffer;
+	uint* buffer = m_bufferData->buffer;
 	const bool steep = abs(y2 - y1) > abs(x2 - x1);
 	if (steep)
 	{
@@ -104,16 +102,16 @@ void Rasterizer::DrawLine(const Line2D* l, BufferData* bufferData) const
 		{
 			if (steep)
 			{
-				uint k = x * bufferData->width + y;
-				if (k < bufferData->size)
+				uint k = x * m_bufferData->width + y;
+				if (k < m_bufferData->size)
 				{
 					buffer[k] = l->c;
 				}
 			}
 			else
 			{
-				uint k = y * bufferData->width + x;
-				if (k < bufferData->size)
+				uint k = y * m_bufferData->width + x;
+				if (k < m_bufferData->size)
 				{
 					buffer[k] = l->c;
 				}
@@ -128,7 +126,7 @@ void Rasterizer::DrawLine(const Line2D* l, BufferData* bufferData) const
 	}
 }
 
-void Rasterizer::DrawTriangle(const Triangle* t, BufferData* bufferData) const
+void Rasterizer::DrawTriangle(const Triangle* t) const
 {
 	Vector2 v1 = Vector2((int)t->va->x, (int)t->va->y);
 	Vector2 v2 = Vector2((int)t->vb->x, (int)t->vb->y);
@@ -142,26 +140,26 @@ void Rasterizer::DrawTriangle(const Triangle* t, BufferData* bufferData) const
 	/* check for trivial case of bottom-flat triangle */
 	if (v2.y == v3.y)
 	{
-		FillBottomFlatTriangle2(&v1, &v2, &v3, t, bufferData);
+		FillBottomFlatTriangle2(&v1, &v2, &v3, t);
 	}
 	/* check for trivial case of top-flat triangle */
 	else if (v1.y == v2.y)
 	{
-		FillTopFlatTriangle2(&v1, &v2, &v3, t, bufferData);
+		FillTopFlatTriangle2(&v1, &v2, &v3, t);
 	}
 	else
 	{
 		/* general case - split the triangle in a topflat and bottom-flat one */
 		Vector2 v4 = Vector2((int)(v1.x + ((float)(v2.y - v1.y) / (float)(v3.y - v1.y)) * (v3.x - v1.x)), v2.y);
-		FillBottomFlatTriangle2(&v1, &v2, &v4, t, bufferData);
-		FillTopFlatTriangle2(&v2, &v4, &v3, t, bufferData);
+		FillBottomFlatTriangle2(&v1, &v2, &v4, t);
+		FillTopFlatTriangle2(&v2, &v4, &v3, t);
 	}
 //	m_drawnTriangles++;
 }
 
-void Rasterizer::FillBottomFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, const Triangle* t, BufferData* bufferData) const
+void Rasterizer::FillBottomFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, const Triangle* t) const
 {
-	uint* buffer = bufferData->buffer;
+	uint* buffer = m_bufferData->buffer;
 	Vector3 p;
 	float invslope1 = (v2->x - v1->x) / (v2->y - v1->y);
 	float invslope2 = (v3->x - v1->x) / (v3->y - v1->y);
@@ -185,7 +183,7 @@ void Rasterizer::FillBottomFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, 
 					p.x = i;
 					p.y = scanlineY;
 					p.z = -1;
-					FillBufferPixel(&p, t, bufferData);
+					FillBufferPixel(&p, t);
 				}
 			}
 		}
@@ -194,9 +192,9 @@ void Rasterizer::FillBottomFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, 
 	}
 }
 
-void Rasterizer::FillTopFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, const Triangle* t, BufferData* bufferData) const
+void Rasterizer::FillTopFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, const Triangle* t) const
 {
-	uint* buffer = bufferData->buffer;
+	uint* buffer = m_bufferData->buffer;
 	Vector3 p;
 	float invslope1 = (v3->x - v1->x) / (v3->y - v1->y);
 	float invslope2 = (v3->x - v2->x) / (v3->y - v2->y);
@@ -219,7 +217,7 @@ void Rasterizer::FillTopFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, con
 					p.x = i;
 					p.y = scanlineY;
 					p.z = -1;
-					FillBufferPixel(&p, t, bufferData);
+					FillBufferPixel(&p, t);
 				}
 			}
 		}
@@ -228,7 +226,7 @@ void Rasterizer::FillTopFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, con
 	}
 }
 
-void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* t, BufferData* bufferData) const
+void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* t) const
 {
 
 	float w2 = edgeFunction(t->va, t->vb, p);
@@ -246,14 +244,14 @@ void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* t, BufferData
 
 		z = 1.0f / (t->va->z * w0 + t->vb->z * w1 + t->vc->z * w2);
 		k = p->y * m_width + p->x;
-		float zf = bufferData->zBuffer[k];
+		float zf = m_bufferData->zBuffer[k];
 
 		static float zmin = 1000;
 		static float zmax = 0;
 
 		if (/*z >= m_zNear && z<=m_zFar && */z > zf)
 		{
-			bufferData->zBuffer[k] = z;
+			m_bufferData->zBuffer[k] = z;
 			if (zmin > z)
 			{
 				zmin = z;
@@ -292,7 +290,7 @@ void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* t, BufferData
 			//a = f * a + (1.0f - f) * sFog.z;
 
 			c = ((int)(r * 255) << 16) + ((int)(g * 255) << 8) + (int)(b * 255);
-			bufferData->buffer[k] = c;
+			m_bufferData->buffer[k] = c;
 //			m_nbPixels++;
 		}
 	}

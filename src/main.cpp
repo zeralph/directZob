@@ -171,7 +171,7 @@ int main()
 	mfb_mouse_button_callback(window, mouse_btn);
 	mfb_mouse_move_callback(window, mouse_move);
 	mfb_mouse_scroll_callback(window, mouse_scroll);
-	std::cout << " OK"<< std::thread::hardware_concurrency()  << "\n";
+	std::cout << " OK\n";
 	std::cout << "Init engine";
 	m_engine = new Engine(WIDTH, HEIGHT);
 	std::cout << " OK\n";
