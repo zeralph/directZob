@@ -17,9 +17,9 @@
 #include "Rasterizer.h"
 #include "Mesh.h"
 
-#define NB_RASTERIZERS 6
+
 #define Z_NEAR 0.1f
-#define Z_FAR 100.0f;
+#define Z_FAR 100.0f
 
 
 class Engine
@@ -80,16 +80,12 @@ private:
 
 	std::vector<Mesh*> m_meshes;
 
-	std::vector<const Triangle*> m_rasterTriangleQueues[NB_RASTERIZERS];
-	//std::vector<const Triangle*> m_rasterTriangleQueue2;
-
-	std::vector<Line2D> m_rasterLineQueues[NB_RASTERIZERS];
-	//std::vector<Line2D> m_rasterLineQueue2;
-
-	Rasterizer* m_rasterizers[NB_RASTERIZERS];
+	std::vector<const Triangle*>* m_rasterTriangleQueues;
+	std::vector<Line2D>* m_rasterLineQueues;
+	std::vector<Rasterizer*>* m_rasterizers;
 
 	bool RasterizersEnded() const;
-
+	uint m_nbRasterizers;
 	int m_width;
 	int m_height;
 	float m_zNear;

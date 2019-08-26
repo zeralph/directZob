@@ -11,6 +11,15 @@
 
 Engine::Engine(int width, int height)
 {
+	m_nbRasterizers = std::thread::hardware_concurrency() - 1;
+	if (m_nbRasterizers % 2 == 1)
+	{
+		m_nbRasterizers--;
+	}
+	if (m_nbRasterizers < 2)
+	{
+		m_nbRasterizers = 1;
+	}
 	m_currentFrame = 0;
 	m_width = width;
 	m_height = height;
@@ -33,31 +42,37 @@ Engine::Engine(int width, int height)
 	m_renderTimeMS = 0;
 	m_geometryTimeMS = 0;
 	
+	m_rasterTriangleQueues = new std::vector<const Triangle*>[m_nbRasterizers];
+	m_rasterLineQueues = new std::vector<Line2D>[m_nbRasterizers];
+	m_rasterizers = new std::vector<Rasterizer*>[m_nbRasterizers];
 
-	int h = m_height / NB_RASTERIZERS;
+	int h = m_height / m_nbRasterizers;
 	int h0 = 0;
-	for (int i = 0; i < NB_RASTERIZERS; i++)
+	m_rasterizers->clear();
+	for (int i = 0; i < m_nbRasterizers; i++)
 	{
-		m_rasterizers[i] = new Rasterizer(m_width, h0, h0+h, m_zNear, m_zFar);
+		Rasterizer* r = new Rasterizer(m_width, h0, h0+h, &m_bufferData);
+		m_rasterizers->push_back(r);
 		m_rasterTriangleQueues[i].clear();
 		m_rasterLineQueues[i].clear();
 		h0 += h;
 	}
-	for (int i = 0; i < NB_RASTERIZERS; i++)
+	for (int i = 0; i < m_nbRasterizers; i++)
 	{
-		m_rasterizers[i]->Init();
+		m_rasterizers->at(i)->Init();
 	}
 	//m_rasterizer2 = new Rasterizer(m_width, m_height / 2, m_height, m_zNear, m_zFar);
 	//std::thread r2(&m_rasterizer2->Render);
 	//m_camera = new Camera();
 	//m_camera->setProjectionMatrix(90.0f, width, height, m_zNear, m_zFar);
+	std::cout << "Engine initialized with " << m_nbRasterizers << " rasterizer(s)\n";
 }
 
 Engine::~Engine()
 {
-	for (int i = 0; i < NB_RASTERIZERS; i++)
+	for (int i = 0; i < m_nbRasterizers; i++)
 	{
-		m_rasterizers[i]->End();
+		m_rasterizers->at(i)->End();
 	}
 }
 
@@ -97,7 +112,7 @@ void Engine::ClearBuffer(const Color* color)
 		m_zBuffer[i] = 0;
 	}
 	//memset(m_zBuffer, 0, sizeof(float) * m_width * m_height);
-	for (int i = 0; i < NB_RASTERIZERS; i++)
+	for (int i = 0; i < m_nbRasterizers; i++)
 	{
 		m_rasterTriangleQueues[i].clear();
 		m_rasterLineQueues[i].clear();
@@ -129,18 +144,18 @@ int Engine::Update(struct Window* window, const Camera* camera)
 	m_geometryTimeMS = (float)(clock() - t) / CLOCKS_PER_SEC * 1000;
 
 	t = clock();
-	for (int i = 0; i < NB_RASTERIZERS; i++)
+	for (int i = 0; i < m_nbRasterizers; i++)
 	{
-		m_rasterizers[i]->Start(&m_rasterTriangleQueues[i], &m_rasterLineQueues[i], &m_bufferData);
+		m_rasterizers->at(i)->Start(&m_rasterTriangleQueues[i], &m_rasterLineQueues[i]);
 
 	}
 	bool bWait = true;
 	while(bWait)
 	{
 		bWait = false;
-		for (int i = 0; i < NB_RASTERIZERS; i++)
+		for (int i = 0; i < m_nbRasterizers; i++)
 		{
-			bWait |= m_rasterizers[i]->m_started;
+			bWait |= m_rasterizers->at(i)->m_started;
 		}
 		Sleep(1);
 	}
@@ -168,9 +183,9 @@ int Engine::Update(struct Window* window, const Camera* camera)
 bool Engine::RasterizersEnded() const
 {
 	bool bWait = false;
-	for (int i = 0; i < NB_RASTERIZERS; i++)
+	for (int i = 0; i < m_nbRasterizers; i++)
 	{
-		bWait |= m_rasterizers[i]->m_started;
+		bWait |= m_rasterizers->at(i)->m_started;
 	}
 	return !bWait;
 }
@@ -248,8 +263,8 @@ void Engine::QueueLine(const Camera* camera, const Vector3* v1, const Vector3* v
 		int max = std::max<int>(a.y, b.y);
 		min = clamp2(min, 0, m_height - 1);
 		max = clamp2(max, 0, m_height - 1);
-		min /= m_height / NB_RASTERIZERS;
-		max /= m_height / NB_RASTERIZERS;
+		min /= m_height / m_nbRasterizers;
+		max /= m_height / m_nbRasterizers;
 		if (min == max)
 		{
 			int y = 0;
@@ -330,13 +345,13 @@ void Engine::QueueTriangle(const Triangle* t)
 	int max = std::max<int>(t->va->y, std::max<int>(t->vb->y, t->vc->y));
 	min = clamp2(min, 0, m_height - 1);
 	max = clamp2(max, 0, m_height - 1);
-	min /= m_height / NB_RASTERIZERS;
-	max /= m_height / NB_RASTERIZERS;
+	min /= m_height / m_nbRasterizers;
+	max /= m_height / m_nbRasterizers;
 
 	assert(min >= 0);
-	assert(min < NB_RASTERIZERS);
+	assert(min < m_nbRasterizers);
 	assert(max >= 0);
-	assert(max < NB_RASTERIZERS);
+	assert(max < m_nbRasterizers);
 	assert(min <= max);
 	for (int i = min; i <= max; i++)
 	{
