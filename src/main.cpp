@@ -40,25 +40,25 @@ std::string ExePath() {
 	return std::string(b).substr(0, pos);
 }
 
-void active(struct Window *window, bool isActive) {
-	const char *window_title = "";
+void active(struct Window* window, bool isActive) {
+	const char* window_title = "";
 	if (window) {
-		window_title = (const char *)mfb_get_user_data(window);
+		window_title = (const char*)mfb_get_user_data(window);
 	}
 	fprintf(stdout, "%s > active: %d\n", window_title, isActive);
 }
 
-void resize(struct Window *window, int width, int height) {
+void resize(struct Window* window, int width, int height) {
 	uint32_t x = 0;
 	uint32_t y = 0;
 	//m_engine->Resize(width, height);
 	//mfb_set_viewport(window, x, y, width, height);
 }
 
-void keyboard(struct Window *window, Key key, KeyMod mod, bool isPressed) {
-	const char *window_title = "";
+void keyboard(struct Window* window, Key key, KeyMod mod, bool isPressed) {
+	const char* window_title = "";
 	if (window) {
-		window_title = (const char *)mfb_get_user_data(window);
+		window_title = (const char*)mfb_get_user_data(window);
 	}
 	//fprintf(stdout, "%s > keyboard: key: %s (pressed: %d) [KeyMod: %x]\n", window_title, mfb_get_key_name(key), isPressed, mod);
 	if (isPressed == false)
@@ -116,24 +116,24 @@ void keyboard(struct Window *window, Key key, KeyMod mod, bool isPressed) {
 	*/
 }
 
-void char_input(struct Window *window, unsigned int charCode) {
-	const char *window_title = "";
+void char_input(struct Window* window, unsigned int charCode) {
+	const char* window_title = "";
 	if (window) {
-		window_title = (const char *)mfb_get_user_data(window);
+		window_title = (const char*)mfb_get_user_data(window);
 	}
 	fprintf(stdout, "%s > charCode: %d\n", window_title, charCode);
 }
 
-void mouse_btn(struct Window *window, MouseButton button, KeyMod mod, bool isPressed) {
-	const char *window_title = "";
+void mouse_btn(struct Window* window, MouseButton button, KeyMod mod, bool isPressed) {
+	const char* window_title = "";
 	if (window) {
-		window_title = (const char *)mfb_get_user_data(window);
+		window_title = (const char*)mfb_get_user_data(window);
 	}
 	fprintf(stdout, "%s > mouse_btn: button: %d (pressed: %d) [KeyMod: %x]\n", window_title, button, isPressed, mod);
 	m_curCam->OnMouseButton(button, isPressed);
 }
 
-void mouse_move(struct Window *window, int x, int y) 
+void mouse_move(struct Window* window, int x, int y)
 {
 	kUnused(window);
 	if (m_mouseLastX < 0)
@@ -155,10 +155,10 @@ void mouse_move(struct Window *window, int x, int y)
 	m_curCam->OnMouseMove(x, y);
 }
 
-void mouse_scroll(struct Window *window, KeyMod mod, float deltaX, float deltaY) {
-	const char *window_title = "";
+void mouse_scroll(struct Window* window, KeyMod mod, float deltaX, float deltaY) {
+	const char* window_title = "";
 	if (window) {
-		window_title = (const char *)mfb_get_user_data(window);
+		window_title = (const char*)mfb_get_user_data(window);
 	}
 	fprintf(stdout, "%s > mouse_scroll: x: %f, y: %f [KeyMod: %x]\n", window_title, deltaX, deltaY, mod);
 	m_curCam->OnMouseScroll(deltaY);
@@ -167,7 +167,7 @@ void mouse_scroll(struct Window *window, KeyMod mod, float deltaX, float deltaY)
 int main()
 {
 	std::cout << "Init Window";
-	struct Window *window = mfb_open_ex("Noise Test", WIDTH, HEIGHT, WF_RESIZABLE);
+	struct Window* window = mfb_open_ex("Noise Test", WIDTH, HEIGHT, WF_RESIZABLE);
 	mfb_active_callback(window, active);
 	mfb_resize_callback(window, resize);
 	mfb_keyboard_callback(window, keyboard);
@@ -197,20 +197,19 @@ int main()
 	Mesh* mesh4 = NULL;
 	Mesh* mesh5 = NULL;
 	Mesh* mesh6 = NULL;
-
 	Text2D* text = NULL;
 	std::string path = ExePath();
-	
+
 	std::string file;
 	file = path + "\\..\\..\\resources\\cottage_diffuse_256.png";
 	Texture* texCottage = new Texture(file.c_str());
 
-	
+
 	file = path + "\\..\\..\\resources\\earth_256.png";
 	Texture* texEarth = new Texture(file.c_str());
 	file = path + "\\..\\..\\resources\\font2.png";
 	Texture* fontTex = new Texture(file.c_str());
-	
+
 	file = path + "\\..\\..\\resources\\cottage_obj.obj";
 	//mesh = new Mesh(file.c_str(), texCottage);
 	file = path + "\\..\\..\\resources\\camaro.obj";
@@ -219,22 +218,23 @@ int main()
 	//mesh3 = new Mesh(file.c_str(), texCottage);
 	file = path + "\\..\\..\\resources\\sphere.obj";
 	//mesh4 = new Mesh(file.c_str(), texEarth);
-	
+
 	file = path + "\\..\\..\\resources\\beach2.png";
 	Texture* texBeach = new Texture(file.c_str());
 	file = path + "\\..\\..\\resources\\beach2.obj";
 	mesh5 = new Mesh(file.c_str(), texBeach);
-	
-	file = path + "\\..\\..\\resources\\beach2.png";
-	//Texture* texBeach = new Texture(file.c_str());
-	file = path + "\\..\\..\\resources\\beach2.obj";
-	//mesh6 = new Mesh(file.c_str(), texBeach);
+
+	file = path + "\\..\\..\\resources\\water.png";
+	Texture* texWater = new Texture(file.c_str());
+	file = path + "\\..\\..\\resources\\water.obj";
+	mesh6 = new Mesh(file.c_str(), texWater);
 
 	m_engine->Add(mesh);
 	m_engine->Add(mesh2);
 	m_engine->Add(mesh3);
 	m_engine->Add(mesh4);
 	m_engine->Add(mesh5);
+	m_engine->Add(mesh6);
 
 	text = new Text2D(m_engine, fontTex, 32, 8);
 
@@ -271,7 +271,7 @@ int main()
 			if (mesh)
 			{
 				mesh->Init();
-				mesh->SetTranslation(0,0,-10);
+				mesh->SetTranslation(0, 0, -10);
 				mesh->SetSCale(scale, scale, scale);
 				mesh->SetRotation(0, rot, 0);
 				//mesh->Draw(m_curCam, m_engine);
@@ -281,7 +281,7 @@ int main()
 				mesh2->Init();
 				mesh2->SetTranslation(0, 0, 0);
 				mesh2->SetSCale(scale, scale, scale);
-				mesh2->SetRotation(0, rot+10, 0);
+				mesh2->SetRotation(0, rot + 10, 0);
 				//mesh2->Draw(m_curCam, m_engine);
 			}
 			if (mesh3)
@@ -289,7 +289,7 @@ int main()
 				mesh3->Init();
 				mesh3->SetTranslation(-5, -1, -1);
 				mesh3->SetSCale(scale, scale, scale);
-				mesh3->SetRotation(rot-10, rot + 20, rot);
+				mesh3->SetRotation(rot - 10, rot + 20, rot);
 				//mesh3->Draw(m_curCam, m_engine);
 			}
 			if (mesh4)
@@ -328,9 +328,9 @@ int main()
 		const Vector3* cp = m_curCam->GetPosition();
 		const Vector3* ct = m_curCam->GetTarget();
 		const Vector3* cf = m_curCam->GetForward();
-		snprintf(buffer, MAX_PATH, "Cam %s pos :  %.2f, %.2f, %.2f, tar : %.2f, %.2f, %.2f, fw : %.2f, %.2f, %.2f", 
-			m_curCam->GetName(), 
-			cp->x, cp->y, cp->z, 
+		snprintf(buffer, MAX_PATH, "Cam %s pos :  %.2f, %.2f, %.2f, tar : %.2f, %.2f, %.2f, fw : %.2f, %.2f, %.2f",
+			m_curCam->GetName(),
+			cp->x, cp->y, cp->z,
 			ct->x, ct->y, ct->z,
 			cf->x, cf->y, cf->z
 		);
@@ -350,7 +350,7 @@ int main()
 		}
 
 		state = mfb_update(window, m_engine->GetBufferData()->buffer);
-		
+
 		if (state < 0)
 			break;
 	}
