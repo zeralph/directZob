@@ -29,24 +29,9 @@ Camera::~Camera()
 
 void Camera::OnMouseScroll(float deltaY)
 {
-	static float d = 5.0f;
-	Vector3 v = m_cameraTarget - m_cameraPosition;
-	float l = v.sqrtLength();
-	if (deltaY > 0)
-	{
-		l += d;
-	}
-	else
-	{
-		l -= d;
-		if (l < 1.0f)
-		{
-			l = 1.0f;
-		}
-	}
-	v = Vector3(m_cameraFw);
-	v = v * l;
-	m_cameraPosition = v;
+	Vector3 v = m_cameraFw;
+	v = v * (deltaY*2.0f);
+	m_cameraPosition = m_cameraPosition + v;
 }
 
 void Camera::OnMouseButton(MouseButton button, bool isPressed)
@@ -81,34 +66,17 @@ void Camera::OnMouseMove(int x, int y)
 	{
 //		if (m_shiftPressed)
 		{
-			if (x > m_mouseX)
-			{
-				Vector3 v = Vector3(m_cameraLeft);
-				v.y = 0;
-				m_cameraPosition = m_cameraPosition + v;
-				m_cameraTarget = m_cameraTarget + v;
-			}
-			else if (x < m_mouseX)
-			{
-				Vector3 v = Vector3(m_cameraLeft);
-				v.y = 0;
-				m_cameraPosition = m_cameraPosition - v;
-				m_cameraTarget = m_cameraTarget - v;
-			}
-			if (y > m_mouseY)
-			{
-				Vector3 v = Vector3(m_cameraFw);
-				v.y = 0;
-				m_cameraPosition = m_cameraPosition + v;
-				m_cameraTarget = m_cameraTarget + v;
-			}
-			else if (y < m_mouseY)
-			{
-				Vector3 v = Vector3(m_cameraFw);
-				v.y = 0;
-				m_cameraPosition = m_cameraPosition - v;
-				m_cameraTarget = m_cameraTarget - v;
-			}
+			int dx = x - m_mouseX;
+			int dy = y - m_mouseY;
+			Vector3 vl = Vector3(m_cameraLeft);
+			Vector3 vf = Vector3(m_cameraFw);
+			vl = vl * ((float)-dx / 20.0f);
+			vf = vf * ((float)dy / 20.0f);
+			//vf = &Vector3::Vector3Zero;
+			vl.y = 0;
+			vf.y = 0;
+			m_cameraPosition = m_cameraPosition - ( vl + vf );
+			m_cameraTarget = m_cameraTarget - (vl + vf);
 		}
 	}
 	m_mouseX = x;
