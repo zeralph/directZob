@@ -86,6 +86,7 @@ void keyboard(struct Window *window, Key key, KeyMod mod, bool isPressed) {
 		{
 			g_bShowGrid = !g_bShowGrid;
 		}
+		m_curCam->OnKeyboardInput(key, isPressed);
 	}
 	/*
 	if (key == KB_KEY_DOWN)
@@ -129,6 +130,7 @@ void mouse_btn(struct Window *window, MouseButton button, KeyMod mod, bool isPre
 		window_title = (const char *)mfb_get_user_data(window);
 	}
 	fprintf(stdout, "%s > mouse_btn: button: %d (pressed: %d) [KeyMod: %x]\n", window_title, button, isPressed, mod);
+	m_curCam->OnMouseButton(button, isPressed);
 }
 
 void mouse_move(struct Window *window, int x, int y) 
@@ -150,6 +152,7 @@ void mouse_move(struct Window *window, int x, int y)
 	//camRot.y = CLAMP(camRot.y, -90, 90);
 	m_mouseLastX = x;
 	m_mouseLastY = y;
+	m_curCam->OnMouseMove(x, y);
 }
 
 void mouse_scroll(struct Window *window, KeyMod mod, float deltaX, float deltaY) {
@@ -158,6 +161,7 @@ void mouse_scroll(struct Window *window, KeyMod mod, float deltaX, float deltaY)
 		window_title = (const char *)mfb_get_user_data(window);
 	}
 	fprintf(stdout, "%s > mouse_scroll: x: %f, y: %f [KeyMod: %x]\n", window_title, deltaX, deltaY, mod);
+	m_curCam->OnMouseScroll(deltaY);
 }
 
 int main()
@@ -234,9 +238,9 @@ int main()
 	static Vector3 camTarget = Vector3(0, 0.1f, 1.0f);
 	static Vector3 up = Vector3(0, 1.0f, 0);
 	m_FPSCam = new Camera("FPS cam", Vector3(0, -2.40f, -50), Vector3(0, -2.40f, -49), Vector3(0, 1.0f, 0), 45.0f, m_engine->GetBufferData());
-	m_freeCam = new Camera("Free cam", Vector3(20.0f, -20.0f, -20.0f), Vector3(0, 0, 0), Vector3(0, 1.0f, 0), 45.0f, m_engine->GetBufferData());
+	m_freeCam = new Camera("Free cam", Vector3(0.0f, -20.0f, -20.0f), Vector3(0, 0, 0), Vector3(0, 1.0f, 0), 45.0f, m_engine->GetBufferData());
 
-	m_curCam = m_FPSCam;
+	m_curCam = m_freeCam;
 
 	for (;;)
 	{
@@ -300,12 +304,21 @@ int main()
 				//mesh5->Draw(m_curCam, m_engine);
 			}
 		}
+
+		state = m_engine->Update(window, m_curCam);
+
 		snprintf(buffer, MAX_PATH, "Triangles : %lu / %lu", m_engine->GetNbDrawnTriangles(), m_engine->GetNbTriangles());
 		text->Print(0, 0, 1, &std::string(buffer), 0xFFFFFFFF);
 
 		const Vector3* cp = m_curCam->GetPosition();
 		const Vector3* ct = m_curCam->GetTarget();
-		snprintf(buffer, MAX_PATH, "Cam %s pos :  %.2f, %.2f, %.2f, tar : %.2f, %.2f, %.2f", m_curCam->GetName(), cp->x, cp->y, cp->z, ct->x, ct->y, ct->z);
+		const Vector3* cf = m_curCam->GetForward();
+		snprintf(buffer, MAX_PATH, "Cam %s pos :  %.2f, %.2f, %.2f, tar : %.2f, %.2f, %.2f, fw : %.2f, %.2f, %.2f", 
+			m_curCam->GetName(), 
+			cp->x, cp->y, cp->z, 
+			ct->x, ct->y, ct->z,
+			cf->x, cf->y, cf->z
+		);
 		text->Print(0, 8, 1, &std::string(buffer), 0xFFFFFFFF);
 
 		snprintf(buffer, MAX_PATH, "FPS : %.2f, render : %.2fms, geom : %.2f", m_engine->GetFps(), m_engine->GetRenderTime(), m_engine->GetGeometryTime());
@@ -321,7 +334,8 @@ int main()
 			text->Print(0, 16, 1, &std::string(buffer), 0xFFFF0000);
 		}
 
-		state = m_engine->Update(window, m_curCam);
+		state = mfb_update(window, m_engine->GetBufferData()->buffer);
+		
 		if (state < 0)
 			break;
 	}

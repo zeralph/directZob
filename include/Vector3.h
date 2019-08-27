@@ -15,12 +15,14 @@ public:
 
 	inline void Normalize() 
 	{
-		float f = (float)sqrt((float)(x * x) + (float)(y * y) + (float)(z * z));
+		float f = sqrtLength();
 		x /= f; 
 		y /= f; 
 		z /= f;
 		w = 1.0f;
 	}
+
+	inline float sqrtLength() { return (float)sqrt((double)x * (double)x + (double)y * (double)y + (double)z * (double)z); }
 
 	static float Dot(const Vector3* v1, const Vector3* v2);
 	static Vector3 Cross(const Vector3* v1, const Vector3* v2);
@@ -28,6 +30,7 @@ public:
 	inline void Div(float f) { x /= f; y /= f; z /= f; }
 	inline void Set(const Vector3* v) { x = v->x; y = v->y; z = v->z; }
 	bool operator== (const Vector3& v) { return (x == v.x && y == v.y && v.z == z && w == v.w); }
+//	Vector3 operator= (const Vector3 v) { x = v.x; y=v.y, z=v.z; }
 
 public:
 	float x;
@@ -37,4 +40,5 @@ public:
 };
 
 static Vector3 operator+ (const Vector3& v1, const Vector3& v2) { return Vector3(v1.x + v2.x, v1.y + v2.y, v1.z + v2.z); }
-//static Vector3 operator+ (const Vector3* v1, const Vector3* v2) { return Vector3(v1->x + v2->x, v1->y + v2->y, v1->z + v2->z); }
+static Vector3 operator- (const Vector3& v1, const Vector3& v2) { return Vector3(v1.x - v2.x, v1.y - v2.y, v1.z - v2.z); }
+static Vector3 operator* (const Vector3& v, const float f) { return Vector3(v.x *f, v.y *f, v.z *f); }

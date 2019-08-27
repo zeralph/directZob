@@ -1,5 +1,6 @@
 #pragma once
 #include "Matrix4x4.h"
+#include "MiniFB_enums.h"
 
 class Camera
 {
@@ -16,7 +17,13 @@ public:
 	inline void SetRotation(const Vector3* p) { m_viewMatrix.SetRotation(-p->x, -p->y, -p->z); }
 	inline const Vector3* GetPosition() { return &m_cameraPosition; }
 	inline const Vector3* GetTarget() { return &m_cameraTarget; }
+	inline const Vector3* GetForward() { return &m_cameraFw; }
 	inline const char* GetName() const { return m_name; }
+
+	void OnMouseScroll(float deltaY);
+	void OnKeyboardInput(Key key, bool isPressed);
+	void OnMouseMove(int x, int y);
+	void OnMouseButton(MouseButton button, bool isPressed);
 
 private:
 	void setProjectionMatrix(const float angleOfView, const float width, const float height, const float near, const float far);
@@ -30,7 +37,13 @@ private:
 	Vector3 m_cameraPosition;
 	Vector3 m_cameraTarget;
 	Vector3 m_cameraUp;
+	Vector3 m_cameraFw;
+	Vector3 m_cameraLeft;
 	float m_cameraZoom;
 	float m_fov;
+	bool m_shiftPressed;
+	bool m_mouseLeftButtonPressed;
+	int m_mouseX;
+	int m_mouseY;
 };
 

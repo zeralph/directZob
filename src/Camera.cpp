@@ -9,14 +9,125 @@ Camera::Camera(const char* name, Vector3 position, Vector3 target, Vector3 up, f
 	m_cameraPosition = position;
 	m_cameraTarget = target;
 	m_cameraUp = up;
+	m_cameraFw =  position - target;
+	m_cameraFw.Normalize();
+	m_cameraLeft = Vector3::Cross(&m_cameraFw, &m_cameraUp);
+	m_cameraLeft.Normalize();
 	m_fov = fov;
 	m_bufferData = bufferData;
 	m_projMatrix.Identity();
 	m_viewMatrix.Identity();
+	m_shiftPressed = false;
+	m_mouseLeftButtonPressed = false;
+	m_mouseX = -1;
+	m_mouseY = -1;
 }
 
 Camera::~Camera()
 {
+}
+
+void Camera::OnMouseScroll(float deltaY)
+{
+	static float d = 5.0f;
+	Vector3 v = m_cameraTarget - m_cameraPosition;
+	float l = v.sqrtLength();
+	if (deltaY > 0)
+	{
+		l += d;
+	}
+	else
+	{
+		l -= d;
+		if (l < 1.0f)
+		{
+			l = 1.0f;
+		}
+	}
+	v = Vector3(m_cameraFw);
+	v = v * l;
+	m_cameraPosition = v;
+}
+
+void Camera::OnMouseButton(MouseButton button, bool isPressed)
+{
+	if (button == MOUSE_BTN_1)
+	{
+		if (isPressed)
+		{
+			m_mouseLeftButtonPressed = true;
+		}
+		else
+		{
+			m_mouseLeftButtonPressed = false;
+		}
+	}
+}
+
+void Camera::OnMouseMove(int x, int y)
+{
+	float d = 1.0f;
+	float r = 1.0f;
+	if (m_mouseX < 0)
+	{
+		m_mouseX = x;
+	}
+	if (m_mouseY < 0)
+	{
+		m_mouseY = y;
+	}
+
+	if (m_mouseLeftButtonPressed)
+	{
+//		if (m_shiftPressed)
+		{
+			if (x > m_mouseX)
+			{
+				Vector3 v = Vector3(m_cameraLeft);
+				v.y = 0;
+				m_cameraPosition = m_cameraPosition + v;
+				m_cameraTarget = m_cameraTarget + v;
+			}
+			else if (x < m_mouseX)
+			{
+				Vector3 v = Vector3(m_cameraLeft);
+				v.y = 0;
+				m_cameraPosition = m_cameraPosition - v;
+				m_cameraTarget = m_cameraTarget - v;
+			}
+			if (y > m_mouseY)
+			{
+				Vector3 v = Vector3(m_cameraFw);
+				v.y = 0;
+				m_cameraPosition = m_cameraPosition + v;
+				m_cameraTarget = m_cameraTarget + v;
+			}
+			else if (y < m_mouseY)
+			{
+				Vector3 v = Vector3(m_cameraFw);
+				v.y = 0;
+				m_cameraPosition = m_cameraPosition - v;
+				m_cameraTarget = m_cameraTarget - v;
+			}
+		}
+	}
+	m_mouseX = x;
+	m_mouseY = y;
+}
+
+void Camera::OnKeyboardInput(Key key, bool isPressed)
+{
+	if (key == KB_KEY_RIGHT_SHIFT || key == KB_KEY_LEFT_SHIFT)
+	{
+		if (isPressed)
+		{
+			m_shiftPressed = true;
+		}
+		else
+		{
+			m_shiftPressed = false;
+		}
+	}
 }
 
 void Camera::Update()
@@ -24,6 +135,10 @@ void Camera::Update()
 	setProjectionMatrix(m_fov, m_bufferData->width, m_bufferData->height, m_bufferData->zNear, m_bufferData->zFar);
 	InitView();
 	SetLookAt(&m_cameraPosition, &m_cameraTarget, &m_cameraUp);
+	m_cameraFw = m_cameraPosition - m_cameraTarget;
+	m_cameraFw.Normalize();
+	m_cameraLeft = Vector3::Cross(&m_cameraFw, &m_cameraUp);
+	m_cameraLeft.Normalize();
 }
 
 void Camera::SetLookAt(const Vector3* eye, const Vector3* at, const Vector3* up)
