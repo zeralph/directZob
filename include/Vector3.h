@@ -26,6 +26,7 @@ public:
 
 	static float Dot(const Vector3* v1, const Vector3* v2);
 	static Vector3 Cross(const Vector3* v1, const Vector3* v2);
+	static Vector3 RotateAroundAxis(const Vector3& v, const Vector3& axe, float angle);
 	inline void Add(const Vector3* v) { x += v->x; y += v->y; z += v->z; }
 	inline void Div(float f) { x /= f; y /= f; z /= f; }
 	inline void Set(const Vector3* v) { x = v->x; y = v->y; z = v->z; }

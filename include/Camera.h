@@ -43,6 +43,7 @@ private:
 	float m_fov;
 	bool m_shiftPressed;
 	bool m_mouseLeftButtonPressed;
+	bool m_mouseRightButtonPressed;
 	int m_mouseX;
 	int m_mouseY;
 };
