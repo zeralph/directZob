@@ -196,6 +196,8 @@ int main()
 	Mesh* mesh3 = NULL;
 	Mesh* mesh4 = NULL;
 	Mesh* mesh5 = NULL;
+	Mesh* mesh6 = NULL;
+
 	Text2D* text = NULL;
 	std::string path = ExePath();
 	
@@ -223,6 +225,10 @@ int main()
 	file = path + "\\..\\..\\resources\\beach2.obj";
 	mesh5 = new Mesh(file.c_str(), texBeach);
 	
+	file = path + "\\..\\..\\resources\\beach2.png";
+	//Texture* texBeach = new Texture(file.c_str());
+	file = path + "\\..\\..\\resources\\beach2.obj";
+	//mesh6 = new Mesh(file.c_str(), texBeach);
 
 	m_engine->Add(mesh);
 	m_engine->Add(mesh2);
@@ -301,6 +307,15 @@ int main()
 				mesh5->SetSCale(1, 1, 1);
 				//mesh5->SetRotation(rot, rot + 30, rot);
 				mesh5->SetRotation(0, 90, 0);
+				//mesh5->Draw(m_curCam, m_engine);
+			}
+			if (mesh6)
+			{
+				mesh6->Init();
+				//mesh5->SetTranslation(5, 5, -2);
+				mesh6->SetSCale(1, 1, 1);
+				//mesh5->SetRotation(rot, rot + 30, rot);
+				mesh6->SetRotation(0, 90, 0);
 				//mesh5->Draw(m_curCam, m_engine);
 			}
 		}

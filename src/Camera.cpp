@@ -19,6 +19,7 @@ Camera::Camera(const char* name, Vector3 position, Vector3 target, Vector3 up, f
 	m_viewMatrix.Identity();
 	m_shiftPressed = false;
 	m_mouseLeftButtonPressed = false;
+	m_mouseRightButtonPressed = false;
 	m_mouseX = -1;
 	m_mouseY = -1;
 }
@@ -47,6 +48,17 @@ void Camera::OnMouseButton(MouseButton button, bool isPressed)
 			m_mouseLeftButtonPressed = false;
 		}
 	}
+	else if(button == MOUSE_BTN_2)
+	{
+		if (isPressed)
+		{
+			m_mouseRightButtonPressed = true;
+		}
+		else
+		{
+			m_mouseRightButtonPressed = false;
+		}
+	}
 }
 
 void Camera::OnMouseMove(int x, int y)
@@ -61,23 +73,25 @@ void Camera::OnMouseMove(int x, int y)
 	{
 		m_mouseY = y;
 	}
+	int dx = x - m_mouseX;
+	int dy = y - m_mouseY;
 
 	if (m_mouseLeftButtonPressed)
 	{
-//		if (m_shiftPressed)
-		{
-			int dx = x - m_mouseX;
-			int dy = y - m_mouseY;
-			Vector3 vl = Vector3(m_cameraLeft);
-			Vector3 vf = Vector3(m_cameraFw);
-			vl = vl * ((float)-dx / 20.0f);
-			vf = vf * ((float)dy / 20.0f);
-			//vf = &Vector3::Vector3Zero;
-			vl.y = 0;
-			vf.y = 0;
-			m_cameraPosition = m_cameraPosition - ( vl + vf );
-			m_cameraTarget = m_cameraTarget - (vl + vf);
-		}
+		Vector3 vl = Vector3(m_cameraLeft);
+		Vector3 vf = Vector3(m_cameraFw);
+		vl = vl * ((float)-dx / 20.0f);
+		vf = vf * ((float)dy / 20.0f);
+		//vf = &Vector3::Vector3Zero;
+		vl.y = 0;
+		vf.y = 0;
+		m_cameraPosition = m_cameraPosition - ( vl + vf );
+		m_cameraTarget = m_cameraTarget - (vl + vf);
+	}
+	if (m_mouseRightButtonPressed)
+	{
+		m_cameraPosition = Vector3::RotateAroundAxis(m_cameraPosition, Vector3::Vector3Y, dx * M_PI / 180.0);
+		m_cameraPosition = Vector3::RotateAroundAxis(m_cameraPosition, m_cameraLeft, dy * M_PI / 180.0);
 	}
 	m_mouseX = x;
 	m_mouseY = y;
