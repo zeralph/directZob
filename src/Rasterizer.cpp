@@ -30,7 +30,7 @@ void Rasterizer::Run()
 		}
 		else
 		{
-			Sleep(1);
+			//Sleep(1);
 		}
 	}
 }

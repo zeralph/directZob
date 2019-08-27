@@ -172,7 +172,7 @@ int Engine::Update(struct Window* window, const Camera* camera)
 		}
 	}
 	int r = 0;
-	r = mfb_update(window, m_buffer);
+	//r = mfb_update(window, m_buffer);
 	m_currentFrame++;
 	m_nbPixels = 0;
 	m_fps = (float)CLOCKS_PER_SEC / (float)(clock() - m_tick);

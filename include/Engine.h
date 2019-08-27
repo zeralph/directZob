@@ -19,7 +19,7 @@
 
 
 #define Z_NEAR 0.1f
-#define Z_FAR 100.0f
+#define Z_FAR 500.0f
 
 
 class Engine
