@@ -18,7 +18,7 @@
 #include "Mesh.h"
 
 
-#define Z_NEAR 0.1f
+#define Z_NEAR 0.001f
 #define Z_FAR 500.0f
 
 
@@ -44,6 +44,8 @@ public:
 	Engine(int width, int height);
 	~Engine();
 
+	inline void Start() { m_started = true; }
+	inline void Stop() { m_started = false; }
 	void ClearBuffer(const Color* color);
 	void CopyBuffer(uint* source, uint * dest);
 	void Resize(int width, int height);
@@ -52,19 +54,16 @@ public:
 	void DrawGrid(const Camera* camera);
 
 	void ToggleZbufferOutput() { m_showZBuffer = !m_showZBuffer; }
-	void GetPixelColor(Color* color, int x, int y);
 
 	void Add(Mesh* mesh);
 
-	void QueueLine(const Camera* camera, const Vector3* v1, const Vector3* v2, const uint c, BufferData* bufferData);
+	void QueueLine(const Camera* camera, const Vector3* v1, const Vector3* v2, const uint c);
 	bool ClipSegment(Vector3* a, Vector3* b);
 	int Update(struct Window *window, const Camera* camera);
 	inline ulong GetCurrentFrame() { return m_currentFrame; }
 	inline const float GetFps() { return m_fps; }
 	inline const float GetRenderTime() { return m_renderTimeMS; }
 	inline const float GetGeometryTime() { return m_geometryTimeMS;}
-	inline const uint Width() const { return m_width; }
-	inline const uint Height() const { return m_height; }
 
 	inline const uint GetNbTriangles() const { return m_sceneTriangles; }
 	inline const uint GetNbDrawnTriangles() const { return m_drawnTriangles; }
@@ -76,18 +75,15 @@ public:
 	inline const ulong GetNbPixels() { return m_nbPixels; }
 private:
 
-	void DrawHorizontalLine(const float x1, const float x2, const float y, const uint color, BufferData* bufferData);
+	void DrawHorizontalLine(const float x1, const float x2, const float y, const uint color);
+	void WaitForRasterizersEnd() const;
+
 
 	std::vector<Mesh*> m_meshes;
-
 	std::vector<const Triangle*>* m_rasterTriangleQueues;
 	std::vector<Line2D>* m_rasterLineQueues;
 	std::vector<Rasterizer*>* m_rasterizers;
-
-	bool RasterizersEnded() const;
 	uint m_nbRasterizers;
-	int m_width;
-	int m_height;
 	float m_zNear;
 	float m_zFar;
 	int m_curBuffer;
@@ -103,4 +99,5 @@ private:
 	uint m_sceneTriangles;
 	uint m_drawnTriangles;
 	ulong m_nbPixels;
+	bool m_started = false;
 };

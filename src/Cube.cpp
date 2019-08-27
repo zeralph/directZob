@@ -32,7 +32,7 @@ void Cube::Draw(const Camera* camera, Engine* engine)
 	Vector2 a, b, c, uva, uvb, uvc;
 	Matrix4x4 m = m_modelMatrix;
 	const Matrix4x4* p = camera->GetProjectionMatrix();
-	const Vector3* camZ = camera->GetEyeVector();
+	const Vector3* camZ = camera->GetForward();
 	for (int i = 0; i < NB_VERTICES; i++)
 	{
 		m_modelMatrix.Mul(&m_vertices[i]);

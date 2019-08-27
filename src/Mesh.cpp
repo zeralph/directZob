@@ -145,7 +145,7 @@ void Mesh::Update(const Camera* camera, const BufferData* bData)
 	Vector2 a, b, c, uva, uvb, uvc;
 	const Matrix4x4* view = camera->GetViewMatrix();
 	const Matrix4x4* proj = camera->GetProjectionMatrix();
-	const Vector3* camZ = camera->GetEyeVector();
+	const Vector3* camZ = camera->GetForward();
 	float w = (float)bData->width / 2.0f;
 	float h = (float)bData->height / 2.0f;
 	float near = bData->zNear;
@@ -154,15 +154,7 @@ void Mesh::Update(const Camera* camera, const BufferData* bData)
 	{
 		m_modelMatrix.Mul(&m_vertices[i]);
 		view->Mul(&m_vertices[i]);
-		//m_vertices[i].x = m_vertices[i].x / m_vertices[i].w;
-		//m_vertices[i].y = m_vertices[i].y / m_vertices[i].w;
-		//m_vertices[i].z = m_vertices[i].z / m_vertices[i].w;
-
 		proj->Mul(&m_vertices[i]);
-		//m_vertices[i].x = m_vertices[i].x / m_vertices[i].w;
-		//m_vertices[i].y = m_vertices[i].y / m_vertices[i].w;
-		//m_vertices[i].z = m_vertices[i].z / m_vertices[i].w;
-
 		m_vertices[i].x = (m_vertices[i].x / m_vertices[i].z + 1) * w;
 		m_vertices[i].y = (m_vertices[i].y / m_vertices[i].z + 1) * h;
 
@@ -191,7 +183,7 @@ void Mesh::Update(const Camera* camera, const BufferData* bData)
 		t->draw = false;
 		if ((t->va->w > near && t->vb->w > near && t->vc->w > near) && (t->va->w < far && t->vb->w < far && t->vc->w < far))
 		{
-			if (Vector3::Dot(&n, camZ) > -0.5f)
+			if (Vector3::Dot(&n, camZ) < 0.5f)
 			{
 				t->ComputeArea();
 				if (t->area > 0)
