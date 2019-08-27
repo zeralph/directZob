@@ -10,14 +10,13 @@ public:
 
 	void Update();
 
-	const Vector3* GetEyeVector() const { return &Vector3::Vector3Z; };
 	inline const Matrix4x4* GetViewMatrix() const { return &m_viewMatrix; }
 	inline const Matrix4x4* GetProjectionMatrix() const {return &m_projMatrix;}
 	inline void SetPosition(const Vector3* p) { m_viewMatrix.SetTranslation(-p->x, -p->y, -p->z); }
 	inline void SetRotation(const Vector3* p) { m_viewMatrix.SetRotation(-p->x, -p->y, -p->z); }
-	inline const Vector3* GetPosition() { return &m_cameraPosition; }
-	inline const Vector3* GetTarget() { return &m_cameraTarget; }
-	inline const Vector3* GetForward() { return &m_cameraFw; }
+	inline const Vector3* GetPosition() const { return &m_cameraPosition; }
+	inline const Vector3* GetTarget() const { return &m_cameraTarget; }
+	inline const Vector3* GetForward() const { return &m_cameraFw; }
 	inline const char* GetName() const { return m_name; }
 
 	void OnMouseScroll(float deltaY);
@@ -29,6 +28,8 @@ private:
 	void setProjectionMatrix(const float angleOfView, const float width, const float height, const float near, const float far);
 	void SetLookAt(const Vector3* from, const Vector3* to, const Vector3* tmp);
 	void InitView();
+	void RecomputeVectors();
+
 
 	const char* m_name;
 	BufferData* m_bufferData = NULL;

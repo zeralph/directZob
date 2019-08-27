@@ -6,6 +6,8 @@
 #include "Matrix4x4.h"
 #include "Triangle.h"
 #include <thread> 
+#include <atomic>
+
 #ifdef LINUX
 	#include <unistd.h>
 #else
@@ -52,8 +54,8 @@ public:
 	uint m_startHeight;
 	uint m_width;
 	uint m_height;
-	volatile bool m_run;
-	volatile bool m_started;
+	std::atomic_bool m_run;
+	std::atomic_bool m_started;
 };
 
 

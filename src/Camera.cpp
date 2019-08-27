@@ -9,10 +9,7 @@ Camera::Camera(const char* name, Vector3 position, Vector3 target, Vector3 up, f
 	m_cameraPosition = position;
 	m_cameraTarget = target;
 	m_cameraUp = up;
-	m_cameraFw =  position - target;
-	m_cameraFw.Normalize();
-	m_cameraLeft = Vector3::Cross(&m_cameraFw, &m_cameraUp);
-	m_cameraLeft.Normalize();
+	RecomputeVectors();
 	m_fov = fov;
 	m_bufferData = bufferData;
 	m_projMatrix.Identity();
@@ -31,7 +28,7 @@ Camera::~Camera()
 void Camera::OnMouseScroll(float deltaY)
 {
 	Vector3 v = m_cameraFw;
-	v = v * (deltaY*2.0f);
+	v = v * (-deltaY*2.0f);
 	m_cameraPosition = m_cameraPosition + v;
 }
 
@@ -90,8 +87,22 @@ void Camera::OnMouseMove(int x, int y)
 	}
 	if (m_mouseRightButtonPressed)
 	{
-		m_cameraPosition = Vector3::RotateAroundAxis(m_cameraPosition, Vector3::Vector3Y, dx * M_PI / 180.0);
-		m_cameraPosition = Vector3::RotateAroundAxis(m_cameraPosition, m_cameraLeft, dy * M_PI / 180.0);
+		Vector3 l = m_cameraPosition - m_cameraTarget;
+		l = Vector3::RotateAroundAxis(l, Vector3::Vector3Y, -dx * M_PI / 180.0);
+		m_cameraPosition = l + m_cameraTarget;
+		RecomputeVectors();
+		if (m_cameraFw.y >= 0.95f && dy > 0)
+		{
+			dy = 0.0f;
+		}
+		if (m_cameraFw.y <= -0.95f && dy < 0)
+		{
+			dy = 0.0f;
+		}
+		l = m_cameraPosition - m_cameraTarget;
+		l = Vector3::RotateAroundAxis(l, m_cameraLeft, dy * M_PI / 180.0);
+		m_cameraPosition = l + m_cameraTarget;
+		RecomputeVectors();
 	}
 	m_mouseX = x;
 	m_mouseY = y;
@@ -117,6 +128,11 @@ void Camera::Update()
 	setProjectionMatrix(m_fov, m_bufferData->width, m_bufferData->height, m_bufferData->zNear, m_bufferData->zFar);
 	InitView();
 	SetLookAt(&m_cameraPosition, &m_cameraTarget, &m_cameraUp);
+	RecomputeVectors();
+}
+
+void Camera::RecomputeVectors()
+{
 	m_cameraFw = m_cameraPosition - m_cameraTarget;
 	m_cameraFw.Normalize();
 	m_cameraLeft = Vector3::Cross(&m_cameraFw, &m_cameraUp);

@@ -51,8 +51,10 @@ void active(struct Window* window, bool isActive) {
 void resize(struct Window* window, int width, int height) {
 	uint32_t x = 0;
 	uint32_t y = 0;
+	m_engine->Stop();
 	//m_engine->Resize(width, height);
-	//mfb_set_viewport(window, x, y, width, height);
+	mfb_set_viewport(window, x, y, width, height);
+	m_engine->Start();
 }
 
 void keyboard(struct Window* window, Key key, KeyMod mod, bool isPressed) {
@@ -179,8 +181,6 @@ int main()
 	std::cout << "Init engine";
 	m_engine = new Engine(WIDTH, HEIGHT);
 	std::cout << " OK\n";
-	int x = m_engine->Width() / 2;
-	int y = m_engine->Height() / 2;
 	int dx = 1;
 	int dy = 1;
 	float r = 0.0f;
@@ -211,13 +211,13 @@ int main()
 	Texture* fontTex = new Texture(file.c_str());
 
 	file = path + "\\..\\..\\resources\\cottage_obj.obj";
-	//mesh = new Mesh(file.c_str(), texCottage);
+	mesh = new Mesh(file.c_str(), texCottage);
 	file = path + "\\..\\..\\resources\\camaro.obj";
-	//mesh2 = new Mesh(file.c_str(), texCottage);
+	mesh2 = new Mesh(file.c_str(), texCottage);
 	file = path + "\\..\\..\\resources\\man.obj";
-	//mesh3 = new Mesh(file.c_str(), texCottage);
+	mesh3 = new Mesh(file.c_str(), texCottage);
 	file = path + "\\..\\..\\resources\\sphere.obj";
-	//mesh4 = new Mesh(file.c_str(), texEarth);
+	mesh4 = new Mesh(file.c_str(), texEarth);
 
 	file = path + "\\..\\..\\resources\\beach2.png";
 	Texture* texBeach = new Texture(file.c_str());
@@ -247,6 +247,8 @@ int main()
 	m_freeCam = new Camera("Free cam", Vector3(0.0f, -20.0f, -20.0f), Vector3(0, 0, 0), Vector3(0, 1.0f, 0), 45.0f, m_engine->GetBufferData());
 
 	m_curCam = m_freeCam;
+
+	m_engine->Start();
 
 	for (;;)
 	{

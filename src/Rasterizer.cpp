@@ -178,9 +178,20 @@ void Rasterizer::FillBottomFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, 
 				b++;
 				a = (int)(a < 0.0f ? 0.0f : a);
 				b = (int)(b > m_width ? m_width : b);
-				for (int i = a; i < b; i++)
+				/*for (int i = a; i < b; i++)
 				{
 					p.x = i;
+					p.y = scanlineY;
+					p.z = -1;
+					FillBufferPixel(&p, t);
+				}*/
+				if (a < b)
+				{
+					p.x = a;
+					p.y = scanlineY;
+					p.z = -1;
+					FillBufferPixel(&p, t);
+					p.x = b - 1;
 					p.y = scanlineY;
 					p.z = -1;
 					FillBufferPixel(&p, t);
@@ -212,9 +223,20 @@ void Rasterizer::FillTopFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, con
 				b++;
 				a = (int)(a < 0.0f ? 0.0f : a);
 				b = (int)(b > m_width ? m_width : b);
-				for (int i = a; i < b; i++)
+				/*for (int i = a; i < b; i++)
 				{
 					p.x = i;
+					p.y = scanlineY;
+					p.z = -1;
+					FillBufferPixel(&p, t);
+				}*/
+				if (a < b)
+				{
+					p.x = a;
+					p.y = scanlineY;
+					p.z = -1;
+					FillBufferPixel(&p, t);
+					p.x = b - 1;
 					p.y = scanlineY;
 					p.z = -1;
 					FillBufferPixel(&p, t);
@@ -277,7 +299,7 @@ void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* t) const
 			b = d[c + 2] * cl;
 			a = d[c + 3] * cl;
 
-
+/*
 			//fog	
 			float f = (zmax - z) / (zmax - zmin);
 			f += fogDecal;
@@ -286,8 +308,11 @@ void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* t) const
 			r = f * sFog.x + (1.0f - f) * r;
 			g = f * sFog.y + (1.0f - f) * g;
 			b = f * sFog.z + (1.0f - f) * b;
+*/
 
-			//a = f * a + (1.0f - f) * sFog.z;
+			r = clamp2(r, 0.0f, 1.0f);
+			g = clamp2(g, 0.0f, 1.0f);
+			b = clamp2(b, 0.0f, 1.0f);
 
 			c = ((int)(r * 255) << 16) + ((int)(g * 255) << 8) + (int)(b * 255);
 			m_bufferData->buffer[k] = c;
