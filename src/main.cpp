@@ -14,6 +14,8 @@
 #include "TextureTestAlpha.h"
 #include "Mesh.h"
 #include "text2D.h"
+#include "Interface.h"
+
 
 #define kUnused(var) (void) var;
 #define WIDTH  1920 / 2
@@ -22,6 +24,8 @@
 #define CLAMP(n, low, max) n <= low ? low : n >= max ? max : n;
 
 static char buffer[MAX_PATH];
+
+
 
 Engine* m_engine = NULL;
 Camera* m_freeCam = NULL;
@@ -249,6 +253,8 @@ int main()
 	m_curCam = m_freeCam;
 
 	m_engine->Start();
+
+	DirectZobInterface m_extInterface(m_engine);
 
 	for (;;)
 	{

@@ -5,3 +5,4 @@ fontExport/.vs
 fontExport/Debug
 fontExport/Release
 fontExport/obj
+/x64/DLL Release

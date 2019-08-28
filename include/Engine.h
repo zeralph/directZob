@@ -21,7 +21,6 @@
 #define Z_NEAR 0.001f
 #define Z_FAR 500.0f
 
-
 class Engine
 {
 public:
