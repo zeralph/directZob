@@ -14,7 +14,7 @@ Engine::Engine(int width, int height)
 	m_nbRasterizers = std::thread::hardware_concurrency() - 1;
 	if (m_nbRasterizers % 2 == 1)
 	{
-		//m_nbRasterizers--;
+		m_nbRasterizers--;
 	}
 	if (m_nbRasterizers < 2)
 	{
