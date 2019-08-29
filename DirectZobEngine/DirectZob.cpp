@@ -86,11 +86,11 @@ void DirectZob::Init()
 
 
 	static Vector3 camRot = Vector3(0, 0, 0);
-	static Vector3 camPos = Vector3(0, -2.40f, -50);
+	static Vector3 camPos = Vector3(0, -12.40f, -50);
 	static Vector3 camTarget = Vector3(0, 0.1f, 1.0f);
 	static Vector3 up = Vector3(0, 1.0f, 0);
 	m_FPSCam = new Camera("FPS cam", Vector3(0, -2.40f, -50), Vector3(0, -2.40f, -49), Vector3(0, 1.0f, 0), 45.0f, m_engine->GetBufferData());
-	m_freeCam = new Camera("Free cam", Vector3(0.0f, -20.0f, -20.0f), Vector3(0, 0, 0), Vector3(0, 1.0f, 0), 45.0f, m_engine->GetBufferData());
+	m_freeCam = new Camera("Free cam", Vector3(0.0f, -50.0f, -50.0f), Vector3(0, 0, 0), Vector3(0, 1.0f, 0), 45.0f, m_engine->GetBufferData());
 
 	m_curCam = m_freeCam;
 
@@ -112,7 +112,7 @@ int DirectZob::RunAFrame()
 
 		//if (g_bShowGrid)
 		{
-			m_engine->DrawGrid(m_curCam);
+			//m_engine->DrawGrid(m_curCam);
 		}
 		static float tx = 0;
 		static float ty = 0;

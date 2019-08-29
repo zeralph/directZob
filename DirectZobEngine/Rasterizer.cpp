@@ -178,14 +178,14 @@ void Rasterizer::FillBottomFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, 
 				b++;
 				a = (int)(a < 0.0f ? 0.0f : a);
 				b = (int)(b > m_width ? m_width : b);
-				/*for (int i = a; i < b; i++)
+				for (int i = a; i < b; i++)
 				{
 					p.x = i;
 					p.y = scanlineY;
 					p.z = -1;
 					FillBufferPixel(&p, t);
-				}*/
-				if (a < b)
+				}
+				/*if (a < b)
 				{
 					p.x = a;
 					p.y = scanlineY;
@@ -195,7 +195,7 @@ void Rasterizer::FillBottomFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, 
 					p.y = scanlineY;
 					p.z = -1;
 					FillBufferPixel(&p, t);
-				}
+				}*/
 			}
 		}
 		curx1 += invslope1;
@@ -223,14 +223,14 @@ void Rasterizer::FillTopFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, con
 				b++;
 				a = (int)(a < 0.0f ? 0.0f : a);
 				b = (int)(b > m_width ? m_width : b);
-				/*for (int i = a; i < b; i++)
+				for (int i = a; i < b; i++)
 				{
 					p.x = i;
 					p.y = scanlineY;
 					p.z = -1;
 					FillBufferPixel(&p, t);
-				}*/
-				if (a < b)
+				}
+				/*if (a < b)
 				{
 					p.x = a;
 					p.y = scanlineY;
@@ -240,7 +240,7 @@ void Rasterizer::FillTopFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, con
 					p.y = scanlineY;
 					p.z = -1;
 					FillBufferPixel(&p, t);
-				}
+				}*/
 			}
 		}
 		curx1 -= invslope1;
