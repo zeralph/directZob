@@ -1,5 +1,6 @@
 #include "text2D.h"
 
+using namespace Core;
 
 Text2D::Text2D(Engine* engine, const Texture* tex, int nbCharWidth, int nbCharHeight)
 {

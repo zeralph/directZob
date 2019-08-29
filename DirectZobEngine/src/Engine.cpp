@@ -9,6 +9,8 @@
 #endif //LINUX
 #include <assert.h> 
 
+using namespace Core;
+
 Engine::Engine(int width, int height)
 {
 	m_nbRasterizers = std::thread::hardware_concurrency() - 1;
@@ -139,7 +141,7 @@ void Engine::ClearBuffer(const Color* color)
 	}
 }
 
-int Engine::Update(struct Window* window, const Camera* camera)
+int Engine::Update(const Camera* camera)
 {
 	if (!m_started)
 	{

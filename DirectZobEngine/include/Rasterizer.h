@@ -21,14 +21,6 @@ class Rasterizer
 {
 public:
 
-	template <typename t>
-	t clamp2(t x, t min, t max) const
-	{
-		if (x < min) x = min;
-		if (x > max) x = max;
-		return x;
-	}
-
 	void DrawTriangle(const Triangle* t) const;
 	void DrawLine(const Line2D* l) const;
 	Rasterizer(uint width, uint startHeight, uint endHeight, BufferData* bufferData);
@@ -46,6 +38,7 @@ public:
 	void sortVerticesAscendingByY(Vector2* v1, Vector2* v2, Vector2* v3) const ;
 	void sortVerticesAscendingByY(Vector2* v1, Vector2* v2, Vector2* v3, Vector2* uv1, Vector2* uv2, Vector2* uv3) const;
 	inline float edgeFunction(const Vector3* a, const Vector3* b, const Vector3* c) const { return (c->x - a->x) * (b->y - a->y) - (c->y - a->y) * (b->x - a->x); }
+	inline float clamp2(float x, float min, float max) const { if (x < min) x = min; if (x > max) x = max; return x; }
 
 	const std::vector<Line2D>* m_lines;
 	const std::vector<const Triangle*>* m_triangles;

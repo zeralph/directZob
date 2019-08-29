@@ -6,6 +6,8 @@
 #include "Camera.h"
 #include "Color.h"
 
+using namespace Core;
+
 class Cube
 {
 public:

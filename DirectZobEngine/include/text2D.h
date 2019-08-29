@@ -4,6 +4,8 @@
 #include "matrix2x2.h"
 #include "Engine.h"
 
+using namespace Core;
+
 class Text2D
 {
 public:
