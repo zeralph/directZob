@@ -47,14 +47,15 @@ namespace DirectZobEditor
             if(m_directZobInterface.RunAFrame() >= 0)
             {
                 IntPtr p = m_directZobInterface.GetBufferData();
-                Rectangle rect = new Rectangle(0, 0, m_engineBitmap.Width, m_engineBitmap.Height);
+                /*Rectangle rect = new Rectangle(0, 0, m_engineBitmap.Width, m_engineBitmap.Height);
                 System.Drawing.Imaging.BitmapData bmpData =
                     m_engineBitmap.LockBits(rect, System.Drawing.Imaging.ImageLockMode.ReadWrite,
                     m_engineBitmap.PixelFormat);
                 bmpData.Scan0 = p;
-                m_engineBitmap.UnlockBits(bmpData);
-                //m_engineBitmap = new System.Drawing.Bitmap(m_width, m_height, 4 * m_width, System.Drawing.Imaging.PixelFormat.Format32bppRgb, p);
-                //m_engineBitmap.da                //EngineWIndow.Image = m_engineBitmap;
+                m_engineBitmap.UnlockBits(bmpData);*/
+
+                m_engineBitmap = new System.Drawing.Bitmap(m_width, m_height, 4 * m_width, System.Drawing.Imaging.PixelFormat.Format32bppRgb, p);
+
                 m_EngineGraphics.DrawImage(m_engineBitmap, 0, 0);
             }
         }
@@ -64,10 +65,15 @@ namespace DirectZobEditor
             while(true)
             {
                 EngineWIndow.Invoke(UpdateEngineWindowDelegate);
-                //Thread.Sleep(1000);
+                Application.DoEvents();
             }
             
             //Refresh();
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            m_engineThread.Abort();
         }
     }
 }

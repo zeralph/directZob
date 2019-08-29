@@ -71,3 +71,14 @@
 /Release/DirectZob.ipdb
 /Release/DirectZob.lib
 /Release/DirectZob.pdb
+/.vs/DirectZob/v16/ipch/AutoPCH/60715ee6dbee8b01/DIRECTZOB.ipch
+/.vs/DirectZob/v16/ipch/AutoPCH/6291816ca369be08/RASTERIZER.ipch
+/.vs/DirectZob/v16/ipch/AutoPCH/7ca93f23fe1074b5/DIRECTZOB.ipch
+/.vs/DirectZob/v16/ipch/AutoPCH/9108481ffcc16244/MAIN.ipch
+/.vs/DirectZob/v16/ipch/AutoPCH/bd59ca498d304110/MAIN.ipch
+/x64/Release/DirectZob.exe
+/x64/Release/DirectZob.exp
+/x64/Release/DirectZob.iobj
+/x64/Release/DirectZob.ipdb
+/x64/Release/DirectZob.lib
+/x64/Release/DirectZob.pdb
