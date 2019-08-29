@@ -1,6 +1,6 @@
 #include "MiniFB.h"
 #include "WindowData.h"
-#include <MiniFB_internal.h>
+#include "MiniFB_internal.h"
 
 //-------------------------------------
 void mfb_active_callback(struct Window *window, mfb_active_func callback) {

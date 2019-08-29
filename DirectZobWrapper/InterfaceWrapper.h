@@ -1,7 +1,7 @@
 //Entity.h
 #pragma once
 #include "ManagedObject.h"
-#include "../directZob/include/Interface.h"
+#include "../DirectZobEngine/Interface.h"
 
 //using namespace System;
 namespace CLI

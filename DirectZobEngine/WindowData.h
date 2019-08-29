@@ -2,7 +2,7 @@
 
 #include <stdint.h>
 #include <stdbool.h>
-#include <MiniFB_enums.h>
+#include "MiniFB_enums.h"
 
 typedef struct {
     void                    *specific;
