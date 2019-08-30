@@ -1,4 +1,5 @@
 #include "Rasterizer.h"
+#include <thread> 
 
 static Vector3 sFog = Vector3(1.0f, 1.0f, 0.95f);
 static float fogDecal = -0.6f;
@@ -11,12 +12,14 @@ Rasterizer::Rasterizer(uint width, uint startHeight, uint endHeight, BufferData*
 	m_width = width;
 	m_run = true;
 	m_started = false;
+	std::thread t = std::thread(&Rasterizer::Run, this);
+	t.detach();
 }
 
 void Rasterizer::Init()
 {
-	m_thread = std::thread(&Rasterizer::Run, this);
-	m_thread.detach();
+	//m_thread = std::thread(&Rasterizer::Run, this);
+	//m_thread.detach();
 }
 
 void Rasterizer::Run()

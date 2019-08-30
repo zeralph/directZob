@@ -5,7 +5,7 @@
 #include "Texture.h"
 #include "Matrix4x4.h"
 #include "Triangle.h"
-#include <thread> 
+//#include <thread> 
 #include <atomic>
 
 #ifdef LINUX
@@ -43,7 +43,7 @@ public:
 	const std::vector<Line2D>* m_lines;
 	const std::vector<const Triangle*>* m_triangles;
 	BufferData* m_bufferData;
-	std::thread m_thread;
+	//std::thread m_thread;
 	uint m_startHeight;
 	uint m_width;
 	uint m_height;

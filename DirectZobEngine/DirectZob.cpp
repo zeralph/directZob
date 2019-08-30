@@ -14,6 +14,7 @@ DirectZob::~DirectZob()
 
 std::string DirectZob::ExePath() {
 
+	return std::string("D:\\_PERSO\\directZob\\directZob\\resources\\");
 	return std::string("C:\\_GIT\\directZob\\x64\\DLL Debug");
 
 	char b[MAX_PATH];
@@ -47,32 +48,32 @@ void DirectZob::Init()
 	std::string path = ExePath();
 
 	std::string file;
-	file = path + "\\..\\..\\resources\\cottage_diffuse_256.png";
+	file = path + "cottage_diffuse_256.png";
 	Texture* texCottage = new Texture(file.c_str());
 
 
-	file = path + "\\..\\..\\resources\\earth_256.png";
+	file = path + "earth_256.png";
 	Texture* texEarth = new Texture(file.c_str());
-	file = path + "\\..\\..\\resources\\font2.png";
+	file = path + "font2.png";
 	Texture* fontTex = new Texture(file.c_str());
 
-	file = path + "\\..\\..\\resources\\cottage_obj.obj";
+	file = path + "cottage_obj.obj";
 	mesh = new Mesh(file.c_str(), texCottage);
-	file = path + "\\..\\..\\resources\\camaro.obj";
+	file = path + "camaro.obj";
 	mesh2 = new Mesh(file.c_str(), texCottage);
-	file = path + "\\..\\..\\resources\\man.obj";
+	file = path + "man.obj";
 	mesh3 = new Mesh(file.c_str(), texCottage);
-	file = path + "\\..\\..\\resources\\sphere.obj";
+	file = path + "sphere.obj";
 	mesh4 = new Mesh(file.c_str(), texEarth);
 
-	file = path + "\\..\\..\\resources\\beach2.png";
+	file = path + "beach2.png";
 	Texture* texBeach = new Texture(file.c_str());
-	file = path + "\\..\\..\\resources\\beach2.obj";
+	file = path + "beach2.obj";
 	mesh5 = new Mesh(file.c_str(), texBeach);
 
-	file = path + "\\..\\..\\resources\\water.png";
+	file = path + "water.png";
 	Texture* texWater = new Texture(file.c_str());
-	file = path + "\\..\\..\\resources\\water.obj";
+	file = path + "water.obj";
 	mesh6 = new Mesh(file.c_str(), texWater);
 
 	m_engine->Add(mesh);

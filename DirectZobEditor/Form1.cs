@@ -21,6 +21,7 @@ namespace DirectZobEditor
         Bitmap m_engineBitmap = null;
         int m_width;
         int m_height;
+        bool m_exiting = false;
         public Form1()
         {
             InitializeComponent();
@@ -62,7 +63,7 @@ namespace DirectZobEditor
 
         private void RunEngineThread()
         {
-            while(true)
+            while(!m_exiting)
             {
                 m_directZobInterface.RunAFrame();
                 EngineWIndow.Invoke(UpdateEngineWindowDelegate);
@@ -74,6 +75,7 @@ namespace DirectZobEditor
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
+            m_exiting = true;
             m_engineThread.Abort();
         }
     }
