@@ -143,3 +143,83 @@
 /DirectZobWrapper/x64/Release/DirectZobWrapper.tlog/rc.write.1.tlog
 /DirectZobWrapper/x64/Release/InterfaceWrapper.obj
 /DirectZobWrapper/x64/Release/vc141.pdb
+/.vs/DirectZob/v15/ipch/AutoPCH/19461e9ad434e929/NEW_SCALAR.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/29a79d8df0bb1dc/TEXTURE.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/456758367d5853fe/INTERFACE.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/51b111f9c8c832a1/DIRECTZOB.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/625fd1470bf72330/MAIN.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/837092121935e67c/RASTERIZER.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/bf5322159497e5c8/MESH.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/c87e3aef0104850c/INTERFACEWRAPPER.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/cff459e0025e3377/EVENTS.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/e47d8439553eac10/TEXT2D.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/eef5515a52d04765/INTERFACE.ipch
+/DirectZobEditor/bin/Debug/DirectZobEditor.exe
+/DirectZobEditor/bin/Debug/DirectZobEditor.exe.config
+/DirectZobEditor/bin/Debug/DirectZobEditor.pdb
+/DirectZobEditor/bin/Debug/DirectZobWrapper.dll
+/DirectZobEditor/bin/Debug/DirectZobWrapper.pdb
+/DirectZobEditor/bin/Release/Newtonsoft.Json.dll
+/DirectZobEditor/bin/Release/Newtonsoft.Json.xml
+/DirectZobEditor/obj/Debug/DirectZobEditor.csproj.CopyComplete
+/DirectZobEditor/obj/Debug/DirectZobEditor.csproj.FileListAbsolute.txt
+/DirectZobEditor/obj/Debug/DirectZobEditor.csproj.GenerateResource.cache
+/DirectZobEditor/obj/Debug/DirectZobEditor.exe
+/DirectZobEditor/obj/Debug/DirectZobEditor.Form1.resources
+/DirectZobEditor/obj/Debug/DirectZobEditor.pdb
+/DirectZobEditor/obj/Debug/DirectZobEditor.Properties.Resources.resources
+/DirectZobEditor/obj/Release/DesignTimeResolveAssemblyReferences.cache
+/DirectZobEditor/obj/Release/DesignTimeResolveAssemblyReferencesInput.cache
+/DirectZobEngine/x64/DLL Debug/Camera.obj
+/DirectZobEngine/x64/DLL Debug/Color.obj
+/DirectZobEngine/x64/DLL Debug/Cube.obj
+/DirectZobEngine/x64/DLL Debug/DirectZob.Build.CppClean.log
+/DirectZobEngine/x64/DLL Debug/DirectZob.idb
+/DirectZobEngine/x64/DLL Debug/DirectZob.obj
+/DirectZobEngine/x64/DLL Debug/DirectZob.pdb
+/DirectZobEngine/x64/DLL Debug/DirectZob.tlog/CL.command.1.tlog
+/DirectZobEngine/x64/DLL Debug/DirectZob.tlog/CL.read.1.tlog
+/DirectZobEngine/x64/DLL Debug/DirectZob.tlog/CL.write.1.tlog
+/DirectZobEngine/x64/DLL Debug/DirectZob.tlog/DirectZob.lastbuildstate
+/DirectZobEngine/x64/DLL Debug/DirectZob.tlog/Lib.command.1.tlog
+/DirectZobEngine/x64/DLL Debug/DirectZob.tlog/Lib-link.read.1.tlog
+/DirectZobEngine/x64/DLL Debug/DirectZob.tlog/Lib-link.write.1.tlog
+/DirectZobEngine/x64/DLL Debug/Engine.obj
+/DirectZobEngine/x64/DLL Debug/Interface.obj
+/DirectZobEngine/x64/DLL Debug/lodepng.obj
+/DirectZobEngine/x64/DLL Debug/main.obj
+/DirectZobEngine/x64/DLL Debug/Matrix2x2.obj
+/DirectZobEngine/x64/DLL Debug/Matrix4x4.obj
+/DirectZobEngine/x64/DLL Debug/Mesh.obj
+/DirectZobEngine/x64/DLL Debug/MiniFB_common.obj
+/DirectZobEngine/x64/DLL Debug/MiniFB_cpp.obj
+/DirectZobEngine/x64/DLL Debug/MiniFB_internal.obj
+/DirectZobEngine/x64/DLL Debug/Project1.log
+/DirectZobEngine/x64/DLL Debug/Rasterizer.obj
+/DirectZobEngine/x64/DLL Debug/Text2D.obj
+/DirectZobEngine/x64/DLL Debug/Texture.obj
+/DirectZobEngine/x64/DLL Debug/Triangle.obj
+/DirectZobEngine/x64/DLL Debug/Vector2.obj
+/DirectZobEngine/x64/DLL Debug/Vector3.obj
+/DirectZobEngine/x64/DLL Debug/WinMiniFB.obj
+/DirectZobWrapper/x64/Debug/.NETFramework,Version=4.6.AssemblyAttributes.asm
+/DirectZobWrapper/x64/Debug/.NETFramework,Version=4.6.AssemblyAttributes.obj
+/DirectZobWrapper/x64/Debug/app.res
+/DirectZobWrapper/x64/Debug/AssemblyInfo.obj
+/DirectZobWrapper/x64/Debug/DirectZobWrapper.Build.CppClean.log
+/DirectZobWrapper/x64/Debug/DirectZobWrapper.log
+/DirectZobWrapper/x64/Debug/DirectZobWrapper.tlog/CL.command.1.tlog
+/DirectZobWrapper/x64/Debug/DirectZobWrapper.tlog/CL.read.1.tlog
+/DirectZobWrapper/x64/Debug/DirectZobWrapper.tlog/CL.write.1.tlog
+/DirectZobWrapper/x64/Debug/DirectZobWrapper.tlog/DirectZobWrapper.lastbuildstate
+/DirectZobWrapper/x64/Debug/DirectZobWrapper.tlog/DirectZobWrapper.write.1u.tlog
+/DirectZobWrapper/x64/Debug/DirectZobWrapper.tlog/link.command.1.tlog
+/DirectZobWrapper/x64/Debug/DirectZobWrapper.tlog/link.read.1.tlog
+/DirectZobWrapper/x64/Debug/DirectZobWrapper.tlog/link.write.1.tlog
+/DirectZobWrapper/x64/Debug/DirectZobWrapper.tlog/metagen.read.1.tlog
+/DirectZobWrapper/x64/Debug/DirectZobWrapper.tlog/metagen.write.1.tlog
+/DirectZobWrapper/x64/Debug/DirectZobWrapper.tlog/rc.command.1.tlog
+/DirectZobWrapper/x64/Debug/DirectZobWrapper.tlog/rc.read.1.tlog
+/DirectZobWrapper/x64/Debug/DirectZobWrapper.tlog/rc.write.1.tlog
+/DirectZobWrapper/x64/Debug/InterfaceWrapper.obj
+/DirectZobWrapper/x64/Debug/vc141.pdb

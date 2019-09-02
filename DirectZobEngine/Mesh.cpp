@@ -1,9 +1,8 @@
 #include "Mesh.h"
 
-
 using namespace std;
 
-Mesh::Mesh(const char* path, const Texture* tex):
+Mesh::Mesh(const char* path, const Texture* tex, Events* events):
 m_texture(tex),
 m_nbVertices(0),
 m_nbUvs(0),
@@ -12,16 +11,18 @@ m_nbFaces(0),
 m_hasNormals(false),
 m_vertices(NULL),
 m_normals(NULL),
-m_uvs(NULL)
+m_uvs(NULL),
+m_events(events)
 {
-	std::cout << "Load mesh " << path;
+	m_events->AddEvent(0, "Load mesh " + std::string(path) );
 
 	std::string::size_type sz;
 	// Open the file.
 	std::ifstream file(path, ios::in);
 	std::string line;
-	if (!file.is_open()) {
-		std::cout << " ERROR\n";
+	if (!file.is_open()) 
+	{
+		m_events->AddEvent(0, "ERROR");
 		return; 
 	}
 	while (getline(file, line))
@@ -108,7 +109,7 @@ m_uvs(NULL)
 	memcpy(m_verticesData, m_vertices, sizeof(Vector3) * m_nbVertices);
 	memcpy(m_normalsData, m_normals, sizeof(Vector3) * m_nbNormals);
 
-	std::cout << " OK\n";
+	m_events->AddEvent(0, "Mesh " + std::string(path) + " loaded");
 }
 
 Mesh::~Mesh()

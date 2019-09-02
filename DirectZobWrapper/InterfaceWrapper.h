@@ -17,10 +17,11 @@ namespace CLI
 		int GetBufferHeight();
 		System::IntPtr GetBufferData();
 
+		array<System::String^>^ GetEventsAndClear();
 
 		int Test();
 
 	private:
-		array<int>^ m_buffer;
+		//array<int>^ m_buffer;
 	};
 }

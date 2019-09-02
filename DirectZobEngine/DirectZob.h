@@ -14,6 +14,7 @@
 #include "TextureTestAlpha.h"
 #include "Mesh.h"
 #include "text2D.h"
+#include "Events.h"
 
 #define kUnused(var) (void) var;
 #define WIDTH  1920 / 2
@@ -33,13 +34,22 @@ public :
 	const uint* GetBufferData() const { return m_engine->GetBufferData()->buffer; }
 	std::string ExePath();
 
+	std::vector<std::string>* GetEvents()
+	{
+		return m_events->GetEvents();
+	}
+	void ClearEvents()
+	{
+		return m_events->ClearEvents();
+	}
+
 private:
 
+	Events* m_events = NULL;
 	Engine* m_engine = NULL;
 	Camera* m_freeCam = NULL;
 	Camera* m_FPSCam = NULL;
 	Camera* m_curCam = NULL;
-
 	Text2D* m_text = NULL;
 
 	static bool g_bShowGrid;

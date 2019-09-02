@@ -2,11 +2,12 @@
 #include "lodepng.h"
 #include <iostream>
 
-Texture::Texture(const char* path)
+Texture::Texture(const char* path, Events* events)
 {
+	m_events = events;
 	std::vector<unsigned char> image; //the raw pixels
 	unsigned width, height;
-	std::cout << "Load texture " << path;
+	m_events->AddEvent(0, "Load texture " + std::string(path));
 	//decode
 	unsigned error = lodepng::decode(image, width, height, path);
 
@@ -16,11 +17,11 @@ Texture::Texture(const char* path)
 	//if there's an error, display it
 	if (error)
 	{
-		std::cout << "decoder error " << error << ": " << lodepng_error_text(error) << std::endl;
+		m_events->AddEvent(0, "decoder error " + std::string(lodepng_error_text(error)));
 	}
 	else
 	{
-		std::cout << " OK\n";
+		m_events->AddEvent(0, "Texture " + std::string(path) + " loaded");
 	}
 
 	data = (float*)malloc(sizeof(float) * 4 * image.size());

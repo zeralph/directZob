@@ -1,5 +1,4 @@
 //#define LINUX 
-
 #include "DirectZob.h"
 
 

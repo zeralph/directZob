@@ -1,4 +1,5 @@
 #include "DirectZob.h"
+#include "Events.h"
 
 static char buffer[MAX_PATH];
 
@@ -25,10 +26,10 @@ std::string DirectZob::ExePath() {
 
 void DirectZob::Init()
 {
-	std::cout << " OK\n";
-	std::cout << "Init engine";
-	m_engine = new Engine(WIDTH, HEIGHT);
-	std::cout << " OK\n";
+	m_events = new Events();
+	m_events->AddEvent(0, "Init engine");
+	m_engine = new Engine(WIDTH, HEIGHT, m_events);
+	m_events->AddEvent(0, " OK\n");
 	int dx = 1;
 	int dy = 1;
 	float r = 0.0f;
@@ -49,41 +50,41 @@ void DirectZob::Init()
 
 	std::string file;
 	file = path + "cottage_diffuse_256.png";
-	Texture* texCottage = new Texture(file.c_str());
+	Texture* texCottage = new Texture(file.c_str(), m_events);
 
 
 	file = path + "earth_256.png";
-	Texture* texEarth = new Texture(file.c_str());
+	Texture* texEarth = new Texture(file.c_str(), m_events);
 	file = path + "font2.png";
-	Texture* fontTex = new Texture(file.c_str());
+	Texture* fontTex = new Texture(file.c_str(), m_events);
 
 	file = path + "cottage_obj.obj";
-	mesh = new Mesh(file.c_str(), texCottage);
+	mesh = new Mesh(file.c_str(), texCottage, m_events);
 	file = path + "camaro.obj";
-	mesh2 = new Mesh(file.c_str(), texCottage);
+	mesh2 = new Mesh(file.c_str(), texCottage, m_events);
 	file = path + "man.obj";
-	mesh3 = new Mesh(file.c_str(), texCottage);
+	mesh3 = new Mesh(file.c_str(), texCottage, m_events);
 	file = path + "sphere.obj";
-	mesh4 = new Mesh(file.c_str(), texEarth);
+	mesh4 = new Mesh(file.c_str(), texEarth, m_events);
 
 	file = path + "beach2.png";
-	Texture* texBeach = new Texture(file.c_str());
+	Texture* texBeach = new Texture(file.c_str(), m_events);
 	file = path + "beach2.obj";
-	mesh5 = new Mesh(file.c_str(), texBeach);
+	mesh5 = new Mesh(file.c_str(), texBeach, m_events);
 
 	file = path + "water.png";
-	Texture* texWater = new Texture(file.c_str());
+	Texture* texWater = new Texture(file.c_str(), m_events);
 	file = path + "water.obj";
-	mesh6 = new Mesh(file.c_str(), texWater);
+	mesh6 = new Mesh(file.c_str(), texWater, m_events);
 
-	m_engine->Add(mesh);
-	m_engine->Add(mesh2);
-	m_engine->Add(mesh3);
-	m_engine->Add(mesh4);
+	//m_engine->Add(mesh);
+	//m_engine->Add(mesh2);
+	//m_engine->Add(mesh3);
+	//m_engine->Add(mesh4);
 	m_engine->Add(mesh5);
 	m_engine->Add(mesh6);
 
-	m_text = new Text2D(m_engine, fontTex, 32, 8);
+	m_text = new Text2D(m_engine, fontTex, 32, 8, m_events);
 
 
 	static Vector3 camRot = Vector3(0, 0, 0);
