@@ -37,8 +37,8 @@
             this.ThirdPanelSPlitter = new System.Windows.Forms.SplitContainer();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
             this.textLog = new System.Windows.Forms.RichTextBox();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
             ((System.ComponentModel.ISupportInitialize)(this.EngineWIndow)).BeginInit();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FirstPanelSplitter)).BeginInit();
@@ -159,6 +159,16 @@
             this.tabPage1.Text = "tabPage1";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // textLog
+            // 
+            this.textLog.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textLog.Font = new System.Drawing.Font("Arial monospaced for SAP", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textLog.Location = new System.Drawing.Point(3, 3);
+            this.textLog.Name = "textLog";
+            this.textLog.Size = new System.Drawing.Size(858, 293);
+            this.textLog.TabIndex = 0;
+            this.textLog.Text = "";
+            // 
             // tabPage2
             // 
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
@@ -168,15 +178,6 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "tabPage2";
             this.tabPage2.UseVisualStyleBackColor = true;
-            // 
-            // textLog
-            // 
-            this.textLog.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textLog.Location = new System.Drawing.Point(3, 3);
-            this.textLog.Name = "textLog";
-            this.textLog.Size = new System.Drawing.Size(858, 293);
-            this.textLog.TabIndex = 0;
-            this.textLog.Text = "";
             // 
             // Form1
             // 
