@@ -10,16 +10,19 @@ namespace Core
 
 		Interface();
 		~Interface();
-
+		
 		int RunAFrame();
 		int GetBufferWidth();
 		int GetBufferHeight();
 		int* GetBufferData();
 
+		std::vector<std::string>* GetEvents();
+		void ClearEvents();
+
 		int Test();
 		//const DirectZobType::BufferData* GetBuffer();
 	private:
-		DirectZob* m_directZob;
+		DirectZob m_directZob;
 	};
 }
 

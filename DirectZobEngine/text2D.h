@@ -3,6 +3,7 @@
 #include "Texture.h"
 #include "matrix2x2.h"
 #include "Engine.h"
+#include "Events.h"
 
 using namespace Core;
 
@@ -10,7 +11,7 @@ class Text2D
 {
 public:
 
-	Text2D(Engine* engine, const Texture* tex, int nbCharWidth, int bCharHeight);
+	Text2D(Engine* engine, const Texture* tex, int nbCharWidth, int bCharHeight, Events* events);
 	~Text2D();
 	void Print(uint x, uint y, uint size, const std::string* text, uint color);
 
@@ -18,6 +19,7 @@ private:
 
 	void PrintChar(uint x, uint y, uint size, const char c, uint color);
 
+	Events* m_events;
 	const Texture* m_texture;
 	Engine* m_engine;
 	uint m_charWidth;

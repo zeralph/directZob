@@ -2,8 +2,9 @@
 
 using namespace Core;
 
-Text2D::Text2D(Engine* engine, const Texture* tex, int nbCharWidth, int nbCharHeight)
+Text2D::Text2D(Engine* engine, const Texture* tex, int nbCharWidth, int nbCharHeight, Events* events)
 {
+	m_events = events;
 	m_engine = engine;
 	m_texture = tex;
 	m_nbCharWidth = nbCharWidth;

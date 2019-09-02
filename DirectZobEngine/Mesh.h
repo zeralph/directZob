@@ -8,12 +8,12 @@
 #include "Types.h"
 #include "Triangle.h"
 #include "Camera.h"
-
+#include "Events.h"
 class Mesh
 {
 public:
 
-	Mesh(const char* path, const Texture* tex);
+	Mesh(const char* path, const Texture* tex, Events* events);
 	~Mesh();
 	void Update(const Camera* camera, const BufferData* bData);
 	void Init();
@@ -39,6 +39,7 @@ private:
 	void CreateTriangles(const std::vector<std::string>* line, std::vector<Triangle>* t, size_t& tArrayIdx, const Texture* tex);
 	inline void ReinitVertices();
 
+	Events* m_events = NULL;
 	uint m_nbVertices = 0;
 	uint m_nbUvs = 0;
 	uint m_nbNormals = 0;

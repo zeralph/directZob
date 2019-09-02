@@ -8,10 +8,11 @@
 #include <windows.h>
 #endif //LINUX
 #include <assert.h> 
+#include "DirectZob.h"
+
 
 using namespace Core;
-
-Engine::Engine(int width, int height)
+Engine::Engine(int width, int height, Events* events)
 {
 	m_nbRasterizers = std::thread::hardware_concurrency() - 1;
 	if (m_nbRasterizers % 2 == 1)
@@ -22,6 +23,7 @@ Engine::Engine(int width, int height)
 	{
 		m_nbRasterizers = 1;
 	}
+	m_events = events;
 	m_currentFrame = 0;
 	m_zNear = Z_NEAR;
 	m_zFar = Z_FAR;
@@ -61,7 +63,7 @@ Engine::Engine(int width, int height)
 	{
 		m_rasterizers->at(i)->Init();
 	}
-	std::cout << "Engine initialized with " << m_nbRasterizers << " rasterizer(s)\n";
+	m_events->AddEvent(0, "Engine initialized with " + std::to_string(m_nbRasterizers) + " rasterizer(s)\n");
 }
 
 Engine::~Engine()
@@ -70,6 +72,7 @@ Engine::~Engine()
 	{
 		m_rasterizers->at(i)->End();
 	}
+	m_events = NULL;
 }
 
 void Engine::Add(Mesh* mesh)

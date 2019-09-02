@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Threading;
+using Newtonsoft.Json;
 
 namespace DirectZobEditor
 {
@@ -16,7 +17,12 @@ namespace DirectZobEditor
         private CLI.InterfaceWrapper m_directZobInterface;
         private Thread m_engineThread;
         public delegate void UpdateEngineWindow();
+        public delegate void UpdateLogWindow();
         public UpdateEngineWindow UpdateEngineWindowDelegate;
+        public UpdateLogWindow UpdateLogWindowDelegate;
+
+        private string[] m_events;
+
         Graphics m_EngineGraphics = null;
         Bitmap m_engineBitmap = null;
         int m_width;
@@ -35,8 +41,10 @@ namespace DirectZobEditor
             Console.WriteLine("TEST : " + i);
             m_EngineGraphics = EngineWIndow.CreateGraphics();
             m_engineThread = new Thread(RunEngineThread);
+            m_engineThread.IsBackground = true;
 
             UpdateEngineWindowDelegate = new UpdateEngineWindow(UpdateEngineWindowMethod);
+            UpdateLogWindowDelegate = new UpdateLogWindow(UpdateLogWindowMethod);
             m_engineThread.Start();
             m_directZobInterface.RunAFrame();
             IntPtr p = m_directZobInterface.GetBufferData();
@@ -58,6 +66,21 @@ namespace DirectZobEditor
                 //m_engineBitmap = new System.Drawing.Bitmap(m_width, m_height, 4 * m_width, System.Drawing.Imaging.PixelFormat.Format32bppRgb, p);
 
                 m_EngineGraphics.DrawImage(m_engineBitmap, 0, 0);
+
+            }
+        }
+
+        void UpdateLogWindowMethod()
+        {
+            int l = m_events.Count();
+            for (int i = 0; i < l; i++)
+            {
+                Event json = JsonConvert.DeserializeObject<Event>(m_events[i]);
+                if (json.type == 0)
+                {
+                    textLog.AppendText(json.data);
+                    textLog.AppendText("\n");
+                }
             }
         }
 
@@ -66,7 +89,9 @@ namespace DirectZobEditor
             while(!m_exiting)
             {
                 m_directZobInterface.RunAFrame();
+                m_events = m_directZobInterface.GetEventsAndClear();
                 EngineWIndow.Invoke(UpdateEngineWindowDelegate);
+                textLog.Invoke(UpdateLogWindowDelegate);
                 //Application.DoEvents();
             }
             
@@ -76,7 +101,15 @@ namespace DirectZobEditor
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             m_exiting = true;
-            m_engineThread.Abort();
+            Thread.Sleep(100);
+            //m_engineThread.Abort();
+            //Application.DoEvents();
         }
     }
+
+    public class Event
+    {
+        public string data { get; set; }
+        public int type { get; set; }
+    };
 }

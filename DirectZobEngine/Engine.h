@@ -16,7 +16,7 @@
 #include "Camera.h"
 #include "Rasterizer.h"
 #include "Mesh.h"
-
+#include "Events.h"
 
 #define Z_NEAR 0.001f
 #define Z_FAR 500.0f
@@ -33,7 +33,7 @@ namespace Core
 			CullCounterClockwiseFace
 		};
 
-		Engine(int width, int height);
+		Engine(int width, int height, Events* events);
 		~Engine();
 
 		inline void Start() { m_started = true; }
@@ -72,7 +72,7 @@ namespace Core
 		void DrawHorizontalLine(const float x1, const float x2, const float y, const uint color);
 		void WaitForRasterizersEnd() const;
 
-
+		Events* m_events;
 		std::vector<Mesh*> m_meshes;
 		std::vector<const Triangle*>* m_rasterTriangleQueues;
 		std::vector<Line2D>* m_rasterLineQueues;
