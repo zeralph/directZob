@@ -262,3 +262,25 @@
 /x64/DLL Release/DirectZob.iobj
 /x64/DLL Release/DirectZob.ipdb
 /x64/DLL Release/DirectZob.pdb
+/.vs/DirectZob/v15/ipch/AutoPCH/20239e318cca5b32/CUBE.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/40dbcea9bf7df68e/DIRECTZOB.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/486dd0ca4c955ea0/TINYXML.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/55272f53fb6a94ca/CAMERAMANAGER.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/57d465b24e56954a/CAMERAMANAGER.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/7ead8c2b0742bc49/CAMERAMANAGER.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/a4e53e3bcfe5572/CAMERA.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/b069c70bbc94d467/TEXTUREMANAGER.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/b665b345e771e6c9/CAMERAWRAPPER.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/c3348e913b3ea085/CUBE.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/d08d0cadc242c15c/TEXTURE.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/d11b2122afdca726/MINIFB_COMMON.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/df4d6699b02f254/TEXTUREMANAGER.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/e016b604a615e6b2/CUBE.ipch
+/DirectZobEngine/x64/DLL Debug/CameraManager.obj
+/DirectZobEngine/x64/DLL Debug/CameraWrapper.obj
+/DirectZobEngine/x64/DLL Debug/Project1.vcxprojAssemblyReference.cache
+/DirectZobEngine/x64/DLL Debug/TextureManager.obj
+/DirectZobEngine/x64/DLL Debug/tinystr.obj
+/DirectZobEngine/x64/DLL Debug/tinyxml.obj
+/DirectZobEngine/x64/DLL Debug/tinyxmlerror.obj
+/DirectZobEngine/x64/DLL Debug/tinyxmlparser.obj

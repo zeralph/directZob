@@ -3,9 +3,9 @@
 
 
 
-Camera::Camera(const char* name, Vector3 position, Vector3 target, Vector3 up, float fov, BufferData* bufferData)
+Camera::Camera(const std::string& name, Vector3 position, Vector3 target, Vector3 up, float fov, BufferData* bufferData)
 {
-	m_name = name;
+	m_name = name.c_str();
 	m_cameraPosition = position;
 	m_cameraTarget = target;
 	m_cameraUp = up;

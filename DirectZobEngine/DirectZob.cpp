@@ -1,5 +1,6 @@
 #include "DirectZob.h"
 #include "Events.h"
+#include "tinyxml.h"
 
 static char buffer[MAX_PATH];
 
@@ -26,11 +27,43 @@ std::string DirectZob::ExePath() {
 	return std::string(b).substr(0, pos);
 }
 
+void DirectZob::LoadScene(std::string& file)
+{
+	TiXmlDocument doc("Scene");
+	doc.LoadFile(file.c_str());
+	//doc.
+	//doc.Parse(demoStart);
+
+	TiXmlElement* root = doc.FirstChildElement("Scene");
+	TiXmlElement* fe = root->FirstChildElement("Texture");
+	for (TiXmlElement* e = root->FirstChildElement("Texture"); e != NULL; e = e->NextSiblingElement("Texture"))
+	{
+		std::string name = e->Attribute("name");
+		std::string path = e->Attribute("file");
+		m_textureManager->LoadTexture(name, path);
+	}
+	for (TiXmlElement* e = root->FirstChildElement("Camera"); e != NULL; e = e->NextSiblingElement("Camera"))
+	{
+		std::string name = e->Attribute("name");
+		Vector3 p;
+		Vector3 t;
+		Vector3 u;
+		float fov = 0.0f;
+		m_cameraManager->LoadCamera(name, p, t, u, fov);
+	}
+	if (doc.Error())
+	{
+		printf("Error in %s: %s\n", doc.Value(), doc.ErrorDesc());
+	}
+}
+
+
 void DirectZob::Init()
 {
 	m_events = new Events();
 	m_events->AddEvent(0, "Init engine");
 	m_engine = new Engine(WIDTH, HEIGHT, m_events);
+	m_textureManager = new TextureManager();
 	m_events->AddEvent(0, " OK\n");
 	int dx = 1;
 	int dy = 1;
@@ -52,13 +85,13 @@ void DirectZob::Init()
 
 	std::string file;
 	file = path + "cottage_diffuse_256.png";
-	Texture* texCottage = new Texture(file.c_str(), m_events);
+	Texture* texCottage = new Texture(file.c_str(), "0", m_events);
 
 
 	file = path + "earth_256.png";
-	Texture* texEarth = new Texture(file.c_str(), m_events);
+	Texture* texEarth = new Texture(file.c_str(), "a", m_events);
 	file = path + "font2.png";
-	Texture* fontTex = new Texture(file.c_str(), m_events);
+	Texture* fontTex = new Texture(file.c_str(), "b", m_events);
 
 	file = path + "cottage_obj.obj";
 	mesh = new Mesh(file.c_str(), texCottage, m_events);
@@ -70,12 +103,12 @@ void DirectZob::Init()
 	mesh4 = new Mesh(file.c_str(), texEarth, m_events);
 
 	file = path + "beach2.png";
-	Texture* texBeach = new Texture(file.c_str(), m_events);
+	Texture* texBeach = new Texture(file.c_str(), "c", m_events);
 	file = path + "beach2.obj";
 	mesh5 = new Mesh(file.c_str(), texBeach, m_events);
 
 	file = path + "water.png";
-	Texture* texWater = new Texture(file.c_str(), m_events);
+	Texture* texWater = new Texture(file.c_str(), "d", m_events);
 	file = path + "water.obj";
 	mesh6 = new Mesh(file.c_str(), texWater, m_events);
 

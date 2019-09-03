@@ -15,6 +15,9 @@
 #include "Mesh.h"
 #include "text2D.h"
 #include "Events.h"
+#include "CameraManager.h"
+#include "TextureManager.h"
+
 
 #define kUnused(var) (void) var;
 #define WIDTH  1920 / 2
@@ -30,6 +33,7 @@ public :
 	~DirectZob();
 
 	void Init();
+	void LoadScene(std::string& file);
 	int RunAFrame();
 	Engine* GetEngine() { return m_engine; }
 	const uint* GetBufferData() const { return m_engine->GetBufferData()->buffer; }
@@ -50,6 +54,8 @@ public :
 private:
 
 	Events* m_events = NULL;
+	TextureManager* m_textureManager = NULL;
+	CameraManager* m_cameraManager = NULL;
 	Engine* m_engine = NULL;
 	Camera* m_freeCam = NULL;
 	Camera* m_FPSCam = NULL;

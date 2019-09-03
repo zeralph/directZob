@@ -19,6 +19,13 @@ namespace CLI
 		m_Instance->Init();
 	}
 
+	void DirectZobWrapper::LoadScene(System::String^ file)
+	{
+		std::string stdFile;
+		MarshalString(file, stdFile);
+		m_Instance->LoadScene(stdFile);
+	}
+
 	int DirectZobWrapper::RunAFrame()
 	{
 		return m_Instance->RunAFrame();

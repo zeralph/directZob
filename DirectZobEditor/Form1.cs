@@ -35,6 +35,9 @@ namespace DirectZobEditor
             m_directZobWrapper = new CLI.DirectZobWrapper();
             m_directZobWrapper.Init();
             m_engineWrapper = new CLI.EngineWrapper();
+            string path = @"D:\_PERSO\directZob\directZob\resources\scene1.xml";
+            m_directZobWrapper.LoadScene(path);
+
             m_width = m_engineWrapper.GetBufferWidth();
             m_height = m_engineWrapper.GetBufferHeight();
             EngineWIndow.Width = m_width;
