@@ -1,7 +1,7 @@
 #pragma once
 #include "ManagedObject.h"
 #include "DirectZob.h"
-
+#include <string> 
 //using namespace System;
 namespace CLI
 {
@@ -11,7 +11,7 @@ namespace CLI
 
 		DirectZobWrapper();
 		void Init();
-
+		void LoadScene(System::String^ file);
 		static DirectZob* GetDirectZobInstance() { return m_directZobInstance; }
 		int RunAFrame();
 

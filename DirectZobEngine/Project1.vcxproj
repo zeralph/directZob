@@ -39,6 +39,8 @@
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Release|x64'">false</CompileAsManaged>
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'">false</CompileAsManaged>
     </ClCompile>
+    <ClCompile Include="CameraManager.cpp" />
+    <ClCompile Include="CameraWrapper.cpp" />
     <ClCompile Include="Color.cpp">
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Release|x64'">false</CompileAsManaged>
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'">false</CompileAsManaged>
@@ -105,6 +107,11 @@
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Release|x64'">false</CompileAsManaged>
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'">false</CompileAsManaged>
     </ClCompile>
+    <ClCompile Include="TextureManager.cpp" />
+    <ClCompile Include="tinystr.cpp" />
+    <ClCompile Include="tinyxml.cpp" />
+    <ClCompile Include="tinyxmlerror.cpp" />
+    <ClCompile Include="tinyxmlparser.cpp" />
     <ClCompile Include="Triangle.cpp">
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Release|x64'">false</CompileAsManaged>
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'">false</CompileAsManaged>
@@ -124,6 +131,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="CameraManager.h" />
+    <ClInclude Include="CameraWrapper.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="Cube.h" />
     <ClInclude Include="DirectZob.h" />
@@ -144,8 +153,11 @@
     <ClInclude Include="Rasterizer.h" />
     <ClInclude Include="text2D.h" />
     <ClInclude Include="Texture.h" />
+    <ClInclude Include="TextureManager.h" />
     <ClInclude Include="TextureTest.h" />
     <ClInclude Include="TextureTestAlpha.h" />
+    <ClInclude Include="tinystr.h" />
+    <ClInclude Include="tinyxml.h" />
     <ClInclude Include="Triangle.h" />
     <ClInclude Include="Types.h" />
     <ClInclude Include="Vector2.h" />

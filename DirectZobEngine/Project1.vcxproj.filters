@@ -19,6 +19,24 @@
     <Filter Include="Fichiers sources\Interfaces">
       <UniqueIdentifier>{5c2e3387-bdff-44d6-b12d-6e5508941eea}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers d%27en-tête\miniFB">
+      <UniqueIdentifier>{fd0334c1-d7f0-4d5e-b208-0ccf7bfd0d7f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\MiniFB">
+      <UniqueIdentifier>{1771de29-1f72-4e7c-baab-c5e80c7802e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\lodepng">
+      <UniqueIdentifier>{7ee29c4f-dd67-42d4-b06b-3133c4e38b3b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\lodepng">
+      <UniqueIdentifier>{9347f25b-c739-4fc5-908b-0e355752466e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\tinyXml">
+      <UniqueIdentifier>{b42c4c24-1506-4ca6-98bb-92ec2ba6a256}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\tinyXml">
+      <UniqueIdentifier>{872086c4-203c-4e9f-9cae-6f57aebdb568}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp">
@@ -39,9 +57,6 @@
     <ClCompile Include="Interface.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="lodepng.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
@@ -52,15 +67,6 @@
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="Mesh.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="MiniFB_common.c">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="MiniFB_cpp.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="MiniFB_internal.c">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="Rasterizer.cpp">
@@ -81,14 +87,47 @@
     <ClCompile Include="Vector3.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="WinMiniFB.c">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="DirectZobWrapper.cpp">
       <Filter>Fichiers sources\Interfaces</Filter>
     </ClCompile>
     <ClCompile Include="EngineWrapper.cpp">
       <Filter>Fichiers sources\Interfaces</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraWrapper.cpp">
+      <Filter>Fichiers sources\Interfaces</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraManager.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="MiniFB_common.c">
+      <Filter>Fichiers sources\MiniFB</Filter>
+    </ClCompile>
+    <ClCompile Include="MiniFB_cpp.cpp">
+      <Filter>Fichiers sources\MiniFB</Filter>
+    </ClCompile>
+    <ClCompile Include="MiniFB_internal.c">
+      <Filter>Fichiers sources\MiniFB</Filter>
+    </ClCompile>
+    <ClCompile Include="WinMiniFB.c">
+      <Filter>Fichiers sources\MiniFB</Filter>
+    </ClCompile>
+    <ClCompile Include="lodepng.cpp">
+      <Filter>Fichiers sources\lodepng</Filter>
+    </ClCompile>
+    <ClCompile Include="tinystr.cpp">
+      <Filter>Fichiers sources\tinyXml</Filter>
+    </ClCompile>
+    <ClCompile Include="tinyxml.cpp">
+      <Filter>Fichiers sources\tinyXml</Filter>
+    </ClCompile>
+    <ClCompile Include="tinyxmlerror.cpp">
+      <Filter>Fichiers sources\tinyXml</Filter>
+    </ClCompile>
+    <ClCompile Include="tinyxmlparser.cpp">
+      <Filter>Fichiers sources\tinyXml</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureManager.cpp">
+      <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -110,9 +149,6 @@
     <ClInclude Include="Interface.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="lodepng.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="Matrix2x2.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
@@ -120,18 +156,6 @@
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="Mesh.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="MiniFB.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="MiniFB_cpp.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="MiniFB_enums.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="MiniFB_internal.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="Rasterizer.h">
@@ -161,9 +185,6 @@
     <ClInclude Include="Vector3.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="WindowData.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="Events.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
@@ -175,6 +196,39 @@
     </ClInclude>
     <ClInclude Include="EngineWrapper.h">
       <Filter>Fichiers d%27en-tête\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraWrapper.h">
+      <Filter>Fichiers d%27en-tête\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraManager.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="MiniFB.h">
+      <Filter>Fichiers d%27en-tête\miniFB</Filter>
+    </ClInclude>
+    <ClInclude Include="MiniFB_cpp.h">
+      <Filter>Fichiers d%27en-tête\miniFB</Filter>
+    </ClInclude>
+    <ClInclude Include="MiniFB_enums.h">
+      <Filter>Fichiers d%27en-tête\miniFB</Filter>
+    </ClInclude>
+    <ClInclude Include="MiniFB_internal.h">
+      <Filter>Fichiers d%27en-tête\miniFB</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowData.h">
+      <Filter>Fichiers d%27en-tête\miniFB</Filter>
+    </ClInclude>
+    <ClInclude Include="lodepng.h">
+      <Filter>Fichiers d%27en-tête\lodepng</Filter>
+    </ClInclude>
+    <ClInclude Include="tinystr.h">
+      <Filter>Fichiers d%27en-tête\tinyXml</Filter>
+    </ClInclude>
+    <ClInclude Include="tinyxml.h">
+      <Filter>Fichiers d%27en-tête\tinyXml</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureManager.h">
+      <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

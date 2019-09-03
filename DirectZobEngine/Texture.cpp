@@ -2,8 +2,9 @@
 #include "lodepng.h"
 #include <iostream>
 
-Texture::Texture(const char* path, Events* events)
+Texture::Texture(const std::string& path, const std::string& name, Events* events)
 {
+	m_name = name.c_str();
 	m_events = events;
 	std::vector<unsigned char> image; //the raw pixels
 	unsigned width, height;

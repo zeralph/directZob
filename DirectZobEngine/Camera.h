@@ -1,11 +1,11 @@
 #pragma once
 #include "Matrix4x4.h"
 #include "MiniFB_enums.h"
-
+#include <string>
 class Camera
 {
 public:
-	Camera(const char* name, Vector3 position, Vector3 target, Vector3 up, float fov, BufferData* bufferData);
+	Camera(const std::string& name, Vector3 position, Vector3 target, Vector3 up, float fov, BufferData* bufferData);
 	~Camera();
 
 	void Update();
@@ -17,7 +17,7 @@ public:
 	inline const Vector3* GetPosition() const { return &m_cameraPosition; }
 	inline const Vector3* GetTarget() const { return &m_cameraTarget; }
 	inline const Vector3* GetForward() const { return &m_cameraFw; }
-	inline const char* GetName() const { return m_name; }
+	inline const std::string& GetName() const { return m_name; }
 
 	void OnMouseScroll(float deltaY);
 	void OnKeyboardInput(Key key, bool isPressed);
@@ -31,7 +31,7 @@ private:
 	void RecomputeVectors();
 
 
-	const char* m_name;
+	std::string m_name;
 	BufferData* m_bufferData = NULL;
 	Matrix4x4 m_viewMatrix;
 	Matrix4x4 m_projMatrix;
