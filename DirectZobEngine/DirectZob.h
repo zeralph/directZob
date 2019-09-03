@@ -24,6 +24,7 @@
 
 class DirectZob
 {
+	static DirectZob* singleton;
 public :
 	DirectZob();
 	~DirectZob();
@@ -43,6 +44,9 @@ public :
 		return m_events->ClearEvents();
 	}
 
+	static DirectZob* GetInstance() { return DirectZob::singleton; }
+	Engine* GetEngine() const { return m_engine; }
+
 private:
 
 	Events* m_events = NULL;
@@ -54,5 +58,4 @@ private:
 
 	static bool g_bShowGrid;
 	static bool g_bShowMeshes;
-
 };

@@ -1,0 +1,21 @@
+//Entity.h
+#pragma once
+#include "ManagedObject.h"
+#include "Engine.h"
+#include "DirectZob.h"
+//using namespace System;
+namespace CLI
+{
+	public ref class EngineWrapper: public ManagedObject<Core::Engine>
+	{
+	public:
+
+		EngineWrapper();
+		int GetBufferWidth();
+		int GetBufferHeight();
+		System::IntPtr GetBufferData();
+
+	private:
+		//array<int>^ m_buffer;
+	};
+}

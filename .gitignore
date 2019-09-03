@@ -225,3 +225,40 @@
 /DirectZobWrapper/x64/Debug/vc141.pdb
 /.vs/DirectZob/v15/ipch/AutoPCH/f20a76102de5510f/INTERFACEWRAPPER.ipch
 /DirectZobWrapper/x64/Release/DirectZobWrapper.vcxprojAssemblyReference.cache
+/.vs/DirectZob/v15/ipch/AutoPCH/2537890d91598e62/DIRECTZOBWRAPPER.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/4e07b92b56f78fdd/ENGINEWRAPPER.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/526900214981cd4e/ENGINEWRAPPER.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/675d51a2ebfc69e2/DIRECTZOBWRAPPER.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/68c7d2896cba58f2/CAMERA.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/79a2836ed0b44bc1/DIRECTZOBWRAPPER.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/f5cb04f0ddf2e6e8/VECTOR2.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/f906cff519f6ac0c/WINMINIFB.ipch
+/DirectZobEditor/bin/Debug/DirectZob.dll
+/DirectZobEditor/bin/Debug/DirectZob.pdb
+/DirectZobEditor/bin/Debug/Newtonsoft.Json.dll
+/DirectZobEditor/bin/Debug/Newtonsoft.Json.xml
+/DirectZobEditor/bin/Release/DirectZob.dll
+/DirectZobEditor/bin/Release/DirectZob.pdb
+/DirectZobEngine/x64/DLL Debug/.NETFramework,Version=v4.0.AssemblyAttributes.asm
+/DirectZobEngine/x64/DLL Debug/.NETFramework,Version=v4.0.AssemblyAttributes.obj
+/DirectZobEngine/x64/DLL Debug/DirectZob.tlog/DirectZob.write.1u.tlog
+/DirectZobEngine/x64/DLL Debug/DirectZob.tlog/link.command.1.tlog
+/DirectZobEngine/x64/DLL Debug/DirectZob.tlog/link.read.1.tlog
+/DirectZobEngine/x64/DLL Debug/DirectZob.tlog/link.write.1.tlog
+/DirectZobEngine/x64/DLL Debug/DirectZob.tlog/metagen.read.1.tlog
+/DirectZobEngine/x64/DLL Debug/DirectZob.tlog/metagen.write.1.tlog
+/DirectZobEngine/x64/DLL Debug/DirectZobWrapper.obj
+/DirectZobEngine/x64/DLL Debug/EngineWrapper.obj
+/DirectZobEngine/x64/DLL Debug/vc141.pdb
+/DirectZobWrapper/x64/Debug/DirectZobWrapper.vcxprojAssemblyReference.cache
+/DirectZobWrapper/x64/Release/DirectZobWrapper.tlog/unsuccessfulbuild
+/x64/DLL Debug/DirectZob.dll
+/x64/DLL Debug/DirectZob.dll.metagen
+/x64/DLL Debug/DirectZob.exp
+/x64/DLL Debug/DirectZob.pdb
+/x64/DLL Release/DirectZob.dll
+/x64/DLL Release/DirectZob.dll.metagen
+/x64/DLL Release/DirectZob.exp
+/x64/DLL Release/DirectZob.iobj
+/x64/DLL Release/DirectZob.ipdb
+/x64/DLL Release/DirectZob.pdb
