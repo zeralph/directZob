@@ -1,6 +1,7 @@
 <Scene>
 	<Texture name="Beach2" file="beach2.png"></Texture>
 	<Texture name="Water" file="water.png"></Texture>
+	<Texture name="Font" file="font2.png"></Texture>
 	<Mesh file="beach2.obj" name="Beach2" texture="Beach2">
 		<Position x="0" y="0" z="0"></Position>
 		<Rotation x="0" y="0" z="0"></Rotation>
@@ -11,18 +12,12 @@
 		<Rotation x="0" y="0" z="0"></Rotation>
 		<Scale x="1" y="1" z="1"></Scale>
 	</Mesh>	
-	<Camera name="Freecam">
-		<Position x="20.0" y="20.0" z="20.0"></Position>
-		<Target x="0" y="0" z="0"></Target>
-		<Fov>45.0</Fov>
-		<zNear>0.01</zNear>
-		<zFar>500.0</zFar>
-	</Camera>
-	<Camera name="FPScam">
+	<!--<Camera name="FPScam">
 		<Position x="0.0" y="1.80" z="0.0"></Position>
 		<Target x="0" y="2.8" z="0"></Target>
+		<Up x="0" y="1" z="0"></Up>
 		<Fov>45.0</Fov>
 		<zNear>0.01</zNear>
 		<zFar>500.0</zFar>
-	</Camera>
+	</Camera>-->
 </Scene>

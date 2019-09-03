@@ -5,7 +5,7 @@
 class Camera
 {
 public:
-	Camera(const std::string& name, Vector3 position, Vector3 target, Vector3 up, float fov, BufferData* bufferData);
+	Camera(const std::string& name, Vector3& position, Vector3& target, Vector3& up, float fov, BufferData* bufferData);
 	~Camera();
 
 	void Update();

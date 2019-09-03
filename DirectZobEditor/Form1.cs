@@ -35,8 +35,10 @@ namespace DirectZobEditor
             m_directZobWrapper = new CLI.DirectZobWrapper();
             m_directZobWrapper.Init();
             m_engineWrapper = new CLI.EngineWrapper();
-            string path = @"D:\_PERSO\directZob\directZob\resources\scene1.xml";
-            m_directZobWrapper.LoadScene(path);
+            string path = @"D:\_PERSO\directZob\directZob\resources\";
+            string file = "scene1.xml";
+            path = @"C:\_GIT\directZob\resources\";
+            m_directZobWrapper.LoadScene(path, file);
 
             m_width = m_engineWrapper.GetBufferWidth();
             m_height = m_engineWrapper.GetBufferHeight();
@@ -64,11 +66,10 @@ namespace DirectZobEditor
                     m_engineBitmap.PixelFormat);
                 bmpData.Scan0 = p;
                 m_engineBitmap.UnlockBits(bmpData);
-
-                //m_engineBitmap = new System.Drawing.Bitmap(m_width, m_height, 4 * m_width, System.Drawing.Imaging.PixelFormat.Format32bppRgb, p);
-
-                m_EngineGraphics.DrawImage(m_engineBitmap, 0, 0);
-
+                Rectangle r = new Rectangle(0, 0, EngineWIndow.Width, EngineWIndow.Height);
+                IntPtr hwnd = EngineWIndow.Handle;
+                m_EngineGraphics = Graphics.FromHwnd(hwnd);
+                m_EngineGraphics.DrawImage(m_engineBitmap, 0, 0, EngineWIndow.Width, EngineWIndow.Height);
             }
         }
 

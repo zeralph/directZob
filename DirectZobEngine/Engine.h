@@ -53,6 +53,7 @@ namespace Core
 		void QueueLine(const Camera* camera, const Vector3* v1, const Vector3* v2, const uint c);
 		bool ClipSegment(Vector3* a, Vector3* b);
 		int Update(const Camera* camera);
+		void LoadMesh(std::string& name, std::string& path, const Texture* texture, Vector3& p, Vector3& r, Vector3& s);
 		inline ulong GetCurrentFrame() { return m_currentFrame; }
 		inline const float GetFps() { return m_fps; }
 		inline const float GetRenderTime() { return m_renderTimeMS; }

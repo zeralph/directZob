@@ -1,20 +1,21 @@
 #include "Mesh.h"
-
+#include "DirectZob.h"
 using namespace std;
 
-Mesh::Mesh(const char* path, const Texture* tex, Events* events):
-m_texture(tex),
-m_nbVertices(0),
-m_nbUvs(0),
-m_nbNormals(0),
-m_nbFaces(0),
-m_hasNormals(false),
-m_vertices(NULL),
-m_normals(NULL),
-m_uvs(NULL),
-m_events(events)
+Mesh::Mesh(std::string& name, std::string& path, const Texture* tex)
 {
-	m_events->AddEvent(0, "Load mesh " + std::string(path) );
+	m_name = name.c_str();
+	m_texture = tex;
+	m_nbVertices = 0;
+	m_nbUvs = 0;
+	m_nbNormals = 0;
+	m_nbFaces = 0;
+	m_hasNormals = false;
+	m_vertices = NULL;
+	m_normals = NULL;
+	m_uvs = NULL;
+	std::string s = "Load mesh " + std::string(path);
+	DirectZob::Log(s);
 
 	std::string::size_type sz;
 	// Open the file.
@@ -22,8 +23,9 @@ m_events(events)
 	std::string line;
 	if (!file.is_open()) 
 	{
-		m_events->AddEvent(0, "ERROR");
-		return; 
+		s = "ERROR";
+		DirectZob::Log(s);
+		return;
 	}
 	while (getline(file, line))
 	{
@@ -109,7 +111,8 @@ m_events(events)
 	memcpy(m_verticesData, m_vertices, sizeof(Vector3) * m_nbVertices);
 	memcpy(m_normalsData, m_normals, sizeof(Vector3) * m_nbNormals);
 
-	m_events->AddEvent(0, "Mesh " + std::string(path) + " loaded");
+	s = "Mesh " + std::string(path) + " loaded";
+	DirectZob::Log(s);
 }
 
 Mesh::~Mesh()
@@ -149,8 +152,8 @@ void Mesh::Update(const Camera* camera, const BufferData* bData)
 	const Vector3* camZ = camera->GetForward();
 	float w = (float)bData->width / 2.0f;
 	float h = (float)bData->height / 2.0f;
-	float near = bData->zNear;
-	float far = bData->zFar;
+	float znear = bData->zNear;
+	float zfar = bData->zFar;
 	for (uint i = 0; i < m_nbVertices; i++)
 	{
 		m_modelMatrix.Mul(&m_vertices[i]);
@@ -182,7 +185,7 @@ void Mesh::Update(const Camera* camera, const BufferData* bData)
 		n.Add(t->nc);
 		n.Div(3.0f);
 		t->draw = false;
-		if ((t->va->w > near && t->vb->w > near && t->vc->w > near) && (t->va->w < far && t->vb->w < far && t->vc->w < far))
+		if ((t->va->w > znear && t->vb->w > znear && t->vc->w > znear) && (t->va->w < zfar && t->vb->w < zfar && t->vc->w < zfar))
 		{
 			if (Vector3::Dot(&n, camZ) < 0.5f)
 			{
