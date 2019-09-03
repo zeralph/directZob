@@ -19,11 +19,13 @@ namespace CLI
 		m_Instance->Init();
 	}
 
-	void DirectZobWrapper::LoadScene(System::String^ file)
+	void DirectZobWrapper::LoadScene(System::String^ path, System::String^ file)
 	{
+		std::string stdPath;
+		MarshalString(path, stdPath);
 		std::string stdFile;
 		MarshalString(file, stdFile);
-		m_Instance->LoadScene(stdFile);
+		m_Instance->LoadScene(stdPath, stdFile);
 	}
 
 	int DirectZobWrapper::RunAFrame()
@@ -33,14 +35,14 @@ namespace CLI
 
 	array<System::String^>^ DirectZobWrapper::GetEventsAndClear()
 	{
-		const std::vector<std::string>* data = m_Instance->GetEvents();
+		const std::vector<std::string>* data = m_Instance->GetEventManager()->GetEvents();
 		int l = data->size();
 		array<System::String ^>^ arr = gcnew array<System::String ^>(l);
 		for (int i = 0; i < l; i++)
 		{
 			arr[i] = gcnew System::String(data->at(i).c_str());
 		}
-		m_Instance->ClearEvents();
+		m_Instance->GetEventManager()->ClearEvents();
 		return arr;
 	}
 }

@@ -284,3 +284,23 @@
 /DirectZobEngine/x64/DLL Debug/tinyxml.obj
 /DirectZobEngine/x64/DLL Debug/tinyxmlerror.obj
 /DirectZobEngine/x64/DLL Debug/tinyxmlparser.obj
+/.vs/DirectZob/v16/ipch/AutoPCH/109ff3c730308fbc/TEXTURE.ipch
+/.vs/DirectZob/v16/ipch/AutoPCH/1ad39c40c8c571c2/DIRECTZOBWRAPPER.ipch
+/.vs/DirectZob/v16/ipch/AutoPCH/20f359f8f97af8de/INTERFACE.ipch
+/.vs/DirectZob/v16/ipch/AutoPCH/3fd6b60aa8393cb0/TEXT2D.ipch
+/.vs/DirectZob/v16/ipch/AutoPCH/4fe425ba0bbcc200/TINYXML.ipch
+/.vs/DirectZob/v16/ipch/AutoPCH/6fd32551a184533c/TEXTURE.ipch
+/.vs/DirectZob/v16/ipch/AutoPCH/75375bb439c732a9/CAMERAMANAGER.ipch
+/.vs/DirectZob/v16/ipch/AutoPCH/76210880489c5ca9/CAMERAWRAPPER.ipch
+/.vs/DirectZob/v16/ipch/AutoPCH/7b78338aec6c5e81/VECTOR3.ipch
+/.vs/DirectZob/v16/ipch/AutoPCH/8ad87e0f3b190729/CAMERAMANAGER.ipch
+/.vs/DirectZob/v16/ipch/AutoPCH/b78cddab2f47024d/ENGINE.ipch
+/.vs/DirectZob/v16/ipch/AutoPCH/c3b4d3f275a499cd/ENGINE.ipch
+/.vs/DirectZob/v16/ipch/AutoPCH/c7112ea115e305c/RASTERIZER.ipch
+/.vs/DirectZob/v16/ipch/AutoPCH/c729d137484f9452/CAMERA.ipch
+/.vs/DirectZob/v16/ipch/AutoPCH/cac969e88de5e144/NEW_SCALAR.ipch
+/.vs/DirectZob/v16/ipch/AutoPCH/d351c77e8ead2bd2/CAMERA.ipch
+/.vs/DirectZob/v16/ipch/AutoPCH/d63e0f2eb1d68aa8/MESH.ipch
+/.vs/DirectZob/v16/ipch/AutoPCH/dbba608ce3b9bcc7/TEXTUREMANAGER.ipch
+/.vs/DirectZob/v16/ipch/AutoPCH/de25b242dcc46a28/MESH.ipch
+/.vs/DirectZob/v16/ipch/AutoPCH/e585cf8f09724681/DIRECTZOB.ipch

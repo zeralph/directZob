@@ -75,6 +75,12 @@ Engine::~Engine()
 	m_events = NULL;
 }
 
+void Engine::LoadMesh(std::string& name, std::string& path, const Texture* texture, Vector3& p, Vector3& r, Vector3& s)
+{
+	Mesh* m = new Mesh(name, path, texture);
+	Add(m);
+}
+
 void Engine::Add(Mesh* mesh)
 {
 	if (mesh)

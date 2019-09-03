@@ -13,7 +13,11 @@ DirectZob::DirectZob()
 
 DirectZob::~DirectZob()
 {
-
+	//delete m_engine;
+	delete m_textureManager;
+	delete m_cameraManager;
+	delete m_text;
+	delete m_events;
 }
 
 std::string DirectZob::ExePath() {
@@ -27,10 +31,13 @@ std::string DirectZob::ExePath() {
 	return std::string(b).substr(0, pos);
 }
 
-void DirectZob::LoadScene(std::string& file)
+void DirectZob::LoadScene(std::string& path, std::string& file)
 {
+	float x, y, z, fov, znear, zfar;
+	std::string name, texture, fullPath;
 	TiXmlDocument doc("Scene");
-	doc.LoadFile(file.c_str());
+	fullPath = path + file;
+	doc.LoadFile(fullPath.c_str());
 	//doc.
 	//doc.Parse(demoStart);
 
@@ -38,19 +45,64 @@ void DirectZob::LoadScene(std::string& file)
 	TiXmlElement* fe = root->FirstChildElement("Texture");
 	for (TiXmlElement* e = root->FirstChildElement("Texture"); e != NULL; e = e->NextSiblingElement("Texture"))
 	{
-		std::string name = e->Attribute("name");
-		std::string path = e->Attribute("file");
-		m_textureManager->LoadTexture(name, path);
+		name = e->Attribute("name");
+		fullPath = path + e->Attribute("file");
+		m_textureManager->LoadTexture(name, fullPath);
 	}
 	for (TiXmlElement* e = root->FirstChildElement("Camera"); e != NULL; e = e->NextSiblingElement("Camera"))
 	{
-		std::string name = e->Attribute("name");
-		Vector3 p;
-		Vector3 t;
-		Vector3 u;
-		float fov = 0.0f;
-		m_cameraManager->LoadCamera(name, p, t, u, fov);
+		name = e->Attribute("name");
+		TiXmlElement* f;
+		f = e->FirstChildElement("Position");
+		x = atof(f->Attribute("x"));
+		y = atof(f->Attribute("y"));
+		z = atof(f->Attribute("z"));
+		Vector3 p = Vector3(x, y, z);
+		f = e->FirstChildElement("Target");
+		x = atof(f->Attribute("x"));
+		y = atof(f->Attribute("y"));
+		z = atof(f->Attribute("z"));
+		Vector3 t = Vector3(x, y, z);
+		f = e->FirstChildElement("Up");
+		x = atof(f->Attribute("x"));
+		y = atof(f->Attribute("y"));
+		z = atof(f->Attribute("z"));
+		Vector3 u = Vector3(x, y, z);
+		f = e->FirstChildElement("Fov");
+		float fov = atof(f->Value());
+		m_cameraManager->CreateCamera(name, p, t, u, fov);
 	}
+	for (TiXmlElement* e = root->FirstChildElement("Mesh"); e != NULL; e = e->NextSiblingElement("Mesh"))
+	{
+		name = e->Attribute("name");
+		texture = e->Attribute("texture");
+		fullPath = path + e->Attribute("file");
+		TiXmlElement* f;
+		f = e->FirstChildElement("Position");
+		x = atof(f->Attribute("x"));
+		y = atof(f->Attribute("y"));
+		z = atof(f->Attribute("z"));
+		Vector3 p = Vector3(x, y, z);
+		f = e->FirstChildElement("Rotation");
+		x = atof(f->Attribute("x"));
+		y = atof(f->Attribute("y"));
+		z = atof(f->Attribute("z"));
+		Vector3 r = Vector3(x, y, z);
+		f = e->FirstChildElement("Position");
+		x = atof(f->Attribute("x"));
+		y = atof(f->Attribute("y"));
+		z = atof(f->Attribute("z"));
+		Vector3 u = Vector3(x, y, z);		
+		f = e->FirstChildElement("Scale");
+		x = atof(f->Attribute("x"));
+		y = atof(f->Attribute("y"));
+		z = atof(f->Attribute("z"));
+		Vector3 s = Vector3(x, y, z);
+		const Texture* t = m_textureManager->GetTexture(texture);
+		m_engine->LoadMesh(name, fullPath, t, p, r, s);
+	}
+	std::string font("Font");
+	m_text = new Text2D(m_engine, m_textureManager->GetTexture(font), 32, 8, m_events);
 	if (doc.Error())
 	{
 		printf("Error in %s: %s\n", doc.Value(), doc.ErrorDesc());
@@ -63,6 +115,7 @@ void DirectZob::Init()
 	m_events = new Events();
 	m_events->AddEvent(0, "Init engine");
 	m_engine = new Engine(WIDTH, HEIGHT, m_events);
+	m_cameraManager = new CameraManager();
 	m_textureManager = new TextureManager();
 	m_events->AddEvent(0, " OK\n");
 	int dx = 1;
@@ -71,70 +124,12 @@ void DirectZob::Init()
 	long frame = 0;
 	float rot = 0.0;
 	char frameCharBuffer[sizeof(ulong)];
-
-	Matrix2x2 m;
 	int state;
-	Mesh* mesh = NULL;
-	Mesh* mesh2 = NULL;
-	Mesh* mesh3 = NULL;
-	Mesh* mesh4 = NULL;
-	Mesh* mesh5 = NULL;
-	Mesh* mesh6 = NULL;
 	
-	std::string path = ExePath();
-
-	std::string file;
-	file = path + "cottage_diffuse_256.png";
-	Texture* texCottage = new Texture(file.c_str(), "0", m_events);
-
-
-	file = path + "earth_256.png";
-	Texture* texEarth = new Texture(file.c_str(), "a", m_events);
-	file = path + "font2.png";
-	Texture* fontTex = new Texture(file.c_str(), "b", m_events);
-
-	file = path + "cottage_obj.obj";
-	mesh = new Mesh(file.c_str(), texCottage, m_events);
-	file = path + "camaro.obj";
-	mesh2 = new Mesh(file.c_str(), texCottage, m_events);
-	file = path + "man.obj";
-	mesh3 = new Mesh(file.c_str(), texCottage, m_events);
-	file = path + "sphere.obj";
-	mesh4 = new Mesh(file.c_str(), texEarth, m_events);
-
-	file = path + "beach2.png";
-	Texture* texBeach = new Texture(file.c_str(), "c", m_events);
-	file = path + "beach2.obj";
-	mesh5 = new Mesh(file.c_str(), texBeach, m_events);
-
-	file = path + "water.png";
-	Texture* texWater = new Texture(file.c_str(), "d", m_events);
-	file = path + "water.obj";
-	mesh6 = new Mesh(file.c_str(), texWater, m_events);
-
-	//m_engine->Add(mesh);
-	//m_engine->Add(mesh2);
-	//m_engine->Add(mesh3);
-	//m_engine->Add(mesh4);
-	m_engine->Add(mesh5);
-	m_engine->Add(mesh6);
-
-	m_text = new Text2D(m_engine, fontTex, 32, 8, m_events);
-
-
-	static Vector3 camRot = Vector3(0, 0, 0);
-	static Vector3 camPos = Vector3(0, -12.40f, -50);
-	static Vector3 camTarget = Vector3(0, 0.1f, 1.0f);
-	static Vector3 up = Vector3(0, 1.0f, 0);
-	m_FPSCam = new Camera("FPS cam", Vector3(0, -2.40f, -50), Vector3(0, -2.40f, -49), Vector3(0, 1.0f, 0), 45.0f, m_engine->GetBufferData());
-	m_freeCam = new Camera("Free cam", Vector3(0.0f, -50.0f, -50.0f), Vector3(0, 0, 0), Vector3(0, 1.0f, 0), 45.0f, m_engine->GetBufferData());
-
-	m_curCam = m_freeCam;
-
 	m_engine->Start();
 }
 
-static float rot = 0.0f;
+static float rot = 1.0f;
 
 int DirectZob::RunAFrame()
 {
@@ -144,12 +139,12 @@ int DirectZob::RunAFrame()
 		//m_engine->ClearBuffer(&Color(255,63,149,255));
 		m_engine->ClearBuffer(&Color::White);
 
-		m_freeCam->Update();
-		m_FPSCam->Update();
+		Camera* cam = m_cameraManager->GetCurrentCamera();
+		cam->Update();
 
 		//if (g_bShowGrid)
 		{
-			//m_engine->DrawGrid(m_curCam);
+			m_engine->DrawGrid(cam);
 		}
 		static float tx = 0;
 		static float ty = 0;
@@ -160,73 +155,20 @@ int DirectZob::RunAFrame()
 		for (int i = 0; i < meshes->size(); i++)
 		{
 			meshes->at(i)->Init();
-			meshes->at(i)->SetRotation(0,rot,0);
+			meshes->at(i)->SetRotation(0, rot, 0);
+			
 		}
-		rot += 1.0f;
-		/*if (g_bShowMeshes)
-		{
-			if (mesh)
-			{
-				mesh->Init();
-				mesh->SetTranslation(0, 0, -10);
-				mesh->SetSCale(scale, scale, scale);
-				mesh->SetRotation(0, rot, 0);
-				//mesh->Draw(m_curCam, m_engine);
-			}
-			if (mesh2)
-			{
-				mesh2->Init();
-				mesh2->SetTranslation(0, 0, 0);
-				mesh2->SetSCale(scale, scale, scale);
-				mesh2->SetRotation(0, rot + 10, 0);
-				//mesh2->Draw(m_curCam, m_engine);
-			}
-			if (mesh3)
-			{
-				mesh3->Init();
-				mesh3->SetTranslation(-5, -1, -1);
-				mesh3->SetSCale(scale, scale, scale);
-				mesh3->SetRotation(rot - 10, rot + 20, rot);
-				//mesh3->Draw(m_curCam, m_engine);
-			}
-			if (mesh4)
-			{
-				mesh4->Init();
-				mesh4->SetTranslation(5, 5, -2);
-				mesh4->SetSCale(scale, scale, scale);
-				mesh4->SetRotation(rot, rot + 30, rot);
-				//mesh4->Draw(m_curCam, m_engine);
-			}
-			if (mesh5)
-			{
-				mesh5->Init();
-				//mesh5->SetTranslation(5, 5, -2);
-				mesh5->SetSCale(1, 1, 1);
-				//mesh5->SetRotation(rot, rot + 30, rot);
-				mesh5->SetRotation(0, 90, 0);
-				//mesh5->Draw(m_curCam, m_engine);
-			}
-			if (mesh6)
-			{
-				mesh6->Init();
-				//mesh5->SetTranslation(5, 5, -2);
-				mesh6->SetSCale(1, 1, 1);
-				//mesh5->SetRotation(rot, rot + 30, rot);
-				mesh6->SetRotation(0, 90, 0);
-				//mesh5->Draw(m_curCam, m_engine);
-			}
-		}*/
-
-		state = m_engine->Update(m_curCam);
+		rot += 1.1f;
+		state = m_engine->Update(cam);
 
 		snprintf(buffer, MAX_PATH, "Triangles : %lu / %lu", m_engine->GetNbDrawnTriangles(), m_engine->GetNbTriangles());
 		m_text->Print(0, 0, 1, &std::string(buffer), 0xFFFFFFFF);
 
-		const Vector3* cp = m_curCam->GetPosition();
-		const Vector3* ct = m_curCam->GetTarget();
-		const Vector3* cf = m_curCam->GetForward();
+		const Vector3* cp = cam->GetPosition();
+		const Vector3* ct = cam->GetTarget();
+		const Vector3* cf = cam->GetForward();
 		snprintf(buffer, MAX_PATH, "Cam %s pos :  %.2f, %.2f, %.2f, tar : %.2f, %.2f, %.2f, fw : %.2f, %.2f, %.2f",
-			m_curCam->GetName(),
+			cam->GetName().c_str(),
 			cp->x, cp->y, cp->z,
 			ct->x, ct->y, ct->z,
 			cf->x, cf->y, cf->z
@@ -247,4 +189,9 @@ int DirectZob::RunAFrame()
 		}
 	}
 	return state;
+}
+
+void DirectZob::Log(std::string& str)
+{
+	DirectZob::singleton->GetEventManager()->AddEvent(0, str);
 }

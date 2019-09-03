@@ -1,14 +1,14 @@
 #include "Texture.h"
 #include "lodepng.h"
 #include <iostream>
+#include "DirectZob.h"
 
-Texture::Texture(const std::string& path, const std::string& name, Events* events)
+Texture::Texture(const std::string& path, const std::string& name)
 {
 	m_name = name.c_str();
-	m_events = events;
 	std::vector<unsigned char> image; //the raw pixels
 	unsigned width, height;
-	m_events->AddEvent(0, "Load texture " + std::string(path));
+	//m_events->AddEvent(0, "Load texture " + std::string(path));
 	//decode
 	unsigned error = lodepng::decode(image, width, height, path);
 
@@ -18,11 +18,14 @@ Texture::Texture(const std::string& path, const std::string& name, Events* event
 	//if there's an error, display it
 	if (error)
 	{
-		m_events->AddEvent(0, "decoder error " + std::string(lodepng_error_text(error)));
+		std::string s = "decoder error " + std::string(lodepng_error_text(error));
+		DirectZob::Log(s);
+		//m_events->AddEvent(0, "decoder error " + std::string(lodepng_error_text(error)));
 	}
 	else
 	{
-		m_events->AddEvent(0, "Texture " + std::string(path) + " loaded");
+		std::string s = "Texture " + std::string(path) + " loaded";
+		DirectZob::Log(s);
 	}
 
 	data = (float*)malloc(sizeof(float) * 4 * image.size());

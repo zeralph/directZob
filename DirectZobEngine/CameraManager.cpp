@@ -4,8 +4,9 @@
 CameraManager::CameraManager()
 {
 	m_cameras.clear();
-	std::string n = "Freecam";
-	LoadCamera(n, Vector3(0, 0, 0), Vector3(20, 20, 20), Vector3(0, 1, 0), 45.0f);
+	std::string n = "EditorCam";
+	CreateCamera(n, Vector3(50, -50, 50), Vector3(0, 0, 0), Vector3(0, 1, 0), 45.0f);
+	m_curCam = m_cameras[0];
 }
 
 CameraManager::~CameraManager()
@@ -17,7 +18,7 @@ CameraManager::~CameraManager()
 	m_cameras.clear();
 }
 
-void CameraManager::LoadCamera(std::string& name, Vector3 position, Vector3 target, Vector3 up, float fov)
+void CameraManager::CreateCamera(std::string& name, Vector3 position, Vector3 target, Vector3 up, float fov)
 {
 	if (GetCamera(name) == NULL)
 	{

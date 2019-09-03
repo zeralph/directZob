@@ -33,33 +33,21 @@ public :
 	~DirectZob();
 
 	void Init();
-	void LoadScene(std::string& file);
+	void LoadScene(std::string& path, std::string& file);
 	int RunAFrame();
-	Engine* GetEngine() { return m_engine; }
 	const uint* GetBufferData() const { return m_engine->GetBufferData()->buffer; }
 	std::string ExePath();
 
-	std::vector<std::string>* GetEvents()
-	{
-		return m_events->GetEvents();
-	}
-	void ClearEvents()
-	{
-		return m_events->ClearEvents();
-	}
-
 	static DirectZob* GetInstance() { return DirectZob::singleton; }
 	Engine* GetEngine() const { return m_engine; }
-
+	Events* GetEventManager() { return m_events; }
+	static void Log(std::string& str);
 private:
 
 	Events* m_events = NULL;
 	TextureManager* m_textureManager = NULL;
 	CameraManager* m_cameraManager = NULL;
 	Engine* m_engine = NULL;
-	Camera* m_freeCam = NULL;
-	Camera* m_FPSCam = NULL;
-	Camera* m_curCam = NULL;
 	Text2D* m_text = NULL;
 
 	static bool g_bShowGrid;

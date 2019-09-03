@@ -18,7 +18,7 @@ void TextureManager::LoadTexture(std::string& name, std::string& file)
 {
 	if (GetTexture(name) == NULL)
 	{
-		Texture* t = new Texture(file, name, NULL);
+		Texture* t = new Texture(file, name);
 		m_textures.push_back(t);
 	}
 	else
