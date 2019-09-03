@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Fichiers d%27en-tête\Interfaces">
+      <UniqueIdentifier>{6725434e-d85e-4532-8d96-9db6fd231faa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Interfaces">
+      <UniqueIdentifier>{5c2e3387-bdff-44d6-b12d-6e5508941eea}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp">
@@ -77,6 +83,12 @@
     </ClCompile>
     <ClCompile Include="WinMiniFB.c">
       <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectZobWrapper.cpp">
+      <Filter>Fichiers sources\Interfaces</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineWrapper.cpp">
+      <Filter>Fichiers sources\Interfaces</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -154,6 +166,15 @@
     </ClInclude>
     <ClInclude Include="Events.h">
       <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="ManagedObject.h">
+      <Filter>Fichiers d%27en-tête\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectZobWrapper.h">
+      <Filter>Fichiers d%27en-tête\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineWrapper.h">
+      <Filter>Fichiers d%27en-tête\Interfaces</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

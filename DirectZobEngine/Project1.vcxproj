@@ -35,37 +35,105 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="Color.cpp" />
-    <ClCompile Include="Cube.cpp" />
-    <ClCompile Include="DirectZob.cpp" />
-    <ClCompile Include="Engine.cpp" />
-    <ClCompile Include="Interface.cpp" />
-    <ClCompile Include="lodepng.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="Matrix2x2.cpp" />
-    <ClCompile Include="Matrix4x4.cpp" />
-    <ClCompile Include="Mesh.cpp" />
-    <ClCompile Include="MiniFB_common.c" />
-    <ClCompile Include="MiniFB_cpp.cpp" />
-    <ClCompile Include="MiniFB_internal.c" />
-    <ClCompile Include="Rasterizer.cpp" />
-    <ClCompile Include="Text2D.cpp" />
-    <ClCompile Include="Texture.cpp" />
-    <ClCompile Include="Triangle.cpp" />
-    <ClCompile Include="Vector2.cpp" />
-    <ClCompile Include="Vector3.cpp" />
-    <ClCompile Include="WinMiniFB.c" />
+    <ClCompile Include="Camera.cpp">
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Release|x64'">false</CompileAsManaged>
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'">false</CompileAsManaged>
+    </ClCompile>
+    <ClCompile Include="Color.cpp">
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Release|x64'">false</CompileAsManaged>
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'">false</CompileAsManaged>
+    </ClCompile>
+    <ClCompile Include="Cube.cpp">
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Release|x64'">false</CompileAsManaged>
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'">false</CompileAsManaged>
+    </ClCompile>
+    <ClCompile Include="DirectZob.cpp">
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Release|x64'">false</CompileAsManaged>
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'">false</CompileAsManaged>
+    </ClCompile>
+    <ClCompile Include="DirectZobWrapper.cpp" />
+    <ClCompile Include="Engine.cpp">
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Release|x64'">false</CompileAsManaged>
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'">false</CompileAsManaged>
+    </ClCompile>
+    <ClCompile Include="EngineWrapper.cpp" />
+    <ClCompile Include="Interface.cpp">
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Release|x64'">false</CompileAsManaged>
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'">false</CompileAsManaged>
+    </ClCompile>
+    <ClCompile Include="lodepng.cpp">
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Release|x64'">false</CompileAsManaged>
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'">false</CompileAsManaged>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Release|x64'">false</CompileAsManaged>
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'">false</CompileAsManaged>
+    </ClCompile>
+    <ClCompile Include="Matrix2x2.cpp">
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Release|x64'">false</CompileAsManaged>
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'">false</CompileAsManaged>
+    </ClCompile>
+    <ClCompile Include="Matrix4x4.cpp">
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Release|x64'">false</CompileAsManaged>
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'">false</CompileAsManaged>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Release|x64'">false</CompileAsManaged>
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'">false</CompileAsManaged>
+    </ClCompile>
+    <ClCompile Include="MiniFB_common.c">
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Release|x64'">false</CompileAsManaged>
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'">false</CompileAsManaged>
+    </ClCompile>
+    <ClCompile Include="MiniFB_cpp.cpp">
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Release|x64'">false</CompileAsManaged>
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'">false</CompileAsManaged>
+    </ClCompile>
+    <ClCompile Include="MiniFB_internal.c">
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Release|x64'">false</CompileAsManaged>
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'">false</CompileAsManaged>
+    </ClCompile>
+    <ClCompile Include="Rasterizer.cpp">
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Release|x64'">false</CompileAsManaged>
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'">false</CompileAsManaged>
+    </ClCompile>
+    <ClCompile Include="Text2D.cpp">
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Release|x64'">false</CompileAsManaged>
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'">false</CompileAsManaged>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Release|x64'">false</CompileAsManaged>
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'">false</CompileAsManaged>
+    </ClCompile>
+    <ClCompile Include="Triangle.cpp">
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Release|x64'">false</CompileAsManaged>
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'">false</CompileAsManaged>
+    </ClCompile>
+    <ClCompile Include="Vector2.cpp">
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Release|x64'">false</CompileAsManaged>
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'">false</CompileAsManaged>
+    </ClCompile>
+    <ClCompile Include="Vector3.cpp">
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Release|x64'">false</CompileAsManaged>
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'">false</CompileAsManaged>
+    </ClCompile>
+    <ClCompile Include="WinMiniFB.c">
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Release|x64'">false</CompileAsManaged>
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'">false</CompileAsManaged>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="Cube.h" />
     <ClInclude Include="DirectZob.h" />
+    <ClInclude Include="DirectZobWrapper.h" />
     <ClInclude Include="Engine.h" />
+    <ClInclude Include="EngineWrapper.h" />
     <ClInclude Include="Events.h" />
     <ClInclude Include="Interface.h" />
     <ClInclude Include="lodepng.h" />
+    <ClInclude Include="ManagedObject.h" />
     <ClInclude Include="Matrix2x2.h" />
     <ClInclude Include="Matrix4x4.h" />
     <ClInclude Include="Mesh.h" />
@@ -127,10 +195,11 @@
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
+    <CLRSupport>true</CLRSupport>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -140,12 +209,12 @@
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DLL Release|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
-    <CLRSupport>false</CLRSupport>
+    <CLRSupport>true</CLRSupport>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">

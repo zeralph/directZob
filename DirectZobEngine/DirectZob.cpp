@@ -3,9 +3,11 @@
 
 static char buffer[MAX_PATH];
 
+DirectZob *DirectZob::singleton = nullptr;
+
 DirectZob::DirectZob()
 {
-
+	DirectZob::singleton= this; 
 }
 
 DirectZob::~DirectZob()

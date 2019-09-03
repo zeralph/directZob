@@ -87,9 +87,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DirectZobWrapper\DirectZobWrapper.vcxproj">
-      <Project>{12e57600-3ee6-4846-9026-f1869849f1bf}</Project>
-      <Name>DirectZobWrapper</Name>
+    <ProjectReference Include="..\DirectZobEngine\Project1.vcxproj">
+      <Project>{b7dd2204-6b59-4b9c-a293-6d8dc2c04e67}</Project>
+      <Name>DirectZob</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
