@@ -16,6 +16,9 @@ namespace DirectZobEditor
     {
         private CLI.DirectZobWrapper m_directZobWrapper;
         private CLI.EngineWrapper m_engineWrapper;
+
+        private CameraControl m_camControl;
+
         private Thread m_engineThread;
         public delegate void UpdateEngineWindow();
         public delegate void UpdateLogWindow();
@@ -35,6 +38,7 @@ namespace DirectZobEditor
             m_directZobWrapper = new CLI.DirectZobWrapper();
             m_directZobWrapper.Init();
             m_engineWrapper = new CLI.EngineWrapper();
+         
             string path = @"D:\_PERSO\directZob\directZob\resources\";
             string file = "scene1.xml";
             path = @"C:\_GIT\directZob\resources\";
@@ -53,7 +57,13 @@ namespace DirectZobEditor
             m_directZobWrapper.RunAFrame();
             IntPtr p = m_engineWrapper.GetBufferData();
             m_engineBitmap = new System.Drawing.Bitmap(m_width, m_height, 4 * m_width, System.Drawing.Imaging.PixelFormat.Format32bppRgb, p);
+
+
+            m_camControl = new CameraControl();
+            propertiesPanel.Controls.Add(m_camControl);
         }
+
+
 
         public void UpdateEngineWindowMethod()
         {
@@ -71,6 +81,7 @@ namespace DirectZobEditor
                 m_EngineGraphics = Graphics.FromHwnd(hwnd);
                 m_EngineGraphics.DrawImage(m_engineBitmap, 0, 0, EngineWIndow.Width, EngineWIndow.Height);
             }
+            m_camControl.Update();
         }
 
         void UpdateLogWindowMethod()

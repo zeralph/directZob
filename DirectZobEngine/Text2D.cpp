@@ -9,8 +9,8 @@ Text2D::Text2D(Engine* engine, const Texture* tex, int nbCharWidth, int nbCharHe
 	m_texture = tex;
 	m_nbCharWidth = nbCharWidth;
 	m_nbCharHeight = nbCharHeight;
-	m_charWidth = tex->GetWidth() / nbCharWidth;
-	m_charHeight = tex->GetHeight() / nbCharHeight;
+	m_charWidth = (tex?tex->GetWidth():0) / nbCharWidth;
+	m_charHeight = (tex?tex->GetHeight():0) / nbCharHeight;
 	m_matrix.Identity();
 }
 
@@ -20,11 +20,14 @@ Text2D::~Text2D()
 
 void Text2D::Print(uint x, uint y, uint size, const std::string* text, uint color)
 {
-	size_t l = text->length();
-	for (size_t i = 0; i < l; i++)
+	if (m_texture != NULL)
 	{
-		int xx = x + i * m_charWidth;
-		PrintChar(xx, y, size, text->at(i), color);
+		size_t l = text->length();
+		for (size_t i = 0; i < l; i++)
+		{
+			int xx = x + i * m_charWidth;
+			PrintChar(xx, y, size, text->at(i), color);
+		}
 	}
 }
 

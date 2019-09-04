@@ -51,6 +51,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CameraControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="CameraControl.Designer.cs">
+      <DependentUpon>CameraControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -59,6 +65,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="CameraControl.resx">
+      <DependentUpon>CameraControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -90,6 +99,7 @@
     <ProjectReference Include="..\DirectZobEngine\Project1.vcxproj">
       <Project>{b7dd2204-6b59-4b9c-a293-6d8dc2c04e67}</Project>
       <Name>DirectZob</Name>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

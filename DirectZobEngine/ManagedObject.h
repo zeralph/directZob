@@ -9,21 +9,23 @@ namespace CLI {
 	{
 	protected:
 		T* m_Instance;
+		bool m_manageDelete;
 	public:
-		ManagedObject(T* instance)
-			: m_Instance(instance)
+		ManagedObject(T* instance, bool manageDelete)
+			: m_Instance(instance),
+			m_manageDelete(manageDelete)
 		{
 		}
 		virtual ~ManagedObject()
 		{
-			if (m_Instance != nullptr)
+			if (m_manageDelete && m_Instance != nullptr)
 			{
 				delete m_Instance;
 			}
 		}
 		!ManagedObject()
 		{
-			if (m_Instance != nullptr)
+			if (m_manageDelete && m_Instance != nullptr)
 			{
 				delete m_Instance;
 			}

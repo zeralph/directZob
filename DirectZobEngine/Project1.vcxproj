@@ -40,7 +40,7 @@
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'">false</CompileAsManaged>
     </ClCompile>
     <ClCompile Include="CameraManager.cpp" />
-    <ClCompile Include="CameraWrapper.cpp" />
+    <ClCompile Include="CameraManagerWrapper.cpp" />
     <ClCompile Include="Color.cpp">
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Release|x64'">false</CompileAsManaged>
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'">false</CompileAsManaged>
@@ -128,7 +128,7 @@
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CameraManager.h" />
-    <ClInclude Include="CameraWrapper.h" />
+    <ClInclude Include="CameraManagerWrapper.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="Cube.h" />
     <ClInclude Include="DirectZob.h" />
@@ -138,6 +138,7 @@
     <ClInclude Include="Events.h" />
     <ClInclude Include="lodepng.h" />
     <ClInclude Include="ManagedObject.h" />
+    <ClInclude Include="ManagedVector3.h" />
     <ClInclude Include="Matrix2x2.h" />
     <ClInclude Include="Matrix4x4.h" />
     <ClInclude Include="Mesh.h" />
@@ -297,6 +298,7 @@
       <ConformanceMode>true</ConformanceMode>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <AdditionalIncludeDirectories>src\windows;include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/Zc:twoPhase- %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

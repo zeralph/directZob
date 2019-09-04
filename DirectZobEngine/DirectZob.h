@@ -40,8 +40,10 @@ public :
 
 	static DirectZob* GetInstance() { return DirectZob::singleton; }
 	Engine* GetEngine() const { return m_engine; }
+	CameraManager* GetCameraManager() const { return m_cameraManager; }
 	Events* GetEventManager() { return m_events; }
 	static void Log(std::string& str);
+	static void Log(const char* str);
 private:
 
 	Events* m_events = NULL;

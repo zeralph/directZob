@@ -42,3 +42,14 @@ Camera* CameraManager::GetCamera(std::string& name) const
 	}
 	return NULL;
 }
+
+const std::vector<std::string>& CameraManager::GetCameraList() const 
+{
+	std::vector<std::string> vec;
+	vec.clear();
+	for (std::vector<Camera*>::const_iterator iter = m_cameras.begin(); iter != m_cameras.end(); iter++)
+	{
+		vec.push_back((*iter)->GetName());
+	}
+	return vec;
+}
