@@ -19,17 +19,35 @@ namespace DirectZobEditor
             m_camerManagerWrapper = new CLI.CameraManagerWrapper();
         }
 
-        public void Update()
+        public void UpdateControl()
         {
             string s = m_camerManagerWrapper.GetCurrentCamera();
             CLI.ManagedVector3 p = m_camerManagerWrapper.GetCurrentCameraPosition();
             CLI.ManagedVector3 t = m_camerManagerWrapper.GetCurrentCameraTarget();
-            //cameraPosX.Text = String.Format("{0:0.00}", p.x);
-            //cameraPosY.Text = String.Format("{0:0.00}", p.y);
-            //cameraPosZ.Text = String.Format("{0:0.00}", p.z);
-            //cameraTarX.Text = String.Format("{0:0.00}", t.x);
-            //cameraTarY.Text = String.Format("{0:0.00}", t.y);
-            //cameraTarZ.Text = String.Format("{0:0.00}", t.z);
+            if(!cameraPosX.Focused)
+            {
+                cameraPosX.Text = String.Format("{0:0.00}", p.x);
+            }
+            if (!cameraPosY.Focused)
+            {
+                cameraPosY.Text = String.Format("{0:0.00}", p.y);
+            }
+            if (!cameraPosZ.Focused)
+            {
+                cameraPosZ.Text = String.Format("{0:0.00}", p.z);
+            }
+            if (!cameraTarX.Focused)
+            {
+                cameraTarX.Text = String.Format("{0:0.00}", p.x);
+            }
+            if (!cameraTarY.Focused)
+            {
+                cameraTarY.Text = String.Format("{0:0.00}", p.y);
+            }
+            if (!cameraTarZ.Focused)
+            {
+                cameraTarZ.Text = String.Format("{0:0.00}", p.z);
+            }
         }
     }
 }
