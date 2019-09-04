@@ -81,7 +81,7 @@ namespace DirectZobEditor
                 m_EngineGraphics = Graphics.FromHwnd(hwnd);
                 m_EngineGraphics.DrawImage(m_engineBitmap, 0, 0, EngineWIndow.Width, EngineWIndow.Height);
             }
-            m_camControl.Update();
+            m_camControl.UpdateControl();
         }
 
         void UpdateLogWindowMethod()
