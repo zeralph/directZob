@@ -39,6 +39,7 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.textLog = new System.Windows.Forms.RichTextBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.propertiesPanel = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.EngineWIndow)).BeginInit();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FirstPanelSplitter)).BeginInit();
@@ -46,6 +47,7 @@
             this.FirstPanelSplitter.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SecondPanelSplitter)).BeginInit();
             this.SecondPanelSplitter.Panel1.SuspendLayout();
+            this.SecondPanelSplitter.Panel2.SuspendLayout();
             this.SecondPanelSplitter.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ThirdPanelSPlitter)).BeginInit();
             this.ThirdPanelSPlitter.Panel1.SuspendLayout();
@@ -60,7 +62,7 @@
             this.EngineWIndow.Dock = System.Windows.Forms.DockStyle.Fill;
             this.EngineWIndow.Location = new System.Drawing.Point(0, 0);
             this.EngineWIndow.Name = "EngineWIndow";
-            this.EngineWIndow.Size = new System.Drawing.Size(872, 413);
+            this.EngineWIndow.Size = new System.Drawing.Size(874, 415);
             this.EngineWIndow.TabIndex = 0;
             this.EngineWIndow.TabStop = false;
             // 
@@ -90,7 +92,7 @@
             // 
             // FirstPanelSplitter
             // 
-            this.FirstPanelSplitter.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.FirstPanelSplitter.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.FirstPanelSplitter.Dock = System.Windows.Forms.DockStyle.Fill;
             this.FirstPanelSplitter.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
             this.FirstPanelSplitter.Location = new System.Drawing.Point(0, 24);
@@ -105,7 +107,6 @@
             // 
             // SecondPanelSplitter
             // 
-            this.SecondPanelSplitter.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.SecondPanelSplitter.Dock = System.Windows.Forms.DockStyle.Fill;
             this.SecondPanelSplitter.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
             this.SecondPanelSplitter.Location = new System.Drawing.Point(0, 0);
@@ -114,13 +115,16 @@
             // SecondPanelSplitter.Panel1
             // 
             this.SecondPanelSplitter.Panel1.Controls.Add(this.ThirdPanelSPlitter);
-            this.SecondPanelSplitter.Size = new System.Drawing.Size(1074, 750);
-            this.SecondPanelSplitter.SplitterDistance = 876;
+            // 
+            // SecondPanelSplitter.Panel2
+            // 
+            this.SecondPanelSplitter.Panel2.Controls.Add(this.propertiesPanel);
+            this.SecondPanelSplitter.Size = new System.Drawing.Size(1072, 748);
+            this.SecondPanelSplitter.SplitterDistance = 874;
             this.SecondPanelSplitter.TabIndex = 0;
             // 
             // ThirdPanelSPlitter
             // 
-            this.ThirdPanelSPlitter.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.ThirdPanelSPlitter.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ThirdPanelSPlitter.Location = new System.Drawing.Point(0, 0);
             this.ThirdPanelSPlitter.Name = "ThirdPanelSPlitter";
@@ -133,8 +137,8 @@
             // ThirdPanelSPlitter.Panel2
             // 
             this.ThirdPanelSPlitter.Panel2.Controls.Add(this.tabControl1);
-            this.ThirdPanelSPlitter.Size = new System.Drawing.Size(876, 750);
-            this.ThirdPanelSPlitter.SplitterDistance = 417;
+            this.ThirdPanelSPlitter.Size = new System.Drawing.Size(874, 748);
+            this.ThirdPanelSPlitter.SplitterDistance = 415;
             this.ThirdPanelSPlitter.TabIndex = 0;
             // 
             // tabControl1
@@ -145,7 +149,7 @@
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(872, 325);
+            this.tabControl1.Size = new System.Drawing.Size(874, 329);
             this.tabControl1.TabIndex = 0;
             // 
             // tabPage1
@@ -154,7 +158,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(864, 299);
+            this.tabPage1.Size = new System.Drawing.Size(866, 303);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "tabPage1";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -165,7 +169,7 @@
             this.textLog.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textLog.Location = new System.Drawing.Point(3, 3);
             this.textLog.Name = "textLog";
-            this.textLog.Size = new System.Drawing.Size(858, 293);
+            this.textLog.Size = new System.Drawing.Size(860, 297);
             this.textLog.TabIndex = 0;
             this.textLog.Text = "";
             // 
@@ -174,10 +178,18 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(864, 299);
+            this.tabPage2.Size = new System.Drawing.Size(866, 303);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "tabPage2";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // propertiesPanel
+            // 
+            this.propertiesPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.propertiesPanel.Location = new System.Drawing.Point(0, 0);
+            this.propertiesPanel.Name = "propertiesPanel";
+            this.propertiesPanel.Size = new System.Drawing.Size(194, 748);
+            this.propertiesPanel.TabIndex = 0;
             // 
             // Form1
             // 
@@ -198,6 +210,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.FirstPanelSplitter)).EndInit();
             this.FirstPanelSplitter.ResumeLayout(false);
             this.SecondPanelSplitter.Panel1.ResumeLayout(false);
+            this.SecondPanelSplitter.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.SecondPanelSplitter)).EndInit();
             this.SecondPanelSplitter.ResumeLayout(false);
             this.ThirdPanelSPlitter.Panel1.ResumeLayout(false);
@@ -224,6 +237,7 @@
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.RichTextBox textLog;
+        private System.Windows.Forms.Panel propertiesPanel;
     }
 }
 

@@ -90,9 +90,6 @@
     <ClCompile Include="EngineWrapper.cpp">
       <Filter>Fichiers sources\Interfaces</Filter>
     </ClCompile>
-    <ClCompile Include="CameraWrapper.cpp">
-      <Filter>Fichiers sources\Interfaces</Filter>
-    </ClCompile>
     <ClCompile Include="CameraManager.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
@@ -125,6 +122,9 @@
     </ClCompile>
     <ClCompile Include="TextureManager.cpp">
       <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraManagerWrapper.cpp">
+      <Filter>Fichiers sources\Interfaces</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -191,9 +191,6 @@
     <ClInclude Include="EngineWrapper.h">
       <Filter>Fichiers d%27en-tête\Interfaces</Filter>
     </ClInclude>
-    <ClInclude Include="CameraWrapper.h">
-      <Filter>Fichiers d%27en-tête\Interfaces</Filter>
-    </ClInclude>
     <ClInclude Include="CameraManager.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
@@ -223,6 +220,12 @@
     </ClInclude>
     <ClInclude Include="TextureManager.h">
       <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraManagerWrapper.h">
+      <Filter>Fichiers d%27en-tête\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="ManagedVector3.h">
+      <Filter>Fichiers d%27en-tête\Interfaces</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

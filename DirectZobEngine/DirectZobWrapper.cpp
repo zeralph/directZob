@@ -9,7 +9,7 @@ namespace CLI
 		unsigned int size = data->Length;
 	}*/
 
-	DirectZobWrapper::DirectZobWrapper():ManagedObject(new DirectZob)
+	DirectZobWrapper::DirectZobWrapper():ManagedObject(new DirectZob, true)
 	{
 
 	}

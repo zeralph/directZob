@@ -38,75 +38,78 @@ void DirectZob::LoadScene(std::string& path, std::string& file)
 	TiXmlDocument doc("Scene");
 	fullPath = path + file;
 	doc.LoadFile(fullPath.c_str());
-	//doc.
-	//doc.Parse(demoStart);
 
-	TiXmlElement* root = doc.FirstChildElement("Scene");
-	TiXmlElement* fe = root->FirstChildElement("Texture");
-	for (TiXmlElement* e = root->FirstChildElement("Texture"); e != NULL; e = e->NextSiblingElement("Texture"))
+	if (doc.Error())
 	{
-		name = e->Attribute("name");
-		fullPath = path + e->Attribute("file");
-		m_textureManager->LoadTexture(name, fullPath);
+		std::string err = "Error loading ";
+		err.append(fullPath.c_str());
+		DirectZob::Log(err);
 	}
-	for (TiXmlElement* e = root->FirstChildElement("Camera"); e != NULL; e = e->NextSiblingElement("Camera"))
+	else
 	{
-		name = e->Attribute("name");
-		TiXmlElement* f;
-		f = e->FirstChildElement("Position");
-		x = atof(f->Attribute("x"));
-		y = atof(f->Attribute("y"));
-		z = atof(f->Attribute("z"));
-		Vector3 p = Vector3(x, y, z);
-		f = e->FirstChildElement("Target");
-		x = atof(f->Attribute("x"));
-		y = atof(f->Attribute("y"));
-		z = atof(f->Attribute("z"));
-		Vector3 t = Vector3(x, y, z);
-		f = e->FirstChildElement("Up");
-		x = atof(f->Attribute("x"));
-		y = atof(f->Attribute("y"));
-		z = atof(f->Attribute("z"));
-		Vector3 u = Vector3(x, y, z);
-		f = e->FirstChildElement("Fov");
-		float fov = atof(f->Value());
-		m_cameraManager->CreateCamera(name, p, t, u, fov);
-	}
-	for (TiXmlElement* e = root->FirstChildElement("Mesh"); e != NULL; e = e->NextSiblingElement("Mesh"))
-	{
-		name = e->Attribute("name");
-		texture = e->Attribute("texture");
-		fullPath = path + e->Attribute("file");
-		TiXmlElement* f;
-		f = e->FirstChildElement("Position");
-		x = atof(f->Attribute("x"));
-		y = atof(f->Attribute("y"));
-		z = atof(f->Attribute("z"));
-		Vector3 p = Vector3(x, y, z);
-		f = e->FirstChildElement("Rotation");
-		x = atof(f->Attribute("x"));
-		y = atof(f->Attribute("y"));
-		z = atof(f->Attribute("z"));
-		Vector3 r = Vector3(x, y, z);
-		f = e->FirstChildElement("Position");
-		x = atof(f->Attribute("x"));
-		y = atof(f->Attribute("y"));
-		z = atof(f->Attribute("z"));
-		Vector3 u = Vector3(x, y, z);		
-		f = e->FirstChildElement("Scale");
-		x = atof(f->Attribute("x"));
-		y = atof(f->Attribute("y"));
-		z = atof(f->Attribute("z"));
-		Vector3 s = Vector3(x, y, z);
-		const Texture* t = m_textureManager->GetTexture(texture);
-		m_engine->LoadMesh(name, fullPath, t, p, r, s);
+		TiXmlElement* root = doc.FirstChildElement("Scene");
+		TiXmlElement* fe = root->FirstChildElement("Texture");
+		for (TiXmlElement* e = root->FirstChildElement("Texture"); e != NULL; e = e->NextSiblingElement("Texture"))
+		{
+			name = e->Attribute("name");
+			fullPath = path + e->Attribute("file");
+			m_textureManager->LoadTexture(name, fullPath);
+		}
+		for (TiXmlElement* e = root->FirstChildElement("Camera"); e != NULL; e = e->NextSiblingElement("Camera"))
+		{
+			name = e->Attribute("name");
+			TiXmlElement* f;
+			f = e->FirstChildElement("Position");
+			x = atof(f->Attribute("x"));
+			y = atof(f->Attribute("y"));
+			z = atof(f->Attribute("z"));
+			Vector3 p = Vector3(x, y, z);
+			f = e->FirstChildElement("Target");
+			x = atof(f->Attribute("x"));
+			y = atof(f->Attribute("y"));
+			z = atof(f->Attribute("z"));
+			Vector3 t = Vector3(x, y, z);
+			f = e->FirstChildElement("Up");
+			x = atof(f->Attribute("x"));
+			y = atof(f->Attribute("y"));
+			z = atof(f->Attribute("z"));
+			Vector3 u = Vector3(x, y, z);
+			f = e->FirstChildElement("Fov");
+			float fov = atof(f->Value());
+			m_cameraManager->CreateCamera(name, p, t, u, fov);
+		}
+		for (TiXmlElement* e = root->FirstChildElement("Mesh"); e != NULL; e = e->NextSiblingElement("Mesh"))
+		{
+			name = e->Attribute("name");
+			texture = e->Attribute("texture");
+			fullPath = path + e->Attribute("file");
+			TiXmlElement* f;
+			f = e->FirstChildElement("Position");
+			x = atof(f->Attribute("x"));
+			y = atof(f->Attribute("y"));
+			z = atof(f->Attribute("z"));
+			Vector3 p = Vector3(x, y, z);
+			f = e->FirstChildElement("Rotation");
+			x = atof(f->Attribute("x"));
+			y = atof(f->Attribute("y"));
+			z = atof(f->Attribute("z"));
+			Vector3 r = Vector3(x, y, z);
+			f = e->FirstChildElement("Position");
+			x = atof(f->Attribute("x"));
+			y = atof(f->Attribute("y"));
+			z = atof(f->Attribute("z"));
+			Vector3 u = Vector3(x, y, z);
+			f = e->FirstChildElement("Scale");
+			x = atof(f->Attribute("x"));
+			y = atof(f->Attribute("y"));
+			z = atof(f->Attribute("z"));
+			Vector3 s = Vector3(x, y, z);
+			const Texture* t = m_textureManager->GetTexture(texture);
+			m_engine->LoadMesh(name, fullPath, t, p, r, s);
+		}		
 	}
 	std::string font("Font");
 	m_text = new Text2D(m_engine, m_textureManager->GetTexture(font), 32, 8, m_events);
-	if (doc.Error())
-	{
-		printf("Error in %s: %s\n", doc.Value(), doc.ErrorDesc());
-	}
 }
 
 
@@ -192,6 +195,10 @@ int DirectZob::RunAFrame()
 }
 
 void DirectZob::Log(std::string& str)
+{
+	DirectZob::singleton->GetEventManager()->AddEvent(0, str);
+}
+void DirectZob::Log(const char* str)
 {
 	DirectZob::singleton->GetEventManager()->AddEvent(0, str);
 }

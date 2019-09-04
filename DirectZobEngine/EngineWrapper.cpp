@@ -2,7 +2,7 @@
 
 namespace CLI
 {
-	EngineWrapper::EngineWrapper():ManagedObject(DirectZob::GetInstance()->GetEngine())
+	EngineWrapper::EngineWrapper():ManagedObject(DirectZob::GetInstance()->GetEngine(), false)
 	{
 
 	}
