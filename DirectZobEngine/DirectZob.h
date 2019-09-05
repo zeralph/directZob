@@ -17,7 +17,7 @@
 #include "Events.h"
 #include "CameraManager.h"
 #include "TextureManager.h"
-
+#include "ZobObjectManager.h"
 
 #define kUnused(var) (void) var;
 #define WIDTH  1920 / 2
@@ -49,6 +49,7 @@ private:
 	Events* m_events = NULL;
 	TextureManager* m_textureManager = NULL;
 	CameraManager* m_cameraManager = NULL;
+	ZobObjectManager* m_zobObjectManager = NULL;
 	Engine* m_engine = NULL;
 	Text2D* m_text = NULL;
 

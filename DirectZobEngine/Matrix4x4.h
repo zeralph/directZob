@@ -13,10 +13,13 @@ public:
 	void CopyFrom(const Matrix4x4* m);
 	void Mul(const Matrix4x4* m);
 	void Mul(Vector3* v) const;
-	void SetScale(const float x, const float y, const float z);
 	inline void SetData(uint i, uint j, float f) { m_data[i][j] = f; }
+	void SetScale(const float x, const float y, const float z);
 	void SetRotation(const float x, const float y, const float z);
 	void SetTranslation(const float x, const float y, const float z);
+	void SetScale(const Vector3& v);
+	void SetRotation(const Vector3& v);
+	void SetTranslation(const Vector3& v);
 	Vector3 GetScale() const { return Vector3(m_data[0][0], m_data[1][1], m_data[2][2]); }
 	Vector3 GetTranslation() const { return Vector3{ m_data[0][3], m_data[1][3], m_data[2][3] }; }
 	inline float GetValue(const int i, const int j) const { return m_data[i][j]; }

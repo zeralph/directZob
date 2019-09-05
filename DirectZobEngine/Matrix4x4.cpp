@@ -41,93 +41,7 @@ void Matrix4x4::Mul(const Matrix4x4* m)
 	}
 	memcpy(&m_data, &tmpMul.m_data, sizeof(tmpMul.m_data));
 }
-/*
-void Matrix4x4::Mul(const Matrix4x4* m)
-{
-	//
-	tmpMul.m_data[0][0] =	(m_data[0][0] * m->m_data[0][0]) +
-							(m_data[0][1] * m->m_data[1][0]) +
-							(m_data[0][2] * m->m_data[2][0]) +
-							(m_data[0][3] * m->m_data[3][0]);
 
-	tmpMul.m_data[0][1] =	(m_data[1][0] * m->m_data[0][0]) +
-							(m_data[1][1] * m->m_data[1][0]) +
-							(m_data[1][2] * m->m_data[2][0]) +
-							(m_data[1][3] * m->m_data[3][0]);
-
-	tmpMul.m_data[0][2] =	(m_data[2][0] * m->m_data[0][0]) +
-							(m_data[2][1] * m->m_data[1][0]) +
-							(m_data[2][2] * m->m_data[2][0]) +
-							(m_data[2][3] * m->m_data[3][0]);
-
-	tmpMul.m_data[0][3] =	(m_data[3][0] * m->m_data[0][0]) +
-							(m_data[3][1] * m->m_data[1][0]) +
-							(m_data[3][2] * m->m_data[2][0]) +
-							(m_data[3][3] * m->m_data[3][0]);
-	//--------------------------------------------------------------
-	tmpMul.m_data[0][1] =	(m_data[0][0] * m->m_data[0][1]) +
-							(m_data[0][1] * m->m_data[1][1]) +
-							(m_data[0][2] * m->m_data[2][1]) +
-							(m_data[0][3] * m->m_data[3][1]);
-
-	tmpMul.m_data[1][1] =	(m_data[1][0] * m->m_data[0][1]) +
-							(m_data[1][1] * m->m_data[1][1]) +
-							(m_data[1][2] * m->m_data[2][1]) +
-							(m_data[1][3] * m->m_data[3][1]);
-
-	tmpMul.m_data[2][1] =	(m_data[2][0] * m->m_data[0][1]) +
-							(m_data[2][1] * m->m_data[1][1]) +
-							(m_data[2][2] * m->m_data[2][1]) +
-							(m_data[2][3] * m->m_data[3][1]);
-
-	tmpMul.m_data[3][1] =	(m_data[3][0] * m->m_data[0][1]) +
-							(m_data[3][1] * m->m_data[1][1]) +
-							(m_data[3][2] * m->m_data[2][1]) +
-							(m_data[3][3] * m->m_data[3][1]);
-	//--------------------------------------------------------------
-	tmpMul.m_data[0][2] =	(m_data[0][0] * m->m_data[0][2]) +
-							(m_data[0][1] * m->m_data[1][2]) +
-							(m_data[0][2] * m->m_data[2][2]) +
-							(m_data[0][3] * m->m_data[3][2]);
-
-	tmpMul.m_data[1][2] =	(m_data[1][0] * m->m_data[0][2]) +
-							(m_data[1][1] * m->m_data[1][2]) +
-							(m_data[1][2] * m->m_data[2][2]) +
-							(m_data[1][3] * m->m_data[3][2]);
-
-	tmpMul.m_data[2][2] =	(m_data[2][0] * m->m_data[0][2]) +
-							(m_data[2][1] * m->m_data[1][2]) +
-							(m_data[2][2] * m->m_data[2][2]) +
-							(m_data[2][3] * m->m_data[3][2]);
-
-	tmpMul.m_data[3][2] =	(m_data[3][0] * m->m_data[0][2]) +
-							(m_data[3][1] * m->m_data[1][2]) +
-							(m_data[3][2] * m->m_data[2][2]) +
-							(m_data[3][3] * m->m_data[3][2]);
-	//--------------------------------------------------------------
-	tmpMul.m_data[0][3] =	(m_data[0][0] * m->m_data[0][3]) +
-							(m_data[0][1] * m->m_data[1][3]) +
-							(m_data[0][2] * m->m_data[2][3]) +
-							(m_data[0][2] * m->m_data[3][3]);
-
-	tmpMul.m_data[1][3] =	(m_data[1][0] * m->m_data[0][3]) +
-							(m_data[1][1] * m->m_data[1][3]) +
-							(m_data[1][2] * m->m_data[2][3]) +
-							(m_data[1][3] * m->m_data[3][3]);
-
-	tmpMul.m_data[2][3] =	(m_data[2][0] * m->m_data[0][3]) +
-							(m_data[2][1] * m->m_data[1][3]) +
-							(m_data[2][2] * m->m_data[2][3]) +
-							(m_data[2][3] * m->m_data[3][3]);
-
-	tmpMul.m_data[3][3] =	(m_data[3][0] * m->m_data[0][3]) +
-							(m_data[3][1] * m->m_data[1][3]) +
-							(m_data[3][2] * m->m_data[2][3]) +
-							(m_data[3][3] * m->m_data[3][3]);
-	//--------------------------------------------------------------
-	memcpy(&m_data, &tmpMul.m_data, sizeof(tmpMul.m_data));
-}
-*/
 void Matrix4x4::Identity()
 {
 	memcpy(&m_data, &identityArray, sizeof(identityArray));
@@ -150,12 +64,30 @@ void Matrix4x4::Mul(Vector3* v) const
 	v->w = fw;
 }
 
+void Matrix4x4::SetScale(const Vector3& v)
+{
+	tmp.Identity();
+	tmp.m_data[0][0] = v.x;
+	tmp.m_data[1][1] = v.y;
+	tmp.m_data[2][2] = v.z;
+	Mul(&tmp);
+}
+
 void Matrix4x4::SetScale(const float x, const float y, const float z)
 {
 	tmp.Identity();
 	tmp.m_data[0][0] = x;
 	tmp.m_data[1][1] = y;
 	tmp.m_data[2][2] = z;
+	Mul(&tmp);
+}
+
+void Matrix4x4::SetTranslation(const Vector3& v)
+{
+	tmp.Identity();
+	tmp.m_data[0][3] = v.x;
+	tmp.m_data[1][3] = v.y;
+	tmp.m_data[2][3] = v.z;
 	Mul(&tmp);
 }
 
@@ -166,6 +98,13 @@ void Matrix4x4::SetTranslation(const float x, const float y, const float z)
 	tmp.m_data[1][3] = y;
 	tmp.m_data[2][3] = z;
 	Mul(&tmp);
+}
+
+void Matrix4x4::SetRotation(const Vector3& v)
+{
+	SetRotationX(v.x);
+	SetRotationY(v.y);
+	SetRotationZ(v.z);
 }
 
 void Matrix4x4::SetRotation(const float x, const float y, const float z)
