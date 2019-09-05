@@ -2,7 +2,9 @@
 #include "Matrix4x4.h"
 #include "MiniFB_enums.h"
 #include <string>
-class Camera
+
+
+class Camera/*: public ZobObject*/
 {
 public:
 	Camera(const std::string& name, Vector3& position, Vector3& target, Vector3& up, float fov, BufferData* bufferData);

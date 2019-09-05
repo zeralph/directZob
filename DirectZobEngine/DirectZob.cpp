@@ -1,6 +1,8 @@
 #include "DirectZob.h"
 #include "Events.h"
 #include "tinyxml.h"
+#include "ZobObject.h"
+#include "SceneLoader.h"
 
 static char buffer[MAX_PATH];
 
@@ -33,81 +35,9 @@ std::string DirectZob::ExePath() {
 
 void DirectZob::LoadScene(std::string& path, std::string& file)
 {
-	float x, y, z, fov, znear, zfar;
-	std::string name, texture, fullPath;
-	TiXmlDocument doc("Scene");
-	fullPath = path + file;
-	doc.LoadFile(fullPath.c_str());
+	SceneLoader::LoadScene(path, file, m_zobObjectManager, m_textureManager);
 
-	if (doc.Error())
-	{
-		std::string err = "Error loading ";
-		err.append(fullPath.c_str());
-		DirectZob::Log(err);
-	}
-	else
-	{
-		TiXmlElement* root = doc.FirstChildElement("Scene");
-		TiXmlElement* fe = root->FirstChildElement("Texture");
-		for (TiXmlElement* e = root->FirstChildElement("Texture"); e != NULL; e = e->NextSiblingElement("Texture"))
-		{
-			name = e->Attribute("name");
-			fullPath = path + e->Attribute("file");
-			m_textureManager->LoadTexture(name, fullPath);
-		}
-		for (TiXmlElement* e = root->FirstChildElement("Camera"); e != NULL; e = e->NextSiblingElement("Camera"))
-		{
-			name = e->Attribute("name");
-			TiXmlElement* f;
-			f = e->FirstChildElement("Position");
-			x = atof(f->Attribute("x"));
-			y = atof(f->Attribute("y"));
-			z = atof(f->Attribute("z"));
-			Vector3 p = Vector3(x, y, z);
-			f = e->FirstChildElement("Target");
-			x = atof(f->Attribute("x"));
-			y = atof(f->Attribute("y"));
-			z = atof(f->Attribute("z"));
-			Vector3 t = Vector3(x, y, z);
-			f = e->FirstChildElement("Up");
-			x = atof(f->Attribute("x"));
-			y = atof(f->Attribute("y"));
-			z = atof(f->Attribute("z"));
-			Vector3 u = Vector3(x, y, z);
-			f = e->FirstChildElement("Fov");
-			float fov = atof(f->Value());
-			m_cameraManager->CreateCamera(name, p, t, u, fov);
-		}
-		for (TiXmlElement* e = root->FirstChildElement("Mesh"); e != NULL; e = e->NextSiblingElement("Mesh"))
-		{
-			name = e->Attribute("name");
-			texture = e->Attribute("texture");
-			fullPath = path + e->Attribute("file");
-			TiXmlElement* f;
-			f = e->FirstChildElement("Position");
-			x = atof(f->Attribute("x"));
-			y = atof(f->Attribute("y"));
-			z = atof(f->Attribute("z"));
-			Vector3 p = Vector3(x, y, z);
-			f = e->FirstChildElement("Rotation");
-			x = atof(f->Attribute("x"));
-			y = atof(f->Attribute("y"));
-			z = atof(f->Attribute("z"));
-			Vector3 r = Vector3(x, y, z);
-			f = e->FirstChildElement("Position");
-			x = atof(f->Attribute("x"));
-			y = atof(f->Attribute("y"));
-			z = atof(f->Attribute("z"));
-			Vector3 u = Vector3(x, y, z);
-			f = e->FirstChildElement("Scale");
-			x = atof(f->Attribute("x"));
-			y = atof(f->Attribute("y"));
-			z = atof(f->Attribute("z"));
-			Vector3 s = Vector3(x, y, z);
-			const Texture* t = m_textureManager->GetTexture(texture);
-			m_engine->LoadMesh(name, fullPath, t, p, r, s);
-		}		
-	}
+
 	std::string font("Font");
 	m_text = new Text2D(m_engine, m_textureManager->GetTexture(font), 32, 8, m_events);
 }
@@ -120,6 +50,7 @@ void DirectZob::Init()
 	m_engine = new Engine(WIDTH, HEIGHT, m_events);
 	m_cameraManager = new CameraManager();
 	m_textureManager = new TextureManager();
+	m_zobObjectManager = new ZobObjectManager();
 	m_events->AddEvent(0, " OK\n");
 	int dx = 1;
 	int dy = 1;
@@ -149,20 +80,10 @@ int DirectZob::RunAFrame()
 		{
 			m_engine->DrawGrid(cam);
 		}
-		static float tx = 0;
-		static float ty = 0;
-		static float tz = 0;
-		static float scale = 0.25f;// 1.0f / 15.0f;// 0.5f;
 
-		std::vector<Mesh*>* meshes = m_engine->GetMeshVector();
-		for (int i = 0; i < meshes->size(); i++)
-		{
-			meshes->at(i)->Init();
-			meshes->at(i)->SetRotation(0, rot, 0);
-			
-		}
-		rot += 1.1f;
-		state = m_engine->Update(cam);
+		m_zobObjectManager->UpdateObjects();
+		m_zobObjectManager->DrawObjects(cam, m_engine);
+		m_engine->DrawScene();
 
 		snprintf(buffer, MAX_PATH, "Triangles : %lu / %lu", m_engine->GetNbDrawnTriangles(), m_engine->GetNbTriangles());
 		m_text->Print(0, 0, 1, &std::string(buffer), 0xFFFFFFFF);

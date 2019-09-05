@@ -37,11 +37,20 @@
     <Filter Include="Fichiers sources\tinyXml">
       <UniqueIdentifier>{872086c4-203c-4e9f-9cae-6f57aebdb568}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers d%27en-tête\ZobObjects">
+      <UniqueIdentifier>{b5804e7c-2967-499a-9835-752d47fa818a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\ZobObjects">
+      <UniqueIdentifier>{8512caeb-af95-4af1-97e6-2ae1441b1fde}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\managers">
+      <UniqueIdentifier>{5729d4fb-727f-4dc2-8f59-5a345f075961}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\managers">
+      <UniqueIdentifier>{ac46cf6d-d22e-4a68-b93e-48174e938be4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Camera.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="Color.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
@@ -51,9 +60,6 @@
     <ClCompile Include="DirectZob.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="Engine.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
@@ -61,9 +67,6 @@
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="Matrix4x4.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Mesh.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="Rasterizer.cpp">
@@ -89,9 +92,6 @@
     </ClCompile>
     <ClCompile Include="EngineWrapper.cpp">
       <Filter>Fichiers sources\Interfaces</Filter>
-    </ClCompile>
-    <ClCompile Include="CameraManager.cpp">
-      <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="MiniFB_common.c">
       <Filter>Fichiers sources\MiniFB</Filter>
@@ -120,17 +120,35 @@
     <ClCompile Include="tinyxmlparser.cpp">
       <Filter>Fichiers sources\tinyXml</Filter>
     </ClCompile>
-    <ClCompile Include="TextureManager.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="CameraManagerWrapper.cpp">
       <Filter>Fichiers sources\Interfaces</Filter>
     </ClCompile>
+    <ClCompile Include="Engine.cpp">
+      <Filter>Fichiers sources\managers</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraManager.cpp">
+      <Filter>Fichiers sources\managers</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureManager.cpp">
+      <Filter>Fichiers sources\managers</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Fichiers sources\ZobObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="ZobObjectManager.cpp">
+      <Filter>Fichiers sources\managers</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="ZobObject.cpp">
+      <Filter>Fichiers sources\ZobObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneLoader.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Camera.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="Color.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
@@ -140,16 +158,10 @@
     <ClInclude Include="DirectZob.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="Engine.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="Matrix2x2.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="Matrix4x4.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Mesh.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="Rasterizer.h">
@@ -191,9 +203,6 @@
     <ClInclude Include="EngineWrapper.h">
       <Filter>Fichiers d%27en-tête\Interfaces</Filter>
     </ClInclude>
-    <ClInclude Include="CameraManager.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="MiniFB.h">
       <Filter>Fichiers d%27en-tête\miniFB</Filter>
     </ClInclude>
@@ -218,14 +227,35 @@
     <ClInclude Include="tinyxml.h">
       <Filter>Fichiers d%27en-tête\tinyXml</Filter>
     </ClInclude>
-    <ClInclude Include="TextureManager.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="CameraManagerWrapper.h">
       <Filter>Fichiers d%27en-tête\Interfaces</Filter>
     </ClInclude>
     <ClInclude Include="ManagedVector3.h">
       <Filter>Fichiers d%27en-tête\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="ZobObject.h">
+      <Filter>Fichiers d%27en-tête\ZobObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraManager.h">
+      <Filter>Fichiers d%27en-tête\managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine.h">
+      <Filter>Fichiers d%27en-tête\managers</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureManager.h">
+      <Filter>Fichiers d%27en-tête\managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Fichiers d%27en-tête\ZobObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="ZobObjectManager.h">
+      <Filter>Fichiers d%27en-tête\managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneLoader.h">
+      <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
