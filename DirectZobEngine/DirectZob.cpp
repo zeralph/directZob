@@ -24,8 +24,8 @@ DirectZob::~DirectZob()
 
 std::string DirectZob::ExePath() {
 
-	return std::string("D:\\_PERSO\\directZob\\directZob\\resources\\");
-	return std::string("C:\\_GIT\\directZob\\x64\\DLL Debug");
+	//return std::string("D:\\_PERSO\\directZob\\directZob\\resources\\");
+	return std::string("C:\\_GIT\\directZob\\resources");
 
 	char b[MAX_PATH];
 	GetModuleFileName(NULL, b, MAX_PATH);

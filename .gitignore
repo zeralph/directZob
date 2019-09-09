@@ -448,3 +448,8 @@
 /DirectZobEngine/x64/DLL Debug/ZobObject.obj
 /DirectZobEngine/x64/DLL Debug/ZobObjectManager.obj
 >>>>>>> origin/master
+/.vs/DirectZob/v16/ipch/AutoPCH/430eb9e3e5670aa1/DIRECTZOB.ipch
+/.vs/DirectZob/v16/ipch/AutoPCH/7b8b29182aa90fd/IOSTREAM.ipch
+/.gitignore.orig
+/DirectZobEditor/obj/Release/DirectZobEditor.EngineWindow.resources
+/DirectZobEditor/obj/Release/DirectZobEditor.ZobObjectList.resources

@@ -263,9 +263,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DLL Release|x64'">
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
+<<<<<<< HEAD
+=======
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'">
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
+>>>>>>> origin/master
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -380,7 +383,10 @@
       <FloatingPointModel>Fast</FloatingPointModel>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalOptions>/Zc:twoPhase- %(AdditionalOptions)</AdditionalOptions>
+<<<<<<< HEAD
+=======
       <MinimalRebuild>false</MinimalRebuild>
+>>>>>>> origin/master
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
