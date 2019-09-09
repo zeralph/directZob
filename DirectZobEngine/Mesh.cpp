@@ -3,8 +3,7 @@
 using namespace std;
 
 Mesh::Mesh(std::string& name, std::string& path, const Texture* tex)
-{
-	m_name = name.c_str();
+{	
 	m_texture = tex;
 	m_nbVertices = 0;
 	m_nbUvs = 0;
@@ -14,6 +13,7 @@ Mesh::Mesh(std::string& name, std::string& path, const Texture* tex)
 	m_vertices = NULL;
 	m_normals = NULL;
 	m_uvs = NULL;
+	m_name = name;
 	std::string s = "Load mesh " + std::string(path);
 	DirectZob::Log(s);
 
@@ -131,12 +131,16 @@ void Mesh::SplitEntry(const std::string* s, std::vector<std::string>* v, const c
 	v->push_back(s->substr(previous, current - previous));
 }
 
-void Mesh::Init()
+/*void Mesh::Update()
 {
 	m_modelMatrix.Identity();
 	m_modelMatrixRotationOnly.Identity();
+	m_modelMatrix.SetScale(m_scale.x, m_scale.y, m_scale.z);
+	m_modelMatrix.SetRotation(m_rotation.x, m_rotation.y, m_rotation.z);
+	m_modelMatrix.SetTranslation(m_translation.x, m_translation.y, m_translation.z);
+	m_modelMatrixRotationOnly.SetRotation(m_rotation.x, m_rotation.y, m_rotation.z);
 	ReinitVertices();
-}
+}*/
 
 void Mesh::ReinitVertices()
 {
@@ -144,8 +148,10 @@ void Mesh::ReinitVertices()
 	memcpy(m_normals, m_normalsData, sizeof(Vector3) * m_nbNormals);
 }
 
-void Mesh::Update(const Camera* camera, const BufferData* bData)
+void Mesh::Draw(const Matrix4x4 &modelMatrix, const Camera* camera, Core::Engine* engine)
 {
+	ReinitVertices();
+	BufferData* bData = engine->GetBufferData();
 	Vector2 a, b, c, uva, uvb, uvc;
 	const Matrix4x4* view = camera->GetViewMatrix();
 	const Matrix4x4* proj = camera->GetProjectionMatrix();
@@ -156,7 +162,7 @@ void Mesh::Update(const Camera* camera, const BufferData* bData)
 	float zfar = bData->zFar;
 	for (uint i = 0; i < m_nbVertices; i++)
 	{
-		m_modelMatrix.Mul(&m_vertices[i]);
+		modelMatrix.Mul(&m_vertices[i]);
 		view->Mul(&m_vertices[i]);
 		proj->Mul(&m_vertices[i]);
 		m_vertices[i].x = (m_vertices[i].x / m_vertices[i].z + 1) * w;
@@ -194,8 +200,8 @@ void Mesh::Update(const Camera* camera, const BufferData* bData)
 				if (t->area > 0 && t->area < a)
 				{
 					t->ComputeLighting(&light);
-					//engine->QueueTriangle(t);
 					t->draw = true;
+					engine->QueueTriangle(t);
 					drawnFaces++;
 				}
 				else

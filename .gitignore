@@ -419,6 +419,7 @@
 /thirdParty/tinyXml/utf8test.xml
 /thirdParty/tinyXml/utf8testverify.xml
 /thirdParty/tinyXml/xmltest.cpp
+<<<<<<< HEAD
 /.vs/DirectZob/v16/ipch/AutoPCH/2bec48c84ef84512/CUBE.ipch
 /.vs/DirectZob/v16/ipch/AutoPCH/33d3ebdc79e62492/CUBE.ipch
 /.vs/DirectZob/v16/ipch/AutoPCH/509a91f9bfc1abea/CAMERAMANAGERWRAPPER.ipch
@@ -428,3 +429,22 @@
 /.vs/DirectZob/v16/ipch/AutoPCH/bc08c978102a8dc/RASTERIZER.ipch
 /.vs/DirectZob/v16/ipch/AutoPCH/e029264cead8c242/DIRECTZOBWRAPPER.ipch
 /.vs/DirectZob/v16/ipch/AutoPCH/fafde7618980a350/TMP1A4D.TMP.ipch
+=======
+/.vs/DirectZob/v15/ipch/AutoPCH/16e781ca35bc8b6d/ENGINE.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/1caa377345111a29/ZOBOBJECT.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/1d155ba2b8c3556a/ZOBOBJECTMANAGER.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/446b0f71412df5e0/MATRIX4X4.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/4ccf138469cd04c9/CAMERAMANAGER.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/4fb5fed03a49842a/ZOBOBJECT.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/5d92440002f9a3b9/ZOBOBJECTMANAGER.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/7f2e02ee4ea0dc9c/SCENELOADER.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/7f4639e8ade37148/MESH.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/81db394ca18cdd1c/SCENELOADER.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/8c6dbe7f9c22e1a9/ZOBOBJECT.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/9bf408527214e8f/SCENELOADER.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/d4a78864ea1c2e60/MATRIX4X4.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/daef930d5e2079ea/ZOBOBJECTMANAGER.ipch
+/DirectZobEngine/x64/DLL Debug/SceneLoader.obj
+/DirectZobEngine/x64/DLL Debug/ZobObject.obj
+/DirectZobEngine/x64/DLL Debug/ZobObjectManager.obj
+>>>>>>> origin/master

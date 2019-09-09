@@ -1,23 +1,37 @@
-<Scene>
-	<Texture name="Beach2" file="beach2.png"></Texture>
-	<Texture name="Water" file="water.png"></Texture>
-	<Texture name="Font" file="font2.png"></Texture>
-	<Mesh file="beach2.obj" name="Beach2" texture="Beach2">
-		<Position x="0" y="0" z="0"></Position>
-		<Rotation x="0" y="0" z="0"></Rotation>
-		<Scale x="1" y="1" z="1"></Scale>
-	</Mesh>
-	<Mesh name="Water" file="water.obj" texture="Water">
-		<Position x="0" y="0" z="0"></Position>
-		<Rotation x="0" y="0" z="0"></Rotation>
-		<Scale x="1" y="1" z="1"></Scale>
-	</Mesh>	
-	<!--<Camera name="FPScam">
-		<Position x="0.0" y="1.80" z="0.0"></Position>
-		<Target x="0" y="2.8" z="0"></Target>
-		<Up x="0" y="1" z="0"></Up>
-		<Fov>45.0</Fov>
-		<zNear>0.01</zNear>
-		<zFar>500.0</zFar>
-	</Camera>-->
-</Scene>
+<root>
+	<Textures>
+		<Texture name="Beach2" file="beach2.png"></Texture>
+		<Texture name="Water" file="water.png"></Texture>
+		<Texture name="Font" file="font2.png"></Texture>
+	</Textures>
+	<Meshes>
+		<Mesh name = "beach2" file="beach2.obj"  texture="Beach2"></Mesh>
+		<Mesh name = "water" file="water.obj" texture="Water"></Mesh>
+	</Meshes>
+	<Scene>
+		<ZobObject name="Beach2">
+			<Position x="-10" y="0" z="-10"></Position>
+			<Rotation x="0" y="0" z="0"></Rotation>
+			<Scale x="0.5" y="1" z="0.5"></Scale>
+			<Mesh>beach2</Mesh>
+			<ZobObject name="Water">
+				<Position x="0" y="0" z="0"></Position>
+				<Rotation x="0" y="0" z="0"></Rotation>
+				<Scale x="1" y="1" z="1"></Scale>
+				<Mesh>water</Mesh>
+			</ZobObject>	
+		</ZobObject>
+	</Scene>
+</root>
+
+
+
+
+<!--<Camera name="FPScam">
+	<Position x="0.0" y="1.80" z="0.0"></Position>
+	<Target x="0" y="2.8" z="0"></Target>
+	<Up x="0" y="1" z="0"></Up>
+	<Fov>45.0</Fov>
+	<zNear>0.01</zNear>
+	<zFar>500.0</zFar>
+</Camera>-->

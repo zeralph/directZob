@@ -95,6 +95,7 @@
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Release|x64'">false</CompileAsManaged>
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'">false</CompileAsManaged>
     </ClCompile>
+    <ClCompile Include="SceneLoader.cpp" />
     <ClCompile Include="Text2D.cpp">
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Release|x64'">false</CompileAsManaged>
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'">false</CompileAsManaged>
@@ -124,6 +125,8 @@
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Release|x64'">false</CompileAsManaged>
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'">false</CompileAsManaged>
     </ClCompile>
+    <ClCompile Include="ZobObject.cpp" />
+    <ClCompile Include="ZobObjectManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
@@ -147,6 +150,7 @@
     <ClInclude Include="MiniFB_enums.h" />
     <ClInclude Include="MiniFB_internal.h" />
     <ClInclude Include="Rasterizer.h" />
+    <ClInclude Include="SceneLoader.h" />
     <ClInclude Include="text2D.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TextureManager.h" />
@@ -159,6 +163,8 @@
     <ClInclude Include="Vector2.h" />
     <ClInclude Include="Vector3.h" />
     <ClInclude Include="WindowData.h" />
+    <ClInclude Include="ZobObject.h" />
+    <ClInclude Include="ZobObjectManager.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -257,6 +263,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DLL Release|x64'">
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
+<<<<<<< HEAD
+=======
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+>>>>>>> origin/master
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -301,6 +313,8 @@
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <AdditionalIncludeDirectories>src\windows;include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/Zc:twoPhase- %(AdditionalOptions)</AdditionalOptions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <FloatingPointModel>Fast</FloatingPointModel>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -369,6 +383,10 @@
       <FloatingPointModel>Fast</FloatingPointModel>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalOptions>/Zc:twoPhase- %(AdditionalOptions)</AdditionalOptions>
+<<<<<<< HEAD
+=======
+      <MinimalRebuild>false</MinimalRebuild>
+>>>>>>> origin/master
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
