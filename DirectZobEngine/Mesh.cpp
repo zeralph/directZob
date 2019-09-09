@@ -185,17 +185,23 @@ void Mesh::Update(const Camera* camera, const BufferData* bData)
 		n.Add(t->nc);
 		n.Div(3.0f);
 		t->draw = false;
-		if ((t->va->w > znear && t->vb->w > znear && t->vc->w > znear) && (t->va->w < zfar && t->vb->w < zfar && t->vc->w < zfar))
+		if (!RejectTriangle(t, znear, zfar, (float)bData->width, (float)bData->height))
 		{
 			if (Vector3::Dot(&n, camZ) < 0.5f)
 			{
 				t->ComputeArea();
-				if (t->area > 0)
+				static float a = 50000.0f;
+				if (t->area > 0 && t->area < a)
 				{
 					t->ComputeLighting(&light);
 					//engine->QueueTriangle(t);
 					t->draw = true;
 					drawnFaces++;
+				}
+				else
+				{
+					int tt = 0;
+					tt++;;
 				}
 			}
 		}
@@ -203,6 +209,35 @@ void Mesh::Update(const Camera* camera, const BufferData* bData)
 	drawnFaces;
 }
 
+inline bool Mesh::RejectTriangle(const Triangle* t, const float znear, const float zfar, const float width, const float height)
+{
+	if (t->va->x < 0 && t->vb->x < 0 && t->vc->x < 0)
+	{
+		return true;
+	}
+	if (t->va->x > width && t->vb->x > width && t->vc->x > width)
+	{
+		return true;
+	}
+	if (t->va->y > height && t->vb->y > height && t->vc->y > height)
+	{
+		return true;
+	}
+	if (t->va->y < 0 && t->vb->y < 0 && t->vc->y < 0)
+	{
+		return true;
+	}
+	if (t->va->w < znear || t->vb->w < znear || t->vc->w < znear)
+	{
+		return true;
+	}
+	if (t->va->w > zfar || t->vb->w > zfar || t->vc->w > zfar)
+	{
+		return true;
+	}
+	//if ((t->va->w > znear && t->vb->w > znear && t->vc->w > znear) && (t->va->w < zfar && t->vb->w < zfar && t->vc->w < zfar))
+	return false;
+}
 
 void Mesh::CreateTriangles(const std::vector<std::string>* line, std::vector<Triangle>* tList, size_t &tArrayIdx, const Texture* tex)
 {

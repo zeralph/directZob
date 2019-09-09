@@ -34,7 +34,7 @@ public:
 	void Clear();
 	void FillTopFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, const Triangle* t) const;
 	void FillBottomFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, const Triangle* t) const;
-	void FillBufferPixel(const Vector3* p, const Triangle* t) const;
+	inline const void FillBufferPixel(const Vector3* p, const Triangle* t) const;
 	void sortVerticesAscendingByY(Vector2* v1, Vector2* v2, Vector2* v3) const ;
 	void sortVerticesAscendingByY(Vector2* v1, Vector2* v2, Vector2* v3, Vector2* uv1, Vector2* uv2, Vector2* uv3) const;
 	inline float edgeFunction(const Vector3* a, const Vector3* b, const Vector3* c) const { return (c->x - a->x) * (b->y - a->y) - (c->y - a->y) * (b->x - a->x); }

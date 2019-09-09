@@ -44,6 +44,7 @@ public :
 	Events* GetEventManager() { return m_events; }
 	static void Log(std::string& str);
 	static void Log(const char* str);
+	
 private:
 
 	Events* m_events = NULL;

@@ -37,6 +37,21 @@ namespace CLI
 		return v;
 	}
 
+	void CameraManagerWrapper::RotateAroundAxis(float x, float y)
+	{
+		m_Instance->GetCurrentCamera()->RotateAroundAxis(x, y);
+	}
+
+	void CameraManagerWrapper::Move(float x, float y)
+	{
+		m_Instance->GetCurrentCamera()->Move(x, y);
+	}
+
+	void CameraManagerWrapper::Zoom(float z)
+	{
+		m_Instance->GetCurrentCamera()->Zoom(z);
+	}
+
 	void CameraManagerWrapper::SetCurrentCameraPosition(ManagedVector3^ p)
 	{
 		Vector3 v = p->ToVector3();
