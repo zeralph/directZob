@@ -251,7 +251,7 @@ void Rasterizer::FillTopFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, con
 	}
 }
 
-void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* t) const
+inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* t) const
 {
 
 	float w2 = edgeFunction(t->va, t->vb, p);

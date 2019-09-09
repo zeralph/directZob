@@ -19,6 +19,11 @@ namespace DirectZobEditor
             m_camerManagerWrapper = new CLI.CameraManagerWrapper();
         }
 
+        public CLI.CameraManagerWrapper GetWrapper()
+        {
+            return m_camerManagerWrapper;
+        }
+
         public void UpdateControl()
         {
             string s = m_camerManagerWrapper.GetCurrentCamera();
@@ -38,15 +43,48 @@ namespace DirectZobEditor
             }
             if (!cameraTarX.Focused)
             {
-                cameraTarX.Text = String.Format("{0:0.00}", p.x);
+                cameraTarX.Text = String.Format("{0:0.00}", t.x);
             }
             if (!cameraTarY.Focused)
             {
-                cameraTarY.Text = String.Format("{0:0.00}", p.y);
+                cameraTarY.Text = String.Format("{0:0.00}", t.y);
             }
             if (!cameraTarZ.Focused)
             {
-                cameraTarZ.Text = String.Format("{0:0.00}", p.z);
+                cameraTarZ.Text = String.Format("{0:0.00}", t.z);
+            }
+        }
+
+        private void CameraPosX_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                float f = float.Parse(cameraPosX.Text);
+                CLI.ManagedVector3 p = m_camerManagerWrapper.GetCurrentCameraPosition();
+                p.x = f;
+                m_camerManagerWrapper.SetCurrentCameraPosition(p);
+            }
+        }
+
+        private void CameraPosY_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                float f = float.Parse(cameraPosY.Text);
+                CLI.ManagedVector3 p = m_camerManagerWrapper.GetCurrentCameraPosition();
+                p.y = f;
+                m_camerManagerWrapper.SetCurrentCameraPosition(p);
+            }
+        }
+
+        private void CameraPosZ_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                float f = float.Parse(cameraPosZ.Text);
+                CLI.ManagedVector3 p = m_camerManagerWrapper.GetCurrentCameraPosition();
+                p.z = f;
+                m_camerManagerWrapper.SetCurrentCameraPosition(p);
             }
         }
     }

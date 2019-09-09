@@ -67,6 +67,9 @@ namespace Core
 		inline const float GetZNear() { return m_zNear; }
 		inline const float GetZFar() { return m_zFar; }
 		inline const ulong GetNbPixels() { return m_nbPixels; }
+
+		std::string GetObjectList();
+
 	private:
 
 		inline float clamp2(float x, float min, float max) const { if (x < min) x = min; if (x > max) x = max; return x; }

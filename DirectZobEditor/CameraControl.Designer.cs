@@ -104,6 +104,7 @@
             this.cameraPosZ.Size = new System.Drawing.Size(50, 20);
             this.cameraPosZ.TabIndex = 5;
             this.cameraPosZ.Text = "100.00";
+            this.cameraPosZ.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CameraPosZ_KeyDown);
             // 
             // cameraPosY
             // 
@@ -112,6 +113,7 @@
             this.cameraPosY.Size = new System.Drawing.Size(50, 20);
             this.cameraPosY.TabIndex = 4;
             this.cameraPosY.Text = "100.00";
+            this.cameraPosY.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CameraPosY_KeyDown);
             // 
             // cameraPosX
             // 
@@ -120,6 +122,7 @@
             this.cameraPosX.Size = new System.Drawing.Size(50, 20);
             this.cameraPosX.TabIndex = 3;
             this.cameraPosX.Text = "100.00";
+            this.cameraPosX.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CameraPosX_KeyDown);
             // 
             // label2
             // 
@@ -147,13 +150,13 @@
             this.comboBox1.Size = new System.Drawing.Size(162, 21);
             this.comboBox1.TabIndex = 0;
             // 
-            // Camera
+            // CameraControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.camerasBox);
             this.MinimumSize = new System.Drawing.Size(200, 200);
-            this.Name = "Camera";
+            this.Name = "CameraControl";
             this.Size = new System.Drawing.Size(200, 200);
             this.camerasBox.ResumeLayout(false);
             this.camerasBox.PerformLayout();

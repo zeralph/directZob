@@ -57,6 +57,45 @@ void Camera::OnMouseButton(MouseButton button, bool isPressed)
 		}
 	}
 }
+void Camera::Zoom(float z)
+{
+	Vector3 v = m_cameraFw;
+	v = v * (-z);
+	m_cameraPosition = m_cameraPosition + v;
+}
+
+void Camera::RotateAroundAxis(float dx, float dy)
+{
+	Vector3 l = m_cameraPosition - m_cameraTarget;
+	l = Vector3::RotateAroundAxis(l, Vector3::Vector3Y, -dx * M_PI / 180.0);
+	m_cameraPosition = l + m_cameraTarget;
+	RecomputeVectors();
+	if (m_cameraFw.y >= 0.95f && dy > 0)
+	{
+		dy = 0.0f;
+	}
+	if (m_cameraFw.y <= -0.95f && dy < 0)
+	{
+		dy = 0.0f;
+	}
+	l = m_cameraPosition - m_cameraTarget;
+	l = Vector3::RotateAroundAxis(l, m_cameraLeft, dy * M_PI / 180.0);
+	m_cameraPosition = l + m_cameraTarget;
+	RecomputeVectors();
+}
+
+void Camera::Move(float dx, float dy)
+{
+	Vector3 vl = Vector3(m_cameraLeft);
+	Vector3 vf = Vector3(m_cameraFw);
+	vl = vl * ((float)-dx / 20.0f);
+	vf = vf * ((float)dy / 20.0f);
+	//vf = &Vector3::Vector3Zero;
+	vl.y = 0;
+	vf.y = 0;
+	m_cameraPosition = m_cameraPosition - (vl + vf);
+	m_cameraTarget = m_cameraTarget - (vl + vf);
+}
 
 void Camera::OnMouseMove(int x, int y)
 {

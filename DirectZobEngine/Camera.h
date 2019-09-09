@@ -12,13 +12,16 @@ public:
 
 	inline const Matrix4x4* GetViewMatrix() const { return &m_viewMatrix; }
 	inline const Matrix4x4* GetProjectionMatrix() const {return &m_projMatrix;}
-	inline void SetPosition(const Vector3* p) { m_viewMatrix.SetTranslation(-p->x, -p->y, -p->z); }
+	inline void SetPosition(const Vector3* p) { m_cameraPosition = p;/*m_viewMatrix.SetTranslation(-p->x, -p->y, -p->z);*/ }
 	inline void SetRotation(const Vector3* p) { m_viewMatrix.SetRotation(-p->x, -p->y, -p->z); }
 	inline const Vector3* GetPosition() const { return &m_cameraPosition; }
 	inline const Vector3* GetTarget() const { return &m_cameraTarget; }
 	inline const Vector3* GetForward() const { return &m_cameraFw; }
 	inline const std::string& GetName() const { return m_name; }
 
+	void RotateAroundAxis(float dx, float dy);
+	void Move(float dx, float dy);
+	void Zoom(float z);
 	void OnMouseScroll(float deltaY);
 	void OnKeyboardInput(Key key, bool isPressed);
 	void OnMouseMove(int x, int y);
