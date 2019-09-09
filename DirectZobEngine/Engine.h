@@ -15,7 +15,6 @@
 #include "Texture.h"
 #include "Camera.h"
 #include "Rasterizer.h"
-#include "Mesh.h"
 #include "Events.h"
 
 #define Z_NEAR 0.001f
@@ -47,12 +46,9 @@ namespace Core
 
 		void ToggleZbufferOutput() { m_showZBuffer = !m_showZBuffer; }
 
-		void Add(Mesh* mesh);
-		std::vector<Mesh*>* GetMeshVector() { return &m_meshes; }
-
 		void QueueLine(const Camera* camera, const Vector3* v1, const Vector3* v2, const uint c);
 		bool ClipSegment(Vector3* a, Vector3* b);
-		int Update(const Camera* camera);
+		int DrawScene();
 		void LoadMesh(std::string& name, std::string& path, const Texture* texture, Vector3& p, Vector3& r, Vector3& s);
 		inline ulong GetCurrentFrame() { return m_currentFrame; }
 		inline const float GetFps() { return m_fps; }
@@ -63,7 +59,7 @@ namespace Core
 		inline const uint GetNbDrawnTriangles() const { return m_drawnTriangles; }
 
 		inline BufferData* GetBufferData() { return &m_bufferData; }
-
+		//inline Camera* GetCurrentCamera() { return}
 		inline const float GetZNear() { return m_zNear; }
 		inline const float GetZFar() { return m_zFar; }
 		inline const ulong GetNbPixels() { return m_nbPixels; }
@@ -77,7 +73,6 @@ namespace Core
 		void WaitForRasterizersEnd() const;
 
 		Events* m_events;
-		std::vector<Mesh*> m_meshes;
 		std::vector<const Triangle*>* m_rasterTriangleQueues;
 		std::vector<Line2D>* m_rasterLineQueues;
 		std::vector<Rasterizer*>* m_rasterizers;

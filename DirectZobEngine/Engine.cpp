@@ -70,21 +70,10 @@ Engine::~Engine()
 {
 	for (int i = 0; i < m_nbRasterizers; i++)
 	{
+	
 		m_rasterizers->at(i)->End();
 	}
 	m_events = NULL;
-}
-
-void Engine::LoadMesh(std::string& name, std::string& path, const Texture* texture, Vector3& p, Vector3& r, Vector3& s)
-{
-	Mesh* m = new Mesh(name, path, texture);
-	Add(m);
-}
-
-void Engine::Add(Mesh* mesh)
-{
-	if (mesh)
-		m_meshes.push_back(mesh);
 }
 
 void Engine::Resize(int width, int height)
@@ -150,7 +139,7 @@ void Engine::ClearBuffer(const Color* color)
 	}
 }
 
-int Engine::Update(const Camera* camera)
+int Engine::DrawScene()
 {
 	if (!m_started)
 	{
@@ -160,10 +149,10 @@ int Engine::Update(const Camera* camera)
 	t = clock();
 	m_sceneTriangles = 0;
 	m_drawnTriangles = 0;
-	for (int i = 0; i < m_meshes.size(); i++)
+	/*for (int i = 0; i < m_meshes.size(); i++)
 	{
 		Mesh* m = m_meshes.at(i);
-		m->Update(camera, &m_bufferData);
+		m->Draw(camera, &m_bufferData);
 		const std::vector<Triangle>* tList = m->GetTrianglesList();
 		for (int j = 0; j < tList->size(); j++)
 		{
@@ -175,7 +164,7 @@ int Engine::Update(const Camera* camera)
 			}
 			m_sceneTriangles++;
 		}
-	}
+	}*/
 	m_geometryTimeMS = (float)(clock() - t) / CLOCKS_PER_SEC * 1000;
 
 	t = clock();
@@ -367,22 +356,6 @@ void Engine::QueueTriangle(const Triangle* t)
 	{
 		m_rasterTriangleQueues[i].push_back(t);
 	}
-
-	/*
-	if (min < m_height / 2 && max < m_height / 2)
-	{
-		m_rasterTriangleQueue1.push_back(t);
-	}
-	else if (min >= m_height / 2 && max >= m_height / 2)
-	{
-		m_rasterTriangleQueue2.push_back(t);
-	}
-	else
-	{
-		m_rasterTriangleQueue1.push_back(t);
-		m_rasterTriangleQueue2.push_back(t);
-	}
-	*/
 }
 
 void Engine::DrawHorizontalLine(const float x1, const float x2, const float y, const uint color)
