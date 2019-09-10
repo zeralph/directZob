@@ -17,6 +17,7 @@
 #include "Events.h"
 #include "CameraManager.h"
 #include "TextureManager.h"
+#include "MeshManager.h"
 #include "ZobObjectManager.h"
 
 #define kUnused(var) (void) var;
@@ -41,6 +42,7 @@ public :
 	static DirectZob* GetInstance() { return DirectZob::singleton; }
 	Engine* GetEngine() const { return m_engine; }
 	CameraManager* GetCameraManager() const { return m_cameraManager; }
+	ZobObjectManager* GetZobObjectManager() const { return m_zobObjectManager; }
 	Events* GetEventManager() { return m_events; }
 	static void Log(std::string& str);
 	static void Log(const char* str);
@@ -49,6 +51,7 @@ private:
 
 	Events* m_events = NULL;
 	TextureManager* m_textureManager = NULL;
+	MeshManager* m_meshManager = NULL;
 	CameraManager* m_cameraManager = NULL;
 	ZobObjectManager* m_zobObjectManager = NULL;
 	Engine* m_engine = NULL;

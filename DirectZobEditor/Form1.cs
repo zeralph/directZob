@@ -17,8 +17,10 @@ namespace DirectZobEditor
         //public UpdateLogWindow UpdateLogWindowDelegate;
         
         private CameraControl m_camControl;
-        private ZobObjectList m_zobObjectList;
+        private ZobObjectListControl m_zobObjectList;
         private EngineWindow m_engineWindow;
+        private EngineControl m_engineControl;
+        private ZobObjectControl m_zobObjectControl;
         private bool m_ctrlPressed = false;
 
         private string[] m_events;
@@ -41,10 +43,16 @@ namespace DirectZobEditor
 
             m_camControl = new CameraControl();
             propertiesPanel.Controls.Add(m_camControl);
-            m_zobObjectList = new ZobObjectList();
+            m_zobObjectList = new ZobObjectListControl(this);
             ZobObjectListPanel.Controls.Add(m_zobObjectList);
             m_engineWindow = new EngineWindow(this, m_directZobWrapper);
             EngineRendererPanel.Controls.Add(m_engineWindow);
+            m_engineControl = new EngineControl(m_engineWindow.GetEngineWrapper());
+            propertiesPanel.Controls.Add(m_engineControl);
+            m_engineControl.Location = new Point(0, m_camControl.Height + 10);
+            m_zobObjectControl = new ZobObjectControl();
+            propertiesPanel.Controls.Add(m_zobObjectControl);
+            m_zobObjectControl.Location = new Point(0, m_engineControl.Location.Y + m_engineControl.Height + 10);
 
             this.WindowState = FormWindowState.Maximized;
 
@@ -88,6 +96,11 @@ namespace DirectZobEditor
             return m_camControl;
         }
         
+        public ZobObjectControl GetZobObjectControl()
+        {
+            return m_zobObjectControl;
+        }
+
         public CLI.DirectZobWrapper GetDirectZobWrapper()
         {
             return m_directZobWrapper;

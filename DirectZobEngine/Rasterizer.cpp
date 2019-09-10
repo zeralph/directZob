@@ -38,10 +38,11 @@ void Rasterizer::Run()
 	}
 }
 
-void Rasterizer::Start(const std::vector<const Triangle*>* triangles, const std::vector<Line2D>* lines)
+void Rasterizer::Start(const std::vector<const Triangle*>* triangles, const std::vector<Line2D>* lines, const bool wireFrame)
 {
 	m_lines = lines;
 	m_triangles = triangles;
+	m_wireFrame = wireFrame;
 	m_started = true;
 }
 
@@ -181,24 +182,30 @@ void Rasterizer::FillBottomFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, 
 				b++;
 				a = (int)(a < 0.0f ? 0.0f : a);
 				b = (int)(b > m_width ? m_width : b);
-				for (int i = a; i < b; i++)
+				if (m_wireFrame)
 				{
-					p.x = i;
-					p.y = scanlineY;
-					p.z = -1;
-					FillBufferPixel(&p, t);
+					if (a < b)
+					{
+						p.x = a;
+						p.y = scanlineY;
+						p.z = -1;
+						FillBufferPixel(&p, t);
+						p.x = b - 1;
+						p.y = scanlineY;
+						p.z = -1;
+						FillBufferPixel(&p, t);
+					}
 				}
-				/*if (a < b)
+				else
 				{
-					p.x = a;
-					p.y = scanlineY;
-					p.z = -1;
-					FillBufferPixel(&p, t);
-					p.x = b - 1;
-					p.y = scanlineY;
-					p.z = -1;
-					FillBufferPixel(&p, t);
-				}*/
+					for (int i = a; i < b; i++)
+					{
+						p.x = i;
+						p.y = scanlineY;
+						p.z = -1;
+						FillBufferPixel(&p, t);
+					}
+				}
 			}
 		}
 		curx1 += invslope1;
@@ -226,24 +233,30 @@ void Rasterizer::FillTopFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, con
 				b++;
 				a = (int)(a < 0.0f ? 0.0f : a);
 				b = (int)(b > m_width ? m_width : b);
-				for (int i = a; i < b; i++)
+				if (m_wireFrame)
 				{
-					p.x = i;
-					p.y = scanlineY;
-					p.z = -1;
-					FillBufferPixel(&p, t);
+					if (a < b)
+					{
+						p.x = a;
+						p.y = scanlineY;
+						p.z = -1;
+						FillBufferPixel(&p, t);
+						p.x = b - 1;
+						p.y = scanlineY;
+						p.z = -1;
+						FillBufferPixel(&p, t);
+					}
 				}
-				/*if (a < b)
+				else
 				{
-					p.x = a;
-					p.y = scanlineY;
-					p.z = -1;
-					FillBufferPixel(&p, t);
-					p.x = b - 1;
-					p.y = scanlineY;
-					p.z = -1;
-					FillBufferPixel(&p, t);
-				}*/
+					for (int i = a; i < b; i++)
+					{
+						p.x = i;
+						p.y = scanlineY;
+						p.z = -1;
+						FillBufferPixel(&p, t);
+					}
+				}
 			}
 		}
 		curx1 -= invslope1;

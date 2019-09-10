@@ -147,6 +147,15 @@
     <ClCompile Include="SceneLoader.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
+    <ClCompile Include="ZobObjectManagerWrapper.cpp">
+      <Filter>Fichiers sources\Interfaces</Filter>
+    </ClCompile>
+    <ClCompile Include="ZobObjectInterface.cpp">
+      <Filter>Fichiers sources\Interfaces</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshManager.cpp">
+      <Filter>Fichiers sources\managers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Color.h">
@@ -256,6 +265,15 @@
     </ClInclude>
     <ClInclude Include="SceneLoader.h">
       <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="ZobObjectManagerWrapper.h">
+      <Filter>Fichiers d%27en-tête\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="ZobObjectInterface.h">
+      <Filter>Fichiers d%27en-tête\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshManager.h">
+      <Filter>Fichiers d%27en-tête\managers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

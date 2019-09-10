@@ -193,7 +193,7 @@ void Mesh::Draw(const Matrix4x4 &modelMatrix, const Camera* camera, Core::Engine
 		t->draw = false;
 		if (!RejectTriangle(t, znear, zfar, (float)bData->width, (float)bData->height))
 		{
-			if (Vector3::Dot(&n, camZ) < 0.5f)
+			if (Vector3::Dot(&n, camZ) < 0.5f || engine->WireFrame())
 			{
 				t->ComputeArea();
 				static float a = 50000.0f;

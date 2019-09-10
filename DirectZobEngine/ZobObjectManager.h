@@ -17,8 +17,12 @@ public:
 
 	void AddZobObject(ZobObject* z);
 	ZobObject* GetZobObject(const std::string& name) const;
+	std::string GetZobObjectList();
+	ZobObject* GetRootObject() { return m_rootObject;  }
+	void CreateZobObject(ZobObject* parent);
+	void RemoveZobObject(ZobObject* z);
 
 private:
-	std::vector<ZobObject*> m_zobObjects;
-
+	void GetZobObjectListInternal(const ZobObject* z, std::string& str);
+	ZobObject* m_rootObject = NULL;
 }; 

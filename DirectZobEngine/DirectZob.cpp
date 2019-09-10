@@ -16,6 +16,7 @@ DirectZob::DirectZob()
 DirectZob::~DirectZob()
 {
 	//delete m_engine;
+	delete m_meshManager;
 	delete m_textureManager;
 	delete m_cameraManager;
 	delete m_text;
@@ -35,7 +36,7 @@ std::string DirectZob::ExePath() {
 
 void DirectZob::LoadScene(std::string& path, std::string& file)
 {
-	SceneLoader::LoadScene(path, file, m_zobObjectManager, m_textureManager);
+	SceneLoader::LoadScene(path, file, m_zobObjectManager, m_meshManager, m_textureManager);
 
 
 	std::string font("Font");
@@ -50,6 +51,7 @@ void DirectZob::Init()
 	m_engine = new Engine(WIDTH, HEIGHT, m_events);
 	m_cameraManager = new CameraManager();
 	m_textureManager = new TextureManager();
+	m_meshManager = new MeshManager();
 	m_zobObjectManager = new ZobObjectManager();
 	m_events->AddEvent(0, " OK\n");
 	int dx = 1;
@@ -76,7 +78,7 @@ int DirectZob::RunAFrame()
 		Camera* cam = m_cameraManager->GetCurrentCamera();
 		cam->Update();
 
-		//if (g_bShowGrid)
+		if(m_engine->ShowGrid())
 		{
 			m_engine->DrawGrid(cam);
 		}
