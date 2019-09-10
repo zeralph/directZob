@@ -57,6 +57,12 @@
     <Compile Include="CameraControl.Designer.cs">
       <DependentUpon>CameraControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="EngineControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="EngineControl.Designer.cs">
+      <DependentUpon>EngineControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="EngineWindow.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -71,14 +77,23 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ZobObjectList.cs">
+    <Compile Include="ZobObjectControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ZobObjectList.Designer.cs">
-      <DependentUpon>ZobObjectList.cs</DependentUpon>
+    <Compile Include="ZobObjectControl.Designer.cs">
+      <DependentUpon>ZobObjectControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ZobObjectListControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ZobObjectListControl.Designer.cs">
+      <DependentUpon>ZobObjectListControl.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="CameraControl.resx">
       <DependentUpon>CameraControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EngineControl.resx">
+      <DependentUpon>EngineControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="EngineWindow.resx">
       <DependentUpon>EngineWindow.cs</DependentUpon>
@@ -96,8 +111,11 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="ZobObjectList.resx">
-      <DependentUpon>ZobObjectList.cs</DependentUpon>
+    <EmbeddedResource Include="ZobObjectControl.resx">
+      <DependentUpon>ZobObjectControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ZobObjectListControl.resx">
+      <DependentUpon>ZobObjectListControl.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

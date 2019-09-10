@@ -149,28 +149,12 @@ int Engine::DrawScene()
 	t = clock();
 	m_sceneTriangles = 0;
 	m_drawnTriangles = 0;
-	/*for (int i = 0; i < m_meshes.size(); i++)
-	{
-		Mesh* m = m_meshes.at(i);
-		m->Draw(camera, &m_bufferData);
-		const std::vector<Triangle>* tList = m->GetTrianglesList();
-		for (int j = 0; j < tList->size(); j++)
-		{
-			const Triangle* t = &tList->at(j);
-			if (t->draw)
-			{
-				this->QueueTriangle(t);
-				m_drawnTriangles++;
-			}
-			m_sceneTriangles++;
-		}
-	}*/
 	m_geometryTimeMS = (float)(clock() - t) / CLOCKS_PER_SEC * 1000;
 
 	t = clock();
 	for (int i = 0; i < m_nbRasterizers; i++)
 	{
-		m_rasterizers->at(i)->Start(&m_rasterTriangleQueues[i], &m_rasterLineQueues[i]);
+		m_rasterizers->at(i)->Start(&m_rasterTriangleQueues[i], &m_rasterLineQueues[i], m_wireFrame);
 
 	}
 	WaitForRasterizersEnd();

@@ -50,6 +50,10 @@ namespace DirectZobEditor
             m_engineBitmap = new System.Drawing.Bitmap(m_width, m_height, 4 * m_width, System.Drawing.Imaging.PixelFormat.Format32bppRgb, p);
         }
 
+        public CLI.EngineWrapper GetEngineWrapper()
+        {
+            return m_engineWrapper;
+        }
         private void UpdateEngineWindowMethod()
         {
             //if(m_directZobWrapper.RunAFrame() >= 0)

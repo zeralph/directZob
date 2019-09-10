@@ -26,7 +26,7 @@ public:
 	Rasterizer(uint width, uint startHeight, uint endHeight, BufferData* bufferData);
 	~Rasterizer();
 
-	void Start(const std::vector<const Triangle*>* triangles, const std::vector<Line2D>* lines);
+	void Start(const std::vector<const Triangle*>* triangles, const std::vector<Line2D>* lines, const bool wireFrame);
 	void End() { m_run = false; }
 	void Init();
 	void Run();
@@ -49,6 +49,7 @@ public:
 	uint m_height;
 	std::atomic_bool m_run;
 	std::atomic_bool m_started;
+	bool m_wireFrame = false;
 };
 
 

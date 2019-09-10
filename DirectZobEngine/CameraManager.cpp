@@ -43,7 +43,7 @@ Camera* CameraManager::GetCamera(std::string& name) const
 	return NULL;
 }
 
-const std::vector<std::string>& CameraManager::GetCameraList() const 
+const std::vector<std::string> CameraManager::GetCameraList() const 
 {
 	std::vector<std::string> vec;
 	vec.clear();

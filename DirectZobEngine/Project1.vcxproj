@@ -79,6 +79,7 @@
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Release|x64'">false</CompileAsManaged>
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'">false</CompileAsManaged>
     </ClCompile>
+    <ClCompile Include="MeshManager.cpp" />
     <ClCompile Include="MiniFB_common.c">
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Release|x64'">false</CompileAsManaged>
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'">false</CompileAsManaged>
@@ -126,7 +127,9 @@
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'">false</CompileAsManaged>
     </ClCompile>
     <ClCompile Include="ZobObject.cpp" />
+    <ClCompile Include="ZobObjectInterface.cpp" />
     <ClCompile Include="ZobObjectManager.cpp" />
+    <ClCompile Include="ZobObjectManagerWrapper.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
@@ -145,6 +148,7 @@
     <ClInclude Include="Matrix2x2.h" />
     <ClInclude Include="Matrix4x4.h" />
     <ClInclude Include="Mesh.h" />
+    <ClInclude Include="MeshManager.h" />
     <ClInclude Include="MiniFB.h" />
     <ClInclude Include="MiniFB_cpp.h" />
     <ClInclude Include="MiniFB_enums.h" />
@@ -164,7 +168,9 @@
     <ClInclude Include="Vector3.h" />
     <ClInclude Include="WindowData.h" />
     <ClInclude Include="ZobObject.h" />
+    <ClInclude Include="ZobObjectInterface.h" />
     <ClInclude Include="ZobObjectManager.h" />
+    <ClInclude Include="ZobObjectManagerWrapper.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

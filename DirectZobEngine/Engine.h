@@ -64,6 +64,11 @@ namespace Core
 		inline const float GetZFar() { return m_zFar; }
 		inline const ulong GetNbPixels() { return m_nbPixels; }
 
+		inline void ShowGrid(bool b) { m_showGrid = b; }
+		inline void WireFrame(bool b) { m_wireFrame = b; }
+		inline bool ShowGrid() { return m_showGrid; }
+		inline bool WireFrame() { return m_wireFrame; }
+
 		std::string GetObjectList();
 
 	private:
@@ -93,5 +98,7 @@ namespace Core
 		uint m_drawnTriangles;
 		ulong m_nbPixels;
 		bool m_started = false;
+		bool m_wireFrame = false;
+		bool m_showGrid = true;
 	};
 }
