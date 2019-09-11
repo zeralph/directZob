@@ -156,6 +156,9 @@
     <ClCompile Include="MeshManager.cpp">
       <Filter>Fichiers sources\managers</Filter>
     </ClCompile>
+    <ClCompile Include="MeshManagerWrapper.cpp">
+      <Filter>Fichiers sources\Interfaces</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Color.h">
@@ -274,6 +277,9 @@
     </ClInclude>
     <ClInclude Include="MeshManager.h">
       <Filter>Fichiers d%27en-tête\managers</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshManagerWrapper.h">
+      <Filter>Fichiers d%27en-tête\Interfaces</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

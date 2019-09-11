@@ -38,10 +38,11 @@ void Rasterizer::Run()
 	}
 }
 
-void Rasterizer::Start(const std::vector<const Triangle*>* triangles, const std::vector<Line2D>* lines, const bool wireFrame)
+void Rasterizer::Start(const Triangle* triangles, uint nbTriangles, const std::vector<Line2D>* lines, const bool wireFrame)
 {
 	m_lines = lines;
 	m_triangles = triangles;
+	m_nbTriangles = nbTriangles;
 	m_wireFrame = wireFrame;
 	m_started = true;
 }
@@ -63,9 +64,9 @@ void Rasterizer::Render() const
 		const Line2D l = m_lines->at(i);
 		DrawLine(&l);
 	}
-	for (int i = 0; i < m_triangles->size(); i++)
+	for (int i = 0; i < m_nbTriangles; i++)
 	{
-		const Triangle* t = m_triangles->at(i);
+		const Triangle* t = &m_triangles[i];
 		DrawTriangle(t);
 	}
 }

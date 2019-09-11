@@ -16,6 +16,7 @@ namespace CLI
 		ZobObjectInterface^ GetZobObject(System::String^ name);
 		void RemoveZobObject(System::String^ name);
 		void AddZobObject(System::String^ parent);
+
 	private:
 
 	};

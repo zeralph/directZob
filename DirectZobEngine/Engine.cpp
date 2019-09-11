@@ -10,7 +10,6 @@
 #include <assert.h> 
 #include "DirectZob.h"
 
-
 using namespace Core;
 Engine::Engine(int width, int height, Events* events)
 {
@@ -44,7 +43,8 @@ Engine::Engine(int width, int height, Events* events)
 	m_renderTimeMS = 0;
 	m_geometryTimeMS = 0;
 	
-	m_rasterTriangleQueues = new std::vector<const Triangle*>[m_nbRasterizers];
+	m_rasterTriangleQueues = (Triangle**)malloc(sizeof(Triangle) * m_nbRasterizers);
+	m_rasterNbTriangleQueues = (uint*)malloc(sizeof(uint) * m_nbRasterizers);
 	m_rasterLineQueues = new std::vector<Line2D>[m_nbRasterizers];
 	m_rasterizers = new std::vector<Rasterizer*>[m_nbRasterizers];
 
@@ -55,7 +55,24 @@ Engine::Engine(int width, int height, Events* events)
 	{
 		Rasterizer* r = new Rasterizer(width, h0, h0+h, &m_bufferData);
 		m_rasterizers->push_back(r);
-		m_rasterTriangleQueues[i].clear();
+
+		Triangle* t = (Triangle*)malloc(sizeof(Triangle) * TRIANGLE_QUEUE_SIZE);
+		m_rasterTriangleQueues[i] = t;
+		for (int j = 0; j < TRIANGLE_QUEUE_SIZE; j++)
+		{
+			m_rasterTriangleQueues[i][j].va = new Vector3();
+			m_rasterTriangleQueues[i][j].vb = new Vector3();
+			m_rasterTriangleQueues[i][j].vc = new Vector3();
+			m_rasterTriangleQueues[i][j].na = new Vector3();
+			m_rasterTriangleQueues[i][j].nb = new Vector3();
+			m_rasterTriangleQueues[i][j].nc = new Vector3();
+			m_rasterTriangleQueues[i][j].ua = new Vector2();
+			m_rasterTriangleQueues[i][j].ub = new Vector2();
+			m_rasterTriangleQueues[i][j].uc = new Vector2();
+		}
+		
+
+		//m_rasterTriangleQueues[i].clear();
 		m_rasterLineQueues[i].clear();
 		h0 += h;
 	}
@@ -110,7 +127,7 @@ void Engine::Resize(int width, int height)
 	{
 		Rasterizer* r = new Rasterizer(width, h0, h0 + h, &m_bufferData);
 		m_rasterizers->push_back(r);
-		m_rasterTriangleQueues[i].clear();
+		//m_rasterTriangleQueues[i].clear();
 		m_rasterLineQueues[i].clear();
 		h0 += h;
 	}
@@ -134,9 +151,12 @@ void Engine::ClearBuffer(const Color* color)
 	//memset(m_zBuffer, 0, sizeof(float) * m_width * m_height);
 	for (int i = 0; i < m_nbRasterizers; i++)
 	{
-		m_rasterTriangleQueues[i].clear();
+		//m_rasterTriangleQueues[i].clear();
 		m_rasterLineQueues[i].clear();
+		m_rasterNbTriangleQueues[i] = 0;
 	}
+	m_sceneTriangles = 0;
+	m_drawnTriangles = 0;
 }
 
 int Engine::DrawScene()
@@ -147,14 +167,9 @@ int Engine::DrawScene()
 	}
 	clock_t t;
 	t = clock();
-	m_sceneTriangles = 0;
-	m_drawnTriangles = 0;
-	m_geometryTimeMS = (float)(clock() - t) / CLOCKS_PER_SEC * 1000;
-
-	t = clock();
 	for (int i = 0; i < m_nbRasterizers; i++)
 	{
-		m_rasterizers->at(i)->Start(&m_rasterTriangleQueues[i], &m_rasterLineQueues[i], m_wireFrame);
+		m_rasterizers->at(i)->Start(m_rasterTriangleQueues[i], m_rasterNbTriangleQueues[i], &m_rasterLineQueues[i], m_wireFrame);
 
 	}
 	WaitForRasterizersEnd();
@@ -236,23 +251,23 @@ void Engine::QueueLine(const Camera* camera, const Vector3* v1, const Vector3* v
 	camera->GetProjectionMatrix()->Mul(&a);
 	camera->GetViewMatrix()->Mul(&b);
 	camera->GetProjectionMatrix()->Mul(&b);
-
+	if (a.w != 1)
+	{
+		a.x /= a.w;
+		a.y /= a.w;
+		a.z /= a.w;
+		a.w /= a.w;
+	}
+	if (b.w != 1)
+	{
+		b.x /= b.w;
+		b.y /= b.w;
+		b.z /= b.w;
+		b.w /= b.w;
+	}
 	if (ClipSegment(&a, &b))
 	{
-		if (a.w != 1)
-		{
-			a.x /= a.w;
-			a.y /= a.w;
-			a.z /= a.w;
-			a.w /= a.w;
-		}
-		if (b.w != 1)
-		{
-			b.x /= b.w;
-			b.y /= b.w;
-			b.z /= b.w;
-			b.w /= b.w;
-		}
+
 		a.x = (a.x + 1) * m_bufferData.width / 2.0f;
 		a.y = (a.y + 1) * m_bufferData.height / 2.0f;
 		b.x = (b.x + 1) * m_bufferData.width / 2.0f;
@@ -338,7 +353,19 @@ void Engine::QueueTriangle(const Triangle* t)
 	assert(min <= max);
 	for (int i = min; i <= max; i++)
 	{
-		m_rasterTriangleQueues[i].push_back(t);
+		uint j = m_rasterNbTriangleQueues[i];
+		if (j < TRIANGLE_QUEUE_SIZE)
+		{
+			m_rasterTriangleQueues[i][j].Copy(t);
+			m_rasterNbTriangleQueues[i]++;
+			m_drawnTriangles++;
+		}
+		else
+		{
+			int oo = 0;
+			oo++;
+		}
+		m_sceneTriangles++;
 	}
 }
 

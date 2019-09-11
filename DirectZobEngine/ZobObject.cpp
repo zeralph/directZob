@@ -33,6 +33,22 @@ ZobObject::~ZobObject()
 	DirectZob::Log(l);
 }
 
+void ZobObject::SetMesh(std::string name)
+{
+	Mesh* m = DirectZob::GetInstance()->GetMeshManager()->GetMesh(name);
+	m_mesh = m;
+}
+
+const std::string ZobObject::GetMeshName() const
+{
+	if (m_mesh)
+	{
+		return m_mesh->GetName();
+	}
+	return "";
+}
+
+
 void ZobObject::Update(const Matrix4x4& parentMatrix)
 {
 	m_modelMatrix.Identity();

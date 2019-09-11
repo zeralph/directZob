@@ -43,11 +43,15 @@
             this.label2 = new System.Windows.Forms.Label();
             this.zobName = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.meshList = new System.Windows.Forms.ComboBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.meshList);
+            this.groupBox1.Controls.Add(this.label5);
             this.groupBox1.Controls.Add(this.zobScaleZ);
             this.groupBox1.Controls.Add(this.zobScaleY);
             this.groupBox1.Controls.Add(this.zobScaleX);
@@ -191,7 +195,7 @@
             // 
             this.zobName.Location = new System.Drawing.Point(60, 42);
             this.zobName.Name = "zobName";
-            this.zobName.Size = new System.Drawing.Size(183, 20);
+            this.zobName.Size = new System.Drawing.Size(162, 20);
             this.zobName.TabIndex = 1;
             // 
             // label1
@@ -202,6 +206,24 @@
             this.label1.Size = new System.Drawing.Size(35, 13);
             this.label1.TabIndex = 0;
             this.label1.Text = "Name";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(7, 187);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(33, 13);
+            this.label5.TabIndex = 22;
+            this.label5.Text = "Mesh";
+            // 
+            // meshList
+            // 
+            this.meshList.FormattingEnabled = true;
+            this.meshList.Location = new System.Drawing.Point(60, 183);
+            this.meshList.Name = "meshList";
+            this.meshList.Size = new System.Drawing.Size(162, 21);
+            this.meshList.TabIndex = 23;
+            this.meshList.SelectedValueChanged += new System.EventHandler(this.MeshList_SelectedValueChanged);
             // 
             // ZobObjectControl
             // 
@@ -233,5 +255,7 @@
         private System.Windows.Forms.TextBox zobPosY;
         private System.Windows.Forms.TextBox zobPosX;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ComboBox meshList;
+        private System.Windows.Forms.Label label5;
     }
 }

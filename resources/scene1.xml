@@ -7,6 +7,10 @@
 	<Meshes>
 		<Mesh name = "beach2" file="beach2.obj"  texture="Beach2"></Mesh>
 		<Mesh name = "water" file="water.obj" texture="Water"></Mesh>
+		<Mesh name = "camaro" file="camaro.obj" texture="Water"></Mesh>
+		<Mesh name = "earth" file="earth.obj" texture="Water"></Mesh>
+		<Mesh name = "man" file="man.obj" texture="Water"></Mesh>
+		<Mesh name = "cottage_obj" file="cottage_obj.obj" texture="Water"></Mesh>
 	</Meshes>
 	<Scene>
 		<ZobObject name="Beach2">

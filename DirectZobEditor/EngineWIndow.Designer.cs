@@ -57,7 +57,7 @@
             this.EngineRender.Dock = System.Windows.Forms.DockStyle.Fill;
             this.EngineRender.Location = new System.Drawing.Point(0, 24);
             this.EngineRender.Name = "EngineRender";
-            this.EngineRender.Size = new System.Drawing.Size(960, 516);
+            this.EngineRender.Size = new System.Drawing.Size(960, 540);
             this.EngineRender.TabIndex = 1;
             this.EngineRender.TabStop = false;
             this.EngineRender.MouseDown += new System.Windows.Forms.MouseEventHandler(this.EngineRender_MouseDown);
@@ -71,7 +71,7 @@
             this.Controls.Add(this.EngineRender);
             this.Controls.Add(this.menuStrip1);
             this.Name = "EngineWindow";
-            this.Size = new System.Drawing.Size(960, 540);
+            this.Size = new System.Drawing.Size(960, 564);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.EngineRender)).EndInit();

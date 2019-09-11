@@ -80,6 +80,7 @@
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'">false</CompileAsManaged>
     </ClCompile>
     <ClCompile Include="MeshManager.cpp" />
+    <ClCompile Include="MeshManagerWrapper.cpp" />
     <ClCompile Include="MiniFB_common.c">
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Release|x64'">false</CompileAsManaged>
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'">false</CompileAsManaged>
@@ -149,6 +150,7 @@
     <ClInclude Include="Matrix4x4.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MeshManager.h" />
+    <ClInclude Include="MeshManagerWrapper.h" />
     <ClInclude Include="MiniFB.h" />
     <ClInclude Include="MiniFB_cpp.h" />
     <ClInclude Include="MiniFB_enums.h" />

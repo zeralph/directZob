@@ -82,9 +82,10 @@ int DirectZob::RunAFrame()
 		{
 			m_engine->DrawGrid(cam);
 		}
-
+		clock_t tick = clock();
 		m_zobObjectManager->UpdateObjects();
 		m_zobObjectManager->DrawObjects(cam, m_engine);
+		m_engine->SetGeometryTime( (float)(clock() - tick) / CLOCKS_PER_SEC * 1000);
 		m_engine->DrawScene();
 
 		snprintf(buffer, MAX_PATH, "Triangles : %lu / %lu", m_engine->GetNbDrawnTriangles(), m_engine->GetNbTriangles());
