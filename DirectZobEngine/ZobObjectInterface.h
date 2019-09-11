@@ -17,5 +17,7 @@ namespace CLI {
 		void SetTransform(ManagedVector3^ p);
 		void SetRotation(ManagedVector3^ p);
 		void SetScale(ManagedVector3^ p);
+		System::String^ GetMeshName();
+		void SetMesh(System::String^ name);
 	};
 }

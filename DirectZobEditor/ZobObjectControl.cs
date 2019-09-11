@@ -7,16 +7,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Newtonsoft.Json;
 
 namespace DirectZobEditor
 {
     public partial class ZobObjectControl : UserControl
     {
         private CLI.ZobObjectInterface m_zobObjectWrapper = null;
+        private CLI.MeshManagerWrapper m_meshManagerWrapper = null;
         public ZobObjectControl()
         {
             InitializeComponent();
+            m_meshManagerWrapper = new CLI.MeshManagerWrapper();
             ClearValues();
+            RefreshMeshList();
         }
 
         public void SetZobObjectWrapper(CLI.ZobObjectInterface z)
@@ -25,6 +29,7 @@ namespace DirectZobEditor
             if(z != null)
             {
                 SetValues();
+                RefreshMeshList();
             }
             else
             {
@@ -121,6 +126,23 @@ namespace DirectZobEditor
             }
         }
 
+        private void RefreshMeshList()
+        {
+            meshList.Items.Clear();
+            string s = m_meshManagerWrapper.GetMeshList();
+            List<JSONMesh> z = JsonConvert.DeserializeObject<List<JSONMesh>>(s);
+            meshList.Items.Add("");
+            for (int i = 0; i < z.Count; i++)
+            {
+                meshList.Items.Add(z[i].name);
+            }
+            if(m_zobObjectWrapper != null)
+            {
+                s = m_zobObjectWrapper.GetMeshName();
+                meshList.SelectedItem = s;
+            }
+        }
+
         private void UpdateFromTextBoxes(object sender, EventArgs e)
         {
             UpdateValues();
@@ -133,6 +155,19 @@ namespace DirectZobEditor
                 e.Handled = true;
                 //e.SuppressKeyPress = true;
                 UpdateValues();
+            }
+        }
+
+        public class JSONMesh
+        {
+            public string name { get; set; }
+        }
+
+        private void MeshList_SelectedValueChanged(object sender, EventArgs e)
+        {
+            if(m_zobObjectWrapper != null)
+            {
+                m_zobObjectWrapper.SetMesh(meshList.SelectedItem.ToString());
             }
         }
     }

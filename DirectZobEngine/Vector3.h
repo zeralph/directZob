@@ -13,6 +13,14 @@ public:
 	static const Vector3 Vector3Y;
 	static const Vector3 Vector3Z;
 
+	inline void Copy(const Vector3* v)
+	{
+		x = v->x;
+		y = v->y;
+		z = v->z;
+		w = v->w;
+	}
+
 	inline void Normalize() 
 	{
 		float f = sqrtLength();

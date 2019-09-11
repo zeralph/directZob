@@ -34,7 +34,8 @@ public:
 	void RemoveChildReference(const ZobObject* z);
 	void AddChildReference(ZobObject* z);
 	int GetChildPosition(const ZobObject* z);
-
+	const std::string GetMeshName() const ;
+	void SetMesh(std::string name);
 protected:
 	ZobObject* m_parent = NULL;
 	Mesh* m_mesh = NULL;

@@ -14,6 +14,7 @@ namespace DirectZobEditor
     {
         private CLI.DirectZobWrapper m_directZobWrapper;
         private CLI.CameraManagerWrapper m_camerManagerWrapper;
+        private CLI.MeshManagerWrapper m_meshManagerWrapper;
         //public UpdateLogWindow UpdateLogWindowDelegate;
         
         private CameraControl m_camControl;
@@ -31,8 +32,10 @@ namespace DirectZobEditor
             this.KeyPreview = true;
             m_directZobWrapper = new CLI.DirectZobWrapper();
             m_directZobWrapper.Init();
-            
-         
+
+            m_meshManagerWrapper = new CLI.MeshManagerWrapper();
+
+
             string path = @"C:\_GIT\directZob\resources\";
             string file = "scene1.xml";
             //path = @"C:\_GIT\directZob\resources\";
@@ -41,6 +44,7 @@ namespace DirectZobEditor
 
             //UpdateLogWindowDelegate = new UpdateLogWindow(UpdateLogWindowMethod);
 
+            propertiesPanel.Width = 600;
             m_camControl = new CameraControl();
             propertiesPanel.Controls.Add(m_camControl);
             m_zobObjectList = new ZobObjectListControl(this);
@@ -104,6 +108,11 @@ namespace DirectZobEditor
         public CLI.DirectZobWrapper GetDirectZobWrapper()
         {
             return m_directZobWrapper;
+        }
+
+        public CLI.MeshManagerWrapper GetMeshManagerWrapper()
+        {
+            return m_meshManagerWrapper;
         }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)

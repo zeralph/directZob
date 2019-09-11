@@ -17,6 +17,7 @@
 #include "Rasterizer.h"
 #include "Events.h"
 
+#define TRIANGLE_QUEUE_SIZE 50000
 #define Z_NEAR 0.001f
 #define Z_FAR 500.0f
 namespace Core
@@ -54,7 +55,7 @@ namespace Core
 		inline const float GetFps() { return m_fps; }
 		inline const float GetRenderTime() { return m_renderTimeMS; }
 		inline const float GetGeometryTime() { return m_geometryTimeMS; }
-
+		inline void SetGeometryTime(float f) { m_geometryTimeMS = f; }
 		inline const uint GetNbTriangles() const { return m_sceneTriangles; }
 		inline const uint GetNbDrawnTriangles() const { return m_drawnTriangles; }
 
@@ -78,7 +79,8 @@ namespace Core
 		void WaitForRasterizersEnd() const;
 
 		Events* m_events;
-		std::vector<const Triangle*>* m_rasterTriangleQueues;
+		Triangle** m_rasterTriangleQueues;
+		uint* m_rasterNbTriangleQueues;
 		std::vector<Line2D>* m_rasterLineQueues;
 		std::vector<Rasterizer*>* m_rasterizers;
 		uint m_nbRasterizers;

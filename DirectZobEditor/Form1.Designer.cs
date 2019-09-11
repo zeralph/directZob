@@ -125,7 +125,7 @@
             // 
             this.SecondPanelSplitter.Panel2.Controls.Add(this.propertiesPanel);
             this.SecondPanelSplitter.Size = new System.Drawing.Size(1074, 750);
-            this.SecondPanelSplitter.SplitterDistance = 876;
+            this.SecondPanelSplitter.SplitterDistance = 700;
             this.SecondPanelSplitter.TabIndex = 0;
             // 
             // ThirdPanelSPlitter
@@ -143,7 +143,7 @@
             // ThirdPanelSPlitter.Panel2
             // 
             this.ThirdPanelSPlitter.Panel2.Controls.Add(this.tabControl1);
-            this.ThirdPanelSPlitter.Size = new System.Drawing.Size(876, 750);
+            this.ThirdPanelSPlitter.Size = new System.Drawing.Size(700, 750);
             this.ThirdPanelSPlitter.SplitterDistance = 416;
             this.ThirdPanelSPlitter.TabIndex = 0;
             // 
@@ -152,7 +152,7 @@
             this.EngineRendererPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.EngineRendererPanel.Location = new System.Drawing.Point(0, 0);
             this.EngineRendererPanel.Name = "EngineRendererPanel";
-            this.EngineRendererPanel.Size = new System.Drawing.Size(874, 414);
+            this.EngineRendererPanel.Size = new System.Drawing.Size(698, 414);
             this.EngineRendererPanel.TabIndex = 0;
             // 
             // tabControl1
@@ -163,7 +163,7 @@
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(874, 328);
+            this.tabControl1.Size = new System.Drawing.Size(698, 328);
             this.tabControl1.TabIndex = 0;
             // 
             // tabPage1
@@ -172,7 +172,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(866, 302);
+            this.tabPage1.Size = new System.Drawing.Size(690, 302);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "tabPage1";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -183,7 +183,7 @@
             this.textLog.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textLog.Location = new System.Drawing.Point(3, 3);
             this.textLog.Name = "textLog";
-            this.textLog.Size = new System.Drawing.Size(860, 296);
+            this.textLog.Size = new System.Drawing.Size(684, 296);
             this.textLog.TabIndex = 0;
             this.textLog.Text = "";
             // 
@@ -192,7 +192,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(866, 303);
+            this.tabPage2.Size = new System.Drawing.Size(896, 302);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "tabPage2";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -202,7 +202,7 @@
             this.propertiesPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.propertiesPanel.Location = new System.Drawing.Point(0, 0);
             this.propertiesPanel.Name = "propertiesPanel";
-            this.propertiesPanel.Size = new System.Drawing.Size(192, 748);
+            this.propertiesPanel.Size = new System.Drawing.Size(368, 748);
             this.propertiesPanel.TabIndex = 0;
             // 
             // Form1

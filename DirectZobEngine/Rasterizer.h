@@ -26,7 +26,7 @@ public:
 	Rasterizer(uint width, uint startHeight, uint endHeight, BufferData* bufferData);
 	~Rasterizer();
 
-	void Start(const std::vector<const Triangle*>* triangles, const std::vector<Line2D>* lines, const bool wireFrame);
+	void Start(const Triangle* triangles, uint nbTriangles, const std::vector<Line2D>* lines, const bool wireFrame);
 	void End() { m_run = false; }
 	void Init();
 	void Run();
@@ -41,8 +41,9 @@ public:
 	inline float clamp2(float x, float min, float max) const { if (x < min) x = min; if (x > max) x = max; return x; }
 
 	const std::vector<Line2D>* m_lines;
-	const std::vector<const Triangle*>* m_triangles;
+	const Triangle* m_triangles;
 	BufferData* m_bufferData;
+	uint m_nbTriangles;
 	//std::thread m_thread;
 	uint m_startHeight;
 	uint m_width;

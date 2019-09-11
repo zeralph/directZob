@@ -43,6 +43,7 @@ public :
 	Engine* GetEngine() const { return m_engine; }
 	CameraManager* GetCameraManager() const { return m_cameraManager; }
 	ZobObjectManager* GetZobObjectManager() const { return m_zobObjectManager; }
+	MeshManager* GetMeshManager() const { return m_meshManager; }
 	Events* GetEventManager() { return m_events; }
 	static void Log(std::string& str);
 	static void Log(const char* str);

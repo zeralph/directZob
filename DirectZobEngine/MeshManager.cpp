@@ -38,3 +38,20 @@ Mesh* MeshManager::GetMesh(std::string& name)
 	}
 	return NULL;
 }
+
+std::string MeshManager::GetMeshList()
+{
+	std::string s = "[";
+	for (int i = 0; i < m_meshes.size(); i++)
+	{
+		s.append("{\"name\":\"");
+		s.append(m_meshes.at(i)->GetName());
+		s.append("\"}");
+		if (i < m_meshes.size() - 1)
+		{
+			s.append(",");
+		}
+	}
+	s.append("]");
+	return s;
+}

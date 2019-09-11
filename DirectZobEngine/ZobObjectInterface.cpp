@@ -15,6 +15,18 @@ namespace CLI
 		return gcnew System::String("");
 	}
 
+	System::String^ ZobObjectInterface::GetMeshName()
+	{
+		return gcnew System::String(m_Instance->GetMeshName().c_str());
+	}
+
+	void ZobObjectInterface::SetMesh(System::String^ name)
+	{
+		std::string n;
+		MarshalString(name, n);
+		m_Instance->SetMesh(n);
+	}
+
 	void ZobObjectInterface::SetName(System::String^ name)
 	{
 		if (m_Instance != NULL)

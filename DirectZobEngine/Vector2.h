@@ -12,7 +12,12 @@ public:
 
 	bool operator== (const Vector2& v2) { return x == v2.x && y == v2.y && w == v2.w; }
 	
-	
+	inline void Copy(Vector2* v)
+	{
+		x = v->x;
+		y = v->y;
+		w = v->w;
+	}
 
 	void Norm();
 	float Dot(const Vector2 * v);
