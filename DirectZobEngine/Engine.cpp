@@ -141,6 +141,7 @@ void Engine::Resize(int width, int height)
 
 void Engine::ClearBuffer(const Color* color)
 {
+	m_tick = clock();
 	uint v = color->GetRawValue();
 	v = 0x3F95FF;
 	for (int i = 0; i < m_bufferData.width * m_bufferData.height; i++)
@@ -159,22 +160,25 @@ void Engine::ClearBuffer(const Color* color)
 	m_drawnTriangles = 0;
 }
 
-int Engine::DrawScene()
+int Engine::StartDrawingScene()
 {
 	if (!m_started)
 	{
 		return 0;
 	}
-	clock_t t;
-	t = clock();
+	m_drawTick = clock();
 	for (int i = 0; i < m_nbRasterizers; i++)
 	{
 		m_rasterizers->at(i)->Start(m_rasterTriangleQueues[i], m_rasterNbTriangleQueues[i], &m_rasterLineQueues[i], m_wireFrame);
 
 	}
+	return 0;
+}
+int Engine::EndDrawingScene()
+{
 	WaitForRasterizersEnd();
 
-	m_renderTimeMS = (float)(clock() - t) / CLOCKS_PER_SEC * 1000;
+	m_renderTimeMS = (float)(clock() - m_drawTick) / CLOCKS_PER_SEC * 1000;
 
 	if (m_showZBuffer)
 	{
@@ -190,8 +194,8 @@ int Engine::DrawScene()
 	//r = mfb_update(window, m_buffer);
 	m_currentFrame++;
 	m_nbPixels = 0;
+	m_frameTimeMS = (float)(clock() - m_tick) / CLOCKS_PER_SEC * 1000;
 	m_fps = (float)CLOCKS_PER_SEC / (float)(clock() - m_tick);
-	m_tick = t;
 	return r;
 }
 
