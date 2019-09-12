@@ -38,7 +38,7 @@ namespace DirectZobEditor
 
             string path = @"C:\_GIT\directZob\resources\";
             string file = "scene1.xml";
-            //path = @"C:\_GIT\directZob\resources\";
+            path = @"D:\_PERSO\directZob\directZob\resources\";
             m_directZobWrapper.LoadScene(path, file);
 
 

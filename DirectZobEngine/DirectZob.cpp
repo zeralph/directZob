@@ -86,8 +86,9 @@ int DirectZob::RunAFrame()
 		m_zobObjectManager->UpdateObjects();
 		m_zobObjectManager->DrawObjects(cam, m_engine);
 		m_engine->SetGeometryTime( (float)(clock() - tick) / CLOCKS_PER_SEC * 1000);
-		m_engine->DrawScene();
 
+		m_engine->StartDrawingScene();
+		m_engine->EndDrawingScene();
 		snprintf(buffer, MAX_PATH, "Triangles : %lu / %lu", m_engine->GetNbDrawnTriangles(), m_engine->GetNbTriangles());
 		m_text->Print(0, 0, 1, &std::string(buffer), 0xFFFFFFFF);
 
@@ -102,7 +103,7 @@ int DirectZob::RunAFrame()
 		);
 		m_text->Print(0, 8, 1, &std::string(buffer), 0xFFFFFFFF);
 
-		snprintf(buffer, MAX_PATH, "FPS : %.2f, render : %.2fms, geom : %.2f", m_engine->GetFps(), m_engine->GetRenderTime(), m_engine->GetGeometryTime());
+		snprintf(buffer, MAX_PATH, "render : %06.2fms, geom : %06.2f, tot : %06.2f, FPS : %06.2f", m_engine->GetRenderTime(), m_engine->GetGeometryTime(), m_engine->GetFrameTime(), m_engine->GetFps());
 		float t = m_engine->GetFps();
 		t = (1.0f / t) * 1000.0f;
 		if (t < TARGET_MS_PER_FRAME)
