@@ -15,7 +15,7 @@ class Mesh
 {
 public:
 
-	Mesh(std::string& name, std::string& path, const Texture* tex);
+	Mesh(std::string& name, std::string& path, std::string& file, const Texture* tex);
 	~Mesh();
 
 
@@ -34,6 +34,7 @@ public:
 	std::vector<Triangle> m_triangles;
 
 	const std::string& GetName() const { return m_name; }
+	const std::string& GetFile() const { return m_file; }
 
 private:
 	void SplitEntry(const std::string* s, std::vector<std::string>* v, const char delim);
@@ -47,6 +48,7 @@ private:
 	
 	bool m_hasNormals = false;
 	std::string m_name;
+	std::string m_file;
 	Matrix4x4	m_modelMatrixRotationOnly;
 	const Texture* m_texture = NULL;
 

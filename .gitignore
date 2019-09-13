@@ -479,3 +479,10 @@
 /.vs/DirectZob/v16/ipch/AutoPCH/af4fbef70297c5c0/MESHMANAGERWRAPPER.ipch
 /DirectZobEditor/obj/Release/DirectZobEditor.ZobObjectControl.resources
 /DirectZobEditor/obj/Release/DirectZobEditor.ZobObjectListControl.resources
+/.vs/DirectZob/v15/ipch/AutoPCH/6fe27bd1b403f0e7/TEXTUREMANAGER.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/a47c3f70c2403913/MESHMANAGER.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/dad2c8e75b7cef57/NEW_SCALAR.ipch
+/DirectZobEngine/x64/DLL Debug/MeshManager.obj
+/DirectZobEngine/x64/DLL Debug/MeshManagerWrapper.obj
+/DirectZobEngine/x64/DLL Debug/ZobObjectInterface.obj
+/DirectZobEngine/x64/DLL Debug/ZobObjectManagerWrapper.obj

@@ -14,17 +14,26 @@ TextureManager::~TextureManager()
 	m_textures.clear();
 }
 
-void TextureManager::LoadTexture(std::string& name, std::string& file)
+void TextureManager::LoadTexture(std::string& name, std::string& path, std::string& file)
 {
 	if (GetTexture(name) == NULL)
 	{
-		Texture* t = new Texture(file, name);
+		Texture* t = new Texture(path, file, name);
 		m_textures.push_back(t);
 	}
 	else
 	{
 		//output error
 	}
+}
+
+const Texture* TextureManager::GetTexture(const int i) const
+{
+	if (i >= 0 && i < m_textures.size())
+	{
+		return m_textures[i];
+	}
+	return NULL;
 }
 
 const Texture* TextureManager::GetTexture(std::string& name) const
@@ -37,4 +46,14 @@ const Texture* TextureManager::GetTexture(std::string& name) const
 		}
 	}
 	return NULL;
+}
+
+
+void TextureManager::UnloadAll()
+{
+	for (int i = 0; i < m_textures.size(); i++)
+	{
+		delete (m_textures[i]);
+	}
+	m_textures.clear();
 }

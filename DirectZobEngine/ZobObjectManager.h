@@ -21,7 +21,7 @@ public:
 	ZobObject* GetRootObject() { return m_rootObject;  }
 	void CreateZobObject(ZobObject* parent);
 	void RemoveZobObject(ZobObject* z);
-	
+	void UnloadAll();
 private:
 	void GetZobObjectListInternal(const ZobObject* z, std::string& str);
 	ZobObject* m_rootObject = NULL;

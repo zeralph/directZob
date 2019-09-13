@@ -93,6 +93,12 @@ Engine::~Engine()
 	m_events = NULL;
 }
 
+void Engine::Stop()
+{
+	m_started = false;
+	WaitForRasterizersEnd();
+}
+
 void Engine::Resize(int width, int height)
 {
 	WaitForRasterizersEnd();

@@ -35,6 +35,11 @@ public :
 
 	void Init();
 	void LoadScene(std::string& path, std::string& file);
+	void SaveScene(std::string& path, std::string& file);
+	void SaveScene();
+	void NewScene();
+	bool CanFastSave();
+
 	int RunAFrame();
 	const uint* GetBufferData() const { return m_engine->GetBufferData()->buffer; }
 	std::string ExePath();

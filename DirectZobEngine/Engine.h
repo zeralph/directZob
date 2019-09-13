@@ -37,7 +37,8 @@ namespace Core
 		~Engine();
 
 		inline void Start() { m_started = true; }
-		inline void Stop() { m_started = false; }
+		const inline bool Started() const { return m_started; }
+		void Stop();
 		void ClearBuffer(const Color* color);
 		void CopyBuffer(uint* source, uint* dest);
 		void Resize(int width, int height);

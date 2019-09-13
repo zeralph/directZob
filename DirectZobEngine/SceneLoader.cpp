@@ -7,17 +7,17 @@ std::string SceneLoader::m_file = "";
 void SceneLoader::LoadTexture(TiXmlElement* node, TextureManager* texMgr)
 {
 	std::string name = node->Attribute("name");
-	std::string fullPath = m_path + node->Attribute("file");
-	texMgr->LoadTexture(name, fullPath);
+	std::string file = node->Attribute("file");
+	texMgr->LoadTexture(name, m_path, file);
 }
 
 void SceneLoader::LoadMesh(TiXmlElement* node, MeshManager* meshMgr, TextureManager* texMgr)
 {
 	std::string name = node->Attribute("name");
-	std::string fullPath = m_path + node->Attribute("file");
 	std::string texStr = node->Attribute("texture");
 	const Texture* tex = texMgr->GetTexture(texStr);
-	meshMgr->LoadMesh(name, fullPath, tex);
+	std::string file = node->Attribute("file");
+	meshMgr->LoadMesh(name, m_path, file, tex);
 }
 
 void SceneLoader::LoadZobObject(TiXmlElement* node, ZobObject* parent, ZobObjectManager* zobMgr, MeshManager* meshMgr)
@@ -94,5 +94,51 @@ void SceneLoader::LoadScene(std::string &path, std::string &file, ZobObjectManag
 		{
 			LoadZobObject(e, NULL, zobObjectManager, meshManager);
 		}
+	}
+}
+
+void SceneLoader::UnloadScene(Core::Engine* engine, ZobObjectManager* zobObjectManager, MeshManager* meshManager, TextureManager* textureManager)
+{
+	engine->Stop();
+//	Sleep(1000);	//ugly but ...
+	zobObjectManager->UnloadAll();
+	meshManager->UnloadAll();
+	textureManager->UnloadAll();
+}
+
+void SceneLoader::NewScene(Core::Engine* engine, ZobObjectManager* zobObjectManager, MeshManager* meshManager, TextureManager* textureManager)
+{
+	UnloadScene(engine, zobObjectManager, meshManager, textureManager);
+	m_path = "";
+	m_file = "";
+	engine->Start();
+}
+
+void SceneLoader::SaveScene(ZobObjectManager* zobObjectManager, MeshManager* meshManager, TextureManager* textureManager)
+{
+	if (CanFastSave())
+	{
+		SaveScene(m_path, m_file, zobObjectManager, meshManager, textureManager);
+	}
+}
+
+void SceneLoader::SaveScene(std::string &path, std::string &file, ZobObjectManager* zobObjectManager, MeshManager* meshManager, TextureManager* textureManager)
+{
+	std::string fullPath;
+	m_file = file;
+	m_path = path;
+	fullPath = path + file;
+	TiXmlDocument doc("Scene");
+	TiXmlElement * root = new TiXmlElement("root");
+	doc.LinkEndChild(root);
+	TiXmlElement * e;
+	e = new TiXmlElement("Textures");
+	root->LinkEndChild(e);
+	int n = textureManager->GetNbTextures();
+	for (int i = 0; i < n; n++)
+	{
+		e = new TiXmlElement("Texture");
+		e->SetAttribute("name", textureManager->GetTexture(i)->GetName().c_str());
+		e->SetAttribute("file", textureManager->GetTexture(i)->GetFile().c_str());
 	}
 }
