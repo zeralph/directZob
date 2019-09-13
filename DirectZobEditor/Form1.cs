@@ -12,6 +12,11 @@ namespace DirectZobEditor
 {
     public partial class Form1 : Form
     {
+
+
+        public event EventHandler OnNewScene;
+        public event EventHandler OnSceneLoaded;
+
         private CLI.DirectZobWrapper m_directZobWrapper;
         private CLI.CameraManagerWrapper m_camerManagerWrapper;
         private CLI.MeshManagerWrapper m_meshManagerWrapper;
@@ -23,6 +28,9 @@ namespace DirectZobEditor
         private EngineControl m_engineControl;
         private ZobObjectControl m_zobObjectControl;
         private bool m_ctrlPressed = false;
+
+        private string m_path;
+        private string m_file;
 
         private string[] m_events;
 
@@ -36,10 +44,10 @@ namespace DirectZobEditor
             m_meshManagerWrapper = new CLI.MeshManagerWrapper();
 
 
-            string path = @"C:\_GIT\directZob\resources\";
-            string file = "scene1.xml";
-            path = @"D:\_PERSO\directZob\directZob\resources\";
-            m_directZobWrapper.LoadScene(path, file);
+            m_path = @"C:\_GIT\directZob\resources\";
+            m_file = "scene1.xml";
+            //path = @"D:\_PERSO\directZob\directZob\resources\";
+            m_directZobWrapper.LoadScene(m_path, m_file);
 
 
             //UpdateLogWindowDelegate = new UpdateLogWindow(UpdateLogWindowMethod);
@@ -54,7 +62,7 @@ namespace DirectZobEditor
             m_engineControl = new EngineControl(m_engineWindow.GetEngineWrapper());
             propertiesPanel.Controls.Add(m_engineControl);
             m_engineControl.Location = new Point(0, m_camControl.Height + 10);
-            m_zobObjectControl = new ZobObjectControl();
+            m_zobObjectControl = new ZobObjectControl(this);
             propertiesPanel.Controls.Add(m_zobObjectControl);
             m_zobObjectControl.Location = new Point(0, m_engineControl.Location.Y + m_engineControl.Height + 10);
 
@@ -130,6 +138,11 @@ namespace DirectZobEditor
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
             m_directZobWrapper.NewScene();
+            EventHandler handler = OnNewScene;
+            if (null != handler)
+            {
+                handler(this, EventArgs.Empty);
+            }
         }
 
         private void fileToolStripMenuItem_Click(object sender, EventArgs e)
@@ -139,7 +152,31 @@ namespace DirectZobEditor
 
         private void loadSceneToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //m_directZobWrapper.LoadScene(path, file);
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.InitialDirectory = m_path;
+                openFileDialog.Filter = "xml files (*.xml)|*.xml";
+                openFileDialog.FilterIndex = 2;
+                openFileDialog.RestoreDirectory = true;
+
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    m_path = openFileDialog.InitialDirectory;
+                    m_file = openFileDialog.SafeFileName;
+                    m_directZobWrapper.NewScene();
+                    EventHandler handler = OnNewScene;
+                    if (null != handler)
+                    {
+                        handler(this, EventArgs.Empty);
+                    }
+                    m_directZobWrapper.LoadScene(m_path, m_file);
+                    handler = OnSceneLoaded;
+                    if (null != handler)
+                    {
+                        handler(this, EventArgs.Empty);
+                    }
+                }
+            }
         }
 
         private void saveSceneAsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -150,6 +187,36 @@ namespace DirectZobEditor
         private void saveSceneToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             m_directZobWrapper.SaveScene();
+        }
+
+        private void LoadTextureToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void LoadMeshToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.InitialDirectory = m_path;
+                openFileDialog.Filter = "obj files (*.obj)|*.obj";
+                openFileDialog.FilterIndex = 2;
+                openFileDialog.RestoreDirectory = true;
+
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    m_path = openFileDialog.InitialDirectory;
+                    m_file = openFileDialog.SafeFileName;
+                    //m_meshManagerWrapper.
+                }
+            }
+        }
+
+        private void ExitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            m_directZobWrapper.NewScene();
+            //m_directZobWrapper = null;
+            Application.Exit();
         }
     }
 

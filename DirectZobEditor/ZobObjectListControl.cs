@@ -21,6 +21,8 @@ namespace DirectZobEditor
             m_zobObjectManagerWrapper = new CLI.ZobObjectManagerWrapper();
             m_mainForm = f;
             UpdateTree();
+            m_mainForm.OnNewScene += new EventHandler(OnSceneChanged);
+            m_mainForm.OnSceneLoaded += new EventHandler(OnSceneChanged);
         }
 
         public void UpdateControl()
@@ -142,6 +144,12 @@ namespace DirectZobEditor
                 ZobObjectTree.Nodes.Clear();
                 UpdateTree();
             }
+        }
+
+        private void OnSceneChanged(object s, EventArgs e)
+        {
+            ZobObjectTree.Nodes.Clear();
+            UpdateTree();
         }
     }
 
