@@ -126,6 +126,31 @@ namespace DirectZobEditor
             if (e.KeyCode == Keys.ControlKey)
                 m_ctrlPressed = false;
         }
+
+        private void newToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            m_directZobWrapper.NewScene();
+        }
+
+        private void fileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            saveSceneToolStripMenuItem1.Available = m_directZobWrapper.CanFastSave();
+        }
+
+        private void loadSceneToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //m_directZobWrapper.LoadScene(path, file);
+        }
+
+        private void saveSceneAsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //m_directZobWrapper.SaveScene(path, file);
+        }
+
+        private void saveSceneToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            m_directZobWrapper.SaveScene();
+        }
     }
 
     public class Event

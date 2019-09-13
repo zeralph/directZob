@@ -12,6 +12,10 @@ namespace CLI
 		DirectZobWrapper();
 		void Init();
 		void LoadScene(System::String^ path, System::String^ file);
+		void NewScene();
+		bool CanFastSave();
+		void SaveScene();
+		void SaveScene(System::String^ path, System::String^ file);
 		static DirectZob* GetDirectZobInstance() { return m_directZobInstance; }
 		int RunAFrame();
 

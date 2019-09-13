@@ -92,7 +92,7 @@ void Camera::Move(float dx, float dy)
 	vf = vf * ((float)dy / 20.0f);
 	//vf = &Vector3::Vector3Zero;
 	vl.y = 0;
-	vf.y = 0;
+	//vf.y = 0;
 	m_cameraPosition = m_cameraPosition - (vl + vf);
 	m_cameraTarget = m_cameraTarget - (vl + vf);
 }

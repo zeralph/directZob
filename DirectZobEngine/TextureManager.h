@@ -9,9 +9,11 @@ public:
 	TextureManager();
 	~TextureManager();
 
-	void LoadTexture(std::string& name, std::string& file);
+	void LoadTexture(std::string& name, std::string& path, std::string& file);
 	const Texture* GetTexture(std::string& name) const;
-
+	const int GetNbTextures() const { return m_textures.size(); }
+	const Texture* GetTexture(const int i) const;
+	void UnloadAll();
 private:
 	std::vector<Texture*> m_textures;
 };

@@ -14,17 +14,26 @@ MeshManager::~MeshManager()
 	m_meshes.clear();
 }
 
-void MeshManager::LoadMesh(std::string& name, std::string& file, const Texture* tex)
+void MeshManager::LoadMesh(std::string& name, std::string& path, std::string& file, const Texture* tex)
 {
 	if (GetMesh(name) == NULL)
 	{
-		Mesh* t = new Mesh(name, file, tex);
+		Mesh* t = new Mesh(name, path, file, tex);
 		m_meshes.push_back(t);
 	}
 	else
 	{
 		//output error
 	}
+}
+
+const Mesh* MeshManager::GetMesh(const int i) const
+{
+	if (i >= 0 && i < m_meshes.size())
+	{
+		return m_meshes[i];
+	}
+	return NULL;
 }
 
 Mesh* MeshManager::GetMesh(std::string& name)
@@ -54,4 +63,13 @@ std::string MeshManager::GetMeshList()
 	}
 	s.append("]");
 	return s;
+}
+
+void MeshManager::UnloadAll()
+{
+	for (int i = 0; i < m_meshes.size(); i++)
+	{
+		delete (m_meshes[i]);
+	}
+	m_meshes.clear();
 }

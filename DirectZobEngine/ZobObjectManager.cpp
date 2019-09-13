@@ -104,3 +104,10 @@ void ZobObjectManager::GetZobObjectListInternal(const ZobObject* z, std::string&
 	}
 	str.append("}");
 }
+
+void ZobObjectManager::UnloadAll()
+{
+	delete m_rootObject;
+	std::string n = "root";
+	m_rootObject = new ZobObject(n, NULL, NULL);
+}

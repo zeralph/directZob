@@ -2,7 +2,7 @@
 #include "DirectZob.h"
 using namespace std;
 
-Mesh::Mesh(std::string& name, std::string& path, const Texture* tex)
+Mesh::Mesh(std::string& name, std::string& path, std::string& file, const Texture* tex)
 {	
 	m_texture = tex;
 	m_nbVertices = 0;
@@ -14,20 +14,23 @@ Mesh::Mesh(std::string& name, std::string& path, const Texture* tex)
 	m_normals = NULL;
 	m_uvs = NULL;
 	m_name = name;
-	std::string s = "Load mesh " + std::string(path);
+	m_file = file;
+	std::string fullPath = path;
+	fullPath.append(file);
+	std::string s = "Load mesh " + std::string(fullPath);
 	DirectZob::Log(s);
 
 	std::string::size_type sz;
 	// Open the file.
-	std::ifstream file(path, ios::in);
+	std::ifstream sfile(fullPath, ios::in);
 	std::string line;
-	if (!file.is_open()) 
+	if (!sfile.is_open()) 
 	{
 		s = "ERROR";
 		DirectZob::Log(s);
 		return;
 	}
-	while (getline(file, line))
+	while (getline(sfile, line))
 	{
 		if (line[0] == 'v')
 		{
@@ -45,8 +48,8 @@ Mesh::Mesh(std::string& name, std::string& path, const Texture* tex)
 			m_nbFaces+= (uint)v.size() -3;
 		}
 	}
-	file.clear();
-	file.seekg(0, ios::beg);
+	sfile.clear();
+	sfile.seekg(0, ios::beg);
 	if (m_nbNormals > 0)
 	{
 		m_hasNormals = true;
@@ -71,7 +74,7 @@ Mesh::Mesh(std::string& name, std::string& path, const Texture* tex)
 	size_t curNormal = 0;
 	size_t curUv = 0;
 	size_t curface = 0;
-	while (getline(file, line))
+	while (getline(sfile, line))
 	{
 		if (line[0] == 'v')
 		{

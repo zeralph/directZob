@@ -3,14 +3,17 @@
 #include <iostream>
 #include "DirectZob.h"
 
-Texture::Texture(const std::string& path, const std::string& name)
+Texture::Texture(const std::string& path, const std::string& file, const std::string& name)
 {
 	m_name = name.c_str();
+	m_file = file.c_str();
+	std::string fullPath = path;
+	fullPath.append(file);
 	std::vector<unsigned char> image; //the raw pixels
 	unsigned width, height;
 	//m_events->AddEvent(0, "Load texture " + std::string(path));
 	//decode
-	unsigned error = lodepng::decode(image, width, height, path);
+	unsigned error = lodepng::decode(image, width, height, fullPath);
 
 	m_width = width;
 	m_height= height;
@@ -24,7 +27,7 @@ Texture::Texture(const std::string& path, const std::string& name)
 	}
 	else
 	{
-		std::string s = "Texture " + std::string(path) + " loaded";
+		std::string s = "Texture " + std::string(fullPath) + " loaded";
 		DirectZob::Log(s);
 	}
 

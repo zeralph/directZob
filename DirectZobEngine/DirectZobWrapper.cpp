@@ -28,6 +28,30 @@ namespace CLI
 		m_Instance->LoadScene(stdPath, stdFile);
 	}
 
+	void DirectZobWrapper::NewScene()
+	{
+		m_Instance->NewScene();
+	}
+
+	bool DirectZobWrapper::CanFastSave()
+	{
+		return m_Instance->CanFastSave();
+	}
+
+	void DirectZobWrapper::SaveScene()
+	{
+		m_Instance->SaveScene();
+	}
+
+	void DirectZobWrapper::SaveScene(System::String^ path, System::String^ file)
+	{
+		std::string stdPath;
+		MarshalString(path, stdPath);
+		std::string stdFile;
+		MarshalString(file, stdFile);
+		m_Instance->SaveScene(stdPath, stdFile);
+	}
+
 	int DirectZobWrapper::RunAFrame()
 	{
 		return m_Instance->RunAFrame();

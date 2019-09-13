@@ -31,6 +31,11 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.loadSceneToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveSceneAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveSceneToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.FirstPanelSplitter = new System.Windows.Forms.SplitContainer();
             this.ZobObjectListPanel = new System.Windows.Forms.Panel();
             this.SecondPanelSplitter = new System.Windows.Forms.SplitContainer();
@@ -78,9 +83,50 @@
             // 
             // fileToolStripMenuItem
             // 
+            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.newToolStripMenuItem,
+            this.loadSceneToolStripMenuItem,
+            this.saveSceneAsToolStripMenuItem,
+            this.saveSceneToolStripMenuItem1,
+            this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "File";
+            this.fileToolStripMenuItem.Click += new System.EventHandler(this.fileToolStripMenuItem_Click);
+            // 
+            // newToolStripMenuItem
+            // 
+            this.newToolStripMenuItem.Name = "newToolStripMenuItem";
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.newToolStripMenuItem.Text = "New scene";
+            this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
+            // 
+            // loadSceneToolStripMenuItem
+            // 
+            this.loadSceneToolStripMenuItem.Name = "loadSceneToolStripMenuItem";
+            this.loadSceneToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.loadSceneToolStripMenuItem.Text = "Load scene ...";
+            this.loadSceneToolStripMenuItem.Click += new System.EventHandler(this.loadSceneToolStripMenuItem_Click);
+            // 
+            // saveSceneAsToolStripMenuItem
+            // 
+            this.saveSceneAsToolStripMenuItem.Name = "saveSceneAsToolStripMenuItem";
+            this.saveSceneAsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveSceneAsToolStripMenuItem.Text = "Save scene as ...";
+            this.saveSceneAsToolStripMenuItem.Click += new System.EventHandler(this.saveSceneAsToolStripMenuItem_Click);
+            // 
+            // saveSceneToolStripMenuItem1
+            // 
+            this.saveSceneToolStripMenuItem1.Name = "saveSceneToolStripMenuItem1";
+            this.saveSceneToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.saveSceneToolStripMenuItem1.Text = "Save scene";
+            this.saveSceneToolStripMenuItem1.Click += new System.EventHandler(this.saveSceneToolStripMenuItem1_Click);
+            // 
+            // exitToolStripMenuItem
+            // 
+            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exitToolStripMenuItem.Text = "Exit";
             // 
             // FirstPanelSplitter
             // 
@@ -192,7 +238,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(896, 302);
+            this.tabPage2.Size = new System.Drawing.Size(690, 302);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "tabPage2";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -253,6 +299,11 @@
         private System.Windows.Forms.Panel propertiesPanel;
         private System.Windows.Forms.Panel ZobObjectListPanel;
         private System.Windows.Forms.Panel EngineRendererPanel;
+        private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem loadSceneToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem saveSceneAsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem saveSceneToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
     }
 }
 
