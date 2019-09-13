@@ -13,12 +13,15 @@ namespace DirectZobEditor
 {
     public partial class ZobObjectControl : UserControl
     {
+        private Form1 m_mainForm;
         private CLI.ZobObjectInterface m_zobObjectWrapper = null;
         private CLI.MeshManagerWrapper m_meshManagerWrapper = null;
-        public ZobObjectControl()
+        public ZobObjectControl(Form1 form)
         {
             InitializeComponent();
+            m_mainForm = form;
             m_meshManagerWrapper = new CLI.MeshManagerWrapper();
+            m_mainForm.OnNewScene += new EventHandler(OnNewScene);
             ClearValues();
             RefreshMeshList();
         }
@@ -169,6 +172,12 @@ namespace DirectZobEditor
             {
                 m_zobObjectWrapper.SetMesh(meshList.SelectedItem.ToString());
             }
+        }
+
+        private void OnNewScene(object s, EventArgs e)
+        {
+            m_zobObjectWrapper = null;
+            UpdateValues();
         }
     }
 }

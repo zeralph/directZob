@@ -20,6 +20,8 @@ Mesh::Mesh(std::string& name, std::string& path, std::string& file, const Textur
 	std::string s = "Load mesh " + std::string(fullPath);
 	DirectZob::Log(s);
 
+	static std::string sMtllib = std::string("mtllib");
+
 	std::string::size_type sz;
 	// Open the file.
 	std::ifstream sfile(fullPath, ios::in);
@@ -46,6 +48,15 @@ Mesh::Mesh(std::string& name, std::string& path, std::string& file, const Textur
 			vector<string> v;
 			SplitEntry(&line, &v, ' ');
 			m_nbFaces+= (uint)v.size() -3;
+		}
+		else if (line.rfind("mtllib",0) == 0)
+		{
+			vector<string> v;
+			SplitEntry(&line, &v, ' ');
+			if (v.size() == 2)
+			{
+				DirectZob::GetInstance()->GetTextureManager()->LoadMaterial(path, v[1]);
+			}
 		}
 	}
 	sfile.clear();

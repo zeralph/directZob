@@ -13,6 +13,7 @@ public:
 	const Texture* GetTexture(std::string& name) const;
 	const int GetNbTextures() const { return m_textures.size(); }
 	const Texture* GetTexture(const int i) const;
+	void LoadMaterial(std::string& path, std::string& file);
 	void UnloadAll();
 private:
 	std::vector<Texture*> m_textures;

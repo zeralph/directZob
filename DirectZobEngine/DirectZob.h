@@ -49,6 +49,7 @@ public :
 	CameraManager* GetCameraManager() const { return m_cameraManager; }
 	ZobObjectManager* GetZobObjectManager() const { return m_zobObjectManager; }
 	MeshManager* GetMeshManager() const { return m_meshManager; }
+	TextureManager* GetTextureManager() const { return m_textureManager;  }
 	Events* GetEventManager() { return m_events; }
 	static void Log(std::string& str);
 	static void Log(const char* str);
