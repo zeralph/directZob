@@ -15,7 +15,7 @@ class Mesh
 {
 public:
 
-	Mesh(std::string& name, std::string& path, std::string& file, const Texture* tex);
+	Mesh(std::string& name, std::string& path, std::string& file);
 	~Mesh();
 
 
@@ -50,8 +50,5 @@ private:
 	std::string m_name;
 	std::string m_file;
 	Matrix4x4	m_modelMatrixRotationOnly;
-	const Texture* m_texture = NULL;
-
-
 };
 

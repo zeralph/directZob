@@ -1,18 +1,24 @@
 <root>
-	<Textures>
+<!--	<Textures>
 		<Texture name="Beach2" file="beach2.png"></Texture>
 		<Texture name="Water" file="water.png"></Texture>
 		<Texture name="Font" file="font2.png"></Texture>
-	</Textures>
+	</Textures>-->
 	<Meshes>
-		<Mesh name = "beach2" file="beach2.obj"  texture="Beach2"></Mesh>
-		<Mesh name = "water" file="water.obj" texture="Water"></Mesh>
-		<Mesh name = "camaro" file="camaro.obj" texture="Water"></Mesh>
-		<Mesh name = "earth" file="earth.obj" texture="Water"></Mesh>
+		<!--<Mesh name = "camaro" file="camaro.obj"></Mesh>-->
+		<Mesh name = "beach2" file="beach2.obj"></Mesh>
+		<Mesh name = "water" file="water.obj"></Mesh>
+		<!--<Mesh name = "earth" file="earth.obj" texture="Water"></Mesh>
 		<Mesh name = "man" file="man.obj" texture="Water"></Mesh>
-		<Mesh name = "cottage_obj" file="cottage_obj.obj" texture="Water"></Mesh>
+		<Mesh name = "cottage_obj" file="cottage_obj.obj" texture="Water"></Mesh>-->
 	</Meshes>
 	<Scene>
+		<!--<ZobObject name="Camaro">
+			<Position x="0" y="0" z="0"></Position>
+			<Rotation x="0" y="0" z="0"></Rotation>
+			<Scale x="1" y="1" z="1"></Scale>
+			<Mesh>camaro</Mesh>
+		</ZobObject>-->
 		<ZobObject name="Beach2">
 			<Position x="-10" y="0" z="-10"></Position>
 			<Rotation x="0" y="0" z="0"></Rotation>

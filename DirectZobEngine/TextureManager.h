@@ -2,6 +2,7 @@
 #include "Types.h"
 #include "Texture.h"
 #include <string>
+#include <vector>
 
 class TextureManager
 {
@@ -13,8 +14,9 @@ public:
 	const Texture* GetTexture(std::string& name) const;
 	const int GetNbTextures() const { return m_textures.size(); }
 	const Texture* GetTexture(const int i) const;
-	void LoadMaterial(std::string& path, std::string& file);
+	void LoadMaterials(std::string& path, std::string& file);
 	void UnloadAll();
 private:
+	void SplitEntry(const std::string* s, std::vector<std::string>* v, const char delim);
 	std::vector<Texture*> m_textures;
 };

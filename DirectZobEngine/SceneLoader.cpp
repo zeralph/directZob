@@ -14,10 +14,8 @@ void SceneLoader::LoadTexture(TiXmlElement* node, TextureManager* texMgr)
 void SceneLoader::LoadMesh(TiXmlElement* node, MeshManager* meshMgr, TextureManager* texMgr)
 {
 	std::string name = node->Attribute("name");
-	std::string texStr = node->Attribute("texture");
-	const Texture* tex = texMgr->GetTexture(texStr);
 	std::string file = node->Attribute("file");
-	meshMgr->LoadMesh(name, m_path, file, tex);
+	meshMgr->LoadMesh(name, m_path, file);
 }
 
 void SceneLoader::LoadZobObject(TiXmlElement* node, ZobObject* parent, ZobObjectManager* zobMgr, MeshManager* meshMgr)
@@ -79,11 +77,11 @@ void SceneLoader::LoadScene(std::string &path, std::string &file, ZobObjectManag
 	else
 	{
 		TiXmlElement* root = doc.FirstChildElement("root");
-		TiXmlElement* textures = root->FirstChildElement("Textures");
+		/*TiXmlElement* textures = root->FirstChildElement("Textures");
 		for (TiXmlElement* e = textures->FirstChildElement("Texture"); e != NULL; e = e->NextSiblingElement("Texture"))
 		{
 			LoadTexture(e, textureManager);
-		}
+		}*/
 		TiXmlElement* meshes = root->FirstChildElement("Meshes");
 		for (TiXmlElement* e = meshes->FirstChildElement("Mesh"); e != NULL; e = e->NextSiblingElement("Mesh"))
 		{

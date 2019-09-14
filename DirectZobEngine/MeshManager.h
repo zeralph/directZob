@@ -9,7 +9,7 @@ public:
 	MeshManager();
 	~MeshManager();
 
-	void LoadMesh(std::string& name, std::string& path, std::string& file, const Texture* tex);
+	void LoadMesh(std::string& name, std::string& path, std::string& file);
 	Mesh* GetMesh(std::string& name);
 	const int GetNbMeshes() const { return m_meshes.size(); }
 	std::string GetMeshList();

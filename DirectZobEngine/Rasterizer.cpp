@@ -302,30 +302,30 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 
 			su = w0 * t->ua->x + w1 * t->ub->x + w2 * t->uc->x;
 			tu = w0 * t->ua->y + w1 * t->ub->y + w2 * t->uc->y;
-			tu = 1.0f - tu;
-			su = (int)(su * texData->GetWidth());
-			tu = (int)(tu * texData->GetHeight());
-			su = (int)su % texData->GetWidth();
-			tu = (int)tu % texData->GetHeight();
 			cl = ((w0 * t->la + w1 * t->lb + w2 * t->lc)) + 0.1f;
-			c = (uint)(((uint)tu * (uint)texData->GetWidth() + (uint)su) * 4);
+			if (texData)
+			{
+				tu = 1.0f - tu;
+				su = (int)(su * texData->GetWidth());
+				tu = (int)(tu * texData->GetHeight());
+				su = (int)su % texData->GetWidth();
+				tu = (int)tu % texData->GetHeight();
 
-			const float* d = texData->GetData();
-			r = d[c] * cl;
-			g = d[c + 1] * cl;
-			b = d[c + 2] * cl;
-			a = d[c + 3] * cl;
+				c = (uint)(((uint)tu * (uint)texData->GetWidth() + (uint)su) * 4);
 
-/*
-			//fog	
-			float f = (zmax - z) / (zmax - zmin);
-			f += fogDecal;
-			f = clamp2(f, 0.0f, 1.0f);
-	
-			r = f * sFog.x + (1.0f - f) * r;
-			g = f * sFog.y + (1.0f - f) * g;
-			b = f * sFog.z + (1.0f - f) * b;
-*/
+				const float* d = texData->GetData();
+				r = d[c] * cl;
+				g = d[c + 1] * cl;
+				b = d[c + 2] * cl;
+				a = d[c + 3] * cl;
+			}
+			else
+			{
+				r = 0.5f * cl;
+				g = 0.5f * cl;
+				b = 0.5f * cl;
+				a = 1.0f * cl;
+			}
 
 			r = clamp2(r, 0.0f, 1.0f);
 			g = clamp2(g, 0.0f, 1.0f);
@@ -333,7 +333,7 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 
 			c = ((int)(r * 255) << 16) + ((int)(g * 255) << 8) + (int)(b * 255);
 			m_bufferData->buffer[k] = c;
-//			m_nbPixels++;
+
 		}
 	}
 }

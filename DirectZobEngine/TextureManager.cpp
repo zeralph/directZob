@@ -1,8 +1,15 @@
 #include "TextureManager.h"
+#include "DirectZob.h"
 #include <fstream>
 #include <iostream>
-#include <vector>
-#include "DirectZob.h"
+
+struct MaterialInfo
+{
+	std::string file;
+	std::string name;
+	std::string texture;
+	//put other stuff here
+};
 
 TextureManager::TextureManager()
 {
@@ -31,41 +38,57 @@ void TextureManager::LoadTexture(std::string& name, std::string& path, std::stri
 	}
 }
 
-void TextureManager::LoadMaterial(std::string& path, std::string& file)
+void TextureManager::LoadMaterials(std::string& path, std::string& file)
 {
 	std::string::size_type sz;
 	// Open the file.
 	std::string fullPath = path;
 	fullPath.append(file);
-	std::ifstream sfile(fullPath, ios::in);
+	std::ifstream sfile(fullPath, std::ios::in);
 	std::string line;
-	std::string mat;
+	std::vector<MaterialInfo> materials;
 	if (!sfile.is_open())
 	{
 		std::string s = "ERROR";
 		DirectZob::Log(s);
 		return;
 	}
+	std::vector<std::string> v;
 	while (getline(sfile, line))
 	{
 		if (line.rfind("newmtl", 0) == 0)
 		{
-			std::vector<std::string> v;
+			v.clear();
 			SplitEntry(&line, &v, ' ');
 			if (v.size() == 2)
 			{
-				mat = v[1];
+				MaterialInfo matInfo;
+				matInfo.name = v[1];
+				matInfo.file = file.substr(0, file.size() - 4);;
+				v.clear();
+				while(getline(sfile, line))
+				{
+					if (line.rfind("map_Kd", 0) == 0)
+					{
+						SplitEntry(&line, &v, ' ');
+						if (v.size() == 2)
+						{
+							matInfo.texture = v[1];
+							materials.push_back(matInfo);
+							break;
+						}
+					}
+				}
+
 			}
 		}
-		else if (line.rfind("map_Kd", 0) == 0)
-		{
-			std::vector<std::string> v;
-			SplitEntry(&line, &v, ' ');
-			if (v.size() == 2)
-			{
-				LoadTexture(mat, path, v[1]);
-			}
-		}
+	}
+	for (int i = 0; i < materials.size(); i++)
+	{
+		std::string n = materials.at(i).file;
+		n.append(".");
+		n.append(materials.at(i).name);
+		LoadTexture(n, path, materials.at(i).texture);
 	}
 }
 

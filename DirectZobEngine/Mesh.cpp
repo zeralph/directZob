@@ -2,9 +2,8 @@
 #include "DirectZob.h"
 using namespace std;
 
-Mesh::Mesh(std::string& name, std::string& path, std::string& file, const Texture* tex)
+Mesh::Mesh(std::string& name, std::string& path, std::string& file)
 {	
-	m_texture = tex;
 	m_nbVertices = 0;
 	m_nbUvs = 0;
 	m_nbNormals = 0;
@@ -55,7 +54,7 @@ Mesh::Mesh(std::string& name, std::string& path, std::string& file, const Textur
 			SplitEntry(&line, &v, ' ');
 			if (v.size() == 2)
 			{
-				DirectZob::GetInstance()->GetTextureManager()->LoadMaterial(path, v[1]);
+				DirectZob::GetInstance()->GetTextureManager()->LoadMaterials(path, v[1]);
 			}
 		}
 	}
@@ -85,6 +84,7 @@ Mesh::Mesh(std::string& name, std::string& path, std::string& file, const Textur
 	size_t curNormal = 0;
 	size_t curUv = 0;
 	size_t curface = 0;
+	const Texture* tex = NULL;
 	while (getline(sfile, line))
 	{
 		if (line[0] == 'v')
@@ -113,6 +113,20 @@ Mesh::Mesh(std::string& name, std::string& path, std::string& file, const Textur
 				m_vertices[curVertice] = v;
 				curVertice++;
 			}
+		}
+		else if (line.rfind("usemtl", 0) == 0)
+		{
+			vector<string> v;
+			SplitEntry(&line, &v, ' ');
+			if (v.size() == 2)
+			{
+				std::string matName = file;
+				matName = matName.substr(0, matName.size() - 4);
+				matName.append(".");
+				matName.append(v[1]);
+				tex = DirectZob::GetInstance()->GetTextureManager()->GetTexture(matName);
+			}
+
 		}
 		else if (line[0] == 'f')
 		{
