@@ -14,11 +14,11 @@ MeshManager::~MeshManager()
 	m_meshes.clear();
 }
 
-void MeshManager::LoadMesh(std::string& name, std::string& path, std::string& file, const Texture* tex)
+void MeshManager::LoadMesh(std::string& name, std::string& path, std::string& file)
 {
 	if (GetMesh(name) == NULL)
 	{
-		Mesh* t = new Mesh(name, path, file, tex);
+		Mesh* t = new Mesh(name, path, file);
 		m_meshes.push_back(t);
 	}
 	else
