@@ -10,8 +10,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DirectZobEditor", "DirectZo
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DirectZob", "DirectZobEngine\Project1.vcxproj", "{B7DD2204-6B59-4B9C-A293-6D8DC2C04E67}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DirectZobWrapper", "DirectZobWrapper\DirectZobWrapper.vcxproj", "{12E57600-3EE6-4846-9026-F1869849F1BF}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -74,28 +72,6 @@ Global
 		{B7DD2204-6B59-4B9C-A293-6D8DC2C04E67}.Release|x64.Build.0 = Release|x64
 		{B7DD2204-6B59-4B9C-A293-6D8DC2C04E67}.Release|x86.ActiveCfg = Release|Win32
 		{B7DD2204-6B59-4B9C-A293-6D8DC2C04E67}.Release|x86.Build.0 = Release|Win32
-		{12E57600-3EE6-4846-9026-F1869849F1BF}.Debug|Any CPU.ActiveCfg = Debug|Win32
-		{12E57600-3EE6-4846-9026-F1869849F1BF}.Debug|x64.ActiveCfg = Debug|x64
-		{12E57600-3EE6-4846-9026-F1869849F1BF}.Debug|x64.Build.0 = Debug|x64
-		{12E57600-3EE6-4846-9026-F1869849F1BF}.Debug|x86.ActiveCfg = Debug|Win32
-		{12E57600-3EE6-4846-9026-F1869849F1BF}.Debug|x86.Build.0 = Debug|Win32
-		{12E57600-3EE6-4846-9026-F1869849F1BF}.Editor debug|Any CPU.ActiveCfg = Debug|x64
-		{12E57600-3EE6-4846-9026-F1869849F1BF}.Editor debug|Any CPU.Build.0 = Debug|x64
-		{12E57600-3EE6-4846-9026-F1869849F1BF}.Editor debug|x64.ActiveCfg = Debug|x64
-		{12E57600-3EE6-4846-9026-F1869849F1BF}.Editor debug|x64.Build.0 = Debug|x64
-		{12E57600-3EE6-4846-9026-F1869849F1BF}.Editor debug|x86.ActiveCfg = Debug|Win32
-		{12E57600-3EE6-4846-9026-F1869849F1BF}.Editor debug|x86.Build.0 = Debug|Win32
-		{12E57600-3EE6-4846-9026-F1869849F1BF}.Editor release|Any CPU.ActiveCfg = Release|x64
-		{12E57600-3EE6-4846-9026-F1869849F1BF}.Editor release|Any CPU.Build.0 = Release|x64
-		{12E57600-3EE6-4846-9026-F1869849F1BF}.Editor release|x64.ActiveCfg = Release|x64
-		{12E57600-3EE6-4846-9026-F1869849F1BF}.Editor release|x64.Build.0 = Release|x64
-		{12E57600-3EE6-4846-9026-F1869849F1BF}.Editor release|x86.ActiveCfg = Release|Win32
-		{12E57600-3EE6-4846-9026-F1869849F1BF}.Editor release|x86.Build.0 = Release|Win32
-		{12E57600-3EE6-4846-9026-F1869849F1BF}.Release|Any CPU.ActiveCfg = Release|Win32
-		{12E57600-3EE6-4846-9026-F1869849F1BF}.Release|x64.ActiveCfg = Release|x64
-		{12E57600-3EE6-4846-9026-F1869849F1BF}.Release|x64.Build.0 = Release|x64
-		{12E57600-3EE6-4846-9026-F1869849F1BF}.Release|x86.ActiveCfg = Release|Win32
-		{12E57600-3EE6-4846-9026-F1869849F1BF}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
