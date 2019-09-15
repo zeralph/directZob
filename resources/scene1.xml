@@ -6,7 +6,7 @@
 	</Textures>-->
 	<Meshes>
 		<!--<Mesh name = "camaro" file="camaro.obj"></Mesh>-->
-		<Mesh name = "beach2" file="beach2.obj"></Mesh>
+		<Mesh name = "beach3" file="beach3.obj"></Mesh>
 		<Mesh name = "water" file="water.obj"></Mesh>
 		<!--<Mesh name = "earth" file="earth.obj" texture="Water"></Mesh>
 		<Mesh name = "man" file="man.obj" texture="Water"></Mesh>
@@ -23,7 +23,7 @@
 			<Position x="-10" y="0" z="-10"></Position>
 			<Rotation x="0" y="0" z="0"></Rotation>
 			<Scale x="0.5" y="1" z="0.5"></Scale>
-			<Mesh>beach2</Mesh>
+			<Mesh>beach3</Mesh>
 			<ZobObject name="Water">
 				<Position x="0" y="0" z="0"></Position>
 				<Rotation x="0" y="0" z="0"></Rotation>
