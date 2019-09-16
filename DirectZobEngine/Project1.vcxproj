@@ -59,6 +59,9 @@
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'">false</CompileAsManaged>
     </ClCompile>
     <ClCompile Include="EngineWrapper.cpp" />
+    <ClCompile Include="ZOBGUID.cpp">
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'">false</CompileAsManaged>
+    </ClCompile>
     <ClCompile Include="lodepng.cpp">
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Release|x64'">false</CompileAsManaged>
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'">false</CompileAsManaged>
@@ -143,6 +146,7 @@
     <ClInclude Include="Engine.h" />
     <ClInclude Include="EngineWrapper.h" />
     <ClInclude Include="Events.h" />
+    <ClInclude Include="ZOBGUID.h" />
     <ClInclude Include="lodepng.h" />
     <ClInclude Include="ManagedObject.h" />
     <ClInclude Include="ManagedVector3.h" />

@@ -48,7 +48,7 @@ void SceneLoader::LoadZobObject(TiXmlElement* node, ZobObject* parent, ZobObject
 	{
 		parent = zobMgr->GetRootObject();
 	}
-	ZobObject* zob = new ZobObject(name, m, parent);
+	ZobObject* zob = new ZobObject(ZOBGUID::type_scene, ZOBGUID::subtype_zobOject, name, m, parent);
 	zob->SetTranslation(position.x, position.y, position.z);
 	zob->SetRotation(rotation.x, rotation.y, rotation.z);
 	zob->SetScale(scale.x, scale.y, scale.z);
@@ -66,13 +66,15 @@ void SceneLoader::LoadScene(std::string &path, std::string &file, ZobObjectManag
 	std::string name, texture, fullPath;
 	TiXmlDocument doc("Scene");
 	fullPath = path + file;
+	doc.ClearError();
 	doc.LoadFile(fullPath.c_str());
-
 	if (doc.Error())
 	{
 		std::string err = "Error loading ";
 		err.append(fullPath.c_str());
-		DirectZob::Log(err);
+		err.append(" : ");
+		err.append(doc.ErrorDesc());
+		DirectZob::LogError(err.c_str());
 	}
 	else
 	{

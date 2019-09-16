@@ -51,9 +51,9 @@ public :
 	MeshManager* GetMeshManager() const { return m_meshManager; }
 	TextureManager* GetTextureManager() const { return m_textureManager;  }
 	Events* GetEventManager() { return m_events; }
-	static void Log(std::string& str);
-	static void Log(const char* str);
-	
+	static void LogInfo(const char* str);
+	static void LogError(const char* str);
+	static void LogWarning(const char* str);
 private:
 
 	Events* m_events = NULL;

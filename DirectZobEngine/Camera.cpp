@@ -87,12 +87,13 @@ void Camera::RotateAroundAxis(float dx, float dy)
 void Camera::Move(float dx, float dy)
 {
 	Vector3 vl = Vector3(m_cameraLeft);
-	Vector3 vf = Vector3(m_cameraFw);
 	vl = vl * ((float)-dx / 20.0f);
-	vf = vf * ((float)dy / 20.0f);
-	//vf = &Vector3::Vector3Zero;
 	vl.y = 0;
-	//vf.y = 0;
+
+	Vector3 vf = Vector3(m_cameraFw);
+	
+	vf = vf * ((float)dy / 20.0f);
+	vf.y = 0;
 	m_cameraPosition = m_cameraPosition - (vl + vf);
 	m_cameraTarget = m_cameraTarget - (vl + vf);
 }

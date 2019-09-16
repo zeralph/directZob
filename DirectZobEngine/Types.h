@@ -12,6 +12,7 @@ public:
 	typedef char u8;
 	typedef unsigned int uint;
 	typedef unsigned long ulong;
+	typedef unsigned long long int guid; 
 	struct BufferData
 	{
 		uint width;
@@ -36,5 +37,6 @@ public:
 typedef DirectZobType::u8 u8;
 typedef DirectZobType::uint uint;
 typedef DirectZobType::ulong ulong;
+typedef unsigned long long zobId;
 typedef struct DirectZobType::BufferData BufferData;
 typedef struct DirectZobType::Line2D Line2D;

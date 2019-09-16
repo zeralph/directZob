@@ -66,13 +66,12 @@ bool DirectZob::CanFastSave()
 void DirectZob::Init()
 {
 	m_events = new Events();
-	m_events->AddEvent(0, "Init engine");
+	DirectZob::LogInfo("Init engine");
 	m_engine = new Engine(WIDTH, HEIGHT, m_events);
 	m_cameraManager = new CameraManager();
 	m_textureManager = new TextureManager();
 	m_meshManager = new MeshManager();
 	m_zobObjectManager = new ZobObjectManager();
-	m_events->AddEvent(0, " OK\n");
 	int dx = 1;
 	int dy = 1;
 	float r = 0.0f;
@@ -138,11 +137,15 @@ int DirectZob::RunAFrame()
 	return state;
 }
 
-void DirectZob::Log(std::string& str)
+void DirectZob::LogInfo(const char* str)
 {
-	DirectZob::singleton->GetEventManager()->AddEvent(0, str);
+	DirectZob::singleton->GetEventManager()->AddEvent(Events::LogInfo, str);
 }
-void DirectZob::Log(const char* str)
+void DirectZob::LogError(const char* str)
 {
-	DirectZob::singleton->GetEventManager()->AddEvent(0, str);
+	DirectZob::singleton->GetEventManager()->AddEvent(Events::LogError, str);
+}
+void DirectZob::LogWarning(const char* str)
+{
+	DirectZob::singleton->GetEventManager()->AddEvent(Events::LogWarning, str);
 }
