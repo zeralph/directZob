@@ -37,7 +37,7 @@ Texture::Texture(const std::string& path, const std::string& file, const std::st
 		data[0 + 3] = a;
 		std::string n = "ERROR loading material ";
 		n.append(m_name.c_str());
-		DirectZob::Log(n);
+		DirectZob::LogError(n.c_str());
 	}
 	else
 	{
@@ -55,6 +55,6 @@ Texture::Texture(const std::string& path, const std::string& file, const std::st
 		}
 		std::string n = "Loaded material ";
 		n.append(m_name.c_str());
-		DirectZob::Log(n);
+		DirectZob::LogInfo(n.c_str());
 	}
 }

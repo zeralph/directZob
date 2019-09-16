@@ -49,8 +49,9 @@ void TextureManager::LoadMaterials(std::string& path, std::string& file)
 	std::vector<MaterialInfo> materials;
 	if (!sfile.is_open())
 	{
-		std::string s = "ERROR";
-		DirectZob::Log(s);
+		std::string s = "ERROR opening ";
+		s.append(fullPath);
+		DirectZob::LogError(s.c_str());
 		return;
 	}
 	std::vector<std::string> v;

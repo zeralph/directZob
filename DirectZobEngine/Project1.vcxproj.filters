@@ -159,6 +159,9 @@
     <ClCompile Include="MeshManagerWrapper.cpp">
       <Filter>Fichiers sources\Interfaces</Filter>
     </ClCompile>
+    <ClCompile Include="ZOBGUID.cpp">
+      <Filter>Fichiers sources\ZobObjects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Color.h">
@@ -280,6 +283,9 @@
     </ClInclude>
     <ClInclude Include="MeshManagerWrapper.h">
       <Filter>Fichiers d%27en-tête\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="ZOBGUID.h">
+      <Filter>Fichiers d%27en-tête\ZobObjects</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

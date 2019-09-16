@@ -6,14 +6,14 @@
 #include "Camera.h"
 #include "Types.h"
 #include "Mesh.h"
-#include"Engine.h"
+#include "Engine.h"
+#include "ZOBGUID.h"
 
-
-class ZobObject
+class ZobObject:ZOBGUID
 {
 public:
 
-	ZobObject(std::string& name, Mesh* mesh, ZobObject* parent = NULL);
+	ZobObject(ZOBGUID::Type t, ZOBGUID::SubType s, std::string& name, Mesh* mesh, ZobObject* parent = NULL);
 	~ZobObject();
 
 	virtual void Update(const Matrix4x4& parentMatrix);

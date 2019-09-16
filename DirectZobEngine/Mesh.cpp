@@ -17,7 +17,7 @@ Mesh::Mesh(std::string& name, std::string& path, std::string& file)
 	std::string fullPath = path;
 	fullPath.append(file);
 	std::string s = "Load mesh " + std::string(fullPath);
-	DirectZob::Log(s);
+	DirectZob::LogInfo(s.c_str());
 
 	static std::string sMtllib = std::string("mtllib");
 
@@ -27,8 +27,9 @@ Mesh::Mesh(std::string& name, std::string& path, std::string& file)
 	std::string line;
 	if (!sfile.is_open()) 
 	{
-		s = "ERROR";
-		DirectZob::Log(s);
+		s = "Error opening ";
+		s.append(fullPath);
+		DirectZob::LogError(s.c_str());
 		return;
 	}
 	while (getline(sfile, line))
@@ -140,7 +141,7 @@ Mesh::Mesh(std::string& name, std::string& path, std::string& file)
 	memcpy(m_normalsData, m_normals, sizeof(Vector3) * m_nbNormals);
 
 	s = "Mesh " + std::string(path) + " loaded";
-	DirectZob::Log(s);
+	DirectZob::LogInfo(s.c_str());
 }
 
 Mesh::~Mesh()
