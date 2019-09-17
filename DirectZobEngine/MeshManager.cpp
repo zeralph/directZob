@@ -36,7 +36,7 @@ const Mesh* MeshManager::GetMesh(const int i) const
 	return NULL;
 }
 
-Mesh* MeshManager::GetMesh(std::string& name)
+Mesh* MeshManager::GetMesh(std::string& name) const
 {
 	for (std::vector<Mesh*>::const_iterator iter = m_meshes.begin(); iter != m_meshes.end(); iter++)
 	{

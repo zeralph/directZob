@@ -1,0 +1,450 @@
+/.vs/DirectZob/v16/.suo
+/.vs/DirectZob/v16/Browse.VC.db
+/.vs/DirectZob/v16/Browse.VC.opendb
+/.vs/DirectZob/v16/ipch/AutoPCH/1109c1d7dc90ebc7/WINMINIFB.ipch
+/.vs/DirectZob/v16/ipch/AutoPCH/206f2ca2bde2215d/MINIFB_COMMON.ipch
+/.vs/DirectZob/v16/ipch/AutoPCH/3995bb112219cf0c/INTERFACEWRAPPER.ipch
+/.vs/DirectZob/v16/ipch/AutoPCH/3b8997bc1f78b3/WINMINIFB.ipch
+/.vs/DirectZob/v16/ipch/AutoPCH/61a5dc3405d4fc7f/INTERFACEWRAPPER.ipch
+/.vs/DirectZob/v16/ipch/AutoPCH/874d199f0eb021c/INTERFACEWRAPPER.ipch
+/.vs/DirectZob/v16/ipch/AutoPCH/a522294f02674c9b/RASTERIZER.ipch
+/.vs/DirectZob/v16/ipch/AutoPCH/a740ccaec04cf253/MINIFB_CPP.ipch
+/.vs/DirectZob/v16/ipch/AutoPCH/b1279d29caecc52f/RASTERIZER.ipch
+/.vs/DirectZob/v16/ipch/AutoPCH/b293eaa06210205d/COLOR.ipch
+/.vs/DirectZob/v16/ipch/AutoPCH/f025c97605eaec9f/WINDOWDATA_WIN.ipch
+/.vs/DirectZob/v16/Server/sqlite3/db.lock
+/.vs/DirectZob/v16/Server/sqlite3/storage.ide
+/.vs/DirectZob/v16/Server/sqlite3/storage.ide-shm
+/.vs/DirectZob/v16/Server/sqlite3/storage.ide-wal
+/.vs/DirectZob/v16/Solution.VC.db
+/.vs/DirectZob/v16/Solution.VC.db-shm
+/.vs/DirectZob/v16/Solution.VC.db-wal
+/x64/Debug/DirectZobWrapper.dll
+/x64/Debug/DirectZobWrapper.dll.metagen
+/x64/Debug/DirectZobWrapper.exp
+/x64/Debug/DirectZobWrapper.lib
+/x64/Debug/DirectZobWrapper.pdb
+/x64/DLL Debug/DirectZob.lib
+/x64/DLL Release/DirectZob.lib
+/x64/Release/DirectZobWrapper.dll
+/x64/Release/DirectZobWrapper.dll.metagen
+/x64/Release/DirectZobWrapper.exp
+/x64/Release/DirectZobWrapper.lib
+/x64/Release/DirectZobWrapper.pdb
+/DirectZobEngine/Release/Camera.obj
+/DirectZobEngine/Release/Color.obj
+/DirectZobEngine/Release/Cube.obj
+/DirectZobEngine/Release/DirectZob.Build.CppClean.log
+/DirectZobEngine/Release/DirectZob.obj
+/DirectZobEngine/Release/DirectZob.tlog/CL.command.1.tlog
+/DirectZobEngine/Release/DirectZob.tlog/CL.read.1.tlog
+/DirectZobEngine/Release/DirectZob.tlog/CL.write.1.tlog
+/DirectZobEngine/Release/DirectZob.tlog/DirectZob.lastbuildstate
+/DirectZobEngine/Release/DirectZob.tlog/DirectZob.write.1u.tlog
+/DirectZobEngine/Release/DirectZob.tlog/link.command.1.tlog
+/DirectZobEngine/Release/DirectZob.tlog/link.read.1.tlog
+/DirectZobEngine/Release/DirectZob.tlog/link.write.1.tlog
+/DirectZobEngine/Release/Engine.obj
+/DirectZobEngine/Release/Interface.obj
+/DirectZobEngine/Release/lodepng.obj
+/DirectZobEngine/Release/main.obj
+/DirectZobEngine/Release/Matrix2x2.obj
+/DirectZobEngine/Release/Matrix4x4.obj
+/DirectZobEngine/Release/Mesh.obj
+/DirectZobEngine/Release/MiniFB_common.obj
+/DirectZobEngine/Release/MiniFB_cpp.obj
+/DirectZobEngine/Release/MiniFB_internal.obj
+/DirectZobEngine/Release/Project1.log
+/DirectZobEngine/Release/Project1.vcxproj.FileListAbsolute.txt
+/DirectZobEngine/Release/Rasterizer.obj
+/DirectZobEngine/Release/Text2D.obj
+/DirectZobEngine/Release/Texture.obj
+/DirectZobEngine/Release/Triangle.obj
+/DirectZobEngine/Release/vc142.pdb
+/DirectZobEngine/Release/Vector2.obj
+/DirectZobEngine/Release/Vector3.obj
+/DirectZobEngine/Release/WinMiniFB.obj
+/DLL Release/DirectZob.lib
+/Release/DirectZob.exe
+/Release/DirectZob.exp
+/Release/DirectZob.iobj
+/Release/DirectZob.ipdb
+/Release/DirectZob.lib
+/Release/DirectZob.pdb
+/.vs/DirectZob/v16/ipch/AutoPCH/60715ee6dbee8b01/DIRECTZOB.ipch
+/.vs/DirectZob/v16/ipch/AutoPCH/6291816ca369be08/RASTERIZER.ipch
+/.vs/DirectZob/v16/ipch/AutoPCH/7ca93f23fe1074b5/DIRECTZOB.ipch
+/.vs/DirectZob/v16/ipch/AutoPCH/9108481ffcc16244/MAIN.ipch
+/.vs/DirectZob/v16/ipch/AutoPCH/bd59ca498d304110/MAIN.ipch
+/x64/Release/DirectZob.exe
+/x64/Release/DirectZob.exp
+/x64/Release/DirectZob.iobj
+/x64/Release/DirectZob.ipdb
+/x64/Release/DirectZob.lib
+/x64/Release/DirectZob.pdb
+/.vs/DirectZob/v15/.suo
+/.vs/DirectZob/v15/Browse.VC.db
+/.vs/DirectZob/v15/Browse.VC.opendb
+/.vs/DirectZob/v15/ipch/AutoPCH/b86e0324860087ed/ENGINE.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/c24a51bfd47672fc/RASTERIZER.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/d5a3d12a26468c7e/INTERFACE.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/e1ed8aed71b66b21/DIRECTZOB.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/f2a2f96eece8479c/INTERFACEWRAPPER.ipch
+/.vs/DirectZob/v15/Server/sqlite3/db.lock
+/.vs/DirectZob/v15/Server/sqlite3/storage.ide
+/.vs/DirectZob/v15/Server/sqlite3/storage.ide-shm
+/.vs/DirectZob/v15/Server/sqlite3/storage.ide-wal
+/.vs/DirectZob/v15/Solution.VC.db
+/.vs/DirectZob/v15/Solution.VC.db-shm
+/.vs/DirectZob/v15/Solution.VC.db-wal
+/DirectZobEditor/bin/Release/DirectZobEditor.exe
+/DirectZobEditor/bin/Release/DirectZobEditor.exe.config
+/DirectZobEditor/bin/Release/DirectZobEditor.pdb
+/DirectZobEditor/bin/Release/DirectZobWrapper.dll
+/DirectZobEditor/bin/Release/DirectZobWrapper.pdb
+/DirectZobEditor/obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
+/DirectZobEditor/obj/Debug/DirectZobEditor.csproj.CoreCompileInputs.cache
+/DirectZobEditor/obj/Debug/DirectZobEditor.csprojAssemblyReference.cache
+/DirectZobEditor/obj/Debug/TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs
+/DirectZobEditor/obj/Debug/TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs
+/DirectZobEditor/obj/Debug/TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs
+/DirectZobEditor/obj/Debug/TempPE/Properties.Resources.Designer.cs.dll
+/DirectZobEditor/obj/Release/DirectZobEditor.csproj.CopyComplete
+/DirectZobEditor/obj/Release/DirectZobEditor.csproj.CoreCompileInputs.cache
+/DirectZobEditor/obj/Release/DirectZobEditor.csproj.FileListAbsolute.txt
+/DirectZobEditor/obj/Release/DirectZobEditor.csproj.GenerateResource.cache
+/DirectZobEditor/obj/Release/DirectZobEditor.csprojAssemblyReference.cache
+/DirectZobEditor/obj/Release/DirectZobEditor.exe
+/DirectZobEditor/obj/Release/DirectZobEditor.Form1.resources
+/DirectZobEditor/obj/Release/DirectZobEditor.pdb
+/DirectZobEditor/obj/Release/DirectZobEditor.Properties.Resources.resources
+/DirectZobEditor/obj/Release/TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs
+/DirectZobEditor/obj/Release/TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs
+/DirectZobEditor/obj/Release/TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs
+/DirectZobEditor/obj/Release/TempPE/Properties.Resources.Designer.cs.dll
+/DirectZobWrapper/x64/Release/.NETFramework,Version=4.6.AssemblyAttributes.asm
+/DirectZobWrapper/x64/Release/.NETFramework,Version=4.6.AssemblyAttributes.obj
+/DirectZobWrapper/x64/Release/app.res
+/DirectZobWrapper/x64/Release/AssemblyInfo.obj
+/DirectZobWrapper/x64/Release/DirectZobWrapper.Build.CppClean.log
+/DirectZobWrapper/x64/Release/DirectZobWrapper.log
+/DirectZobWrapper/x64/Release/DirectZobWrapper.tlog/CL.command.1.tlog
+/DirectZobWrapper/x64/Release/DirectZobWrapper.tlog/CL.read.1.tlog
+/DirectZobWrapper/x64/Release/DirectZobWrapper.tlog/CL.write.1.tlog
+/DirectZobWrapper/x64/Release/DirectZobWrapper.tlog/DirectZobWrapper.lastbuildstate
+/DirectZobWrapper/x64/Release/DirectZobWrapper.tlog/DirectZobWrapper.write.1u.tlog
+/DirectZobWrapper/x64/Release/DirectZobWrapper.tlog/link.command.1.tlog
+/DirectZobWrapper/x64/Release/DirectZobWrapper.tlog/link.read.1.tlog
+/DirectZobWrapper/x64/Release/DirectZobWrapper.tlog/link.write.1.tlog
+/DirectZobWrapper/x64/Release/DirectZobWrapper.tlog/metagen.read.1.tlog
+/DirectZobWrapper/x64/Release/DirectZobWrapper.tlog/metagen.write.1.tlog
+/DirectZobWrapper/x64/Release/DirectZobWrapper.tlog/rc.command.1.tlog
+/DirectZobWrapper/x64/Release/DirectZobWrapper.tlog/rc.read.1.tlog
+/DirectZobWrapper/x64/Release/DirectZobWrapper.tlog/rc.write.1.tlog
+/DirectZobWrapper/x64/Release/InterfaceWrapper.obj
+/DirectZobWrapper/x64/Release/vc141.pdb
+/.vs/DirectZob/v15/ipch/AutoPCH/19461e9ad434e929/NEW_SCALAR.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/29a79d8df0bb1dc/TEXTURE.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/456758367d5853fe/INTERFACE.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/51b111f9c8c832a1/DIRECTZOB.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/625fd1470bf72330/MAIN.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/837092121935e67c/RASTERIZER.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/bf5322159497e5c8/MESH.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/c87e3aef0104850c/INTERFACEWRAPPER.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/cff459e0025e3377/EVENTS.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/e47d8439553eac10/TEXT2D.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/eef5515a52d04765/INTERFACE.ipch
+/DirectZobEditor/bin/Debug/DirectZobEditor.exe
+/DirectZobEditor/bin/Debug/DirectZobEditor.exe.config
+/DirectZobEditor/bin/Debug/DirectZobEditor.pdb
+/DirectZobEditor/bin/Debug/DirectZobWrapper.dll
+/DirectZobEditor/bin/Debug/DirectZobWrapper.pdb
+/DirectZobEditor/bin/Release/Newtonsoft.Json.dll
+/DirectZobEditor/bin/Release/Newtonsoft.Json.xml
+/DirectZobEditor/obj/Debug/DirectZobEditor.csproj.CopyComplete
+/DirectZobEditor/obj/Debug/DirectZobEditor.csproj.FileListAbsolute.txt
+/DirectZobEditor/obj/Debug/DirectZobEditor.csproj.GenerateResource.cache
+/DirectZobEditor/obj/Debug/DirectZobEditor.exe
+/DirectZobEditor/obj/Debug/DirectZobEditor.Form1.resources
+/DirectZobEditor/obj/Debug/DirectZobEditor.pdb
+/DirectZobEditor/obj/Debug/DirectZobEditor.Properties.Resources.resources
+/DirectZobEditor/obj/Release/DesignTimeResolveAssemblyReferences.cache
+/DirectZobEditor/obj/Release/DesignTimeResolveAssemblyReferencesInput.cache
+/DirectZobEngine/x64/DLL Debug/Camera.obj
+/DirectZobEngine/x64/DLL Debug/Color.obj
+/DirectZobEngine/x64/DLL Debug/Cube.obj
+/DirectZobEngine/x64/DLL Debug/DirectZob.Build.CppClean.log
+/DirectZobEngine/x64/DLL Debug/DirectZob.idb
+/DirectZobEngine/x64/DLL Debug/DirectZob.obj
+/DirectZobEngine/x64/DLL Debug/DirectZob.pdb
+/DirectZobEngine/x64/DLL Debug/DirectZob.tlog/CL.command.1.tlog
+/DirectZobEngine/x64/DLL Debug/DirectZob.tlog/CL.read.1.tlog
+/DirectZobEngine/x64/DLL Debug/DirectZob.tlog/CL.write.1.tlog
+/DirectZobEngine/x64/DLL Debug/DirectZob.tlog/DirectZob.lastbuildstate
+/DirectZobEngine/x64/DLL Debug/DirectZob.tlog/Lib.command.1.tlog
+/DirectZobEngine/x64/DLL Debug/DirectZob.tlog/Lib-link.read.1.tlog
+/DirectZobEngine/x64/DLL Debug/DirectZob.tlog/Lib-link.write.1.tlog
+/DirectZobEngine/x64/DLL Debug/Engine.obj
+/DirectZobEngine/x64/DLL Debug/Interface.obj
+/DirectZobEngine/x64/DLL Debug/lodepng.obj
+/DirectZobEngine/x64/DLL Debug/main.obj
+/DirectZobEngine/x64/DLL Debug/Matrix2x2.obj
+/DirectZobEngine/x64/DLL Debug/Matrix4x4.obj
+/DirectZobEngine/x64/DLL Debug/Mesh.obj
+/DirectZobEngine/x64/DLL Debug/MiniFB_common.obj
+/DirectZobEngine/x64/DLL Debug/MiniFB_cpp.obj
+/DirectZobEngine/x64/DLL Debug/MiniFB_internal.obj
+/DirectZobEngine/x64/DLL Debug/Project1.log
+/DirectZobEngine/x64/DLL Debug/Rasterizer.obj
+/DirectZobEngine/x64/DLL Debug/Text2D.obj
+/DirectZobEngine/x64/DLL Debug/Texture.obj
+/DirectZobEngine/x64/DLL Debug/Triangle.obj
+/DirectZobEngine/x64/DLL Debug/Vector2.obj
+/DirectZobEngine/x64/DLL Debug/Vector3.obj
+/DirectZobEngine/x64/DLL Debug/WinMiniFB.obj
+/DirectZobWrapper/x64/Debug/.NETFramework,Version=4.6.AssemblyAttributes.asm
+/DirectZobWrapper/x64/Debug/.NETFramework,Version=4.6.AssemblyAttributes.obj
+/DirectZobWrapper/x64/Debug/app.res
+/DirectZobWrapper/x64/Debug/AssemblyInfo.obj
+/DirectZobWrapper/x64/Debug/DirectZobWrapper.Build.CppClean.log
+/DirectZobWrapper/x64/Debug/DirectZobWrapper.log
+/DirectZobWrapper/x64/Debug/DirectZobWrapper.tlog/CL.command.1.tlog
+/DirectZobWrapper/x64/Debug/DirectZobWrapper.tlog/CL.read.1.tlog
+/DirectZobWrapper/x64/Debug/DirectZobWrapper.tlog/CL.write.1.tlog
+/DirectZobWrapper/x64/Debug/DirectZobWrapper.tlog/DirectZobWrapper.lastbuildstate
+/DirectZobWrapper/x64/Debug/DirectZobWrapper.tlog/DirectZobWrapper.write.1u.tlog
+/DirectZobWrapper/x64/Debug/DirectZobWrapper.tlog/link.command.1.tlog
+/DirectZobWrapper/x64/Debug/DirectZobWrapper.tlog/link.read.1.tlog
+/DirectZobWrapper/x64/Debug/DirectZobWrapper.tlog/link.write.1.tlog
+/DirectZobWrapper/x64/Debug/DirectZobWrapper.tlog/metagen.read.1.tlog
+/DirectZobWrapper/x64/Debug/DirectZobWrapper.tlog/metagen.write.1.tlog
+/DirectZobWrapper/x64/Debug/DirectZobWrapper.tlog/rc.command.1.tlog
+/DirectZobWrapper/x64/Debug/DirectZobWrapper.tlog/rc.read.1.tlog
+/DirectZobWrapper/x64/Debug/DirectZobWrapper.tlog/rc.write.1.tlog
+/DirectZobWrapper/x64/Debug/InterfaceWrapper.obj
+/DirectZobWrapper/x64/Debug/vc141.pdb
+/.vs/DirectZob/v15/ipch/AutoPCH/f20a76102de5510f/INTERFACEWRAPPER.ipch
+/DirectZobWrapper/x64/Release/DirectZobWrapper.vcxprojAssemblyReference.cache
+/.vs/DirectZob/v15/ipch/AutoPCH/2537890d91598e62/DIRECTZOBWRAPPER.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/4e07b92b56f78fdd/ENGINEWRAPPER.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/526900214981cd4e/ENGINEWRAPPER.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/675d51a2ebfc69e2/DIRECTZOBWRAPPER.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/68c7d2896cba58f2/CAMERA.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/79a2836ed0b44bc1/DIRECTZOBWRAPPER.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/f5cb04f0ddf2e6e8/VECTOR2.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/f906cff519f6ac0c/WINMINIFB.ipch
+/DirectZobEditor/bin/Debug/DirectZob.dll
+/DirectZobEditor/bin/Debug/DirectZob.pdb
+/DirectZobEditor/bin/Debug/Newtonsoft.Json.dll
+/DirectZobEditor/bin/Debug/Newtonsoft.Json.xml
+/DirectZobEditor/bin/Release/DirectZob.dll
+/DirectZobEditor/bin/Release/DirectZob.pdb
+/DirectZobEngine/x64/DLL Debug/.NETFramework,Version=v4.0.AssemblyAttributes.asm
+/DirectZobEngine/x64/DLL Debug/.NETFramework,Version=v4.0.AssemblyAttributes.obj
+/DirectZobEngine/x64/DLL Debug/DirectZob.tlog/DirectZob.write.1u.tlog
+/DirectZobEngine/x64/DLL Debug/DirectZob.tlog/link.command.1.tlog
+/DirectZobEngine/x64/DLL Debug/DirectZob.tlog/link.read.1.tlog
+/DirectZobEngine/x64/DLL Debug/DirectZob.tlog/link.write.1.tlog
+/DirectZobEngine/x64/DLL Debug/DirectZob.tlog/metagen.read.1.tlog
+/DirectZobEngine/x64/DLL Debug/DirectZob.tlog/metagen.write.1.tlog
+/DirectZobEngine/x64/DLL Debug/DirectZobWrapper.obj
+/DirectZobEngine/x64/DLL Debug/EngineWrapper.obj
+/DirectZobEngine/x64/DLL Debug/vc141.pdb
+/DirectZobWrapper/x64/Debug/DirectZobWrapper.vcxprojAssemblyReference.cache
+/DirectZobWrapper/x64/Release/DirectZobWrapper.tlog/unsuccessfulbuild
+/x64/DLL Debug/DirectZob.dll
+/x64/DLL Debug/DirectZob.dll.metagen
+/x64/DLL Debug/DirectZob.exp
+/x64/DLL Debug/DirectZob.pdb
+/x64/DLL Release/DirectZob.dll
+/x64/DLL Release/DirectZob.dll.metagen
+/x64/DLL Release/DirectZob.exp
+/x64/DLL Release/DirectZob.iobj
+/x64/DLL Release/DirectZob.ipdb
+/x64/DLL Release/DirectZob.pdb
+/.vs/DirectZob/v15/ipch/AutoPCH/20239e318cca5b32/CUBE.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/40dbcea9bf7df68e/DIRECTZOB.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/486dd0ca4c955ea0/TINYXML.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/55272f53fb6a94ca/CAMERAMANAGER.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/57d465b24e56954a/CAMERAMANAGER.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/7ead8c2b0742bc49/CAMERAMANAGER.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/a4e53e3bcfe5572/CAMERA.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/b069c70bbc94d467/TEXTUREMANAGER.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/b665b345e771e6c9/CAMERAWRAPPER.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/c3348e913b3ea085/CUBE.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/d08d0cadc242c15c/TEXTURE.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/d11b2122afdca726/MINIFB_COMMON.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/df4d6699b02f254/TEXTUREMANAGER.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/e016b604a615e6b2/CUBE.ipch
+/DirectZobEngine/x64/DLL Debug/CameraManager.obj
+/DirectZobEngine/x64/DLL Debug/CameraWrapper.obj
+/DirectZobEngine/x64/DLL Debug/Project1.vcxprojAssemblyReference.cache
+/DirectZobEngine/x64/DLL Debug/TextureManager.obj
+/DirectZobEngine/x64/DLL Debug/tinystr.obj
+/DirectZobEngine/x64/DLL Debug/tinyxml.obj
+/DirectZobEngine/x64/DLL Debug/tinyxmlerror.obj
+/DirectZobEngine/x64/DLL Debug/tinyxmlparser.obj
+/.vs/DirectZob/v16/ipch/AutoPCH/109ff3c730308fbc/TEXTURE.ipch
+/.vs/DirectZob/v16/ipch/AutoPCH/1ad39c40c8c571c2/DIRECTZOBWRAPPER.ipch
+/.vs/DirectZob/v16/ipch/AutoPCH/20f359f8f97af8de/INTERFACE.ipch
+/.vs/DirectZob/v16/ipch/AutoPCH/3fd6b60aa8393cb0/TEXT2D.ipch
+/.vs/DirectZob/v16/ipch/AutoPCH/4fe425ba0bbcc200/TINYXML.ipch
+/.vs/DirectZob/v16/ipch/AutoPCH/6fd32551a184533c/TEXTURE.ipch
+/.vs/DirectZob/v16/ipch/AutoPCH/75375bb439c732a9/CAMERAMANAGER.ipch
+/.vs/DirectZob/v16/ipch/AutoPCH/76210880489c5ca9/CAMERAWRAPPER.ipch
+/.vs/DirectZob/v16/ipch/AutoPCH/7b78338aec6c5e81/VECTOR3.ipch
+/.vs/DirectZob/v16/ipch/AutoPCH/8ad87e0f3b190729/CAMERAMANAGER.ipch
+/.vs/DirectZob/v16/ipch/AutoPCH/b78cddab2f47024d/ENGINE.ipch
+/.vs/DirectZob/v16/ipch/AutoPCH/c3b4d3f275a499cd/ENGINE.ipch
+/.vs/DirectZob/v16/ipch/AutoPCH/c7112ea115e305c/RASTERIZER.ipch
+/.vs/DirectZob/v16/ipch/AutoPCH/c729d137484f9452/CAMERA.ipch
+/.vs/DirectZob/v16/ipch/AutoPCH/cac969e88de5e144/NEW_SCALAR.ipch
+/.vs/DirectZob/v16/ipch/AutoPCH/d351c77e8ead2bd2/CAMERA.ipch
+/.vs/DirectZob/v16/ipch/AutoPCH/d63e0f2eb1d68aa8/MESH.ipch
+/.vs/DirectZob/v16/ipch/AutoPCH/dbba608ce3b9bcc7/TEXTUREMANAGER.ipch
+/.vs/DirectZob/v16/ipch/AutoPCH/de25b242dcc46a28/MESH.ipch
+/.vs/DirectZob/v16/ipch/AutoPCH/e585cf8f09724681/DIRECTZOB.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/42f702df04faaf90/TEXT2D.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/4e6a467fa80f48a/CAMERAMANAGERWRAPPER.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/844778c7e6f784ce/ENGINEWRAPPER.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/950284e5d9a3f69f/MANAGEDVECTOR3.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/ab26fdcc4fba56ca/CAMERAWRAPPER.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/ad5edbdf10ea44d9/CAMERAMANAGERWRAPPER.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/e8442bec84e79e49/CAMERAWRAPPER.ipch
+/DirectZobEditor/obj/Debug/DesignTimeResolveAssemblyReferences.cache
+/DirectZobEditor/obj/Debug/DirectZobEditor.CameraControl.resources
+/DirectZobEngine/x64/DLL Debug/CameraManagerWrapper.obj
+/thirdParty/tinyXml/changes.txt
+/thirdParty/tinyXml/docs/annotated.html
+/thirdParty/tinyXml/docs/classes.html
+/thirdParty/tinyXml/docs/classTiXmlAttribute.html
+/thirdParty/tinyXml/docs/classTiXmlAttribute.png
+/thirdParty/tinyXml/docs/classTiXmlAttribute-members.html
+/thirdParty/tinyXml/docs/classTiXmlBase.html
+/thirdParty/tinyXml/docs/classTiXmlBase.png
+/thirdParty/tinyXml/docs/classTiXmlBase-members.html
+/thirdParty/tinyXml/docs/classTiXmlComment.html
+/thirdParty/tinyXml/docs/classTiXmlComment.png
+/thirdParty/tinyXml/docs/classTiXmlComment-members.html
+/thirdParty/tinyXml/docs/classTiXmlDeclaration.html
+/thirdParty/tinyXml/docs/classTiXmlDeclaration.png
+/thirdParty/tinyXml/docs/classTiXmlDeclaration-members.html
+/thirdParty/tinyXml/docs/classTiXmlDocument.html
+/thirdParty/tinyXml/docs/classTiXmlDocument.png
+/thirdParty/tinyXml/docs/classTiXmlDocument-members.html
+/thirdParty/tinyXml/docs/classTiXmlElement.html
+/thirdParty/tinyXml/docs/classTiXmlElement.png
+/thirdParty/tinyXml/docs/classTiXmlElement-members.html
+/thirdParty/tinyXml/docs/classTiXmlHandle.html
+/thirdParty/tinyXml/docs/classTiXmlHandle-members.html
+/thirdParty/tinyXml/docs/classTiXmlNode.html
+/thirdParty/tinyXml/docs/classTiXmlNode.png
+/thirdParty/tinyXml/docs/classTiXmlNode-members.html
+/thirdParty/tinyXml/docs/classTiXmlPrinter.html
+/thirdParty/tinyXml/docs/classTiXmlPrinter.png
+/thirdParty/tinyXml/docs/classTiXmlPrinter-members.html
+/thirdParty/tinyXml/docs/classTiXmlText.html
+/thirdParty/tinyXml/docs/classTiXmlText.png
+/thirdParty/tinyXml/docs/classTiXmlText-members.html
+/thirdParty/tinyXml/docs/classTiXmlUnknown.html
+/thirdParty/tinyXml/docs/classTiXmlUnknown.png
+/thirdParty/tinyXml/docs/classTiXmlUnknown-members.html
+/thirdParty/tinyXml/docs/classTiXmlVisitor.html
+/thirdParty/tinyXml/docs/classTiXmlVisitor.png
+/thirdParty/tinyXml/docs/classTiXmlVisitor-members.html
+/thirdParty/tinyXml/docs/deprecated.html
+/thirdParty/tinyXml/docs/doxygen.css
+/thirdParty/tinyXml/docs/doxygen.png
+/thirdParty/tinyXml/docs/files.html
+/thirdParty/tinyXml/docs/functions.html
+/thirdParty/tinyXml/docs/functions_0x63.html
+/thirdParty/tinyXml/docs/functions_0x64.html
+/thirdParty/tinyXml/docs/functions_0x65.html
+/thirdParty/tinyXml/docs/functions_0x66.html
+/thirdParty/tinyXml/docs/functions_0x67.html
+/thirdParty/tinyXml/docs/functions_0x69.html
+/thirdParty/tinyXml/docs/functions_0x6c.html
+/thirdParty/tinyXml/docs/functions_0x6e.html
+/thirdParty/tinyXml/docs/functions_0x6f.html
+/thirdParty/tinyXml/docs/functions_0x70.html
+/thirdParty/tinyXml/docs/functions_0x71.html
+/thirdParty/tinyXml/docs/functions_0x72.html
+/thirdParty/tinyXml/docs/functions_0x73.html
+/thirdParty/tinyXml/docs/functions_0x74.html
+/thirdParty/tinyXml/docs/functions_0x75.html
+/thirdParty/tinyXml/docs/functions_0x76.html
+/thirdParty/tinyXml/docs/functions_enum.html
+/thirdParty/tinyXml/docs/functions_func.html
+/thirdParty/tinyXml/docs/functions_func_0x63.html
+/thirdParty/tinyXml/docs/functions_func_0x64.html
+/thirdParty/tinyXml/docs/functions_func_0x65.html
+/thirdParty/tinyXml/docs/functions_func_0x66.html
+/thirdParty/tinyXml/docs/functions_func_0x67.html
+/thirdParty/tinyXml/docs/functions_func_0x69.html
+/thirdParty/tinyXml/docs/functions_func_0x6c.html
+/thirdParty/tinyXml/docs/functions_func_0x6e.html
+/thirdParty/tinyXml/docs/functions_func_0x70.html
+/thirdParty/tinyXml/docs/functions_func_0x71.html
+/thirdParty/tinyXml/docs/functions_func_0x72.html
+/thirdParty/tinyXml/docs/functions_func_0x73.html
+/thirdParty/tinyXml/docs/functions_func_0x74.html
+/thirdParty/tinyXml/docs/functions_func_0x75.html
+/thirdParty/tinyXml/docs/functions_func_0x76.html
+/thirdParty/tinyXml/docs/functions_rela.html
+/thirdParty/tinyXml/docs/functions_vars.html
+/thirdParty/tinyXml/docs/hierarchy.html
+/thirdParty/tinyXml/docs/index.html
+/thirdParty/tinyXml/docs/pages.html
+/thirdParty/tinyXml/docs/tab_b.gif
+/thirdParty/tinyXml/docs/tab_l.gif
+/thirdParty/tinyXml/docs/tab_r.gif
+/thirdParty/tinyXml/docs/tabs.css
+/thirdParty/tinyXml/docs/tinystr_8h_source.html
+/thirdParty/tinyXml/docs/tinyxml_8h_source.html
+/thirdParty/tinyXml/docs/tutorial0.html
+/thirdParty/tinyXml/Makefile
+/thirdParty/tinyXml/readme.txt
+/thirdParty/tinyXml/tinystr.cpp
+/thirdParty/tinyXml/tinystr.h
+/thirdParty/tinyXml/tinyxml.cpp
+/thirdParty/tinyXml/tinyxml.h
+/thirdParty/tinyXml/tinyxml.sln
+/thirdParty/tinyXml/tinyxml_lib.vcxproj
+/thirdParty/tinyXml/tinyxmlerror.cpp
+/thirdParty/tinyXml/tinyxmlparser.cpp
+/thirdParty/tinyXml/tinyxmlSTL.vcxproj
+/thirdParty/tinyXml/tinyXmlTest.vcxproj
+/thirdParty/tinyXml/tinyXmlTestSTL.vcxproj
+/thirdParty/tinyXml/utf8test.gif
+/thirdParty/tinyXml/utf8test.xml
+/thirdParty/tinyXml/utf8testverify.xml
+/thirdParty/tinyXml/xmltest.cpp
+<<<<<<< HEAD
+/.vs/DirectZob/v16/ipch/AutoPCH/2bec48c84ef84512/CUBE.ipch
+/.vs/DirectZob/v16/ipch/AutoPCH/33d3ebdc79e62492/CUBE.ipch
+/.vs/DirectZob/v16/ipch/AutoPCH/509a91f9bfc1abea/CAMERAMANAGERWRAPPER.ipch
+/.vs/DirectZob/v16/ipch/AutoPCH/87345748ab916898/MANAGEDOBJECT.ipch
+/.vs/DirectZob/v16/ipch/AutoPCH/8d3f8e5d5adfd5e1/NEW_SCALAR.ipch
+/.vs/DirectZob/v16/ipch/AutoPCH/a872c510e1040c6a/CAMERAMANAGERWRAPPER.ipch
+/.vs/DirectZob/v16/ipch/AutoPCH/bc08c978102a8dc/RASTERIZER.ipch
+/.vs/DirectZob/v16/ipch/AutoPCH/e029264cead8c242/DIRECTZOBWRAPPER.ipch
+/.vs/DirectZob/v16/ipch/AutoPCH/fafde7618980a350/TMP1A4D.TMP.ipch
+=======
+/.vs/DirectZob/v15/ipch/AutoPCH/16e781ca35bc8b6d/ENGINE.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/1caa377345111a29/ZOBOBJECT.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/1d155ba2b8c3556a/ZOBOBJECTMANAGER.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/446b0f71412df5e0/MATRIX4X4.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/4ccf138469cd04c9/CAMERAMANAGER.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/4fb5fed03a49842a/ZOBOBJECT.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/5d92440002f9a3b9/ZOBOBJECTMANAGER.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/7f2e02ee4ea0dc9c/SCENELOADER.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/7f4639e8ade37148/MESH.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/81db394ca18cdd1c/SCENELOADER.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/8c6dbe7f9c22e1a9/ZOBOBJECT.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/9bf408527214e8f/SCENELOADER.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/d4a78864ea1c2e60/MATRIX4X4.ipch
+/.vs/DirectZob/v15/ipch/AutoPCH/daef930d5e2079ea/ZOBOBJECTMANAGER.ipch
+/DirectZobEngine/x64/DLL Debug/SceneLoader.obj
+/DirectZobEngine/x64/DLL Debug/ZobObject.obj
+/DirectZobEngine/x64/DLL Debug/ZobObjectManager.obj
+>>>>>>> origin/master

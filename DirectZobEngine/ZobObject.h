@@ -23,6 +23,7 @@ public:
 	const std::vector<ZobObject*>* getChildren() const { return &m_children; }
 	ZobObject* GetParent() { return m_parent; }
 	ZobObject* GetChild(const std::string& name);
+	ZobObject* GetChild(const int i);
 	inline void SetScale(float x, float y, float z) { m_scale.x = x; m_scale.y = y; m_scale.z = z; }
 	inline void SetRotation(float x, float y, float z) { m_rotation.x = x; m_rotation.y = y; m_rotation.z = z; }
 	inline void SetTranslation(float x, float y, float z) { m_translation.x = x; m_translation.y = y; m_translation.z = z; }
@@ -31,6 +32,7 @@ public:
 	inline const Vector3& GetScale() const { return m_scale; }
 	inline const std::string& GetName() const { return m_name; }
 	inline void SetName(const std::string &name) { m_name = name; }
+	inline const int GetNbChildren() const { return m_children.size(); }
 	void RemoveChildReference(const ZobObject* z);
 	void AddChildReference(ZobObject* z);
 	int GetChildPosition(const ZobObject* z);

@@ -1,0 +1,26 @@
+<root>
+    <Meshes>
+        <Mesh name="beach3" file="beach3.obj" />
+        <Mesh name="water" file="water.obj" />
+    </Meshes>
+    <Scene>
+        <ZobObject name="Beach2">
+            <Mesh>beach3</Mesh>
+            <Position x="-10" y="0" z="-10" />
+            <Rotation x="0" y="0" z="0" />
+            <Scale x="0.5" y="1" z="0.5" />
+            <ZobObject name="Water">
+                <Mesh>water</Mesh>
+                <Position x="0" y="0" z="0" />
+                <Rotation x="0" y="0" z="0" />
+                <Scale x="1" y="1" z="1" />
+                <ZobObject name="newObject_1">
+                    <Mesh>beach3</Mesh>
+                    <Position x="0" y="10" z="0" />
+                    <Rotation x="0" y="0" z="0" />
+                    <Scale x="1" y="1" z="1" />
+                </ZobObject>
+            </ZobObject>
+        </ZobObject>
+    </Scene>
+</root>
