@@ -1,6 +1,6 @@
 #pragma once
 #include"Types.h"
-#include "Texture.h"
+#include "material.h"
 
 class TextureTestAlpha
 {

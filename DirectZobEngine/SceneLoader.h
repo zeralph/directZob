@@ -3,9 +3,9 @@
 #include <vector>
 #include "ZobObjectManager.h"
 #include "ZobObject.h"
-#include "TextureManager.h"
+#include "materialManager.h"
 #include "MeshManager.h"
-#include "Texture.h"
+#include "Material.h"
 #include "Mesh.h"
 #include "Engine.h"
 #include "tinyxml.h"

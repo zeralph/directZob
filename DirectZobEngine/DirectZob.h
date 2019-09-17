@@ -10,13 +10,13 @@
 #include <algorithm>
 #include "Engine.h"
 #include "Cube.h"
-#include "Texture.h"
+#include "Material.h"
 #include "TextureTestAlpha.h"
 #include "Mesh.h"
 #include "text2D.h"
 #include "Events.h"
 #include "CameraManager.h"
-#include "TextureManager.h"
+#include "MaterialManager.h"
 #include "MeshManager.h"
 #include "ZobObjectManager.h"
 

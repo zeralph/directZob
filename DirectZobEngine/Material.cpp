@@ -1,4 +1,4 @@
-#include "Texture.h"
+#include "Material.h"
 #include "lodepng.h"
 #include <iostream>
 #include "DirectZob.h"

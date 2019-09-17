@@ -1,7 +1,7 @@
 #pragma once
 #include "ManagedObject.h"
 #include "ZobObjectManager.h"
-#include "ZobObjectInterface.h"
+#include "ZobObjectWrapper.h"
 #include <string> 
 //using namespace System;
 namespace CLI
@@ -13,7 +13,7 @@ namespace CLI
 		ZobObjectManagerWrapper();
 
 		System::String^ GetZobObjectList();
-		ZobObjectInterface^ GetZobObject(System::String^ name);
+		ZobObjectWrapper^ GetZobObject(System::String^ name);
 		void RemoveZobObject(System::String^ name);
 		void AddZobObject(System::String^ parent);
 
