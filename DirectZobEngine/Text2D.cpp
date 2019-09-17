@@ -2,7 +2,7 @@
 
 using namespace Core;
 
-Text2D::Text2D(Engine* engine, const Texture* tex, int nbCharWidth, int nbCharHeight, Events* events)
+Text2D::Text2D(Engine* engine, const Material* tex, int nbCharWidth, int nbCharHeight, Events* events)
 {
 	m_events = events;
 	m_engine = engine;

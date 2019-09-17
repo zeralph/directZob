@@ -85,7 +85,7 @@ Mesh::Mesh(std::string& name, std::string& path, std::string& file)
 	size_t curNormal = 0;
 	size_t curUv = 0;
 	size_t curface = 0;
-	const Texture* tex = NULL;
+	const Material* tex = NULL;
 	while (getline(sfile, line))
 	{
 		if (line[0] == 'v')
@@ -274,7 +274,7 @@ inline bool Mesh::RejectTriangle(const Triangle* t, const float znear, const flo
 	return false;
 }
 
-void Mesh::CreateTriangles(const std::vector<std::string>* line, std::vector<Triangle>* tList, size_t &tArrayIdx, const Texture* tex)
+void Mesh::CreateTriangles(const std::vector<std::string>* line, std::vector<Triangle>* tList, size_t &tArrayIdx, const Material* tex)
 {
 	size_t nbFaces = line->size() - 2;
 	int a, b, c = 0;

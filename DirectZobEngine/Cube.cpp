@@ -1,7 +1,7 @@
 #include "Cube.h"
 
 
-Cube::Cube(const Texture *tex)
+Cube::Cube(const Material *tex)
 {
 	m_texture = tex;
 	m_modelMatrix.Identity();

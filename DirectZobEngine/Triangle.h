@@ -21,7 +21,7 @@ public:
 	Vector2* ub;
 	Vector2* uc;
 
-	const Texture* tex;
+	const Material* tex;
 
 	float area;
 
