@@ -8,6 +8,7 @@
 		<!--<Mesh name = "camaro" file="camaro.obj"></Mesh>-->
 		<Mesh name = "beach3" file="beach3.obj"></Mesh>
 		<Mesh name = "water" file="water.obj"></Mesh>
+		<Mesh name = "arrowX" file="arrowX.obj"></Mesh>
 		<!--<Mesh name = "earth" file="earth.obj" texture="Water"></Mesh>
 		<Mesh name = "man" file="man.obj" texture="Water"></Mesh>
 		<Mesh name = "cottage_obj" file="cottage_obj.obj" texture="Water"></Mesh>-->

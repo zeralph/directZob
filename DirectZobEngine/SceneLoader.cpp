@@ -129,14 +129,59 @@ void SceneLoader::SaveScene(std::string &path, std::string &file, ZobObjectManag
 	TiXmlDocument doc("Scene");
 	TiXmlElement * root = new TiXmlElement("root");
 	doc.LinkEndChild(root);
-	TiXmlElement * e;
-	e = new TiXmlElement("Textures");
-	root->LinkEndChild(e);
-	int n = textureManager->GetNbTextures();
-	for (int i = 0; i < n; n++)
+	TiXmlElement meshes = TiXmlElement("Meshes");
+	int n = meshManager->GetNbMeshes();
+	for (int i = 0; i < n; i++)
 	{
-		e = new TiXmlElement("Texture");
-		e->SetAttribute("name", textureManager->GetTexture(i)->GetName().c_str());
-		e->SetAttribute("file", textureManager->GetTexture(i)->GetFile().c_str());
+		TiXmlElement e = TiXmlElement("Mesh");
+		e.SetAttribute("name", meshManager->GetMesh(i)->GetName().c_str());
+		e.SetAttribute("file", meshManager->GetMesh(i)->GetFile().c_str());
+		meshes.InsertEndChild(e);
 	}
+	root->InsertEndChild(meshes);
+	TiXmlElement scene = TiXmlElement("Scene");
+	ZobObject* rootObj = zobObjectManager->GetRootObject();
+	for (int i = 0; i < rootObj->GetNbChildren(); i++)
+	{
+		SaveZobObjectRecusrive(&scene, rootObj->GetChild(i));
+	}
+	root->InsertEndChild(scene);
+	if (!doc.SaveFile("C:\\_GIT\\directZob\\resources\\test.xml"))
+	{
+		DirectZob::Log("Error saving scene");
+	}
+}
+
+void SceneLoader::SaveZobObjectRecusrive(TiXmlElement* node, ZobObject* z)
+{
+	TiXmlElement o = TiXmlElement("ZobObject");
+	TiXmlElement p = TiXmlElement("Position");
+	TiXmlElement r = TiXmlElement("Rotation");
+	TiXmlElement s = TiXmlElement("Scale");
+	o.SetAttribute("name", z->GetName().c_str());
+	p.SetDoubleAttribute("x", z->GetTransform().x);
+	p.SetDoubleAttribute("y", z->GetTransform().y);
+	p.SetDoubleAttribute("z", z->GetTransform().z);
+	r.SetDoubleAttribute("x", z->GetRotation().x);
+	r.SetDoubleAttribute("y", z->GetRotation().y);
+	r.SetDoubleAttribute("z", z->GetRotation().z);
+	s.SetDoubleAttribute("x", z->GetScale().x);
+	s.SetDoubleAttribute("y", z->GetScale().y);
+	s.SetDoubleAttribute("z", z->GetScale().z);
+	std::string meshName = z->GetMeshName();
+	if (meshName.length() >0 )
+	{
+		TiXmlElement m = TiXmlElement("Mesh");
+		TiXmlText t = TiXmlText(meshName.c_str());
+		m.InsertEndChild(t);
+		o.InsertEndChild(m);
+	}
+	o.InsertEndChild(p);
+	o.InsertEndChild(r);
+	o.InsertEndChild(s);
+	for (int i = 0; i < z->GetNbChildren(); i++)
+	{
+		SaveZobObjectRecusrive(&o, z->GetChild(i));
+	}
+	node->InsertEndChild(o);
 }

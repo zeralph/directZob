@@ -207,7 +207,7 @@ namespace DirectZobEditor
                 {
                     m_path = openFileDialog.InitialDirectory;
                     m_file = openFileDialog.SafeFileName;
-                    //m_meshManagerWrapper.
+                    //m_meshManagerWrapper.L
                 }
             }
         }

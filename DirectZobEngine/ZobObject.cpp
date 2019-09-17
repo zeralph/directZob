@@ -112,3 +112,12 @@ ZobObject* ZobObject::GetChild(const std::string& name)
 	}
 	return NULL;
 }
+
+ZobObject* ZobObject::GetChild(const int i)
+{
+	if (i >= 0 && i < m_children.size())
+	{
+		return m_children.at(i);
+	}
+	return NULL;
+}
