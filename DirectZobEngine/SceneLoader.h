@@ -23,13 +23,10 @@ private:
 
 	static void LoadMesh(TiXmlElement* node, MeshManager* meshMgr, MaterialManager* texMgr);
 	static void LoadZobObject(TiXmlElement* node, ZobObject* parent, ZobObjectManager* zobMgr, MeshManager* meshMgr);
-<<<<<<< HEAD
-	static void UnloadScene(Core::Engine* engine, ZobObjectManager* zobObjectManager, MeshManager* meshManager, TextureManager* textureManager);
+
 	static void SaveZobObjectRecusrive(TiXmlElement* node, ZobObject* z);
-=======
 	static void UnloadScene(Core::Engine* engine, ZobObjectManager* zobObjectManager, MeshManager* meshManager, MaterialManager* materialManager);
 
->>>>>>> eb0c2e88ae1fc73fc770eb63e92b8d992db63375
 	static std::string m_path;
 	static std::string m_file;
 	static std::vector<Mesh*> m_meshes;
