@@ -11,12 +11,12 @@ struct MaterialInfo
 	//put other stuff here
 };
 
-TextureManager::TextureManager()
+MaterialManager::MaterialManager()
 {
 	m_textures.clear();
 }
 
-TextureManager::~TextureManager()
+MaterialManager::~MaterialManager()
 {
 	for (int i = 0; i < m_textures.size(); i++)
 	{
@@ -25,7 +25,7 @@ TextureManager::~TextureManager()
 	m_textures.clear();
 }
 
-void TextureManager::LoadTexture(std::string& name, std::string& path, std::string& file)
+void MaterialManager::LoadTexture(std::string& name, std::string& path, std::string& file)
 {
 	if (GetTexture(name) == NULL)
 	{
@@ -38,7 +38,7 @@ void TextureManager::LoadTexture(std::string& name, std::string& path, std::stri
 	}
 }
 
-void TextureManager::LoadMaterials(std::string& path, std::string& file)
+void MaterialManager::LoadMaterials(std::string& path, std::string& file)
 {
 	std::string::size_type sz;
 	// Open the file.
@@ -93,7 +93,7 @@ void TextureManager::LoadMaterials(std::string& path, std::string& file)
 	}
 }
 
-const Texture* TextureManager::GetTexture(const int i) const
+const Texture* MaterialManager::GetTexture(const int i) const
 {
 	if (i >= 0 && i < m_textures.size())
 	{
@@ -102,7 +102,7 @@ const Texture* TextureManager::GetTexture(const int i) const
 	return NULL;
 }
 
-const Texture* TextureManager::GetTexture(std::string& name) const
+const Texture* MaterialManager::GetTexture(std::string& name) const
 {
 	for (std::vector<Texture*>::const_iterator iter = m_textures.begin(); iter != m_textures.end(); iter++)
 	{
@@ -115,7 +115,7 @@ const Texture* TextureManager::GetTexture(std::string& name) const
 }
 
 
-void TextureManager::UnloadAll()
+void MaterialManager::UnloadAll()
 {
 	for (int i = 0; i < m_textures.size(); i++)
 	{
@@ -124,7 +124,7 @@ void TextureManager::UnloadAll()
 	m_textures.clear();
 }
 
-void TextureManager::SplitEntry(const std::string* s, std::vector<std::string>* v, const char delim)
+void MaterialManager::SplitEntry(const std::string* s, std::vector<std::string>* v, const char delim)
 {
 	std::size_t current, previous = 0;
 	current = s->find(delim);
