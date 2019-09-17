@@ -52,7 +52,7 @@ namespace Core
 		bool ClipSegment(Vector3* a, Vector3* b);
 		int StartDrawingScene();
 		int EndDrawingScene();
-		void LoadMesh(std::string& name, std::string& path, const Texture* texture, Vector3& p, Vector3& r, Vector3& s);
+		void LoadMesh(std::string& name, std::string& path, const Material* texture, Vector3& p, Vector3& r, Vector3& s);
 		inline ulong GetCurrentFrame() { return m_currentFrame; }
 		inline const float GetFps() { return m_fps; }
 		inline const float GetRenderTime() { return m_renderTimeMS; }

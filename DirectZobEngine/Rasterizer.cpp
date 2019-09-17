@@ -279,7 +279,7 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 		w1 /= t->area;
 		w2 /= t->area;
 
-		const Texture* texData = t->tex;
+		const Material* texData = t->tex;
 
 		z = 1.0f / (t->va->z * w0 + t->vb->z * w1 + t->vc->z * w2);
 		k = p->y * m_width + p->x;

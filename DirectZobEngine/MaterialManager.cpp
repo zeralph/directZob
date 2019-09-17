@@ -29,7 +29,7 @@ void MaterialManager::LoadTexture(std::string& name, std::string& path, std::str
 {
 	if (GetTexture(name) == NULL)
 	{
-		Texture* t = new Texture(path, file, name);
+		Material* t = new Material(path, file, name);
 		m_textures.push_back(t);
 	}
 	else
@@ -93,7 +93,7 @@ void MaterialManager::LoadMaterials(std::string& path, std::string& file)
 	}
 }
 
-const Texture* MaterialManager::GetTexture(const int i) const
+const Material* MaterialManager::GetTexture(const int i) const
 {
 	if (i >= 0 && i < m_textures.size())
 	{
@@ -102,9 +102,9 @@ const Texture* MaterialManager::GetTexture(const int i) const
 	return NULL;
 }
 
-const Texture* MaterialManager::GetTexture(std::string& name) const
+const Material* MaterialManager::GetTexture(std::string& name) const
 {
-	for (std::vector<Texture*>::const_iterator iter = m_textures.begin(); iter != m_textures.end(); iter++)
+	for (std::vector<Material*>::const_iterator iter = m_textures.begin(); iter != m_textures.end(); iter++)
 	{
 		if ((*iter)->GetName() == name)
 		{
