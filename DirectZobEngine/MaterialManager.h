@@ -4,11 +4,11 @@
 #include <string>
 #include <vector>
 
-class TextureManager
+class MaterialManager
 {
 public:
-	TextureManager();
-	~TextureManager();
+	MaterialManager();
+	~MaterialManager();
 
 	void LoadTexture(std::string& name, std::string& path, std::string& file);
 	const Texture* GetTexture(std::string& name) const;
