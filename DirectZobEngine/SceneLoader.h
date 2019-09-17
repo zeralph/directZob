@@ -21,7 +21,6 @@ public:
 	static void NewScene(Core::Engine* engine, ZobObjectManager* zobObjectManager, MeshManager* meshManager, MaterialManager* materialManager);
 private:
 
-	static void LoadTexture(TiXmlElement* node, MaterialManager* texMgr);
 	static void LoadMesh(TiXmlElement* node, MeshManager* meshMgr, MaterialManager* texMgr);
 	static void LoadZobObject(TiXmlElement* node, ZobObject* parent, ZobObjectManager* zobMgr, MeshManager* meshMgr);
 	static void UnloadScene(Core::Engine* engine, ZobObjectManager* zobObjectManager, MeshManager* meshManager, MaterialManager* materialManager);

@@ -10,8 +10,8 @@ public:
 	MaterialManager();
 	~MaterialManager();
 
-	void LoadTexture(std::string& name, std::string& path, std::string& file);
-	const Material* GetTexture(std::string& name) const;
+	void LoadMaterial(const std::string& name, const Vector3* ambientColor, const Vector3* diffuseColor, const std::string* textureFile = NULL);
+	const Material* GetTexture(const std::string& name) const;
 	const int GetNbTextures() const { return m_textures.size(); }
 	const Material* GetTexture(const int i) const;
 	void LoadMaterials(std::string& path, std::string& file);
