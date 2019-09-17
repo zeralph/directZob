@@ -80,7 +80,8 @@ Engine::Engine(int width, int height, Events* events)
 	{
 		m_rasterizers->at(i)->Init();
 	}
-	m_events->AddEvent(0, "Engine initialized with " + std::to_string(m_nbRasterizers) + " rasterizer(s)\n");
+	std::string n = "Engine initialized with " + std::to_string(m_nbRasterizers) + " rasterizer(s)";
+	DirectZob::LogInfo(n.c_str());
 }
 
 Engine::~Engine()

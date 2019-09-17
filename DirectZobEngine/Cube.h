@@ -20,7 +20,7 @@ public:
 		uint color;
 	};
 
-	Cube(const Texture* tex);
+	Cube(const Material* tex);
 	~Cube();
 	void Init();
 	inline void SetSCale(float x, float y, float z) { m_modelMatrix.SetScale(x, y, z); }
@@ -51,5 +51,5 @@ private:
 	static const uint m_colorsData[NB_TRIANGLES];
 	static const uint m_verticesIndex[NB_VERTICES_INDEX];
 
-	const Texture* m_texture;
+	const Material* m_texture;
 };

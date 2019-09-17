@@ -7,6 +7,13 @@ class Events
 {
 public:
 
+	enum LogType
+	{
+		LogInfo = 0,
+		LogWarning,
+		LogError
+	};
+
 	Events()
 	{
 		ClearEvents();
@@ -17,10 +24,10 @@ public:
 		ClearEvents();
 	}
 
-	void AddEvent(int eventType, std::string data)
+	void AddEvent(LogType eventType, std::string data)
 	{
 		std::string s = "{ \"type\":\"";
-		s.append(std::to_string(eventType));
+		s.append(std::to_string((int)eventType));
 		s.append("\", \"data\":\"");
 		s.append(escapeJsonString(data));
 		s.append("\"}");

@@ -4,10 +4,10 @@
 #include "ManagedVector3.h"
 
 namespace CLI {
-	public ref class ZobObjectInterface : ManagedObject<ZobObject>
+	public ref class ZobObjectWrapper : ManagedObject<ZobObject>
 	{
 	public:
-		ZobObjectInterface(ZobObject* zobObject);
+		ZobObjectWrapper(ZobObject* zobObject);
 		void SetZobObject(ZobObject* zobObject) { m_Instance = zobObject; }
 		System::String^ GetName();
 		void SetName(System::String^ name);

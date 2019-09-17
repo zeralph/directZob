@@ -1,7 +1,7 @@
 #include "ZobObject.h"
 #include "DirectZob.h"
 
-ZobObject::ZobObject(std::string& name, Mesh* mesh, ZobObject* parent /*= NULL*/)
+ZobObject::ZobObject(Type t, SubType s, std::string& name, Mesh* mesh, ZobObject* parent /*= NULL*/):ZOBGUID(t,s)
 {
 	m_name = name;
 	m_parent = parent;
@@ -15,7 +15,7 @@ ZobObject::ZobObject(std::string& name, Mesh* mesh, ZobObject* parent /*= NULL*/
 	}
 	std::string l = "Added new ZobObject ";
 	l.append(m_name);
-	DirectZob::Log(l);
+	DirectZob::LogInfo(l.c_str());
 }
 
 ZobObject::~ZobObject()
@@ -30,7 +30,7 @@ ZobObject::~ZobObject()
 	}
 	std::string l = "Deleted ZobObject ";
 	l.append(m_name);
-	DirectZob::Log(l);
+	DirectZob::LogInfo(l.c_str());
 }
 
 void ZobObject::SetMesh(std::string name)
