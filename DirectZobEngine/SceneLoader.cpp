@@ -4,13 +4,6 @@
 std::string SceneLoader::m_path = "";
 std::string SceneLoader::m_file = "";
 
-void SceneLoader::LoadTexture(TiXmlElement* node, MaterialManager* materialManager)
-{
-	std::string name = node->Attribute("name");
-	std::string file = node->Attribute("file");
-	materialManager->LoadTexture(name, m_path, file);
-}
-
 void SceneLoader::LoadMesh(TiXmlElement* node, MeshManager* meshMgr, MaterialManager* materialManager)
 {
 	std::string name = node->Attribute("name");
@@ -134,11 +127,11 @@ void SceneLoader::SaveScene(std::string &path, std::string &file, ZobObjectManag
 	TiXmlElement * e;
 	e = new TiXmlElement("Textures");
 	root->LinkEndChild(e);
-	int n = MaterialManager->GetNbTextures();
-	for (int i = 0; i < n; n++)
-	{
-		e = new TiXmlElement("Texture");
-		e->SetAttribute("name", MaterialManager->GetTexture(i)->GetName().c_str());
-		e->SetAttribute("file", MaterialManager->GetTexture(i)->GetFile().c_str());
-	}
+	//int n = MaterialManager->GetNbTextures();
+	//for (int i = 0; i < n; n++)
+	//{
+	//	e = new TiXmlElement("Texture");
+	//	e->SetAttribute("name", MaterialManager->GetTexture(i)->GetName().c_str());
+	//	e->SetAttribute("file", MaterialManager->GetTexture(i)->GetFile().c_str());
+	//}
 }

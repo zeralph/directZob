@@ -2,12 +2,15 @@
 #include "DirectZob.h"
 #include <fstream>
 #include <iostream>
+#include "Vector3.h"
 
 struct MaterialInfo
 {
 	std::string file;
 	std::string name;
 	std::string texture;
+	Vector3 diffuse;
+	Vector3 ambient;
 	//put other stuff here
 };
 
@@ -25,11 +28,11 @@ MaterialManager::~MaterialManager()
 	m_textures.clear();
 }
 
-void MaterialManager::LoadTexture(std::string& name, std::string& path, std::string& file)
+void MaterialManager::LoadMaterial(const std::string& name, const Vector3* ambientColor, const Vector3* diffuseColor, const std::string* textureFile/* = NULL*/)
 {
 	if (GetTexture(name) == NULL)
 	{
-		Material* t = new Material(path, file, name);
+		Material* t = new Material(name, ambientColor, diffuseColor, textureFile);
 		m_textures.push_back(t);
 	}
 	else
@@ -64,23 +67,48 @@ void MaterialManager::LoadMaterials(std::string& path, std::string& file)
 			if (v.size() == 2)
 			{
 				MaterialInfo matInfo;
+				matInfo.texture = "";
 				matInfo.name = v[1];
 				matInfo.file = file.substr(0, file.size() - 4);;
-				v.clear();
 				while(getline(sfile, line))
 				{
 					if (line.rfind("map_Kd", 0) == 0)
 					{
+						v.clear();
 						SplitEntry(&line, &v, ' ');
 						if (v.size() == 2)
 						{
 							matInfo.texture = v[1];
-							materials.push_back(matInfo);
-							break;
 						}
 					}
+					if (line.rfind("Ka", 0) == 0)
+					{
+						v.clear();
+						SplitEntry(&line, &v, ' ');
+						if (v.size() == 4)
+						{
+							matInfo.ambient.x = atof(v[1].c_str());
+							matInfo.ambient.y = atof(v[2].c_str());
+							matInfo.ambient.z = atof(v[3].c_str());
+						}
+					}
+					if (line.rfind("Kd", 0) == 0)
+					{
+						v.clear();
+						SplitEntry(&line, &v, ' ');
+						if (v.size() == 4)
+						{
+							matInfo.diffuse.x = atof(v[1].c_str());
+							matInfo.diffuse.y = atof(v[2].c_str());
+							matInfo.diffuse.z = atof(v[3].c_str());
+						}
+					}
+					if (line.length() == 0)
+					{
+						break;
+					}
 				}
-
+				materials.push_back(matInfo);
 			}
 		}
 	}
@@ -89,7 +117,17 @@ void MaterialManager::LoadMaterials(std::string& path, std::string& file)
 		std::string n = materials.at(i).file;
 		n.append(".");
 		n.append(materials.at(i).name);
-		LoadTexture(n, path, materials.at(i).texture);
+
+		if (materials.at(i).texture.length() > 0)
+		{
+			std::string p = path;
+			p.append(materials.at(i).texture);
+			LoadMaterial(n, &materials.at(i).ambient, &materials.at(i).diffuse, &p);
+		}
+		else
+		{
+			LoadMaterial(n, &materials.at(i).ambient, &materials.at(i).diffuse, NULL);
+		}
 	}
 }
 
@@ -102,7 +140,7 @@ const Material* MaterialManager::GetTexture(const int i) const
 	return NULL;
 }
 
-const Material* MaterialManager::GetTexture(std::string& name) const
+const Material* MaterialManager::GetTexture(const std::string& name) const
 {
 	for (std::vector<Material*>::const_iterator iter = m_textures.begin(); iter != m_textures.end(); iter++)
 	{
