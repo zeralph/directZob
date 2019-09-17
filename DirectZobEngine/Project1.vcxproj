@@ -59,6 +59,8 @@
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'">false</CompileAsManaged>
     </ClCompile>
     <ClCompile Include="EngineWrapper.cpp" />
+    <ClCompile Include="Material.cpp" />
+    <ClCompile Include="MaterialManager.cpp" />
     <ClCompile Include="ZOBGUID.cpp">
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'">false</CompileAsManaged>
     </ClCompile>
@@ -105,11 +107,6 @@
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Release|x64'">false</CompileAsManaged>
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'">false</CompileAsManaged>
     </ClCompile>
-    <ClCompile Include="Texture.cpp">
-      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Release|x64'">false</CompileAsManaged>
-      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'">false</CompileAsManaged>
-    </ClCompile>
-    <ClCompile Include="TextureManager.cpp" />
     <ClCompile Include="tinystr.cpp" />
     <ClCompile Include="tinyxml.cpp" />
     <ClCompile Include="tinyxmlerror.cpp" />
@@ -131,9 +128,9 @@
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'">false</CompileAsManaged>
     </ClCompile>
     <ClCompile Include="ZobObject.cpp" />
-    <ClCompile Include="ZobObjectInterface.cpp" />
     <ClCompile Include="ZobObjectManager.cpp" />
     <ClCompile Include="ZobObjectManagerWrapper.cpp" />
+    <ClCompile Include="ZobObjectWrapper.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
@@ -146,6 +143,8 @@
     <ClInclude Include="Engine.h" />
     <ClInclude Include="EngineWrapper.h" />
     <ClInclude Include="Events.h" />
+    <ClInclude Include="Material.h" />
+    <ClInclude Include="MaterialManager.h" />
     <ClInclude Include="ZOBGUID.h" />
     <ClInclude Include="lodepng.h" />
     <ClInclude Include="ManagedObject.h" />
@@ -162,8 +161,6 @@
     <ClInclude Include="Rasterizer.h" />
     <ClInclude Include="SceneLoader.h" />
     <ClInclude Include="text2D.h" />
-    <ClInclude Include="Texture.h" />
-    <ClInclude Include="TextureManager.h" />
     <ClInclude Include="TextureTest.h" />
     <ClInclude Include="TextureTestAlpha.h" />
     <ClInclude Include="tinystr.h" />
@@ -174,9 +171,9 @@
     <ClInclude Include="Vector3.h" />
     <ClInclude Include="WindowData.h" />
     <ClInclude Include="ZobObject.h" />
-    <ClInclude Include="ZobObjectInterface.h" />
     <ClInclude Include="ZobObjectManager.h" />
     <ClInclude Include="ZobObjectManagerWrapper.h" />
+    <ClInclude Include="ZobObjectWrapper.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

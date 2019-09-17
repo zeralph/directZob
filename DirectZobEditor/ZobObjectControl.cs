@@ -14,7 +14,7 @@ namespace DirectZobEditor
     public partial class ZobObjectControl : UserControl
     {
         private Form1 m_mainForm;
-        private CLI.ZobObjectInterface m_zobObjectWrapper = null;
+        private CLI.ZobObjectWrapper m_zobObjectWrapper = null;
         private CLI.MeshManagerWrapper m_meshManagerWrapper = null;
         public ZobObjectControl(Form1 form)
         {
@@ -26,7 +26,7 @@ namespace DirectZobEditor
             RefreshMeshList();
         }
 
-        public void SetZobObjectWrapper(CLI.ZobObjectInterface z)
+        public void SetZobObjectWrapper(CLI.ZobObjectWrapper z)
         {
             m_zobObjectWrapper = z;
             if(z != null)

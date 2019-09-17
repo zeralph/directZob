@@ -1,6 +1,6 @@
 #pragma once
 #include "Types.h"
-#include "Texture.h"
+#include "Material.h"
 #include "matrix2x2.h"
 #include "Engine.h"
 #include "Events.h"
