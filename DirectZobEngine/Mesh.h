@@ -38,7 +38,7 @@ public:
 
 private:
 	void SplitEntry(const std::string* s, std::vector<std::string>* v, const char delim);
-	void CreateTriangles(const std::vector<std::string>* line, std::vector<Triangle>* t, size_t& tArrayIdx, const Texture* tex);
+	void CreateTriangles(const std::vector<std::string>* line, std::vector<Triangle>* t, size_t& tArrayIdx, const Material* tex);
 	inline void ReinitVertices();
 	inline bool RejectTriangle(const Triangle* t, const float znear, const float zfar, const float width, const float height);
 	uint m_nbVertices = 0;

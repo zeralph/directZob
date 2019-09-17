@@ -99,7 +99,7 @@ namespace DirectZobEditor
 
         private void ZobObjectTree_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            CLI.ZobObjectInterface i = null;
+            CLI.ZobObjectWrapper i = null;
             if (ZobObjectTree.SelectedNode != null && ZobObjectTree.SelectedNode.Name != "root")
             {
                 TreeNode n = ZobObjectTree.SelectedNode;

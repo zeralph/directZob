@@ -17,7 +17,7 @@ DirectZob::~DirectZob()
 {
 	//delete m_engine;
 	delete m_meshManager;
-	delete m_textureManager;
+	delete m_materialManager;
 	delete m_cameraManager;
 	delete m_text;
 	delete m_events;
@@ -36,26 +36,26 @@ std::string DirectZob::ExePath() {
 
 void DirectZob::LoadScene(std::string& path, std::string& file)
 {
-	SceneLoader::LoadScene(path, file, m_zobObjectManager, m_meshManager, m_textureManager);
+	SceneLoader::LoadScene(path, file, m_zobObjectManager, m_meshManager, m_materialManager);
 	std::string font("Font");
-	m_text = new Text2D(m_engine, m_textureManager->GetTexture(font), 32, 8, m_events);
+	m_text = new Text2D(m_engine, m_materialManager->GetTexture(font), 32, 8, m_events);
 }
 
 void DirectZob::SaveScene(std::string& path, std::string& file)
 {
-	SceneLoader::SaveScene(path, file, m_zobObjectManager, m_meshManager, m_textureManager);
+	SceneLoader::SaveScene(path, file, m_zobObjectManager, m_meshManager, m_materialManager);
 }
 
 void DirectZob::SaveScene()
 {
-	SceneLoader::SaveScene(m_zobObjectManager, m_meshManager, m_textureManager);
+	SceneLoader::SaveScene(m_zobObjectManager, m_meshManager, m_materialManager);
 }
 
 void DirectZob::NewScene()
 {
-	SceneLoader::NewScene(m_engine, m_zobObjectManager, m_meshManager, m_textureManager);
+	SceneLoader::NewScene(m_engine, m_zobObjectManager, m_meshManager, m_materialManager);
 	std::string font("Font");
-	m_text = new Text2D(m_engine, m_textureManager->GetTexture(font), 32, 8, m_events);
+	m_text = new Text2D(m_engine, m_materialManager->GetTexture(font), 32, 8, m_events);
 }
 
 bool DirectZob::CanFastSave()
@@ -66,13 +66,12 @@ bool DirectZob::CanFastSave()
 void DirectZob::Init()
 {
 	m_events = new Events();
-	m_events->AddEvent(0, "Init engine");
+	DirectZob::LogInfo("Init engine");
 	m_engine = new Engine(WIDTH, HEIGHT, m_events);
 	m_cameraManager = new CameraManager();
-	m_textureManager = new TextureManager();
+	m_materialManager = new MaterialManager();
 	m_meshManager = new MeshManager();
 	m_zobObjectManager = new ZobObjectManager();
-	m_events->AddEvent(0, " OK\n");
 	int dx = 1;
 	int dy = 1;
 	float r = 0.0f;
@@ -138,11 +137,15 @@ int DirectZob::RunAFrame()
 	return state;
 }
 
-void DirectZob::Log(std::string& str)
+void DirectZob::LogInfo(const char* str)
 {
-	DirectZob::singleton->GetEventManager()->AddEvent(0, str);
+	DirectZob::singleton->GetEventManager()->AddEvent(Events::LogInfo, str);
 }
-void DirectZob::Log(const char* str)
+void DirectZob::LogError(const char* str)
 {
-	DirectZob::singleton->GetEventManager()->AddEvent(0, str);
+	DirectZob::singleton->GetEventManager()->AddEvent(Events::LogError, str);
+}
+void DirectZob::LogWarning(const char* str)
+{
+	DirectZob::singleton->GetEventManager()->AddEvent(Events::LogWarning, str);
 }

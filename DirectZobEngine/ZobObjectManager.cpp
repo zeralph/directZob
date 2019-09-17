@@ -5,7 +5,7 @@ static int sObjectNumber = 1;
 ZobObjectManager::ZobObjectManager()
 {
 	std::string n = "root";
-	m_rootObject = new ZobObject(n, NULL, NULL);
+	m_rootObject = new ZobObject(ZOBGUID::type_internal, ZOBGUID::subtype_zobOject, n, NULL, NULL);
 }
 
 ZobObjectManager::~ZobObjectManager()
@@ -30,7 +30,7 @@ void ZobObjectManager::CreateZobObject(ZobObject* parent)
 	{
 		parent = m_rootObject;
 	}
-	ZobObject* z = new ZobObject(n, NULL, parent);
+	ZobObject* z = new ZobObject(ZOBGUID::type_scene, ZOBGUID::subtype_zobOject, n, NULL, parent);
 }
 
 void ZobObjectManager::RemoveZobObject(ZobObject* z)
@@ -109,5 +109,5 @@ void ZobObjectManager::UnloadAll()
 {
 	delete m_rootObject;
 	std::string n = "root";
-	m_rootObject = new ZobObject(n, NULL, NULL);
+	m_rootObject = new ZobObject(ZOBGUID::type_internal, ZOBGUID::subtype_zobOject, n, NULL, NULL);
 }

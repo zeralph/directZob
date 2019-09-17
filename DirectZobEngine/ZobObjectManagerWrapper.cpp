@@ -13,12 +13,12 @@ namespace CLI
 		return gcnew System::String(m_Instance->GetZobObjectList().c_str());
 	}
 
-	ZobObjectInterface^ ZobObjectManagerWrapper::GetZobObject(System::String^ name)
+	ZobObjectWrapper^ ZobObjectManagerWrapper::GetZobObject(System::String^ name)
 	{
 		std::string n;
 		MarshalString(name, n);
 		ZobObject* z = m_Instance->GetZobObject(n);
-		return gcnew ZobObjectInterface(z);
+		return gcnew ZobObjectWrapper(z);
 	}
 
 	void ZobObjectManagerWrapper::RemoveZobObject(System::String^ name)

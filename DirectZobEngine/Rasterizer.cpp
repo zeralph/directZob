@@ -279,7 +279,7 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 		w1 /= t->area;
 		w2 /= t->area;
 
-		const Texture* texData = t->tex;
+		const Material* texData = t->tex;
 
 		z = 1.0f / (t->va->z * w0 + t->vb->z * w1 + t->vc->z * w2);
 		k = p->y * m_width + p->x;
@@ -303,7 +303,7 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 			su = w0 * t->ua->x + w1 * t->ub->x + w2 * t->uc->x;
 			tu = w0 * t->ua->y + w1 * t->ub->y + w2 * t->uc->y;
 			cl = ((w0 * t->la + w1 * t->lb + w2 * t->lc)) + 0.1f;
-			if (texData)
+			if (texData->GetData())
 			{
 				tu = 1.0f - tu;
 				su = (int)(su * texData->GetWidth());
@@ -321,10 +321,11 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 			}
 			else
 			{
-				r = 0.5f * cl;
-				g = 0.5f * cl;
-				b = 0.5f * cl;
-				a = 1.0f * cl;
+				
+				r = texData->GetDiffuseColor()->x * cl;
+				g = texData->GetDiffuseColor()->x * cl;
+				b = texData->GetDiffuseColor()->x * cl;
+				a = 1.0f;
 			}
 
 			r = clamp2(r, 0.0f, 1.0f);

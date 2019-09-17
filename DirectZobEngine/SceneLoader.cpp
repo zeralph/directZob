@@ -4,14 +4,7 @@
 std::string SceneLoader::m_path = "";
 std::string SceneLoader::m_file = "";
 
-void SceneLoader::LoadTexture(TiXmlElement* node, TextureManager* texMgr)
-{
-	std::string name = node->Attribute("name");
-	std::string file = node->Attribute("file");
-	texMgr->LoadTexture(name, m_path, file);
-}
-
-void SceneLoader::LoadMesh(TiXmlElement* node, MeshManager* meshMgr, TextureManager* texMgr)
+void SceneLoader::LoadMesh(TiXmlElement* node, MeshManager* meshMgr, MaterialManager* materialManager)
 {
 	std::string name = node->Attribute("name");
 	std::string file = node->Attribute("file");
@@ -48,7 +41,7 @@ void SceneLoader::LoadZobObject(TiXmlElement* node, ZobObject* parent, ZobObject
 	{
 		parent = zobMgr->GetRootObject();
 	}
-	ZobObject* zob = new ZobObject(name, m, parent);
+	ZobObject* zob = new ZobObject(ZOBGUID::type_scene, ZOBGUID::subtype_zobOject, name, m, parent);
 	zob->SetTranslation(position.x, position.y, position.z);
 	zob->SetRotation(rotation.x, rotation.y, rotation.z);
 	zob->SetScale(scale.x, scale.y, scale.z);
@@ -58,7 +51,7 @@ void SceneLoader::LoadZobObject(TiXmlElement* node, ZobObject* parent, ZobObject
 	}
 }
 
-void SceneLoader::LoadScene(std::string &path, std::string &file, ZobObjectManager* zobObjectManager, MeshManager* meshManager, TextureManager* textureManager)
+void SceneLoader::LoadScene(std::string &path, std::string &file, ZobObjectManager* zobObjectManager, MeshManager* meshManager, MaterialManager* materialManager)
 {
 	m_path = path;
 	m_file = file;
@@ -66,13 +59,15 @@ void SceneLoader::LoadScene(std::string &path, std::string &file, ZobObjectManag
 	std::string name, texture, fullPath;
 	TiXmlDocument doc("Scene");
 	fullPath = path + file;
+	doc.ClearError();
 	doc.LoadFile(fullPath.c_str());
-
 	if (doc.Error())
 	{
 		std::string err = "Error loading ";
 		err.append(fullPath.c_str());
-		DirectZob::Log(err);
+		err.append(" : ");
+		err.append(doc.ErrorDesc());
+		DirectZob::LogError(err.c_str());
 	}
 	else
 	{
@@ -80,12 +75,12 @@ void SceneLoader::LoadScene(std::string &path, std::string &file, ZobObjectManag
 		/*TiXmlElement* textures = root->FirstChildElement("Textures");
 		for (TiXmlElement* e = textures->FirstChildElement("Texture"); e != NULL; e = e->NextSiblingElement("Texture"))
 		{
-			LoadTexture(e, textureManager);
+			LoadTexture(e, MaterialManager);
 		}*/
 		TiXmlElement* meshes = root->FirstChildElement("Meshes");
 		for (TiXmlElement* e = meshes->FirstChildElement("Mesh"); e != NULL; e = e->NextSiblingElement("Mesh"))
 		{
-			LoadMesh(e, meshManager, textureManager);
+			LoadMesh(e, meshManager, materialManager);
 		}
 		TiXmlElement* scene = root->FirstChildElement("Scene");
 		for (TiXmlElement* e = scene->FirstChildElement("ZobObject"); e != NULL; e = e->NextSiblingElement("ZobObject"))
@@ -95,32 +90,32 @@ void SceneLoader::LoadScene(std::string &path, std::string &file, ZobObjectManag
 	}
 }
 
-void SceneLoader::UnloadScene(Core::Engine* engine, ZobObjectManager* zobObjectManager, MeshManager* meshManager, TextureManager* textureManager)
+void SceneLoader::UnloadScene(Core::Engine* engine, ZobObjectManager* zobObjectManager, MeshManager* meshManager, MaterialManager* MaterialManager)
 {
 	engine->Stop();
 //	Sleep(1000);	//ugly but ...
 	zobObjectManager->UnloadAll();
 	meshManager->UnloadAll();
-	textureManager->UnloadAll();
+	MaterialManager->UnloadAll();
 }
 
-void SceneLoader::NewScene(Core::Engine* engine, ZobObjectManager* zobObjectManager, MeshManager* meshManager, TextureManager* textureManager)
+void SceneLoader::NewScene(Core::Engine* engine, ZobObjectManager* zobObjectManager, MeshManager* meshManager, MaterialManager* MaterialManager)
 {
-	UnloadScene(engine, zobObjectManager, meshManager, textureManager);
+	UnloadScene(engine, zobObjectManager, meshManager, MaterialManager);
 	m_path = "";
 	m_file = "";
 	engine->Start();
 }
 
-void SceneLoader::SaveScene(ZobObjectManager* zobObjectManager, MeshManager* meshManager, TextureManager* textureManager)
+void SceneLoader::SaveScene(ZobObjectManager* zobObjectManager, MeshManager* meshManager, MaterialManager* MaterialManager)
 {
 	if (CanFastSave())
 	{
-		SaveScene(m_path, m_file, zobObjectManager, meshManager, textureManager);
+		SaveScene(m_path, m_file, zobObjectManager, meshManager, MaterialManager);
 	}
 }
 
-void SceneLoader::SaveScene(std::string &path, std::string &file, ZobObjectManager* zobObjectManager, MeshManager* meshManager, TextureManager* textureManager)
+void SceneLoader::SaveScene(std::string &path, std::string &file, ZobObjectManager* zobObjectManager, MeshManager* meshManager, MaterialManager* MaterialManager)
 {
 	std::string fullPath;
 	m_file = file;
@@ -129,6 +124,7 @@ void SceneLoader::SaveScene(std::string &path, std::string &file, ZobObjectManag
 	TiXmlDocument doc("Scene");
 	TiXmlElement * root = new TiXmlElement("root");
 	doc.LinkEndChild(root);
+<<<<<<< HEAD
 	TiXmlElement meshes = TiXmlElement("Meshes");
 	int n = meshManager->GetNbMeshes();
 	for (int i = 0; i < n; i++)
@@ -184,4 +180,16 @@ void SceneLoader::SaveZobObjectRecusrive(TiXmlElement* node, ZobObject* z)
 		SaveZobObjectRecusrive(&o, z->GetChild(i));
 	}
 	node->InsertEndChild(o);
+=======
+	TiXmlElement * e;
+	e = new TiXmlElement("Textures");
+	root->LinkEndChild(e);
+	//int n = MaterialManager->GetNbTextures();
+	//for (int i = 0; i < n; n++)
+	//{
+	//	e = new TiXmlElement("Texture");
+	//	e->SetAttribute("name", MaterialManager->GetTexture(i)->GetName().c_str());
+	//	e->SetAttribute("file", MaterialManager->GetTexture(i)->GetFile().c_str());
+	//}
+>>>>>>> eb0c2e88ae1fc73fc770eb63e92b8d992db63375
 }

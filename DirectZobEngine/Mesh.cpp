@@ -17,7 +17,7 @@ Mesh::Mesh(std::string& name, std::string& path, std::string& file)
 	std::string fullPath = path;
 	fullPath.append(file);
 	std::string s = "Load mesh " + std::string(fullPath);
-	DirectZob::Log(s);
+	DirectZob::LogInfo(s.c_str());
 
 	static std::string sMtllib = std::string("mtllib");
 
@@ -27,8 +27,9 @@ Mesh::Mesh(std::string& name, std::string& path, std::string& file)
 	std::string line;
 	if (!sfile.is_open()) 
 	{
-		s = "ERROR";
-		DirectZob::Log(s);
+		s = "Error opening ";
+		s.append(fullPath);
+		DirectZob::LogError(s.c_str());
 		return;
 	}
 	while (getline(sfile, line))
@@ -54,7 +55,7 @@ Mesh::Mesh(std::string& name, std::string& path, std::string& file)
 			SplitEntry(&line, &v, ' ');
 			if (v.size() == 2)
 			{
-				DirectZob::GetInstance()->GetTextureManager()->LoadMaterials(path, v[1]);
+				DirectZob::GetInstance()->GetmaterialManager()->LoadMaterials(path, v[1]);
 			}
 		}
 	}
@@ -84,7 +85,7 @@ Mesh::Mesh(std::string& name, std::string& path, std::string& file)
 	size_t curNormal = 0;
 	size_t curUv = 0;
 	size_t curface = 0;
-	const Texture* tex = NULL;
+	const Material* tex = NULL;
 	while (getline(sfile, line))
 	{
 		if (line[0] == 'v')
@@ -124,7 +125,7 @@ Mesh::Mesh(std::string& name, std::string& path, std::string& file)
 				matName = matName.substr(0, matName.size() - 4);
 				matName.append(".");
 				matName.append(v[1]);
-				tex = DirectZob::GetInstance()->GetTextureManager()->GetTexture(matName);
+				tex = DirectZob::GetInstance()->GetmaterialManager()->GetTexture(matName);
 			}
 
 		}
@@ -140,7 +141,7 @@ Mesh::Mesh(std::string& name, std::string& path, std::string& file)
 	memcpy(m_normalsData, m_normals, sizeof(Vector3) * m_nbNormals);
 
 	s = "Mesh " + std::string(path) + " loaded";
-	DirectZob::Log(s);
+	DirectZob::LogInfo(s.c_str());
 }
 
 Mesh::~Mesh()
@@ -273,7 +274,7 @@ inline bool Mesh::RejectTriangle(const Triangle* t, const float znear, const flo
 	return false;
 }
 
-void Mesh::CreateTriangles(const std::vector<std::string>* line, std::vector<Triangle>* tList, size_t &tArrayIdx, const Texture* tex)
+void Mesh::CreateTriangles(const std::vector<std::string>* line, std::vector<Triangle>* tList, size_t &tArrayIdx, const Material* tex)
 {
 	size_t nbFaces = line->size() - 2;
 	int a, b, c = 0;

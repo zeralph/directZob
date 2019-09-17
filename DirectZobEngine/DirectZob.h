@@ -10,13 +10,13 @@
 #include <algorithm>
 #include "Engine.h"
 #include "Cube.h"
-#include "Texture.h"
+#include "Material.h"
 #include "TextureTestAlpha.h"
 #include "Mesh.h"
 #include "text2D.h"
 #include "Events.h"
 #include "CameraManager.h"
-#include "TextureManager.h"
+#include "MaterialManager.h"
 #include "MeshManager.h"
 #include "ZobObjectManager.h"
 
@@ -49,15 +49,15 @@ public :
 	CameraManager* GetCameraManager() const { return m_cameraManager; }
 	ZobObjectManager* GetZobObjectManager() const { return m_zobObjectManager; }
 	MeshManager* GetMeshManager() const { return m_meshManager; }
-	TextureManager* GetTextureManager() const { return m_textureManager;  }
+	MaterialManager* GetmaterialManager() const { return m_materialManager;  }
 	Events* GetEventManager() { return m_events; }
-	static void Log(std::string& str);
-	static void Log(const char* str);
-	
+	static void LogInfo(const char* str);
+	static void LogError(const char* str);
+	static void LogWarning(const char* str);
 private:
 
 	Events* m_events = NULL;
-	TextureManager* m_textureManager = NULL;
+	MaterialManager* m_materialManager = NULL;
 	MeshManager* m_meshManager = NULL;
 	CameraManager* m_cameraManager = NULL;
 	ZobObjectManager* m_zobObjectManager = NULL;

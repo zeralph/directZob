@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -92,11 +93,29 @@ namespace DirectZobEditor
                 Event json = JsonConvert.DeserializeObject<Event>(m_events[i]);
                 if (json.type == 0)
                 {
-                    textLog.AppendText(json.data);
-                    textLog.AppendText("\n");
+                    AppendText(textLog, json.data + "\n", Color.Blue);
+                }
+                else if (json.type == 1)
+                {
+                    AppendText(textLog, json.data + "\n", Color.Orange);
+                }
+                else if (json.type == 2)
+                {
+                    AppendText(textLog, json.data + "\n", Color.Red);
                 }
             }
         }
+
+        private void AppendText(RichTextBox box, string text, Color color)
+        {
+            box.SelectionStart = box.TextLength;
+            box.SelectionLength = 0;
+
+            box.SelectionColor = color;
+            box.AppendText(text);
+            box.SelectionColor = box.ForeColor;
+        }
+      
 
         public bool IsCtrlPressed()
         {
@@ -161,7 +180,7 @@ namespace DirectZobEditor
 
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    m_path = openFileDialog.InitialDirectory;
+                    m_path = Path.GetDirectoryName(openFileDialog.FileName) +"\\";
                     m_file = openFileDialog.SafeFileName;
                     m_directZobWrapper.NewScene();
                     EventHandler handler = OnNewScene;
