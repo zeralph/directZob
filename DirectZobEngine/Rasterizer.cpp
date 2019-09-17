@@ -303,31 +303,40 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 			su = w0 * t->ua->x + w1 * t->ub->x + w2 * t->uc->x;
 			tu = w0 * t->ua->y + w1 * t->ub->y + w2 * t->uc->y;
 			cl = ((w0 * t->la + w1 * t->lb + w2 * t->lc)) + 0.1f;
-			if (texData->GetData())
+			if (texData)
 			{
-				tu = 1.0f - tu;
-				su = (int)(su * texData->GetWidth());
-				tu = (int)(tu * texData->GetHeight());
-				su = (int)su % texData->GetWidth();
-				tu = (int)tu % texData->GetHeight();
+				if (texData->GetData())
+				{
+					tu = 1.0f - tu;
+					su = (int)(su * texData->GetWidth());
+					tu = (int)(tu * texData->GetHeight());
+					su = (int)su % texData->GetWidth();
+					tu = (int)tu % texData->GetHeight();
 
-				c = (uint)(((uint)tu * (uint)texData->GetWidth() + (uint)su) * 4);
+					c = (uint)(((uint)tu * (uint)texData->GetWidth() + (uint)su) * 4);
 
-				const float* d = texData->GetData();
-				r = d[c] * cl;
-				g = d[c + 1] * cl;
-				b = d[c + 2] * cl;
-				a = d[c + 3] * cl;
+					const float* d = texData->GetData();
+					r = d[c] * cl;
+					g = d[c + 1] * cl;
+					b = d[c + 2] * cl;
+					a = d[c + 3] * cl;
+				}
+				else
+				{
+
+					r = texData->GetDiffuseColor()->x * cl;
+					g = texData->GetDiffuseColor()->x * cl;
+					b = texData->GetDiffuseColor()->x * cl;
+					a = 1.0f;
+				}
 			}
 			else
 			{
-				
-				r = texData->GetDiffuseColor()->x * cl;
-				g = texData->GetDiffuseColor()->x * cl;
-				b = texData->GetDiffuseColor()->x * cl;
+				r = 1.0f * cl;
+				g = 0.0f * cl;
+				b = 1.0f * cl;
 				a = 1.0f;
 			}
-
 			r = clamp2(r, 0.0f, 1.0f);
 			g = clamp2(g, 0.0f, 1.0f);
 			b = clamp2(b, 0.0f, 1.0f);

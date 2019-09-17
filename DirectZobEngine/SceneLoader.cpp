@@ -124,7 +124,6 @@ void SceneLoader::SaveScene(std::string &path, std::string &file, ZobObjectManag
 	TiXmlDocument doc("Scene");
 	TiXmlElement * root = new TiXmlElement("root");
 	doc.LinkEndChild(root);
-<<<<<<< HEAD
 	TiXmlElement meshes = TiXmlElement("Meshes");
 	int n = meshManager->GetNbMeshes();
 	for (int i = 0; i < n; i++)
@@ -144,7 +143,7 @@ void SceneLoader::SaveScene(std::string &path, std::string &file, ZobObjectManag
 	root->InsertEndChild(scene);
 	if (!doc.SaveFile("C:\\_GIT\\directZob\\resources\\test.xml"))
 	{
-		DirectZob::Log("Error saving scene");
+		DirectZob::LogError("Error saving scene");
 	}
 }
 
@@ -180,16 +179,4 @@ void SceneLoader::SaveZobObjectRecusrive(TiXmlElement* node, ZobObject* z)
 		SaveZobObjectRecusrive(&o, z->GetChild(i));
 	}
 	node->InsertEndChild(o);
-=======
-	TiXmlElement * e;
-	e = new TiXmlElement("Textures");
-	root->LinkEndChild(e);
-	//int n = MaterialManager->GetNbTextures();
-	//for (int i = 0; i < n; n++)
-	//{
-	//	e = new TiXmlElement("Texture");
-	//	e->SetAttribute("name", MaterialManager->GetTexture(i)->GetName().c_str());
-	//	e->SetAttribute("file", MaterialManager->GetTexture(i)->GetFile().c_str());
-	//}
->>>>>>> eb0c2e88ae1fc73fc770eb63e92b8d992db63375
 }
