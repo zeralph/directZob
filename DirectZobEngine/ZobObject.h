@@ -9,7 +9,7 @@
 #include "Engine.h"
 #include "ZOBGUID.h"
 
-class ZobObject:ZOBGUID
+class ZobObject:public ZOBGUID
 {
 public:
 
@@ -21,7 +21,7 @@ public:
 
 	void AddChild(ZobObject* z) { m_children.push_back(z); }
 	const std::vector<ZobObject*>* getChildren() const { return &m_children; }
-	ZobObject* GetParent() { return m_parent; }
+	ZobObject* GetParent() const { return m_parent; }
 	ZobObject* GetChild(const std::string& name);
 	ZobObject* GetChild(const int i);
 	inline void SetScale(float x, float y, float z) { m_scale.x = x; m_scale.y = y; m_scale.z = z; }
@@ -32,6 +32,7 @@ public:
 	inline const Vector3& GetScale() const { return m_scale; }
 	inline const std::string& GetName() const { return m_name; }
 	inline void SetName(const std::string &name) { m_name = name; }
+	const void GetFullName(std::string &fullName) const;
 	inline const int GetNbChildren() const { return m_children.size(); }
 	void RemoveChildReference(const ZobObject* z);
 	void AddChildReference(ZobObject* z);

@@ -25,6 +25,10 @@ namespace DirectZobEditor
             m_mainForm.OnSceneLoaded += new EventHandler(OnSceneChanged);
         }
 
+        public CLI.ZobObjectManagerWrapper GetWrapper()
+        {
+            return m_zobObjectManagerWrapper;
+        }
         public void UpdateControl()
         {
 

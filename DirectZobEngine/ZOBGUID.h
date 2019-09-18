@@ -31,7 +31,7 @@ public :
 
 	Type GetType();
 	SubType GetSubType();
-	ulong GetId();
+	uint GetId();
 
 private:
 	zobId m_guid;

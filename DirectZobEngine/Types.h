@@ -22,6 +22,7 @@ public:
 		float zFar;
 		uint* buffer;
 		float* zBuffer;
+		uint* oBuffer;
 	};
 
 	struct Line2D

@@ -66,7 +66,7 @@ void ZobObject::Draw(const Camera* camera, Core::Engine* engine)
 {
 	if (m_mesh)
 	{
-		m_mesh->Draw(m_modelMatrix, camera, engine);
+		m_mesh->Draw(m_modelMatrix, camera, engine, GetId());
 	}
 	for (int i = 0; i < m_children.size(); i++)
 	{
@@ -120,4 +120,20 @@ ZobObject* ZobObject::GetChild(const int i)
 		return m_children.at(i);
 	}
 	return NULL;
+}
+
+const void ZobObject::GetFullName(std::string& fullname) const
+{
+	std::string s = GetName();
+	std::string s2 = "";
+	const ZobObject* z = this;
+	while (z->GetParent())
+	{
+		s2 = "\\";
+		s2.append(z->GetName());
+		s2.append(s);
+		s = s2;
+		z = z->GetParent();
+	}
+	fullname = s;
 }

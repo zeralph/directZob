@@ -177,7 +177,7 @@ void Mesh::ReinitVertices()
 	memcpy(m_normals, m_normalsData, sizeof(Vector3) * m_nbNormals);
 }
 
-void Mesh::Draw(const Matrix4x4 &modelMatrix, const Camera* camera, Core::Engine* engine)
+void Mesh::Draw(const Matrix4x4 &modelMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId)
 {
 	ReinitVertices();
 	BufferData* bData = engine->GetBufferData();
@@ -208,35 +208,30 @@ void Mesh::Draw(const Matrix4x4 &modelMatrix, const Camera* camera, Core::Engine
 	int triangleIndex = 0;
 	uint color = 0;
 	Vector3 n;
-
 	Vector3 light = Vector3(0.1f, 1.0f, 0.1f);
 	light.Normalize();
 	uint drawnFaces = 0;
 	for (int i = 0; i < m_nbFaces; i ++)
 	{
 		Triangle* t = &m_triangles[i];
-		n.Set(t->na);
-		n.Add(t->nb);
-		n.Add(t->nc);
-		n.Div(3.0f);
 		t->draw = false;
 		if (!RejectTriangle(t, znear, zfar, (float)bData->width, (float)bData->height))
 		{
+			n.Set(t->na);
+			n.Add(t->nb);
+			n.Add(t->nc);
+			n.Div(3.0f);
 			if (Vector3::Dot(&n, camZ) < 0.5f || engine->WireFrame())
 			{
 				t->ComputeArea();
 				static float a = 50000.0f;
 				if (t->area > 0 && t->area < a)
 				{
+					t->owner = ownerId;
 					t->ComputeLighting(&light);
 					t->draw = true;
 					engine->QueueTriangle(t);
 					drawnFaces++;
-				}
-				else
-				{
-					int tt = 0;
-					tt++;;
 				}
 			}
 		}

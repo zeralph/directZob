@@ -4,6 +4,7 @@ namespace CLI
 {
 	ZobObjectWrapper::ZobObjectWrapper(ZobObject* zobObject):ManagedObject(zobObject, false)
 	{
+		m_isValid = zobObject != NULL;
 	}
 
 	System::String^ ZobObjectWrapper::GetName()
@@ -13,6 +14,13 @@ namespace CLI
 			return gcnew System::String(m_Instance->GetName().c_str());
 		}
 		return gcnew System::String("");
+	}
+
+	System::String^ ZobObjectWrapper::GetFullName()
+	{
+		std::string s;
+		m_Instance->GetFullName(s);
+		return gcnew System::String(s.c_str());
 	}
 
 	System::String^ ZobObjectWrapper::GetMeshName()
