@@ -126,7 +126,7 @@ namespace DirectZobEditor
             else
             {
                 CLI.ZobObjectWrapper z = m_mainForm.GetZobObjectListControl().GetWrapper().GetObjectAtCoords(e.X, e.Y);
-                if(z != null)
+                if(z!=null && z.IsValid())
                 {
                     string fullName = z.GetFullName();
                     m_mainForm.GetZobObjectControl().SetZobObjectWrapper(z);

@@ -4,6 +4,7 @@ namespace CLI
 {
 	ZobObjectWrapper::ZobObjectWrapper(ZobObject* zobObject):ManagedObject(zobObject, false)
 	{
+		m_isValid = zobObject != NULL;
 	}
 
 	System::String^ ZobObjectWrapper::GetName()

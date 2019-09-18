@@ -61,6 +61,7 @@ ZobObject* ZobObjectManager::GetZobObjectFromPartialId(ZobObject* z, const uint 
 			}
 		}
 	}
+	return NULL;
 }
 
 ZobObject* ZobObjectManager::GetZobObject(const std::string& name) const

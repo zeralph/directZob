@@ -20,5 +20,8 @@ namespace CLI {
 		void SetScale(ManagedVector3^ p);
 		System::String^ GetMeshName();
 		void SetMesh(System::String^ name);
+		bool IsValid()  { return m_isValid; }
+	private:
+		bool m_isValid;
 	};
 }

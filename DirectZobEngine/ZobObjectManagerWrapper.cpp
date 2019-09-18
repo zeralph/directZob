@@ -24,7 +24,10 @@ namespace CLI
 	{
 		uint id = DirectZob::GetInstance()->GetEngine()->GetObjectIdAtCoords(x, y);
 		ZobObject* z = m_Instance->GetZobObjectFromPartialId(id);
-		return gcnew ZobObjectWrapper(z);
+		if (z)
+		{
+			return gcnew ZobObjectWrapper(z);
+		}
 	}
 
 	void ZobObjectManagerWrapper::RemoveZobObject(System::String^ name)
