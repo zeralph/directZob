@@ -57,9 +57,14 @@ void MaterialManager::LoadMaterials(std::string& path, std::string& file)
 		DirectZob::LogError(s.c_str());
 		return;
 	}
+	std::string s = "Opening ";
+	s.append(fullPath);
+	DirectZob::LogInfo(s.c_str());
 	std::vector<std::string> v;
-	while (getline(sfile, line))
+	bool bJumpRead = false;
+	while (bJumpRead || getline(sfile, line))
 	{
+		bJumpRead = false;
 		if (line.rfind("newmtl", 0) == 0)
 		{
 			v.clear();
@@ -69,7 +74,7 @@ void MaterialManager::LoadMaterials(std::string& path, std::string& file)
 				MaterialInfo matInfo;
 				matInfo.texture = "";
 				matInfo.name = v[1];
-				matInfo.file = file.substr(0, file.size() - 4);;
+				matInfo.file = file.substr(0, file.size() - 4);
 				while(getline(sfile, line))
 				{
 					if (line.rfind("map_Kd", 0) == 0)
@@ -103,8 +108,9 @@ void MaterialManager::LoadMaterials(std::string& path, std::string& file)
 							matInfo.diffuse.z = atof(v[3].c_str());
 						}
 					}
-					if (line.length() == 0)
+					if (line.rfind("newmtl", 0) == 0)
 					{
+						bJumpRead = true;
 						break;
 					}
 				}

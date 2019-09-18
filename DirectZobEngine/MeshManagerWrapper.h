@@ -11,7 +11,7 @@ namespace CLI
 	public:
 
 		MeshManagerWrapper();
-
+		void LoadMesh(System::String^ name, System::String^ path, System::String^ file);
 		System::String^ GetMeshList();
 
 	private:

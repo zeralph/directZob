@@ -221,12 +221,14 @@ namespace DirectZobEditor
                 openFileDialog.Filter = "obj files (*.obj)|*.obj";
                 openFileDialog.FilterIndex = 2;
                 openFileDialog.RestoreDirectory = true;
-
+                openFileDialog.AutoUpgradeEnabled = false;
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    m_path = openFileDialog.InitialDirectory;
-                    m_file = openFileDialog.SafeFileName;
-                    //m_meshManagerWrapper.L
+                    string path = Path.GetDirectoryName(openFileDialog.FileName) + "\\";
+                    string file = openFileDialog.SafeFileName;
+                    string name = file;
+                    name.Replace(' ', '_');
+                    m_meshManagerWrapper.LoadMesh(name, path, file);
                 }
             }
         }

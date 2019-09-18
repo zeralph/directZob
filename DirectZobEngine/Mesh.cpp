@@ -140,7 +140,7 @@ Mesh::Mesh(std::string& name, std::string& path, std::string& file)
 	memcpy(m_verticesData, m_vertices, sizeof(Vector3) * m_nbVertices);
 	memcpy(m_normalsData, m_normals, sizeof(Vector3) * m_nbNormals);
 
-	s = "Mesh " + std::string(path) + " loaded";
+	s = "Mesh loaded : " + std::string(fullPath);
 	DirectZob::LogInfo(s.c_str());
 }
 

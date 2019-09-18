@@ -24,7 +24,7 @@
 		<ZobObject name="Beach2">
 			<Position x="-10" y="0" z="-10"></Position>
 			<Rotation x="0" y="0" z="0"></Rotation>
-			<Scale x="0.5" y="1" z="0.5"></Scale>
+			<Scale x="1" y="1" z="1"></Scale>
 			<Mesh>beach3</Mesh>
 			<ZobObject name="Water">
 				<Position x="0" y="0" z="0"></Position>
