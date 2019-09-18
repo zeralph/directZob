@@ -49,6 +49,11 @@ Material::Material(const std::string& name, const Vector3* ambientColor, const V
 				m_data[i + 2] = b;
 				m_data[i + 3] = a;
 			}
+			std::string n = "Loaded texture for material : ";
+			n.append(m_name.c_str());
+			n.append(", ");
+			n.append(textureFile->c_str());
+			DirectZob::LogInfo(n.c_str());
 		}
 	}
 	std::string n = "Loaded material ";
