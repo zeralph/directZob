@@ -10,6 +10,7 @@ namespace CLI {
 		ZobObjectWrapper(ZobObject* zobObject);
 		void SetZobObject(ZobObject* zobObject) { m_Instance = zobObject; }
 		System::String^ GetName();
+		System::String^ GetFullName();
 		void SetName(System::String^ name);
 		ManagedVector3^ GetTransform();
 		ManagedVector3^ GetRotation();

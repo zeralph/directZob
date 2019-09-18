@@ -290,6 +290,7 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 
 		if (/*z >= m_zNear && z<=m_zFar && */z > zf)
 		{
+			m_bufferData->oBuffer[k] = t->owner;
 			m_bufferData->zBuffer[k] = z;
 			if (zmin > z)
 			{

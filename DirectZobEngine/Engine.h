@@ -72,7 +72,7 @@ namespace Core
 		inline void WireFrame(bool b) { m_wireFrame = b; }
 		inline bool ShowGrid() { return m_showGrid; }
 		inline bool WireFrame() { return m_wireFrame; }
-
+		uint GetObjectIdAtCoords(uint x, uint y);
 		std::string GetObjectList();
 
 	private:
@@ -99,6 +99,7 @@ namespace Core
 		ulong m_currentFrame;
 		uint* m_buffer;
 		float* m_zBuffer;
+		uint* m_oBuffer;
 		BufferData m_bufferData;
 		bool m_showZBuffer;
 		uint m_sceneTriangles;

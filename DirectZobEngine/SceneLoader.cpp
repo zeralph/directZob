@@ -68,6 +68,8 @@ void SceneLoader::LoadScene(std::string &path, std::string &file, ZobObjectManag
 		err.append(" : ");
 		err.append(doc.ErrorDesc());
 		DirectZob::LogError(err.c_str());
+		m_path = "";
+		m_file = "";
 	}
 	else
 	{
@@ -93,7 +95,7 @@ void SceneLoader::LoadScene(std::string &path, std::string &file, ZobObjectManag
 void SceneLoader::UnloadScene(Core::Engine* engine, ZobObjectManager* zobObjectManager, MeshManager* meshManager, MaterialManager* MaterialManager)
 {
 	engine->Stop();
-//	Sleep(1000);	//ugly but ...
+	Sleep(1000);	//ugly but ...
 	zobObjectManager->UnloadAll();
 	meshManager->UnloadAll();
 	MaterialManager->UnloadAll();
@@ -141,9 +143,11 @@ void SceneLoader::SaveScene(std::string &path, std::string &file, ZobObjectManag
 		SaveZobObjectRecusrive(&scene, rootObj->GetChild(i));
 	}
 	root->InsertEndChild(scene);
-	if (!doc.SaveFile("C:\\_GIT\\directZob\\resources\\test.xml"))
+	if (!doc.SaveFile(fullPath.c_str()))
 	{
-		DirectZob::LogError("Error saving scene");
+		std::string s = "Error saving scene : ";
+		s.append(doc.ErrorDesc());
+		DirectZob::LogError(s.c_str());
 	}
 }
 

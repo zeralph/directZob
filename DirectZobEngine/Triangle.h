@@ -22,13 +22,11 @@ public:
 	Vector2* uc;
 
 	const Material* tex;
-
 	float area;
-
 	float la;
 	float lb;
 	float lc;
-
+	uint owner;
 	bool draw;
 
 	inline void ComputeArea()
@@ -63,7 +61,7 @@ public:
 		tex = t->tex;
 
 		area = t->area;
-
+		owner = t->owner;
 		lb = t->lb;
 		la = t->la;
 		lc = t->lc;
