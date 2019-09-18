@@ -38,6 +38,31 @@ void ZobObjectManager::RemoveZobObject(ZobObject* z)
 	delete z;
 }
 
+ZobObject* ZobObjectManager::GetZobObjectFromPartialId(const uint id) const
+{
+	ZobObject* ret = GetZobObjectFromPartialId(m_rootObject, id);
+	return ret;
+}
+
+ZobObject* ZobObjectManager::GetZobObjectFromPartialId(ZobObject* z, const uint id) const
+{
+	if (z->GetId() == id)
+	{
+		return z;
+	}
+	else
+	{
+		for (int i = 0; i < z->GetNbChildren(); i++)
+		{
+			ZobObject* o = GetZobObjectFromPartialId(z->GetChild(i), id);
+			if(o)
+			{
+				return o;
+			}
+		}
+	}
+}
+
 ZobObject* ZobObjectManager::GetZobObject(const std::string& name) const
 {
 

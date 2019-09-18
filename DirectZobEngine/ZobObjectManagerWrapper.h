@@ -16,7 +16,7 @@ namespace CLI
 		ZobObjectWrapper^ GetZobObject(System::String^ name);
 		void RemoveZobObject(System::String^ name);
 		void AddZobObject(System::String^ parent);
-
+		ZobObjectWrapper^ GetObjectAtCoords(int x, int y);
 	private:
 
 	};

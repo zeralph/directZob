@@ -31,9 +31,9 @@ ZOBGUID::SubType ZOBGUID::GetSubType()
 	return (ZOBGUID::SubType)g;
 }
 
-ulong ZOBGUID::GetId()
+uint ZOBGUID::GetId()
 {
 	zobId g = m_guid;
-	g = g & 0x00000000FFFFFFFF;
-	return (ulong)g;
+	g = g & 0x000000000000FFFF;
+	return (uint)g;
 }

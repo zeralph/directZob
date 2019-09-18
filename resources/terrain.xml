@@ -1,0 +1,15 @@
+<root>
+    <Meshes>
+        <Mesh name="beach3" file="beach3.obj" />
+        <Mesh name="water" file="water.obj" />
+        <Mesh name="Terrain.obj" file="Terrain.obj" />
+    </Meshes>
+    <Scene>
+        <ZobObject name="newObject_1">
+            <Mesh>Terrain.obj</Mesh>
+            <Position x="0" y="0" z="0" />
+            <Rotation x="0" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+        </ZobObject>
+    </Scene>
+</root>
