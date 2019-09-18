@@ -123,6 +123,16 @@ namespace DirectZobEditor
             {
                 m_mainForm.GetCameraControl().GetWrapper().Move((float)-dx * 2.0f, (float)-dy * 2.0f);
             }
+            else
+            {
+                CLI.ZobObjectWrapper z = m_mainForm.GetZobObjectListControl().GetWrapper().GetObjectAtCoords(e.X, e.Y);
+                if(z!=null && z.IsValid())
+                {
+                    string fullName = z.GetFullName();
+                    m_mainForm.GetZobObjectControl().SetZobObjectWrapper(z);
+                    //m_mainForm.GetZobObjectListControl().GetWrapper().
+                }
+            }
             m_lastMouseX = e.X;
             m_lastMouseY = e.Y;
         }
@@ -131,6 +141,11 @@ namespace DirectZobEditor
         {
             m_lastMouseX = e.X;
             m_lastMouseY = e.Y;
+        }
+
+        private void EngineRender_MouseHover(object sender, EventArgs e)
+        {
+
         }
     }
 }

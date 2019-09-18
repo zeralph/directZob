@@ -28,6 +28,7 @@ Engine::Engine(int width, int height, Events* events)
 	m_zFar = Z_FAR;
 	m_buffer = (uint*)malloc(sizeof(uint) * width * height);
 	m_zBuffer = (float*)malloc(sizeof(float) * width * height);
+	m_oBuffer = (uint*)malloc(sizeof(uint) * width * height);
 	m_curBuffer = 0;
 	m_showZBuffer = false;
 	m_fps = 0.0;
@@ -37,6 +38,7 @@ Engine::Engine(int width, int height, Events* events)
 	m_bufferData.zFar= m_zFar;
 	m_bufferData.buffer = m_buffer;
 	m_bufferData.zBuffer = m_zBuffer;
+	m_bufferData.oBuffer = m_oBuffer;
 	m_bufferData.size = width * height;
 	m_tick = clock();
 	m_nbPixels = 0;
@@ -82,6 +84,15 @@ Engine::Engine(int width, int height, Events* events)
 	}
 	std::string n = "Engine initialized with " + std::to_string(m_nbRasterizers) + " rasterizer(s)";
 	DirectZob::LogInfo(n.c_str());
+}
+
+uint Engine::GetObjectIdAtCoords(uint x, uint y)
+{
+	size_t l = m_bufferData.width * y + x;
+	if (l >= 0 && l < m_bufferData.width * m_bufferData.height)
+	{
+		return m_bufferData.oBuffer[l];
+	}
 }
 
 Engine::~Engine()

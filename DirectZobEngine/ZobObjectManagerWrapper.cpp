@@ -20,6 +20,15 @@ namespace CLI
 		ZobObject* z = m_Instance->GetZobObject(n);
 		return gcnew ZobObjectWrapper(z);
 	}
+	ZobObjectWrapper^ ZobObjectManagerWrapper::GetObjectAtCoords(int x, int y)
+	{
+		uint id = DirectZob::GetInstance()->GetEngine()->GetObjectIdAtCoords(x, y);
+		ZobObject* z = m_Instance->GetZobObjectFromPartialId(id);
+		if (z)
+		{
+			return gcnew ZobObjectWrapper(z);
+		}
+	}
 
 	void ZobObjectManagerWrapper::RemoveZobObject(System::String^ name)
 	{

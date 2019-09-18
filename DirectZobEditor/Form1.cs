@@ -17,6 +17,7 @@ namespace DirectZobEditor
 
         public event EventHandler OnNewScene;
         public event EventHandler OnSceneLoaded;
+        public event EventHandler OnSceneSaved;
 
         private CLI.DirectZobWrapper m_directZobWrapper;
         private CLI.CameraManagerWrapper m_camerManagerWrapper;
@@ -132,6 +133,11 @@ namespace DirectZobEditor
             return m_zobObjectControl;
         }
 
+        public ZobObjectListControl GetZobObjectListControl()
+        {
+            return m_zobObjectList;
+        }
+
         public CLI.DirectZobWrapper GetDirectZobWrapper()
         {
             return m_directZobWrapper;
@@ -157,16 +163,19 @@ namespace DirectZobEditor
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
             m_directZobWrapper.NewScene();
+            m_path = "";
+            m_file = "";
             EventHandler handler = OnNewScene;
             if (null != handler)
             {
                 handler(this, EventArgs.Empty);
             }
+            this.Text = "DirectZob " + m_path + m_file;
         }
 
         private void fileToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            saveSceneToolStripMenuItem1.Available = m_directZobWrapper.CanFastSave();
+            saveSceneToolStripMenuItem1.Enabled = m_directZobWrapper.CanFastSave();
         }
 
         private void loadSceneToolStripMenuItem_Click(object sender, EventArgs e)
@@ -194,18 +203,52 @@ namespace DirectZobEditor
                     {
                         handler(this, EventArgs.Empty);
                     }
+                    this.Text = "DirectZob " + m_path + m_file;
                 }
             }
         }
 
         private void saveSceneAsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //m_directZobWrapper.SaveScene(path, file);
+            using (SaveFileDialog saveFileDialog = new SaveFileDialog())
+            {
+                saveFileDialog.InitialDirectory = m_path;
+                saveFileDialog.Filter = "xml files (*.xml)|*.xml";
+                saveFileDialog.FilterIndex = 2;
+                saveFileDialog.RestoreDirectory = true;
+                //openFileDialog.AutoUpgradeEnabled = false;
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    string path = Path.GetDirectoryName(saveFileDialog.FileName) + "\\";
+                    string file = Path.GetFileName(saveFileDialog.FileName);
+                    if(File.Exists(saveFileDialog.FileName) && (path!=m_path || file != m_file))
+                    {
+                        DialogResult r = MessageBox.Show("Warning", "File already exists. Overwrite ?", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
+                        if(r == DialogResult.No)
+                        {
+                            return;
+                        }
+                    }
+                    m_path = path;
+                    m_file = file;
+                    m_directZobWrapper.SaveScene(path, file);
+                    EventHandler handler = OnSceneSaved;
+                    if (null != handler)
+                    {
+                        handler(this, EventArgs.Empty);
+                    }
+                    this.Text = "DirectZob " + m_path + m_file;
+                }
+            }
         }
-
         private void saveSceneToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             m_directZobWrapper.SaveScene();
+            EventHandler handler = OnSceneSaved;
+            if (null != handler)
+            {
+                handler(this, EventArgs.Empty);
+            }
         }
 
         private void LoadTextureToolStripMenuItem_Click(object sender, EventArgs e)
@@ -221,7 +264,7 @@ namespace DirectZobEditor
                 openFileDialog.Filter = "obj files (*.obj)|*.obj";
                 openFileDialog.FilterIndex = 2;
                 openFileDialog.RestoreDirectory = true;
-                openFileDialog.AutoUpgradeEnabled = false;
+                //openFileDialog.AutoUpgradeEnabled = false;
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     string path = Path.GetDirectoryName(openFileDialog.FileName) + "\\";

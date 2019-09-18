@@ -10,6 +10,7 @@ namespace CLI {
 		ZobObjectWrapper(ZobObject* zobObject);
 		void SetZobObject(ZobObject* zobObject) { m_Instance = zobObject; }
 		System::String^ GetName();
+		System::String^ GetFullName();
 		void SetName(System::String^ name);
 		ManagedVector3^ GetTransform();
 		ManagedVector3^ GetRotation();
@@ -19,5 +20,8 @@ namespace CLI {
 		void SetScale(ManagedVector3^ p);
 		System::String^ GetMeshName();
 		void SetMesh(System::String^ name);
+		bool IsValid()  { return m_isValid; }
+	private:
+		bool m_isValid;
 	};
 }
