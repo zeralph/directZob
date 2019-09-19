@@ -32,7 +32,7 @@ public:
 	inline const Vector3& GetScale() const { return m_scale; }
 	inline const std::string& GetName() const { return m_name; }
 	inline void SetName(const std::string &name) { m_name = name; }
-	const void GetFullName(std::string &fullName) const;
+	const void GetFullNodeName(std::string &fullName) const;
 	inline const int GetNbChildren() const { return m_children.size(); }
 	void RemoveChildReference(const ZobObject* z);
 	void AddChildReference(ZobObject* z);

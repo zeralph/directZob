@@ -122,18 +122,18 @@ ZobObject* ZobObject::GetChild(const int i)
 	return NULL;
 }
 
-const void ZobObject::GetFullName(std::string& fullname) const
+const void ZobObject::GetFullNodeName(std::string& fullname) const
 {
 	std::string s = GetName();
 	std::string s2 = "";
 	const ZobObject* z = this;
 	while (z->GetParent())
 	{
-		s2 = "\\";
-		s2.append(z->GetName());
+		z = z->GetParent();
+		s2 = z->GetName();
+		s2.append("/");
 		s2.append(s);
 		s = s2;
-		z = z->GetParent();
 	}
 	fullname = s;
 }

@@ -16,10 +16,10 @@ namespace CLI
 		return gcnew System::String("");
 	}
 
-	System::String^ ZobObjectWrapper::GetFullName()
+	System::String^ ZobObjectWrapper::GetFullNodeName()
 	{
 		std::string s;
-		m_Instance->GetFullName(s);
+		m_Instance->GetFullNodeName(s);
 		return gcnew System::String(s.c_str());
 	}
 
