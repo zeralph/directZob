@@ -9,7 +9,7 @@ public:
 	MeshManager();
 	~MeshManager();
 
-	void LoadMesh(std::string& name, std::string& path, std::string& file);
+	Mesh* LoadMesh(std::string& name, std::string& path, std::string& file);
 	Mesh* GetMesh(std::string& name) const;
 	const int GetNbMeshes() const { return m_meshes.size(); }
 	std::string GetMeshList();

@@ -22,8 +22,10 @@ public:
 	void CreateZobObject(ZobObject* parent);
 	void RemoveZobObject(ZobObject* z);
 	void UnloadAll();
+	void CreateEditorGizmos(std::string& editorResourcesPath);
 private:
 	void GetZobObjectListInternal(const ZobObject* z, std::string& str);
+	ZobObject* LoadEditorMesh(const char* name, const char* meshPath, const char* meshFile, ZobObject* parent);
 	ZobObject* GetZobObjectFromPartialId(ZobObject* z, const uint id) const;
 	ZobObject* m_rootObject = NULL;
 }; 

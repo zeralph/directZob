@@ -326,8 +326,8 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 				{
 
 					r = texData->GetDiffuseColor()->x * cl;
-					g = texData->GetDiffuseColor()->x * cl;
-					b = texData->GetDiffuseColor()->x * cl;
+					g = texData->GetDiffuseColor()->y * cl;
+					b = texData->GetDiffuseColor()->z * cl;
 					a = 1.0f;
 				}
 			}

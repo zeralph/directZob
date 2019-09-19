@@ -45,4 +45,11 @@ namespace CLI
 		ZobObject* z = m_Instance->GetZobObject(n);
 		m_Instance->CreateZobObject(z);
 	}
+
+	void ZobObjectManagerWrapper::CreateEditorGizmos(System::String^ editorResourcesPath)
+	{
+		std::string n;
+		MarshalString(editorResourcesPath, n);
+		m_Instance->CreateEditorGizmos(n);
+	}
 }

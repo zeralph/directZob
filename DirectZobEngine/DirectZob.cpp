@@ -107,31 +107,34 @@ int DirectZob::RunAFrame()
 
 		m_engine->StartDrawingScene();
 		m_engine->EndDrawingScene();
-		snprintf(buffer, MAX_PATH, "Triangles : %lu / %lu", m_engine->GetNbDrawnTriangles(), m_engine->GetNbTriangles());
-		m_text->Print(0, 0, 1, &std::string(buffer), 0xFFFFFFFF);
-
-		const Vector3* cp = cam->GetPosition();
-		const Vector3* ct = cam->GetTarget();
-		const Vector3* cf = cam->GetForward();
-		snprintf(buffer, MAX_PATH, "Cam %s pos :  %.2f, %.2f, %.2f, tar : %.2f, %.2f, %.2f, fw : %.2f, %.2f, %.2f",
-			cam->GetName().c_str(),
-			cp->x, cp->y, cp->z,
-			ct->x, ct->y, ct->z,
-			cf->x, cf->y, cf->z
-		);
-		m_text->Print(0, 8, 1, &std::string(buffer), 0xFFFFFFFF);
-
-		snprintf(buffer, MAX_PATH, "render : %06.2fms, geom : %06.2f, tot : %06.2f, FPS : %06.2f", m_engine->GetRenderTime(), m_engine->GetGeometryTime(), m_engine->GetFrameTime(), m_engine->GetFps());
-		float t = m_engine->GetFps();
-		t = (1.0f / t) * 1000.0f;
-		if (t < TARGET_MS_PER_FRAME)
+		if (m_text)
 		{
-			m_text->Print(0, 16, 1, &std::string(buffer), 0xFF00FF00);
-			Sleep(TARGET_MS_PER_FRAME - t);
-		}
-		else
-		{
-			m_text->Print(0, 16, 1, &std::string(buffer), 0xFFFF0000);
+			snprintf(buffer, MAX_PATH, "Triangles : %lu / %lu", m_engine->GetNbDrawnTriangles(), m_engine->GetNbTriangles());
+			m_text->Print(0, 0, 1, &std::string(buffer), 0xFFFFFFFF);
+
+			const Vector3* cp = cam->GetPosition();
+			const Vector3* ct = cam->GetTarget();
+			const Vector3* cf = cam->GetForward();
+			snprintf(buffer, MAX_PATH, "Cam %s pos :  %.2f, %.2f, %.2f, tar : %.2f, %.2f, %.2f, fw : %.2f, %.2f, %.2f",
+				cam->GetName().c_str(),
+				cp->x, cp->y, cp->z,
+				ct->x, ct->y, ct->z,
+				cf->x, cf->y, cf->z
+			);
+			m_text->Print(0, 8, 1, &std::string(buffer), 0xFFFFFFFF);
+
+			snprintf(buffer, MAX_PATH, "render : %06.2fms, geom : %06.2f, tot : %06.2f, FPS : %06.2f", m_engine->GetRenderTime(), m_engine->GetGeometryTime(), m_engine->GetFrameTime(), m_engine->GetFps());
+			float t = m_engine->GetFps();
+			t = (1.0f / t) * 1000.0f;
+			if (t < TARGET_MS_PER_FRAME)
+			{
+				m_text->Print(0, 16, 1, &std::string(buffer), 0xFF00FF00);
+				Sleep(TARGET_MS_PER_FRAME - t);
+			}
+			else
+			{
+				m_text->Print(0, 16, 1, &std::string(buffer), 0xFFFF0000);
+			}
 		}
 	}
 	return state;

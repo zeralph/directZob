@@ -171,6 +171,7 @@ namespace DirectZobEditor
         private void OnSceneChanged(object s, EventArgs e)
         {
             ZobObjectTree.Nodes.Clear();
+            m_zobObjectManagerWrapper.CreateEditorGizmos("C:\\_GIT\\directZob\\resources\\editor\\");
             UpdateTree();
         }
     }
