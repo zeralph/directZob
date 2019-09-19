@@ -164,6 +164,7 @@ void MaterialManager::UnloadAll()
 	for (int i = 0; i < m_textures.size(); i++)
 	{
 		delete (m_textures[i]);
+		m_textures[i] = NULL;
 	}
 	m_textures.clear();
 }

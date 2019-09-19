@@ -11,6 +11,7 @@ public:
 
 	//Material(const std::string& path, const std::string& file, const std::string& name);
 	Material(const std::string& name, const Vector3* ambientColor, const Vector3* diffuseColor, const std::string* textureFile=NULL);
+	~Material();
 	inline const uint GetWidth() const { return m_width; }
 	inline const uint GetHeight() const { return m_height; }
 	inline const float* GetData() const { return m_data; }
