@@ -158,5 +158,11 @@ namespace DirectZobEditor
                 }*/
             }
         }
+
+        private void TRSButton_Click(object sender, EventArgs e)
+        {
+            ToolStripButton b = (ToolStripButton)sender;
+            //if(b.Name == )
+        }
     }
 }
