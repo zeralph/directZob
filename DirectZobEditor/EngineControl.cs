@@ -32,5 +32,11 @@ namespace DirectZobEditor
         {
             m_engineWrapper.WireFrame(wireframe.Checked);
         }
+
+        private void ComboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ComboBox c = (ComboBox)sender;
+            m_engineWrapper.SetRenderOutput(c.SelectedIndex);
+        }
     }
 }

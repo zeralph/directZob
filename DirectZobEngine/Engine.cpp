@@ -22,6 +22,7 @@ Engine::Engine(int width, int height, Events* events)
 	{
 		m_nbRasterizers = 1;
 	}
+	m_renderOutput = RenderOutput_render;
 	m_events = events;
 	m_currentFrame = 0;
 	m_zNear = Z_NEAR;
@@ -122,7 +123,7 @@ void Engine::Resize(int width, int height)
 	delete m_zBuffer;
 	m_buffer = (uint*)malloc(sizeof(uint) * width * height);
 	m_zBuffer = (float*)malloc(sizeof(float) * width * height);
-
+	m_oBuffer = (uint*)malloc(sizeof(float) * width * height);
 	m_bufferData.height = height;
 	m_bufferData.width = width;
 	m_bufferData.buffer = m_buffer;
@@ -166,6 +167,7 @@ void Engine::ClearBuffer(const Color* color)
 	{
 		m_buffer[i] = v;
 		m_zBuffer[i] = 0;
+		m_oBuffer[i] = 0;
 	}
 	//memset(m_zBuffer, 0, sizeof(float) * m_width * m_height);
 	for (int i = 0; i < m_nbRasterizers; i++)
@@ -198,13 +200,23 @@ int Engine::EndDrawingScene()
 
 	m_renderTimeMS = (float)(clock() - m_drawTick) / CLOCKS_PER_SEC * 1000;
 
-	if (m_showZBuffer)
+	if (m_renderOutput == RenderOutput_zBuffer)
 	{
 		uint c;
 		for (int i = 0; i < m_bufferData.size; i++)
 		{
 			c = (uint)(m_zBuffer[i] * 255.0f);
 			c = (c << 16) + (c << 8) + c;
+			m_buffer[i] = c;
+		}
+	}
+	else if (m_renderOutput == RenderOutput_oBuffer)
+	{
+		uint c;
+		for (int i = 0; i < m_bufferData.size; i++)
+		{
+			c = oBufferColors[(uint)(m_oBuffer[i]) % 8];
+			//c = (c << 16) + (c << 8) + c;
 			m_buffer[i] = c;
 		}
 	}

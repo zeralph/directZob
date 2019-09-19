@@ -55,8 +55,14 @@ Material::Material(const std::string& name, const Vector3* ambientColor, const V
 			n.append(textureFile->c_str());
 			DirectZob::LogInfo(n.c_str());
 		}
+		image.clear();
 	}
 	std::string n = "Loaded material ";
 	n.append(m_name.c_str());
 	DirectZob::LogInfo(n.c_str());
+}
+
+Material::~Material()
+{
+	delete m_data;
 }

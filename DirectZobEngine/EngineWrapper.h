@@ -16,7 +16,7 @@ namespace CLI
 		System::IntPtr GetBufferData();
 		void ShowGrid(bool b) { m_Instance->ShowGrid(b); }
 		void WireFrame(bool b) { m_Instance->WireFrame(b); }
-
+		void SetRenderOutput(int r);
 	private:
 		//array<int>^ m_buffer;
 	};

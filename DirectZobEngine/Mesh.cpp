@@ -146,6 +146,12 @@ Mesh::Mesh(std::string& name, std::string& path, std::string& file)
 
 Mesh::~Mesh()
 {
+	m_triangles.clear();
+	delete m_vertices;
+	delete m_verticesData;
+	delete m_uvs;
+	delete m_normals;
+	delete m_normalsData;
 }
 
 void Mesh::SplitEntry(const std::string* s, std::vector<std::string>* v, const char delim)

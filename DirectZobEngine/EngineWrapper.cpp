@@ -21,4 +21,11 @@ namespace CLI
 		//pin_ptr<int> arrayPin = &m_Instance->GetBufferData()[0];
 		//return arrayPin;
 	}
+	void EngineWrapper::SetRenderOutput(int r)
+	{
+		if (r >= 0 && r < (int)Engine::RenderOutput::RenderOutputMAX)
+		{
+			m_Instance->SetRenderOutput((Engine::RenderOutput)r);
+		}
+	}
 }

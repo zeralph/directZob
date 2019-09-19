@@ -26,6 +26,13 @@ namespace Core
 	{
 	public:
 
+		enum RenderOutput
+		{
+			RenderOutput_render = 0,
+			RenderOutput_zBuffer,
+			RenderOutput_oBuffer,
+			RenderOutputMAX
+		};
 		enum CullMode
 		{
 			None = 0,
@@ -61,6 +68,8 @@ namespace Core
 		inline void SetGeometryTime(float f) { m_geometryTimeMS = f; }
 		inline const uint GetNbTriangles() const { return m_sceneTriangles; }
 		inline const uint GetNbDrawnTriangles() const { return m_drawnTriangles; }
+
+		inline void SetRenderOutput(RenderOutput r) { m_renderOutput = r; }
 
 		inline BufferData* GetBufferData() { return &m_bufferData; }
 		//inline Camera* GetCurrentCamera() { return}
@@ -108,5 +117,9 @@ namespace Core
 		bool m_started = false;
 		bool m_wireFrame = false;
 		bool m_showGrid = true;
+		RenderOutput m_renderOutput;
+		const uint oBufferColors[8] = { 0x000000, 0x00FF00, 0x0000FF,
+										 0xFFFF00, 0x00FFFF, 0xFF00FF,
+										 0xFFFFFF, 0xFF0000, };
 	};
 }
