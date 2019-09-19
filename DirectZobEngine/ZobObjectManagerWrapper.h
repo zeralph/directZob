@@ -17,6 +17,7 @@ namespace CLI
 		void RemoveZobObject(System::String^ name);
 		void AddZobObject(System::String^ parent);
 		ZobObjectWrapper^ GetObjectAtCoords(int x, int y);
+		void CreateEditorGizmos(System::String^ editorResourcesPath);
 	private:
 
 	};

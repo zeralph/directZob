@@ -1,5 +1,5 @@
 #include "MeshManager.h"
-
+#include "DirectZob.h"
 MeshManager::MeshManager()
 {
 	m_meshes.clear();
@@ -14,17 +14,15 @@ MeshManager::~MeshManager()
 	m_meshes.clear();
 }
 
-void MeshManager::LoadMesh(std::string& name, std::string& path, std::string& file)
+Mesh* MeshManager::LoadMesh(std::string& name, std::string& path, std::string& file)
 {
+	Mesh* outMesh = NULL;
 	if (GetMesh(name) == NULL)
 	{
-		Mesh* t = new Mesh(name, path, file);
-		m_meshes.push_back(t);
+		outMesh = new Mesh(name, path, file);
+		m_meshes.push_back(outMesh);
 	}
-	else
-	{
-		//output error
-	}
+	return outMesh;
 }
 
 const Mesh* MeshManager::GetMesh(const int i) const

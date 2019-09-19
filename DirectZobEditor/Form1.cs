@@ -45,13 +45,6 @@ namespace DirectZobEditor
 
             m_meshManagerWrapper = new CLI.MeshManagerWrapper();
 
-
-            m_path = @"C:\_GIT\directZob\resources\";
-            m_file = "scene1.xml";
-            //path = @"D:\_PERSO\directZob\directZob\resources\";
-            m_directZobWrapper.LoadScene(m_path, m_file);
-
-
             //UpdateLogWindowDelegate = new UpdateLogWindow(UpdateLogWindowMethod);
 
             propertiesPanel.Width = 600;
@@ -70,6 +63,17 @@ namespace DirectZobEditor
 
             this.WindowState = FormWindowState.Maximized;
 
+
+            m_path = @"C:\_GIT\directZob\resources\";
+            m_file = "scene1.xml";
+            //path = @"D:\_PERSO\directZob\directZob\resources\";
+            //m_directZobWrapper.LoadScene(m_path, m_file);
+            m_directZobWrapper.NewScene();
+            EventHandler handler = OnNewScene;
+            if (null != handler)
+            {
+                handler(this, EventArgs.Empty);
+            }
         }
 
         public void UpdateAfterEngine()

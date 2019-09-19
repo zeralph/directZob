@@ -1,4 +1,6 @@
 #include "ZobObjectManager.h"
+#include "DirectZob.h"
+#include "MeshManager.h"
 
 static int sObjectNumber = 1;
 
@@ -136,4 +138,37 @@ void ZobObjectManager::UnloadAll()
 	delete m_rootObject;
 	std::string n = "root";
 	m_rootObject = new ZobObject(ZOBGUID::type_internal, ZOBGUID::subtype_zobOject, n, NULL, NULL);
+}
+
+void ZobObjectManager::CreateEditorGizmos(std::string& editorResourcesPath)
+{
+	std::string name;
+	name = "gizmos";
+	ZobObject* gizmos = new ZobObject(ZOBGUID::type_editor, ZOBGUID::subtype_zobOject, name, NULL, m_rootObject);
+
+	ZobObject* transform = LoadEditorMesh("transform", editorResourcesPath.c_str(), "transform.obj", gizmos);
+	ZobObject* transformX = LoadEditorMesh("transformX", editorResourcesPath.c_str(), "transformX.obj", transform);
+	ZobObject* transformY = LoadEditorMesh("transformY", editorResourcesPath.c_str(), "transformY.obj", transform);
+	ZobObject* transformZ = LoadEditorMesh("transformZ", editorResourcesPath.c_str(), "transformZ.obj", transform);
+
+	ZobObject* rotate = LoadEditorMesh("rotate", editorResourcesPath.c_str(), "rotate.obj", gizmos);
+	ZobObject* rotateX = LoadEditorMesh("rotateX", editorResourcesPath.c_str(), "rotateX.obj", rotate);
+	ZobObject* rotateY = LoadEditorMesh("rotateY", editorResourcesPath.c_str(), "rotateY.obj", rotate);
+	ZobObject* rotateZ = LoadEditorMesh("rotateZ", editorResourcesPath.c_str(), "rotateZ.obj", rotate);
+
+	ZobObject* scale = LoadEditorMesh("scale", editorResourcesPath.c_str(), "scale.obj", gizmos);
+	ZobObject* scaleX = LoadEditorMesh("scaleX", editorResourcesPath.c_str(), "scaleX.obj", scale);
+	ZobObject* scaleY = LoadEditorMesh("scaleY", editorResourcesPath.c_str(), "scaleY.obj", scale);
+	ZobObject* scaleZ = LoadEditorMesh("scaleZ", editorResourcesPath.c_str(), "scaleZ.obj", scale);
+}
+
+ZobObject* ZobObjectManager::LoadEditorMesh(const char* name, const char* meshPath, const char* meshFile, ZobObject* parent)
+{
+	MeshManager* meshMgr = DirectZob::GetInstance()->GetMeshManager();
+	std::string n = std::string(name);
+	std::string p = std::string(meshPath);
+	std::string m = std::string(meshFile);
+	Mesh* mesh = meshMgr->LoadMesh(n, p, m);
+	ZobObject* transform = new ZobObject(ZOBGUID::type_internal, ZOBGUID::subtype_zobOject, n, mesh, parent);
+	return transform;
 }
