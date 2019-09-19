@@ -112,11 +112,13 @@ namespace DirectZobEditor
             {
                 if (!m_mainForm.IsCtrlPressed())
                 {
-                    m_mainForm.GetCameraControl().GetWrapper().RotateAroundAxis((float)-dx, (float)dy);
+                    //MOVE OBJECT HERE
+                    //m_mainForm.GetCameraControl().GetWrapper().RotateAroundAxis((float)-dx, (float)dy);
                 }
                 else
                 {
-                    m_mainForm.GetCameraControl().GetWrapper().Move((float)-dx*2.0f, (float)-dy*2.0f);
+                    m_mainForm.GetCameraControl().GetWrapper().RotateAroundAxis((float)-dx, (float)dy);
+                    //m_mainForm.GetCameraControl().GetWrapper().Move((float)-dx*2.0f, (float)-dy*2.0f);
                 }
             }
             else if(e.Button == MouseButtons.Middle)
@@ -125,13 +127,7 @@ namespace DirectZobEditor
             }
             else
             {
-                CLI.ZobObjectWrapper z = m_mainForm.GetZobObjectListControl().GetWrapper().GetObjectAtCoords(e.X, e.Y);
-                if(z!=null && z.IsValid())
-                {
-                    string fullName = z.GetFullName();
-                    m_mainForm.GetZobObjectControl().SetZobObjectWrapper(z);
-                    //m_mainForm.GetZobObjectListControl().GetWrapper().
-                }
+
             }
             m_lastMouseX = e.X;
             m_lastMouseY = e.Y;
@@ -146,6 +142,21 @@ namespace DirectZobEditor
         private void EngineRender_MouseHover(object sender, EventArgs e)
         {
 
+        }
+
+        private void EngineRender_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left && !m_mainForm.IsCtrlPressed())
+            {
+                m_mainForm.GetZobObjectListControl().SelectObjectAtCoords(e.X, e.Y);
+                /*CLI.ZobObjectWrapper z = m_mainForm.GetZobObjectListControl().GetWrapper().GetObjectAtCoords(e.X, e.Y);
+                if (z != null && z.IsValid())
+                {
+                    string fullName = z.GetFullName();
+                    m_mainForm.GetZobObjectControl().SetZobObjectWrapper(z);
+                    //m_mainForm.GetZobObjectListControl().GetWrapper().
+                }*/
+            }
         }
     }
 }

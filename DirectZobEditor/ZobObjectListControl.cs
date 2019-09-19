@@ -34,6 +34,24 @@ namespace DirectZobEditor
 
         }
 
+        public bool SelectObjectAtCoords(int x, int y)
+        {
+            CLI.ZobObjectWrapper z = m_zobObjectManagerWrapper.GetObjectAtCoords(x, y);
+            if(z!=null && z.IsValid())
+            {
+                string s = z.GetFullNodeName();
+                string[] s2 = s.Split('/');
+                TreeNode n = ZobObjectTree.Nodes[0];
+                for (int i=1; i<s2.Length; i++)
+                {
+                    n = n.Nodes[s2[i]];
+                }
+                ZobObjectTree.SelectedNode = n;
+                return true;
+            }
+            return false;
+        }
+
         private void UpdateTree()
         {
             string s = m_zobObjectManagerWrapper.GetZobObjectList();

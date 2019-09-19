@@ -60,6 +60,7 @@
             this.EngineRender.Size = new System.Drawing.Size(960, 540);
             this.EngineRender.TabIndex = 1;
             this.EngineRender.TabStop = false;
+            this.EngineRender.MouseClick += new System.Windows.Forms.MouseEventHandler(this.EngineRender_MouseClick);
             this.EngineRender.MouseDown += new System.Windows.Forms.MouseEventHandler(this.EngineRender_MouseDown);
             this.EngineRender.MouseHover += new System.EventHandler(this.EngineRender_MouseHover);
             this.EngineRender.MouseMove += new System.Windows.Forms.MouseEventHandler(this.EngineRender_MouseMove);
