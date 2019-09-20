@@ -82,7 +82,8 @@ namespace Core
 		inline bool WireFrame() { return m_wireFrame; }
 		uint GetObjectIdAtCoords(uint x, uint y);
 		std::string GetObjectList();
-
+		const CullMode GetCullMode() const { return m_cullMode; }
+		void SetCullMode(const CullMode c) { m_cullMode = c; }
 	private:
 
 		inline float clamp2(float x, float min, float max) const { if (x < min) x = min; if (x > max) x = max; return x; }
@@ -118,6 +119,8 @@ namespace Core
 		bool m_wireFrame = false;
 		bool m_showGrid = true;
 		RenderOutput m_renderOutput;
+		CullMode m_cullMode;
+
 		const uint oBufferColors[8] = { 0x000000, 0x00FF00, 0x0000FF,
 										 0xFFFF00, 0x00FFFF, 0xFF00FF,
 										 0xFFFFFF, 0xFF0000, };

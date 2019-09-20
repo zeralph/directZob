@@ -9,6 +9,10 @@ Triangle::Triangle()
 	vb = NULL;
 	vc = NULL;
 
+	pa = NULL;
+	pb = NULL;
+	pc = NULL;
+
 	na = NULL;
 	nb = NULL;
 	nc = NULL;

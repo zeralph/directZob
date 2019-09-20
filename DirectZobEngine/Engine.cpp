@@ -48,7 +48,8 @@ Engine::Engine(int width, int height, Events* events)
 	m_nbPixels = 0;
 	m_renderTimeMS = 0;
 	m_geometryTimeMS = 0;
-	
+	m_cullMode = CullMode::CullClockwiseFace;
+
 	m_rasterTriangleQueues = (Triangle**)malloc(sizeof(Triangle) * m_nbRasterizers);
 	m_rasterNbTriangleQueues = (uint*)malloc(sizeof(uint) * m_nbRasterizers);
 	m_rasterLineQueues = new std::vector<Line2D>[m_nbRasterizers];
@@ -69,6 +70,9 @@ Engine::Engine(int width, int height, Events* events)
 			m_rasterTriangleQueues[i][j].va = new Vector3();
 			m_rasterTriangleQueues[i][j].vb = new Vector3();
 			m_rasterTriangleQueues[i][j].vc = new Vector3();
+			m_rasterTriangleQueues[i][j].pa = new Vector3();
+			m_rasterTriangleQueues[i][j].pb = new Vector3();
+			m_rasterTriangleQueues[i][j].pc = new Vector3();
 			m_rasterTriangleQueues[i][j].na = new Vector3();
 			m_rasterTriangleQueues[i][j].nb = new Vector3();
 			m_rasterTriangleQueues[i][j].nc = new Vector3();
@@ -288,6 +292,7 @@ void Engine::QueueLine(const Camera* camera, const Vector3* v1, const Vector3* v
 	camera->GetProjectionMatrix()->Mul(&a);
 	camera->GetViewMatrix()->Mul(&b);
 	camera->GetProjectionMatrix()->Mul(&b);
+	
 	if (a.w != 1)
 	{
 		a.x /= a.w;
@@ -376,8 +381,8 @@ bool Engine::ClipSegment(Vector3* a, Vector3* b)
 
 void Engine::QueueTriangle(const Triangle* t)
 {
-	int min = std::min<int>(t->va->y, std::min<int>(t->vb->y, t->vc->y));
-	int max = std::max<int>(t->va->y, std::max<int>(t->vb->y, t->vc->y));
+	int min = std::min<int>(t->pa->y, std::min<int>(t->pb->y, t->pc->y));
+	int max = std::max<int>(t->pa->y, std::max<int>(t->pb->y, t->pc->y));
 	min = clamp2(min, 0, (int)m_bufferData.height - 1);
 	max = clamp2(max, 0, (int)m_bufferData.height - 1);
 	min /= m_bufferData.height / m_nbRasterizers;

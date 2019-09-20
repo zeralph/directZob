@@ -19,12 +19,13 @@ public:
 	~Mesh();
 
 
-	void Draw(const Matrix4x4& modelMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions options);
+	void Draw(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions options);
 
 	const std::vector<Triangle>* GetTrianglesList() const { return &m_triangles; }
 	const uint GetNbTriangles() const { return m_nbFaces; }
 
 	Vector3* m_vertices = NULL;
+	Vector3* m_projectedVertices = NULL;
 	Vector3* m_normals = NULL;
 
 	Vector3* m_verticesData = NULL;
@@ -49,6 +50,5 @@ private:
 	bool m_hasNormals = false;
 	std::string m_name;
 	std::string m_file;
-	Matrix4x4	m_modelMatrixRotationOnly;
 };
 

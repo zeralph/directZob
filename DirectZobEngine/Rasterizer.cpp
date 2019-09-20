@@ -79,6 +79,7 @@ void Rasterizer::DrawLine(const Line2D* l) const
 	float y1 = l->ya;
 	float y2 = l->yb;
 	uint* buffer = m_bufferData->buffer;
+	float* zBuffer = m_bufferData->zBuffer;
 	const bool steep = abs(y2 - y1) > abs(x2 - x1);
 	if (steep)
 	{
@@ -133,9 +134,13 @@ void Rasterizer::DrawLine(const Line2D* l) const
 
 void Rasterizer::DrawTriangle(const Triangle* t) const
 {
-	Vector2 v1 = Vector2((int)t->va->x, (int)t->va->y);
+	/*Vector2 v1 = Vector2((int)t->va->x, (int)t->va->y);
 	Vector2 v2 = Vector2((int)t->vb->x, (int)t->vb->y);
-	Vector2 v3 = Vector2((int)t->vc->x, (int)t->vc->y);
+	Vector2 v3 = Vector2((int)t->vc->x, (int)t->vc->y);*/
+
+	Vector2 v1 = Vector2((int)t->pa->x, (int)t->pa->y);
+	Vector2 v2 = Vector2((int)t->pb->x, (int)t->pb->y);
+	Vector2 v3 = Vector2((int)t->pc->x, (int)t->pc->y);
 
 	/* at first sort the three vertices by y-coordinate ascending so v1 is the topmost vertice */
 	sortVerticesAscendingByY(&v1, &v2, &v3);
@@ -268,10 +273,13 @@ void Rasterizer::FillTopFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, con
 inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* t) const
 {
 
-	float w2 = edgeFunction(t->va, t->vb, p);
+	/*float w2 = edgeFunction(t->va, t->vb, p);
 	float w0 = edgeFunction(t->vb, t->vc, p);
-	float w1 = edgeFunction(t->vc, t->va, p);
-	float su, tu, cl, r, g, b, a, z;
+	float w1 = edgeFunction(t->vc, t->va, p);*/
+	float w2 = edgeFunction(t->pa, t->pb, p);
+	float w0 = edgeFunction(t->pb, t->pc, p);
+	float w1 = edgeFunction(t->pc, t->pa, p);
+	float su, tu, cl, r, g, b, a, z, cla, clb, clc;
 	uint c, k;
 	//if (w0 >= 0 || w1 >= 0 || w2 >= 0)
 	{
@@ -281,7 +289,7 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 
 		const Material* texData = t->tex;
 		z = m_bufferData->zNear;
-		z = 1.0f / (t->va->z * w0 + t->vb->z * w1 + t->vc->z * w2);
+		z = 1.0f / (t->pa->z * w0 + t->pb->z * w1 + t->pc->z * w2);
 		k = p->y * m_width + p->x;
 		float zf = m_bufferData->zBuffer[k];
 
@@ -306,7 +314,12 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 			cl = 1.0f;
 			if (t->options.Lighted())
 			{
-				cl = ((w0 * t->la + w1 * t->lb + w2 * t->lc)) + 0.1f;
+				//cl = ((w0 * t->la + w1 * t->lb + w2 * t->lc)) + 0.1f;
+				Vector3 c = Vector3((w0 * t->na->x + w1 * t->nb->x + w2 * t->nc->x),
+									(w0 * t->na->y + w1 * t->nb->y + w2 * t->nc->y),
+									(w0 * t->na->z + w1 * t->nb->z + w2 * t->nc->z));
+				Vector3 v = Vector3(1, 1, 1);
+				cl = Vector3::Dot(&c, &v);
 			}
 			if (texData)
 			{
