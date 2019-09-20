@@ -183,7 +183,7 @@ void Mesh::ReinitVertices()
 	memcpy(m_normals, m_normalsData, sizeof(Vector3) * m_nbNormals);
 }
 
-void Mesh::Draw(const Matrix4x4 &modelMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId)
+void Mesh::Draw(const Matrix4x4 &modelMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions options)
 {
 	ReinitVertices();
 	BufferData* bData = engine->GetBufferData();
@@ -221,6 +221,8 @@ void Mesh::Draw(const Matrix4x4 &modelMatrix, const Camera* camera, Core::Engine
 	{
 		Triangle* t = &m_triangles[i];
 		t->draw = false;
+		t->options.ZBuffered(options.ZBuffered());
+		t->options.Lighted(options.Lighted());
 		if (!RejectTriangle(t, znear, zfar, (float)bData->width, (float)bData->height))
 		{
 			n.Set(t->na);

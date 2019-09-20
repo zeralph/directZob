@@ -66,7 +66,7 @@ void ZobObject::Draw(const Camera* camera, Core::Engine* engine)
 {
 	if (m_mesh)
 	{
-		m_mesh->Draw(m_modelMatrix, camera, engine, GetId());
+		m_mesh->Draw(m_modelMatrix, camera, engine, GetId(), m_renderOptions);
 	}
 	for (int i = 0; i < m_children.size(); i++)
 	{
