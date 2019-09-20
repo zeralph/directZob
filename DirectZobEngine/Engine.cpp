@@ -10,6 +10,8 @@
 #include <assert.h> 
 #include "DirectZob.h"
 
+# define MAX_TRIANGLES_PER_IMAGE 200000
+
 using namespace Core;
 Engine::Engine(int width, int height, Events* events)
 {
@@ -22,6 +24,7 @@ Engine::Engine(int width, int height, Events* events)
 	{
 		m_nbRasterizers = 1;
 	}
+	m_triangleQueueSize = MAX_TRIANGLES_PER_IMAGE / m_nbRasterizers;
 	m_renderOutput = RenderOutput_render;
 	m_events = events;
 	m_currentFrame = 0;
@@ -59,9 +62,9 @@ Engine::Engine(int width, int height, Events* events)
 		Rasterizer* r = new Rasterizer(width, h0, h0+h, &m_bufferData);
 		m_rasterizers->push_back(r);
 
-		Triangle* t = (Triangle*)malloc(sizeof(Triangle) * TRIANGLE_QUEUE_SIZE);
+		Triangle* t = (Triangle*)malloc(sizeof(Triangle) * m_triangleQueueSize);
 		m_rasterTriangleQueues[i] = t;
-		for (int j = 0; j < TRIANGLE_QUEUE_SIZE; j++)
+		for (int j = 0; j < m_triangleQueueSize; j++)
 		{
 			m_rasterTriangleQueues[i][j].va = new Vector3();
 			m_rasterTriangleQueues[i][j].vb = new Vector3();
@@ -83,7 +86,7 @@ Engine::Engine(int width, int height, Events* events)
 	{
 		m_rasterizers->at(i)->Init();
 	}
-	std::string n = "Engine initialized with " + std::to_string(m_nbRasterizers) + " rasterizer(s)";
+	std::string n = "Engine initialized with " + std::to_string(m_nbRasterizers) + " rasterizer(s) for " + std::to_string(m_triangleQueueSize) +  " triangles per image";
 	DirectZob::LogInfo(n.c_str());
 }
 
@@ -388,7 +391,7 @@ void Engine::QueueTriangle(const Triangle* t)
 	for (int i = min; i <= max; i++)
 	{
 		uint j = m_rasterNbTriangleQueues[i];
-		if (j < TRIANGLE_QUEUE_SIZE)
+		if (j < m_triangleQueueSize)
 		{
 			m_rasterTriangleQueues[i][j].Copy(t);
 			m_rasterNbTriangleQueues[i]++;

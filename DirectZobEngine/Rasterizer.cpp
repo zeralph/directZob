@@ -280,7 +280,7 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 		w2 /= t->area;
 
 		const Material* texData = t->tex;
-
+		z = m_bufferData->zNear;
 		z = 1.0f / (t->va->z * w0 + t->vb->z * w1 + t->vc->z * w2);
 		k = p->y * m_width + p->x;
 		float zf = m_bufferData->zBuffer[k];
@@ -288,7 +288,7 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 		static float zmin = 1000;
 		static float zmax = 0;
 
-		if (/*z >= m_zNear && z<=m_zFar && */z > zf)
+		if (!t->options.ZBuffered() || z > zf)
 		{
 			m_bufferData->oBuffer[k] = t->owner;
 			m_bufferData->zBuffer[k] = z;
@@ -303,7 +303,11 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 
 			su = w0 * t->ua->x + w1 * t->ub->x + w2 * t->uc->x;
 			tu = w0 * t->ua->y + w1 * t->ub->y + w2 * t->uc->y;
-			cl = ((w0 * t->la + w1 * t->lb + w2 * t->lc)) + 0.1f;
+			cl = 1.0f;
+			if (t->options.Lighted())
+			{
+				cl = ((w0 * t->la + w1 * t->lb + w2 * t->lc)) + 0.1f;
+			}
 			if (texData)
 			{
 				if (texData->GetData())

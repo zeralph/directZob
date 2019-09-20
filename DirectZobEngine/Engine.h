@@ -17,7 +17,6 @@
 #include "Rasterizer.h"
 #include "Events.h"
 
-#define TRIANGLE_QUEUE_SIZE 50000
 #define Z_NEAR 0.001f
 #define Z_FAR 500.0f
 namespace Core
@@ -96,6 +95,7 @@ namespace Core
 		std::vector<Line2D>* m_rasterLineQueues;
 		std::vector<Rasterizer*>* m_rasterizers;
 		uint m_nbRasterizers;
+		uint m_triangleQueueSize;
 		float m_zNear;
 		float m_zFar;
 		int m_curBuffer;

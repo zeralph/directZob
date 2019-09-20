@@ -19,7 +19,7 @@ public:
 	~Mesh();
 
 
-	void Draw(const Matrix4x4& modelMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId);
+	void Draw(const Matrix4x4& modelMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions options);
 
 	const std::vector<Triangle>* GetTrianglesList() const { return &m_triangles; }
 	const uint GetNbTriangles() const { return m_nbFaces; }

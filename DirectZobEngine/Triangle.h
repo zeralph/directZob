@@ -2,7 +2,12 @@
 #include "Vector2.h"
 #include "Vector3.h"
 #include "Material.h"
+#include "Types.h"
 
+//FLAGS :
+//					7			6			5			4			3			2			1			0
+//		|no lighting|no zBuffer |	...
+//
 class Triangle
 {
 public:
@@ -28,6 +33,7 @@ public:
 	float lc;
 	uint owner;
 	bool draw;
+	DirectZobType::RenderOptions options;
 
 	inline void ComputeArea()
 	{
@@ -48,24 +54,20 @@ public:
 	{
 		va->Copy(t->va);
 		vb->Copy(t->vb);
-		vc->Copy(t->vc);
-		  
+		vc->Copy(t->vc);  
 		na->Copy(t->na);
 		nb->Copy(t->nb);
 		nc->Copy(t->nc);
-		  
 		ua->Copy(t->ua);
 		ub->Copy(t->ub);
 		uc->Copy(t->uc);
-
 		tex = t->tex;
-
 		area = t->area;
 		owner = t->owner;
 		lb = t->lb;
 		la = t->la;
 		lc = t->lc;
-
+		options = t->options;
 		draw = t->draw;
 	}
 };

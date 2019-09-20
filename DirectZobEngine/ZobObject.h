@@ -25,7 +25,7 @@ public:
 	void SetParent(ZobObject* o);
 	ZobObject* GetChild(const std::string& name);
 	ZobObject* GetChild(const int i);
-	
+	RenderOptions& GetRenderOptions() { return m_renderOptions; }
 	inline void SetScale(float x, float y, float z) { m_scale.x = x; m_scale.y = y; m_scale.z = z; }
 	inline void SetRotation(float x, float y, float z) { m_rotation.x = x; m_rotation.y = y; m_rotation.z = z; }
 	inline void SetTranslation(float x, float y, float z) { m_translation.x = x; m_translation.y = y; m_translation.z = z; }
@@ -53,4 +53,5 @@ protected:
 	Vector3 m_rotation;
 	Vector3 m_scale;
 	std::string m_name;
+	RenderOptions m_renderOptions;
 };
