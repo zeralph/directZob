@@ -11,7 +11,8 @@ Mesh::Mesh(std::string& name, std::string& path, std::string& file)
 	m_hasNormals = false;
 	m_vertices = NULL;
 	m_projectedVertices = NULL;
-	m_normals = NULL;
+	m_verticesNormals = NULL;
+	m_trianglesNormals = NULL;
 	m_uvs = NULL;
 	m_name = name;
 	m_file = file;
@@ -74,13 +75,17 @@ Mesh::Mesh(std::string& name, std::string& path, std::string& file)
 	m_projectedVertices = (Vector3*)malloc(sizeof(Vector3) * m_nbVertices);
 	m_verticesData = (Vector3*)malloc(sizeof(Vector3) * m_nbVertices);
 	m_uvs = (Vector2*)malloc(sizeof(Vector2) * m_nbUvs);
-	m_normals = (Vector3*)malloc(sizeof(Vector3) * m_nbNormals);
-	m_normalsData = (Vector3*)malloc(sizeof(Vector3) * m_nbNormals);
+	m_verticesNormals = (Vector3*)malloc(sizeof(Vector3) * m_nbNormals);
+	m_verticesNormalsData = (Vector3*)malloc(sizeof(Vector3) * m_nbNormals);
+	m_trianglesNormals = (Vector3*)malloc(sizeof(Vector3) * m_nbFaces);
+	m_trianglesNormalsData = (Vector3*)malloc(sizeof(Vector3) * m_nbFaces);
 	m_triangles.clear();
 	
 	if (!m_hasNormals)
 	{
-		m_normals[0] = Vector3(0, 0, 1);
+		//TODO ... compute !
+		m_verticesNormals[0] = Vector3(0, 0, 1);
+		m_trianglesNormals[0] = Vector3(0, 0, 1);
 	}
 	
 	size_t curVertice = 0;
@@ -105,7 +110,7 @@ Mesh::Mesh(std::string& name, std::string& path, std::string& file)
 				std::vector<string> vec;
 				SplitEntry(&line, &vec, ' ');
 				Vector3 v = Vector3(std::stof(vec[1], &sz), ::stof(vec[2], &sz), ::stof(vec[3], &sz));
-				m_normals[curNormal] = v;
+				m_verticesNormals[curNormal] = v;
 				curNormal++;
 			}
 			else if (line[1] == ' ')
@@ -140,8 +145,8 @@ Mesh::Mesh(std::string& name, std::string& path, std::string& file)
 		}
 	}
 	memcpy(m_verticesData, m_vertices, sizeof(Vector3)* m_nbVertices);
-	memcpy(m_normalsData, m_normals, sizeof(Vector3)* m_nbNormals);
-
+	memcpy(m_verticesNormalsData, m_verticesNormals, sizeof(Vector3)* m_nbNormals);
+	memcpy(m_trianglesNormals, m_trianglesNormals, sizeof(Vector3)* m_nbFaces);
 	s = "Mesh loaded : " + std::string(fullPath);
 	DirectZob::LogInfo(s.c_str());
 }
@@ -152,8 +157,10 @@ Mesh::~Mesh()
 	delete m_vertices;
 	delete m_verticesData;
 	delete m_uvs;
-	delete m_normals;
-	delete m_normalsData;
+	delete m_verticesNormals;
+	delete m_verticesNormalsData;
+	delete m_trianglesNormals;
+	delete m_trianglesNormalsData;
 }
 
 void Mesh::SplitEntry(const std::string* s, std::vector<std::string>* v, const char delim)
@@ -182,7 +189,8 @@ void Mesh::SplitEntry(const std::string* s, std::vector<std::string>* v, const c
 void Mesh::ReinitVertices()
 {
 	memcpy(m_vertices, m_verticesData, sizeof(Vector3) * m_nbVertices);
-	memcpy(m_normals, m_normalsData, sizeof(Vector3) * m_nbNormals);
+	memcpy(m_verticesNormals, m_verticesNormalsData, sizeof(Vector3) * m_nbNormals);
+	memcpy(m_trianglesNormals, m_trianglesNormalsData, sizeof(Vector3) * m_nbFaces);
 }
 
 void Mesh::Draw(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions options)
@@ -215,8 +223,10 @@ void Mesh::Draw(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, c
 	}
 	for (uint i = 0; i < m_nbNormals; i++)
 	{
-		rotationMatrix.Mul(&m_normals[i]);
-		m_normals[i].Normalize();
+		rotationMatrix.Mul(&m_verticesNormals[i]);
+		m_verticesNormals[i].Normalize();
+		rotationMatrix.Mul(&m_trianglesNormals[i]);
+		m_trianglesNormals[i].Normalize();
 	}
 	int w2 = bData->width / 2;
 	int h2 = bData->height / 2;
@@ -234,10 +244,10 @@ void Mesh::Draw(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, c
 		t->options.Lighted(options.Lighted());
 		if (!RejectTriangle(t, znear, zfar, (float)bData->width, (float)bData->height))
 		{
-			n.Set(t->na);
-			n.Add(t->nb);
-			n.Add(t->nc);
-			n.Div(3.0f);
+			t->n->Set(t->na);
+			t->n->Add(t->nb);
+			t->n->Add(t->nc);
+			t->n->Div(3.0f);
 			bool bCull = false;
 			if (false)	//draw normals
 			{
@@ -249,22 +259,22 @@ void Mesh::Draw(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, c
 			}
 
 
-				t->ComputeArea();
-				static float a = 50000.0f;
-				float area = t->area;
-				if (engine->GetCullMode() == Engine::CullCounterClockwiseFace)
-				{
-					area = -area;
-				}
+			t->ComputeArea();
+			static float a = 50000.0f;
+			float area = t->area;
+			if (engine->GetCullMode() == Engine::CullCounterClockwiseFace)
+			{
+				area = -area;
+			}
 
-				if ((engine->GetCullMode() == Engine::None || area > 0) && abs(area) < a)
-				{
-					t->owner = ownerId;
-					t->ComputeLighting(&light);
-					t->draw = true;
-					engine->QueueTriangle(t);
-					drawnFaces++;
-				}
+			if ((engine->GetCullMode() == Engine::None || area > 0) && abs(area) < a)
+			{
+				t->owner = ownerId;
+				t->ComputeLighting(&light);
+				t->draw = true;
+				engine->QueueTriangle(t);
+				drawnFaces++;
+			}
 		}
 	}
 	drawnFaces;
@@ -334,11 +344,11 @@ void Mesh::CreateTriangles(const std::vector<std::string>* line, std::vector<Tri
 			t.ua = &Vector2(0, 0);
 		if (m_hasNormals)
 		{
-			t.na = &m_normals[std::stoi(vec[2], &sz) - 1];
+			t.na = &m_verticesNormals[std::stoi(vec[2], &sz) - 1];
 		}
 		else
 		{
-			t.na = &m_normals[0];
+			t.na = &m_verticesNormals[0];
 		}
 
 		vec.clear();
@@ -351,11 +361,11 @@ void Mesh::CreateTriangles(const std::vector<std::string>* line, std::vector<Tri
 			t.ub = &Vector2(0, 0);
 		if (m_hasNormals)
 		{
-			t.nb = &m_normals[std::stoi(vec[2], &sz) - 1];
+			t.nb = &m_verticesNormals[std::stoi(vec[2], &sz) - 1];
 		}
 		else
 		{
-			t.nb = &m_normals[0];
+			t.nb = &m_verticesNormals[0];
 		}
 
 		vec.clear();
@@ -368,16 +378,19 @@ void Mesh::CreateTriangles(const std::vector<std::string>* line, std::vector<Tri
 			t.uc = &Vector2(0, 0);
 		if (m_hasNormals)
 		{
-			t.nc = &m_normals[std::stoi(vec[2], &sz) - 1];
+			t.nc = &m_verticesNormals[std::stoi(vec[2], &sz) - 1];
 		}
 		else
 		{
-			t.nc = &m_normals[0];
+			t.nc = &m_verticesNormals[0];
 		}
 		t.tex = tex;
-		//
+		float nx = (t.na->x + t.nb->x + t.nc->x) / 3.0f;
+		float ny = (t.na->y + t.nb->y + t.nc->y) / 3.0f;
+		float nz = (t.na->z + t.nb->z + t.nc->z) / 3.0f;
+		m_trianglesNormals[tArrayIdx] = Vector3(nx, ny, nz);
+		t.n = &m_trianglesNormals[tArrayIdx];
 		tList->push_back(t);
-		tArrayIdx++;
-		
+		tArrayIdx++;	
 	}
 }

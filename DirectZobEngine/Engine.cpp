@@ -76,6 +76,7 @@ Engine::Engine(int width, int height, Events* events)
 			m_rasterTriangleQueues[i][j].na = new Vector3();
 			m_rasterTriangleQueues[i][j].nb = new Vector3();
 			m_rasterTriangleQueues[i][j].nc = new Vector3();
+			m_rasterTriangleQueues[i][j].n = new Vector3();
 			m_rasterTriangleQueues[i][j].ua = new Vector2();
 			m_rasterTriangleQueues[i][j].ub = new Vector2();
 			m_rasterTriangleQueues[i][j].uc = new Vector2();
