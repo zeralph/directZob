@@ -19,7 +19,7 @@ void ZobObjectManager::AddZobObject(ZobObject* z)
 {
 	if (!m_rootObject->GetChild(z->GetName()))
 	{
-		m_rootObject->AddChild(z);
+		m_rootObject->AddChildReference(z);
 	}
 }
 
@@ -135,31 +135,38 @@ void ZobObjectManager::GetZobObjectListInternal(const ZobObject* z, std::string&
 
 void ZobObjectManager::UnloadAll()
 {
+	delete m_editorGizmos;
 	delete m_rootObject;
+	m_editorGizmos = NULL;
 	std::string n = "root";
 	m_rootObject = new ZobObject(ZOBGUID::type_internal, ZOBGUID::subtype_zobOject, n, NULL, NULL);
 }
 
 void ZobObjectManager::CreateEditorGizmos(std::string& editorResourcesPath)
 {
-	std::string name;
-	name = "gizmos";
-	ZobObject* gizmos = new ZobObject(ZOBGUID::type_editor, ZOBGUID::subtype_zobOject, name, NULL, m_rootObject);
+	if (m_editorGizmos == NULL)
+	{
+		std::string name;
+		name = "gizmos";
+		ZobObject* gizmos = new ZobObject(ZOBGUID::type_editor, ZOBGUID::subtype_zobOject, name, NULL, m_rootObject);
 
-	ZobObject* transform = LoadEditorMesh("transform", editorResourcesPath.c_str(), "transform.obj", gizmos);
-	ZobObject* transformX = LoadEditorMesh("transformX", editorResourcesPath.c_str(), "transformX.obj", transform);
-	ZobObject* transformY = LoadEditorMesh("transformY", editorResourcesPath.c_str(), "transformY.obj", transform);
-	ZobObject* transformZ = LoadEditorMesh("transformZ", editorResourcesPath.c_str(), "transformZ.obj", transform);
+		ZobObject* transform = LoadEditorMesh("transform", editorResourcesPath.c_str(), "transform.obj", gizmos);
+		ZobObject* transformX = LoadEditorMesh("transformX", editorResourcesPath.c_str(), "transformX.obj", transform);
+		ZobObject* transformY = LoadEditorMesh("transformY", editorResourcesPath.c_str(), "transformY.obj", transform);
+		ZobObject* transformZ = LoadEditorMesh("transformZ", editorResourcesPath.c_str(), "transformZ.obj", transform);
 
-	ZobObject* rotate = LoadEditorMesh("rotate", editorResourcesPath.c_str(), "rotate.obj", gizmos);
-	ZobObject* rotateX = LoadEditorMesh("rotateX", editorResourcesPath.c_str(), "rotateX.obj", rotate);
-	ZobObject* rotateY = LoadEditorMesh("rotateY", editorResourcesPath.c_str(), "rotateY.obj", rotate);
-	ZobObject* rotateZ = LoadEditorMesh("rotateZ", editorResourcesPath.c_str(), "rotateZ.obj", rotate);
+		ZobObject* rotate = LoadEditorMesh("rotate", editorResourcesPath.c_str(), "rotate.obj", gizmos);
+		ZobObject* rotateX = LoadEditorMesh("rotateX", editorResourcesPath.c_str(), "rotateX.obj", rotate);
+		ZobObject* rotateY = LoadEditorMesh("rotateY", editorResourcesPath.c_str(), "rotateY.obj", rotate);
+		ZobObject* rotateZ = LoadEditorMesh("rotateZ", editorResourcesPath.c_str(), "rotateZ.obj", rotate);
 
-	ZobObject* scale = LoadEditorMesh("scale", editorResourcesPath.c_str(), "scale.obj", gizmos);
-	ZobObject* scaleX = LoadEditorMesh("scaleX", editorResourcesPath.c_str(), "scaleX.obj", scale);
-	ZobObject* scaleY = LoadEditorMesh("scaleY", editorResourcesPath.c_str(), "scaleY.obj", scale);
-	ZobObject* scaleZ = LoadEditorMesh("scaleZ", editorResourcesPath.c_str(), "scaleZ.obj", scale);
+		ZobObject* scale = LoadEditorMesh("scale", editorResourcesPath.c_str(), "scale.obj", gizmos);
+		ZobObject* scaleX = LoadEditorMesh("scaleX", editorResourcesPath.c_str(), "scaleX.obj", scale);
+		ZobObject* scaleY = LoadEditorMesh("scaleY", editorResourcesPath.c_str(), "scaleY.obj", scale);
+		ZobObject* scaleZ = LoadEditorMesh("scaleZ", editorResourcesPath.c_str(), "scaleZ.obj", scale);
+
+		m_editorGizmos = gizmos;
+	}
 }
 
 ZobObject* ZobObjectManager::LoadEditorMesh(const char* name, const char* meshPath, const char* meshFile, ZobObject* parent)
@@ -171,4 +178,14 @@ ZobObject* ZobObjectManager::LoadEditorMesh(const char* name, const char* meshPa
 	Mesh* mesh = meshMgr->LoadMesh(n, p, m);
 	ZobObject* transform = new ZobObject(ZOBGUID::type_internal, ZOBGUID::subtype_zobOject, n, mesh, parent);
 	return transform;
+}
+
+bool ZobObjectManager::Reparent(ZobObject *o, ZobObject* parent)
+{
+	if (o)
+	{
+		o->SetParent(parent);
+		return true;
+	}
+	return false;
 }

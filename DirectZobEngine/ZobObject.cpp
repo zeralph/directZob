@@ -11,7 +11,7 @@ ZobObject::ZobObject(Type t, SubType s, std::string& name, Mesh* mesh, ZobObject
 	m_scale = Vector3(1, 1, 1);
 	if (parent != NULL)
 	{
-		parent->AddChild(this);
+		parent->AddChildReference(this);
 	}
 	std::string l = "Added new ZobObject ";
 	l.append(m_name);
@@ -136,4 +136,39 @@ const void ZobObject::GetFullNodeName(std::string& fullname) const
 		s = s2;
 	}
 	fullname = s;
+}
+
+void ZobObject::SetParent(ZobObject* p)
+{
+	ZobObject* parent = GetParent();
+	if (p != NULL && p!= this && p != parent)
+	{
+		if (!HasChild(p))
+		{
+			parent->RemoveChildReference(this);
+			p->AddChildReference(this);
+			m_parent = p;
+		}
+		else
+		{
+			DirectZob::LogWarning("trying to reparent an object with one of its descendants !");
+		}
+	}
+}
+
+bool ZobObject::HasChild(const ZobObject* o)
+{
+	if (o == this)
+	{
+		return true;
+	}
+	else
+	{
+		bool bRet = false;
+		for (int i = 0; i < m_children.size(); i++)
+		{
+			bRet |= m_children.at(i)->HasChild(o);
+		}
+		return bRet;
+	}
 }

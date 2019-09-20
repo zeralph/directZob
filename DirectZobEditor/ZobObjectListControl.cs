@@ -8,13 +8,20 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Newtonsoft.Json;
+using System.IO;
 
 namespace DirectZobEditor
 {
     public partial class ZobObjectListControl : UserControl
     {
+        
+        public delegate void OnObjectSelectedHandler(object s, ObjectSelectionEventArg e);
+        public event OnObjectSelectedHandler OnObjectSelected;
+
+
         private CLI.ZobObjectManagerWrapper m_zobObjectManagerWrapper;
         private Form1 m_mainForm = null;
+        private CLI.ZobObjectWrapper m_currentSelectedZobObject = null;
         public ZobObjectListControl(Form1 f)
         {
             InitializeComponent();
@@ -37,6 +44,7 @@ namespace DirectZobEditor
         public bool SelectObjectAtCoords(int x, int y)
         {
             CLI.ZobObjectWrapper z = m_zobObjectManagerWrapper.GetObjectAtCoords(x, y);
+            bool bRet = false;
             if(z!=null && z.IsValid())
             {
                 string s = z.GetFullNodeName();
@@ -47,9 +55,10 @@ namespace DirectZobEditor
                     n = n.Nodes[s2[i]];
                 }
                 ZobObjectTree.SelectedNode = n;
-                return true;
+                bRet = true;
             }
-            return false;
+            OnZobObjectSelectionChange(z);
+            return bRet;
         }
 
         private void UpdateTree()
@@ -127,12 +136,25 @@ namespace DirectZobEditor
                 TreeNode n = ZobObjectTree.SelectedNode;
                 string s = GetFullNodeName(n);
                 i = m_zobObjectManagerWrapper.GetZobObject(s);
-                m_mainForm.GetZobObjectControl().SetZobObjectWrapper(i);
             }
-            else
+            OnZobObjectSelectionChange(i);
+        }
+
+        private void OnZobObjectSelectionChange(CLI.ZobObjectWrapper newZobObject)
+        {
+            OnObjectSelectedHandler handler = OnObjectSelected;
+            if (null != handler)
             {
-                m_mainForm.GetZobObjectControl().SetZobObjectWrapper(null);
+                ObjectSelectionEventArg ev = new ObjectSelectionEventArg();
+                ev.previousZobObject = m_currentSelectedZobObject;
+                m_currentSelectedZobObject = newZobObject;
+                ev.newZobObject = newZobObject;
+                handler(this, ev);
             }
+            CLI.ZobObjectWrapper gizmos = m_zobObjectManagerWrapper.GetEditorGizmos();
+            m_zobObjectManagerWrapper.Reparent(gizmos, newZobObject);
+            //ZobObjectTree.Nodes.Clear();
+            UpdateTree();
         }
 
         private void ZobObjectTree_MouseClick(object sender, MouseEventArgs e)
@@ -171,7 +193,15 @@ namespace DirectZobEditor
         private void OnSceneChanged(object s, EventArgs e)
         {
             ZobObjectTree.Nodes.Clear();
-            m_zobObjectManagerWrapper.CreateEditorGizmos("C:\\_GIT\\directZob\\resources\\editor\\");
+            string p = Application.StartupPath;
+            p = Path.Combine(p, "..\\..\\..\\resources\\editor\\");
+            m_zobObjectManagerWrapper.CreateEditorGizmos(p);
+            UpdateTree();
+        }
+
+        private void BtnForceRefresh_Click(object sender, EventArgs e)
+        {
+            ZobObjectTree.Nodes.Clear();
             UpdateTree();
         }
     }
@@ -181,4 +211,10 @@ namespace DirectZobEditor
         public string name { get; set; }
         public ZobObjectTree[] children { get; set; }
     };
+
+    public class ObjectSelectionEventArg : EventArgs
+    {
+        public CLI.ZobObjectWrapper previousZobObject;
+        public CLI.ZobObjectWrapper newZobObject;
+    }
 }

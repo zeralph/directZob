@@ -153,6 +153,10 @@ void SceneLoader::SaveScene(std::string &path, std::string &file, ZobObjectManag
 
 void SceneLoader::SaveZobObjectRecusrive(TiXmlElement* node, ZobObject* z)
 {
+	if (z->GetType() == ZOBGUID::type_editor)
+	{
+		return;
+	}
 	TiXmlElement o = TiXmlElement("ZobObject");
 	TiXmlElement p = TiXmlElement("Position");
 	TiXmlElement r = TiXmlElement("Rotation");

@@ -24,12 +24,14 @@ namespace DirectZobEditor
             m_mainForm.OnNewScene += new EventHandler(OnNewScene);
             ClearValues();
             RefreshMeshList();
+            ZobObjectListControl z = m_mainForm.GetZobObjectListControl();
+            z.OnObjectSelected += new ZobObjectListControl.OnObjectSelectedHandler(OnZobObjectSelectionChanged);
         }
 
-        public void SetZobObjectWrapper(CLI.ZobObjectWrapper z)
+        public void OnZobObjectSelectionChanged(object s, ObjectSelectionEventArg e)
         {
-            m_zobObjectWrapper = z;
-            if(z != null)
+            m_zobObjectWrapper = e.newZobObject;
+            if (m_zobObjectWrapper != null && m_zobObjectWrapper.IsValid())
             {
                 SetValues();
                 RefreshMeshList();
@@ -69,7 +71,7 @@ namespace DirectZobEditor
 
         private void UpdateValues()
         {
-            if (m_zobObjectWrapper != null)
+            if (m_zobObjectWrapper != null && m_zobObjectWrapper.IsValid())
             {
                 CLI.ManagedVector3 p = m_zobObjectWrapper.GetTransform();
                 CLI.ManagedVector3 r = m_zobObjectWrapper.GetRotation();
@@ -139,7 +141,7 @@ namespace DirectZobEditor
             {
                 meshList.Items.Add(z[i].name);
             }
-            if(m_zobObjectWrapper != null)
+            if(m_zobObjectWrapper != null && m_zobObjectWrapper.IsValid())
             {
                 s = m_zobObjectWrapper.GetMeshName();
                 meshList.SelectedItem = s;
@@ -168,7 +170,7 @@ namespace DirectZobEditor
 
         private void MeshList_SelectedValueChanged(object sender, EventArgs e)
         {
-            if(m_zobObjectWrapper != null)
+            if(m_zobObjectWrapper != null && m_zobObjectWrapper.IsValid())
             {
                 m_zobObjectWrapper.SetMesh(meshList.SelectedItem.ToString());
             }

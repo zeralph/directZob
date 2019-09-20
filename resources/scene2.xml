@@ -1,0 +1,27 @@
+<root>
+    <Meshes>
+        <Mesh name="Terrain.obj" file="Terrain.obj" />
+        <Mesh name="cottage_obj.obj" file="cottage_obj.obj" />
+        <Mesh name="camaro.obj" file="camaro.obj" />
+    </Meshes>
+    <Scene>
+        <ZobObject name="newObject_1">
+            <Mesh>Terrain.obj</Mesh>
+            <Position x="10" y="0" z="0" />
+            <Rotation x="0" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+            <ZobObject name="newObject_2">
+                <Mesh>cottage_obj.obj</Mesh>
+                <Position x="10" y="0" z="-30" />
+                <Rotation x="0" y="45" z="0" />
+                <Scale x="1" y="1" z="1" />
+                <ZobObject name="newObject_3">
+                    <Mesh>camaro.obj</Mesh>
+                    <Position x="20" y="5" z="30" />
+                    <Rotation x="0" y="180" z="0" />
+                    <Scale x="1" y="1" z="1" />
+                </ZobObject>
+            </ZobObject>
+        </ZobObject>
+    </Scene>
+</root>

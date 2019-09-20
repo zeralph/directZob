@@ -35,12 +35,14 @@
             this.addToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.removeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rebaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.BtnForceRefresh = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.TreeNodeRightClick.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.BtnForceRefresh);
             this.groupBox1.Controls.Add(this.ZobObjectTree);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox1.Location = new System.Drawing.Point(0, 0);
@@ -52,9 +54,9 @@
             // 
             // ZobObjectTree
             // 
-            this.ZobObjectTree.Location = new System.Drawing.Point(6, 38);
+            this.ZobObjectTree.Location = new System.Drawing.Point(6, 58);
             this.ZobObjectTree.Name = "ZobObjectTree";
-            this.ZobObjectTree.Size = new System.Drawing.Size(188, 856);
+            this.ZobObjectTree.Size = new System.Drawing.Size(188, 836);
             this.ZobObjectTree.TabIndex = 0;
             this.ZobObjectTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.ZobObjectTree_AfterSelect);
             this.ZobObjectTree.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ZobObjectTree_MouseClick);
@@ -66,27 +68,37 @@
             this.removeToolStripMenuItem,
             this.rebaseToolStripMenuItem});
             this.TreeNodeRightClick.Name = "contextMenuStrip1";
-            this.TreeNodeRightClick.Size = new System.Drawing.Size(181, 92);
+            this.TreeNodeRightClick.Size = new System.Drawing.Size(124, 70);
             // 
             // addToolStripMenuItem
             // 
             this.addToolStripMenuItem.Name = "addToolStripMenuItem";
-            this.addToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.addToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.addToolStripMenuItem.Text = "Add ...";
             this.addToolStripMenuItem.Click += new System.EventHandler(this.AddToolStripMenuItem_Click);
             // 
             // removeToolStripMenuItem
             // 
             this.removeToolStripMenuItem.Name = "removeToolStripMenuItem";
-            this.removeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.removeToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.removeToolStripMenuItem.Text = "Remove";
             this.removeToolStripMenuItem.Click += new System.EventHandler(this.RemoveToolStripMenuItem_Click);
             // 
             // rebaseToolStripMenuItem
             // 
             this.rebaseToolStripMenuItem.Name = "rebaseToolStripMenuItem";
-            this.rebaseToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.rebaseToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.rebaseToolStripMenuItem.Text = "Rebase ...";
+            // 
+            // BtnForceRefresh
+            // 
+            this.BtnForceRefresh.Location = new System.Drawing.Point(6, 29);
+            this.BtnForceRefresh.Name = "BtnForceRefresh";
+            this.BtnForceRefresh.Size = new System.Drawing.Size(188, 23);
+            this.BtnForceRefresh.TabIndex = 1;
+            this.BtnForceRefresh.Text = "Refresh";
+            this.BtnForceRefresh.UseVisualStyleBackColor = true;
+            this.BtnForceRefresh.Click += new System.EventHandler(this.BtnForceRefresh_Click);
             // 
             // ZobObjectListControl
             // 
@@ -109,5 +121,6 @@
         private System.Windows.Forms.ToolStripMenuItem addToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem removeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem rebaseToolStripMenuItem;
+        private System.Windows.Forms.Button BtnForceRefresh;
     }
 }
