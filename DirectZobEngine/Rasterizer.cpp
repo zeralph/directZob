@@ -314,12 +314,18 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 			cl = 1.0f;
 			if (t->options.Lighted())
 			{
-				//cl = ((w0 * t->la + w1 * t->lb + w2 * t->lc)) + 0.1f;
-				Vector3 c = Vector3((w0 * t->na->x + w1 * t->nb->x + w2 * t->nc->x),
-									(w0 * t->na->y + w1 * t->nb->y + w2 * t->nc->y),
-									(w0 * t->na->z + w1 * t->nb->z + w2 * t->nc->z));
-				Vector3 v = Vector3(1, 1, 1);
-				cl = Vector3::Dot(&c, &v);
+				Vector3 v = Vector3(-1, -1, -1);
+				if (true)
+				{
+					Vector3 c = Vector3((w0 * t->na->x + w1 * t->nb->x + w2 * t->nc->x),
+										(w0 * t->na->y + w1 * t->nb->y + w2 * t->nc->y),
+										(w0 * t->na->z + w1 * t->nb->z + w2 * t->nc->z));
+					cl = -Vector3::Dot(&c, &v);
+				}
+				else
+				{
+					cl = -Vector3::Dot(t->n, &v);
+				}		
 			}
 			if (texData)
 			{

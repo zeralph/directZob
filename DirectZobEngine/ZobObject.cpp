@@ -52,10 +52,12 @@ const std::string ZobObject::GetMeshName() const
 void ZobObject::Update(const Matrix4x4& parentMatrix, const Matrix4x4& parentRotationMatrix)
 {
 	m_modelMatrix.Identity();
+	m_rotationMatrix.Identity();
 	m_modelMatrix.SetScale(&m_scale);
 	m_modelMatrix.SetRotation(&m_rotation);
 	m_modelMatrix.SetTranslation(&m_translation);
 	m_modelMatrix.Mul(&parentMatrix);
+	m_rotationMatrix.SetRotation(&m_rotation);
 	m_rotationMatrix.Mul(&parentRotationMatrix);
 	for (int i = 0; i < m_children.size(); i++)
 	{

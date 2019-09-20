@@ -26,11 +26,11 @@ public:
 
 	Vector3* m_vertices = NULL;
 	Vector3* m_projectedVertices = NULL;
-	Vector3* m_normals = NULL;
-
+	Vector3* m_verticesNormals = NULL;
+	Vector3* m_trianglesNormals = NULL;
 	Vector3* m_verticesData = NULL;
-	Vector3* m_normalsData = NULL;
-
+	Vector3* m_verticesNormalsData = NULL;
+	Vector3* m_trianglesNormalsData = NULL;
 	Vector2* m_uvs = NULL;
 	std::vector<Triangle> m_triangles;
 

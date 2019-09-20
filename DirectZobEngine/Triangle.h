@@ -26,6 +26,8 @@ public:
 	Vector3* nb;
 	Vector3* nc;
 
+	Vector3* n;
+
 	Vector2* ua;
 	Vector2* ub;
 	Vector2* uc;
@@ -66,6 +68,7 @@ public:
 		na->Copy(t->na);
 		nb->Copy(t->nb);
 		nc->Copy(t->nc);
+		n->Copy(t->n);
 		ua->Copy(t->ua);
 		ub->Copy(t->ub);
 		uc->Copy(t->uc);
