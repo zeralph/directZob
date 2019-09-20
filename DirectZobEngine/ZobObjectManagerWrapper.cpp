@@ -52,4 +52,14 @@ namespace CLI
 		MarshalString(editorResourcesPath, n);
 		m_Instance->CreateEditorGizmos(n);
 	}
+	ZobObjectWrapper^ ZobObjectManagerWrapper::GetEditorGizmos()
+	{
+		ZobObject* z = m_Instance->GetEditorGizmos();
+		return gcnew ZobObjectWrapper(z);
+	}
+
+	bool ZobObjectManagerWrapper::Reparent(ZobObjectWrapper^ o, ZobObjectWrapper^ parent)
+	{
+		return m_Instance->Reparent((o != nullptr) ? o->GetInstance() : NULL, (parent != nullptr) ? parent->GetInstance() : NULL);
+	}
 }

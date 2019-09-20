@@ -12,6 +12,8 @@ public:
 	ZobObjectManager();
 	~ZobObjectManager();
 
+	//friend void ZobObject::SetParent(ZobObject* o);
+
 	void UpdateObjects();
 	void DrawObjects(const Camera* camera, Core::Engine* engine);
 	ZobObject* GetZobObjectFromPartialId(const uint id) const;
@@ -23,9 +25,12 @@ public:
 	void RemoveZobObject(ZobObject* z);
 	void UnloadAll();
 	void CreateEditorGizmos(std::string& editorResourcesPath);
+	ZobObject* GetEditorGizmos() { return m_editorGizmos; }
+	bool Reparent(ZobObject *o, ZobObject* parent);
 private:
 	void GetZobObjectListInternal(const ZobObject* z, std::string& str);
 	ZobObject* LoadEditorMesh(const char* name, const char* meshPath, const char* meshFile, ZobObject* parent);
 	ZobObject* GetZobObjectFromPartialId(ZobObject* z, const uint id) const;
 	ZobObject* m_rootObject = NULL;
+	ZobObject* m_editorGizmos = NULL;
 }; 

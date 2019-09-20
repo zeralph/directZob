@@ -19,11 +19,13 @@ public:
 	virtual void Update(const Matrix4x4& parentMatrix);
 	virtual void Draw(const Camera* camera, Core::Engine* engine);
 
-	void AddChild(ZobObject* z) { m_children.push_back(z); }
+	//void AddChild(ZobObject* z) { m_children.push_back(z); }
 	const std::vector<ZobObject*>* getChildren() const { return &m_children; }
 	ZobObject* GetParent() const { return m_parent; }
+	void SetParent(ZobObject* o);
 	ZobObject* GetChild(const std::string& name);
 	ZobObject* GetChild(const int i);
+	
 	inline void SetScale(float x, float y, float z) { m_scale.x = x; m_scale.y = y; m_scale.z = z; }
 	inline void SetRotation(float x, float y, float z) { m_rotation.x = x; m_rotation.y = y; m_rotation.z = z; }
 	inline void SetTranslation(float x, float y, float z) { m_translation.x = x; m_translation.y = y; m_translation.z = z; }
@@ -40,6 +42,9 @@ public:
 	const std::string GetMeshName() const ;
 	void SetMesh(std::string name);
 protected:
+	
+	bool HasChild(const ZobObject* o);
+
 	ZobObject* m_parent = NULL;
 	Mesh* m_mesh = NULL;
 	std::vector<ZobObject*> m_children;

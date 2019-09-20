@@ -8,8 +8,8 @@ namespace CLI {
 	public ref class ManagedObject
 	{
 	protected:
-		T* m_Instance;
-		bool m_manageDelete;
+		T* m_Instance = NULL;
+		bool m_manageDelete = true;
 	public:
 		ManagedObject(T* instance, bool manageDelete)
 			: m_Instance(instance),

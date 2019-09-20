@@ -109,6 +109,10 @@ namespace DirectZobEditor
                     AppendText(textLog, json.data + "\n", Color.Red);
                 }
             }
+            if (l > 0)
+            {
+                textLog.ScrollToCaret();
+            }
         }
 
         private void AppendText(RichTextBox box, string text, Color color)
