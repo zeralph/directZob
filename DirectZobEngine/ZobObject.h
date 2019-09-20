@@ -16,7 +16,7 @@ public:
 	ZobObject(ZOBGUID::Type t, ZOBGUID::SubType s, std::string& name, Mesh* mesh, ZobObject* parent = NULL);
 	~ZobObject();
 
-	virtual void Update(const Matrix4x4& parentMatrix);
+	virtual void Update(const Matrix4x4& parentMatrix, const Matrix4x4& parentRotationMatrix);
 	virtual void Draw(const Camera* camera, Core::Engine* engine);
 
 	//void AddChild(ZobObject* z) { m_children.push_back(z); }
@@ -49,6 +49,7 @@ protected:
 	Mesh* m_mesh = NULL;
 	std::vector<ZobObject*> m_children;
 	Matrix4x4 m_modelMatrix;
+	Matrix4x4 m_rotationMatrix;
 	Vector3 m_translation;
 	Vector3 m_rotation;
 	Vector3 m_scale;

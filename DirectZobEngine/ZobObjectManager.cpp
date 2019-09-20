@@ -95,7 +95,7 @@ void ZobObjectManager::UpdateObjects()
 {
 	Matrix4x4 m;
 	m.Identity();
-	m_rootObject->Update(&m);
+	m_rootObject->Update(&m, &m);
 }
 
 void ZobObjectManager::DrawObjects(const Camera* camera, Core::Engine* engine)

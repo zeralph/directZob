@@ -10,6 +10,7 @@ Mesh::Mesh(std::string& name, std::string& path, std::string& file)
 	m_nbFaces = 0;
 	m_hasNormals = false;
 	m_vertices = NULL;
+	m_projectedVertices = NULL;
 	m_normals = NULL;
 	m_uvs = NULL;
 	m_name = name;
@@ -70,6 +71,7 @@ Mesh::Mesh(std::string& name, std::string& path, std::string& file)
 		m_nbNormals = 1;
 	}
 	m_vertices = (Vector3*)malloc(sizeof(Vector3) * m_nbVertices);
+	m_projectedVertices = (Vector3*)malloc(sizeof(Vector3) * m_nbVertices);
 	m_verticesData = (Vector3*)malloc(sizeof(Vector3) * m_nbVertices);
 	m_uvs = (Vector2*)malloc(sizeof(Vector2) * m_nbUvs);
 	m_normals = (Vector3*)malloc(sizeof(Vector3) * m_nbNormals);
@@ -137,8 +139,8 @@ Mesh::Mesh(std::string& name, std::string& path, std::string& file)
 			CreateTriangles(&v, &m_triangles, curface, tex);
 		}
 	}
-	memcpy(m_verticesData, m_vertices, sizeof(Vector3) * m_nbVertices);
-	memcpy(m_normalsData, m_normals, sizeof(Vector3) * m_nbNormals);
+	memcpy(m_verticesData, m_vertices, sizeof(Vector3)* m_nbVertices);
+	memcpy(m_normalsData, m_normals, sizeof(Vector3)* m_nbNormals);
 
 	s = "Mesh loaded : " + std::string(fullPath);
 	DirectZob::LogInfo(s.c_str());
@@ -183,7 +185,7 @@ void Mesh::ReinitVertices()
 	memcpy(m_normals, m_normalsData, sizeof(Vector3) * m_nbNormals);
 }
 
-void Mesh::Draw(const Matrix4x4 &modelMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions options)
+void Mesh::Draw(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions options)
 {
 	ReinitVertices();
 	BufferData* bData = engine->GetBufferData();
@@ -198,15 +200,22 @@ void Mesh::Draw(const Matrix4x4 &modelMatrix, const Camera* camera, Core::Engine
 	for (uint i = 0; i < m_nbVertices; i++)
 	{
 		modelMatrix.Mul(&m_vertices[i]);
-		view->Mul(&m_vertices[i]);
-		proj->Mul(&m_vertices[i]);
-		m_vertices[i].x = (m_vertices[i].x / m_vertices[i].z + 1) * w;
-		m_vertices[i].y = (m_vertices[i].y / m_vertices[i].z + 1) * h;
+		
+		m_projectedVertices[i].x = m_vertices[i].x;
+		m_projectedVertices[i].y = m_vertices[i].y;
+		m_projectedVertices[i].z = m_vertices[i].z;
+		m_projectedVertices[i].w = m_vertices[i].w;
 
+		view->Mul(&m_projectedVertices[i]);
+		proj->Mul(&m_projectedVertices[i]);
+		m_projectedVertices[i].x = (m_projectedVertices[i].x / m_projectedVertices[i].z + 1) * w;
+		m_projectedVertices[i].y = (m_projectedVertices[i].y / m_projectedVertices[i].z + 1) * h;
+		//m_projectedVertices[i].z = m_vertices[i].z;
+		//m_projectedVertices[i].w = m_vertices[i].w;
 	}
 	for (uint i = 0; i < m_nbNormals; i++)
 	{
-		m_modelMatrixRotationOnly.Mul(&m_normals[i]);
+		rotationMatrix.Mul(&m_normals[i]);
 		m_normals[i].Normalize();
 	}
 	int w2 = bData->width / 2;
@@ -217,7 +226,7 @@ void Mesh::Draw(const Matrix4x4 &modelMatrix, const Camera* camera, Core::Engine
 	Vector3 light = Vector3(0.1f, 1.0f, 0.1f);
 	light.Normalize();
 	uint drawnFaces = 0;
-	for (int i = 0; i < m_nbFaces; i ++)
+	for (int i = 0; i < m_nbFaces; i++)
 	{
 		Triangle* t = &m_triangles[i];
 		t->draw = false;
@@ -229,11 +238,26 @@ void Mesh::Draw(const Matrix4x4 &modelMatrix, const Camera* camera, Core::Engine
 			n.Add(t->nb);
 			n.Add(t->nc);
 			n.Div(3.0f);
-			if (Vector3::Dot(&n, camZ) < 0.5f || engine->WireFrame())
+			bool bCull = false;
+			if (false)	//draw normals
 			{
+				Vector3 p1 = Vector3((t->va->x + t->vb->x + t->vc->x) / 3.0f,
+					(t->vb->y + t->vb->y + t->vc->y) / 3.0f,
+					(t->va->z + t->vb->z + t->vc->z) / 3.0f);
+				Vector3 p2 = p1 + n;
+				engine->QueueLine(camera, &p1, &p2, 0xFFFFFFFF);
+			}
+
+
 				t->ComputeArea();
 				static float a = 50000.0f;
-				if (t->area > 0 && t->area < a)
+				float area = t->area;
+				if (engine->GetCullMode() == Engine::CullCounterClockwiseFace)
+				{
+					area = -area;
+				}
+
+				if ((engine->GetCullMode() == Engine::None || area > 0) && abs(area) < a)
 				{
 					t->owner = ownerId;
 					t->ComputeLighting(&light);
@@ -241,7 +265,6 @@ void Mesh::Draw(const Matrix4x4 &modelMatrix, const Camera* camera, Core::Engine
 					engine->QueueTriangle(t);
 					drawnFaces++;
 				}
-			}
 		}
 	}
 	drawnFaces;
@@ -249,7 +272,8 @@ void Mesh::Draw(const Matrix4x4 &modelMatrix, const Camera* camera, Core::Engine
 
 inline bool Mesh::RejectTriangle(const Triangle* t, const float znear, const float zfar, const float width, const float height)
 {
-	if (t->va->x < 0 && t->vb->x < 0 && t->vc->x < 0)
+	//return false;
+	if (t->pa->x < 0 && t->pb->x < 0 && t->pc->x < 0)
 	{
 		return true;
 	}
@@ -257,19 +281,19 @@ inline bool Mesh::RejectTriangle(const Triangle* t, const float znear, const flo
 	{
 		return true;
 	}
-	if (t->va->y > height && t->vb->y > height && t->vc->y > height)
+	if (t->pa->y > height && t->pb->y > height && t->pc->y > height)
 	{
 		return true;
 	}
-	if (t->va->y < 0 && t->vb->y < 0 && t->vc->y < 0)
+	if (t->pa->y < 0 && t->pb->y < 0 && t->pc->y < 0)
 	{
 		return true;
 	}
-	if (t->va->w < znear || t->vb->w < znear || t->vc->w < znear)
+	if (t->pa->w < znear || t->pb->w < znear || t->pc->w < znear)
 	{
 		return true;
 	}
-	if (t->va->w > zfar || t->vb->w > zfar || t->vc->w > zfar)
+	if (t->pa->w > zfar || t->pb->w > zfar || t->pc->w > zfar)
 	{
 		return true;
 	}
@@ -303,6 +327,7 @@ void Mesh::CreateTriangles(const std::vector<std::string>* line, std::vector<Tri
 		vec.clear();
 		SplitEntry(&line->at(a), &vec, '/');
 		t.va = &m_vertices[std::stoi(vec[0], &sz) - 1];
+		t.pa = &m_projectedVertices[std::stoi(vec[0], &sz) - 1];
 		if (vec[1].size() > 0)
 			t.ua = &m_uvs[std::stoi(vec[1], &sz) - 1];
 		else
@@ -319,6 +344,7 @@ void Mesh::CreateTriangles(const std::vector<std::string>* line, std::vector<Tri
 		vec.clear();
 		SplitEntry(&line->at(b), &vec, '/');
 		t.vb = &m_vertices[std::stoi(vec[0], &sz) - 1];
+		t.pb = &m_projectedVertices[std::stoi(vec[0], &sz) - 1];
 		if (vec[1].size() > 0)
 			t.ub = &m_uvs[std::stoi(vec[1], &sz) - 1];
 		else
@@ -335,6 +361,7 @@ void Mesh::CreateTriangles(const std::vector<std::string>* line, std::vector<Tri
 		vec.clear();
 		SplitEntry(&line->at(c), &vec, '/');
 		t.vc = &m_vertices[std::stoi(vec[0], &sz) - 1];
+		t.pc = &m_projectedVertices[std::stoi(vec[0], &sz) - 1];
 		if (vec[1].size() > 0)
 			t.uc = &m_uvs[std::stoi(vec[1], &sz) - 1];
 		else

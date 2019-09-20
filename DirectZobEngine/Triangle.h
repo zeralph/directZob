@@ -18,6 +18,10 @@ public:
 	Vector3* vb;
 	Vector3* vc;
 
+	Vector3* pa;
+	Vector3* pb;
+	Vector3* pc;
+
 	Vector3* na;
 	Vector3* nb;
 	Vector3* nc;
@@ -37,7 +41,8 @@ public:
 
 	inline void ComputeArea()
 	{
-		area = (vc->x - va->x) * (vb->y - va->y) - (vc->y - va->y) * (vb->x - va->x);
+		area = (pc->x - pa->x) * (pb->y - pa->y) - (pc->y - pa->y) * (pb->x - pa->x);
+		//area = (vc->x - va->x) * (vb->y - va->y) - (vc->y - va->y) * (vb->x - va->x);
 	}
 
 	inline void ComputeLighting(Vector3* v)
@@ -54,7 +59,10 @@ public:
 	{
 		va->Copy(t->va);
 		vb->Copy(t->vb);
-		vc->Copy(t->vc);  
+		vc->Copy(t->vc);
+		pa->Copy(t->pa);
+		pb->Copy(t->pb);
+		pc->Copy(t->pc);
 		na->Copy(t->na);
 		nb->Copy(t->nb);
 		nc->Copy(t->nc);
