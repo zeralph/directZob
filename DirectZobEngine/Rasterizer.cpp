@@ -312,10 +312,11 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 			su = w0 * t->ua->x + w1 * t->ub->x + w2 * t->uc->x;
 			tu = w0 * t->ua->y + w1 * t->ub->y + w2 * t->uc->y;
 			cl = 1.0f;
-			if (t->options.Lighted())
+			RenderOptions::eLightMode lighting = t->options.LightMode();
+			if (lighting != RenderOptions::eLightMode_none)
 			{
 				Vector3 v = Vector3(-1, -1, -1);
-				if (true)
+				if (lighting == RenderOptions::eLightMode_gouraud)
 				{
 					Vector3 c = Vector3((w0 * t->na->x + w1 * t->nb->x + w2 * t->nc->x),
 										(w0 * t->na->y + w1 * t->nb->y + w2 * t->nc->y),

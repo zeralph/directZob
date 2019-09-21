@@ -36,9 +36,18 @@ public:
 
 	struct RenderOptions
 	{
+		//			7			6			5			4			3			2			1			0
+		//	 ZBuffer|    Lighting mode      |
+
+		enum eLightMode
+		{
+			eLightMode_none = 0,
+			eLightMode_flat,
+			eLightMode_gouraud,
+		};
 		char flag = 0xFF;
-		inline const bool Lighted() const { return flag & 0x80; }
-		void Lighted(const bool b)
+		inline const bool ZBuffered() const { return flag & 0x80; }
+		void ZBuffered(const bool b)
 		{
 			if (b)
 			{
@@ -49,18 +58,18 @@ public:
 				flag &= 0x7F;
 			}
 		}
-		inline const bool ZBuffered() const { return flag & 0x40; }
-		void ZBuffered(const bool b)
+		inline const eLightMode LightMode() const 
+		{ 
+			int c = (flag & 0x60) >> 5;
+			return (eLightMode)c;
+		}
+		void LightMode(eLightMode l)
 		{
-			if (b)
-			{
-				flag |= 0x40;
-			}
-			else
-			{
-				flag &= 0xBF;
-			}
-		};
+			flag &= 0x9F;
+			int c = (int)l;
+			c = c << 5;
+			flag |= c;
+		}
 	};
 };
 

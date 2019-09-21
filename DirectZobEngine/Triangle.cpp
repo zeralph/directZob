@@ -5,21 +5,21 @@
 Triangle::Triangle()
 {
 	tex = NULL;
-	va = NULL;
-	vb = NULL;
-	vc = NULL;
+	va = new Vector3();
+	vb = new Vector3();
+	vc = new Vector3();
 
-	pa = NULL;
-	pb = NULL;
-	pc = NULL;
+	pa = new Vector3();
+	pb = new Vector3();
+	pc = new Vector3();
 
-	na = NULL;
-	nb = NULL;
-	nc = NULL;
+	na = new Vector3();
+	nb = new Vector3();
+	nc = new Vector3();
 
-	ua = NULL;
-	ub = NULL;
-	uc = NULL;
+	ua = new Vector2();
+	ub = new Vector2();
+	uc = new Vector2();
 
 	draw = false;
 }

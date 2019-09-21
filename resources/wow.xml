@@ -1,0 +1,32 @@
+<root>
+    <Meshes>
+        <Mesh name="transform" file="transform.obj" />
+        <Mesh name="transformX" file="transformX.obj" />
+        <Mesh name="transformY" file="transformY.obj" />
+        <Mesh name="transformZ" file="transformZ.obj" />
+        <Mesh name="rotate" file="rotate.obj" />
+        <Mesh name="rotateX" file="rotateX.obj" />
+        <Mesh name="rotateY" file="rotateY.obj" />
+        <Mesh name="rotateZ" file="rotateZ.obj" />
+        <Mesh name="scale" file="scale.obj" />
+        <Mesh name="scaleX" file="scaleX.obj" />
+        <Mesh name="scaleY" file="scaleY.obj" />
+        <Mesh name="scaleZ" file="scaleZ.obj" />
+        <Mesh name="terrain2.obj" file="terrain2.obj" />
+        <Mesh name="camaro.obj" file="camaro.obj" />
+    </Meshes>
+    <Scene>
+        <ZobObject name="newObject_1">
+            <Mesh>terrain2.obj</Mesh>
+            <Position x="0" y="0" z="0" />
+            <Rotation x="0" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+        </ZobObject>
+        <ZobObject name="newObject_2">
+            <Mesh>camaro.obj</Mesh>
+            <Position x="0" y="0" z="0" />
+            <Rotation x="0" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+        </ZobObject>
+    </Scene>
+</root>

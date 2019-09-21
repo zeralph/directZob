@@ -177,7 +177,7 @@ ZobObject* ZobObjectManager::LoadEditorMesh(const char* name, const char* meshPa
 	std::string m = std::string(meshFile);
 	Mesh* mesh = meshMgr->LoadMesh(n, p, m);
 	ZobObject* transform = new ZobObject(ZOBGUID::type_internal, ZOBGUID::subtype_zobOject, n, mesh, parent);
-	transform->GetRenderOptions().Lighted(false);
+	transform->GetRenderOptions().LightMode(RenderOptions::eLightMode_flat);
 	transform->GetRenderOptions().ZBuffered(false);
 	return transform;
 }

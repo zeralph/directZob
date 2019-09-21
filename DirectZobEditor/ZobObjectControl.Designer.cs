@@ -29,6 +29,12 @@
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.LightingModeBox = new System.Windows.Forms.ComboBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.meshList = new System.Windows.Forms.ComboBox();
+            this.label5 = new System.Windows.Forms.Label();
             this.zobScaleZ = new System.Windows.Forms.TextBox();
             this.zobScaleY = new System.Windows.Forms.TextBox();
             this.zobScaleX = new System.Windows.Forms.TextBox();
@@ -43,13 +49,15 @@
             this.label2 = new System.Windows.Forms.Label();
             this.zobName = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.meshList = new System.Windows.Forms.ComboBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.textBox1);
+            this.groupBox1.Controls.Add(this.label7);
+            this.groupBox1.Controls.Add(this.LightingModeBox);
+            this.groupBox1.Controls.Add(this.label6);
             this.groupBox1.Controls.Add(this.meshList);
             this.groupBox1.Controls.Add(this.label5);
             this.groupBox1.Controls.Add(this.zobScaleZ);
@@ -69,14 +77,75 @@
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox1.Location = new System.Drawing.Point(0, 0);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(249, 224);
+            this.groupBox1.Size = new System.Drawing.Size(249, 457);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "ZobObject";
             // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(59, 33);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.ReadOnly = true;
+            this.textBox1.Size = new System.Drawing.Size(162, 20);
+            this.textBox1.TabIndex = 27;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(37, 36);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(16, 13);
+            this.label7.TabIndex = 26;
+            this.label7.Text = "Id";
+            // 
+            // LightingModeBox
+            // 
+            this.LightingModeBox.AutoCompleteCustomSource.AddRange(new string[] {
+            "Flat shading",
+            "Gouraud shading",
+            "No shading"});
+            this.LightingModeBox.FormattingEnabled = true;
+            this.LightingModeBox.Items.AddRange(new object[] {
+            "No lighting",
+            "Flat shading",
+            "Gouraud shading"});
+            this.LightingModeBox.Location = new System.Drawing.Point(59, 190);
+            this.LightingModeBox.Name = "LightingModeBox";
+            this.LightingModeBox.Size = new System.Drawing.Size(162, 21);
+            this.LightingModeBox.TabIndex = 25;
+            this.LightingModeBox.SelectedIndexChanged += new System.EventHandler(this.LightingModeBox_SelectedIndexChanged);
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(9, 194);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(44, 13);
+            this.label6.TabIndex = 24;
+            this.label6.Text = "Lighting";
+            // 
+            // meshList
+            // 
+            this.meshList.FormattingEnabled = true;
+            this.meshList.Location = new System.Drawing.Point(59, 163);
+            this.meshList.Name = "meshList";
+            this.meshList.Size = new System.Drawing.Size(162, 21);
+            this.meshList.TabIndex = 23;
+            this.meshList.SelectedValueChanged += new System.EventHandler(this.MeshList_SelectedValueChanged);
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(20, 167);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(33, 13);
+            this.label5.TabIndex = 22;
+            this.label5.Text = "Mesh";
+            // 
             // zobScaleZ
             // 
-            this.zobScaleZ.Location = new System.Drawing.Point(172, 156);
+            this.zobScaleZ.Location = new System.Drawing.Point(171, 137);
             this.zobScaleZ.Name = "zobScaleZ";
             this.zobScaleZ.Size = new System.Drawing.Size(50, 20);
             this.zobScaleZ.TabIndex = 21;
@@ -86,7 +155,7 @@
             // 
             // zobScaleY
             // 
-            this.zobScaleY.Location = new System.Drawing.Point(116, 156);
+            this.zobScaleY.Location = new System.Drawing.Point(115, 137);
             this.zobScaleY.Name = "zobScaleY";
             this.zobScaleY.Size = new System.Drawing.Size(50, 20);
             this.zobScaleY.TabIndex = 20;
@@ -96,7 +165,7 @@
             // 
             // zobScaleX
             // 
-            this.zobScaleX.Location = new System.Drawing.Point(60, 156);
+            this.zobScaleX.Location = new System.Drawing.Point(59, 137);
             this.zobScaleX.Name = "zobScaleX";
             this.zobScaleX.Size = new System.Drawing.Size(50, 20);
             this.zobScaleX.TabIndex = 19;
@@ -107,7 +176,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(7, 159);
+            this.label4.Location = new System.Drawing.Point(19, 140);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(34, 13);
             this.label4.TabIndex = 18;
@@ -115,7 +184,7 @@
             // 
             // zobRotZ
             // 
-            this.zobRotZ.Location = new System.Drawing.Point(172, 117);
+            this.zobRotZ.Location = new System.Drawing.Point(171, 111);
             this.zobRotZ.Name = "zobRotZ";
             this.zobRotZ.Size = new System.Drawing.Size(50, 20);
             this.zobRotZ.TabIndex = 17;
@@ -125,7 +194,7 @@
             // 
             // zobRotY
             // 
-            this.zobRotY.Location = new System.Drawing.Point(116, 117);
+            this.zobRotY.Location = new System.Drawing.Point(115, 111);
             this.zobRotY.Name = "zobRotY";
             this.zobRotY.Size = new System.Drawing.Size(50, 20);
             this.zobRotY.TabIndex = 16;
@@ -135,7 +204,7 @@
             // 
             // zobRotX
             // 
-            this.zobRotX.Location = new System.Drawing.Point(60, 117);
+            this.zobRotX.Location = new System.Drawing.Point(59, 111);
             this.zobRotX.Name = "zobRotX";
             this.zobRotX.Size = new System.Drawing.Size(50, 20);
             this.zobRotX.TabIndex = 15;
@@ -146,7 +215,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(7, 120);
+            this.label3.Location = new System.Drawing.Point(6, 114);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(47, 13);
             this.label3.TabIndex = 14;
@@ -154,7 +223,7 @@
             // 
             // zobPosZ
             // 
-            this.zobPosZ.Location = new System.Drawing.Point(172, 78);
+            this.zobPosZ.Location = new System.Drawing.Point(171, 85);
             this.zobPosZ.Name = "zobPosZ";
             this.zobPosZ.Size = new System.Drawing.Size(50, 20);
             this.zobPosZ.TabIndex = 13;
@@ -164,7 +233,7 @@
             // 
             // zobPosY
             // 
-            this.zobPosY.Location = new System.Drawing.Point(116, 78);
+            this.zobPosY.Location = new System.Drawing.Point(115, 85);
             this.zobPosY.Name = "zobPosY";
             this.zobPosY.Size = new System.Drawing.Size(50, 20);
             this.zobPosY.TabIndex = 12;
@@ -174,7 +243,7 @@
             // 
             // zobPosX
             // 
-            this.zobPosX.Location = new System.Drawing.Point(60, 78);
+            this.zobPosX.Location = new System.Drawing.Point(59, 85);
             this.zobPosX.Name = "zobPosX";
             this.zobPosX.Size = new System.Drawing.Size(50, 20);
             this.zobPosX.TabIndex = 11;
@@ -185,7 +254,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(7, 81);
+            this.label2.Location = new System.Drawing.Point(9, 88);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(44, 13);
             this.label2.TabIndex = 10;
@@ -193,7 +262,7 @@
             // 
             // zobName
             // 
-            this.zobName.Location = new System.Drawing.Point(60, 42);
+            this.zobName.Location = new System.Drawing.Point(59, 59);
             this.zobName.Name = "zobName";
             this.zobName.Size = new System.Drawing.Size(162, 20);
             this.zobName.TabIndex = 1;
@@ -201,29 +270,11 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(7, 42);
+            this.label1.Location = new System.Drawing.Point(18, 62);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(35, 13);
             this.label1.TabIndex = 0;
             this.label1.Text = "Name";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(7, 187);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(33, 13);
-            this.label5.TabIndex = 22;
-            this.label5.Text = "Mesh";
-            // 
-            // meshList
-            // 
-            this.meshList.FormattingEnabled = true;
-            this.meshList.Location = new System.Drawing.Point(60, 183);
-            this.meshList.Name = "meshList";
-            this.meshList.Size = new System.Drawing.Size(162, 21);
-            this.meshList.TabIndex = 23;
-            this.meshList.SelectedValueChanged += new System.EventHandler(this.MeshList_SelectedValueChanged);
             // 
             // ZobObjectControl
             // 
@@ -231,7 +282,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.groupBox1);
             this.Name = "ZobObjectControl";
-            this.Size = new System.Drawing.Size(249, 224);
+            this.Size = new System.Drawing.Size(249, 457);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
@@ -257,5 +308,9 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ComboBox meshList;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.ComboBox LightingModeBox;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Label label7;
     }
 }

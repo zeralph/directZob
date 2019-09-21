@@ -146,7 +146,7 @@ Mesh::Mesh(std::string& name, std::string& path, std::string& file)
 	}
 	memcpy(m_verticesData, m_vertices, sizeof(Vector3)* m_nbVertices);
 	memcpy(m_verticesNormalsData, m_verticesNormals, sizeof(Vector3)* m_nbNormals);
-	memcpy(m_trianglesNormals, m_trianglesNormals, sizeof(Vector3)* m_nbFaces);
+	memcpy(m_trianglesNormalsData, m_trianglesNormals, sizeof(Vector3)* m_nbFaces);
 	s = "Mesh loaded : " + std::string(fullPath);
 	DirectZob::LogInfo(s.c_str());
 }
@@ -241,13 +241,13 @@ void Mesh::Draw(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, c
 		Triangle* t = &m_triangles[i];
 		t->draw = false;
 		t->options.ZBuffered(options.ZBuffered());
-		t->options.Lighted(options.Lighted());
+		t->options.LightMode(options.LightMode());
 		if (!RejectTriangle(t, znear, zfar, (float)bData->width, (float)bData->height))
 		{
-			t->n->Set(t->na);
-			t->n->Add(t->nb);
-			t->n->Add(t->nc);
-			t->n->Div(3.0f);
+			//t->n->Set(t->na);
+			//t->n->Add(t->nb);
+			//t->n->Add(t->nc);
+			//t->n->Div(3.0f);
 			bool bCull = false;
 			if (false)	//draw normals
 			{
