@@ -1,3 +1,4 @@
+#ifdef _WINDLL
 #pragma once
 #include "ManagedObject.h"
 #include "DirectZob.h"
@@ -26,3 +27,4 @@ namespace CLI
 		static DirectZob* m_directZobInstance=NULL;
 	};
 }
+#endif //_WINDLL

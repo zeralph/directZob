@@ -1,3 +1,4 @@
+#ifdef _WINDLL
 #pragma once
 #include "ManagedObject.h"
 #include "ZobObjectManager.h"
@@ -24,3 +25,4 @@ namespace CLI
 
 	};
 }
+#endif //_WINDLL

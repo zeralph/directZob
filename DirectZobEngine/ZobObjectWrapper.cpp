@@ -1,3 +1,4 @@
+#ifdef _WINDLL
 #include "ZobObjectWrapper.h"
 
 namespace CLI
@@ -87,3 +88,4 @@ namespace CLI
 		m_Instance->SetLightingMode(l);
 	}
 }
+#endif //_WINDLL

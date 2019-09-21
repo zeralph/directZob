@@ -315,7 +315,7 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 			RenderOptions::eLightMode lighting = t->options.LightMode();
 			if (lighting != RenderOptions::eLightMode_none)
 			{
-				Vector3 v = Vector3(-1, -1, -1);
+				Vector3 v = Vector3(1, -1, 1);
 				if (lighting == RenderOptions::eLightMode_gouraud)
 				{
 					Vector3 c = Vector3((w0 * t->na->x + w1 * t->nb->x + w2 * t->nc->x),

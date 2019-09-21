@@ -122,15 +122,20 @@ int main()
 	mfb_mouse_scroll_callback(window, mouse_scroll);
 
 	m_directZob.Init();
-
+	std::string path = "C:\\_GIT\\directZob\\resources\\";
+	std::string file = "scene1.xml";
+	m_directZob.LoadScene(path, file);
+	float rot = 0.0f;
 	for (;;)
 	{
+		m_directZob.GetZobObjectManager()->GetRootObject()->SetRotation(90, rot, 0);
 		m_directZob.RunAFrame();
 		int state = mfb_update(window, (void*)m_directZob.GetBufferData() );
 		if (state < 0)
 		{
 			break;
 		}
+		rot += 1.0f;
 	}
 	mfb_close(window);
 

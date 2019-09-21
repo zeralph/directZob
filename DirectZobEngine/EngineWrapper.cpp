@@ -1,3 +1,4 @@
+#ifdef _WINDLL
 #include "EngineWrapper.h"
 
 namespace CLI
@@ -29,3 +30,4 @@ namespace CLI
 		}
 	}
 }
+#endif //_WINDLL

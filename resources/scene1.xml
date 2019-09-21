@@ -7,19 +7,14 @@
         <Mesh name="man" file="man.obj" />
         <Mesh name="cottage_obj" file="cottage_obj.obj" />
         <Mesh name="camaro" file="camaro.obj" />
+		<Mesh name="skull" file="skull.obj" />
     </Meshes>
     <Scene>
-        <ZobObject name="Beach2">
-            <Mesh>beach3</Mesh>
-            <Position x="-10" y="0" z="-10" />
+        <ZobObject name="camaro">
+            <Mesh>skull</Mesh>
+            <Position x="0" y="0" z="0" />
             <Rotation x="0" y="0" z="0" />
-            <Scale x="1" y="1" z="1" />
-            <ZobObject name="Water">
-                <Mesh>water</Mesh>
-                <Position x="0" y="0" z="0" />
-                <Rotation x="0" y="0" z="0" />
-                <Scale x="1" y="1" z="1" />
-            </ZobObject>
+            <Scale x="2" y="2" z="2" />
         </ZobObject>
     </Scene>
 </root>

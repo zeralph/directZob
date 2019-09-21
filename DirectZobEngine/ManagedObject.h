@@ -1,3 +1,4 @@
+#ifdef _WINDLL
 #pragma once
 #include <string> 
 #include <iostream>
@@ -42,3 +43,4 @@ namespace CLI {
 		}
 	};
 }
+#endif //_WINDLL
