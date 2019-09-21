@@ -21,6 +21,7 @@ namespace CLI {
 		System::String^ GetMeshName();
 		void SetMesh(System::String^ name);
 		bool IsValid()  { return m_isValid; }
+		void SetLightingMode(int lightMode);
 	private:
 		bool m_isValid;
 	};

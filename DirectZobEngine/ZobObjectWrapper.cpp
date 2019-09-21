@@ -80,4 +80,10 @@ namespace CLI
 		Vector3 v = p->ToVector3();
 		m_Instance->SetScale(v.x, v.y, v.z);
 	}
+
+	void ZobObjectWrapper::SetLightingMode(int lightMode)
+	{
+		RenderOptions::eLightMode l = (RenderOptions::eLightMode)lightMode;
+		m_Instance->SetLightingMode(l);
+	}
 }

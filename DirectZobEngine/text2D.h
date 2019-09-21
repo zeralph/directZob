@@ -11,7 +11,7 @@ class Text2D
 {
 public:
 
-	Text2D(Engine* engine, const Material* tex, int nbCharWidth, int bCharHeight, Events* events);
+	Text2D(Engine* engine, std::string &fontImageFile, int nbCharWidth, int bCharHeight, Events* events);
 	~Text2D();
 	void Print(uint x, uint y, uint size, const std::string* text, uint color);
 
@@ -19,9 +19,11 @@ private:
 
 	void PrintChar(uint x, uint y, uint size, const char c, uint color);
 
-	Events* m_events;
-	const Material* m_texture;
 	Engine* m_engine;
+	Events* m_events;
+	float* m_data;
+	uint m_texWidth;
+	uint m_texHeight;
 	uint m_charWidth;
 	uint m_charHeight;
 	uint m_nbCharWidth;

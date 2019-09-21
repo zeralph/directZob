@@ -81,14 +81,15 @@ namespace Core
 		inline bool ShowGrid() { return m_showGrid; }
 		inline bool WireFrame() { return m_wireFrame; }
 		uint GetObjectIdAtCoords(uint x, uint y);
-		std::string GetObjectList();
 		const CullMode GetCullMode() const { return m_cullMode; }
 		void SetCullMode(const CullMode c) { m_cullMode = c; }
+		void WaitForRasterizersEnd();
+		void ClearRenderQueues();
 	private:
 
 		inline float clamp2(float x, float min, float max) const { if (x < min) x = min; if (x > max) x = max; return x; }
 		void DrawHorizontalLine(const float x1, const float x2, const float y, const uint color);
-		void WaitForRasterizersEnd() const;
+		
 
 		Events* m_events;
 		Triangle** m_rasterTriangleQueues;

@@ -175,3 +175,8 @@ bool ZobObject::HasChild(const ZobObject* o)
 		return bRet;
 	}
 }
+
+void ZobObject::SetLightingMode(RenderOptions::eLightMode l)
+{
+	m_renderOptions.LightMode(l);
+}

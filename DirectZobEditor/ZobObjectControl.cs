@@ -181,5 +181,13 @@ namespace DirectZobEditor
             m_zobObjectWrapper = null;
             UpdateValues();
         }
+
+        private void LightingModeBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (m_zobObjectWrapper != null && m_zobObjectWrapper.IsValid())
+            {
+                m_zobObjectWrapper.SetLightingMode(LightingModeBox.SelectedIndex);
+            }
+        }
     }
 }

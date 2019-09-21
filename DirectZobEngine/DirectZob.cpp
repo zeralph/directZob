@@ -37,8 +37,11 @@ std::string DirectZob::ExePath() {
 void DirectZob::LoadScene(std::string& path, std::string& file)
 {
 	SceneLoader::LoadScene(path, file, m_zobObjectManager, m_meshManager, m_materialManager);
-	std::string font("Font");
-	m_text = new Text2D(m_engine, m_materialManager->GetTexture(font), 32, 8, m_events);
+	if (m_text == NULL)
+	{
+		std::string font = "C:\\_GIT\\directZob\\resources\\font2.png";
+		m_text = new Text2D(m_engine, font, 32, 8, m_events);
+	}
 }
 
 void DirectZob::SaveScene(std::string& path, std::string& file)
@@ -54,8 +57,11 @@ void DirectZob::SaveScene()
 void DirectZob::NewScene()
 {
 	SceneLoader::NewScene(m_engine, m_zobObjectManager, m_meshManager, m_materialManager);
-	std::string font("Font");
-	m_text = new Text2D(m_engine, m_materialManager->GetTexture(font), 32, 8, m_events);
+	if (m_text == NULL)
+	{
+		std::string font = "C:\\_GIT\\directZob\\resources\\font2.png";
+		m_text = new Text2D(m_engine, font, 32, 8, m_events);
+	}
 }
 
 bool DirectZob::CanFastSave()
@@ -90,39 +96,24 @@ int DirectZob::RunAFrame()
 	int state=0;
 	if(m_engine->Started())
 	{
-		//m_engine->ClearBuffer(&Color(255,63,149,255));
-		m_engine->ClearBuffer(&Color::White);
 
+		m_engine->ClearBuffer(&Color::White);
+		m_engine->StartDrawingScene();
 		Camera* cam = m_cameraManager->GetCurrentCamera();
 		cam->Update();
-
-		if(m_engine->ShowGrid())
+		m_zobObjectManager->UpdateObjects();
+		m_engine->WaitForRasterizersEnd();
+		m_engine->ClearRenderQueues();
+		clock_t tick = clock();
+		m_zobObjectManager->DrawObjects(cam, m_engine);
+		if (m_engine->ShowGrid())
 		{
 			m_engine->DrawGrid(cam);
 		}
-		clock_t tick = clock();
-		m_zobObjectManager->UpdateObjects();
-		m_zobObjectManager->DrawObjects(cam, m_engine);
-		m_engine->SetGeometryTime( (float)(clock() - tick) / CLOCKS_PER_SEC * 1000);
-
-		m_engine->StartDrawingScene();
-		m_engine->EndDrawingScene();
 		if (m_text)
 		{
 			snprintf(buffer, MAX_PATH, "Triangles : %lu / %lu", m_engine->GetNbDrawnTriangles(), m_engine->GetNbTriangles());
 			m_text->Print(0, 0, 1, &std::string(buffer), 0xFFFFFFFF);
-
-			const Vector3* cp = cam->GetPosition();
-			const Vector3* ct = cam->GetTarget();
-			const Vector3* cf = cam->GetForward();
-			snprintf(buffer, MAX_PATH, "Cam %s pos :  %.2f, %.2f, %.2f, tar : %.2f, %.2f, %.2f, fw : %.2f, %.2f, %.2f",
-				cam->GetName().c_str(),
-				cp->x, cp->y, cp->z,
-				ct->x, ct->y, ct->z,
-				cf->x, cf->y, cf->z
-			);
-			m_text->Print(0, 8, 1, &std::string(buffer), 0xFFFFFFFF);
-
 			snprintf(buffer, MAX_PATH, "render : %06.2fms, geom : %06.2f, tot : %06.2f, FPS : %06.2f", m_engine->GetRenderTime(), m_engine->GetGeometryTime(), m_engine->GetFrameTime(), m_engine->GetFps());
 			float t = m_engine->GetFps();
 			t = (1.0f / t) * 1000.0f;
@@ -136,6 +127,8 @@ int DirectZob::RunAFrame()
 				m_text->Print(0, 16, 1, &std::string(buffer), 0xFFFF0000);
 			}
 		}
+		m_engine->SetGeometryTime((float)(clock() - tick) / CLOCKS_PER_SEC * 1000);
+		m_engine->EndDrawingScene();
 	}
 	return state;
 }

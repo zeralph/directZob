@@ -89,6 +89,8 @@ Engine::Engine(int width, int height, Events* events)
 	}
 	for (int i = 0; i < m_nbRasterizers; i++)
 	{
+		m_rasterLineQueues[i].clear();
+		m_rasterNbTriangleQueues[i] = 0;
 		m_rasterizers->at(i)->Init();
 	}
 	std::string n = "Engine initialized with " + std::to_string(m_nbRasterizers) + " rasterizer(s) for " + std::to_string(m_triangleQueueSize) +  " triangles per image";
@@ -118,6 +120,7 @@ void Engine::Stop()
 {
 	m_started = false;
 	WaitForRasterizersEnd();
+	ClearRenderQueues();
 }
 
 void Engine::Resize(int width, int height)
@@ -177,13 +180,13 @@ void Engine::ClearBuffer(const Color* color)
 		m_zBuffer[i] = 0;
 		m_oBuffer[i] = 0;
 	}
-	//memset(m_zBuffer, 0, sizeof(float) * m_width * m_height);
-	for (int i = 0; i < m_nbRasterizers; i++)
+	
+	/*for (int i = 0; i < m_nbRasterizers; i++)
 	{
 		//m_rasterTriangleQueues[i].clear();
 		m_rasterLineQueues[i].clear();
 		m_rasterNbTriangleQueues[i] = 0;
-	}
+	}*/
 	m_sceneTriangles = 0;
 	m_drawnTriangles = 0;
 }
@@ -204,10 +207,6 @@ int Engine::StartDrawingScene()
 }
 int Engine::EndDrawingScene()
 {
-	WaitForRasterizersEnd();
-
-	m_renderTimeMS = (float)(clock() - m_drawTick) / CLOCKS_PER_SEC * 1000;
-
 	if (m_renderOutput == RenderOutput_zBuffer)
 	{
 		uint c;
@@ -230,6 +229,9 @@ int Engine::EndDrawingScene()
 	}
 	int r = 0;
 	//r = mfb_update(window, m_buffer);
+
+
+
 	m_currentFrame++;
 	m_nbPixels = 0;
 	m_frameTimeMS = (float)(clock() - m_tick) / CLOCKS_PER_SEC * 1000;
@@ -237,7 +239,17 @@ int Engine::EndDrawingScene()
 	return r;
 }
 
-void Engine::WaitForRasterizersEnd() const
+void Engine::ClearRenderQueues()
+{
+	for (int i = 0; i < m_nbRasterizers; i++)
+	{
+		//m_rasterTriangleQueues[i].clear();
+		m_rasterLineQueues[i].clear();
+		m_rasterNbTriangleQueues[i] = 0;
+	}
+}
+
+void Engine::WaitForRasterizersEnd() 
 {
 	bool bWait = true;
 	while (bWait)
@@ -247,8 +259,8 @@ void Engine::WaitForRasterizersEnd() const
 		{
 			bWait |= m_rasterizers->at(i)->m_started;
 		}
-		//Sleep(1);
 	}
+	m_renderTimeMS = (float)(clock() - m_drawTick) / CLOCKS_PER_SEC * 1000;
 }
 
 void Engine::DrawGrid(const Camera* camera)

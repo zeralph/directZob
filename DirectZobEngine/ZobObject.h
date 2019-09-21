@@ -41,6 +41,8 @@ public:
 	int GetChildPosition(const ZobObject* z);
 	const std::string GetMeshName() const ;
 	void SetMesh(std::string name);
+	void SetLightingMode(RenderOptions::eLightMode l);
+	const RenderOptions::eLightMode GetLightingMode() const { return m_renderOptions.LightMode(); }
 protected:
 	
 	bool HasChild(const ZobObject* o);
