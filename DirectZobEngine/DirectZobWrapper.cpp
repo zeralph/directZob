@@ -1,3 +1,4 @@
+#ifdef _WINDLL
 #include "DirectZobWrapper.h"
 
 namespace CLI
@@ -70,3 +71,4 @@ namespace CLI
 		return arr;
 	}
 }
+#endif //_WINDLL

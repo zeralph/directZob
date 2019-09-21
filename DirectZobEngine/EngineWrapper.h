@@ -1,4 +1,4 @@
-//Entity.h
+#ifdef _WINDLL
 #pragma once
 #include "ManagedObject.h"
 #include "Engine.h"
@@ -21,3 +21,4 @@ namespace CLI
 		//array<int>^ m_buffer;
 	};
 }
+#endif //_WINDLL

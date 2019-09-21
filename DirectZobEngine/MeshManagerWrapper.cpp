@@ -1,3 +1,4 @@
+#ifdef _WINDLL
 #include "MeshManagerWrapper.h"
 #include "DirectZob.h"
 
@@ -22,3 +23,4 @@ namespace CLI
 		return gcnew System::String(m_Instance->GetMeshList().c_str());
 	}
 }
+#endif //_WINDLL

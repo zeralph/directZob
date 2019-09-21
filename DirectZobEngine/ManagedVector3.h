@@ -1,3 +1,4 @@
+#ifdef _WINDLL
 #pragma once
 #include "Vector3.h"
 
@@ -28,3 +29,4 @@ namespace CLI {
 		float z;
 	};
 }
+#endif //_WINDLL

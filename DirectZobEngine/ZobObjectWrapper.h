@@ -1,3 +1,4 @@
+#ifdef _WINDLL
 #pragma once
 #include "ManagedObject.h"
 #include "ZobObject.h"
@@ -26,3 +27,4 @@ namespace CLI {
 		bool m_isValid;
 	};
 }
+#endif //_WINDLL 

@@ -1,3 +1,4 @@
+#ifdef _WINDLL
 #pragma once
 #include "ManagedObject.h"
 #include "CameraManager.h"
@@ -26,3 +27,4 @@ namespace CLI
 
 	};
 }
+#endif //_WINDLL

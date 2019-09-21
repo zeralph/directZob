@@ -1,6 +1,5 @@
+#ifdef _WINDLL
 #include "CameraManagerWrapper.h"
-
-
 namespace CLI
 {
 	CameraManagerWrapper::CameraManagerWrapper():ManagedObject(DirectZob::GetInstance()->GetCameraManager(), false)
@@ -58,3 +57,4 @@ namespace CLI
 		m_Instance->GetCurrentCamera()->SetPosition(&v);
 	}
 }
+#endif //_WINDLL

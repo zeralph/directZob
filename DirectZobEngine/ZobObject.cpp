@@ -13,6 +13,8 @@ ZobObject::ZobObject(Type t, SubType s, std::string& name, Mesh* mesh, ZobObject
 	{
 		parent->AddChildReference(this);
 	}
+	m_renderOptions.LightMode(RenderOptions::eLightMode_gouraud);
+	m_renderOptions.ZBuffered(true);
 	std::string l = "Added new ZobObject ";
 	l.append(m_name);
 	DirectZob::LogInfo(l.c_str());

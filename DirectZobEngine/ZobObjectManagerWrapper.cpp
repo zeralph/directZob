@@ -1,3 +1,4 @@
+#ifdef _WINDLL
 #include "ZobObjectManagerWrapper.h"
 #include "DirectZob.h"
 #include "ZobObject.h"
@@ -63,3 +64,4 @@ namespace CLI
 		return m_Instance->Reparent((o != nullptr) ? o->GetInstance() : NULL, (parent != nullptr) ? parent->GetInstance() : NULL);
 	}
 }
+#endif //_WINDLL

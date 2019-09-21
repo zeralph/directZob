@@ -1,3 +1,4 @@
+#ifdef _WINDLL
 #pragma once
 #include "ManagedObject.h"
 #include "MeshManager.h"
@@ -18,3 +19,4 @@ namespace CLI
 
 	};
 }
+#endif //_WINDLL
