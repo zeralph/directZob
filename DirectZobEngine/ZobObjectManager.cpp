@@ -113,12 +113,12 @@ std::string ZobObjectManager::GetZobObjectList()
 
 void ZobObjectManager::GetZobObjectListInternal(const ZobObject* z, std::string& str)
 {
-	str.append("{\"name\":\"");
-	str.append(z->GetName());
-	str.append("\"");
-	const std::vector<ZobObject*>* c = z->getChildren();
-	//if (c->size() > 0)
+	if (z->GetType() != ZOBGUID::type_editor)
 	{
+		str.append("{\"name\":\"");
+		str.append(z->GetName());
+		str.append("\"");
+		const std::vector<ZobObject*>* c = z->getChildren();
 		str.append(",\"children\":[");
 		for (int i = 0; i < c->size(); i++)
 		{
@@ -129,8 +129,8 @@ void ZobObjectManager::GetZobObjectListInternal(const ZobObject* z, std::string&
 			}
 		}
 		str.append("]");
+		str.append("}");
 	}
-	str.append("}");
 }
 
 void ZobObjectManager::UnloadAll()
@@ -138,6 +138,18 @@ void ZobObjectManager::UnloadAll()
 	delete m_editorGizmos;
 	delete m_rootObject;
 	m_editorGizmos = NULL;
+	m_transform = NULL;
+	m_transformX = NULL;
+	m_transformY = NULL;
+	m_transformZ = NULL;
+	m_rotate = NULL;
+	m_rotateX = NULL;
+	m_rotateY = NULL;
+	m_rotateZ = NULL;
+	m_scale = NULL;
+	m_scaleX = NULL;
+	m_scaleY = NULL;
+	m_scaleZ = NULL;
 	std::string n = "root";
 	m_rootObject = new ZobObject(ZOBGUID::type_internal, ZOBGUID::subtype_zobOject, n, NULL, NULL);
 }
@@ -148,24 +160,23 @@ void ZobObjectManager::CreateEditorGizmos(std::string& editorResourcesPath)
 	{
 		std::string name;
 		name = "gizmos";
-		ZobObject* gizmos = new ZobObject(ZOBGUID::type_editor, ZOBGUID::subtype_zobOject, name, NULL, m_rootObject);
+		m_editorGizmos = new ZobObject(ZOBGUID::type_editor, ZOBGUID::subtype_zobOject, name, NULL, m_rootObject);
 
-		ZobObject* transform = LoadEditorMesh("transform", editorResourcesPath.c_str(), "transform.obj", gizmos);
-		ZobObject* transformX = LoadEditorMesh("transformX", editorResourcesPath.c_str(), "transformX.obj", transform);
-		ZobObject* transformY = LoadEditorMesh("transformY", editorResourcesPath.c_str(), "transformY.obj", transform);
-		ZobObject* transformZ = LoadEditorMesh("transformZ", editorResourcesPath.c_str(), "transformZ.obj", transform);
+		m_transform = LoadEditorMesh("transform", editorResourcesPath.c_str(), "transform.obj", m_editorGizmos);
+		m_transformX = LoadEditorMesh("transformX", editorResourcesPath.c_str(), "transformX.obj", m_transform);
+		m_transformY = LoadEditorMesh("transformY", editorResourcesPath.c_str(), "transformY.obj", m_transform);
+		m_transformZ = LoadEditorMesh("transformZ", editorResourcesPath.c_str(), "transformZ.obj", m_transform);
 
-		ZobObject* rotate = LoadEditorMesh("rotate", editorResourcesPath.c_str(), "rotate.obj", gizmos);
-		ZobObject* rotateX = LoadEditorMesh("rotateX", editorResourcesPath.c_str(), "rotateX.obj", rotate);
-		ZobObject* rotateY = LoadEditorMesh("rotateY", editorResourcesPath.c_str(), "rotateY.obj", rotate);
-		ZobObject* rotateZ = LoadEditorMesh("rotateZ", editorResourcesPath.c_str(), "rotateZ.obj", rotate);
+		m_rotate = LoadEditorMesh("rotate", editorResourcesPath.c_str(), "rotate.obj", m_editorGizmos);
+		m_rotateX = LoadEditorMesh("rotateX", editorResourcesPath.c_str(), "rotateX.obj", m_rotate);
+		m_rotateY = LoadEditorMesh("rotateY", editorResourcesPath.c_str(), "rotateY.obj", m_rotate);
+		m_rotateZ = LoadEditorMesh("rotateZ", editorResourcesPath.c_str(), "rotateZ.obj", m_rotate);
 
-		ZobObject* scale = LoadEditorMesh("scale", editorResourcesPath.c_str(), "scale.obj", gizmos);
-		ZobObject* scaleX = LoadEditorMesh("scaleX", editorResourcesPath.c_str(), "scaleX.obj", scale);
-		ZobObject* scaleY = LoadEditorMesh("scaleY", editorResourcesPath.c_str(), "scaleY.obj", scale);
-		ZobObject* scaleZ = LoadEditorMesh("scaleZ", editorResourcesPath.c_str(), "scaleZ.obj", scale);
+		m_scale = LoadEditorMesh("scale", editorResourcesPath.c_str(), "scale.obj", m_editorGizmos);
+		m_scaleX = LoadEditorMesh("scaleX", editorResourcesPath.c_str(), "scaleX.obj", m_scale);
+		m_scaleY = LoadEditorMesh("scaleY", editorResourcesPath.c_str(), "scaleY.obj", m_scale);
+		m_scaleZ = LoadEditorMesh("scaleZ", editorResourcesPath.c_str(), "scaleZ.obj", m_scale);
 
-		m_editorGizmos = gizmos;
 	}
 }
 
@@ -176,7 +187,7 @@ ZobObject* ZobObjectManager::LoadEditorMesh(const char* name, const char* meshPa
 	std::string p = std::string(meshPath);
 	std::string m = std::string(meshFile);
 	Mesh* mesh = meshMgr->LoadMesh(n, p, m);
-	ZobObject* transform = new ZobObject(ZOBGUID::type_internal, ZOBGUID::subtype_zobOject, n, mesh, parent);
+	ZobObject* transform = new ZobObject(ZOBGUID::type_editor, ZOBGUID::subtype_zobOject, n, mesh, parent);
 	transform->GetRenderOptions().LightMode(RenderOptions::eLightMode_none);
 	transform->GetRenderOptions().ZBuffered(false);
 	return transform;

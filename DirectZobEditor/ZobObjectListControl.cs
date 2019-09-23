@@ -40,11 +40,14 @@ namespace DirectZobEditor
         {
 
         }
-
-        public bool SelectObjectAtCoords(int x, int y)
+        public CLI.ZobObjectWrapper GetObjectAtCoords(int x, int y, CLI.ZobObjectManagerWrapper.eObjectTypes t)
         {
-            CLI.ZobObjectWrapper z = m_zobObjectManagerWrapper.GetObjectAtCoords(x, y);
-            bool bRet = false;
+            return m_zobObjectManagerWrapper.GetObjectAtCoords(x, y, t);
+        }
+
+        public CLI.ZobObjectWrapper SelectObjectAtCoords(int x, int y, CLI.ZobObjectManagerWrapper.eObjectTypes t)
+        {
+            CLI.ZobObjectWrapper z = GetObjectAtCoords(x, y, t);
             if(z!=null && z.IsValid())
             {
                 string s = z.GetFullNodeName();
@@ -55,10 +58,9 @@ namespace DirectZobEditor
                     n = n.Nodes[s2[i]];
                 }
                 ZobObjectTree.SelectedNode = n;
-                bRet = true;
             }
             OnZobObjectSelectionChange(z);
-            return bRet;
+            return z;
         }
 
         private void UpdateTree()
@@ -153,7 +155,6 @@ namespace DirectZobEditor
             }
             CLI.ZobObjectWrapper gizmos = m_zobObjectManagerWrapper.GetEditorGizmos();
             m_zobObjectManagerWrapper.Reparent(gizmos, newZobObject);
-            //ZobObjectTree.Nodes.Clear();
             UpdateTree();
         }
 

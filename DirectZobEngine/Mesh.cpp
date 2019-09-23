@@ -260,15 +260,19 @@ void Mesh::Draw(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, c
 
 
 			t->ComputeArea();
-			static float a = 50000.0f;
-			float area = t->area;
+			static float sAreaMin = 0.0f;
+			static float sClampArea = 1.0f;
+			static float sAreaMax = 50000.0f;
 			if (engine->GetCullMode() == Engine::CullCounterClockwiseFace)
 			{
-				area = -area;
+				t->area = -t->area;
 			}
-
-			if ((engine->GetCullMode() == Engine::None || area > 0) && abs(area) < a)
+			if ((engine->GetCullMode() == Engine::None || t->area > sAreaMin) && t->area < sAreaMax)
 			{
+				if (t->area < sClampArea)
+				{
+					t->area = sClampArea;
+				}
 				t->owner = ownerId;
 				t->ComputeLighting(&light);
 				t->draw = true;

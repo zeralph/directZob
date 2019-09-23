@@ -4,6 +4,7 @@
 #include "ZobObject.h"
 namespace CLI
 {
+
 	ZobObjectManagerWrapper::ZobObjectManagerWrapper():ManagedObject(DirectZob::GetInstance()->GetZobObjectManager(), false)
 	{
 
@@ -21,10 +22,29 @@ namespace CLI
 		ZobObject* z = m_Instance->GetZobObject(n);
 		return gcnew ZobObjectWrapper(z);
 	}
-	ZobObjectWrapper^ ZobObjectManagerWrapper::GetObjectAtCoords(int x, int y)
+
+	ZobObjectWrapper^ ZobObjectManagerWrapper::GetObjectAtCoords(int x, int y, eObjectTypes type)
 	{
 		uint id = DirectZob::GetInstance()->GetEngine()->GetObjectIdAtCoords(x, y);
 		ZobObject* z = m_Instance->GetZobObjectFromPartialId(id);
+		ZOBGUID::Type t;
+		if (type != eObjectTypes::eObjectTypes_all)
+		{
+			switch (type)
+			{
+			default:
+			case eObjectTypes::eObjectTypes_scene:
+				t = ZOBGUID::type_scene;
+				break;
+			case eObjectTypes::eObjectTypes_editor:
+				t = ZOBGUID::type_editor;
+				break;
+			}
+			while (z != NULL && z->GetType() != t)
+			{
+				z = z->GetParent();
+			}
+		}
 		if (z)
 		{
 			return gcnew ZobObjectWrapper(z);

@@ -32,5 +32,19 @@ private:
 	ZobObject* LoadEditorMesh(const char* name, const char* meshPath, const char* meshFile, ZobObject* parent);
 	ZobObject* GetZobObjectFromPartialId(ZobObject* z, const uint id) const;
 	ZobObject* m_rootObject = NULL;
+
+//Editor objects
 	ZobObject* m_editorGizmos = NULL;
+	ZobObject* m_transform = NULL;
+	ZobObject* m_transformX = NULL;
+	ZobObject* m_transformY = NULL;
+	ZobObject* m_transformZ = NULL;
+	ZobObject* m_rotate = NULL;
+	ZobObject* m_rotateX = NULL;
+	ZobObject* m_rotateY = NULL;
+	ZobObject* m_rotateZ = NULL;
+	ZobObject* m_scale = NULL;
+	ZobObject* m_scaleX = NULL;
+	ZobObject* m_scaleY = NULL;
+	ZobObject* m_scaleZ = NULL;
 }; 
