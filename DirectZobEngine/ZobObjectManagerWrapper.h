@@ -10,6 +10,12 @@ namespace CLI
 	public ref class ZobObjectManagerWrapper : public ManagedObject<ZobObjectManager>
 	{
 	public:
+		enum class eObjectTypes
+		{
+			eObjectTypes_all = 0,
+			eObjectTypes_editor,
+			eObjectTypes_scene,
+		};
 
 		ZobObjectManagerWrapper();
 
@@ -17,7 +23,7 @@ namespace CLI
 		ZobObjectWrapper^ GetZobObject(System::String^ name);
 		void RemoveZobObject(System::String^ name);
 		void AddZobObject(System::String^ parent);
-		ZobObjectWrapper^ GetObjectAtCoords(int x, int y);
+		ZobObjectWrapper^ GetObjectAtCoords(int x, int y, eObjectTypes type);
 		void CreateEditorGizmos(System::String^ editorResourcesPath);
 		ZobObjectWrapper^ GetEditorGizmos();
 		bool Reparent(ZobObjectWrapper^ o, ZobObjectWrapper^ parent);

@@ -15,7 +15,7 @@ ZOBGUID::ZOBGUID(Type t, SubType s)
 	ulong i2 = GetId();
 }
 
-ZOBGUID::Type ZOBGUID::GetType()
+const ZOBGUID::Type ZOBGUID::GetType() const
 {
 	zobId g = m_guid;
 	g = g & 0x0F00000000000000;
@@ -23,7 +23,7 @@ ZOBGUID::Type ZOBGUID::GetType()
 	return (ZOBGUID::Type)g;
 }
 
-ZOBGUID::SubType ZOBGUID::GetSubType()
+const ZOBGUID::SubType ZOBGUID::GetSubType() const
 {
 	zobId g = m_guid;
 	g = g & 0x00F0000000000000;

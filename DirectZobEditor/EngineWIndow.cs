@@ -20,7 +20,8 @@ namespace DirectZobEditor
         public delegate void UpdateEngineWindow();
         public delegate void UpdateLogWindow();
         public UpdateEngineWindow UpdateEngineWindowDelegate;
-        
+        private CLI.ZobObjectWrapper m_selectedObject = null;
+        private string m_currentMouseAction = "";
         Graphics m_EngineGraphics = null;
         Bitmap m_engineBitmap = null;
         int m_width;
@@ -113,7 +114,19 @@ namespace DirectZobEditor
                 if (!m_mainForm.IsCtrlPressed())
                 {
                     //MOVE OBJECT HERE
-                    //m_mainForm.GetCameraControl().GetWrapper().RotateAroundAxis((float)-dx, (float)dy);
+                    if (m_selectedObject != null && m_currentMouseAction.Length != 0)
+                    {
+                        CLI.ManagedVector3 p = m_selectedObject.GetTransform();
+                        switch (m_currentMouseAction)
+                        {
+                            case "transformY":
+                                p.y += dy;
+                                break;
+                            default:
+                                break;
+                        }
+                        m_selectedObject.SetTransform(p);
+                    }
                 }
                 else
                 {
@@ -133,12 +146,6 @@ namespace DirectZobEditor
             m_lastMouseY = e.Y;
         }
 
-        private void EngineRender_MouseDown(object sender, MouseEventArgs e)
-        {
-            m_lastMouseX = e.X;
-            m_lastMouseY = e.Y;
-        }
-
         private void EngineRender_MouseHover(object sender, EventArgs e)
         {
 
@@ -148,14 +155,7 @@ namespace DirectZobEditor
         {
             if (e.Button == MouseButtons.Left && !m_mainForm.IsCtrlPressed())
             {
-                m_mainForm.GetZobObjectListControl().SelectObjectAtCoords(e.X, e.Y);
-                /*CLI.ZobObjectWrapper z = m_mainForm.GetZobObjectListControl().GetWrapper().GetObjectAtCoords(e.X, e.Y);
-                if (z != null && z.IsValid())
-                {
-                    string fullName = z.GetFullName();
-                    m_mainForm.GetZobObjectControl().SetZobObjectWrapper(z);
-                    //m_mainForm.GetZobObjectListControl().GetWrapper().
-                }*/
+                m_selectedObject = m_mainForm.GetZobObjectListControl().SelectObjectAtCoords(e.X, e.Y, CLI.ZobObjectManagerWrapper.eObjectTypes.eObjectTypes_scene);
             }
         }
 
@@ -163,6 +163,30 @@ namespace DirectZobEditor
         {
             ToolStripButton b = (ToolStripButton)sender;
             //if(b.Name == )
+        }
+
+        private void EngineRender_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left && !m_mainForm.IsCtrlPressed())
+            {
+                if (m_selectedObject == null)
+                {
+                    m_selectedObject = m_mainForm.GetZobObjectListControl().SelectObjectAtCoords(e.X, e.Y, CLI.ZobObjectManagerWrapper.eObjectTypes.eObjectTypes_scene);
+                }
+                if (m_selectedObject != null && m_currentMouseAction.Length == 0)
+                {
+                    CLI.ZobObjectWrapper zAction = m_mainForm.GetZobObjectListControl().GetObjectAtCoords(e.X, e.Y, CLI.ZobObjectManagerWrapper.eObjectTypes.eObjectTypes_editor);
+                    if (zAction != null)
+                    {
+                        m_currentMouseAction = zAction.GetName();
+                    }
+                }
+            }
+        }
+
+        private void EngineRender_MouseUp(object sender, MouseEventArgs e)
+        {
+            m_currentMouseAction = "";
         }
     }
 }

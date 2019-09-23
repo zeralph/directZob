@@ -29,8 +29,8 @@ public :
 
 	ZOBGUID(Type t, SubType s);
 
-	Type GetType();
-	SubType GetSubType();
+	const Type GetType()const;
+	const SubType GetSubType()const;
 	uint GetId();
 
 private:
