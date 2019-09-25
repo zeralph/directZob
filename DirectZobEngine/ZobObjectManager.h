@@ -18,6 +18,7 @@ public:
 	void DrawObjects(const Camera* camera, Core::Engine* engine);
 	ZobObject* GetZobObjectFromPartialId(const uint id) const;
 	void AddZobObject(ZobObject* z);
+	ZobObject* GetRootObject() const;
 	ZobObject* GetZobObject(const std::string& name) const;
 	std::string GetZobObjectList();
 	ZobObject* GetRootObject() { return m_rootObject;  }

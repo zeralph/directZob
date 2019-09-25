@@ -287,5 +287,8 @@
     <ClInclude Include="ZobObjectWrapper.h">
       <Filter>Fichiers d%27en-tête\Interfaces</Filter>
     </ClInclude>
+    <ClInclude Include="BaseFont.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

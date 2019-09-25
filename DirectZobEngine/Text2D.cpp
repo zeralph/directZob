@@ -1,42 +1,22 @@
 #include "text2D.h"
 #include "lodepng.h"
+#include "BaseFont.h"
+
 using namespace Core;
 
-Text2D::Text2D(Engine* engine, std::string& fontImageFile, int nbCharWidth, int nbCharHeight, Events* events)
+Text2D::Text2D(Engine* engine, Events* events)
 {
-	std::vector<unsigned char> image; //the raw pixels
-	unsigned width, height;
-	unsigned error = lodepng::decode(image, width, height, fontImageFile.c_str());
-	if (error)
-	{
-		m_data = NULL;
-		m_texWidth = 0;
-		m_texHeight = 0;
-	}
-	else
-	{
-		m_texWidth = width;
-		m_texHeight = height;
-		m_data = (float*)malloc(sizeof(float) * 4 * image.size());
-		for (int i = 0; i < image.size(); i += 4)
-		{
-			float r = (float)image[i] / 255.0f;
-			float g = (float)image[i + 1] / 255.0f;
-			float b = (float)image[i + 2] / 255.0f;
-			float a = (float)image[i + 3] / 255.0f;
-			m_data[i] = r;
-			m_data[i + 1] = g;
-			m_data[i + 2] = b;
-			m_data[i + 3] = a;
-		}
-	}
-	image.clear();
+	
+	m_data = BaseFont.pixel_data;
+	m_texWidth = BaseFont.width;
+	m_texHeight = BaseFont.height;
+
 	m_events = events;
 	m_engine = engine;
-	m_nbCharWidth = nbCharWidth;
-	m_nbCharHeight = nbCharHeight;
-	m_charWidth = m_texWidth / nbCharWidth;
-	m_charHeight = m_texHeight / nbCharHeight;
+	m_nbCharWidth = BaseFont.nbCharWidth;
+	m_nbCharHeight = BaseFont.nbCharHeight;
+	m_charWidth = m_texWidth / BaseFont.nbCharWidth;
+	m_charHeight = m_texHeight / BaseFont.nbCharHeight;
 	m_matrix.Identity();
 }
 
@@ -71,12 +51,11 @@ void Text2D::PrintChar(uint x, uint y, uint size, const char c, uint color)
 	{
 		for (int i = 0; i < m_charWidth; i++)
 		{
-			uint c = m_data[(jj+j)*tw*4 + (ii+i)*4 ];
-			if (c == 0)
+			char c = m_data[(jj+j)*tw + (ii+i) ];
+			if (c == '1')
 			{
-				c = color;
 				k = (y + j) * ew + (x + i);
-				m_engine->GetBufferData()->buffer[k] = c;
+				m_engine->GetBufferData()->buffer[k] = color;
 			}
 		}
 	}

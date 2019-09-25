@@ -21,6 +21,7 @@ namespace CLI
 
 		System::String^ GetZobObjectList();
 		ZobObjectWrapper^ GetZobObject(System::String^ name);
+		ZobObjectWrapper^ GetRootObject();
 		void RemoveZobObject(System::String^ name);
 		void AddZobObject(System::String^ parent);
 		ZobObjectWrapper^ GetObjectAtCoords(int x, int y, eObjectTypes type);

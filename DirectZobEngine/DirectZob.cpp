@@ -39,8 +39,7 @@ void DirectZob::LoadScene(std::string& path, std::string& file)
 	SceneLoader::LoadScene(path, file, m_zobObjectManager, m_meshManager, m_materialManager);
 	if (m_text == NULL)
 	{
-		std::string font = "C:\\_GIT\\directZob\\resources\\font2.png";
-		m_text = new Text2D(m_engine, font, 32, 8, m_events);
+		m_text = new Text2D(m_engine, m_events);
 	}
 }
 
@@ -59,8 +58,7 @@ void DirectZob::NewScene()
 	SceneLoader::NewScene(m_engine, m_zobObjectManager, m_meshManager, m_materialManager);
 	if (m_text == NULL)
 	{
-		std::string font = "C:\\_GIT\\directZob\\resources\\font2.png";
-		m_text = new Text2D(m_engine, font, 32, 8, m_events);
+		m_text = new Text2D(m_engine, m_events);
 	}
 }
 

@@ -13,6 +13,8 @@ namespace DirectZobEditor
 {
     public partial class EngineWindow : UserControl
     {
+        public event EventHandler OnBeginFrame;
+        public event EventHandler OnEndFrame;
         private CLI.DirectZobWrapper m_directZobWrapper;
         private CLI.EngineWrapper m_engineWrapper;
         private Thread m_engineThread;
@@ -46,9 +48,17 @@ namespace DirectZobEditor
             UpdateEngineWindowDelegate = new UpdateEngineWindow(UpdateEngineWindowMethod);
 
             m_engineThread.Start();
+            if (OnBeginFrame != null)
+            {
+                OnBeginFrame(this, EventArgs.Empty);
+            }
             m_directZobWrapper.RunAFrame();
             IntPtr p = m_engineWrapper.GetBufferData();
             m_engineBitmap = new System.Drawing.Bitmap(m_width, m_height, 4 * m_width, System.Drawing.Imaging.PixelFormat.Format32bppRgb, p);
+            if (OnEndFrame != null)
+            {
+                OnEndFrame(this, EventArgs.Empty);
+            }
         }
 
         public CLI.EngineWrapper GetEngineWrapper()
@@ -78,13 +88,17 @@ namespace DirectZobEditor
         {
             while (!m_exiting)
             {
+                if (OnBeginFrame != null)
+                {
+                    OnBeginFrame(this, EventArgs.Empty);
+                }
                 m_directZobWrapper.RunAFrame();
                 EngineRender.Invoke(UpdateEngineWindowDelegate);
-
-                //Application.DoEvents();
+                if (OnEndFrame != null)
+                {
+                    OnEndFrame(this, EventArgs.Empty);
+                }
             }
-
-            //Refresh();
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)

@@ -12,27 +12,38 @@ namespace fontExport
 	{
 		static void Main(string[] args)
 		{
-			string path = @"C:\Users\zeral\Desktop\Project1\fontExport\fontExport\test_alpha.png";
+			string path = @"D:\_PERSO\directZob\directZob\resources\font2.png";
 			Bitmap b = new Bitmap(path);
 			int w = b.Width;
 			int h = b.Height;
 
-            string output = "#pragma once\n#include\"Types.h\"\n\nclass Test\n{\npublic:\n";
-            output += "unit width = " + w + ";\n";
-            output += "uint height = " + h + ";\n";
-            output += "\n const uint data["+w*h+"]={";
+            string output = "";
+            //output += "#pragma once\n#include\"Types.h\"\n\nclass Test\n{\npublic:\n";
+            //output += "unit width = " + w + ";\n";
+            //output += "uint height = " + h + ";\n";
+            //output += "\n const uint data["+w*h+"]={";
 			Color white = Color.FromArgb(255, 255, 255, 255);
 			for(int y=0; y<h; y++)
 			{
-				for(int x=0; x<w; x++)
+                output += "\"";
+                for (int x=0; x<w; x++)
 				{
                     Color c = b.GetPixel(x, y);
-                    output += "0x"+c.ToArgb().ToString("X") + ", ";
+                    if(c == white)
+                    {
+                        output += "0";
+                    }
+                    else
+                    {
+                        output += "1";
+                    }
+                    //output += "0x"+c.ToArgb().ToString("X") + ", ";
                 }
-				output += "\n";
+				output += "\"\n";
 			}
-			output += "};";
-			System.IO.File.WriteAllText(@"C:\Users\zeral\Desktop\Project1\fontExport\fontExport\test_alpha.h", output);
+            //output += "\"";
+            //output += "};";
+            System.IO.File.WriteAllText(@"D:\_PERSO\directZob\directZob\resources\test_alpha.h", output);
 		}
 	}
 }

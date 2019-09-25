@@ -1,6 +1,9 @@
 /Debug
 /x64
 /Release
+/FontExport/.vs
+/FontExport/bin
+/FontExport/obj
 /.vs
 DirectZobEditor/bin
 DirectZobEditor/obj
