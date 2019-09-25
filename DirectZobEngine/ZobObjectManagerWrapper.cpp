@@ -79,6 +79,12 @@ namespace CLI
 		return gcnew ZobObjectWrapper(z);
 	}
 
+	ZobObjectWrapper^ ZobObjectManagerWrapper::GetRootObject()
+	{
+		ZobObject* z = m_Instance->GetRootObject();
+		return gcnew ZobObjectWrapper(z);
+	}
+
 	bool ZobObjectManagerWrapper::Reparent(ZobObjectWrapper^ o, ZobObjectWrapper^ parent)
 	{
 		return m_Instance->Reparent((o != nullptr) ? o->GetInstance() : NULL, (parent != nullptr) ? parent->GetInstance() : NULL);
