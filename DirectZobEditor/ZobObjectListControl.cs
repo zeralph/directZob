@@ -209,6 +209,7 @@ namespace DirectZobEditor
         }
         public void OnFrameEnd(Object o, EventArgs e)
         {
+           // return;
             CLI.ZobObjectWrapper z = m_zobObjectManagerWrapper.GetRootObject();
             if (z != null && z.IsValid())
             {

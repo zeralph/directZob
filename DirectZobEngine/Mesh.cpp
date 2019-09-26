@@ -225,6 +225,9 @@ void Mesh::Draw(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, c
 	{
 		rotationMatrix.Mul(&m_verticesNormals[i]);
 		m_verticesNormals[i].Normalize();
+	}
+	for (uint i = 0; i < m_nbFaces; i++)
+	{
 		rotationMatrix.Mul(&m_trianglesNormals[i]);
 		m_trianglesNormals[i].Normalize();
 	}

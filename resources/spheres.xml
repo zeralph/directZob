@@ -1,0 +1,31 @@
+<root>
+    <Meshes>
+        <Mesh name="transform" file="transform.obj" />
+        <Mesh name="transformX" file="transformX.obj" />
+        <Mesh name="transformY" file="transformY.obj" />
+        <Mesh name="transformZ" file="transformZ.obj" />
+        <Mesh name="rotate" file="rotate.obj" />
+        <Mesh name="rotateX" file="rotateX.obj" />
+        <Mesh name="rotateY" file="rotateY.obj" />
+        <Mesh name="rotateZ" file="rotateZ.obj" />
+        <Mesh name="scale" file="scale.obj" />
+        <Mesh name="scaleX" file="scaleX.obj" />
+        <Mesh name="scaleY" file="scaleY.obj" />
+        <Mesh name="scaleZ" file="scaleZ.obj" />
+        <Mesh name="earth.obj" file="earth.obj" />
+    </Meshes>
+    <Scene>
+        <ZobObject name="newObject_1">
+            <Mesh>earth.obj</Mesh>
+            <Position x="0" y="0" z="0" />
+            <Rotation x="0" y="45" z="0" />
+            <Scale x="0.01" y="0.01" z="0.01" />
+            <ZobObject name="newObject_2">
+                <Mesh>earth.obj</Mesh>
+                <Position x="1000" y="0" z="0" />
+                <Rotation x="0" y="0" z="0" />
+                <Scale x="1" y="1" z="1" />
+            </ZobObject>
+        </ZobObject>
+    </Scene>
+</root>
