@@ -34,39 +34,29 @@ public:
 
 	struct RenderOptions
 	{
-		//			7			6			5			4			3			2			1			0
-		//	 ZBuffer|    Lighting mode      |
-
 		enum eLightMode
 		{
 			eLightMode_none = 0,
 			eLightMode_flat,
 			eLightMode_gouraud,
+			eLightMode_phong,
+			eLightMode_flatPhong,
+			__eLightMode_MAX__
 		};
-		char flag = 0xFF;
-		inline const bool ZBuffered() const { return flag & 0x80; }
+		bool zBuffered = true;
+		eLightMode lightMode = eLightMode::eLightMode_phong;
+		inline const bool ZBuffered() const { return zBuffered; }
 		void ZBuffered(const bool b)
 		{
-			if (b)
-			{
-				flag |= 0x80;
-			}
-			else
-			{
-				flag &= 0x7F;
-			}
+			zBuffered = b;
 		}
 		inline const eLightMode LightMode() const 
 		{ 
-			int c = (flag & 0x60) >> 5;
-			return (eLightMode)c;
+			return lightMode;
 		}
 		void LightMode(eLightMode l)
 		{
-			flag &= 0x9F;
-			int c = (int)l;
-			c = c << 5;
-			flag |= c;
+			lightMode = l;
 		}
 	};
 };

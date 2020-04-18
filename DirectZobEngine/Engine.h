@@ -75,7 +75,6 @@ namespace Core
 		inline const float GetZNear() { return m_zNear; }
 		inline const float GetZFar() { return m_zFar; }
 		inline const ulong GetNbPixels() { return m_nbPixels; }
-
 		inline void ShowGrid(bool b) { m_showGrid = b; }
 		inline void WireFrame(bool b) { m_wireFrame = b; }
 		inline bool ShowGrid() { return m_showGrid; }

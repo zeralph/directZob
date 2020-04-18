@@ -45,15 +45,16 @@ namespace DirectZobEditor
         private void SetValues()
         {
             zobName.Text = m_zobObjectWrapper.GetName();
-            zobPosX.Text = String.Format("{0:0.00}", m_zobObjectWrapper.GetTransform().x);
-            zobPosY.Text = String.Format("{0:0.00}", m_zobObjectWrapper.GetTransform().y);
-            zobPosZ.Text = String.Format("{0:0.00}", m_zobObjectWrapper.GetTransform().z);
-            zobRotX.Text = String.Format("{0:0.00}", m_zobObjectWrapper.GetRotation().x);
-            zobRotY.Text = String.Format("{0:0.00}", m_zobObjectWrapper.GetRotation().y);
-            zobRotZ.Text = String.Format("{0:0.00}", m_zobObjectWrapper.GetRotation().z);
-            zobScaleX.Text = String.Format("{0:0.00}", m_zobObjectWrapper.GetScale().x);
-            zobScaleY.Text = String.Format("{0:0.00}", m_zobObjectWrapper.GetScale().y);
-            zobScaleZ.Text = String.Format("{0:0.00}", m_zobObjectWrapper.GetScale().z);
+            zobPosX.Text = String.Format("{0:0.000}", m_zobObjectWrapper.GetTransform().x);
+            zobPosY.Text = String.Format("{0:0.000}", m_zobObjectWrapper.GetTransform().y);
+            zobPosZ.Text = String.Format("{0:0.000}", m_zobObjectWrapper.GetTransform().z);
+            zobRotX.Text = String.Format("{0:0.000}", m_zobObjectWrapper.GetRotation().x);
+            zobRotY.Text = String.Format("{0:0.000}", m_zobObjectWrapper.GetRotation().y);
+            zobRotZ.Text = String.Format("{0:0.000}", m_zobObjectWrapper.GetRotation().z);
+            zobScaleX.Text = String.Format("{0:0.000}", m_zobObjectWrapper.GetScale().x);
+            zobScaleY.Text = String.Format("{0:0.000}", m_zobObjectWrapper.GetScale().y);
+            zobScaleZ.Text = String.Format("{0:0.000}", m_zobObjectWrapper.GetScale().z);   
+            LightingModeBox.SelectedIndex = m_zobObjectWrapper.GetLightingMode();
         }
         private void ClearValues()
         {

@@ -215,7 +215,7 @@ namespace DirectZobEditor
             {
                 CLI.ManagedVector3 v = z.GetRotation();
                 v.y += 0.8f;
-                z.SetRotation(v);
+                //z.SetRotation(v);
             }
         }
     }

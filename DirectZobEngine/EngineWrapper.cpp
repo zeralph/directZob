@@ -29,5 +29,13 @@ namespace CLI
 			m_Instance->SetRenderOutput((Engine::RenderOutput)r);
 		}
 	}
+
+	void EngineWrapper::Resize(int w, int h)
+	{
+		if (w > 0 && h > 0 && w<=1920 && h<=1080)
+		{
+			m_Instance->Resize(w, h);
+		}		
+	}
 }
 #endif //_WINDLL

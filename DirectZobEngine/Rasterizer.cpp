@@ -1,5 +1,6 @@
 #include "Rasterizer.h"
 #include <thread> 
+#include "DirectZob.h"
 
 static Vector3 sFog = Vector3(1.0f, 1.0f, 0.95f);
 static float fogDecal = -0.6f;
@@ -57,8 +58,12 @@ void Rasterizer::Clear()
 	m_triangles = NULL;
 }
 
-void Rasterizer::Render() const
+void Rasterizer::Render() 
 {
+	const Vector3* camDir = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera()->GetForward();
+	m_camDir = Vector3(-camDir->x, -camDir->y, -camDir->z);
+	//warning : invert lightdir ! https://fr.wikipedia.org/wiki/Ombrage_de_Phong
+	m_lightDir = Vector3(0, -1, 0);
 	for (int i = 0; i < m_lines->size(); i++)
 	{
 		const Line2D l = m_lines->at(i);
@@ -276,11 +281,16 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 	/*float w2 = edgeFunction(t->va, t->vb, p);
 	float w0 = edgeFunction(t->vb, t->vc, p);
 	float w1 = edgeFunction(t->vc, t->va, p);*/
-	float w2 = edgeFunction(t->pa, t->pb, p);
-	float w0 = edgeFunction(t->pb, t->pc, p);
-	float w1 = edgeFunction(t->pc, t->pa, p);
-	float su, tu, cl, r, g, b, a, z, cla, clb, clc;
+
+	float w0, w1, w2, su, tu, cl, sl, al, r, g, b, a, z, cla, clb, clc;
+	float texPixelData[4];
 	uint c, k;
+	Vector3 normal;
+
+	w2 = edgeFunction(t->pa, t->pb, p);
+	w0 = edgeFunction(t->pb, t->pc, p);
+	w1 = edgeFunction(t->pc, t->pa, p);
+
 	//if (w0 >= 0 || w1 >= 0 || w2 >= 0)
 	{
 		w0 /= t->area;
@@ -313,20 +323,29 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 			tu = w0 * t->ua->y + w1 * t->ub->y + w2 * t->uc->y;
 			cl = 1.0f;
 			RenderOptions::eLightMode lighting = t->options.LightMode();
-			if (lighting != RenderOptions::eLightMode_none)
+			if (lighting == RenderOptions::eLightMode_flat || lighting == RenderOptions::eLightMode_flatPhong)
 			{
-				Vector3 v = Vector3(1, -1, 1);
-				if (lighting == RenderOptions::eLightMode_gouraud)
-				{
-					Vector3 c = Vector3((w0 * t->na->x + w1 * t->nb->x + w2 * t->nc->x),
-										(w0 * t->na->y + w1 * t->nb->y + w2 * t->nc->y),
-										(w0 * t->na->z + w1 * t->nb->z + w2 * t->nc->z));
-					cl = -Vector3::Dot(&c, &v);
-				}
-				else
-				{
-					cl = -Vector3::Dot(t->n, &v);
-				}		
+				normal = t->n;
+			}
+			else
+			{
+				normal = Vector3((w0 * t->na->x + w1 * t->nb->x + w2 * t->nc->x),
+					(w0 * t->na->y + w1 * t->nb->y + w2 * t->nc->y),
+					(w0 * t->na->z + w1 * t->nb->z + w2 * t->nc->z));
+			}
+			static int specularIntensity = 2;
+			static float ambientIntensity = 0.4f;
+			al = computeAmbient(ambientIntensity);
+			cl = computeLighting(&normal, &m_lightDir);
+			sl = computeSpecular(&normal, &m_lightDir, &m_camDir, cl, specularIntensity);
+			if (lighting == RenderOptions::eLightMode_none)
+			{
+				cl = 0.0f;
+				sl = 0.0f;
+			}
+			else if (lighting == RenderOptions::eLightMode_gouraud)
+			{
+				sl = 0.0f;
 			}
 			if (texData)
 			{
@@ -341,34 +360,38 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 					c = (uint)(((uint)tu * (uint)texData->GetWidth() + (uint)su) * 4);
 
 					const float* d = texData->GetData();
-					r = d[c] * cl;
-					g = d[c + 1] * cl;
-					b = d[c + 2] * cl;
-					a = d[c + 3] * cl;
+					//std::copy(d[c], d[c+4], &texPixelData);
+					memcpy(texPixelData, &d[c], sizeof(float) * 4);
+					r = texPixelData[0];
+					g = texPixelData[1];
+					b = texPixelData[2];
+					a = texPixelData[3];
 				}
 				else
 				{
 
-					r = texData->GetDiffuseColor()->x * cl;
-					g = texData->GetDiffuseColor()->y * cl;
-					b = texData->GetDiffuseColor()->z * cl;
+					r = texData->GetDiffuseColor()->x;
+					g = texData->GetDiffuseColor()->y;
+					b = texData->GetDiffuseColor()->z;
 					a = 1.0f;
 				}
 			}
 			else
 			{
-				r = 1.0f * cl;
-				g = 0.0f * cl;
-				b = 1.0f * cl;
+				r = 1.0f;
+				g = 0.0f;
+				b = 1.0f;
 				a = 1.0f;
 			}
+			//ambient
+			r = r * ( cl + al ) + sl;
+			g = g * ( cl + al ) + sl;
+			b = b * ( cl + al ) + sl;
 			r = clamp2(r, 0.0f, 1.0f);
 			g = clamp2(g, 0.0f, 1.0f);
 			b = clamp2(b, 0.0f, 1.0f);
-
 			c = ((int)(r * 255) << 16) + ((int)(g * 255) << 8) + (int)(b * 255);
 			m_bufferData->buffer[k] = c;
-
 		}
 	}
 }

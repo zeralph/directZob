@@ -21,8 +21,9 @@ namespace CLI {
 		void SetScale(ManagedVector3^ p);
 		System::String^ GetMeshName();
 		void SetMesh(System::String^ name);
-		bool IsValid()  { return m_isValid; }
+		bool IsValid() { return m_isValid; };
 		void SetLightingMode(int lightMode);
+		int GetLightingMode();
 	private:
 		bool m_isValid;
 	};

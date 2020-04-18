@@ -1,5 +1,6 @@
 #include "Mesh.h"
 #include "DirectZob.h"
+
 using namespace std;
 
 Mesh::Mesh(std::string& name, std::string& path, std::string& file)
@@ -16,18 +17,186 @@ Mesh::Mesh(std::string& name, std::string& path, std::string& file)
 	m_uvs = NULL;
 	m_name = name;
 	m_file = file;
+	m_path = path;
 	std::string fullPath = path;
 	fullPath.append(file);
-	std::string s = "Load mesh " + std::string(fullPath);
-	DirectZob::LogInfo(s.c_str());
+	
+	
+	if (fullPath.find(".fbx") != -1)
+	{
+		std::string s = "Load mesh " + fullPath;
+		DirectZob::LogInfo(s.c_str());
+		FbxManager* fbxManag = DirectZob::GetInstance()->GetMeshManager()->GetFbxManager();
+		FbxImporter* importer = FbxImporter::Create(fbxManag, "");
+		if (importer->Initialize(fullPath.c_str(), -1, fbxManag->GetIOSettings()))
+		{
+			FbxScene* lScene = FbxScene::Create(fbxManag, "myScene");
+			importer->Import(lScene);
+			importer->Destroy();
+			int gc = lScene->GetGeometryCount();
+			m_nbFaces = 0;
+			int i = 0;
+			//first pass, allocations
+			m_nbVertices = 0;
+			for (int i = 0; i < gc; i++)
+			{
+				FbxMesh* mesh = (FbxMesh*)lScene->GetGeometry(i);
+				m_nbVertices += mesh->GetPolygonVertexCount();
+			}
+			m_nbFaces = 0;
+			m_vertices = (Vector3*)malloc(sizeof(Vector3) * m_nbVertices);
+			m_projectedVertices = (Vector3*)malloc(sizeof(Vector3) * m_nbVertices);
+			m_verticesData = (Vector3*)malloc(sizeof(Vector3) * m_nbVertices);
+			m_nbNormals = m_nbVertices;
+			m_verticesNormals = (Vector3*)malloc(sizeof(Vector3) * m_nbNormals);
+			m_verticesNormalsData = (Vector3*)malloc(sizeof(Vector3) * m_nbNormals);
+			m_nbUvs = m_nbVertices;
+			m_uvs = (Vector2*)malloc(sizeof(Vector2) * m_nbUvs);
+			for (int i = 0; i < gc; i++)
+			{
+				FbxMesh* mesh = (FbxMesh*)lScene->GetGeometry(i);
+				int pc = mesh->GetPolygonCount();
+				int vIdx = 0;
+				if (mesh && pc > 0)
+				{
+					fbxsdk::FbxAMatrix mat;
+					mesh->GetPivot(mat);
+					fbxsdk::FbxGeometryElementMaterial* material = mesh->GetElementMaterial(0);
+					//mesh->text
+					//material->lay
+					for (int j = 0; j < pc; j++)
+					{
+						int pSize = mesh->GetPolygonSize(j);
+						int startIdx = vIdx;
+						FbxVector4 normal = FbxVector4(0,0,0);
+						for (int k = 0; k < pSize; k++)
+						{
+							int ctrlIdx = mesh->GetPolygonVertex(j, k);
+							FbxVector4 v = mesh->GetControlPointAt(ctrlIdx);
+							FbxMultT(mesh->GetNode(), v);
+							m_vertices[vIdx] = Vector3(v[0], v[1], v[2]);
+							m_uvs[vIdx] = Vector2(0, 0);
+							mesh->GetPolygonVertexNormal(j, k, normal);
+							FbxMultT(mesh->GetNode(), normal);
+							normal.Normalize();
+							m_verticesNormals[vIdx] = Vector3(normal[0], normal[1], normal[2]);
+							//todo : compute normal
+							
+							vIdx++;
+						}
+						Triangle t;
+						t.va = &m_vertices[startIdx];
+						t.vb = &m_vertices[startIdx + 1];
+						t.vc = &m_vertices[startIdx + 2];
+						t.pa = &m_projectedVertices[startIdx];
+						t.pb = &m_projectedVertices[startIdx + 1];
+						t.pc = &m_projectedVertices[startIdx + 2];
+						t.na = &m_verticesNormals[startIdx];
+						t.nb = &m_verticesNormals[startIdx + 1];
+						t.nc = &m_verticesNormals[startIdx + 2];
+						t.ua = &m_uvs[startIdx];
+						t.ub = &m_uvs[startIdx + 1];
+						t.uc = &m_uvs[startIdx + 2];
+						m_triangles.push_back(t);
+						m_nbFaces++;
+						if (pSize > 4)
+						{
+							int yy = 0;
+							yy++;
+						}
+						if (pSize == 4)
+						{
+							Triangle t;
+							t.va = &m_vertices[startIdx + 3];
+							t.vb = &m_vertices[startIdx + 0];
+							t.vc = &m_vertices[startIdx + 2];
+							t.pa = &m_projectedVertices[startIdx + 3];
+							t.pb = &m_projectedVertices[startIdx + 0];
+							t.pc = &m_projectedVertices[startIdx + 2];
+							t.na = &m_verticesNormals[startIdx + 3];
+							t.nb = &m_verticesNormals[startIdx + 0];
+							t.nc = &m_verticesNormals[startIdx + 2];
+							t.ua = &m_uvs[startIdx + 3];
+							t.ub = &m_uvs[startIdx + 0];
+							t.uc = &m_uvs[startIdx + 2];
+							m_triangles.push_back(t);
+							m_nbFaces++;
+						}
+					}
+				}
+				if (vIdx == m_nbVertices)
+				{
+					int ok = 0;
+				}
+				else
+				{
+					int ok = 1;
+				}
+				m_trianglesNormals = (Vector3*)malloc(sizeof(Vector3) * m_nbFaces);
+				m_trianglesNormalsData = (Vector3*)malloc(sizeof(Vector3) * m_nbFaces);
+				for (int i = 0; i < m_nbFaces; i++)
+				{
+					Triangle* t = &m_triangles[i];
+					Vector3 v = Vector3(0,0,0);
+					v.Add(t->na);
+					v.Add(t->nb);
+					v.Add(t->nc);
+					v.Div(3.0f);
+					m_trianglesNormals[i] = v;
+					t->n = &m_trianglesNormals[i];
+				}
+				memcpy(m_verticesData, m_vertices, sizeof(Vector3) * m_nbVertices);
+				memcpy(m_verticesNormalsData, m_verticesNormals, sizeof(Vector3) * m_nbNormals);
+				memcpy(m_trianglesNormalsData, m_trianglesNormals, sizeof(Vector3) * m_nbFaces);
+			}
+		}
+	}
+	else
+	{
+		LoadOBJ(fullPath);
+	}
+}
 
+void Mesh::FbxMultT(FbxNode* node, FbxVector4 &vector) 
+{
+	fbxsdk::FbxAMatrix matrixGeo;
+	matrixGeo.SetIdentity();
+	if (node->GetNodeAttribute())
+	{
+		FbxVector4 lT = node->GetGeometricTranslation(FbxNode::eSourcePivot);
+		FbxVector4 lR = node->GetGeometricRotation(FbxNode::eSourcePivot);
+		FbxVector4 lS = node->GetGeometricScaling(FbxNode::eSourcePivot);
+		matrixGeo.SetT(lT);
+		matrixGeo.SetR(lR);
+		matrixGeo.SetS(lS);
+	}
+	fbxsdk::FbxAMatrix globalMatrix = node->EvaluateLocalTransform();
+	fbxsdk::FbxAMatrix matrix = globalMatrix * matrixGeo;
+	vector = matrix.MultT(vector);
+}
+
+Mesh::~Mesh()
+{
+	m_triangles.clear();
+	delete m_vertices;
+	delete m_verticesData;
+	delete m_uvs;
+	delete m_verticesNormals;
+	delete m_verticesNormalsData;
+	delete m_trianglesNormals;
+	delete m_trianglesNormalsData;
+}
+
+void Mesh::LoadOBJ(const std::string& fullPath)
+{
 	static std::string sMtllib = std::string("mtllib");
-
+	std::string s = "Load mesh " + fullPath;
+	DirectZob::LogInfo(s.c_str());
 	std::string::size_type sz;
 	// Open the file.
 	std::ifstream sfile(fullPath, ios::in);
 	std::string line;
-	if (!sfile.is_open()) 
+	if (!sfile.is_open())
 	{
 		s = "Error opening ";
 		s.append(fullPath);
@@ -49,15 +218,15 @@ Mesh::Mesh(std::string& name, std::string& path, std::string& file)
 		{
 			vector<string> v;
 			SplitEntry(&line, &v, ' ');
-			m_nbFaces+= (uint)v.size() -3;
+			m_nbFaces += (uint)v.size() - 3;
 		}
-		else if (line.rfind("mtllib",0) == 0)
+		else if (line.rfind("mtllib", 0) == 0)
 		{
 			vector<string> v;
 			SplitEntry(&line, &v, ' ');
 			if (v.size() == 2)
 			{
-				DirectZob::GetInstance()->GetmaterialManager()->LoadMaterials(path, v[1]);
+				DirectZob::GetInstance()->GetmaterialManager()->LoadMaterials(m_path, v[1]);
 			}
 		}
 	}
@@ -80,14 +249,14 @@ Mesh::Mesh(std::string& name, std::string& path, std::string& file)
 	m_trianglesNormals = (Vector3*)malloc(sizeof(Vector3) * m_nbFaces);
 	m_trianglesNormalsData = (Vector3*)malloc(sizeof(Vector3) * m_nbFaces);
 	m_triangles.clear();
-	
+
 	if (!m_hasNormals)
 	{
 		//TODO ... compute !
 		m_verticesNormals[0] = Vector3(0, 0, 1);
 		m_trianglesNormals[0] = Vector3(0, 0, 1);
 	}
-	
+
 	size_t curVertice = 0;
 	size_t curNormal = 0;
 	size_t curUv = 0;
@@ -128,7 +297,7 @@ Mesh::Mesh(std::string& name, std::string& path, std::string& file)
 			SplitEntry(&line, &v, ' ');
 			if (v.size() == 2)
 			{
-				std::string matName = file;
+				std::string matName = m_file;
 				matName = matName.substr(0, matName.size() - 4);
 				matName.append(".");
 				matName.append(v[1]);
@@ -144,23 +313,11 @@ Mesh::Mesh(std::string& name, std::string& path, std::string& file)
 			CreateTriangles(&v, &m_triangles, curface, tex);
 		}
 	}
-	memcpy(m_verticesData, m_vertices, sizeof(Vector3)* m_nbVertices);
-	memcpy(m_verticesNormalsData, m_verticesNormals, sizeof(Vector3)* m_nbNormals);
-	memcpy(m_trianglesNormalsData, m_trianglesNormals, sizeof(Vector3)* m_nbFaces);
+	memcpy(m_verticesData, m_vertices, sizeof(Vector3) * m_nbVertices);
+	memcpy(m_verticesNormalsData, m_verticesNormals, sizeof(Vector3) * m_nbNormals);
+	memcpy(m_trianglesNormalsData, m_trianglesNormals, sizeof(Vector3) * m_nbFaces);
 	s = "Mesh loaded : " + std::string(fullPath);
 	DirectZob::LogInfo(s.c_str());
-}
-
-Mesh::~Mesh()
-{
-	m_triangles.clear();
-	delete m_vertices;
-	delete m_verticesData;
-	delete m_uvs;
-	delete m_verticesNormals;
-	delete m_verticesNormalsData;
-	delete m_trianglesNormals;
-	delete m_trianglesNormalsData;
 }
 
 void Mesh::SplitEntry(const std::string* s, std::vector<std::string>* v, const char delim)
@@ -269,7 +426,7 @@ void Mesh::Draw(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, c
 			{
 				t->area = -t->area;
 			}
-			if ((engine->GetCullMode() == Engine::None || t->area > sAreaMin) && t->area < sAreaMax)
+			if (engine->GetCullMode() == Engine::None || (t->area > sAreaMin && t->area < sAreaMax))
 			{
 				t->owner = ownerId;
 				t->ComputeLighting(&light);

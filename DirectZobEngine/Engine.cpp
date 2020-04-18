@@ -125,13 +125,16 @@ void Engine::Stop()
 
 void Engine::Resize(int width, int height)
 {
-	WaitForRasterizersEnd();
+	bool bStarted = m_started;
+	Stop();
+	Sleep(100);
 	for (int i = 0; i < m_nbRasterizers; i++)
 	{
 		m_rasterizers->at(i)->End();
 	}
 	delete m_buffer;
 	delete m_zBuffer;
+	delete m_oBuffer;
 	m_buffer = (uint*)malloc(sizeof(uint) * width * height);
 	m_zBuffer = (float*)malloc(sizeof(float) * width * height);
 	m_oBuffer = (uint*)malloc(sizeof(float) * width * height);
@@ -139,6 +142,7 @@ void Engine::Resize(int width, int height)
 	m_bufferData.width = width;
 	m_bufferData.buffer = m_buffer;
 	m_bufferData.zBuffer = m_zBuffer;
+	m_bufferData.oBuffer = m_oBuffer;
 	m_bufferData.zNear = m_zNear;
 	m_bufferData.zFar = m_zFar;
 	m_bufferData.size = width * height;
@@ -165,7 +169,10 @@ void Engine::Resize(int width, int height)
 	{
 		m_rasterizers->at(i)->Init();
 	}
-
+	if (bStarted)
+	{
+		Start();
+	}
 	m_tick = clock();
 }
 
@@ -257,7 +264,7 @@ void Engine::WaitForRasterizersEnd()
 		bWait = false;
 		for (int i = 0; i < m_nbRasterizers; i++)
 		{
-			bWait |= m_rasterizers->at(i)->m_started;
+			bWait |= m_rasterizers->at(i)->HasStarted();
 		}
 	}
 	m_renderTimeMS = (float)(clock() - m_drawTick) / CLOCKS_PER_SEC * 1000;

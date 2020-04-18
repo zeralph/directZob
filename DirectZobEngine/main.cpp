@@ -124,6 +124,7 @@ int main()
 	m_directZob.Init();
 	std::string path = "C:\\_GIT\\directZob\\resources\\";
 	std::string file = "scene1.xml";
+	file = "lancia.xml";
 	m_directZob.LoadScene(path, file);
 	float rot = 0.0f;
 	for (;;)

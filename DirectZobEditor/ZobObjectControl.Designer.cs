@@ -109,7 +109,9 @@
             this.LightingModeBox.Items.AddRange(new object[] {
             "No lighting",
             "Flat shading",
-            "Gouraud shading"});
+            "Gouraud shading",
+            "Phong shading",
+            "Flat phong shading"});
             this.LightingModeBox.Location = new System.Drawing.Point(59, 190);
             this.LightingModeBox.Name = "LightingModeBox";
             this.LightingModeBox.Size = new System.Drawing.Size(162, 21);

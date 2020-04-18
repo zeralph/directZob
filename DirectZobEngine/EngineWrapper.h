@@ -17,6 +17,7 @@ namespace CLI
 		void ShowGrid(bool b) { m_Instance->ShowGrid(b); }
 		void WireFrame(bool b) { m_Instance->WireFrame(b); }
 		void SetRenderOutput(int r);
+		void Resize(int w, int h);
 	private:
 		//array<int>^ m_buffer;
 	};
