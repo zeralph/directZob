@@ -3,10 +3,14 @@
 MeshManager::MeshManager()
 {
 	m_meshes.clear();
+	m_lSdkManager = FbxManager::Create();
+	FbxIOSettings* ios = FbxIOSettings::Create(m_lSdkManager, IOSROOT);
+	m_lSdkManager->SetIOSettings(ios);
 }
 
 MeshManager::~MeshManager()
 {
+	m_lSdkManager->Destroy();
 	for (int i = 0; i < m_meshes.size(); i++)
 	{
 		delete (m_meshes[i]);

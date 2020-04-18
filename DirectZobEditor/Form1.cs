@@ -13,8 +13,8 @@ namespace DirectZobEditor
 {
     public partial class Form1 : Form
     {
-
-
+        public static Form1 m_mainForm = null;
+        public static Form1 GetMainForm() { return m_mainForm; }
         public event EventHandler OnNewScene;
         public event EventHandler OnSceneLoaded;
         public event EventHandler OnSceneSaved;
@@ -38,6 +38,7 @@ namespace DirectZobEditor
 
         public Form1()
         {
+            m_mainForm = this;
             InitializeComponent();
             this.KeyPreview = true;
             m_directZobWrapper = new CLI.DirectZobWrapper();

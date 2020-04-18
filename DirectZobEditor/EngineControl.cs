@@ -21,6 +21,8 @@ namespace DirectZobEditor
             wireframe.Checked = false;
             m_engineWrapper.ShowGrid(showGrid.Checked);
             m_engineWrapper.WireFrame(wireframe.Checked);
+            engineWidth.Text = m_engineWrapper.GetBufferWidth().ToString();
+            engineHeight.Text = m_engineWrapper.GetBufferHeight().ToString();
         }
 
         private void ShowGrid_CheckedChanged(object sender, EventArgs e)
@@ -37,6 +39,19 @@ namespace DirectZobEditor
         {
             ComboBox c = (ComboBox)sender;
             m_engineWrapper.SetRenderOutput(c.SelectedIndex);
+        }
+
+        private void engineSetSize_Click(object sender, EventArgs e)
+        {
+            string sw = engineWidth.Text;
+            string sh = engineHeight.Text;
+            int w = 0;
+            int h = 0;
+            if(int.TryParse(sw, out w) && int.TryParse(sh, out h))
+            {
+                m_engineWrapper.Resize(w, h);
+                Form1.GetMainForm().GetEngineWindow().ResizeRenderWindow();
+            }
         }
     }
 }

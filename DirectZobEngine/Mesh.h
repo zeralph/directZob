@@ -10,7 +10,7 @@
 #include "Camera.h"
 #include "Events.h"
 #include "Engine.h"
-
+#include <fbxsdk.h>
 class Mesh
 {
 public:
@@ -40,6 +40,8 @@ public:
 private:
 	void SplitEntry(const std::string* s, std::vector<std::string>* v, const char delim);
 	void CreateTriangles(const std::vector<std::string>* line, std::vector<Triangle>* t, size_t& tArrayIdx, const Material* tex);
+	void LoadOBJ(const std::string& fullPath);
+	void FbxMultT(FbxNode* node, FbxVector4 &vector);
 	inline void ReinitVertices();
 	inline bool RejectTriangle(const Triangle* t, const float znear, const float zfar, const float width, const float height);
 	uint m_nbVertices = 0;
@@ -50,5 +52,6 @@ private:
 	bool m_hasNormals = false;
 	std::string m_name;
 	std::string m_file;
+	std::string m_path;
 };
 

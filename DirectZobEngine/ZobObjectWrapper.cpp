@@ -82,6 +82,11 @@ namespace CLI
 		m_Instance->SetScale(v.x, v.y, v.z);
 	}
 
+	int ZobObjectWrapper::GetLightingMode()
+	{
+		return m_Instance->GetLightingMode();
+	}
+
 	void ZobObjectWrapper::SetLightingMode(int lightMode)
 	{
 		RenderOptions::eLightMode l = (RenderOptions::eLightMode)lightMode;

@@ -2,6 +2,7 @@
 #include "Types.h"
 #include "Mesh.h"
 #include <string>
+#include <fbxsdk.h>
 
 class MeshManager
 {
@@ -15,6 +16,8 @@ public:
 	std::string GetMeshList();
 	const Mesh* GetMesh(const int i) const;
 	void UnloadAll(); 
+	FbxManager* GetFbxManager() { return m_lSdkManager; }
 private:
 	std::vector<Mesh*> m_meshes;
+	FbxManager* m_lSdkManager = NULL;
 };

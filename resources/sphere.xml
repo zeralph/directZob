@@ -1,0 +1,13 @@
+<root>
+    <Meshes>
+        <Mesh name="fbx_example" file="only_quad_sphere.fbx" />
+    </Meshes>
+    <Scene>
+        <ZobObject name="FBX">
+            <Mesh>fbx_example</Mesh>
+            <Position x="0" y="0" z="0" />
+            <Rotation x="0" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+        </ZobObject>
+    </Scene>
+</root>

@@ -136,10 +136,15 @@
       <Project>{b7dd2204-6b59-4b9c-a293-6d8dc2c04e67}</Project>
       <Name>DirectZob</Name>
       <EmbedInteropTypes>False</EmbedInteropTypes>
+      <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controls\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy /Y "$(SolutionDir)x64\DLL $(ConfigurationName)\DirectZob.dll"  "$(TargetDir)DirectZob.dll"
+copy /Y "C:\Program Files\Autodesk\FBX\FBX SDK\2019.2\lib\vs2017\x64\release\libfbxsdk.dll"  "$(TargetDir)libfbxsdk.dll"</PostBuildEvent>
+  </PropertyGroup>
 </Project>

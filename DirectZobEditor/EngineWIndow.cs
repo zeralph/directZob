@@ -38,6 +38,29 @@ namespace DirectZobEditor
             m_mainForm = f;
             m_directZobWrapper = directZobWrapper;
             m_engineWrapper = new CLI.EngineWrapper();
+            GenerateRenderWindow();
+        }
+
+        public void ResizeRenderWindow()
+        {
+            GenerateRenderWindow();
+        }
+
+        public CLI.EngineWrapper GetEngineWrapper()
+        {
+            return m_engineWrapper;
+        }
+
+        private void GenerateRenderWindow()
+        {
+            if(m_engineThread != null)
+            {
+                if(m_engineThread.IsAlive)
+                {
+                    m_engineThread.Abort();
+                }
+            }
+            m_engineThread = null;
             m_width = m_engineWrapper.GetBufferWidth();
             m_height = m_engineWrapper.GetBufferHeight();
             EngineRender.Width = m_width;
@@ -61,10 +84,6 @@ namespace DirectZobEditor
             }
         }
 
-        public CLI.EngineWrapper GetEngineWrapper()
-        {
-            return m_engineWrapper;
-        }
         private void UpdateEngineWindowMethod()
         {
             //if(m_directZobWrapper.RunAFrame() >= 0)
