@@ -1,6 +1,7 @@
 #include "Rasterizer.h"
 #include <thread> 
 #include "DirectZob.h"
+#include "Light.h"
 
 static Vector3 sFog = Vector3(1.0f, 1.0f, 0.95f);
 static float fogDecal = -0.6f;
@@ -63,7 +64,6 @@ void Rasterizer::Render()
 	const Vector3* camDir = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera()->GetForward();
 	m_camDir = Vector3(-camDir->x, -camDir->y, -camDir->z);
 	//warning : invert lightdir ! https://fr.wikipedia.org/wiki/Ombrage_de_Phong
-	m_lightDir = Vector3(0, -1, 0);
 	for (int i = 0; i < m_lines->size(); i++)
 	{
 		const Line2D l = m_lines->at(i);
@@ -72,6 +72,8 @@ void Rasterizer::Render()
 	for (int i = 0; i < m_nbTriangles; i++)
 	{
 		const Triangle* t = &m_triangles[i];
+		m_lights = DirectZob::GetInstance()->GetLightManager()->GetActiveLights();
+		m_ambientColor = DirectZob::GetInstance()->GetLightManager()->GetAmbientColor();
 		DrawTriangle(t);
 	}
 }
@@ -282,10 +284,10 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 	float w0 = edgeFunction(t->vb, t->vc, p);
 	float w1 = edgeFunction(t->vc, t->va, p);*/
 
-	float w0, w1, w2, su, tu, cl, sl, al, r, g, b, a, z, cla, clb, clc;
+	float w0, w1, w2, su, tu, cl, sl, al, r, g, b, a, z, cla, clb, clc, fr, fg, fb, lightPower;
 	float texPixelData[4];
 	uint c, k;
-	Vector3 normal;
+	Vector3 normal, lightDir;
 
 	w2 = edgeFunction(t->pa, t->pb, p);
 	w0 = edgeFunction(t->pb, t->pc, p);
@@ -297,9 +299,13 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 		w1 /= t->area;
 		w2 /= t->area;
 
+		Vector3 tpos = Vector3(	(t->va->x * w0 + t->vb->x * w1 + t->vc->x * w2),
+								(t->va->y * w0 + t->vb->y * w1 + t->vc->y * w2),
+								(t->va->z * w0 + t->vb->z * w1 + t->vc->z * w2));
+
 		const Material* texData = t->tex;
 		z = m_bufferData->zNear;
-		z = 1.0f / (t->pa->z * w0 + t->pb->z * w1 + t->pc->z * w2);
+		z = 1.0f / (t->pa->z * w0 + t->pb->z * w1 + t->pc->z * w2); //tpos.z ?
 		k = p->y * m_width + p->x;
 		float zf = m_bufferData->zBuffer[k];
 
@@ -333,20 +339,6 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 					(w0 * t->na->y + w1 * t->nb->y + w2 * t->nc->y),
 					(w0 * t->na->z + w1 * t->nb->z + w2 * t->nc->z));
 			}
-			static int specularIntensity = 2;
-			static float ambientIntensity = 0.4f;
-			al = computeAmbient(ambientIntensity);
-			cl = computeLighting(&normal, &m_lightDir);
-			sl = computeSpecular(&normal, &m_lightDir, &m_camDir, cl, specularIntensity);
-			if (lighting == RenderOptions::eLightMode_none)
-			{
-				cl = 0.0f;
-				sl = 0.0f;
-			}
-			else if (lighting == RenderOptions::eLightMode_gouraud)
-			{
-				sl = 0.0f;
-			}
 			if (texData)
 			{
 				if (texData->GetData())
@@ -379,18 +371,46 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 			else
 			{
 				r = 1.0f;
-				g = 0.0f;
+				g = 1.0f;
 				b = 1.0f;
 				a = 1.0f;
 			}
-			//ambient
-			r = r * ( cl + al ) + sl;
-			g = g * ( cl + al ) + sl;
-			b = b * ( cl + al ) + sl;
-			r = clamp2(r, 0.0f, 1.0f);
-			g = clamp2(g, 0.0f, 1.0f);
-			b = clamp2(b, 0.0f, 1.0f);
-			c = ((int)(r * 255) << 16) + ((int)(g * 255) << 8) + (int)(b * 255);
+			//lighting
+			fr = 0.0f;
+			fg = 0.0f;
+			fb = 0.0f;
+			for (std::vector<Light*>::const_iterator iter = m_lights->begin(); iter != m_lights->end(); iter++)
+			{
+				const Light* l = (*iter);
+				//lightDir = l->GetTransform() - t->va;
+				lightDir = l->GetTransform() - t->va;// tpos;
+				lightPower =  (l->GetFallOffDistance() / lightDir.sqrtLength());
+				lightDir.Normalize();
+				static int specularIntensity = 50;
+				static float ambientIntensity = 0.4f;
+				al = computeAmbient(ambientIntensity);
+				cl = computeLighting(&normal, &lightDir);
+				sl = computeSpecular(&normal, &lightDir, &m_camDir, cl, specularIntensity);
+				if (lighting == RenderOptions::eLightMode_none)
+				{
+					cl = 0.0f;
+					sl = 0.0f;
+				}
+				else if (lighting == RenderOptions::eLightMode_gouraud)
+				{
+					sl = 0.0f;
+				}
+				fr += r * (cl + sl) * l->GetColor()->x * lightPower;
+				fg += g * (cl + sl) * l->GetColor()->y * lightPower;
+				fb += b * (cl + sl) * l->GetColor()->z * lightPower;
+			}
+			fr += r * m_ambientColor->x;
+			fg += g * m_ambientColor->y;
+			fb += b * m_ambientColor->z;
+			fr = clamp2(fr, 0.0f, 1.0f);
+			fg = clamp2(fg, 0.0f, 1.0f);
+			fb = clamp2(fb, 0.0f, 1.0f);
+			c = ((int)(fr * 255) << 16) + ((int)(fg * 255) << 8) + (int)(fb * 255);
 			m_bufferData->buffer[k] = c;
 		}
 	}

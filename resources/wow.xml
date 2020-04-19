@@ -1,6 +1,6 @@
 <root>
     <Meshes>
-        <Mesh name="transform" file="transform.obj" />
+        <!--<Mesh name="transform" file="transform.obj" />
         <Mesh name="transformX" file="transformX.obj" />
         <Mesh name="transformY" file="transformY.obj" />
         <Mesh name="transformZ" file="transformZ.obj" />
@@ -12,21 +12,21 @@
         <Mesh name="scaleX" file="scaleX.obj" />
         <Mesh name="scaleY" file="scaleY.obj" />
         <Mesh name="scaleZ" file="scaleZ.obj" />
-        <Mesh name="terrain2.obj" file="terrain2.obj" />
-        <Mesh name="camaro.obj" file="camaro.obj" />
+        <Mesh name="camaro.obj" file="camaro.obj" />-->
         <Mesh name="skull.obj" file="skull.obj" />
+		<Mesh name="terrain2.obj" file="terrain2.obj" />
     </Meshes>
     <Scene>
-        <ZobObject name="newObject_2">
+        <ZobObject name="skull">
             <Mesh>skull.obj</Mesh>
             <Position x="0" y="0" z="0" />
-            <Rotation x="-90" y="0" z="180" />
+            <Rotation x="0" y="0" z="180" />
             <Scale x="1" y="1" z="1" />
         </ZobObject>
-        <ZobObject name="newObject_1">
+        <ZobObject name="terrain">
             <Mesh>terrain2.obj</Mesh>
             <Position x="0" y="0" z="0" />
-            <Rotation x="0" y="0" z="0" />
+            <Rotation x="-90" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
         </ZobObject>
     </Scene>

@@ -1,0 +1,13 @@
+<root>
+    <Meshes>
+		<Mesh name="skull" file="skull.obj" />
+    </Meshes>
+    <Scene>
+        <ZobObject name="camaro">
+            <Mesh>skull</Mesh>
+            <Position x="0" y="0" z="0" />
+            <Rotation x="-90" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+        </ZobObject>
+    </Scene>
+</root>

@@ -124,12 +124,14 @@ int main()
 	m_directZob.Init();
 	std::string path = "C:\\_GIT\\directZob\\resources\\";
 	std::string file = "scene1.xml";
-	file = "lancia.xml";
+	file = "wow.xml";
 	m_directZob.LoadScene(path, file);
 	float rot = 0.0f;
 	for (;;)
 	{
-		m_directZob.GetZobObjectManager()->GetRootObject()->SetRotation(90, rot, 0);
+		//m_directZob.GetZobObjectManager()->GetRootObject()->SetRotation(90, rot, 0);
+		m_directZob.GetZobObjectManager()->GetZobObject("terrain")->SetRotation(0, rot, 0);
+		m_directZob.GetZobObjectManager()->GetZobObject("skull")->SetRotation(0, -rot, 0);
 		m_directZob.RunAFrame();
 		int state = mfb_update(window, (void*)m_directZob.GetBufferData() );
 		if (state < 0)
