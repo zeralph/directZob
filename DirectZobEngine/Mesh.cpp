@@ -409,7 +409,7 @@ void Mesh::Draw(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, c
 			//t->n->Add(t->nc);
 			//t->n->Div(3.0f);
 			bool bCull = false;
-			if (false)	//draw normals
+			if (true)	//draw normals
 			{
 				Vector3 p1 = Vector3((t->va->x + t->vb->x + t->vc->x) / 3.0f,
 					(t->vb->y + t->vb->y + t->vc->y) / 3.0f,

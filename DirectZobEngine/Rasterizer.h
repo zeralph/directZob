@@ -5,7 +5,6 @@
 #include "Material.h"
 #include "Matrix4x4.h"
 #include "Triangle.h"
-//#include <thread> 
 #include <atomic>
 
 #ifdef LINUX
@@ -15,7 +14,7 @@
 #endif //LINUX
 
 #include <windows.h>
-
+class Light;
 class Rasterizer
 {
 public:
@@ -63,11 +62,12 @@ private:
 		return sl;
 	};
 
+	const std::vector<Light*>* m_lights;
 	const std::vector<Line2D>* m_lines;
 	const Triangle* m_triangles;
+	const Vector3* m_ambientColor;
 	BufferData* m_bufferData;
 	Vector3 m_camDir;
-	Vector3 m_lightDir;
 	uint m_nbTriangles;
 	//std::thread m_thread;
 	uint m_startHeight;

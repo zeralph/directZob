@@ -19,6 +19,7 @@ DirectZob::~DirectZob()
 	delete m_meshManager;
 	delete m_materialManager;
 	delete m_cameraManager;
+	delete m_lightManager;
 	delete m_text;
 	delete m_events;
 }
@@ -73,6 +74,7 @@ void DirectZob::Init()
 	DirectZob::LogInfo("Init engine");
 	m_engine = new Engine(WIDTH, HEIGHT, m_events);
 	m_cameraManager = new CameraManager();
+	m_lightManager = new LightManager();
 	m_materialManager = new MaterialManager();
 	m_meshManager = new MeshManager();
 	m_zobObjectManager = new ZobObjectManager();

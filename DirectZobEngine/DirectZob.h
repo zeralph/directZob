@@ -18,6 +18,7 @@
 #include "CameraManager.h"
 #include "MaterialManager.h"
 #include "MeshManager.h"
+#include "LightManager.h"
 #include "ZobObjectManager.h"
 
 #define kUnused(var) (void) var;
@@ -47,6 +48,7 @@ public :
 	static DirectZob* GetInstance() { return DirectZob::singleton; }
 	Engine* GetEngine() const { return m_engine; }
 	CameraManager* GetCameraManager() const { return m_cameraManager; }
+	LightManager* GetLightManager() const { return m_lightManager; }
 	ZobObjectManager* GetZobObjectManager() const { return m_zobObjectManager; }
 	MeshManager* GetMeshManager() const { return m_meshManager; }
 	MaterialManager* GetmaterialManager() const { return m_materialManager;  }
@@ -60,6 +62,7 @@ private:
 	MaterialManager* m_materialManager = NULL;
 	MeshManager* m_meshManager = NULL;
 	CameraManager* m_cameraManager = NULL;
+	LightManager* m_lightManager = NULL;
 	ZobObjectManager* m_zobObjectManager = NULL;
 	Engine* m_engine = NULL;
 	Text2D* m_text = NULL;

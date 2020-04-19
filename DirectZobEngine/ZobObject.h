@@ -3,7 +3,6 @@
 #include "Matrix4x4.h"
 #include <string>
 #include <vector>
-#include "Camera.h"
 #include "Types.h"
 #include "Mesh.h"
 #include "Engine.h"

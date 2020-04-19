@@ -162,6 +162,12 @@
     <ClCompile Include="ZobObjectWrapper.cpp">
       <Filter>Fichiers sources\Interfaces</Filter>
     </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>Fichiers sources\ZobObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="LightManager.cpp">
+      <Filter>Fichiers sources\managers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Color.h">
@@ -289,6 +295,12 @@
     </ClInclude>
     <ClInclude Include="BaseFont.h">
       <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>Fichiers d%27en-tête\ZobObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="LightManager.h">
+      <Filter>Fichiers d%27en-tête\managers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
