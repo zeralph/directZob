@@ -74,12 +74,12 @@ void SceneLoader::LoadZobObject(TiXmlElement* node, ZobObject* parent)
 		float intensity = f ? atof(f->GetText()) : 1.0f;
 		f = node->FirstChildElement("FallOffDistance");
 		float falloff = f ? atof(f->GetText()) : 1.0f;
-		zob = DirectZob::GetInstance()->GetLightManager()->CreatePointLight(name, position, color, intensity, falloff);
 		if (parent == NULL)
 		{
 			ZobObjectManager* zobObjectManager = DirectZob::GetInstance()->GetZobObjectManager();
 			parent = zobObjectManager->GetRootObject();
 		}
+		zob = DirectZob::GetInstance()->GetLightManager()->CreatePointLight(name, position, color, intensity, falloff, parent);
 	}
 	else
 	{

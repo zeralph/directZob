@@ -11,7 +11,7 @@ public:
 	LightManager();
 	~LightManager();
 
-	Light* CreatePointLight(std::string& name, Vector3 position, Vector3 color, float intensity, float distance);
+	Light* CreatePointLight(std::string& name, Vector3 position, Vector3 color, float intensity, float distance, ZobObject* parent);
 	const std::vector<Light*>*  GetActiveLights() const;
 	const Vector3* GetAmbientColor() const { return &m_ambientColor; };
 	const float GetAmbientColorIntensity() const { return m_ambientColorIntensity; };

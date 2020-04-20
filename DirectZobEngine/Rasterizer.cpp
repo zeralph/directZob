@@ -69,11 +69,16 @@ void Rasterizer::Render()
 		const Line2D l = m_lines->at(i);
 		DrawLine(&l);
 	}
+	m_lights = NULL;
+	LightManager* lm = DirectZob::GetInstance()->GetLightManager();
+	if (lm)
+	{
+		m_lights = lm->GetActiveLights();
+		m_ambientColor = lm->GetAmbientColor();
+	}
 	for (int i = 0; i < m_nbTriangles; i++)
 	{
 		const Triangle* t = &m_triangles[i];
-		m_lights = DirectZob::GetInstance()->GetLightManager()->GetActiveLights();
-		m_ambientColor = DirectZob::GetInstance()->GetLightManager()->GetAmbientColor();
 		DrawTriangle(t);
 	}
 }

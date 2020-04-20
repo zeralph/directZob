@@ -9,15 +9,15 @@ LightManager::LightManager()
 
 	std::string l = "lightRed";
 	c = Vector3(1.0f, 0.0f, 0.0f);
-	CreatePointLight(l, Vector3(50, 0, 0), c, 1.0f, 500);
+	CreatePointLight(l, Vector3(50, 0, 0), c, 1.0f, 500, NULL);
 
 	l = "lightGreen";
 	c = Vector3(0.0f, 1.0f, 0.0f);
-	CreatePointLight(l, Vector3(0, 50, 0), c, 1.0f, 500);
+	CreatePointLight(l, Vector3(0, 50, 0), c, 1.0f, 500, NULL);
 
 	l = "lightBlue";
 	c = Vector3(0.0f, 0.0f, 1.0f);
-	CreatePointLight(l, Vector3(0, 0, 50), c, 1.0f, 500);
+	CreatePointLight(l, Vector3(0, 0, 50), c, 1.0f, 500, NULL);
 
 	m_ambientColor = Vector3(0.4f, 0.4f, 0.4f);
 
@@ -40,9 +40,9 @@ void LightManager::UnloadAll()
 	m_lights.clear();
 }
 
-Light* LightManager::CreatePointLight(std::string& name, Vector3 position, Vector3 color, float intensity, float distance)
+Light* LightManager::CreatePointLight(std::string& name, Vector3 position, Vector3 color, float intensity, float distance, ZobObject* parent)
 {
-	Light* l = new Light(name, color, intensity, distance);
+	Light* l = new Light(name, color, intensity, distance, parent);
 	l->SetTranslation(position.x, position.y, position.z);
 	l->SetRotation(0,0,0);
 	m_lights.push_back(l);

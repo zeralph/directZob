@@ -9,6 +9,7 @@ ZobObject::ZobObject(Type t, SubType s, std::string& name, Mesh* mesh, ZobObject
 	m_translation = Vector3(0, 0, 0);
 	m_rotation = Vector3(0, 0, 0);
 	m_scale = Vector3(1, 1, 1);
+	m_children.clear();
 	if (parent != NULL)
 	{
 		parent->AddChildReference(this);
