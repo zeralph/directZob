@@ -131,7 +131,7 @@ int main()
 	{
 		//m_directZob.GetZobObjectManager()->GetRootObject()->SetRotation(90, rot, 0);
 		m_directZob.GetZobObjectManager()->GetZobObject("terrain")->SetRotation(0, rot, 0);
-		m_directZob.GetZobObjectManager()->GetZobObject("skull")->SetRotation(0, -rot, 0);
+		m_directZob.GetZobObjectManager()->GetZobObject("skull")->SetRotation(0, -rot, 90);
 		m_directZob.RunAFrame();
 		int state = mfb_update(window, (void*)m_directZob.GetBufferData() );
 		if (state < 0)

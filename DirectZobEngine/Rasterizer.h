@@ -40,7 +40,7 @@ private:
 	void sortVerticesAscendingByY(Vector2* v1, Vector2* v2, Vector2* v3) const ;
 	void sortVerticesAscendingByY(Vector2* v1, Vector2* v2, Vector2* v3, Vector2* uv1, Vector2* uv2, Vector2* uv3) const;
 	inline float edgeFunction(const Vector3* a, const Vector3* b, const Vector3* c) const { return (c->x - a->x) * (b->y - a->y) - (c->y - a->y) * (b->x - a->x); }
-	inline float clamp2(float x, float min, float max) const { if (x < min) x = min; if (x > max) x = max; return x; }
+	inline float clamp2(float x, const float min, const float max) const { if (x < min) x = min; if (x > max) x = max; return x; }
 
 	inline const float computeAmbient(float ambientIntensity) const
 	{

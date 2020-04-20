@@ -37,7 +37,7 @@ std::string DirectZob::ExePath() {
 
 void DirectZob::LoadScene(std::string& path, std::string& file)
 {
-	SceneLoader::LoadScene(path, file, m_zobObjectManager, m_meshManager, m_materialManager);
+	SceneLoader::LoadScene(path, file);
 	if (m_text == NULL)
 	{
 		m_text = new Text2D(m_engine, m_events);
@@ -46,17 +46,17 @@ void DirectZob::LoadScene(std::string& path, std::string& file)
 
 void DirectZob::SaveScene(std::string& path, std::string& file)
 {
-	SceneLoader::SaveScene(path, file, m_zobObjectManager, m_meshManager, m_materialManager);
+	SceneLoader::SaveScene(path, file);
 }
 
 void DirectZob::SaveScene()
 {
-	SceneLoader::SaveScene(m_zobObjectManager, m_meshManager, m_materialManager);
+	SceneLoader::SaveScene();
 }
 
 void DirectZob::NewScene()
 {
-	SceneLoader::NewScene(m_engine, m_zobObjectManager, m_meshManager, m_materialManager);
+	SceneLoader::NewScene();
 	if (m_text == NULL)
 	{
 		m_text = new Text2D(m_engine, m_events);

@@ -4,55 +4,100 @@
 std::string SceneLoader::m_path = "";
 std::string SceneLoader::m_file = "";
 
-void SceneLoader::LoadMesh(TiXmlElement* node, MeshManager* meshMgr, MaterialManager* materialManager)
+void SceneLoader::LoadMesh(TiXmlElement* node)
 {
 	std::string name = node->Attribute("name");
 	std::string file = node->Attribute("file");
-	meshMgr->LoadMesh(name, m_path, file);
+	DirectZob::GetInstance()->GetMeshManager()->LoadMesh(name, m_path, file);
 }
 
-void SceneLoader::LoadZobObject(TiXmlElement* node, ZobObject* parent, ZobObjectManager* zobMgr, MeshManager* meshMgr)
+void SceneLoader::LoadZobObject(TiXmlElement* node, ZobObject* parent)
 {
 	float x, y, z;
 	std::string name;
 	std::string mesh;
 	TiXmlElement* f;
-	
+	std::string type;
+	ZobObject* zob = NULL;
+	Vector3 position, rotation, scale, orientation = Vector3();	 
 	name = node->Attribute("name");
+	type = node->Attribute("type");
 	f = node->FirstChildElement("Position");
 	x = atof(f->Attribute("x"));
 	y = atof(f->Attribute("y"));
 	z = atof(f->Attribute("z"));
-	Vector3 position = Vector3(x, y, z);
+	position = Vector3(x, y, z);
 	f = node->FirstChildElement("Rotation");
-	x = atof(f->Attribute("x"));
-	y = atof(f->Attribute("y"));
-	z = atof(f->Attribute("z"));
-	Vector3 rotation = Vector3(x, y, z);
-	f = node->FirstChildElement("Scale");
-	x = atof(f->Attribute("x"));
-	y = atof(f->Attribute("y"));
-	z = atof(f->Attribute("z"));
-	Vector3 scale = Vector3(x, y, z);
-	f = node->FirstChildElement("Mesh");
-	std::string meshName = f ? f->GetText() : "";
-	Mesh* m = meshMgr->GetMesh(meshName);
-	if (parent == NULL)
+	if (f)
 	{
-		parent = zobMgr->GetRootObject();
+		x = atof(f->Attribute("x"));
+		y = atof(f->Attribute("y"));
+		z = atof(f->Attribute("z"));
+		rotation = Vector3(x, y, z);
 	}
-	ZobObject* zob = new ZobObject(ZOBGUID::type_scene, ZOBGUID::subtype_zobOject, name, m, parent);
-	zob->SetTranslation(position.x, position.y, position.z);
-	zob->SetRotation(rotation.x, rotation.y, rotation.z);
-	zob->SetScale(scale.x, scale.y, scale.z);
+	f = node->FirstChildElement("Scale");
+	if (f)
+	{
+		x = atof(f->Attribute("x"));
+		y = atof(f->Attribute("y"));
+		z = atof(f->Attribute("z"));
+		scale = Vector3(x, y, z);
+	}
+	if (type == "mesh")
+	{
+		f = node->FirstChildElement("Mesh");
+		std::string meshName = f ? f->GetText() : "";
+		MeshManager* meshManager = DirectZob::GetInstance()->GetMeshManager();
+		Mesh* m = meshManager->GetMesh(meshName);
+		if (parent == NULL)
+		{
+			ZobObjectManager* zobObjectManager = DirectZob::GetInstance()->GetZobObjectManager();
+			parent = zobObjectManager->GetRootObject();
+		}
+		zob = new ZobObject(ZOBGUID::type_scene, ZOBGUID::subtype_zobOject, name, m, parent);
+		zob->SetTranslation(position.x, position.y, position.z);
+		zob->SetRotation(rotation.x, rotation.y, rotation.z);
+		zob->SetScale(scale.x, scale.y, scale.z);
+	}
+	else if (type == "pointlight")
+	{
+		Vector3 color = Vector3(1.0f, 0.0f, 1.0f);
+		f = node->FirstChildElement("Color");
+		if (f)
+		{
+			x = atof(f->Attribute("r"));
+			y = atof(f->Attribute("g"));
+			z = atof(f->Attribute("b"));
+			color = Vector3(x/255.0f, y/255.0f, z/255.0f);
+		}
+		f = node->FirstChildElement("Intensity");
+		float intensity = f ? atof(f->GetText()) : 1.0f;
+		f = node->FirstChildElement("FallOffDistance");
+		float falloff = f ? atof(f->GetText()) : 1.0f;
+		zob = DirectZob::GetInstance()->GetLightManager()->CreatePointLight(name, position, color, intensity, falloff);
+		if (parent == NULL)
+		{
+			ZobObjectManager* zobObjectManager = DirectZob::GetInstance()->GetZobObjectManager();
+			parent = zobObjectManager->GetRootObject();
+		}
+	}
+	else
+	{
+		std::string err = "Error creating zobObject ";
+		err.append(name);
+		DirectZob::LogError(err.c_str());
+	}
 	for (TiXmlElement* e = node->FirstChildElement("ZobObject"); e != NULL; e = e->NextSiblingElement("ZobObject"))
 	{
-		LoadZobObject(e, zob, zobMgr, meshMgr);
+		LoadZobObject(e, zob);
 	}
 }
 
-void SceneLoader::LoadScene(std::string &path, std::string &file, ZobObjectManager* zobObjectManager, MeshManager* meshManager, MaterialManager* materialManager)
+void SceneLoader::LoadScene(std::string &path, std::string &file)
 {
+	MeshManager* meshManager = DirectZob::GetInstance()->GetMeshManager();
+	MaterialManager* materialManager = DirectZob::GetInstance()->GetMaterialManager();
+	ZobObjectManager* zobObjectManager = DirectZob::GetInstance()->GetZobObjectManager();
 	m_path = path;
 	m_file = file;
 	float x, y, z, fov, znear, zfar;
@@ -82,43 +127,51 @@ void SceneLoader::LoadScene(std::string &path, std::string &file, ZobObjectManag
 		TiXmlElement* meshes = root->FirstChildElement("Meshes");
 		for (TiXmlElement* e = meshes->FirstChildElement("Mesh"); e != NULL; e = e->NextSiblingElement("Mesh"))
 		{
-			LoadMesh(e, meshManager, materialManager);
+			LoadMesh(e);
 		}
 		TiXmlElement* scene = root->FirstChildElement("Scene");
 		for (TiXmlElement* e = scene->FirstChildElement("ZobObject"); e != NULL; e = e->NextSiblingElement("ZobObject"))
 		{
-			LoadZobObject(e, NULL, zobObjectManager, meshManager);
+			LoadZobObject(e, NULL);
 		}
 	}
 }
 
-void SceneLoader::UnloadScene(Core::Engine* engine, ZobObjectManager* zobObjectManager, MeshManager* meshManager, MaterialManager* MaterialManager)
+void SceneLoader::UnloadScene()
 {
+	MeshManager* meshManager = DirectZob::GetInstance()->GetMeshManager();
+	MaterialManager* materialManager = DirectZob::GetInstance()->GetMaterialManager();
+	ZobObjectManager* zobObjectManager = DirectZob::GetInstance()->GetZobObjectManager();
+	LightManager* lightManager = DirectZob::GetInstance()->GetLightManager();
+	Engine* engine = DirectZob::GetInstance()->GetEngine();
 	engine->Stop();
 	Sleep(1000);	//ugly but ...
 	zobObjectManager->UnloadAll();
 	meshManager->UnloadAll();
-	MaterialManager->UnloadAll();
+	materialManager->UnloadAll();
+	lightManager->UnloadAll();
 }
 
-void SceneLoader::NewScene(Core::Engine* engine, ZobObjectManager* zobObjectManager, MeshManager* meshManager, MaterialManager* MaterialManager)
+void SceneLoader::NewScene()
 {
-	UnloadScene(engine, zobObjectManager, meshManager, MaterialManager);
+	UnloadScene();
 	m_path = "";
 	m_file = "";
-	engine->Start();
+	DirectZob::GetInstance()->GetEngine()->Start();
 }
 
-void SceneLoader::SaveScene(ZobObjectManager* zobObjectManager, MeshManager* meshManager, MaterialManager* MaterialManager)
+void SceneLoader::SaveScene()
 {
 	if (CanFastSave())
 	{
-		SaveScene(m_path, m_file, zobObjectManager, meshManager, MaterialManager);
+		SaveScene(m_path, m_file);
 	}
 }
 
-void SceneLoader::SaveScene(std::string &path, std::string &file, ZobObjectManager* zobObjectManager, MeshManager* meshManager, MaterialManager* MaterialManager)
+void SceneLoader::SaveScene(std::string &path, std::string &file)
 {
+	MeshManager* meshManager = DirectZob::GetInstance()->GetMeshManager();
+	ZobObjectManager* zobObjectManager = DirectZob::GetInstance()->GetZobObjectManager();
 	std::string fullPath;
 	m_file = file;
 	m_path = path;

@@ -168,8 +168,6 @@
     <ClInclude Include="Rasterizer.h" />
     <ClInclude Include="SceneLoader.h" />
     <ClInclude Include="text2D.h" />
-    <ClInclude Include="TextureTest.h" />
-    <ClInclude Include="TextureTestAlpha.h" />
     <ClInclude Include="tinystr.h" />
     <ClInclude Include="tinyxml.h" />
     <ClInclude Include="Triangle.h" />

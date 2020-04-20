@@ -383,8 +383,13 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 			{
 				const Light* l = (*iter);
 				//lightDir = l->GetTransform() - t->va;
-				lightDir = l->GetTransform() - t->va;// tpos;
-				lightPower =  (l->GetFallOffDistance() / lightDir.sqrtLength());
+				lightDir = tpos - l->GetTransform();// tpos;
+				lightPower = 1.0f - (lightDir.sqrtLength() / l->GetFallOffDistance());
+				lightPower = clamp2(lightPower, 0.0f, 1.0f) * l->GetIntensity();
+				if (lightPower == 0.0f)
+				{
+					break;
+				}
 				lightDir.Normalize();
 				static int specularIntensity = 50;
 				static float ambientIntensity = 0.4f;

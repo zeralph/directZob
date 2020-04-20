@@ -4,15 +4,20 @@
 LightManager::LightManager()
 {
 	m_lights.clear();
-	std::string l = "light1";
+	
 	Vector3 c = Vector3(94.5f / 255.0f, 85.5f / 255.0f, 64.3f / 255.0f);
 
+	std::string l = "lightRed";
+	c = Vector3(1.0f, 0.0f, 0.0f);
+	CreatePointLight(l, Vector3(50, 0, 0), c, 1.0f, 500);
 
-	c = Vector3(1.0f, 0.2f, 0.2f);
-	CreateLight(l, Vector3(-25, 20, 0), Vector3(-1, -1, -1), c, 1, 150);
-	l = "light2";
-	c = Vector3(0.0f, 0.2f, 1.0f);
-	CreateLight(l, Vector3(25, 20, 0), Vector3(-1, -1, -1), c, 1, 150);
+	l = "lightGreen";
+	c = Vector3(0.0f, 1.0f, 0.0f);
+	CreatePointLight(l, Vector3(0, 50, 0), c, 1.0f, 500);
+
+	l = "lightBlue";
+	c = Vector3(0.0f, 0.0f, 1.0f);
+	CreatePointLight(l, Vector3(0, 0, 50), c, 1.0f, 500);
 
 	m_ambientColor = Vector3(0.4f, 0.4f, 0.4f);
 
@@ -26,12 +31,22 @@ LightManager::~LightManager()
 	}
 }
 
-void LightManager::CreateLight(std::string& name, Vector3 position, Vector3 orientation, Vector3 color, float intensity, float distance)
+void LightManager::UnloadAll()
+{
+	for (int i = 0; i < m_lights.size(); i++)
+	{
+		delete (m_lights[i]);
+	}
+	m_lights.clear();
+}
+
+Light* LightManager::CreatePointLight(std::string& name, Vector3 position, Vector3 color, float intensity, float distance)
 {
 	Light* l = new Light(name, color, intensity, distance);
 	l->SetTranslation(position.x, position.y, position.z);
-	l->SetRotation(orientation.x, orientation.y, orientation.z);
+	l->SetRotation(0,0,0);
 	m_lights.push_back(l);
+	return l;
 }
 
 const std::vector<Light*>* LightManager::GetActiveLights() const

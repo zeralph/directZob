@@ -11,7 +11,6 @@
 #include "Engine.h"
 #include "Cube.h"
 #include "Material.h"
-#include "TextureTestAlpha.h"
 #include "Mesh.h"
 #include "text2D.h"
 #include "Events.h"
@@ -51,7 +50,7 @@ public :
 	LightManager* GetLightManager() const { return m_lightManager; }
 	ZobObjectManager* GetZobObjectManager() const { return m_zobObjectManager; }
 	MeshManager* GetMeshManager() const { return m_meshManager; }
-	MaterialManager* GetmaterialManager() const { return m_materialManager;  }
+	MaterialManager* GetMaterialManager() const { return m_materialManager;  }
 	Events* GetEventManager() { return m_events; }
 	static void LogInfo(const char* str);
 	static void LogError(const char* str);

@@ -226,7 +226,7 @@ void Mesh::LoadOBJ(const std::string& fullPath)
 			SplitEntry(&line, &v, ' ');
 			if (v.size() == 2)
 			{
-				DirectZob::GetInstance()->GetmaterialManager()->LoadMaterials(m_path, v[1]);
+				DirectZob::GetInstance()->GetMaterialManager()->LoadMaterials(m_path, v[1]);
 			}
 		}
 	}
@@ -301,7 +301,7 @@ void Mesh::LoadOBJ(const std::string& fullPath)
 				matName = matName.substr(0, matName.size() - 4);
 				matName.append(".");
 				matName.append(v[1]);
-				tex = DirectZob::GetInstance()->GetmaterialManager()->GetTexture(matName);
+				tex = DirectZob::GetInstance()->GetMaterialManager()->GetTexture(matName);
 			}
 
 		}
