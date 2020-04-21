@@ -3,24 +3,27 @@
 
 LightManager::LightManager()
 {
+	m_fogColor = Vector3(63.0f / 255.0f, 149.0f / 255.0f, 255.0f / 255.0f);
+	m_clearColor = Vector3(63.0f / 255.0f, 149.0f / 255.0f, 255.0f / 255.0f);
+	m_ambientColor = Vector3(0.4f, 0.4f, 0.4f);
+	m_fogDistance = 500.0f;
 	m_lights.clear();
+	m_fogDensity = 2.0f;
+	m_fogType = FogType::FogType_Exp;
 	
 	Vector3 c = Vector3(94.5f / 255.0f, 85.5f / 255.0f, 64.3f / 255.0f);
 
 	std::string l = "lightRed";
 	c = Vector3(1.0f, 0.0f, 0.0f);
-	CreatePointLight(l, Vector3(50, 0, 0), c, 1.0f, 500, NULL);
+	CreatePointLight(l, Vector3(50, 0, 0), c, 1.0f, 500, nullptr);
 
 	l = "lightGreen";
 	c = Vector3(0.0f, 1.0f, 0.0f);
-	CreatePointLight(l, Vector3(0, 50, 0), c, 1.0f, 500, NULL);
+	CreatePointLight(l, Vector3(0, 50, 0), c, 1.0f, 500, nullptr);
 
 	l = "lightBlue";
 	c = Vector3(0.0f, 0.0f, 1.0f);
-	CreatePointLight(l, Vector3(0, 0, 50), c, 1.0f, 500, NULL);
-
-	m_ambientColor = Vector3(0.4f, 0.4f, 0.4f);
-
+	CreatePointLight(l, Vector3(0, 0, 50), c, 1.0f, 500, nullptr);
 }
 
 LightManager::~LightManager()
@@ -28,6 +31,28 @@ LightManager::~LightManager()
 	for (int i = 0; i < m_lights.size(); i++)
 	{
 		delete (m_lights[i]);
+	}
+}
+
+void LightManager::Setup(Vector3* fogColor, Vector3* ambientColor, Vector3* clearColor, float fogDistance, float fogDensity, FogType fogType)
+{
+	m_fogColor = fogColor;
+	m_ambientColor = ambientColor;
+	m_clearColor = clearColor;
+	m_fogDistance = fogDistance;
+	m_fogDensity = fogDensity;
+	m_fogType = fogType;
+}
+
+void LightManager::RemoveLight(Light* l)
+{
+	for (int i = 0; i < m_lights.size(); i++)
+	{
+		if (m_lights[i] == l)
+		{
+			std::swap(m_lights.at(i), m_lights.at(m_lights.size() - 1));
+			m_lights.pop_back();
+		}
 	}
 }
 

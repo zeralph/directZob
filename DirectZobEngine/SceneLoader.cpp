@@ -21,7 +21,7 @@ void SceneLoader::LoadZobObject(TiXmlElement* node, ZobObject* parent)
 	ZobObject* zob = NULL;
 	Vector3 position, rotation, scale, orientation = Vector3();	 
 	name = node->Attribute("name");
-	type = node->Attribute("type");
+	type = node->Attribute("type")? node->Attribute("type"):"mesh";
 	f = node->FirstChildElement("Position");
 	x = atof(f->Attribute("x"));
 	y = atof(f->Attribute("y"));
@@ -49,7 +49,7 @@ void SceneLoader::LoadZobObject(TiXmlElement* node, ZobObject* parent)
 		std::string meshName = f ? f->GetText() : "";
 		MeshManager* meshManager = DirectZob::GetInstance()->GetMeshManager();
 		Mesh* m = meshManager->GetMesh(meshName);
-		if (parent == NULL)
+		if (parent == nullptr)
 		{
 			ZobObjectManager* zobObjectManager = DirectZob::GetInstance()->GetZobObjectManager();
 			parent = zobObjectManager->GetRootObject();
@@ -130,10 +130,84 @@ void SceneLoader::LoadScene(std::string &path, std::string &file)
 			LoadMesh(e);
 		}
 		TiXmlElement* scene = root->FirstChildElement("Scene");
+		LoadGlobals( scene->FirstChildElement("Globals") );
 		for (TiXmlElement* e = scene->FirstChildElement("ZobObject"); e != NULL; e = e->NextSiblingElement("ZobObject"))
 		{
 			LoadZobObject(e, NULL);
 		}
+	}
+}
+
+void SceneLoader::LoadGlobals(TiXmlElement* node)
+{
+	if (node)
+	{
+		LightManager* lm = DirectZob::GetInstance()->GetLightManager();
+		TiXmlElement* e; 
+		Vector3 ambient = lm->GetAmbientColor();
+		e = node->FirstChildElement("AmbientColor");
+		if (e)
+		{
+			float x = atof(e->Attribute("r"));
+			float y = atof(e->Attribute("g"));
+			float z = atof(e->Attribute("b"));
+			ambient = Vector3(x, y, z);
+		}
+		Vector3 fog = lm->GetFogColor();
+		e = node->FirstChildElement("FogColor");
+		if (e)
+		{
+			float x = atof(e->Attribute("r"));
+			float y = atof(e->Attribute("g"));
+			float z = atof(e->Attribute("b"));
+			fog = Vector3(x, y, z );
+		}
+		e = node->FirstChildElement("ClearColor");
+		Vector3 clear = lm->GetClearColor();
+		if (e)
+		{
+			float x = atof(e->Attribute("r"));
+			float y = atof(e->Attribute("g"));
+			float z = atof(e->Attribute("b"));
+			clear = Vector3(x, y, z);
+		}
+		e = node->FirstChildElement("FogDensity");
+		float fogDensity = lm->GetFogDensity();
+		if (e)
+		{
+			fogDensity = atof(e->GetText());
+		}
+		e = node->FirstChildElement("FogDistance");
+		float FogDistance = lm->GetFogDistance();
+		if (e)
+		{
+			FogDistance = atof(e->GetText());
+		}
+		e = node->FirstChildElement("FogType");
+		FogType fogType = lm->GetFogType();
+		if (e)
+		{
+			if (e->GetText() == "linear")
+			{
+				fogType = FogType::FogType_Linear;
+			}
+			else if (e->GetText() == "exp")
+			{
+				fogType = FogType::FogType_Exp;
+			}
+			else if (e->GetText() == "exp2")
+			{
+				fogType = FogType::FogType_Exp2;
+			}
+			else 
+			{
+				fogType = FogType::FogType_NoFog;
+			}
+		}
+		fog /= 255.0f;
+		ambient /= 255.0f;
+		clear /= 255.0f;
+		lm->Setup(&fog, &ambient, &clear, FogDistance, fogDensity, fogType);
 	}
 }
 

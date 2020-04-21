@@ -1,7 +1,7 @@
 #include "MiniFB.h"
 #include "MiniFB_internal.h"
 #include "WindowData.h"
-#include "WIndows/WindowData_Win.h"
+#include "Windows/WindowData_Win.h"
 
 #include <stdlib.h>
 

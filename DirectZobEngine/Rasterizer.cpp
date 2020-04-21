@@ -75,6 +75,10 @@ void Rasterizer::Render()
 	{
 		m_lights = lm->GetActiveLights();
 		m_ambientColor = lm->GetAmbientColor();
+		m_fogColor = lm->GetFogColor();
+		m_fogType = lm->GetFogType();
+		m_fogDensity = lm->GetFogDensity();
+		m_fogDistance = lm->GetFogDistance();
 	}
 	for (int i = 0; i < m_nbTriangles; i++)
 	{
@@ -289,7 +293,7 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 	float w0 = edgeFunction(t->vb, t->vc, p);
 	float w1 = edgeFunction(t->vc, t->va, p);*/
 
-	float w0, w1, w2, su, tu, cl, sl, al, r, g, b, a, z, cla, clb, clc, fr, fg, fb, lightPower;
+	float w0, w1, w2, su, tu, cl, sl, al, r, g, b, a, z, zRatio, cla, clb, clc, fr, fg, fb, lightPower;
 	float texPixelData[4];
 	uint c, k;
 	Vector3 normal, lightDir;
@@ -309,27 +313,14 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 								(t->va->z * w0 + t->vb->z * w1 + t->vc->z * w2));
 
 		const Material* texData = t->tex;
-		z = m_bufferData->zNear;
-		z = 1.0f / (t->pa->z * w0 + t->pb->z * w1 + t->pc->z * w2); //tpos.z ?
+		z = (t->pa->z * w0 + t->pb->z * w1 + t->pc->z * w2);
+		zRatio = (z - m_bufferData->zNear ) / (m_bufferData->zFar - m_bufferData->zNear);
 		k = p->y * m_width + p->x;
 		float zf = m_bufferData->zBuffer[k];
-
-		static float zmin = 1000;
-		static float zmax = 0;
-
-		if (!t->options.ZBuffered() || z > zf)
+		if (!t->options.ZBuffered() || zf < 0.0f  || zRatio < zf )
 		{
 			m_bufferData->oBuffer[k] = t->owner;
-			m_bufferData->zBuffer[k] = z;
-			if (zmin > z)
-			{
-				zmin = z;
-			}
-			if (zmax < z)
-			{
-				zmax = z;
-			}
-
+			m_bufferData->zBuffer[k] = zRatio;
 			su = w0 * t->ua->x + w1 * t->ub->x + w2 * t->uc->x;
 			tu = w0 * t->ua->y + w1 * t->ub->y + w2 * t->uc->y;
 			cl = 1.0f;
@@ -420,6 +411,29 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 			fr = clamp2(fr, 0.0f, 1.0f);
 			fg = clamp2(fg, 0.0f, 1.0f);
 			fb = clamp2(fb, 0.0f, 1.0f);
+			z = abs(z);
+			if (m_fogType == FogType::FogType_NoFog)
+			{
+				z = 1.0f;
+			}
+			else if (m_fogType == FogType::FogType_Linear)
+			{
+				z = (m_bufferData->zFar - z) / (m_fogDistance - m_bufferData->zNear);
+			}
+			else if (m_fogType == FogType::FogType_Exp)
+			{
+				//z = (m_bufferData->zFar - z) / (m_fogDistance - m_bufferData->zNear);
+				z = exp(-m_fogDensity * zRatio);
+			}
+			else
+			{
+				//z = (m_bufferData->zFar - z) / (m_fogDistance - m_bufferData->zNear);
+				z = exp(-m_fogDensity * pow(zRatio,2));
+			}
+			z = clamp2(z, 0.0f, 1.0f);
+			fr = fr * z + (1.0f - z) * m_fogColor->x;
+			fg = fg * z + (1.0f - z) * m_fogColor->y;
+			fb = fb * z + (1.0f - z) * m_fogColor->z;
 			c = ((int)(fr * 255) << 16) + ((int)(fg * 255) << 8) + (int)(fb * 255);
 			m_bufferData->buffer[k] = c;
 		}

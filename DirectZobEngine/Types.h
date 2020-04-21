@@ -61,6 +61,15 @@ public:
 	};
 };
 
+enum FogType
+{
+	FogType_NoFog = 0,
+	FogType_Linear,
+	FogType_Exp,
+	FogType_Exp2,
+	__FogType_MAX__
+};
+
 typedef DirectZobType::u8 u8;
 typedef DirectZobType::uint uint;
 typedef DirectZobType::ulong ulong;

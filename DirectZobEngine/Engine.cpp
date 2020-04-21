@@ -120,6 +120,7 @@ void Engine::Stop()
 	m_started = false;
 	WaitForRasterizersEnd();
 	ClearRenderQueues();
+	Sleep(100);
 }
 
 void Engine::Resize(int width, int height)
@@ -179,11 +180,10 @@ void Engine::ClearBuffer(const Color* color)
 {
 	m_tick = clock();
 	uint v = color->GetRawValue();
-	v = 0x3F95FF;
 	for (int i = 0; i < m_bufferData.width * m_bufferData.height; i++)
 	{
 		m_buffer[i] = v;
-		m_zBuffer[i] = 0;
+		m_zBuffer[i] = -1.0f;
 		m_oBuffer[i] = 0;
 	}
 	

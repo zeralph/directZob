@@ -11,6 +11,11 @@ Color::Color() :
 
 }
 
+Color::Color(const Vector3* v)
+{
+	Set(255, (int)(v->x * 255.0f), (int)(v->y * 255.0f), (int)(v->z * 255.0f));
+}
+
 Color::Color(uint rawValue):
 	m_value(rawValue)
 {

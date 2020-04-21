@@ -17,23 +17,38 @@
         <Mesh name="camaro.obj" file="camaro.obj" />
     </Meshes>
     <Scene>
-        <ZobObject name="newObject_1">
+		<Globals>
+			<AmbientColor r="0.8" g="0.8" b="0.8"/>
+			<FogColor r="200" g="200" b="200" />
+			<ClearColor r="0" g="0" b="0" />
+			<FogDensity>20</FogDensity>
+			<FogDistance>0</FogDistance>
+			<FogType>Exp2</FogType>			
+		</Globals>
+        <ZobObject name="newObject_1" type="mesh">
             <Mesh>Terrain.obj</Mesh>
             <Position x="10" y="0" z="0" />
             <Rotation x="0" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
-            <ZobObject name="newObject_2">
+            <ZobObject name="newObject_2" type="mesh">
                 <Mesh>cottage_obj.obj</Mesh>
                 <Position x="10" y="0" z="-30" />
                 <Rotation x="0" y="45" z="0" />
                 <Scale x="1" y="1" z="1" />
-                <ZobObject name="newObject_3">
+                <ZobObject name="newObject_3" type="mesh">
                     <Mesh>camaro.obj</Mesh>
                     <Position x="20" y="5" z="30" />
                     <Rotation x="0" y="180" z="0" />
                     <Scale x="1" y="1" z="1" />
                 </ZobObject>
             </ZobObject>
+        </ZobObject>
+		<ZobObject name ="sun" type="pointlight">
+			<Rotation x="0" y="0" z="0" />
+            <Position x="0" y="1000" z="0" />
+            <Color r="241" g="218" b="164" />
+			<Intensity>1</Intensity>
+			<FallOffDistance>5000</FallOffDistance>
         </ZobObject>
     </Scene>
 </root>

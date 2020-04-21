@@ -66,6 +66,10 @@ private:
 	const std::vector<Line2D>* m_lines;
 	const Triangle* m_triangles;
 	const Vector3* m_ambientColor;
+	const Vector3* m_fogColor;
+	float m_fogDistance;
+	float m_fogDensity;
+	FogType m_fogType;
 	BufferData* m_bufferData;
 	Vector3 m_camDir;
 	uint m_nbTriangles;

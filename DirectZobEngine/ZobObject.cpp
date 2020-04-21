@@ -3,16 +3,17 @@
 
 ZobObject::ZobObject(Type t, SubType s, std::string& name, Mesh* mesh, ZobObject* parent /*= NULL*/):ZOBGUID(t,s)
 {
-	m_name = name;
 	m_parent = parent;
+	m_name = name;
 	m_mesh = mesh;
 	m_translation = Vector3(0, 0, 0);
 	m_rotation = Vector3(0, 0, 0);
 	m_scale = Vector3(1, 1, 1);
 	m_children.clear();
-	if (parent != NULL)
+	SetParent(parent);
+	if (m_parent != nullptr)
 	{
-		parent->AddChildReference(this);
+		m_parent->AddChildReference(this);
 	}
 	m_renderOptions.LightMode(RenderOptions::eLightMode_phong);
 	m_renderOptions.ZBuffered(true);
@@ -23,17 +24,25 @@ ZobObject::ZobObject(Type t, SubType s, std::string& name, Mesh* mesh, ZobObject
 
 ZobObject::~ZobObject()
 {
-	for (int i = 0; i < m_children.size(); i++)
+	Light* l = (Light*)this;
+	if (l)
 	{
-		delete m_children.at(i);
+		DirectZob::GetInstance()->GetLightManager()->RemoveLight(l);
 	}
 	if (m_parent != NULL)
 	{
 		m_parent->RemoveChildReference(this);
 	}
-	std::string l = "Deleted ZobObject ";
-	l.append(m_name);
-	DirectZob::LogInfo(l.c_str());
+	m_parent = NULL;
+	for (int i = 0; i < m_children.size(); i++)
+	{
+		m_children.at(i)->SetParent(NULL);
+		delete m_children.at(i);
+	}
+	m_children.clear();
+	std::string s = "Deleted ZobObject ";
+	s.append(m_name);
+	DirectZob::LogInfo(s.c_str());
 }
 
 void ZobObject::SetMesh(std::string name)
@@ -89,7 +98,7 @@ void ZobObject::Draw(const Camera* camera, Core::Engine* engine)
 
 int ZobObject::GetChildPosition(const ZobObject* z)
 {
-	for (int i=0; i<m_children.size(); i++)
+	for (int i = 0; i < m_children.size(); i++)
 	{
 		if (m_children.at(i) == z)
 		{
@@ -104,7 +113,7 @@ void ZobObject::RemoveChildReference(const ZobObject* z)
 	int i = GetChildPosition(z);
 	if (i >= 0)
 	{
-		std::swap(m_children.at(i), m_children.at(m_children.size()-1));
+		std::swap(m_children.at(i), m_children.at(m_children.size() - 1));
 		m_children.pop_back();
 	}
 }
@@ -154,7 +163,7 @@ const void ZobObject::GetFullNodeName(std::string& fullname) const
 void ZobObject::SetParent(ZobObject* p)
 {
 	ZobObject* parent = GetParent();
-	if (p != NULL && p!= this && p != parent)
+	if (parent != NULL && p != NULL && p!= this && p != parent)
 	{
 		if (!HasChild(p))
 		{
@@ -165,6 +174,14 @@ void ZobObject::SetParent(ZobObject* p)
 		else
 		{
 			DirectZob::LogWarning("trying to reparent an object with one of its descendants !");
+		}
+	}
+	else
+	{
+		//m_parent.reset();
+		if (p)
+		{
+			m_parent = p;
 		}
 	}
 }

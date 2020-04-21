@@ -28,11 +28,6 @@ std::string DirectZob::ExePath() {
 
 	//return std::string("D:\\_PERSO\\directZob\\directZob\\resources\\");
 	return std::string("C:\\_GIT\\directZob\\resources");
-
-	char b[MAX_PATH];
-	GetModuleFileName(NULL, b, MAX_PATH);
-	std::string::size_type pos = std::string(b).find_last_of("\\/");
-	return std::string(b).substr(0, pos);
 }
 
 void DirectZob::LoadScene(std::string& path, std::string& file)
@@ -96,8 +91,8 @@ int DirectZob::RunAFrame()
 	int state=0;
 	if(m_engine->Started())
 	{
-
-		m_engine->ClearBuffer(&Color::White);
+		Color c = Color(DirectZob::GetInstance()->GetLightManager()->GetClearColor());
+		m_engine->ClearBuffer(&c);
 		m_engine->StartDrawingScene();
 		Camera* cam = m_cameraManager->GetCurrentCamera();
 		cam->Update();

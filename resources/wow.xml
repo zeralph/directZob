@@ -17,6 +17,14 @@
 		<Mesh name="terrain2.obj" file="terrain2.obj" />
     </Meshes>
     <Scene>
+		<Globals>
+			<AmbientColor r="200" g="200" b="200"/>
+			<FogColor r="200" g="200" b="200" />
+			<ClearColor r="0" g="0" b="0" />
+			<FogDensity>2</FogDensity>
+			<FogDistance>0</FogDistance>
+			<FogType>Exp2</FogType>			
+		</Globals>
         <ZobObject name="skull" type="mesh">
             <Mesh>skull.obj</Mesh>
             <Position x="0" y="10" z="0" />

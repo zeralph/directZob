@@ -8,16 +8,28 @@
 class LightManager
 {
 public:
+
 	LightManager();
 	~LightManager();
-
+	void Setup(Vector3* fogColor, Vector3* ambientColor, Vector3* clearColor, float fogDistance, float fogDensity, FogType fogType);
 	Light* CreatePointLight(std::string& name, Vector3 position, Vector3 color, float intensity, float distance, ZobObject* parent);
 	const std::vector<Light*>*  GetActiveLights() const;
 	const Vector3* GetAmbientColor() const { return &m_ambientColor; };
+	const Vector3* GetFogColor() const { return &m_fogColor; };
+	const Vector3* GetClearColor() const { return &m_clearColor; };
+	const float GetFogDistance() const { return m_fogDistance; };
 	const float GetAmbientColorIntensity() const { return m_ambientColorIntensity; };
+	const float GetFogDensity() const { return m_fogDensity; }
+	const FogType GetFogType() const { return m_fogType; }
+	void RemoveLight(Light* l);
 	void UnloadAll();
 private:
+	FogType m_fogType;
 	std::vector<Light*> m_lights;
 	Vector3 m_ambientColor;
+	Vector3 m_clearColor;
 	float m_ambientColorIntensity;
+	Vector3 m_fogColor;
+	float m_fogDistance;
+	float m_fogDensity;
 };

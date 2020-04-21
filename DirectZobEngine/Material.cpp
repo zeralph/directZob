@@ -11,6 +11,7 @@ Material::Material(const std::string& name, const Vector3* ambientColor, const V
 	m_diffuseColor = diffuseColor;
 	m_width = 0;
 	m_height = 0;
+	m_data = NULL;
 	if (textureFile)
 	{
 		std::vector<unsigned char> image; //the raw pixels
@@ -65,4 +66,10 @@ Material::Material(const std::string& name, const Vector3* ambientColor, const V
 Material::~Material()
 {
 	delete m_data;
+	m_data = NULL;
+	m_name = "deleted";
+	m_ambientColor = Vector3(0, 0, 0);
+	m_diffuseColor = Vector3(0,0,0);
+	m_width = 0;
+	m_height = 0;
 }

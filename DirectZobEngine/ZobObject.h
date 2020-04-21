@@ -46,7 +46,7 @@ protected:
 	
 	bool HasChild(const ZobObject* o);
 
-	ZobObject* m_parent = NULL;
+	ZobObject* m_parent;
 	Mesh* m_mesh = NULL;
 	std::vector<ZobObject*> m_children;
 	Matrix4x4 m_modelMatrix;
