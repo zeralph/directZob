@@ -312,7 +312,7 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 								(t->va->y * w0 + t->vb->y * w1 + t->vc->y * w2),
 								(t->va->z * w0 + t->vb->z * w1 + t->vc->z * w2));
 
-		const Material* texData = t->tex;
+		const Material* texData = t->material;
 		z = (t->pa->z * w0 + t->pb->z * w1 + t->pc->z * w2);
 		zRatio = (z - m_bufferData->zNear ) / (m_bufferData->zFar - m_bufferData->zNear);
 		k = p->y * m_width + p->x;

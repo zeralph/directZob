@@ -24,137 +24,216 @@ Mesh::Mesh(std::string& name, std::string& path, std::string& file)
 	
 	if (fullPath.find(".fbx") != -1)
 	{
-		std::string s = "Load mesh " + fullPath;
-		DirectZob::LogInfo(s.c_str());
-		FbxManager* fbxManag = DirectZob::GetInstance()->GetMeshManager()->GetFbxManager();
-		FbxImporter* importer = FbxImporter::Create(fbxManag, "");
-		if (importer->Initialize(fullPath.c_str(), -1, fbxManag->GetIOSettings()))
-		{
-			FbxScene* lScene = FbxScene::Create(fbxManag, "myScene");
-			importer->Import(lScene);
-			importer->Destroy();
-			int gc = lScene->GetGeometryCount();
-			m_nbFaces = 0;
-			int i = 0;
-			//first pass, allocations
-			m_nbVertices = 0;
-			for (int i = 0; i < gc; i++)
-			{
-				FbxMesh* mesh = (FbxMesh*)lScene->GetGeometry(i);
-				m_nbVertices += mesh->GetPolygonVertexCount();
-			}
-			m_nbFaces = 0;
-			m_vertices = (Vector3*)malloc(sizeof(Vector3) * m_nbVertices);
-			m_projectedVertices = (Vector3*)malloc(sizeof(Vector3) * m_nbVertices);
-			m_verticesData = (Vector3*)malloc(sizeof(Vector3) * m_nbVertices);
-			m_nbNormals = m_nbVertices;
-			m_verticesNormals = (Vector3*)malloc(sizeof(Vector3) * m_nbNormals);
-			m_verticesNormalsData = (Vector3*)malloc(sizeof(Vector3) * m_nbNormals);
-			m_nbUvs = m_nbVertices;
-			m_uvs = (Vector2*)malloc(sizeof(Vector2) * m_nbUvs);
-			for (int i = 0; i < gc; i++)
-			{
-				FbxMesh* mesh = (FbxMesh*)lScene->GetGeometry(i);
-				int pc = mesh->GetPolygonCount();
-				int vIdx = 0;
-				if (mesh && pc > 0)
-				{
-					fbxsdk::FbxAMatrix mat;
-					mesh->GetPivot(mat);
-					fbxsdk::FbxGeometryElementMaterial* material = mesh->GetElementMaterial(0);
-					//mesh->text
-					//material->lay
-					for (int j = 0; j < pc; j++)
-					{
-						int pSize = mesh->GetPolygonSize(j);
-						int startIdx = vIdx;
-						FbxVector4 normal = FbxVector4(0,0,0);
-						for (int k = 0; k < pSize; k++)
-						{
-							int ctrlIdx = mesh->GetPolygonVertex(j, k);
-							FbxVector4 v = mesh->GetControlPointAt(ctrlIdx);
-							FbxMultT(mesh->GetNode(), v);
-							m_vertices[vIdx] = Vector3(v[0], v[1], v[2]);
-							m_uvs[vIdx] = Vector2(0, 0);
-							mesh->GetPolygonVertexNormal(j, k, normal);
-							FbxMultT(mesh->GetNode(), normal);
-							normal.Normalize();
-							m_verticesNormals[vIdx] = Vector3(normal[0], normal[1], normal[2]);
-							//todo : compute normal
-							
-							vIdx++;
-						}
-						Triangle t;
-						t.va = &m_vertices[startIdx];
-						t.vb = &m_vertices[startIdx + 1];
-						t.vc = &m_vertices[startIdx + 2];
-						t.pa = &m_projectedVertices[startIdx];
-						t.pb = &m_projectedVertices[startIdx + 1];
-						t.pc = &m_projectedVertices[startIdx + 2];
-						t.na = &m_verticesNormals[startIdx];
-						t.nb = &m_verticesNormals[startIdx + 1];
-						t.nc = &m_verticesNormals[startIdx + 2];
-						t.ua = &m_uvs[startIdx];
-						t.ub = &m_uvs[startIdx + 1];
-						t.uc = &m_uvs[startIdx + 2];
-						m_triangles.push_back(t);
-						m_nbFaces++;
-						if (pSize > 4)
-						{
-							int yy = 0;
-							yy++;
-						}
-						if (pSize == 4)
-						{
-							Triangle t;
-							t.va = &m_vertices[startIdx + 3];
-							t.vb = &m_vertices[startIdx + 0];
-							t.vc = &m_vertices[startIdx + 2];
-							t.pa = &m_projectedVertices[startIdx + 3];
-							t.pb = &m_projectedVertices[startIdx + 0];
-							t.pc = &m_projectedVertices[startIdx + 2];
-							t.na = &m_verticesNormals[startIdx + 3];
-							t.nb = &m_verticesNormals[startIdx + 0];
-							t.nc = &m_verticesNormals[startIdx + 2];
-							t.ua = &m_uvs[startIdx + 3];
-							t.ub = &m_uvs[startIdx + 0];
-							t.uc = &m_uvs[startIdx + 2];
-							m_triangles.push_back(t);
-							m_nbFaces++;
-						}
-					}
-				}
-				if (vIdx == m_nbVertices)
-				{
-					int ok = 0;
-				}
-				else
-				{
-					int ok = 1;
-				}
-				m_trianglesNormals = (Vector3*)malloc(sizeof(Vector3) * m_nbFaces);
-				m_trianglesNormalsData = (Vector3*)malloc(sizeof(Vector3) * m_nbFaces);
-				for (int i = 0; i < m_nbFaces; i++)
-				{
-					Triangle* t = &m_triangles[i];
-					Vector3 v = Vector3(0,0,0);
-					v.Add(t->na);
-					v.Add(t->nb);
-					v.Add(t->nc);
-					v.Div(3.0f);
-					m_trianglesNormals[i] = v;
-					t->n = &m_trianglesNormals[i];
-				}
-				memcpy(m_verticesData, m_vertices, sizeof(Vector3) * m_nbVertices);
-				memcpy(m_verticesNormalsData, m_verticesNormals, sizeof(Vector3) * m_nbNormals);
-				memcpy(m_trianglesNormalsData, m_trianglesNormals, sizeof(Vector3) * m_nbFaces);
-			}
-		}
+		LoadFbx(fullPath);
 	}
 	else
 	{
 		LoadOBJ(fullPath);
 	}
+}
+
+void Mesh::LoadFbx(const std::string& fullPath)
+{
+	std::string s = "Load mesh " + fullPath;
+	DirectZob::LogInfo(s.c_str());
+	FbxManager* fbxManag = DirectZob::GetInstance()->GetMeshManager()->GetFbxManager();
+	FbxImporter* importer = FbxImporter::Create(fbxManag, "");
+	if (importer->Initialize(fullPath.c_str(), -1, fbxManag->GetIOSettings()))
+	{
+		FbxScene* lScene = FbxScene::Create(fbxManag, "myScene");
+		importer->Import(lScene);
+		importer->Destroy();
+		int gc = lScene->GetGeometryCount();
+		m_nbFaces = 0;
+		int i = 0;
+		//first pass, allocations
+		m_nbVertices = 0;
+		for (int i = 0; i < gc; i++)
+		{
+			FbxMesh* mesh = (FbxMesh*)lScene->GetGeometry(i);
+			m_nbVertices += mesh->GetPolygonVertexCount();
+		}
+		m_nbFaces = 0;
+		m_vertices = (Vector3*)malloc(sizeof(Vector3) * m_nbVertices);
+		m_projectedVertices = (Vector3*)malloc(sizeof(Vector3) * m_nbVertices);
+		m_verticesData = (Vector3*)malloc(sizeof(Vector3) * m_nbVertices);
+		m_nbNormals = m_nbVertices;
+		m_verticesNormals = (Vector3*)malloc(sizeof(Vector3) * m_nbNormals);
+		m_verticesNormalsData = (Vector3*)malloc(sizeof(Vector3) * m_nbNormals);
+		m_nbUvs = m_nbVertices;
+		m_uvs = (Vector2*)malloc(sizeof(Vector2) * m_nbUvs);
+		for (int i = 0; i < gc; i++)
+		{
+			FbxMesh* mesh = (FbxMesh*)lScene->GetGeometry(i);
+			int pc = mesh->GetPolygonCount();
+			int vIdx = 0;
+			if (mesh && pc > 0)
+			{
+				fbxsdk::FbxAMatrix mat;
+				mesh->GetPivot(mat);
+				for (int j = 0; j < pc; j++)
+				{
+					int pSize = mesh->GetPolygonSize(j);
+					int startIdx = vIdx;
+					FbxVector4 normal = FbxVector4(0, 0, 0);
+					for (int k = 0; k < pSize; k++)
+					{
+						int polyGroup = mesh->GetPolygonGroup(j);
+						int ctrlIdx = mesh->GetPolygonVertex(j, k);
+						FbxVector4 v = mesh->GetControlPointAt(ctrlIdx);
+						FbxMultT(mesh->GetNode(), v);
+						m_vertices[vIdx] = Vector3(v[0], v[1], v[2]);
+						m_uvs[vIdx] = Vector2(0, 0);
+						mesh->GetPolygonVertexNormal(j, k, normal);
+						FbxMultT(mesh->GetNode(), normal);
+						normal.Normalize();
+						m_verticesNormals[vIdx] = Vector3(normal[0], normal[1], normal[2]);
+						//todo : compute normal
+
+						vIdx++;
+					}
+					
+					const Material* material = LoadFbxMaterial(mesh);
+					Triangle t;
+					t.va = &m_vertices[startIdx];
+					t.vb = &m_vertices[startIdx + 1];
+					t.vc = &m_vertices[startIdx + 2];
+					t.pa = &m_projectedVertices[startIdx];
+					t.pb = &m_projectedVertices[startIdx + 1];
+					t.pc = &m_projectedVertices[startIdx + 2];
+					t.na = &m_verticesNormals[startIdx];
+					t.nb = &m_verticesNormals[startIdx + 1];
+					t.nc = &m_verticesNormals[startIdx + 2];
+					t.ua = &m_uvs[startIdx];
+					t.ub = &m_uvs[startIdx + 1];
+					t.uc = &m_uvs[startIdx + 2];
+					t.material = material;
+					m_triangles.push_back(t);
+					m_nbFaces++;
+					if (pSize > 4)
+					{
+						int yy = 0;
+						yy++;
+					}
+					if (pSize == 4)
+					{
+						Triangle t;
+						t.va = &m_vertices[startIdx + 3];
+						t.vb = &m_vertices[startIdx + 0];
+						t.vc = &m_vertices[startIdx + 2];
+						t.pa = &m_projectedVertices[startIdx + 3];
+						t.pb = &m_projectedVertices[startIdx + 0];
+						t.pc = &m_projectedVertices[startIdx + 2];
+						t.na = &m_verticesNormals[startIdx + 3];
+						t.nb = &m_verticesNormals[startIdx + 0];
+						t.nc = &m_verticesNormals[startIdx + 2];
+						t.ua = &m_uvs[startIdx + 3];
+						t.ub = &m_uvs[startIdx + 0];
+						t.uc = &m_uvs[startIdx + 2];
+						t.material = material;
+						m_triangles.push_back(t);
+						m_nbFaces++;
+					}
+				}
+			}
+			if (vIdx == m_nbVertices)
+			{
+				int ok = 0;
+			}
+			else
+			{
+				int ok = 1;
+			}
+			m_trianglesNormals = (Vector3*)malloc(sizeof(Vector3) * m_nbFaces);
+			m_trianglesNormalsData = (Vector3*)malloc(sizeof(Vector3) * m_nbFaces);
+			for (int i = 0; i < m_nbFaces; i++)
+			{
+				Triangle* t = &m_triangles[i];
+				Vector3 v = Vector3(0, 0, 0);
+				v.Add(t->na);
+				v.Add(t->nb);
+				v.Add(t->nc);
+				v.Div(3.0f);
+				m_trianglesNormals[i] = v;
+				t->n = &m_trianglesNormals[i];
+			}
+			memcpy(m_verticesData, m_vertices, sizeof(Vector3) * m_nbVertices);
+			memcpy(m_verticesNormalsData, m_verticesNormals, sizeof(Vector3) * m_nbNormals);
+			memcpy(m_trianglesNormalsData, m_trianglesNormals, sizeof(Vector3) * m_nbFaces);
+		}
+	}
+}
+
+const Material* Mesh::LoadFbxMaterial(fbxsdk::FbxMesh* mesh)
+{
+	const Material* finalMaterial = NULL;
+	MaterialManager* materialMgr = DirectZob::GetInstance()->GetMaterialManager();
+	int mcount = mesh->GetElementMaterialCount();
+	for (int index = 0; index < mcount; index++)
+	{
+		//fbxsdk::FbxGeometryElementMaterial* material = mesh->GetElementMaterial(0);
+		fbxsdk::FbxGeometryElementMaterial* gMaterial = mesh->GetElementMaterial(index);
+		if (gMaterial)
+		{
+			fbxsdk::FbxSurfaceMaterial* material = mesh->GetNode()->GetMaterial(gMaterial->GetIndexArray().GetAt(0));
+			int propCount = material->GetSrcPropertyCount();
+			//if (propCount > 0)
+			{
+				const char* matName = material->GetName();
+				finalMaterial = materialMgr->GetMaterial(matName);
+				if (finalMaterial)
+				{
+					return finalMaterial;
+				}
+				else
+				{
+					// This only gets the material of type sDiffuse, you probably need to traverse all Standard Material Property by its name to get all possible textures.
+					fbxsdk::FbxProperty prop = material->FindProperty(fbxsdk::FbxSurfaceMaterial::sDiffuse);
+					// Check if it's layeredtextures
+					FbxDouble3 c = prop.Get<FbxDouble3>();
+					Vector3 diffuse = Vector3(c[0], c[1], c[2]);
+					const char* texture_name = NULL;
+					int layered_texture_count = prop.GetSrcObjectCount<fbxsdk::FbxLayeredTexture>();
+					if (layered_texture_count > 0)
+					{
+						for (int j = 0; j < layered_texture_count; j++)
+						{
+							FbxLayeredTexture* layered_texture = FbxCast<fbxsdk::FbxLayeredTexture>(prop.GetSrcObject<FbxLayeredTexture>(j));
+							int lcount = layered_texture->GetSrcObjectCount<fbxsdk::FbxTexture>();
+							for (int k = 0; k < lcount; k++)
+							{
+								FbxTexture* texture = FbxCast<fbxsdk::FbxTexture>(layered_texture->GetSrcObject<fbxsdk::FbxTexture>(k));
+								// Then, you can get all the properties of the texture, include its name
+								texture_name = texture->GetName();
+							}
+						}
+					}
+					else
+					{
+						// Directly get textures
+						int texture_count = prop.GetSrcObjectCount<fbxsdk::FbxTexture>();
+						for (int j = 0; j < texture_count; j++)
+						{
+							const fbxsdk::FbxTexture* texture = FbxCast<fbxsdk::FbxTexture>(prop.GetSrcObject<fbxsdk::FbxTexture>(j));
+							// Then, you can get all the properties of the texture, include its name
+							texture_name = texture->GetName();
+						}
+					}
+					float f;
+					prop = material->FindProperty(fbxsdk::FbxSurfaceMaterial::sDiffuseFactor);
+					f = prop.Get<FbxDouble>();
+					
+					prop = material->FindProperty(fbxsdk::FbxSurfaceMaterial::sSpecularFactor);
+					f = prop.Get<FbxDouble>();
+					Vector3 ambient;
+					
+					std::string texName = texture_name?std::string(texture_name): string("");
+					finalMaterial = materialMgr->LoadMaterial(matName, &ambient, &diffuse, &texName);
+				}
+			}
+		}
+	}
+	return finalMaterial;
 }
 
 void Mesh::FbxMultT(FbxNode* node, FbxVector4 &vector) 
@@ -301,7 +380,7 @@ void Mesh::LoadOBJ(const std::string& fullPath)
 				matName = matName.substr(0, matName.size() - 4);
 				matName.append(".");
 				matName.append(v[1]);
-				tex = DirectZob::GetInstance()->GetMaterialManager()->GetTexture(matName);
+				tex = DirectZob::GetInstance()->GetMaterialManager()->GetMaterial(matName);
 			}
 
 		}
@@ -543,7 +622,7 @@ void Mesh::CreateTriangles(const std::vector<std::string>* line, std::vector<Tri
 		{
 			t.nc = &m_verticesNormals[0];
 		}
-		t.tex = tex;
+		t.material = tex;
 		float nx = (t.na->x + t.nb->x + t.nc->x) / 3.0f;
 		float ny = (t.na->y + t.nb->y + t.nc->y) / 3.0f;
 		float nz = (t.na->z + t.nb->z + t.nc->z) / 3.0f;

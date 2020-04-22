@@ -32,7 +32,7 @@ public:
 	Vector2* ub;
 	Vector2* uc;
 
-	const Material* tex;
+	const Material* material;
 	float area;
 	float la;
 	float lb;
@@ -72,7 +72,7 @@ public:
 		ua->Copy(t->ua);
 		ub->Copy(t->ub);
 		uc->Copy(t->uc);
-		tex = t->tex;
+		material = t->material;
 		area = t->area;
 		owner = t->owner;
 		lb = t->lb;

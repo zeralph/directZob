@@ -28,16 +28,18 @@ MaterialManager::~MaterialManager()
 	m_materials.clear();
 }
 
-void MaterialManager::LoadMaterial(const std::string& name, const Vector3* ambientColor, const Vector3* diffuseColor, const std::string* textureFile/* = NULL*/)
+const Material* MaterialManager::LoadMaterial(const std::string& name, const Vector3* ambientColor, const Vector3* diffuseColor, const std::string* textureFile/* = NULL*/)
 {
-	if (GetTexture(name) == NULL)
+	if (GetMaterial(name) == NULL)
 	{
 		Material* t = new Material(name, ambientColor, diffuseColor, textureFile);
 		m_materials.push_back(t);
+		return t;
 	}
 	else
 	{
 		//output error
+		return GetMaterial(name);
 	}
 }
 
@@ -137,7 +139,7 @@ void MaterialManager::LoadMaterials(std::string& path, std::string& file)
 	}
 }
 
-const Material* MaterialManager::GetTexture(const int i) const
+const Material* MaterialManager::GetMaterial(const int i) const
 {
 	if (i >= 0 && i < m_materials.size())
 	{
@@ -146,7 +148,7 @@ const Material* MaterialManager::GetTexture(const int i) const
 	return NULL;
 }
 
-const Material* MaterialManager::GetTexture(const std::string& name) const
+const Material* MaterialManager::GetMaterial(const std::string& name) const
 {
 	for (std::vector<Material*>::const_iterator iter = m_materials.begin(); iter != m_materials.end(); iter++)
 	{
