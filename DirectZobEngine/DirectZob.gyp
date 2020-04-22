@@ -70,7 +70,16 @@
                             #			'/usr/lib',
                             #		],
                         },
-                    }
+                        "copies": [
+                            {
+                                'destination':
+                                '<(PRODUCT_DIR)',
+                                'files': [
+                                    '../dependencies/fbxsdk/windows/lib/vs2017/x86/release/libfbxsdk.dll'
+                                ],
+                            },
+                        ],
+                    },
                 ],
             ],
         },
