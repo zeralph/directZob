@@ -59,6 +59,9 @@
                             '.',
                             '../dependencies/fbxsdk/windows/include',
                         ],
+                        'defines': [
+                            'WINDOWS',
+                        ],
                         'direct_dependent_settings': {
                             'include_dirs': [
                                 '.',
@@ -74,11 +77,22 @@
                             '.',
                             '../dependencies/fbxsdk/macos/include',
                         ],
+                        'defines': [
+                            'MACOS',
+                        ],
                         'link_settings': {
                             'libraries': [
                                 '../../../dependencies/fbxsdk/macos/lib/clang/release/libfbxsdk.a',  # relative to xcode project
                             ],
                         },
+                    },
+                ],
+                [
+                    'OS=="linux"',
+                    {
+                        'defines': [
+                            'LINUX',
+                        ],
                     },
                 ],
             ],

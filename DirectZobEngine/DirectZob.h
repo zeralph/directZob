@@ -1,13 +1,9 @@
 #pragma once
 
 
-
-#define LINUX
-#define MAX_PATH 256
-
-
 #ifdef LINUX
-	#include <unistd.h>
+#define MAX_PATH 256
+#include <unistd.h>
 	#define SLEEP(a) sleep(a)
 	#define _snprintf_s(a,b,c,...) snprintf(a,b,c,__VA_ARGS__)
 #else

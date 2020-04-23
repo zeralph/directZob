@@ -1,5 +1,5 @@
 #pragma once
-#define LINUX
+
 #include "Types.h"
 #include "Vector2.h"
 #include "Vector3.h"
