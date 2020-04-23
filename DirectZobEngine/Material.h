@@ -10,7 +10,7 @@ class Material
 public:
 
 	//Material(const std::string& path, const std::string& file, const std::string& name);
-	Material(const std::string& name, const Vector3* ambientColor, const Vector3* diffuseColor, const std::string* textureFile=NULL);
+	Material(const std::string& name, const Vector3* ambientColor, const Vector3* diffuseColor, const char* textureFile=NULL);
 	~Material();
 	inline const uint GetWidth() const { return m_width; }
 	inline const uint GetHeight() const { return m_height; }

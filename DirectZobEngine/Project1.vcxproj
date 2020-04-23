@@ -63,6 +63,7 @@
     <ClCompile Include="LightManager.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="MaterialManager.cpp" />
+    <ClCompile Include="nanojpeg.cpp" />
     <ClCompile Include="ZOBGUID.cpp">
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'">false</CompileAsManaged>
     </ClCompile>
@@ -152,6 +153,7 @@
     <ClInclude Include="LightManager.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="MaterialManager.h" />
+    <ClInclude Include="nanojpeg.h" />
     <ClInclude Include="ZOBGUID.h" />
     <ClInclude Include="lodepng.h" />
     <ClInclude Include="ManagedObject.h" />

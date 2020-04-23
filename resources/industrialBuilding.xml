@@ -22,7 +22,7 @@
 			<Position x="100" y="100" z="100" />
 			<Color r="255" g="128" b="64" />
 			<Intensity>5</Intensity>
-			<FallOffDistance>500</FallOffDistance>
+			<FallOffDistance>5000</FallOffDistance>
 		</ZobObject>
     </Scene>
 </root>

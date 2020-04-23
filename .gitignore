@@ -119,6 +119,7 @@ DirectZobWrapper/Release
 /thirdParty/tinyXml/utf8test.xml
 /thirdParty/tinyXml/utf8testverify.xml
 /thirdParty/tinyXml/xmltest.cpp
+/resources/test
 /resources/DeLorean.mtl
 /resources/DeLorean.obj
 /resources/DeLorean.xml
