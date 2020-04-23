@@ -5,6 +5,18 @@
             'minifb',
             'type':
             'static_library',
+            'configurations': {
+                'Debug': {
+                    'defines': [
+                        'DEBUG',
+                    ],
+                },
+                'Release': {
+                    'defines': [
+                        'RELEASE',
+                    ],
+                },
+            },
             'direct_dependent_settings': {
                 'include_dirs': ['.'],
             },

@@ -5,6 +5,18 @@
             'DirectZobLib',
             'type':
             'static_library',
+            'configurations': {
+                'Debug': {
+                    'defines': [
+                        'DEBUG',
+                    ],
+                },
+                'Release': {
+                    'defines': [
+                        'RELEASE',
+                    ],
+                },
+            },
             'dependencies': [
                 '../dependencies/minifb/minifb.gyp:minifb',
                 '../dependencies/tinyxml/tinyxml.gyp:tinyxml',
@@ -76,6 +88,18 @@
             'DirectZobExe',
             'type':
             'executable',
+            'configurations': {
+                'Debug': {
+                    'defines': [
+                        'DEBUG',
+                    ],
+                },
+                'Release': {
+                    'defines': [
+                        'RELEASE',
+                    ],
+                },
+            },
             'dependencies': [
                 'DirectZobLib',
             ],
@@ -83,41 +107,41 @@
                 'main.cpp',
             ],
             'conditions': [
-            [
-                'OS=="win"',
-                {
-            'link_settings': {
-                # links fbxsdk as dll
-                'libraries': [
-                    '../../../dependencies/fbxsdk/windows/lib/vs2017/x86/release/libfbxsdk.lib',  # relative to sln
-                    'kernel32.lib',
-                    'user32.lib',
-                    'gdi32.lib',
-                    'winspool.lib',
-                    'comdlg32.lib',
-                    'advapi32.lib',
-                    'shell32.lib',
-                    'ole32.lib',
-                    'oleaut32.lib',
-                    'uuid.lib',
-                    'odbc32.lib',
-                    'odbccp32.lib',
+                [
+                    'OS=="win"',
+                    {
+                        'link_settings': {
+                            # links fbxsdk as dll
+                            'libraries': [
+                                '../../../dependencies/fbxsdk/windows/lib/vs2017/x86/release/libfbxsdk.lib',  # relative to sln
+                                'kernel32.lib',
+                                'user32.lib',
+                                'gdi32.lib',
+                                'winspool.lib',
+                                'comdlg32.lib',
+                                'advapi32.lib',
+                                'shell32.lib',
+                                'ole32.lib',
+                                'oleaut32.lib',
+                                'uuid.lib',
+                                'odbc32.lib',
+                                'odbccp32.lib',
+                            ],
+                            #		'library_dirs': [
+                            #			'/usr/lib',
+                            #		],
+                        },
+                        "copies": [
+                            {
+                                'destination':
+                                '<(PRODUCT_DIR)',
+                                'files': [
+                                    '../dependencies/fbxsdk/windows/lib/vs2017/x86/release/libfbxsdk.dll'  # copy fbxsdk 
+                                ],
+                            },
+                        ],
+                    },
                 ],
-                #		'library_dirs': [
-                #			'/usr/lib',
-                #		],
-            },
-            "copies": [
-                {
-                    'destination':
-                    '<(PRODUCT_DIR)',
-                    'files': [
-                        '../dependencies/fbxsdk/windows/lib/vs2017/x86/release/libfbxsdk.dll'  # copy fbxsdk 
-                    ],
-                },
-            ],
-            },
-        ],
             ],
         },
     ],
@@ -131,6 +155,18 @@
                         'DirectZobDll',
                         'type':
                         'shared_library',
+                        'configurations': {
+                            'Debug': {
+                                'defines': [
+                                    'DEBUG',
+                                ],
+                            },
+                            'Release': {
+                                'defines': [
+                                    'RELEASE',
+                                ],
+                            },
+                        },
                         'dependencies': [
                             'DirectZobLib',
                         ],
