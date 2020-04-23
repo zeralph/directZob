@@ -1,4 +1,4 @@
-#include "materialManager.h"
+#include "MaterialManager.h"
 #include "DirectZob.h"
 #include <fstream>
 #include <iostream>

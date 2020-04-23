@@ -2,7 +2,7 @@
 #include "Types.h"
 #include "lodepng.h"
 #include <string>
-#include "vector3.h" 
+#include "Vector3.h" 
 #include "Events.h"
 
 class Material

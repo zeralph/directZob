@@ -3,6 +3,9 @@
 
 using namespace std;
 
+
+static Vector2 vec2zero = Vector2(0,0);
+
 Mesh::Mesh(std::string& name, std::string& path, std::string& file)
 {	
 	m_nbVertices = 0;
@@ -500,7 +503,7 @@ void Mesh::CreateTriangles(const std::vector<std::string>* line, std::vector<Tri
 		if (vec[1].size() > 0)
 			t.ua = &m_uvs[std::stoi(vec[1], &sz) - 1];
 		else
-			t.ua = &Vector2(0, 0);
+			t.ua = &vec2zero;
 		if (m_hasNormals)
 		{
 			t.na = &m_verticesNormals[std::stoi(vec[2], &sz) - 1];
@@ -517,7 +520,7 @@ void Mesh::CreateTriangles(const std::vector<std::string>* line, std::vector<Tri
 		if (vec[1].size() > 0)
 			t.ub = &m_uvs[std::stoi(vec[1], &sz) - 1];
 		else
-			t.ub = &Vector2(0, 0);
+			t.ub = &vec2zero;
 		if (m_hasNormals)
 		{
 			t.nb = &m_verticesNormals[std::stoi(vec[2], &sz) - 1];
@@ -534,7 +537,7 @@ void Mesh::CreateTriangles(const std::vector<std::string>* line, std::vector<Tri
 		if (vec[1].size() > 0)
 			t.uc = &m_uvs[std::stoi(vec[1], &sz) - 1];
 		else
-			t.uc = &Vector2(0, 0);
+			t.uc = &vec2zero;
 		if (m_hasNormals)
 		{
 			t.nc = &m_verticesNormals[std::stoi(vec[2], &sz) - 1];
