@@ -3,7 +3,7 @@
 #include <vector>
 #include "ZobObjectManager.h"
 #include "ZobObject.h"
-#include "materialManager.h"
+#include "MaterialManager.h"
 #include "MeshManager.h"
 #include "Material.h"
 #include "Mesh.h"
@@ -11,7 +11,7 @@
 #include "tinyxml.h"
 
 
-static class SceneLoader
+class SceneLoader
 {
 public:
 	static void LoadScene(std::string &path, std::string &file, ZobObjectManager* zobObjectManager, MeshManager* meshManager, MaterialManager* materialManager);

@@ -1,4 +1,5 @@
 #pragma once
+#define LINUX
 #include "Types.h"
 #include "Vector2.h"
 #include "Vector3.h"
@@ -13,7 +14,6 @@
 	#include <windows.h>
 #endif //LINUX
 
-#include <windows.h>
 class Light;
 class Rasterizer
 {

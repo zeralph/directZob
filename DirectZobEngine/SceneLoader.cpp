@@ -95,7 +95,7 @@ void SceneLoader::LoadScene(std::string &path, std::string &file, ZobObjectManag
 void SceneLoader::UnloadScene(Core::Engine* engine, ZobObjectManager* zobObjectManager, MeshManager* meshManager, MaterialManager* MaterialManager)
 {
 	engine->Stop();
-	Sleep(1000);	//ugly but ...
+	SLEEP(1000);	//ugly but ...
 	zobObjectManager->UnloadAll();
 	meshManager->UnloadAll();
 	MaterialManager->UnloadAll();

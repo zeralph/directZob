@@ -58,7 +58,8 @@ void ZobObject::Update(const Matrix4x4& parentMatrix, const Matrix4x4& parentRot
 
 	Vector3 t = m_translation;
 	parentRotationMatrix.Mul(&t);
-	t.Add(&parentMatrix.GetTranslation());
+	Vector3 tp = parentMatrix.GetTranslation();
+	t.Add(&tp);
 
 
 	m_modelMatrix.SetTranslation(&t);

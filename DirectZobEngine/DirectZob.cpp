@@ -28,11 +28,12 @@ std::string DirectZob::ExePath() {
 
 	//return std::string("D:\\_PERSO\\directZob\\directZob\\resources\\");
 	return std::string("C:\\_GIT\\directZob\\resources");
-
+	/*
 	char b[MAX_PATH];
 	GetModuleFileName(NULL, b, MAX_PATH);
 	std::string::size_type pos = std::string(b).find_last_of("\\/");
 	return std::string(b).substr(0, pos);
+	*/
 }
 
 void DirectZob::LoadScene(std::string& path, std::string& file)
@@ -112,19 +113,21 @@ int DirectZob::RunAFrame()
 		}
 		if (m_text)
 		{
-			_snprintf_s(buffer, MAX_PATH, "Triangles : %lu / %lu", m_engine->GetNbDrawnTriangles(), m_engine->GetNbTriangles());
-			m_text->Print(0, 0, 1, &std::string(buffer), 0xFFFFFFFF);
+			_snprintf_s(buffer, MAX_PATH, "Triangles : %i / %i", m_engine->GetNbDrawnTriangles(), m_engine->GetNbTriangles());
+			std::string sBuf = std::string(buffer);
+			m_text->Print(0, 0, 1, &sBuf, 0xFFFFFFFF);
 			_snprintf_s(buffer, MAX_PATH, "render : %06.2fms, geom : %06.2f, tot : %06.2f, FPS : %06.2f", m_engine->GetRenderTime(), m_engine->GetGeometryTime(), m_engine->GetFrameTime(), m_engine->GetFps());
 			float t = m_engine->GetFps();
 			t = (1.0f / t) * 1000.0f;
+			sBuf = std::string(buffer);
 			if (t < TARGET_MS_PER_FRAME)
 			{
-				m_text->Print(0, 16, 1, &std::string(buffer), 0xFF00FF00);
-				Sleep(TARGET_MS_PER_FRAME - t);
+				m_text->Print(0, 16, 1, &sBuf, 0xFF00FF00);
+				SLEEP(TARGET_MS_PER_FRAME - t);
 			}
 			else
 			{
-				m_text->Print(0, 16, 1, &std::string(buffer), 0xFFFF0000);
+				m_text->Print(0, 16, 1, &sBuf, 0xFFFF0000);
 			}
 		}
 		m_engine->SetGeometryTime((float)(clock() - tick) / CLOCKS_PER_SEC * 1000);
