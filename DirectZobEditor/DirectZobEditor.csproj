@@ -169,7 +169,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="libfbxsdk.dll">
+    <Content Include="..\dependencies\fbxsdk\windows\lib\vs2017\x64\release\libfbxsdk.dll">
+      <Link>libfbxsdk.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
