@@ -1,10 +1,36 @@
 {
     'target_defaults': {
-        'msvs_settings': {
-            'VCCLCompilerTool': {
-                'MultiProcessorCompilation': 'true',
-            },
-        },
+        'conditions': [
+            [
+                'OS=="win"',
+                {
+                    'msvs_settings': {
+                        'VCCLCompilerTool': {
+                            'MultiProcessorCompilation': 'true',
+                        },
+                    },
+                    'defines': [
+                        'WINDOWS',
+                    ],
+                },
+            ],
+            [
+                'OS=="mac"',
+                {
+                    'defines': [
+                        'MACOS',
+                    ],
+                },
+            ],
+            [
+                'OS=="linux"',
+                {
+                    'defines': [
+                        'LINUX',
+                    ],
+                },
+            ],
+        ],
         'configurations': {
             'Debug': {
                 'defines': [

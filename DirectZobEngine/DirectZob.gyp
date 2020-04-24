@@ -1,6 +1,6 @@
 {
     'includes': [
-      '../defaults.gypi',
+        '../defaults.gypi',
     ],
     'targets': [
         {
@@ -51,12 +51,15 @@
                             '../dependencies/fbxsdk/windows/include',
                         ],
                         'defines': [
-                            'WINDOWS',
+                            'FBXSDK_SHARED',  # required to link with dll
                         ],
                         'direct_dependent_settings': {
                             'include_dirs': [
                                 '.',
                                 '../dependencies/fbxsdk/windows/include',
+                            ],
+                            'defines': [
+                                'FBXSDK_SHARED',
                             ],
                         },
                     },
@@ -163,8 +166,7 @@
                         'msvs_settings': {
                             'VCCLCompilerTool': {
                                 'CompileAsManaged': 'true',
-                                'ExceptionHandling':
-                                '0'  # /clr is incompatible with /EHs
+                                'ExceptionHandling': '0',  # /clr is incompatible with /EHs
                             },
                         },
                         'sources': [
@@ -178,9 +180,7 @@
                         'link_settings': {
                             # links fbxsdk as static
                             'libraries': [
-                                '../../../dependencies/fbxsdk/windows/lib/vs2017/x64/release/libfbxsdk-md.lib',  # relative to sln
-                                '../../../dependencies/fbxsdk/windows/lib/vs2017/x64/release/libxml2-md.lib',
-                                '../../../dependencies/fbxsdk/windows/lib/vs2017/x64/release/zlib-md.lib',
+                                '../../../dependencies/fbxsdk/windows/lib/vs2017/x64/release/libfbxsdk.lib',  # relative to sln
                                 'kernel32.lib',
                                 'user32.lib',
                                 'gdi32.lib',
@@ -195,6 +195,15 @@
                                 'odbccp32.lib',
                             ],
                         },
+                        "copies": [
+                            {
+                                'destination':
+                                '<(PRODUCT_DIR)',
+                                'files': [
+                                    '../dependencies/fbxsdk/windows/lib/vs2017/x64/release/libfbxsdk.dll'  # copy fbxsdk 
+                                ],
+                            },
+                        ],
                     },
                 ],
             }
