@@ -174,6 +174,11 @@
                                 'defines': [
                                     'DEBUG',
                                 ],
+                                'msvs_settings': {
+                                    'VCLinkerTool': {
+                                        'AssemblyDebug': '1', # add /ASSEMBLYDEBUG to linker options
+                                    },
+                                },
                             },
                             'Release': {
                                 'defines': [
@@ -189,7 +194,7 @@
                                 'CompileAsManaged': 'true',
                                 'ExceptionHandling':
                                 '0'  # /clr is incompatible with /EHs
-                            }
+                            },
                         },
                         'sources': [
                             'CameraManagerWrapper.cpp',
