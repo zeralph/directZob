@@ -115,18 +115,8 @@
                             # links fbxsdk as dll
                             'libraries': [
                                 '../../../dependencies/fbxsdk/windows/lib/vs2017/x64/release/libfbxsdk.lib',  # relative to sln
-                                'kernel32.lib',
                                 'user32.lib',
                                 'gdi32.lib',
-                                'winspool.lib',
-                                'comdlg32.lib',
-                                'advapi32.lib',
-                                'shell32.lib',
-                                'ole32.lib',
-                                'oleaut32.lib',
-                                'uuid.lib',
-                                'odbc32.lib',
-                                'odbccp32.lib',
                             ],
                             #		'library_dirs': [
                             #			'/usr/lib',
@@ -188,18 +178,8 @@
                             # links fbxsdk as static
                             'libraries': [
                                 '../../../dependencies/fbxsdk/windows/lib/vs2017/x64/release/libfbxsdk.lib',  # relative to sln
-                                'kernel32.lib',
                                 'user32.lib',
                                 'gdi32.lib',
-                                'winspool.lib',
-                                'comdlg32.lib',
-                                'advapi32.lib',
-                                'shell32.lib',
-                                'ole32.lib',
-                                'oleaut32.lib',
-                                'uuid.lib',
-                                'odbc32.lib',
-                                'odbccp32.lib',
                             ],
                         },
                         "copies": [
