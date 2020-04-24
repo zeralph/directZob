@@ -168,6 +168,11 @@
       <Name>DirectZobDInterop</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="libfbxsdk.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>
