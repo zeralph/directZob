@@ -1,22 +1,13 @@
 {
+    'includes': [
+      '../defaults.gypi',
+    ],
     'targets': [
         {
             'target_name':
             'DirectZobEngine',
             'type':
             'static_library',
-            'configurations': {
-                'Debug': {
-                    'defines': [
-                        'DEBUG',
-                    ],
-                },
-                'Release': {
-                    'defines': [
-                        'RELEASE',
-                    ],
-                },
-            },
             'dependencies': [
                 '../dependencies/minifb/minifb.gyp:minifb',
                 '../dependencies/tinyxml/tinyxml.gyp:tinyxml',
@@ -102,18 +93,6 @@
             'DirectZobExe',
             'type':
             'executable',
-            'configurations': {
-                'Debug': {
-                    'defines': [
-                        'DEBUG',
-                    ],
-                },
-                'Release': {
-                    'defines': [
-                        'RELEASE',
-                    ],
-                },
-            },
             'dependencies': [
                 'DirectZobEngine',
             ],
@@ -171,19 +150,11 @@
                         'shared_library',
                         'configurations': {
                             'Debug': {
-                                'defines': [
-                                    'DEBUG',
-                                ],
                                 'msvs_settings': {
                                     'VCLinkerTool': {
                                         'AssemblyDebug': '1', # add /ASSEMBLYDEBUG to linker options
                                     },
                                 },
-                            },
-                            'Release': {
-                                'defines': [
-                                    'RELEASE',
-                                ],
                             },
                         },
                         'dependencies': [
