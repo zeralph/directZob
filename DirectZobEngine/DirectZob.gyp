@@ -62,6 +62,11 @@
                                 'FBXSDK_SHARED',
                             ],
                         },
+                        'msvs_settings': {
+                            'VCCLCompilerTool': {
+                                'FloatingPointModel': '2', # fast
+                            },
+                        },
                     },
                 ],
                 [
@@ -155,7 +160,8 @@
                             'Debug': {
                                 'msvs_settings': {
                                     'VCLinkerTool': {
-                                        'AssemblyDebug': '1', # add /ASSEMBLYDEBUG to linker options
+                                        'AssemblyDebug':
+                                        '1',  # add /ASSEMBLYDEBUG to linker options
                                     },
                                 },
                             },
@@ -166,7 +172,8 @@
                         'msvs_settings': {
                             'VCCLCompilerTool': {
                                 'CompileAsManaged': 'true',
-                                'ExceptionHandling': '0',  # /clr is incompatible with /EHs
+                                'ExceptionHandling':
+                                '0',  # /clr is incompatible with /EHs
                             },
                         },
                         'sources': [
