@@ -14,8 +14,8 @@
                     [
                         'OS=="win"',
                         {
-                            #'msvs_configuration_platform': 'x64',
-                            #'msvs_target_platform': 'x64',
+                            'msvs_configuration_platform': 'x64',
+                            'msvs_target_platform': 'x64',
                         },
                     ],
                 ],
@@ -28,8 +28,8 @@
                     [
                         'OS=="win"',
                         {
-                            #'msvs_configuration_platform': 'x64',
-                            #'msvs_target_platform': 'x64',
+                            'msvs_configuration_platform': 'x64',
+                            'msvs_target_platform': 'x64',
                         },
                     ],
                 ],

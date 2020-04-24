@@ -106,7 +106,7 @@
                         'link_settings': {
                             # links fbxsdk as dll
                             'libraries': [
-                                '../../../dependencies/fbxsdk/windows/lib/vs2017/x86/release/libfbxsdk.lib',  # relative to sln
+                                '../../../dependencies/fbxsdk/windows/lib/vs2017/x64/release/libfbxsdk.lib',  # relative to sln
                                 'kernel32.lib',
                                 'user32.lib',
                                 'gdi32.lib',
@@ -129,7 +129,7 @@
                                 'destination':
                                 '<(PRODUCT_DIR)',
                                 'files': [
-                                    '../dependencies/fbxsdk/windows/lib/vs2017/x86/release/libfbxsdk.dll'  # copy fbxsdk 
+                                    '../dependencies/fbxsdk/windows/lib/vs2017/x64/release/libfbxsdk.dll'  # copy fbxsdk 
                                 ],
                             },
                         ],
@@ -178,9 +178,9 @@
                         'link_settings': {
                             # links fbxsdk as static
                             'libraries': [
-                                '../../../dependencies/fbxsdk/windows/lib/vs2017/x86/release/libfbxsdk-md.lib',  # relative to sln
-                                '../../../dependencies/fbxsdk/windows/lib/vs2017/x86/release/libxml2-md.lib',
-                                '../../../dependencies/fbxsdk/windows/lib/vs2017/x86/release/zlib-md.lib',
+                                '../../../dependencies/fbxsdk/windows/lib/vs2017/x64/release/libfbxsdk-md.lib',  # relative to sln
+                                '../../../dependencies/fbxsdk/windows/lib/vs2017/x64/release/libxml2-md.lib',
+                                '../../../dependencies/fbxsdk/windows/lib/vs2017/x64/release/zlib-md.lib',
                                 'kernel32.lib',
                                 'user32.lib',
                                 'gdi32.lib',
