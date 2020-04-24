@@ -2,7 +2,7 @@
     'targets': [
         {
             'target_name':
-            'DirectZobLib',
+            'DirectZobEngine',
             'type':
             'static_library',
             'configurations': {
@@ -115,7 +115,7 @@
                 },
             },
             'dependencies': [
-                'DirectZobLib',
+                'DirectZobEngine',
             ],
             'sources': [
                 'main.cpp',
@@ -166,7 +166,7 @@
                 'targets': [
                     {
                         'target_name':
-                        'DirectZobDll',
+                        'DirectZobDInterop',
                         'type':
                         'shared_library',
                         'configurations': {
@@ -182,7 +182,7 @@
                             },
                         },
                         'dependencies': [
-                            'DirectZobLib',
+                            'DirectZobEngine',
                         ],
                         'msvs_settings': {
                             'VCCLCompilerTool': {
