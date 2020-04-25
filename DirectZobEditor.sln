@@ -11,6 +11,7 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DirectZobEngine", "DirectZobEngine\build\DirectZob\DirectZobEngine.vcxproj", "{E211B4F0-D8EE-477E-1499-330C8B5FE661}"
 	ProjectSection(ProjectDependencies) = postProject
 		{49873042-36A7-A83E-3AB6-E723904D7001} = {49873042-36A7-A83E-3AB6-E723904D7001}
+		{1C135745-14BA-68E1-1E90-C1DEADA93E41} = {1C135745-14BA-68E1-1E90-C1DEADA93E41}
 		{5710A5BD-4FF7-C34A-BE52-82CFBD3C31A6} = {5710A5BD-4FF7-C34A-BE52-82CFBD3C31A6}
 	EndProjectSection
 EndProject
@@ -19,6 +20,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "minifb", "DirectZobEngine\build\dependencies\minifb\minifb.vcxproj", "{49873042-36A7-A83E-3AB6-E723904D7001}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "tinyxml", "DirectZobEngine\build\dependencies\tinyxml\tinyxml.vcxproj", "{5710A5BD-4FF7-C34A-BE52-82CFBD3C31A6}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "nanojpeg", "DirectZobEngine\build\dependencies\nanojpeg\nanojpeg.vcxproj", "{1C135745-14BA-68E1-1E90-C1DEADA93E41}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -46,6 +49,10 @@ Global
 		{5710A5BD-4FF7-C34A-BE52-82CFBD3C31A6}.Debug|x64.Build.0 = Debug|x64
 		{5710A5BD-4FF7-C34A-BE52-82CFBD3C31A6}.Release|x64.ActiveCfg = Release|x64
 		{5710A5BD-4FF7-C34A-BE52-82CFBD3C31A6}.Release|x64.Build.0 = Release|x64
+		{1C135745-14BA-68E1-1E90-C1DEADA93E41}.Debug|x64.ActiveCfg = Debug|x64
+		{1C135745-14BA-68E1-1E90-C1DEADA93E41}.Debug|x64.Build.0 = Debug|x64
+		{1C135745-14BA-68E1-1E90-C1DEADA93E41}.Release|x64.ActiveCfg = Release|x64
+		{1C135745-14BA-68E1-1E90-C1DEADA93E41}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

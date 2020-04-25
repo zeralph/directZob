@@ -11,10 +11,12 @@
             'dependencies': [
                 '../dependencies/minifb/minifb.gyp:minifb',
                 '../dependencies/tinyxml/tinyxml.gyp:tinyxml',
+                '../dependencies/nanojpeg/nanojpeg.gyp:nanojpeg',
             ],
             'export_dependent_settings': [
                 '../dependencies/minifb/minifb.gyp:minifb',
                 '../dependencies/tinyxml/tinyxml.gyp:tinyxml',
+                '../dependencies/nanojpeg/nanojpeg.gyp:nanojpeg',
             ],
             'sources': [
                 'Camera.cpp',
