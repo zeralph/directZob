@@ -29,7 +29,7 @@
                 ],
                 ['OS=="linux"', {
                     'sources': [
-                        'wayland/WaylandMiniFB.c',
+                        'x11/X11MiniFB.c',
                     ]
                 }],
                 ['OS=="win"', {
