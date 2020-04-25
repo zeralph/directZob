@@ -302,6 +302,41 @@ void Engine::DrawGrid(const Camera* camera)
 	//QueueLine(camera, &Vector3::Vector3Zero, &Vector3::Vector3Z, 0xFFFFFF, GetBufferData());
 }
 
+void Engine::ClipSegmentToPlane(Vector3 &s0, Vector3 &s1, Vector3 &pp, Vector3 &pn)
+{
+	
+//std:swap(s0, s1);
+
+	Vector3 u = s1 - s0;
+	Vector3 w = s0 - pp;
+
+	float D = Vector3::Dot(&pn, &u);
+	float N = -Vector3::Dot(&pn, &w);
+
+	if (fabs(D) < 0.001f) {           // segment is parallel to plane
+		/*if (N == 0)                      // segment lies in plane
+			return 2;
+		else
+			return 0;                    // no intersection
+		*/
+		return;
+	}
+	// they are not parallel
+	// compute intersect param
+	float sI = N / D;
+	if (sI < 0 || sI > 1)
+	{
+		//return 0;                        // no intersection
+		return;
+	}
+	
+//	s1 = s0 + s1.Mul(u);                  // compute segment intersect point
+	/*
+	return
+	return 1;
+	*/
+}
+
 void Engine::QueueLine(const Camera* camera, const Vector3* v1, const Vector3* v2, const uint c)
 {
 	Vector3 a = Vector3(v1);

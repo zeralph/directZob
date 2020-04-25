@@ -81,7 +81,7 @@ void DirectZob::Init()
 	char frameCharBuffer[sizeof(ulong)];
 	int state;
 	
-	m_engine->Start();
+//	m_engine->Start();
 }
 
 static float rot = 1.0f;

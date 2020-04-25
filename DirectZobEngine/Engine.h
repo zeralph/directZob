@@ -88,7 +88,7 @@ namespace Core
 
 		inline float clamp2(float x, float min, float max) const { if (x < min) x = min; if (x > max) x = max; return x; }
 		void DrawHorizontalLine(const float x1, const float x2, const float y, const uint color);
-		
+		void ClipSegmentToPlane(Vector3 &s0, Vector3 &s1, Vector3 &pp, Vector3 &pn);
 
 		Events* m_events;
 		Triangle** m_rasterTriangleQueues;

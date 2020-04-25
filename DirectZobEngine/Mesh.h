@@ -21,7 +21,7 @@ public:
 
 
 	void Draw(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions options);
-
+	void DrawBoundingBox(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions options);
 	const std::vector<Triangle>* GetTrianglesList() const { return &m_triangles; }
 	const uint GetNbTriangles() const { return m_nbFaces; }
 
@@ -57,5 +57,7 @@ private:
 	std::string m_name;
 	std::string m_file;
 	std::string m_path;
+	Vector3 m_minBouding;
+	Vector3 m_maxBouding;
 };
 

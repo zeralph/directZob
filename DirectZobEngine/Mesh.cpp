@@ -70,6 +70,20 @@ Mesh::Mesh(fbxsdk::FbxMesh* mesh)
 					FbxVector4 v = mesh->GetControlPointAt(ctrlIdx);
 					FbxMultT(mesh->GetNode(), v);
 					m_vertices[vIdx] = Vector3(v[0], v[1], v[2]);
+					if (vIdx == 0)
+					{
+						m_minBouding = Vector3(v[0], v[1], v[2]);
+						m_maxBouding = Vector3(v[0], v[1], v[2]);
+					}
+					else
+					{
+						m_minBouding.x = min(m_minBouding.x, v[0]);
+						m_minBouding.y = min(m_minBouding.y, v[1]);
+						m_minBouding.z = min(m_minBouding.z, v[2]);
+						m_maxBouding.x = max(m_maxBouding.x, v[0]);
+						m_maxBouding.y = max(m_maxBouding.y, v[1]);
+						m_maxBouding.z = max(m_maxBouding.z, v[2]);
+					}
 					//UVs
 					fbxsdk::FbxStringList uvsNames;
 					mesh->GetUVSetNames(uvsNames);
@@ -216,6 +230,8 @@ const Material* Mesh::LoadFbxMaterial(fbxsdk::FbxMesh* mesh)
 					FbxDouble3 c = prop.Get<FbxDouble3>();
 					Vector3 diffuse = Vector3(c[0], c[1], c[2]);
 					const char* texture_name = NULL;
+					const char* texture_name2 = NULL;
+					const char* texture_name3 = NULL;
 					int file_texture_count = prop.GetSrcObjectCount<fbxsdk::FbxFileTexture>();
 					if (file_texture_count > 0)
 					{
@@ -223,12 +239,11 @@ const Material* Mesh::LoadFbxMaterial(fbxsdk::FbxMesh* mesh)
 						{
 							FbxFileTexture* file_texture = FbxCast<fbxsdk::FbxFileTexture>(prop.GetSrcObject<FbxFileTexture>(j));
 							texture_name = file_texture->GetFileName();
-							//texture_name = file_texture->GetRelativeFileName();
-							//texture_name = file_texture->GetMediaName();
+							texture_name2 = file_texture->GetRelativeFileName();
+							texture_name3 = file_texture->GetMediaName();
 						}
 					}
-					/*
-					int layered_texture_count = prop.GetSrcObjectCount<fbxsdk::FbxLayeredTexture>();
+					/*int layered_texture_count = prop.GetSrcObjectCount<fbxsdk::FbxLayeredTexture>();
 					if (layered_texture_count > 0)
 					{
 						for (int j = 0; j < layered_texture_count; j++)
@@ -240,6 +255,8 @@ const Material* Mesh::LoadFbxMaterial(fbxsdk::FbxMesh* mesh)
 								FbxTexture* texture = FbxCast<fbxsdk::FbxTexture>(layered_texture->GetSrcObject<fbxsdk::FbxTexture>(k));
 								// Then, you can get all the properties of the texture, include its name
 								texture_name = texture->GetName();
+								//texture_name2 = texture->GetRelativeFileName();
+								//texture_name3 = texture->GetMediaName();
 							}
 						}
 					}
@@ -253,9 +270,10 @@ const Material* Mesh::LoadFbxMaterial(fbxsdk::FbxMesh* mesh)
 							//texture->FindSrcObject
 							// Then, you can get all the properties of the texture, include its name
 							texture_name = texture->GetName();
+							//texture_name2 = texture->GetRelativeFileName();
+							//texture_name3 = texture->GetMediaName();
 						}
-					}
-					*/
+					}*/
 					float f;
 					prop = material->FindProperty(fbxsdk::FbxSurfaceMaterial::sDiffuseFactor);
 					f = prop.Get<FbxDouble>();
@@ -468,8 +486,44 @@ void Mesh::ReinitVertices()
 	memcpy(m_trianglesNormals, m_trianglesNormalsData, sizeof(Vector3) * m_nbFaces);
 }
 
+void Mesh::DrawBoundingBox(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions options)
+{
+	Vector3 v0 = Vector3(m_minBouding.x, m_minBouding.y, m_minBouding.z);
+	Vector3 v1 = Vector3(m_minBouding.x, m_maxBouding.y, m_minBouding.z);
+	Vector3 v2 = Vector3(m_maxBouding.x, m_maxBouding.y, m_minBouding.z);
+	Vector3 v3 = Vector3(m_maxBouding.x, m_minBouding.y, m_minBouding.z);
+
+	Vector3 v4 = Vector3(m_minBouding.x, m_minBouding.y, m_maxBouding.z);
+	Vector3 v5 = Vector3(m_minBouding.x, m_maxBouding.y, m_maxBouding.z);
+	Vector3 v6 = Vector3(m_maxBouding.x, m_maxBouding.y, m_maxBouding.z);
+	Vector3 v7 = Vector3(m_maxBouding.x, m_minBouding.y, m_maxBouding.z);
+	modelMatrix.Mul(&v0);
+	modelMatrix.Mul(&v1);
+	modelMatrix.Mul(&v2);
+	modelMatrix.Mul(&v3);
+	modelMatrix.Mul(&v4);
+	modelMatrix.Mul(&v5);
+	modelMatrix.Mul(&v6);
+	modelMatrix.Mul(&v7);
+	engine->QueueLine(camera, &v0, &v1, 0xFF00FF00);
+	engine->QueueLine(camera, &v1, &v2, 0xFF00FF00);
+	engine->QueueLine(camera, &v2, &v3, 0xFF00FF00);
+	engine->QueueLine(camera, &v3, &v0, 0xFF00FF00);
+
+	engine->QueueLine(camera, &v4, &v5, 0xFF00FF00);
+	engine->QueueLine(camera, &v5, &v6, 0xFF00FF00);
+	engine->QueueLine(camera, &v6, &v7, 0xFF00FF00);
+	engine->QueueLine(camera, &v7, &v4, 0xFF00FF00);
+
+	engine->QueueLine(camera, &v1, &v5, 0xFF00FF00);
+	engine->QueueLine(camera, &v2, &v6, 0xFF00FF00);
+	engine->QueueLine(camera, &v3, &v7, 0xFF00FF00);
+	engine->QueueLine(camera, &v0, &v4, 0xFF00FF00);
+}
+
 void Mesh::Draw(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions options)
 {
+	DrawBoundingBox(modelMatrix, rotationMatrix, camera, engine, ownerId, options);
 	ReinitVertices();
 	BufferData* bData = engine->GetBufferData();
 	Vector2 a, b, c, uva, uvb, uvc;
@@ -544,7 +598,7 @@ void Mesh::Draw(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, c
 			{
 				t->area = -t->area;
 			}
-			if (engine->GetCullMode() == Engine::None || (t->area > sAreaMin && t->area < sAreaMax))
+			//if (engine->GetCullMode() == Engine::None )// ( || t->area > sAreaMin && t->area < sAreaMax))
 			{
 				t->owner = ownerId;
 				t->ComputeLighting(&light);

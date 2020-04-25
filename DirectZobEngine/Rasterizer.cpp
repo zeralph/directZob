@@ -98,11 +98,6 @@ void Rasterizer::DrawLine(const Line3D* l) const
 	float y2 = l->yb;
 	float z1 = l->za;
 	float z2 = l->zb;
-	if (z1 < 0.0f || z2 < 0.0f)
-	{
-		int yy = 0;
-		yy++;
-	}
 	uint* buffer = m_bufferData->buffer;
 	float* zBuffer = m_bufferData->zBuffer;
 	const bool steep = abs(y2 - y1) > abs(x2 - x1);

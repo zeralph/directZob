@@ -75,7 +75,6 @@ namespace DirectZobEditor
             {
                 OnBeginFrame(this, EventArgs.Empty);
             }
-            m_directZobWrapper.RunAFrame();
             IntPtr p = m_engineWrapper.GetBufferData();
             m_engineBitmap = new System.Drawing.Bitmap(m_width, m_height, 4 * m_width, System.Drawing.Imaging.PixelFormat.Format32bppRgb, p);
             if (OnEndFrame != null)
