@@ -10,13 +10,13 @@ public:
 	MaterialManager();
 	~MaterialManager();
 
-	void LoadMaterial(const std::string& name, const Vector3* ambientColor, const Vector3* diffuseColor, const std::string* textureFile = NULL);
-	const Material* GetTexture(const std::string& name) const;
-	const int GetNbTextures() const { return m_textures.size(); }
-	const Material* GetTexture(const int i) const;
+	const Material* LoadMaterial(const std::string& name, const Vector3* ambientColor, const Vector3* diffuseColor, const char* textureFile = NULL);
+	const Material* GetMaterial(const std::string& name) const;
+	const int GetNbTextures() const { return (int)m_materials.size(); }
+	const Material* GetMaterial(const int i) const;
 	void LoadMaterials(std::string& path, std::string& file);
 	void UnloadAll();
 private:
 	void SplitEntry(const std::string* s, std::vector<std::string>* v, const char delim);
-	std::vector<Material*> m_textures;
+	std::vector<Material*> m_materials;
 };

@@ -5,7 +5,7 @@
 #include "SceneLoader.h"
 
 static char buffer[MAX_PATH];
-
+static char logBuffer[1024];
 DirectZob *DirectZob::singleton = nullptr;
 
 DirectZob::DirectZob()
@@ -28,17 +28,11 @@ std::string DirectZob::ExePath() {
 
 	//return std::string("D:\\_PERSO\\directZob\\directZob\\resources\\");
 	return std::string("C:\\_GIT\\directZob\\resources");
-	/*
-	char b[MAX_PATH];
-	GetModuleFileName(NULL, b, MAX_PATH);
-	std::string::size_type pos = std::string(b).find_last_of("\\/");
-	return std::string(b).substr(0, pos);
-	*/
 }
 
 void DirectZob::LoadScene(std::string& path, std::string& file)
 {
-	SceneLoader::LoadScene(path, file, m_zobObjectManager, m_meshManager, m_materialManager);
+	SceneLoader::LoadScene(path, file);
 	if (m_text == NULL)
 	{
 		m_text = new Text2D(m_engine, m_events);
@@ -47,17 +41,17 @@ void DirectZob::LoadScene(std::string& path, std::string& file)
 
 void DirectZob::SaveScene(std::string& path, std::string& file)
 {
-	SceneLoader::SaveScene(path, file, m_zobObjectManager, m_meshManager, m_materialManager);
+	SceneLoader::SaveScene(path, file);
 }
 
 void DirectZob::SaveScene()
 {
-	SceneLoader::SaveScene(m_zobObjectManager, m_meshManager, m_materialManager);
+	SceneLoader::SaveScene();
 }
 
 void DirectZob::NewScene()
 {
-	SceneLoader::NewScene(m_engine, m_zobObjectManager, m_meshManager, m_materialManager);
+	SceneLoader::NewScene();
 	if (m_text == NULL)
 	{
 		m_text = new Text2D(m_engine, m_events);
@@ -87,7 +81,7 @@ void DirectZob::Init()
 	char frameCharBuffer[sizeof(ulong)];
 	int state;
 	
-	m_engine->Start();
+//	m_engine->Start();
 }
 
 static float rot = 1.0f;
@@ -97,8 +91,8 @@ int DirectZob::RunAFrame()
 	int state=0;
 	if(m_engine->Started())
 	{
-
-		m_engine->ClearBuffer(&Color::White);
+		Color c = Color(DirectZob::GetInstance()->GetLightManager()->GetClearColor());
+		m_engine->ClearBuffer(&c);
 		m_engine->StartDrawingScene();
 		Camera* cam = m_cameraManager->GetCurrentCamera();
 		cam->Update();
@@ -140,9 +134,33 @@ void DirectZob::LogInfo(const char* str)
 {
 	DirectZob::singleton->GetEventManager()->AddEvent(Events::LogInfo, str);
 }
-void DirectZob::LogError(const char* str)
+
+void DirectZob::LogError(const char* format, ...)
 {
-	DirectZob::singleton->GetEventManager()->AddEvent(Events::LogError, str);
+	va_list args;
+	va_start(args, format);
+	//size_t size = _snprintf_s(NULL, 0, format, args) + 1;
+	char buf[1024];// = (char*)malloc(size * sizeof(char));
+	_vsnprintf_s(buf, 1024, format, args);
+	std::string s = std::string(buf);
+	DirectZob::singleton->GetEventManager()->AddEvent(Events::LogError, s);
+	va_end(args);
+	//delete buf;
+	/*
+	size_t size = snprintf(nullptr, 0, format.c_str(), args ...) + 1; // Extra space for '\0'
+	if (size <= 0) { throw std::runtime_error("Error during formatting."); }
+	std::unique_ptr<char[]> buf(new char[size]);
+	snprintf(buf.get(), size, format.c_str(), args ...);
+	std::string s = std::string(buf.get(), buf.get() + size - 1);
+	DirectZob::singleton->GetEventManager()->AddEvent(Events::LogError, s);
+	*/
+	/*
+	va_list args;
+	va_start(args, str);
+	_snprintf_s(logBuffer, 1024, str, args);
+	DirectZob::singleton->GetEventManager()->AddEvent(Events::LogError, std::string(logBuffer));
+	va_end(args);
+	*/
 }
 void DirectZob::LogWarning(const char* str)
 {

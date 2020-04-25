@@ -49,6 +49,9 @@
     <Filter Include="Fichiers sources\managers">
       <UniqueIdentifier>{ac46cf6d-d22e-4a68-b93e-48174e938be4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers sources\nanojpeg">
+      <UniqueIdentifier>{af032649-6598-479e-b64e-e627e33ae866}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Color.cpp">
@@ -168,6 +171,9 @@
     <ClCompile Include="LightManager.cpp">
       <Filter>Fichiers sources\managers</Filter>
     </ClCompile>
+    <ClCompile Include="nanojpeg.cpp">
+      <Filter>Fichiers sources\nanojpeg</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Color.h">
@@ -189,12 +195,6 @@
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="text2D.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="TextureTest.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="TextureTestAlpha.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="Triangle.h">
@@ -301,6 +301,9 @@
     </ClInclude>
     <ClInclude Include="LightManager.h">
       <Filter>Fichiers d%27en-tête\managers</Filter>
+    </ClInclude>
+    <ClInclude Include="nanojpeg.h">
+      <Filter>Fichiers sources\nanojpeg</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

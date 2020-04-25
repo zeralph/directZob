@@ -16,28 +16,30 @@ struct MaterialInfo
 
 MaterialManager::MaterialManager()
 {
-	m_textures.clear();
+	m_materials.clear();
 }
 
 MaterialManager::~MaterialManager()
 {
-	for (int i = 0; i < m_textures.size(); i++)
+	for (int i = 0; i < m_materials.size(); i++)
 	{
-		delete (m_textures[i]);
+		delete (m_materials[i]);
 	}
-	m_textures.clear();
+	m_materials.clear();
 }
 
-void MaterialManager::LoadMaterial(const std::string& name, const Vector3* ambientColor, const Vector3* diffuseColor, const std::string* textureFile/* = NULL*/)
+const Material* MaterialManager::LoadMaterial(const std::string& name, const Vector3* ambientColor, const Vector3* diffuseColor, const char* textureFile/* = NULL*/)
 {
-	if (GetTexture(name) == NULL)
+	if (GetMaterial(name) == NULL)
 	{
 		Material* t = new Material(name, ambientColor, diffuseColor, textureFile);
-		m_textures.push_back(t);
+		m_materials.push_back(t);
+		return t;
 	}
 	else
 	{
 		//output error
+		return GetMaterial(name);
 	}
 }
 
@@ -52,9 +54,7 @@ void MaterialManager::LoadMaterials(std::string& path, std::string& file)
 	std::vector<MaterialInfo> materials;
 	if (!sfile.is_open())
 	{
-		std::string s = "ERROR opening ";
-		s.append(fullPath);
-		DirectZob::LogError(s.c_str());
+		DirectZob::LogError("Error opening %s", fullPath.c_str());
 		return;
 	}
 	std::string s = "Opening ";
@@ -92,9 +92,9 @@ void MaterialManager::LoadMaterials(std::string& path, std::string& file)
 						SplitEntry(&line, &v, ' ');
 						if (v.size() == 4)
 						{
-							matInfo.ambient.x = atof(v[1].c_str());
-							matInfo.ambient.y = atof(v[2].c_str());
-							matInfo.ambient.z = atof(v[3].c_str());
+							matInfo.ambient.x = (float)atof(v[1].c_str());
+							matInfo.ambient.y = (float)atof(v[2].c_str());
+							matInfo.ambient.z = (float)atof(v[3].c_str());
 						}
 					}
 					if (line.rfind("Kd", 0) == 0)
@@ -103,9 +103,9 @@ void MaterialManager::LoadMaterials(std::string& path, std::string& file)
 						SplitEntry(&line, &v, ' ');
 						if (v.size() == 4)
 						{
-							matInfo.diffuse.x = atof(v[1].c_str());
-							matInfo.diffuse.y = atof(v[2].c_str());
-							matInfo.diffuse.z = atof(v[3].c_str());
+							matInfo.diffuse.x = (float)atof(v[1].c_str());
+							matInfo.diffuse.y = (float)atof(v[2].c_str());
+							matInfo.diffuse.z = (float)atof(v[3].c_str());
 						}
 					}
 					if (line.rfind("newmtl", 0) == 0)
@@ -128,7 +128,7 @@ void MaterialManager::LoadMaterials(std::string& path, std::string& file)
 		{
 			std::string p = path;
 			p.append(materials.at(i).texture);
-			LoadMaterial(n, &materials.at(i).ambient, &materials.at(i).diffuse, &p);
+			LoadMaterial(n, &materials.at(i).ambient, &materials.at(i).diffuse, p.c_str());
 		}
 		else
 		{
@@ -137,18 +137,18 @@ void MaterialManager::LoadMaterials(std::string& path, std::string& file)
 	}
 }
 
-const Material* MaterialManager::GetTexture(const int i) const
+const Material* MaterialManager::GetMaterial(const int i) const
 {
-	if (i >= 0 && i < m_textures.size())
+	if (i >= 0 && i < m_materials.size())
 	{
-		return m_textures[i];
+		return m_materials[i];
 	}
 	return NULL;
 }
 
-const Material* MaterialManager::GetTexture(const std::string& name) const
+const Material* MaterialManager::GetMaterial(const std::string& name) const
 {
-	for (std::vector<Material*>::const_iterator iter = m_textures.begin(); iter != m_textures.end(); iter++)
+	for (std::vector<Material*>::const_iterator iter = m_materials.begin(); iter != m_materials.end(); iter++)
 	{
 		if ((*iter)->GetName() == name)
 		{
@@ -161,12 +161,12 @@ const Material* MaterialManager::GetTexture(const std::string& name) const
 
 void MaterialManager::UnloadAll()
 {
-	for (int i = 0; i < m_textures.size(); i++)
+	for (int i = 0; i < m_materials.size(); i++)
 	{
-		delete (m_textures[i]);
-		m_textures[i] = NULL;
+		delete (m_materials[i]);
+		m_materials[i] = NULL;
 	}
-	m_textures.clear();
+	m_materials.clear();
 }
 
 void MaterialManager::SplitEntry(const std::string* s, std::vector<std::string>* v, const char delim)

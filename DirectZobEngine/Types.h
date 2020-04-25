@@ -7,6 +7,7 @@
 class  DirectZobType
 {
 public:
+	
 	typedef char u8;
 	typedef unsigned int uint;
 	typedef unsigned long ulong;
@@ -20,15 +21,17 @@ public:
 		float zFar;
 		uint* buffer;
 		float* zBuffer;
-		uint* oBuffer;
+//		uint* oBuffer;
 	};
 
-	struct Line2D
+	struct Line3D
 	{
 		float xa;
 		float xb;
 		float ya;
 		float yb;
+		float za;
+		float zb;
 		float c;
 	};
 
@@ -61,10 +64,18 @@ public:
 	};
 };
 
+enum FogType
+{
+	FogType_NoFog = 0,
+	FogType_Linear,
+	FogType_Exp,
+	FogType_Exp2,
+	__FogType_MAX__
+};
 typedef DirectZobType::u8 u8;
 typedef DirectZobType::uint uint;
 typedef DirectZobType::ulong ulong;
 typedef unsigned long long zobId;
 typedef struct DirectZobType::BufferData BufferData;
-typedef struct DirectZobType::Line2D Line2D;
+typedef struct DirectZobType::Line3D Line3D;
 typedef struct DirectZobType::RenderOptions RenderOptions;

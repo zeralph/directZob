@@ -16,7 +16,6 @@
 #include "Engine.h"
 #include "Cube.h"
 #include "Material.h"
-#include "TextureTestAlpha.h"
 #include "Mesh.h"
 #include "text2D.h"
 #include "Events.h"
@@ -26,11 +25,13 @@
 #include "LightManager.h"
 #include "ZobObjectManager.h"
 
+
 #define kUnused(var) (void) var;
 #define WIDTH  800//320//640//1920 / 2
 #define HEIGHT 600//240//480//1080 / 2
 #define TARGET_MS_PER_FRAME 33.33f
 #define CLAMP(n, low, max) n <= low ? low : n >= max ? max : n;
+
 
 class DirectZob
 {
@@ -56,10 +57,11 @@ public :
 	LightManager* GetLightManager() const { return m_lightManager; }
 	ZobObjectManager* GetZobObjectManager() const { return m_zobObjectManager; }
 	MeshManager* GetMeshManager() const { return m_meshManager; }
-	MaterialManager* GetmaterialManager() const { return m_materialManager;  }
+	MaterialManager* GetMaterialManager() const { return m_materialManager;  }
 	Events* GetEventManager() { return m_events; }
 	static void LogInfo(const char* str);
-	static void LogError(const char* str);
+
+	static void LogError(const char* format, ...);
 	static void LogWarning(const char* str);
 private:
 

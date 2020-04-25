@@ -4,7 +4,7 @@
 
 Triangle::Triangle()
 {
-	tex = NULL;
+	material = NULL;
 	va = new Vector3();
 	vb = new Vector3();
 	vc = new Vector3();

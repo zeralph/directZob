@@ -20,11 +20,11 @@ class Rasterizer
 public:
 
 	void DrawTriangle(const Triangle* t) const;
-	void DrawLine(const Line2D* l) const;
+	void DrawLine(const Line3D* l) const;
 	Rasterizer(uint width, uint startHeight, uint endHeight, BufferData* bufferData);
 	~Rasterizer();
 
-	void Start(const Triangle* triangles, uint nbTriangles, const std::vector<Line2D>* lines, const bool wireFrame);
+	void Start(const Triangle* triangles, uint nbTriangles, const std::vector<Line3D>* lines, const bool wireFrame);
 	void End() { m_run = false; }
 	void Init();
 	void Run();
@@ -40,7 +40,7 @@ private:
 	void sortVerticesAscendingByY(Vector2* v1, Vector2* v2, Vector2* v3) const ;
 	void sortVerticesAscendingByY(Vector2* v1, Vector2* v2, Vector2* v3, Vector2* uv1, Vector2* uv2, Vector2* uv3) const;
 	inline float edgeFunction(const Vector3* a, const Vector3* b, const Vector3* c) const { return (c->x - a->x) * (b->y - a->y) - (c->y - a->y) * (b->x - a->x); }
-	inline float clamp2(float x, float min, float max) const { if (x < min) x = min; if (x > max) x = max; return x; }
+	inline float clamp2(float x, const float min, const float max) const { if (x < min) x = min; if (x > max) x = max; return x; }
 
 	inline const float computeAmbient(float ambientIntensity) const
 	{
@@ -63,9 +63,13 @@ private:
 	};
 
 	const std::vector<Light*>* m_lights;
-	const std::vector<Line2D>* m_lines;
+	const std::vector<Line3D>* m_lines;
 	const Triangle* m_triangles;
 	const Vector3* m_ambientColor;
+	const Vector3* m_fogColor;
+	float m_fogDistance;
+	float m_fogDensity;
+	FogType m_fogType;
 	BufferData* m_bufferData;
 	Vector3 m_camDir;
 	uint m_nbTriangles;

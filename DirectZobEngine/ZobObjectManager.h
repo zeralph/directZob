@@ -27,25 +27,25 @@ public:
 	void UnloadAll();
 	void CreateEditorGizmos(std::string& editorResourcesPath);
 	ZobObject* GetEditorGizmos() { return m_editorGizmos; }
-	bool Reparent(ZobObject *o, ZobObject* parent);
+	bool Reparent(ZobObject* o, ZobObject* parent);
 private:
 	void GetZobObjectListInternal(const ZobObject* z, std::string& str);
 	ZobObject* LoadEditorMesh(const char* name, const char* meshPath, const char* meshFile, ZobObject* parent);
 	ZobObject* GetZobObjectFromPartialId(ZobObject* z, const uint id) const;
-	ZobObject* m_rootObject = NULL;
+	ZobObject* m_rootObject = nullptr;
 
 //Editor objects
-	ZobObject* m_editorGizmos = NULL;
-	ZobObject* m_transform = NULL;
-	ZobObject* m_transformX = NULL;
-	ZobObject* m_transformY = NULL;
-	ZobObject* m_transformZ = NULL;
-	ZobObject* m_rotate = NULL;
-	ZobObject* m_rotateX = NULL;
-	ZobObject* m_rotateY = NULL;
-	ZobObject* m_rotateZ = NULL;
-	ZobObject* m_scale = NULL;
-	ZobObject* m_scaleX = NULL;
-	ZobObject* m_scaleY = NULL;
-	ZobObject* m_scaleZ = NULL;
+	ZobObject* m_editorGizmos = nullptr;
+	ZobObject* m_transform = nullptr;
+	ZobObject* m_transformX = nullptr;
+	ZobObject* m_transformY = nullptr;
+	ZobObject* m_transformZ = nullptr;
+	ZobObject* m_rotate = nullptr;
+	ZobObject* m_rotateX = nullptr;
+	ZobObject* m_rotateY = nullptr;
+	ZobObject* m_rotateZ = nullptr;
+	ZobObject* m_scale = nullptr;
+	ZobObject* m_scaleX = nullptr;
+	ZobObject* m_scaleY = nullptr;
+	ZobObject* m_scaleZ = nullptr;
 }; 

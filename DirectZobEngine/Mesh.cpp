@@ -8,6 +8,7 @@ static Vector2 vec2zero = Vector2(0,0);
 
 Mesh::Mesh(std::string& name, std::string& path, std::string& file)
 {	
+	m_subMeshes.clear();
 	m_nbVertices = 0;
 	m_nbUvs = 0;
 	m_nbNormals = 0;
@@ -27,137 +28,268 @@ Mesh::Mesh(std::string& name, std::string& path, std::string& file)
 	
 	if (fullPath.find(".fbx") != -1)
 	{
-		std::string s = "Load mesh " + fullPath;
-		DirectZob::LogInfo(s.c_str());
-		FbxManager* fbxManag = DirectZob::GetInstance()->GetMeshManager()->GetFbxManager();
-		FbxImporter* importer = FbxImporter::Create(fbxManag, "");
-		if (importer->Initialize(fullPath.c_str(), -1, fbxManag->GetIOSettings()))
-		{
-			FbxScene* lScene = FbxScene::Create(fbxManag, "myScene");
-			importer->Import(lScene);
-			importer->Destroy();
-			int gc = lScene->GetGeometryCount();
-			m_nbFaces = 0;
-			int i = 0;
-			//first pass, allocations
-			m_nbVertices = 0;
-			for (int i = 0; i < gc; i++)
-			{
-				FbxMesh* mesh = (FbxMesh*)lScene->GetGeometry(i);
-				m_nbVertices += mesh->GetPolygonVertexCount();
-			}
-			m_nbFaces = 0;
-			m_vertices = (Vector3*)malloc(sizeof(Vector3) * m_nbVertices);
-			m_projectedVertices = (Vector3*)malloc(sizeof(Vector3) * m_nbVertices);
-			m_verticesData = (Vector3*)malloc(sizeof(Vector3) * m_nbVertices);
-			m_nbNormals = m_nbVertices;
-			m_verticesNormals = (Vector3*)malloc(sizeof(Vector3) * m_nbNormals);
-			m_verticesNormalsData = (Vector3*)malloc(sizeof(Vector3) * m_nbNormals);
-			m_nbUvs = m_nbVertices;
-			m_uvs = (Vector2*)malloc(sizeof(Vector2) * m_nbUvs);
-			for (int i = 0; i < gc; i++)
-			{
-				FbxMesh* mesh = (FbxMesh*)lScene->GetGeometry(i);
-				int pc = mesh->GetPolygonCount();
-				int vIdx = 0;
-				if (mesh && pc > 0)
-				{
-					fbxsdk::FbxAMatrix mat;
-					mesh->GetPivot(mat);
-					fbxsdk::FbxGeometryElementMaterial* material = mesh->GetElementMaterial(0);
-					//mesh->text
-					//material->lay
-					for (int j = 0; j < pc; j++)
-					{
-						int pSize = mesh->GetPolygonSize(j);
-						int startIdx = vIdx;
-						FbxVector4 normal = FbxVector4(0,0,0);
-						for (int k = 0; k < pSize; k++)
-						{
-							int ctrlIdx = mesh->GetPolygonVertex(j, k);
-							FbxVector4 v = mesh->GetControlPointAt(ctrlIdx);
-							FbxMultT(mesh->GetNode(), v);
-							m_vertices[vIdx] = Vector3(v[0], v[1], v[2]);
-							m_uvs[vIdx] = Vector2(0, 0);
-							mesh->GetPolygonVertexNormal(j, k, normal);
-							FbxMultT(mesh->GetNode(), normal);
-							normal.Normalize();
-							m_verticesNormals[vIdx] = Vector3(normal[0], normal[1], normal[2]);
-							//todo : compute normal
-							
-							vIdx++;
-						}
-						Triangle t;
-						t.va = &m_vertices[startIdx];
-						t.vb = &m_vertices[startIdx + 1];
-						t.vc = &m_vertices[startIdx + 2];
-						t.pa = &m_projectedVertices[startIdx];
-						t.pb = &m_projectedVertices[startIdx + 1];
-						t.pc = &m_projectedVertices[startIdx + 2];
-						t.na = &m_verticesNormals[startIdx];
-						t.nb = &m_verticesNormals[startIdx + 1];
-						t.nc = &m_verticesNormals[startIdx + 2];
-						t.ua = &m_uvs[startIdx];
-						t.ub = &m_uvs[startIdx + 1];
-						t.uc = &m_uvs[startIdx + 2];
-						m_triangles.push_back(t);
-						m_nbFaces++;
-						if (pSize > 4)
-						{
-							int yy = 0;
-							yy++;
-						}
-						if (pSize == 4)
-						{
-							Triangle t;
-							t.va = &m_vertices[startIdx + 3];
-							t.vb = &m_vertices[startIdx + 0];
-							t.vc = &m_vertices[startIdx + 2];
-							t.pa = &m_projectedVertices[startIdx + 3];
-							t.pb = &m_projectedVertices[startIdx + 0];
-							t.pc = &m_projectedVertices[startIdx + 2];
-							t.na = &m_verticesNormals[startIdx + 3];
-							t.nb = &m_verticesNormals[startIdx + 0];
-							t.nc = &m_verticesNormals[startIdx + 2];
-							t.ua = &m_uvs[startIdx + 3];
-							t.ub = &m_uvs[startIdx + 0];
-							t.uc = &m_uvs[startIdx + 2];
-							m_triangles.push_back(t);
-							m_nbFaces++;
-						}
-					}
-				}
-				if (vIdx == m_nbVertices)
-				{
-					int ok = 0;
-				}
-				else
-				{
-					int ok = 1;
-				}
-				m_trianglesNormals = (Vector3*)malloc(sizeof(Vector3) * m_nbFaces);
-				m_trianglesNormalsData = (Vector3*)malloc(sizeof(Vector3) * m_nbFaces);
-				for (int i = 0; i < m_nbFaces; i++)
-				{
-					Triangle* t = &m_triangles[i];
-					Vector3 v = Vector3(0,0,0);
-					v.Add(t->na);
-					v.Add(t->nb);
-					v.Add(t->nc);
-					v.Div(3.0f);
-					m_trianglesNormals[i] = v;
-					t->n = &m_trianglesNormals[i];
-				}
-				memcpy(m_verticesData, m_vertices, sizeof(Vector3) * m_nbVertices);
-				memcpy(m_verticesNormalsData, m_verticesNormals, sizeof(Vector3) * m_nbNormals);
-				memcpy(m_trianglesNormalsData, m_trianglesNormals, sizeof(Vector3) * m_nbFaces);
-			}
-		}
+		LoadFbx(fullPath);
 	}
 	else
 	{
 		LoadOBJ(fullPath);
 	}
+}
+
+Mesh::Mesh(fbxsdk::FbxMesh* mesh)
+{
+	if (mesh)
+	{
+		char buf[256];
+		m_nbVertices += mesh->GetPolygonVertexCount();
+		_snprintf_s(buf, 256, "Load sub mesh %s, %i vertices", mesh->GetName(), m_nbVertices);
+		DirectZob::LogInfo(buf);
+		m_nbFaces = 0;
+		m_vertices = (Vector3*)malloc(sizeof(Vector3) * m_nbVertices);
+		m_projectedVertices = (Vector3*)malloc(sizeof(Vector3) * m_nbVertices);
+		m_verticesData = (Vector3*)malloc(sizeof(Vector3) * m_nbVertices);
+		m_nbNormals = m_nbVertices;
+		m_verticesNormals = (Vector3*)malloc(sizeof(Vector3) * m_nbNormals);
+		m_verticesNormalsData = (Vector3*)malloc(sizeof(Vector3) * m_nbNormals);
+		m_nbUvs = m_nbVertices;
+		m_uvs = (Vector2*)malloc(sizeof(Vector2) * m_nbUvs);
+		int pc = mesh->GetPolygonCount();
+		_snprintf_s(buf, 256, "Object %s, %i polygons", mesh->GetName(), pc);
+		DirectZob::LogInfo(buf);
+		int vIdx = 0;
+		if (mesh && pc > 0)
+		{
+			fbxsdk::FbxAMatrix mat;
+			mesh->GetPivot(mat);
+			for (int j = 0; j < pc; j++)
+			{
+				int pSize = mesh->GetPolygonSize(j);
+				int startIdx = vIdx;
+				FbxVector4 normal = FbxVector4(0, 0, 0);
+				for (int k = 0; k < pSize; k++)
+				{
+					int polyGroup = mesh->GetPolygonGroup(j);
+					int ctrlIdx = mesh->GetPolygonVertex(j, k);
+					FbxVector4 v = mesh->GetControlPointAt(ctrlIdx);
+					FbxMultT(mesh->GetNode(), v);
+					m_vertices[vIdx] = Vector3(v[0], v[1], v[2]);
+					if (vIdx == 0)
+					{
+						m_minBouding = Vector3(v[0], v[1], v[2]);
+						m_maxBouding = Vector3(v[0], v[1], v[2]);
+					}
+					else
+					{
+						m_minBouding.x = min(m_minBouding.x, v[0]);
+						m_minBouding.y = min(m_minBouding.y, v[1]);
+						m_minBouding.z = min(m_minBouding.z, v[2]);
+						m_maxBouding.x = max(m_maxBouding.x, v[0]);
+						m_maxBouding.y = max(m_maxBouding.y, v[1]);
+						m_maxBouding.z = max(m_maxBouding.z, v[2]);
+					}
+					//UVs
+					fbxsdk::FbxStringList uvsNames;
+					mesh->GetUVSetNames(uvsNames);
+					if (uvsNames.GetCount() > 0)
+					{
+						fbxsdk::FbxVector2 uv;
+						bool unmapped;
+						char* uvSetName;
+						if (mesh->GetPolygonVertexUV(j, k, uvsNames[0], uv, unmapped))
+						{
+							m_uvs[vIdx] = Vector2(uv[0], uv[1]);
+						}
+						else
+						{
+							m_uvs[vIdx] = Vector2(0, 0);
+						}
+					}
+					else
+					{
+						m_uvs[vIdx] = Vector2(0, 0);
+					}
+					mesh->GetPolygonVertexNormal(j, k, normal);
+					FbxMultT(mesh->GetNode(), normal);
+					normal.Normalize();
+					m_verticesNormals[vIdx] = Vector3(normal[0], normal[1], normal[2]);
+					//todo : compute normal
+
+					vIdx++;
+				}
+
+				const Material* material = LoadFbxMaterial(mesh);
+				Triangle t;
+				t.va = &m_vertices[startIdx];
+				t.vb = &m_vertices[startIdx + 1];
+				t.vc = &m_vertices[startIdx + 2];
+				t.pa = &m_projectedVertices[startIdx];
+				t.pb = &m_projectedVertices[startIdx + 1];
+				t.pc = &m_projectedVertices[startIdx + 2];
+				t.na = &m_verticesNormals[startIdx];
+				t.nb = &m_verticesNormals[startIdx + 1];
+				t.nc = &m_verticesNormals[startIdx + 2];
+				t.ua = &m_uvs[startIdx];
+				t.ub = &m_uvs[startIdx + 1];
+				t.uc = &m_uvs[startIdx + 2];
+				t.material = material;
+				m_triangles.push_back(t);
+				m_nbFaces++;
+				if (pSize == 4)
+				{
+					Triangle t;
+					t.va = &m_vertices[startIdx + 3];
+					t.vb = &m_vertices[startIdx + 0];
+					t.vc = &m_vertices[startIdx + 2];
+					t.pa = &m_projectedVertices[startIdx + 3];
+					t.pb = &m_projectedVertices[startIdx + 0];
+					t.pc = &m_projectedVertices[startIdx + 2];
+					t.na = &m_verticesNormals[startIdx + 3];
+					t.nb = &m_verticesNormals[startIdx + 0];
+					t.nc = &m_verticesNormals[startIdx + 2];
+					t.ua = &m_uvs[startIdx + 3];
+					t.ub = &m_uvs[startIdx + 0];
+					t.uc = &m_uvs[startIdx + 2];
+					t.material = material;
+					m_triangles.push_back(t);
+					m_nbFaces++;
+				}
+			}
+		}
+		m_trianglesNormals = (Vector3*)malloc(sizeof(Vector3) * m_nbFaces);
+		m_trianglesNormalsData = (Vector3*)malloc(sizeof(Vector3) * m_nbFaces);
+		for (int i = 0; i < m_nbFaces; i++)
+		{
+			Triangle* t = &m_triangles[i];
+			Vector3 v = Vector3(0, 0, 0);
+			v.Add(t->na);
+			v.Add(t->nb);
+			v.Add(t->nc);
+			v.Div(3.0f);
+			m_trianglesNormals[i] = v;
+			t->n = &m_trianglesNormals[i];
+		}
+		memcpy(m_verticesData, m_vertices, sizeof(Vector3) * m_nbVertices);
+		memcpy(m_verticesNormalsData, m_verticesNormals, sizeof(Vector3) * m_nbNormals);
+		memcpy(m_trianglesNormalsData, m_trianglesNormals, sizeof(Vector3) * m_nbFaces);
+	}
+}
+
+void Mesh::LoadFbx(const std::string& fullPath)
+{
+	char buf[256];
+	_snprintf_s(buf, 256, "Load mesh %s", fullPath.c_str());
+	DirectZob::LogInfo(buf);
+	FbxManager* fbxManag = DirectZob::GetInstance()->GetMeshManager()->GetFbxManager();
+	FbxImporter* importer = FbxImporter::Create(fbxManag, "");
+	importer->SetEmbeddingExtractionFolder("C:\\_GIT\\directZob\\resources\\test");
+	if (importer->Initialize(fullPath.c_str(), -1, fbxManag->GetIOSettings()))
+	{
+		FbxScene* lScene = FbxScene::Create(fbxManag, "myScene");
+		importer->Import(lScene);
+		importer->Destroy();
+		int gc = lScene->GetGeometryCount();
+		m_nbFaces = 0;
+		int i = 0;
+		//first pass, allocations
+		m_nbVertices = 0;
+		m_nbFaces = 0;
+		m_nbNormals = 0;
+		m_nbUvs = 0;
+		for (int i = 0; i < gc; i++)
+		{
+			FbxMesh* mesh = (FbxMesh*)lScene->GetGeometry(i);
+			Mesh* m = new Mesh(mesh);
+			m_subMeshes.push_back(m);
+		}
+	}
+}
+
+const Material* Mesh::LoadFbxMaterial(fbxsdk::FbxMesh* mesh)
+{
+	const Material* finalMaterial = NULL;
+	MaterialManager* materialMgr = DirectZob::GetInstance()->GetMaterialManager();
+	int mcount = mesh->GetElementMaterialCount();
+	for (int index = 0; index < mcount; index++)
+	{
+		//fbxsdk::FbxGeometryElementMaterial* material = mesh->GetElementMaterial(0);
+		fbxsdk::FbxGeometryElementMaterial* gMaterial = mesh->GetElementMaterial(index);
+		if (gMaterial)
+		{
+			fbxsdk::FbxSurfaceMaterial* material = mesh->GetNode()->GetMaterial(gMaterial->GetIndexArray().GetAt(0));
+			int propCount = material->GetSrcPropertyCount();
+			//if (propCount > 0)
+			{
+				const char* matName = material->GetName();
+				finalMaterial = materialMgr->GetMaterial(matName);
+				if (finalMaterial)
+				{
+					return finalMaterial;
+				}
+				else
+				{
+					// This only gets the material of type sDiffuse, you probably need to traverse all Standard Material Property by its name to get all possible textures.
+					fbxsdk::FbxProperty prop = material->FindProperty(fbxsdk::FbxSurfaceMaterial::sDiffuse);
+					// Check if it's layeredtextures
+					FbxDouble3 c = prop.Get<FbxDouble3>();
+					Vector3 diffuse = Vector3(c[0], c[1], c[2]);
+					const char* texture_name = NULL;
+					const char* texture_name2 = NULL;
+					const char* texture_name3 = NULL;
+					int file_texture_count = prop.GetSrcObjectCount<fbxsdk::FbxFileTexture>();
+					if (file_texture_count > 0)
+					{
+						for (int j = 0; j < file_texture_count; j++)
+						{
+							FbxFileTexture* file_texture = FbxCast<fbxsdk::FbxFileTexture>(prop.GetSrcObject<FbxFileTexture>(j));
+							texture_name = file_texture->GetFileName();
+							texture_name2 = file_texture->GetRelativeFileName();
+							texture_name3 = file_texture->GetMediaName();
+						}
+					}
+					/*int layered_texture_count = prop.GetSrcObjectCount<fbxsdk::FbxLayeredTexture>();
+					if (layered_texture_count > 0)
+					{
+						for (int j = 0; j < layered_texture_count; j++)
+						{
+							FbxLayeredTexture* layered_texture = FbxCast<fbxsdk::FbxLayeredTexture>(prop.GetSrcObject<FbxLayeredTexture>(j));
+							int lcount = layered_texture->GetSrcObjectCount<fbxsdk::FbxTexture>();
+							for (int k = 0; k < lcount; k++)
+							{
+								FbxTexture* texture = FbxCast<fbxsdk::FbxTexture>(layered_texture->GetSrcObject<fbxsdk::FbxTexture>(k));
+								// Then, you can get all the properties of the texture, include its name
+								texture_name = texture->GetName();
+								//texture_name2 = texture->GetRelativeFileName();
+								//texture_name3 = texture->GetMediaName();
+							}
+						}
+					}
+					else
+					{
+						// Directly get textures
+						int texture_count = prop.GetSrcObjectCount<fbxsdk::FbxTexture>();
+						for (int j = 0; j < texture_count; j++)
+						{
+							const fbxsdk::FbxTexture* texture = FbxCast<fbxsdk::FbxTexture>(prop.GetSrcObject<fbxsdk::FbxTexture>(j));
+							//texture->FindSrcObject
+							// Then, you can get all the properties of the texture, include its name
+							texture_name = texture->GetName();
+							//texture_name2 = texture->GetRelativeFileName();
+							//texture_name3 = texture->GetMediaName();
+						}
+					}*/
+					float f;
+					prop = material->FindProperty(fbxsdk::FbxSurfaceMaterial::sDiffuseFactor);
+					f = prop.Get<FbxDouble>();
+					
+					prop = material->FindProperty(fbxsdk::FbxSurfaceMaterial::sSpecularFactor);
+					f = prop.Get<FbxDouble>();
+					Vector3 ambient;
+					finalMaterial = materialMgr->LoadMaterial(matName, &ambient, &diffuse, texture_name);
+				}
+			}
+		}
+	}
+	return finalMaterial;
 }
 
 void Mesh::FbxMultT(FbxNode* node, FbxVector4 &vector) 
@@ -180,6 +312,12 @@ void Mesh::FbxMultT(FbxNode* node, FbxVector4 &vector)
 
 Mesh::~Mesh()
 {
+	for (int i = 0; i < m_subMeshes.size(); i++)
+	{
+		delete m_subMeshes[i];
+		m_subMeshes[i] = NULL;
+	}
+	m_subMeshes.clear();
 	m_triangles.clear();
 	delete m_vertices;
 	delete m_verticesData;
@@ -201,9 +339,7 @@ void Mesh::LoadOBJ(const std::string& fullPath)
 	std::string line;
 	if (!sfile.is_open())
 	{
-		s = "Error opening ";
-		s.append(fullPath);
-		DirectZob::LogError(s.c_str());
+		DirectZob::LogError("Error opening %s", fullPath.c_str());
 		return;
 	}
 	while (getline(sfile, line))
@@ -229,7 +365,7 @@ void Mesh::LoadOBJ(const std::string& fullPath)
 			SplitEntry(&line, &v, ' ');
 			if (v.size() == 2)
 			{
-				DirectZob::GetInstance()->GetmaterialManager()->LoadMaterials(m_path, v[1]);
+				DirectZob::GetInstance()->GetMaterialManager()->LoadMaterials(m_path, v[1]);
 			}
 		}
 	}
@@ -304,7 +440,7 @@ void Mesh::LoadOBJ(const std::string& fullPath)
 				matName = matName.substr(0, matName.size() - 4);
 				matName.append(".");
 				matName.append(v[1]);
-				tex = DirectZob::GetInstance()->GetmaterialManager()->GetTexture(matName);
+				tex = DirectZob::GetInstance()->GetMaterialManager()->GetMaterial(matName);
 			}
 
 		}
@@ -353,8 +489,44 @@ void Mesh::ReinitVertices()
 	memcpy(m_trianglesNormals, m_trianglesNormalsData, sizeof(Vector3) * m_nbFaces);
 }
 
+void Mesh::DrawBoundingBox(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions options)
+{
+	Vector3 v0 = Vector3(m_minBouding.x, m_minBouding.y, m_minBouding.z);
+	Vector3 v1 = Vector3(m_minBouding.x, m_maxBouding.y, m_minBouding.z);
+	Vector3 v2 = Vector3(m_maxBouding.x, m_maxBouding.y, m_minBouding.z);
+	Vector3 v3 = Vector3(m_maxBouding.x, m_minBouding.y, m_minBouding.z);
+
+	Vector3 v4 = Vector3(m_minBouding.x, m_minBouding.y, m_maxBouding.z);
+	Vector3 v5 = Vector3(m_minBouding.x, m_maxBouding.y, m_maxBouding.z);
+	Vector3 v6 = Vector3(m_maxBouding.x, m_maxBouding.y, m_maxBouding.z);
+	Vector3 v7 = Vector3(m_maxBouding.x, m_minBouding.y, m_maxBouding.z);
+	modelMatrix.Mul(&v0);
+	modelMatrix.Mul(&v1);
+	modelMatrix.Mul(&v2);
+	modelMatrix.Mul(&v3);
+	modelMatrix.Mul(&v4);
+	modelMatrix.Mul(&v5);
+	modelMatrix.Mul(&v6);
+	modelMatrix.Mul(&v7);
+	engine->QueueLine(camera, &v0, &v1, 0xFF00FF00);
+	engine->QueueLine(camera, &v1, &v2, 0xFF00FF00);
+	engine->QueueLine(camera, &v2, &v3, 0xFF00FF00);
+	engine->QueueLine(camera, &v3, &v0, 0xFF00FF00);
+
+	engine->QueueLine(camera, &v4, &v5, 0xFF00FF00);
+	engine->QueueLine(camera, &v5, &v6, 0xFF00FF00);
+	engine->QueueLine(camera, &v6, &v7, 0xFF00FF00);
+	engine->QueueLine(camera, &v7, &v4, 0xFF00FF00);
+
+	engine->QueueLine(camera, &v1, &v5, 0xFF00FF00);
+	engine->QueueLine(camera, &v2, &v6, 0xFF00FF00);
+	engine->QueueLine(camera, &v3, &v7, 0xFF00FF00);
+	engine->QueueLine(camera, &v0, &v4, 0xFF00FF00);
+}
+
 void Mesh::Draw(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions options)
 {
+	DrawBoundingBox(modelMatrix, rotationMatrix, camera, engine, ownerId, options);
 	ReinitVertices();
 	BufferData* bData = engine->GetBufferData();
 	Vector2 a, b, c, uva, uvb, uvc;
@@ -429,7 +601,7 @@ void Mesh::Draw(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, c
 			{
 				t->area = -t->area;
 			}
-			if (engine->GetCullMode() == Engine::None || (t->area > sAreaMin && t->area < sAreaMax))
+			//if (engine->GetCullMode() == Engine::None )// ( || t->area > sAreaMin && t->area < sAreaMax))
 			{
 				t->owner = ownerId;
 				t->ComputeLighting(&light);
@@ -440,6 +612,10 @@ void Mesh::Draw(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, c
 		}
 	}
 	drawnFaces;
+	for (int i = 0; i < m_subMeshes.size(); i++)
+	{
+		m_subMeshes[i]->Draw(modelMatrix, rotationMatrix, camera,  engine, ownerId, options);
+	}
 }
 
 inline bool Mesh::RejectTriangle(const Triangle* t, const float znear, const float zfar, const float width, const float height)
@@ -546,7 +722,7 @@ void Mesh::CreateTriangles(const std::vector<std::string>* line, std::vector<Tri
 		{
 			t.nc = &m_verticesNormals[0];
 		}
-		t.tex = tex;
+		t.material = tex;
 		float nx = (t.na->x + t.nb->x + t.nc->x) / 3.0f;
 		float ny = (t.na->y + t.nb->y + t.nc->y) / 3.0f;
 		float nz = (t.na->z + t.nb->z + t.nc->z) / 3.0f;

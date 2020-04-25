@@ -6,7 +6,7 @@ static const struct {
   uint  	 height;
   uint		 nbCharWidth;
   uint		 nbCharHeight;
-  u8 		 pixel_data[];
+  u8 		 pixel_data[16512];
 
 } BaseFont = {
   256, 

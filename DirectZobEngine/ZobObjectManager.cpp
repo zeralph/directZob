@@ -198,7 +198,7 @@ ZobObject* ZobObjectManager::LoadEditorMesh(const char* name, const char* meshPa
 	return transform;
 }
 
-bool ZobObjectManager::Reparent(ZobObject *o, ZobObject* parent)
+bool ZobObjectManager::Reparent(ZobObject*o, ZobObject* parent)
 {
 	if (o)
 	{

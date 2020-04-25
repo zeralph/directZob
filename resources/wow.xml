@@ -11,23 +11,58 @@
         <Mesh name="scale" file="scale.obj" />
         <Mesh name="scaleX" file="scaleX.obj" />
         <Mesh name="scaleY" file="scaleY.obj" />
-        <Mesh name="scaleZ" file="scaleZ.obj" />
-        <Mesh name="camaro.obj" file="camaro.obj" />-->
+        <Mesh name="scaleZ" file="scaleZ.obj" />-->
+        <Mesh name="camaro.obj" file="camaro.obj" />
         <Mesh name="skull.obj" file="skull.obj" />
 		<Mesh name="terrain2.obj" file="terrain2.obj" />
     </Meshes>
     <Scene>
-        <ZobObject name="skull">
+		<Globals>
+			<Resolution x="320" y="240"/>
+			<AmbientColor r="200" g="200" b="200"/>
+			<FogColor r="0" g="0" b="0" />
+			<ClearColor r="0" g="0" b="0" />
+			<FogDensity>20</FogDensity>
+			<FogDistance>10</FogDistance>
+			<FogType>exp2</FogType>			
+		</Globals>
+        <ZobObject name="skull" type="mesh">
             <Mesh>skull.obj</Mesh>
-            <Position x="0" y="0" z="0" />
-            <Rotation x="0" y="0" z="180" />
-            <Scale x="1" y="1" z="1" />
-        </ZobObject>
-        <ZobObject name="terrain">
-            <Mesh>terrain2.obj</Mesh>
-            <Position x="0" y="0" z="0" />
+            <Position x="0" y="10" z="0" />
             <Rotation x="-90" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
+			<ZobObject name ="red" type="pointlight">
+				<Rotation x="0" y="0" z="0" />
+				<Position x="-10" y="10" z="0" />
+				<Color r="255" g="0" b="0" />
+				<Intensity>5</Intensity>
+				<FallOffDistance>500</FallOffDistance>
+			</ZobObject>
+			<ZobObject name ="camaro" type="mesh">
+				<Mesh>camaro.obj</Mesh>
+				<Rotation x="90" y="0" z="0" />
+				<Position x="20" y="20" z="20" />
+			</ZobObject>
         </ZobObject>
+        <ZobObject name="terrain" type="mesh">
+            <Mesh>terrain2.obj</Mesh>
+            <Position x="0" y="0" z="0" />
+            <Rotation x="0" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+		</ZobObject>
+       <!-- <ZobObject name ="green" type="pointlight">
+			<Rotation x="0" y="0" z="0" />
+            <Position x="0" y="100" z="0" />
+            <Color r="0" g="255" b="0" />
+			<Intensity>5</Intensity>
+			<FallOffDistance>500</FallOffDistance>
+        </ZobObject>
+        <ZobObject name ="blue" type="pointlight">
+			<Rotation x="0" y="0" z="0" />
+            <Position x="0" y="0" z="-100" />
+            <Color r="0" g="0" b="255" />
+			<Intensity>5</Intensity>
+			<FallOffDistance>500</FallOffDistance>
+        </ZobObject>		-->
     </Scene>
 </root>

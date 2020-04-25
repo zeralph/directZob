@@ -10,7 +10,7 @@ namespace CLI
 	array<System::String^>^ CameraManagerWrapper::GetCameraList()
 	{
 		const std::vector<std::string> data = m_Instance->GetCameraList();
-		int l = data.size();
+		int l = (int)data.size();
 		array<System::String ^>^ arr = gcnew array<System::String ^>(l);
 		for (int i = 0; i < l; i++)
 		{

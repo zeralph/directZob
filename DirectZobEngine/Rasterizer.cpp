@@ -40,7 +40,7 @@ void Rasterizer::Run()
 	}
 }
 
-void Rasterizer::Start(const Triangle* triangles, uint nbTriangles, const std::vector<Line2D>* lines, const bool wireFrame)
+void Rasterizer::Start(const Triangle* triangles, uint nbTriangles, const std::vector<Line3D>* lines, const bool wireFrame)
 {
 	m_lines = lines;
 	m_triangles = triangles;
@@ -66,25 +66,38 @@ void Rasterizer::Render()
 	//warning : invert lightdir ! https://fr.wikipedia.org/wiki/Ombrage_de_Phong
 	for (int i = 0; i < m_lines->size(); i++)
 	{
-		const Line2D l = m_lines->at(i);
+		const Line3D l = m_lines->at(i);
 		DrawLine(&l);
+	}
+	m_lights = NULL;
+	LightManager* lm = DirectZob::GetInstance()->GetLightManager();
+	if (lm)
+	{
+		m_lights = lm->GetActiveLights();
+		m_ambientColor = lm->GetAmbientColor();
+		m_fogColor = lm->GetFogColor();
+		m_fogType = lm->GetFogType();
+		m_fogDensity = lm->GetFogDensity();
+		m_fogDistance = lm->GetFogDistance();
 	}
 	for (int i = 0; i < m_nbTriangles; i++)
 	{
 		const Triangle* t = &m_triangles[i];
-		m_lights = DirectZob::GetInstance()->GetLightManager()->GetActiveLights();
-		m_ambientColor = DirectZob::GetInstance()->GetLightManager()->GetAmbientColor();
 		DrawTriangle(t);
 	}
 }
 
 
-void Rasterizer::DrawLine(const Line2D* l) const
+void Rasterizer::DrawLine(const Line3D* l) const
 {
+	float zRatio, zf = 0.0f;
+	uint k = 0;
 	float x1 = l->xa;
 	float x2 = l->xb;
 	float y1 = l->ya;
 	float y2 = l->yb;
+	float z1 = l->za;
+	float z2 = l->zb;
 	uint* buffer = m_bufferData->buffer;
 	float* zBuffer = m_bufferData->zBuffer;
 	const bool steep = abs(y2 - y1) > abs(x2 - x1);
@@ -98,35 +111,53 @@ void Rasterizer::DrawLine(const Line2D* l) const
 	{
 		std::swap(x1, x2);
 		std::swap(y1, y2);
+		std::swap(z1, z2);
 	}
-
 	const float dx = x2 - x1;
 	const float dy = abs(y2 - y1);
+	
 	float scaleX = 1.0;
 	float scaleY = 1.0;
+	float scaleZ = 1.0;
 	float error = dx / 2.0f;
 	const int ystep = (y1 < y2) ? 1 : -1;
+	
 	int y = (int)y1;
-
+	
 	const int maxX = (int)x2;
+	const float dz = z2 - z1;
+	const float zstep = dz / (maxX - x1);
+	float z = z1;
 	for (int x = (int)x1; x < maxX; x++)
 	{
 		if (x >= 0 && x < m_width && y >= m_startHeight && y < m_height)
 		{
 			if (steep)
 			{
-				uint k = x * m_bufferData->width + y;
+				k = x * m_bufferData->width + y;
 				if (k < m_bufferData->size)
 				{
-					buffer[k] = l->c;
+					zf = m_bufferData->zBuffer[k];
+					zRatio = (z - m_bufferData->zNear) / (m_bufferData->zFar - m_bufferData->zNear);
+					if (zRatio >= 0.0f && (zf < 0.0f || zRatio < zf))
+					{
+						buffer[k] = l->c;
+						m_bufferData->zBuffer[k] = zRatio;
+					}
 				}
 			}
 			else
 			{
-				uint k = y * m_bufferData->width + x;
+				k = y * m_bufferData->width + x;
 				if (k < m_bufferData->size)
 				{
-					buffer[k] = l->c;
+					zf = m_bufferData->zBuffer[k];
+					zRatio = (z - m_bufferData->zNear) / (m_bufferData->zFar - m_bufferData->zNear);
+					if (zRatio >= 0.0f && (zf < 0.0f || zRatio < zf))
+					{
+						buffer[k] = l->c;
+						m_bufferData->zBuffer[k] = zRatio;
+					}
 				}
 			}
 		}
@@ -134,6 +165,7 @@ void Rasterizer::DrawLine(const Line2D* l) const
 		if (error < 0)
 		{
 			y += ystep;
+			z += zstep;
 			error += dx;
 		}
 	}
@@ -284,7 +316,7 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 	float w0 = edgeFunction(t->vb, t->vc, p);
 	float w1 = edgeFunction(t->vc, t->va, p);*/
 
-	float w0, w1, w2, su, tu, cl, sl, al, r, g, b, a, z, cla, clb, clc, fr, fg, fb, lightPower;
+	float w0, w1, w2, su, tu, cl, sl, al, r, g, b, a, z, zRatio, fr, fg, fb, lightPower;
 	float texPixelData[4];
 	uint c, k;
 	Vector3 normal, lightDir;
@@ -303,28 +335,15 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 								(t->va->y * w0 + t->vb->y * w1 + t->vc->y * w2),
 								(t->va->z * w0 + t->vb->z * w1 + t->vc->z * w2));
 
-		const Material* texData = t->tex;
-		z = m_bufferData->zNear;
-		z = 1.0f / (t->pa->z * w0 + t->pb->z * w1 + t->pc->z * w2); //tpos.z ?
+		const Material* texData = t->material;
+		z = (t->pa->z * w0 + t->pb->z * w1 + t->pc->z * w2);
+		zRatio = (z - m_bufferData->zNear ) / (m_bufferData->zFar - m_bufferData->zNear);
 		k = p->y * m_width + p->x;
 		float zf = m_bufferData->zBuffer[k];
-
-		static float zmin = 1000;
-		static float zmax = 0;
-
-		if (!t->options.ZBuffered() || z > zf)
+		if ( zRatio >= 0.0f &&  (!t->options.ZBuffered() || zf < 0.0f  || zRatio < zf ))
 		{
-			m_bufferData->oBuffer[k] = t->owner;
-			m_bufferData->zBuffer[k] = z;
-			if (zmin > z)
-			{
-				zmin = z;
-			}
-			if (zmax < z)
-			{
-				zmax = z;
-			}
-
+//			m_bufferData->oBuffer[k] = t->owner;
+			m_bufferData->zBuffer[k] = zRatio;
 			su = w0 * t->ua->x + w1 * t->ub->x + w2 * t->uc->x;
 			tu = w0 * t->ua->y + w1 * t->ub->y + w2 * t->uc->y;
 			cl = 1.0f;
@@ -352,12 +371,15 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 					c = (uint)(((uint)tu * (uint)texData->GetWidth() + (uint)su) * 4);
 
 					const float* d = texData->GetData();
-					//std::copy(d[c], d[c+4], &texPixelData);
-					memcpy(texPixelData, &d[c], sizeof(float) * 4);
-					r = texPixelData[0];
-					g = texPixelData[1];
-					b = texPixelData[2];
-					a = texPixelData[3];
+					if (c < texData->GetDataSize() - 4)
+					{
+						//std::copy(d[c], d[c+4], &texPixelData);
+						memcpy(texPixelData, &d[c], sizeof(float) * 4);
+						r = texPixelData[0];
+						g = texPixelData[1];
+						b = texPixelData[2];
+						a = texPixelData[3];
+					}
 				}
 				else
 				{
@@ -383,8 +405,13 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 			{
 				const Light* l = (*iter);
 				//lightDir = l->GetTransform() - t->va;
-				lightDir = l->GetTransform() - t->va;// tpos;
-				lightPower =  (l->GetFallOffDistance() / lightDir.sqrtLength());
+				lightDir = tpos - l->GetTransform();// tpos;
+				lightPower = 1.0f - (lightDir.sqrtLength() / l->GetFallOffDistance());
+				lightPower = clamp2(lightPower, 0.0f, 1.0f) * l->GetIntensity();
+				if (lightPower == 0.0f)
+				{
+					break;
+				}
 				lightDir.Normalize();
 				static int specularIntensity = 50;
 				static float ambientIntensity = 0.4f;
@@ -410,6 +437,29 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 			fr = clamp2(fr, 0.0f, 1.0f);
 			fg = clamp2(fg, 0.0f, 1.0f);
 			fb = clamp2(fb, 0.0f, 1.0f);
+			z = abs(z);
+			if (m_fogType == FogType::FogType_NoFog)
+			{
+				z = 1.0f;
+			}
+			else if (m_fogType == FogType::FogType_Linear)
+			{
+				z = (m_bufferData->zFar - z) / (m_fogDistance - m_bufferData->zNear);
+			}
+			else if (m_fogType == FogType::FogType_Exp)
+			{
+				//z = (m_bufferData->zFar - z) / (m_fogDistance - m_bufferData->zNear);
+				z = exp(-m_fogDensity * zRatio);
+			}
+			else
+			{
+				//z = (m_bufferData->zFar - z) / (m_fogDistance - m_bufferData->zNear);
+				z = exp(-m_fogDensity * pow(zRatio,2));
+			}
+			z = clamp2(z, 0.0f, 1.0f);
+			fr = fr * z + (1.0f - z) * m_fogColor->x;
+			fg = fg * z + (1.0f - z) * m_fogColor->y;
+			fb = fb * z + (1.0f - z) * m_fogColor->z;
 			c = ((int)(fr * 255) << 16) + ((int)(fg * 255) << 8) + (int)(fb * 255);
 			m_bufferData->buffer[k] = c;
 		}

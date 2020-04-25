@@ -34,7 +34,7 @@ public:
 	inline const std::string& GetName() const { return m_name; }
 	inline void SetName(const std::string &name) { m_name = name; }
 	const void GetFullNodeName(std::string &fullName) const;
-	inline const int GetNbChildren() const { return m_children.size(); }
+	inline const int GetNbChildren() const { return (int)m_children.size(); }
 	void RemoveChildReference(const ZobObject* z);
 	void AddChildReference(ZobObject* z);
 	int GetChildPosition(const ZobObject* z);
@@ -46,7 +46,7 @@ protected:
 	
 	bool HasChild(const ZobObject* o);
 
-	ZobObject* m_parent = NULL;
+	ZobObject* m_parent;
 	Mesh* m_mesh = NULL;
 	std::vector<ZobObject*> m_children;
 	Matrix4x4 m_modelMatrix;

@@ -1,7 +1,7 @@
 #include "Light.h"
 
-Light::Light(std::string &name, Vector3 color, float intensity, float distance) :
-	ZobObject(ZOBGUID::type_scene, ZOBGUID::subtype_zobLight, name, NULL, NULL)
+Light::Light(std::string &name, Vector3 color, float intensity, float distance, ZobObject*parent):
+	ZobObject(ZOBGUID::type_scene, ZOBGUID::subtype_zobLight, name, nullptr, parent)
 {
 	m_color = color;
 	m_intensity = intensity;
@@ -10,5 +10,4 @@ Light::Light(std::string &name, Vector3 color, float intensity, float distance) 
 
 Light::~Light()
 {
-
 }
