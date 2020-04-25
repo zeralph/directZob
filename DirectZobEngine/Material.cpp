@@ -26,11 +26,7 @@ Material::Material(const std::string& name, const Vector3* ambientColor, const V
 				if (error)
 				{
 					m_data = NULL;
-					std::string n = "ERROR loading texture ";
-					n.append(textureFile);
-					n.append(" for material ");
-					n.append(name);
-					DirectZob::LogError(n.c_str());
+					DirectZob::LogError("Error %i occured when loading PNG texture %s for material %s", error, textureFile, name.c_str());
 				}
 				else
 				{
@@ -48,6 +44,7 @@ Material::Material(const std::string& name, const Vector3* ambientColor, const V
 						m_data[i + 2] = b;
 						m_data[i + 3] = a;
 					}
+					m_dataSize = width * height * 4;
 					std::string n = "Loaded texture ";
 					n.append(textureFile);
 					n.append(" for material ");
@@ -82,17 +79,20 @@ Material::Material(const std::string& name, const Vector3* ambientColor, const V
 						m_width = width;
 						m_height = height;
 						m_data = (float*)malloc(sizeof(float) * 4 * image.size());
+						int j = 0;
 						for (int i = 0; i < image.size(); i += 3)
 						{
 							float r = (float)image[i] / 255.0f;
 							float g = (float)image[i + 1] / 255.0f;
 							float b = (float)image[i + 2] / 255.0f;
 							float a = 1.0f;
-							m_data[i] = r;
-							m_data[i + 1] = g;
-							m_data[i + 2] = b;
-							m_data[i + 3] = a;
+							m_data[j] = r;
+							m_data[j + 1] = g;
+							m_data[j + 2] = b;
+							m_data[j + 3] = a;
+							j += 4;
 						}
+						m_dataSize = width * height * 4;
 						std::string n = "Loaded texture ";
 						n.append(textureFile);
 						n.append(" for material ");
@@ -101,21 +101,16 @@ Material::Material(const std::string& name, const Vector3* ambientColor, const V
 					}
 					else
 					{
-						std::string n = "ERROR loading texture ";
-						n.append(textureFile);
-						n.append(" for material ");
-						n.append(name);
-						DirectZob::LogError(n.c_str());
+						m_data = NULL;
+						m_dataSize = 0;
+						m_width = m_height = 0;
+						DirectZob::LogError("Error %i occured when loading JPEG texture %s for material %s", error, textureFile, name.c_str());
 					}
 					free((void*)buf);
 				}
 				else
 				{
-					std::string n = "ERROR opening file ";
-					n.append(textureFile);
-					n.append(" for material ");
-					n.append(name);
-					DirectZob::LogError(n.c_str());
+					DirectZob::LogError("Error %i occured when opening JPEG texture %s for material %s", error, textureFile, name.c_str());
 					m_data = NULL;
 					error = 1;
 				}
@@ -137,4 +132,5 @@ Material::~Material()
 	m_diffuseColor = Vector3(0,0,0);
 	m_width = 0;
 	m_height = 0;
+	m_dataSize = 0;
 }

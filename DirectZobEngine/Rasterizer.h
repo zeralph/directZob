@@ -20,11 +20,11 @@ class Rasterizer
 public:
 
 	void DrawTriangle(const Triangle* t) const;
-	void DrawLine(const Line2D* l) const;
+	void DrawLine(const Line3D* l) const;
 	Rasterizer(uint width, uint startHeight, uint endHeight, BufferData* bufferData);
 	~Rasterizer();
 
-	void Start(const Triangle* triangles, uint nbTriangles, const std::vector<Line2D>* lines, const bool wireFrame);
+	void Start(const Triangle* triangles, uint nbTriangles, const std::vector<Line3D>* lines, const bool wireFrame);
 	void End() { m_run = false; }
 	void Init();
 	void Run();
@@ -63,7 +63,7 @@ private:
 	};
 
 	const std::vector<Light*>* m_lights;
-	const std::vector<Line2D>* m_lines;
+	const std::vector<Line3D>* m_lines;
 	const Triangle* m_triangles;
 	const Vector3* m_ambientColor;
 	const Vector3* m_fogColor;

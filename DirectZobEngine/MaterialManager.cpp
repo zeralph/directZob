@@ -54,9 +54,7 @@ void MaterialManager::LoadMaterials(std::string& path, std::string& file)
 	std::vector<MaterialInfo> materials;
 	if (!sfile.is_open())
 	{
-		std::string s = "ERROR opening ";
-		s.append(fullPath);
-		DirectZob::LogError(s.c_str());
+		DirectZob::LogError("Error opening %s", fullPath.c_str());
 		return;
 	}
 	std::string s = "Opening ";
@@ -94,9 +92,9 @@ void MaterialManager::LoadMaterials(std::string& path, std::string& file)
 						SplitEntry(&line, &v, ' ');
 						if (v.size() == 4)
 						{
-							matInfo.ambient.x = atof(v[1].c_str());
-							matInfo.ambient.y = atof(v[2].c_str());
-							matInfo.ambient.z = atof(v[3].c_str());
+							matInfo.ambient.x = (float)atof(v[1].c_str());
+							matInfo.ambient.y = (float)atof(v[2].c_str());
+							matInfo.ambient.z = (float)atof(v[3].c_str());
 						}
 					}
 					if (line.rfind("Kd", 0) == 0)
@@ -105,9 +103,9 @@ void MaterialManager::LoadMaterials(std::string& path, std::string& file)
 						SplitEntry(&line, &v, ' ');
 						if (v.size() == 4)
 						{
-							matInfo.diffuse.x = atof(v[1].c_str());
-							matInfo.diffuse.y = atof(v[2].c_str());
-							matInfo.diffuse.z = atof(v[3].c_str());
+							matInfo.diffuse.x = (float)atof(v[1].c_str());
+							matInfo.diffuse.y = (float)atof(v[2].c_str());
+							matInfo.diffuse.z = (float)atof(v[3].c_str());
 						}
 					}
 					if (line.rfind("newmtl", 0) == 0)

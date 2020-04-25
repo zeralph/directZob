@@ -1,12 +1,12 @@
 <root>
     <Meshes>
-        <Mesh name="IndustrialBuilding" file="IndustrialBuilding.fbx" />
+        <Mesh name="IndustrialBuilding" file="RmhDktMako.fbx" />
     </Meshes>
     <Scene>
 		<Globals>
-			<AmbientColor r="50" g="50" b="50"/>
+			<AmbientColor r="200" g="200" b="200"/>
 			<FogColor r="200" g="200" b="200" />
-			<ClearColor r="0" g="0" b="0" />
+			<ClearColor r="200" g="200" b="200" />
 			<FogDensity>0</FogDensity>
 			<FogDistance>0</FogDistance>
 			<FogType>Exp2</FogType>			
@@ -14,15 +14,15 @@
         <ZobObject name="IndustrialBuilding" type="mesh">
             <Mesh>IndustrialBuilding</Mesh>
             <Position x="0" y="0" z="0" />
-            <Rotation x="-90" y="0" z="0" />
-            <Scale x="0.001" y="0.001" z="0.001" />
+            <Rotation x="0" y="0" z="0" />
+            <Scale x="0.1" y="0.1" z="0.1" />
         </ZobObject>
 		<ZobObject name ="sun" type="pointlight">
 			<Rotation x="0" y="0" z="0" />
 			<Position x="100" y="100" z="100" />
 			<Color r="255" g="128" b="64" />
 			<Intensity>5</Intensity>
-			<FallOffDistance>5000</FallOffDistance>
+			<FallOffDistance>50000</FallOffDistance>
 		</ZobObject>
     </Scene>
 </root>

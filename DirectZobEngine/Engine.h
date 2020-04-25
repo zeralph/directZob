@@ -93,7 +93,7 @@ namespace Core
 		Events* m_events;
 		Triangle** m_rasterTriangleQueues;
 		uint* m_rasterNbTriangleQueues;
-		std::vector<Line2D>* m_rasterLineQueues;
+		std::vector<Line3D>* m_rasterLineQueues;
 		std::vector<Rasterizer*>* m_rasterizers;
 		uint m_nbRasterizers;
 		uint m_triangleQueueSize;
@@ -109,7 +109,7 @@ namespace Core
 		ulong m_currentFrame;
 		uint* m_buffer;
 		float* m_zBuffer;
-		uint* m_oBuffer;
+//		uint* m_oBuffer;
 		BufferData m_bufferData;
 		bool m_showZBuffer;
 		uint m_sceneTriangles;

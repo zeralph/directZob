@@ -5,7 +5,7 @@
 #include "SceneLoader.h"
 
 static char buffer[MAX_PATH];
-
+static char logBuffer[1024];
 DirectZob *DirectZob::singleton = nullptr;
 
 DirectZob::DirectZob()
@@ -132,9 +132,33 @@ void DirectZob::LogInfo(const char* str)
 {
 	DirectZob::singleton->GetEventManager()->AddEvent(Events::LogInfo, str);
 }
-void DirectZob::LogError(const char* str)
+
+void DirectZob::LogError(const char* format, ...)
 {
-	DirectZob::singleton->GetEventManager()->AddEvent(Events::LogError, str);
+	va_list args;
+	va_start(args, format);
+	//size_t size = _snprintf_s(NULL, 0, format, args) + 1;
+	char buf[1024];// = (char*)malloc(size * sizeof(char));
+	_vsnprintf_s(buf, 1024, format, args);
+	std::string s = std::string(buf);
+	DirectZob::singleton->GetEventManager()->AddEvent(Events::LogError, s);
+	va_end(args);
+	//delete buf;
+	/*
+	size_t size = snprintf(nullptr, 0, format.c_str(), args ...) + 1; // Extra space for '\0'
+	if (size <= 0) { throw std::runtime_error("Error during formatting."); }
+	std::unique_ptr<char[]> buf(new char[size]);
+	snprintf(buf.get(), size, format.c_str(), args ...);
+	std::string s = std::string(buf.get(), buf.get() + size - 1);
+	DirectZob::singleton->GetEventManager()->AddEvent(Events::LogError, s);
+	*/
+	/*
+	va_list args;
+	va_start(args, str);
+	_snprintf_s(logBuffer, 1024, str, args);
+	DirectZob::singleton->GetEventManager()->AddEvent(Events::LogError, std::string(logBuffer));
+	va_end(args);
+	*/
 }
 void DirectZob::LogWarning(const char* str)
 {

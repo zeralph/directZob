@@ -40,7 +40,7 @@ void Rasterizer::Run()
 	}
 }
 
-void Rasterizer::Start(const Triangle* triangles, uint nbTriangles, const std::vector<Line2D>* lines, const bool wireFrame)
+void Rasterizer::Start(const Triangle* triangles, uint nbTriangles, const std::vector<Line3D>* lines, const bool wireFrame)
 {
 	m_lines = lines;
 	m_triangles = triangles;
@@ -66,7 +66,7 @@ void Rasterizer::Render()
 	//warning : invert lightdir ! https://fr.wikipedia.org/wiki/Ombrage_de_Phong
 	for (int i = 0; i < m_lines->size(); i++)
 	{
-		const Line2D l = m_lines->at(i);
+		const Line3D l = m_lines->at(i);
 		DrawLine(&l);
 	}
 	m_lights = NULL;
@@ -88,12 +88,21 @@ void Rasterizer::Render()
 }
 
 
-void Rasterizer::DrawLine(const Line2D* l) const
+void Rasterizer::DrawLine(const Line3D* l) const
 {
+	float zRatio, zf = 0.0f;
+	uint k = 0;
 	float x1 = l->xa;
 	float x2 = l->xb;
 	float y1 = l->ya;
 	float y2 = l->yb;
+	float z1 = l->za;
+	float z2 = l->zb;
+	if (z1 < 0.0f || z2 < 0.0f)
+	{
+		int yy = 0;
+		yy++;
+	}
 	uint* buffer = m_bufferData->buffer;
 	float* zBuffer = m_bufferData->zBuffer;
 	const bool steep = abs(y2 - y1) > abs(x2 - x1);
@@ -107,35 +116,53 @@ void Rasterizer::DrawLine(const Line2D* l) const
 	{
 		std::swap(x1, x2);
 		std::swap(y1, y2);
+		std::swap(z1, z2);
 	}
-
 	const float dx = x2 - x1;
 	const float dy = abs(y2 - y1);
+	
 	float scaleX = 1.0;
 	float scaleY = 1.0;
+	float scaleZ = 1.0;
 	float error = dx / 2.0f;
 	const int ystep = (y1 < y2) ? 1 : -1;
+	
 	int y = (int)y1;
-
+	
 	const int maxX = (int)x2;
+	const float dz = z2 - z1;
+	const float zstep = dz / (maxX - x1);
+	float z = z1;
 	for (int x = (int)x1; x < maxX; x++)
 	{
 		if (x >= 0 && x < m_width && y >= m_startHeight && y < m_height)
 		{
 			if (steep)
 			{
-				uint k = x * m_bufferData->width + y;
+				k = x * m_bufferData->width + y;
 				if (k < m_bufferData->size)
 				{
-					buffer[k] = l->c;
+					zf = m_bufferData->zBuffer[k];
+					zRatio = (z - m_bufferData->zNear) / (m_bufferData->zFar - m_bufferData->zNear);
+					if (zRatio >= 0.0f && (zf < 0.0f || zRatio < zf))
+					{
+						buffer[k] = l->c;
+						m_bufferData->zBuffer[k] = zRatio;
+					}
 				}
 			}
 			else
 			{
-				uint k = y * m_bufferData->width + x;
+				k = y * m_bufferData->width + x;
 				if (k < m_bufferData->size)
 				{
-					buffer[k] = l->c;
+					zf = m_bufferData->zBuffer[k];
+					zRatio = (z - m_bufferData->zNear) / (m_bufferData->zFar - m_bufferData->zNear);
+					if (zRatio >= 0.0f && (zf < 0.0f || zRatio < zf))
+					{
+						buffer[k] = l->c;
+						m_bufferData->zBuffer[k] = zRatio;
+					}
 				}
 			}
 		}
@@ -143,6 +170,7 @@ void Rasterizer::DrawLine(const Line2D* l) const
 		if (error < 0)
 		{
 			y += ystep;
+			z += zstep;
 			error += dx;
 		}
 	}
@@ -293,7 +321,7 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 	float w0 = edgeFunction(t->vb, t->vc, p);
 	float w1 = edgeFunction(t->vc, t->va, p);*/
 
-	float w0, w1, w2, su, tu, cl, sl, al, r, g, b, a, z, zRatio, cla, clb, clc, fr, fg, fb, lightPower;
+	float w0, w1, w2, su, tu, cl, sl, al, r, g, b, a, z, zRatio, fr, fg, fb, lightPower;
 	float texPixelData[4];
 	uint c, k;
 	Vector3 normal, lightDir;
@@ -317,9 +345,9 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 		zRatio = (z - m_bufferData->zNear ) / (m_bufferData->zFar - m_bufferData->zNear);
 		k = p->y * m_width + p->x;
 		float zf = m_bufferData->zBuffer[k];
-		if (!t->options.ZBuffered() || zf < 0.0f  || zRatio < zf )
+		if ( zRatio >= 0.0f &&  (!t->options.ZBuffered() || zf < 0.0f  || zRatio < zf ))
 		{
-			m_bufferData->oBuffer[k] = t->owner;
+//			m_bufferData->oBuffer[k] = t->owner;
 			m_bufferData->zBuffer[k] = zRatio;
 			su = w0 * t->ua->x + w1 * t->ub->x + w2 * t->uc->x;
 			tu = w0 * t->ua->y + w1 * t->ub->y + w2 * t->uc->y;
@@ -348,12 +376,15 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 					c = (uint)(((uint)tu * (uint)texData->GetWidth() + (uint)su) * 4);
 
 					const float* d = texData->GetData();
-					//std::copy(d[c], d[c+4], &texPixelData);
-					memcpy(texPixelData, &d[c], sizeof(float) * 4);
-					r = texPixelData[0];
-					g = texPixelData[1];
-					b = texPixelData[2];
-					a = texPixelData[3];
+					if (c < texData->GetDataSize() - 4)
+					{
+						//std::copy(d[c], d[c+4], &texPixelData);
+						memcpy(texPixelData, &d[c], sizeof(float) * 4);
+						r = texPixelData[0];
+						g = texPixelData[1];
+						b = texPixelData[2];
+						a = texPixelData[3];
+					}
 				}
 				else
 				{

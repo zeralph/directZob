@@ -5,6 +5,7 @@ using namespace std;
 
 Mesh::Mesh(std::string& name, std::string& path, std::string& file)
 {	
+	m_subMeshes.clear();
 	m_nbVertices = 0;
 	m_nbUvs = 0;
 	m_nbNormals = 0;
@@ -32,10 +33,135 @@ Mesh::Mesh(std::string& name, std::string& path, std::string& file)
 	}
 }
 
+Mesh::Mesh(fbxsdk::FbxMesh* mesh)
+{
+	if (mesh)
+	{
+		char buf[256];
+		m_nbVertices += mesh->GetPolygonVertexCount();
+		_snprintf_s(buf, 256, "Load sub mesh %s, %i vertices", mesh->GetName(), m_nbVertices);
+		DirectZob::LogInfo(buf);
+		m_nbFaces = 0;
+		m_vertices = (Vector3*)malloc(sizeof(Vector3) * m_nbVertices);
+		m_projectedVertices = (Vector3*)malloc(sizeof(Vector3) * m_nbVertices);
+		m_verticesData = (Vector3*)malloc(sizeof(Vector3) * m_nbVertices);
+		m_nbNormals = m_nbVertices;
+		m_verticesNormals = (Vector3*)malloc(sizeof(Vector3) * m_nbNormals);
+		m_verticesNormalsData = (Vector3*)malloc(sizeof(Vector3) * m_nbNormals);
+		m_nbUvs = m_nbVertices;
+		m_uvs = (Vector2*)malloc(sizeof(Vector2) * m_nbUvs);
+		int pc = mesh->GetPolygonCount();
+		_snprintf_s(buf, 256, "Object %s, %i polygons", mesh->GetName(), pc);
+		DirectZob::LogInfo(buf);
+		int vIdx = 0;
+		if (mesh && pc > 0)
+		{
+			fbxsdk::FbxAMatrix mat;
+			mesh->GetPivot(mat);
+			for (int j = 0; j < pc; j++)
+			{
+				int pSize = mesh->GetPolygonSize(j);
+				int startIdx = vIdx;
+				FbxVector4 normal = FbxVector4(0, 0, 0);
+				for (int k = 0; k < pSize; k++)
+				{
+					int polyGroup = mesh->GetPolygonGroup(j);
+					int ctrlIdx = mesh->GetPolygonVertex(j, k);
+					FbxVector4 v = mesh->GetControlPointAt(ctrlIdx);
+					FbxMultT(mesh->GetNode(), v);
+					m_vertices[vIdx] = Vector3(v[0], v[1], v[2]);
+					//UVs
+					fbxsdk::FbxStringList uvsNames;
+					mesh->GetUVSetNames(uvsNames);
+					if (uvsNames.GetCount() > 0)
+					{
+						fbxsdk::FbxVector2 uv;
+						bool unmapped;
+						char* uvSetName;
+						if (mesh->GetPolygonVertexUV(j, k, uvsNames[0], uv, unmapped))
+						{
+							m_uvs[vIdx] = Vector2(uv[0], uv[1]);
+						}
+						else
+						{
+							m_uvs[vIdx] = Vector2(0, 0);
+						}
+					}
+					else
+					{
+						m_uvs[vIdx] = Vector2(0, 0);
+					}
+					mesh->GetPolygonVertexNormal(j, k, normal);
+					FbxMultT(mesh->GetNode(), normal);
+					normal.Normalize();
+					m_verticesNormals[vIdx] = Vector3(normal[0], normal[1], normal[2]);
+					//todo : compute normal
+
+					vIdx++;
+				}
+
+				const Material* material = LoadFbxMaterial(mesh);
+				Triangle t;
+				t.va = &m_vertices[startIdx];
+				t.vb = &m_vertices[startIdx + 1];
+				t.vc = &m_vertices[startIdx + 2];
+				t.pa = &m_projectedVertices[startIdx];
+				t.pb = &m_projectedVertices[startIdx + 1];
+				t.pc = &m_projectedVertices[startIdx + 2];
+				t.na = &m_verticesNormals[startIdx];
+				t.nb = &m_verticesNormals[startIdx + 1];
+				t.nc = &m_verticesNormals[startIdx + 2];
+				t.ua = &m_uvs[startIdx];
+				t.ub = &m_uvs[startIdx + 1];
+				t.uc = &m_uvs[startIdx + 2];
+				t.material = material;
+				m_triangles.push_back(t);
+				m_nbFaces++;
+				if (pSize == 4)
+				{
+					Triangle t;
+					t.va = &m_vertices[startIdx + 3];
+					t.vb = &m_vertices[startIdx + 0];
+					t.vc = &m_vertices[startIdx + 2];
+					t.pa = &m_projectedVertices[startIdx + 3];
+					t.pb = &m_projectedVertices[startIdx + 0];
+					t.pc = &m_projectedVertices[startIdx + 2];
+					t.na = &m_verticesNormals[startIdx + 3];
+					t.nb = &m_verticesNormals[startIdx + 0];
+					t.nc = &m_verticesNormals[startIdx + 2];
+					t.ua = &m_uvs[startIdx + 3];
+					t.ub = &m_uvs[startIdx + 0];
+					t.uc = &m_uvs[startIdx + 2];
+					t.material = material;
+					m_triangles.push_back(t);
+					m_nbFaces++;
+				}
+			}
+		}
+		m_trianglesNormals = (Vector3*)malloc(sizeof(Vector3) * m_nbFaces);
+		m_trianglesNormalsData = (Vector3*)malloc(sizeof(Vector3) * m_nbFaces);
+		for (int i = 0; i < m_nbFaces; i++)
+		{
+			Triangle* t = &m_triangles[i];
+			Vector3 v = Vector3(0, 0, 0);
+			v.Add(t->na);
+			v.Add(t->nb);
+			v.Add(t->nc);
+			v.Div(3.0f);
+			m_trianglesNormals[i] = v;
+			t->n = &m_trianglesNormals[i];
+		}
+		memcpy(m_verticesData, m_vertices, sizeof(Vector3) * m_nbVertices);
+		memcpy(m_verticesNormalsData, m_verticesNormals, sizeof(Vector3) * m_nbNormals);
+		memcpy(m_trianglesNormalsData, m_trianglesNormals, sizeof(Vector3) * m_nbFaces);
+	}
+}
+
 void Mesh::LoadFbx(const std::string& fullPath)
 {
-	std::string s = "Load mesh " + fullPath;
-	DirectZob::LogInfo(s.c_str());
+	char buf[256];
+	_snprintf_s(buf, 256, "Load mesh %s", fullPath.c_str());
+	DirectZob::LogInfo(buf);
 	FbxManager* fbxManag = DirectZob::GetInstance()->GetMeshManager()->GetFbxManager();
 	FbxImporter* importer = FbxImporter::Create(fbxManag, "");
 	importer->SetEmbeddingExtractionFolder("C:\\_GIT\\directZob\\resources\\test");
@@ -49,138 +175,14 @@ void Mesh::LoadFbx(const std::string& fullPath)
 		int i = 0;
 		//first pass, allocations
 		m_nbVertices = 0;
+		m_nbFaces = 0;
+		m_nbNormals = 0;
+		m_nbUvs = 0;
 		for (int i = 0; i < gc; i++)
 		{
 			FbxMesh* mesh = (FbxMesh*)lScene->GetGeometry(i);
-			m_nbVertices += mesh->GetPolygonVertexCount();
-		}
-		m_nbFaces = 0;
-		m_vertices = (Vector3*)malloc(sizeof(Vector3) * m_nbVertices);
-		m_projectedVertices = (Vector3*)malloc(sizeof(Vector3) * m_nbVertices);
-		m_verticesData = (Vector3*)malloc(sizeof(Vector3) * m_nbVertices);
-		m_nbNormals = m_nbVertices;
-		m_verticesNormals = (Vector3*)malloc(sizeof(Vector3) * m_nbNormals);
-		m_verticesNormalsData = (Vector3*)malloc(sizeof(Vector3) * m_nbNormals);
-		m_nbUvs = m_nbVertices;
-		m_uvs = (Vector2*)malloc(sizeof(Vector2) * m_nbUvs);
-		for (int i = 0; i < gc; i++)
-		{
-			fbxsdk:: FbxMesh* mesh = (fbxsdk::FbxMesh*)lScene->GetGeometry(i);
-			int pc = mesh->GetPolygonCount();
-			int vIdx = 0;
-			if (mesh && pc > 0)
-			{
-				fbxsdk::FbxAMatrix mat;
-				mesh->GetPivot(mat);
-				for (int j = 0; j < pc; j++)
-				{
-					int pSize = mesh->GetPolygonSize(j);
-					int startIdx = vIdx;
-					FbxVector4 normal = FbxVector4(0, 0, 0);
-					for (int k = 0; k < pSize; k++)
-					{
-						int polyGroup = mesh->GetPolygonGroup(j);
-						int ctrlIdx = mesh->GetPolygonVertex(j, k);
-						FbxVector4 v = mesh->GetControlPointAt(ctrlIdx);
-						FbxMultT(mesh->GetNode(), v);
-						m_vertices[vIdx] = Vector3(v[0], v[1], v[2]);
-						//UVs
-						fbxsdk::FbxStringList uvsNames;
-						mesh->GetUVSetNames(uvsNames);
-						if (uvsNames.GetCount() > 0)
-						{
-							fbxsdk::FbxVector2 uv;
-							bool unmapped;
-							char* uvSetName;
-							if (mesh->GetPolygonVertexUV(j, k, uvsNames[0], uv, unmapped))
-							{
-								m_uvs[vIdx] = Vector2(uv[0], uv[1]);
-							}
-							else
-							{
-								m_uvs[vIdx] = Vector2(0, 0);
-							}
-						}
-						else
-						{
-							m_uvs[vIdx] = Vector2(0, 0);
-						}
-						mesh->GetPolygonVertexNormal(j, k, normal);
-						FbxMultT(mesh->GetNode(), normal);
-						normal.Normalize();
-						m_verticesNormals[vIdx] = Vector3(normal[0], normal[1], normal[2]);
-						//todo : compute normal
-
-						vIdx++;
-					}
-					
-					const Material* material = LoadFbxMaterial(mesh);
-					Triangle t;
-					t.va = &m_vertices[startIdx];
-					t.vb = &m_vertices[startIdx + 1];
-					t.vc = &m_vertices[startIdx + 2];
-					t.pa = &m_projectedVertices[startIdx];
-					t.pb = &m_projectedVertices[startIdx + 1];
-					t.pc = &m_projectedVertices[startIdx + 2];
-					t.na = &m_verticesNormals[startIdx];
-					t.nb = &m_verticesNormals[startIdx + 1];
-					t.nc = &m_verticesNormals[startIdx + 2];
-					t.ua = &m_uvs[startIdx];
-					t.ub = &m_uvs[startIdx + 1];
-					t.uc = &m_uvs[startIdx + 2];
-					t.material = material;
-					m_triangles.push_back(t);
-					m_nbFaces++;
-					if (pSize > 4)
-					{
-						int yy = 0;
-						yy++;
-					}
-					if (pSize == 4)
-					{
-						Triangle t;
-						t.va = &m_vertices[startIdx + 3];
-						t.vb = &m_vertices[startIdx + 0];
-						t.vc = &m_vertices[startIdx + 2];
-						t.pa = &m_projectedVertices[startIdx + 3];
-						t.pb = &m_projectedVertices[startIdx + 0];
-						t.pc = &m_projectedVertices[startIdx + 2];
-						t.na = &m_verticesNormals[startIdx + 3];
-						t.nb = &m_verticesNormals[startIdx + 0];
-						t.nc = &m_verticesNormals[startIdx + 2];
-						t.ua = &m_uvs[startIdx + 3];
-						t.ub = &m_uvs[startIdx + 0];
-						t.uc = &m_uvs[startIdx + 2];
-						t.material = material;
-						m_triangles.push_back(t);
-						m_nbFaces++;
-					}
-				}
-			}
-			if (vIdx == m_nbVertices)
-			{
-				int ok = 0;
-			}
-			else
-			{
-				int ok = 1;
-			}
-			m_trianglesNormals = (Vector3*)malloc(sizeof(Vector3) * m_nbFaces);
-			m_trianglesNormalsData = (Vector3*)malloc(sizeof(Vector3) * m_nbFaces);
-			for (int i = 0; i < m_nbFaces; i++)
-			{
-				Triangle* t = &m_triangles[i];
-				Vector3 v = Vector3(0, 0, 0);
-				v.Add(t->na);
-				v.Add(t->nb);
-				v.Add(t->nc);
-				v.Div(3.0f);
-				m_trianglesNormals[i] = v;
-				t->n = &m_trianglesNormals[i];
-			}
-			memcpy(m_verticesData, m_vertices, sizeof(Vector3) * m_nbVertices);
-			memcpy(m_verticesNormalsData, m_verticesNormals, sizeof(Vector3) * m_nbNormals);
-			memcpy(m_trianglesNormalsData, m_trianglesNormals, sizeof(Vector3) * m_nbFaces);
+			Mesh* m = new Mesh(mesh);
+			m_subMeshes.push_back(m);
 		}
 	}
 }
@@ -289,6 +291,12 @@ void Mesh::FbxMultT(FbxNode* node, FbxVector4 &vector)
 
 Mesh::~Mesh()
 {
+	for (int i = 0; i < m_subMeshes.size(); i++)
+	{
+		delete m_subMeshes[i];
+		m_subMeshes[i] = NULL;
+	}
+	m_subMeshes.clear();
 	m_triangles.clear();
 	delete m_vertices;
 	delete m_verticesData;
@@ -310,9 +318,7 @@ void Mesh::LoadOBJ(const std::string& fullPath)
 	std::string line;
 	if (!sfile.is_open())
 	{
-		s = "Error opening ";
-		s.append(fullPath);
-		DirectZob::LogError(s.c_str());
+		DirectZob::LogError("Error opening %s", fullPath.c_str());
 		return;
 	}
 	while (getline(sfile, line))
@@ -549,6 +555,10 @@ void Mesh::Draw(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, c
 		}
 	}
 	drawnFaces;
+	for (int i = 0; i < m_subMeshes.size(); i++)
+	{
+		m_subMeshes[i]->Draw(modelMatrix, rotationMatrix, camera,  engine, ownerId, options);
+	}
 }
 
 inline bool Mesh::RejectTriangle(const Triangle* t, const float znear, const float zfar, const float width, const float height)

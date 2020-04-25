@@ -20,11 +20,13 @@
 #include "LightManager.h"
 #include "ZobObjectManager.h"
 
+
 #define kUnused(var) (void) var;
 #define WIDTH  800//320//640//1920 / 2
 #define HEIGHT 600//240//480//1080 / 2
 #define TARGET_MS_PER_FRAME 33.33f
 #define CLAMP(n, low, max) n <= low ? low : n >= max ? max : n;
+
 
 class DirectZob
 {
@@ -53,7 +55,8 @@ public :
 	MaterialManager* GetMaterialManager() const { return m_materialManager;  }
 	Events* GetEventManager() { return m_events; }
 	static void LogInfo(const char* str);
-	static void LogError(const char* str);
+
+	static void LogError(const char* format, ...);
 	static void LogWarning(const char* str);
 private:
 

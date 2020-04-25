@@ -15,6 +15,7 @@ public:
 	inline const uint GetWidth() const { return m_width; }
 	inline const uint GetHeight() const { return m_height; }
 	inline const float* GetData() const { return m_data; }
+	inline const uint GetDataSize() const { return m_dataSize; }
 	inline const Vector3* GetAmbientColor() const { return &m_ambientColor; }
 	inline const Vector3* GetDiffuseColor() const { return &m_diffuseColor; }
 	inline const std::string& GetName() const { return m_name; }
@@ -22,6 +23,7 @@ public:
 private:
 
 	float* m_data = NULL;
+	uint m_dataSize = 0;
 	uint m_width = 0;
 	uint m_height = 0;
 	std::string m_name;

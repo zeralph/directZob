@@ -1,13 +1,13 @@
 <root>
     <Meshes>
-        <Mesh name="fbx_example" file="beach3.fbx" />
+        <Mesh name="fbx_example" file="Residential Buildings 009.fbx" />
     </Meshes>
     <Scene>
-        <ZobObject name="beach3">
-            <Mesh>beach3</Mesh>
+        <ZobObject name="fbx_example">
+            <Mesh>fbx_example</Mesh>
             <Position x="0" y="0" z="0" />
             <Rotation x="0" y="0" z="0" />
-            <Scale x="0.10" y="0.1" z="0.10" />
+            <Scale x="0.001" y="0.001" z="0.001" />
         </ZobObject>
     </Scene>
 </root>

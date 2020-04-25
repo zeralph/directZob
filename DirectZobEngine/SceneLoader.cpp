@@ -83,9 +83,7 @@ void SceneLoader::LoadZobObject(TiXmlElement* node, ZobObject* parent)
 	}
 	else
 	{
-		std::string err = "Error creating zobObject ";
-		err.append(name);
-		DirectZob::LogError(err.c_str());
+		DirectZob::LogError("Error creating ZObjects %s", name);
 	}
 	for (TiXmlElement* e = node->FirstChildElement("ZobObject"); e != NULL; e = e->NextSiblingElement("ZobObject"))
 	{
@@ -108,11 +106,7 @@ void SceneLoader::LoadScene(std::string &path, std::string &file)
 	doc.LoadFile(fullPath.c_str());
 	if (doc.Error())
 	{
-		std::string err = "Error loading ";
-		err.append(fullPath.c_str());
-		err.append(" : ");
-		err.append(doc.ErrorDesc());
-		DirectZob::LogError(err.c_str());
+		DirectZob::LogError("Error loading %s : %s", fullPath, doc.ErrorDesc());
 		m_path = "";
 		m_file = "";
 	}
@@ -187,15 +181,16 @@ void SceneLoader::LoadGlobals(TiXmlElement* node)
 		FogType fogType = lm->GetFogType();
 		if (e)
 		{
-			if (e->GetText() == "linear")
+			std::string type = std::string(e->GetText());
+			if (type == "linear")
 			{
 				fogType = FogType::FogType_Linear;
 			}
-			else if (e->GetText() == "exp")
+			else if (type == "exp")
 			{
 				fogType = FogType::FogType_Exp;
 			}
-			else if (e->GetText() == "exp2")
+			else if (type == "exp2")
 			{
 				fogType = FogType::FogType_Exp2;
 			}
@@ -208,6 +203,11 @@ void SceneLoader::LoadGlobals(TiXmlElement* node)
 		ambient /= 255.0f;
 		clear /= 255.0f;
 		lm->Setup(&fog, &ambient, &clear, FogDistance, fogDensity, fogType);
+		/*
+		int x = 320;
+		int y = 240;
+		DirectZob::GetInstance()->GetEngine()->Resize(x, y);
+		*/
 	}
 }
 
@@ -272,9 +272,7 @@ void SceneLoader::SaveScene(std::string &path, std::string &file)
 	root->InsertEndChild(scene);
 	if (!doc.SaveFile(fullPath.c_str()))
 	{
-		std::string s = "Error saving scene : ";
-		s.append(doc.ErrorDesc());
-		DirectZob::LogError(s.c_str());
+		DirectZob::LogError("Error saving scene : ", doc.ErrorDesc());
 	}
 }
 

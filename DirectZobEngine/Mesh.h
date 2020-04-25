@@ -16,6 +16,7 @@ class Mesh
 public:
 
 	Mesh(std::string& name, std::string& path, std::string& file);
+	Mesh(fbxsdk::FbxMesh* mesh);
 	~Mesh();
 
 
@@ -46,6 +47,7 @@ private:
 	void FbxMultT(FbxNode* node, FbxVector4 &vector);
 	inline void ReinitVertices();
 	inline bool RejectTriangle(const Triangle* t, const float znear, const float zfar, const float width, const float height);
+	std::vector<Mesh*> m_subMeshes;
 	uint m_nbVertices = 0;
 	uint m_nbUvs = 0;
 	uint m_nbNormals = 0;

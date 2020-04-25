@@ -31,7 +31,7 @@ Engine::Engine(int width, int height, Events* events)
 	m_zFar = Z_FAR;
 	m_buffer = (uint*)malloc(sizeof(uint) * width * height);
 	m_zBuffer = (float*)malloc(sizeof(float) * width * height);
-	m_oBuffer = (uint*)malloc(sizeof(uint) * width * height);
+//	m_oBuffer = (uint*)malloc(sizeof(uint) * width * height);
 	m_curBuffer = 0;
 	m_showZBuffer = false;
 	m_fps = 0.0;
@@ -41,7 +41,7 @@ Engine::Engine(int width, int height, Events* events)
 	m_bufferData.zFar= m_zFar;
 	m_bufferData.buffer = m_buffer;
 	m_bufferData.zBuffer = m_zBuffer;
-	m_bufferData.oBuffer = m_oBuffer;
+//	m_bufferData.oBuffer = m_oBuffer;
 	m_bufferData.size = width * height;
 	m_tick = clock();
 	m_nbPixels = 0;
@@ -51,7 +51,7 @@ Engine::Engine(int width, int height, Events* events)
 
 	m_rasterTriangleQueues = (Triangle**)malloc(sizeof(Triangle) * m_nbRasterizers);
 	m_rasterNbTriangleQueues = (uint*)malloc(sizeof(uint) * m_nbRasterizers);
-	m_rasterLineQueues = new std::vector<Line2D>[m_nbRasterizers];
+	m_rasterLineQueues = new std::vector<Line3D>[m_nbRasterizers];
 	m_rasterizers = new std::vector<Rasterizer*>[m_nbRasterizers];
 
 	int h = height / m_nbRasterizers;
@@ -101,8 +101,9 @@ uint Engine::GetObjectIdAtCoords(uint x, uint y)
 	size_t l = m_bufferData.width * y + x;
 	if (l >= 0 && l < m_bufferData.width * m_bufferData.height)
 	{
-		return m_bufferData.oBuffer[l];
+//		return m_bufferData.oBuffer[l];
 	}
+	return 0;
 }
 
 Engine::~Engine()
@@ -134,15 +135,15 @@ void Engine::Resize(int width, int height)
 	}
 	delete m_buffer;
 	delete m_zBuffer;
-	delete m_oBuffer;
+//	delete m_oBuffer;
 	m_buffer = (uint*)malloc(sizeof(uint) * width * height);
 	m_zBuffer = (float*)malloc(sizeof(float) * width * height);
-	m_oBuffer = (uint*)malloc(sizeof(float) * width * height);
+//	m_oBuffer = (uint*)malloc(sizeof(float) * width * height);
 	m_bufferData.height = height;
 	m_bufferData.width = width;
 	m_bufferData.buffer = m_buffer;
 	m_bufferData.zBuffer = m_zBuffer;
-	m_bufferData.oBuffer = m_oBuffer;
+//	m_bufferData.oBuffer = m_oBuffer;
 	m_bufferData.zNear = m_zNear;
 	m_bufferData.zFar = m_zFar;
 	m_bufferData.size = width * height;
@@ -184,7 +185,7 @@ void Engine::ClearBuffer(const Color* color)
 	{
 		m_buffer[i] = v;
 		m_zBuffer[i] = -1.0f;
-		m_oBuffer[i] = 0;
+//		m_oBuffer[i] = 0;
 	}
 	
 	/*for (int i = 0; i < m_nbRasterizers; i++)
@@ -228,9 +229,8 @@ int Engine::EndDrawingScene()
 		uint c;
 		for (int i = 0; i < m_bufferData.size; i++)
 		{
-			c = oBufferColors[(uint)(m_oBuffer[i]) % 8];
-			//c = (c << 16) + (c << 8) + c;
-			m_buffer[i] = c;
+			//c = oBufferColors[(uint)(m_oBuffer[i]) % 8];
+			m_buffer[i] = 0;// c;
 		}
 	}
 	int r = 0;
@@ -306,10 +306,12 @@ void Engine::QueueLine(const Camera* camera, const Vector3* v1, const Vector3* v
 {
 	Vector3 a = Vector3(v1);
 	Vector3 b = Vector3(v2);
-
+	float za, zb = 0.0f;
 	camera->GetViewMatrix()->Mul(&a);
+	za = a.z;
 	camera->GetProjectionMatrix()->Mul(&a);
 	camera->GetViewMatrix()->Mul(&b);
+	zb = b.z;
 	camera->GetProjectionMatrix()->Mul(&b);
 	
 	if (a.w != 1)
@@ -326,18 +328,20 @@ void Engine::QueueLine(const Camera* camera, const Vector3* v1, const Vector3* v
 		b.z /= b.w;
 		b.w /= b.w;
 	}
-	if (ClipSegment(&a, &b))
+	//if (ClipSegment(&a, &b))
 	{
 
 		a.x = (a.x + 1) * m_bufferData.width / 2.0f;
 		a.y = (a.y + 1) * m_bufferData.height / 2.0f;
 		b.x = (b.x + 1) * m_bufferData.width / 2.0f;
 		b.y = (b.y + 1) * m_bufferData.height / 2.0f;
-		Line2D l;
+		Line3D l;
 		l.xa = a.x;
 		l.xb = b.x;
 		l.ya = a.y;
 		l.yb = b.y;
+		l.za = za;
+		l.zb = zb;
 		l.c = c;
 		int min = std::min<int>(a.y, b.y);
 		int max = std::max<int>(a.y, b.y);
@@ -345,11 +349,6 @@ void Engine::QueueLine(const Camera* camera, const Vector3* v1, const Vector3* v
 		max = clamp2(max, 0, (int)m_bufferData.height - 1);
 		min /= m_bufferData.height / m_nbRasterizers;
 		max /= m_bufferData.height / m_nbRasterizers;
-		if (min == max)
-		{
-			int y = 0;
-			y++;
-		}
 		for (int i = min; i <= max; i++)
 		{
 			m_rasterLineQueues[i].push_back(l);
