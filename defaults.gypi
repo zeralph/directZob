@@ -56,6 +56,12 @@
                         {
                             'msvs_configuration_platform': 'x64',
                             'msvs_target_platform': 'x64',
+                            'msvs_settings': {
+                                'VCCLCompilerTool': {
+                                    'Optimization':
+                                    '2',  # O2 optimisation
+                                },
+                            },
                         },
                     ],
                 ],
