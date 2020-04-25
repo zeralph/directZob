@@ -5,21 +5,21 @@
 Triangle::Triangle()
 {
 	material = NULL;
-	va = new Vector3();
-	vb = new Vector3();
-	vc = new Vector3();
+	va = NULL;
+	vb = NULL;
+	vc = NULL;
 
-	pa = new Vector3();
-	pb = new Vector3();
-	pc = new Vector3();
+	pa = NULL;
+	pb = NULL;
+	pc = NULL;
 
-	na = new Vector3();
-	nb = new Vector3();
-	nc = new Vector3();
+	na = NULL;
+	nb = NULL;
+	nc = NULL;
 
-	ua = new Vector2();
-	ub = new Vector2();
-	uc = new Vector2();
+	ua = NULL;
+	ub = NULL;
+	uc = NULL;
 
 	draw = false;
 }
@@ -27,4 +27,18 @@ Triangle::Triangle()
 
 Triangle::~Triangle()
 {
+	material = NULL;
+	draw = false;
+	va = NULL;
+	vb = NULL;
+	vc = NULL;
+	pa = NULL;
+	pb = NULL;
+	pc = NULL;
+	na = NULL;
+	nb = NULL;
+	nc = NULL;
+	ua = NULL;
+	ub = NULL;
+	uc = NULL;
 }

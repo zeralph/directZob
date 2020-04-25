@@ -40,7 +40,7 @@ void Rasterizer::Run()
 	}
 }
 
-void Rasterizer::Start(const Triangle* triangles, uint nbTriangles, const std::vector<Line3D>* lines, const bool wireFrame)
+void Rasterizer::Start(const Triangle* triangles, const uint nbTriangles, const std::vector<Line3D>* lines, const bool wireFrame)
 {
 	m_lines = lines;
 	m_triangles = triangles;
@@ -51,12 +51,14 @@ void Rasterizer::Start(const Triangle* triangles, uint nbTriangles, const std::v
 
 Rasterizer::~Rasterizer()
 {
+	Clear();
 }
 
 void Rasterizer::Clear()
 {
 	m_lines = NULL;
 	m_triangles = NULL;
+	m_nbTriangles = 0;
 }
 
 void Rasterizer::Render() 

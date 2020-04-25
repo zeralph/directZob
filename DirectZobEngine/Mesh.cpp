@@ -36,11 +36,12 @@ Mesh::Mesh(std::string& name, std::string& path, std::string& file)
 	}
 }
 
-Mesh::Mesh(fbxsdk::FbxMesh* mesh)
+Mesh::Mesh(std::string &parentName, fbxsdk::FbxMesh* mesh)
 {
 	if (mesh)
 	{
 		char buf[256];
+		m_name = parentName+"."+mesh->GetName();
 		m_nbVertices += mesh->GetPolygonVertexCount();
 		_snprintf_s(buf, 256, "Load sub mesh %s, %i vertices", mesh->GetName(), m_nbVertices);
 		DirectZob::LogInfo(buf);
@@ -93,9 +94,10 @@ Mesh::Mesh(fbxsdk::FbxMesh* mesh)
 					if (uvsNames.GetCount() > 0)
 					{
 						fbxsdk::FbxVector2 uv;
-						bool unmapped;
+						bool unmapped = true;
 						char* uvSetName;
-						if (mesh->GetPolygonVertexUV(j, k, uvsNames[0], uv, unmapped))
+						mesh->GetPolygonVertexUV(j, k, uvsNames[0], uv, unmapped);
+						if (!unmapped)
 						{
 							m_uvs[vIdx] = Vector2(uv[0], uv[1]);
 						}
@@ -108,12 +110,17 @@ Mesh::Mesh(fbxsdk::FbxMesh* mesh)
 					{
 						m_uvs[vIdx] = Vector2(0, 0);
 					}
-					mesh->GetPolygonVertexNormal(j, k, normal);
-					FbxMultT(mesh->GetNode(), normal);
-					normal.Normalize();
-					m_verticesNormals[vIdx] = Vector3(normal[0], normal[1], normal[2]);
-					//todo : compute normal
-
+					if (mesh->GetPolygonVertexNormal(j, k, normal))
+					{
+						FbxMultT(mesh->GetNode(), normal);
+						normal.Normalize();
+						m_verticesNormals[vIdx] = Vector3(normal[0], normal[1], normal[2]);
+						//todo : compute normal
+					}
+					else
+					{
+						m_verticesNormals[vIdx] = Vector3(0,1,0);
+					}
 					vIdx++;
 				}
 
@@ -198,7 +205,7 @@ void Mesh::LoadFbx(const std::string& fullPath)
 		for (int i = 0; i < gc; i++)
 		{
 			FbxMesh* mesh = (FbxMesh*)lScene->GetGeometry(i);
-			Mesh* m = new Mesh(mesh);
+			Mesh* m = new Mesh(m_name, mesh);
 			m_subMeshes.push_back(m);
 		}
 	}
@@ -284,6 +291,7 @@ const Material* Mesh::LoadFbxMaterial(fbxsdk::FbxMesh* mesh)
 					prop = material->FindProperty(fbxsdk::FbxSurfaceMaterial::sSpecularFactor);
 					f = prop.Get<FbxDouble>();
 					Vector3 ambient;
+					//texture_name = "C:\\_GIT\\directZob\\resources\\earth_256.png";
 					finalMaterial = materialMgr->LoadMaterial(matName, &ambient, &diffuse, texture_name);
 				}
 			}

@@ -31,7 +31,6 @@ public:
 	Vector2* ua;
 	Vector2* ub;
 	Vector2* uc;
-
 	const Material* material;
 	float area;
 	float la;

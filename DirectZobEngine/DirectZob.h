@@ -59,10 +59,9 @@ public :
 	MeshManager* GetMeshManager() const { return m_meshManager; }
 	MaterialManager* GetMaterialManager() const { return m_materialManager;  }
 	Events* GetEventManager() { return m_events; }
-	static void LogInfo(const char* str);
-
+	static void LogInfo(const char* format, ...);
 	static void LogError(const char* format, ...);
-	static void LogWarning(const char* str);
+	static void LogWarning(const char* format, ...);
 private:
 
 	Events* m_events = NULL;
@@ -73,7 +72,7 @@ private:
 	ZobObjectManager* m_zobObjectManager = NULL;
 	Engine* m_engine = NULL;
 	Text2D* m_text = NULL;
-
+	bool m_isRendering = false;
 	static bool g_bShowGrid;
 	static bool g_bShowMeshes;
 };

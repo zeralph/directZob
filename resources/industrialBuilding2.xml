@@ -1,14 +1,14 @@
 <root>
     <Meshes>
-        <Mesh name="IndustrialBuilding" file="IndustrialBuilding.fbx" />
+        <Mesh name="IndustrialBuilding" file="IndustrialBuilding.fbx" /> 
     </Meshes>
     <Scene>
 		<Globals>
-			<AmbientColor r="200" g="200" b="200"/>
+			<AmbientColor r="50" g="50" b="50"/>
 			<FogColor r="200" g="200" b="200" />
 			<ClearColor r="200" g="200" b="200" />
-			<FogDensity>0</FogDensity>
-			<FogDistance>0</FogDistance>
+			<FogDensity>20</FogDensity>
+			<FogDistance>20</FogDistance>
 			<FogType>Exp2</FogType>			
 		</Globals>
         <ZobObject name="IndustrialBuilding" type="mesh">
@@ -17,12 +17,33 @@
             <Rotation x="-90" y="0" z="0" />
             <Scale x="0.001" y="0.001" z="0.001" />
         </ZobObject>
-		<ZobObject name ="sun" type="pointlight">
+		<ZobObject name ="red" type="pointlight">
 			<Rotation x="0" y="0" z="0" />
-			<Position x="100" y="100" z="100" />
-			<Color r="255" g="128" b="64" />
+			<Position x="1000" y="1000" z="1000" />
+			<Color r="255" g="0" b="0" />
 			<Intensity>5</Intensity>
 			<FallOffDistance>50000</FallOffDistance>
 		</ZobObject>
+		<!--<ZobObject name ="green" type="pointlight">
+			<Rotation x="0" y="0" z="0" />
+			<Position x="-100" y="100" z="100" />
+			<Color r="0" g="255" b="0" />
+			<Intensity>1</Intensity>
+			<FallOffDistance>50000</FallOffDistance>
+		</ZobObject>-->
+		<!--<ZobObject name ="blue" type="pointlight">
+			<Rotation x="0" y="0" z="0" />
+			<Position x="100" y="100" z="-100" />
+			<Color r="0" g="0" b="255" />
+			<Intensity>1</Intensity>
+			<FallOffDistance>50000</FallOffDistance>
+		</ZobObject>-->
+		<!--<ZobObject name ="yellow" type="pointlight">
+			<Rotation x="0" y="0" z="0" />
+			<Position x="-100" y="-100" z="100" />
+			<Color r="255" g="255" b="0" />
+			<Intensity>5</Intensity>
+			<FallOffDistance>50000</FallOffDistance>
+		</ZobObject>		-->
     </Scene>
 </root>
