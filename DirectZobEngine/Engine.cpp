@@ -50,7 +50,7 @@ Engine::Engine(int width, int height, Events* events)
 	m_cullMode = CullMode::CullClockwiseFace;
 
 	m_rasterTriangleQueues = (Triangle**)malloc(sizeof(Triangle) * m_nbRasterizers);
-	m_rasterNbTriangleQueues = (uint*)malloc(sizeof(uint) * m_nbRasterizers);
+	m_rasterNbTriangleQueues = (long*)malloc(sizeof(long) * m_nbRasterizers);
 	m_rasterLineQueues = new std::vector<Line3D>[m_nbRasterizers];
 	m_rasterizers = new std::vector<Rasterizer*>[m_nbRasterizers];
 
@@ -235,9 +235,6 @@ int Engine::EndDrawingScene()
 	}
 	int r = 0;
 	//r = mfb_update(window, m_buffer);
-
-
-
 	m_currentFrame++;
 	m_nbPixels = 0;
 	m_frameTimeMS = (float)(clock() - m_tick) / CLOCKS_PER_SEC * 1000;
@@ -249,7 +246,7 @@ void Engine::ClearRenderQueues()
 {
 	for (int i = 0; i < m_nbRasterizers; i++)
 	{
-		//m_rasterTriangleQueues[i].clear();
+		//m_rasterTriangleQueues[i]->clear();
 		m_rasterLineQueues[i].clear();
 		m_rasterNbTriangleQueues[i] = 0;
 	}
@@ -271,70 +268,50 @@ void Engine::WaitForRasterizersEnd()
 
 void Engine::DrawGrid(const Camera* camera)
 {
+	int gridSize = 10;
 	Vector3 a;
 	Vector3 b;
-	for (float i = -10; i < 10; i += 1.0f)
+	for (float i = -gridSize; i < gridSize; i += 1.0f)
 	{
 		a.x = i;
 		b.x = i;
 		a.y = 0.0f;
 		b.y = 0.0f;
-		a.z = -10;
-		b.z = 10;
+		a.z = -gridSize;
+		b.z = gridSize;
 		QueueLine(camera, &a, &b, 0xFFFFFF);
 	}
-	for (float i = -10; i <= 10; i += 1.0f)
+	for (float i = -gridSize; i <= gridSize; i += 1.0f)
 	{
 		a.z = b.z = i;
 		a.y = b.y = 0.0f;
-		a.x = -10;
-		b.x = 10;
+		a.x = -gridSize;
+		b.x = gridSize;
 		QueueLine(camera, &a, &b, 0xFFFFFF);
 	}
 
 	QueueLine(camera, &Vector3::Vector3Zero, &Vector3::Vector3X, 0xFF0000);
 	QueueLine(camera, &Vector3::Vector3Zero, &Vector3::Vector3Y, 0x00FF00);
 	QueueLine(camera, &Vector3::Vector3Zero, &Vector3::Vector3Z, 0x0000FF);
-	a.x = b.x = 1;
-	a.y = b.y = 0.0f;
-	a.z = -10;
-	b.z = 10;
-	//QueueLine(camera, &Vector3::Vector3Zero, &Vector3::Vector3Z, 0xFFFFFF, GetBufferData());
 }
 
 void Engine::ClipSegmentToPlane(Vector3 &s0, Vector3 &s1, Vector3 &pp, Vector3 &pn)
 {
-	
-//std:swap(s0, s1);
-
 	Vector3 u = s1 - s0;
 	Vector3 w = s0 - pp;
-
 	float D = Vector3::Dot(&pn, &u);
 	float N = -Vector3::Dot(&pn, &w);
-
-	if (fabs(D) < 0.001f) {           // segment is parallel to plane
-		/*if (N == 0)                      // segment lies in plane
-			return 2;
-		else
-			return 0;                    // no intersection
-		*/
+	if (fabs(D) < 0.001f) 
+	{           
 		return;
 	}
-	// they are not parallel
-	// compute intersect param
 	float sI = N / D;
 	if (sI < 0 || sI > 1)
 	{
-		//return 0;                        // no intersection
 		return;
 	}
-	
-//	s1 = s0 + s1.Mul(u);                  // compute segment intersect point
-	/*
-	return
-	return 1;
-	*/
+	u.Mul(sI);
+	s1 = s0 + u;
 }
 
 void Engine::QueueLine(const Camera* camera, const Vector3* v1, const Vector3* v2, const uint c)
@@ -349,6 +326,23 @@ void Engine::QueueLine(const Camera* camera, const Vector3* v1, const Vector3* v
 	zb = b.z;
 	camera->GetProjectionMatrix()->Mul(&b);
 	
+	if (a.z < m_bufferData.zNear && b.z < m_bufferData.zNear)
+	{
+		return;
+	}
+	else if (a.z < m_bufferData.zNear || b.z < m_bufferData.zNear)
+	{
+		Vector3 pp = Vector3(0, 0, m_bufferData.zNear);
+		Vector3 pn = Vector3(0, 0, 1);
+		if (a.z < b.z)
+		{
+			ClipSegmentToPlane(b, a, pp, pn);
+		}
+		else
+		{
+			ClipSegmentToPlane(a, b, pp, pn);
+		}
+	}
 	if (a.w != 1)
 	{
 		a.x /= a.w;

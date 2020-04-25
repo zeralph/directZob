@@ -92,7 +92,7 @@ namespace Core
 
 		Events* m_events;
 		Triangle** m_rasterTriangleQueues;
-		uint* m_rasterNbTriangleQueues;
+		long* m_rasterNbTriangleQueues;
 		std::vector<Line3D>* m_rasterLineQueues;
 		std::vector<Rasterizer*>* m_rasterizers;
 		uint m_nbRasterizers;

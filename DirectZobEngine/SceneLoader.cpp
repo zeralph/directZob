@@ -93,6 +93,7 @@ void SceneLoader::LoadZobObject(TiXmlElement* node, ZobObject* parent)
 
 void SceneLoader::LoadScene(std::string &path, std::string &file)
 {
+	UnloadScene();
 	MeshManager* meshManager = DirectZob::GetInstance()->GetMeshManager();
 	MaterialManager* materialManager = DirectZob::GetInstance()->GetMaterialManager();
 	ZobObjectManager* zobObjectManager = DirectZob::GetInstance()->GetZobObjectManager();
@@ -130,6 +131,7 @@ void SceneLoader::LoadScene(std::string &path, std::string &file)
 			LoadZobObject(e, NULL);
 		}
 	}
+	DirectZob::GetInstance()->GetEngine()->Start();
 }
 
 void SceneLoader::LoadGlobals(TiXmlElement* node)

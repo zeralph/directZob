@@ -16,7 +16,6 @@ class Mesh
 public:
 
 	Mesh(std::string& name, std::string& path, std::string& file);
-	Mesh(fbxsdk::FbxMesh* mesh);
 	~Mesh();
 
 
@@ -39,6 +38,7 @@ public:
 	const std::string& GetFile() const { return m_file; }
 
 private:
+	Mesh(std::string& parentName, fbxsdk::FbxMesh* mesh);
 	void SplitEntry(const std::string* s, std::vector<std::string>* v, const char delim);
 	void CreateTriangles(const std::vector<std::string>* line, std::vector<Triangle>* t, size_t& tArrayIdx, const Material* tex);
 	void LoadOBJ(const std::string& fullPath);
