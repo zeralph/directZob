@@ -139,8 +139,12 @@ void DirectZob::LogInfo(const char* format, ...)
 	va_start(args, format);
 	_vsnprintf_s(logBuffer, LOG_BUFFER_SIZE, format, args);
 	std::string s = std::string(logBuffer);
-	DirectZob::singleton->GetEventManager()->AddEvent(Events::LogInfo, s);
 	va_end(args);
+#ifdef EDITOR
+	DirectZob::singleton->GetEventManager()->AddEvent(Events::LogInfo, s);
+#else
+    printf("%s\n", logBuffer);
+#endif
 }
 
 void DirectZob::LogError(const char* format, ...)
@@ -149,8 +153,12 @@ void DirectZob::LogError(const char* format, ...)
 	va_start(args, format);
 	_vsnprintf_s(logBuffer, LOG_BUFFER_SIZE, format, args);
 	std::string s = std::string(logBuffer);
+    va_end(args);
+#ifdef EDITOR
 	DirectZob::singleton->GetEventManager()->AddEvent(Events::LogError, s);
-	va_end(args);
+#else
+    printf("%s\n", logBuffer);
+#endif
 }
 void DirectZob::LogWarning(const char* format, ...)
 {
@@ -158,6 +166,10 @@ void DirectZob::LogWarning(const char* format, ...)
 	va_start(args, format);
 	_vsnprintf_s(logBuffer, LOG_BUFFER_SIZE, format, args);
 	std::string s = std::string(logBuffer);
-	DirectZob::singleton->GetEventManager()->AddEvent(Events::LogWarning, s);
 	va_end(args);
+#ifdef EDITOR
+	DirectZob::singleton->GetEventManager()->AddEvent(Events::LogWarning, s);
+#else
+    printf("%s\n", logBuffer);
+#endif
 }

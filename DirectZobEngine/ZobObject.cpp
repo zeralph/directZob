@@ -3,6 +3,7 @@
 
 ZobObject::ZobObject(Type t, SubType s, std::string& name, Mesh* mesh, ZobObject* parent /*= NULL*/):ZOBGUID(t,s)
 {
+	DirectZob::LogInfo("Adding new ZobObject %s", name.c_str());
 	m_parent = parent;
 	m_name = name;
 	m_mesh = mesh;
@@ -17,9 +18,7 @@ ZobObject::ZobObject(Type t, SubType s, std::string& name, Mesh* mesh, ZobObject
 	}
 	m_renderOptions.LightMode(RenderOptions::eLightMode_phong);
 	m_renderOptions.ZBuffered(true);
-	std::string l = "Added new ZobObject ";
-	l.append(m_name);
-	DirectZob::LogInfo(l.c_str());
+    DirectZob::LogInfo("ZobObject %s added", name.c_str());
 }
 
 ZobObject::~ZobObject()
