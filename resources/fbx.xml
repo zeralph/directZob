@@ -1,6 +1,6 @@
 <root>
     <Meshes>
-        <Mesh name="fbx_example" file="Residential Buildings 009.fbx" />
+        <Mesh name="fbx_example" file="11.fbx" />
     </Meshes>
     <Scene>
         <ZobObject name="fbx_example">
@@ -9,5 +9,19 @@
             <Rotation x="0" y="0" z="0" />
             <Scale x="0.001" y="0.001" z="0.001" />
         </ZobObject>
+		<ZobObject name ="green" type="pointlight">
+			<Rotation x="0" y="0" z="0" />
+            <Position x="0" y="50" z="0" />
+            <Color r="0" g="255" b="0" />
+			<Intensity>5</Intensity>
+			<FallOffDistance>100</FallOffDistance>
+        </ZobObject>
+		<ZobObject name ="red" type="pointlight">
+			<Rotation x="0" y="0" z="0" />
+            <Position x="0" y="50" z="100" />
+            <Color r="255" g="0" b="0" />
+			<Intensity>5</Intensity>
+			<FallOffDistance>100</FallOffDistance>
+        </ZobObject>		
     </Scene>
 </root>
