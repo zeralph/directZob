@@ -91,9 +91,24 @@
                 [
                     'OS=="linux"',
                     {
+                        'include_dirs': [
+                            '.',
+                            '../dependencies/fbxsdk/linux/include',
+                        ],
                         'defines': [
                             'LINUX',
                         ],
+                        'direct_dependent_settings': {
+                            'include_dirs': [
+                                '.',
+                                '../dependencies/fbxsdk/linux/include',
+                            ],
+                        },
+                        'link_settings': {
+                            'libraries': [
+                                '../../../dependencies/fbxsdk/linux/lib/libfbxsdk.so',  # relative to xcode project
+                            ],
+                        },
                     },
                 ],
             ],
@@ -133,6 +148,9 @@
                                 ],
                             },
                         ],
+                    }, 
+                    'OS=="linux"',
+                    {
                     },
                 ],
             ],

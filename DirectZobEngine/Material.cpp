@@ -4,6 +4,7 @@
 #include "DirectZob.h"
 #include "nanojpeg.h"
 
+
 Material::Material(const std::string& name, const Vector3* ambientColor, const Vector3* diffuseColor, const char* textureFile /*=NULL*/)
 {
 	m_name = name.c_str();
@@ -55,7 +56,7 @@ Material::Material(const std::string& name, const Vector3* ambientColor, const V
 			else if (texFile.find(".jpg") != -1 || texFile.find(".jpeg") != -1)
 			{
 				FILE* f;
-				errno_t err = fopen_s(&f, textureFile, "rb");
+				int err = (int)fopen_s(&f, textureFile, "rb");
 				if (err == 0)
 				{
 					char* buf;

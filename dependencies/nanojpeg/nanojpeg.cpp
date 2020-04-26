@@ -26,12 +26,15 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 
-#ifdef _MSC_VER
-#define NJ_INLINE static __inline
-#define NJ_FORCE_INLINE static __forceinline
-#else
-#define NJ_INLINE static inline
-#define NJ_FORCE_INLINE static inline
+#ifdef WINDOWS
+    #define NJ_INLINE static __inline
+    #define NJ_FORCE_INLINE static __forceinline
+#elif LINUX
+    #define NJ_INLINE static inline
+    #define NJ_FORCE_INLINE static inline
+#elif MACOS
+    #define NJ_INLINE static inline
+    #define NJ_FORCE_INLINE static inline
 #endif
 
 #if NJ_USE_LIBC
@@ -491,7 +494,7 @@ NJ_INLINE void njDecodeScan(void) {
     nj.error = __NJ_FINISHED;
 }
 
-#if nanojpeg::NJ_CHROMA_FILTER
+#if NJ_CHROMA_FILTER
 
 #define CF4A (-9)
 #define CF4B (111)
@@ -507,7 +510,7 @@ NJ_INLINE void njDecodeScan(void) {
 #define CF2B (-11)
 #define CF(x) njClip(((x) + 64) >> 7)
 
-nanojpeg::NJ_INLINE void nanojpeg::njUpsampleH(nj_component_t* c) {
+NJ_INLINE void njUpsampleH(nj_component_t* c) {
     const int xmax = c->width - 3;
     unsigned char* out, * lin, * lout;
     int x, y;
@@ -535,7 +538,7 @@ nanojpeg::NJ_INLINE void nanojpeg::njUpsampleH(nj_component_t* c) {
     c->pixels = out;
 }
 
-nanojpeg::NJ_INLINE void nanojpeg::njUpsampleV(nj_component_t* c) {
+NJ_INLINE void njUpsampleV(nj_component_t* c) {
     const int w = c->width, s1 = c->stride, s2 = s1 + s1;
     unsigned char* out, * cin, * cout;
     int x, y;
@@ -592,7 +595,7 @@ NJ_INLINE void njConvert(void) {
     int i;
     nj_component_t* c;
     for (i = 0, c = nj.comp; i < nj.ncomp; ++i, ++c) {
-#if nanojpeg::NJ_CHROMA_FILTER
+#if NJ_CHROMA_FILTER
         while ((c->width < nj.width) || (c->height < nj.height)) {
             if (c->width < nj.width) njUpsampleH(c);
             njCheckError();

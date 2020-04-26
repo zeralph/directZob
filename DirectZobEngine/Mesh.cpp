@@ -81,12 +81,12 @@ Mesh::Mesh(std::string &parentName, fbxsdk::FbxMesh* mesh)
 					}
 					else
 					{
-						m_minBouding.x = min(m_minBouding.x, v[0]);
-						m_minBouding.y = min(m_minBouding.y, v[1]);
-						m_minBouding.z = min(m_minBouding.z, v[2]);
-						m_maxBouding.x = max(m_maxBouding.x, v[0]);
-						m_maxBouding.y = max(m_maxBouding.y, v[1]);
-						m_maxBouding.z = max(m_maxBouding.z, v[2]);
+						m_minBouding.x = min(m_minBouding.x, (float)v[0]);
+						m_minBouding.y = min(m_minBouding.y, (float)v[1]);
+						m_minBouding.z = min(m_minBouding.z, (float)v[2]);
+						m_maxBouding.x = max(m_maxBouding.x, (float)v[0]);
+						m_maxBouding.y = max(m_maxBouding.y, (float)v[1]);
+						m_maxBouding.z = max(m_maxBouding.z, (float)v[2]);
 					}
 					//UVs
 					fbxsdk::FbxStringList uvsNames;
