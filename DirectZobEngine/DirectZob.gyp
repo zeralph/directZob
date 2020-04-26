@@ -106,7 +106,12 @@
                         },
                         'link_settings': {
                             'libraries': [
-                                '../../../dependencies/fbxsdk/linux/lib/libfbxsdk.so',  # relative to xcode project
+                                '../../../dependencies/fbxsdk/linux/lib/libfbxsdk.a',  # relative to xcode project
+                                '/usr/lib/x86_64-linux-gnu/libpthread.so',
+                                '/usr/lib/x86_64-linux-gnu/libxml2.so',
+                                '/usr/lib/x86_64-linux-gnu/libX11.so',
+                                '/usr/lib/x86_64-linux-gnu/libdl.so',
+                                '/usr/lib/x86_64-linux-gnu/libz.so',
                             ],
                         },
                     },
