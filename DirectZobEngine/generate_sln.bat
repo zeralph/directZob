@@ -1,1 +1,1 @@
-gyp .\DirectZob.gyp --depth=. --generator-output=build/DirectZob/
+gyp .\DirectZob.gyp --depth=. --generator-output=build/DirectZob/ -f msvs -G msvs_version=2017
