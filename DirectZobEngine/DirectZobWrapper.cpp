@@ -17,7 +17,7 @@ namespace CLI
 
 	void DirectZobWrapper::Init()
 	{
-		m_Instance->Init();
+		m_Instance->Init(true);
 	}
 
 	void DirectZobWrapper::LoadScene(System::String^ path, System::String^ file)

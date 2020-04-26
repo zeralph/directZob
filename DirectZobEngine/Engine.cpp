@@ -9,7 +9,7 @@
 #include <assert.h> 
 #include "DirectZob.h"
 
-# define MAX_TRIANGLES_PER_IMAGE 200000
+# define MAX_TRIANGLES_PER_IMAGE 400000
 
 using namespace Core;
 Engine::Engine(int width, int height, Events* events)

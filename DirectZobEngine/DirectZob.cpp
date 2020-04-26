@@ -7,6 +7,7 @@
 
 static char buffer[MAX_PATH];
 static char logBuffer[LOG_BUFFER_SIZE];
+static bool g_isInEditorMode;
 DirectZob *DirectZob::singleton = nullptr;
 
 DirectZob::DirectZob()
@@ -64,8 +65,9 @@ bool DirectZob::CanFastSave()
 	return SceneLoader::CanFastSave();
 }
 
-void DirectZob::Init()
+void DirectZob::Init(bool bEditorMode)
 {
+	g_isInEditorMode = bEditorMode;
 	m_events = new Events();
 	DirectZob::LogInfo("Init engine");
 	m_engine = new Engine(WIDTH, HEIGHT, m_events);
@@ -140,11 +142,14 @@ void DirectZob::LogInfo(const char* format, ...)
 	_vsnprintf_s(logBuffer, LOG_BUFFER_SIZE, format, args);
 	std::string s = std::string(logBuffer);
 	va_end(args);
-#ifdef EDITOR
-	DirectZob::singleton->GetEventManager()->AddEvent(Events::LogInfo, s);
-#else
-    printf("%s\n", logBuffer);
-#endif
+	if (g_isInEditorMode)
+	{
+		DirectZob::singleton->GetEventManager()->AddEvent(Events::LogInfo, s);
+}
+	else
+	{
+		printf("%s\n", logBuffer);
+	}
 }
 
 void DirectZob::LogError(const char* format, ...)
@@ -154,11 +159,14 @@ void DirectZob::LogError(const char* format, ...)
 	_vsnprintf_s(logBuffer, LOG_BUFFER_SIZE, format, args);
 	std::string s = std::string(logBuffer);
     va_end(args);
-#ifdef EDITOR
-	DirectZob::singleton->GetEventManager()->AddEvent(Events::LogError, s);
-#else
-    printf("%s\n", logBuffer);
-#endif
+	if (g_isInEditorMode)
+	{
+		DirectZob::singleton->GetEventManager()->AddEvent(Events::LogError, s);
+}
+	else
+	{
+		printf("%s\n", logBuffer);
+	}
 }
 void DirectZob::LogWarning(const char* format, ...)
 {
@@ -167,9 +175,12 @@ void DirectZob::LogWarning(const char* format, ...)
 	_vsnprintf_s(logBuffer, LOG_BUFFER_SIZE, format, args);
 	std::string s = std::string(logBuffer);
 	va_end(args);
-#ifdef EDITOR
-	DirectZob::singleton->GetEventManager()->AddEvent(Events::LogWarning, s);
-#else
-    printf("%s\n", logBuffer);
-#endif
+	if (g_isInEditorMode)
+	{
+		DirectZob::singleton->GetEventManager()->AddEvent(Events::LogWarning, s);
+	}
+	else
+	{
+		printf("%s\n", logBuffer);
+	}
 }

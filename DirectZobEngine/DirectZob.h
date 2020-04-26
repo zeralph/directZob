@@ -52,10 +52,11 @@ class DirectZob
 {
 	static DirectZob* singleton;
 public :
+	
 	DirectZob();
 	~DirectZob();
 
-	void Init();
+	void Init(bool bEditorMode);
 	void LoadScene(std::string& path, std::string& file);
 	void SaveScene(std::string& path, std::string& file);
 	void SaveScene();
