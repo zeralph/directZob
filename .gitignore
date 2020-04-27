@@ -5,6 +5,8 @@
 /FontExport/bin
 /FontExport/obj
 /.vs
+/.DS_Store
+.DS_Store
 DirectZobEditor/bin
 DirectZobEditor/obj
 DirectZobEditor/bin

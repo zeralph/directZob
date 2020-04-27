@@ -121,7 +121,7 @@ int main()
 	mfb_mouse_move_callback(window, mouse_move);
 	mfb_mouse_scroll_callback(window, mouse_scroll);
 
-	m_directZob.Init();
+	m_directZob.Init(false);
 	std::string path = "./resources/";
 	std::string file = "wow.xml";
 	file = "wow.xml";

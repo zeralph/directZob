@@ -88,7 +88,7 @@
                         },
 						'xcode_settings':{
 							'CC':'clang',
-							'MACOSX_DEPLOYMENT_TARGET':'10.7',
+							'MACOSX_DEPLOYMENT_TARGET':'10.14',
 							'CLANG_CXX_LANGUAGE_STANDARD':'c++11',
 							'CLANG_CXX_LIBRARY':'libc++',
 						},
@@ -165,9 +165,18 @@
                     },
                     'OS=="mac"',
                     {
+                        'include_dirs': [
+                            '.',
+                            '../dependencies/fbxsdk/macos/include',
+                        ],
+                        'link_settings': {
+                            'libraries': [
+                                '../../../dependencies/fbxsdk/macos/lib/clang/release/libfbxsdk.a',  # relative to xcode project
+                            ],
+                        },
 						'xcode_settings':{
 							'CC':'clang',
-							'MACOSX_DEPLOYMENT_TARGET':'10.7',
+							'MACOSX_DEPLOYMENT_TARGET':'10.14',
 							'CLANG_CXX_LANGUAGE_STANDARD':'c++11',
 							'CLANG_CXX_LIBRARY':'libc++',
 						},

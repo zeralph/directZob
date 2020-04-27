@@ -7,14 +7,10 @@
 	#define SLEEP(a) sleep(a)
 	#define _snprintf_s(a,b,c,...) snprintf(a,b,c,__VA_ARGS__)
 	#define _vsnprintf_s(a,b,c,...) vsnprintf(a,b,c,__VA_ARGS__)
-
-
     #define fopen_s(fp, fmt, mode)  ({\
         *(fp)=fopen( (fmt), (mode));\
         (*(fp) ) ? 0:errno;\
     })
-
-
 #elif WINDOWS
 	#include <windows.h>
 	#define SLEEP(a) Sleep(a)
@@ -24,6 +20,10 @@
 	#define SLEEP(a) sleep(a)
 	#define _snprintf_s(a,b,c,...) snprintf(a,b,c,__VA_ARGS__)
 	#define _vsnprintf_s(a,b,c,...) vsnprintf(a,b,c,__VA_ARGS__)
+	#define fopen_s(fp, fmt, mode)  ({\
+        *(fp)=fopen( (fmt), (mode));\
+        (*(fp) ) ? 0:errno;\
+    })
 #endif //LINUX
 #include <string>
 #include <iostream>

@@ -83,7 +83,7 @@ void SceneLoader::LoadZobObject(TiXmlElement* node, ZobObject* parent)
 	}
 	else
 	{
-		DirectZob::LogError("Error creating ZObjects %s", name);
+		DirectZob::LogError("Error creating ZObjects %s", name.c_str());
 	}
 	for (TiXmlElement* e = node->FirstChildElement("ZobObject"); e != NULL; e = e->NextSiblingElement("ZobObject"))
 	{
@@ -108,7 +108,7 @@ void SceneLoader::LoadScene(std::string &path, std::string &file)
 	doc.LoadFile(fullPath.c_str());
 	if (doc.Error())
 	{
-		DirectZob::LogError("Error loading %s : %s", fullPath, doc.ErrorDesc());
+		DirectZob::LogError("Error loading %s : %s", fullPath.c_str(), doc.ErrorDesc());
 		m_path = "";
 		m_file = "";
 	}
