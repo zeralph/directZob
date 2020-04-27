@@ -3,7 +3,7 @@
 #include <iostream>
 #include "DirectZob.h"
 #include "nanojpeg.h"
-
+#include "tga.h"
 
 Material::Material(const std::string& name, const Vector3* ambientColor, const Vector3* diffuseColor, const char* textureFile /*=NULL*/)
 {
@@ -113,8 +113,52 @@ Material::Material(const std::string& name, const Vector3* ambientColor, const V
 				{
 					DirectZob::LogError("Error %i occured when opening JPEG texture %s for material %s", error, textureFile, name.c_str());
 					m_data = NULL;
+					m_dataSize = 0;
+					m_width = m_height = 0;
 					error = 1;
 				}
+			}
+			else if (texFile.find(".tga") != -1)
+			{
+				int w, h, bpp = 0;
+				uint8_t* d = tga_load(textureFile, &w, &h, &bpp);
+				if (d)
+				{
+					int size = w * h;
+					m_data = (float*)malloc(sizeof(float) * 4 * size);
+					int j = 0;
+					for (int i = 0; i < size; i += 3)
+					{
+						float g = (float)d[i] / 255.0f;
+						float b = (float)d[i + 1] / 255.0f;
+						float r = (float)d[i + 2] / 255.0f;
+						//float b = (float)d[i + 3] / 255.0f;
+						m_data[j] = r;
+						m_data[j + 1] = g;
+						m_data[j + 2] = b;
+						m_data[j + 3] = 1.0f;
+						j += 4;
+					}
+					m_width = w;
+					m_height = h;
+					m_dataSize = w * h;
+					delete d;
+				}
+				else
+				{
+					DirectZob::LogError("Error %i occured when opening TGA texture %s for material %s", error, textureFile, name.c_str());
+					m_data = NULL;
+					m_dataSize = 0;
+					m_width = m_height = 0;
+					error = 1;
+				}
+			}
+			else
+			{
+				m_data = NULL;
+				m_dataSize = 0;
+				m_width = m_height = 0;
+				DirectZob::LogError("Error %i occured when loading texture %s for material %s : format not supported", error, textureFile, name.c_str());
 			}
 		}
 		image.clear();

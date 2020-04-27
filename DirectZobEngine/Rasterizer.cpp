@@ -320,7 +320,7 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 
 	float w0, w1, w2, su, tu, cl, sl, al, r, g, b, a, z, zRatio, fr, fg, fb, lightPower;
 	float texPixelData[4];
-	uint c, k;
+	int c, k;
 	Vector3 normal, lightDir;
 
 	w2 = edgeFunction(t->pa, t->pb, p);
@@ -348,6 +348,7 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 			m_bufferData->zBuffer[k] = zRatio;
 			su = w0 * t->ua->x + w1 * t->ub->x + w2 * t->uc->x;
 			tu = w0 * t->ua->y + w1 * t->ub->y + w2 * t->uc->y;
+
 			cl = 1.0f;
 			RenderOptions::eLightMode lighting = t->options.LightMode();
 			if (lighting == RenderOptions::eLightMode_flat || lighting == RenderOptions::eLightMode_flatPhong)
@@ -364,23 +365,45 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 			{
 				if (texData->GetData())
 				{
-					tu = 1.0f - tu;
+					//tu = 1.0f - tu;
+					//if(tu<0.0f)
+					//	tu = 1.0f + tu;
+					tu = abs(tu);
+					su = abs(su);
+					//if (su < 0.0f)
+					//	su = 1.0f + su;
+					//tu = clamp2(tu, 0.0f, 1.0f);
+					//su = clamp2(su, 0.0f, 1.0f);
 					su = (int)(su * texData->GetWidth());
 					tu = (int)(tu * texData->GetHeight());
 					su = (int)su % texData->GetWidth();
 					tu = (int)tu % texData->GetHeight();
-
-					c = (uint)(((uint)tu * (uint)texData->GetWidth() + (uint)su) * 4);
-
-					const float* d = texData->GetData();
-					if (c < texData->GetDataSize() - 4)
+					if (tu < 0)
 					{
-						//std::copy(d[c], d[c+4], &texPixelData);
-						memcpy(texPixelData, &d[c], sizeof(float) * 4);
-						r = texPixelData[0];
-						g = texPixelData[1];
-						b = texPixelData[2];
-						a = texPixelData[3];
+						tu += texData->GetHeight();
+					}
+					if (su < 0)
+					{
+						su += texData->GetWidth();
+					}
+					c = (int)(((int)tu * (int)texData->GetWidth() + (int)su) * 4);
+					const float* d = texData->GetData();
+					if (true || c>=0 && c < texData->GetDataSize() - 4)
+					{
+						//memcpy(texPixelData, &d[c], sizeof(float) * 4);
+						//r = texPixelData[0];
+						//g = texPixelData[1];
+						//b = texPixelData[2];
+						//a = 1.0f;// texPixelData[3];
+						r = d[c+0];
+						g = d[c+1];
+						b = d[c+2];
+						a = 1.0f;// texPixelData[3];
+					}
+					else
+					{
+						int hh = 0;
+						hh++;
 					}
 				}
 				else

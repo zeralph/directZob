@@ -99,6 +99,14 @@ Mesh::Mesh(std::string &parentName, fbxsdk::FbxMesh* mesh)
 						mesh->GetPolygonVertexUV(j, k, uvsNames[0], uv, unmapped);
 						if (!unmapped)
 						{
+							/*if (uv[0] < 0.0f )
+							{
+								uv[0] = 1.0f-uv[0];
+							}
+							if (uv[1] < 0.0f)
+							{
+								uv[1] = 1.0f-uv[1];
+							}*/
 							m_uvs[vIdx] = Vector2(uv[0], uv[1]);
 						}
 						else
@@ -292,7 +300,10 @@ const Material* Mesh::LoadFbxMaterial(fbxsdk::FbxMesh* mesh)
 					f = prop.Get<FbxDouble>();
 					Vector3 ambient;
 					//texture_name = "C:\\_GIT\\directZob\\resources\\earth_256.png";
-					finalMaterial = materialMgr->LoadMaterial(matName, &ambient, &diffuse, texture_name);
+					char buffer[256];
+					const char* resourcePath = "C:\\_GIT\\directZob\\resources\\";
+					_snprintf_s(buffer, 256, "%s%s", resourcePath, texture_name2);
+					finalMaterial = materialMgr->LoadMaterial(matName, &ambient, &diffuse, buffer);
 				}
 			}
 		}
