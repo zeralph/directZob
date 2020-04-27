@@ -2,9 +2,11 @@
 #include <algorithm>
 #include <thread> 
 #ifdef LINUX
-#include <unistd.h>
-#else
-#include <windows.h>
+    #include <unistd.h>
+#elif MACOS
+    #include <unistd.h>
+#elif WINDOWS
+    #include <windows.h>
 #endif //LINUX
 #include <assert.h> 
 #include "DirectZob.h"
