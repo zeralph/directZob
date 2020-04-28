@@ -77,8 +77,10 @@ namespace Core
 		inline const ulong GetNbPixels() { return m_nbPixels; }
 		inline void ShowGrid(bool b) { m_showGrid = b; }
 		inline void WireFrame(bool b) { m_wireFrame = b; }
+		inline void ShowNormals(bool b) { m_showNormals = b; }
 		inline bool ShowGrid() { return m_showGrid; }
 		inline bool WireFrame() { return m_wireFrame; }
+		inline bool ShowNormals() { return m_showNormals; }
 		uint GetObjectIdAtCoords(uint x, uint y);
 		const CullMode GetCullMode() const { return m_cullMode; }
 		void SetCullMode(const CullMode c) { m_cullMode = c; }
@@ -117,6 +119,7 @@ namespace Core
 		ulong m_nbPixels;
 		bool m_started = false;
 		bool m_wireFrame = false;
+		bool m_showNormals = false;
 		bool m_showGrid = true;
 		RenderOutput m_renderOutput;
 		CullMode m_cullMode;

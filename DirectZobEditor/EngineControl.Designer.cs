@@ -29,25 +29,29 @@
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.engineSetSize = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.engineHeight = new System.Windows.Forms.TextBox();
+            this.engineWidth = new System.Windows.Forms.TextBox();
+            this.comboRendering = new System.Windows.Forms.ComboBox();
             this.wireframe = new System.Windows.Forms.CheckBox();
             this.showGrid = new System.Windows.Forms.CheckBox();
-            this.engineWidth = new System.Windows.Forms.TextBox();
-            this.engineHeight = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.engineSetSize = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
+            this.showNormals = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.showNormals);
+            this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.engineSetSize);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.engineHeight);
             this.groupBox1.Controls.Add(this.engineWidth);
-            this.groupBox1.Controls.Add(this.comboBox1);
+            this.groupBox1.Controls.Add(this.comboRendering);
             this.groupBox1.Controls.Add(this.wireframe);
             this.groupBox1.Controls.Add(this.showGrid);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -58,24 +62,68 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Engine";
             // 
-            // comboBox1
+            // engineSetSize
             // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Items.AddRange(new object[] {
+            this.engineSetSize.Location = new System.Drawing.Point(144, 103);
+            this.engineSetSize.Name = "engineSetSize";
+            this.engineSetSize.Size = new System.Drawing.Size(40, 23);
+            this.engineSetSize.TabIndex = 7;
+            this.engineSetSize.Text = "Set";
+            this.engineSetSize.UseVisualStyleBackColor = true;
+            this.engineSetSize.Click += new System.EventHandler(this.engineSetSize_Click);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(74, 108);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(15, 13);
+            this.label2.TabIndex = 6;
+            this.label2.Text = "H";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(5, 108);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(18, 13);
+            this.label1.TabIndex = 5;
+            this.label1.Text = "W";
+            // 
+            // engineHeight
+            // 
+            this.engineHeight.Location = new System.Drawing.Point(91, 104);
+            this.engineHeight.Name = "engineHeight";
+            this.engineHeight.Size = new System.Drawing.Size(46, 20);
+            this.engineHeight.TabIndex = 4;
+            // 
+            // engineWidth
+            // 
+            this.engineWidth.Location = new System.Drawing.Point(23, 104);
+            this.engineWidth.Name = "engineWidth";
+            this.engineWidth.Size = new System.Drawing.Size(46, 20);
+            this.engineWidth.TabIndex = 3;
+            // 
+            // comboRendering
+            // 
+            this.comboRendering.FormattingEnabled = true;
+            this.comboRendering.Items.AddRange(new object[] {
             "Render",
             "ZBuffer",
             "OBuffer"});
-            this.comboBox1.Location = new System.Drawing.Point(62, 83);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(121, 21);
-            this.comboBox1.TabIndex = 2;
-            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.ComboBox1_SelectedIndexChanged);
+            this.comboRendering.Location = new System.Drawing.Point(67, 76);
+            this.comboRendering.Name = "comboRendering";
+            this.comboRendering.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.comboRendering.Size = new System.Drawing.Size(117, 21);
+            this.comboRendering.TabIndex = 2;
+            this.comboRendering.SelectedIndexChanged += new System.EventHandler(this.ComboBox1_SelectedIndexChanged);
             // 
             // wireframe
             // 
             this.wireframe.AutoSize = true;
-            this.wireframe.Location = new System.Drawing.Point(62, 59);
+            this.wireframe.Location = new System.Drawing.Point(110, 19);
             this.wireframe.Name = "wireframe";
+            this.wireframe.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.wireframe.Size = new System.Drawing.Size(74, 17);
             this.wireframe.TabIndex = 1;
             this.wireframe.Text = "Wireframe";
@@ -85,55 +133,35 @@
             // showGrid
             // 
             this.showGrid.AutoSize = true;
-            this.showGrid.Location = new System.Drawing.Point(62, 35);
+            this.showGrid.Location = new System.Drawing.Point(111, 53);
             this.showGrid.Name = "showGrid";
+            this.showGrid.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.showGrid.Size = new System.Drawing.Size(73, 17);
             this.showGrid.TabIndex = 0;
             this.showGrid.Text = "Show grid";
             this.showGrid.UseVisualStyleBackColor = true;
             this.showGrid.CheckedChanged += new System.EventHandler(this.ShowGrid_CheckedChanged);
             // 
-            // engineWidth
+            // label3
             // 
-            this.engineWidth.Location = new System.Drawing.Point(22, 115);
-            this.engineWidth.Name = "engineWidth";
-            this.engineWidth.Size = new System.Drawing.Size(46, 20);
-            this.engineWidth.TabIndex = 3;
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(20, 80);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(35, 13);
+            this.label3.TabIndex = 8;
+            this.label3.Text = "Buffer";
             // 
-            // engineHeight
+            // showNormals
             // 
-            this.engineHeight.Location = new System.Drawing.Point(90, 115);
-            this.engineHeight.Name = "engineHeight";
-            this.engineHeight.Size = new System.Drawing.Size(46, 20);
-            this.engineHeight.TabIndex = 4;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(4, 122);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(18, 13);
-            this.label1.TabIndex = 5;
-            this.label1.Text = "W";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(73, 122);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(15, 13);
-            this.label2.TabIndex = 6;
-            this.label2.Text = "H";
-            // 
-            // engineSetSize
-            // 
-            this.engineSetSize.Location = new System.Drawing.Point(143, 113);
-            this.engineSetSize.Name = "engineSetSize";
-            this.engineSetSize.Size = new System.Drawing.Size(40, 23);
-            this.engineSetSize.TabIndex = 7;
-            this.engineSetSize.Text = "Set";
-            this.engineSetSize.UseVisualStyleBackColor = true;
-            this.engineSetSize.Click += new System.EventHandler(this.engineSetSize_Click);
+            this.showNormals.AutoSize = true;
+            this.showNormals.Location = new System.Drawing.Point(92, 36);
+            this.showNormals.Name = "showNormals";
+            this.showNormals.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.showNormals.Size = new System.Drawing.Size(92, 17);
+            this.showNormals.TabIndex = 9;
+            this.showNormals.Text = "Show normals";
+            this.showNormals.UseVisualStyleBackColor = true;
+            this.showNormals.CheckedChanged += new System.EventHandler(this.showNormals_CheckedChanged);
             // 
             // EngineControl
             // 
@@ -153,11 +181,13 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.CheckBox wireframe;
         private System.Windows.Forms.CheckBox showGrid;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.ComboBox comboRendering;
         private System.Windows.Forms.Button engineSetSize;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox engineHeight;
         private System.Windows.Forms.TextBox engineWidth;
+        private System.Windows.Forms.CheckBox showNormals;
+        private System.Windows.Forms.Label label3;
     }
 }
