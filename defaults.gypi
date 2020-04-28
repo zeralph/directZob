@@ -42,6 +42,12 @@
                         {
                             'msvs_configuration_platform': 'x64',
                             'msvs_target_platform': 'x64',
+							'msvs_settings': {
+                                'VCCLCompilerTool': {
+                                    'Optimization': '0',  # Od optimisation
+									'FloatingPointModel': '2', # fast
+                                },
+                            },
                         },
                     ],
                 ],
@@ -58,8 +64,12 @@
                             'msvs_target_platform': 'x64',
                             'msvs_settings': {
                                 'VCCLCompilerTool': {
-                                    'Optimization':
-                                    '2',  # O2 optimisation
+                                    'Optimization':'2',  # O2 optimisation
+									'InlineFunctionExpansion': 2, # /Ob2, inline anything eligible
+									'FavorSizeOrSpeed': 1, # /Ot, favour speed over size
+									'FloatingPointModel': '2', # fast
+									'EnableIntrinsicFunctions': 'true',
+									'WholeProgramOptimization': 'true', # No
                                 },
                             },
                         },

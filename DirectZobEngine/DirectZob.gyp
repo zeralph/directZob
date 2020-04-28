@@ -86,14 +86,40 @@
                                 '../../../dependencies/fbxsdk/macos/lib/clang/release/libfbxsdk.a',  # relative to xcode project
                             ],
                         },
+						'xcode_settings':{
+							'CC':'clang',
+							'MACOSX_DEPLOYMENT_TARGET':'10.14',
+							'CLANG_CXX_LANGUAGE_STANDARD':'c++11',
+							'CLANG_CXX_LIBRARY':'libc++',
+						},
                     },
                 ],
                 [
                     'OS=="linux"',
                     {
+                        'include_dirs': [
+                            '.',
+                            '../dependencies/fbxsdk/linux/include',
+                        ],
                         'defines': [
                             'LINUX',
                         ],
+                        'direct_dependent_settings': {
+                            'include_dirs': [
+                                '.',
+                                '../dependencies/fbxsdk/linux/include',
+                            ],
+                        },
+                        'link_settings': {
+                            'libraries': [
+                                '../../../dependencies/fbxsdk/linux/lib/libfbxsdk.a',  # relative to xcode project
+                                '/usr/lib/x86_64-linux-gnu/libpthread.so',
+                                '/usr/lib/x86_64-linux-gnu/libxml2.so',
+                                '/usr/lib/x86_64-linux-gnu/libX11.so',
+                                '/usr/lib/x86_64-linux-gnu/libdl.so',
+                                '/usr/lib/x86_64-linux-gnu/libz.so',
+                            ],
+                        },
                     },
                 ],
             ],
@@ -133,7 +159,28 @@
                                 ],
                             },
                         ],
+                    }, 
+                    'OS=="linux"',
+                    {
                     },
+                    'OS=="mac"',
+                    {
+                        'include_dirs': [
+                            '.',
+                            '../dependencies/fbxsdk/macos/include',
+                        ],
+                        'link_settings': {
+                            'libraries': [
+                                '../../../dependencies/fbxsdk/macos/lib/clang/release/libfbxsdk.a',  # relative to xcode project
+                            ],
+                        },
+						'xcode_settings':{
+							'CC':'clang',
+							'MACOSX_DEPLOYMENT_TARGET':'10.14',
+							'CLANG_CXX_LANGUAGE_STANDARD':'c++11',
+							'CLANG_CXX_LIBRARY':'libc++',
+						},
+                    },					
                 ],
             ],
         },

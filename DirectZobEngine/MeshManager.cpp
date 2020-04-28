@@ -20,6 +20,7 @@ MeshManager::~MeshManager()
 
 Mesh* MeshManager::LoadMesh(std::string& name, std::string& path, std::string& file)
 {
+    DirectZob::LogInfo("Loading mesh %s%s", path.c_str(), file.c_str());
 	Mesh* outMesh = NULL;
 	if (GetMesh(name) == NULL)
 	{

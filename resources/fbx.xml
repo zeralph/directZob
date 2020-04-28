@@ -1,13 +1,35 @@
 <root>
     <Meshes>
-        <Mesh name="fbx_example" file="Residential Buildings 009.fbx" />
+        <Mesh name="fbx_example" file="11.fbx" />
     </Meshes>
     <Scene>
+		<Globals>
+			<AmbientColor r="50" g="50" b="50"/>
+			<FogColor r="200" g="200" b="200" />
+			<ClearColor r="200" g="200" b="200" />
+			<FogDensity>0</FogDensity>
+			<FogDistance>20</FogDistance>
+			<FogType>Exp2</FogType>			
+		</Globals>
         <ZobObject name="fbx_example">
             <Mesh>fbx_example</Mesh>
             <Position x="0" y="0" z="0" />
             <Rotation x="0" y="0" z="0" />
             <Scale x="0.001" y="0.001" z="0.001" />
+        </ZobObject>
+		<ZobObject name ="green" type="pointlight">
+			<Rotation x="0" y="0" z="0" />
+            <Position x="0" y="50" z="-100" />
+            <Color r="00" g="255" b="00" />
+			<Intensity>1</Intensity>
+			<FallOffDistance>500</FallOffDistance>
+        </ZobObject>
+		<ZobObject name ="red" type="pointlight">
+			<Rotation x="0" y="0" z="0" />
+            <Position x="0" y="50" z="100" />
+            <Color r="0" g="00" b="255" />
+			<Intensity>1</Intensity>
+			<FallOffDistance>500</FallOffDistance>
         </ZobObject>
     </Scene>
 </root>

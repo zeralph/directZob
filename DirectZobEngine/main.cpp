@@ -111,7 +111,7 @@ int main()
 {
 	m_mouseLastX = -1;
 	m_mouseLastY = -1;
-	std::cout << "Init Window";
+	printf("Init Window\n");
 	struct Window* window = mfb_open_ex("DirectZob", WIDTH, HEIGHT, WF_RESIZABLE);
 	mfb_active_callback(window, active);
 	mfb_resize_callback(window, resize);
@@ -121,12 +121,13 @@ int main()
 	mfb_mouse_move_callback(window, mouse_move);
 	mfb_mouse_scroll_callback(window, mouse_scroll);
 
-	m_directZob.Init();
-	std::string path = "resources\\";
-	std::string file = "scene2.xml";
+	m_directZob.Init(false);
+	std::string path = "./resources/";
+	std::string file = "wow.xml";
 	file = "wow.xml";
 	m_directZob.LoadScene(path, file);
 	float rot = 0.0f;
+    printf("Start rendering\n");
 	for (;;)
 	{
 		//m_directZob.GetZobObjectManager()->GetRootObject()->SetRotation(90, rot, 0);
@@ -140,6 +141,9 @@ int main()
 		}
 		rot += 1.0f;
 	}
+    printf("Closing\n");
+    m_directZob.NewScene();
+    printf("Exiting\n");
 	mfb_close(window);
 
 	return 0;

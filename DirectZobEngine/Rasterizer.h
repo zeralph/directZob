@@ -10,7 +10,9 @@
 
 #ifdef LINUX
 	#include <unistd.h>
-#else
+#elif MACOS
+    #include <unistd.h>
+#elif WINDOWS
 	#include <windows.h>
 #endif //LINUX
 

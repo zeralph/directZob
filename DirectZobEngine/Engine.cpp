@@ -2,14 +2,16 @@
 #include <algorithm>
 #include <thread> 
 #ifdef LINUX
-#include <unistd.h>
-#else
-#include <windows.h>
+    #include <unistd.h>
+#elif MACOS
+    #include <unistd.h>
+#elif WINDOWS
+    #include <windows.h>
 #endif //LINUX
 #include <assert.h> 
 #include "DirectZob.h"
 
-# define MAX_TRIANGLES_PER_IMAGE 200000
+# define MAX_TRIANGLES_PER_IMAGE 400000
 
 using namespace Core;
 Engine::Engine(int width, int height, Events* events)
@@ -121,7 +123,6 @@ void Engine::Stop()
 	m_started = false;
 	WaitForRasterizersEnd();
 	ClearRenderQueues();
-	Sleep(100);
 }
 
 void Engine::Resize(int width, int height)

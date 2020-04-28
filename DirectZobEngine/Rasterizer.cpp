@@ -320,7 +320,7 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 
 	float w0, w1, w2, su, tu, cl, sl, al, r, g, b, a, z, zRatio, fr, fg, fb, lightPower;
 	float texPixelData[4];
-	uint c, k;
+	int c, k;
 	Vector3 normal, lightDir;
 
 	w2 = edgeFunction(t->pa, t->pb, p);
@@ -348,6 +348,7 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 			m_bufferData->zBuffer[k] = zRatio;
 			su = w0 * t->ua->x + w1 * t->ub->x + w2 * t->uc->x;
 			tu = w0 * t->ua->y + w1 * t->ub->y + w2 * t->uc->y;
+
 			cl = 1.0f;
 			RenderOptions::eLightMode lighting = t->options.LightMode();
 			if (lighting == RenderOptions::eLightMode_flat || lighting == RenderOptions::eLightMode_flatPhong)
@@ -358,7 +359,8 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 			{
 				normal = Vector3((w0 * t->na->x + w1 * t->nb->x + w2 * t->nc->x),
 					(w0 * t->na->y + w1 * t->nb->y + w2 * t->nc->y),
-					(w0 * t->na->z + w1 * t->nb->z + w2 * t->nc->z));
+					(w0 * t->na->z + w1 * t->nb->z + w2 * t->nc->z)); 
+				//normal.Mul(-1.0f);
 			}
 			if (texData)
 			{
@@ -370,17 +372,24 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 					su = (int)su % texData->GetWidth();
 					tu = (int)tu % texData->GetHeight();
 
-					c = (uint)(((uint)tu * (uint)texData->GetWidth() + (uint)su) * 4);
-
+					c = (int)(((int)tu * (int)texData->GetWidth() + (int)su) * 4);
 					const float* d = texData->GetData();
-					if (c < texData->GetDataSize() - 4)
+					if ( c>=0 && c < texData->GetDataSize()*4 - 4)
 					{
-						//std::copy(d[c], d[c+4], &texPixelData);
-						memcpy(texPixelData, &d[c], sizeof(float) * 4);
-						r = texPixelData[0];
-						g = texPixelData[1];
-						b = texPixelData[2];
-						a = texPixelData[3];
+						//memcpy(texPixelData, &d[c], sizeof(float) * 4);
+						//r = texPixelData[0];
+						//g = texPixelData[1];
+						//b = texPixelData[2];
+						//a = 1.0f;// texPixelData[3];
+						r = d[c+0];
+						g = d[c+1];
+						b = d[c+2];
+						a = 1.0f;// texPixelData[3];
+					}
+					else
+					{
+						int hh = 0;
+						hh++;
 					}
 				}
 				else

@@ -5,6 +5,8 @@
 /FontExport/bin
 /FontExport/obj
 /.vs
+/.DS_Store
+.DS_Store
 DirectZobEditor/bin
 DirectZobEditor/obj
 DirectZobEditor/bin
@@ -133,3 +135,14 @@ DirectZobWrapper/Release
 /resources/Textures/sticker mask.png
 /resources/Textures/tire normal.png
 /DirectZobEngine/build
+/dependencies/minifb/minifb.sln
+/dependencies/minifb/minifb.vcproj
+/dependencies/nanojpeg/nanojpeg.sln
+/dependencies/nanojpeg/nanojpeg.vcproj
+/dependencies/tinyxml/tinyxml.sln
+/dependencies/tinyxml/tinyxml.vcproj
+/DirectZobEngine/DirectZob.sln
+/DirectZobEngine/DirectZobDInterop.vcproj
+/DirectZobEngine/DirectZobEngine.vcproj
+/DirectZobEngine/DirectZobExe.vcproj
+DirectZobExe

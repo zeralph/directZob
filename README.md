@@ -16,6 +16,9 @@ https://pip.pypa.io/en/stable/installing/
 For some reason, the gyp package in pip repository may not want to install. Installing the latest version can be done manually with the command :
 pip install git+https://chromium.googlesource.com/external/gyp
 
+On linux, compilation is supported with gcc 7.5. The following additional packages are needed : libx11-dev, libxml2-dev
+
+in order to compile properly you must have Autodesk FBX Software Developer Kit installed and copy fbxsdk.dll into the application directory of the engine or editor executable 
 
 ## Gyp documentation
 
