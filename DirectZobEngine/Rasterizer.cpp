@@ -359,36 +359,22 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 			{
 				normal = Vector3((w0 * t->na->x + w1 * t->nb->x + w2 * t->nc->x),
 					(w0 * t->na->y + w1 * t->nb->y + w2 * t->nc->y),
-					(w0 * t->na->z + w1 * t->nb->z + w2 * t->nc->z));
+					(w0 * t->na->z + w1 * t->nb->z + w2 * t->nc->z)); 
+				//normal.Mul(-1.0f);
 			}
 			if (texData)
 			{
 				if (texData->GetData())
 				{
-					//tu = 1.0f - tu;
-					//if(tu<0.0f)
-					//	tu = 1.0f + tu;
-					tu = abs(tu);
-					su = abs(su);
-					//if (su < 0.0f)
-					//	su = 1.0f + su;
-					//tu = clamp2(tu, 0.0f, 1.0f);
-					//su = clamp2(su, 0.0f, 1.0f);
+					tu = 1.0f - tu;
 					su = (int)(su * texData->GetWidth());
 					tu = (int)(tu * texData->GetHeight());
 					su = (int)su % texData->GetWidth();
 					tu = (int)tu % texData->GetHeight();
-					if (tu < 0)
-					{
-						tu += texData->GetHeight();
-					}
-					if (su < 0)
-					{
-						su += texData->GetWidth();
-					}
+
 					c = (int)(((int)tu * (int)texData->GetWidth() + (int)su) * 4);
 					const float* d = texData->GetData();
-					if (true || c>=0 && c < texData->GetDataSize() - 4)
+					if ( c>=0 && c < texData->GetDataSize()*4 - 4)
 					{
 						//memcpy(texPixelData, &d[c], sizeof(float) * 4);
 						//r = texPixelData[0];

@@ -303,6 +303,7 @@ const Material* Mesh::LoadFbxMaterial(fbxsdk::FbxMesh* mesh)
 					char buffer[256];
 					const char* resourcePath = "C:\\_GIT\\directZob\\resources\\";
 					_snprintf_s(buffer, 256, "%s%s", resourcePath, texture_name2);
+					//_snprintf_s(buffer, 256, "%s%s", resourcePath, "artefact.tga");
 					finalMaterial = materialMgr->LoadMaterial(matName, &ambient, &diffuse, buffer);
 				}
 			}
