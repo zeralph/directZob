@@ -123,7 +123,7 @@ int main()
 
 	m_directZob.Init(false);
 	std::string path = "./resources/";
-	std::string file = "wow.xml";
+	std::string file = "fbx.xml";
 	file = "wow.xml";
 	m_directZob.LoadScene(path, file);
 	float rot = 0.0f;
