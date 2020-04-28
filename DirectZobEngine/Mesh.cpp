@@ -628,6 +628,19 @@ void Mesh::Draw(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, c
 				t->draw = true;
 				engine->QueueTriangle(t);
 				drawnFaces++;
+				static bool bShowNormal = true;
+				if (engine->ShowNormals())
+				{
+					Vector3 v = t->na;
+					v = v + t->va;
+					engine->QueueLine(camera, t->va, &v, 0xFF00FF);
+					v = t->nb;
+					v = v + t->vb;
+					engine->QueueLine(camera, t->vb, &v, 0xFF00FF);
+					v = t->nb;
+					v = v + t->vc;
+					engine->QueueLine(camera, t->vc, &v, 0xFF00FF);
+				}
 			}
 		}
 	}
@@ -657,11 +670,11 @@ inline bool Mesh::RejectTriangle(const Triangle* t, const float znear, const flo
 	{
 		return true;
 	}
-	if (t->pa->w < znear || t->pb->w < znear || t->pc->w < znear)
+	if (t->pa->z < znear || t->pb->z < znear || t->pc->z < znear)
 	{
 		return true;
 	}
-	if (t->pa->w > zfar || t->pb->w > zfar || t->pc->w > zfar)
+	if (t->pa->z > zfar || t->pb->z > zfar || t->pc->z > zfar)
 	{
 		return true;
 	}

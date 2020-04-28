@@ -22,6 +22,8 @@ public:
 
 private:
 
+	void OnError(int error, const char* material, const char* texture);
+
 	float* m_data = NULL;
 	uint m_dataSize = 0;
 	uint m_width = 0;

@@ -4,10 +4,10 @@
     </Meshes>
     <Scene>
 		<Globals>
-			<AmbientColor r="50" g="50" b="50"/>
+			<AmbientColor r="150" g="150" b="150"/>
 			<FogColor r="200" g="200" b="200" />
 			<ClearColor r="200" g="200" b="200" />
-			<FogDensity>0</FogDensity>
+			<FogDensity>5</FogDensity>
 			<FogDistance>20</FogDistance>
 			<FogType>Exp2</FogType>			
 		</Globals>

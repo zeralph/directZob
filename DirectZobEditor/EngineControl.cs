@@ -19,6 +19,8 @@ namespace DirectZobEditor
             m_engineWrapper = e;
             showGrid.Checked = true;
             wireframe.Checked = false;
+            showNormals.Checked = false;
+            comboRendering.SelectedIndex = 0;
             m_engineWrapper.ShowGrid(showGrid.Checked);
             m_engineWrapper.WireFrame(wireframe.Checked);
             engineWidth.Text = m_engineWrapper.GetBufferWidth().ToString();
@@ -52,6 +54,11 @@ namespace DirectZobEditor
                 m_engineWrapper.Resize(w, h);
                 Form1.GetMainForm().GetEngineWindow().ResizeRenderWindow();
             }
+        }
+
+        private void showNormals_CheckedChanged(object sender, EventArgs e)
+        {
+            m_engineWrapper.ShowNormals(showNormals.Checked);
         }
     }
 }

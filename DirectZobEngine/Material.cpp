@@ -26,8 +26,7 @@ Material::Material(const std::string& name, const Vector3* ambientColor, const V
 				error = lodepng::decode(image, width, height, textureFile);
 				if (error)
 				{
-					m_data = NULL;
-					DirectZob::LogError("Error %i occured when loading PNG texture %s for material %s", error, textureFile, name.c_str());
+					OnError(error, name.c_str(), textureFile);
 				}
 				else
 				{
@@ -46,11 +45,7 @@ Material::Material(const std::string& name, const Vector3* ambientColor, const V
 						m_data[i + 3] = a;
 					}
 					m_dataSize = width * height * 4;
-					std::string n = "Loaded texture ";
-					n.append(textureFile);
-					n.append(" for material ");
-					n.append(name);
-					DirectZob::LogInfo(n.c_str());
+					DirectZob::LogInfo("Loaded texture %s", textureFile);
 				}
 			}
 			else if (texFile.find(".jpg") != -1 || texFile.find(".jpeg") != -1)
@@ -94,28 +89,17 @@ Material::Material(const std::string& name, const Vector3* ambientColor, const V
 							j += 4;
 						}
 						m_dataSize = width * height * 4;
-						std::string n = "Loaded texture ";
-						n.append(textureFile);
-						n.append(" for material ");
-						n.append(name);
-						DirectZob::LogInfo(n.c_str());
+						DirectZob::LogInfo("Loaded texture %s", textureFile);
 					}
 					else
 					{
-						m_data = NULL;
-						m_dataSize = 0;
-						m_width = m_height = 0;
-						DirectZob::LogError("Error %i occured when loading JPEG texture %s for material %s", error, textureFile, name.c_str());
+						OnError(error, name.c_str(), textureFile);
 					}
 					free((void*)buf);
 				}
 				else
 				{
-					DirectZob::LogError("Error %i occured when opening JPEG texture %s for material %s", error, textureFile, name.c_str());
-					m_data = NULL;
-					m_dataSize = 0;
-					m_width = m_height = 0;
-					error = 1;
+					OnError(error, name.c_str(), textureFile);
 				}
 			}
 			else if (texFile.find(".tga") != -1)
@@ -175,30 +159,30 @@ Material::Material(const std::string& name, const Vector3* ambientColor, const V
 					m_width = w;
 					m_height = h;
 					m_dataSize = width * height * 4;
-					//delete d;
+					DirectZob::LogInfo("Loaded texture %s", textureFile);
 				}
 				else
 				{
-					DirectZob::LogError("Error %i occured when opening TGA texture %s for material %s", error, textureFile, name.c_str());
-					m_data = NULL;
-					m_dataSize = 0;
-					m_width = m_height = 0;
-					error = 1;
+					OnError(error, name.c_str(), textureFile);
 				}
 			}
 			else
 			{
-				m_data = NULL;
-				m_dataSize = 0;
-				m_width = m_height = 0;
-				DirectZob::LogError("Error %i occured when loading texture %s for material %s : format not supported", error, textureFile, name.c_str());
+				DirectZob::LogError("no decoder for file %s", textureFile);
 			}
 		}
 		image.clear();
 	}
-	std::string n = "Loaded material ";
-	n.append(m_name.c_str());
-	DirectZob::LogInfo(n.c_str());
+	DirectZob::LogInfo("Loaded material %s", name.c_str());
+}
+
+void Material::OnError(int error, const char* material, const char* texture)
+{
+	m_data = NULL;
+	m_dataSize = 0;
+	m_width = m_height = 0;
+	DirectZob::LogError("Error %i occured when loading texture %s for material %s : format not supported", error, texture, material);
+
 }
 
 Material::~Material()
