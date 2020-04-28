@@ -122,17 +122,18 @@ int main()
 	mfb_mouse_scroll_callback(window, mouse_scroll);
 
 	m_directZob.Init(false);
-	std::string path = "./resources/";
+	std::string path = "C:\\_GIT\\directZob\\resources\\";
 	std::string file = "wow.xml";
-	file = "wow.xml";
+	file = "fbx.xml";
 	m_directZob.LoadScene(path, file);
 	float rot = 0.0f;
     printf("Start rendering\n");
 	for (;;)
 	{
-		//m_directZob.GetZobObjectManager()->GetRootObject()->SetRotation(90, rot, 0);
-		m_directZob.GetZobObjectManager()->GetZobObject("terrain")->SetRotation(0, rot, 0);
-		m_directZob.GetZobObjectManager()->GetZobObject("skull")->SetRotation(0, -rot, 90);
+		m_directZob.GetZobObjectManager()->GetRootObject()->SetTranslation(0, 0, -50);
+		m_directZob.GetZobObjectManager()->GetRootObject()->SetRotation(0, rot, 0);
+		//m_directZob.GetZobObjectManager()->GetZobObject("terrain")->SetRotation(0, rot, 0);
+		//m_directZob.GetZobObjectManager()->GetZobObject("skull")->SetRotation(0, -rot, 90);
 		m_directZob.RunAFrame();
 		int state = mfb_update(window, (void*)m_directZob.GetBufferData() );
 		if (state < 0)
