@@ -28,7 +28,7 @@ MaterialManager::~MaterialManager()
 	m_materials.clear();
 }
 
-const Material* MaterialManager::LoadMaterial(const std::string& name, const Vector3* ambientColor, const Vector3* diffuseColor, const char* textureFile/* = NULL*/)
+const Material* MaterialManager::LoadMaterial(const std::string& name, const Vector3* ambientColor, const Vector3* diffuseColor, const std::string &textureFile)
 {
 	if (GetMaterial(name) == NULL)
 	{
@@ -43,7 +43,7 @@ const Material* MaterialManager::LoadMaterial(const std::string& name, const Vec
 	}
 }
 
-void MaterialManager::LoadMaterials(std::string& path, std::string& file)
+void MaterialManager::LoadOBJMaterials(std::string& path, std::string& file)
 {
 	std::string::size_type sz;
 	// Open the file.
@@ -128,11 +128,11 @@ void MaterialManager::LoadMaterials(std::string& path, std::string& file)
 		{
 			std::string p = path;
 			p.append(materials.at(i).texture);
-			LoadMaterial(n, &materials.at(i).ambient, &materials.at(i).diffuse, p.c_str());
+			LoadMaterial(n, &materials.at(i).ambient, &materials.at(i).diffuse, p);
 		}
 		else
 		{
-			LoadMaterial(n, &materials.at(i).ambient, &materials.at(i).diffuse, NULL);
+			LoadMaterial(n, &materials.at(i).ambient, &materials.at(i).diffuse, "");
 		}
 	}
 }
