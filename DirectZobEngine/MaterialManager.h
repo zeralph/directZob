@@ -1,6 +1,7 @@
 #pragma once
 #include "Types.h"
 #include "Material.h"
+#include <fbxsdk.h>
 #include <string>
 #include <vector>
 
@@ -15,6 +16,7 @@ public:
 	const int GetNbTextures() const { return (int)m_materials.size(); }
 	const Material* GetMaterial(const int i) const;
 	void LoadOBJMaterials(std::string& path, std::string& file);
+	const Material* LoadFbxMaterial(const fbxsdk::FbxMesh* mesh, const std::string &path);
 	void UnloadAll();
 private:
 	void SplitEntry(const std::string* s, std::vector<std::string>* v, const char delim);
