@@ -44,7 +44,12 @@ private:
 	void LoadOBJ(const std::string& fullPath);
 	void LoadFbx(const std::string& fullPath);
 	void FbxMultT(FbxNode* node, FbxVector4 &vector);
-	inline void ReinitVertices();
+	inline void ReinitVertices()
+	{
+		memcpy(m_vertices, m_verticesData, sizeof(Vector3) * m_nbVertices);
+		memcpy(m_verticesNormals, m_verticesNormalsData, sizeof(Vector3) * m_nbNormals);
+		memcpy(m_trianglesNormals, m_trianglesNormalsData, sizeof(Vector3) * m_nbFaces);
+	};
 	inline bool RejectTriangle(const Triangle* t, const float znear, const float zfar, const float width, const float height);
 	std::vector<Mesh*> m_subMeshes;
 	uint m_nbVertices = 0;

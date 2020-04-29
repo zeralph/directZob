@@ -410,13 +410,6 @@ void Mesh::SplitEntry(const std::string* s, std::vector<std::string>* v, const c
 	ReinitVertices();
 }*/
 
-void Mesh::ReinitVertices()
-{
-	memcpy(m_vertices, m_verticesData, sizeof(Vector3) * m_nbVertices);
-	memcpy(m_verticesNormals, m_verticesNormalsData, sizeof(Vector3) * m_nbNormals);
-	memcpy(m_trianglesNormals, m_trianglesNormalsData, sizeof(Vector3) * m_nbFaces);
-}
-
 void Mesh::DrawBoundingBox(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions options)
 {
 	Vector3 v0 = Vector3(m_minBouding.x, m_minBouding.y, m_minBouding.z);
@@ -532,7 +525,7 @@ void Mesh::Draw(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, c
 			//if (engine->GetCullMode() == Engine::None )// ( || t->area > sAreaMin && t->area < sAreaMax))
 			{
 				t->owner = ownerId;
-				t->ComputeLighting(&light);
+				//t->ComputeLighting(&light);
 				t->draw = true;
 				engine->QueueTriangle(t);
 				drawnFaces++;

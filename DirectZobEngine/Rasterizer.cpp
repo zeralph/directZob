@@ -374,23 +374,19 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 
 					c = (int)(((int)tu * (int)texData->GetWidth() + (int)su) * 4);
 					const float* d = texData->GetData();
-					if ( c>=0 && c < texData->GetDataSize()*4 - 4)
+					//if ( c>=0 && c < texData->GetDataSize()*4 - 4)
 					{
-						//memcpy(texPixelData, &d[c], sizeof(float) * 4);
-						//r = texPixelData[0];
-						//g = texPixelData[1];
-						//b = texPixelData[2];
-						//a = 1.0f;// texPixelData[3];
-						r = d[c+0];
-						g = d[c+1];
-						b = d[c+2];
+						memcpy(texPixelData, &d[c], sizeof(float) * 4);
+						r = texPixelData[0];
+						g = texPixelData[1];
+						b = texPixelData[2];
 						a = 1.0f;// texPixelData[3];
+						//r = d[c+0];
+						//g = d[c+1];
+						//b = d[c+2];
+						//a = 1.0f;// texPixelData[3];
 					}
-					else
-					{
-						int hh = 0;
-						hh++;
-					}
+
 				}
 				else
 				{
