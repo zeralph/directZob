@@ -122,7 +122,7 @@ int main()
 	mfb_mouse_scroll_callback(window, mouse_scroll);
 
 	m_directZob.Init(false);
-	std::string path = "C:\\_GIT\\directZob\\resources\\";
+	std::string path = "resources/";
 	std::string file = "wow.xml";
 	file = "fbx.xml";
 	m_directZob.LoadScene(path, file);
