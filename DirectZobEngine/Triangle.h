@@ -55,30 +55,5 @@ public:
 		//lb = 0.5f;
 		//lc = 0.5f;
 	}
-
-	inline void Copy(const Triangle* t)
-	{
-		va->Copy(t->va);
-		vb->Copy(t->vb);
-		vc->Copy(t->vc);
-		pa->Copy(t->pa);
-		pb->Copy(t->pb);
-		pc->Copy(t->pc);
-		na->Copy(t->na);
-		nb->Copy(t->nb);
-		nc->Copy(t->nc);
-		n->Copy(t->n);
-		ua->Copy(t->ua);
-		ub->Copy(t->ub);
-		uc->Copy(t->uc);
-		material = t->material;
-		area = t->area;
-		owner = t->owner;
-		lb = t->lb;
-		la = t->la;
-		lc = t->lc;
-		options = t->options;
-		draw = t->draw;
-	}
 };
 

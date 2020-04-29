@@ -43,7 +43,6 @@ private:
 	void CreateTriangles(const std::vector<std::string>* line, std::vector<Triangle>* t, size_t& tArrayIdx, const Material* tex);
 	void LoadOBJ(const std::string& fullPath);
 	void LoadFbx(const std::string& fullPath);
-	const Material* LoadFbxMaterial(fbxsdk::FbxMesh* mesh);
 	void FbxMultT(FbxNode* node, FbxVector4 &vector);
 	inline void ReinitVertices();
 	inline bool RejectTriangle(const Triangle* t, const float znear, const float zfar, const float width, const float height);

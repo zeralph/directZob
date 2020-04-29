@@ -446,14 +446,10 @@ void Engine::QueueTriangle(const Triangle* t)
 		uint j = m_rasterNbTriangleQueues[i];
 		if (j < m_triangleQueueSize)
 		{
-			m_rasterTriangleQueues[i][j].Copy(t);
+			memcpy(&m_rasterTriangleQueues[i][j], t, sizeof(Triangle));
+			//m_rasterTriangleQueues[i][j].Copy(t);
 			m_rasterNbTriangleQueues[i]++;
 			m_drawnTriangles++;
-		}
-		else
-		{
-			int oo = 0;
-			oo++;
 		}
 		m_sceneTriangles++;
 	}
