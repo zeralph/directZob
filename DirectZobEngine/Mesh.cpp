@@ -36,11 +36,12 @@ Mesh::Mesh(std::string& name, std::string& path, std::string& file)
 	}
 }
 
-Mesh::Mesh(std::string &parentName, fbxsdk::FbxMesh* mesh)
+Mesh::Mesh(std::string &parentName, std::string& path, fbxsdk::FbxMesh* mesh)
 {
 	if (mesh)
 	{
 		char buf[256];
+		m_path = path;
 		m_name = parentName+"."+mesh->GetName();
 		m_nbVertices += mesh->GetPolygonVertexCount();
 		_snprintf_s(buf, 256, "Load sub mesh %s, %i vertices", mesh->GetName(), m_nbVertices);
@@ -196,7 +197,7 @@ void Mesh::LoadFbx(const std::string& fullPath)
 	DirectZob::LogInfo(buf);
 	FbxManager* fbxManag = DirectZob::GetInstance()->GetMeshManager()->GetFbxManager();
 	FbxImporter* importer = FbxImporter::Create(fbxManag, "");
-	importer->SetEmbeddingExtractionFolder("C:\\_GIT\\directZob\\resources\\test");
+	//importer->SetEmbeddingExtractionFolder("C:\\_GIT\\directZob\\resources\\test");
 	if (importer->Initialize(fullPath.c_str(), -1, fbxManag->GetIOSettings()))
 	{
 		FbxScene* lScene = FbxScene::Create(fbxManag, "myScene");
@@ -213,7 +214,7 @@ void Mesh::LoadFbx(const std::string& fullPath)
 		for (int i = 0; i < gc; i++)
 		{
 			FbxMesh* mesh = (FbxMesh*)lScene->GetGeometry(i);
-			Mesh* m = new Mesh(m_name, mesh);
+			Mesh* m = new Mesh(m_name, m_path, mesh);
 			m_subMeshes.push_back(m);
 		}
 	}
@@ -299,12 +300,12 @@ const Material* Mesh::LoadFbxMaterial(fbxsdk::FbxMesh* mesh)
 					prop = material->FindProperty(fbxsdk::FbxSurfaceMaterial::sSpecularFactor);
 					f = prop.Get<FbxDouble>();
 					Vector3 ambient;
-					//texture_name = "C:\\_GIT\\directZob\\resources\\earth_256.png";
-					char buffer[256];
-					const char* resourcePath = "C:\\_GIT\\directZob\\resources\\";
-					_snprintf_s(buffer, 256, "%s%s", resourcePath, texture_name2);
-					//_snprintf_s(buffer, 256, "%s%s", resourcePath, "artefact.tga");
-					finalMaterial = materialMgr->LoadMaterial(matName, &ambient, &diffuse, buffer);
+					std::string texFullPath = "";
+					if (texture_name2)
+					{
+						texFullPath = m_path + std::string(texture_name2);
+					}
+					finalMaterial = materialMgr->LoadMaterial(matName, &ambient, &diffuse, texFullPath);
 				}
 			}
 		}
@@ -385,7 +386,7 @@ void Mesh::LoadOBJ(const std::string& fullPath)
 			SplitEntry(&line, &v, ' ');
 			if (v.size() == 2)
 			{
-				DirectZob::GetInstance()->GetMaterialManager()->LoadMaterials(m_path, v[1]);
+				DirectZob::GetInstance()->GetMaterialManager()->LoadOBJMaterials(m_path, v[1]);
 			}
 		}
 	}
