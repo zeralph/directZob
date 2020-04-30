@@ -23,6 +23,8 @@ public:
 	const float GetFogDensity() const { return m_fogDensity; }
 	const FogType GetFogType() const { return m_fogType; }
 	void RemoveLight(Light* l);
+	const bool EnableLighting() const  { return m_lightingEnabled; }
+	void EnableLighting(bool b) { m_lightingEnabled = b; }
 	void UnloadAll();
 private:
 	FogType m_fogType;
@@ -33,4 +35,5 @@ private:
 	Vector3 m_fogColor;
 	float m_fogDistance;
 	float m_fogDensity;
+	bool m_lightingEnabled = true;
 };

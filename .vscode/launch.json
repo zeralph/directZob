@@ -6,14 +6,18 @@
     "configurations": [
         
         {
-            "name": "g++ - Build and run debug",
+            "name": "Build and run debug",
             "type": "cppdbg",
             "request": "launch",
             "program": "/home/ralph/directZob/DirectZobExe",
             "args": [ 
                 "--bench",
                 "--scene",
-                "./resources/fbx.xml"
+                "./resources/fbx.xml",
+                "--width",
+                "640",
+                "--height",
+                "400"
             ],
             "stopAtEntry": false,
             "cwd": "/home/ralph/directZob/",
@@ -27,17 +31,21 @@
                     "ignoreFailures": true
                 }
             ],
-            "preLaunchTask": "g++ build debug",
+            "preLaunchTask": "build debug",
             "miDebuggerPath": "/usr/bin/gdb"
         },
         {
-            "name": "g++ - build and run release",
+            "name": "Build and run release",
             "request": "launch",
             "program": "/home/ralph/directZob/DirectZobExe",
             "args": [
                 "--bench",
                 "--scene",
-                "./resources/fbx.xml"
+                "./resources/fbx.xml",
+                "--width",
+                "640",
+                "--height",
+                "400"
             ],
             "stopAtEntry": false,
             "cwd": "/home/ralph/directZob/",
@@ -52,7 +60,7 @@
                     "ignoreFailures": true
                 }
             ],
-            "preLaunchTask": "g++ build release",
+            "preLaunchTask": "build release",
             "miDebuggerPath": "/usr/bin/gdb"
         }
     ]

@@ -74,7 +74,14 @@ Light* LightManager::GetLight(const std::string& name) const
 
 const std::vector<Light*>* LightManager::GetActiveLights() const
 {
-	return &m_lights;
+	if(m_lightingEnabled)
+	{
+		return &m_lights;
+	}
+	else
+	{
+		return NULL;
+	}
 	/*
 	if (m_lights.size() > 0)
 	{

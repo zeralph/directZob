@@ -35,26 +35,23 @@ void keyboard(struct Window* window, Key key, KeyMod mod, bool isPressed) {
 		if (key == KB_KEY_ESCAPE) {
 			mfb_close(window);
 		}
-		else if (key == KB_KEY_F1)
+		else if (key == KB_KEY_Z)
 		{
-			//m_curCam = m_FPSCam;
-		}
-		else if (key == KB_KEY_F2)
-		{
-			//m_curCam = m_freeCam;
-		}
-		else if (key == KB_KEY_C)
-		{
-			//m_engine->ToggleZbufferOutput();
+			m_directZob.GetEngine()->ToggleZbufferOutput();
 		}
 		else if (key == KB_KEY_S)
 		{
-			//g_bShowMeshes = !g_bShowMeshes;
+			m_directZob.GetEngine()->UseScanline(!m_directZob.GetEngine()->UseScanline());
 		}
-		else if (key == KB_KEY_G)
+		else if (key == KB_KEY_P)
 		{
-			//g_bShowGrid = !g_bShowGrid;
+			bPause = !bPause;
 		}
+		else if (key == KB_KEY_L)
+		{
+			const bool  b = m_directZob.GetLightManager()->EnableLighting();
+			m_directZob.GetLightManager()->EnableLighting(!b);
+		}		
 		//m_curCam->OnKeyboardInput(key, isPressed);
 	}
 }
@@ -63,14 +60,6 @@ void char_input(struct Window* window, unsigned int charCode) {
 	const char* window_title = "";
 	if (window) {
 		window_title = (const char*)mfb_get_user_data(window);
-	}
-	if (charCode == 's' || charCode == 'S')
-	{
-		m_directZob.GetEngine()->UseScanline(!m_directZob.GetEngine()->UseScanline());
-	}
-	if (charCode == 'p' || charCode == 'P')
-	{
-		bPause = !bPause;
 	}
 	fprintf(stdout, "%s > charCode: %d\n", window_title, charCode);
 }
@@ -247,7 +236,7 @@ int main(int argc, char* argv[])
 	m_directZob.GetEngine()->ShowBBoxes(false);
 	m_directZob.GetEngine()->ShowNormals(false);
 	m_directZob.GetEngine()->ShowGrid(false);
-	m_directZob.GetEngine()->UseScanline(false);
+	m_directZob.GetEngine()->UseScanline(true);
 	//m_directZob.GetEngine()->GetBufferData()->zFar = 70.0f;
 	//m_directZob.GetZobObjectManager()->GetZobObject("fbx_example")->SetRotation(0, 90, 0);
 	for (;;)
