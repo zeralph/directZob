@@ -247,8 +247,8 @@ int main(int argc, char* argv[])
 	m_directZob.GetEngine()->ShowBBoxes(false);
 	m_directZob.GetEngine()->ShowNormals(false);
 	m_directZob.GetEngine()->ShowGrid(false);
-	m_directZob.GetEngine()->UseScanline(true);
-	m_directZob.GetEngine()->GetBufferData()->zFar = 70.0f;
+	m_directZob.GetEngine()->UseScanline(false);
+	//m_directZob.GetEngine()->GetBufferData()->zFar = 70.0f;
 	//m_directZob.GetZobObjectManager()->GetZobObject("fbx_example")->SetRotation(0, 90, 0);
 	for (;;)
 	{

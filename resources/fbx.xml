@@ -7,8 +7,8 @@
 			<AmbientColor r="50" g="50" b="50"/>
 			<FogColor r="63" g="149" b="255" />
 			<ClearColor r="63" g="149" b="255" />
-			<FogDensity>5</FogDensity>
-			<FogDistance>60</FogDistance>
+			<FogDensity>60</FogDensity>
+			<FogDistance>1</FogDistance>
 			<FogType>exp2</FogType>			
 		</Globals>
         <ZobObject name="fbx_example">

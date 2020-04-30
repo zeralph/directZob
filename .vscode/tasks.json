@@ -6,12 +6,12 @@
         {
             "label": "g++ build debug",
             "type": "shell",
-            "command": "/home/ralph/directZob/buildAndRunLinux.sh Debug"
+            "command": "/home/ralph/directZob/buildLinux.sh Debug"
         },
         {
             "label": "g++ build release",
             "type": "shell",
-            "command": "/home/ralph/directZob/buildAndRunLinux.sh Release"
+            "command": "/home/ralph/directZob/buildLinux.sh Release"
         }
     ]
 }

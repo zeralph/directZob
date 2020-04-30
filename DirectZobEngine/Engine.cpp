@@ -190,8 +190,12 @@ void Engine::ClearBuffer(const Color* color)
 	//v = cc.GetRawValue();
 	if (!m_scaneLine)
 	{
-		memset(m_buffer, v, sizeof(uint) * m_bufferData.width * m_bufferData.height);
-		memset(m_zBuffer, -1.0f, sizeof(float) * m_bufferData.width * m_bufferData.height);
+		//memset(m_zBuffer, 0, sizeof(float) * m_bufferData.width * m_bufferData.height);
+		for (int i = 0; i < m_bufferData.width * m_bufferData.height; i++)
+		{
+			m_zBuffer[i] = -1.0f;
+			m_buffer[i] = v;
+		}
 	}
 	else
 	{	
@@ -199,13 +203,12 @@ void Engine::ClearBuffer(const Color* color)
 		for (y; y < m_bufferData.height; y += 2)
 		{
 			int s = m_bufferData.width * y;
-			memset(&m_buffer[s], v, sizeof(uint) * m_bufferData.width);
-			memset(&m_zBuffer[s], -1.0f, sizeof(float) * m_bufferData.width);
+			for (int i = 0; i < m_bufferData.width; i++)
+			{
+				m_zBuffer[i+s] = -1.0f;
+				m_buffer[i+s] = v;
+			}
 		}
-	}
-	for (int i = 0; i < m_bufferData.width * m_bufferData.height; i++)
-	{
-		m_buffer[i] = v;
 	}
 	m_sceneTriangles = 0;
 	m_drawnTriangles = 0;

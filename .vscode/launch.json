@@ -4,12 +4,17 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+        
         {
             "name": "g++ - Build and run debug",
             "type": "cppdbg",
             "request": "launch",
             "program": "/home/ralph/directZob/DirectZobExe",
-            "args": [],
+            "args": [ 
+                "--bench",
+                "--scene",
+                "./resources/fbx.xml"
+            ],
             "stopAtEntry": false,
             "cwd": "/home/ralph/directZob/",
             "environment": [],
@@ -29,7 +34,11 @@
             "name": "g++ - build and run release",
             "request": "launch",
             "program": "/home/ralph/directZob/DirectZobExe",
-            "args": [],
+            "args": [
+                "--bench",
+                "--scene",
+                "./resources/fbx.xml"
+            ],
             "stopAtEntry": false,
             "cwd": "/home/ralph/directZob/",
             "environment": [],
