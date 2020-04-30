@@ -186,19 +186,27 @@ void Engine::ClearBuffer(const Color* color)
 {
 	m_tick = clock();
 	uint v = color->GetRawValue();
+	//Color cc = Color(63, 149, 255, 255);
+	//v = cc.GetRawValue();
+	if (!m_scaneLine)
+	{
+		memset(m_buffer, v, sizeof(uint) * m_bufferData.width * m_bufferData.height);
+		memset(m_zBuffer, -1.0f, sizeof(float) * m_bufferData.width * m_bufferData.height);
+	}
+	else
+	{	
+		int y = (m_currentFrame) % 2;
+		for (y; y < m_bufferData.height; y += 2)
+		{
+			int s = m_bufferData.width * y;
+			memset(&m_buffer[s], v, sizeof(uint) * m_bufferData.width);
+			memset(&m_zBuffer[s], -1.0f, sizeof(float) * m_bufferData.width);
+		}
+	}
 	for (int i = 0; i < m_bufferData.width * m_bufferData.height; i++)
 	{
 		m_buffer[i] = v;
-		m_zBuffer[i] = -1.0f;
-//		m_oBuffer[i] = 0;
 	}
-	
-	/*for (int i = 0; i < m_nbRasterizers; i++)
-	{
-		//m_rasterTriangleQueues[i].clear();
-		m_rasterLineQueues[i].clear();
-		m_rasterNbTriangleQueues[i] = 0;
-	}*/
 	m_sceneTriangles = 0;
 	m_drawnTriangles = 0;
 }
@@ -212,7 +220,7 @@ int Engine::StartDrawingScene()
 	m_drawTick = clock();
 	for (int i = 0; i < m_nbRasterizers; i++)
 	{
-		m_rasterizers[i]->Start(m_rasterTriangleQueues[i], m_rasterNbTriangleQueues[i], &m_rasterLineQueues[i], m_wireFrame);
+		m_rasterizers[i]->Start(m_rasterTriangleQueues[i], m_rasterNbTriangleQueues[i], &m_rasterLineQueues[i], m_wireFrame, m_scaneLine, m_currentFrame % 2);
 
 	}
 	return 0;

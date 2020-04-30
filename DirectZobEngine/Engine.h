@@ -76,11 +76,15 @@ namespace Core
 		inline const float GetZFar() { return m_zFar; }
 		inline const ulong GetNbPixels() { return m_nbPixels; }
 		inline void ShowGrid(bool b) { m_showGrid = b; }
+		inline void ShowBBoxes(bool b) { m_showBBoxes = b; }
 		inline void WireFrame(bool b) { m_wireFrame = b; }
 		inline void ShowNormals(bool b) { m_showNormals = b; }
 		inline bool ShowGrid() { return m_showGrid; }
 		inline bool WireFrame() { return m_wireFrame; }
 		inline bool ShowNormals() { return m_showNormals; }
+		inline bool ShowBBoxes() { return m_showBBoxes; }
+		inline void UseScanline(bool b) { m_scaneLine = b; }
+		inline const bool UseScanline() { return m_scaneLine; }
 		uint GetObjectIdAtCoords(uint x, uint y);
 		const CullMode GetCullMode() const { return m_cullMode; }
 		void SetCullMode(const CullMode c) { m_cullMode = c; }
@@ -120,8 +124,10 @@ namespace Core
 		ulong m_nbPixels;
 		volatile bool m_started = false;
 		bool m_wireFrame = false;
+		bool m_scaneLine = false;
 		bool m_showNormals = false;
 		bool m_showGrid = true;
+		bool m_showBBoxes = true;
 		RenderOutput m_renderOutput;
 		CullMode m_cullMode;
 

@@ -439,7 +439,10 @@ void Mesh::DrawBoundingBox(const Matrix4x4& modelMatrix, const Matrix4x4& rotati
 
 void Mesh::Draw(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions options)
 {
-	DrawBoundingBox(modelMatrix, rotationMatrix, camera, engine, ownerId, options);
+	if (engine->ShowBBoxes())
+	{
+		DrawBoundingBox(modelMatrix, rotationMatrix, camera, engine, ownerId, options);
+	}
 	ReinitVertices();
 	BufferData* bData = engine->GetBufferData();
 	Vector2 a, b, c, uva, uvb, uvc;

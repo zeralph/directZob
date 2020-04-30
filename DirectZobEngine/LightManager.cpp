@@ -10,21 +10,6 @@ LightManager::LightManager()
 	m_lights.clear();
 	m_fogDensity = 2.0f;
 	m_fogType = FogType::FogType_Exp;
-	
-	Vector3 c = Vector3(94.5f / 255.0f, 85.5f / 255.0f, 64.3f / 255.0f);
-/*
-	std::string l = "lightRed";
-	c = Vector3(1.0f, 0.0f, 0.0f);
-	CreatePointLight(l, Vector3(50, 0, 0), c, 1.0f, 500, nullptr);
-
-	l = "lightGreen";
-	c = Vector3(0.0f, 1.0f, 0.0f);
-	CreatePointLight(l, Vector3(0, 50, 0), c, 1.0f, 500, nullptr);
-
-	l = "lightBlue";
-	c = Vector3(0.0f, 0.0f, 1.0f);
-	CreatePointLight(l, Vector3(0, 0, 50), c, 1.0f, 500, nullptr);
-*/
 }
 
 LightManager::~LightManager()

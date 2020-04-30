@@ -5,6 +5,7 @@
 DirectZob m_directZob;
 static int m_mouseLastX;
 static int m_mouseLastY;
+bool bPause = false;
 
 void active(struct Window* window, bool isActive) {
 	const char* window_title = "";
@@ -62,6 +63,14 @@ void char_input(struct Window* window, unsigned int charCode) {
 	const char* window_title = "";
 	if (window) {
 		window_title = (const char*)mfb_get_user_data(window);
+	}
+	if (charCode == 's' || charCode == 'S')
+	{
+		m_directZob.GetEngine()->UseScanline(!m_directZob.GetEngine()->UseScanline());
+	}
+	if (charCode == 'p' || charCode == 'P')
+	{
+		bPause = !bPause;
 	}
 	fprintf(stdout, "%s > charCode: %d\n", window_title, charCode);
 }
@@ -235,6 +244,11 @@ int main(int argc, char* argv[])
 	float benchRender = 0.0f;
 	float benchGeom = 0.0f;
 	ulong frames = 0;
+	m_directZob.GetEngine()->ShowBBoxes(false);
+	m_directZob.GetEngine()->ShowNormals(false);
+	m_directZob.GetEngine()->ShowGrid(false);
+	m_directZob.GetEngine()->UseScanline(true);
+	m_directZob.GetEngine()->GetBufferData()->zFar = 70.0f;
 	//m_directZob.GetZobObjectManager()->GetZobObject("fbx_example")->SetRotation(0, 90, 0);
 	for (;;)
 	{
@@ -243,7 +257,7 @@ int main(int argc, char* argv[])
 			m_directZob.GetCameraManager()->GetCurrentCamera()->SetLookAt(&camPos, &camTo, &camUp);
 			Light* red = m_directZob.GetLightManager()->GetLight("red");
 			Light* blue = m_directZob.GetLightManager()->GetLight("blue");
-			Light* green= m_directZob.GetLightManager()->GetLight("green");
+			Light* green = m_directZob.GetLightManager()->GetLight("green");
 			//blue->SetActive(false);
 			//green->SetActive(false);
 			if (red->GetTransform().z >= 110.0f)
@@ -252,23 +266,26 @@ int main(int argc, char* argv[])
 			}
 			else
 			{
-				red->SetTranslation(red->GetTransform().x, 2, red->GetTransform().z+to);
+				red->SetTranslation(red->GetTransform().x, 2, red->GetTransform().z + to);
 			}
-			
+
 		}
 		else
 		{
 			m_directZob.GetZobObjectManager()->GetRootObject()->SetRotation(0, rot, 0);
 		}
-		camPos.z += to;
-		camTo.z += to;
-		if (camPos.z >= 70.0f)
+		if (!bPause)
 		{
-			camPos.z = 0.0f;
-			camTo.z = 1.0f;
-			if (bBench)
+			camPos.z += to;
+			camTo.z += to;
+			if (camPos.z >= 70.0f)
 			{
-//				break;
+				camPos.z = 0.0f;
+				camTo.z = 1.0f;
+				if (bBench)
+				{
+					//				break;
+				}
 			}
 		}
 		m_directZob.RunAFrame();

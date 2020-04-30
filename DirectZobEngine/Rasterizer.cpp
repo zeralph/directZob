@@ -41,13 +41,15 @@ void Rasterizer::Run()
 	}
 }
 
-void Rasterizer::Start(const Triangle* triangles, const uint nbTriangles, const std::vector<Line3D>* lines, const bool wireFrame)
+void Rasterizer::Start(const Triangle* triangles, const uint nbTriangles, const std::vector<Line3D>* lines, const bool wireFrame, const bool scanline, const bool bEvenFrame)
 {
 	m_lines = lines;
 	m_triangles = triangles;
 	m_nbTriangles = nbTriangles;
 	m_wireFrame = wireFrame;
 	m_started = true;
+	m_bEvenFrame = bEvenFrame ? 1 : 0;
+	m_scanline = scanline;
 }
 
 Rasterizer::~Rasterizer()
@@ -135,31 +137,34 @@ void Rasterizer::DrawLine(const Line3D* l) const
 	{
 		if (x >= 0 && x < m_width && y >= m_startHeight && y < m_height)
 		{
-			if (steep)
+			if (RenderLine(y))
 			{
-				k = x * m_bufferData->width + y;
-				if (k < m_bufferData->size)
+				if (steep)
 				{
-					zf = m_bufferData->zBuffer[k];
-					zRatio = (z - m_bufferData->zNear) / (m_bufferData->zFar - m_bufferData->zNear);
-					if (zRatio >= 0.0f && (zf < 0.0f || zRatio < zf))
+					k = x * m_bufferData->width + y;
+					if (k < m_bufferData->size)
 					{
-						buffer[k] = l->c;
-						m_bufferData->zBuffer[k] = zRatio;
+						zf = m_bufferData->zBuffer[k];
+						zRatio = (z - m_bufferData->zNear) / (m_bufferData->zFar - m_bufferData->zNear);
+						if (zRatio >= 0.0f && (zf < 0.0f || zRatio < zf))
+						{
+							buffer[k] = l->c;
+							m_bufferData->zBuffer[k] = zRatio;
+						}
 					}
 				}
-			}
-			else
-			{
-				k = y * m_bufferData->width + x;
-				if (k < m_bufferData->size)
+				else
 				{
-					zf = m_bufferData->zBuffer[k];
-					zRatio = (z - m_bufferData->zNear) / (m_bufferData->zFar - m_bufferData->zNear);
-					if (zRatio >= 0.0f && (zf < 0.0f || zRatio < zf))
+					k = y * m_bufferData->width + x;
+					if (k < m_bufferData->size)
 					{
-						buffer[k] = l->c;
-						m_bufferData->zBuffer[k] = zRatio;
+						zf = m_bufferData->zBuffer[k];
+						zRatio = (z - m_bufferData->zNear) / (m_bufferData->zFar - m_bufferData->zNear);
+						if (zRatio >= 0.0f && (zf < 0.0f || zRatio < zf))
+						{
+							buffer[k] = l->c;
+							m_bufferData->zBuffer[k] = zRatio;
+						}
 					}
 				}
 			}
@@ -221,7 +226,7 @@ void Rasterizer::FillBottomFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, 
 	for (int scanlineY = v1->y; scanlineY <= v2->y; scanlineY++)
 	{
 		int k;
-		if (scanlineY >= m_startHeight && scanlineY < m_height)
+		if (RenderLine(scanlineY) && scanlineY >= m_startHeight && scanlineY < m_height)
 		{
 			if (curx1 != curx2)
 			{
@@ -272,7 +277,7 @@ void Rasterizer::FillTopFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, con
 	float a, b;
 	for (int scanlineY = v3->y; scanlineY > v1->y; scanlineY--)
 	{
-		if (scanlineY >= m_startHeight && scanlineY < m_height)
+		if (RenderLine(scanlineY) && scanlineY >= m_startHeight && scanlineY < m_height)
 		{
 			if (curx1 != curx2)
 			{
@@ -319,7 +324,7 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 	float w0 = edgeFunction(t->vb, t->vc, p);
 	float w1 = edgeFunction(t->vc, t->va, p);*/
 
-	float w0, w1, w2, su, tu, cl, sl, al, r, g, b, a, z, zRatio, fr, fg, fb, lightPower;
+	float w0, w1, w2, su, tu, cl, sl, r, g, b, a, z, zRatio, fr, fg, fb, lightPower;
 	float texPixelData[4];
 	int c, k;
 	Vector3 normal, lightDir;
@@ -425,7 +430,6 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 						lightDir.Normalize();
 						static int specularIntensity = 50;
 						static float ambientIntensity = 0.4f;
-						al = computeAmbient(ambientIntensity);
 						cl = computeLighting(&normal, &lightDir);
 						sl = computeSpecular(&normal, &lightDir, &m_camDir, cl, specularIntensity);
 						if (lighting == RenderOptions::eLightMode_none)
