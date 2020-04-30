@@ -1,7 +1,6 @@
 //#define LINUX 
 #include "DirectZob.h"
-
-
+#include <fstream>
 
 DirectZob m_directZob;
 static int m_mouseLastX;
@@ -107,12 +106,61 @@ void mouse_scroll(struct Window* window, KeyMod mod, float deltaX, float deltaY)
 	//m_curCam->OnMouseScroll(deltaY);
 }
 
-int main()
+int main(int argc, char* argv[])
 {
+	bool bBench = false;
+	std::string scenePath = "";
+	int width = 640;
+	int height = 480;
+	if (argc < 2) {
+		std::cerr << "Usage: " << argv[0] << " --scene <scene to load>" << std::endl;
+		std::cerr << "Additional options : " << std::endl;
+		std::cerr << "\t--bench : run a becnhmark" << std::endl;
+		return 1;
+	}
+	int i = 0;
+	while( i < argc) 
+	{
+		if (std::string(argv[i]) == "--scene") 
+		{
+			if (i + 1 < argc && argv[i+1][0] != '-')
+			{
+				i++;
+				scenePath = argv[i];
+			}
+			else 
+			{ 
+				std::cerr << "--scene option requires one argument." << std::endl;
+				return 1;
+			}
+		}
+		else if(std::string(argv[i]) == "--bench")
+		{
+			bBench = true;
+		}
+		i++;
+	}
+
+	std::ifstream f(scenePath.c_str());
+	if (!f.good())
+	{
+		std::cerr << "Cannot open " << scenePath << " : File not found or not accessible."<< std::endl;
+		return 1;
+	}
+
+	std::size_t found = scenePath.rfind('\\');
+	if (found == std::string::npos)
+	{
+		std::cerr << "cannot parse path to file " << scenePath << std::endl;
+		return 1;
+	}
+	std::string path = scenePath.substr(0,found+1);
+	std::string file = scenePath.substr(found + 1, scenePath.length() - found - 1);
+
 	m_mouseLastX = -1;
 	m_mouseLastY = -1;
 	printf("Init Window\n");
-	struct Window* window = mfb_open_ex("DirectZob", WIDTH, HEIGHT, WF_RESIZABLE);
+	struct Window* window = mfb_open_ex("DirectZob", width, height, WF_RESIZABLE);
 	mfb_active_callback(window, active);
 	mfb_resize_callback(window, resize);
 	mfb_keyboard_callback(window, keyboard);
@@ -121,20 +169,45 @@ int main()
 	mfb_mouse_move_callback(window, mouse_move);
 	mfb_mouse_scroll_callback(window, mouse_scroll);
 
-	m_directZob.Init(false);
-	std::string path = "resources/";
-	std::string file = "wow.xml";
-	file = "fbx.xml";
+	m_directZob.Init(width, height, false);
+
 	m_directZob.LoadScene(path, file);
 	float rot = 0.0f;
+	float to = 0.5f;
     printf("Start rendering\n");
+	Vector3 camPos = Vector3(0, 1, 0);
+	Vector3 camTo = Vector3(0, 1, 1);
+	Vector3 camUp = Vector3(0, 1, 0);
+	float benchFps = 0.0f;
+	float benchRender = 0.0f;
+	float benchGeom = 0.0f;
+	ulong frames = 0;
 	for (;;)
 	{
-		//m_directZob.GetZobObjectManager()->GetRootObject()->SetTranslation(0, rot, 0);
-		m_directZob.GetZobObjectManager()->GetRootObject()->SetRotation(0, rot, 0);
-		//m_directZob.GetZobObjectManager()->GetZobObject("terrain")->SetRotation(0, rot, 0);
-		//m_directZob.GetZobObjectManager()->GetZobObject("skull")->SetRotation(0, -rot, 90);
+		if (bBench)
+		{
+			m_directZob.GetCameraManager()->GetCurrentCamera()->SetLookAt(&camPos, &camTo, &camUp);
+		}
+		else
+		{
+			m_directZob.GetZobObjectManager()->GetRootObject()->SetRotation(0, rot, 0);
+		}
+		camPos.z += to;
+		camTo.z += to;
+		if (camPos.z >= 70.0f)
+		{
+			camPos.z = 0.0f;
+			camTo.z = 1.0f;
+			if (bBench)
+			{
+//				break;
+			}
+		}
 		m_directZob.RunAFrame();
+		benchFps += m_directZob.GetEngine()->GetFps();
+		benchRender += m_directZob.GetEngine()->GetRenderTime();
+		benchGeom += m_directZob.GetEngine()->GetGeometryTime();
+		frames++;
 		int state = mfb_update(window, (void*)m_directZob.GetBufferData() );
 		if (state < 0)
 		{
@@ -146,7 +219,13 @@ int main()
     m_directZob.NewScene();
     printf("Exiting\n");
 	mfb_close(window);
-
+	if (bBench)
+	{
+		float f = benchFps / (float)frames;
+		float r = benchRender / (float)frames;
+		float g = benchGeom / (float)frames;
+		std::cout << "\n\t\tBenchmark:\nRender\tGeom\tFps\n" << r <<"\t"<<g<<"\t"<<f<< std::endl;
+	}
 	return 0;
 }
 

@@ -60,17 +60,23 @@ void DirectZob::NewScene()
 	}
 }
 
+void DirectZob::Unload()
+{
+	SceneLoader::UnloadScene();
+	DirectZob::GetInstance()->GetEngine()->Stop();
+}
+
 bool DirectZob::CanFastSave()
 {
 	return SceneLoader::CanFastSave();
 }
 
-void DirectZob::Init(bool bEditorMode)
+void DirectZob::Init(int width, int height, bool bEditorMode)
 {
 	g_isInEditorMode = bEditorMode;
 	m_events = new Events();
 	DirectZob::LogInfo("Init engine");
-	m_engine = new Engine(WIDTH, HEIGHT, m_events);
+	m_engine = new Engine(width, height, m_events);
 	m_cameraManager = new CameraManager();
 	m_lightManager = new LightManager();
 	m_materialManager = new MaterialManager();

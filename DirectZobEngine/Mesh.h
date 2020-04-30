@@ -38,14 +38,18 @@ public:
 	const std::string& GetFile() const { return m_file; }
 
 private:
-	Mesh(std::string& parentName, fbxsdk::FbxMesh* mesh);
+	Mesh(std::string& parentName, std::string& path, fbxsdk::FbxMesh* mesh);
 	void SplitEntry(const std::string* s, std::vector<std::string>* v, const char delim);
 	void CreateTriangles(const std::vector<std::string>* line, std::vector<Triangle>* t, size_t& tArrayIdx, const Material* tex);
 	void LoadOBJ(const std::string& fullPath);
 	void LoadFbx(const std::string& fullPath);
-	const Material* LoadFbxMaterial(fbxsdk::FbxMesh* mesh);
 	void FbxMultT(FbxNode* node, FbxVector4 &vector);
-	inline void ReinitVertices();
+	inline void ReinitVertices()
+	{
+		memcpy(m_vertices, m_verticesData, sizeof(Vector3) * m_nbVertices);
+		memcpy(m_verticesNormals, m_verticesNormalsData, sizeof(Vector3) * m_nbNormals);
+		memcpy(m_trianglesNormals, m_trianglesNormalsData, sizeof(Vector3) * m_nbFaces);
+	};
 	inline bool RejectTriangle(const Triangle* t, const float znear, const float zfar, const float width, const float height);
 	std::vector<Mesh*> m_subMeshes;
 	uint m_nbVertices = 0;

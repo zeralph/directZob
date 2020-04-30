@@ -96,7 +96,8 @@ namespace Core
 		Triangle** m_rasterTriangleQueues;
 		long* m_rasterNbTriangleQueues;
 		std::vector<Line3D>* m_rasterLineQueues;
-		std::vector<Rasterizer*>* m_rasterizers;
+		//std::vector<Rasterizer*>* m_rasterizers;
+		Rasterizer** m_rasterizers;
 		uint m_nbRasterizers;
 		uint m_triangleQueueSize;
 		float m_zNear;
@@ -117,7 +118,7 @@ namespace Core
 		uint m_sceneTriangles;
 		uint m_drawnTriangles;
 		ulong m_nbPixels;
-		bool m_started = false;
+		volatile bool m_started = false;
 		bool m_wireFrame = false;
 		bool m_showNormals = false;
 		bool m_showGrid = true;

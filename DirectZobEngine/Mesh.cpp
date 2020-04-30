@@ -36,11 +36,12 @@ Mesh::Mesh(std::string& name, std::string& path, std::string& file)
 	}
 }
 
-Mesh::Mesh(std::string &parentName, fbxsdk::FbxMesh* mesh)
+Mesh::Mesh(std::string &parentName, std::string& path, fbxsdk::FbxMesh* mesh)
 {
 	if (mesh)
 	{
 		char buf[256];
+		m_path = path;
 		m_name = parentName+"."+mesh->GetName();
 		m_nbVertices += mesh->GetPolygonVertexCount();
 		_snprintf_s(buf, 256, "Load sub mesh %s, %i vertices", mesh->GetName(), m_nbVertices);
@@ -132,7 +133,7 @@ Mesh::Mesh(std::string &parentName, fbxsdk::FbxMesh* mesh)
 					vIdx++;
 				}
 
-				const Material* material = LoadFbxMaterial(mesh);
+				const Material* material = DirectZob::GetInstance()->GetMaterialManager()->LoadFbxMaterial(mesh, m_path);
 				Triangle t;
 				t.va = &m_vertices[startIdx];
 				t.vb = &m_vertices[startIdx + 1];
@@ -196,7 +197,7 @@ void Mesh::LoadFbx(const std::string& fullPath)
 	DirectZob::LogInfo(buf);
 	FbxManager* fbxManag = DirectZob::GetInstance()->GetMeshManager()->GetFbxManager();
 	FbxImporter* importer = FbxImporter::Create(fbxManag, "");
-	importer->SetEmbeddingExtractionFolder("C:\\_GIT\\directZob\\resources\\test");
+	//importer->SetEmbeddingExtractionFolder("C:\\_GIT\\directZob\\resources\\test");
 	if (importer->Initialize(fullPath.c_str(), -1, fbxManag->GetIOSettings()))
 	{
 		FbxScene* lScene = FbxScene::Create(fbxManag, "myScene");
@@ -213,103 +214,10 @@ void Mesh::LoadFbx(const std::string& fullPath)
 		for (int i = 0; i < gc; i++)
 		{
 			FbxMesh* mesh = (FbxMesh*)lScene->GetGeometry(i);
-			Mesh* m = new Mesh(m_name, mesh);
+			Mesh* m = new Mesh(m_name, m_path, mesh);
 			m_subMeshes.push_back(m);
 		}
 	}
-}
-
-const Material* Mesh::LoadFbxMaterial(fbxsdk::FbxMesh* mesh)
-{
-	const Material* finalMaterial = NULL;
-	MaterialManager* materialMgr = DirectZob::GetInstance()->GetMaterialManager();
-	int mcount = mesh->GetElementMaterialCount();
-	for (int index = 0; index < mcount; index++)
-	{
-		//fbxsdk::FbxGeometryElementMaterial* material = mesh->GetElementMaterial(0);
-		fbxsdk::FbxGeometryElementMaterial* gMaterial = mesh->GetElementMaterial(index);
-		if (gMaterial)
-		{
-			fbxsdk::FbxSurfaceMaterial* material = mesh->GetNode()->GetMaterial(gMaterial->GetIndexArray().GetAt(0));
-			int propCount = material->GetSrcPropertyCount();
-			//if (propCount > 0)
-			{
-				const char* matName = material->GetName();
-				finalMaterial = materialMgr->GetMaterial(matName);
-				if (finalMaterial)
-				{
-					return finalMaterial;
-				}
-				else
-				{
-					// This only gets the material of type sDiffuse, you probably need to traverse all Standard Material Property by its name to get all possible textures.
-					fbxsdk::FbxProperty prop = material->FindProperty(fbxsdk::FbxSurfaceMaterial::sDiffuse);
-					// Check if it's layeredtextures
-					FbxDouble3 c = prop.Get<FbxDouble3>();
-					Vector3 diffuse = Vector3(c[0], c[1], c[2]);
-					const char* texture_name = NULL;
-					const char* texture_name2 = NULL;
-					const char* texture_name3 = NULL;
-					int file_texture_count = prop.GetSrcObjectCount<fbxsdk::FbxFileTexture>();
-					if (file_texture_count > 0)
-					{
-						for (int j = 0; j < file_texture_count; j++)
-						{
-							FbxFileTexture* file_texture = FbxCast<fbxsdk::FbxFileTexture>(prop.GetSrcObject<FbxFileTexture>(j));
-							texture_name = file_texture->GetFileName();
-							texture_name2 = file_texture->GetRelativeFileName();
-							texture_name3 = file_texture->GetMediaName();
-						}
-					}
-					/*int layered_texture_count = prop.GetSrcObjectCount<fbxsdk::FbxLayeredTexture>();
-					if (layered_texture_count > 0)
-					{
-						for (int j = 0; j < layered_texture_count; j++)
-						{
-							FbxLayeredTexture* layered_texture = FbxCast<fbxsdk::FbxLayeredTexture>(prop.GetSrcObject<FbxLayeredTexture>(j));
-							int lcount = layered_texture->GetSrcObjectCount<fbxsdk::FbxTexture>();
-							for (int k = 0; k < lcount; k++)
-							{
-								FbxTexture* texture = FbxCast<fbxsdk::FbxTexture>(layered_texture->GetSrcObject<fbxsdk::FbxTexture>(k));
-								// Then, you can get all the properties of the texture, include its name
-								texture_name = texture->GetName();
-								//texture_name2 = texture->GetRelativeFileName();
-								//texture_name3 = texture->GetMediaName();
-							}
-						}
-					}
-					else
-					{
-						// Directly get textures
-						int texture_count = prop.GetSrcObjectCount<fbxsdk::FbxTexture>();
-						for (int j = 0; j < texture_count; j++)
-						{
-							const fbxsdk::FbxTexture* texture = FbxCast<fbxsdk::FbxTexture>(prop.GetSrcObject<fbxsdk::FbxTexture>(j));
-							//texture->FindSrcObject
-							// Then, you can get all the properties of the texture, include its name
-							texture_name = texture->GetName();
-							//texture_name2 = texture->GetRelativeFileName();
-							//texture_name3 = texture->GetMediaName();
-						}
-					}*/
-					float f;
-					prop = material->FindProperty(fbxsdk::FbxSurfaceMaterial::sDiffuseFactor);
-					f = prop.Get<FbxDouble>();
-					
-					prop = material->FindProperty(fbxsdk::FbxSurfaceMaterial::sSpecularFactor);
-					f = prop.Get<FbxDouble>();
-					Vector3 ambient;
-					//texture_name = "C:\\_GIT\\directZob\\resources\\earth_256.png";
-					char buffer[256];
-					const char* resourcePath = "C:\\_GIT\\directZob\\resources\\";
-					_snprintf_s(buffer, 256, "%s%s", resourcePath, texture_name2);
-					//_snprintf_s(buffer, 256, "%s%s", resourcePath, "artefact.tga");
-					finalMaterial = materialMgr->LoadMaterial(matName, &ambient, &diffuse, buffer);
-				}
-			}
-		}
-	}
-	return finalMaterial;
 }
 
 void Mesh::FbxMultT(FbxNode* node, FbxVector4 &vector) 
@@ -385,7 +293,7 @@ void Mesh::LoadOBJ(const std::string& fullPath)
 			SplitEntry(&line, &v, ' ');
 			if (v.size() == 2)
 			{
-				DirectZob::GetInstance()->GetMaterialManager()->LoadMaterials(m_path, v[1]);
+				DirectZob::GetInstance()->GetMaterialManager()->LoadOBJMaterials(m_path, v[1]);
 			}
 		}
 	}
@@ -502,13 +410,6 @@ void Mesh::SplitEntry(const std::string* s, std::vector<std::string>* v, const c
 	ReinitVertices();
 }*/
 
-void Mesh::ReinitVertices()
-{
-	memcpy(m_vertices, m_verticesData, sizeof(Vector3) * m_nbVertices);
-	memcpy(m_verticesNormals, m_verticesNormalsData, sizeof(Vector3) * m_nbNormals);
-	memcpy(m_trianglesNormals, m_trianglesNormalsData, sizeof(Vector3) * m_nbFaces);
-}
-
 void Mesh::DrawBoundingBox(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions options)
 {
 	Vector3 v0 = Vector3(m_minBouding.x, m_minBouding.y, m_minBouding.z);
@@ -624,7 +525,7 @@ void Mesh::Draw(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, c
 			//if (engine->GetCullMode() == Engine::None )// ( || t->area > sAreaMin && t->area < sAreaMax))
 			{
 				t->owner = ownerId;
-				t->ComputeLighting(&light);
+				//t->ComputeLighting(&light);
 				t->draw = true;
 				engine->QueueTriangle(t);
 				drawnFaces++;

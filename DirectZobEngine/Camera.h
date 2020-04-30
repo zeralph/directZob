@@ -20,7 +20,7 @@ public:
 	inline const Vector3* GetTarget() const { return &m_cameraTarget; }
 	inline const Vector3* GetForward() const { return &m_cameraFw; }
 	inline const std::string& GetName() const { return m_name; }
-
+	void SetLookAt(const Vector3* from, const Vector3* to, const Vector3* up);
 	void RotateAroundAxis(float dx, float dy);
 	void Move(float dx, float dy);
 	void Zoom(float z);
@@ -31,7 +31,7 @@ public:
 
 private:
 	void setProjectionMatrix(const float angleOfView, const float width, const float height, const float near, const float far);
-	void SetLookAt(const Vector3* from, const Vector3* to, const Vector3* tmp);
+	void UpdateLookAt();
 	void InitView();
 	void RecomputeVectors();
 
