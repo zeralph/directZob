@@ -96,7 +96,8 @@ namespace Core
 		Triangle** m_rasterTriangleQueues;
 		long* m_rasterNbTriangleQueues;
 		std::vector<Line3D>* m_rasterLineQueues;
-		std::vector<Rasterizer*>* m_rasterizers;
+		//std::vector<Rasterizer*>* m_rasterizers;
+		Rasterizer** m_rasterizers;
 		uint m_nbRasterizers;
 		uint m_triangleQueueSize;
 		float m_zNear;

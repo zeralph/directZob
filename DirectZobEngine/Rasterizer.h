@@ -32,7 +32,7 @@ public:
 	void Run();
 	void Render();
 	void Clear();
-	inline bool HasStarted() const { return m_started; };
+	inline bool HasStarted() const { return m_run && m_started; };
 
 private:
 
