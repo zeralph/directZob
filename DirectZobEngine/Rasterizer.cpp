@@ -413,32 +413,35 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 			for (std::vector<Light*>::const_iterator iter = m_lights->begin(); iter != m_lights->end(); iter++)
 			{
 				const Light* l = (*iter);
-				//lightDir = l->GetTransform() - t->va;
-				lightDir = tpos - l->GetTransform();// tpos;
-				lightPower = 1.0f - (lightDir.sqrtLength() / l->GetFallOffDistance());
-				lightPower = clamp2(lightPower, 0.0f, 1.0f) * l->GetIntensity();
-				if (lightPower == 0.0f)
+				if (l->IsActive())
 				{
-					break;
+					//lightDir = l->GetTransform() - t->va;
+					//Vector3 titi = l->GetWorldPosition();
+					lightDir = tpos - l->GetWorldPosition();// tpos;
+					lightPower = 1.0f - (lightDir.sqrtLength() / l->GetFallOffDistance());
+					lightPower = clamp2(lightPower, 0.0f, 1.0f) * l->GetIntensity();
+					if (lightPower > 0.0f)
+					{
+						lightDir.Normalize();
+						static int specularIntensity = 50;
+						static float ambientIntensity = 0.4f;
+						al = computeAmbient(ambientIntensity);
+						cl = computeLighting(&normal, &lightDir);
+						sl = computeSpecular(&normal, &lightDir, &m_camDir, cl, specularIntensity);
+						if (lighting == RenderOptions::eLightMode_none)
+						{
+							cl = 0.0f;
+							sl = 0.0f;
+						}
+						else if (lighting == RenderOptions::eLightMode_gouraud)
+						{
+							sl = 0.0f;
+						}
+						fr += r * (cl + sl) * l->GetColor()->x * lightPower;
+						fg += g * (cl + sl) * l->GetColor()->y * lightPower;
+						fb += b * (cl + sl) * l->GetColor()->z * lightPower;
+					}
 				}
-				lightDir.Normalize();
-				static int specularIntensity = 50;
-				static float ambientIntensity = 0.4f;
-				al = computeAmbient(ambientIntensity);
-				cl = computeLighting(&normal, &lightDir);
-				sl = computeSpecular(&normal, &lightDir, &m_camDir, cl, specularIntensity);
-				if (lighting == RenderOptions::eLightMode_none)
-				{
-					cl = 0.0f;
-					sl = 0.0f;
-				}
-				else if (lighting == RenderOptions::eLightMode_gouraud)
-				{
-					sl = 0.0f;
-				}
-				fr += r * (cl + sl) * l->GetColor()->x * lightPower;
-				fg += g * (cl + sl) * l->GetColor()->y * lightPower;
-				fb += b * (cl + sl) * l->GetColor()->z * lightPower;
 			}
 			fr += r * m_ambientColor->x;
 			fg += g * m_ambientColor->y;

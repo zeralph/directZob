@@ -75,6 +75,18 @@ Light* LightManager::CreatePointLight(std::string& name, Vector3 position, Vecto
 	return l;
 }
 
+Light* LightManager::GetLight(const std::string& name) const
+{
+	for (std::vector<Light*>::const_iterator iter = m_lights.begin(); iter != m_lights.end(); iter++)
+	{
+		if ((*iter)->GetName() == name)
+		{
+			return *iter;
+		}
+	}
+	return NULL;
+}
+
 const std::vector<Light*>* LightManager::GetActiveLights() const
 {
 	return &m_lights;

@@ -115,7 +115,9 @@ int main(int argc, char* argv[])
 	if (argc < 2) {
 		std::cerr << "Usage: " << argv[0] << " --scene <scene to load>" << std::endl;
 		std::cerr << "Additional options : " << std::endl;
-		std::cerr << "\t--bench : run a becnhmark" << std::endl;
+		std::cerr << "\t--bench  : run a benchmark" << std::endl;
+		std::cerr << "\t--width  : width" << std::endl;
+		std::cerr << "\t--height : height" << std::endl;
 		return 1;
 	}
 	int i = 0;
@@ -135,6 +137,52 @@ int main(int argc, char* argv[])
 			}
 		}
 		else if(std::string(argv[i]) == "--bench")
+		{
+			bBench = true;
+		}
+		else if (std::string(argv[i]) == "--width")
+		{
+			if (i + 1 < argc)
+			{
+				int w = strtol(argv[i + 1], NULL, 10);
+				if (w >= 0 && w <= 4096)
+				{
+					width = w;
+				}
+				else
+				{
+					std::cerr << "width must be between 1 and 4096 px." << std::endl;
+				}
+				i++;
+			}
+			else
+			{
+				std::cerr << "--width option requires one argument." << std::endl;
+				return 1;
+			}
+		}
+		else if (std::string(argv[i]) == "--height")
+		{
+			if (i + 1 < argc)
+			{
+				int h = strtol(argv[i + 1], NULL, 10);
+				if (h >= 0 && h <= 4096)
+				{
+					height = h;
+				}
+				else
+				{
+					std::cerr << "height must be between 1 and 4096 px." << std::endl;
+				}
+				i++;
+			}
+			else
+			{
+				std::cerr << "--height option requires one argument." << std::endl;
+				return 1;
+			}
+		}
+		else if (std::string(argv[i]) == "--height")
 		{
 			bBench = true;
 		}
@@ -180,18 +228,33 @@ int main(int argc, char* argv[])
 	float rot = 0.0f;
 	float to = 0.5f;
     printf("Start rendering\n");
-	Vector3 camPos = Vector3(0, 1, 0);
-	Vector3 camTo = Vector3(0, 1, 1);
+	Vector3 camPos = Vector3(0, 1, 20);
+	Vector3 camTo = Vector3(0, 1, 21);
 	Vector3 camUp = Vector3(0, 1, 0);
 	float benchFps = 0.0f;
 	float benchRender = 0.0f;
 	float benchGeom = 0.0f;
 	ulong frames = 0;
+	//m_directZob.GetZobObjectManager()->GetZobObject("fbx_example")->SetRotation(0, 90, 0);
 	for (;;)
 	{
 		if (bBench)
 		{
 			m_directZob.GetCameraManager()->GetCurrentCamera()->SetLookAt(&camPos, &camTo, &camUp);
+			Light* red = m_directZob.GetLightManager()->GetLight("red");
+			Light* blue = m_directZob.GetLightManager()->GetLight("blue");
+			Light* green= m_directZob.GetLightManager()->GetLight("green");
+			//blue->SetActive(false);
+			//green->SetActive(false);
+			if (red->GetTransform().z >= 110.0f)
+			{
+				red->SetTranslation(red->GetTransform().x, 2, -20);
+			}
+			else
+			{
+				red->SetTranslation(red->GetTransform().x, 2, red->GetTransform().z+to);
+			}
+			
 		}
 		else
 		{

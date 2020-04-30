@@ -1,0 +1,54 @@
+<root>
+    <Meshes>
+        <Mesh name="metric_plane" file="metric_plane.obj" />
+		<Mesh name="sphere" file="only_quad_sphere.fbx" />
+    </Meshes>
+    <Scene>
+		<Globals>
+			<AmbientColor r="150" g="150" b="150"/>
+			<FogColor r="200" g="200" b="200" />
+			<ClearColor r="200" g="200" b="200" />
+			<FogDensity>5</FogDensity>
+			<FogDistance>20</FogDistance>
+			<FogType>Exp2</FogType>			
+		</Globals>
+        <ZobObject name="metric_plane" type="mesh">
+            <Mesh>metric_plane</Mesh>
+            <Position x="0" y="0" z="0" />
+            <Rotation x="0" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+        </ZobObject>
+		<ZobObject name ="lightsNode" >
+		    <Position x="0" y="0" z="0" />
+            <Rotation x="0" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+			<ZobObject name ="green" type="pointlight">
+				<Rotation x="0" y="0" z="0" />
+				<Position x="-2" y="2" z="0" />
+				<Color r="00" g="255" b="00" />
+				<Intensity>2</Intensity>
+				<FallOffDistance>3</FallOffDistance>
+			</ZobObject>
+			<ZobObject name ="blue" type="pointlight">
+				<Rotation x="0" y="0" z="0" />
+				<Position x="2" y="2" z="0" />
+				<Color r="0" g="00" b="255" />
+				<Intensity>2</Intensity>
+				<FallOffDistance>3</FallOffDistance>
+			</ZobObject>
+			<ZobObject name ="red" type="pointlight">
+				<Rotation x="0" y="0" z="0" />
+				<Position x="0" y="2" z="2" />
+				<Color r="255" g="00" b="0" />
+				<Intensity>2</Intensity>
+				<FallOffDistance>3</FallOffDistance>
+			</ZobObject>
+			<ZobObject name ="sphere" type="mesh">
+				<Mesh>sphere</Mesh>
+				<Rotation x="0" y="0" z="0" />
+				<Position x="0" y="2" z="-2" />
+				<Scale x="1" y="1" z="1" />
+			</ZobObject>
+		</ZobObject>
+    </Scene>
+</root>

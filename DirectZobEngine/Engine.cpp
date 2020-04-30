@@ -16,7 +16,7 @@
 using namespace Core;
 Engine::Engine(int width, int height, Events* events)
 {
-	m_nbRasterizers = std::thread::hardware_concurrency() - 1;
+	m_nbRasterizers = std::thread::hardware_concurrency() -1;
 	if (m_nbRasterizers % 2 == 1)
 	{
 		m_nbRasterizers--;

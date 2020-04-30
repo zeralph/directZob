@@ -100,14 +100,6 @@ Mesh::Mesh(std::string &parentName, std::string& path, fbxsdk::FbxMesh* mesh)
 						mesh->GetPolygonVertexUV(j, k, uvsNames[0], uv, unmapped);
 						if (!unmapped)
 						{
-							/*if (uv[0] < 0.0f )
-							{
-								uv[0] = 1.0f-uv[0];
-							}
-							if (uv[1] < 0.0f)
-							{
-								uv[1] = 1.0f-uv[1];
-							}*/
 							m_uvs[vIdx] = Vector2(uv[0], uv[1]);
 						}
 						else
@@ -121,8 +113,8 @@ Mesh::Mesh(std::string &parentName, std::string& path, fbxsdk::FbxMesh* mesh)
 					}
 					if (mesh->GetPolygonVertexNormal(j, k, normal))
 					{
-						FbxMultT(mesh->GetNode(), normal);
-						normal.Normalize();
+						//FbxMultT(mesh->GetNode(), normal);
+						//normal.Normalize();
 						m_verticesNormals[vIdx] = Vector3(normal[0], normal[1], normal[2]);
 						//todo : compute normal
 					}
