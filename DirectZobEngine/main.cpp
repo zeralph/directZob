@@ -147,8 +147,13 @@ int main(int argc, char* argv[])
 		std::cerr << "Cannot open " << scenePath << " : File not found or not accessible."<< std::endl;
 		return 1;
 	}
-
+#ifdef WINDOWS
 	std::size_t found = scenePath.rfind('\\');
+#elif LINUX
+	std::size_t found = scenePath.rfind('/');
+#elif MACOS
+	std::size_t found = scenePath.rfind('/');
+#endif	
 	if (found == std::string::npos)
 	{
 		std::cerr << "cannot parse path to file " << scenePath << std::endl;
