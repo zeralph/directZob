@@ -120,9 +120,9 @@ Engine::~Engine()
 
 void Engine::Stop()
 {
-	m_started = false;
 	WaitForRasterizersEnd();
 	ClearRenderQueues();
+	m_started = false;
 }
 
 void Engine::Resize(int width, int height)

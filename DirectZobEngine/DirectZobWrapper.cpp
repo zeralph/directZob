@@ -15,9 +15,9 @@ namespace CLI
 
 	}
 
-	void DirectZobWrapper::Init()
+	void DirectZobWrapper::Init(int width, int height)
 	{
-		m_Instance->Init(true);
+		m_Instance->Init(width, height, true);
 	}
 
 	void DirectZobWrapper::LoadScene(System::String^ path, System::String^ file)
@@ -33,6 +33,12 @@ namespace CLI
 	{
 		m_Instance->NewScene();
 	}
+
+	void DirectZobWrapper::Unload()
+	{
+		m_Instance->Unload();
+	}
+
 
 	bool DirectZobWrapper::CanFastSave()
 	{

@@ -51,6 +51,15 @@ namespace DirectZobEditor
             return m_engineWrapper;
         }
 
+        public void End()
+        {
+            if (m_engineThread.IsAlive)
+            {
+                m_engineThread.Abort();
+            }
+            m_exiting = true;
+        }
+
         private void GenerateRenderWindow()
         {
             if(m_engineThread != null)
@@ -117,14 +126,6 @@ namespace DirectZobEditor
                     OnEndFrame(this, EventArgs.Empty);
                 }
             }
-        }
-
-        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            m_exiting = true;
-            Thread.Sleep(100);
-            //m_engineThread.Abort();
-            //Application.DoEvents();
         }
 
         private void UpdateCamera()

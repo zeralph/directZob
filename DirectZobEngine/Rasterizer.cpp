@@ -2,6 +2,7 @@
 #include <thread> 
 #include "DirectZob.h"
 #include "Light.h"
+#include "Texture.h"
 
 static Vector3 sFog = Vector3(1.0f, 1.0f, 0.95f);
 static float fogDecal = -0.6f;
@@ -337,7 +338,7 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 								(t->va->y * w0 + t->vb->y * w1 + t->vc->y * w2),
 								(t->va->z * w0 + t->vb->z * w1 + t->vc->z * w2));
 
-		const Material* texData = t->material;
+		const Material* material = t->material;
 		z = (t->pa->z * w0 + t->pb->z * w1 + t->pc->z * w2);
 		zRatio = (z - m_bufferData->zNear ) / (m_bufferData->zFar - m_bufferData->zNear);
 		k = p->y * m_width + p->x;
@@ -362,18 +363,19 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 					(w0 * t->na->z + w1 * t->nb->z + w2 * t->nc->z)); 
 				//normal.Mul(-1.0f);
 			}
-			if (texData)
+			const Texture* texture = material->GetDiffuseTexture();
+			if (texture)
 			{
-				if (texData->GetData())
+				if (texture->GetData())
 				{
 					tu = 1.0f - tu;
-					su = (int)(su * texData->GetWidth());
-					tu = (int)(tu * texData->GetHeight());
-					su = (int)su % texData->GetWidth();
-					tu = (int)tu % texData->GetHeight();
+					su = (int)(su * texture->GetWidth());
+					tu = (int)(tu * texture->GetHeight());
+					su = (int)su % texture->GetWidth();
+					tu = (int)tu % texture->GetHeight();
 
-					c = (int)(((int)tu * (int)texData->GetWidth() + (int)su) * 4);
-					const float* d = texData->GetData();
+					c = (int)(((int)tu * (int)texture->GetWidth() + (int)su) * 4);
+					const float* d = texture->GetData();
 					//if ( c>=0 && c < texData->GetDataSize()*4 - 4)
 					{
 						memcpy(texPixelData, &d[c], sizeof(float) * 4);
@@ -391,9 +393,9 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 				else
 				{
 
-					r = texData->GetDiffuseColor()->x;
-					g = texData->GetDiffuseColor()->y;
-					b = texData->GetDiffuseColor()->z;
+					r = material->GetDiffuseColor()->x;
+					g = material->GetDiffuseColor()->y;
+					b = material->GetDiffuseColor()->z;
 					a = 1.0f;
 				}
 			}

@@ -42,11 +42,11 @@ namespace DirectZobEditor
             InitializeComponent();
             this.KeyPreview = true;
             m_directZobWrapper = new CLI.DirectZobWrapper();
-            m_directZobWrapper.Init();
+            m_directZobWrapper.Init(800, 600);
 
             m_meshManagerWrapper = new CLI.MeshManagerWrapper();
 
-            //UpdateLogWindowDelegate = new UpdateLogWindow(UpdateLogWindowMethod);
+            Application.ApplicationExit += new EventHandler(this.OnApplicationExit);
 
             propertiesPanel.Width = 600;
             m_camControl = new CameraControl();
@@ -61,14 +61,7 @@ namespace DirectZobEditor
             m_zobObjectControl = new ZobObjectControl(this);
             propertiesPanel.Controls.Add(m_zobObjectControl);
             m_zobObjectControl.Location = new Point(0, m_engineControl.Location.Y + m_engineControl.Height + 10);
-
             this.WindowState = FormWindowState.Maximized;
-
-
-            m_path = @"C:\_GIT\directZob\resources\";
-            m_file = "scene1.xml";
-            //path = @"D:\_PERSO\directZob\directZob\resources\";
-            //m_directZobWrapper.LoadScene(m_path, m_file);
             m_directZobWrapper.NewScene();
             EventHandler handler = OnNewScene;
             if (null != handler)
@@ -289,12 +282,26 @@ namespace DirectZobEditor
             }
         }
 
+        private void OnApplicationExit(object sender, EventArgs e)
+        {
+            m_engineWindow.End();
+            m_directZobWrapper.Unload();
+        }
+
         private void ExitToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            m_directZobWrapper.NewScene();
-            //m_directZobWrapper = null;
             Application.Exit();
         }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
+        private void Form1_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            OnApplicationExit(sender, e);
+        }
+
     }
 
     public class Event

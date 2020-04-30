@@ -117,7 +117,7 @@ namespace Core
 		uint m_sceneTriangles;
 		uint m_drawnTriangles;
 		ulong m_nbPixels;
-		bool m_started = false;
+		volatile bool m_started = false;
 		bool m_wireFrame = false;
 		bool m_showNormals = false;
 		bool m_showGrid = true;

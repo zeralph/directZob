@@ -4,10 +4,12 @@
 #include <fbxsdk.h>
 #include <string>
 #include <vector>
+#include "Texture.h"
 
 class MaterialManager
 {
 public:
+
 	MaterialManager();
 	~MaterialManager();
 
@@ -21,4 +23,5 @@ public:
 private:
 	void SplitEntry(const std::string* s, std::vector<std::string>* v, const char delim);
 	std::vector<Material*> m_materials;
+	std::vector<Texture*> m_textures;
 };

@@ -110,6 +110,8 @@ int main(int argc, char* argv[])
 {
 	bool bBench = false;
 	std::string scenePath = "";
+	int width = 640;
+	int height = 480;
 	if (argc < 2) {
 		std::cerr << "Usage: " << argv[0] << " --scene <scene to load>" << std::endl;
 		std::cerr << "Additional options : " << std::endl;
@@ -158,7 +160,7 @@ int main(int argc, char* argv[])
 	m_mouseLastX = -1;
 	m_mouseLastY = -1;
 	printf("Init Window\n");
-	struct Window* window = mfb_open_ex("DirectZob", WIDTH, HEIGHT, WF_RESIZABLE);
+	struct Window* window = mfb_open_ex("DirectZob", width, height, WF_RESIZABLE);
 	mfb_active_callback(window, active);
 	mfb_resize_callback(window, resize);
 	mfb_keyboard_callback(window, keyboard);
@@ -167,7 +169,7 @@ int main(int argc, char* argv[])
 	mfb_mouse_move_callback(window, mouse_move);
 	mfb_mouse_scroll_callback(window, mouse_scroll);
 
-	m_directZob.Init(false);
+	m_directZob.Init(width, height, false);
 
 	m_directZob.LoadScene(path, file);
 	float rot = 0.0f;
@@ -198,7 +200,7 @@ int main(int argc, char* argv[])
 			camTo.z = 1.0f;
 			if (bBench)
 			{
-				break;
+//				break;
 			}
 		}
 		m_directZob.RunAFrame();
