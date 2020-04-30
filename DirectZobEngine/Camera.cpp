@@ -167,7 +167,7 @@ void Camera::Update()
 {
 	setProjectionMatrix(m_fov, m_bufferData->width, m_bufferData->height, m_bufferData->zNear, m_bufferData->zFar);
 	InitView();
-	SetLookAt(&m_cameraPosition, &m_cameraTarget, &m_cameraUp);
+	UpdateLookAt();
 	RecomputeVectors();
 }
 
@@ -179,10 +179,22 @@ void Camera::RecomputeVectors()
 	m_cameraLeft.Normalize();
 }
 
-void Camera::SetLookAt(const Vector3* eye, const Vector3* at, const Vector3* up)
+void Camera::SetLookAt(const Vector3* from, const Vector3* to, const Vector3* up)
+{
+	m_cameraPosition = from;
+	m_cameraTarget = to;
+	m_cameraUp = up;
+	m_cameraPosition.Mul(-1.0f);
+	m_cameraTarget.Mul(-1.0f);
+	//m_cameraUp.Mul(-1.0f);
+}
+
+void Camera::UpdateLookAt()
 {
 	//Vector3 zaxis = Vector3(eye->x - at->x, eye->y - at->y, eye->z - at->z);
-	
+	const Vector3* eye = &m_cameraPosition;
+	const Vector3* at = &m_cameraTarget;
+	const Vector3* up = &m_cameraUp;
 	Vector3 zaxis = Vector3(at->x - eye->x, at->y - eye->y, at->z - eye->z);
 	
 	zaxis.Normalize();
