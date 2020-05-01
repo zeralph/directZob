@@ -223,7 +223,7 @@ int Engine::StartDrawingScene()
 	m_drawTick = clock();
 	for (int i = 0; i < m_nbRasterizers; i++)
 	{
-		m_rasterizers[i]->Start(m_rasterTriangleQueues[i], m_rasterNbTriangleQueues[i], &m_rasterLineQueues[i], m_wireFrame, m_scaneLine, m_currentFrame % 2);
+		m_rasterizers[i]->Start(m_rasterTriangleQueues[i], m_rasterNbTriangleQueues[i], &m_rasterLineQueues[i], m_wireFrame, m_scaneLine, m_currentFrame % 2, m_lightingPrecision);
 
 	}
 	return 0;

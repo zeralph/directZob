@@ -16,13 +16,6 @@
 	#include <windows.h>
 #endif //LINUX
 
-enum Lighting_precision
-{
-	Lighting_precision_vertex = 0,
-	Lighting_precision_pixel,
-	__Lighting_precision_MAX__
-};
-
 class Light;
 class Rasterizer
 {
@@ -33,7 +26,7 @@ public:
 	Rasterizer(uint width, uint startHeight, uint endHeight, BufferData* bufferData);
 	~Rasterizer();
 
-	void Start(const Triangle* triangles, const uint nbTriangles, const std::vector<Line3D>* lines, const bool wireFrame, const bool scanline, const bool bEvenFrame);
+	void Start(const Triangle* triangles, const uint nbTriangles, const std::vector<Line3D>* lines, const bool wireFrame, const bool scanline, const bool bEvenFrame, RenderOptions::Lighting_precision lp);
 	void End() { m_run = false; }
 	void Init();
 	void Run();
@@ -87,12 +80,12 @@ private:
 	uint m_startHeight;
 	uint m_width;
 	uint m_height;
-	Lighting_precision m_lightingPrecision = Lighting_precision_vertex;
 	volatile std::atomic_bool m_run;
 	volatile std::atomic_bool m_started;
 	bool m_wireFrame = false;
 	bool m_scanline = false;
 	int m_bEvenFrame = 0;
+	RenderOptions::Lighting_precision m_lightingPrecision;
 };
 
 

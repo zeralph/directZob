@@ -41,7 +41,7 @@ void Rasterizer::Run()
 	}
 }
 
-void Rasterizer::Start(const Triangle* triangles, const uint nbTriangles, const std::vector<Line3D>* lines, const bool wireFrame, const bool scanline, const bool bEvenFrame)
+void Rasterizer::Start(const Triangle* triangles, const uint nbTriangles, const std::vector<Line3D>* lines, const bool wireFrame, const bool scanline, const bool bEvenFrame, RenderOptions::Lighting_precision lp)
 {
 	m_lines = lines;
 	m_triangles = triangles;
@@ -50,6 +50,7 @@ void Rasterizer::Start(const Triangle* triangles, const uint nbTriangles, const 
 	m_started = true;
 	m_bEvenFrame = bEvenFrame ? 1 : 0;
 	m_scanline = scanline;
+	m_lightingPrecision = lp;
 }
 
 Rasterizer::~Rasterizer()
@@ -241,7 +242,7 @@ void Rasterizer::DrawTriangle(const Triangle* t) const
 	}
 
 	Vector3 la, lb, lc = Vector3(0, 0, 0);
-	if (m_lightingPrecision == Lighting_precision_vertex)
+	if (m_lightingPrecision == RenderOptions::Lighting_precision_vertex)
 	{
 		la = ComputeLightingAtPoint(t->va, t->na, t->options.lightMode);
 		lb = ComputeLightingAtPoint(t->vb, t->nb, t->options.lightMode);
@@ -455,7 +456,7 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 		fg = 0.0f;
 		fb = 0.0f;
 
-		if (m_lightingPrecision == Lighting_precision_vertex)
+		if (m_lightingPrecision == RenderOptions::Lighting_precision_vertex)
 		{
 			//Vertex lighting
 			fr = (w0 * la->x + w1 * lb->x + w2 * lc->x) * r;

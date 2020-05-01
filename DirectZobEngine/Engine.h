@@ -85,6 +85,8 @@ namespace Core
 		inline bool ShowBBoxes() { return m_showBBoxes; }
 		inline void UseScanline(bool b) { m_scaneLine = b; }
 		inline const bool UseScanline() { return m_scaneLine; }
+		inline const RenderOptions::Lighting_precision LightingPrecision() const  { return m_lightingPrecision ; } 
+		void LightingPrecision(RenderOptions::Lighting_precision l) { m_lightingPrecision = l; }
 		uint GetObjectIdAtCoords(uint x, uint y);
 		const CullMode GetCullMode() const { return m_cullMode; }
 		void SetCullMode(const CullMode c) { m_cullMode = c; }
@@ -130,7 +132,7 @@ namespace Core
 		bool m_showBBoxes = true;
 		RenderOutput m_renderOutput;
 		CullMode m_cullMode;
-
+		RenderOptions::Lighting_precision m_lightingPrecision = RenderOptions::Lighting_precision_vertex;
 		const uint oBufferColors[8] = { 0x000000, 0x00FF00, 0x0000FF,
 										 0xFFFF00, 0x00FFFF, 0xFF00FF,
 										 0xFFFFFF, 0xFF0000, };
