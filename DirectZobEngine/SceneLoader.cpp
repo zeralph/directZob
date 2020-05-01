@@ -190,6 +190,7 @@ void SceneLoader::NewScene()
 	UnloadScene();
 	m_path = "";
 	m_file = "";
+	DirectZob::GetInstance()->GetLightManager()->ReInitGlobalSettings();
 	DirectZob::GetInstance()->GetEngine()->Start();
 }
 
@@ -197,6 +198,7 @@ void SceneLoader::LoadScene(std::string& path, std::string& file)
 {
 	DirectZob::LogInfo("Load scene %s%s", path.c_str(), file.c_str());
 	UnloadScene();
+	DirectZob::GetInstance()->GetLightManager()->ReInitGlobalSettings();
 	MeshManager* meshManager = DirectZob::GetInstance()->GetMeshManager();
 	MaterialManager* materialManager = DirectZob::GetInstance()->GetMaterialManager();
 	ZobObjectManager* zobObjectManager = DirectZob::GetInstance()->GetZobObjectManager();
