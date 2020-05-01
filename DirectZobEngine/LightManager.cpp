@@ -3,13 +3,7 @@
 
 LightManager::LightManager()
 {
-	m_fogColor = Vector3(63.0f / 255.0f, 149.0f / 255.0f, 255.0f / 255.0f);
-	m_clearColor = Vector3(63.0f / 255.0f, 149.0f / 255.0f, 255.0f / 255.0f);
-	m_ambientColor = Vector3(0.4f, 0.4f, 0.4f);
-	m_fogDistance = 500.0f;
-	m_lights.clear();
-	m_fogDensity = 2.0f;
-	m_fogType = FogType::FogType_Exp;
+	ReInitGlobalSettings();
 }
 
 LightManager::~LightManager()
@@ -18,6 +12,17 @@ LightManager::~LightManager()
 	{
 		delete (m_lights[i]);
 	}
+}
+
+void LightManager::ReInitGlobalSettings()
+{
+	m_fogColor = Vector3(63.0f / 255.0f, 149.0f / 255.0f, 255.0f / 255.0f);
+	m_clearColor = Vector3(63.0f / 255.0f, 149.0f / 255.0f, 255.0f / 255.0f);
+	m_ambientColor = Vector3(0.4f, 0.4f, 0.4f);
+	m_fogDistance = 500.0f;
+	m_lights.clear();
+	m_fogDensity = 2.0f;
+	m_fogType = FogType::FogType_NoFog;
 }
 
 void LightManager::Setup(Vector3* fogColor, Vector3* ambientColor, Vector3* clearColor, float fogDistance, float fogDensity, FogType fogType)

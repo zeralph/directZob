@@ -405,7 +405,7 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 				(w0 * t->na->z + w1 * t->nb->z + w2 * t->nc->z)); 
 			//normal.Mul(-1.0f);
 		}
-		const Texture* texture = material->GetDiffuseTexture();
+		const Texture* texture = material?material->GetDiffuseTexture():NULL;
 		if (texture)
 		{
 			if (texture->GetData())
@@ -457,7 +457,7 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 				gg++;
 			}
 		}
-		else 
+		else if(m_lightingPrecision == RenderOptions::Lighting_precision_pixel)
 		{
 			Vector3 l = ComputeLightingAtPoint(&tpos, &normal, lighting);
 			fr = l.x * r;

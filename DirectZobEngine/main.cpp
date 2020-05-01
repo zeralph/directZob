@@ -39,6 +39,11 @@ void keyboard(struct Window* window, Key key, KeyMod mod, bool isPressed) {
 		{
 			m_directZob.GetEngine()->ToggleZbufferOutput();
 		}
+		else if (key == KB_KEY_W)
+		{
+			bool b = m_directZob.GetEngine()->WireFrame();
+			m_directZob.GetEngine()->WireFrame(!b);
+		}
 		else if (key == KB_KEY_S)
 		{
 			m_directZob.GetEngine()->UseScanline(!m_directZob.GetEngine()->UseScanline());
@@ -49,8 +54,13 @@ void keyboard(struct Window* window, Key key, KeyMod mod, bool isPressed) {
 		}
 		else if (key == KB_KEY_L)
 		{
-			const bool  b = m_directZob.GetLightManager()->EnableLighting();
-			m_directZob.GetLightManager()->EnableLighting(!b);
+			int l = (int)m_directZob.GetEngine()->LightingPrecision();
+			l++;
+			if(l == RenderOptions::__Lighting_precision_MAX__)
+			{
+				l = RenderOptions::Lighting_precision_noLighting;
+			}	
+			m_directZob.GetEngine()->LightingPrecision( (RenderOptions::Lighting_precision)l);
 		}		
 		//m_curCam->OnKeyboardInput(key, isPressed);
 	}
