@@ -46,6 +46,12 @@ public:
 			eLightMode_flatPhong,
 			__eLightMode_MAX__
 		};
+		enum Lighting_precision
+		{
+			Lighting_precision_vertex = 0,
+			Lighting_precision_pixel,
+			__Lighting_precision_MAX__
+		};
 		bool zBuffered = true;
 		eLightMode lightMode = eLightMode::eLightMode_phong;
 		inline const bool ZBuffered() const { return zBuffered; }

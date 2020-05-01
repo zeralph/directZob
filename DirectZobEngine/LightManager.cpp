@@ -10,21 +10,6 @@ LightManager::LightManager()
 	m_lights.clear();
 	m_fogDensity = 2.0f;
 	m_fogType = FogType::FogType_Exp;
-	
-	Vector3 c = Vector3(94.5f / 255.0f, 85.5f / 255.0f, 64.3f / 255.0f);
-/*
-	std::string l = "lightRed";
-	c = Vector3(1.0f, 0.0f, 0.0f);
-	CreatePointLight(l, Vector3(50, 0, 0), c, 1.0f, 500, nullptr);
-
-	l = "lightGreen";
-	c = Vector3(0.0f, 1.0f, 0.0f);
-	CreatePointLight(l, Vector3(0, 50, 0), c, 1.0f, 500, nullptr);
-
-	l = "lightBlue";
-	c = Vector3(0.0f, 0.0f, 1.0f);
-	CreatePointLight(l, Vector3(0, 0, 50), c, 1.0f, 500, nullptr);
-*/
 }
 
 LightManager::~LightManager()
@@ -75,9 +60,28 @@ Light* LightManager::CreatePointLight(std::string& name, Vector3 position, Vecto
 	return l;
 }
 
+Light* LightManager::GetLight(const std::string& name) const
+{
+	for (std::vector<Light*>::const_iterator iter = m_lights.begin(); iter != m_lights.end(); iter++)
+	{
+		if ((*iter)->GetName() == name)
+		{
+			return *iter;
+		}
+	}
+	return NULL;
+}
+
 const std::vector<Light*>* LightManager::GetActiveLights() const
 {
-	return &m_lights;
+	if(m_lightingEnabled)
+	{
+		return &m_lights;
+	}
+	else
+	{
+		return NULL;
+	}
 	/*
 	if (m_lights.size() > 0)
 	{

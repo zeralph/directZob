@@ -60,17 +60,23 @@ void DirectZob::NewScene()
 	}
 }
 
+void DirectZob::Unload()
+{
+	SceneLoader::UnloadScene();
+	DirectZob::GetInstance()->GetEngine()->Stop();
+}
+
 bool DirectZob::CanFastSave()
 {
 	return SceneLoader::CanFastSave();
 }
 
-void DirectZob::Init(bool bEditorMode)
+void DirectZob::Init(int width, int height, bool bEditorMode)
 {
 	g_isInEditorMode = bEditorMode;
 	m_events = new Events();
 	DirectZob::LogInfo("Init engine");
-	m_engine = new Engine(WIDTH, HEIGHT, m_events);
+	m_engine = new Engine(width, height, m_events);
 	m_cameraManager = new CameraManager();
 	m_lightManager = new LightManager();
 	m_materialManager = new MaterialManager();
@@ -127,6 +133,15 @@ int DirectZob::RunAFrame()
 			{
 				m_text->Print(0, 16, 1, &sBuf, 0xFFFF0000);
 			}
+			if(m_engine->LightingPrecision()==RenderOptions::Lighting_precision_pixel)
+			{
+				sBuf = std::string("LighingPrecision : pixel");
+			}
+			else
+			{
+				sBuf = std::string("LighingPrecision : vertex");
+			}
+			m_text->Print(0, 32, 1, &sBuf, 0xFFFFFFFF);
 		}
 		m_engine->SetGeometryTime((float)(clock() - tick) / CLOCKS_PER_SEC * 1000);
 		m_engine->EndDrawingScene();

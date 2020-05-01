@@ -78,11 +78,17 @@ namespace Core
 		inline const float GetZFar() { return m_zFar; }
 		inline const ulong GetNbPixels() { return m_nbPixels; }
 		inline void ShowGrid(bool b) { m_showGrid = b; }
+		inline void ShowBBoxes(bool b) { m_showBBoxes = b; }
 		inline void WireFrame(bool b) { m_wireFrame = b; }
 		inline void ShowNormals(bool b) { m_showNormals = b; }
 		inline bool ShowGrid() { return m_showGrid; }
 		inline bool WireFrame() { return m_wireFrame; }
 		inline bool ShowNormals() { return m_showNormals; }
+		inline bool ShowBBoxes() { return m_showBBoxes; }
+		inline void UseScanline(bool b) { m_scaneLine = b; }
+		inline const bool UseScanline() { return m_scaneLine; }
+		inline const RenderOptions::Lighting_precision LightingPrecision() const  { return m_lightingPrecision ; } 
+		void LightingPrecision(RenderOptions::Lighting_precision l) { m_lightingPrecision = l; }
 		uint GetObjectIdAtCoords(uint x, uint y);
 		const CullMode GetCullMode() const { return m_cullMode; }
 		void SetCullMode(const CullMode c) { m_cullMode = c; }
@@ -98,7 +104,8 @@ namespace Core
 		Triangle** m_rasterTriangleQueues;
 		long* m_rasterNbTriangleQueues;
 		std::vector<Line3D>* m_rasterLineQueues;
-		std::vector<Rasterizer*>* m_rasterizers;
+		//std::vector<Rasterizer*>* m_rasterizers;
+		Rasterizer** m_rasterizers;
 		uint m_nbRasterizers;
 		uint m_triangleQueueSize;
 		float m_zNear;
@@ -119,13 +126,15 @@ namespace Core
 		uint m_sceneTriangles;
 		uint m_drawnTriangles;
 		ulong m_nbPixels;
-		bool m_started = false;
+		volatile bool m_started = false;
 		bool m_wireFrame = false;
+		bool m_scaneLine = false;
 		bool m_showNormals = false;
 		bool m_showGrid = true;
+		bool m_showBBoxes = true;
 		RenderOutput m_renderOutput;
 		CullMode m_cullMode;
-
+		RenderOptions::Lighting_precision m_lightingPrecision = RenderOptions::Lighting_precision_vertex;
 		const uint oBufferColors[8] = { 0x000000, 0x00FF00, 0x0000FF,
 										 0xFFFF00, 0x00FFFF, 0xFF00FF,
 										 0xFFFFFF, 0xFF0000, };

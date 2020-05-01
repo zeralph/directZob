@@ -19,12 +19,12 @@ public:
 	static void SaveScene();
 	static bool CanFastSave() { return m_path.length() > 0 && m_file.length() > 0; }
 	static void NewScene();
+	static void UnloadScene();
 private:
 
 	static void LoadMesh(TiXmlElement* node);
 	static void LoadZobObject(TiXmlElement* node, ZobObject* parent);
 	static void SaveZobObjectRecusrive(TiXmlElement* node, ZobObject* z);
-	static void UnloadScene();
 	static void LoadGlobals(TiXmlElement* node);
 	static std::string m_path;
 	static std::string m_file;

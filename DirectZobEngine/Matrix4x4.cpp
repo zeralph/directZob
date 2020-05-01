@@ -52,18 +52,6 @@ void Matrix4x4::CopyFrom(const Matrix4x4* m)
 	memcpy(&m_data, &m->m_data, sizeof(m_data));
 }
 
-void Matrix4x4::Mul(Vector3* v) const
-{
-	float fx = m_data[0][0] * v->x + m_data[0][1] * v->y + m_data[0][2] * v->z + m_data[0][3] * v->w;
-	float fy = m_data[1][0] * v->x + m_data[1][1] * v->y + m_data[1][2] * v->z + m_data[1][3] * v->w;
-	float fz = m_data[2][0] * v->x + m_data[2][1] * v->y + m_data[2][2] * v->z + m_data[2][3] * v->w;
-	float fw = m_data[3][0] * v->x + m_data[3][1] * v->y + m_data[3][2] * v->z + m_data[3][3] * v->w;
-	v->x = fx;// +m_translationX;
-	v->y = fy;// +m_translationY;
-	v->z = fz;
-	v->w = fw;
-}
-
 void Matrix4x4::SetScale(const Vector3& v)
 {
 	tmp.Identity();

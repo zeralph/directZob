@@ -37,6 +37,7 @@
                 'Rasterizer.cpp',
                 'SceneLoader.cpp',
                 'Text2D.cpp',
+				'Texture.cpp',
                 'Triangle.cpp',
                 'Vector2.cpp',
                 'Vector3.cpp',
@@ -150,6 +151,11 @@
                             #			'/usr/lib',
                             #		],
                         },
+						'VCLibrarianTool': {
+							'AdditionalOptions': [
+								'/LTCG:INCREMENTAL', # incremental link-time code generation
+							]
+						},
                         "copies": [
                             {
                                 'destination':

@@ -100,14 +100,6 @@ Mesh::Mesh(std::string &parentName, std::string& path, fbxsdk::FbxMesh* mesh)
 						mesh->GetPolygonVertexUV(j, k, uvsNames[0], uv, unmapped);
 						if (!unmapped)
 						{
-							/*if (uv[0] < 0.0f )
-							{
-								uv[0] = 1.0f-uv[0];
-							}
-							if (uv[1] < 0.0f)
-							{
-								uv[1] = 1.0f-uv[1];
-							}*/
 							m_uvs[vIdx] = Vector2(uv[0], uv[1]);
 						}
 						else
@@ -121,8 +113,8 @@ Mesh::Mesh(std::string &parentName, std::string& path, fbxsdk::FbxMesh* mesh)
 					}
 					if (mesh->GetPolygonVertexNormal(j, k, normal))
 					{
-						FbxMultT(mesh->GetNode(), normal);
-						normal.Normalize();
+						//FbxMultT(mesh->GetNode(), normal);
+						//normal.Normalize();
 						m_verticesNormals[vIdx] = Vector3(normal[0], normal[1], normal[2]);
 						//todo : compute normal
 					}
@@ -133,7 +125,7 @@ Mesh::Mesh(std::string &parentName, std::string& path, fbxsdk::FbxMesh* mesh)
 					vIdx++;
 				}
 
-				const Material* material = LoadFbxMaterial(mesh);
+				const Material* material = DirectZob::GetInstance()->GetMaterialManager()->LoadFbxMaterial(mesh, m_path);
 				Triangle t;
 				t.va = &m_vertices[startIdx];
 				t.vb = &m_vertices[startIdx + 1];
@@ -218,99 +210,6 @@ void Mesh::LoadFbx(const std::string& fullPath)
 			m_subMeshes.push_back(m);
 		}
 	}
-}
-
-const Material* Mesh::LoadFbxMaterial(fbxsdk::FbxMesh* mesh)
-{
-	const Material* finalMaterial = NULL;
-	MaterialManager* materialMgr = DirectZob::GetInstance()->GetMaterialManager();
-	int mcount = mesh->GetElementMaterialCount();
-	for (int index = 0; index < mcount; index++)
-	{
-		//fbxsdk::FbxGeometryElementMaterial* material = mesh->GetElementMaterial(0);
-		fbxsdk::FbxGeometryElementMaterial* gMaterial = mesh->GetElementMaterial(index);
-		if (gMaterial)
-		{
-			fbxsdk::FbxSurfaceMaterial* material = mesh->GetNode()->GetMaterial(gMaterial->GetIndexArray().GetAt(0));
-			int propCount = material->GetSrcPropertyCount();
-			//if (propCount > 0)
-			{
-				const char* matName = material->GetName();
-				finalMaterial = materialMgr->GetMaterial(matName);
-				if (finalMaterial)
-				{
-					return finalMaterial;
-				}
-				else
-				{
-					// This only gets the material of type sDiffuse, you probably need to traverse all Standard Material Property by its name to get all possible textures.
-					fbxsdk::FbxProperty prop = material->FindProperty(fbxsdk::FbxSurfaceMaterial::sDiffuse);
-					// Check if it's layeredtextures
-					FbxDouble3 c = prop.Get<FbxDouble3>();
-					Vector3 diffuse = Vector3(c[0], c[1], c[2]);
-					const char* texture_name = NULL;
-					const char* texture_name2 = NULL;
-					const char* texture_name3 = NULL;
-					int file_texture_count = prop.GetSrcObjectCount<fbxsdk::FbxFileTexture>();
-					if (file_texture_count > 0)
-					{
-						for (int j = 0; j < file_texture_count; j++)
-						{
-							FbxFileTexture* file_texture = FbxCast<fbxsdk::FbxFileTexture>(prop.GetSrcObject<FbxFileTexture>(j));
-							texture_name = file_texture->GetFileName();
-							texture_name2 = file_texture->GetRelativeFileName();
-							texture_name3 = file_texture->GetMediaName();
-						}
-					}
-					/*int layered_texture_count = prop.GetSrcObjectCount<fbxsdk::FbxLayeredTexture>();
-					if (layered_texture_count > 0)
-					{
-						for (int j = 0; j < layered_texture_count; j++)
-						{
-							FbxLayeredTexture* layered_texture = FbxCast<fbxsdk::FbxLayeredTexture>(prop.GetSrcObject<FbxLayeredTexture>(j));
-							int lcount = layered_texture->GetSrcObjectCount<fbxsdk::FbxTexture>();
-							for (int k = 0; k < lcount; k++)
-							{
-								FbxTexture* texture = FbxCast<fbxsdk::FbxTexture>(layered_texture->GetSrcObject<fbxsdk::FbxTexture>(k));
-								// Then, you can get all the properties of the texture, include its name
-								texture_name = texture->GetName();
-								//texture_name2 = texture->GetRelativeFileName();
-								//texture_name3 = texture->GetMediaName();
-							}
-						}
-					}
-					else
-					{
-						// Directly get textures
-						int texture_count = prop.GetSrcObjectCount<fbxsdk::FbxTexture>();
-						for (int j = 0; j < texture_count; j++)
-						{
-							const fbxsdk::FbxTexture* texture = FbxCast<fbxsdk::FbxTexture>(prop.GetSrcObject<fbxsdk::FbxTexture>(j));
-							//texture->FindSrcObject
-							// Then, you can get all the properties of the texture, include its name
-							texture_name = texture->GetName();
-							//texture_name2 = texture->GetRelativeFileName();
-							//texture_name3 = texture->GetMediaName();
-						}
-					}*/
-					float f;
-					prop = material->FindProperty(fbxsdk::FbxSurfaceMaterial::sDiffuseFactor);
-					f = prop.Get<FbxDouble>();
-					
-					prop = material->FindProperty(fbxsdk::FbxSurfaceMaterial::sSpecularFactor);
-					f = prop.Get<FbxDouble>();
-					Vector3 ambient;
-					std::string texFullPath = "";
-					if (texture_name2)
-					{
-						texFullPath = m_path + std::string(texture_name2);
-					}
-					finalMaterial = materialMgr->LoadMaterial(matName, &ambient, &diffuse, texFullPath);
-				}
-			}
-		}
-	}
-	return finalMaterial;
 }
 
 void Mesh::FbxMultT(FbxNode* node, FbxVector4 &vector) 
@@ -503,13 +402,6 @@ void Mesh::SplitEntry(const std::string* s, std::vector<std::string>* v, const c
 	ReinitVertices();
 }*/
 
-void Mesh::ReinitVertices()
-{
-	memcpy(m_vertices, m_verticesData, sizeof(Vector3) * m_nbVertices);
-	memcpy(m_verticesNormals, m_verticesNormalsData, sizeof(Vector3) * m_nbNormals);
-	memcpy(m_trianglesNormals, m_trianglesNormalsData, sizeof(Vector3) * m_nbFaces);
-}
-
 void Mesh::DrawBoundingBox(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions options)
 {
 	Vector3 v0 = Vector3(m_minBouding.x, m_minBouding.y, m_minBouding.z);
@@ -547,7 +439,10 @@ void Mesh::DrawBoundingBox(const Matrix4x4& modelMatrix, const Matrix4x4& rotati
 
 void Mesh::Draw(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions options)
 {
-	DrawBoundingBox(modelMatrix, rotationMatrix, camera, engine, ownerId, options);
+	if (engine->ShowBBoxes())
+	{
+		DrawBoundingBox(modelMatrix, rotationMatrix, camera, engine, ownerId, options);
+	}
 	ReinitVertices();
 	BufferData* bData = engine->GetBufferData();
 	Vector2 a, b, c, uva, uvb, uvc;
@@ -625,7 +520,7 @@ void Mesh::Draw(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, c
 			//if (engine->GetCullMode() == Engine::None )// ( || t->area > sAreaMin && t->area < sAreaMax))
 			{
 				t->owner = ownerId;
-				t->ComputeLighting(&light);
+				//t->ComputeLighting(&light);
 				t->draw = true;
 				engine->QueueTriangle(t);
 				drawnFaces++;

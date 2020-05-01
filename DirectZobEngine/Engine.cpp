@@ -17,7 +17,7 @@
 using namespace Core;
 Engine::Engine(int width, int height, Events* events)
 {
-	m_nbRasterizers = std::thread::hardware_concurrency() - 1;
+	m_nbRasterizers = std::thread::hardware_concurrency() -1;
 	if (m_nbRasterizers % 2 == 1)
 	{
 		m_nbRasterizers--;
@@ -55,15 +55,15 @@ Engine::Engine(int width, int height, Events* events)
 	m_rasterTriangleQueues = (Triangle **)malloc(sizeof(Triangle) * m_nbRasterizers);
 	m_rasterNbTriangleQueues = (long *)malloc(sizeof(long) * m_nbRasterizers);
 	m_rasterLineQueues = new std::vector<Line3D>[m_nbRasterizers];
-	m_rasterizers = new std::vector<Rasterizer *>[m_nbRasterizers];
-
+	//m_rasterizers = new std::vector<Rasterizer*>[m_nbRasterizers];
+	m_rasterizers = (Rasterizer**)malloc(sizeof(Rasterizer) * m_nbRasterizers);
 	int h = height / m_nbRasterizers;
 	int h0 = 0;
-	m_rasterizers->clear();
+	
 	for (int i = 0; i < m_nbRasterizers; i++)
 	{
 		Rasterizer *r = new Rasterizer(width, h0, h0 + h, &m_bufferData);
-		m_rasterizers->push_back(r);
+		m_rasterizers[i] = r;
 
 		Triangle *t = (Triangle *)malloc(sizeof(Triangle) * m_triangleQueueSize);
 		m_rasterTriangleQueues[i] = t;
@@ -92,7 +92,7 @@ Engine::Engine(int width, int height, Events* events)
 	{
 		m_rasterLineQueues[i].clear();
 		m_rasterNbTriangleQueues[i] = 0;
-		m_rasterizers->at(i)->Init();
+		m_rasterizers[i]->Init();
 	}
 	std::string n = "Engine initialized with " + std::to_string(m_nbRasterizers) + " rasterizer(s) for " + std::to_string(m_triangleQueueSize) + " triangles per image";
 	DirectZob::LogInfo(n.c_str());
@@ -113,16 +113,20 @@ Engine::~Engine()
 	for (int i = 0; i < m_nbRasterizers; i++)
 	{
 
-		m_rasterizers->at(i)->End();
+		m_rasterizers[i]->End();
 	}
 	m_events = NULL;
 }
 
 void Engine::Stop()
 {
-	m_started = false;
 	WaitForRasterizersEnd();
 	ClearRenderQueues();
+	for (int i = 0; i < m_nbRasterizers; i++)
+	{
+		m_rasterizers[i]->Clear();
+	}
+	m_started = false;
 }
 
 void Engine::Resize(int width, int height)
@@ -132,7 +136,7 @@ void Engine::Resize(int width, int height)
 	SLEEP(100);
 	for (int i = 0; i < m_nbRasterizers; i++)
 	{
-		m_rasterizers->at(i)->End();
+		m_rasterizers[i]->End();
 	}
 	delete m_buffer;
 	delete m_zBuffer;
@@ -152,24 +156,24 @@ void Engine::Resize(int width, int height)
 	for (int i = 0; i < m_nbRasterizers; i++)
 	{
 		//m_rasterizers->at(i)->End();
-		delete m_rasterizers->at(i);
-		m_rasterizers->at(i) = NULL;
+		delete m_rasterizers[i];
+		m_rasterizers[i] = NULL;
 	}
 
 	int h = height / m_nbRasterizers;
 	int h0 = 0;
-	m_rasterizers->clear();
+	m_rasterizers = (Rasterizer**)malloc(sizeof(Rasterizer) * m_nbRasterizers);
 	for (int i = 0; i < m_nbRasterizers; i++)
 	{
 		Rasterizer *r = new Rasterizer(width, h0, h0 + h, &m_bufferData);
-		m_rasterizers->push_back(r);
+		m_rasterizers[i] = r;
 		//m_rasterTriangleQueues[i].clear();
 		m_rasterLineQueues[i].clear();
 		h0 += h;
 	}
 	for (int i = 0; i < m_nbRasterizers; i++)
 	{
-		m_rasterizers->at(i)->Init();
+		m_rasterizers[i]->Init();
 	}
 	if (bStarted)
 	{
@@ -182,19 +186,30 @@ void Engine::ClearBuffer(const Color *color)
 {
 	m_tick = clock();
 	uint v = color->GetRawValue();
-	for (int i = 0; i < m_bufferData.width * m_bufferData.height; i++)
+	//Color cc = Color(63, 149, 255, 255);
+	//v = cc.GetRawValue();
+	if (!m_scaneLine)
 	{
-		m_buffer[i] = v;
-		m_zBuffer[i] = -1.0f;
-		//		m_oBuffer[i] = 0;
+		//memset(m_zBuffer, 0, sizeof(float) * m_bufferData.width * m_bufferData.height);
+		for (int i = 0; i < m_bufferData.width * m_bufferData.height; i++)
+		{
+			m_zBuffer[i] = -1.0f;
+			m_buffer[i] = v;
+		}
 	}
-
-	/*for (int i = 0; i < m_nbRasterizers; i++)
-	{
-		//m_rasterTriangleQueues[i].clear();
-		m_rasterLineQueues[i].clear();
-		m_rasterNbTriangleQueues[i] = 0;
-	}*/
+	else
+	{	
+		int y = (m_currentFrame) % 2;
+		for (y; y < m_bufferData.height; y += 2)
+		{
+			int s = m_bufferData.width * y;
+			for (int i = 0; i < m_bufferData.width; i++)
+			{
+				m_zBuffer[i+s] = -1.0f;
+				m_buffer[i+s] = v;
+			}
+		}
+	}
 	m_sceneTriangles = 0;
 	m_drawnTriangles = 0;
 }
@@ -208,7 +223,7 @@ int Engine::StartDrawingScene()
 	m_drawTick = clock();
 	for (int i = 0; i < m_nbRasterizers; i++)
 	{
-		m_rasterizers->at(i)->Start(m_rasterTriangleQueues[i], m_rasterNbTriangleQueues[i], &m_rasterLineQueues[i], m_wireFrame);
+		m_rasterizers[i]->Start(m_rasterTriangleQueues[i], m_rasterNbTriangleQueues[i], &m_rasterLineQueues[i], m_wireFrame, m_scaneLine, m_currentFrame % 2, m_lightingPrecision);
 	}
 	return 0;
 }
@@ -249,6 +264,7 @@ void Engine::ClearRenderQueues()
 		//m_rasterTriangleQueues[i]->clear();
 		m_rasterLineQueues[i].clear();
 		m_rasterNbTriangleQueues[i] = 0;
+		m_rasterizers[i]->Clear();
 	}
 }
 
@@ -256,7 +272,7 @@ void Engine::WaitForRasterizersEnd()
 {
 	for (int i = 0; i < m_nbRasterizers; i++)
 	{
-		m_rasterizers->at(i)->WaitForend();
+		m_rasterizers[i]->WaitForEnd();
 	}
 	m_renderTimeMS = (float)(clock() - m_drawTick) / CLOCKS_PER_SEC * 1000;
 }
@@ -311,71 +327,74 @@ void Engine::ClipSegmentToPlane(Vector3 &s0, Vector3 &s1, Vector3 &pp, Vector3 &
 
 void Engine::QueueLine(const Camera *camera, const Vector3 *v1, const Vector3 *v2, const uint c)
 {
-	Vector3 a = Vector3(v1);
-	Vector3 b = Vector3(v2);
-	float za, zb = 0.0f;
-	camera->GetViewMatrix()->Mul(&a);
-	za = a.z;
-	camera->GetProjectionMatrix()->Mul(&a);
-	camera->GetViewMatrix()->Mul(&b);
-	zb = b.z;
-	camera->GetProjectionMatrix()->Mul(&b);
+	if (m_started)
+	{
+		Vector3 a = Vector3(v1);
+		Vector3 b = Vector3(v2);
+		float za, zb = 0.0f;
+		camera->GetViewMatrix()->Mul(&a);
+		za = a.z;
+		camera->GetProjectionMatrix()->Mul(&a);
+		camera->GetViewMatrix()->Mul(&b);
+		zb = b.z;
+		camera->GetProjectionMatrix()->Mul(&b);
 
-	if (a.z < m_bufferData.zNear && b.z < m_bufferData.zNear)
-	{
-		return;
-	}
-	else if (a.z < m_bufferData.zNear || b.z < m_bufferData.zNear)
-	{
-		Vector3 pp = Vector3(0, 0, m_bufferData.zNear);
-		Vector3 pn = Vector3(0, 0, 1);
-		if (a.z < b.z)
+		if (a.z < m_bufferData.zNear && b.z < m_bufferData.zNear)
 		{
-			ClipSegmentToPlane(b, a, pp, pn);
+			return;
 		}
-		else
+		else if (a.z < m_bufferData.zNear || b.z < m_bufferData.zNear)
 		{
-			ClipSegmentToPlane(a, b, pp, pn);
+			Vector3 pp = Vector3(0, 0, m_bufferData.zNear);
+			Vector3 pn = Vector3(0, 0, 1);
+			if (a.z < b.z)
+			{
+				ClipSegmentToPlane(b, a, pp, pn);
+			}
+			else
+			{
+				ClipSegmentToPlane(a, b, pp, pn);
+			}
 		}
-	}
-	if (a.w != 1)
-	{
-		a.x /= a.w;
-		a.y /= a.w;
-		a.z /= a.w;
-		a.w /= a.w;
-	}
-	if (b.w != 1)
-	{
-		b.x /= b.w;
-		b.y /= b.w;
-		b.z /= b.w;
-		b.w /= b.w;
-	}
-	//if (ClipSegment(&a, &b))
-	{
+		if (a.w != 1)
+		{
+			a.x /= a.w;
+			a.y /= a.w;
+			a.z /= a.w;
+			a.w /= a.w;
+		}
+		if (b.w != 1)
+		{
+			b.x /= b.w;
+			b.y /= b.w;
+			b.z /= b.w;
+			b.w /= b.w;
+		}
+		//if (ClipSegment(&a, &b))
+		{
 
-		a.x = (a.x + 1) * m_bufferData.width / 2.0f;
-		a.y = (a.y + 1) * m_bufferData.height / 2.0f;
-		b.x = (b.x + 1) * m_bufferData.width / 2.0f;
-		b.y = (b.y + 1) * m_bufferData.height / 2.0f;
-		Line3D l;
-		l.xa = a.x;
-		l.xb = b.x;
-		l.ya = a.y;
-		l.yb = b.y;
-		l.za = za;
-		l.zb = zb;
-		l.c = c;
-		int min = std::min<int>(a.y, b.y);
-		int max = std::max<int>(a.y, b.y);
-		min = clamp2(min, 0, (int)m_bufferData.height - 1);
-		max = clamp2(max, 0, (int)m_bufferData.height - 1);
-		min /= m_bufferData.height / m_nbRasterizers;
-		max /= m_bufferData.height / m_nbRasterizers;
-		for (int i = min; i <= max; i++)
-		{
-			m_rasterLineQueues[i].push_back(l);
+			a.x = (a.x + 1) * m_bufferData.width / 2.0f;
+			a.y = (a.y + 1) * m_bufferData.height / 2.0f;
+			b.x = (b.x + 1) * m_bufferData.width / 2.0f;
+			b.y = (b.y + 1) * m_bufferData.height / 2.0f;
+			Line3D l;
+			l.xa = a.x;
+			l.xb = b.x;
+			l.ya = a.y;
+			l.yb = b.y;
+			l.za = za;
+			l.zb = zb;
+			l.c = c;
+			int min = std::min<int>(a.y, b.y);
+			int max = std::max<int>(a.y, b.y);
+			min = clamp2(min, 0, (int)m_bufferData.height - 1);
+			max = clamp2(max, 0, (int)m_bufferData.height - 1);
+			min /= m_bufferData.height / m_nbRasterizers;
+			max /= m_bufferData.height / m_nbRasterizers;
+			for (int i = min; i <= max; i++)
+			{
+				m_rasterLineQueues[i].push_back(l);
+			}
 		}
 	}
 }
@@ -423,33 +442,32 @@ bool Engine::ClipSegment(Vector3 *a, Vector3 *b)
 
 void Engine::QueueTriangle(const Triangle *t)
 {
-	int min = std::min<int>(t->pa->y, std::min<int>(t->pb->y, t->pc->y));
-	int max = std::max<int>(t->pa->y, std::max<int>(t->pb->y, t->pc->y));
-	min = clamp2(min, 0, (int)m_bufferData.height - 1);
-	max = clamp2(max, 0, (int)m_bufferData.height - 1);
-	min /= m_bufferData.height / m_nbRasterizers;
-	max /= m_bufferData.height / m_nbRasterizers;
-
-	assert(min >= 0);
-	assert(min < m_nbRasterizers);
-	assert(max >= 0);
-	assert(max < m_nbRasterizers);
-	assert(min <= max);
-	for (int i = min; i <= max; i++)
+	if (m_started)
 	{
-		uint j = m_rasterNbTriangleQueues[i];
-		if (j < m_triangleQueueSize)
+		int min = std::min<int>(t->pa->y, std::min<int>(t->pb->y, t->pc->y));
+		int max = std::max<int>(t->pa->y, std::max<int>(t->pb->y, t->pc->y));
+		min = clamp2(min, 0, (int)m_bufferData.height - 1);
+		max = clamp2(max, 0, (int)m_bufferData.height - 1);
+		min /= m_bufferData.height / m_nbRasterizers;
+		max /= m_bufferData.height / m_nbRasterizers;
+
+		assert(min >= 0);
+		assert(min < m_nbRasterizers);
+		assert(max >= 0);
+		assert(max < m_nbRasterizers);
+		assert(min <= max);
+		for (int i = min; i <= max; i++)
 		{
-			m_rasterTriangleQueues[i][j].Copy(t);
-			m_rasterNbTriangleQueues[i]++;
-			m_drawnTriangles++;
+			uint j = m_rasterNbTriangleQueues[i];
+			if (j < m_triangleQueueSize)
+			{
+				memcpy(&m_rasterTriangleQueues[i][j], t, sizeof(Triangle));
+				//m_rasterTriangleQueues[i][j].Copy(t);
+				m_rasterNbTriangleQueues[i]++;
+				m_drawnTriangles++;
+			}
+			m_sceneTriangles++;
 		}
-		else
-		{
-			int oo = 0;
-			oo++;
-		}
-		m_sceneTriangles++;
 	}
 }
 

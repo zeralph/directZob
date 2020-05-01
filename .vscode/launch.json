@@ -4,12 +4,21 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+        
         {
-            "name": "g++ - Build and debug active file",
+            "name": "Build and run debug",
             "type": "cppdbg",
             "request": "launch",
             "program": "/home/ralph/directZob/DirectZobExe",
-            "args": [],
+            "args": [ 
+                "--bench",
+                "--scene",
+                "./resources/fbx.xml",
+                "--width",
+                "640",
+                "--height",
+                "400"
+            ],
             "stopAtEntry": false,
             "cwd": "/home/ralph/directZob/",
             "environment": [],
@@ -22,7 +31,36 @@
                     "ignoreFailures": true
                 }
             ],
-            "preLaunchTask": "g++ build active file",
+            "preLaunchTask": "build debug",
+            "miDebuggerPath": "/usr/bin/gdb"
+        },
+        {
+            "name": "Build and run release",
+            "request": "launch",
+            "program": "/home/ralph/directZob/DirectZobExe",
+            "args": [
+                "--bench",
+                "--scene",
+                "./resources/fbx.xml",
+                "--width",
+                "640",
+                "--height",
+                "400"
+            ],
+            "stopAtEntry": false,
+            "cwd": "/home/ralph/directZob/",
+            "environment": [],
+            "externalConsole": false,
+            "type": "cppdbg",
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "build release",
             "miDebuggerPath": "/usr/bin/gdb"
         }
     ]

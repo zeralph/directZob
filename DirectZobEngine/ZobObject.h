@@ -29,6 +29,14 @@ public:
 	inline void SetRotation(float x, float y, float z) { m_rotation.x = x; m_rotation.y = y; m_rotation.z = z; }
 	inline void SetTranslation(float x, float y, float z) { m_translation.x = x; m_translation.y = y; m_translation.z = z; }
 	inline const Vector3& GetTransform() const { return m_translation; }
+	inline const Vector3 GetWorldPosition() const 
+	{ 
+		return m_modelMatrix.GetTranslation();
+	}
+	inline const Vector3 GetWorldScale() const
+	{
+		return m_modelMatrix.GetScale();
+	}
 	inline const Vector3& GetRotation() const { return m_rotation; }
 	inline const Vector3& GetScale() const { return m_scale; }
 	inline const std::string& GetName() const { return m_name; }

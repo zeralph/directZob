@@ -4,7 +4,7 @@
 #include <iostream>
 #include "Vector3.h"
 
-struct MaterialInfo
+struct OBJMaterialInfo
 {
 	std::string file;
 	std::string name;
@@ -17,22 +17,37 @@ struct MaterialInfo
 MaterialManager::MaterialManager()
 {
 	m_materials.clear();
+	m_textures.clear();
 }
 
 MaterialManager::~MaterialManager()
 {
-	for (int i = 0; i < m_materials.size(); i++)
-	{
-		delete (m_materials[i]);
-	}
-	m_materials.clear();
+	UnloadAll();
 }
 
 const Material* MaterialManager::LoadMaterial(const std::string& name, const Vector3* ambientColor, const Vector3* diffuseColor, const std::string &textureFile)
 {
 	if (GetMaterial(name) == NULL)
 	{
-		Material* t = new Material(name, ambientColor, diffuseColor, textureFile);
+		Texture* texture = NULL;
+		if (textureFile.length() > 0)
+		{
+			for (std::vector<Texture*>::const_iterator iter = m_textures.begin(); iter != m_textures.end(); iter++)
+			{
+				if ((*iter)->GetPath() == textureFile)
+				{
+					texture = (*iter);
+					break;
+				}
+			}
+			if(texture == NULL)
+			{
+				texture = new Texture();
+				texture->LoadFromFile(textureFile);
+				m_textures.push_back(texture);
+			}
+		}
+		Material* t = new Material(name, ambientColor, diffuseColor, texture);
 		m_materials.push_back(t);
 		return t;
 	}
@@ -43,6 +58,100 @@ const Material* MaterialManager::LoadMaterial(const std::string& name, const Vec
 	}
 }
 
+const Material* MaterialManager::LoadFbxMaterial(const fbxsdk::FbxMesh* mesh, const std::string& path)
+{
+	const Material* finalMaterial = NULL;
+	MaterialManager* materialMgr = DirectZob::GetInstance()->GetMaterialManager();
+	int mcount = mesh->GetElementMaterialCount();
+	for (int index = 0; index < mcount; index++)
+	{
+		//fbxsdk::FbxGeometryElementMaterial* material = mesh->GetElementMaterial(0);
+		const fbxsdk::FbxGeometryElementMaterial* gMaterial = mesh->GetElementMaterial(index);
+		if (gMaterial)
+		{
+			fbxsdk::FbxSurfaceMaterial* material = mesh->GetNode()->GetMaterial(gMaterial->GetIndexArray().GetAt(0));
+			int propCount = material->GetSrcPropertyCount();
+			//if (propCount > 0)
+			{
+				const char* matName = material->GetName();
+				finalMaterial = materialMgr->GetMaterial(matName);
+				if (finalMaterial)
+				{
+					return finalMaterial;
+				}
+				else
+				{
+					// This only gets the material of type sDiffuse, you probably need to traverse all Standard Material Property by its name to get all possible textures.
+					fbxsdk::FbxProperty prop = material->FindProperty(fbxsdk::FbxSurfaceMaterial::sDiffuse);
+					// Check if it's layeredtextures
+					FbxDouble3 c = prop.Get<FbxDouble3>();
+					Vector3 diffuse = Vector3(c[0], c[1], c[2]);
+					const char* texture_name = NULL;
+					const char* texture_name2 = NULL;
+					const char* texture_name3 = NULL;
+					int file_texture_count = prop.GetSrcObjectCount<fbxsdk::FbxFileTexture>();
+					if (file_texture_count > 0)
+					{
+						for (int j = 0; j < file_texture_count; j++)
+						{
+							FbxFileTexture* file_texture = FbxCast<fbxsdk::FbxFileTexture>(prop.GetSrcObject<FbxFileTexture>(j));
+							texture_name = file_texture->GetFileName();
+							texture_name2 = file_texture->GetRelativeFileName();
+							texture_name3 = file_texture->GetMediaName();
+						}
+					}
+					/*int layered_texture_count = prop.GetSrcObjectCount<fbxsdk::FbxLayeredTexture>();
+					if (layered_texture_count > 0)
+					{
+						for (int j = 0; j < layered_texture_count; j++)
+						{
+							FbxLayeredTexture* layered_texture = FbxCast<fbxsdk::FbxLayeredTexture>(prop.GetSrcObject<FbxLayeredTexture>(j));
+							int lcount = layered_texture->GetSrcObjectCount<fbxsdk::FbxTexture>();
+							for (int k = 0; k < lcount; k++)
+							{
+								FbxTexture* texture = FbxCast<fbxsdk::FbxTexture>(layered_texture->GetSrcObject<fbxsdk::FbxTexture>(k));
+								// Then, you can get all the properties of the texture, include its name
+								texture_name = texture->GetName();
+								//texture_name2 = texture->GetRelativeFileName();
+								//texture_name3 = texture->GetMediaName();
+							}
+						}
+					}
+					else
+					{
+						// Directly get textures
+						int texture_count = prop.GetSrcObjectCount<fbxsdk::FbxTexture>();
+						for (int j = 0; j < texture_count; j++)
+						{
+							const fbxsdk::FbxTexture* texture = FbxCast<fbxsdk::FbxTexture>(prop.GetSrcObject<fbxsdk::FbxTexture>(j));
+							//texture->FindSrcObject
+							// Then, you can get all the properties of the texture, include its name
+							texture_name = texture->GetName();
+							//texture_name2 = texture->GetRelativeFileName();
+							//texture_name3 = texture->GetMediaName();
+						}
+					}*/
+					float f;
+					prop = material->FindProperty(fbxsdk::FbxSurfaceMaterial::sDiffuseFactor);
+					f = prop.Get<FbxDouble>();
+
+					prop = material->FindProperty(fbxsdk::FbxSurfaceMaterial::sSpecularFactor);
+					f = prop.Get<FbxDouble>();
+					Vector3 ambient;
+					std::string texFullPath = "";
+					if (texture_name2)
+					{
+						texFullPath = path + std::string(texture_name2);
+					}
+					finalMaterial = LoadMaterial(matName, &ambient, &diffuse, texFullPath);
+				}
+			}
+		}
+	}
+	return finalMaterial;
+}
+
+
 void MaterialManager::LoadOBJMaterials(std::string& path, std::string& file)
 {
 	std::string::size_type sz;
@@ -51,7 +160,7 @@ void MaterialManager::LoadOBJMaterials(std::string& path, std::string& file)
 	fullPath.append(file);
 	std::ifstream sfile(fullPath, std::ios::in);
 	std::string line;
-	std::vector<MaterialInfo> materials;
+	std::vector<OBJMaterialInfo> materials;
 	if (!sfile.is_open())
 	{
 		DirectZob::LogError("Error opening %s", fullPath.c_str());
@@ -71,7 +180,7 @@ void MaterialManager::LoadOBJMaterials(std::string& path, std::string& file)
 			SplitEntry(&line, &v, ' ');
 			if (v.size() == 2)
 			{
-				MaterialInfo matInfo;
+				OBJMaterialInfo matInfo;
 				matInfo.texture = "";
 				matInfo.name = v[1];
 				matInfo.file = file.substr(0, file.size() - 4);
@@ -167,6 +276,12 @@ void MaterialManager::UnloadAll()
 		m_materials[i] = NULL;
 	}
 	m_materials.clear();
+	for (int i = 0; i < m_textures.size(); i++)
+	{
+		delete (m_textures[i]);
+		m_textures[i] = NULL;
+	}
+	m_textures.clear();
 }
 
 void MaterialManager::SplitEntry(const std::string* s, std::vector<std::string>* v, const char delim)

@@ -4,12 +4,12 @@
     </Meshes>
     <Scene>
 		<Globals>
-			<AmbientColor r="150" g="150" b="150"/>
-			<FogColor r="200" g="200" b="200" />
-			<ClearColor r="200" g="200" b="200" />
-			<FogDensity>5</FogDensity>
-			<FogDistance>20</FogDistance>
-			<FogType>Exp2</FogType>			
+			<AmbientColor r="50" g="50" b="50"/>
+			<FogColor r="63" g="149" b="255" />
+			<ClearColor r="63" g="149" b="255" />
+			<FogDensity>60</FogDensity>
+			<FogDistance>1</FogDistance>
+			<FogType>exp2</FogType>			
 		</Globals>
         <ZobObject name="fbx_example">
             <Mesh>fbx_example</Mesh>
@@ -19,17 +19,24 @@
         </ZobObject>
 		<ZobObject name ="green" type="pointlight">
 			<Rotation x="0" y="0" z="0" />
-            <Position x="0" y="50" z="-100" />
+            <Position x="0" y="10" z="20" />
             <Color r="00" g="255" b="00" />
 			<Intensity>1</Intensity>
-			<FallOffDistance>500</FallOffDistance>
+			<FallOffDistance>60</FallOffDistance>
         </ZobObject>
 		<ZobObject name ="red" type="pointlight">
 			<Rotation x="0" y="0" z="0" />
-            <Position x="0" y="50" z="100" />
-            <Color r="0" g="00" b="255" />
-			<Intensity>1</Intensity>
-			<FallOffDistance>500</FallOffDistance>
+            <Position x="0" y="10" z="40" />
+            <Color r="255" g="00" b="0" />
+			<Intensity>2</Intensity>
+			<FallOffDistance>60</FallOffDistance>
         </ZobObject>
+		<ZobObject name ="blue" type="pointlight">
+			<Rotation x="0" y="0" z="0" />
+            <Position x="0" y="10" z="60" />
+            <Color r="0" g="0" b="255" />
+			<Intensity>1</Intensity>
+			<FallOffDistance>60</FallOffDistance>
+        </ZobObject>		
     </Scene>
 </root>

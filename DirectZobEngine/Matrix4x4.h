@@ -12,7 +12,17 @@ public:
 	void Identity();
 	void CopyFrom(const Matrix4x4* m);
 	void Mul(const Matrix4x4* m);
-	void Mul(Vector3* v) const;
+	inline void Mul(Vector3* v) const
+	{
+		float fx = m_data[0][0] * v->x + m_data[0][1] * v->y + m_data[0][2] * v->z + m_data[0][3] * v->w;
+		float fy = m_data[1][0] * v->x + m_data[1][1] * v->y + m_data[1][2] * v->z + m_data[1][3] * v->w;
+		float fz = m_data[2][0] * v->x + m_data[2][1] * v->y + m_data[2][2] * v->z + m_data[2][3] * v->w;
+		float fw = m_data[3][0] * v->x + m_data[3][1] * v->y + m_data[3][2] * v->z + m_data[3][3] * v->w;
+		v->x = fx;// +m_translationX;
+		v->y = fy;// +m_translationY;
+		v->z = fz;
+		v->w = fw;
+	};
 	inline void SetData(uint i, uint j, float f) { m_data[i][j] = f; }
 	void SetScale(const float x, const float y, const float z);
 	void SetRotation(const float x, const float y, const float z);
