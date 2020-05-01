@@ -6,7 +6,7 @@
 #include "Material.h"
 #include "Matrix4x4.h"
 #include "Triangle.h"
-#include <atomic>
+#include <thread> 
 
 #ifdef LINUX
 	#include <unistd.h>
@@ -27,12 +27,11 @@ public:
 	~Rasterizer();
 
 	void Start(const Triangle* triangles, const uint nbTriangles, const std::vector<Line3D>* lines, const bool wireFrame);
-	void End() { m_run = false; }
+	void WaitForend();
+	void End();
 	void Init();
-	void Run();
 	void Render();
 	void Clear();
-	inline bool HasStarted() const { return m_started; };
 
 private:
 
@@ -79,9 +78,6 @@ private:
 	uint m_startHeight;
 	uint m_width;
 	uint m_height;
-	volatile std::atomic_bool m_run;
-	volatile std::atomic_bool m_started;
+	std::thread m_thread;
 	bool m_wireFrame = false;
 };
-
-

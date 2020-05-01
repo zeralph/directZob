@@ -14,11 +14,13 @@
 #include "Vector3.h"
 #include "Material.h"
 #include "Camera.h"
-#include "Rasterizer.h"
 #include "Events.h"
 
 #define Z_NEAR 0.001f
 #define Z_FAR 500.0f
+
+class Rasterizer;
+
 namespace Core
 {
 	class Engine

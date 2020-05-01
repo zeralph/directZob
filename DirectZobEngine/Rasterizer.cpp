@@ -1,5 +1,4 @@
 #include "Rasterizer.h"
-#include <thread> 
 #include "DirectZob.h"
 #include "Light.h"
 
@@ -12,10 +11,6 @@ Rasterizer::Rasterizer(uint width, uint startHeight, uint endHeight, BufferData*
 	m_bufferData = bufferData;
 	m_height = endHeight;
 	m_width = width;
-	m_run = true;
-	m_started = false;
-	std::thread t = std::thread(&Rasterizer::Run, this);
-	t.detach();
 }
 
 void Rasterizer::Init()
@@ -24,29 +19,23 @@ void Rasterizer::Init()
 	//m_thread.detach();
 }
 
-void Rasterizer::Run()
-{
-	while (m_run)
-	{
-		if (m_started)
-		{
-			Render();
-			m_started = false;
-		}
-		else
-		{
-			//Sleep(1);
-		}
-	}
-}
-
 void Rasterizer::Start(const Triangle* triangles, const uint nbTriangles, const std::vector<Line3D>* lines, const bool wireFrame)
 {
 	m_lines = lines;
 	m_triangles = triangles;
 	m_nbTriangles = nbTriangles;
 	m_wireFrame = wireFrame;
-	m_started = true;
+	m_thread = std::thread(&Rasterizer::Render, this);
+}
+
+void Rasterizer::WaitForend() {
+	if(m_thread.joinable())
+		m_thread.join();
+}
+
+void Rasterizer::End() {
+	if (m_thread.joinable())
+		m_thread.join();
 }
 
 Rasterizer::~Rasterizer()
