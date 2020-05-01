@@ -133,13 +133,19 @@ int DirectZob::RunAFrame()
 			{
 				m_text->Print(0, 16, 1, &sBuf, 0xFFFF0000);
 			}
-			if(m_engine->LightingPrecision()==RenderOptions::Lighting_precision_pixel)
+			switch(m_engine->LightingPrecision())
 			{
-				sBuf = std::string("LighingPrecision : pixel");
-			}
-			else
-			{
-				sBuf = std::string("LighingPrecision : vertex");
+				default:
+				case RenderOptions::Lighting_precision_noLighting:
+					sBuf = std::string("LighingPrecision : no lighting");
+					break;
+				case RenderOptions::Lighting_precision_pixel:
+					sBuf = std::string("LighingPrecision : pixel");
+					break;
+				case RenderOptions::Lighting_precision_vertex:
+					sBuf = std::string("LighingPrecision : vertex");
+					break;
+
 			}
 			m_text->Print(0, 32, 1, &sBuf, 0xFFFFFFFF);
 		}

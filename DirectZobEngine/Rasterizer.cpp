@@ -457,7 +457,7 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 				gg++;
 			}
 		}
-		else 
+		else if(m_lightingPrecision == RenderOptions::Lighting_precision_pixel)
 		{
 			Vector3 l = ComputeLightingAtPoint(&tpos, &normal, lighting);
 			fr = l.x * r;

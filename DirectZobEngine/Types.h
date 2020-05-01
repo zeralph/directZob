@@ -48,7 +48,8 @@ public:
 		};
 		enum Lighting_precision
 		{
-			Lighting_precision_vertex = 0,
+			Lighting_precision_noLighting = 0,
+			Lighting_precision_vertex,
 			Lighting_precision_pixel,
 			__Lighting_precision_MAX__
 		};

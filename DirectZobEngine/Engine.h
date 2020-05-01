@@ -80,9 +80,9 @@ namespace Core
 		inline void ShowGrid(bool b) { m_showGrid = b; }
 		inline void ShowBBoxes(bool b) { m_showBBoxes = b; }
 		inline void WireFrame(bool b) { m_wireFrame = b; }
+		inline bool WireFrame() { return m_wireFrame; }
 		inline void ShowNormals(bool b) { m_showNormals = b; }
 		inline bool ShowGrid() { return m_showGrid; }
-		inline bool WireFrame() { return m_wireFrame; }
 		inline bool ShowNormals() { return m_showNormals; }
 		inline bool ShowBBoxes() { return m_showBBoxes; }
 		inline void UseScanline(bool b) { m_scaneLine = b; }
