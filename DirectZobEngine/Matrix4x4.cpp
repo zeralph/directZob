@@ -52,6 +52,13 @@ void Matrix4x4::CopyFrom(const Matrix4x4* m)
 	memcpy(&m_data, &m->m_data, sizeof(m_data));
 }
 
+void Matrix4x4::AddScale(const Vector3& v)
+{
+	m_data[0][0] *= v.x;
+	m_data[1][1] *= v.y;
+	m_data[2][2] *= v.z;
+}
+
 void Matrix4x4::SetScale(const Vector3& v)
 {
 	tmp.Identity();
@@ -77,6 +84,41 @@ void Matrix4x4::SetTranslation(const Vector3& v)
 	tmp.m_data[1][3] = v.y;
 	tmp.m_data[2][3] = v.z;
 	Mul(&tmp);
+}
+
+void Matrix4x4::AddRotation(const Vector3& v)
+{
+	float heading = 0.0f;
+	float bank = 0.0f;
+	float attitude = 0.0f;
+
+	if (m_data[1][0] > 0.998) { // singularity at north pole
+		heading = atan2(m_data[0][2], m_data[2][2]);
+		attitude = M_PI / 2;
+		bank = 0;
+		return;
+	}
+	if (m_data[1][0] < -0.998) { // singularity at south pole
+		heading = atan2(m_data[0][2], m_data[2][2]);
+		attitude = -M_PI / 2;
+		bank = 0;
+		return;
+	}
+	heading = atan2(-m_data[2][0], m_data[0][0]);
+	bank = atan2(-m_data[1][2], m_data[1][1]);
+	attitude = asin(m_data[1][0]);
+
+	SetRotationX(heading + v.x);
+	SetRotationY(bank + v.y);
+	SetRotationZ(attitude + v.z);
+}
+
+
+void Matrix4x4::AddTranslation(const Vector3& v)
+{
+	m_data[0][3] += v.x;
+	m_data[1][3] += v.y;
+	m_data[2][3] += v.z;
 }
 
 void Matrix4x4::SetTranslation(const float x, const float y, const float z)
