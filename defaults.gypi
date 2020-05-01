@@ -77,6 +77,7 @@
 									'FloatingPointModel': '2', # fast
 									'EnableIntrinsicFunctions': 'true',
 									'WholeProgramOptimization': 'true', # No
+                                    'EnableEnhancedInstructionSet' : '5', # enable AVX2 instructions
                                 },
                             },
                         },
