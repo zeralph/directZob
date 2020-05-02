@@ -19,14 +19,27 @@
                 {
                     'defines': [
                         'MACOS',
-                        'USE_METAL_API',
+                        #'USE_METAL_API',
                     ],
                     'xcode_settings':{
-                        'CC':'clang',
-                        'MACOSX_DEPLOYMENT_TARGET':'10.14',
+                        'CC':'clang++',
+                        'MACOSX_DEPLOYMENT_TARGET':'10.17',
                         'CLANG_CXX_LANGUAGE_STANDARD':'c++11',
                         'CLANG_CXX_LIBRARY':'libc++',
                         'ARCHS': ['x86_64']
+                    },
+                    'link_settings': {
+                        'libraries': [
+                            '$(SDKROOT)/System/Library/Frameworks/Cocoa.framework',
+                            '$(SDKROOT)/System/Library/Frameworks/Metal.framework',
+                            #'$(SDKROOT)/System/Library/Frameworks/StoreKit.framework',
+                            '$(SDKROOT)/System/Library/Frameworks/GameKit.framework',
+                            '-liconv',
+                            '-lz',
+                            '-lxml2',
+                            '-ObjC',
+                            '-v',
+                        ],
                     },
                 },
             ],
@@ -57,7 +70,7 @@
                                 },
                             },
                         },
-                           'OS=="linux"',
+                        'OS=="linux"',
                         {
                             'cflags': 
                             [

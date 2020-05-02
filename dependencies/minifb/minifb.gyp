@@ -18,21 +18,13 @@
                 'MiniFB_internal.c',
             ],
             'conditions': [
-                [
-                    'OS=="mac"', {
-                        'sources': [
-                            'macosx/MacMiniFB.m',
-                            'macosx/OSXWindow.m',
-                            'macosx/OSXWindowFrameView.m',
-                        ],
-						'xcode_settings':{
-							'CC':'clang',
-							'MACOSX_DEPLOYMENT_TARGET':'10.7',
-							'CLANG_CXX_LANGUAGE_STANDARD':'c++11',
-							'CLANG_CXX_LIBRARY':'libc++',
-						},
-                    }
-                ],
+                ['OS=="mac"', {
+                    'sources': [
+                        'macosx/MacMiniFB.m',
+                        'macosx/OSXWindow.m',
+                        'macosx/OSXWindowFrameView.m',
+                    ],
+                }],
                 ['OS=="linux"', {
                     'sources': [
                         'x11/X11MiniFB.c',
