@@ -53,7 +53,7 @@ void Texture::LoadFromFile(const std::string& textureFile)
 				m_data[i + 3] = a;
 			}
 			m_dataSize = width * height * 4;
-			DirectZob::LogInfo("Loaded texture %s", textureFile);
+			DirectZob::LogInfo("Loaded texture %s", textureFile.c_str());
 		}
 	}
 	else if (textureFile.find(".jpg") != -1 || textureFile.find(".jpeg") != -1)
@@ -98,7 +98,7 @@ void Texture::LoadFromFile(const std::string& textureFile)
 				}
 				m_dataSize = width * height * 4;
 				nanojpeg::njDone();
-				DirectZob::LogInfo("Loaded texture %s", textureFile);
+				DirectZob::LogInfo("Loaded texture %s", textureFile.c_str());
 			}
 			else
 			{

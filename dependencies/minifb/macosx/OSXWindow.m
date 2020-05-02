@@ -277,7 +277,8 @@ extern short int    g_keycodes[512];
 
 - (void)windowDidResize:(NSNotification *)notification {
     kUnused(notification);
-    CGSize size = [self contentRectForFrameRect:[self frame]].size;
+    //CGSize
+    NSSize size = [self contentRectForFrameRect:[self frame]].size;
 
     window_data->window_width  = size.width;
     window_data->window_height = size.height;
