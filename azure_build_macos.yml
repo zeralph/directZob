@@ -7,24 +7,15 @@ trigger:
 - master
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: 'macos-latest'
 
 steps:
 - task: UsePythonVersion@0
   inputs:
     versionSpec: '3.6'
 
-#- script: python -m pip install --upgrade pip setuptools
-#  displayName: 'Install pyhton tools'
-
 - script: python -m pip install git+https://chromium.googlesource.com/external/gyp
   displayName: 'Install gyp'
-
-#- script: gyp ./DirectZobEngine/DirectZob.gyp --depth=. --generator-output=./DirectZobEngine/build/DirectZob/
-#  displayName: 'Generate sln'
-
-#- script: ./DirectZobEngine/build/DirectZob/make DirectZobExe BUILDTYPE=Release
-#  displayName: 'make'
 
 - script: ./buildMacos.sh Release
   displayName: 'make'
