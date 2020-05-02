@@ -1,20 +1,30 @@
-# Xcode
-# Build, test, and archive an Xcode workspace on macOS.
-# Add steps that install certificates, test, sign, and distribute an app, save build artifacts, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/xcode
+# C/C++ with GCC
+# Build your C/C++ project with GCC using make.
+# Add steps that publish test results, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/apps/c-cpp/gcc
 
 trigger:
 - master
 
 pool:
-  vmImage: 'macos-latest'
+  vmImage: 'ubuntu-latest'
 
 steps:
-- task: Xcode@5
+- task: UsePythonVersion@0
   inputs:
-    actions: 'build'
-    scheme: ''
-    sdk: 'iphoneos'
-    configuration: 'Release'
-    xcWorkspacePath: '**/*.xcodeproj/project.xcworkspace'
-    xcodeVersion: 'default' # Options: 8, 9, 10, default, specifyPath
+    versionSpec: '3.6'
+
+#- script: python -m pip install --upgrade pip setuptools
+#  displayName: 'Install pyhton tools'
+
+- script: python -m pip install git+https://chromium.googlesource.com/external/gyp
+  displayName: 'Install gyp'
+
+#- script: gyp ./DirectZobEngine/DirectZob.gyp --depth=. --generator-output=./DirectZobEngine/build/DirectZob/
+#  displayName: 'Generate sln'
+
+#- script: ./DirectZobEngine/build/DirectZob/make DirectZobExe BUILDTYPE=Release
+#  displayName: 'make'
+
+- script: ./buildMacos.sh Release
+  displayName: 'make'
