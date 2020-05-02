@@ -29,11 +29,11 @@ steps:
 #- script: gyp ./DirectZobEngine/DirectZob.gyp --depth=. --generator-output=./DirectZobEngine/build/DirectZob/ -f msvs -G msvs_version=2017 -d all
 #  displayName: 'Generate sln'
 
-#- task: VSBuild@1
-#  inputs:
-#    solution: '$(solution)'
-#    configuration: '$(buildConfiguration)'
-#    msbuildArgs: '/p:AppxBundlePlatforms="$(buildPlatform)" /p:AppxPackageDir="$(appxPackageDir)" /p:AppxBundle=Always /p:UapAppxPackageBuildMode=StoreUpload'
+- script: ./DirectZobEngine/generate_sln.bat
+  displayName: 'Generate sln'
 
-- script: ./buildWindows.bat
-  displayName: 'make'
+- task: VSBuild@1
+  inputs:
+    solution: '$(solution)'
+    configuration: '$(buildConfiguration)'
+    msbuildArgs: '/p:AppxBundlePlatforms="$(buildPlatform)" /p:AppxPackageDir="$(appxPackageDir)" /p:AppxBundle=Always /p:UapAppxPackageBuildMode=StoreUpload'
