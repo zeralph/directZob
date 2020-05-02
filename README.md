@@ -1,6 +1,8 @@
 # directZob
 A full software 3D engine
 
+Windows : [![Windows](https://dev.azure.com/zeralph/DirectZob/_apis/build/status/azure_windows_build?branchName=master)](https://dev.azure.com/zeralph/DirectZob/_build/latest?definitionId=6&branchName=master) Linux : [![Build Status](https://dev.azure.com/zeralph/DirectZob/_apis/build/status/azure_linux_build?branchName=master)](https://dev.azure.com/zeralph/DirectZob/_build/latest?definitionId=5&branchName=master) MacOs: [![Build Status](https://dev.azure.com/zeralph/DirectZob/_apis/build/status/azure_macos_build?branchName=master)](https://dev.azure.com/zeralph/DirectZob/_build/latest?definitionId=3&branchName=master)
+
 ## Requirements
 
 ### gyp build system
