@@ -20,7 +20,7 @@ steps:
 - script: python -m pip install git+https://chromium.googlesource.com/external/gyp
   displayName: 'Install gyp'
 
-- script: gyp ./DirectZobEngine/DirectZob.gyp --depth=. --generator-output=./DirectZobEngine/build/DirectZob/ -f msvs -G msvs_version=2017 -d all
+- script: gyp ./DirectZobEngine/DirectZob.gyp --depth=. --generator-output=./DirectZobEngine/build/DirectZob/
   displayName: 'Generate sln'
 
 
