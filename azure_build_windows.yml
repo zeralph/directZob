@@ -29,7 +29,8 @@ steps:
 #- script: gyp ./DirectZobEngine/DirectZob.gyp --depth=. --generator-output=./DirectZobEngine/build/DirectZob/ -f msvs -G msvs_version=2017 -d all
 #  displayName: 'Generate sln'
 
-- script: ./DirectZobEngine/generate_sln.bat
+- script: generate_sln.bat
+  workingDirectory: ./DirectZobEngine/
   displayName: 'Generate sln'
 
 - task: VSBuild@1
