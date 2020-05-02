@@ -10,7 +10,7 @@ pool:
   vmImage: 'windows-latest'
 
 variables:
-  solution: '*./DirectZobEngine/build/DirectZob.DirectZob.sln'
+  solution: './DirectZobEngine/build/DirectZob.DirectZob.sln'
   buildPlatform: 'x64'
   buildConfiguration: 'Release'
   appxPackageDir: '$(build.artifactStagingDirectory)\AppxPackages\\'
