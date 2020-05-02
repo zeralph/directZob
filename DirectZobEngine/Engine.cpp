@@ -199,8 +199,7 @@ void Engine::ClearBuffer(const Color *color)
 	}
 	else
 	{	
-		int y = (m_currentFrame) % 2;
-		for (y; y < m_bufferData.height; y += 2)
+		for (int y = (m_currentFrame) % 2; y < m_bufferData.height; y += 2)
 		{
 			int s = m_bufferData.width * y;
 			for (int i = 0; i < m_bufferData.width; i++)
