@@ -20,8 +20,11 @@ steps:
   inputs:
     versionSpec: '3.6'
 
-- script: python3 -m pip3 install --upgrade pip3 setuptools gyp
-  displayName: 'Install pyhton tools and gyp'
+- script: python -m pip install --upgrade pip setuptools gyp
+  displayName: 'Install pyhton tools'
+
+- script: python -m pip install git+https://chromium.googlesource.com/external/gyp
+  displayName: 'Install gyp'
 
 - script: python3 gyp ./DirectZobEngine/DirectZob.gyp --depth=. --generator-output=./DirectZobEngine/build/DirectZob/ -f msvs -G msvs_version=2017
   displayName: 'Generate sln'
