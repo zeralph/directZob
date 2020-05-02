@@ -19,6 +19,7 @@
                 {
                     'defines': [
                         'MACOS',
+                        'USE_METAL_API',
                     ],
                 },
             ],
