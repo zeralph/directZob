@@ -85,7 +85,9 @@
                         {
                             'cflags': 
                             [
-                                '-Ofast'
+                                '-Ofast',
+								'-march=haswell',
+                                '-ffast-math'
                             ],
                         }
                     ],
