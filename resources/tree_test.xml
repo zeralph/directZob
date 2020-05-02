@@ -1,0 +1,27 @@
+<root>
+    <Meshes>
+		<Mesh name="sphere0" file="only_quad_sphere.fbx" />
+		<Mesh name="sphere1" file="only_quad_sphere.fbx" />
+		<Mesh name="sphere2" file="only_quad_sphere.fbx" />
+    </Meshes>
+    <Scene>
+        <ZobObject name="sphere0">
+            <Mesh>sphere0</Mesh>
+            <Position x="0" y="0" z="0" />
+            <Rotation x="0" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+			<ZobObject name="sphere1">
+				<Mesh>sphere1</Mesh>
+				<Position x="2" y="0" z="0" />
+				<Rotation x="0" y="0" z="0" />
+				<Scale x="1" y="1" z="1" />
+				<ZobObject name="sphere2">
+					<Mesh>sphere2</Mesh>
+					<Position x="2" y="0" z="0" />
+					<Rotation x="0" y="0" z="0" />
+					<Scale x="1" y="1" z="1" />
+				</ZobObject>
+			</ZobObject>
+        </ZobObject>
+    </Scene>
+</root>

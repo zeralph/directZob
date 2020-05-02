@@ -100,6 +100,7 @@ void Rasterizer::DrawLine(const Line3D* l) const
 	{
 		std::swap(x1, y1);
 		std::swap(x2, y2);
+		std::swap(z1, z2);
 	}
 
 	if (x1 > x2)
@@ -110,7 +111,8 @@ void Rasterizer::DrawLine(const Line3D* l) const
 	}
 	const float dx = x2 - x1;
 	const float dy = abs(y2 - y1);
-	
+	const float dz = abs(z2 - z1);
+
 	float scaleX = 1.0;
 	float scaleY = 1.0;
 	float scaleZ = 1.0;
@@ -120,7 +122,6 @@ void Rasterizer::DrawLine(const Line3D* l) const
 	int y = (int)y1;
 	
 	const int maxX = (int)x2;
-	const float dz = z2 - z1;
 	const float zstep = dz / (maxX - x1);
 	float z = z1;
 	for (int x = (int)x1; x < maxX; x++)
