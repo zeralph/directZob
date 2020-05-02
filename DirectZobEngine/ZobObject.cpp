@@ -60,23 +60,24 @@ const std::string ZobObject::GetMeshName() const
 }
 
 
-void ZobObject::Update(const Matrix4x4& parentMatrix, const Matrix4x4& parentRotationMatrix)
+void ZobObject::Update(const Matrix4x4& parentMatrix, const Matrix4x4& parentRSMatrix)
 {
-	m_modelMatrix.Identity();
-	m_rotationMatrix.Identity();
-	m_rotationMatrix.SetRotation(&m_rotation);
-	m_rotationMatrix.Mul(&parentRotationMatrix);
 	Vector3 t = m_translation;
 	Vector3 r = m_rotation;
 	Vector3 s = m_scale;
-	parentRotationMatrix.Mul(&t);
+	m_modelMatrix.Identity();
+	m_rotationScaleMatrix.Identity();
+	m_rotationScaleMatrix.SetRotation(&m_rotation);
+	m_rotationScaleMatrix.SetScale(&m_scale);
+	m_rotationScaleMatrix.Mul(&parentRSMatrix);
+	parentRSMatrix.Mul(&t);
+	m_modelMatrix.SetTranslation(&t);
+	m_modelMatrix.SetRotation(&r);
+	m_modelMatrix.SetScale(&s);
 	m_modelMatrix.Mul(&parentMatrix);
-	m_modelMatrix.AddScale(&s);
-	m_modelMatrix.AddRotation(&r);
-	m_modelMatrix.AddTranslation(&t);
 	for (int i = 0; i < m_children.size(); i++)
 	{
-		m_children.at(i)->Update(m_modelMatrix, m_rotationMatrix);
+		m_children.at(i)->Update(m_modelMatrix, m_rotationScaleMatrix);
 	}
 }
 
@@ -84,7 +85,7 @@ void ZobObject::Draw(const Camera* camera, Core::Engine* engine)
 {
 	if (m_mesh)
 	{
-		m_mesh->Draw(m_modelMatrix, m_rotationMatrix, camera, engine, GetId(), m_renderOptions);
+		m_mesh->Draw(m_modelMatrix, m_rotationScaleMatrix, camera, engine, GetId(), m_renderOptions);
 	}
 	for (int i = 0; i < m_children.size(); i++)
 	{
