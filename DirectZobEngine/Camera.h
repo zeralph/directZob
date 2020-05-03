@@ -1,6 +1,7 @@
 #pragma once
 #include "Matrix4x4.h"
-#include "MiniFB_enums.h"
+//TODO : camera should not handlke mouse and key inputs .... to remove
+#include "../dependencies/minifb/MiniFB_enums.h"
 #include <string>
 
 
