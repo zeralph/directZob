@@ -104,6 +104,30 @@
             "externalConsole": false,
             "MIMode": "lldb",
             "preLaunchTask": "Macos build release"
-        }
+        },
+        {
+            "name": "Windows Release build and run",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/DirectZobExe.exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "preLaunchTask": "Windows build release"
+          },
+          {
+              "name": "Windows Debug build and run",
+              "type": "cppvsdbg",
+              "request": "launch",
+              "program": "${workspaceFolder}/DirectZobExe.exe",
+              "args": [],
+              "stopAtEntry": false,
+              "cwd": "${workspaceFolder}",
+              "environment": [],
+              "externalConsole": false,
+              "preLaunchTask": "Windows build debug"
+            }
     ]
 }
