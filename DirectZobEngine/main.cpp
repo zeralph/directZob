@@ -129,7 +129,7 @@ int main(int argc, char* argv[])
 		return 1;
 	}
 	int i = 0;
-	while( i < argc) 
+	while( i < argc)
 	{
 		if (std::string(argv[i]) == "--scene") 
 		{

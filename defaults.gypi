@@ -26,13 +26,12 @@
                         'MACOSX_DEPLOYMENT_TARGET':'10.17',
                         'CLANG_CXX_LANGUAGE_STANDARD':'c++11',
                         'CLANG_CXX_LIBRARY':'libc++',
-                        'ARCHS': ['x86_64']
+                        'ARCHS': ['x86_64'],
                     },
                     'link_settings': {
                         'libraries': [
                             '$(SDKROOT)/System/Library/Frameworks/Cocoa.framework',
                             '$(SDKROOT)/System/Library/Frameworks/Metal.framework',
-                            #'$(SDKROOT)/System/Library/Frameworks/StoreKit.framework',
                             '$(SDKROOT)/System/Library/Frameworks/GameKit.framework',
                             '-liconv',
                             '-lz',
@@ -70,6 +69,14 @@
                                 },
                             },
                         },
+                        'OS=="mac"',
+                        {
+                            'xcode_settings':{
+                                'GCC_OPTIMIZATION_LEVEL':'0',
+                                'GCC_FAST_MATH':'YES',
+                                'CLANG_X86_VECTOR_INSTRUCTIONS':'avx2',
+                            },
+                        },
                         'OS=="linux"',
                         {
                             'cflags': 
@@ -100,6 +107,14 @@
 									'WholeProgramOptimization': 'true', # No
                                     'EnableEnhancedInstructionSet' : '5', # enable AVX2 instructions
                                 },
+                            },
+                        },
+                        'OS=="mac"',
+                        {
+                            'xcode_settings':{
+                                'GCC_OPTIMIZATION_LEVEL':'s',
+                                'GCC_FAST_MATH':'YES',
+                                'CLANG_X86_VECTOR_INSTRUCTIONS':'avx2',
                             },
                         },
                         'OS=="linux"',

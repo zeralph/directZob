@@ -6,7 +6,7 @@
     "configurations": [
         
         {
-            "name": "Build and run debug",
+            "name": "Linux Debug build and run",
             "type": "cppdbg",
             "request": "launch",
             "program": "/home/ralph/directZob/DirectZobExe",
@@ -31,11 +31,11 @@
                     "ignoreFailures": true
                 }
             ],
-            "preLaunchTask": "build debug",
+            "preLaunchTask": "Linux build debug",
             "miDebuggerPath": "/usr/bin/gdb"
         },
         {
-            "name": "Build and run release",
+            "name": "Linux Release build and run",
             "request": "launch",
             "program": "/home/ralph/directZob/DirectZobExe",
             "args": [
@@ -60,8 +60,50 @@
                     "ignoreFailures": true
                 }
             ],
-            "preLaunchTask": "build release",
+            "preLaunchTask": "Linux build release",
             "miDebuggerPath": "/usr/bin/gdb"
+        },
+        {
+            "name": "Macos Debug build and run",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/DirectZobExe",
+            "args": [ 
+                "--bench",
+                "--scene",
+                "./resources/fbx.xml",
+                "--width",
+                "640",
+                "--height",
+                "400"
+            ],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "lldb",
+            "preLaunchTask": "Macos build debug"
+        },
+        {
+            "name": "Macos Release build and run",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/DirectZobExe",
+            "args": [ 
+                "--bench",
+                "--scene",
+                "./resources/fbx.xml",
+                "--width",
+                "640",
+                "--height",
+                "400"
+            ],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "lldb",
+            "preLaunchTask": "Macos build release"
         }
     ]
 }
