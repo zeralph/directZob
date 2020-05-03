@@ -1,7 +1,5 @@
 #pragma once
 #include "Matrix4x4.h"
-//TODO : camera should not handlke mouse and key inputs .... to remove
-#include "../dependencies/minifb/MiniFB_enums.h"
 #include <string>
 
 
@@ -25,10 +23,6 @@ public:
 	void RotateAroundAxis(float dx, float dy);
 	void Move(float dx, float dy);
 	void Zoom(float z);
-	void OnMouseScroll(float deltaY);
-	void OnKeyboardInput(Key key, bool isPressed);
-	void OnMouseMove(int x, int y);
-	void OnMouseButton(MouseButton button, bool isPressed);
 
 private:
 	void setProjectionMatrix(const float angleOfView, const float width, const float height, const float near, const float far);

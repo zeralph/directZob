@@ -25,38 +25,6 @@ Camera::~Camera()
 {
 }
 
-void Camera::OnMouseScroll(float deltaY)
-{
-	Vector3 v = m_cameraFw;
-	v = v * (-deltaY*2.0f);
-	m_cameraPosition = m_cameraPosition + v;
-}
-
-void Camera::OnMouseButton(MouseButton button, bool isPressed)
-{
-	if (button == MOUSE_BTN_1)
-	{
-		if (isPressed)
-		{
-			m_mouseLeftButtonPressed = true;
-		}
-		else
-		{
-			m_mouseLeftButtonPressed = false;
-		}
-	}
-	else if(button == MOUSE_BTN_2)
-	{
-		if (isPressed)
-		{
-			m_mouseRightButtonPressed = true;
-		}
-		else
-		{
-			m_mouseRightButtonPressed = false;
-		}
-	}
-}
 void Camera::Zoom(float z)
 {
 	Vector3 v = m_cameraFw;
@@ -96,71 +64,6 @@ void Camera::Move(float dx, float dy)
 	vf.y = 0;
 	m_cameraPosition = m_cameraPosition - (vl + vf);
 	m_cameraTarget = m_cameraTarget - (vl + vf);
-}
-
-void Camera::OnMouseMove(int x, int y)
-{
-	float d = 1.0f;
-	float r = 1.0f;
-	if (m_mouseX < 0)
-	{
-		m_mouseX = x;
-	}
-	if (m_mouseY < 0)
-	{
-		m_mouseY = y;
-	}
-	int dx = x - m_mouseX;
-	int dy = y - m_mouseY;
-
-	if (m_mouseLeftButtonPressed)
-	{
-		Vector3 vl = Vector3(m_cameraLeft);
-		Vector3 vf = Vector3(m_cameraFw);
-		vl = vl * ((float)-dx / 20.0f);
-		vf = vf * ((float)dy / 20.0f);
-		//vf = &Vector3::Vector3Zero;
-		vl.y = 0;
-		vf.y = 0;
-		m_cameraPosition = m_cameraPosition - ( vl + vf );
-		m_cameraTarget = m_cameraTarget - (vl + vf);
-	}
-	if (m_mouseRightButtonPressed)
-	{
-		Vector3 l = m_cameraPosition - m_cameraTarget;
-		l = Vector3::RotateAroundAxis(l, Vector3::Vector3Y, -dx * M_PI / 180.0);
-		m_cameraPosition = l + m_cameraTarget;
-		RecomputeVectors();
-		if (m_cameraFw.y >= 0.95f && dy > 0)
-		{
-			dy = 0.0f;
-		}
-		if (m_cameraFw.y <= -0.95f && dy < 0)
-		{
-			dy = 0.0f;
-		}
-		l = m_cameraPosition - m_cameraTarget;
-		l = Vector3::RotateAroundAxis(l, m_cameraLeft, dy * M_PI / 180.0);
-		m_cameraPosition = l + m_cameraTarget;
-		RecomputeVectors();
-	}
-	m_mouseX = x;
-	m_mouseY = y;
-}
-
-void Camera::OnKeyboardInput(Key key, bool isPressed)
-{
-	if (key == KB_KEY_RIGHT_SHIFT || key == KB_KEY_LEFT_SHIFT)
-	{
-		if (isPressed)
-		{
-			m_shiftPressed = true;
-		}
-		else
-		{
-			m_shiftPressed = false;
-		}
-	}
 }
 
 void Camera::Update()

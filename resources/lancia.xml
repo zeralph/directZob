@@ -6,8 +6,15 @@
         <ZobObject name="lacia_delta_9">
             <Mesh>fbx_example</Mesh>
             <Position x="0" y="0" z="0" />
-            <Rotation x="-90" y="0" z="0" />
+            <Rotation x="0" y="0" z="0" />
             <Scale x="0.05" y="0.05" z="0.05" />
         </ZobObject>
+		<ZobObject name ="sun" type="pointlight">
+			<Rotation x="0" y="0" z="0" />
+			<Position x="100" y="100" z="100" />
+			<Color r="255" g="128" b="64" />
+			<Intensity>5</Intensity>
+			<FallOffDistance>50000</FallOffDistance>
+		</ZobObject>
     </Scene>
 </root>
