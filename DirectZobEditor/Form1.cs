@@ -18,10 +18,11 @@ namespace DirectZobEditor
         public event EventHandler OnNewScene;
         public event EventHandler OnSceneLoaded;
         public event EventHandler OnSceneSaved;
+        public event EventHandler OnSceneUpdated;
 
         private CLI.DirectZobWrapper m_directZobWrapper;
-        private CLI.CameraManagerWrapper m_camerManagerWrapper;
         private CLI.MeshManagerWrapper m_meshManagerWrapper;
+        private CLI.LightManagerWrapper m_lightManagerWrapper;
         //public UpdateLogWindow UpdateLogWindowDelegate;
         
         private CameraControl m_camControl;
@@ -45,7 +46,7 @@ namespace DirectZobEditor
             m_directZobWrapper.Init(800, 600);
 
             m_meshManagerWrapper = new CLI.MeshManagerWrapper();
-
+            m_lightManagerWrapper = new CLI.LightManagerWrapper();
             Application.ApplicationExit += new EventHandler(this.OnApplicationExit);
 
             propertiesPanel.Width = 600;
@@ -267,7 +268,7 @@ namespace DirectZobEditor
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
                 openFileDialog.InitialDirectory = m_path;
-                openFileDialog.Filter = "obj files (*.obj)|*.obj";
+                openFileDialog.Filter = "obj files (*.obj)|*.obj|fbx files (*.fbx)|*.fbx";
                 openFileDialog.FilterIndex = 2;
                 openFileDialog.RestoreDirectory = true;
                 //openFileDialog.AutoUpgradeEnabled = false;
@@ -278,6 +279,13 @@ namespace DirectZobEditor
                     string name = file;
                     name.Replace(' ', '_');
                     m_meshManagerWrapper.LoadMesh(name, path, file);
+                    CLI.ZobObjectWrapper z = m_zobObjectList.GetWrapper().AddZobObject("");
+                    z.SetMesh(name);
+                    EventHandler handler = OnSceneUpdated;
+                    if (null != handler)
+                    {
+                        handler(this, EventArgs.Empty);
+                    }
                 }
             }
         }
@@ -302,6 +310,25 @@ namespace DirectZobEditor
             OnApplicationExit(sender, e);
         }
 
+        private void createLightToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            m_lightManagerWrapper.CreateLight();
+            EventHandler handler = OnSceneUpdated;
+            if (null != handler)
+            {
+                handler(this, EventArgs.Empty);
+            }
+        }
+
+        private void ZobObjectListPanel_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+
+        }
     }
 
     public class Event

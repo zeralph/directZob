@@ -35,7 +35,7 @@ public:
 	float area;
 	uint owner;
 	bool draw;
-	DirectZobType::RenderOptions options;
+	const DirectZobType::RenderOptions* options;
 
 	inline void ComputeArea()
 	{

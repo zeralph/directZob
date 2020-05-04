@@ -13,6 +13,7 @@ Material::Material(const std::string& name, const Vector3* ambientColor, const V
 
 Material::~Material()
 {
+	//warning : material does not delete the texture. This is handlded by the materialManager
 	m_diffuseTexture = NULL;
 	m_name = "deleted";
 	m_ambientColor = Vector3(0, 0, 0);

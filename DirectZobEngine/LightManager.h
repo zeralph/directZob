@@ -13,6 +13,7 @@ public:
 	~LightManager();
 	void Setup(Vector3* fogColor, Vector3* ambientColor, Vector3* clearColor, float fogDistance, float fogDensity, FogType fogType);
 	void ReInitGlobalSettings();
+	Light* CreateLight();
 	Light* CreatePointLight(std::string& name, Vector3 position, Vector3 color, float intensity, float distance, ZobObject* parent);
 	const std::vector<Light*>*  GetActiveLights() const;
 	Light* GetLight(const std::string& name) const;

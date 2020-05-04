@@ -208,6 +208,7 @@
                         },
                         'sources': [
                             'CameraManagerWrapper.cpp',
+							'LightManagerWrapper.cpp',
                             'DirectZobWrapper.cpp',
                             'EngineWrapper.cpp',
                             'MeshManagerWrapper.cpp',

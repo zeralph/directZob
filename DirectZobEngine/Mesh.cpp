@@ -195,6 +195,19 @@ void Mesh::LoadFbx(const std::string& fullPath)
 		FbxScene* lScene = FbxScene::Create(fbxManag, "myScene");
 		importer->Import(lScene);
 		importer->Destroy();
+		if (lScene->GetGlobalSettings().GetSystemUnit() == FbxSystemUnit::cm)
+		{
+			const FbxSystemUnit::ConversionOptions lConversionOptions = {
+			  false, /* mConvertRrsNodes */
+			  true, /* mConvertLimits */
+			  true, /* mConvertClusters */
+			  true, /* mConvertLightIntensity */
+			  true, /* mConvertPhotometricLProperties */
+			  true  /* mConvertCameraClipPlanes */
+			};
+			// Convert the scene to meters using the defined options.
+			FbxSystemUnit::m.ConvertScene(lScene, lConversionOptions);
+		}
 		int gc = lScene->GetGeometryCount();
 		m_nbFaces = 0;
 		int i = 0;
@@ -234,8 +247,9 @@ Mesh::~Mesh()
 {
 	for (int i = 0; i < m_subMeshes.size(); i++)
 	{
-		delete m_subMeshes[i];
+		Mesh* m = m_subMeshes[i];
 		m_subMeshes[i] = NULL;
+		delete m;
 	}
 	m_subMeshes.clear();
 	m_triangles.clear();
@@ -402,7 +416,7 @@ void Mesh::SplitEntry(const std::string* s, std::vector<std::string>* v, const c
 	ReinitVertices();
 }*/
 
-void Mesh::DrawBoundingBox(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions options)
+void Mesh::DrawBoundingBox(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions* options)
 {
 	Vector3 v0 = Vector3(m_minBouding.x, m_minBouding.y, m_minBouding.z);
 	Vector3 v1 = Vector3(m_minBouding.x, m_maxBouding.y, m_minBouding.z);
@@ -437,7 +451,7 @@ void Mesh::DrawBoundingBox(const Matrix4x4& modelMatrix, const Matrix4x4& rotati
 	engine->QueueLine(camera, &v0, &v4, 0xFF00FF00);
 }
 
-void Mesh::Draw(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions options)
+void Mesh::Draw(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions* options)
 {
 	if (engine->ShowBBoxes())
 	{
@@ -491,8 +505,7 @@ void Mesh::Draw(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, c
 	{
 		Triangle* t = &m_triangles[i];
 		t->draw = false;
-		t->options.ZBuffered(options.ZBuffered());
-		t->options.LightMode(options.LightMode());
+		t->options = options;
 		if (!RejectTriangle(t, znear, zfar, (float)bData->width, (float)bData->height))
 		{
 			//t->n->Set(t->na);

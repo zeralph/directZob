@@ -22,6 +22,7 @@ Triangle::Triangle()
 	uc = NULL;
 
 	draw = false;
+	options = NULL;
 }
 
 
@@ -41,4 +42,5 @@ Triangle::~Triangle()
 	ua = NULL;
 	ub = NULL;
 	uc = NULL;
+	options = NULL;
 }

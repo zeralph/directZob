@@ -59,12 +59,13 @@ namespace CLI
 		m_Instance->RemoveZobObject(z);
 	}
 
-	void ZobObjectManagerWrapper::AddZobObject(System::String^ parent)
+	ZobObjectWrapper^ ZobObjectManagerWrapper::AddZobObject(System::String^ parent)
 	{
 		std::string n;
 		MarshalString(parent, n);
-		ZobObject* z = m_Instance->GetZobObject(n);
-		m_Instance->CreateZobObject(z);
+		ZobObject* p = m_Instance->GetZobObject(n);
+		ZobObject* z = m_Instance->CreateZobObject(p);
+		return gcnew ZobObjectWrapper(z);
 	}
 
 	void ZobObjectManagerWrapper::CreateEditorGizmos(System::String^ editorResourcesPath)

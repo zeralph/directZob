@@ -13,7 +13,9 @@ MeshManager::~MeshManager()
 	m_lSdkManager->Destroy();
 	for (int i = 0; i < m_meshes.size(); i++)
 	{
-		delete (m_meshes[i]);
+		Mesh* m = m_meshes[i];
+		m_meshes[i] = NULL;
+		delete m;
 	}
 	m_meshes.clear();
 }

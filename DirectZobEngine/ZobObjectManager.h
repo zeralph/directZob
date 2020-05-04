@@ -5,6 +5,7 @@
 #include <vector>
 #include "Camera.h"
 #include "Engine.h"
+#include "Light.h"
 
 class ZobObjectManager
 {
@@ -22,7 +23,7 @@ public:
 	ZobObject* GetZobObject(const std::string& name) const;
 	std::string GetZobObjectList();
 	ZobObject* GetRootObject() { return m_rootObject;  }
-	void CreateZobObject(ZobObject* parent);
+	ZobObject* CreateZobObject(ZobObject* parent);
 	void RemoveZobObject(ZobObject* z);
 	void UnloadAll();
 	void CreateEditorGizmos(std::string& editorResourcesPath);

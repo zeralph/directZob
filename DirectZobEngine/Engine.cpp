@@ -271,7 +271,10 @@ void Engine::WaitForRasterizersEnd()
 {
 	for (int i = 0; i < m_nbRasterizers; i++)
 	{
-		m_rasterizers[i]->WaitForEnd();
+		if (m_rasterizers[i])
+		{
+			m_rasterizers[i]->WaitForEnd();
+		}
 	}
 	m_renderTimeMS = (float)(clock() - m_drawTick) / CLOCKS_PER_SEC * 1000;
 }

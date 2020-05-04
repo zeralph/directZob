@@ -17,7 +17,7 @@
 #include "Events.h"
 
 #define Z_NEAR 0.001f
-#define Z_FAR 500.0f
+#define Z_FAR 5000.0f
 
 class Rasterizer;
 

@@ -65,6 +65,14 @@ Light* LightManager::CreatePointLight(std::string& name, Vector3 position, Vecto
 	return l;
 }
 
+Light* LightManager::CreateLight()
+{
+	int l = m_lights.size();
+	std::string name = std::string("Light_").append(std::to_string((l)));
+	Vector3 color = Vector3(252.0f / 255.0f, 212 / 255.0f, 64.0f / 255.0f);
+	return CreatePointLight(name, Vector3(0, 10, 0), color, 5.0f, 100.0f, NULL);
+}
+
 Light* LightManager::GetLight(const std::string& name) const
 {
 	for (std::vector<Light*>::const_iterator iter = m_lights.begin(); iter != m_lights.end(); iter++)

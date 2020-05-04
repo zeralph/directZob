@@ -23,6 +23,8 @@ namespace CLI
 		void RotateAroundAxis(float x, float y);
 		void Move(float x, float y);
 		void Zoom(float z);
+		void SetLookAt(ManagedVector3^ position, ManagedVector3^ target, ManagedVector3^ up);
+
 	private:
 
 	};

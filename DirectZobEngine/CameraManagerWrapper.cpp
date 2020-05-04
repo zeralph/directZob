@@ -56,5 +56,13 @@ namespace CLI
 		Vector3 v = p->ToVector3();
 		m_Instance->GetCurrentCamera()->SetPosition(&v);
 	}
+
+	void CameraManagerWrapper::SetLookAt(ManagedVector3^ position, ManagedVector3^ target, ManagedVector3^ up)
+	{
+		Vector3 p = position->ToVector3();
+		Vector3 t = target->ToVector3();
+		Vector3 u = up->ToVector3();
+		m_Instance->GetCurrentCamera()->SetLookAt(&p, &t, &u);
+	}
 }
 #endif //_WINDLL

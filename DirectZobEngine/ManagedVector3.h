@@ -11,6 +11,11 @@ namespace CLI {
 			x = 0; y = 0; z = 0;
 		}
 
+		ManagedVector3(int x, int y, int z)
+		{
+			x = (float)x; y = (float)y; z = (float)z;
+		}
+
 		ManagedVector3(float x, float y, float z)
 		{
 			x = x; y = y; z = z;

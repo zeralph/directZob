@@ -4,20 +4,31 @@
 ZobObject::ZobObject(Type t, SubType s, std::string& name, Mesh* mesh, ZobObject* parent /*= NULL*/):ZOBGUID(t,s)
 {
 	DirectZob::LogInfo("Adding new ZobObject %s", name.c_str());
-	m_parent = parent;
+	if (!parent && name != "root")
+	{
+		m_parent = DirectZob::GetInstance()->GetZobObjectManager()->GetRootObject();
+		//DirectZob::LogError("Cannot add %s because it has no parent", name.c_str());
+	}
+	else
+	{
+		m_parent = parent;
+	}
+	m_markedForDeletion = false;
 	m_name = name;
 	m_mesh = mesh;
 	m_translation = Vector3(0, 0, 0);
 	m_rotation = Vector3(0, 0, 0);
 	m_scale = Vector3(1, 1, 1);
 	m_children.clear();
-	SetParent(parent);
-	if (m_parent != nullptr)
+	SetParent(m_parent);
+	if (m_parent != NULL)
 	{
 		m_parent->AddChildReference(this);
 	}
 	m_renderOptions.LightMode(RenderOptions::eLightMode_phong);
 	m_renderOptions.ZBuffered(true);
+	m_renderOptions.bTransparency = false;
+	//m_renderOptions.colorization = new Vector3(1, 0, 0);
     DirectZob::LogInfo("ZobObject %s added", name.c_str());
 }
 
@@ -35,13 +46,12 @@ ZobObject::~ZobObject()
 	m_parent = NULL;
 	for (int i = 0; i < m_children.size(); i++)
 	{
-		m_children.at(i)->SetParent(NULL);
-		delete m_children.at(i);
+		ZobObject* z = m_children[i];
+		m_children[i] = NULL;
+		delete z;
 	}
 	m_children.clear();
-	std::string s = "Deleted ZobObject ";
-	s.append(m_name);
-	DirectZob::LogInfo(s.c_str());
+	DirectZob::LogInfo("Deleted ZobObject %s", m_name.c_str());
 }
 
 void ZobObject::SetMesh(std::string name)
@@ -77,7 +87,16 @@ void ZobObject::Update(const Matrix4x4& parentMatrix, const Matrix4x4& parentRSM
 	m_modelMatrix.Mul(&parentMatrix);
 	for (int i = 0; i < m_children.size(); i++)
 	{
-		m_children.at(i)->Update(m_modelMatrix, m_rotationScaleMatrix);
+		ZobObject* z = m_children[i];
+		if(z->IsMarkedForDeletion())
+		{
+			RemoveChildReference(z);
+			delete z;
+		}
+		else
+		{
+			z->Update(m_modelMatrix, m_rotationScaleMatrix);
+		}
 	}
 }
 
@@ -85,7 +104,7 @@ void ZobObject::Draw(const Camera* camera, Core::Engine* engine)
 {
 	if (m_mesh)
 	{
-		m_mesh->Draw(m_modelMatrix, m_rotationScaleMatrix, camera, engine, GetId(), m_renderOptions);
+		m_mesh->Draw(m_modelMatrix, m_rotationScaleMatrix, camera, engine, GetId(), &m_renderOptions);
 	}
 	for (int i = 0; i < m_children.size(); i++)
 	{

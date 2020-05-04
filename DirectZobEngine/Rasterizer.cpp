@@ -33,8 +33,14 @@ void Rasterizer::Start(const Triangle* triangles, const uint nbTriangles, const 
 }
 
 void Rasterizer::WaitForEnd() {
-	if(m_thread.joinable())
-		m_thread.join();
+	try {
+		if (m_thread.joinable())
+			m_thread.join();
+	}
+	catch (...) {
+		int g = 0;
+		g++;;
+	}
 }
 
 void Rasterizer::End() {
@@ -234,9 +240,9 @@ void Rasterizer::DrawTriangle(const Triangle* t) const
 	Vector3 la, lb, lc = Vector3(0, 0, 0);
 	if (m_lightingPrecision == RenderOptions::Lighting_precision_vertex)
 	{
-		la = ComputeLightingAtPoint(t->va, t->na, t->options.lightMode);
-		lb = ComputeLightingAtPoint(t->vb, t->nb, t->options.lightMode);
-		lc = ComputeLightingAtPoint(t->vc, t->nc, t->options.lightMode);
+		la = ComputeLightingAtPoint(t->va, t->na, t->options->lightMode);
+		lb = ComputeLightingAtPoint(t->vb, t->nb, t->options->lightMode);
+		lc = ComputeLightingAtPoint(t->vc, t->nc, t->options->lightMode);
 	}
 
 	/* here we know that v1.y <= v2.y <= v3.y */
@@ -370,6 +376,8 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 	int c, k;
 	Vector3 normal, lightDir;
 
+	k = p->y * m_width + p->x;
+
 	w2 = edgeFunction(t->pa, t->pb, p);
 	w0 = edgeFunction(t->pb, t->pc, p);
 	w1 = edgeFunction(t->pc, t->pa, p);
@@ -378,6 +386,14 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 	w1 /= t->area;
 	w2 /= t->area;
 
+	if (t->options->bTransparency)
+	{
+		if (((int)p->x  + ((int)p->y % 2))%2 == 0)
+		{
+			return;
+		}
+	}
+
 	Vector3 tpos = Vector3(	(t->va->x * w0 + t->vb->x * w1 + t->vc->x * w2),
 							(t->va->y * w0 + t->vb->y * w1 + t->vc->y * w2),
 							(t->va->z * w0 + t->vb->z * w1 + t->vc->z * w2));
@@ -385,16 +401,28 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 	const Material* material = t->material;
 	z = (t->pa->z * w0 + t->pb->z * w1 + t->pc->z * w2);
 	zRatio = (z - m_bufferData->zNear ) / (m_bufferData->zFar - m_bufferData->zNear);
-	k = p->y * m_width + p->x;
+	
 	float zf = m_bufferData->zBuffer[k];
-	if ( zRatio >= 0.0f &&  (!t->options.ZBuffered() || zf < 0.0f  || zRatio < zf ))
+	if ( zRatio >= 0.0f &&  (!t->options->ZBuffered() || zf < 0.0f  || zRatio < zf ))
 	{
 		m_bufferData->zBuffer[k] = zRatio;
+
+		if (t->options->bColorize)
+		{
+			if (((int)p->x + ((int)p->y % 2)) % 2 == 0)
+			{
+				c = ((int)(t->options->colorization.x * 255) << 16) + ((int)(t->options->colorization.y * 255) << 8) + (int)(t->options->colorization.z * 255);
+				m_bufferData->buffer[k] = c;
+				return;
+			}
+		}
+
+
 		su = w0 * t->ua->x + w1 * t->ub->x + w2 * t->uc->x;
 		tu = w0 * t->ua->y + w1 * t->ub->y + w2 * t->uc->y;
 
 		cl = 1.0f;
-		RenderOptions::eLightMode lighting = t->options.LightMode();
+		RenderOptions::eLightMode lighting = t->options->LightMode();
 		if (lighting == RenderOptions::eLightMode_flat || lighting == RenderOptions::eLightMode_flatPhong)
 		{
 			normal = t->n;

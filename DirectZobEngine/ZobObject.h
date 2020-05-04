@@ -24,7 +24,6 @@ public:
 	void SetParent(ZobObject* o);
 	ZobObject* GetChild(const std::string& name);
 	ZobObject* GetChild(const int i);
-	RenderOptions& GetRenderOptions() { return m_renderOptions; }
 	inline void SetScale(float x, float y, float z) { m_scale.x = x; m_scale.y = y; m_scale.z = z; }
 	inline void SetRotation(float x, float y, float z) { m_rotation.x = x; m_rotation.y = y; m_rotation.z = z; }
 	inline void SetTranslation(float x, float y, float z) { m_translation.x = x; m_translation.y = y; m_translation.z = z; }
@@ -46,9 +45,12 @@ public:
 	void RemoveChildReference(const ZobObject* z);
 	void AddChildReference(ZobObject* z);
 	int GetChildPosition(const ZobObject* z);
+	RenderOptions* GetRenderOptions() { return &m_renderOptions; };
 	const std::string GetMeshName() const ;
 	void SetMesh(std::string name);
 	void SetLightingMode(RenderOptions::eLightMode l);
+	const bool IsMarkedForDeletion() const { return m_markedForDeletion; };
+	void MarkForDeletion() { m_markedForDeletion=true; };
 	const RenderOptions::eLightMode GetLightingMode() const { return m_renderOptions.LightMode(); }
 protected:
 	
@@ -64,4 +66,5 @@ protected:
 	Vector3 m_scale;
 	std::string m_name;
 	RenderOptions m_renderOptions;
+	bool m_markedForDeletion;
 };

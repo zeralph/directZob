@@ -3,6 +3,7 @@
 #include "ManagedObject.h"
 #include "ZobObject.h"
 #include "ManagedVector3.h"
+#include "ManagedRenderOptions.h"
 
 namespace CLI {
 	public ref class ZobObjectWrapper : ManagedObject<ZobObject>
@@ -16,6 +17,7 @@ namespace CLI {
 		ManagedVector3^ GetTransform();
 		ManagedVector3^ GetRotation();
 		ManagedVector3^ GetScale();
+		ManagedRenderOptions^ GetRenderOptions();
 		void SetTransform(ManagedVector3^ p);
 		void SetRotation(ManagedVector3^ p);
 		void SetScale(ManagedVector3^ p);

@@ -23,7 +23,7 @@ void ZobObjectManager::AddZobObject(ZobObject* z)
 	}
 }
 
-void ZobObjectManager::CreateZobObject(ZobObject* parent)
+ZobObject* ZobObjectManager::CreateZobObject(ZobObject* parent)
 {
 	std::string n = "newObject_";
 	n.append(std::to_string(sObjectNumber));
@@ -32,12 +32,14 @@ void ZobObjectManager::CreateZobObject(ZobObject* parent)
 	{
 		parent = m_rootObject;
 	}
-	ZobObject* z = new ZobObject(ZOBGUID::type_scene, ZOBGUID::subtype_zobOject, n, NULL, parent);
+	return new ZobObject(ZOBGUID::type_scene, ZOBGUID::subtype_zobOject, n, NULL, parent);
 }
 
 void ZobObjectManager::RemoveZobObject(ZobObject* z)
 {
-	delete z;
+	z->MarkForDeletion();
+	//todo : delay deletion
+	//delete z;
 }
 
 ZobObject* ZobObjectManager::GetZobObjectFromPartialId(const uint id) const
@@ -193,8 +195,8 @@ ZobObject* ZobObjectManager::LoadEditorMesh(const char* name, const char* meshPa
 	std::string m = std::string(meshFile);
 	Mesh* mesh = meshMgr->LoadMesh(n, p, m);
 	ZobObject* transform = new ZobObject(ZOBGUID::type_editor, ZOBGUID::subtype_zobOject, n, mesh, parent);
-	transform->GetRenderOptions().LightMode(RenderOptions::eLightMode_none);
-	transform->GetRenderOptions().ZBuffered(false);
+	transform->GetRenderOptions()->LightMode(RenderOptions::eLightMode_none);
+	transform->GetRenderOptions()->ZBuffered(false);
 	return transform;
 }
 

@@ -1,4 +1,5 @@
 #pragma once
+#include "Vector3.h"
 #include <stddef.h>
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
@@ -53,8 +54,6 @@ public:
 			Lighting_precision_pixel,
 			__Lighting_precision_MAX__
 		};
-		bool zBuffered = true;
-		eLightMode lightMode = eLightMode::eLightMode_phong;
 		inline const bool ZBuffered() const { return zBuffered; }
 		void ZBuffered(const bool b)
 		{
@@ -68,6 +67,15 @@ public:
 		{
 			lightMode = l;
 		}
+		void Save()
+		{
+
+		}
+		bool bTransparency = false;
+		bool bColorize = false;
+		Vector3 colorization = Vector3();
+		bool zBuffered = true;
+		eLightMode lightMode = eLightMode::eLightMode_phong;
 	};
 };
 

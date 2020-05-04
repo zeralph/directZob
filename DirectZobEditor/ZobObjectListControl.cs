@@ -18,7 +18,7 @@ namespace DirectZobEditor
         public delegate void OnObjectSelectedHandler(object s, ObjectSelectionEventArg e);
         public event OnObjectSelectedHandler OnObjectSelected;
 
-
+        private CLI.ManagedRenderOptions m_savedRenderOptions;
         private CLI.ZobObjectManagerWrapper m_zobObjectManagerWrapper;
         private Form1 m_mainForm = null;
         private CLI.ZobObjectWrapper m_currentSelectedZobObject = null;
@@ -30,7 +30,7 @@ namespace DirectZobEditor
             UpdateTree();
             m_mainForm.OnNewScene += new EventHandler(OnSceneChanged);
             m_mainForm.OnSceneLoaded += new EventHandler(OnSceneChanged);
-
+            m_mainForm.OnSceneUpdated += new EventHandler(OnSceneUpdated);
             m_mainForm.GetEngineWindow().OnEndFrame += new EventHandler(OnFrameEnd);
         }
 
@@ -150,8 +150,17 @@ namespace DirectZobEditor
             if (null != handler)
             {
                 ObjectSelectionEventArg ev = new ObjectSelectionEventArg();
+                if(m_currentSelectedZobObject != null)
+                {
+                    m_currentSelectedZobObject.GetRenderOptions().EnableColorization(false);
+                }
                 ev.previousZobObject = m_currentSelectedZobObject;
                 m_currentSelectedZobObject = newZobObject;
+                if (m_currentSelectedZobObject != null)
+                {
+                    m_currentSelectedZobObject.GetRenderOptions().SetColorization(255, 0, 255);
+                    m_currentSelectedZobObject.GetRenderOptions().EnableColorization(true);
+                }
                 ev.newZobObject = newZobObject;
                 handler(this, ev);
             }
@@ -193,12 +202,16 @@ namespace DirectZobEditor
             }
         }
 
+        private void OnSceneUpdated(object s, EventArgs e)
+        {
+            UpdateTree();
+        }
         private void OnSceneChanged(object s, EventArgs e)
         {
             ZobObjectTree.Nodes.Clear();
             string p = Application.StartupPath;
             p = Path.Combine(p, "..\\..\\..\\resources\\editor\\");
-            m_zobObjectManagerWrapper.CreateEditorGizmos(p);
+//            m_zobObjectManagerWrapper.CreateEditorGizmos(p);
             UpdateTree();
         }
 
@@ -216,6 +229,57 @@ namespace DirectZobEditor
                 CLI.ManagedVector3 v = z.GetRotation();
                 v.y += 0.8f;
                 //z.SetRotation(v);
+            }
+        }
+
+        private void TreeNodeRightClick_Opening(object sender, CancelEventArgs e)
+        {
+            TreeNode n = ZobObjectTree.SelectedNode;
+            if (n != null)
+            {
+                ContextMenuStrip c = (ContextMenuStrip)sender;
+                if ( n.Name == "root")
+                {
+                    c.Items[0].Enabled = true;
+                    c.Items[1].Enabled = false;
+                    c.Items[2].Enabled = false;
+                }
+                else
+                {
+                    c.Items[0].Enabled = true;
+                    c.Items[1].Enabled = true;
+                    c.Items[2].Enabled = true;
+                }
+            }
+        }
+
+        private void TreeNodeRightClick_Opened(object sender, EventArgs e)
+        {
+        }
+
+        private void TreeNodeRightClick_Closed(object sender, ToolStripDropDownClosedEventArgs e)
+        {
+            //ZobObjectTree.Nodes.Clear();
+            //UpdateTree();
+        }
+
+        private void ZoomToStripMenuItem_Click(object sender, EventArgs e)
+        {
+            TreeNode n = ZobObjectTree.SelectedNode;
+            if (n != null)
+            {
+                CLI.ZobObjectWrapper z = m_zobObjectManagerWrapper.GetZobObject(GetFullNodeName(n));
+                if(z != null)
+                {
+                    CLI.ManagedVector3 position = z.GetTransform();
+                    CLI.ManagedVector3 target = z.GetTransform();
+                    position.x = position.x - 5;
+                    position.y = position.y + 5;
+                    position.z = position.z - 5;
+                    CLI.ManagedVector3 up = new CLI.ManagedVector3();
+                    up.y = 1.0f;
+                    m_mainForm.GetCameraControl().GetWrapper().SetLookAt(position, target, up);
+                }
             }
         }
     }

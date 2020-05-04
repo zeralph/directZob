@@ -119,7 +119,14 @@ namespace DirectZobEditor
                 {
                     OnBeginFrame(this, EventArgs.Empty);
                 }
-                m_directZobWrapper.RunAFrame();
+                try
+                {
+                    m_directZobWrapper.RunAFrame();
+                }
+                catch(Exception e)
+                {
+                    Console.WriteLine(e);
+                }
                 EngineRender.Invoke(UpdateEngineWindowDelegate);
                 if (OnEndFrame != null)
                 {

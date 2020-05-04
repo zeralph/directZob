@@ -39,6 +39,7 @@
             this.assetsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadTextureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadMeshToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.createLightToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.FirstPanelSplitter = new System.Windows.Forms.SplitContainer();
             this.ZobObjectListPanel = new System.Windows.Forms.Panel();
             this.SecondPanelSplitter = new System.Windows.Forms.SplitContainer();
@@ -84,6 +85,7 @@
             this.menuStrip1.Size = new System.Drawing.Size(1278, 24);
             this.menuStrip1.TabIndex = 2;
             this.menuStrip1.Text = "menuStrip1";
+            this.menuStrip1.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.menuStrip1_ItemClicked);
             // 
             // fileToolStripMenuItem
             // 
@@ -137,7 +139,8 @@
             // 
             this.assetsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.loadTextureToolStripMenuItem,
-            this.loadMeshToolStripMenuItem});
+            this.loadMeshToolStripMenuItem,
+            this.createLightToolStripMenuItem});
             this.assetsToolStripMenuItem.Name = "assetsToolStripMenuItem";
             this.assetsToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
             this.assetsToolStripMenuItem.Text = "Assets";
@@ -145,16 +148,23 @@
             // loadTextureToolStripMenuItem
             // 
             this.loadTextureToolStripMenuItem.Name = "loadTextureToolStripMenuItem";
-            this.loadTextureToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
+            this.loadTextureToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.loadTextureToolStripMenuItem.Text = "Load Texture ...";
             this.loadTextureToolStripMenuItem.Click += new System.EventHandler(this.LoadTextureToolStripMenuItem_Click);
             // 
             // loadMeshToolStripMenuItem
             // 
             this.loadMeshToolStripMenuItem.Name = "loadMeshToolStripMenuItem";
-            this.loadMeshToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
+            this.loadMeshToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.loadMeshToolStripMenuItem.Text = "Load Mesh ...";
             this.loadMeshToolStripMenuItem.Click += new System.EventHandler(this.LoadMeshToolStripMenuItem_Click);
+            // 
+            // createLightToolStripMenuItem
+            // 
+            this.createLightToolStripMenuItem.Name = "createLightToolStripMenuItem";
+            this.createLightToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.createLightToolStripMenuItem.Text = "Create Light ";
+            this.createLightToolStripMenuItem.Click += new System.EventHandler(this.createLightToolStripMenuItem_Click);
             // 
             // FirstPanelSplitter
             // 
@@ -182,6 +192,7 @@
             this.ZobObjectListPanel.Name = "ZobObjectListPanel";
             this.ZobObjectListPanel.Size = new System.Drawing.Size(198, 748);
             this.ZobObjectListPanel.TabIndex = 0;
+            this.ZobObjectListPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.ZobObjectListPanel_Paint);
             // 
             // SecondPanelSplitter
             // 
@@ -336,6 +347,7 @@
         private System.Windows.Forms.ToolStripMenuItem assetsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem loadTextureToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem loadMeshToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem createLightToolStripMenuItem;
     }
 }
 

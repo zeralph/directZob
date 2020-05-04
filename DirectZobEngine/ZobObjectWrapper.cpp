@@ -29,6 +29,12 @@ namespace CLI
 		return gcnew System::String(m_Instance->GetMeshName().c_str());
 	}
 
+	ManagedRenderOptions^ ZobObjectWrapper::GetRenderOptions()
+	{
+		ManagedRenderOptions^ r = gcnew CLI::ManagedRenderOptions(m_Instance->GetRenderOptions());
+		return r;
+	}
+
 	void ZobObjectWrapper::SetMesh(System::String^ name)
 	{
 		std::string n;

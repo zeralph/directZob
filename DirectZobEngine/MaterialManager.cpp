@@ -272,14 +272,16 @@ void MaterialManager::UnloadAll()
 {
 	for (int i = 0; i < m_materials.size(); i++)
 	{
-		delete (m_materials[i]);
+		Material* m = m_materials[i];
 		m_materials[i] = NULL;
+		delete m;
 	}
 	m_materials.clear();
 	for (int i = 0; i < m_textures.size(); i++)
 	{
-		delete (m_textures[i]);
+		Texture* t = m_textures[i];
 		m_textures[i] = NULL;
+		delete t;
 	}
 	m_textures.clear();
 }
