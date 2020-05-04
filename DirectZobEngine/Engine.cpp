@@ -327,6 +327,42 @@ void Engine::ClipSegmentToPlane(Vector3 &s0, Vector3 &s1, Vector3 &pp, Vector3 &
 	s1 = s0 + u;
 }
 
+void Engine::QueueEllipse(const Camera* camera, const Vector3* center, const Vector3* up, const float r1, const float r2, const uint c)
+{
+	int segs = 10;
+	Matrix4x4 m;
+	Vector3 v = Vector3(0, 1, 0);
+	Vector3 y = up;
+	y.Normalize();
+	float dy = (y.y!=0.0f)?y.z/y.y:0.0f;
+	Vector3 x = Vector3(1, dy, 0);
+	Vector3 z = Vector3(0, dy, 1);
+	x.Normalize();
+	z.Normalize();
+	m.SetData(0,0, x.x);
+	m.SetData(0,1, y.x);
+	m.SetData(0,2, z.x);
+	m.SetData(1,0, x.y);
+	m.SetData(1,1, y.y);
+	m.SetData(1,2, z.y);
+	m.SetData(2,0, x.z);
+	m.SetData(2,1, y.z);
+	m.SetData(2,2, z.z);
+	m.SetTranslation(center);
+	Vector3 a, b = Vector3(r1, 0, 0);
+	m.Mul(&a);
+	float rot = 360.0f / (float)segs;
+	for(int i=0; i<segs; i++)
+	{
+		b = a;
+		m.SetRotation(0, rot, 0);
+		a = Vector3(r1, 0, 0);
+		m.Mul(&a);
+		QueueLine(camera, &a, &b, c);
+	}
+
+}
+
 void Engine::QueueLine(const Camera *camera, const Vector3 *v1, const Vector3 *v2, const uint c)
 {
 	if (m_started)

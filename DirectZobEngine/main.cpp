@@ -257,6 +257,7 @@ int main(int argc, char* argv[])
 			Light* red = m_directZob.GetLightManager()->GetLight("red");
 			Light* blue = m_directZob.GetLightManager()->GetLight("blue");
 			Light* green = m_directZob.GetLightManager()->GetLight("green");
+
 			//blue->SetActive(false);
 			//green->SetActive(false);
 			if (red->GetTransform().z >= 110.0f)

@@ -32,4 +32,10 @@ void Light::Draw(const Camera* camera, Core::Engine* engine)
 	engine->QueueLine(camera, &v1, &v2, c);
 	engine->QueueLine(camera, &v3, &v4, c);
 	engine->QueueLine(camera, &v5, &v6, c);
+	Vector3 up = Vector3(0, 1, 0);
+	engine->QueueEllipse(camera, &m_translation, &up, 1.0f, 1.0f, c);
+	Vector3 left = Vector3(1, 0, 0);
+	engine->QueueEllipse(camera, &m_translation, &left, 1.0f, 1.0f, c);
+	Vector3 forward = Vector3(0, 0, 1);
+	engine->QueueEllipse(camera, &m_translation, &forward, 1.0f, 1.0f, c);
 }
