@@ -1,9 +1,10 @@
 #pragma once
 #include "Matrix4x4.h"
+#include "ZobObject.h"
 #include <string>
 
 
-class Camera/*: public ZobObject*/
+class Camera : public ZobObject
 {
 public:
 	Camera(const std::string& name, Vector3& position, Vector3& target, Vector3& up, float fov, BufferData* bufferData);
@@ -32,7 +33,6 @@ private:
 
 
 	std::string m_name;
-	BufferData* m_bufferData = NULL;
 	Matrix4x4 m_viewMatrix;
 	Matrix4x4 m_projMatrix;
 	Vector3 m_cameraPosition;

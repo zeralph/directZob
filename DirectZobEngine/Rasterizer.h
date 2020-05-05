@@ -22,6 +22,7 @@ class Rasterizer
 public:
 
 	void DrawTriangle(const Triangle* t) const;
+	void plotLine(int x0, int y0, int x1, int y1) const;
 	void DrawLine(const Line3D* l) const;
 	Rasterizer(uint width, uint startHeight, uint endHeight, BufferData* bufferData);
 	~Rasterizer();
@@ -78,7 +79,7 @@ private:
 	//std::thread m_thread;
 	uint m_startHeight;
 	uint m_width;
-	uint m_height;
+	uint m_endHeight;
 	std::thread m_thread;
 	bool m_wireFrame = false;
 	bool m_scanline = false;

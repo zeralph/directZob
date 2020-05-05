@@ -10,9 +10,12 @@ public:
 	CameraManager();
 	~CameraManager();
 
-	void CreateCamera(std::string& name, Vector3 position, Vector3 target, Vector3 up, float fov);
+	Camera* CreateCamera();
+	Camera* CreateCamera(std::string& name, Vector3 position, Vector3 target, Vector3 up, float fov);
 	Camera* GetCurrentCamera() {return m_curCam;}
 	Camera* GetCamera(std::string& name) const;
+	void SetCurrentCamera(std::string& name);
+	void RemoveCamera(Camera* c);
 	const std::vector<std::string> GetCameraList() const;
 
 private:

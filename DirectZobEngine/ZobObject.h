@@ -4,15 +4,15 @@
 #include <string>
 #include <vector>
 #include "Types.h"
-#include "Mesh.h"
 #include "Engine.h"
 #include "ZOBGUID.h"
 
+class Mesh;
 class ZobObject:public ZOBGUID
 {
 public:
 
-	ZobObject(ZOBGUID::Type t, ZOBGUID::SubType s, std::string& name, Mesh* mesh, ZobObject* parent = NULL);
+	ZobObject(ZOBGUID::Type t, ZOBGUID::SubType s, const std::string& name, Mesh* mesh, ZobObject* parent = NULL);
 	~ZobObject();
 
 	virtual void Update(const Matrix4x4& parentMatrix, const Matrix4x4& parentRSMatrix);

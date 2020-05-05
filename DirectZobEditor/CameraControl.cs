@@ -13,10 +13,13 @@ namespace DirectZobEditor
     public partial class CameraControl : UserControl
     {
         private CLI.CameraManagerWrapper m_camerManagerWrapper;
-        public CameraControl()
+        private Form1 m_mainForm = null;
+        public CameraControl(Form1 f)
         {
             InitializeComponent();
+            m_mainForm = f;
             m_camerManagerWrapper = new CLI.CameraManagerWrapper();
+            m_mainForm.OnSceneUpdated += new EventHandler(OnSceneUpdated);
         }
 
         public CLI.CameraManagerWrapper GetWrapper()
@@ -85,6 +88,25 @@ namespace DirectZobEditor
                 CLI.ManagedVector3 p = m_camerManagerWrapper.GetCurrentCameraPosition();
                 p.z = f;
                 m_camerManagerWrapper.SetCurrentCameraPosition(p);
+            }
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string s = (string)cameraBox.SelectedItem;
+            if (!string.IsNullOrEmpty(s))
+            {
+                m_camerManagerWrapper.SetCurrentCamera(s);
+            }
+        }
+
+        private void OnSceneUpdated(object s, EventArgs e)
+        {
+            string [] c = m_camerManagerWrapper.GetCameraList();
+            cameraBox.Items.Clear();
+            for (int i=0; i<c.Count(); i++)
+            {
+                cameraBox.Items.Add(c[i]);
             }
         }
     }

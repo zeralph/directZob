@@ -24,7 +24,8 @@ namespace CLI
 		void Move(float x, float y);
 		void Zoom(float z);
 		void SetLookAt(ManagedVector3^ position, ManagedVector3^ target, ManagedVector3^ up);
-
+		void SetCurrentCamera(System::String^ name);
+		void CreateCamera();
 	private:
 
 	};

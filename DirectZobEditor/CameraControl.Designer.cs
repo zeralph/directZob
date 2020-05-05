@@ -38,7 +38,7 @@
             this.cameraPosX = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.cameraBox = new System.Windows.Forms.ComboBox();
             this.camerasBox.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -53,7 +53,7 @@
             this.camerasBox.Controls.Add(this.cameraPosX);
             this.camerasBox.Controls.Add(this.label2);
             this.camerasBox.Controls.Add(this.label1);
-            this.camerasBox.Controls.Add(this.comboBox1);
+            this.camerasBox.Controls.Add(this.cameraBox);
             this.camerasBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.camerasBox.Location = new System.Drawing.Point(0, 0);
             this.camerasBox.Margin = new System.Windows.Forms.Padding(10);
@@ -142,13 +142,14 @@
             this.label1.TabIndex = 1;
             this.label1.Text = "Current camera";
             // 
-            // comboBox1
+            // cameraBox
             // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(13, 36);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(162, 21);
-            this.comboBox1.TabIndex = 0;
+            this.cameraBox.FormattingEnabled = true;
+            this.cameraBox.Location = new System.Drawing.Point(13, 36);
+            this.cameraBox.Name = "cameraBox";
+            this.cameraBox.Size = new System.Drawing.Size(162, 21);
+            this.cameraBox.TabIndex = 0;
+            this.cameraBox.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
             // CameraControl
             // 
@@ -176,6 +177,6 @@
         private System.Windows.Forms.TextBox cameraPosX;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.ComboBox cameraBox;
     }
 }

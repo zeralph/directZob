@@ -50,7 +50,7 @@ namespace DirectZobEditor
             Application.ApplicationExit += new EventHandler(this.OnApplicationExit);
 
             propertiesPanel.Width = 600;
-            m_camControl = new CameraControl();
+            m_camControl = new CameraControl(this);
             propertiesPanel.Controls.Add(m_camControl);
             m_engineWindow = new EngineWindow(this, m_directZobWrapper);
             EngineRendererPanel.Controls.Add(m_engineWindow);
@@ -324,10 +324,14 @@ namespace DirectZobEditor
         {
 
         }
-
-        private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        private void createCameraToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            m_camControl.GetWrapper().CreateCamera();
+            EventHandler handler = OnSceneUpdated;
+            if (null != handler)
+            {
+                handler(this, EventArgs.Empty);
+            }
         }
     }
 

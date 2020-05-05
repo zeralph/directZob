@@ -435,20 +435,20 @@ void Mesh::DrawBoundingBox(const Matrix4x4& modelMatrix, const Matrix4x4& rotati
 	modelMatrix.Mul(&v5);
 	modelMatrix.Mul(&v6);
 	modelMatrix.Mul(&v7);
-	engine->QueueLine(camera, &v0, &v1, 0xFF00FF00);
-	engine->QueueLine(camera, &v1, &v2, 0xFF00FF00);
-	engine->QueueLine(camera, &v2, &v3, 0xFF00FF00);
-	engine->QueueLine(camera, &v3, &v0, 0xFF00FF00);
+	engine->QueueLine(camera, &v0, &v1, 0xFF00FF00, true);
+	engine->QueueLine(camera, &v1, &v2, 0xFF00FF00, true);
+	engine->QueueLine(camera, &v2, &v3, 0xFF00FF00, true);
+	engine->QueueLine(camera, &v3, &v0, 0xFF00FF00, true);
 
-	engine->QueueLine(camera, &v4, &v5, 0xFF00FF00);
-	engine->QueueLine(camera, &v5, &v6, 0xFF00FF00);
-	engine->QueueLine(camera, &v6, &v7, 0xFF00FF00);
-	engine->QueueLine(camera, &v7, &v4, 0xFF00FF00);
+	engine->QueueLine(camera, &v4, &v5, 0xFF00FF00, true);
+	engine->QueueLine(camera, &v5, &v6, 0xFF00FF00, true);
+	engine->QueueLine(camera, &v6, &v7, 0xFF00FF00, true);
+	engine->QueueLine(camera, &v7, &v4, 0xFF00FF00, true);
 
-	engine->QueueLine(camera, &v1, &v5, 0xFF00FF00);
-	engine->QueueLine(camera, &v2, &v6, 0xFF00FF00);
-	engine->QueueLine(camera, &v3, &v7, 0xFF00FF00);
-	engine->QueueLine(camera, &v0, &v4, 0xFF00FF00);
+	engine->QueueLine(camera, &v1, &v5, 0xFF00FF00, true);
+	engine->QueueLine(camera, &v2, &v6, 0xFF00FF00, true);
+	engine->QueueLine(camera, &v3, &v7, 0xFF00FF00, true);
+	engine->QueueLine(camera, &v0, &v4, 0xFF00FF00, true);
 }
 
 void Mesh::Draw(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions* options)
@@ -519,7 +519,7 @@ void Mesh::Draw(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, c
 					(t->vb->y + t->vb->y + t->vc->y) / 3.0f,
 					(t->va->z + t->vb->z + t->vc->z) / 3.0f);
 				Vector3 p2 = p1 + n;
-				engine->QueueLine(camera, &p1, &p2, 0xFFFFFFFF);
+				engine->QueueLine(camera, &p1, &p2, 0xFFFFFFFF, false);
 			}
 
 
@@ -542,13 +542,13 @@ void Mesh::Draw(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, c
 				{
 					Vector3 v = t->na;
 					v = v + t->va;
-					engine->QueueLine(camera, t->va, &v, 0xFF00FF);
+					engine->QueueLine(camera, t->va, &v, 0xFF00FF, false);
 					v = t->nb;
 					v = v + t->vb;
-					engine->QueueLine(camera, t->vb, &v, 0xFF00FF);
+					engine->QueueLine(camera, t->vb, &v, 0xFF00FF, false);
 					v = t->nb;
 					v = v + t->vc;
-					engine->QueueLine(camera, t->vc, &v, 0xFF00FF);
+					engine->QueueLine(camera, t->vc, &v, 0xFF00FF, false);
 				}
 			}
 		}

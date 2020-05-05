@@ -10,7 +10,7 @@ Rasterizer::Rasterizer(uint width, uint startHeight, uint endHeight, BufferData*
 {
 	m_startHeight = startHeight;
 	m_bufferData = bufferData;
-	m_height = endHeight;
+	m_endHeight = endHeight;
 	m_width = width;
 }
 
@@ -62,117 +62,94 @@ void Rasterizer::Clear()
 
 void Rasterizer::Render() 
 {
-	const Vector3* camDir = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera()->GetForward();
-	m_camDir = Vector3(-camDir->x, -camDir->y, -camDir->z);
-	//warning : invert lightdir ! https://fr.wikipedia.org/wiki/Ombrage_de_Phong
-	for (int i = 0; i < m_lines->size(); i++)
+	if (DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera())
 	{
-		const Line3D l = m_lines->at(i);
-		DrawLine(&l);
-	}
-	m_lights = NULL;
-	LightManager* lm = DirectZob::GetInstance()->GetLightManager();
-	if (lm)
-	{
-		m_lights = lm->GetActiveLights();
-		m_ambientColor = lm->GetAmbientColor();
-		m_fogColor = lm->GetFogColor();
-		m_fogType = lm->GetFogType();
-		m_fogDensity = lm->GetFogDensity();
-		m_fogDistance = lm->GetFogDistance();
-	}
-	for (int i = 0; i < m_nbTriangles; i++)
-	{
-		const Triangle* t = &m_triangles[i];
-		DrawTriangle(t);
+		const Vector3* camDir = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera()->GetForward();
+		m_camDir = Vector3(-camDir->x, -camDir->y, -camDir->z);
+		//warning : invert lightdir ! https://fr.wikipedia.org/wiki/Ombrage_de_Phong
+		for (int i = 0; i < m_lines->size(); i++)
+		{
+			const Line3D l = m_lines->at(i);
+			DrawLine(&l);
+		}
+		m_lights = NULL;
+		LightManager* lm = DirectZob::GetInstance()->GetLightManager();
+		if (lm)
+		{
+			m_lights = lm->GetActiveLights();
+			m_ambientColor = lm->GetAmbientColor();
+			m_fogColor = lm->GetFogColor();
+			m_fogType = lm->GetFogType();
+			m_fogDensity = lm->GetFogDensity();
+			m_fogDistance = lm->GetFogDistance();
+		}
+		for (int i = 0; i < m_nbTriangles; i++)
+		{
+			const Triangle* t = &m_triangles[i];
+			DrawTriangle(t);
+		}
 	}
 }
 
+void Rasterizer::plotLine(int x0, int y0, int x1, int y1) const
+{
+
+}
 
 void Rasterizer::DrawLine(const Line3D* l) const
 {
 	float zRatio, zf = 0.0f;
-	uint k = 0;
-	float x1 = l->xa;
-	float x2 = l->xb;
-	float y1 = l->ya;
-	float y2 = l->yb;
-	float z1 = l->za;
-	float z2 = l->zb;
-	uint* buffer = m_bufferData->buffer;
-	float* zBuffer = m_bufferData->zBuffer;
-	const bool steep = abs(y2 - y1) > abs(x2 - x1);
-	if (steep)
-	{
-		std::swap(x1, y1);
-		std::swap(x2, y2);
-		std::swap(z1, z2);
-	}
+	int x0 = (int)l->xa;
+	int x1 = (int)l->xb;
+	int y0 = (int)l->ya;
+	int y1 = (int)l->yb;
+	float z0 = l->za;
+	float z1 = l->zb;
+	float dz = l->zb - l->za;
+	int dx = abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
+	int dy = -abs(y1 - y0), sy = y0 < y1 ? 1 : -1;
+	dz /= (float)max(dx, dy);
+	int err = dx + dy, e2; /* error value e_xy */
+	bool boldX = false;
+	bool boldY = false;
+	int k, kx, ky;
+	float z = z0;
+	for (;;)
+	{  /* loop */
 
-	if (x1 > x2)
-	{
-		std::swap(x1, x2);
-		std::swap(y1, y2);
-		std::swap(z1, z2);
-	}
-	const float dx = x2 - x1;
-	const float dy = abs(y2 - y1);
-	const float dz = abs(z2 - z1);
-
-	float scaleX = 1.0;
-	float scaleY = 1.0;
-	float scaleZ = 1.0;
-	float error = dx / 2.0f;
-	const int ystep = (y1 < y2) ? 1 : -1;
-	
-	int y = (int)y1;
-	
-	const int maxX = (int)x2;
-	const float zstep = dz / (maxX - x1);
-	float z = z1;
-	for (int x = (int)x1; x < maxX; x++)
-	{
-		if (x >= 0 && x < m_width && y >= m_startHeight && y < m_height)
+		if (x0 >= 0 && x0 < m_bufferData->width && y0 >= m_startHeight && y0 < m_endHeight)
 		{
-			if (RenderLine(y))
+			k = y0 * m_bufferData->width + x0;
+			kx = y0 * m_bufferData->width + (x0+1);
+			ky = (y0+1) * m_bufferData->width + x0;
+			if (k < m_bufferData->size)
 			{
-				if (steep)
+				//float zf = m_bufferData->zBuffer[k];
+				//float zRatio = (z  - m_bufferData->zNear) / (m_bufferData->zFar - m_bufferData->zNear);
+				//if (zRatio >= 0.0f && (zf < 0.0f || zRatio < zf))
 				{
-					k = x * m_bufferData->width + y;
-					if (k < m_bufferData->size)
+					m_bufferData->buffer[k] = l->c;
+					//m_bufferData->zBuffer[k] = zRatio;
+					if (boldX && kx < m_bufferData->size)
 					{
-						zf = m_bufferData->zBuffer[k];
-						zRatio = (z - m_bufferData->zNear) / (m_bufferData->zFar - m_bufferData->zNear);
-						if (zRatio >= 0.0f && (zf < 0.0f || zRatio < zf))
-						{
-							buffer[k] = l->c;
-							m_bufferData->zBuffer[k] = zRatio;
-						}
+						m_bufferData->buffer[kx] = l->c;
+						//m_bufferData->zBuffer[kx] = zRatio;
 					}
-				}
-				else
-				{
-					k = y * m_bufferData->width + x;
-					if (k < m_bufferData->size)
+					if (boldY && ky < m_bufferData->size)
 					{
-						zf = m_bufferData->zBuffer[k];
-						zRatio = (z - m_bufferData->zNear) / (m_bufferData->zFar - m_bufferData->zNear);
-						if (zRatio >= 0.0f && (zf < 0.0f || zRatio < zf))
-						{
-							buffer[k] = l->c;
-							m_bufferData->zBuffer[k] = zRatio;
-						}
+						m_bufferData->buffer[ky] = l->c;
+						//m_bufferData->zBuffer[ky] = zRatio;
 					}
 				}
 			}
 		}
-		error -= dy;
-		if (error < 0)
-		{
-			y += ystep;
-			z += zstep;
-			error += dx;
-		}
+		if (x0 == x1 && y0 == y1) break;
+		e2 = 2 * err;
+		boldX = false;
+		boldY = false;
+		if (e2 >= dy) { err += dy; x0 += sx; boldY = l->bold; } /* e_xy+e_x > 0 */
+		if (e2 <= dx) { err += dx; y0 += sy; boldX = l->bold; } /* e_xy+e_y < 0 */
+		z += dz;
 	}
 }
 
@@ -278,7 +255,7 @@ void Rasterizer::FillBottomFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, 
 	for (int scanlineY = v1->y; scanlineY <= v2->y; scanlineY++)
 	{
 		int k;
-		if (RenderLine(scanlineY) && scanlineY >= m_startHeight && scanlineY < m_height)
+		if (RenderLine(scanlineY) && scanlineY >= m_startHeight && scanlineY < m_endHeight)
 		{
 			if (curx1 != curx2)
 			{
@@ -329,7 +306,7 @@ void Rasterizer::FillTopFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, con
 	float a, b;
 	for (int scanlineY = v3->y; scanlineY > v1->y; scanlineY--)
 	{
-		if (RenderLine(scanlineY) && scanlineY >= m_startHeight && scanlineY < m_height)
+		if (RenderLine(scanlineY) && scanlineY >= m_startHeight && scanlineY < m_endHeight)
 		{
 			if (curx1 != curx2)
 			{

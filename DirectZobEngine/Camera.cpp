@@ -1,9 +1,11 @@
 #include "Camera.h"
+#include "DirectZob.h"
 #include <math.h>
 
 
 
 Camera::Camera(const std::string& name, Vector3& position, Vector3& target, Vector3& up, float fov, BufferData* bufferData)
+	:ZobObject(ZOBGUID::Type::type_scene, ZOBGUID::SubType::subtype_zobCamera, name, NULL, NULL)
 {
 	m_name = name.c_str();
 	m_cameraPosition = position;
@@ -11,7 +13,7 @@ Camera::Camera(const std::string& name, Vector3& position, Vector3& target, Vect
 	m_cameraUp = up;
 	RecomputeVectors();
 	m_fov = fov;
-	m_bufferData = bufferData;
+//	m_bufferData = bufferData;
 	m_projMatrix.Identity();
 	m_viewMatrix.Identity();
 	m_shiftPressed = false;
@@ -68,7 +70,8 @@ void Camera::Move(float dx, float dy)
 
 void Camera::Update()
 {
-	setProjectionMatrix(m_fov, m_bufferData->width, m_bufferData->height, m_bufferData->zNear, m_bufferData->zFar);
+	BufferData* b = DirectZob::GetInstance()->GetEngine()->GetBufferData();
+	setProjectionMatrix(m_fov, b->width, b->height, b->zNear, b->zFar);
 	InitView();
 	UpdateLookAt();
 	RecomputeVectors();
@@ -248,10 +251,10 @@ void Camera::setProjectionMatrix(const float angleOfView, const float width, con
 }
 */
 
-void Camera::setProjectionMatrix(const float angleOfView, const float width, const float height, const float near, const float far)
+void Camera::setProjectionMatrix(const float angleOfView, const float width, const float height, const float zNear, const float zFar)
 {
 	const float ar = width / height;
-	const float zRange = near - far;
+	const float zRange = zNear - zFar;
 	const float tanHalfFOV = -tanf(angleOfView / 2.0 * M_PI / 180.0);
 
 	m_projMatrix.SetData(0, 0, 1.0f / (tanHalfFOV * ar));
@@ -266,8 +269,8 @@ void Camera::setProjectionMatrix(const float angleOfView, const float width, con
 
 	m_projMatrix.SetData(2, 0, 0.0f);
 	m_projMatrix.SetData(2, 1, 0.0f);
-	m_projMatrix.SetData(2, 2, (-near - far) / zRange);
-	m_projMatrix.SetData(2, 3, 2.0f * far * near / zRange);
+	m_projMatrix.SetData(2, 2, (-zNear - zFar) / zRange);
+	m_projMatrix.SetData(2, 3, 2.0f * zFar * zNear / zRange);
 
 	m_projMatrix.SetData(3, 0, 0.0f);
 	m_projMatrix.SetData(3, 1, 0.0f);

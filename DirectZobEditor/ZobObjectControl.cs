@@ -26,6 +26,7 @@ namespace DirectZobEditor
             RefreshMeshList();
             ZobObjectListControl z = m_mainForm.GetZobObjectListControl();
             z.OnObjectSelected += new ZobObjectListControl.OnObjectSelectedHandler(OnZobObjectSelectionChanged);
+            checkBoxLinkScale.Checked = true;
         }
 
         public void OnZobObjectSelectionChanged(object s, ObjectSelectionEventArg e)
@@ -35,6 +36,18 @@ namespace DirectZobEditor
             {
                 SetValues();
                 RefreshMeshList();
+                if(m_zobObjectWrapper.IsLight())
+                {
+
+                }
+                if (m_zobObjectWrapper.IsCamera())
+                {
+
+                }
+                if (m_zobObjectWrapper.HasMesh())
+                {
+
+                }
             }
             else
             {
@@ -88,6 +101,22 @@ namespace DirectZobEditor
                 float sy = s.y;
                 float sz = s.z;
                 float f;
+                zobPosX.Text = zobPosX.Text.Replace('.', ',');
+                zobPosY.Text = zobPosY.Text.Replace('.', ',');
+                zobPosZ.Text = zobPosZ.Text.Replace('.', ',');
+
+                zobPosX.Text = zobPosX.Text.Replace('.', ',');
+                zobPosY.Text = zobPosY.Text.Replace('.', ',');
+                zobPosZ.Text = zobPosZ.Text.Replace('.', ',');
+
+                zobRotX.Text = zobRotX.Text.Replace('.', ',');
+                zobRotY.Text = zobRotY.Text.Replace('.', ',');
+                zobRotZ.Text = zobRotZ.Text.Replace('.', ',');
+
+                zobScaleX.Text = zobScaleX.Text.Replace('.', ',');
+                zobScaleY.Text = zobScaleY.Text.Replace('.', ',');
+                zobScaleZ.Text = zobScaleZ.Text.Replace('.', ',');
+
                 if (float.TryParse(zobPosX.Text, out f))
                 {
                     p.x = f;
@@ -151,6 +180,24 @@ namespace DirectZobEditor
 
         private void UpdateFromTextBoxes(object sender, EventArgs e)
         {
+            if(checkBoxLinkScale.Checked)
+            {
+                if (sender == zobScaleX)
+                {
+                    zobScaleY.Text = zobScaleX.Text;
+                    zobScaleZ.Text = zobScaleX.Text;
+                }
+                if (sender == zobScaleY)
+                {
+                    zobScaleX.Text = zobScaleY.Text;
+                    zobScaleZ.Text = zobScaleY.Text;
+                }
+                if (sender == zobScaleZ)
+                {
+                    zobScaleY.Text = zobScaleZ.Text;
+                    zobScaleX.Text = zobScaleZ.Text;
+                }
+            }
             UpdateValues();
         }
 
@@ -159,7 +206,24 @@ namespace DirectZobEditor
             if(e.KeyChar == (char)Keys.Return)
             {
                 e.Handled = true;
-                //e.SuppressKeyPress = true;
+                if (checkBoxLinkScale.Checked)
+                {
+                    if (sender == zobScaleX)
+                    {
+                        zobScaleY.Text = zobScaleX.Text;
+                        zobScaleZ.Text = zobScaleX.Text;
+                    }
+                    if (sender == zobScaleY)
+                    {
+                        zobScaleX.Text = zobScaleY.Text;
+                        zobScaleZ.Text = zobScaleY.Text;
+                    }
+                    if (sender == zobScaleZ)
+                    {
+                        zobScaleY.Text = zobScaleZ.Text;
+                        zobScaleX.Text = zobScaleZ.Text;
+                    }
+                }
                 UpdateValues();
             }
         }
@@ -189,6 +253,30 @@ namespace DirectZobEditor
             {
                 m_zobObjectWrapper.SetLightingMode(LightingModeBox.SelectedIndex);
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            colorDialog1.ShowDialog();
+        }
+
+        private void buttonLinkScale_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void checkBoxLinkScale_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lightRed_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void zobScaleX_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

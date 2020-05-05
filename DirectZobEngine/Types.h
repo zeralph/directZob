@@ -34,6 +34,7 @@ public:
 		float za;
 		float zb;
 		float c;
+		bool bold = false;
 	};
 
 	struct RenderOptions

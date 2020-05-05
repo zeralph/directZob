@@ -1,0 +1,32 @@
+<root>
+    <Meshes>
+        <Mesh name="Residential Buildings 006.fbx" file="Residential Buildings 006.fbx" />
+        <Mesh name="Residential Buildings 004.fbx" file="Residential Buildings 004.fbx" />
+        <Mesh name="Residential Buildings 005.fbx" file="Residential Buildings 005.fbx" />
+    </Meshes>
+    <Scene>
+        <ZobObject name="Light_0">
+            <Position x="0" y="100" z="-50" />
+            <Rotation x="0" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+        </ZobObject>
+        <ZobObject name="newObject_1">
+            <Mesh>Residential Buildings 006.fbx</Mesh>
+            <Position x="20" y="0" z="0" />
+            <Rotation x="0" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+        </ZobObject>
+        <ZobObject name="newObject_2">
+            <Mesh>Residential Buildings 004.fbx</Mesh>
+            <Position x="0" y="0" z="0" />
+            <Rotation x="0" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+        </ZobObject>
+        <ZobObject name="newObject_3">
+            <Mesh>Residential Buildings 005.fbx</Mesh>
+            <Position x="-30" y="0" z="0" />
+            <Rotation x="0" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+        </ZobObject>
+    </Scene>
+</root>

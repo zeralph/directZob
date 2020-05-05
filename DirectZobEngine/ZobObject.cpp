@@ -1,7 +1,8 @@
 #include "ZobObject.h"
 #include "DirectZob.h"
+#include "Mesh.h"
 
-ZobObject::ZobObject(Type t, SubType s, std::string& name, Mesh* mesh, ZobObject* parent /*= NULL*/):ZOBGUID(t,s)
+ZobObject::ZobObject(Type t, SubType s, const std::string& name, Mesh* mesh, ZobObject* parent /*= NULL*/):ZOBGUID(t,s)
 {
 	DirectZob::LogInfo("Adding new ZobObject %s", name.c_str());
 	if (!parent && name != "root")
@@ -38,6 +39,11 @@ ZobObject::~ZobObject()
 	if (l)
 	{
 		DirectZob::GetInstance()->GetLightManager()->RemoveLight(l);
+	}
+	Camera* c = (Camera*)this;
+	if (l)
+	{
+		DirectZob::GetInstance()->GetCameraManager()->RemoveCamera(c);
 	}
 	if (m_parent != NULL)
 	{

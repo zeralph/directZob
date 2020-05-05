@@ -50,6 +50,7 @@
             this.textLog = new System.Windows.Forms.RichTextBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.propertiesPanel = new System.Windows.Forms.Panel();
+            this.createCameraToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FirstPanelSplitter)).BeginInit();
             this.FirstPanelSplitter.Panel1.SuspendLayout();
@@ -85,7 +86,6 @@
             this.menuStrip1.Size = new System.Drawing.Size(1278, 24);
             this.menuStrip1.TabIndex = 2;
             this.menuStrip1.Text = "menuStrip1";
-            this.menuStrip1.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.menuStrip1_ItemClicked);
             // 
             // fileToolStripMenuItem
             // 
@@ -103,35 +103,35 @@
             // newToolStripMenuItem
             // 
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.newToolStripMenuItem.Text = "New scene";
             this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
             // 
             // loadSceneToolStripMenuItem
             // 
             this.loadSceneToolStripMenuItem.Name = "loadSceneToolStripMenuItem";
-            this.loadSceneToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.loadSceneToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.loadSceneToolStripMenuItem.Text = "Load scene ...";
             this.loadSceneToolStripMenuItem.Click += new System.EventHandler(this.loadSceneToolStripMenuItem_Click);
             // 
             // saveSceneAsToolStripMenuItem
             // 
             this.saveSceneAsToolStripMenuItem.Name = "saveSceneAsToolStripMenuItem";
-            this.saveSceneAsToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.saveSceneAsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.saveSceneAsToolStripMenuItem.Text = "Save scene as ...";
             this.saveSceneAsToolStripMenuItem.Click += new System.EventHandler(this.saveSceneAsToolStripMenuItem_Click);
             // 
             // saveSceneToolStripMenuItem1
             // 
             this.saveSceneToolStripMenuItem1.Name = "saveSceneToolStripMenuItem1";
-            this.saveSceneToolStripMenuItem1.Size = new System.Drawing.Size(157, 22);
+            this.saveSceneToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
             this.saveSceneToolStripMenuItem1.Text = "Save scene";
             this.saveSceneToolStripMenuItem1.Click += new System.EventHandler(this.saveSceneToolStripMenuItem1_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.ExitToolStripMenuItem_Click);
             // 
@@ -140,7 +140,8 @@
             this.assetsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.loadTextureToolStripMenuItem,
             this.loadMeshToolStripMenuItem,
-            this.createLightToolStripMenuItem});
+            this.createLightToolStripMenuItem,
+            this.createCameraToolStripMenuItem});
             this.assetsToolStripMenuItem.Name = "assetsToolStripMenuItem";
             this.assetsToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
             this.assetsToolStripMenuItem.Text = "Assets";
@@ -290,6 +291,13 @@
             this.propertiesPanel.Size = new System.Drawing.Size(368, 748);
             this.propertiesPanel.TabIndex = 0;
             // 
+            // createCameraToolStripMenuItem
+            // 
+            this.createCameraToolStripMenuItem.Name = "createCameraToolStripMenuItem";
+            this.createCameraToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.createCameraToolStripMenuItem.Text = "Create Camera";
+            this.createCameraToolStripMenuItem.Click += new System.EventHandler(this.createCameraToolStripMenuItem_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -348,6 +356,7 @@
         private System.Windows.Forms.ToolStripMenuItem loadTextureToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem loadMeshToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem createLightToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem createCameraToolStripMenuItem;
     }
 }
 

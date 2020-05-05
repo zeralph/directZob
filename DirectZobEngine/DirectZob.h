@@ -90,4 +90,5 @@ private:
 	bool m_isRendering = false;
 	static bool g_bShowGrid;
 	static bool g_bShowMeshes;
+	bool m_initialized = false;
 };

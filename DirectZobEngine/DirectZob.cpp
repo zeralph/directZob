@@ -12,6 +12,7 @@ DirectZob *DirectZob::singleton = nullptr;
 
 DirectZob::DirectZob()
 {
+	m_initialized = false;
 	DirectZob::singleton= this; 
 }
 
@@ -77,11 +78,11 @@ void DirectZob::Init(int width, int height, bool bEditorMode)
 	m_events = new Events();
 	DirectZob::LogInfo("Init engine");
 	m_engine = new Engine(width, height, m_events);
-	m_cameraManager = new CameraManager();
+	m_zobObjectManager = new ZobObjectManager();
 	m_lightManager = new LightManager();
 	m_materialManager = new MaterialManager();
 	m_meshManager = new MeshManager();
-	m_zobObjectManager = new ZobObjectManager();
+	m_cameraManager = new CameraManager();
 	int dx = 1;
 	int dy = 1;
 	float r = 0.0f;
@@ -89,7 +90,7 @@ void DirectZob::Init(int width, int height, bool bEditorMode)
 	float rot = 0.0;
 	char frameCharBuffer[sizeof(ulong)];
 	int state;
-	
+	m_initialized = true;
 //	m_engine->Start();
 }
 
@@ -98,22 +99,34 @@ static float rot = 1.0f;
 int DirectZob::RunAFrame()
 {
 	int state=0;
-	if(m_engine->Started() && !m_isRendering)
+	if(m_initialized && m_engine->Started() && !m_isRendering)
 	{
 		m_isRendering = true;
 		Color c = Color(DirectZob::GetInstance()->GetLightManager()->GetClearColor());
 		m_engine->ClearBuffer(&c);
-		m_engine->StartDrawingScene();
-		Camera* cam = m_cameraManager->GetCurrentCamera();
-		cam->Update();
-		m_zobObjectManager->UpdateObjects();
-		m_engine->WaitForRasterizersEnd();
-		m_engine->ClearRenderQueues();
 		clock_t tick = clock();
-		m_zobObjectManager->DrawObjects(cam, m_engine);
-		if (m_engine->ShowGrid())
+		Camera* cam = m_cameraManager->GetCurrentCamera();
+		if (cam)
 		{
-			m_engine->DrawGrid(cam);
+			m_engine->StartDrawingScene();
+			cam->Update();
+			m_zobObjectManager->UpdateObjects();
+			m_engine->WaitForRasterizersEnd();
+			m_engine->ClearRenderQueues();
+			m_zobObjectManager->DrawObjects(cam, m_engine);
+			if (m_engine->ShowGrid())
+			{
+				m_engine->DrawGrid(cam);
+			}
+		}
+		else
+		{
+			if (m_text)
+			{
+				_snprintf_s(buffer, MAX_PATH, "WARNING : NO CAMERA");
+				std::string sBuf = std::string(buffer);
+				m_text->Print(m_engine->GetBufferData()->width / 2, m_engine->GetBufferData()->height / 2, 1, &sBuf, 0xFFFF0000);
+			}
 		}
 		if (m_text)
 		{

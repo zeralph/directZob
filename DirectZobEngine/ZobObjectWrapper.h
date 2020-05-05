@@ -26,6 +26,9 @@ namespace CLI {
 		bool IsValid() { return m_isValid; };
 		void SetLightingMode(int lightMode);
 		int GetLightingMode();
+		bool IsLight();
+		bool IsCamera();
+		bool HasMesh();
 	private:
 		bool m_isValid;
 	};

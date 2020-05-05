@@ -190,6 +190,7 @@ void SceneLoader::NewScene()
 	UnloadScene();
 	m_path = "";
 	m_file = "";
+	DirectZob::GetInstance()->GetCameraManager()->CreateCamera();
 	DirectZob::GetInstance()->GetLightManager()->ReInitGlobalSettings();
 	DirectZob::GetInstance()->GetEngine()->Start();
 }

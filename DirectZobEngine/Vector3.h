@@ -48,6 +48,7 @@ public:
 	inline void Mul(float f) { x *= f; y *= f; z *= f; }
 	inline void Set(const Vector3* v) { x = v->x; y = v->y; z = v->z; }
 	inline bool operator== (const Vector3& v) { return (x == v.x && y == v.y && v.z == z && w == v.w); }
+	inline bool operator!= (const Vector3& v) { return (x != v.x || y != v.y || v.z != z || w != v.w); }
 	inline void operator/= (const float f) { x /= f; y /= f; z /= f; }
 	inline void operator*= (const float f) { x *= f; y *= f; z *= f; }
 //	inline Vector3 operator= (const Vector3 &v) { return Vector3(v.x, v.y, v.z); }

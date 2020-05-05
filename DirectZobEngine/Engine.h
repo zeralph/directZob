@@ -13,14 +13,14 @@
 #include "Vector2.h"
 #include "Vector3.h"
 #include "Material.h"
-#include "Camera.h"
+//#include "Camera.h"
 #include "Events.h"
 
 #define Z_NEAR 0.001f
 #define Z_FAR 5000.0f
 
 class Rasterizer;
-
+class Camera;
 namespace Core
 {
 	class Engine
@@ -56,8 +56,8 @@ namespace Core
 
 		void ToggleZbufferOutput() { m_showZBuffer = !m_showZBuffer; }
 
-		void QueueLine(const Camera* camera, const Vector3* v1, const Vector3* v2, const uint c);
-		void QueueEllipse(const Camera* camera, const Vector3* center, const Vector3* up, const float r1, const float r2, const uint c);
+		void QueueLine(const Camera* camera, const Vector3* v1, const Vector3* v2, const uint c, bool bold);
+		void QueueEllipse(const Camera* camera, const Vector3* center, const Vector3* up, const float r1, const float r2, const uint c, bool bold);
 		bool ClipSegment(Vector3* a, Vector3* b);
 		int StartDrawingScene();
 		int EndDrawingScene();

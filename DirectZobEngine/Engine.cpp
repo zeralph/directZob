@@ -11,6 +11,7 @@
 #include <assert.h>
 #include "DirectZob.h"
 #include "Rasterizer.h"
+#include "Camera.h"
 
 #define MAX_TRIANGLES_PER_IMAGE 400000
 
@@ -281,10 +282,11 @@ void Engine::WaitForRasterizersEnd()
 
 void Engine::DrawGrid(const Camera *camera)
 {
-	int gridSize = 10;
+	int gridSize = 50;
 	Vector3 a;
 	Vector3 b;
-	for (float i = -gridSize; i < gridSize; i += 1.0f)
+	bool bold;
+	for (int i = -gridSize; i <= gridSize; i += 1.0f)
 	{
 		a.x = i;
 		b.x = i;
@@ -292,20 +294,36 @@ void Engine::DrawGrid(const Camera *camera)
 		b.y = 0.0f;
 		a.z = -gridSize;
 		b.z = gridSize;
-		QueueLine(camera, &a, &b, 0xFFFFFF);
+		bold = i % 5 == 0;
+		if (bold)
+		{
+			QueueLine(camera, &a, &b, 0xFFFFFF, bold);
+		}
+		else
+		{
+			QueueLine(camera, &a, &b, 0xCCCCCC, bold);
+		}
 	}
-	for (float i = -gridSize; i <= gridSize; i += 1.0f)
+	for (int i = -gridSize; i <= gridSize; i += 1.0f)
 	{
 		a.z = b.z = i;
 		a.y = b.y = 0.0f;
 		a.x = -gridSize;
 		b.x = gridSize;
-		QueueLine(camera, &a, &b, 0xFFFFFF);
+		bold = i % 5 == 0;
+		if (bold)
+		{
+			QueueLine(camera, &a, &b, 0xFFFFFF, bold);
+		}
+		else
+		{
+			QueueLine(camera, &a, &b, 0xCCCCCC, bold);
+		}
 	}
 
-	QueueLine(camera, &Vector3::Vector3Zero, &Vector3::Vector3X, 0xFF0000);
-	QueueLine(camera, &Vector3::Vector3Zero, &Vector3::Vector3Y, 0x00FF00);
-	QueueLine(camera, &Vector3::Vector3Zero, &Vector3::Vector3Z, 0x0000FF);
+	QueueLine(camera, &Vector3::Vector3Zero, &Vector3::Vector3X, 0xFF0000, true);
+	QueueLine(camera, &Vector3::Vector3Zero, &Vector3::Vector3Y, 0x00FF00, true);
+	QueueLine(camera, &Vector3::Vector3Zero, &Vector3::Vector3Z, 0x0000FF, true);
 }
 
 void Engine::ClipSegmentToPlane(Vector3 &s0, Vector3 &s1, Vector3 &pp, Vector3 &pn)
@@ -327,16 +345,19 @@ void Engine::ClipSegmentToPlane(Vector3 &s0, Vector3 &s1, Vector3 &pp, Vector3 &
 	s1 = s0 + u;
 }
 
-void Engine::QueueEllipse(const Camera* camera, const Vector3* center, const Vector3* up, const float r1, const float r2, const uint c)
+void Engine::QueueEllipse(const Camera* camera, const Vector3* center, const Vector3* up, const float r1, const float r2, const uint c, bool bold)
 {
 	int segs = 10;
 	Matrix4x4 m;
-	Vector3 v = Vector3(0, 1, 0);
-	Vector3 y = up;
+	Vector3 y = Vector3(0, 1, 0);
+	Vector3 x = Vector3(1, 0, 0);
+	if (y != up)
+	{
+		x = Vector3::Cross(up, &y);
+	}
+	Vector3 z = Vector3::Cross(&x, up);
+	y = up;
 	y.Normalize();
-	float dy = (y.y!=0.0f)?y.z/y.y:0.0f;
-	Vector3 x = Vector3(1, dy, 0);
-	Vector3 z = Vector3(0, dy, 1);
 	x.Normalize();
 	z.Normalize();
 	m.SetData(0,0, x.x);
@@ -348,22 +369,25 @@ void Engine::QueueEllipse(const Camera* camera, const Vector3* center, const Vec
 	m.SetData(2,0, x.z);
 	m.SetData(2,1, y.z);
 	m.SetData(2,2, z.z);
-	m.SetTranslation(center);
-	Vector3 a, b = Vector3(r1, 0, 0);
-	m.Mul(&a);
+	Vector3 a = Vector3(r1, 0, 0);
+	Vector3 b = a;
 	float rot = 360.0f / (float)segs;
+	m.SetRotation(0, rot, 0);
+	m.Mul(&a);
+	a = a + center;
 	for(int i=0; i<segs; i++)
 	{
 		b = a;
-		m.SetRotation(0, rot, 0);
 		a = Vector3(r1, 0, 0);
+		m.SetRotation(0, rot, 0);
 		m.Mul(&a);
-		QueueLine(camera, &a, &b, c);
+		a = a + center;
+		QueueLine(camera, &a, &b, c, bold);
 	}
 
 }
 
-void Engine::QueueLine(const Camera *camera, const Vector3 *v1, const Vector3 *v2, const uint c)
+void Engine::QueueLine(const Camera *camera, const Vector3 *v1, const Vector3 *v2, const uint c, bool bold)
 {
 	if (m_started)
 	{
@@ -423,12 +447,15 @@ void Engine::QueueLine(const Camera *camera, const Vector3 *v1, const Vector3 *v
 			l.za = za;
 			l.zb = zb;
 			l.c = c;
+			l.bold = bold;
 			int min = std::min<int>(a.y, b.y);
 			int max = std::max<int>(a.y, b.y);
 			min = clamp2(min, 0, (int)m_bufferData.height - 1);
 			max = clamp2(max, 0, (int)m_bufferData.height - 1);
 			min /= m_bufferData.height / m_nbRasterizers;
 			max /= m_bufferData.height / m_nbRasterizers;
+//			min = 0;
+//			max = m_nbRasterizers-1;
 			for (int i = min; i <= max; i++)
 			{
 				m_rasterLineQueues[i].push_back(l);

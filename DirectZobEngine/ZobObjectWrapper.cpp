@@ -1,6 +1,7 @@
 #ifdef _WINDLL
 #include "ZobObjectWrapper.h"
-
+#include "Light.h"
+#include "Camera.h"
 namespace CLI
 {
 	ZobObjectWrapper::ZobObjectWrapper(ZobObject* zobObject):ManagedObject(zobObject, false)
@@ -97,6 +98,21 @@ namespace CLI
 	{
 		RenderOptions::eLightMode l = (RenderOptions::eLightMode)lightMode;
 		m_Instance->SetLightingMode(l);
+	}
+
+	bool ZobObjectWrapper::IsLight()
+	{
+		return (Light*)m_Instance != NULL;
+	}
+
+	bool ZobObjectWrapper::IsCamera()
+	{
+		return (Camera*)m_Instance != NULL;
+	}
+
+	bool ZobObjectWrapper::HasMesh()
+	{
+		return m_Instance->GetMeshName() != "";
 	}
 }
 #endif //_WINDLL
