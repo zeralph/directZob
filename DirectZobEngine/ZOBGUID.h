@@ -4,11 +4,6 @@
 class ZOBGUID
 {
 public :
-	//    60   56   52   48   44   40   36   32   28   24   20   16   12    8    4    0
-	//     |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
-	//  0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000  
-	//|res |type|styp|
-
 
 	enum Type
 	{
@@ -34,6 +29,8 @@ public :
 	uint GetId();
 
 private:
-	zobId m_guid;
+	uint m_id;
+	ZOBGUID::Type m_type;
+	ZOBGUID::SubType m_subType;
 	static ulong sCurrentId;
 };

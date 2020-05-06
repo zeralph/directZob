@@ -4,36 +4,23 @@ ulong ZOBGUID::sCurrentId = 0;
 
 ZOBGUID::ZOBGUID(Type t, SubType s)
 {
-	zobId g = (zobId)1 << 63;
-	g += (zobId)t << 56;
-	g += (zobId)s << 48;
-	g += (zobId)sCurrentId;
-	m_guid = g;
-	sCurrentId++;
-	ZOBGUID::Type t2 = GetType();
-	ZOBGUID::SubType s2 = GetSubType();
-	ulong i2 = GetId();
+
+	m_id = sCurrentId;
+	m_type = t;
+	m_subType = s;
 }
 
 const ZOBGUID::Type ZOBGUID::GetType() const
 {
-	zobId g = m_guid;
-	g = g & 0x0F00000000000000;
-	g = g >> 56;
-	return (ZOBGUID::Type)g;
+	return m_type;
 }
 
 const ZOBGUID::SubType ZOBGUID::GetSubType() const
 {
-	zobId g = m_guid;
-	g = g & 0x00F0000000000000;
-	g = g >> 48;
-	return (ZOBGUID::SubType)g;
+	return m_subType;
 }
 
 uint ZOBGUID::GetId()
 {
-	zobId g = m_guid;
-	g = g & 0x000000000000FFFF;
-	return (uint)g;
+	return m_id;
 }

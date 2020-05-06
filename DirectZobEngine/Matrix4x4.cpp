@@ -86,7 +86,7 @@ void Matrix4x4::SetTranslation(const Vector3& v)
 	Mul(&tmp);
 }
 
-void Matrix4x4::AddRotation(const Vector3& v)
+Vector3 Matrix4x4::GetRotation() const
 {
 	float heading = 0.0f;
 	float bank = 0.0f;
@@ -96,21 +96,27 @@ void Matrix4x4::AddRotation(const Vector3& v)
 		heading = atan2(m_data[0][2], m_data[2][2]);
 		attitude = M_PI / 2;
 		bank = 0;
-		return;
 	}
-	if (m_data[1][0] < -0.998) { // singularity at south pole
+	else if (m_data[1][0] < -0.998) { // singularity at south pole
 		heading = atan2(m_data[0][2], m_data[2][2]);
 		attitude = -M_PI / 2;
 		bank = 0;
-		return;
 	}
-	heading = atan2(-m_data[2][0], m_data[0][0]);
-	bank = atan2(-m_data[1][2], m_data[1][1]);
-	attitude = asin(m_data[1][0]);
+	else
+	{
+		heading = atan2(-m_data[2][0], m_data[0][0]);
+		bank = atan2(-m_data[1][2], m_data[1][1]);
+		attitude = asin(m_data[1][0]);
+	}
+	return Vector3(heading, bank, attitude);
+}
 
-	SetRotationX(heading + v.x);
-	SetRotationY(bank + v.y);
-	SetRotationZ(attitude + v.z);
+void Matrix4x4::AddRotation(const Vector3& v)
+{
+	Vector3 r = GetRotation();
+	SetRotationX(r.x + v.x);
+	SetRotationY(r.y + v.y);
+	SetRotationZ(r.z + v.z);
 }
 
 

@@ -238,6 +238,11 @@ void SceneLoader::LoadScene(std::string& path, std::string& file)
 			LoadZobObject(e, NULL);
 		}
 	}
+	if (DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera() == NULL)
+	{
+		DirectZob::LogWarning("Scene does not have any camer, adding default one");
+		DirectZob::GetInstance()->GetCameraManager()->CreateCamera();
+	}
 	DirectZob::LogInfo("Scene loaded");
 	DirectZob::GetInstance()->GetEngine()->Start();
 }

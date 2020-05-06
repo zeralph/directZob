@@ -102,17 +102,18 @@ namespace CLI
 
 	bool ZobObjectWrapper::IsLight()
 	{
-		return (Light*)m_Instance != NULL;
+		ZOBGUID::SubType t = m_Instance->GetSubType();
+		return t == ZOBGUID::SubType::subtype_zobLight;
 	}
 
 	bool ZobObjectWrapper::IsCamera()
 	{
-		return (Camera*)m_Instance != NULL;
+		return m_Instance->GetSubType() == ZOBGUID::SubType::subtype_zobCamera;
 	}
 
 	bool ZobObjectWrapper::HasMesh()
 	{
-		return m_Instance->GetMeshName() != "";
+		return m_Instance->GetSubType() == ZOBGUID::SubType::subtype_zobOject;
 	}
 }
 #endif //_WINDLL

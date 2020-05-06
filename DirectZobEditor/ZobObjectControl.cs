@@ -27,6 +27,7 @@ namespace DirectZobEditor
             ZobObjectListControl z = m_mainForm.GetZobObjectListControl();
             z.OnObjectSelected += new ZobObjectListControl.OnObjectSelectedHandler(OnZobObjectSelectionChanged);
             checkBoxLinkScale.Checked = true;
+            tabZobObject.Controls.Clear();
         }
 
         public void OnZobObjectSelectionChanged(object s, ObjectSelectionEventArg e)
@@ -38,15 +39,18 @@ namespace DirectZobEditor
                 RefreshMeshList();
                 if(m_zobObjectWrapper.IsLight())
                 {
-
+                    tabZobObject.Controls.Clear();
+                    tabZobObject.Controls.Add(tabLight);
                 }
-                if (m_zobObjectWrapper.IsCamera())
+                else if (m_zobObjectWrapper.IsCamera())
                 {
-
+                    tabZobObject.Controls.Clear();
+                    tabZobObject.Controls.Add(tabCamera);
                 }
-                if (m_zobObjectWrapper.HasMesh())
+                else
                 {
-
+                    tabZobObject.Controls.Clear();
+                    tabZobObject.Controls.Add(tabMesh);
                 }
             }
             else

@@ -8,7 +8,8 @@ Camera::Camera(const std::string& name, Vector3& position, Vector3& target, Vect
 	:ZobObject(ZOBGUID::Type::type_scene, ZOBGUID::SubType::subtype_zobCamera, name, NULL, NULL)
 {
 	m_name = name.c_str();
-	m_cameraPosition = position;
+	m_translation = position;
+//	m_cameraPosition = position;
 	m_cameraTarget = target;
 	m_cameraUp = up;
 	RecomputeVectors();
@@ -16,11 +17,6 @@ Camera::Camera(const std::string& name, Vector3& position, Vector3& target, Vect
 //	m_bufferData = bufferData;
 	m_projMatrix.Identity();
 	m_viewMatrix.Identity();
-	m_shiftPressed = false;
-	m_mouseLeftButtonPressed = false;
-	m_mouseRightButtonPressed = false;
-	m_mouseX = -1;
-	m_mouseY = -1;
 }
 
 Camera::~Camera()
@@ -31,14 +27,14 @@ void Camera::Zoom(float z)
 {
 	Vector3 v = m_cameraFw;
 	v = v * (-z);
-	m_cameraPosition = m_cameraPosition + v;
+	m_translation = m_translation + v;
 }
 
 void Camera::RotateAroundAxis(float dx, float dy)
 {
-	Vector3 l = m_cameraPosition - m_cameraTarget;
+	Vector3 l = m_translation - m_cameraTarget;
 	l = Vector3::RotateAroundAxis(l, Vector3::Vector3Y, -dx * M_PI / 180.0);
-	m_cameraPosition = l + m_cameraTarget;
+	m_translation = l + m_cameraTarget;
 	RecomputeVectors();
 	if (m_cameraFw.y >= 0.95f && dy > 0)
 	{
@@ -48,9 +44,9 @@ void Camera::RotateAroundAxis(float dx, float dy)
 	{
 		dy = 0.0f;
 	}
-	l = m_cameraPosition - m_cameraTarget;
+	l = m_translation - m_cameraTarget;
 	l = Vector3::RotateAroundAxis(l, m_cameraLeft, dy * M_PI / 180.0);
-	m_cameraPosition = l + m_cameraTarget;
+	m_translation = l + m_cameraTarget;
 	RecomputeVectors();
 }
 
@@ -64,7 +60,7 @@ void Camera::Move(float dx, float dy)
 	
 	vf = vf * ((float)dy / 20.0f);
 	vf.y = 0;
-	m_cameraPosition = m_cameraPosition - (vl + vf);
+	m_translation = m_translation - (vl + vf);
 	m_cameraTarget = m_cameraTarget - (vl + vf);
 }
 
@@ -75,11 +71,13 @@ void Camera::Update()
 	InitView();
 	UpdateLookAt();
 	RecomputeVectors();
+	m_modelMatrix = m_viewMatrix;
+	m_rotation = m_modelMatrix.GetRotation();
 }
 
 void Camera::RecomputeVectors()
 {
-	m_cameraFw = m_cameraPosition - m_cameraTarget;
+	m_cameraFw = m_translation - m_cameraTarget;
 	m_cameraFw.Normalize();
 	m_cameraLeft = Vector3::Cross(&m_cameraFw, &m_cameraUp);
 	m_cameraLeft.Normalize();
@@ -87,10 +85,10 @@ void Camera::RecomputeVectors()
 
 void Camera::SetLookAt(const Vector3* from, const Vector3* to, const Vector3* up)
 {
-	m_cameraPosition = from;
+	m_translation = from;
 	m_cameraTarget = to;
 	m_cameraUp = up;
-	m_cameraPosition.Mul(-1.0f);
+	m_translation.Mul(-1.0f);
 	m_cameraTarget.Mul(-1.0f);
 	//m_cameraUp.Mul(-1.0f);
 }
@@ -98,7 +96,7 @@ void Camera::SetLookAt(const Vector3* from, const Vector3* to, const Vector3* up
 void Camera::UpdateLookAt()
 {
 	//Vector3 zaxis = Vector3(eye->x - at->x, eye->y - at->y, eye->z - at->z);
-	const Vector3* eye = &m_cameraPosition;
+	const Vector3* eye = &m_translation;
 	const Vector3* at = &m_cameraTarget;
 	const Vector3* up = &m_cameraUp;
 	Vector3 zaxis = Vector3(at->x - eye->x, at->y - eye->y, at->z - eye->z);

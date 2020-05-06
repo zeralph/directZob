@@ -33,6 +33,7 @@ public:
 	void AddRotation(const Vector3& v);
 	void SetTranslation(const Vector3& v);
 	void AddTranslation(const Vector3& v);
+	Vector3 GetRotation() const;
 	Vector3 GetScale() const { return Vector3(m_data[0][0], m_data[1][1], m_data[2][2]); }
 	Vector3 GetTranslation() const { return Vector3{ m_data[0][3], m_data[1][3], m_data[2][3] }; }
 	inline float GetValue(const int i, const int j) const { return m_data[i][j]; }
