@@ -108,7 +108,7 @@ void Rasterizer::DrawLine(const Line3D* l) const
 	float dz = l->zb - l->za;
 	int dx = abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
 	int dy = -abs(y1 - y0), sy = y0 < y1 ? 1 : -1;
-	dz /= (float)max(dx, dy);
+	dz /= (float)fmax(dx, dy);
 	int err = dx + dy, e2; /* error value e_xy */
 	bool boldX = false;
 	bool boldY = false;

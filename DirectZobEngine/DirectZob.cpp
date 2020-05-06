@@ -123,7 +123,7 @@ int DirectZob::RunAFrame()
 		{
 			if (m_text)
 			{
-				_snprintf_s(buffer, MAX_PATH, "WARNING : NO CAMERA");
+				_snprintf_s(buffer, MAX_PATH, "WARNING : NO CAMERA", NULL);
 				std::string sBuf = std::string(buffer);
 				m_text->Print(m_engine->GetBufferData()->width / 2, m_engine->GetBufferData()->height / 2, 1, &sBuf, 0xFFFF0000);
 			}
