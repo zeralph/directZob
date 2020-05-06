@@ -210,8 +210,9 @@ namespace DirectZobEditor
         {
             ZobObjectTree.Nodes.Clear();
             string p = Application.StartupPath;
-            p = Path.Combine(p, "..\\..\\..\\resources\\editor\\");
-//            m_zobObjectManagerWrapper.CreateEditorGizmos(p);
+            CLI.CameraManagerWrapper cm = m_mainForm.GetCameraControl().GetWrapper();
+            //create an editor camera
+            cm.CreateEditorCamera();
             UpdateTree();
         }
 

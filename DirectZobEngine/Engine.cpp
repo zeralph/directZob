@@ -263,6 +263,7 @@ void Engine::ClearRenderQueues()
 	{
 		//m_rasterTriangleQueues[i]->clear();
 		m_rasterLineQueues[i].clear();
+		m_rasterLineQueues[i].shrink_to_fit();
 		m_rasterNbTriangleQueues[i] = 0;
 		m_rasterizers[i]->Clear();
 	}

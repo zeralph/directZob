@@ -102,6 +102,7 @@ int DirectZob::RunAFrame()
 	if(m_initialized && m_engine->Started() && !m_isRendering)
 	{
 		m_isRendering = true;
+		m_cameraManager->UpdateAfter();
 		Color c = Color(DirectZob::GetInstance()->GetLightManager()->GetClearColor());
 		m_engine->ClearBuffer(&c);
 		clock_t tick = clock();
@@ -109,8 +110,9 @@ int DirectZob::RunAFrame()
 		if (cam)
 		{
 			m_engine->StartDrawingScene();
-			cam->Update();
+			
 			m_zobObjectManager->UpdateObjects();
+//			cam->Update();
 			m_engine->WaitForRasterizersEnd();
 			m_engine->ClearRenderQueues();
 			m_zobObjectManager->DrawObjects(cam, m_engine);

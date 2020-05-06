@@ -108,6 +108,10 @@ void ZobObject::Update(const Matrix4x4& parentMatrix, const Matrix4x4& parentRSM
 
 void ZobObject::Draw(const Camera* camera, Core::Engine* engine)
 {
+	if(GetType() == ZOBGUID::type_editor)
+	{
+		return;
+	}
 	if (m_mesh)
 	{
 		m_mesh->Draw(m_modelMatrix, m_rotationScaleMatrix, camera, engine, GetId(), &m_renderOptions);
