@@ -20,6 +20,11 @@ const ZOBGUID::SubType ZOBGUID::GetSubType() const
 	return m_subType;
 }
 
+void ZOBGUID::ChangeType(Type t)
+{
+	m_type = t;
+}
+
 uint ZOBGUID::GetId()
 {
 	return m_id;

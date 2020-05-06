@@ -253,7 +253,10 @@ int main(int argc, char* argv[])
 	{
 		if (bBench)
 		{
-			m_directZob.GetCameraManager()->GetCurrentCamera()->SetLookAt(&camPos, &camTo, &camUp);
+			if (m_directZob.GetCameraManager()->GetCurrentCamera())
+			{
+				m_directZob.GetCameraManager()->GetCurrentCamera()->SetLookAt(&camPos, &camTo, &camUp);
+			}
 			Light* red = m_directZob.GetLightManager()->GetLight("red");
 			Light* blue = m_directZob.GetLightManager()->GetLight("blue");
 			Light* green = m_directZob.GetLightManager()->GetLight("green");

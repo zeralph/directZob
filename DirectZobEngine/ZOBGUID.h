@@ -26,6 +26,7 @@ public :
 
 	const Type GetType()const;
 	const SubType GetSubType()const;
+	void ChangeType(Type t);
 	uint GetId();
 
 private:

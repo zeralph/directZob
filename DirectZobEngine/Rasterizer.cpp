@@ -32,15 +32,10 @@ void Rasterizer::Start(const Triangle* triangles, const uint nbTriangles, const 
 	m_lightingPrecision = lp;
 }
 
-void Rasterizer::WaitForEnd() {
-	try {
-		if (m_thread.joinable())
-			m_thread.join();
-	}
-	catch (...) {
-		int g = 0;
-		g++;;
-	}
+void Rasterizer::WaitForEnd() 
+{
+	if (m_thread.joinable())
+		m_thread.join();
 }
 
 void Rasterizer::End() {

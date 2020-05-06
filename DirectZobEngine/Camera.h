@@ -10,7 +10,7 @@ public:
 	Camera(const std::string& name, Vector3& position, Vector3& target, Vector3& up, float fov, BufferData* bufferData);
 	~Camera();
 
-	void Update();
+	void Update(const Matrix4x4& parentMatrix, const Matrix4x4& parentRSMatrix);
 
 	inline const Matrix4x4* GetViewMatrix() const { return &m_viewMatrix; }
 	inline const Matrix4x4* GetProjectionMatrix() const {return &m_projMatrix;}
@@ -20,6 +20,7 @@ public:
 	inline const Vector3* GetTarget() const { return &m_cameraTarget; }
 	inline const Vector3* GetForward() const { return &m_cameraFw; }
 	inline const std::string& GetName() const { return m_name; }
+	void Draw(const Camera* camera, Core::Engine* engine);
 	void SetLookAt(const Vector3* from, const Vector3* to, const Vector3* up);
 	void RotateAroundAxis(float dx, float dy);
 	void Move(float dx, float dy);

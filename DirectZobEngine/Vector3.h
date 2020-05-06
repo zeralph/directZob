@@ -24,10 +24,13 @@ public:
 	inline void Normalize() 
 	{
 		float f = sqrtLength();
-		x /= f; 
-		y /= f; 
-		z /= f;
-		w = 1.0f;
+		if (f != 0.0f)
+		{
+			x /= f;
+			y /= f;
+			z /= f;
+			w = 1.0f;
+		}
 	}
 
 	inline float sqrtLength() { return (float)sqrt((double)x * (double)x + (double)y * (double)y + (double)z * (double)z); }

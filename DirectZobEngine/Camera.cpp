@@ -23,6 +23,36 @@ Camera::~Camera()
 {
 }
 
+void Camera::Draw(const Camera* camera, Core::Engine* engine)
+{
+	return;
+	if (GetType() == ZOBGUID::type_editor)
+	{
+		return;
+	}
+	Vector3 v0 = Vector3(-1, 1, 1);
+	Vector3 v1 = Vector3(1, 1, 1);
+	Vector3 v2 = Vector3(-1, -1, 1);
+	Vector3 v3 = Vector3(1, -1, 1);
+	m_rotationScaleMatrix.Mul(&v0);
+	m_rotationScaleMatrix.Mul(&v1);
+	m_rotationScaleMatrix.Mul(&v2);
+	m_rotationScaleMatrix.Mul(&v3);
+	v0 = v0 + m_translation;
+	v1 = v1 + m_translation;
+	v2 = v2 + m_translation;
+	v3 = v3 + m_translation;
+	uint c = 0x000000FF;
+	engine->QueueLine(camera, &v0, &v1, c, true);
+	engine->QueueLine(camera, &v1, &v3, c, true);
+	engine->QueueLine(camera, &v2, &v3, c, true);
+	engine->QueueLine(camera, &v2, &v0, c, true);
+	engine->QueueLine(camera, &m_translation, &v1, c, true);
+	engine->QueueLine(camera, &m_translation, &v2, c, true);
+	engine->QueueLine(camera, &m_translation, &v3, c, true);
+	engine->QueueLine(camera, &m_translation, &v0, c, true);
+}
+
 void Camera::Zoom(float z)
 {
 	Vector3 v = m_cameraFw;
@@ -64,8 +94,9 @@ void Camera::Move(float dx, float dy)
 	m_cameraTarget = m_cameraTarget - (vl + vf);
 }
 
-void Camera::Update()
+void Camera::Update(const Matrix4x4& parentMatrix, const Matrix4x4& parentRSMatrix)
 {
+	ZobObject::Update(parentMatrix, parentRSMatrix);
 	BufferData* b = DirectZob::GetInstance()->GetEngine()->GetBufferData();
 	setProjectionMatrix(m_fov, b->width, b->height, b->zNear, b->zFar);
 	InitView();
@@ -73,6 +104,9 @@ void Camera::Update()
 	RecomputeVectors();
 	m_modelMatrix = m_viewMatrix;
 	m_rotation = m_modelMatrix.GetRotation();
+	m_rotationScaleMatrix.Identity();
+	m_rotationScaleMatrix.SetRotation(&m_rotation);
+	m_rotationScaleMatrix.SetScale(&m_scale);
 }
 
 void Camera::RecomputeVectors()

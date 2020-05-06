@@ -5,7 +5,7 @@ CameraManager::CameraManager()
 {
 	m_cameras.clear();
 	m_curCam = NULL;
-
+	m_nextCamera = NULL;
 }
 
 CameraManager::~CameraManager()
@@ -30,6 +30,38 @@ void CameraManager::RemoveCamera(Camera* c)
 		{
 			m_curCam = NULL;
 		}
+		if (c == m_nextCamera)
+		{
+			m_nextCamera = NULL;
+		}
+	}
+}
+
+Camera* CameraManager::CreateEditorCamera()
+{
+	Camera* c = GetCamera(std::string("EditorCamera"));
+	if (c)
+	{
+		return c;
+	}
+	else
+	{
+		std::string name = std::string("EditorCamera");
+		Vector3 p = Vector3(-50, -50, -50);
+		Vector3 t = Vector3(0, 0, 0);
+		Vector3 u = Vector3(0, 1, 0);
+		c = DirectZob::GetInstance()->GetCameraManager()->CreateCamera(name, &p, &t, &u, 45.0f);
+		c->ChangeType(ZOBGUID::type_editor);
+		return c;
+	}
+}
+
+void CameraManager::UpdateAfter()
+{
+	if (m_nextCamera)
+	{
+		m_curCam = m_nextCamera;
+		m_nextCamera = NULL;
 	}
 }
 
@@ -37,19 +69,19 @@ Camera* CameraManager::CreateCamera()
 {
 	int l = m_cameras.size();
 	std::string name = std::string("Camera_").append(std::to_string((l)));
-	Vector3 p = Vector3(-50, -50, -50);
+	Vector3 p = Vector3(0, 1, 0);
 	Vector3 t = Vector3(0, 0, 0);
 	Vector3 u = Vector3(0, 1, 0);
 	return DirectZob::GetInstance()->GetCameraManager()->CreateCamera(name, &p, &t, &u, 45.0f);
 }
 
-void CameraManager::SetCurrentCamera(std::string& name)
+void CameraManager::SetNextCamera(std::string& name)
 {
 	for (int i = 0; i < m_cameras.size(); i++)
 	{
 		if (m_cameras[i]->GetName() == name)
 		{
-			m_curCam = m_cameras[i];
+			m_nextCamera = m_cameras[i];
 			return;
 		}
 	}

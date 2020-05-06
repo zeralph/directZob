@@ -88,6 +88,12 @@ namespace CLI
 		}
 	}
 
+
+	void CameraManagerWrapper::CreateEditorCamera()
+	{
+		m_Instance->CreateEditorCamera();
+	}
+
 	void CameraManagerWrapper::CreateCamera()
 	{
 		m_Instance->CreateCamera();
@@ -97,7 +103,7 @@ namespace CLI
 	{
 		std::string stdName;
 		MarshalString(name, stdName);
-		m_Instance->SetCurrentCamera(stdName);
+		m_Instance->SetNextCamera(stdName);
 	}
 
 	void CameraManagerWrapper::SetLookAt(ManagedVector3^ position, ManagedVector3^ target, ManagedVector3^ up)
