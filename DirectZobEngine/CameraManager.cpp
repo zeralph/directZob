@@ -39,7 +39,8 @@ void CameraManager::RemoveCamera(Camera* c)
 
 Camera* CameraManager::CreateEditorCamera()
 {
-	Camera* c = GetCamera(std::string("EditorCamera"));
+	std::string s = std::string("EditorCamera");
+	Camera* c = GetCamera(s);
 	if (c)
 	{
 		return c;
