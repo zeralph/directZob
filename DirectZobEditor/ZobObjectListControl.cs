@@ -272,14 +272,16 @@ namespace DirectZobEditor
                 CLI.ZobObjectWrapper z = m_zobObjectManagerWrapper.GetZobObject(GetFullNodeName(n));
                 if(z != null)
                 {
-                    CLI.ManagedVector3 position = z.GetTransform();
+                    //CLI.ManagedVector3 position = z.GetTransform();
                     CLI.ManagedVector3 target = z.GetTransform();
-                    position.x = position.x - 5;
-                    position.y = position.y + 5;
-                    position.z = position.z - 5;
-                    CLI.ManagedVector3 up = new CLI.ManagedVector3();
-                    up.y = 1.0f;
-                    m_mainForm.GetCameraControl().GetWrapper().SetLookAt(position, target, up);
+                    //position.x = position.x - 5;
+                    //position.y = position.y + 5;
+                    //position.z = position.z - 5;
+                    //CLI.ManagedVector3 up = new CLI.ManagedVector3();
+                    //up.y = 1.0f;
+
+                    //TODO : camer wrapper et setlookat
+                    m_mainForm.GetCameraControl().GetWrapper().SetLookAt(target);
                 }
             }
         }

@@ -11,6 +11,10 @@
 			<FogDistance>1</FogDistance>
 			<FogType>exp2</FogType>			
 		</Globals>
+		<ZobObject name="camera_0" type="camera">
+            <Position x="0" y="5" z="0" />
+            <Rotation x="0" y="0" z="0" />
+        </ZobObject>
         <ZobObject name="fbx_example">
             <Mesh>fbx_example</Mesh>
             <Position x="0" y="0" z="0" />

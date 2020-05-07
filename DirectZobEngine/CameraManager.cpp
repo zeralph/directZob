@@ -48,10 +48,10 @@ Camera* CameraManager::CreateEditorCamera()
 	else
 	{
 		std::string name = std::string("EditorCamera");
-		Vector3 p = Vector3(-50, -50, -50);
-		Vector3 t = Vector3(0, 0, 0);
-		Vector3 u = Vector3(0, 1, 0);
-		c = DirectZob::GetInstance()->GetCameraManager()->CreateCamera(name, &p, &t, &u, 45.0f);
+		c = DirectZob::GetInstance()->GetCameraManager()->CreateCamera(name, 45.0f, NULL);
+		c->SetTranslation(20, 20, -20);
+		Vector3 v = Vector3(0, 0, 0);
+		c->SetTarget(&v);
 		c->ChangeType(ZOBGUID::type_editor);
 		return c;
 	}
@@ -66,14 +66,13 @@ void CameraManager::UpdateAfter()
 	}
 }
 
-Camera* CameraManager::CreateCamera()
+Camera* CameraManager::CreateCamera(ZobObject* parent)
 {
 	int l = m_cameras.size();
 	std::string name = std::string("Camera_").append(std::to_string((l)));
-	Vector3 p = Vector3(0, 1, 0);
-	Vector3 t = Vector3(0, 0, 0);
-	Vector3 u = Vector3(0, 1, 0);
-	return DirectZob::GetInstance()->GetCameraManager()->CreateCamera(name, &p, &t, &u, 45.0f);
+	Camera* c = DirectZob::GetInstance()->GetCameraManager()->CreateCamera(name, 45.0f, parent);
+	c->SetTranslation(0, 5, 0);
+	return c;
 }
 
 void CameraManager::SetNextCamera(std::string& name)
@@ -88,11 +87,11 @@ void CameraManager::SetNextCamera(std::string& name)
 	}
 }
 
-Camera* CameraManager::CreateCamera(std::string& name, Vector3 position, Vector3 target, Vector3 up, float fov)
+Camera* CameraManager::CreateCamera(std::string& name, float fov, ZobObject* parent)
 {
 	if (GetCamera(name) == NULL)
 	{
-		Camera* c = new Camera(name, position, target, up, fov, DirectZob::GetInstance()->GetEngine()->GetBufferData());
+		Camera* c = new Camera(name, fov, DirectZob::GetInstance()->GetEngine()->GetBufferData(), parent);
 		m_cameras.push_back(c);
 		if (!m_curCam)
 		{

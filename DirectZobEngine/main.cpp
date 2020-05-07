@@ -255,7 +255,9 @@ int main(int argc, char* argv[])
 		{
 			if (m_directZob.GetCameraManager()->GetCurrentCamera())
 			{
-				m_directZob.GetCameraManager()->GetCurrentCamera()->SetLookAt(&camPos, &camTo, &camUp);
+				//m_directZob.GetCameraManager()->GetCurrentCamera()->SetLookAt(&camPos, &camTo, &camUp);
+				m_directZob.GetCameraManager()->GetCurrentCamera()->SetTranslation(camPos.x, camPos.y, camPos.z);
+				m_directZob.GetCameraManager()->GetCurrentCamera()->SetRotation(0, rot, 0);
 			}
 			Light* red = m_directZob.GetLightManager()->GetLight("red");
 			Light* blue = m_directZob.GetLightManager()->GetLight("blue");

@@ -210,6 +210,11 @@ namespace DirectZobEditor
                     {
                         handler(this, EventArgs.Empty);
                     }
+                    handler = OnSceneUpdated;
+                    if (null != handler)
+                    {
+                        handler(this, EventArgs.Empty);
+                    }
                     this.Text = "DirectZob " + m_path + m_file;
                 }
             }

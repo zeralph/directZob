@@ -7,41 +7,44 @@
 class Camera : public ZobObject
 {
 public:
-	Camera(const std::string& name, Vector3& position, Vector3& target, Vector3& up, float fov, BufferData* bufferData);
+	Camera(const std::string& name, float fov, BufferData* bufferData, ZobObject* parent);
 	~Camera();
 
 	void Update(const Matrix4x4& parentMatrix, const Matrix4x4& parentRSMatrix);
 
-	inline const Matrix4x4* GetViewMatrix() const { return &m_viewMatrix; }
+	inline const Matrix4x4* GetViewMatrix() const { return &m_viewRotMatrix; }
 	inline const Matrix4x4* GetProjectionMatrix() const {return &m_projMatrix;}
-	inline void SetPosition(const Vector3* p) { m_translation = p;/*m_viewMatrix.SetTranslation(-p->x, -p->y, -p->z);*/ }
-	inline void SetRotation(const Vector3* p) { m_viewMatrix.SetRotation(-p->x, -p->y, -p->z); }
-	inline const Vector3* GetPosition() const { return &m_translation; }
-	inline const Vector3* GetTarget() const { return &m_cameraTarget; }
-	inline const Vector3* GetForward() const { return &m_cameraFw; }
-	inline const std::string& GetName() const { return m_name; }
+	inline const Vector3* GetForward() const 
+	{
+		return &m_forward;
+		Vector3 v;
+		v.x = m_viewRotMatrix.GetValue(0,1);
+		v.y = m_viewRotMatrix.GetValue(1, 1);
+		v.z = m_viewRotMatrix.GetValue(2, 1);
+		v.Normalize();
+		return &v; 
+	}
+	bool SetTarget(const Vector3* t);
 	void Draw(const Camera* camera, Core::Engine* engine);
-	void SetLookAt(const Vector3* from, const Vector3* to, const Vector3* up);
-	void RotateAroundAxis(float dx, float dy);
+	void RotateAroundAxis(const Vector3* axis, float dx, float dy);
 	void Move(float dx, float dy);
 	void Zoom(float z);
-
+	inline void ToViewSpace(Vector3* v) const
+	{
+		v->x -= m_translation.x;
+		v->y -= m_translation.y;
+		v->z -= m_translation.z;
+		m_viewRotMatrix.Mul(v);
+	}
 private:
+	void SetViewMatrix(const Vector3 &left, const Vector3 &up, const Vector3 &fw, const Vector3 &p);
 	void setProjectionMatrix(const float angleOfView, const float width, const float height, const float near, const float far);
-	void UpdateLookAt();
-	void InitView();
-	void RecomputeVectors();
 
-
-	std::string m_name;
-	Matrix4x4 m_viewMatrix;
+	Vector3 m_left;
+	Vector3 m_forward;
+	Vector3 m_up;
+	Matrix4x4 m_viewRotMatrix;
 	Matrix4x4 m_projMatrix;
-	//Vector3 m_cameraPosition;
-	Vector3 m_cameraTarget;
-	Vector3 m_cameraUp;
-	Vector3 m_cameraFw;
-	Vector3 m_cameraLeft;
-	float m_cameraZoom;
 	float m_fov;
 };
 

@@ -4,15 +4,16 @@
 #include <string>
 #include <vector>
 
+class ZobObject;
 class CameraManager
 {
 public:
 	CameraManager();
 	~CameraManager();
 
-	Camera* CreateCamera();
+	Camera* CreateCamera(ZobObject* parent);
 	Camera* CreateEditorCamera();
-	Camera* CreateCamera(std::string& name, Vector3 position, Vector3 target, Vector3 up, float fov);
+	Camera* CreateCamera(std::string& name, float fov, ZobObject* parent);
 	Camera* GetCurrentCamera() {return m_curCam;}
 	Camera* GetCamera(std::string& name) const;
 	void UpdateAfter();

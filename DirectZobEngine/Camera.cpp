@@ -4,19 +4,11 @@
 
 
 
-Camera::Camera(const std::string& name, Vector3& position, Vector3& target, Vector3& up, float fov, BufferData* bufferData)
-	:ZobObject(ZOBGUID::Type::type_scene, ZOBGUID::SubType::subtype_zobCamera, name, NULL, NULL)
+Camera::Camera(const std::string& name, float fov, BufferData* bufferData, ZobObject* parent)
+	:ZobObject(ZOBGUID::Type::type_scene, ZOBGUID::SubType::subtype_zobCamera, name, NULL, parent)
 {
-	m_name = name.c_str();
-	m_translation = position;
-//	m_cameraPosition = position;
-	m_cameraTarget = target;
-	m_cameraUp = up;
-	RecomputeVectors();
+	//RecomputeVectors();
 	m_fov = fov;
-//	m_bufferData = bufferData;
-	m_projMatrix.Identity();
-	m_viewMatrix.Identity();
 }
 
 Camera::~Camera()
@@ -25,7 +17,6 @@ Camera::~Camera()
 
 void Camera::Draw(const Camera* camera, Core::Engine* engine)
 {
-	return;
 	if (GetType() == ZOBGUID::type_editor)
 	{
 		return;
@@ -55,16 +46,17 @@ void Camera::Draw(const Camera* camera, Core::Engine* engine)
 
 void Camera::Zoom(float z)
 {
-	Vector3 v = m_cameraFw;
+	Vector3 v = GetForward();
 	v = v * (-z);
 	m_translation = m_translation + v;
 }
 
-void Camera::RotateAroundAxis(float dx, float dy)
+void Camera::RotateAroundAxis(const Vector3* axis, float dx, float dy)
 {
-	Vector3 l = m_translation - m_cameraTarget;
-	l = Vector3::RotateAroundAxis(l, Vector3::Vector3Y, -dx * M_PI / 180.0);
-	m_translation = l + m_cameraTarget;
+	/*
+	Vector3 l = Vector3::RotateAroundAxis(axis, Vector3::Vector3Y, -dx * M_PI / 180.0);
+	//l = Vector3::RotateAroundAxis(l, Vector3::Vector3Y, -dx * M_PI / 180.0);
+	m_translation = l + axis;
 	RecomputeVectors();
 	if (m_cameraFw.y >= 0.95f && dy > 0)
 	{
@@ -74,14 +66,16 @@ void Camera::RotateAroundAxis(float dx, float dy)
 	{
 		dy = 0.0f;
 	}
-	l = m_translation - m_cameraTarget;
+	l = m_translation - axis;
 	l = Vector3::RotateAroundAxis(l, m_cameraLeft, dy * M_PI / 180.0);
-	m_translation = l + m_cameraTarget;
+	m_translation = l + axis;
 	RecomputeVectors();
+	*/
 }
 
 void Camera::Move(float dx, float dy)
 {
+	/*
 	Vector3 vl = Vector3(m_cameraLeft);
 	vl = vl * ((float)-dx / 20.0f);
 	vl.y = 0;
@@ -91,197 +85,66 @@ void Camera::Move(float dx, float dy)
 	vf = vf * ((float)dy / 20.0f);
 	vf.y = 0;
 	m_translation = m_translation - (vl + vf);
-	m_cameraTarget = m_cameraTarget - (vl + vf);
+//	m_cameraTarget = m_cameraTarget - (vl + vf);
+*/
 }
 
 void Camera::Update(const Matrix4x4& parentMatrix, const Matrix4x4& parentRSMatrix)
 {
 	ZobObject::Update(parentMatrix, parentRSMatrix);
+	//Vector3 x = Vector3(0, 0, 0);
+	//SetTarget(&x);
 	BufferData* b = DirectZob::GetInstance()->GetEngine()->GetBufferData();
 	setProjectionMatrix(m_fov, b->width, b->height, b->zNear, b->zFar);
-	InitView();
-	UpdateLookAt();
-	RecomputeVectors();
-	m_modelMatrix = m_viewMatrix;
-	m_rotation = m_modelMatrix.GetRotation();
-	m_rotationScaleMatrix.Identity();
-	m_rotationScaleMatrix.SetRotation(&m_rotation);
-	m_rotationScaleMatrix.SetScale(&m_scale);
+	Vector3 p = m_translation;
+	m_left = Vector3(1, 0, 0);
+	m_forward = Vector3(0, 0, 1);
+	m_up = Vector3(0, 1, 0);
+	m_rotationScaleMatrix.Mul(&m_left);
+	m_rotationScaleMatrix.Mul(&m_forward);
+	m_rotationScaleMatrix.Mul(&m_up);
+	SetViewMatrix(&m_left, &m_up, &m_forward, &p);
 }
 
-void Camera::RecomputeVectors()
+
+void Camera::SetViewMatrix(const Vector3& left, const Vector3& up, const Vector3& fw, const Vector3& p)
 {
-	m_cameraFw = m_translation - m_cameraTarget;
-	m_cameraFw.Normalize();
-	m_cameraLeft = Vector3::Cross(&m_cameraFw, &m_cameraUp);
-	m_cameraLeft.Normalize();
+	m_viewRotMatrix.SetData(0, 0, left.x);
+	m_viewRotMatrix.SetData(0, 1, up.x);
+	m_viewRotMatrix.SetData(0, 2, fw.x);
+	m_viewRotMatrix.SetData(0, 3, 0);// -p.x);
+
+	m_viewRotMatrix.SetData(1, 0, left.y);
+	m_viewRotMatrix.SetData(1, 1, up.y);
+	m_viewRotMatrix.SetData(1, 2, fw.y);
+	m_viewRotMatrix.SetData(1, 3, 0);//-p.y);
+
+	m_viewRotMatrix.SetData(2, 0, left.z);
+	m_viewRotMatrix.SetData(2, 1, up.z);
+	m_viewRotMatrix.SetData(2, 2, fw.z);
+	m_viewRotMatrix.SetData(2, 3, 0);//-p.z);
+
+	m_viewRotMatrix.SetData(3, 0, 0);
+	m_viewRotMatrix.SetData(3, 1, 0);
+	m_viewRotMatrix.SetData(3, 2, 0);
+	m_viewRotMatrix.SetData(3, 3, 1);
 }
 
-void Camera::SetLookAt(const Vector3* from, const Vector3* to, const Vector3* up)
+bool Camera::SetTarget(const Vector3* t)
 {
-	m_translation = from;
-	m_cameraTarget = to;
-	m_cameraUp = up;
-	m_translation.Mul(-1.0f);
-	m_cameraTarget.Mul(-1.0f);
-	//m_cameraUp.Mul(-1.0f);
-}
-
-void Camera::UpdateLookAt()
-{
-	//Vector3 zaxis = Vector3(eye->x - at->x, eye->y - at->y, eye->z - at->z);
-	const Vector3* eye = &m_translation;
-	const Vector3* at = &m_cameraTarget;
-	const Vector3* up = &m_cameraUp;
-	Vector3 zaxis = Vector3(at->x - eye->x, at->y - eye->y, at->z - eye->z);
-	
-	zaxis.Normalize();
-	Vector3 xaxis = Vector3::Cross(&zaxis, up);
-	xaxis.Normalize();
-	
-	Vector3 yaxis = Vector3::Cross(&xaxis, &zaxis);
-	zaxis.x = -zaxis.x;
-	zaxis.y = -zaxis.y;
-	zaxis.z = -zaxis.z;
-
-	m_viewMatrix.SetData(0, 0, xaxis.x);
-	m_viewMatrix.SetData(0, 1, xaxis.y);
-	m_viewMatrix.SetData(0, 2, xaxis.z);
-	m_viewMatrix.SetData(0, 3, Vector3::Dot(&xaxis, eye));
-
-	m_viewMatrix.SetData(1, 0, yaxis.x);
-	m_viewMatrix.SetData(1, 1, yaxis.y);
-	m_viewMatrix.SetData(1, 2, yaxis.z);
-	m_viewMatrix.SetData(1, 3, Vector3::Dot(&yaxis, eye));
-
-	m_viewMatrix.SetData(2, 0, zaxis.x);
-	m_viewMatrix.SetData(2, 1, zaxis.y);
-	m_viewMatrix.SetData(2, 2, zaxis.z);
-	m_viewMatrix.SetData(2, 3, Vector3::Dot(&zaxis, eye));
-
-	m_viewMatrix.SetData(3, 0, 0);
-	m_viewMatrix.SetData(3, 1, 0);
-	m_viewMatrix.SetData(3, 2, 0);
-	m_viewMatrix.SetData(3, 3, 1);
-}
-
-/*
-void Camera::SetLookAt(const Vector3* from, const Vector3* to, const Vector3* tmp)
-{
-	Vector3 forward = Vector3(to->x - from->x, to->y - from->y, to->z - from->z);
-	forward.Normalize();
-	Vector3 right = Vector3::Cross(tmp, &forward);
-	right.Normalize();
-	Vector3 up = Vector3::Cross(&forward, &right);
-	up.Normalize();
-	m_viewMatrix.Identity();
-	static bool b = true;
-	if (b)
+	if (t != &m_translation)
 	{
-		m_viewMatrix.SetData(0, 0, right.x);
-		m_viewMatrix.SetData(0, 1, right.y);
-		m_viewMatrix.SetData(0, 2, right.z);
-		//m_viewMatrix.SetData(0, 3, -from->x);
-
-		m_viewMatrix.SetData(1, 0, up.x);
-		m_viewMatrix.SetData(1, 1, up.y);
-		m_viewMatrix.SetData(1, 2, up.z);
-		//m_viewMatrix.SetData(1, 3, -from->y);
-
-		m_viewMatrix.SetData(2, 0, forward.x);
-		m_viewMatrix.SetData(2, 1, forward.y);
-		m_viewMatrix.SetData(2, 2, forward.z);
-		//m_viewMatrix.SetData(2, 3, -from->z);
-
-		m_viewMatrix.SetData(0, 3, -right.x * from->x - right.y * from->y - right.z * from->z);
-		m_viewMatrix.SetData(1, 3, -up.x * from->x - up.y * from->y - up.z * from->z);
-		m_viewMatrix.SetData(2, 3, -forward.x * from->x - forward.y * from->y - forward.z * from->z);
+		Vector3 v = t - m_translation;
+		v.Normalize();
+		float pitch = asin(-v.y);
+		float yaw = atan2(v.x, v.z);
+		m_rotation.x = -pitch * 180.0f / M_PI;
+		m_rotation.y = -yaw * 180.0f / M_PI;
+		m_rotation.z = 0.0f * v.z;
+		return true;
 	}
-	else
-	{
-		m_viewMatrix.SetData(0, 0, 1);
-		m_viewMatrix.SetData(0, 1, 0);
-		m_viewMatrix.SetData(0, 2, 0);
-		m_viewMatrix.SetData(0, 3, 0);
-
-		m_viewMatrix.SetData(1, 0, 0);
-		m_viewMatrix.SetData(1, 1, 1);
-		m_viewMatrix.SetData(1, 2, 0);
-		m_viewMatrix.SetData(1, 3, 0);
-
-		m_viewMatrix.SetData(2, 0, 0);
-		m_viewMatrix.SetData(2, 1, 0);
-		m_viewMatrix.SetData(2, 2, 1);
-		m_viewMatrix.SetData(2, 3, 0);
-
-		m_viewMatrix.SetData(3, 0, 0);
-		m_viewMatrix.SetData(3, 1, 0);
-		m_viewMatrix.SetData(3, 2, 0);
-		m_viewMatrix.SetData(3, 3, 1);
-	}
+	return false;
 }
-*/
-void Camera::InitView()
-{
-	m_viewMatrix.SetData(0, 0, 1);
-	m_viewMatrix.SetData(0, 1, 0);
-	m_viewMatrix.SetData(0, 2, 0);
-	m_viewMatrix.SetData(0, 3, 0);
-
-	m_viewMatrix.SetData(1, 0, 0);
-	m_viewMatrix.SetData(1, 1, 1);
-	m_viewMatrix.SetData(1, 2, 0);
-	m_viewMatrix.SetData(1, 3, 0);
-
-	m_viewMatrix.SetData(2, 0, 0);
-	m_viewMatrix.SetData(2, 1, 0);
-	m_viewMatrix.SetData(2, 2, 1);
-	m_viewMatrix.SetData(2, 3, 0);
-
-	m_viewMatrix.SetData(3, 0, 0);
-	m_viewMatrix.SetData(3, 1, 0);
-	m_viewMatrix.SetData(3, 2, 0);
-	m_viewMatrix.SetData(3, 3, 1);
-};
-
-/*
-void Camera::setProjectionMatrix(const float angleOfView, const float width, const float height, const float near, const float far)
-{
-	float n, f, t, r,w, h, imageAspectRatio, scale;
-	n = near;
-	f = far;
-	w = width / 2.0f;
-	h = height / 2.0f;
-	imageAspectRatio = w / h;
-	scale = -tan(angleOfView * 0.5 * M_PI / 180.0) * n;
-	r = imageAspectRatio * scale;
-	t = scale;
-
-//	//http://www.songho.ca/opengl/gl_projectionmatrix.html
-	m_projMatrix.Identity();
-	m_projMatrix.SetData(0, 0, n/r);
-	m_projMatrix.SetData(0, 1, 0); 
-	m_projMatrix.SetData(0, 2, 0);
-	m_projMatrix.SetData(0, 3, 0);
-
-	m_projMatrix.SetData(1, 0, 0);
-	m_projMatrix.SetData(1, 1, n/t);
-	m_projMatrix.SetData(1, 2, 0);
-	m_projMatrix.SetData(1, 3, 0);
-
-	m_projMatrix.SetData(2, 0, 0);
-	m_projMatrix.SetData(2, 1, 0);
-	m_projMatrix.SetData(2, 2, -(f + n) / (f - n));
-	m_projMatrix.SetData(2, 3, -(2 * f * n) / (f - n));
-
-	m_projMatrix.SetData(3, 0, 0);
-	m_projMatrix.SetData(3, 1, 0);
-	m_projMatrix.SetData(3, 2, -1);
-	m_projMatrix.SetData(3, 3, 0);
-
-
-}
-*/
 
 void Camera::setProjectionMatrix(const float angleOfView, const float width, const float height, const float zNear, const float zFar)
 {

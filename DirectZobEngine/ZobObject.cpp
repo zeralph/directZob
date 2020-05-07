@@ -120,6 +120,27 @@ void ZobObject::Draw(const Camera* camera, Core::Engine* engine)
 	{
 		m_children.at(i)->Draw(camera, engine);
 	}
+	DrawGizmos(camera, engine);
+}
+
+void ZobObject::DrawGizmos(const Camera* camera, Core::Engine* engine)
+{
+	uint c;
+	Vector3 x = Vector3(1, 0, 0);
+	Vector3 y = Vector3(0, 1, 0);
+	Vector3 z = Vector3(0, 0, 1);
+	m_rotationScaleMatrix.Mul(&x);
+	m_rotationScaleMatrix.Mul(&y);
+	m_rotationScaleMatrix.Mul(&z);
+	x = x + m_translation;
+	y = y + m_translation;
+	z = z + m_translation;
+	c = 0x00FF0000;
+	engine->QueueLine(camera, &m_translation, &x, c, true);
+	c = 0x0000FF00;
+	engine->QueueLine(camera, &m_translation, &y, c, true);
+	c = 0x000000FF;
+	engine->QueueLine(camera, &m_translation, &z, c, true);
 }
 
 int ZobObject::GetChildPosition(const ZobObject* z)

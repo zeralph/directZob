@@ -23,7 +23,7 @@ namespace CLI
 		void RotateAroundAxis(float x, float y);
 		void Move(float x, float y);
 		void Zoom(float z);
-		void SetLookAt(ManagedVector3^ position, ManagedVector3^ target, ManagedVector3^ up);
+		void SetLookAt(ManagedVector3^ target);
 		void SetCurrentCamera(System::String^ name);
 		void CreateCamera();
 		void CreateEditorCamera();

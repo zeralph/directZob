@@ -103,7 +103,7 @@ void Rasterizer::DrawLine(const Line3D* l) const
 	float dz = l->zb - l->za;
 	int dx = abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
 	int dy = -abs(y1 - y0), sy = y0 < y1 ? 1 : -1;
-	dz /= (float)fmax(dx, dy);
+	dz /= (float)(abs(x1 - x0) + abs(y1 - y0));
 	int err = dx + dy, e2; /* error value e_xy */
 	bool boldX = false;
 	bool boldY = false;
@@ -119,21 +119,21 @@ void Rasterizer::DrawLine(const Line3D* l) const
 			ky = (y0+1) * m_bufferData->width + x0;
 			if (k < m_bufferData->size)
 			{
-				//float zf = m_bufferData->zBuffer[k];
-				//float zRatio = (z  - m_bufferData->zNear) / (m_bufferData->zFar - m_bufferData->zNear);
-				//if (zRatio >= 0.0f && (zf < 0.0f || zRatio < zf))
+				float zf = m_bufferData->zBuffer[k];
+				float zRatio = (z  - m_bufferData->zNear) / (m_bufferData->zFar - m_bufferData->zNear);
+				if (zRatio >= 0.0f && (zf < 0.0f || zRatio < zf))
 				{
 					m_bufferData->buffer[k] = l->c;
-					//m_bufferData->zBuffer[k] = zRatio;
+					m_bufferData->zBuffer[k] = zRatio;
 					if (boldX && kx < m_bufferData->size)
 					{
 						m_bufferData->buffer[kx] = l->c;
-						//m_bufferData->zBuffer[kx] = zRatio;
+						m_bufferData->zBuffer[kx] = zRatio;
 					}
 					if (boldY && ky < m_bufferData->size)
 					{
 						m_bufferData->buffer[ky] = l->c;
-						//m_bufferData->zBuffer[ky] = zRatio;
+						m_bufferData->zBuffer[ky] = zRatio;
 					}
 				}
 			}

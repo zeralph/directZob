@@ -395,10 +395,12 @@ void Engine::QueueLine(const Camera *camera, const Vector3 *v1, const Vector3 *v
 		Vector3 a = Vector3(v1);
 		Vector3 b = Vector3(v2);
 		float za, zb = 0.0f;
-		camera->GetViewMatrix()->Mul(&a);
+		//camera->GetViewMatrix()->Mul(&a);
+		camera->ToViewSpace(&a);
 		za = a.z;
 		camera->GetProjectionMatrix()->Mul(&a);
-		camera->GetViewMatrix()->Mul(&b);
+		//camera->GetViewMatrix()->Mul(&b);
+		camera->ToViewSpace(&b);
 		zb = b.z;
 		camera->GetProjectionMatrix()->Mul(&b);
 
@@ -457,6 +459,10 @@ void Engine::QueueLine(const Camera *camera, const Vector3 *v1, const Vector3 *v
 			max /= m_bufferData.height / m_nbRasterizers;
 //			min = 0;
 //			max = m_nbRasterizers-1;
+			if(isinf(l.xa) || isinf(l.xb) || isinf(l.ya) || isinf(l.yb))
+			{
+				return;
+			}
 			for (int i = min; i <= max; i++)
 			{
 				m_rasterLineQueues[i].push_back(l);

@@ -55,7 +55,7 @@ public:
 protected:
 	
 	bool HasChild(const ZobObject* o);
-
+	void DrawGizmos(const Camera* camera, Core::Engine* engine);
 	ZobObject* m_parent;
 	Mesh* m_mesh = NULL;
 	std::vector<ZobObject*> m_children;

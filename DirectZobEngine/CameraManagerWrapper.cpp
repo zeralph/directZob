@@ -34,7 +34,7 @@ namespace CLI
 		Camera* c = m_Instance->GetCurrentCamera();
 		if (c)
 		{
-			ManagedVector3^ v = gcnew CLI::ManagedVector3(m_Instance->GetCurrentCamera()->GetPosition());
+			ManagedVector3^ v = gcnew CLI::ManagedVector3(m_Instance->GetCurrentCamera()->GetTransform());
 			return v;
 		}
 		return gcnew CLI::ManagedVector3();
@@ -42,12 +42,14 @@ namespace CLI
 
 	ManagedVector3^ CameraManagerWrapper::GetCurrentCameraTarget()
 	{
+		/*
 		Camera* c = m_Instance->GetCurrentCamera();
 		if (c)
 		{
 			ManagedVector3^ v = gcnew CLI::ManagedVector3(m_Instance->GetCurrentCamera()->GetTarget());
 			return v;
 		}
+		*/
 		return gcnew CLI::ManagedVector3();
 	}
 
@@ -56,7 +58,8 @@ namespace CLI
 		Camera* c = m_Instance->GetCurrentCamera();
 		if (c)
 		{
-			c->RotateAroundAxis(x, y);
+			Vector3 v = Vector3(0, 0, 0);
+			c->RotateAroundAxis(&v, x, y);
 		}
 	}
 
@@ -84,7 +87,7 @@ namespace CLI
 		if (c)
 		{
 			Vector3 v = p->ToVector3();
-			c->SetPosition(&v);
+			c->SetTranslation(v.x, v.y, v.z);
 		}
 	}
 
@@ -96,7 +99,7 @@ namespace CLI
 
 	void CameraManagerWrapper::CreateCamera()
 	{
-		m_Instance->CreateCamera();
+		m_Instance->CreateCamera(NULL);
 	}
 
 	void CameraManagerWrapper::SetCurrentCamera(System::String^ name)
@@ -106,15 +109,13 @@ namespace CLI
 		m_Instance->SetNextCamera(stdName);
 	}
 
-	void CameraManagerWrapper::SetLookAt(ManagedVector3^ position, ManagedVector3^ target, ManagedVector3^ up)
+	void CameraManagerWrapper::SetLookAt( ManagedVector3^ target)
 	{
 		Camera* c = m_Instance->GetCurrentCamera();
 		if (c)
 		{
-			Vector3 p = position->ToVector3();
 			Vector3 t = target->ToVector3();
-			Vector3 u = up->ToVector3();
-			c->SetLookAt(&p, &t, &u);
+			c->SetTarget(&t);
 		}
 	}
 }

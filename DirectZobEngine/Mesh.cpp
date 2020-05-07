@@ -476,7 +476,8 @@ void Mesh::Draw(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, c
 		m_projectedVertices[i].z = m_vertices[i].z;
 		m_projectedVertices[i].w = m_vertices[i].w;
 
-		view->Mul(&m_projectedVertices[i]);
+		camera->ToViewSpace(&m_projectedVertices[i]);
+		//view->Mul(&m_projectedVertices[i]);
 		proj->Mul(&m_projectedVertices[i]);
 		m_projectedVertices[i].x = (m_projectedVertices[i].x / m_projectedVertices[i].z + 1) * w;
 		m_projectedVertices[i].y = (m_projectedVertices[i].y / m_projectedVertices[i].z + 1) * h;

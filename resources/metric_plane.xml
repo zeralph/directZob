@@ -21,6 +21,13 @@
             <Rotation x="0" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
         </ZobObject>
+        <ZobObject name="camera" type="camera">
+            <Position x="0" y="-3" z="16" />
+            <Rotation x="0" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+			<Fov>45</Fov>
+			<!--<Target x=0 y=0 z=0/>-->
+        </ZobObject>	
 		<ZobObject name ="lightsNode" >
 		    <Position x="0" y="0" z="0" />
             <Rotation x="0" y="0" z="0" />
