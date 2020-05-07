@@ -138,9 +138,29 @@ void Matrix4x4::SetTranslation(const float x, const float y, const float z)
 
 void Matrix4x4::SetRotation(const Vector3& v)
 {
-	SetRotationX(-v.x);
-	SetRotationY(-v.y);
-	SetRotationZ(-v.z);
+	float yaw = v.z * M_PI / 180.0f;
+	float pitch = -v.y * M_PI / 180.0f;
+	float roll = -v.x * M_PI / 180.0f;
+	float cosY = cos(yaw);
+	float sinY = sin(yaw);
+	float cosP = cos(pitch);
+	float sinP = sin(pitch);
+	float cosR = cos(roll);
+	float sinR = sin(roll);
+	m_data[0][0] = cosY * cosP;
+	m_data[0][1] = cosY * sinP * sinR - sinY * cosR;
+	m_data[0][2] = cosY * sinP * cosR + sinY * sinR;
+
+	m_data[1][0] = sinY * cosP;
+	m_data[1][1] = sinY * sinP * sinR + cosY * cosR;
+	m_data[1][2] = sinY * sinP * cosR - cosY * sinR;
+
+	m_data[2][0] = -sinP;
+	m_data[2][1] = cosP * sinR;
+	m_data[2][2] = cosP * cosR;
+	//SetRotationX(-v.x);
+	//SetRotationY(-v.y);
+	//SetRotationZ(-v.z);
 }
 
 void Matrix4x4::SetRotation(const float x, const float y, const float z)

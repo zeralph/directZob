@@ -16,7 +16,7 @@ public:
 	inline const Matrix4x4* GetProjectionMatrix() const {return &m_projMatrix;}
 	inline const Vector3* GetForward() const 
 	{
-		return &m_forward;
+		//return &m_forward;
 		Vector3 v;
 		v.x = m_viewRotMatrix.GetValue(0,1);
 		v.y = m_viewRotMatrix.GetValue(1, 1);

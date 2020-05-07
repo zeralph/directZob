@@ -21,10 +21,10 @@ void Camera::Draw(const Camera* camera, Core::Engine* engine)
 	{
 		return;
 	}
-	Vector3 v0 = Vector3(-1, 1, 1);
-	Vector3 v1 = Vector3(1, 1, 1);
-	Vector3 v2 = Vector3(-1, -1, 1);
-	Vector3 v3 = Vector3(1, -1, 1);
+	Vector3 v0 = Vector3(-2, 1, 1);
+	Vector3 v1 = Vector3(2, 1, 1);
+	Vector3 v2 = Vector3(-2, -1, 1);
+	Vector3 v3 = Vector3(2, -1, 1);
 	m_rotationScaleMatrix.Mul(&v0);
 	m_rotationScaleMatrix.Mul(&v1);
 	m_rotationScaleMatrix.Mul(&v2);
@@ -34,9 +34,10 @@ void Camera::Draw(const Camera* camera, Core::Engine* engine)
 	v2 = v2 + m_translation;
 	v3 = v3 + m_translation;
 	uint c = 0x000000FF;
+	uint c2 = 0x0000FFFF;
 	engine->QueueLine(camera, &v0, &v1, c, true);
 	engine->QueueLine(camera, &v1, &v3, c, true);
-	engine->QueueLine(camera, &v2, &v3, c, true);
+	engine->QueueLine(camera, &v2, &v3, c2, true);
 	engine->QueueLine(camera, &v2, &v0, c, true);
 	engine->QueueLine(camera, &m_translation, &v1, c, true);
 	engine->QueueLine(camera, &m_translation, &v2, c, true);
@@ -91,6 +92,12 @@ void Camera::Move(float dx, float dy)
 
 void Camera::Update(const Matrix4x4& parentMatrix, const Matrix4x4& parentRSMatrix)
 {
+	static bool gg = false;
+	if (gg)
+	{
+		Vector3 v = Vector3(0, 0, 0);
+		SetTarget(&v);
+	}
 	ZobObject::Update(parentMatrix, parentRSMatrix);
 	//Vector3 x = Vector3(0, 0, 0);
 	//SetTarget(&x);
