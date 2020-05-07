@@ -99,10 +99,12 @@ void Camera::Update(const Matrix4x4& parentMatrix, const Matrix4x4& parentRSMatr
 	Vector3 p = m_translation;
 	m_left = Vector3(1, 0, 0);
 	m_forward = Vector3(0, 0, 1);
-	m_up = Vector3(0, 1, 0);
-	m_rotationScaleMatrix.Mul(&m_left);
-	m_rotationScaleMatrix.Mul(&m_forward);
-	m_rotationScaleMatrix.Mul(&m_up);
+	m_up = Vector3(0,1, 0);
+	Matrix4x4 m_invRotationMatrix;
+	Matrix4x4::InvertMatrix4(m_rotationScaleMatrix, m_invRotationMatrix);
+	m_invRotationMatrix.Mul(&m_left);
+	m_invRotationMatrix.Mul(&m_forward);
+	m_invRotationMatrix.Mul(&m_up);
 	SetViewMatrix(&m_left, &m_up, &m_forward, &p);
 }
 
@@ -112,7 +114,7 @@ void Camera::SetViewMatrix(const Vector3& left, const Vector3& up, const Vector3
 	m_viewRotMatrix.SetData(0, 0, left.x);
 	m_viewRotMatrix.SetData(0, 1, up.x);
 	m_viewRotMatrix.SetData(0, 2, fw.x);
-	m_viewRotMatrix.SetData(0, 3, 0);// -p.x);
+	m_viewRotMatrix.SetData(0, 3, 0);//-p.x);
 
 	m_viewRotMatrix.SetData(1, 0, left.y);
 	m_viewRotMatrix.SetData(1, 1, up.y);

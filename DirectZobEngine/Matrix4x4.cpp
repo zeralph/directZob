@@ -138,16 +138,16 @@ void Matrix4x4::SetTranslation(const float x, const float y, const float z)
 
 void Matrix4x4::SetRotation(const Vector3& v)
 {
-	SetRotationX(v.x);
-	SetRotationY(v.y);
-	SetRotationZ(v.z);
+	SetRotationX(-v.x);
+	SetRotationY(-v.y);
+	SetRotationZ(-v.z);
 }
 
 void Matrix4x4::SetRotation(const float x, const float y, const float z)
 {
-	SetRotationX(x);
-	SetRotationY(y);
-	SetRotationZ(z);
+	SetRotationX(-x);
+	SetRotationY(-y);
+	SetRotationZ(-z);
 }
 
 void Matrix4x4::SetRotationX(const float r)
@@ -181,4 +181,51 @@ void Matrix4x4::SetRotationZ(const float r)
 	tmp.m_data[1][0] = (float)sin(rx);
 	tmp.m_data[1][1] = (float)cos(rx);
 	Mul(&tmp);
+}
+
+void Matrix4x4::InvertMatrix4(const Matrix4x4& m, Matrix4x4& im)
+{
+	float det;
+	double A2323 = m.m_data[2][2] * m.m_data[3][3] - m.m_data[2][3] * m.m_data[3][2];
+	double A1323 = m.m_data[2][1] * m.m_data[3][3] - m.m_data[2][3] * m.m_data[3][1];
+	double A1223 = m.m_data[2][1] * m.m_data[3][2] - m.m_data[2][2] * m.m_data[3][1];
+	double A0323 = m.m_data[2][0] * m.m_data[3][3] - m.m_data[2][3] * m.m_data[3][0];
+	double A0223 = m.m_data[2][0] * m.m_data[3][2] - m.m_data[2][2] * m.m_data[3][0];
+	double A0123 = m.m_data[2][0] * m.m_data[3][1] - m.m_data[2][1] * m.m_data[3][0];
+	double A2313 = m.m_data[1][2] * m.m_data[3][3] - m.m_data[1][3] * m.m_data[3][2];
+	double A1313 = m.m_data[1][1] * m.m_data[3][3] - m.m_data[1][3] * m.m_data[3][1];
+	double A1213 = m.m_data[1][1] * m.m_data[3][2] - m.m_data[1][2] * m.m_data[3][1];
+	double A2312 = m.m_data[1][2] * m.m_data[2][3] - m.m_data[1][3] * m.m_data[2][2];
+	double A1312 = m.m_data[1][1] * m.m_data[2][3] - m.m_data[1][3] * m.m_data[2][1];
+	double A1212 = m.m_data[1][1] * m.m_data[2][2] - m.m_data[1][2] * m.m_data[2][1];
+	double A0313 = m.m_data[1][0] * m.m_data[3][3] - m.m_data[1][3] * m.m_data[3][0];
+	double A0213 = m.m_data[1][0] * m.m_data[3][2] - m.m_data[1][2] * m.m_data[3][0];
+	double A0312 = m.m_data[1][0] * m.m_data[2][3] - m.m_data[1][3] * m.m_data[2][0];
+	double A0212 = m.m_data[1][0] * m.m_data[2][2] - m.m_data[1][2] * m.m_data[2][0];
+	double A0113 = m.m_data[1][0] * m.m_data[3][1] - m.m_data[1][1] * m.m_data[3][0];
+	double A0112 = m.m_data[1][0] * m.m_data[2][1] - m.m_data[1][1] * m.m_data[2][0];
+
+	det = m.m_data[0][0] * (m.m_data[1][1] * A2323 - m.m_data[1][2] * A1323 + m.m_data[1][3] * A1223)
+		- m.m_data[0][1] * (m.m_data[1][0] * A2323 - m.m_data[1][2] * A0323 + m.m_data[1][3] * A0223)
+		+ m.m_data[0][2] * (m.m_data[1][0] * A1323 - m.m_data[1][1] * A0323 + m.m_data[1][3] * A0123)
+		- m.m_data[0][3] * (m.m_data[1][0] * A1223 - m.m_data[1][1] * A0223 + m.m_data[1][2] * A0123);
+
+	det = 1.0f / det;
+
+	im.m_data[0][0] = det * (m.m_data[1][1] * A2323 - m.m_data[1][2] * A1323 + m.m_data[1][3] * A1223);
+	im.m_data[0][1] = det * -(m.m_data[0][1] * A2323 - m.m_data[0][2] * A1323 + m.m_data[0][3] * A1223);
+	im.m_data[0][2] = det * (m.m_data[0][1] * A2313 - m.m_data[0][2] * A1313 + m.m_data[0][3] * A1213);
+	im.m_data[0][3] = det * -(m.m_data[0][1] * A2312 - m.m_data[0][2] * A1312 + m.m_data[0][3] * A1212);
+	im.m_data[1][0] = det * -(m.m_data[1][0] * A2323 - m.m_data[1][2] * A0323 + m.m_data[1][3] * A0223);
+	im.m_data[1][1] = det * (m.m_data[0][0] * A2323 - m.m_data[0][2] * A0323 + m.m_data[0][3] * A0223);
+	im.m_data[1][2] = det * -(m.m_data[0][0] * A2313 - m.m_data[0][2] * A0313 + m.m_data[0][3] * A0213);
+	im.m_data[1][3] = det * (m.m_data[0][0] * A2312 - m.m_data[0][2] * A0312 + m.m_data[0][3] * A0212);
+	im.m_data[2][0] = det * (m.m_data[1][0] * A1323 - m.m_data[1][1] * A0323 + m.m_data[1][3] * A0123);
+	im.m_data[2][1] = det * -(m.m_data[0][0] * A1323 - m.m_data[0][1] * A0323 + m.m_data[0][3] * A0123);
+	im.m_data[2][2] = det * (m.m_data[0][0] * A1313 - m.m_data[0][1] * A0313 + m.m_data[0][3] * A0113);
+	im.m_data[2][3] = det * -(m.m_data[0][0] * A1312 - m.m_data[0][1] * A0312 + m.m_data[0][3] * A0112);
+	im.m_data[3][0] = det * -(m.m_data[1][0] * A1223 - m.m_data[1][1] * A0223 + m.m_data[1][2] * A0123);
+	im.m_data[3][1] = det * (m.m_data[0][0] * A1223 - m.m_data[0][1] * A0223 + m.m_data[0][2] * A0123);
+	im.m_data[3][2] = det * -(m.m_data[0][0] * A1213 - m.m_data[0][1] * A0213 + m.m_data[0][2] * A0113);
+	im.m_data[3][3] = det * (m.m_data[0][0] * A1212 - m.m_data[0][1] * A0212 + m.m_data[0][2] * A0112);
 }
