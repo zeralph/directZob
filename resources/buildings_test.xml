@@ -1,0 +1,105 @@
+<root>
+    <Meshes>
+        <Mesh name="Residential Buildings 001.fbx" file="Residential Buildings 001.fbx" />
+        <Mesh name="Residential Buildings 002.fbx" file="Residential Buildings 002.fbx" />
+        <Mesh name="Residential Buildings 003.fbx" file="Residential Buildings 003.fbx" />
+        <Mesh name="Residential Buildings 004.fbx" file="Residential Buildings 004.fbx" />
+        <Mesh name="Residential Buildings 005.fbx" file="Residential Buildings 005.fbx" />
+        <Mesh name="Residential Buildings 006.fbx" file="Residential Buildings 006.fbx" />
+        <Mesh name="Residential Buildings 007.fbx" file="Residential Buildings 007.fbx" />
+        <Mesh name="Residential Buildings 008.fbx" file="Residential Buildings 008.fbx" />
+        <Mesh name="Residential Buildings 009.fbx" file="Residential Buildings 009.fbx" />
+        <Mesh name="Residential Buildings 010.fbx" file="Residential Buildings 010.fbx" />
+        <Mesh name="metric_plane.obj" file="metric_plane.obj" />
+    </Meshes>
+    <Globals>
+        <AmbientColor r="102" g="102" b="102" />
+        <FogColor r="63" g="149" b="255" />
+        <ClearColor r="63" g="149" b="255" />
+        <FogDensity>2.00</FogDensity>
+        <FogDistance>500.00</FogDistance>
+        <FogType></FogType>
+    </Globals>
+    <Scene>
+        <ZobObject name="newObject_1" type="mesh">
+            <Position x="-50" y="0" z="0" />
+            <Rotation x="0" y="180" z="0" />
+            <Scale x="1" y="1" z="1" />
+            <Mesh>Residential Buildings 001.fbx</Mesh>
+        </ZobObject>
+        <ZobObject name="newObject_2" type="mesh">
+            <Position x="-30" y="0" z="0" />
+            <Rotation x="0" y="180" z="0" />
+            <Scale x="1" y="1" z="1" />
+            <Mesh>Residential Buildings 002.fbx</Mesh>
+        </ZobObject>
+        <ZobObject name="newObject_3" type="mesh">
+            <Position x="-10" y="0" z="0" />
+            <Rotation x="0" y="180" z="0" />
+            <Scale x="1" y="1" z="1" />
+            <Mesh>Residential Buildings 003.fbx</Mesh>
+        </ZobObject>
+        <ZobObject name="newObject_4" type="mesh">
+            <Position x="10" y="0" z="0" />
+            <Rotation x="0" y="180" z="0" />
+            <Scale x="1" y="1" z="1" />
+            <Mesh>Residential Buildings 004.fbx</Mesh>
+        </ZobObject>
+        <ZobObject name="newObject_5" type="mesh">
+            <Position x="30" y="0" z="0" />
+            <Rotation x="0" y="180" z="0" />
+            <Scale x="1" y="1" z="1" />
+            <Mesh>Residential Buildings 005.fbx</Mesh>
+        </ZobObject>
+        <ZobObject name="newObject_6" type="mesh">
+            <Position x="-30" y="0" z="50" />
+            <Rotation x="0" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+            <Mesh>Residential Buildings 006.fbx</Mesh>
+        </ZobObject>
+        <ZobObject name="newObject_7" type="mesh">
+            <Position x="-10" y="0" z="50" />
+            <Rotation x="0" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+            <Mesh>Residential Buildings 007.fbx</Mesh>
+        </ZobObject>
+        <ZobObject name="newObject_8" type="mesh">
+            <Position x="30" y="0" z="50" />
+            <Rotation x="0" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+            <Mesh>Residential Buildings 008.fbx</Mesh>
+        </ZobObject>
+        <ZobObject name="newObject_9" type="mesh">
+            <Position x="10" y="0" z="50" />
+            <Rotation x="0" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+            <Mesh>Residential Buildings 009.fbx</Mesh>
+        </ZobObject>
+        <ZobObject name="newObject_10" type="mesh">
+            <Position x="-50" y="0" z="50" />
+            <Rotation x="0" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+            <Mesh>Residential Buildings 010.fbx</Mesh>
+        </ZobObject>
+        <ZobObject name="newObject_18" type="mesh">
+            <Position x="0" y="1" z="0" />
+            <Rotation x="0" y="0" z="0" />
+            <Scale x="10" y="10" z="10" />
+            <Mesh>metric_plane.obj</Mesh>
+        </ZobObject>
+        <ZobObject name="Camera_1" type="camera">
+            <Position x="20" y="50" z="20" />
+            <Rotation x="-30" y="90" z="0" />
+            <Scale x="1" y="1" z="1" />
+            <Fov>45.00</Fov>
+        </ZobObject>
+        <ZobObject name="Light_0" type="pointlight">
+            <Position x="0" y="10" z="0" />
+            <Rotation x="0" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+            <Color r="252" g="212" b="64" />
+            <Intensity>5.00</Intensity>
+            <FallOffDistance>100.00</FallOffDistance>
+        </ZobObject>
+    </Scene>
+</root>

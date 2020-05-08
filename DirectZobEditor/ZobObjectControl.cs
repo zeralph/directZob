@@ -282,5 +282,10 @@ namespace DirectZobEditor
         {
 
         }
+
+        private void zobPosY_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

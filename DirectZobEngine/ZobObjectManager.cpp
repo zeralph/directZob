@@ -3,7 +3,6 @@
 #include "DirectZob.h"
 #include "MeshManager.h"
 
-static int sObjectNumber = 1;
 static std::thread g_geometryThread;
 
 ZobObjectManager::ZobObjectManager()
@@ -27,14 +26,11 @@ void ZobObjectManager::AddZobObject(ZobObject* z)
 
 ZobObject* ZobObjectManager::CreateZobObject(ZobObject* parent)
 {
-	std::string n = "newObject_";
-	n.append(std::to_string(sObjectNumber));
-	sObjectNumber++;
 	if (parent == NULL)
 	{
 		parent = m_rootObject;
 	}
-	return new ZobObject(ZOBGUID::type_scene, ZOBGUID::subtype_zobOject, n, NULL, parent);
+	return new ZobObject(ZOBGUID::type_scene, ZOBGUID::subtype_zobOject, "", NULL, parent);
 }
 
 void ZobObjectManager::RemoveZobObject(ZobObject* z)

@@ -16,24 +16,7 @@ Light::~Light()
 void Light::Draw(const Camera* camera, Core::Engine* engine)
 {
 	ZobObject::Draw(camera, engine);
-	int c = ((int)(m_color.x * 255) << 16) + ((int)(m_color.y * 255) << 8) + (int)(m_color.z * 255);
-	/*
-	Vector3 v1 = Vector3(m_translation.x - 1, m_translation.y, m_translation.z);
-	Vector3 v2 = Vector3(m_translation.x + 1, m_translation.y, m_translation.z);
-	Vector3 v3 = Vector3(m_translation.x, m_translation.y - 1, m_translation.z);
-	Vector3 v4 = Vector3(m_translation.x, m_translation.y + 1, m_translation.z);
-	Vector3 v5 = Vector3(m_translation.x, m_translation.y, m_translation.z - 1);
-	Vector3 v6 = Vector3(m_translation.x, m_translation.y, m_translation.z + 1);
-	m_rotationScaleMatrix.Mul(&v1);
-	m_rotationScaleMatrix.Mul(&v2);
-	m_rotationScaleMatrix.Mul(&v3);
-	m_rotationScaleMatrix.Mul(&v4);
-	m_rotationScaleMatrix.Mul(&v5);
-	m_rotationScaleMatrix.Mul(&v6);
-	engine->QueueLine(camera, &v1, &v2, c);
-	engine->QueueLine(camera, &v3, &v4, c);
-	engine->QueueLine(camera, &v5, &v6, c);
-	*/
+	int c = ((int)(m_color.x * 255) << 16) + ((int)(m_color.y * 255) << 8) + (int)(m_color.z * 255);	
 	Vector3 up = Vector3(0, 1, 0);
 	engine->QueueEllipse(camera, &m_translation, &up, 1.0f, 1.0f, c, true);
 	Vector3 left = Vector3(1, 0, 0);

@@ -188,6 +188,7 @@
             this.zobPosY.Size = new System.Drawing.Size(50, 20);
             this.zobPosY.TabIndex = 12;
             this.zobPosY.Text = "100.00";
+            this.zobPosY.TextChanged += new System.EventHandler(this.zobPosY_TextChanged);
             this.zobPosY.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ZobScaleZ_KeyPress);
             this.zobPosY.Leave += new System.EventHandler(this.UpdateFromTextBoxes);
             // 

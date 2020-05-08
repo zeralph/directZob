@@ -70,6 +70,9 @@ void SceneLoader::LoadZobObject(TiXmlElement* node, ZobObject* parent)
 		f = node->FirstChildElement("Fov");
 		float fov = f ? atof(f->GetText()) : 45.0f;
 		zob = DirectZob::GetInstance()->GetCameraManager()->CreateCamera(name, fov, parent);
+		zob->SetTranslation(position.x, position.y, position.z);
+		zob->SetRotation(rotation.x, rotation.y, rotation.z);
+		zob->SetScale(scale.x, scale.y, scale.z);
 	}
 	else if (type == "pointlight")
 	{
@@ -388,28 +391,44 @@ void SceneLoader::SaveZobObjectRecusrive(TiXmlElement* node, ZobObject* z)
 	}
 	else if (z->GetSubType() == ZOBGUID::subtype_zobCamera)
 	{
-
+		Camera* c = (Camera*)z;
+		if (c)
+		{
+			o.SetAttribute("type", "camera");
+			TiXmlText t("");
+			TiXmlElement fov = TiXmlElement("Fov");
+			_snprintf_s(tmpBuffer, 256, "%.2f", c->GetFov());
+			t.SetValue(tmpBuffer);
+			fov.InsertEndChild(t);
+			o.InsertEndChild(fov);
+			//targetting ....
+		}
 	}
 	else if (z->GetSubType() == ZOBGUID::subtype_zobLight)
 	{
 		Light* l = (Light*)z;
 		if (l)
 		{
+			o.SetAttribute("type", "pointlight");
 			Vector3 c = l->GetColor();
 			int r = (int)(c.x * 255.0f);
 			int g = (int)(c.y * 255.0f);
 			int b = (int)(c.z * 255.0f);
 			TiXmlElement color = TiXmlElement("Color");
-			s.SetAttribute("r", r);
-			s.SetAttribute("g", g);
-			s.SetAttribute("b", b);
+			color.SetAttribute("r", r);
+			color.SetAttribute("g", g);
+			color.SetAttribute("b", b);
+			o.InsertEndChild(color);
+			TiXmlText t("");
 			TiXmlElement intensity = TiXmlElement("Intensity");
 			_snprintf_s(tmpBuffer, 256, "%.2f", l->GetIntensity());
-			intensity.SetValue(tmpBuffer);
+			t.SetValue(tmpBuffer);
+			intensity.InsertEndChild(t);
 			o.InsertEndChild(intensity);
 			TiXmlElement fallOff = TiXmlElement("FallOffDistance");
 			_snprintf_s(tmpBuffer, 256, "%.2f", l->GetFallOffDistance());
-			intensity.SetValue(tmpBuffer);
+			t.SetValue(tmpBuffer);
+			fallOff.InsertEndChild(t);
 			o.InsertEndChild(fallOff);
 		}
 	}

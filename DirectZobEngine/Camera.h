@@ -23,21 +23,16 @@ public:
 
 	inline const Matrix4x4* GetViewMatrix() const { return &m_viewRotMatrix; }
 	inline const Matrix4x4* GetProjectionMatrix() const {return &m_projMatrix;}
-	inline Vector3 GetForward() const 
-	{
-		//return &m_forward;
-		Vector3 v;
-		v.x = m_viewRotMatrix.GetValue(0,1);
-		v.y = m_viewRotMatrix.GetValue(1, 1);
-		v.z = m_viewRotMatrix.GetValue(2, 1);
-		v.Normalize();
-		return v; 
-	}
+	inline Vector3 GetForward() const { return &m_forward;}
+	inline Vector3 GetLeft() const { return &m_left; }
+	inline Vector3 GetUp() const { return &m_up; }
+	inline float GetFov() const { return m_fov; };
 	void SetTarget(const Vector3 t) { m_tagetMode = eTarget_Vector; m_targetVector = t; }
 	void SetTarget(const ZobObject* z) { m_tagetMode = eTarget_Object; m_targetObject = z; }
 	void SetNoTarget() { m_tagetMode = eTarget_none; }
+	bool GetTargetVector(Vector3* t);
 	void Draw(const Camera* camera, Core::Engine* engine);
-	void RotateAroundAxis(const Vector3* axis, float angle);
+	void RotateAroundPointAxis(const Vector3* point, const Vector3* axis, float angle);
 	void Move(float dx, float dy, bool moveTargetVector);
 	void Zoom(float z);
 	inline void ToViewSpace(Vector3* v) const
@@ -47,6 +42,13 @@ public:
 		v->z -= m_viewTransaltion.z;
 		m_viewRotMatrix.Mul(v);
 	}
+
+	inline void SetTranslation(float x, float y, float z) 
+	{ 
+		m_translation.x = x; m_translation.y = y; m_translation.z = z; 
+		m_nextTranslation = m_translation;
+	}
+
 private:
 	void SetViewMatrix(const Vector3 &left, const Vector3 &up, const Vector3 &fw, const Vector3 &p);
 	void setProjectionMatrix(const float angleOfView, const float width, const float height, const float near, const float far);
@@ -61,5 +63,6 @@ private:
 	eTargetMode m_tagetMode;
 	Vector3 m_targetVector;
 	const ZobObject* m_targetObject;
+	Vector3 m_nextTranslation;
 };
 

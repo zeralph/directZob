@@ -1,11 +1,22 @@
 #include "ZobObject.h"
 #include "DirectZob.h"
 #include "Mesh.h"
-
+static int sObjectNumber = 0;
 ZobObject::ZobObject(Type t, SubType s, const std::string& name, Mesh* mesh, ZobObject* parent /*= NULL*/):ZOBGUID(t,s)
 {
-	DirectZob::LogInfo("Adding new ZobObject %s", name.c_str());
-	if (!parent && name != "root")
+	sObjectNumber++;
+	if (name.length() == 0)
+	{
+		std::string n = "newObject_";
+		n.append(std::to_string(sObjectNumber));
+		m_name = n;
+	}
+	else
+	{
+		m_name = name;
+	}
+	DirectZob::LogInfo("Adding new ZobObject %s", m_name.c_str());
+	if (!parent && m_name != "root")
 	{
 		m_parent = DirectZob::GetInstance()->GetZobObjectManager()->GetRootObject();
 		//DirectZob::LogError("Cannot add %s because it has no parent", name.c_str());
@@ -15,7 +26,7 @@ ZobObject::ZobObject(Type t, SubType s, const std::string& name, Mesh* mesh, Zob
 		m_parent = parent;
 	}
 	m_markedForDeletion = false;
-	m_name = name;
+	
 	m_mesh = mesh;
 	m_translation = Vector3(0, 0, 0);
 	m_rotation = Vector3(0, 0, 0);
@@ -30,7 +41,7 @@ ZobObject::ZobObject(Type t, SubType s, const std::string& name, Mesh* mesh, Zob
 	m_renderOptions.ZBuffered(true);
 	m_renderOptions.bTransparency = false;
 	//m_renderOptions.colorization = new Vector3(1, 0, 0);
-    DirectZob::LogInfo("ZobObject %s added", name.c_str());
+    DirectZob::LogInfo("ZobObject %s added", m_name.c_str());
 }
 
 ZobObject::~ZobObject()
