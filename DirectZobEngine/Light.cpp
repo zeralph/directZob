@@ -28,6 +28,7 @@ Light::Light(TiXmlElement* node, ZobObject* parent)
 		float falloff = f ? atof(f->GetText()) : 1.0f;
 		m_distance = falloff;
 		m_intensity = intensity;
+		m_active = true;
 }
 
 Light::~Light()

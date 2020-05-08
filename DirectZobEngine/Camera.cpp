@@ -12,13 +12,17 @@ Camera::Camera(const std::string& name, float fov, BufferData* bufferData, ZobOb
 	//RecomputeVectors();
 	m_fov = fov;
 	m_tagetMode = eTarget_none;
+	m_nextTranslation = m_translation;
 }
 
 Camera::Camera(TiXmlElement* node, ZobObject* parent)
 	:ZobObject(ZOBGUID::Type::type_scene, ZOBGUID::SubType::subtype_zobCamera, node, NULL, parent)
 {
 	TiXmlElement * f = node->FirstChildElement("Fov");
-	float fov = f ? atof(f->GetText()) : 45.0f;
+	float fov = f ? atof(f->GetText()) : 45.0f; 
+	m_fov = fov;
+	m_nextTranslation = m_translation;
+	m_tagetMode = eTarget_none;
 }
 
 Camera::~Camera()
