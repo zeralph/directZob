@@ -21,11 +21,11 @@
                         'MACOS',
                         #'USE_METAL_API',
                     ],
-                    'xcode_settings':{
-                        'CC':'clang++',
-                        'MACOSX_DEPLOYMENT_TARGET':'10.14',
-                        'CLANG_CXX_LANGUAGE_STANDARD':'c++11',
-                        'CLANG_CXX_LIBRARY':'libc++',
+                    'xcode_settings': {
+                        'CC': 'clang++',
+                        'MACOSX_DEPLOYMENT_TARGET': '10.14',
+                        'CLANG_CXX_LANGUAGE_STANDARD': 'c++11',
+                        'CLANG_CXX_LIBRARY': 'libc++',
                         'ARCHS': ['x86_64'],
                     },
                     'link_settings': {
@@ -62,27 +62,24 @@
                         {
                             'msvs_configuration_platform': 'x64',
                             'msvs_target_platform': 'x64',
-							'msvs_settings': {
+                            'msvs_settings': {
                                 'VCCLCompilerTool': {
                                     'Optimization': '0',  # Od optimisation
-									'FloatingPointModel': '2', # fast
+                                    'FloatingPointModel': '2',  # fast
                                 },
                             },
                         },
                         'OS=="mac"',
                         {
-                            'xcode_settings':{
-                                'GCC_OPTIMIZATION_LEVEL':'0',
-                                'GCC_FAST_MATH':'YES',
-                                'CLANG_X86_VECTOR_INSTRUCTIONS':'avx2',
+                            'xcode_settings': {
+                                'GCC_OPTIMIZATION_LEVEL': '0',
+                                'GCC_FAST_MATH': 'YES',
+                                'CLANG_X86_VECTOR_INSTRUCTIONS': 'avx2',
                             },
                         },
                         'OS=="linux"',
                         {
-                            'cflags': 
-                            [
-                                '-g'
-                            ],
+                            'cflags': ['-g'],
                         }
                     ],
                 ],
@@ -99,32 +96,40 @@
                             'msvs_target_platform': 'x64',
                             'msvs_settings': {
                                 'VCCLCompilerTool': {
-                                    'Optimization':'2',  # O2 optimisation
-									'InlineFunctionExpansion': 2, # /Ob2, inline anything eligible
-									'FavorSizeOrSpeed': 1, # /Ot, favour speed over size
-									'FloatingPointModel': '2', # fast
-									'EnableIntrinsicFunctions': 'true',
-									'WholeProgramOptimization': 'true', # No
-                                    'EnableEnhancedInstructionSet' : '5', # enable AVX2 instructions
+                                    'Optimization': '2',  # O2 optimisation
+                                    'InlineFunctionExpansion':
+                                    2,  # /Ob2, inline anything eligible
+                                    'FavorSizeOrSpeed':
+                                    1,  # /Ot, favour speed over size
+                                    'FloatingPointModel': '2',  # fast
+                                    'EnableIntrinsicFunctions': 'true',
+                                    'WholeProgramOptimization': 'true',  # No
+                                    'EnableEnhancedInstructionSet':
+                                    '5',  # enable AVX2 instructions
+                                },
+                                'VCLinkerTool': {
+                                    'LinkTimeCodeGeneration':
+                                    '1',  # Link-time Code Generation
+                                },
+                                'VCLibrarianTool': {
+                                    'AdditionalOptions': [
+                                        '/LTCG:INCREMENTAL',  # incremental link-time code generation
+                                    ]
                                 },
                             },
                         },
                         'OS=="mac"',
                         {
-                            'xcode_settings':{
-                                'GCC_OPTIMIZATION_LEVEL':'s',
-                                'GCC_FAST_MATH':'YES',
-                                'CLANG_X86_VECTOR_INSTRUCTIONS':'avx2',
+                            'xcode_settings': {
+                                'GCC_OPTIMIZATION_LEVEL': 's',
+                                'GCC_FAST_MATH': 'YES',
+                                'CLANG_X86_VECTOR_INSTRUCTIONS': 'avx2',
                             },
                         },
                         'OS=="linux"',
                         {
-                            'cflags': 
-                            [
-                                '-Ofast',
-								'-march=haswell',
-                                '-ffast-math'
-                            ],
+                            'cflags':
+                            ['-Ofast', '-march=haswell', '-ffast-math'],
                         }
                     ],
                 ],

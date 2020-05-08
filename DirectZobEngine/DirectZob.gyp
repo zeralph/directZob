@@ -148,11 +148,6 @@
                             #			'/usr/lib',
                             #		],
                         },
-						'VCLibrarianTool': {
-							'AdditionalOptions': [
-								'/LTCG:INCREMENTAL', # incremental link-time code generation
-							]
-						},
                         "copies": [
                             {
                                 'destination':
