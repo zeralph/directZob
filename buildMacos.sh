@@ -6,8 +6,9 @@ else
 fi
 cwd=$(pwd)
 echo "building target "$target
-gyp ./DirectZobEngine/DirectZob.gyp --depth=./DirectZobEngine --generator-output=./build/DirectZob/ --format=make
-cd ./DirectZobEngine/build/DirectZob/
+cd ./DirectZobEngine
+gyp DirectZob.gyp --depth=. --generator-output=./build/DirectZob/ --format=make
+cd ./build/DirectZob/
 make DirectZobExe BUILDTYPE=$target
 cd $cwd
 rm ./DirectZobExe
