@@ -2,7 +2,8 @@
 #include "DirectZob.h"
 #include "Mesh.h"
 static int sObjectNumber = 0;
-ZobObject::ZobObject(Type t, SubType s, const std::string& name, Mesh* mesh, ZobObject* parent /*= NULL*/):ZOBGUID(t,s)
+ZobObject::ZobObject(Type t, SubType s, const std::string& name, Mesh* mesh, ZobObject* parent /*= NULL*/)
+	:ZOBGUID(t,s)
 {
 	sObjectNumber++;
 	if (name.length() == 0)
@@ -26,7 +27,6 @@ ZobObject::ZobObject(Type t, SubType s, const std::string& name, Mesh* mesh, Zob
 		m_parent = parent;
 	}
 	m_markedForDeletion = false;
-	
 	m_mesh = mesh;
 	m_translation = Vector3(0, 0, 0);
 	m_rotation = Vector3(0, 0, 0);
@@ -42,6 +42,69 @@ ZobObject::ZobObject(Type t, SubType s, const std::string& name, Mesh* mesh, Zob
 	m_renderOptions.bTransparency = false;
 	//m_renderOptions.colorization = new Vector3(1, 0, 0);
     DirectZob::LogInfo("ZobObject %s added", m_name.c_str());
+}
+
+ZobObject::ZobObject(Type t, SubType s, TiXmlElement* node, Mesh* mesh, ZobObject* parent)
+	:ZOBGUID(t,s)
+{
+	sObjectNumber++;
+	Vector3 position, rotation, scale, orientation = Vector3();	 
+	std::string name;
+	float x, y, z;
+	TiXmlElement* f;
+	name = node->Attribute("name");
+	f = node->FirstChildElement("Position");
+	x = atof(f->Attribute("x"));
+	y = atof(f->Attribute("y"));
+	z = atof(f->Attribute("z"));
+	position = Vector3(x, y, z);
+	f = node->FirstChildElement("Rotation");
+	if (f)
+	{
+		x = atof(f->Attribute("x"));
+		y = atof(f->Attribute("y"));
+		z = atof(f->Attribute("z"));
+		rotation = Vector3(x, y, z);
+	}
+	f = node->FirstChildElement("Scale");
+	if (f)
+	{
+		x = atof(f->Attribute("x"));
+		y = atof(f->Attribute("y"));
+		z = atof(f->Attribute("z"));
+		scale = Vector3(x, y, z);
+	}
+	m_name = name;
+	DirectZob::LogInfo("Adding new ZobObject %s", m_name.c_str());
+	if (!parent && m_name != "root")
+	{
+		m_parent = DirectZob::GetInstance()->GetZobObjectManager()->GetRootObject();
+		//DirectZob::LogError("Cannot add %s because it has no parent", name.c_str());
+	}
+	else
+	{
+		m_parent = parent;
+	}
+	m_markedForDeletion = false;
+	m_mesh = mesh;
+	m_translation = Vector3(0, 0, 0);
+	m_rotation = Vector3(0, 0, 0);
+	m_scale = Vector3(1, 1, 1);
+	m_children.clear();
+	SetParent(m_parent);
+	if (m_parent != NULL)
+	{
+		m_parent->AddChildReference(this);
+	}
+	m_renderOptions.LightMode(RenderOptions::eLightMode_phong);
+	m_renderOptions.ZBuffered(true);
+	m_renderOptions.bTransparency = false;
+	//m_renderOptions.colorization = new Vector3(1, 0, 0);
+	SetTranslation(position.x, position.y, position.z);
+	SetRotation(rotation.x, rotation.y, rotation.z);
+	SetScale(scale.x, scale.y, scale.z);
+	SetParent(m_parent);
+	DirectZob::LogInfo("ZobObject %s added", m_name.c_str());
 }
 
 ZobObject::~ZobObject()
@@ -240,6 +303,7 @@ void ZobObject::SetParent(ZobObject* p)
 		if (p)
 		{
 			m_parent = p;
+			//p->AddChildReference(this);
 		}
 	}
 }
@@ -264,4 +328,9 @@ bool ZobObject::HasChild(const ZobObject* o)
 void ZobObject::SetLightingMode(RenderOptions::eLightMode l)
 {
 	m_renderOptions.LightMode(l);
+}
+
+void SaveToNode(TiXmlElement* e)
+{
+
 }

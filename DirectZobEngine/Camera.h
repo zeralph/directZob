@@ -2,7 +2,7 @@
 #include "Matrix4x4.h"
 #include "ZobObject.h"
 #include <string>
-
+#include "tinyxml.h"
 
 class Camera : public ZobObject
 {
@@ -16,6 +16,7 @@ public:
 		__eTarget_MAX__
 	};
 	Camera(const std::string& name, float fov, BufferData* bufferData, ZobObject* parent);
+	Camera(TiXmlElement* node, ZobObject* parent);
 	~Camera();
 
 	void Update(const Matrix4x4& parentMatrix, const Matrix4x4& parentRSMatrix);

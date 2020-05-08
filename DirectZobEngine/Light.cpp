@@ -1,4 +1,5 @@
 #include "Light.h"
+#include "tinyxml.h"
 
 Light::Light(std::string &name, Vector3 color, float intensity, float distance, ZobObject*parent):
 	ZobObject(ZOBGUID::type_scene, ZOBGUID::subtype_zobLight, name, nullptr, parent)
@@ -7,6 +8,26 @@ Light::Light(std::string &name, Vector3 color, float intensity, float distance, 
 	m_intensity = intensity;
 	m_distance = distance;
 	m_active = true;
+}
+
+Light::Light(TiXmlElement* node, ZobObject* parent)
+	:ZobObject(ZOBGUID::type_scene, ZOBGUID::subtype_zobLight, node, NULL, parent)
+{
+		float x, y, z;
+		TiXmlElement* f = node->FirstChildElement("Color");
+		if (f)
+		{
+			x = atof(f->Attribute("r"));
+			y = atof(f->Attribute("g"));
+			z = atof(f->Attribute("b"));
+			m_color = Vector3(x/255.0f, y/255.0f, z/255.0f);
+		}
+		f = node->FirstChildElement("Intensity");
+		float intensity = f ? atof(f->GetText()) : 1.0f;
+		f = node->FirstChildElement("FallOffDistance");
+		float falloff = f ? atof(f->GetText()) : 1.0f;
+		m_distance = falloff;
+		m_intensity = intensity;
 }
 
 Light::~Light()

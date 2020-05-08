@@ -13,91 +13,38 @@ void SceneLoader::LoadMesh(TiXmlElement* node)
 }
 
 void SceneLoader::LoadZobObject(TiXmlElement* node, ZobObject* parent)
-{
-	float x, y, z;
-	std::string name;
-	std::string mesh;
-	TiXmlElement* f;
+{	
 	std::string type;
 	ZobObject* zob = NULL;
-	Vector3 position, rotation, scale, orientation = Vector3();	 
-	name = node->Attribute("name");
+	if (parent == nullptr)
+	{
+		ZobObjectManager* zobObjectManager = DirectZob::GetInstance()->GetZobObjectManager();
+		parent = zobObjectManager->GetRootObject();
+	}
 	type = node->Attribute("type")? node->Attribute("type"):"mesh";
-	f = node->FirstChildElement("Position");
-	x = atof(f->Attribute("x"));
-	y = atof(f->Attribute("y"));
-	z = atof(f->Attribute("z"));
-	position = Vector3(x, y, z);
-	f = node->FirstChildElement("Rotation");
-	if (f)
-	{
-		x = atof(f->Attribute("x"));
-		y = atof(f->Attribute("y"));
-		z = atof(f->Attribute("z"));
-		rotation = Vector3(x, y, z);
-	}
-	f = node->FirstChildElement("Scale");
-	if (f)
-	{
-		x = atof(f->Attribute("x"));
-		y = atof(f->Attribute("y"));
-		z = atof(f->Attribute("z"));
-		scale = Vector3(x, y, z);
-	}
 	if (type == "mesh")
 	{
-		f = node->FirstChildElement("Mesh");
+		TiXmlElement* f = node->FirstChildElement("Mesh");
 		std::string meshName = f ? f->GetText() : "";
 		MeshManager* meshManager = DirectZob::GetInstance()->GetMeshManager();
 		Mesh* m = meshManager->GetMesh(meshName);
-		if (parent == nullptr)
-		{
-			ZobObjectManager* zobObjectManager = DirectZob::GetInstance()->GetZobObjectManager();
-			parent = zobObjectManager->GetRootObject();
-		}
-		zob = new ZobObject(ZOBGUID::type_scene, ZOBGUID::subtype_zobOject, name, m, parent);
-		zob->SetTranslation(position.x, position.y, position.z);
-		zob->SetRotation(rotation.x, rotation.y, rotation.z);
-		zob->SetScale(scale.x, scale.y, scale.z);
+		zob = new ZobObject(ZOBGUID::Type::type_scene, ZOBGUID::SubType::subtype_zobOject, node, m, parent);
 	}
 	else if (type == "camera")
 	{
-		if (parent == NULL)
-		{
-			ZobObjectManager* zobObjectManager = DirectZob::GetInstance()->GetZobObjectManager();
-			parent = zobObjectManager->GetRootObject();
-		}
-		f = node->FirstChildElement("Fov");
-		float fov = f ? atof(f->GetText()) : 45.0f;
-		zob = DirectZob::GetInstance()->GetCameraManager()->CreateCamera(name, fov, parent);
-		zob->SetTranslation(position.x, position.y, position.z);
-		zob->SetRotation(rotation.x, rotation.y, rotation.z);
-		zob->SetScale(scale.x, scale.y, scale.z);
+		Camera* c = new Camera(node, parent);
+		DirectZob::GetInstance()->GetCameraManager()->AddCamera(c);
+		zob = c;
 	}
 	else if (type == "pointlight")
 	{
-		Vector3 color = Vector3(1.0f, 0.0f, 1.0f);
-		f = node->FirstChildElement("Color");
-		if (f)
-		{
-			x = atof(f->Attribute("r"));
-			y = atof(f->Attribute("g"));
-			z = atof(f->Attribute("b"));
-			color = Vector3(x/255.0f, y/255.0f, z/255.0f);
-		}
-		f = node->FirstChildElement("Intensity");
-		float intensity = f ? atof(f->GetText()) : 1.0f;
-		f = node->FirstChildElement("FallOffDistance");
-		float falloff = f ? atof(f->GetText()) : 1.0f;
-		if (parent == NULL)
-		{
-			ZobObjectManager* zobObjectManager = DirectZob::GetInstance()->GetZobObjectManager();
-			parent = zobObjectManager->GetRootObject();
-		}
-		zob = DirectZob::GetInstance()->GetLightManager()->CreatePointLight(name, position, color, intensity, falloff, parent);
+		Light* l = new Light(node, parent);
+		DirectZob::GetInstance()->GetLightManager()->AddLight(l);
+		zob = l;
 	}
 	else
 	{
+		std::string name = node->Attribute("name");
 		DirectZob::LogError("Error creating ZObjects %s", name.c_str());
 	}
 	for (TiXmlElement* e = node->FirstChildElement("ZobObject"); e != NULL; e = e->NextSiblingElement("ZobObject"))

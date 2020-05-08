@@ -6,6 +6,7 @@
 #include "Types.h"
 #include "Engine.h"
 #include "ZOBGUID.h"
+#include "tinyxml.h"
 
 class Mesh;
 class ZobObject:public ZOBGUID
@@ -13,11 +14,12 @@ class ZobObject:public ZOBGUID
 public:
 
 	ZobObject(ZOBGUID::Type t, ZOBGUID::SubType s, const std::string& name, Mesh* mesh, ZobObject* parent = NULL);
+	ZobObject(ZOBGUID::Type t, ZOBGUID::SubType s, TiXmlElement* node, Mesh* mesh, ZobObject* parent);
 	~ZobObject();
 
 	virtual void Update(const Matrix4x4& parentMatrix, const Matrix4x4& parentRSMatrix);
 	virtual void Draw(const Camera* camera, Core::Engine* engine);
-
+	
 	//void AddChild(ZobObject* z) { m_children.push_back(z); }
 	const std::vector<ZobObject*>* getChildren() const { return &m_children; }
 	ZobObject* GetParent() const { return m_parent; }

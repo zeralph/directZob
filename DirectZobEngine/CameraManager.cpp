@@ -93,16 +93,21 @@ void CameraManager::SetNextCamera(std::string& name)
 	}
 }
 
-Camera* CameraManager::CreateCamera(std::string& name, float fov, ZobObject* parent)
+void CameraManager::AddCamera(Camera* c)
 {
-	if (GetCamera(name) == NULL)
-	{
-		Camera* c = new Camera(name, fov, DirectZob::GetInstance()->GetEngine()->GetBufferData(), parent);
 		m_cameras.push_back(c);
 		if (!m_curCam)
 		{
 			m_curCam = c;
 		}
+}
+
+Camera* CameraManager::CreateCamera(std::string& name, float fov, ZobObject* parent)
+{
+	if (GetCamera(name) == NULL)
+	{
+		Camera* c = new Camera(name, fov, DirectZob::GetInstance()->GetEngine()->GetBufferData(), parent);
+		AddCamera(c);
 		return c;
 	}
 	else

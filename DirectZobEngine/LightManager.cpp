@@ -61,8 +61,13 @@ Light* LightManager::CreatePointLight(std::string& name, Vector3 position, Vecto
 	Light* l = new Light(name, color, intensity, distance, parent);
 	l->SetTranslation(position.x, position.y, position.z);
 	l->SetRotation(0,0,0);
-	m_lights.push_back(l);
+	AddLight(l);
 	return l;
+}
+
+void LightManager::AddLight(Light* l)
+{
+	m_lights.push_back(l);
 }
 
 Light* LightManager::CreateLight()

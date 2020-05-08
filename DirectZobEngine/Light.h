@@ -6,6 +6,7 @@ class Light : public ZobObject
 {
 public:
 	Light(std::string& name, Vector3 color, float intensity, float distance, ZobObject* parent);
+	Light(TiXmlElement* node, ZobObject* parent);
 	~Light();
 
 	const Vector3* GetColor() const { return &m_color; }
