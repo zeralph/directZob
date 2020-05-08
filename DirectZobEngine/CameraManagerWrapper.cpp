@@ -58,8 +58,10 @@ namespace CLI
 		Camera* c = m_Instance->GetCurrentCamera();
 		if (c)
 		{
-			Vector3 v = Vector3(0, 0, 0);
-			c->RotateAroundAxis(&v, x, y);
+			Vector3 v = Vector3(0, 1, 0);
+			c->RotateAroundAxis(&v, x);
+			v = Vector3(1, 0, 0);
+			//c->RotateAroundAxis(&v, y);
 		}
 	}
 
@@ -68,7 +70,7 @@ namespace CLI
 		Camera* c = m_Instance->GetCurrentCamera();
 		if (c)
 		{
-			c->Move(x, y);
+			c->Move(x, y, true);
 		}
 	}
 

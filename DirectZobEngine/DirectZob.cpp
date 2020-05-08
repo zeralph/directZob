@@ -1,3 +1,4 @@
+#include <mutex>
 #include "DirectZob.h"
 #include "Events.h"
 #include "tinyxml.h"
@@ -8,6 +9,7 @@
 static char buffer[MAX_PATH];
 static char logBuffer[LOG_BUFFER_SIZE];
 static bool g_isInEditorMode;
+static std::mutex g_render_mutex;
 DirectZob *DirectZob::singleton = nullptr;
 
 DirectZob::DirectZob()
@@ -54,17 +56,21 @@ void DirectZob::SaveScene()
 
 void DirectZob::NewScene()
 {
+	g_render_mutex.lock();
 	SceneLoader::NewScene();
 	if (m_text == NULL)
 	{
 		m_text = new Text2D(m_engine, m_events);
 	}
+	g_render_mutex.unlock();
 }
 
 void DirectZob::Unload()
 {
+	g_render_mutex.lock();
 	SceneLoader::UnloadScene();
 	DirectZob::GetInstance()->GetEngine()->Stop();
+	g_render_mutex.unlock();
 }
 
 bool DirectZob::CanFastSave()
@@ -99,9 +105,9 @@ static float rot = 1.0f;
 int DirectZob::RunAFrame()
 {
 	int state=0;
-	if(m_initialized && m_engine->Started() && !m_isRendering)
+	if(m_initialized && m_engine->Started())
 	{
-		m_isRendering = true;
+		g_render_mutex.lock();
 		m_cameraManager->UpdateAfter();
 		Color c = Color(DirectZob::GetInstance()->GetLightManager()->GetClearColor());
 		m_engine->ClearBuffer(&c);
@@ -109,8 +115,8 @@ int DirectZob::RunAFrame()
 		Camera* cam = m_cameraManager->GetCurrentCamera();
 		if (cam)
 		{
+			cam->UpdateViewProjectionMatrix();
 			m_engine->StartDrawingScene();
-			
 			m_zobObjectManager->UpdateObjects();
 //			cam->Update();
 			m_engine->WaitForRasterizersEnd();
@@ -166,7 +172,7 @@ int DirectZob::RunAFrame()
 		}
 		m_engine->SetGeometryTime((float)(clock() - tick) / CLOCKS_PER_SEC * 1000);
 		m_engine->EndDrawingScene();
-		m_isRendering = false;
+		g_render_mutex.unlock();
 	}
 	return state;
 }

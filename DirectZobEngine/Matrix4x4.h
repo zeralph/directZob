@@ -38,6 +38,8 @@ public:
 	Vector3 GetTranslation() const { return Vector3{ m_data[0][3], m_data[1][3], m_data[2][3] }; }
 	inline float GetValue(const int i, const int j) const { return m_data[i][j]; }
 	static void InvertMatrix4(const Matrix4x4& m, Matrix4x4& im);
+	static Matrix4x4 RotateAroundAxis(const Vector3& axis, const float angle);
+	//float& operator[](int i) {return &m_data[i][j]; };
 private:
 
 	void SetRotationX(const float r);

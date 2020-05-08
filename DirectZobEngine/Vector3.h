@@ -1,5 +1,8 @@
 #pragma once
 #include <math.h>
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
 class Vector3
 {
 public:
@@ -45,13 +48,23 @@ public:
 		//r.z = v1->x * v2->y - v1->y * v2->x;
 		return r;
 	};
-	static Vector3 RotateAroundAxis(const Vector3& v, const Vector3& axe, float angle);
+	static inline Vector3 GetAnglesFromVector(Vector3 v)
+	{
+		Vector3 vOut = v;
+		vOut.Normalize();
+		float pitch = asin(-vOut.y);
+		float yaw = atan2(vOut.x, vOut.z);
+		vOut.x = -pitch * 180.0f / M_PI;
+		vOut.y = -yaw * 180.0f / M_PI;
+		vOut.z = 0.0f * vOut.z;
+		return vOut;
+	};
 	inline void Add(const Vector3* v) { x += v->x; y += v->y; z += v->z; }
 	inline void Div(float f) { x /= f; y /= f; z /= f; }
 	inline void Mul(float f) { x *= f; y *= f; z *= f; }
 	inline void Set(const Vector3* v) { x = v->x; y = v->y; z = v->z; }
-	inline bool operator== (const Vector3& v) { return (x == v.x && y == v.y && v.z == z && w == v.w); }
-	inline bool operator!= (const Vector3& v) { return (x != v.x || y != v.y || v.z != z || w != v.w); }
+	inline const bool operator== (const Vector3& v) { return (x == v.x && y == v.y && v.z == z && w == v.w); }
+	inline const bool operator!= (const Vector3& v) { return (x != v.x || y != v.y || v.z != z || w != v.w); }
 	inline void operator/= (const float f) { x /= f; y /= f; z /= f; }
 	inline void operator*= (const float f) { x *= f; y *= f; z *= f; }
 //	inline Vector3 operator= (const Vector3 &v) { return Vector3(v.x, v.y, v.z); }

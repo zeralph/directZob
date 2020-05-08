@@ -7,10 +7,19 @@
 class Camera : public ZobObject
 {
 public:
+
+	enum eTargetMode
+	{
+		eTarget_none=0,
+		eTarget_Vector,
+		eTarget_Object,
+		__eTarget_MAX__
+	};
 	Camera(const std::string& name, float fov, BufferData* bufferData, ZobObject* parent);
 	~Camera();
 
 	void Update(const Matrix4x4& parentMatrix, const Matrix4x4& parentRSMatrix);
+	void UpdateViewProjectionMatrix();
 
 	inline const Matrix4x4* GetViewMatrix() const { return &m_viewRotMatrix; }
 	inline const Matrix4x4* GetProjectionMatrix() const {return &m_projMatrix;}
@@ -24,16 +33,18 @@ public:
 		v.Normalize();
 		return &v; 
 	}
-	bool SetTarget(const Vector3* t);
+	void SetTarget(const Vector3 t) { m_tagetMode = eTarget_Vector; m_targetVector = t; }
+	void SetTarget(const ZobObject* z) { m_tagetMode = eTarget_Object; m_targetObject = z; }
+	void SetNoTarget() { m_tagetMode = eTarget_none; }
 	void Draw(const Camera* camera, Core::Engine* engine);
-	void RotateAroundAxis(const Vector3* axis, float dx, float dy);
-	void Move(float dx, float dy);
+	void RotateAroundAxis(const Vector3* axis, float angle);
+	void Move(float dx, float dy, bool moveTargetVector);
 	void Zoom(float z);
 	inline void ToViewSpace(Vector3* v) const
 	{
-		v->x -= m_translation.x;
-		v->y -= m_translation.y;
-		v->z -= m_translation.z;
+		v->x -= m_viewTransaltion.x;
+		v->y -= m_viewTransaltion.y;
+		v->z -= m_viewTransaltion.z;
 		m_viewRotMatrix.Mul(v);
 	}
 private:
@@ -46,5 +57,9 @@ private:
 	Matrix4x4 m_viewRotMatrix;
 	Matrix4x4 m_projMatrix;
 	float m_fov;
+	Vector3 m_viewTransaltion;
+	eTargetMode m_tagetMode;
+	Vector3 m_targetVector;
+	const ZobObject* m_targetObject;
 };
 

@@ -78,7 +78,7 @@ public :
 	static void LogError(const char* format, ...);
 	static void LogWarning(const char* format, ...);
 private:
-
+	
 	Events* m_events = NULL;
 	MaterialManager* m_materialManager = NULL;
 	MeshManager* m_meshManager = NULL;

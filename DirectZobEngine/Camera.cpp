@@ -1,8 +1,10 @@
 #include "Camera.h"
 #include "DirectZob.h"
 #include <math.h>
+#include <mutex>
 
-
+static std::mutex g_update_camera_mutex;
+static float ee = 0.0f;
 
 Camera::Camera(const std::string& name, float fov, BufferData* bufferData, ZobObject* parent)
 	:ZobObject(ZOBGUID::Type::type_scene, ZOBGUID::SubType::subtype_zobCamera, name, NULL, parent)
@@ -43,78 +45,110 @@ void Camera::Draw(const Camera* camera, Core::Engine* engine)
 	engine->QueueLine(camera, &m_translation, &v2, c, true);
 	engine->QueueLine(camera, &m_translation, &v3, c, true);
 	engine->QueueLine(camera, &m_translation, &v0, c, true);
+
+	Vector3 t = Vector3(0, 0, 0);
+	c2 = 0x000000;
+	engine->QueueLine(camera, &m_translation, &t, c, true);
+	t = Vector3(0, 0, 1);
+	m_rotationScaleMatrix.Mul(&t);
+	t = t + m_translation;
+	c2 = 0xFF0000;
+	engine->QueueLine(camera, &m_translation, &t, c, true);
 }
 
 void Camera::Zoom(float z)
 {
-	Vector3 v = GetForward();
+	Vector3 v = m_forward;
 	v = v * (-z);
 	m_translation = m_translation + v;
 }
 
-void Camera::RotateAroundAxis(const Vector3* axis, float dx, float dy)
+void Camera::RotateAroundAxis(const Vector3* axis, float angle)
 {
-	/*
-	Vector3 l = Vector3::RotateAroundAxis(axis, Vector3::Vector3Y, -dx * M_PI / 180.0);
-	//l = Vector3::RotateAroundAxis(l, Vector3::Vector3Y, -dx * M_PI / 180.0);
-	m_translation = l + axis;
-	RecomputeVectors();
-	if (m_cameraFw.y >= 0.95f && dy > 0)
-	{
-		dy = 0.0f;
-	}
-	if (m_cameraFw.y <= -0.95f && dy < 0)
-	{
-		dy = 0.0f;
-	}
-	l = m_translation - axis;
-	l = Vector3::RotateAroundAxis(l, m_cameraLeft, dy * M_PI / 180.0);
-	m_translation = l + axis;
-	RecomputeVectors();
-	*/
+	g_update_camera_mutex.lock();
+	Matrix4x4 rot = Matrix4x4::RotateAroundAxis(axis, angle);
+	rot.Mul(&m_translation);
+//	Vector3 t = Vector3(0, 0, 0);
+//	SetTarget(&t);
+	g_update_camera_mutex.unlock();
 }
 
-void Camera::Move(float dx, float dy)
+void Camera::Move(float dx, float dy, bool moveTargetVector)
 {
-	/*
-	Vector3 vl = Vector3(m_cameraLeft);
+	Vector3 vl = Vector3(m_left);
 	vl = vl * ((float)-dx / 20.0f);
 	vl.y = 0;
 
-	Vector3 vf = Vector3(m_cameraFw);
+	Vector3 vf = Vector3(m_forward);
 	
 	vf = vf * ((float)dy / 20.0f);
 	vf.y = 0;
 	m_translation = m_translation - (vl + vf);
-//	m_cameraTarget = m_cameraTarget - (vl + vf);
-*/
+	if (moveTargetVector)
+	{
+		m_targetVector = m_targetVector - (vl + vf);
+	}
 }
 
 void Camera::Update(const Matrix4x4& parentMatrix, const Matrix4x4& parentRSMatrix)
 {
-	static bool gg = false;
-	if (gg)
-	{
-		Vector3 v = Vector3(0, 0, 0);
-		SetTarget(&v);
-	}
-	ZobObject::Update(parentMatrix, parentRSMatrix);
-	//Vector3 x = Vector3(0, 0, 0);
-	//SetTarget(&x);
-	BufferData* b = DirectZob::GetInstance()->GetEngine()->GetBufferData();
-	setProjectionMatrix(m_fov, b->width, b->height, b->zNear, b->zFar);
-	Vector3 p = m_translation;
+	g_update_camera_mutex.lock();
 	m_left = Vector3(1, 0, 0);
 	m_forward = Vector3(0, 0, 1);
-	m_up = Vector3(0,1, 0);
-	Matrix4x4 m_invRotationMatrix;
-	Matrix4x4::InvertMatrix4(m_rotationScaleMatrix, m_invRotationMatrix);
-	m_invRotationMatrix.Mul(&m_left);
-	m_invRotationMatrix.Mul(&m_forward);
-	m_invRotationMatrix.Mul(&m_up);
-	SetViewMatrix(&m_left, &m_up, &m_forward, &p);
+	m_up = Vector3(0, 1, 0);
+	if (m_tagetMode != eTarget_none)
+	{
+		if (m_tagetMode == eTarget_Vector &&  m_targetVector != m_translation)
+		{
+			Vector3 v = m_targetVector - m_translation;
+			v.Normalize();
+			m_forward = v;
+			m_rotation = Vector3::GetAnglesFromVector(v);
+
+		}
+		else if (m_tagetMode == eTarget_Object && m_targetObject)
+		{
+			Vector3 v = m_targetObject->GetTransform();
+			if( v != m_translation)
+			{
+				v = m_targetObject->GetTransform() - m_translation;
+				v.Normalize();
+				m_forward = v;
+				m_rotation = Vector3::GetAnglesFromVector(v);
+			}
+		}
+	}
+	ZobObject::Update(parentMatrix, parentRSMatrix);
+
+	m_rotationScaleMatrix.Identity();
+	m_rotationScaleMatrix.SetRotation(&m_rotation);
+	m_left = Vector3(1, 0, 0);
+	m_forward = Vector3(0, 0, 1);
+	m_up = Vector3(0, 1, 0);
+	m_rotationScaleMatrix.Mul(&m_left);
+	m_rotationScaleMatrix.Mul(&m_forward);
+	m_rotationScaleMatrix.Mul(&m_up);
+	g_update_camera_mutex.unlock();
 }
 
+void Camera::UpdateViewProjectionMatrix()
+{
+	g_update_camera_mutex.lock();
+	m_viewTransaltion = m_translation;
+	BufferData* b = DirectZob::GetInstance()->GetEngine()->GetBufferData();
+	setProjectionMatrix(m_fov, b->width, b->height, b->zNear, b->zFar);
+	Vector3 p = m_viewTransaltion;
+	Vector3 left = Vector3(1, 0, 0);
+	Vector3 forward = Vector3(0, 0, 1);
+	Vector3 up = Vector3(0, 1, 0);
+	Matrix4x4 m_invRotationMatrix;
+	Matrix4x4::InvertMatrix4(m_rotationScaleMatrix, m_invRotationMatrix);
+	m_invRotationMatrix.Mul(&left);
+	m_invRotationMatrix.Mul(&forward);
+	m_invRotationMatrix.Mul(&up);
+	SetViewMatrix(&left, &up, &forward, &p);
+	g_update_camera_mutex.unlock();
+}
 
 void Camera::SetViewMatrix(const Vector3& left, const Vector3& up, const Vector3& fw, const Vector3& p)
 {
@@ -137,22 +171,6 @@ void Camera::SetViewMatrix(const Vector3& left, const Vector3& up, const Vector3
 	m_viewRotMatrix.SetData(3, 1, 0);
 	m_viewRotMatrix.SetData(3, 2, 0);
 	m_viewRotMatrix.SetData(3, 3, 1);
-}
-
-bool Camera::SetTarget(const Vector3* t)
-{
-	if (t != &m_translation)
-	{
-		Vector3 v = t - m_translation;
-		v.Normalize();
-		float pitch = asin(-v.y);
-		float yaw = atan2(v.x, v.z);
-		m_rotation.x = -pitch * 180.0f / M_PI;
-		m_rotation.y = -yaw * 180.0f / M_PI;
-		m_rotation.z = 0.0f * v.z;
-		return true;
-	}
-	return false;
 }
 
 void Camera::setProjectionMatrix(const float angleOfView, const float width, const float height, const float zNear, const float zFar)

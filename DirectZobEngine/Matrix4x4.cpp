@@ -165,9 +165,11 @@ void Matrix4x4::SetRotation(const Vector3& v)
 
 void Matrix4x4::SetRotation(const float x, const float y, const float z)
 {
-	SetRotationX(-x);
-	SetRotationY(-y);
-	SetRotationZ(-z);
+	Vector3 v = Vector3(x, y, z);
+	SetRotation(v);
+	//SetRotationX(-x);
+	//SetRotationY(-y);
+	//SetRotationZ(-z);
 }
 
 void Matrix4x4::SetRotationX(const float r)
@@ -248,4 +250,40 @@ void Matrix4x4::InvertMatrix4(const Matrix4x4& m, Matrix4x4& im)
 	im.m_data[3][1] = det * (m.m_data[0][0] * A1223 - m.m_data[0][1] * A0223 + m.m_data[0][2] * A0123);
 	im.m_data[3][2] = det * -(m.m_data[0][0] * A1213 - m.m_data[0][1] * A0213 + m.m_data[0][2] * A0113);
 	im.m_data[3][3] = det * (m.m_data[0][0] * A1212 - m.m_data[0][1] * A0212 + m.m_data[0][2] * A0112);
+}
+
+Matrix4x4 Matrix4x4::RotateAroundAxis(const Vector3& axis, const float angle)
+{
+	Matrix4x4 rotationMatrix;
+	float u = axis.x;
+	float v = axis.y;
+	float w = axis.z;
+	float L = (u * u + v * v + w * w);
+	float a = angle * M_PI / 180.0; //converting to radian value
+	float u2 = u * u;
+	float v2 = v * v;
+	float w2 = w * w;
+	float cosa = cos(a);
+	float sina = sin(a);
+	float sqrtL = sqrt(L);
+	rotationMatrix.m_data[0][1] = (u * v * (1 - cosa) - w * sqrtL * sin(a)) / L;
+	rotationMatrix.m_data[0][2] = (u * w * (1 - cosa) + v * sqrtL * sin(a)) / L;
+	rotationMatrix.m_data[0][3] = 0.0;
+				  
+	rotationMatrix.m_data[1][0] = (u * v * (1 - cosa) + w * sqrtL * sin(a)) / L;
+	rotationMatrix.m_data[0][0] = (u2 + (v2 + w2) * cosa) / L;
+	rotationMatrix.m_data[1][1] = (v2 + (u2 + w2) * cosa) / L;
+	rotationMatrix.m_data[1][2] = (v * w * (1 - cosa) - u * sqrtL * sin(a)) / L;
+	rotationMatrix.m_data[1][3] = 0.0;
+				 
+	rotationMatrix.m_data[2][0] = (u * w * (1 - cosa) - v * sqrtL * sin(a)) / L;
+	rotationMatrix.m_data[2][1] = (v * w * (1 - cosa) + u * sqrtL * sin(a)) / L;
+	rotationMatrix.m_data[2][2] = (w2 + (u2 + v2) * cosa) / L;
+	rotationMatrix.m_data[2][3] = 0.0;
+				
+	rotationMatrix.m_data[3][0] = 0.0;
+	rotationMatrix.m_data[3][1] = 0.0;
+	rotationMatrix.m_data[3][2] = 0.0;
+	rotationMatrix.m_data[3][3] = 1.0;
+	return rotationMatrix;
 }
