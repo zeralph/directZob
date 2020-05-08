@@ -242,6 +242,7 @@ int main(int argc, char* argv[])
 	float benchFps = 0.0f;
 	float benchRender = 0.0f;
 	float benchGeom = 0.0f;
+	float benchTot = 0.0f;
 	ulong frames = 0;
 	m_directZob.GetEngine()->ShowBBoxes(false);
 	m_directZob.GetEngine()->ShowNormals(false);
@@ -263,17 +264,17 @@ int main(int argc, char* argv[])
 			Light* blue = m_directZob.GetLightManager()->GetLight("blue");
 			Light* green = m_directZob.GetLightManager()->GetLight("green");
 
-			//blue->SetActive(false);
-			//green->SetActive(false);
-			if (red->GetTransform().z >= 110.0f)
+			if (!bPause)
 			{
-				red->SetTranslation(red->GetTransform().x, 2, -20);
+				if (red->GetTransform().z >= 110.0f)
+				{
+					red->SetTranslation(red->GetTransform().x, 2, -20);
+				}
+				else
+				{
+					red->SetTranslation(red->GetTransform().x, 2, red->GetTransform().z + to);
+				}
 			}
-			else
-			{
-				red->SetTranslation(red->GetTransform().x, 2, red->GetTransform().z + to);
-			}
-
 		}
 		else
 		{
@@ -283,27 +284,25 @@ int main(int argc, char* argv[])
 		{
 			camPos.z += to;
 			camTo.z += to;
+			rot += 1.0f;
 			if (camPos.z >= 70.0f)
 			{
 				camPos.z = 0.0f;
 				camTo.z = 1.0f;
-				if (bBench)
-				{
-					//				break;
-				}
 			}
 		}
 		m_directZob.RunAFrame();
-		benchFps += m_directZob.GetEngine()->GetFps();
-		benchRender += m_directZob.GetEngine()->GetRenderTime();
-		benchGeom += m_directZob.GetEngine()->GetGeometryTime();
+		benchFps += m_directZob.GetFps();
+		benchRender += m_directZob.GetRenderTime();
+		benchGeom += m_directZob.GetGeometryTime();
+		benchTot += m_directZob.GetFrameTime();
 		frames++;
 		int state = mfb_update(window, (void*)m_directZob.GetBufferData() );
 		if (state < 0)
 		{
 			break;
 		}
-		rot += 1.0f;
+		
 	}
     printf("Closing\n");
     m_directZob.NewScene();
@@ -314,7 +313,8 @@ int main(int argc, char* argv[])
 		float f = benchFps / (float)frames;
 		float r = benchRender / (float)frames;
 		float g = benchGeom / (float)frames;
-		std::cout << "\n\t\tBenchmark:\nRender\tGeom\tFps\n" << r <<"\t"<<g<<"\t"<<f<< std::endl;
+		float t = benchTot / (float)frames;
+		std::cout << "\n\t\tBenchmark:\nRender\tGeom\tFrame\tFps\n" << r <<"\t"<<g<<"\t"<<t<<"\t"<<f<< std::endl;
 	}
 	return 0;
 }

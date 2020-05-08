@@ -60,14 +60,9 @@ namespace Core
 		void QueueEllipse(const Camera* camera, const Vector3* center, const Vector3* up, const float r1, const float r2, const uint c, bool bold);
 		bool ClipSegment(Vector3* a, Vector3* b);
 		int StartDrawingScene();
-		int EndDrawingScene();
+		int SetDisplayedBuffer();
 		void LoadMesh(std::string& name, std::string& path, const Material* texture, Vector3& p, Vector3& r, Vector3& s);
 		inline ulong GetCurrentFrame() { return m_currentFrame; }
-		inline const float GetFps() { return m_fps; }
-		inline const float GetRenderTime() { return m_renderTimeMS; }
-		inline const float GetGeometryTime() { return m_geometryTimeMS; }
-		inline const  float GetFrameTime() { return m_frameTimeMS; }
-		inline void SetGeometryTime(float f) { m_geometryTimeMS = f; }
 		inline const uint GetNbTriangles() const { return m_sceneTriangles; }
 		inline const uint GetNbDrawnTriangles() const { return m_drawnTriangles; }
 
@@ -93,7 +88,7 @@ namespace Core
 		uint GetObjectIdAtCoords(uint x, uint y);
 		const CullMode GetCullMode() const { return m_cullMode; }
 		void SetCullMode(const CullMode c) { m_cullMode = c; }
-		void WaitForRasterizersEnd();
+		float WaitForRasterizersEnd();
 		void ClearRenderQueues();
 	private:
 
@@ -114,10 +109,6 @@ namespace Core
 		int m_curBuffer;
 		clock_t	m_tick;
 		clock_t	m_drawTick;
-		float m_fps;
-		float m_geometryTimeMS;
-		float m_renderTimeMS;
-		float m_frameTimeMS;
 		ulong m_currentFrame;
 		uint* m_buffer;
 		float* m_zBuffer;

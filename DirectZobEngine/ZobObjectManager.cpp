@@ -1,8 +1,10 @@
+#include <thread>
 #include "ZobObjectManager.h"
 #include "DirectZob.h"
 #include "MeshManager.h"
 
 static int sObjectNumber = 1;
+static std::thread g_geometryThread;
 
 ZobObjectManager::ZobObjectManager()
 {
@@ -12,7 +14,7 @@ ZobObjectManager::ZobObjectManager()
 
 ZobObjectManager::~ZobObjectManager()
 {
-
+	WaitForUpdateObjectend();
 }
 
 void ZobObjectManager::AddZobObject(ZobObject* z)
@@ -98,6 +100,19 @@ ZobObject* ZobObjectManager::GetZobObject(const std::string& name) const
 
 }
 
+void ZobObjectManager::StartUpdateObjects()
+{
+	m_drawTick = clock();
+	g_geometryThread = std::thread(&ZobObjectManager::UpdateObjects, this);
+}
+
+float ZobObjectManager::WaitForUpdateObjectend()
+{
+	if (g_geometryThread.joinable())
+		g_geometryThread.join();
+	return (float)(clock() - m_drawTick) / CLOCKS_PER_SEC * 1000;
+}
+
 void ZobObjectManager::UpdateObjects()
 {
 	Matrix4x4 m;
@@ -105,7 +120,7 @@ void ZobObjectManager::UpdateObjects()
 	m_rootObject->Update(&m, &m);
 }
 
-void ZobObjectManager::DrawObjects(const Camera* camera, Core::Engine* engine)
+void ZobObjectManager::CopyObjectsDataToRenderQueues(const Camera* camera, Core::Engine* engine)
 {
 	m_rootObject->Draw(camera, engine);
 }

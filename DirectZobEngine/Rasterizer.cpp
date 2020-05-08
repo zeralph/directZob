@@ -59,8 +59,8 @@ void Rasterizer::Render()
 {
 	if (DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera())
 	{
-		const Vector3* camDir = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera()->GetForward();
-		m_camDir = Vector3(-camDir->x, -camDir->y, -camDir->z);
+		const Vector3 camDir = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera()->GetForward();
+		m_camDir = Vector3(-camDir.x, -camDir.y, -camDir.z);
 		//warning : invert lightdir ! https://fr.wikipedia.org/wiki/Ombrage_de_Phong
 		for (int i = 0; i < m_lines->size(); i++)
 		{

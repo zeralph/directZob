@@ -462,7 +462,6 @@ void Mesh::Draw(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, c
 	Vector2 a, b, c, uva, uvb, uvc;
 	const Matrix4x4* view = camera->GetViewMatrix();
 	const Matrix4x4* proj = camera->GetProjectionMatrix();
-	const Vector3* camZ = camera->GetForward();
 	float w = (float)bData->width / 2.0f;
 	float h = (float)bData->height / 2.0f;
 	float znear = bData->zNear;

@@ -15,8 +15,10 @@ public:
 
 	//friend void ZobObject::SetParent(ZobObject* o);
 
-	void UpdateObjects();
-	void DrawObjects(const Camera* camera, Core::Engine* engine);
+
+	void StartUpdateObjects();
+	float WaitForUpdateObjectend();
+	void CopyObjectsDataToRenderQueues(const Camera* camera, Core::Engine* engine);
 	ZobObject* GetZobObjectFromPartialId(const uint id) const;
 	void AddZobObject(ZobObject* z);
 	ZobObject* GetRootObject() const;
@@ -30,11 +32,12 @@ public:
 	ZobObject* GetEditorGizmos() { return m_editorGizmos; }
 	bool Reparent(ZobObject* o, ZobObject* parent);
 private:
+	void UpdateObjects();
 	void GetZobObjectListInternal(const ZobObject* z, std::string& str);
 	ZobObject* LoadEditorMesh(const char* name, const char* meshPath, const char* meshFile, ZobObject* parent);
 	ZobObject* GetZobObjectFromPartialId(ZobObject* z, const uint id) const;
 	ZobObject* m_rootObject = nullptr;
-
+	clock_t	m_drawTick;
 //Editor objects
 	ZobObject* m_editorGizmos = nullptr;
 	ZobObject* m_transform = nullptr;

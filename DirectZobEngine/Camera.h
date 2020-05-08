@@ -23,7 +23,7 @@ public:
 
 	inline const Matrix4x4* GetViewMatrix() const { return &m_viewRotMatrix; }
 	inline const Matrix4x4* GetProjectionMatrix() const {return &m_projMatrix;}
-	inline const Vector3* GetForward() const 
+	inline Vector3 GetForward() const 
 	{
 		//return &m_forward;
 		Vector3 v;
@@ -31,7 +31,7 @@ public:
 		v.y = m_viewRotMatrix.GetValue(1, 1);
 		v.z = m_viewRotMatrix.GetValue(2, 1);
 		v.Normalize();
-		return &v; 
+		return v; 
 	}
 	void SetTarget(const Vector3 t) { m_tagetMode = eTarget_Vector; m_targetVector = t; }
 	void SetTarget(const ZobObject* z) { m_tagetMode = eTarget_Object; m_targetObject = z; }

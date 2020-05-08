@@ -62,6 +62,10 @@ public :
 	void NewScene();
 	bool CanFastSave();
 
+	const float GetFps() const { return m_fps; };
+	const float GetRenderTime() const { return m_geometryTime; };
+	const float GetGeometryTime() const { return m_renderTime; };
+	const float GetFrameTime() const { return m_frameTime; };
 	int RunAFrame();
 	const uint* GetBufferData() const { return m_engine->GetBufferData()->buffer; }
 	std::string ExePath();
@@ -91,4 +95,9 @@ private:
 	static bool g_bShowGrid;
 	static bool g_bShowMeshes;
 	bool m_initialized = false;
+	float m_renderTime;
+	float m_geometryTime;
+	float m_frameTime;
+	float m_fps;
+	clock_t	m_frameTick;
 };

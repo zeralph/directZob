@@ -38,7 +38,6 @@ Engine::Engine(int width, int height, Events* events)
 	//	m_oBuffer = (uint*)malloc(sizeof(uint) * width * height);
 	m_curBuffer = 0;
 	m_showZBuffer = false;
-	m_fps = 0.0;
 	m_bufferData.height = height;
 	m_bufferData.width = width;
 	m_bufferData.zNear = m_zNear;
@@ -47,10 +46,7 @@ Engine::Engine(int width, int height, Events* events)
 	m_bufferData.zBuffer = m_zBuffer;
 	//	m_bufferData.oBuffer = m_oBuffer;
 	m_bufferData.size = width * height;
-	m_tick = clock();
 	m_nbPixels = 0;
-	m_renderTimeMS = 0;
-	m_geometryTimeMS = 0;
 	m_cullMode = CullMode::CullClockwiseFace;
 
 	m_rasterTriangleQueues = (Triangle **)malloc(sizeof(Triangle) * m_nbRasterizers);
@@ -180,12 +176,10 @@ void Engine::Resize(int width, int height)
 	{
 		Start();
 	}
-	m_tick = clock();
 }
 
 void Engine::ClearBuffer(const Color *color)
 {
-	m_tick = clock();
 	uint v = color->GetRawValue();
 	//Color cc = Color(63, 149, 255, 255);
 	//v = cc.GetRawValue();
@@ -227,7 +221,7 @@ int Engine::StartDrawingScene()
 	}
 	return 0;
 }
-int Engine::EndDrawingScene()
+int Engine::SetDisplayedBuffer()
 {
 	if (m_renderOutput == RenderOutput_zBuffer)
 	{
@@ -252,8 +246,6 @@ int Engine::EndDrawingScene()
 	//r = mfb_update(window, m_buffer);
 	m_currentFrame++;
 	m_nbPixels = 0;
-	m_frameTimeMS = (float)(clock() - m_tick) / CLOCKS_PER_SEC * 1000;
-	m_fps = (float)CLOCKS_PER_SEC / (float)(clock() - m_tick);
 	return r;
 }
 
@@ -269,7 +261,7 @@ void Engine::ClearRenderQueues()
 	}
 }
 
-void Engine::WaitForRasterizersEnd()
+float Engine::WaitForRasterizersEnd()
 {
 	for (int i = 0; i < m_nbRasterizers; i++)
 	{
@@ -278,7 +270,7 @@ void Engine::WaitForRasterizersEnd()
 			m_rasterizers[i]->WaitForEnd();
 		}
 	}
-	m_renderTimeMS = (float)(clock() - m_drawTick) / CLOCKS_PER_SEC * 1000;
+	return (float)(clock() - m_drawTick) / CLOCKS_PER_SEC * 1000;
 }
 
 void Engine::DrawGrid(const Camera *camera)

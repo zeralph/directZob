@@ -10,6 +10,7 @@ static char buffer[MAX_PATH];
 static char logBuffer[LOG_BUFFER_SIZE];
 static bool g_isInEditorMode;
 static std::mutex g_render_mutex;
+
 DirectZob *DirectZob::singleton = nullptr;
 
 DirectZob::DirectZob()
@@ -97,6 +98,7 @@ void DirectZob::Init(int width, int height, bool bEditorMode)
 	char frameCharBuffer[sizeof(ulong)];
 	int state;
 	m_initialized = true;
+	m_frameTick = clock();
 //	m_engine->Start();
 }
 
@@ -105,6 +107,9 @@ static float rot = 1.0f;
 int DirectZob::RunAFrame()
 {
 	int state=0;
+	m_frameTime =  (float)(clock() - m_frameTick) / CLOCKS_PER_SEC * 1000;
+	m_fps = 1000.0f / m_frameTime;
+	m_frameTick = clock();
 	if(m_initialized && m_engine->Started())
 	{
 		g_render_mutex.lock();
@@ -117,11 +122,11 @@ int DirectZob::RunAFrame()
 		{
 			cam->UpdateViewProjectionMatrix();
 			m_engine->StartDrawingScene();
-			m_zobObjectManager->UpdateObjects();
-//			cam->Update();
-			m_engine->WaitForRasterizersEnd();
+			m_zobObjectManager->StartUpdateObjects();
+			m_renderTime = m_engine->WaitForRasterizersEnd();
+			m_geometryTime = m_zobObjectManager->WaitForUpdateObjectend();
 			m_engine->ClearRenderQueues();
-			m_zobObjectManager->DrawObjects(cam, m_engine);
+			m_zobObjectManager->CopyObjectsDataToRenderQueues(cam, m_engine);
 			if (m_engine->ShowGrid())
 			{
 				m_engine->DrawGrid(cam);
@@ -141,11 +146,9 @@ int DirectZob::RunAFrame()
 			_snprintf_s(buffer, MAX_PATH, "Triangles : %i / %i", m_engine->GetNbDrawnTriangles(), m_engine->GetNbTriangles());
 			std::string sBuf = std::string(buffer);
 			m_text->Print(0, 0, 1, &sBuf, 0xFFFFFFFF);
-			_snprintf_s(buffer, MAX_PATH, "render : %06.2fms, geom : %06.2f, tot : %06.2f, FPS : %06.2f", m_engine->GetRenderTime(), m_engine->GetGeometryTime(), m_engine->GetFrameTime(), m_engine->GetFps());
-			float t = m_engine->GetFps();
-			t = (1.0f / t) * 1000.0f;
+			_snprintf_s(buffer, MAX_PATH, "render : %06.2fms, geom : %06.2f, tot : %06.2f, FPS : %06.2f", m_renderTime, m_geometryTime, m_frameTime, m_fps);
 			sBuf = std::string(buffer);
-			if (t < TARGET_MS_PER_FRAME)
+			if (m_frameTime < TARGET_MS_PER_FRAME)
 			{
 				m_text->Print(0, 16, 1, &sBuf, 0xFF00FF00);
 //				SLEEP((TARGET_MS_PER_FRAME - t));
@@ -170,8 +173,7 @@ int DirectZob::RunAFrame()
 			}
 			m_text->Print(0, 32, 1, &sBuf, 0xFFFFFFFF);
 		}
-		m_engine->SetGeometryTime((float)(clock() - tick) / CLOCKS_PER_SEC * 1000);
-		m_engine->EndDrawingScene();
+		m_engine->SetDisplayedBuffer();
 		g_render_mutex.unlock();
 	}
 	return state;
