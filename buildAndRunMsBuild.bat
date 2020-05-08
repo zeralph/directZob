@@ -5,6 +5,6 @@ popd
 pushd DirectZobEngine
 CALL generate_sln.bat
 python.exe .\strip_emptylines.py .\build\DirectZob\DirectZob.sln
-msbuild build\DirectZob\DirectZob.sln /p:Configuration=Release
+msbuild build\DirectZob\DirectZob.sln /m /p:Configuration=Release
 popd
 start /W DirectZobEngine\build\DirectZob\Debug\DirectZobExe.exe --scene .\resources\fbx.xml
