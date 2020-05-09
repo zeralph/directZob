@@ -9,7 +9,7 @@
 #include "Mesh.h"
 #include "Engine.h"
 #include "tinyxml.h"
-
+#include "Types.h"
 
 class SceneLoader
 {
@@ -21,13 +21,10 @@ public:
 	static void NewScene();
 	static void UnloadScene();
 private:
-	static Vector3 Vector2Color(Vector3* v) { return Vector3((int)(v->x * 255.0f), (int)(v->y * 255.0f), (int)(v->z * 255.0f)); };
-	static Vector3 Color2Vector(Vector3* v) { return Vector3(v->x / 255.0f, v->y / 255.0f, v->z / 255.0f); };
+
 	static void LoadMesh(TiXmlElement* node);
 	static void LoadZobObject(TiXmlElement* node, ZobObject* parent);
-	static void SaveZobObjectRecusrive(TiXmlElement* node, ZobObject* z);
-	static void SaveGlobals(TiXmlElement* node);
-	static void LoadGlobals(TiXmlElement* node);
+	static void SaveZobObjectRecusrive(TiXmlNode* node, ZobObject* z);
 	static std::string m_path;
 	static std::string m_file;
 	static std::vector<Mesh*> m_meshes;

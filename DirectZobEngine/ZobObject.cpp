@@ -177,6 +177,14 @@ void ZobObject::Update(const Matrix4x4& parentMatrix, const Matrix4x4& parentRSM
 	m_modelMatrix.SetRotation(&r);
 	m_modelMatrix.SetScale(&s);
 	m_modelMatrix.Mul(&parentMatrix);
+
+	m_left = Vector3(1, 0, 0);
+	m_forward = Vector3(0, 0, 1);
+	m_up = Vector3(0, 1, 0);
+	m_rotationScaleMatrix.Mul(&m_left);
+	m_rotationScaleMatrix.Mul(&m_forward);
+	m_rotationScaleMatrix.Mul(&m_up);
+
 	for (int i = 0; i < m_children.size(); i++)
 	{
 		ZobObject* z = m_children[i];
@@ -212,12 +220,9 @@ void ZobObject::QueueForDrawing(const Camera* camera, Core::Engine* engine)
 void ZobObject::DrawGizmos(const Camera* camera, Core::Engine* engine)
 {
 	uint c;
-	Vector3 x = Vector3(1, 0, 0);
-	Vector3 y = Vector3(0, 1, 0);
-	Vector3 z = Vector3(0, 0, 1);
-	m_rotationScaleMatrix.Mul(&x);
-	m_rotationScaleMatrix.Mul(&y);
-	m_rotationScaleMatrix.Mul(&z);
+	Vector3 x = m_left;
+	Vector3 y = m_up;
+	Vector3 z = m_forward;
 	x = x + m_translation;
 	y = y + m_translation;
 	z = z + m_translation;
@@ -342,7 +347,34 @@ void ZobObject::SetLightingMode(RenderOptions::eLightMode l)
 	m_renderOptions.LightMode(l);
 }
 
-void SaveToNode(TiXmlElement* e)
+TiXmlNode* ZobObject::SaveUnderNode(TiXmlNode* node)
 {
-
+	char tmpBuffer[256];
+	TiXmlElement* o = new TiXmlElement("ZobObject");
+	TiXmlElement p = TiXmlElement("Position");
+	TiXmlElement r = TiXmlElement("Rotation");
+	TiXmlElement s = TiXmlElement("Scale");
+	o->SetAttribute("name", GetName().c_str());
+	std::string meshName = GetMeshName();
+	p.SetDoubleAttribute("x", GetTransform().x);
+	p.SetDoubleAttribute("y", GetTransform().y);
+	p.SetDoubleAttribute("z", GetTransform().z);
+	r.SetDoubleAttribute("x", GetRotation().x);
+	r.SetDoubleAttribute("y", GetRotation().y);
+	r.SetDoubleAttribute("z", GetRotation().z);
+	s.SetDoubleAttribute("x", GetScale().x);
+	s.SetDoubleAttribute("y", GetScale().y);
+	s.SetDoubleAttribute("z", GetScale().z);
+	o->InsertEndChild(p);
+	o->InsertEndChild(r);
+	o->InsertEndChild(s);
+	if (meshName.length() > 0)
+	{
+		TiXmlElement m = TiXmlElement("Mesh");
+		TiXmlText t = TiXmlText(meshName.c_str());
+		m.InsertEndChild(t);
+		o->InsertEndChild(m);
+		o->SetAttribute("type", "mesh");
+	}
+	return o;
 }

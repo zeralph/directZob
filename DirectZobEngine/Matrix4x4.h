@@ -23,6 +23,7 @@ public:
 		v->z = fz;
 		v->w = fw;
 	};
+	void FromVectors(const Vector3& left, const Vector3& up, const Vector3& forward);
 	inline void SetData(uint i, uint j, float f) { m_data[i][j] = f; }
 	void SetScale(const float x, const float y, const float z);
 	void SetRotation(const float x, const float y, const float z);

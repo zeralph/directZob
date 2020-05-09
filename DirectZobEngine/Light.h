@@ -9,14 +9,16 @@ public:
 	Light(TiXmlElement* node, ZobObject* parent);
 	~Light();
 
-	const Vector3* GetColor() const { return &m_color; }
-	const float GetFallOffDistance() const { return m_distance; }
-	const float GetIntensity() const { return m_intensity; }
-	void SetActive(bool b) { m_active = b; }
-	inline bool IsActive() const { return m_active; }
+	void				DrawGizmos(const Camera* camera, Core::Engine* engine) override;
+	TiXmlNode*			SaveUnderNode(TiXmlNode* node) override;
 
-	void Draw(const Camera* camera, Core::Engine* engine);
+	const Vector3*		GetColor() const { return &m_color; }
+	const float			GetFallOffDistance() const { return m_distance; }
+	const float			GetIntensity() const { return m_intensity; }
+	void				SetActive(bool b) { m_active = b; }
+	inline bool			IsActive() const { return m_active; }
 
+	
 private:
 	Vector3 m_color;
 	float m_intensity;

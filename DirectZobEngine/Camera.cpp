@@ -29,13 +29,13 @@ Camera::~Camera()
 {
 }
 
-void Camera::Draw(const Camera* camera, Core::Engine* engine)
+void Camera::DrawGizmos(const Camera* camera, Core::Engine* engine)
 {
 	if (GetType() == ZOBGUID::type_editor)
 	{
 		return;
 	}
-	ZobObject::QueueForDrawing(camera, engine);
+	ZobObject::DrawGizmos(camera, engine);
 	Vector3 v0 = Vector3(-2, 1, 1);
 	Vector3 v1 = Vector3(2, 1, 1);
 	Vector3 v2 = Vector3(-2, -1, 1);
@@ -150,12 +150,14 @@ void Camera::Update(const Matrix4x4& parentMatrix, const Matrix4x4& parentRSMatr
 	ZobObject::Update(parentMatrix, parentRSMatrix);
 	m_rotationScaleMatrix.Identity();
 	m_rotationScaleMatrix.SetRotation(&m_rotation);
+	/*
 	m_left = Vector3(1, 0, 0);
 	m_forward = Vector3(0, 0, 1);
 	m_up = Vector3(0, 1, 0);
 	m_rotationScaleMatrix.Mul(&m_left);
 	m_rotationScaleMatrix.Mul(&m_forward);
 	m_rotationScaleMatrix.Mul(&m_up);
+	*/
 	g_update_camera_mutex.unlock();
 }
 
@@ -226,4 +228,19 @@ void Camera::setProjectionMatrix(const float angleOfView, const float width, con
 	m_projMatrix.SetData(3, 1, 0.0f);
 	m_projMatrix.SetData(3, 2, 1.0f);
 	m_projMatrix.SetData(3, 3, 0.0f);
+}
+
+TiXmlNode* Camera::SaveUnderNode(TiXmlNode* node)
+{
+	char tmpBuffer[256];
+	TiXmlNode* n = ZobObject::SaveUnderNode(node);
+	TiXmlElement* ne = (TiXmlElement*)n;
+	ne->SetAttribute("type", "camera");
+	TiXmlText t("");
+	TiXmlElement fov = TiXmlElement("Fov");
+	_snprintf_s(tmpBuffer, 256, "%.2f", GetFov());
+	t.SetValue(tmpBuffer);
+	fov.InsertEndChild(t);
+	ne->InsertEndChild(fov);
+	return n;
 }

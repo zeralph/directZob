@@ -11,24 +11,27 @@ public:
 
 	LightManager();
 	~LightManager();
-	void Setup(Vector3* fogColor, Vector3* ambientColor, Vector3* clearColor, float fogDistance, float fogDensity, FogType fogType);
-	void ReInitGlobalSettings();
-	void AddLight(Light* l);
-	Light* CreateLight();
-	Light* CreatePointLight(std::string& name, Vector3 position, Vector3 color, float intensity, float distance, ZobObject* parent);
+
+	void						Setup(Vector3* fogColor, Vector3* ambientColor, Vector3* clearColor, float fogDistance, float fogDensity, FogType fogType);
+	void						ReInitGlobalSettings();
+	void						AddLight(Light* l);
+	Light*						CreateLight();
+	Light*						CreatePointLight(std::string& name, Vector3 position, Vector3 color, float intensity, float distance, ZobObject* parent);
 	const std::vector<Light*>*  GetActiveLights() const;
-	Light* GetLight(const std::string& name) const;
-	const Vector3* GetAmbientColor() const { return &m_ambientColor; };
-	const Vector3* GetFogColor() const { return &m_fogColor; };
-	const Vector3* GetClearColor() const { return &m_clearColor; };
-	const float GetFogDistance() const { return m_fogDistance; };
-	const float GetAmbientColorIntensity() const { return m_ambientColorIntensity; };
-	const float GetFogDensity() const { return m_fogDensity; }
-	const FogType GetFogType() const { return m_fogType; }
-	void RemoveLight(Light* l);
-	const bool EnableLighting() const  { return m_lightingEnabled; }
-	void EnableLighting(bool b) { m_lightingEnabled = b; }
-	void UnloadAll();
+	Light*						GetLight(const std::string& name) const;
+	const Vector3*				GetAmbientColor() const { return &m_ambientColor; };
+	const Vector3*				GetFogColor() const { return &m_fogColor; };
+	const Vector3*				GetClearColor() const { return &m_clearColor; };
+	const float					GetFogDistance() const { return m_fogDistance; };
+	const float					GetAmbientColorIntensity() const { return m_ambientColorIntensity; };
+	const float					GetFogDensity() const { return m_fogDensity; }
+	const FogType				GetFogType() const { return m_fogType; }
+	void						RemoveLight(Light* l);
+	const bool					EnableLighting() const  { return m_lightingEnabled; }
+	void						EnableLighting(bool b) { m_lightingEnabled = b; }
+	void						UnloadAll();
+	void						LoadFromNode(TiXmlElement* node);
+	void						SaveUnderNode(TiXmlElement* node);
 private:
 	FogType m_fogType;
 	std::vector<Light*> m_lights;

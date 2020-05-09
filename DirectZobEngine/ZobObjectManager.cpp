@@ -139,7 +139,7 @@ void ZobObjectManager::GetZobObjectListInternal(const ZobObject* z, std::string&
 		str.append("{\"name\":\"");
 		str.append(z->GetName());
 		str.append("\"");
-		const std::vector<ZobObject*>* c = z->getChildren();
+		const std::vector<ZobObject*>* c = z->GetChildren();
 		str.append(",\"children\":[");
 		for (int i = 0; i < c->size(); i++)
 		{

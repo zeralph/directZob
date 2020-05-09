@@ -57,7 +57,7 @@ namespace Core
 		void ToggleZbufferOutput() { m_showZBuffer = !m_showZBuffer; }
 
 		void QueueLine(const Camera* camera, const Vector3* v1, const Vector3* v2, const uint c, bool bold);
-		void QueueEllipse(const Camera* camera, const Vector3* center, const Vector3* up, const float r1, const float r2, const uint c, bool bold);
+		void QueueEllipse(const Camera* camera, const Vector3* center, const Vector3* vectorUp, const float r1, const float r2, const uint c, bool bold);
 		bool ClipSegment(Vector3* a, Vector3* b);
 		int StartDrawingScene();
 		int SetDisplayedBuffer();

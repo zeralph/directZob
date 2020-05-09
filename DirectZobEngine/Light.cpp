@@ -35,14 +35,40 @@ Light::~Light()
 {
 }
 
-void Light::Draw(const Camera* camera, Core::Engine* engine)
+void Light::DrawGizmos(const Camera* camera, Core::Engine* engine)
 {
-	ZobObject::QueueForDrawing(camera, engine);
-	int c = ((int)(m_color.x * 255) << 16) + ((int)(m_color.y * 255) << 8) + (int)(m_color.z * 255);	
-	Vector3 up = Vector3(0, 1, 0);
-	engine->QueueEllipse(camera, &m_translation, &up, 1.0f, 1.0f, c, true);
-	Vector3 left = Vector3(1, 0, 0);
-	engine->QueueEllipse(camera, &m_translation, &left, 1.0f, 1.0f, c, true);
-	Vector3 forward = Vector3(0, 0, 1);
-	engine->QueueEllipse(camera, &m_translation, &forward, 1.0f, 1.0f, c, true);
+	ZobObject::DrawGizmos(camera, engine);
+	uint c = ((int)(m_color.x * 255) << 16) + ((int)(m_color.y * 255) << 8) + (int)(m_color.z * 255);	
+	engine->QueueEllipse(camera, &m_translation, &m_up, 1.0f, 1.0f, c, true);
+	engine->QueueEllipse(camera, &m_translation, &m_left, 1.0f, 1.0f, c, true);
+	engine->QueueEllipse(camera, &m_translation, &m_forward, 1.0f, 1.0f, c, true);
+}
+
+TiXmlNode* Light::SaveUnderNode(TiXmlNode* node)
+{
+	char tmpBuffer[256];
+	TiXmlNode* n = ZobObject::SaveUnderNode(node);
+	TiXmlElement* ne = (TiXmlElement*)n;
+	ne->SetAttribute("type", "pointlight");
+	Vector3 c = GetColor();
+	int r = (int)(c.x * 255.0f);
+	int g = (int)(c.y * 255.0f);
+	int b = (int)(c.z * 255.0f);
+	TiXmlElement color = TiXmlElement("Color");
+	color.SetAttribute("r", r);
+	color.SetAttribute("g", g);
+	color.SetAttribute("b", b);
+	ne->InsertEndChild(color);
+	TiXmlText t("");
+	TiXmlElement intensity = TiXmlElement("Intensity");
+	_snprintf_s(tmpBuffer, 256, "%.2f", GetIntensity());
+	t.SetValue(tmpBuffer);
+	intensity.InsertEndChild(t);
+	ne->InsertEndChild(intensity);
+	TiXmlElement fallOff = TiXmlElement("FallOffDistance");
+	_snprintf_s(tmpBuffer, 256, "%.2f", GetFallOffDistance());
+	t.SetValue(tmpBuffer);
+	fallOff.InsertEndChild(t);
+	ne->InsertEndChild(fallOff);
+	return n;
 }

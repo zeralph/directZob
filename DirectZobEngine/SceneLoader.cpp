@@ -53,141 +53,6 @@ void SceneLoader::LoadZobObject(TiXmlElement* node, ZobObject* parent)
 	}
 }
 
-void SceneLoader::SaveGlobals(TiXmlElement* node)
-{
-	LightManager* lm = DirectZob::GetInstance()->GetLightManager();
-	Vector3 ambient = lm->GetAmbientColor();
-	ambient = Vector2Color(&ambient);
-	TiXmlText t("");
-	TiXmlElement e = TiXmlElement("AmbientColor");
-	e.SetAttribute("r", ambient.x);
-	e.SetAttribute("g", ambient.y);
-	e.SetAttribute("b", ambient.z);
-	node->InsertEndChild(e);
-	Vector3 fogColor = lm->GetFogColor();
-	fogColor = Vector2Color(&fogColor);
-	e = TiXmlElement("FogColor");
-	e.SetAttribute("r", fogColor.x);
-	e.SetAttribute("g", fogColor.y);
-	e.SetAttribute("b", fogColor.z);
-	node->InsertEndChild(e);
-	Vector3 clearColor = lm->GetClearColor();
-	clearColor = Vector2Color(&clearColor);
-	e = TiXmlElement("ClearColor");
-	e.SetAttribute("r", clearColor.x);
-	e.SetAttribute("g", clearColor.y);
-	e.SetAttribute("b", clearColor.z);
-	node->InsertEndChild(e);
-	e = TiXmlElement("FogDensity");
-	_snprintf_s(tmpBuffer, 256, "%.2f", lm->GetFogDensity());
-	t.SetValue(tmpBuffer);
-	e.InsertEndChild(t);
-	node->InsertEndChild(e);
-	e = TiXmlElement("FogDistance");
-	_snprintf_s(tmpBuffer, 256, "%.2f", lm->GetFogDistance());
-	t.SetValue(tmpBuffer);
-	e.InsertEndChild(t);
-	node->InsertEndChild(e);
-	e = TiXmlElement("FogType");
-	t.SetValue("");
-	switch (lm->GetFogType())
-	{
-		case FogType_Exp:
-			t.SetValue("exp");
-			break;
-		case FogType_Exp2:
-			t.SetValue("exp2");
-			break;
-		case FogType_Linear:
-			t.SetValue("linear");
-			break;
-		case FogType_NoFog:
-		default:
-			break;
-	}
-	e.InsertEndChild(t);
-	node->InsertEndChild(e);
-}
-
-void SceneLoader::LoadGlobals(TiXmlElement* node)
-{
-	if (node)
-	{
-		LightManager* lm = DirectZob::GetInstance()->GetLightManager();
-		TiXmlElement* e; 
-		Vector3 ambient = lm->GetAmbientColor();
-		e = node->FirstChildElement("AmbientColor");
-		if (e)
-		{
-			float x = atof(e->Attribute("r"));
-			float y = atof(e->Attribute("g"));
-			float z = atof(e->Attribute("b"));
-			ambient = Vector3(x, y, z);
-		}
-		Vector3 fog = lm->GetFogColor();
-		e = node->FirstChildElement("FogColor");
-		if (e)
-		{
-			float x = atof(e->Attribute("r"));
-			float y = atof(e->Attribute("g"));
-			float z = atof(e->Attribute("b"));
-			fog = Vector3(x, y, z );
-		}
-		e = node->FirstChildElement("ClearColor");
-		Vector3 clear = lm->GetClearColor();
-		if (e)
-		{
-			float x = atof(e->Attribute("r"));
-			float y = atof(e->Attribute("g"));
-			float z = atof(e->Attribute("b"));
-			clear = Vector3(x, y, z);
-		}
-		e = node->FirstChildElement("FogDensity");
-		float fogDensity = lm->GetFogDensity();
-		if (e)
-		{
-			fogDensity = atof(e->GetText());
-		}
-		e = node->FirstChildElement("FogDistance");
-		float FogDistance = lm->GetFogDistance();
-		if (e)
-		{
-			FogDistance = atof(e->GetText());
-		}
-		e = node->FirstChildElement("FogType");
-		FogType fogType = lm->GetFogType();
-		if (e)
-		{
-			std::string type = std::string(e->GetText());
-			if (type == "linear")
-			{
-				fogType = FogType::FogType_Linear;
-			}
-			else if (type == "exp")
-			{
-				fogType = FogType::FogType_Exp;
-			}
-			else if (type == "exp2")
-			{
-				fogType = FogType::FogType_Exp2;
-			}
-			else 
-			{
-				fogType = FogType::FogType_NoFog;
-			}
-		}
-		fog /= 255.0f;
-		ambient /= 255.0f;
-		clear /= 255.0f;
-		lm->Setup(&fog, &ambient, &clear, FogDistance, fogDensity, fogType);
-		/*
-		int x = 320;
-		int y = 240;
-		DirectZob::GetInstance()->GetEngine()->Resize(x, y);
-		*/
-	}
-}
-
 void SceneLoader::UnloadScene()
 {
 	MeshManager* meshManager = DirectZob::GetInstance()->GetMeshManager();
@@ -249,7 +114,7 @@ void SceneLoader::LoadScene(std::string& path, std::string& file)
 			LoadMesh(e);
 		}
 		TiXmlElement* scene = root->FirstChildElement("Scene");
-		LoadGlobals(scene->FirstChildElement("Globals"));
+		DirectZob::GetInstance()->GetLightManager()->LoadFromNode(scene->FirstChildElement("Globals"));
 		for (TiXmlElement* e = scene->FirstChildElement("ZobObject"); e != NULL; e = e->NextSiblingElement("ZobObject"))
 		{
 			LoadZobObject(e, NULL);
@@ -288,10 +153,10 @@ void SceneLoader::SaveScene(std::string &path, std::string &file)
 		meshes.InsertEndChild(e);
 	}
 	root->InsertEndChild(meshes);
-	TiXmlElement globals = TiXmlElement("Globals");
-	SaveGlobals(&globals);
-	root->InsertEndChild(globals);
 	TiXmlElement scene = TiXmlElement("Scene");
+	TiXmlElement globals = TiXmlElement("Globals");
+	DirectZob::GetInstance()->GetLightManager()->SaveUnderNode(&globals);
+	scene.InsertEndChild(globals);	
 	ZobObject* rootObj = zobObjectManager->GetRootObject();
 	for (int i = 0; i < rootObj->GetNbChildren(); i++)
 	{
@@ -304,84 +169,16 @@ void SceneLoader::SaveScene(std::string &path, std::string &file)
 	}
 }
 
-void SceneLoader::SaveZobObjectRecusrive(TiXmlElement* node, ZobObject* z)
+void SceneLoader::SaveZobObjectRecusrive(TiXmlNode* node, ZobObject* z)
 {
 	if (z->GetType() == ZOBGUID::type_editor)
 	{
 		return;
 	}
-	TiXmlElement o = TiXmlElement("ZobObject");
-	TiXmlElement p = TiXmlElement("Position");
-	TiXmlElement r = TiXmlElement("Rotation");
-	TiXmlElement s = TiXmlElement("Scale");
-	o.SetAttribute("name", z->GetName().c_str());
-	std::string meshName = z->GetMeshName();
-	p.SetDoubleAttribute("x", z->GetTransform().x);
-	p.SetDoubleAttribute("y", z->GetTransform().y);
-	p.SetDoubleAttribute("z", z->GetTransform().z);
-	r.SetDoubleAttribute("x", z->GetRotation().x);
-	r.SetDoubleAttribute("y", z->GetRotation().y);
-	r.SetDoubleAttribute("z", z->GetRotation().z);
-	s.SetDoubleAttribute("x", z->GetScale().x);
-	s.SetDoubleAttribute("y", z->GetScale().y);
-	s.SetDoubleAttribute("z", z->GetScale().z);
-	o.InsertEndChild(p);
-	o.InsertEndChild(r);
-	o.InsertEndChild(s);
-	if (meshName.length() > 0)
-	{
-		TiXmlElement m = TiXmlElement("Mesh");
-		TiXmlText t = TiXmlText(meshName.c_str());
-		m.InsertEndChild(t);
-		o.InsertEndChild(m);
-		o.SetAttribute("type", "mesh");
-	}
-	else if (z->GetSubType() == ZOBGUID::subtype_zobCamera)
-	{
-		Camera* c = (Camera*)z;
-		if (c)
-		{
-			o.SetAttribute("type", "camera");
-			TiXmlText t("");
-			TiXmlElement fov = TiXmlElement("Fov");
-			_snprintf_s(tmpBuffer, 256, "%.2f", c->GetFov());
-			t.SetValue(tmpBuffer);
-			fov.InsertEndChild(t);
-			o.InsertEndChild(fov);
-			//targetting ....
-		}
-	}
-	else if (z->GetSubType() == ZOBGUID::subtype_zobLight)
-	{
-		Light* l = (Light*)z;
-		if (l)
-		{
-			o.SetAttribute("type", "pointlight");
-			Vector3 c = l->GetColor();
-			int r = (int)(c.x * 255.0f);
-			int g = (int)(c.y * 255.0f);
-			int b = (int)(c.z * 255.0f);
-			TiXmlElement color = TiXmlElement("Color");
-			color.SetAttribute("r", r);
-			color.SetAttribute("g", g);
-			color.SetAttribute("b", b);
-			o.InsertEndChild(color);
-			TiXmlText t("");
-			TiXmlElement intensity = TiXmlElement("Intensity");
-			_snprintf_s(tmpBuffer, 256, "%.2f", l->GetIntensity());
-			t.SetValue(tmpBuffer);
-			intensity.InsertEndChild(t);
-			o.InsertEndChild(intensity);
-			TiXmlElement fallOff = TiXmlElement("FallOffDistance");
-			_snprintf_s(tmpBuffer, 256, "%.2f", l->GetFallOffDistance());
-			t.SetValue(tmpBuffer);
-			fallOff.InsertEndChild(t);
-			o.InsertEndChild(fallOff);
-		}
-	}
+	TiXmlNode* newNode = z->SaveUnderNode(node);
 	for (int i = 0; i < z->GetNbChildren(); i++)
 	{
-		SaveZobObjectRecusrive(&o, z->GetChild(i));
+		SaveZobObjectRecusrive(newNode, z->GetChild(i));
 	}
-	node->InsertEndChild(o);
+	node->InsertEndChild(*newNode);
 }

@@ -100,25 +100,139 @@ const std::vector<Light*>* LightManager::GetActiveLights() const
 	{
 		return NULL;
 	}
-	/*
-	if (m_lights.size() > 0)
+}
+
+void LightManager::LoadFromNode(TiXmlElement* node)
+{
+	if (node)
 	{
-		Light* l = m_lights[0];
-		Vector3 v =l->GetTransform() - position;
-		float d = v.sqrtLength();
-		for (int i = 1; i < m_lights.size(); i++)
+		TiXmlElement* e;
+		Vector3 ambient = GetAmbientColor();
+		e = node->FirstChildElement("AmbientColor");
+		if (e)
 		{
-			v = m_lights[i]->GetTransform()
-				- position;
-			float d2 = v.sqrtLength();
-			if (d2 < d)
+			float x = atof(e->Attribute("r"));
+			float y = atof(e->Attribute("g"));
+			float z = atof(e->Attribute("b"));
+			ambient = Vector3(x, y, z);
+		}
+		Vector3 fog = GetFogColor();
+		e = node->FirstChildElement("FogColor");
+		if (e)
+		{
+			float x = atof(e->Attribute("r"));
+			float y = atof(e->Attribute("g"));
+			float z = atof(e->Attribute("b"));
+			fog = Vector3(x, y, z);
+		}
+		e = node->FirstChildElement("ClearColor");
+		Vector3 clear = GetClearColor();
+		if (e)
+		{
+			float x = atof(e->Attribute("r"));
+			float y = atof(e->Attribute("g"));
+			float z = atof(e->Attribute("b"));
+			clear = Vector3(x, y, z);
+		}
+		e = node->FirstChildElement("FogDensity");
+		float fogDensity = GetFogDensity();
+		if (e)
+		{
+			fogDensity = atof(e->GetText());
+		}
+		e = node->FirstChildElement("FogDistance");
+		float FogDistance = GetFogDistance();
+		if (e)
+		{
+			FogDistance = atof(e->GetText());
+		}
+		e = node->FirstChildElement("FogType");
+		FogType fogType = GetFogType();
+		if (e)
+		{
+			std::string type = std::string(e->GetText() ? e->GetText():"");
+			if (type == "linear")
 			{
-				d = d2;
-				l = m_lights[i];
+				fogType = FogType::FogType_Linear;
+			}
+			else if (type == "exp")
+			{
+				fogType = FogType::FogType_Exp;
+			}
+			else if (type == "exp2")
+			{
+				fogType = FogType::FogType_Exp2;
+			}
+			else
+			{
+				fogType = FogType::FogType_NoFog;
 			}
 		}
-		return l;
+		fog /= 255.0f;
+		ambient /= 255.0f;
+		clear /= 255.0f;
+		Setup(&fog, &ambient, &clear, FogDistance, fogDensity, fogType);
+		/*
+		int x = 320;
+		int y = 240;
+		DirectZob::GetInstance()->GetEngine()->Resize(x, y);
+		*/
 	}
-	return NULL;
-	*/
+}
+
+void LightManager::SaveUnderNode(TiXmlElement* node)
+{
+	char tmpBuffer[256];
+	Vector3 ambient = GetAmbientColor();
+	ambient = Vector2Color(&ambient);
+	TiXmlText t("");
+	TiXmlElement e = TiXmlElement("AmbientColor");
+	e.SetAttribute("r", ambient.x);
+	e.SetAttribute("g", ambient.y);
+	e.SetAttribute("b", ambient.z);
+	node->InsertEndChild(e);
+	Vector3 fogColor = GetFogColor();
+	fogColor = Vector2Color(&fogColor);
+	e = TiXmlElement("FogColor");
+	e.SetAttribute("r", fogColor.x);
+	e.SetAttribute("g", fogColor.y);
+	e.SetAttribute("b", fogColor.z);
+	node->InsertEndChild(e);
+	Vector3 clearColor = GetClearColor();
+	clearColor = Vector2Color(&clearColor);
+	e = TiXmlElement("ClearColor");
+	e.SetAttribute("r", clearColor.x);
+	e.SetAttribute("g", clearColor.y);
+	e.SetAttribute("b", clearColor.z);
+	node->InsertEndChild(e);
+	e = TiXmlElement("FogDensity");
+	_snprintf_s(tmpBuffer, 256, "%.2f", GetFogDensity());
+	t.SetValue(tmpBuffer);
+	e.InsertEndChild(t);
+	node->InsertEndChild(e);
+	e = TiXmlElement("FogDistance");
+	_snprintf_s(tmpBuffer, 256, "%.2f", GetFogDistance());
+	t.SetValue(tmpBuffer);
+	e.InsertEndChild(t);
+	node->InsertEndChild(e);
+	e = TiXmlElement("FogType");
+	t.SetValue("");
+	switch (GetFogType())
+	{
+	case FogType_Exp:
+		t.SetValue("exp");
+		break;
+	case FogType_Exp2:
+		t.SetValue("exp2");
+		break;
+	case FogType_Linear:
+		t.SetValue("linear");
+		break;
+	case FogType_NoFog:
+	default:
+		t.SetValue("none");
+		break;
+	}
+	e.InsertEndChild(t);
+	node->InsertEndChild(e);
 }

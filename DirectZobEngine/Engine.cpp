@@ -339,41 +339,38 @@ void Engine::ClipSegmentToPlane(Vector3 &s0, Vector3 &s1, Vector3 &pp, Vector3 &
 	s1 = s0 + u;
 }
 
-void Engine::QueueEllipse(const Camera* camera, const Vector3* center, const Vector3* up, const float r1, const float r2, const uint c, bool bold)
+void Engine::QueueEllipse(const Camera* camera, const Vector3* center, const Vector3* vectorUp, const float r1, const float r2, const uint c, bool bold)
 {
-	int segs = 10;
+	int segs = 20;
+	float r = 0.0f;
+	float rot = (2.0f * M_PI) / (float)segs;
+	Vector3 a;
 	Matrix4x4 m;
-	Vector3 y = Vector3(0, 1, 0);
-	Vector3 x = Vector3(1, 0, 0);
-	if (y != up)
+	Vector3 up = vectorUp;
+	Vector3 baseUp = Vector3(0, 1, 0);
+	Vector3 left = Vector3(1, 0, 0);
+	Vector3 forward = Vector3(0, 0, 1);
+	if (up != baseUp)
 	{
-		x = Vector3::Cross(up, &y);
+		left = Vector3::Cross(&up, &baseUp);
 	}
-	Vector3 z = Vector3::Cross(&x, up);
-	y = up;
-	y.Normalize();
-	x.Normalize();
-	z.Normalize();
-	m.SetData(0,0, x.x);
-	m.SetData(0,1, y.x);
-	m.SetData(0,2, z.x);
-	m.SetData(1,0, x.y);
-	m.SetData(1,1, y.y);
-	m.SetData(1,2, z.y);
-	m.SetData(2,0, x.z);
-	m.SetData(2,1, y.z);
-	m.SetData(2,2, z.z);
-	Vector3 a = Vector3(r1, 0, 0);
-	Vector3 b = a;
-	float rot = 360.0f / (float)segs;
-	m.SetRotation(0, rot, 0);
+	//if (up != &left)
+	{
+		forward = Vector3::Cross(&left, &up);
+	}
+	left.Normalize();
+	up.Normalize();
+	forward.Normalize();
+	m.FromVectors(left, up, forward);
+	a = Vector3(r1 * cos(r), 0, r2 * sin(r));
 	m.Mul(&a);
 	a = a + center;
-	for(int i=0; i<segs; i++)
+	Vector3 b = a;
+	for(int i=1; i<=segs; i++)
 	{
+		r = rot * i;
 		b = a;
-		a = Vector3(r1, 0, 0);
-		m.SetRotation(0, rot, 0);
+		a = Vector3(r1 * cos(r), 0, r2 * sin(r));
 		m.Mul(&a);
 		a = a + center;
 		QueueLine(camera, &a, &b, c, bold);

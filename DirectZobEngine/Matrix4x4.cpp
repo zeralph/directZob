@@ -205,6 +205,29 @@ void Matrix4x4::SetRotationZ(const float r)
 	Mul(&tmp);
 }
 
+void Matrix4x4::FromVectors(const Vector3& left, const Vector3& up, const Vector3& forward)
+{
+	SetData(0, 0, left.x);
+	SetData(0, 1, up.x);
+	SetData(0, 2, forward.x);
+	SetData(0, 3, 0);//-p.x);
+
+	SetData(1, 0, left.y);
+	SetData(1, 1, up.y);
+	SetData(1, 2, forward.y);
+	SetData(1, 3, 0);//-p.y);
+
+	SetData(2, 0, left.z);
+	SetData(2, 1, up.z);
+	SetData(2, 2, forward.z);
+	SetData(2, 3, 0);//-p.z);
+
+	SetData(3, 0, 0);
+	SetData(3, 1, 0);
+	SetData(3, 2, 0);
+	SetData(3, 3, 1);
+}
+
 void Matrix4x4::InvertMatrix4(const Matrix4x4& m, Matrix4x4& im)
 {
 	float det;
