@@ -16,17 +16,17 @@ namespace CLI
 		CameraManagerWrapper();
 
 		array<System::String^>^ GetCameraList();
-		System::String^ GetCurrentCamera();
-		ManagedVector3^ GetCurrentCameraPosition();
-		ManagedVector3^ GetCurrentCameraTarget();
-		void SetCurrentCameraPosition(ManagedVector3^ p);
-		void RotateAroundAxis(float x, float y);
-		void Move(float x, float y);
-		void Zoom(float z);
-		void SetLookAt(ManagedVector3^ target);
-		void SetCurrentCamera(System::String^ name);
-		void CreateCamera();
-		void CreateEditorCamera();
+		System::String^ 		GetCurrentCamera();
+		ManagedVector3^ 		GetCurrentCameraPosition();
+		ManagedVector3^ 		GetCurrentCameraTarget();
+		void 					SetCurrentCameraPosition(ManagedVector3^ p);
+		void 					RotateAroundAxis(float x, float y);
+		void 					Move(float x, float y);
+		void 					Zoom(float z);
+		void 					SetLookAt(ManagedVector3^ target);
+		void 					SetCurrentCamera(System::String^ name);
+		void 					CreateCamera();
+		void 					CreateEditorCamera();
 	private:
 
 	};

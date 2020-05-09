@@ -22,7 +22,6 @@
                 'Camera.cpp',
                 'CameraManager.cpp',
                 'Color.cpp',
-                'Cube.cpp',
                 'DirectZob.cpp',
                 'Engine.cpp',
                 'Light.cpp',

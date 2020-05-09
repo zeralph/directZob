@@ -11,16 +11,16 @@ public:
 	CameraManager();
 	~CameraManager();
 
-	Camera* CreateCamera(ZobObject* parent);
-	Camera* CreateEditorCamera();
-	Camera* CreateCamera(std::string& name, float fov, ZobObject* parent);
-	Camera* GetCurrentCamera() {return m_curCam;}
-	Camera* GetCamera(std::string& name) const;
-	void AddCamera(Camera* c);
-	void UpdateAfter();
-	void SetNextCamera(std::string& name);
-	void RemoveCamera(Camera* c);
-	const std::vector<std::string> GetCameraList() const;
+	Camera* 						CreateCamera(ZobObject* parent);
+	Camera* 						CreateEditorCamera();
+	Camera* 						CreateCamera(std::string& name, float fov, ZobObject* parent);
+	Camera*					 		GetCurrentCamera() {return m_curCam;}
+	Camera* 						GetCamera(std::string& name) const;
+	void 							AddCamera(Camera* c);
+	void 							UpdateAfter();
+	void 							SetNextCamera(std::string& name);
+	void 							RemoveCamera(Camera* c);
+	const std::vector<std::string> 	GetCameraList() const;
 
 private:
 	std::vector<Camera*> m_cameras;

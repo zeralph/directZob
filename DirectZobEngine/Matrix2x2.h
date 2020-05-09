@@ -19,9 +19,9 @@ public:
 	void SetTranslation(const float x, const float y);
 	Vector2 GetScale() const { return Vector2(m_data[0][0], m_data[1][1]); }
 	Vector2 GetTranslation() const { return Vector2{ m_data[0][2], m_data[1][2] }; }
-	inline float GetValue(const int i, const int j) const { return m_data[i][j]; }
+	inline float 	GetValue(const int i, const int j) const { return m_data[i][j]; }
 
 private:
-	float m_data[3][3];
+	float 			m_data[3][3];
 };
 

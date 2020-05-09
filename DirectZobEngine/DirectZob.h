@@ -3,7 +3,6 @@
 #include <iostream>
 #include <algorithm>
 #include "Engine.h"
-#include "Cube.h"
 #include "Material.h"
 #include "Mesh.h"
 #include "text2D.h"

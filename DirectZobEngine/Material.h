@@ -13,10 +13,10 @@ public:
 	//Material(const std::string& path, const std::string& file, const std::string& name);
 	Material(const std::string& name, const Vector3* ambientColor, const Vector3* diffuseColor, const Texture* texture);
 	~Material();
-	inline const Texture* GetDiffuseTexture() const { return m_diffuseTexture; }
-	inline const Vector3* GetAmbientColor() const { return &m_ambientColor; }
-	inline const Vector3* GetDiffuseColor() const { return &m_diffuseColor; }
-	inline const std::string& GetName() const { return m_name; }
+	inline const Texture* 		GetDiffuseTexture() const { return m_diffuseTexture; }
+	inline const Vector3* 		GetAmbientColor() const { return &m_ambientColor; }
+	inline const Vector3* 		GetDiffuseColor() const { return &m_diffuseColor; }
+	inline const std::string& 	GetName() const { return m_name; }
 
 private:
 
