@@ -4,7 +4,30 @@
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
 #endif
-
+#ifdef LINUX
+    #define MAX_PATH 256
+    #include <unistd.h>
+	#define SLEEP(a) sleep(a/1000)
+	#define _snprintf_s(a,b,c,...) snprintf(a,b,c,__VA_ARGS__)
+	#define _vsnprintf_s(a,b,c,...) vsnprintf(a,b,c,__VA_ARGS__)
+    #define fopen_s(fp, fmt, mode)  ({\
+        *(fp)=fopen( (fmt), (mode));\
+        (*(fp) ) ? 0:errno;\
+    })
+#elif WINDOWS
+	#include <windows.h>
+	#define SLEEP(a) Sleep(a)
+#elif MACOS
+    #define MAX_PATH 256
+    #include <unistd.h>
+	#define SLEEP(a) sleep(a/1000)
+	#define _snprintf_s(a,b,c,...) snprintf(a,b,c,__VA_ARGS__)
+	#define _vsnprintf_s(a,b,c,...) vsnprintf(a,b,c,__VA_ARGS__)
+	#define fopen_s(fp, fmt, mode)  ({\
+        *(fp)=fopen( (fmt), (mode));\
+        (*(fp) ) ? 0:errno;\
+    })
+#endif //LINUX
 class  DirectZobType
 {
 public:
