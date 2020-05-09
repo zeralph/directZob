@@ -12,15 +12,15 @@
         <Mesh name="Residential Buildings 010.fbx" file="Residential Buildings 010.fbx" />
         <Mesh name="metric_plane.obj" file="metric_plane.obj" />
     </Meshes>
-    <Globals>
-        <AmbientColor r="102" g="102" b="102" />
-        <FogColor r="63" g="149" b="255" />
-        <ClearColor r="63" g="149" b="255" />
-        <FogDensity>2.00</FogDensity>
-        <FogDistance>500.00</FogDistance>
-        <FogType></FogType>
-    </Globals>
     <Scene>
+        <Globals>
+            <AmbientColor r="102" g="102" b="102" />
+            <FogColor r="63" g="149" b="255" />
+            <ClearColor r="63" g="149" b="255" />
+            <FogDensity>2.00</FogDensity>
+            <FogDistance>500.00</FogDistance>
+            <FogType>none</FogType>
+        </Globals>
         <ZobObject name="newObject_1" type="mesh">
             <Position x="-50" y="0" z="0" />
             <Rotation x="0" y="180" z="0" />
@@ -94,7 +94,7 @@
             <Fov>45.00</Fov>
         </ZobObject>
         <ZobObject name="Light_0" type="pointlight">
-            <Position x="0" y="10" z="0" />
+            <Position x="0" y="80" z="0" />
             <Rotation x="0" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
             <Color r="252" g="212" b="64" />

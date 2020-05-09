@@ -66,6 +66,13 @@ void DirectZob::NewScene()
 	g_render_mutex.unlock();
 }
 
+void DirectZob::Resize(int width, int height)
+{
+	g_render_mutex.lock();
+	m_engine->Resize(width, height);
+	g_render_mutex.unlock();
+}
+
 void DirectZob::Unload()
 {
 	g_render_mutex.lock();

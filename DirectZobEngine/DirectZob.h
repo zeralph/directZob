@@ -54,34 +54,34 @@ public :
 	DirectZob();
 	~DirectZob();
 
-	void Init(int width, int height, bool bEditorMode);
-	void LoadScene(std::string& path, std::string& file);
-	void Unload();
-	void SaveScene(std::string& path, std::string& file);
-	void SaveScene();
-	void NewScene();
-	bool CanFastSave();
+	void				Init(int width, int height, bool bEditorMode);
+	void				LoadScene(std::string& path, std::string& file);
+	void				Unload();
+	void				SaveScene(std::string& path, std::string& file);
+	void				SaveScene();
+	void				NewScene();
+	bool				CanFastSave();
+	void				Resize(int width, int height);
+	const float			GetFps() const { return m_fps; };
+	const float			GetRenderTime() const { return m_renderTime; };
+	const float			GetGeometryTime() const { return m_geometryTime; };
+	const float			GetFrameTime() const { return m_frameTime; };
+	const float			GetCopyTime() const { return m_copyTime; };
+	int					RunAFrame();
+	const uint*			GetBufferData() const { return m_engine->GetBufferData()->buffer; }
+	std::string			ExePath();
 
-	const float GetFps() const { return m_fps; };
-	const float GetRenderTime() const { return m_renderTime; };
-	const float GetGeometryTime() const { return m_geometryTime; };
-	const float GetFrameTime() const { return m_frameTime; };
-	const float GetCopyTime() const { return m_copyTime; };
-	int RunAFrame();
-	const uint* GetBufferData() const { return m_engine->GetBufferData()->buffer; }
-	std::string ExePath();
-
-	static DirectZob* GetInstance() { return DirectZob::singleton; }
-	Engine* GetEngine() const { return m_engine; }
-	CameraManager* GetCameraManager() const { return m_cameraManager; }
-	LightManager* GetLightManager() const { return m_lightManager; }
-	ZobObjectManager* GetZobObjectManager() const { return m_zobObjectManager; }
-	MeshManager* GetMeshManager() const { return m_meshManager; }
-	MaterialManager* GetMaterialManager() const { return m_materialManager;  }
-	Events* GetEventManager() { return m_events; }
-	static void LogInfo(const char* format, ...);
-	static void LogError(const char* format, ...);
-	static void LogWarning(const char* format, ...);
+	static DirectZob*	GetInstance() { return DirectZob::singleton; }
+	Engine*				GetEngine() const { return m_engine; }
+	CameraManager*		GetCameraManager() const { return m_cameraManager; }
+	LightManager*		GetLightManager() const { return m_lightManager; }
+	ZobObjectManager*	GetZobObjectManager() const { return m_zobObjectManager; }
+	MeshManager*		GetMeshManager() const { return m_meshManager; }
+	MaterialManager*	GetMaterialManager() const { return m_materialManager;  }
+	Events*				GetEventManager() { return m_events; }
+	static void			LogInfo(const char* format, ...);
+	static void			LogError(const char* format, ...);
+	static void			LogWarning(const char* format, ...);
 private:
 	
 	Events* m_events = NULL;

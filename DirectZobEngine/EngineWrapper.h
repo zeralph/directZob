@@ -18,7 +18,6 @@ namespace CLI
 		void WireFrame(bool b) { m_Instance->WireFrame(b); }
 		void ShowNormals(bool b) { m_Instance->ShowNormals(b); }
 		void SetRenderOutput(int r);
-		void Resize(int w, int h);
 	private:
 		//array<int>^ m_buffer;
 	};

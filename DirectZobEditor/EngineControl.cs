@@ -13,8 +13,10 @@ namespace DirectZobEditor
     public partial class EngineControl : UserControl
     {
         private CLI.EngineWrapper m_engineWrapper;
-        public EngineControl(CLI.EngineWrapper e)
+        private Form1 m_mainForm = null;
+        public EngineControl(Form1 f, CLI.EngineWrapper e)
         {
+            m_mainForm = f;
             InitializeComponent();
             m_engineWrapper = e;
             showGrid.Checked = true;
@@ -51,7 +53,7 @@ namespace DirectZobEditor
             int h = 0;
             if(int.TryParse(sw, out w) && int.TryParse(sh, out h))
             {
-                m_engineWrapper.Resize(w, h);
+                m_mainForm.GetDirectZobWrapper().Resize(w, h);
                 Form1.GetMainForm().GetEngineWindow().ResizeRenderWindow();
             }
         }

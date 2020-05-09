@@ -56,7 +56,7 @@ namespace DirectZobEditor
             EngineRendererPanel.Controls.Add(m_engineWindow);
             m_zobObjectList = new ZobObjectListControl(this);
             ZobObjectListPanel.Controls.Add(m_zobObjectList);
-            m_engineControl = new EngineControl(m_engineWindow.GetEngineWrapper());
+            m_engineControl = new EngineControl(this, m_engineWindow.GetEngineWrapper());
             propertiesPanel.Controls.Add(m_engineControl);
             m_engineControl.Location = new Point(0, m_camControl.Height + 10);
             m_zobObjectControl = new ZobObjectControl(this);

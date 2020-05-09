@@ -76,5 +76,13 @@ namespace CLI
 		m_Instance->GetEventManager()->ClearEvents();
 		return arr;
 	}
+
+	void DirectZobWrapper::Resize(int w, int h)
+	{
+		if (w > 0 && h > 0 && w <= 1920 && h <= 1080)
+		{
+			m_Instance->Resize(w, h);
+		}
+	}
 }
 #endif //_WINDLL
