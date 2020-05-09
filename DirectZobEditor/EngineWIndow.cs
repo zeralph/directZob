@@ -35,6 +35,7 @@ namespace DirectZobEditor
         public EngineWindow(Form1 f, CLI.DirectZobWrapper directZobWrapper)
         {
             InitializeComponent();
+            this.Dock = DockStyle.Fill;
             m_mainForm = f;
             m_directZobWrapper = directZobWrapper;
             m_engineWrapper = new CLI.EngineWrapper();
@@ -78,7 +79,7 @@ namespace DirectZobEditor
             m_engineThread = new Thread(RunEngineThread);
             m_engineThread.IsBackground = true;
             UpdateEngineWindowDelegate = new UpdateEngineWindow(UpdateEngineWindowMethod);
-
+            EngineRender.SizeMode = PictureBoxSizeMode.Zoom;
             m_engineThread.Start();
             if (OnBeginFrame != null)
             {
@@ -106,7 +107,29 @@ namespace DirectZobEditor
                 IntPtr hwnd = EngineRender.Handle;
                 m_EngineGraphics = Graphics.FromHwnd(hwnd);
                 m_EngineGraphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-                m_EngineGraphics.DrawImage(m_engineBitmap, 0, 0, EngineRender.Width, EngineRender.Height);
+
+
+                int w = EngineRender.Width;
+                int h = EngineRender.Height;
+                float hFactor = (float)m_engineBitmap.Height / (float)EngineRenderPanel.Height;
+                float wFactor = (float)m_engineBitmap.Width / (float)EngineRenderPanel.Width;
+                if (hFactor > wFactor)
+                {           
+                    h = EngineRenderPanel.Height;
+                    w = (int)((float)m_engineBitmap.Width / (float)m_engineBitmap.Height* h);
+                }
+                else
+                {
+                    w = EngineRenderPanel.Width;
+                    h = (int)((float)m_engineBitmap.Height / (float)m_engineBitmap.Width * w);
+                }
+                EngineRender.Width = w;
+                EngineRender.Height = h;
+                m_EngineGraphics.DrawImage(m_engineBitmap, 0, 0, w, h);
+                int x = (EngineRenderPanel.Width - w) / 2;
+                int y = (EngineRenderPanel.Height - h) / 2;
+                EngineRender.Location = new Point(x, y);
+
             }
             m_mainForm.UpdateAfterEngine();
         }

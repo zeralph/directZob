@@ -40,6 +40,7 @@
             this.loadTextureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadMeshToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.createLightToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.createCameraToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.FirstPanelSplitter = new System.Windows.Forms.SplitContainer();
             this.ZobObjectListPanel = new System.Windows.Forms.Panel();
             this.SecondPanelSplitter = new System.Windows.Forms.SplitContainer();
@@ -50,7 +51,7 @@
             this.textLog = new System.Windows.Forms.RichTextBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.propertiesPanel = new System.Windows.Forms.Panel();
-            this.createCameraToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.EngineControlsFlowLayout = new System.Windows.Forms.FlowLayoutPanel();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FirstPanelSplitter)).BeginInit();
             this.FirstPanelSplitter.Panel1.SuspendLayout();
@@ -66,6 +67,7 @@
             this.ThirdPanelSPlitter.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            this.propertiesPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // statusStrip1
@@ -103,35 +105,35 @@
             // newToolStripMenuItem
             // 
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.newToolStripMenuItem.Text = "New scene";
             this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
             // 
             // loadSceneToolStripMenuItem
             // 
             this.loadSceneToolStripMenuItem.Name = "loadSceneToolStripMenuItem";
-            this.loadSceneToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.loadSceneToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.loadSceneToolStripMenuItem.Text = "Load scene ...";
             this.loadSceneToolStripMenuItem.Click += new System.EventHandler(this.loadSceneToolStripMenuItem_Click);
             // 
             // saveSceneAsToolStripMenuItem
             // 
             this.saveSceneAsToolStripMenuItem.Name = "saveSceneAsToolStripMenuItem";
-            this.saveSceneAsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveSceneAsToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.saveSceneAsToolStripMenuItem.Text = "Save scene as ...";
             this.saveSceneAsToolStripMenuItem.Click += new System.EventHandler(this.saveSceneAsToolStripMenuItem_Click);
             // 
             // saveSceneToolStripMenuItem1
             // 
             this.saveSceneToolStripMenuItem1.Name = "saveSceneToolStripMenuItem1";
-            this.saveSceneToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.saveSceneToolStripMenuItem1.Size = new System.Drawing.Size(157, 22);
             this.saveSceneToolStripMenuItem1.Text = "Save scene";
             this.saveSceneToolStripMenuItem1.Click += new System.EventHandler(this.saveSceneToolStripMenuItem1_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.ExitToolStripMenuItem_Click);
             // 
@@ -149,23 +151,30 @@
             // loadTextureToolStripMenuItem
             // 
             this.loadTextureToolStripMenuItem.Name = "loadTextureToolStripMenuItem";
-            this.loadTextureToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.loadTextureToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
             this.loadTextureToolStripMenuItem.Text = "Load Texture ...";
             this.loadTextureToolStripMenuItem.Click += new System.EventHandler(this.LoadTextureToolStripMenuItem_Click);
             // 
             // loadMeshToolStripMenuItem
             // 
             this.loadMeshToolStripMenuItem.Name = "loadMeshToolStripMenuItem";
-            this.loadMeshToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.loadMeshToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
             this.loadMeshToolStripMenuItem.Text = "Load Mesh ...";
             this.loadMeshToolStripMenuItem.Click += new System.EventHandler(this.LoadMeshToolStripMenuItem_Click);
             // 
             // createLightToolStripMenuItem
             // 
             this.createLightToolStripMenuItem.Name = "createLightToolStripMenuItem";
-            this.createLightToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.createLightToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
             this.createLightToolStripMenuItem.Text = "Create Light ";
             this.createLightToolStripMenuItem.Click += new System.EventHandler(this.createLightToolStripMenuItem_Click);
+            // 
+            // createCameraToolStripMenuItem
+            // 
+            this.createCameraToolStripMenuItem.Name = "createCameraToolStripMenuItem";
+            this.createCameraToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
+            this.createCameraToolStripMenuItem.Text = "Create Camera";
+            this.createCameraToolStripMenuItem.Click += new System.EventHandler(this.createCameraToolStripMenuItem_Click);
             // 
             // FirstPanelSplitter
             // 
@@ -209,6 +218,8 @@
             // 
             // SecondPanelSplitter.Panel2
             // 
+            this.SecondPanelSplitter.Panel2.AutoScroll = true;
+            this.SecondPanelSplitter.Panel2.AutoScrollMinSize = new System.Drawing.Size(300, 0);
             this.SecondPanelSplitter.Panel2.Controls.Add(this.propertiesPanel);
             this.SecondPanelSplitter.Size = new System.Drawing.Size(1074, 750);
             this.SecondPanelSplitter.SplitterDistance = 700;
@@ -285,18 +296,25 @@
             // 
             // propertiesPanel
             // 
+            this.propertiesPanel.Controls.Add(this.EngineControlsFlowLayout);
             this.propertiesPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.propertiesPanel.Location = new System.Drawing.Point(0, 0);
+            this.propertiesPanel.MinimumSize = new System.Drawing.Size(300, 0);
             this.propertiesPanel.Name = "propertiesPanel";
             this.propertiesPanel.Size = new System.Drawing.Size(368, 748);
             this.propertiesPanel.TabIndex = 0;
             // 
-            // createCameraToolStripMenuItem
+            // EngineControlsFlowLayout
             // 
-            this.createCameraToolStripMenuItem.Name = "createCameraToolStripMenuItem";
-            this.createCameraToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.createCameraToolStripMenuItem.Text = "Create Camera";
-            this.createCameraToolStripMenuItem.Click += new System.EventHandler(this.createCameraToolStripMenuItem_Click);
+            this.EngineControlsFlowLayout.AutoScroll = true;
+            this.EngineControlsFlowLayout.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.EngineControlsFlowLayout.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.EngineControlsFlowLayout.Location = new System.Drawing.Point(0, 0);
+            this.EngineControlsFlowLayout.Name = "EngineControlsFlowLayout";
+            this.EngineControlsFlowLayout.Size = new System.Drawing.Size(368, 748);
+            this.EngineControlsFlowLayout.TabIndex = 0;
+            this.EngineControlsFlowLayout.WrapContents = false;
+            this.EngineControlsFlowLayout.Resize += new System.EventHandler(this.EngineControlsFlowLayout_Resize);
             // 
             // Form1
             // 
@@ -328,6 +346,7 @@
             this.ThirdPanelSPlitter.ResumeLayout(false);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
+            this.propertiesPanel.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -357,6 +376,7 @@
         private System.Windows.Forms.ToolStripMenuItem loadMeshToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem createLightToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem createCameraToolStripMenuItem;
+        private System.Windows.Forms.FlowLayoutPanel EngineControlsFlowLayout;
     }
 }
 

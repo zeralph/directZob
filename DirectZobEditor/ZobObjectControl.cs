@@ -23,40 +23,8 @@ namespace DirectZobEditor
             m_meshManagerWrapper = new CLI.MeshManagerWrapper();
             m_mainForm.OnNewScene += new EventHandler(OnNewScene);
             ClearValues();
-            RefreshMeshList();
             ZobObjectListControl z = m_mainForm.GetZobObjectListControl();
-            z.OnObjectSelected += new ZobObjectListControl.OnObjectSelectedHandler(OnZobObjectSelectionChanged);
             checkBoxLinkScale.Checked = true;
-            tabZobObject.Controls.Clear();
-        }
-
-        public void OnZobObjectSelectionChanged(object s, ObjectSelectionEventArg e)
-        {
-            m_zobObjectWrapper = e.newZobObject;
-            if (m_zobObjectWrapper != null && m_zobObjectWrapper.IsValid())
-            {
-                SetValues();
-                RefreshMeshList();
-                if(m_zobObjectWrapper.IsLight())
-                {
-                    tabZobObject.Controls.Clear();
-                    tabZobObject.Controls.Add(tabLight);
-                }
-                else if (m_zobObjectWrapper.IsCamera())
-                {
-                    tabZobObject.Controls.Clear();
-                    tabZobObject.Controls.Add(tabCamera);
-                }
-                else
-                {
-                    tabZobObject.Controls.Clear();
-                    tabZobObject.Controls.Add(tabMesh);
-                }
-            }
-            else
-            {
-                ClearValues();
-            }
         }
 
         private void SetValues()
@@ -71,7 +39,6 @@ namespace DirectZobEditor
             zobScaleX.Text = String.Format("{0:0.000}", m_zobObjectWrapper.GetScale().x);
             zobScaleY.Text = String.Format("{0:0.000}", m_zobObjectWrapper.GetScale().y);
             zobScaleZ.Text = String.Format("{0:0.000}", m_zobObjectWrapper.GetScale().z);   
-            LightingModeBox.SelectedIndex = m_zobObjectWrapper.GetLightingMode();
         }
         private void ClearValues()
         {
@@ -165,23 +132,6 @@ namespace DirectZobEditor
             }
         }
 
-        private void RefreshMeshList()
-        {
-            meshList.Items.Clear();
-            string s = m_meshManagerWrapper.GetMeshList();
-            List<JSONMesh> z = JsonConvert.DeserializeObject<List<JSONMesh>>(s);
-            meshList.Items.Add("");
-            for (int i = 0; i < z.Count; i++)
-            {
-                meshList.Items.Add(z[i].name);
-            }
-            if(m_zobObjectWrapper != null && m_zobObjectWrapper.IsValid())
-            {
-                s = m_zobObjectWrapper.GetMeshName();
-                meshList.SelectedItem = s;
-            }
-        }
-
         private void UpdateFromTextBoxes(object sender, EventArgs e)
         {
             if(checkBoxLinkScale.Checked)
@@ -237,31 +187,10 @@ namespace DirectZobEditor
             public string name { get; set; }
         }
 
-        private void MeshList_SelectedValueChanged(object sender, EventArgs e)
-        {
-            if(m_zobObjectWrapper != null && m_zobObjectWrapper.IsValid())
-            {
-                m_zobObjectWrapper.SetMesh(meshList.SelectedItem.ToString());
-            }
-        }
-
         private void OnNewScene(object s, EventArgs e)
         {
             m_zobObjectWrapper = null;
             UpdateValues();
-        }
-
-        private void LightingModeBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (m_zobObjectWrapper != null && m_zobObjectWrapper.IsValid())
-            {
-                m_zobObjectWrapper.SetLightingMode(LightingModeBox.SelectedIndex);
-            }
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            colorDialog1.ShowDialog();
         }
 
         private void buttonLinkScale_Click(object sender, EventArgs e)

@@ -37,14 +37,18 @@
             this.removeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rebaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ZoomToStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.groupBox1.SuspendLayout();
             this.TreeNodeRightClick.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
+            this.splitContainer1.Panel1.SuspendLayout();
+            this.splitContainer1.Panel2.SuspendLayout();
+            this.splitContainer1.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.BtnForceRefresh);
-            this.groupBox1.Controls.Add(this.ZobObjectTree);
+            this.groupBox1.Controls.Add(this.splitContainer1);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox1.Location = new System.Drawing.Point(0, 0);
             this.groupBox1.Name = "groupBox1";
@@ -55,7 +59,7 @@
             // 
             // BtnForceRefresh
             // 
-            this.BtnForceRefresh.Location = new System.Drawing.Point(6, 29);
+            this.BtnForceRefresh.Location = new System.Drawing.Point(3, 3);
             this.BtnForceRefresh.Name = "BtnForceRefresh";
             this.BtnForceRefresh.Size = new System.Drawing.Size(188, 23);
             this.BtnForceRefresh.TabIndex = 1;
@@ -65,9 +69,10 @@
             // 
             // ZobObjectTree
             // 
-            this.ZobObjectTree.Location = new System.Drawing.Point(6, 58);
+            this.ZobObjectTree.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ZobObjectTree.Location = new System.Drawing.Point(0, 0);
             this.ZobObjectTree.Name = "ZobObjectTree";
-            this.ZobObjectTree.Size = new System.Drawing.Size(188, 836);
+            this.ZobObjectTree.Size = new System.Drawing.Size(194, 838);
             this.ZobObjectTree.TabIndex = 0;
             this.ZobObjectTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.ZobObjectTree_AfterSelect);
             this.ZobObjectTree.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ZobObjectTree_MouseClick);
@@ -80,7 +85,7 @@
             this.rebaseToolStripMenuItem,
             this.ZoomToStripMenuItem});
             this.TreeNodeRightClick.Name = "contextMenuStrip1";
-            this.TreeNodeRightClick.Size = new System.Drawing.Size(181, 114);
+            this.TreeNodeRightClick.Size = new System.Drawing.Size(124, 92);
             this.TreeNodeRightClick.Closed += new System.Windows.Forms.ToolStripDropDownClosedEventHandler(this.TreeNodeRightClick_Closed);
             this.TreeNodeRightClick.Opening += new System.ComponentModel.CancelEventHandler(this.TreeNodeRightClick_Opening);
             this.TreeNodeRightClick.Opened += new System.EventHandler(this.TreeNodeRightClick_Opened);
@@ -88,29 +93,47 @@
             // addToolStripMenuItem
             // 
             this.addToolStripMenuItem.Name = "addToolStripMenuItem";
-            this.addToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.addToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.addToolStripMenuItem.Text = "Add ...";
             this.addToolStripMenuItem.Click += new System.EventHandler(this.AddToolStripMenuItem_Click);
             // 
             // removeToolStripMenuItem
             // 
             this.removeToolStripMenuItem.Name = "removeToolStripMenuItem";
-            this.removeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.removeToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.removeToolStripMenuItem.Text = "Remove";
             this.removeToolStripMenuItem.Click += new System.EventHandler(this.RemoveToolStripMenuItem_Click);
             // 
             // rebaseToolStripMenuItem
             // 
             this.rebaseToolStripMenuItem.Name = "rebaseToolStripMenuItem";
-            this.rebaseToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.rebaseToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.rebaseToolStripMenuItem.Text = "Rebase ...";
             // 
             // ZoomToStripMenuItem
             // 
             this.ZoomToStripMenuItem.Name = "ZoomToStripMenuItem";
-            this.ZoomToStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.ZoomToStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.ZoomToStripMenuItem.Text = "Zoom to";
             this.ZoomToStripMenuItem.Click += new System.EventHandler(this.ZoomToStripMenuItem_Click);
+            // 
+            // splitContainer1
+            // 
+            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer1.Location = new System.Drawing.Point(3, 16);
+            this.splitContainer1.Name = "splitContainer1";
+            this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainer1.Panel1
+            // 
+            this.splitContainer1.Panel1.Controls.Add(this.BtnForceRefresh);
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.Controls.Add(this.ZobObjectTree);
+            this.splitContainer1.Size = new System.Drawing.Size(194, 881);
+            this.splitContainer1.SplitterDistance = 39;
+            this.splitContainer1.TabIndex = 2;
             // 
             // ZobObjectListControl
             // 
@@ -121,6 +144,10 @@
             this.Size = new System.Drawing.Size(200, 900);
             this.groupBox1.ResumeLayout(false);
             this.TreeNodeRightClick.ResumeLayout(false);
+            this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
+            this.splitContainer1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -135,5 +162,6 @@
         private System.Windows.Forms.ToolStripMenuItem rebaseToolStripMenuItem;
         private System.Windows.Forms.Button BtnForceRefresh;
         private System.Windows.Forms.ToolStripMenuItem ZoomToStripMenuItem;
+        private System.Windows.Forms.SplitContainer splitContainer1;
     }
 }

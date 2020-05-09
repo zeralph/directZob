@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.showNormals = new System.Windows.Forms.CheckBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.engineSetSize = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -37,8 +39,6 @@
             this.comboRendering = new System.Windows.Forms.ComboBox();
             this.wireframe = new System.Windows.Forms.CheckBox();
             this.showGrid = new System.Windows.Forms.CheckBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.showNormals = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -57,10 +57,31 @@
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox1.Location = new System.Drawing.Point(0, 0);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(199, 194);
+            this.groupBox1.Size = new System.Drawing.Size(199, 138);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Engine";
+            // 
+            // showNormals
+            // 
+            this.showNormals.AutoSize = true;
+            this.showNormals.Location = new System.Drawing.Point(92, 36);
+            this.showNormals.Name = "showNormals";
+            this.showNormals.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.showNormals.Size = new System.Drawing.Size(92, 17);
+            this.showNormals.TabIndex = 9;
+            this.showNormals.Text = "Show normals";
+            this.showNormals.UseVisualStyleBackColor = true;
+            this.showNormals.CheckedChanged += new System.EventHandler(this.showNormals_CheckedChanged);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(20, 80);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(35, 13);
+            this.label3.TabIndex = 8;
+            this.label3.Text = "Buffer";
             // 
             // engineSetSize
             // 
@@ -142,34 +163,13 @@
             this.showGrid.UseVisualStyleBackColor = true;
             this.showGrid.CheckedChanged += new System.EventHandler(this.ShowGrid_CheckedChanged);
             // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(20, 80);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(35, 13);
-            this.label3.TabIndex = 8;
-            this.label3.Text = "Buffer";
-            // 
-            // showNormals
-            // 
-            this.showNormals.AutoSize = true;
-            this.showNormals.Location = new System.Drawing.Point(92, 36);
-            this.showNormals.Name = "showNormals";
-            this.showNormals.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.showNormals.Size = new System.Drawing.Size(92, 17);
-            this.showNormals.TabIndex = 9;
-            this.showNormals.Text = "Show normals";
-            this.showNormals.UseVisualStyleBackColor = true;
-            this.showNormals.CheckedChanged += new System.EventHandler(this.showNormals_CheckedChanged);
-            // 
             // EngineControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.groupBox1);
             this.Name = "EngineControl";
-            this.Size = new System.Drawing.Size(199, 194);
+            this.Size = new System.Drawing.Size(199, 138);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);

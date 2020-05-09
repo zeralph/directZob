@@ -30,6 +30,7 @@ namespace DirectZobEditor
         private EngineWindow m_engineWindow;
         private EngineControl m_engineControl;
         private ZobObjectControl m_zobObjectControl;
+        private SceneControl m_sceneControl;
         private bool m_ctrlPressed = false;
 
         private string m_path;
@@ -48,20 +49,25 @@ namespace DirectZobEditor
             m_meshManagerWrapper = new CLI.MeshManagerWrapper();
             m_lightManagerWrapper = new CLI.LightManagerWrapper();
             Application.ApplicationExit += new EventHandler(this.OnApplicationExit);
-
-            propertiesPanel.Width = 600;
+            //--
             m_camControl = new CameraControl(this);
-            propertiesPanel.Controls.Add(m_camControl);
+            EngineControlsFlowLayout.Controls.Add(m_camControl);
+            //--
             m_engineWindow = new EngineWindow(this, m_directZobWrapper);
             EngineRendererPanel.Controls.Add(m_engineWindow);
+            //--
             m_zobObjectList = new ZobObjectListControl(this);
             ZobObjectListPanel.Controls.Add(m_zobObjectList);
+            //--
+            m_sceneControl = new SceneControl();
+            EngineControlsFlowLayout.Controls.Add(m_sceneControl);
+            //--
             m_engineControl = new EngineControl(this, m_engineWindow.GetEngineWrapper());
-            propertiesPanel.Controls.Add(m_engineControl);
-            m_engineControl.Location = new Point(0, m_camControl.Height + 10);
+            EngineControlsFlowLayout.Controls.Add(m_engineControl);
+            //--
             m_zobObjectControl = new ZobObjectControl(this);
-            propertiesPanel.Controls.Add(m_zobObjectControl);
-            m_zobObjectControl.Location = new Point(0, m_engineControl.Location.Y + m_engineControl.Height + 10);
+            EngineControlsFlowLayout.Controls.Add(m_zobObjectControl);
+
             this.WindowState = FormWindowState.Maximized;
             m_directZobWrapper.NewScene();
             EventHandler handler = OnNewScene;
@@ -336,6 +342,18 @@ namespace DirectZobEditor
             if (null != handler)
             {
                 handler(this, EventArgs.Empty);
+            }
+        }
+
+        private void EngineControlsFlowLayout_Resize(object sender, EventArgs e)
+        {
+            FlowLayoutPanel fl = (FlowLayoutPanel)sender;
+            if(fl != null )
+            {
+                foreach (Control ctrl in fl.Controls)
+                {
+                    ctrl.Width = fl.Width - 15;
+                }
             }
         }
     }

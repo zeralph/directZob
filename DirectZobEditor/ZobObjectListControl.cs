@@ -32,6 +32,7 @@ namespace DirectZobEditor
             m_mainForm.OnSceneLoaded += new EventHandler(OnSceneChanged);
             m_mainForm.OnSceneUpdated += new EventHandler(OnSceneUpdated);
             m_mainForm.GetEngineWindow().OnEndFrame += new EventHandler(OnFrameEnd);
+            this.Dock = DockStyle.Fill;
         }
 
         public CLI.ZobObjectManagerWrapper GetWrapper()
