@@ -63,8 +63,8 @@ public :
 	bool CanFastSave();
 
 	const float GetFps() const { return m_fps; };
-	const float GetRenderTime() const { return m_geometryTime; };
-	const float GetGeometryTime() const { return m_renderTime; };
+	const float GetRenderTime() const { return m_renderTime; };
+	const float GetGeometryTime() const { return m_geometryTime; };
 	const float GetFrameTime() const { return m_frameTime; };
 	const float GetCopyTime() const { return m_copyTime; };
 	int RunAFrame();

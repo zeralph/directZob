@@ -268,7 +268,7 @@ float Engine::WaitForRasterizersEnd()
 		if (m_rasterizers[i])
 		{
 			float t2 = m_rasterizers[i]->WaitForEnd();
-			t = max(t, t2);
+			t = fmax(t, t2);
 		}
 	}
 	return t;
