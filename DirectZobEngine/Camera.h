@@ -43,7 +43,7 @@ public:
 		m_viewRotMatrix.Mul(v);
 	};
 
-	inline void				SetTranslation(float x, float y, float z)
+	inline void				SetTranslation(float x, float y, float z) override
 	{
 		m_translation.x = x; m_translation.y = y; m_translation.z = z;
 		m_nextTranslation = m_translation;

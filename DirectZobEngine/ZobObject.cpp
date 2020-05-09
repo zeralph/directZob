@@ -214,7 +214,10 @@ void ZobObject::QueueForDrawing(const Camera* camera, Core::Engine* engine)
 	{
 		m_children.at(i)->QueueForDrawing(camera, engine);
 	}
-	DrawGizmos(camera, engine);
+	if(engine->DrawGizmos())
+	{
+		DrawGizmos(camera, engine);
+	}
 }
 
 void ZobObject::DrawGizmos(const Camera* camera, Core::Engine* engine)

@@ -131,12 +131,6 @@
                                 'GCC_FAST_MATH': 'YES',
                                 'CLANG_X86_VECTOR_INSTRUCTIONS': 'avx2',
                             },
-                            'cflags': [
-                                '-Wno-pragma-pack',
-                            ],
-                            'cxxflags': [
-                                '-Wno-pragma-pack',
-                            ]
                         },
                         'OS=="linux"',
                         {

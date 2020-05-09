@@ -1,4 +1,8 @@
+
 #pragma once
+#ifdef __clang__
+	#pragma clang diagnostic ignored "-Wpragma-pack"
+#endif
 #include "Vector3.h"
 #include <stddef.h>
 #ifndef M_PI

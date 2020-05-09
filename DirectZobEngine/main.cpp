@@ -231,7 +231,6 @@ int main(int argc, char* argv[])
 	mfb_mouse_scroll_callback(window, mouse_scroll);
 
 	m_directZob.Init(width, height, false);
-	file = "fbx.xml";
 	m_directZob.LoadScene(path, file);
 	float rot = 0.0f;
 	float to = 0.5f;
@@ -249,6 +248,7 @@ int main(int argc, char* argv[])
 	m_directZob.GetEngine()->ShowNormals(false);
 	m_directZob.GetEngine()->ShowGrid(false);
 	m_directZob.GetEngine()->UseScanline(false);
+	m_directZob.GetEngine()->DrawGizmos(false);
 	//m_directZob.GetEngine()->GetBufferData()->zFar = 70.0f;
 	//m_directZob.GetZobObjectManager()->GetZobObject("fbx_example")->SetRotation(0, 90, 0);
 	for (;;)

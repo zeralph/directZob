@@ -75,8 +75,10 @@ namespace Core
 		inline void										WireFrame(bool b) { m_wireFrame = b; }
 		inline bool										WireFrame() { return m_wireFrame; }
 		inline void										ShowNormals(bool b) { m_showNormals = b; }
+		inline void										DrawGizmos(bool b) { m_drawGizmos = b; }
 		inline bool										ShowGrid() { return m_showGrid; }
 		inline bool										ShowNormals() { return m_showNormals; }
+		inline bool										DrawGizmos() { return m_drawGizmos; }
 		inline bool										ShowBBoxes() { return m_showBBoxes; }
 		inline void										UseScanline(bool b) { m_scaneLine = b; }
 		inline const bool								UseScanline() { return m_scaneLine; }
@@ -119,6 +121,7 @@ namespace Core
 		bool m_scaneLine = false;
 		bool m_showNormals = false;
 		bool m_showGrid = true;
+		bool m_drawGizmos = true;
 		bool m_showBBoxes = true;
 		RenderOutput m_renderOutput;
 		CullMode m_cullMode;
