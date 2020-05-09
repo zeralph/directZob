@@ -18,7 +18,8 @@ public:
 	~ZobObject();
 
 	virtual void Update(const Matrix4x4& parentMatrix, const Matrix4x4& parentRSMatrix);
-	virtual void Draw(const Camera* camera, Core::Engine* engine);
+	void UpdateMesh(const Camera* camera, Core::Engine* engine);
+	void QueueForDrawing(const Camera* camera, Core::Engine* engine);
 	
 	//void AddChild(ZobObject* z) { m_children.push_back(z); }
 	const std::vector<ZobObject*>* getChildren() const { return &m_children; }

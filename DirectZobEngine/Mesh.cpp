@@ -48,11 +48,17 @@ Mesh::Mesh(std::string &parentName, std::string& path, fbxsdk::FbxMesh* mesh)
 		DirectZob::LogInfo(buf);
 		m_nbFaces = 0;
 		m_vertices = (Vector3*)malloc(sizeof(Vector3) * m_nbVertices);
-		m_projectedVertices = (Vector3*)malloc(sizeof(Vector3) * m_nbVertices);
 		m_verticesData = (Vector3*)malloc(sizeof(Vector3) * m_nbVertices);
+		m_verticesTmp = (Vector3*)malloc(sizeof(Vector3) * m_nbVertices);
+
+		m_projectedVertices = (Vector3*)malloc(sizeof(Vector3) * m_nbVertices);
+		m_projectedVerticesTmp = (Vector3*)malloc(sizeof(Vector3) * m_nbVertices);
+
 		m_nbNormals = m_nbVertices;
 		m_verticesNormals = (Vector3*)malloc(sizeof(Vector3) * m_nbNormals);
 		m_verticesNormalsData = (Vector3*)malloc(sizeof(Vector3) * m_nbNormals);
+		m_verticesNormalsTmp = (Vector3*)malloc(sizeof(Vector3) * m_nbNormals);
+
 		m_nbUvs = m_nbVertices;
 		m_uvs = (Vector2*)malloc(sizeof(Vector2) * m_nbUvs);
 		int pc = mesh->GetPolygonCount();
@@ -165,6 +171,7 @@ Mesh::Mesh(std::string &parentName, std::string& path, fbxsdk::FbxMesh* mesh)
 		}
 		m_trianglesNormals = (Vector3*)malloc(sizeof(Vector3) * m_nbFaces);
 		m_trianglesNormalsData = (Vector3*)malloc(sizeof(Vector3) * m_nbFaces);
+		m_trianglesNormalsTmp = (Vector3*)malloc(sizeof(Vector3) * m_nbFaces);
 		for (int i = 0; i < m_nbFaces; i++)
 		{
 			Triangle* t = &m_triangles[i];
@@ -177,8 +184,11 @@ Mesh::Mesh(std::string &parentName, std::string& path, fbxsdk::FbxMesh* mesh)
 			t->n = &m_trianglesNormals[i];
 		}
 		memcpy(m_verticesData, m_vertices, sizeof(Vector3) * m_nbVertices);
+		memcpy(m_verticesTmp, m_vertices, sizeof(Vector3)* m_nbVertices);
 		memcpy(m_verticesNormalsData, m_verticesNormals, sizeof(Vector3) * m_nbNormals);
+		memcpy(m_verticesNormalsTmp, m_verticesNormals, sizeof(Vector3)* m_nbNormals);
 		memcpy(m_trianglesNormalsData, m_trianglesNormals, sizeof(Vector3) * m_nbFaces);
+		memcpy(m_trianglesNormalsTmp, m_trianglesNormals, sizeof(Vector3)* m_nbFaces);
 	}
 }
 
@@ -255,11 +265,16 @@ Mesh::~Mesh()
 	m_triangles.clear();
 	delete m_vertices;
 	delete m_verticesData;
-	delete m_uvs;
+	delete m_verticesTmp;
 	delete m_verticesNormals;
 	delete m_verticesNormalsData;
+	delete m_verticesNormalsTmp;
 	delete m_trianglesNormals;
+	delete m_trianglesNormalsTmp;
 	delete m_trianglesNormalsData;
+	delete m_projectedVertices;
+	delete m_projectedVerticesTmp;
+	delete m_uvs;
 }
 
 void Mesh::LoadOBJ(const std::string& fullPath)
@@ -314,13 +329,18 @@ void Mesh::LoadOBJ(const std::string& fullPath)
 		m_nbNormals = 1;
 	}
 	m_vertices = (Vector3*)malloc(sizeof(Vector3) * m_nbVertices);
+	m_verticesTmp = (Vector3*)malloc(sizeof(Vector3) * m_nbVertices);
 	m_projectedVertices = (Vector3*)malloc(sizeof(Vector3) * m_nbVertices);
+	m_projectedVerticesTmp = (Vector3*)malloc(sizeof(Vector3) * m_nbVertices);
 	m_verticesData = (Vector3*)malloc(sizeof(Vector3) * m_nbVertices);
+	m_verticesTmp = (Vector3*)malloc(sizeof(Vector3) * m_nbVertices);
 	m_uvs = (Vector2*)malloc(sizeof(Vector2) * m_nbUvs);
 	m_verticesNormals = (Vector3*)malloc(sizeof(Vector3) * m_nbNormals);
 	m_verticesNormalsData = (Vector3*)malloc(sizeof(Vector3) * m_nbNormals);
+	m_verticesNormalsTmp = (Vector3*)malloc(sizeof(Vector3) * m_nbNormals);
 	m_trianglesNormals = (Vector3*)malloc(sizeof(Vector3) * m_nbFaces);
 	m_trianglesNormalsData = (Vector3*)malloc(sizeof(Vector3) * m_nbFaces);
+	m_trianglesNormalsTmp = (Vector3*)malloc(sizeof(Vector3) * m_nbFaces);
 	m_triangles.clear();
 
 	if (!m_hasNormals)
@@ -451,56 +471,61 @@ void Mesh::DrawBoundingBox(const Matrix4x4& modelMatrix, const Matrix4x4& rotati
 	engine->QueueLine(camera, &v0, &v4, 0xFF00FF00, true);
 }
 
-void Mesh::Draw(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions* options)
+void Mesh::Update(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions* options)
 {
+	BufferData* bData = engine->GetBufferData();
+	const Matrix4x4* view = camera->GetViewMatrix();
+	const Matrix4x4* proj = camera->GetProjectionMatrix();
+	float w = (float)bData->width / 2.0f;
+	float h = (float)bData->height / 2.0f;	
+
+	memcpy(m_verticesTmp, m_verticesData, sizeof(Vector3) * m_nbVertices);
+	memcpy(m_verticesNormalsTmp, m_verticesNormalsData, sizeof(Vector3) * m_nbNormals);
+	memcpy(m_trianglesNormalsTmp, m_trianglesNormalsData, sizeof(Vector3) * m_nbFaces);
+
+	for (uint i = 0; i < m_nbVertices; i++)
+	{
+		modelMatrix.Mul(&m_verticesTmp[i]);
+		m_projectedVerticesTmp[i].x = m_verticesTmp[i].x;
+		m_projectedVerticesTmp[i].y = m_verticesTmp[i].y;
+		m_projectedVerticesTmp[i].z = m_verticesTmp[i].z;
+		m_projectedVerticesTmp[i].w = m_verticesTmp[i].w;
+		camera->ToViewSpace(&m_projectedVerticesTmp[i]);
+		proj->Mul(&m_projectedVerticesTmp[i]);
+		m_projectedVerticesTmp[i].x = (m_projectedVerticesTmp[i].x / m_projectedVerticesTmp[i].z + 1) * w;
+		m_projectedVerticesTmp[i].y = (m_projectedVerticesTmp[i].y / m_projectedVerticesTmp[i].z + 1) * h;
+	}
+	for (uint i = 0; i < m_nbNormals; i++)
+	{
+		rotationMatrix.Mul(&m_verticesNormalsTmp[i]);
+		m_verticesNormalsTmp[i].Normalize();
+	}
+	for (uint i = 0; i < m_nbFaces; i++)
+	{
+		rotationMatrix.Mul(&m_trianglesNormalsTmp[i]);
+		m_trianglesNormalsTmp[i].Normalize();
+	}
+	for (int i = 0; i < m_subMeshes.size(); i++)
+	{
+		m_subMeshes[i]->Update(modelMatrix, rotationMatrix, camera, engine, ownerId, options);
+	}
+}
+void Mesh::QueueForDrawing(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions* options)
+{
+	memcpy(m_vertices, m_verticesTmp, sizeof(Vector3) * m_nbVertices);
+	memcpy(m_verticesNormals, m_verticesNormalsTmp, sizeof(Vector3) * m_nbNormals);
+	memcpy(m_trianglesNormals, m_trianglesNormalsTmp, sizeof(Vector3) * m_nbFaces);
+	memcpy(m_projectedVertices, m_projectedVerticesTmp, sizeof(Vector3) * m_nbVertices);
+
 	if (engine->ShowBBoxes())
 	{
 		DrawBoundingBox(modelMatrix, rotationMatrix, camera, engine, ownerId, options);
 	}
-	ReinitVertices();
+	//Update(modelMatrix, rotationMatrix, camera, engine, ownerId, options);
 	BufferData* bData = engine->GetBufferData();
-	Vector2 a, b, c, uva, uvb, uvc;
-	const Matrix4x4* view = camera->GetViewMatrix();
-	const Matrix4x4* proj = camera->GetProjectionMatrix();
-	float w = (float)bData->width / 2.0f;
-	float h = (float)bData->height / 2.0f;
 	float znear = bData->zNear;
 	float zfar = bData->zFar;
-	for (uint i = 0; i < m_nbVertices; i++)
-	{
-		modelMatrix.Mul(&m_vertices[i]);
-		
-		m_projectedVertices[i].x = m_vertices[i].x;
-		m_projectedVertices[i].y = m_vertices[i].y;
-		m_projectedVertices[i].z = m_vertices[i].z;
-		m_projectedVertices[i].w = m_vertices[i].w;
-
-		camera->ToViewSpace(&m_projectedVertices[i]);
-		//view->Mul(&m_projectedVertices[i]);
-		proj->Mul(&m_projectedVertices[i]);
-		m_projectedVertices[i].x = (m_projectedVertices[i].x / m_projectedVertices[i].z + 1) * w;
-		m_projectedVertices[i].y = (m_projectedVertices[i].y / m_projectedVertices[i].z + 1) * h;
-		//m_projectedVertices[i].z = m_vertices[i].z;
-		//m_projectedVertices[i].w = m_vertices[i].w;
-	}
-	for (uint i = 0; i < m_nbNormals; i++)
-	{
-		rotationMatrix.Mul(&m_verticesNormals[i]);
-		m_verticesNormals[i].Normalize();
-	}
-	for (uint i = 0; i < m_nbFaces; i++)
-	{
-		rotationMatrix.Mul(&m_trianglesNormals[i]);
-		m_trianglesNormals[i].Normalize();
-	}
-	int w2 = bData->width / 2;
-	int h2 = bData->height / 2;
-	int triangleIndex = 0;
-	uint color = 0;
 	Vector3 n;
-	Vector3 light = Vector3(0.1f, 1.0f, 0.1f);
-	light.Normalize();
-	uint drawnFaces = 0;
 	for (int i = 0; i < m_nbFaces; i++)
 	{
 		Triangle* t = &m_triangles[i];
@@ -508,21 +533,7 @@ void Mesh::Draw(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, c
 		t->options = options;
 		if (!RejectTriangle(t, znear, zfar, (float)bData->width, (float)bData->height))
 		{
-			//t->n->Set(t->na);
-			//t->n->Add(t->nb);
-			//t->n->Add(t->nc);
-			//t->n->Div(3.0f);
 			bool bCull = false;
-			if (true)	//draw normals
-			{
-				Vector3 p1 = Vector3((t->va->x + t->vb->x + t->vc->x) / 3.0f,
-					(t->vb->y + t->vb->y + t->vc->y) / 3.0f,
-					(t->va->z + t->vb->z + t->vc->z) / 3.0f);
-				Vector3 p2 = p1 + n;
-				engine->QueueLine(camera, &p1, &p2, 0xFFFFFFFF, false);
-			}
-
-
 			t->ComputeArea();
 			static float sAreaMin = 0.0f;
 			static float sAreaMax = 50000.0f;
@@ -533,10 +544,8 @@ void Mesh::Draw(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, c
 			//if (engine->GetCullMode() == Engine::None )// ( || t->area > sAreaMin && t->area < sAreaMax))
 			{
 				t->owner = ownerId;
-				//t->ComputeLighting(&light);
 				t->draw = true;
 				engine->QueueTriangle(t);
-				drawnFaces++;
 				static bool bShowNormal = true;
 				if (engine->ShowNormals())
 				{
@@ -553,10 +562,9 @@ void Mesh::Draw(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, c
 			}
 		}
 	}
-	drawnFaces;
 	for (int i = 0; i < m_subMeshes.size(); i++)
 	{
-		m_subMeshes[i]->Draw(modelMatrix, rotationMatrix, camera,  engine, ownerId, options);
+		m_subMeshes[i]->QueueForDrawing(modelMatrix, rotationMatrix, camera,  engine, ownerId, options);
 	}
 }
 

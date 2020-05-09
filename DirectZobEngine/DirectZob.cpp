@@ -121,12 +121,12 @@ int DirectZob::RunAFrame()
 		{
 			cam->UpdateViewProjectionMatrix();
 			m_engine->StartDrawingScene();
-			m_zobObjectManager->StartUpdateObjects();
-			m_renderTime = m_engine->WaitForRasterizersEnd();
+			m_zobObjectManager->StartUpdateObjects(cam, m_engine);
 			m_geometryTime = m_zobObjectManager->WaitForUpdateObjectend();
+			m_renderTime = m_engine->WaitForRasterizersEnd();
 			m_engine->ClearRenderQueues();
 			m_copyTick = clock();
-			m_zobObjectManager->CopyObjectsDataToRenderQueues(cam, m_engine);
+			m_zobObjectManager->QueueForDrawing(cam, m_engine);
 			m_copyTime = (float)(clock() - m_copyTick) / CLOCKS_PER_SEC * 1000;
 			if (m_engine->ShowGrid())
 			{
@@ -147,7 +147,7 @@ int DirectZob::RunAFrame()
 			_snprintf_s(buffer, MAX_PATH, "Triangles : %i / %i", m_engine->GetNbDrawnTriangles(), m_engine->GetNbTriangles());
 			std::string sBuf = std::string(buffer);
 			m_text->Print(0, 0, 1, &sBuf, 0xFFFFFFFF);
-			_snprintf_s(buffer, MAX_PATH, "render : %06.2fms, geom : %06.2f, cpy : %06.2f, tot : %06.2f, FPS : %06.2f", m_renderTime, m_geometryTime, m_frameTime, m_copyTime, m_fps);
+			_snprintf_s(buffer, MAX_PATH, "render : %03i, geom : %03i, cpy : %03i, tot : %03i, FPS : %03i", (int)m_renderTime, (int)m_geometryTime, (int)m_copyTime, (int)m_frameTime, (int)m_fps);
 			sBuf = std::string(buffer);
 			if (m_frameTime < TARGET_MS_PER_FRAME)
 			{

@@ -273,8 +273,8 @@ namespace DirectZobEditor
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
                 openFileDialog.InitialDirectory = m_path;
-                openFileDialog.Filter = "obj files (*.obj)|*.obj|fbx files (*.fbx)|*.fbx";
-                openFileDialog.FilterIndex = 2;
+                openFileDialog.Filter = "all meshes (*.obj;*.fbx)|*.obj;*.fbx|obj files (*.obj)|*.obj|fbx files (*.fbx)|*.fbx";
+                openFileDialog.FilterIndex = 1;
                 openFileDialog.RestoreDirectory = true;
                 //openFileDialog.AutoUpgradeEnabled = false;
                 if (openFileDialog.ShowDialog() == DialogResult.OK)

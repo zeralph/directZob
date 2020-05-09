@@ -107,8 +107,8 @@ namespace Core
 		float m_zNear;
 		float m_zFar;
 		int m_curBuffer;
-		clock_t	m_tick;
 		clock_t	m_drawTick;
+		float m_time;
 		ulong m_currentFrame;
 		uint* m_buffer;
 		float* m_zBuffer;

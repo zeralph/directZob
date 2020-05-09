@@ -243,7 +243,7 @@ int main(int argc, char* argv[])
 	float benchRender = 0.0f;
 	float benchGeom = 0.0f;
 	float benchTot = 0.0f;
-	float benchCpy;
+	float benchCpy = 0.0f;
 	ulong frames = 0;
 	m_directZob.GetEngine()->ShowBBoxes(false);
 	m_directZob.GetEngine()->ShowNormals(false);
@@ -312,12 +312,12 @@ int main(int argc, char* argv[])
 	mfb_close(window);
 	if (bBench)
 	{
-		float f = benchFps / (float)frames;
-		float r = benchRender / (float)frames;
-		float g = benchGeom / (float)frames;
-		float t = benchTot / (float)frames;
-		float c = benchCpy / (float)frames;
-		std::cout << "\n\t\tBenchmark:\nRender\tGeom\tCpy\tFrame\tFps\n" << r <<"\t"<<g<<"\t"<<t<<"\t"<<c<<"\t"<<f<< std::endl;
+		int fps = (int)(benchFps / (float)frames);
+		int r = (int)(benchRender / (float)frames);
+		int g = (int)(benchGeom / (float)frames);
+		int t = (int)(benchTot / (float)frames);
+		int c = (int)(benchCpy / (float)frames);
+		std::cout << "\n\t\tBenchmark:\nRender\tGeom\tCpy\tFrame\tFps\n" << r <<"\t"<<g<<"\t"<<c<<"\t"<<t<<"\t"<<fps<< std::endl;
 	}
 	return 0;
 }

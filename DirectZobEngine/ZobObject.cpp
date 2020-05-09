@@ -149,6 +149,18 @@ const std::string ZobObject::GetMeshName() const
 	return "";
 }
 
+void ZobObject::UpdateMesh(const Camera* camera, Core::Engine* engine)
+{
+	if (m_mesh)
+	{
+		m_mesh->Update(&m_modelMatrix, &m_rotationScaleMatrix, camera, engine, GetId(), &m_renderOptions);
+	}
+	for (int i = 0; i < m_children.size(); i++)
+	{
+		ZobObject* z = m_children[i];
+		z->UpdateMesh(camera, engine);
+	}
+}
 
 void ZobObject::Update(const Matrix4x4& parentMatrix, const Matrix4x4& parentRSMatrix)
 {
@@ -180,7 +192,7 @@ void ZobObject::Update(const Matrix4x4& parentMatrix, const Matrix4x4& parentRSM
 	}
 }
 
-void ZobObject::Draw(const Camera* camera, Core::Engine* engine)
+void ZobObject::QueueForDrawing(const Camera* camera, Core::Engine* engine)
 {
 	if(GetType() == ZOBGUID::type_editor)
 	{
@@ -188,11 +200,11 @@ void ZobObject::Draw(const Camera* camera, Core::Engine* engine)
 	}
 	if (m_mesh)
 	{
-		m_mesh->Draw(m_modelMatrix, m_rotationScaleMatrix, camera, engine, GetId(), &m_renderOptions);
+		m_mesh->QueueForDrawing(m_modelMatrix, m_rotationScaleMatrix, camera, engine, GetId(), &m_renderOptions);
 	}
 	for (int i = 0; i < m_children.size(); i++)
 	{
-		m_children.at(i)->Draw(camera, engine);
+		m_children.at(i)->QueueForDrawing(camera, engine);
 	}
 	DrawGizmos(camera, engine);
 }

@@ -18,20 +18,29 @@ public:
 	Mesh(std::string& name, std::string& path, std::string& file);
 	~Mesh();
 
-
-	void Draw(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions* options);
+	void Update(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions* options);
+	void QueueForDrawing(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions* options);
 	void DrawBoundingBox(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions* options);
 	const std::vector<Triangle>* GetTrianglesList() const { return &m_triangles; }
 	const uint GetNbTriangles() const { return m_nbFaces; }
 
 	Vector3* m_vertices = NULL;
-	Vector3* m_projectedVertices = NULL;
-	Vector3* m_verticesNormals = NULL;
-	Vector3* m_trianglesNormals = NULL;
+	Vector3* m_verticesTmp = NULL;
 	Vector3* m_verticesData = NULL;
+
+	Vector3* m_projectedVertices = NULL;
+	Vector3* m_projectedVerticesTmp = NULL;
+
+	Vector3* m_verticesNormals = NULL;
 	Vector3* m_verticesNormalsData = NULL;
+	Vector3* m_verticesNormalsTmp = NULL;
+
+	Vector3* m_trianglesNormals = NULL;
 	Vector3* m_trianglesNormalsData = NULL;
+	Vector3* m_trianglesNormalsTmp = NULL;
+
 	Vector2* m_uvs = NULL;
+
 	std::vector<Triangle> m_triangles;
 
 	const std::string& GetName() const { return m_name; }
@@ -44,12 +53,6 @@ private:
 	void LoadOBJ(const std::string& fullPath);
 	void LoadFbx(const std::string& fullPath);
 	void FbxMultT(FbxNode* node, FbxVector4 &vector);
-	inline void ReinitVertices()
-	{
-		memcpy(m_vertices, m_verticesData, sizeof(Vector3) * m_nbVertices);
-		memcpy(m_verticesNormals, m_verticesNormalsData, sizeof(Vector3) * m_nbNormals);
-		memcpy(m_trianglesNormals, m_trianglesNormalsData, sizeof(Vector3) * m_nbFaces);
-	};
 	inline bool RejectTriangle(const Triangle* t, const float znear, const float zfar, const float width, const float height);
 	std::vector<Mesh*> m_subMeshes;
 	uint m_nbVertices = 0;

@@ -96,29 +96,32 @@ ZobObject* ZobObjectManager::GetZobObject(const std::string& name) const
 
 }
 
-void ZobObjectManager::StartUpdateObjects()
+void ZobObjectManager::StartUpdateObjects(const Camera* camera, Core::Engine* engine)
 {
 	m_drawTick = clock();
-	g_geometryThread = std::thread(&ZobObjectManager::UpdateObjects, this);
+	g_geometryThread = std::thread(&ZobObjectManager::UpdateObjects, this, camera, engine);
 }
 
 float ZobObjectManager::WaitForUpdateObjectend()
 {
 	if (g_geometryThread.joinable())
 		g_geometryThread.join();
-	return (float)(clock() - m_drawTick) / CLOCKS_PER_SEC * 1000;
+	return m_time;
 }
 
-void ZobObjectManager::UpdateObjects()
+void ZobObjectManager::UpdateObjects(const Camera* camera, Core::Engine* engine)
 {
 	Matrix4x4 m;
 	m.Identity();
 	m_rootObject->Update(&m, &m);
+	m_rootObject->UpdateMesh(camera, engine);
+	m_time = (float)(clock() - m_drawTick) / CLOCKS_PER_SEC * 1000;
 }
 
-void ZobObjectManager::CopyObjectsDataToRenderQueues(const Camera* camera, Core::Engine* engine)
+void ZobObjectManager::QueueForDrawing(const Camera* camera, Core::Engine* engine)
 {
-	m_rootObject->Draw(camera, engine);
+	//m_rootObject->UpdateMesh(camera, engine);
+	m_rootObject->QueueForDrawing(camera, engine);
 }
 
 std::string ZobObjectManager::GetZobObjectList()

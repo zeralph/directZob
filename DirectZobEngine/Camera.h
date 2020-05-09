@@ -19,7 +19,7 @@ public:
 	Camera(TiXmlElement* node, ZobObject* parent);
 	~Camera();
 
-	void Update(const Matrix4x4& parentMatrix, const Matrix4x4& parentRSMatrix);
+	void Update(const Matrix4x4& parentMatrix, const Matrix4x4& parentRSMatrix) override;
 	void UpdateViewProjectionMatrix();
 
 	inline const Matrix4x4* GetViewMatrix() const { return &m_viewRotMatrix; }

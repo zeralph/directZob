@@ -35,7 +35,7 @@ void Camera::Draw(const Camera* camera, Core::Engine* engine)
 	{
 		return;
 	}
-	ZobObject::Draw(camera, engine);
+	ZobObject::QueueForDrawing(camera, engine);
 	Vector3 v0 = Vector3(-2, 1, 1);
 	Vector3 v1 = Vector3(2, 1, 1);
 	Vector3 v2 = Vector3(-2, -1, 1);

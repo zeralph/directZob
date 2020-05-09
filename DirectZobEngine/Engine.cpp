@@ -219,6 +219,7 @@ int Engine::StartDrawingScene()
 	{
 		m_rasterizers[i]->Start(m_rasterTriangleQueues[i], m_rasterNbTriangleQueues[i], &m_rasterLineQueues[i], m_wireFrame, m_scaneLine, m_currentFrame % 2, m_lightingPrecision);
 	}
+	m_time = (float)(clock() - m_drawTick) / CLOCKS_PER_SEC * 1000;
 	return 0;
 }
 int Engine::SetDisplayedBuffer()
@@ -270,7 +271,7 @@ float Engine::WaitForRasterizersEnd()
 			m_rasterizers[i]->WaitForEnd();
 		}
 	}
-	return (float)(clock() - m_drawTick) / CLOCKS_PER_SEC * 1000;
+	return m_time;
 }
 
 void Engine::DrawGrid(const Camera *camera)
