@@ -28,7 +28,7 @@ public:
 	~Rasterizer();
 
 	void Start(const Triangle* triangles, const uint nbTriangles, const std::vector<Line3D>* lines, const bool wireFrame, const bool scanline, const bool bEvenFrame, RenderOptions::Lighting_precision lp);
-	void WaitForEnd();
+	float WaitForEnd();
 	void End();
 	void Init();
 	void Render();
@@ -85,4 +85,6 @@ private:
 	bool m_scanline = false;
 	int m_bEvenFrame = 0;
 	RenderOptions::Lighting_precision m_lightingPrecision;
+	clock_t	m_tick;
+	float m_time;
 };

@@ -32,10 +32,11 @@ void Rasterizer::Start(const Triangle* triangles, const uint nbTriangles, const 
 	m_lightingPrecision = lp;
 }
 
-void Rasterizer::WaitForEnd() 
+float Rasterizer::WaitForEnd() 
 {
 	if (m_thread.joinable())
 		m_thread.join();
+	return m_time;
 }
 
 void Rasterizer::End() {
@@ -57,6 +58,7 @@ void Rasterizer::Clear()
 
 void Rasterizer::Render() 
 {
+	m_tick = clock();
 	if (DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera())
 	{
 		const Vector3 camDir = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera()->GetForward();
@@ -84,6 +86,7 @@ void Rasterizer::Render()
 			DrawTriangle(t);
 		}
 	}
+	m_time = (float)(clock() - m_tick) / CLOCKS_PER_SEC * 1000;
 }
 
 void Rasterizer::plotLine(int x0, int y0, int x1, int y1) const
