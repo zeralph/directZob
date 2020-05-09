@@ -66,6 +66,7 @@ public :
 	const float GetRenderTime() const { return m_geometryTime; };
 	const float GetGeometryTime() const { return m_renderTime; };
 	const float GetFrameTime() const { return m_frameTime; };
+	const float GetCopyTime() const { return m_copyTime; };
 	int RunAFrame();
 	const uint* GetBufferData() const { return m_engine->GetBufferData()->buffer; }
 	std::string ExePath();
@@ -99,5 +100,7 @@ private:
 	float m_geometryTime;
 	float m_frameTime;
 	float m_fps;
+	float m_copyTime;
+	clock_t m_copyTick;
 	clock_t	m_frameTick;
 };

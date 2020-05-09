@@ -243,6 +243,7 @@ int main(int argc, char* argv[])
 	float benchRender = 0.0f;
 	float benchGeom = 0.0f;
 	float benchTot = 0.0f;
+	float benchCpy;
 	ulong frames = 0;
 	m_directZob.GetEngine()->ShowBBoxes(false);
 	m_directZob.GetEngine()->ShowNormals(false);
@@ -296,6 +297,7 @@ int main(int argc, char* argv[])
 		benchRender += m_directZob.GetRenderTime();
 		benchGeom += m_directZob.GetGeometryTime();
 		benchTot += m_directZob.GetFrameTime();
+		benchCpy += m_directZob.GetCopyTime();
 		frames++;
 		int state = mfb_update(window, (void*)m_directZob.GetBufferData() );
 		if (state < 0)
@@ -314,7 +316,8 @@ int main(int argc, char* argv[])
 		float r = benchRender / (float)frames;
 		float g = benchGeom / (float)frames;
 		float t = benchTot / (float)frames;
-		std::cout << "\n\t\tBenchmark:\nRender\tGeom\tFrame\tFps\n" << r <<"\t"<<g<<"\t"<<t<<"\t"<<f<< std::endl;
+		float c = benchCpy / (float)frames;
+		std::cout << "\n\t\tBenchmark:\nRender\tGeom\tCpy\tFrame\tFps\n" << r <<"\t"<<g<<"\t"<<t<<"\t"<<c<<"\t"<<f<< std::endl;
 	}
 	return 0;
 }
