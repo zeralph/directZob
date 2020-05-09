@@ -150,4 +150,5 @@ DirectZobWrapper/Release
 /DirectZobEngine/DirectZobDInterop.vcproj
 /DirectZobEngine/DirectZobEngine.vcproj
 /DirectZobEngine/DirectZobExe.vcproj
+/doc
 DirectZobExe
