@@ -32,6 +32,44 @@
         (*(fp) ) ? 0:errno;\
     })
 #endif //LINUX
+
+enum eRenderOutput
+{
+	eRenderOutput_render = 0,
+	eRenderOutput_zBuffer,
+	eRenderOutput_oBuffer,
+	__eRenderOutput_MAX__
+};
+enum eRenderMode
+{
+	eRenderMode_fullframe = 0,
+	eRenderMode_interlaced,
+	eRenderMode_scanline,
+	__eRenderMode_MAX__
+};
+enum eCullMode
+{
+	eCullMode_None = 0,
+	eCullMode_ClockwiseFace,
+	eCullMode_CounterClockwiseFace,
+	__eCullMode_MAX__,
+};
+enum eLightingPrecision
+{
+	eLightingPrecision_noLighting = 0,
+	eLightingPrecision_vertex,
+	eLightingPrecision_pixel,
+	__eLightingPrecision_MAX__
+};
+enum eFogType
+{
+	eFogType_NoFog = 0,
+	eFogType_Linear,
+	eFogType_Exp,
+	eFogType_Exp2,
+	__eFogType_MAX__
+};
+
 class  DirectZobType
 {
 public:
@@ -63,7 +101,6 @@ public:
 		float c;
 		bool bold = false;
 	};
-
 	struct RenderOptions
 	{
 		enum eLightMode
@@ -75,46 +112,15 @@ public:
 			eLightMode_flatPhong,
 			__eLightMode_MAX__
 		};
-		enum Lighting_precision
-		{
-			Lighting_precision_noLighting = 0,
-			Lighting_precision_vertex,
-			Lighting_precision_pixel,
-			__Lighting_precision_MAX__
-		};
-		inline const bool ZBuffered() const { return zBuffered; }
-		void ZBuffered(const bool b)
-		{
-			zBuffered = b;
-		}
-		inline const eLightMode LightMode() const 
-		{ 
-			return lightMode;
-		}
-		void LightMode(eLightMode l)
-		{
-			lightMode = l;
-		}
-		void Save()
-		{
-
-		}
 		bool bTransparency = false;
 		bool bColorize = false;
 		Vector3 colorization = Vector3();
 		bool zBuffered = true;
 		eLightMode lightMode = eLightMode::eLightMode_phong;
+		eCullMode cullMode = eCullMode_ClockwiseFace;
 	};
 };
 
-enum FogType
-{
-	FogType_NoFog = 0,
-	FogType_Linear,
-	FogType_Exp,
-	FogType_Exp2,
-	__FogType_MAX__
-};
 typedef DirectZobType::u8 u8;
 typedef DirectZobType::uint uint;
 typedef DirectZobType::ulong ulong;

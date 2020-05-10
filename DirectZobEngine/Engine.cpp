@@ -28,7 +28,7 @@ Engine::Engine(int width, int height, Events* events)
 		m_nbRasterizers = 1;
 	}
 	m_triangleQueueSize = MAX_TRIANGLES_PER_IMAGE / m_nbRasterizers;
-	m_renderOutput = RenderOutput_render;
+	m_renderOutput = eRenderOutput_render;
 	m_events = events;
 	m_currentFrame = 0;
 	m_zNear = Z_NEAR;
@@ -47,7 +47,6 @@ Engine::Engine(int width, int height, Events* events)
 	//	m_bufferData.oBuffer = m_oBuffer;
 	m_bufferData.size = width * height;
 	m_nbPixels = 0;
-	m_cullMode = CullMode::CullClockwiseFace;
 
 	m_rasterTriangleQueues = (Triangle **)malloc(sizeof(Triangle) * m_nbRasterizers);
 	m_rasterNbTriangleQueues = (long *)malloc(sizeof(long) * m_nbRasterizers);
@@ -183,13 +182,34 @@ void Engine::ClearBuffer(const Color *color)
 	uint v = color->GetRawValue();
 	//Color cc = Color(63, 149, 255, 255);
 	//v = cc.GetRawValue();
-	if (!m_scaneLine)
+	if (m_renderMode == eRenderMode_fullframe )
 	{
 		//memset(m_zBuffer, 0, sizeof(float) * m_bufferData.width * m_bufferData.height);
 		for (int i = 0; i < m_bufferData.width * m_bufferData.height; i++)
 		{
 			m_zBuffer[i] = -1.0f;
 			m_buffer[i] = v;
+		}
+	}
+	else if (m_renderMode == eRenderMode_scanline)
+	{
+		uint c;
+		for (int y = 0; y < m_bufferData.height; y ++)
+		{
+			if (y % 2)
+			{
+				c = v;
+			}
+			else
+			{
+				c = 0;
+			}
+			int s = m_bufferData.width * y;
+			for (int i = 0; i < m_bufferData.width; i++)
+			{
+				m_zBuffer[i + s] = -1.0f;
+				m_buffer[i + s] = c;
+			}
 		}
 	}
 	else
@@ -216,13 +236,13 @@ int Engine::StartDrawingScene()
 	}
 	for (int i = 0; i < m_nbRasterizers; i++)
 	{
-		m_rasterizers[i]->Start(m_rasterTriangleQueues[i], m_rasterNbTriangleQueues[i], &m_rasterLineQueues[i], m_wireFrame, m_scaneLine, m_currentFrame % 2, m_lightingPrecision);
+		m_rasterizers[i]->Start(m_rasterTriangleQueues[i], m_rasterNbTriangleQueues[i], &m_rasterLineQueues[i], m_wireFrame, m_renderMode, m_currentFrame % 2, m_lightingPrecision);
 	}
 	return 0;
 }
 int Engine::SetDisplayedBuffer()
 {
-	if (m_renderOutput == RenderOutput_zBuffer)
+	if (m_renderOutput == eRenderOutput_zBuffer)
 	{
 		uint c;
 		for (int i = 0; i < m_bufferData.size; i++)
@@ -232,7 +252,7 @@ int Engine::SetDisplayedBuffer()
 			m_buffer[i] = c;
 		}
 	}
-	else if (m_renderOutput == RenderOutput_oBuffer)
+	else if (m_renderOutput == eRenderOutput_oBuffer)
 	{
 		uint c;
 		for (int i = 0; i < m_bufferData.size; i++)

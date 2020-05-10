@@ -14,31 +14,70 @@ namespace DirectZobEditor
     public partial class ZobObjectControl : UserControl
     {
         private Form1 m_mainForm;
-        private CLI.ZobObjectWrapper m_zobObjectWrapper = null;
+        private CLI.ZobObjectWrapper m_currentZobObjectWrapper = null;
         private CLI.MeshManagerWrapper m_meshManagerWrapper = null;
-        public ZobObjectControl(Form1 form)
+
+        ZobLightControl m_lightControl = null;
+        ZobCameraControl m_cameraControl = null;
+        ZobMeshControl m_meshControl = null;
+        public ZobObjectControl(Form1 form, ZobLightControl l, ZobCameraControl c, ZobMeshControl m)
         {
             InitializeComponent();
             m_mainForm = form;
+            m_lightControl = l;
+            m_cameraControl = c;
+            m_meshControl = m;
+            m_lightControl.Visible = false;
+            m_meshControl.Visible = false;
+            m_cameraControl.Visible = false;
+            this.Visible = false;
             m_meshManagerWrapper = new CLI.MeshManagerWrapper();
             m_mainForm.OnNewScene += new EventHandler(OnNewScene);
             ClearValues();
             ZobObjectListControl z = m_mainForm.GetZobObjectListControl();
-            checkBoxLinkScale.Checked = true;
+            z.OnObjectSelected += new ZobObjectListControl.OnObjectSelectedHandler(OnObjectSelected);
         }
-
+        private void OnObjectSelected(object s, ObjectSelectionEventArg e)
+        {
+            CLI.ZobObjectWrapper oldObject = e.previousZobObject;
+            m_currentZobObjectWrapper = e.newZobObject;
+            m_lightControl.Visible = false;
+            m_meshControl.Visible = false;
+            m_cameraControl.Visible = false;
+            if (m_currentZobObjectWrapper != null)
+            {
+                this.Visible = true;
+                if(m_currentZobObjectWrapper.IsLight())
+                {
+                    m_lightControl.Visible = true;
+                }
+                else if(m_currentZobObjectWrapper.IsCamera())
+                {
+                    m_cameraControl.Visible = true;
+                }
+                else if(m_currentZobObjectWrapper.HasMesh())
+                {
+                    m_meshControl.Visible = true;
+                }
+            }
+            else
+            {
+                this.Visible = false;
+            }
+            UpdateValues();
+        }
         private void SetValues()
         {
-            zobName.Text = m_zobObjectWrapper.GetName();
-            zobPosX.Text = String.Format("{0:0.000}", m_zobObjectWrapper.GetTransform().x);
-            zobPosY.Text = String.Format("{0:0.000}", m_zobObjectWrapper.GetTransform().y);
-            zobPosZ.Text = String.Format("{0:0.000}", m_zobObjectWrapper.GetTransform().z);
-            zobRotX.Text = String.Format("{0:0.000}", m_zobObjectWrapper.GetRotation().x);
-            zobRotY.Text = String.Format("{0:0.000}", m_zobObjectWrapper.GetRotation().y);
-            zobRotZ.Text = String.Format("{0:0.000}", m_zobObjectWrapper.GetRotation().z);
-            zobScaleX.Text = String.Format("{0:0.000}", m_zobObjectWrapper.GetScale().x);
-            zobScaleY.Text = String.Format("{0:0.000}", m_zobObjectWrapper.GetScale().y);
-            zobScaleZ.Text = String.Format("{0:0.000}", m_zobObjectWrapper.GetScale().z);   
+            zobName.Text = m_currentZobObjectWrapper.GetName();
+            zobPosX.Text = String.Format("{0:0.000}", m_currentZobObjectWrapper.GetTransform().x);
+            zobPosY.Text = String.Format("{0:0.000}", m_currentZobObjectWrapper.GetTransform().y);
+            zobPosZ.Text = String.Format("{0:0.000}", m_currentZobObjectWrapper.GetTransform().z);
+            zobRotX.Text = String.Format("{0:0.000}", m_currentZobObjectWrapper.GetRotation().x);
+            zobRotY.Text = String.Format("{0:0.000}", m_currentZobObjectWrapper.GetRotation().y);
+            zobRotZ.Text = String.Format("{0:0.000}", m_currentZobObjectWrapper.GetRotation().z);
+            zobScaleX.Text = String.Format("{0:0.000}", m_currentZobObjectWrapper.GetScale().x);
+            zobScaleY.Text = String.Format("{0:0.000}", m_currentZobObjectWrapper.GetScale().y);
+            zobScaleZ.Text = String.Format("{0:0.000}", m_currentZobObjectWrapper.GetScale().z);   
         }
         private void ClearValues()
         {
@@ -56,11 +95,11 @@ namespace DirectZobEditor
 
         private void UpdateValues()
         {
-            if (m_zobObjectWrapper != null && m_zobObjectWrapper.IsValid())
+            if (m_currentZobObjectWrapper != null && m_currentZobObjectWrapper.IsValid())
             {
-                CLI.ManagedVector3 p = m_zobObjectWrapper.GetTransform();
-                CLI.ManagedVector3 r = m_zobObjectWrapper.GetRotation();
-                CLI.ManagedVector3 s = m_zobObjectWrapper.GetScale();
+                CLI.ManagedVector3 p = m_currentZobObjectWrapper.GetTransform();
+                CLI.ManagedVector3 r = m_currentZobObjectWrapper.GetRotation();
+                CLI.ManagedVector3 s = m_currentZobObjectWrapper.GetScale();
 
                 float px = p.x;
                 float py = p.y;
@@ -125,9 +164,9 @@ namespace DirectZobEditor
                     s.z = f;
                 }
 
-                m_zobObjectWrapper.SetTransform(p);
-                m_zobObjectWrapper.SetRotation(r);
-                m_zobObjectWrapper.SetScale(s);
+                m_currentZobObjectWrapper.SetTransform(p);
+                m_currentZobObjectWrapper.SetRotation(r);
+                m_currentZobObjectWrapper.SetScale(s);
                 SetValues();
             }
         }
@@ -189,32 +228,13 @@ namespace DirectZobEditor
 
         private void OnNewScene(object s, EventArgs e)
         {
-            m_zobObjectWrapper = null;
+            m_currentZobObjectWrapper = null;
             UpdateValues();
         }
 
-        private void buttonLinkScale_Click(object sender, EventArgs e)
+        private void valueChanged(object sender, EventArgs e)
         {
-        }
-
-        private void checkBoxLinkScale_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void lightRed_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void zobScaleX_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void zobPosY_TextChanged(object sender, EventArgs e)
-        {
-
+            UpdateValues();
         }
     }
 }

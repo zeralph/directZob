@@ -59,7 +59,7 @@ public:
 	void							SetLightingMode(RenderOptions::eLightMode l);
 	const bool						IsMarkedForDeletion() const { return m_markedForDeletion; };
 	void							MarkForDeletion() { m_markedForDeletion=true; };
-	const RenderOptions::eLightMode GetLightingMode() const { return m_renderOptions.LightMode(); };
+	const RenderOptions::eLightMode GetLightingMode() const { return m_renderOptions.lightMode; };
 	bool							HasChild(const ZobObject* o);
 
 protected:

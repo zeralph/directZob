@@ -22,10 +22,10 @@ void LightManager::ReInitGlobalSettings()
 	m_fogDistance = 500.0f;
 	m_lights.clear();
 	m_fogDensity = 2.0f;
-	m_fogType = FogType::FogType_NoFog;
+	m_fogType = eFogType::eFogType_NoFog;
 }
 
-void LightManager::Setup(Vector3* fogColor, Vector3* ambientColor, Vector3* clearColor, float fogDistance, float fogDensity, FogType fogType)
+void LightManager::Setup(Vector3* fogColor, Vector3* ambientColor, Vector3* clearColor, float fogDistance, float fogDensity, eFogType fogType)
 {
 	m_fogColor = fogColor;
 	m_ambientColor = ambientColor;
@@ -147,25 +147,25 @@ void LightManager::LoadFromNode(TiXmlElement* node)
 			FogDistance = atof(e->GetText());
 		}
 		e = node->FirstChildElement("FogType");
-		FogType fogType = GetFogType();
+		eFogType fogType = GetFogType();
 		if (e)
 		{
 			std::string type = std::string(e->GetText() ? e->GetText():"");
 			if (type == "linear")
 			{
-				fogType = FogType::FogType_Linear;
+				fogType = eFogType::eFogType_Linear;
 			}
 			else if (type == "exp")
 			{
-				fogType = FogType::FogType_Exp;
+				fogType = eFogType::eFogType_Exp;
 			}
 			else if (type == "exp2")
 			{
-				fogType = FogType::FogType_Exp2;
+				fogType = eFogType::eFogType_Exp2;
 			}
 			else
 			{
-				fogType = FogType::FogType_NoFog;
+				fogType = eFogType::eFogType_NoFog;
 			}
 		}
 		fog /= 255.0f;
@@ -219,16 +219,16 @@ void LightManager::SaveUnderNode(TiXmlElement* node)
 	t.SetValue("");
 	switch (GetFogType())
 	{
-	case FogType_Exp:
+	case eFogType_Exp:
 		t.SetValue("exp");
 		break;
-	case FogType_Exp2:
+	case eFogType_Exp2:
 		t.SetValue("exp2");
 		break;
-	case FogType_Linear:
+	case eFogType_Linear:
 		t.SetValue("linear");
 		break;
-	case FogType_NoFog:
+	case eFogType_NoFog:
 	default:
 		t.SetValue("none");
 		break;

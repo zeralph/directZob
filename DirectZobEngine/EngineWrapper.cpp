@@ -19,14 +19,26 @@ namespace CLI
 	System::IntPtr EngineWrapper::GetBufferData()
 	{
 		return System::IntPtr(m_Instance->GetBufferData()->buffer);
-		//pin_ptr<int> arrayPin = &m_Instance->GetBufferData()[0];
-		//return arrayPin;
 	}
 	void EngineWrapper::SetRenderOutput(int r)
 	{
-		if (r >= 0 && r < (int)Engine::RenderOutput::RenderOutputMAX)
+		if (r >= 0 && r < (int)eRenderOutput::__eRenderOutput_MAX__)
 		{
-			m_Instance->SetRenderOutput((Engine::RenderOutput)r);
+			m_Instance->SetRenderOutput((eRenderOutput)r);
+		}
+	}
+	void EngineWrapper::SetLightingPrecision(int r)
+	{
+		if (r >= 0 && r < (int)eLightingPrecision::__eLightingPrecision_MAX__)
+		{
+			m_Instance->SetLightingPrecision((eLightingPrecision)r);
+		}
+	}
+	void EngineWrapper::SetRenderMode(int r)
+	{
+		if (r >= 0 && r < (int)eRenderMode::__eRenderMode_MAX__)
+		{
+			m_Instance->SetRenderMode((eRenderMode)r);
 		}
 	}
 }

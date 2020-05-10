@@ -49,6 +49,7 @@ namespace CLI
 		{
 			return gcnew ZobObjectWrapper(z);
 		}
+		return nullptr;
 	}
 
 	void ZobObjectManagerWrapper::RemoveZobObject(System::String^ name)

@@ -26,21 +26,6 @@ namespace Core
 	class Engine
 	{
 	public:
-
-		enum RenderOutput
-		{
-			RenderOutput_render = 0,
-			RenderOutput_zBuffer,
-			RenderOutput_oBuffer,
-			RenderOutputMAX
-		};
-		enum CullMode
-		{
-			None = 0,
-			CullClockwiseFace,
-			CullCounterClockwiseFace
-		};
-
 		Engine(int width, int height, Events* events);
 		~Engine();
 
@@ -64,8 +49,6 @@ namespace Core
 		inline const uint								GetNbTriangles() const { return m_sceneTriangles; }
 		inline const uint								GetNbDrawnTriangles() const { return m_drawnTriangles; }
 
-		inline void										SetRenderOutput(RenderOutput r) { m_renderOutput = r; }
-
 		inline BufferData*								GetBufferData() { return &m_bufferData; }
 		inline const float								GetZNear() { return m_zNear; }
 		inline const float								GetZFar() { return m_zFar; }
@@ -80,13 +63,13 @@ namespace Core
 		inline bool										ShowNormals() { return m_showNormals; }
 		inline bool										DrawGizmos() { return m_drawGizmos; }
 		inline bool										ShowBBoxes() { return m_showBBoxes; }
-		inline void										UseScanline(bool b) { m_scaneLine = b; }
-		inline const bool								UseScanline() { return m_scaneLine; }
-		inline const RenderOptions::Lighting_precision	LightingPrecision() const  { return m_lightingPrecision ; } 
-		void											LightingPrecision(RenderOptions::Lighting_precision l) { m_lightingPrecision = l; }
+		inline void										SetRenderMode(eRenderMode b) { m_renderMode = b; }
+		inline const eRenderMode						GetRenderMode() { return m_renderMode; }
+		inline void										SetRenderOutput(eRenderOutput r) { m_renderOutput = r; }
+		inline const eRenderOutput						GetRenderOutput() { return m_renderOutput; }
+		inline const eLightingPrecision					GetLightingPrecision() const  { return m_lightingPrecision ; }
+		void											SetLightingPrecision(eLightingPrecision l) { m_lightingPrecision = l; }
 		uint											GetObjectIdAtCoords(uint x, uint y);
-		const CullMode									GetCullMode() const { return m_cullMode; }
-		void											SetCullMode(const CullMode c) { m_cullMode = c; }
 		float											WaitForRasterizersEnd();
 		void											ClearRenderQueues();
 		void											Resize(int width, int height);
@@ -118,14 +101,14 @@ namespace Core
 		ulong m_nbPixels;
 		volatile bool m_started = false;
 		bool m_wireFrame = false;
-		bool m_scaneLine = false;
+		
 		bool m_showNormals = false;
 		bool m_showGrid = true;
 		bool m_drawGizmos = true;
 		bool m_showBBoxes = true;
-		RenderOutput m_renderOutput;
-		CullMode m_cullMode;
-		RenderOptions::Lighting_precision m_lightingPrecision = RenderOptions::Lighting_precision_vertex;
+		eRenderOutput m_renderOutput;
+		eRenderMode m_renderMode = eRenderMode_fullframe;
+		eLightingPrecision m_lightingPrecision = eLightingPrecision_vertex;
 		const uint oBufferColors[8] = { 0x000000, 0x00FF00, 0x0000FF,
 										 0xFFFF00, 0x00FFFF, 0xFF00FF,
 										 0xFFFFFF, 0xFF0000, };

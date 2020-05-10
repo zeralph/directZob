@@ -43,7 +43,7 @@
             this.camerasBox.Margin = new System.Windows.Forms.Padding(10);
             this.camerasBox.Name = "camerasBox";
             this.camerasBox.Padding = new System.Windows.Forms.Padding(10);
-            this.camerasBox.Size = new System.Drawing.Size(200, 84);
+            this.camerasBox.Size = new System.Drawing.Size(340, 84);
             this.camerasBox.TabIndex = 1;
             this.camerasBox.TabStop = false;
             this.camerasBox.Text = "Cameras";
@@ -74,7 +74,7 @@
             this.Controls.Add(this.camerasBox);
             this.MinimumSize = new System.Drawing.Size(200, 50);
             this.Name = "CameraControl";
-            this.Size = new System.Drawing.Size(200, 84);
+            this.Size = new System.Drawing.Size(340, 84);
             this.camerasBox.ResumeLayout(false);
             this.camerasBox.PerformLayout();
             this.ResumeLayout(false);

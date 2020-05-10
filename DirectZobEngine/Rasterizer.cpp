@@ -20,7 +20,7 @@ void Rasterizer::Init()
 	//m_thread.detach();
 }
 
-void Rasterizer::Start(const Triangle* triangles, const uint nbTriangles, const std::vector<Line3D>* lines, const bool wireFrame, const bool scanline, const bool bEvenFrame, RenderOptions::Lighting_precision lp)
+void Rasterizer::Start(const Triangle* triangles, const uint nbTriangles, const std::vector<Line3D>* lines, const bool wireFrame, const eRenderMode renderMode, const bool bEvenFrame, const eLightingPrecision lp)
 {
 	m_lines = lines;
 	m_triangles = triangles;
@@ -28,7 +28,7 @@ void Rasterizer::Start(const Triangle* triangles, const uint nbTriangles, const 
 	m_wireFrame = wireFrame;
 	m_thread = std::thread(&Rasterizer::Render, this);
 	m_bEvenFrame = bEvenFrame ? 1 : 0;
-	m_scanline = scanline;
+	m_renderMode = renderMode;
 	m_lightingPrecision = lp;
 }
 
@@ -213,7 +213,7 @@ void Rasterizer::DrawTriangle(const Triangle* t) const
 	}
 
 	Vector3 la, lb, lc = Vector3(0, 0, 0);
-	if (m_lightingPrecision == RenderOptions::Lighting_precision_vertex)
+	if (m_lightingPrecision == eLightingPrecision_vertex)
 	{
 		la = ComputeLightingAtPoint(t->va, t->na, t->options->lightMode);
 		lb = ComputeLightingAtPoint(t->vb, t->nb, t->options->lightMode);
@@ -378,7 +378,7 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 	zRatio = (z - m_bufferData->zNear ) / (m_bufferData->zFar - m_bufferData->zNear);
 	
 	float zf = m_bufferData->zBuffer[k];
-	if ( zRatio >= 0.0f &&  (!t->options->ZBuffered() || zf < 0.0f  || zRatio < zf ))
+	if ( zRatio >= 0.0f &&  (!t->options->zBuffered || zf < 0.0f  || zRatio < zf ))
 	{
 		m_bufferData->zBuffer[k] = zRatio;
 
@@ -397,7 +397,7 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 		tu = w0 * t->ua->y + w1 * t->ub->y + w2 * t->uc->y;
 
 		cl = 1.0f;
-		RenderOptions::eLightMode lighting = t->options->LightMode();
+		RenderOptions::eLightMode lighting = t->options->lightMode;
 		if (lighting == RenderOptions::eLightMode_flat || lighting == RenderOptions::eLightMode_flatPhong)
 		{
 			normal = t->n;
@@ -449,7 +449,7 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 		fg = 0.0f;
 		fb = 0.0f;
 
-		if (m_lightingPrecision == RenderOptions::Lighting_precision_vertex)
+		if (m_lightingPrecision == eLightingPrecision_vertex)
 		{
 			//Vertex lighting
 			fr = (w0 * la->x + w1 * lb->x + w2 * lc->x) * r;
@@ -461,7 +461,7 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 				gg++;
 			}
 		}
-		else if(m_lightingPrecision == RenderOptions::Lighting_precision_pixel)
+		else if(m_lightingPrecision == eLightingPrecision_pixel)
 		{
 			Vector3 l = ComputeLightingAtPoint(&tpos, &normal, lighting);
 			fr = l.x * r;
@@ -475,15 +475,15 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 		fg = clamp2(fg, 0.0f, 1.0f);
 		fb = clamp2(fb, 0.0f, 1.0f);
 		z = abs(z);
-		if (m_fogType == FogType::FogType_NoFog)
+		if (m_fogType == eFogType::eFogType_NoFog)
 		{
 			z = 1.0f;
 		}
-		else if (m_fogType == FogType::FogType_Linear)
+		else if (m_fogType == eFogType::eFogType_Linear)
 		{
 			z = (m_bufferData->zFar - z) / (m_fogDistance - m_bufferData->zNear);
 		}
-		else if (m_fogType == FogType::FogType_Exp)
+		else if (m_fogType == eFogType::eFogType_Exp)
 		{
 			//z = (m_bufferData->zFar - z) / (m_fogDistance - m_bufferData->zNear);
 			z = exp(-m_fogDensity * zRatio);
@@ -493,7 +493,7 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 			//z = (m_bufferData->zFar - z) / (m_fogDistance - m_bufferData->zNear);
 			z = exp(-m_fogDensity * pow(zRatio,2));
 		}
-		z = clamp2(z, 0.0f, 1.0f);
+		z = clamp2(abs(z), 0.0f, 1.0f);
 		fr = fr * z + (1.0f - z) * m_fogColor->x;
 		fg = fg * z + (1.0f - z) * m_fogColor->y;
 		fb = fb * z + (1.0f - z) * m_fogColor->z;

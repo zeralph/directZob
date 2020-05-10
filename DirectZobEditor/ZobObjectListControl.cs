@@ -17,8 +17,6 @@ namespace DirectZobEditor
         
         public delegate void OnObjectSelectedHandler(object s, ObjectSelectionEventArg e);
         public event OnObjectSelectedHandler OnObjectSelected;
-
-        private CLI.ManagedRenderOptions m_savedRenderOptions;
         private CLI.ZobObjectManagerWrapper m_zobObjectManagerWrapper;
         private Form1 m_mainForm = null;
         private CLI.ZobObjectWrapper m_currentSelectedZobObject = null;

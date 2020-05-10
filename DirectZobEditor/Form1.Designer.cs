@@ -187,6 +187,7 @@
             // FirstPanelSplitter.Panel1
             // 
             this.FirstPanelSplitter.Panel1.Controls.Add(this.ZobObjectListPanel);
+            this.FirstPanelSplitter.Panel1MinSize = 200;
             // 
             // FirstPanelSplitter.Panel2
             // 
@@ -219,8 +220,8 @@
             // SecondPanelSplitter.Panel2
             // 
             this.SecondPanelSplitter.Panel2.AutoScroll = true;
-            this.SecondPanelSplitter.Panel2.AutoScrollMinSize = new System.Drawing.Size(300, 0);
             this.SecondPanelSplitter.Panel2.Controls.Add(this.propertiesPanel);
+            this.SecondPanelSplitter.Panel2MinSize = 350;
             this.SecondPanelSplitter.Size = new System.Drawing.Size(1074, 750);
             this.SecondPanelSplitter.SplitterDistance = 700;
             this.SecondPanelSplitter.TabIndex = 0;
@@ -310,6 +311,7 @@
             this.EngineControlsFlowLayout.Dock = System.Windows.Forms.DockStyle.Fill;
             this.EngineControlsFlowLayout.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.EngineControlsFlowLayout.Location = new System.Drawing.Point(0, 0);
+            this.EngineControlsFlowLayout.MinimumSize = new System.Drawing.Size(300, 0);
             this.EngineControlsFlowLayout.Name = "EngineControlsFlowLayout";
             this.EngineControlsFlowLayout.Size = new System.Drawing.Size(368, 748);
             this.EngineControlsFlowLayout.TabIndex = 0;

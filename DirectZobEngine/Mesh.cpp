@@ -517,7 +517,7 @@ void Mesh::QueueForDrawing(const Matrix4x4& modelMatrix, const Matrix4x4& rotati
 	memcpy(m_trianglesNormals, m_trianglesNormalsTmp, sizeof(Vector3) * m_nbFaces);
 	memcpy(m_projectedVertices, m_projectedVerticesTmp, sizeof(Vector3) * m_nbVertices);
 
-	if (engine->ShowBBoxes())
+	if (engine->DrawGizmos())// && engine->ShowBBoxes() )
 	{
 		DrawBoundingBox(modelMatrix, rotationMatrix, camera, engine, ownerId, options);
 	}
@@ -537,7 +537,7 @@ void Mesh::QueueForDrawing(const Matrix4x4& modelMatrix, const Matrix4x4& rotati
 			t->ComputeArea();
 			static float sAreaMin = 0.0f;
 			static float sAreaMax = 50000.0f;
-			if (engine->GetCullMode() == Engine::CullCounterClockwiseFace)
+			if (t->options->cullMode == eCullMode_CounterClockwiseFace)
 			{
 				t->area = -t->area;
 			}

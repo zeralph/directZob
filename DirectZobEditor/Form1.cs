@@ -23,6 +23,7 @@ namespace DirectZobEditor
         private CLI.DirectZobWrapper m_directZobWrapper;
         private CLI.MeshManagerWrapper m_meshManagerWrapper;
         private CLI.LightManagerWrapper m_lightManagerWrapper;
+
         //public UpdateLogWindow UpdateLogWindowDelegate;
         
         private CameraControl m_camControl;
@@ -31,6 +32,9 @@ namespace DirectZobEditor
         private EngineControl m_engineControl;
         private ZobObjectControl m_zobObjectControl;
         private SceneControl m_sceneControl;
+        private ZobLightControl m_lightControl;
+        private ZobCameraControl m_cameraControl;
+        private ZobMeshControl m_meshControl;
         private bool m_ctrlPressed = false;
 
         private string m_path;
@@ -51,22 +55,26 @@ namespace DirectZobEditor
             Application.ApplicationExit += new EventHandler(this.OnApplicationExit);
             //--
             m_camControl = new CameraControl(this);
-            EngineControlsFlowLayout.Controls.Add(m_camControl);
-            //--
             m_engineWindow = new EngineWindow(this, m_directZobWrapper);
-            EngineRendererPanel.Controls.Add(m_engineWindow);
-            //--
             m_zobObjectList = new ZobObjectListControl(this);
-            ZobObjectListPanel.Controls.Add(m_zobObjectList);
-            //--
-            m_sceneControl = new SceneControl();
-            EngineControlsFlowLayout.Controls.Add(m_sceneControl);
-            //--
+            m_sceneControl = new SceneControl(this, m_lightManagerWrapper);
             m_engineControl = new EngineControl(this, m_engineWindow.GetEngineWrapper());
-            EngineControlsFlowLayout.Controls.Add(m_engineControl);
+            m_lightControl = new ZobLightControl();
+            m_cameraControl = new ZobCameraControl();
+            m_meshControl = new ZobMeshControl();
+            m_zobObjectControl = new ZobObjectControl(this, m_lightControl, m_cameraControl, m_meshControl);
             //--
-            m_zobObjectControl = new ZobObjectControl(this);
+            EngineControlsFlowLayout.Controls.Add(m_camControl);
+            EngineRendererPanel.Controls.Add(m_engineWindow);
+            ZobObjectListPanel.Controls.Add(m_zobObjectList);
+            EngineControlsFlowLayout.Controls.Add(m_sceneControl);
+            EngineControlsFlowLayout.Controls.Add(m_engineControl);
             EngineControlsFlowLayout.Controls.Add(m_zobObjectControl);
+            EngineControlsFlowLayout.Controls.Add(m_meshControl);
+            EngineControlsFlowLayout.Controls.Add(m_cameraControl);
+            EngineControlsFlowLayout.Controls.Add(m_lightControl);
+            //--
+            this.propertiesPanel.MinimumSize = new Size(300, 500);
 
             this.WindowState = FormWindowState.Maximized;
             m_directZobWrapper.NewScene();

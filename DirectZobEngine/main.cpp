@@ -46,7 +46,13 @@ void keyboard(struct Window* window, Key key, KeyMod mod, bool isPressed) {
 		}
 		else if (key == KB_KEY_S)
 		{
-			m_directZob.GetEngine()->UseScanline(!m_directZob.GetEngine()->UseScanline());
+			int l = (int)m_directZob.GetEngine()->GetRenderMode();
+			l++;
+			if (l == eRenderMode::__eRenderMode_MAX__)
+			{
+				l = eRenderMode::eRenderMode_fullframe;
+			}
+			m_directZob.GetEngine()->SetRenderMode((eRenderMode)l);
 		}
 		else if (key == KB_KEY_P)
 		{
@@ -54,13 +60,13 @@ void keyboard(struct Window* window, Key key, KeyMod mod, bool isPressed) {
 		}
 		else if (key == KB_KEY_L)
 		{
-			int l = (int)m_directZob.GetEngine()->LightingPrecision();
+			int l = (int)m_directZob.GetEngine()->GetLightingPrecision();
 			l++;
-			if(l == RenderOptions::__Lighting_precision_MAX__)
+			if(l == eLightingPrecision::__eLightingPrecision_MAX__)
 			{
-				l = RenderOptions::Lighting_precision_noLighting;
+				l = eLightingPrecision::eLightingPrecision_noLighting;
 			}	
-			m_directZob.GetEngine()->LightingPrecision( (RenderOptions::Lighting_precision)l);
+			m_directZob.GetEngine()->SetLightingPrecision( (eLightingPrecision)l);
 		}		
 		//m_curCam->OnKeyboardInput(key, isPressed);
 	}
@@ -190,10 +196,6 @@ int main(int argc, char* argv[])
 				return 1;
 			}
 		}
-		else if (std::string(argv[i]) == "--height")
-		{
-			bBench = true;
-		}
 		i++;
 	}
 
@@ -235,9 +237,6 @@ int main(int argc, char* argv[])
 	float rot = 0.0f;
 	float to = 0.5f;
     printf("Start rendering\n");
-	Vector3 camPos = Vector3(0, 1, 20);
-	Vector3 camTo = Vector3(0, 1, 21);
-	Vector3 camUp = Vector3(0, 1, 0);
 	float benchFps = 0.0f;
 	float benchRender = 0.0f;
 	float benchGeom = 0.0f;
@@ -247,10 +246,14 @@ int main(int argc, char* argv[])
 	m_directZob.GetEngine()->ShowBBoxes(false);
 	m_directZob.GetEngine()->ShowNormals(false);
 	m_directZob.GetEngine()->ShowGrid(false);
-	m_directZob.GetEngine()->UseScanline(false);
+	m_directZob.GetEngine()->SetRenderMode(eRenderMode::eRenderMode_fullframe);
 	m_directZob.GetEngine()->DrawGizmos(false);
 	//m_directZob.GetEngine()->GetBufferData()->zFar = 70.0f;
 	//m_directZob.GetZobObjectManager()->GetZobObject("fbx_example")->SetRotation(0, 90, 0);
+	Vector3 camPos = m_directZob.GetCameraManager()->GetCurrentCamera()->GetTransform();
+	Vector3 camTo = camPos;
+	camTo.z += 1.0f;
+
 	for (;;)
 	{
 		if (bBench)
@@ -259,7 +262,7 @@ int main(int argc, char* argv[])
 			{
 				//m_directZob.GetCameraManager()->GetCurrentCamera()->SetLookAt(&camPos, &camTo, &camUp);
 				m_directZob.GetCameraManager()->GetCurrentCamera()->SetTranslation(camPos.x, camPos.y, camPos.z);
-				m_directZob.GetCameraManager()->GetCurrentCamera()->SetRotation(0, rot, 0);
+			//	m_directZob.GetCameraManager()->GetCurrentCamera()->SetRotation(0, rot, 0);
 			}
 			Light* red = m_directZob.GetLightManager()->GetLight("red");
 			Light* blue = m_directZob.GetLightManager()->GetLight("blue");

@@ -37,8 +37,8 @@ ZobObject::ZobObject(Type t, SubType s, const std::string& name, Mesh* mesh, Zob
 	{
 		m_parent->AddChildReference(this);
 	}
-	m_renderOptions.LightMode(RenderOptions::eLightMode_phong);
-	m_renderOptions.ZBuffered(true);
+	m_renderOptions.lightMode = RenderOptions::eLightMode_phong;
+	m_renderOptions.zBuffered = true;
 	m_renderOptions.bTransparency = false;
 	//m_renderOptions.colorization = new Vector3(1, 0, 0);
     DirectZob::LogInfo("ZobObject %s added", m_name.c_str());
@@ -96,8 +96,8 @@ ZobObject::ZobObject(Type t, SubType s, TiXmlElement* node, Mesh* mesh, ZobObjec
 	{
 		m_parent->AddChildReference(this);
 	}
-	m_renderOptions.LightMode(RenderOptions::eLightMode_phong);
-	m_renderOptions.ZBuffered(true);
+	m_renderOptions.lightMode = RenderOptions::eLightMode_phong;
+	m_renderOptions.zBuffered = true;
 	m_renderOptions.bTransparency = false;
 	//m_renderOptions.colorization = new Vector3(1, 0, 0);
 	SetTranslation(position.x, position.y, position.z);
@@ -347,7 +347,7 @@ bool ZobObject::HasChild(const ZobObject* o)
 
 void ZobObject::SetLightingMode(RenderOptions::eLightMode l)
 {
-	m_renderOptions.LightMode(l);
+	m_renderOptions.lightMode = l;
 }
 
 TiXmlNode* ZobObject::SaveUnderNode(TiXmlNode* node)

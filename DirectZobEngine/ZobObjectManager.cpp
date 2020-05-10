@@ -209,8 +209,8 @@ ZobObject* ZobObjectManager::LoadEditorMesh(const char* name, const char* meshPa
 	std::string m = std::string(meshFile);
 	Mesh* mesh = meshMgr->LoadMesh(n, p, m);
 	ZobObject* transform = new ZobObject(ZOBGUID::type_editor, ZOBGUID::subtype_zobOject, n, mesh, parent);
-	transform->GetRenderOptions()->LightMode(RenderOptions::eLightMode_none);
-	transform->GetRenderOptions()->ZBuffered(false);
+	transform->GetRenderOptions()->lightMode = RenderOptions::eLightMode_none;
+	transform->GetRenderOptions()->zBuffered =  false;
 	return transform;
 }
 

@@ -27,7 +27,7 @@ public:
 	void 				DrawTriangle(const Triangle* t) const;
 	void 				plotLine(int x0, int y0, int x1, int y1) const;
 	void 				DrawLine(const Line3D* l) const;
-	void 				Start(const Triangle* triangles, const uint nbTriangles, const std::vector<Line3D>* lines, const bool wireFrame, const bool scanline, const bool bEvenFrame, RenderOptions::Lighting_precision lp);
+	void 				Start(const Triangle* triangles, const uint nbTriangles, const std::vector<Line3D>* lines, const bool wireFrame, const eRenderMode renderMode, const bool bEvenFrame, const eLightingPrecision lp);
 	float 				WaitForEnd();
 	void 				End();
 	void 				Init();
@@ -44,7 +44,12 @@ private:
 	void 				sortVerticesAscendingByY(Vector2* v1, Vector2* v2, Vector2* v3, Vector2* uv1, Vector2* uv2, Vector2* uv3) const;
 	inline float 		edgeFunction(const Vector3* a, const Vector3* b, const Vector3* c) const { return (c->x - a->x) * (b->y - a->y) - (c->y - a->y) * (b->x - a->x); }
 	inline float 		clamp2(float x, const float min, const float max) const { if (x < min) x = min; if (x > max) x = max; return x; }
-	inline const bool 	RenderLine(int line) const { return !m_scanline || line % 2 == m_bEvenFrame; }
+	inline const bool 	RenderLine(int line) const 
+	{ 
+		return (m_renderMode == eRenderMode_fullframe) ||
+			(m_renderMode == eRenderMode_interlaced && line % 2 == m_bEvenFrame) ||
+			(m_renderMode == eRenderMode_scanline && line % 2 == 0);
+	}
 	inline const float 	computeAmbient(float ambientIntensity) const
 	{
 		return clamp2(ambientIntensity, 0.0f, 1.0f);
@@ -72,7 +77,7 @@ private:
 	const Vector3* m_fogColor;
 	float m_fogDistance;
 	float m_fogDensity;
-	FogType m_fogType;
+	eFogType m_fogType;
 	BufferData* m_bufferData;
 	Vector3 m_camDir;
 	uint m_nbTriangles;
@@ -82,9 +87,9 @@ private:
 	uint m_endHeight;
 	std::thread m_thread;
 	bool m_wireFrame = false;
-	bool m_scanline = false;
+	eRenderMode m_renderMode;
 	int m_bEvenFrame = 0;
-	RenderOptions::Lighting_precision m_lightingPrecision;
+	eLightingPrecision m_lightingPrecision;
 	clock_t	m_tick;
 	float m_time;
 };

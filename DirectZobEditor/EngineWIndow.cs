@@ -218,7 +218,7 @@ namespace DirectZobEditor
         {
             if (e.Button == MouseButtons.Left && !m_mainForm.IsCtrlPressed())
             {
-                m_selectedObject = m_mainForm.GetZobObjectListControl().SelectObjectAtCoords(e.X, e.Y, CLI.ZobObjectManagerWrapper.eObjectTypes.eObjectTypes_scene);
+//                m_selectedObject = m_mainForm.GetZobObjectListControl().SelectObjectAtCoords(e.X, e.Y, CLI.ZobObjectManagerWrapper.eObjectTypes.eObjectTypes_scene);
             }
         }
 

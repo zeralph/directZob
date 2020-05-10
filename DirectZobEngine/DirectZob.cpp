@@ -165,16 +165,16 @@ int DirectZob::RunAFrame()
 			{
 				m_text->Print(0, 16, 1, &sBuf, 0xFFFF0000);
 			}
-			switch(m_engine->LightingPrecision())
+			switch(m_engine->GetLightingPrecision())
 			{
 				default:
-				case RenderOptions::Lighting_precision_noLighting:
+				case eLightingPrecision_noLighting:
 					sBuf = std::string("LighingPrecision : no lighting");
 					break;
-				case RenderOptions::Lighting_precision_pixel:
+				case eLightingPrecision_pixel:
 					sBuf = std::string("LighingPrecision : pixel");
 					break;
-				case RenderOptions::Lighting_precision_vertex:
+				case eLightingPrecision_vertex:
 					sBuf = std::string("LighingPrecision : vertex");
 					break;
 

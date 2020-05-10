@@ -22,9 +22,12 @@ namespace DirectZobEditor
             showGrid.Checked = true;
             wireframe.Checked = false;
             showNormals.Checked = false;
-            comboRendering.SelectedIndex = 0;
+            comboBuffer.SelectedIndex = 0;
+            comboRender.SelectedIndex = 0;
+            comboLighting.SelectedIndex = 1;
             m_engineWrapper.ShowGrid(showGrid.Checked);
             m_engineWrapper.WireFrame(wireframe.Checked);
+            m_engineWrapper.DrawGizmos(drawGizmos.Checked);
             engineWidth.Text = m_engineWrapper.GetBufferWidth().ToString();
             engineHeight.Text = m_engineWrapper.GetBufferHeight().ToString();
         }
@@ -37,12 +40,6 @@ namespace DirectZobEditor
         private void Wireframe_CheckedChanged(object sender, EventArgs e)
         {
             m_engineWrapper.WireFrame(wireframe.Checked);
-        }
-
-        private void ComboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            ComboBox c = (ComboBox)sender;
-            m_engineWrapper.SetRenderOutput(c.SelectedIndex);
         }
 
         private void engineSetSize_Click(object sender, EventArgs e)
@@ -61,6 +58,28 @@ namespace DirectZobEditor
         private void showNormals_CheckedChanged(object sender, EventArgs e)
         {
             m_engineWrapper.ShowNormals(showNormals.Checked);
+        }
+        private void ComboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ComboBox c = (ComboBox)sender;
+            m_engineWrapper.SetRenderOutput(c.SelectedIndex);
+        }
+
+        private void comboRender_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ComboBox c = (ComboBox)sender;
+            m_engineWrapper.SetRenderMode(c.SelectedIndex);
+        }
+
+        private void comboLighting_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ComboBox c = (ComboBox)sender;
+            m_engineWrapper.SetLightingPrecision(c.SelectedIndex);
+        }
+
+        private void drawGizmos_CheckedChanged(object sender, EventArgs e)
+        {
+            m_engineWrapper.DrawGizmos(drawGizmos.Checked);
         }
     }
 }
