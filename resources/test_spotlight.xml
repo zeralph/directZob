@@ -1,0 +1,30 @@
+<root>
+    <Meshes>
+        <Mesh name="beach2.obj" file="beach2.obj" />
+    </Meshes>
+    <Scene>
+        <Globals>
+            <AmbientColor r="102" g="102" b="102" />
+            <FogColor r="63" g="149" b="255" />
+            <ClearColor r="63" g="149" b="255" />
+            <FogDensity>2.00</FogDensity>
+            <FogDistance>500.00</FogDistance>
+            <FogType>none</FogType>
+        </Globals>
+        <ZobObject name="Light_0" type="light">
+            <Position x="0" y="10" z="0" />
+            <Rotation x="-90" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+            <Color r="255" g="0" b="0" />
+            <Intensity>5.00</Intensity>
+            <FallOffDistance>100.00</FallOffDistance>
+            <Type>spot</Type>
+        </ZobObject>
+        <ZobObject name="newObject_5" type="mesh">
+            <Position x="0" y="0" z="0" />
+            <Rotation x="0" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+            <Mesh>beach2.obj</Mesh>
+        </ZobObject>
+    </Scene>
+</root>

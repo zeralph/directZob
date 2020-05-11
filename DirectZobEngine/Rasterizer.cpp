@@ -163,12 +163,31 @@ inline Vector3 Rasterizer::ComputeLightingAtPoint(const Vector3* position, const
 			const Light* l = (*iter);
 			if (l->IsActive())
 			{
-				lightDir = position - l->GetWorldPosition();// tpos;
-				lightPower = 1.0f - (lightDir.sqrtLength() / l->GetFallOffDistance());
-				lightPower = clamp2(lightPower, 0.0f, 1.0f) * l->GetIntensity();
+				if (l->GetType() == Light::eLightType_directional)
+				{
+					lightDir = l->GetForward();
+					lightPower = 1.0f;
+				}
+				else if(l->GetType() == Light::eLightType_point)
+				{
+					lightDir = position - l->GetWorldPosition();// tpos;
+					lightPower = 1.0f - (lightDir.sqrtLength() / l->GetFallOffDistance());
+					lightPower = clamp2(lightPower, 0.0f, 1.0f) * l->GetIntensity();
+					lightDir.Normalize();
+				}
+				else if (l->GetType() == Light::eLightType_spot)
+				{
+					lightDir = position - l->GetWorldPosition();// tpos;
+					lightPower = 1.0f - (lightDir.sqrtLength() / l->GetFallOffDistance());
+					lightDir.Normalize();
+					Vector3 fw = l->GetForward();
+					float f = Vector3::Dot(&fw, &lightDir);
+					f = f - (90.0f - l->GetSpotAngle()) / 90.0f;
+					lightPower *= f;
+					lightPower = clamp2(lightPower, 0.0f, 1.0f) * l->GetIntensity();
+				}
 				if (lightPower > 0.0f)
 				{
-					lightDir.Normalize();
 					static int specularIntensity = 50;
 					static float ambientIntensity = 0.4f;
 					cl = computeLighting(normal, &lightDir);
@@ -491,7 +510,7 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 		else
 		{
 			//z = (m_bufferData->zFar - z) / (m_fogDistance - m_bufferData->zNear);
-			z = exp(-m_fogDensity * pow(zRatio,2));
+			z = exp(-pow(m_fogDensity*zRatio,2));
 		}
 		z = clamp2(abs(z), 0.0f, 1.0f);
 		fr = fr * z + (1.0f - z) * m_fogColor->x;

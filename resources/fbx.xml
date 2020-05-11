@@ -23,29 +23,32 @@
             <Scale x="0.1" y="0.1" z="0.1" />
             <Mesh>fbx_example</Mesh>
         </ZobObject>
-        <ZobObject name="green" type="pointlight">
+        <ZobObject name="green" type="light">
             <Position x="0" y="5" z="0" />
             <Rotation x="0" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
             <Color r="0" g="255" b="0" />
             <Intensity>1.00</Intensity>
             <FallOffDistance>60.00</FallOffDistance>
+            <Type>point</Type>
         </ZobObject>
-        <ZobObject name="red" type="pointlight">
-            <Position x="0" y="10" z="40" />
+        <ZobObject name="red" type="light">
+            <Position x="0" y="10" z="0" />
             <Rotation x="0" y="0" z="0" />
-            <Scale x="0" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
             <Color r="255" g="0" b="0" />
             <Intensity>2.00</Intensity>
             <FallOffDistance>60.00</FallOffDistance>
+            <Type>spot</Type>
         </ZobObject>
-        <ZobObject name="blue" type="pointlight">
-            <Position x="0" y="10" z="60" />
-            <Rotation x="0" y="0" z="0" />
-            <Scale x="0" y="0" z="0" />
-            <Color r="0" g="0" b="255" />
+        <ZobObject name="blue" type="light">
+            <Position x="0" y="10" z="40" />
+            <Rotation x="-45" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+            <Color r="185" g="185" b="0" />
             <Intensity>1.00</Intensity>
             <FallOffDistance>60.00</FallOffDistance>
+            <Type>directional</Type>
         </ZobObject>
     </Scene>
 </root>

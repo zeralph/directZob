@@ -41,30 +41,20 @@ namespace DirectZobEditor
         {
             CLI.ZobObjectWrapper oldObject = e.previousZobObject;
             m_currentZobObjectWrapper = e.newZobObject;
-            m_lightControl.Visible = false;
-            m_meshControl.Visible = false;
-            m_cameraControl.Visible = false;
+            //m_lightControl.Visible = false;
+            //m_meshControl.Visible = false;
+            //m_cameraControl.Visible = false;
             if (m_currentZobObjectWrapper != null)
             {
+                SetValues();
                 this.Visible = true;
-                if(m_currentZobObjectWrapper.IsLight())
-                {
-                    m_lightControl.Visible = true;
-                }
-                else if(m_currentZobObjectWrapper.IsCamera())
-                {
-                    m_cameraControl.Visible = true;
-                }
-                else if(m_currentZobObjectWrapper.HasMesh())
-                {
-                    m_meshControl.Visible = true;
-                }
             }
             else
             {
                 this.Visible = false;
+                ClearValues();
             }
-            UpdateValues();
+            
         }
         private void SetValues()
         {

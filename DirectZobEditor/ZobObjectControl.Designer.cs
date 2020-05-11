@@ -209,7 +209,7 @@
             this.zobRotY.Size = new System.Drawing.Size(50, 20);
             this.zobRotY.TabIndex = 37;
             this.zobRotY.Text = "100.00";
-            this.zobRotY.TextChanged += new System.EventHandler(this.valueChanged);
+            this.zobRotY.Leave += new System.EventHandler(this.valueChanged);
             // 
             // label4
             // 
@@ -227,7 +227,7 @@
             this.zobRotZ.Size = new System.Drawing.Size(50, 20);
             this.zobRotZ.TabIndex = 38;
             this.zobRotZ.Text = "100.00";
-            this.zobRotZ.TextChanged += new System.EventHandler(this.valueChanged);
+            this.zobRotZ.Leave += new System.EventHandler(this.valueChanged);
             // 
             // ZobObjectControl
             // 

@@ -36,9 +36,9 @@ namespace DirectZobEditor
             buttonAmbientColor.BackColor = ToColor(m_LightManagerWrapper.GetAmbientColor());
             buttonFogColor.BackColor = ToColor(m_LightManagerWrapper.GetFogColor());
             buttonClearColor.BackColor = ToColor(m_LightManagerWrapper.GetClearColor());
-            trackBarAmbientIntensity.Value = (int)(m_LightManagerWrapper.GetAmbientIntensity() * 100);
-            trackBarFogIntensity.Value = (int)(m_LightManagerWrapper.GetFogIntensity());
-            trackBarFogDistance.Value = (int)(m_LightManagerWrapper.GetFogDistance());
+         //   trackBarAmbientIntensity.Value = (int)(m_LightManagerWrapper.GetAmbientIntensity() * 100);
+         //   trackBarFogIntensity.Value = (int)(m_LightManagerWrapper.GetFogIntensity());
+          //  trackBarFogDistance.Value = (int)(m_LightManagerWrapper.GetFogDistance());
             comboFogType.SelectedIndex = (int)(m_LightManagerWrapper.GetFogType());
         }
 

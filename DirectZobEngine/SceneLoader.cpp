@@ -36,7 +36,7 @@ void SceneLoader::LoadZobObject(TiXmlElement* node, ZobObject* parent)
 		DirectZob::GetInstance()->GetCameraManager()->AddCamera(c);
 		zob = c;
 	}
-	else if (type == "pointlight")
+	else if (type == "light")
 	{
 		Light* l = new Light(node, parent);
 		DirectZob::GetInstance()->GetLightManager()->AddLight(l);

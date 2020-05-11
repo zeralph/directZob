@@ -3,6 +3,8 @@
 #include "ManagedObject.h"
 #include "ZobObjectManager.h"
 #include "ZobObjectWrapper.h"
+#include "ZobLightWrapper.h"
+#include "ZobCameraWrapper.h"
 #include <string> 
 //using namespace System;
 namespace CLI

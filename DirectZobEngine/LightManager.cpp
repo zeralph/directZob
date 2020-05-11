@@ -56,9 +56,9 @@ void LightManager::UnloadAll()
 	m_lights.clear();
 }
 
-Light* LightManager::CreatePointLight(std::string& name, Vector3 position, Vector3 color, float intensity, float distance, ZobObject* parent)
+Light* LightManager::CreateLight(std::string& name, Light::eLightType type, Vector3 position, Vector3 color, float intensity, float distance, ZobObject* parent)
 {
-	Light* l = new Light(name, color, intensity, distance, parent);
+	Light* l = new Light(name, type, color, intensity, distance, parent);
 	l->SetTranslation(position.x, position.y, position.z);
 	l->SetRotation(0,0,0);
 	AddLight(l);
@@ -75,7 +75,7 @@ Light* LightManager::CreateLight()
 	int l = m_lights.size();
 	std::string name = std::string("Light_").append(std::to_string((l)));
 	Vector3 color = Vector3(252.0f / 255.0f, 212 / 255.0f, 64.0f / 255.0f);
-	return CreatePointLight(name, Vector3(0, 10, 0), color, 5.0f, 100.0f, NULL);
+	return CreateLight(name, Light::eLightType_point, Vector3(0, 10, 0), color, 5.0f, 100.0f, NULL);
 }
 
 Light* LightManager::GetLight(const std::string& name) const

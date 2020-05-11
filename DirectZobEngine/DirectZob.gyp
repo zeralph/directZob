@@ -214,6 +214,10 @@
                             'MeshManagerWrapper.cpp',
                             'ZobObjectManagerWrapper.cpp',
                             'ZobObjectWrapper.cpp',
+							'LightManagerWrapper.cpp',
+                            'ZobLightWrapper.cpp',
+							'CameraManagerWrapper.cpp',
+                            'ZobCameraWrapper.cpp',
                         ],
                         'link_settings': {
                             # links fbxsdk as static

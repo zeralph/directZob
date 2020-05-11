@@ -16,7 +16,7 @@ public:
 	void						ReInitGlobalSettings();
 	void						AddLight(Light* l);
 	Light*						CreateLight();
-	Light*						CreatePointLight(std::string& name, Vector3 position, Vector3 color, float intensity, float distance, ZobObject* parent);
+	Light*						CreateLight(std::string& name, Light::eLightType type, Vector3 position, Vector3 color, float intensity, float distance, ZobObject* parent);
 	const std::vector<Light*>*  GetActiveLights() const;
 	Light*						GetLight(const std::string& name) const;
 	const Vector3*				GetAmbientColor() const { return &m_ambientColor; };

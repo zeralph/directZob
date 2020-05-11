@@ -29,7 +29,7 @@ namespace CLI {
 		bool IsLight();
 		bool IsCamera();
 		bool HasMesh();
-	private:
+	protected:
 		bool m_isValid;
 	};
 }

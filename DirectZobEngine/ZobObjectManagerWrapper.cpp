@@ -20,6 +20,16 @@ namespace CLI
 		std::string n;
 		MarshalString(name, n);
 		ZobObject* z = m_Instance->GetZobObject(n);
+		
+		if (z->GetSubType() == ZOBGUID::SubType::subtype_zobLight)
+		{
+			return gcnew ZobLightWrapper((Light*)z);
+		}
+		else if (z->GetSubType() == ZOBGUID::SubType::subtype_zobCamera)
+		{
+			return gcnew ZobCameraWrapper((Camera*)z);
+		}
+		
 		return gcnew ZobObjectWrapper(z);
 	}
 
