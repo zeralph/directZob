@@ -42,7 +42,27 @@ public:
 		v->z -= m_viewTransaltion.z;
 		m_viewRotMatrix.Mul(v);
 	};
-
+	inline void				ToProjectedSpace(Vector3* vp)
+	{
+		m_projMatrix.Mul(vp);
+	}
+	/*
+	inline void				ToScreenSpace(Vector3* v)
+	{
+		BufferData* b = DirectZob::GetInstance()->GetEngine()->GetBufferData();
+		if (b)
+		{
+			v->x = (v->x / v->z + 1) * b->width;
+			v->y = (v->y / v->z + 1) * b->height;
+		}
+	}
+	*/
+	inline void				ProjectPointFromWorld(Vector3* wp)
+	{
+		ToViewSpace(wp);
+		ToProjectedSpace(wp);
+		//ToScreenSpace(wp);
+	}
 	inline void				SetTranslation(float x, float y, float z) override
 	{
 		m_translation.x = x; m_translation.y = y; m_translation.z = z;

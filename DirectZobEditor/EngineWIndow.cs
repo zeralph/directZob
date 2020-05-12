@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Windows.Forms;
+using CLI;
+using System.Runtime.CompilerServices;
 
 namespace DirectZobEditor
 {
@@ -40,6 +42,68 @@ namespace DirectZobEditor
             m_directZobWrapper = directZobWrapper;
             m_engineWrapper = new CLI.EngineWrapper();
             GenerateRenderWindow();
+            m_mainForm.GetZobObjectListControl().OnObjectSelected += new ZobObjectListControl.OnObjectSelectedHandler(OnObjectSelected);
+        }
+
+        public void RemoveTranslationGizmos()
+        {
+            bTY.Visible = false;
+            bTX.Visible = false;
+            bTZ.Visible = false;
+        }
+
+        public void SetTranslationGizmos(ZobObjectWrapper z)
+        {
+            if (z != null && z.IsValid())
+            {       
+                ManagedVector3 p0 = z.GetTransform();
+                ManagedVector3 pX = z.GetLeft();
+                ManagedVector3 pY = z.GetUp();
+                ManagedVector3 pZ = z.GetForward();
+                float d = m_engineWrapper.GetDistanceToCamera(p0) / 10.0f;
+                pX.Mul(d);
+                pY.Mul(d);
+                pZ.Mul(d);
+                pX.Add(p0);
+                pY.Add(p0);
+                pZ.Add(p0);
+                m_engineWrapper.GetProjectedCoords(p0);
+                m_engineWrapper.GetProjectedCoords(pX);
+                m_engineWrapper.GetProjectedCoords(pY);
+                m_engineWrapper.GetProjectedCoords(pZ);
+                p0 = ToScreenCoords(p0);
+                pX = ToScreenCoords(pX);
+                pY = ToScreenCoords(pY);
+                pZ = ToScreenCoords(pZ);
+                Point pp0 = new Point((int)p0.x, (int)p0.y);
+                Point ppX = new Point((int)pX.x, (int)pX.y);
+                Point ppY = new Point((int)pY.x, (int)pY.y);
+                Point ppZ = new Point((int)pZ.x, (int)pZ.y);
+                pp0.X += EngineRender.Location.X;
+                pp0.Y += EngineRender.Location.Y;
+                ppX.X += EngineRender.Location.X;
+                ppX.Y += EngineRender.Location.Y;
+                ppY.X += EngineRender.Location.X;
+                ppY.Y += EngineRender.Location.Y;
+                ppZ.X += EngineRender.Location.X;
+                ppZ.Y += EngineRender.Location.Y;
+                bCenter.Location = pp0;
+                bTX.Location = ppX;
+                bTY.Location = ppY;
+                bTZ.Location = ppZ;
+                bTY.Visible = true;
+                bTX.Visible = true;
+                bTZ.Visible = true;
+            }
+        }
+
+        public ManagedVector3 ToScreenCoords(ManagedVector3 v)
+        {
+            ManagedVector3 vout = new ManagedVector3();
+            vout.x = (v.x / v.z + 1) * EngineRender.Width / 2;
+            vout.y = (v.y / v.z + 1) * EngineRender.Height / 2;
+            vout.z = v.z;
+            return vout;
         }
 
         public void ResizeRenderWindow()
@@ -63,9 +127,9 @@ namespace DirectZobEditor
 
         private void GenerateRenderWindow()
         {
-            if(m_engineThread != null)
+            if (m_engineThread != null)
             {
-                if(m_engineThread.IsAlive)
+                if (m_engineThread.IsAlive)
                 {
                     m_engineThread.Abort();
                 }
@@ -114,9 +178,9 @@ namespace DirectZobEditor
                 float hFactor = (float)m_engineBitmap.Height / (float)EngineRenderPanel.Height;
                 float wFactor = (float)m_engineBitmap.Width / (float)EngineRenderPanel.Width;
                 if (hFactor > wFactor)
-                {           
+                {
                     h = EngineRenderPanel.Height;
-                    w = (int)((float)m_engineBitmap.Width / (float)m_engineBitmap.Height* h);
+                    w = (int)((float)m_engineBitmap.Width / (float)m_engineBitmap.Height * h);
                 }
                 else
                 {
@@ -131,6 +195,7 @@ namespace DirectZobEditor
                 EngineRender.Location = new Point(x, y);
 
             }
+            SetTranslationGizmos(m_selectedObject);
             m_mainForm.UpdateAfterEngine();
         }
 
@@ -146,7 +211,7 @@ namespace DirectZobEditor
                 {
                     m_directZobWrapper.RunAFrame();
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     Console.WriteLine(e);
                 }
@@ -165,48 +230,31 @@ namespace DirectZobEditor
 
         private void EngineRender_MouseWheel(object sender, MouseEventArgs e)
         {
-            m_mainForm.GetCameraControl().GetWrapper().Zoom(e.Delta/50.0f);
+            m_mainForm.GetCameraControl().GetWrapper().Zoom(e.Delta / 50.0f);
         }
 
         private void EngineRender_MouseMove(object sender, MouseEventArgs e)
         {
-            int dx = m_lastMouseX - e.X;
-            int dy = m_lastMouseY - e.Y;
             if (e.Button == MouseButtons.Left)
             {
-                if (!m_mainForm.IsCtrlPressed())
+                if (m_mainForm.IsCtrlPressed())
                 {
-                    //MOVE OBJECT HERE
-                    if (m_selectedObject != null && m_currentMouseAction.Length != 0)
-                    {
-                        CLI.ManagedVector3 p = m_selectedObject.GetTransform();
-                        switch (m_currentMouseAction)
-                        {
-                            case "transformY":
-                                p.y += dy;
-                                break;
-                            default:
-                                break;
-                        }
-                        m_selectedObject.SetTransform(p);
-                    }
-                }
-                else
-                {
+                    int dx = m_lastMouseX - e.X;
+                    int dy = m_lastMouseY - e.Y;
                     m_mainForm.GetCameraControl().GetWrapper().RotateAroundAxis((float)-dx, (float)dy);
                     //m_mainForm.GetCameraControl().GetWrapper().Move((float)-dx*2.0f, (float)-dy*2.0f);
+                    m_lastMouseX = e.X;
+                    m_lastMouseY = e.Y;
                 }
             }
-            else if(e.Button == MouseButtons.Middle)
+            else if (e.Button == MouseButtons.Middle)
             {
+                int dx = m_lastMouseX - e.X;
+                int dy = m_lastMouseY - e.Y;
                 m_mainForm.GetCameraControl().GetWrapper().Move((float)-dx * 2.0f, (float)-dy * 2.0f);
+                m_lastMouseX = e.X;
+                m_lastMouseY = e.Y;
             }
-            else
-            {
-
-            }
-            m_lastMouseX = e.X;
-            m_lastMouseY = e.Y;
         }
 
         private void EngineRender_MouseHover(object sender, EventArgs e)
@@ -216,9 +264,11 @@ namespace DirectZobEditor
 
         private void EngineRender_MouseClick(object sender, MouseEventArgs e)
         {
+            m_lastMouseX = e.X;
+            m_lastMouseY = e.Y;
             if (e.Button == MouseButtons.Left && !m_mainForm.IsCtrlPressed())
             {
-//                m_selectedObject = m_mainForm.GetZobObjectListControl().SelectObjectAtCoords(e.X, e.Y, CLI.ZobObjectManagerWrapper.eObjectTypes.eObjectTypes_scene);
+                //                m_selectedObject = m_mainForm.GetZobObjectListControl().SelectObjectAtCoords(e.X, e.Y, CLI.ZobObjectManagerWrapper.eObjectTypes.eObjectTypes_scene);
             }
         }
 
@@ -232,10 +282,6 @@ namespace DirectZobEditor
         {
             if (e.Button == MouseButtons.Left && !m_mainForm.IsCtrlPressed())
             {
-                if (m_selectedObject == null)
-                {
-                    m_selectedObject = m_mainForm.GetZobObjectListControl().SelectObjectAtCoords(e.X, e.Y, CLI.ZobObjectManagerWrapper.eObjectTypes.eObjectTypes_scene);
-                }
                 if (m_selectedObject != null && m_currentMouseAction.Length == 0)
                 {
                     CLI.ZobObjectWrapper zAction = m_mainForm.GetZobObjectListControl().GetObjectAtCoords(e.X, e.Y, CLI.ZobObjectManagerWrapper.eObjectTypes.eObjectTypes_editor);
@@ -250,6 +296,55 @@ namespace DirectZobEditor
         private void EngineRender_MouseUp(object sender, MouseEventArgs e)
         {
             m_currentMouseAction = "";
+        }
+
+        private void OnObjectSelected(object s, ObjectSelectionEventArg e)
+        {
+            CLI.ZobObjectWrapper oldObject = e.previousZobObject;
+            m_selectedObject = e.newZobObject;
+            if (m_selectedObject != null)
+            {
+                SetTranslationGizmos(m_selectedObject);
+            }
+            else
+            {
+                RemoveTranslationGizmos();
+            }
+        }
+
+        private void bTX_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (m_selectedObject != null && e.Button == MouseButtons.Left)
+            {
+                ManagedVector3 pX = m_selectedObject.GetLeft();
+                ManagedVector3 p0 = m_selectedObject.GetTransform();
+                float d = m_engineWrapper.GetDistanceToCamera(p0) / 10.0f;
+                pX.Mul(d);
+                pX.Add(p0);
+                m_engineWrapper.GetProjectedCoords(p0);
+                m_engineWrapper.GetProjectedCoords(pX);
+                p0 = ToScreenCoords(p0);
+                pX = ToScreenCoords(pX);
+                float x = (m_lastMouseX - e.X);
+                float y = (m_lastMouseY - e.Y);
+                pX = m_selectedObject.GetLeft();
+                pX.x = (x / 100.0f) ;
+                //pX.y = pX.y + y / 100.0f;
+                p0 = m_selectedObject.GetTransform();
+                p0.Add(pX);
+                m_selectedObject.SetTransform(p0); 
+                m_lastMouseX = e.X;
+                m_lastMouseY = e.Y;
+            }
+            //e.Handled = true;
+        }
+
+        private void bTX_Click(object sender, EventArgs e)
+        {
+            //e.ToString(); ;
+            MouseEventArgs m = (MouseEventArgs)e;
+            m_lastMouseX = m.X;
+            m_lastMouseY = m.Y;
         }
     }
 }

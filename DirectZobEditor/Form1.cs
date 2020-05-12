@@ -55,8 +55,8 @@ namespace DirectZobEditor
             Application.ApplicationExit += new EventHandler(this.OnApplicationExit);
             //--
             m_camControl = new CameraControl(this);
-            m_engineWindow = new EngineWindow(this, m_directZobWrapper);
             m_zobObjectList = new ZobObjectListControl(this);
+            m_engineWindow = new EngineWindow(this, m_directZobWrapper);
             m_sceneControl = new SceneControl(this, m_lightManagerWrapper);
             m_engineControl = new EngineControl(this, m_engineWindow.GetEngineWrapper());
             m_lightControl = new ZobLightControl(this);

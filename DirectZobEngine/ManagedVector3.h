@@ -23,11 +23,23 @@ namespace CLI {
 
 		ManagedVector3(const Vector3& v)
 		{
-			x = v.x; y = v.y; z = v.z;
+			x = v.x / v.w; y = v.y / v.w; z = v.z / v.w;
 		}
 
 		Vector3 ToVector3() { return Vector3(x, y, z); }
-		void FromVector3(Vector3& v) { x = v.x; y = v.y; z = v.z; }
+		void FromVector3(Vector3& v) { x = v.x / v.w; y = v.y / v.w; z = v.z / v.w; }
+		void Add(ManagedVector3^ v)
+		{
+			x += v->x;
+			y += v->y;
+			z += v->z;
+		}
+		void Mul(float f)
+		{
+			x *= f;
+			y *= f;
+			z *= f;
+		}
 	public:
 		float x;
 		float y;

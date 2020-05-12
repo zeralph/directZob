@@ -22,6 +22,8 @@ namespace CLI
 		void			SetRenderOutput(int r);
 		void			SetRenderMode(int r);
 		void			SetLightingPrecision(int r);
+		bool			GetProjectedCoords(ManagedVector3^ worldSpacePos);
+		float			GetDistanceToCamera(ManagedVector3^ worldPos);
 	private:
 		//array<int>^ m_buffer;
 	};

@@ -65,6 +65,24 @@ namespace CLI
 		return v;
 	}
 
+	ManagedVector3^ ZobObjectWrapper::GetLeft()
+	{
+		ManagedVector3^ v = gcnew CLI::ManagedVector3(m_Instance->GetLeft());
+		return v;
+	}
+
+	ManagedVector3^ ZobObjectWrapper::GetUp()
+	{
+		ManagedVector3^ v = gcnew CLI::ManagedVector3(m_Instance->GetUp());
+		return v;
+	}
+
+	ManagedVector3^ ZobObjectWrapper::GetForward()
+	{
+		ManagedVector3^ v = gcnew CLI::ManagedVector3(m_Instance->GetForward());
+		return v;
+	}
+
 	ManagedVector3^ ZobObjectWrapper::GetScale()
 	{
 		ManagedVector3^ v = gcnew CLI::ManagedVector3(m_Instance->GetScale());

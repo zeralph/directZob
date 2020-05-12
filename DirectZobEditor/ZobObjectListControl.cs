@@ -29,7 +29,6 @@ namespace DirectZobEditor
             m_mainForm.OnNewScene += new EventHandler(OnSceneChanged);
             m_mainForm.OnSceneLoaded += new EventHandler(OnSceneChanged);
             m_mainForm.OnSceneUpdated += new EventHandler(OnSceneUpdated);
-            m_mainForm.GetEngineWindow().OnEndFrame += new EventHandler(OnFrameEnd);
             this.Dock = DockStyle.Fill;
         }
 
@@ -219,17 +218,6 @@ namespace DirectZobEditor
         {
             ZobObjectTree.Nodes.Clear();
             UpdateTree();
-        }
-        public void OnFrameEnd(Object o, EventArgs e)
-        {
-           // return;
-            CLI.ZobObjectWrapper z = m_zobObjectManagerWrapper.GetRootObject();
-            if (z != null && z.IsValid())
-            {
-                CLI.ManagedVector3 v = z.GetRotation();
-                v.y += 0.8f;
-                //z.SetRotation(v);
-            }
         }
 
         private void TreeNodeRightClick_Opening(object sender, CancelEventArgs e)

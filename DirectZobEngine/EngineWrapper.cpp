@@ -41,5 +41,20 @@ namespace CLI
 			m_Instance->SetRenderMode((eRenderMode)r);
 		}
 	}
+	bool EngineWrapper::GetProjectedCoords(ManagedVector3^ worldSpacePos)
+	{
+		Vector3 v = worldSpacePos->ToVector3();
+		if (m_Instance->GetProjectedCoords(&v))
+		{
+			worldSpacePos->FromVector3(v);
+			return true;
+		}
+		return false;
+	}
+	float EngineWrapper::GetDistanceToCamera(ManagedVector3^ worldSpacePos)
+	{
+		Vector3 v = worldSpacePos->ToVector3();
+		return m_Instance->GetDistanceToCamera(&v);
+	}
 }
 #endif //_WINDLL

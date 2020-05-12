@@ -15,6 +15,9 @@ namespace CLI {
 		System::String^ GetFullNodeName();
 		void SetName(System::String^ name);
 		ManagedVector3^ GetTransform();
+		ManagedVector3^ GetLeft();
+		ManagedVector3^ GetForward();
+		ManagedVector3^ GetUp();
 		ManagedVector3^ GetRotation();
 		ManagedVector3^ GetScale();
 		ManagedRenderOptions^ GetRenderOptions();

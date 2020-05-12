@@ -575,3 +575,24 @@ void Engine::DrawHorizontalLine(const float x1, const float x2, const float y, c
 		}
 	}
 }
+bool Engine::GetProjectedCoords(Vector3* worldPos)
+{
+	Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
+	if (c)
+	{
+		c->ProjectPointFromWorld(worldPos);
+		return true;
+	}
+	return false;
+}
+
+float Engine::GetDistanceToCamera(Vector3* worldPos)
+{
+	Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
+	if (c)
+	{
+		Vector3 v = c->GetTransform() - worldPos;
+		return v.sqrtLength();
+	}
+	return 0.0f;
+}

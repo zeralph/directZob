@@ -73,6 +73,8 @@ namespace Core
 		float											WaitForRasterizersEnd();
 		void											ClearRenderQueues();
 		void											Resize(int width, int height);
+		bool											Engine::GetProjectedCoords(Vector3* worldPos);
+		float											GetDistanceToCamera(Vector3* worldPos);
 
 	private:	
 		inline float									clamp2(float x, float min, float max) const { if (x < min) x = min; if (x > max) x = max; return x; }
