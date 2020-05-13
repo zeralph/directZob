@@ -10,6 +10,7 @@ using System.Threading;
 using System.Windows.Forms;
 using CLI;
 using System.Runtime.CompilerServices;
+using System.Numerics;
 
 namespace DirectZobEditor
 {
@@ -42,6 +43,10 @@ namespace DirectZobEditor
             m_directZobWrapper = directZobWrapper;
             m_engineWrapper = new CLI.EngineWrapper();
             GenerateRenderWindow();
+            bTX.Visible = false;
+            bTY.Visible = false;
+            bTZ.Visible = false;
+            bCenter.Visible = false;
             m_mainForm.GetZobObjectListControl().OnObjectSelected += new ZobObjectListControl.OnObjectSelectedHandler(OnObjectSelected);
         }
 
@@ -55,7 +60,8 @@ namespace DirectZobEditor
         public void SetTranslationGizmos(ZobObjectWrapper z)
         {
             if (z != null && z.IsValid())
-            {       
+            {
+                int btnSize = 20 / 2;
                 ManagedVector3 p0 = z.GetTransform();
                 ManagedVector3 pX = z.GetLeft();
                 ManagedVector3 pY = z.GetUp();
@@ -79,18 +85,19 @@ namespace DirectZobEditor
                 Point ppX = new Point((int)pX.x, (int)pX.y);
                 Point ppY = new Point((int)pY.x, (int)pY.y);
                 Point ppZ = new Point((int)pZ.x, (int)pZ.y);
-                pp0.X += EngineRender.Location.X;
-                pp0.Y += EngineRender.Location.Y;
-                ppX.X += EngineRender.Location.X;
-                ppX.Y += EngineRender.Location.Y;
-                ppY.X += EngineRender.Location.X;
-                ppY.Y += EngineRender.Location.Y;
-                ppZ.X += EngineRender.Location.X;
-                ppZ.Y += EngineRender.Location.Y;
+                pp0.X += EngineRender.Location.X - btnSize;
+                pp0.Y += EngineRender.Location.Y - btnSize;
+                ppX.X += EngineRender.Location.X - btnSize;
+                ppX.Y += EngineRender.Location.Y - btnSize;
+                ppY.X += EngineRender.Location.X - btnSize;
+                ppY.Y += EngineRender.Location.Y - btnSize;
+                ppZ.X += EngineRender.Location.X - btnSize;
+                ppZ.Y += EngineRender.Location.Y - btnSize;
                 bCenter.Location = pp0;
                 bTX.Location = ppX;
                 bTY.Location = ppY;
                 bTZ.Location = ppZ;
+                bCenter.Visible = true;
                 bTY.Visible = true;
                 bTX.Visible = true;
                 bTZ.Visible = true;
@@ -159,42 +166,36 @@ namespace DirectZobEditor
 
         private void UpdateEngineWindowMethod()
         {
-            //if(m_directZobWrapper.RunAFrame() >= 0)
+            IntPtr p = m_engineWrapper.GetBufferData();
+            Rectangle rect = new Rectangle(0, 0, m_engineBitmap.Width, m_engineBitmap.Height);
+            System.Drawing.Imaging.BitmapData bmpData =
+                m_engineBitmap.LockBits(rect, System.Drawing.Imaging.ImageLockMode.WriteOnly,
+                m_engineBitmap.PixelFormat);
+            bmpData.Scan0 = p;
+            m_engineBitmap.UnlockBits(bmpData);
+            IntPtr hwnd = EngineRender.Handle;
+            m_EngineGraphics = Graphics.FromHwnd(hwnd);
+            m_EngineGraphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+            int w = EngineRender.Width;
+            int h = EngineRender.Height;
+            float hFactor = (float)m_engineBitmap.Height / (float)EngineRenderPanel.Height;
+            float wFactor = (float)m_engineBitmap.Width / (float)EngineRenderPanel.Width;
+            if (hFactor > wFactor)
             {
-                IntPtr p = m_engineWrapper.GetBufferData();
-                Rectangle rect = new Rectangle(0, 0, m_engineBitmap.Width, m_engineBitmap.Height);
-                System.Drawing.Imaging.BitmapData bmpData =
-                    m_engineBitmap.LockBits(rect, System.Drawing.Imaging.ImageLockMode.WriteOnly,
-                    m_engineBitmap.PixelFormat);
-                bmpData.Scan0 = p;
-                m_engineBitmap.UnlockBits(bmpData);
-                IntPtr hwnd = EngineRender.Handle;
-                m_EngineGraphics = Graphics.FromHwnd(hwnd);
-                m_EngineGraphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-
-
-                int w = EngineRender.Width;
-                int h = EngineRender.Height;
-                float hFactor = (float)m_engineBitmap.Height / (float)EngineRenderPanel.Height;
-                float wFactor = (float)m_engineBitmap.Width / (float)EngineRenderPanel.Width;
-                if (hFactor > wFactor)
-                {
-                    h = EngineRenderPanel.Height;
-                    w = (int)((float)m_engineBitmap.Width / (float)m_engineBitmap.Height * h);
-                }
-                else
-                {
-                    w = EngineRenderPanel.Width;
-                    h = (int)((float)m_engineBitmap.Height / (float)m_engineBitmap.Width * w);
-                }
-                EngineRender.Width = w;
-                EngineRender.Height = h;
-                m_EngineGraphics.DrawImage(m_engineBitmap, 0, 0, w, h);
-                int x = (EngineRenderPanel.Width - w) / 2;
-                int y = (EngineRenderPanel.Height - h) / 2;
-                EngineRender.Location = new Point(x, y);
-
+                h = EngineRenderPanel.Height;
+                w = (int)((float)m_engineBitmap.Width / (float)m_engineBitmap.Height * h);
             }
+            else
+            {
+                w = EngineRenderPanel.Width;
+                h = (int)((float)m_engineBitmap.Height / (float)m_engineBitmap.Width * w);
+            }
+            EngineRender.Width = w;
+            EngineRender.Height = h;
+            m_EngineGraphics.DrawImage(m_engineBitmap, 0, 0, w, h);
+            int x = (EngineRenderPanel.Width - w) / 2;
+            int y = (EngineRenderPanel.Height - h) / 2;
+            EngineRender.Location = new Point(x, y);
             SetTranslationGizmos(m_selectedObject);
             m_mainForm.UpdateAfterEngine();
         }
@@ -230,7 +231,7 @@ namespace DirectZobEditor
 
         private void EngineRender_MouseWheel(object sender, MouseEventArgs e)
         {
-            m_mainForm.GetCameraControl().GetWrapper().Zoom(e.Delta / 50.0f);
+            m_mainForm.GetCameraControl().GetWrapper().Zoom(-e.Delta / 50.0f);
         }
 
         private void EngineRender_MouseMove(object sender, MouseEventArgs e)
@@ -239,22 +240,25 @@ namespace DirectZobEditor
             {
                 if (m_mainForm.IsCtrlPressed())
                 {
-                    int dx = m_lastMouseX - e.X;
-                    int dy = m_lastMouseY - e.Y;
+                    int dx = m_lastMouseX - Cursor.Position.X;
+                    int dy = m_lastMouseY - Cursor.Position.Y;
                     m_mainForm.GetCameraControl().GetWrapper().RotateAroundAxis((float)-dx, (float)dy);
                     //m_mainForm.GetCameraControl().GetWrapper().Move((float)-dx*2.0f, (float)-dy*2.0f);
-                    m_lastMouseX = e.X;
-                    m_lastMouseY = e.Y;
+                    //m_lastMouseX = e.X;
+                    //m_lastMouseY = e.Y;
                 }
             }
             else if (e.Button == MouseButtons.Middle)
             {
-                int dx = m_lastMouseX - e.X;
-                int dy = m_lastMouseY - e.Y;
+                int dx = m_lastMouseX - Cursor.Position.X;
+                int dy = m_lastMouseY - Cursor.Position.Y;
                 m_mainForm.GetCameraControl().GetWrapper().Move((float)-dx * 2.0f, (float)-dy * 2.0f);
-                m_lastMouseX = e.X;
-                m_lastMouseY = e.Y;
+                //m_lastMouseX = e.X;
+                //m_lastMouseY = e.Y;
             }
+            m_lastMouseX = Cursor.Position.X;
+            m_lastMouseY = Cursor.Position.Y;
+           // Console.WriteLine("MouseMove : " + m_lastMouseX + ", " + m_lastMouseY);
         }
 
         private void EngineRender_MouseHover(object sender, EventArgs e)
@@ -264,8 +268,8 @@ namespace DirectZobEditor
 
         private void EngineRender_MouseClick(object sender, MouseEventArgs e)
         {
-            m_lastMouseX = e.X;
-            m_lastMouseY = e.Y;
+            //m_lastMouseX = e.X;
+            //m_lastMouseY = e.Y;
             if (e.Button == MouseButtons.Left && !m_mainForm.IsCtrlPressed())
             {
                 //                m_selectedObject = m_mainForm.GetZobObjectListControl().SelectObjectAtCoords(e.X, e.Y, CLI.ZobObjectManagerWrapper.eObjectTypes.eObjectTypes_scene);
@@ -316,35 +320,53 @@ namespace DirectZobEditor
         {
             if (m_selectedObject != null && e.Button == MouseButtons.Left)
             {
-                ManagedVector3 pX = m_selectedObject.GetLeft();
-                ManagedVector3 p0 = m_selectedObject.GetTransform();
-                float d = m_engineWrapper.GetDistanceToCamera(p0) / 10.0f;
-                pX.Mul(d);
-                pX.Add(p0);
-                m_engineWrapper.GetProjectedCoords(p0);
-                m_engineWrapper.GetProjectedCoords(pX);
-                p0 = ToScreenCoords(p0);
-                pX = ToScreenCoords(pX);
-                float x = (m_lastMouseX - e.X);
-                float y = (m_lastMouseY - e.Y);
-                pX = m_selectedObject.GetLeft();
-                pX.x = (x / 100.0f) ;
-                //pX.y = pX.y + y / 100.0f;
+                MoveAlongAxis(m_selectedObject.GetLeft());
+            }
+        }
+        private void bTY_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (m_selectedObject != null && e.Button == MouseButtons.Left)
+            {
+                MoveAlongAxis(m_selectedObject.GetUp());
+            }
+        }
+        private void bTZ_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (m_selectedObject != null && e.Button == MouseButtons.Left)
+            {
+                MoveAlongAxis(m_selectedObject.GetForward());
+            }
+        }
+        private void MoveAlongAxis(ManagedVector3 axis)
+        {
+            float speed = 10.0f;
+            ManagedVector3 pX = new ManagedVector3(axis);
+            ManagedVector3 p0 = m_selectedObject.GetTransform();
+            pX.Add(p0);
+            m_engineWrapper.GetProjectedCoords(p0);
+            m_engineWrapper.GetProjectedCoords(pX);
+            p0 = ToScreenCoords(p0);
+            pX = ToScreenCoords(pX);
+            Vector2 v1 = new Vector2(m_lastMouseX - Cursor.Position.X, m_lastMouseY - Cursor.Position.Y);
+            if (v1.X != 0 || v1.Y != 0)
+            {
+                Vector2 v2 = new Vector2(pX.x - p0.x, pX.y - p0.y);
+                v1 = Vector2.Normalize(v1);
+                v2 = Vector2.Normalize(v2);
+                float d = -Vector2.Dot(v1, v2) / speed;
+                Vector3 u1 = new Vector3(v1, 0);
+                Vector3 u2 = new Vector3(v2, 0);
+                pX = new ManagedVector3(axis);
+                pX.x *= d;
+                pX.y *= d;
+                pX.z *= d;
                 p0 = m_selectedObject.GetTransform();
                 p0.Add(pX);
-                m_selectedObject.SetTransform(p0); 
-                m_lastMouseX = e.X;
-                m_lastMouseY = e.Y;
+                m_selectedObject.SetTransform(p0);
+                m_mainForm.PropagateSceneUpdateEvent(EventArgs.Empty);
             }
-            //e.Handled = true;
-        }
-
-        private void bTX_Click(object sender, EventArgs e)
-        {
-            //e.ToString(); ;
-            MouseEventArgs m = (MouseEventArgs)e;
-            m_lastMouseX = m.X;
-            m_lastMouseY = m.Y;
+            m_lastMouseX = Cursor.Position.X;
+            m_lastMouseY = Cursor.Position.Y;
         }
     }
 }

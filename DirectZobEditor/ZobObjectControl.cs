@@ -36,14 +36,18 @@ namespace DirectZobEditor
             ClearValues();
             ZobObjectListControl z = m_mainForm.GetZobObjectListControl();
             z.OnObjectSelected += new ZobObjectListControl.OnObjectSelectedHandler(OnObjectSelected);
+            m_mainForm.OnSceneUpdated += new EventHandler(OnSceneUpdated);
         }
+
+        private void OnSceneUpdated(object sender, EventArgs e)
+        {
+            SetValues();
+        }
+
         private void OnObjectSelected(object s, ObjectSelectionEventArg e)
         {
             CLI.ZobObjectWrapper oldObject = e.previousZobObject;
             m_currentZobObjectWrapper = e.newZobObject;
-            //m_lightControl.Visible = false;
-            //m_meshControl.Visible = false;
-            //m_cameraControl.Visible = false;
             if (m_currentZobObjectWrapper != null)
             {
                 SetValues();
@@ -58,16 +62,23 @@ namespace DirectZobEditor
         }
         private void SetValues()
         {
-            zobName.Text = m_currentZobObjectWrapper.GetName();
-            zobPosX.Text = String.Format("{0:0.000}", m_currentZobObjectWrapper.GetTransform().x);
-            zobPosY.Text = String.Format("{0:0.000}", m_currentZobObjectWrapper.GetTransform().y);
-            zobPosZ.Text = String.Format("{0:0.000}", m_currentZobObjectWrapper.GetTransform().z);
-            zobRotX.Text = String.Format("{0:0.000}", m_currentZobObjectWrapper.GetRotation().x);
-            zobRotY.Text = String.Format("{0:0.000}", m_currentZobObjectWrapper.GetRotation().y);
-            zobRotZ.Text = String.Format("{0:0.000}", m_currentZobObjectWrapper.GetRotation().z);
-            zobScaleX.Text = String.Format("{0:0.000}", m_currentZobObjectWrapper.GetScale().x);
-            zobScaleY.Text = String.Format("{0:0.000}", m_currentZobObjectWrapper.GetScale().y);
-            zobScaleZ.Text = String.Format("{0:0.000}", m_currentZobObjectWrapper.GetScale().z);   
+            if (m_currentZobObjectWrapper != null)
+            {
+                zobName.Text = m_currentZobObjectWrapper.GetName();
+                zobPosX.Text = String.Format("{0:0.000}", m_currentZobObjectWrapper.GetTransform().x);
+                zobPosY.Text = String.Format("{0:0.000}", m_currentZobObjectWrapper.GetTransform().y);
+                zobPosZ.Text = String.Format("{0:0.000}", m_currentZobObjectWrapper.GetTransform().z);
+                zobRotX.Text = String.Format("{0:0.000}", m_currentZobObjectWrapper.GetRotation().x);
+                zobRotY.Text = String.Format("{0:0.000}", m_currentZobObjectWrapper.GetRotation().y);
+                zobRotZ.Text = String.Format("{0:0.000}", m_currentZobObjectWrapper.GetRotation().z);
+                zobScaleX.Text = String.Format("{0:0.000}", m_currentZobObjectWrapper.GetScale().x);
+                zobScaleY.Text = String.Format("{0:0.000}", m_currentZobObjectWrapper.GetScale().y);
+                zobScaleZ.Text = String.Format("{0:0.000}", m_currentZobObjectWrapper.GetScale().z);
+            }
+            else
+            {
+                ClearValues();
+            }
         }
         private void ClearValues()
         {

@@ -26,6 +26,13 @@ namespace CLI {
 			x = v.x / v.w; y = v.y / v.w; z = v.z / v.w;
 		}
 
+		ManagedVector3(ManagedVector3^ v)
+		{
+			x = v->x; 
+			y = v->y; 
+			z = v->z;
+		}
+
 		Vector3 ToVector3() { return Vector3(x, y, z); }
 		void FromVector3(Vector3& v) { x = v.x / v.w; y = v.y / v.w; z = v.z / v.w; }
 		void Add(ManagedVector3^ v)
@@ -34,6 +41,7 @@ namespace CLI {
 			y += v->y;
 			z += v->z;
 		}
+
 		void Mul(float f)
 		{
 			x *= f;

@@ -224,11 +224,7 @@ namespace DirectZobEditor
                     {
                         handler(this, EventArgs.Empty);
                     }
-                    handler = OnSceneUpdated;
-                    if (null != handler)
-                    {
-                        handler(this, EventArgs.Empty);
-                    }
+                    PropagateSceneUpdateEvent(EventArgs.Empty);
                     this.Text = "DirectZob " + m_path + m_file;
                 }
             }
@@ -329,14 +325,19 @@ namespace DirectZobEditor
             OnApplicationExit(sender, e);
         }
 
-        private void createLightToolStripMenuItem_Click(object sender, EventArgs e)
+        public void PropagateSceneUpdateEvent(EventArgs e)
         {
-            m_lightManagerWrapper.CreateLight();
             EventHandler handler = OnSceneUpdated;
             if (null != handler)
             {
-                handler(this, EventArgs.Empty);
+                handler(this, e);
             }
+        }
+
+        private void createLightToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            m_lightManagerWrapper.CreateLight();
+            PropagateSceneUpdateEvent(e);
         }
 
         private void ZobObjectListPanel_Paint(object sender, PaintEventArgs e)
@@ -346,11 +347,7 @@ namespace DirectZobEditor
         private void createCameraToolStripMenuItem_Click(object sender, EventArgs e)
         {
             m_camControl.GetWrapper().CreateCamera();
-            EventHandler handler = OnSceneUpdated;
-            if (null != handler)
-            {
-                handler(this, EventArgs.Empty);
-            }
+            PropagateSceneUpdateEvent(e);
         }
 
         private void EngineControlsFlowLayout_Resize(object sender, EventArgs e)
