@@ -111,7 +111,7 @@
                                     'EnableIntrinsicFunctions': 'true',
                                     'WholeProgramOptimization': 'true',  # No
                                     'EnableEnhancedInstructionSet':
-                                    '5',  # enable AVX2 instructions
+                                    '2',  # enable AVX instructions
                                 },
                                 'VCLinkerTool': {
                                     'LinkTimeCodeGeneration':

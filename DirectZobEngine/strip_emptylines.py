@@ -4,7 +4,7 @@ import platform
 
 version = platform.python_version()
 majorVersion = version[0]
-if majorVersion is '2':
+if majorVersion == '2':
     print('running in pyhton 2')
     UNIX_NEWLINE = '\n'
     WINDOWS_NEWLINE = '\r\n'
