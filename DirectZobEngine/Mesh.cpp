@@ -286,7 +286,7 @@ Mesh::~Mesh()
 void Mesh::LoadOBJ(const std::string& fullPath)
 {
 	static std::string sMtllib = std::string("mtllib");
-	DirectZob::LogInfo("Load OBJ %s", fullPath);
+	DirectZob::LogInfo("Load OBJ %s", fullPath.c_str());
 	DirectZob::AddIndent();
 	std::string::size_type sz;
 	// Open the file.
