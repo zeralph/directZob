@@ -123,6 +123,7 @@ void mouse_scroll(struct Window* window, KeyMod mod, float deltaX, float deltaY)
 int main(int argc, char* argv[])
 {
 	bool bBench = false;
+	bool btest = false;
 	std::string scenePath = "";
 	int width = 640;
 	int height = 480;
@@ -149,6 +150,10 @@ int main(int argc, char* argv[])
 				std::cerr << "--scene option requires one argument." << std::endl;
 				return 1;
 			}
+		}
+		else if (std::string(argv[i]) == "--test")
+		{
+			btest = true;
 		}
 		else if(std::string(argv[i]) == "--bench")
 		{
@@ -293,6 +298,10 @@ int main(int argc, char* argv[])
 			{
 				camPos.z = 0.0f;
 				camTo.z = 1.0f;
+				if (btest)
+				{
+					break;
+				}
 			}
 		}
 		m_directZob.RunAFrame();
