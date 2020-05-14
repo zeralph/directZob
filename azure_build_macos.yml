@@ -19,3 +19,7 @@ steps:
 
 - script: ./buildMacos.sh Release
   displayName: 'make'
+
+- script: ./smokeTestMacos.sh
+  workingDirectory: .
+  displayName: 'Smoke Test'
