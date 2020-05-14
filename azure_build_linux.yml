@@ -28,3 +28,7 @@ steps:
 
 - script: ./buildLinux.sh Release
   displayName: 'make'
+
+- script: ./smokeTestLinux.sh
+  workingDirectory: .
+  displayName: 'Smoke Test'
