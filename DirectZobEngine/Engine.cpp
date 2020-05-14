@@ -60,26 +60,25 @@ Engine::Engine(int width, int height, Events* events)
 	{
 		Rasterizer *r = new Rasterizer(width, h0, h0 + h, &m_bufferData);
 		m_rasterizers[i] = r;
-
-		Triangle *t = (Triangle *)malloc(sizeof(Triangle) * m_triangleQueueSize);
-		m_rasterTriangleQueues[i] = t;
+		m_rasterTriangleQueues[i] = (Triangle*)malloc(sizeof(Triangle) * m_triangleQueueSize);
+		/*
 		for (int j = 0; j < m_triangleQueueSize; j++)
 		{
-			m_rasterTriangleQueues[i][j].va = new Vector3();
-			m_rasterTriangleQueues[i][j].vb = new Vector3();
-			m_rasterTriangleQueues[i][j].vc = new Vector3();
-			m_rasterTriangleQueues[i][j].pa = new Vector3();
-			m_rasterTriangleQueues[i][j].pb = new Vector3();
-			m_rasterTriangleQueues[i][j].pc = new Vector3();
-			m_rasterTriangleQueues[i][j].na = new Vector3();
-			m_rasterTriangleQueues[i][j].nb = new Vector3();
-			m_rasterTriangleQueues[i][j].nc = new Vector3();
-			m_rasterTriangleQueues[i][j].n = new Vector3();
-			m_rasterTriangleQueues[i][j].ua = new Vector2();
-			m_rasterTriangleQueues[i][j].ub = new Vector2();
-			m_rasterTriangleQueues[i][j].uc = new Vector2();
+			m_rasterTriangleQueues[i][j].va = NULL; 
+			m_rasterTriangleQueues[i][j].vb = NULL; 
+			m_rasterTriangleQueues[i][j].vc = NULL; 
+			m_rasterTriangleQueues[i][j].pa = NULL; 
+			m_rasterTriangleQueues[i][j].pb = NULL; 
+			m_rasterTriangleQueues[i][j].pc = NULL; 
+			m_rasterTriangleQueues[i][j].na = NULL; 
+			m_rasterTriangleQueues[i][j].nb = NULL; 
+			m_rasterTriangleQueues[i][j].nc = NULL; 
+			m_rasterTriangleQueues[i][j].n =  NULL; 
+			m_rasterTriangleQueues[i][j].ua = NULL; 
+			m_rasterTriangleQueues[i][j].ub = NULL; 
+			m_rasterTriangleQueues[i][j].uc = NULL; 
 		}
-
+		*/
 		//m_rasterTriangleQueues[i].clear();
 		m_rasterLineQueues[i].clear();
 		h0 += h;

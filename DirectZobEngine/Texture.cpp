@@ -15,16 +15,21 @@ Texture::Texture()
 
 Texture::~Texture()
 {
+	DirectZob::LogInfo("Delete Texture %s", m_fullPath.c_str());
+	DirectZob::AddIndent();
 	delete m_data;
 	uint m_dataSize = 0;
 	uint m_width = 0;
 	uint m_height = 0;
 	std::string m_fullPath = "";
+	DirectZob::RemoveIndent();
 }
 
 void Texture::LoadFromFile(const std::string& textureFile)
 {
 	m_fullPath = textureFile;
+	DirectZob::LogInfo("Texture %s creation", m_fullPath.c_str());
+	DirectZob::AddIndent();
 	std::vector<unsigned char> image; //the raw pixels
 	unsigned width, height;
 	uint8_t error = 0;
@@ -177,6 +182,7 @@ void Texture::LoadFromFile(const std::string& textureFile)
 		DirectZob::LogError("no decoder for file %s", textureFile.c_str());
 	}
 	image.shrink_to_fit();
+	DirectZob::RemoveIndent();
 }
 
 

@@ -10,6 +10,11 @@ ZOBGUID::ZOBGUID(Type t, SubType s)
 	m_subType = s;
 }
 
+ZOBGUID::~ZOBGUID()
+{
+
+}
+
 const ZOBGUID::Type ZOBGUID::GetType() const
 {
 	return m_type;

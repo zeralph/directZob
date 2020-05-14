@@ -55,6 +55,8 @@ public :
 	static void			LogInfo(const char* format, ...);
 	static void			LogError(const char* format, ...);
 	static void			LogWarning(const char* format, ...);
+	static void			AddIndent() { s_logIndent++; }
+	static void			RemoveIndent() { s_logIndent--; if (s_logIndent < 0) { s_logIndent = 0; } }
 private:
 	
 	Events* m_events = NULL;
@@ -76,4 +78,5 @@ private:
 	float m_copyTime;
 	clock_t m_copyTick;
 	clock_t	m_frameTick;
+	static int s_logIndent;
 };

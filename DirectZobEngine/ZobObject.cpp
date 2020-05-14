@@ -5,6 +5,8 @@ static int sObjectNumber = 0;
 ZobObject::ZobObject(Type t, SubType s, const std::string& name, Mesh* mesh, ZobObject* parent /*= NULL*/)
 	:ZOBGUID(t,s)
 {
+	DirectZob::LogInfo("ZobObejct %s creation", name.c_str());
+	DirectZob::AddIndent();
 	sObjectNumber++;
 	if (name.length() == 0)
 	{
@@ -40,19 +42,20 @@ ZobObject::ZobObject(Type t, SubType s, const std::string& name, Mesh* mesh, Zob
 	m_renderOptions.lightMode = RenderOptions::eLightMode_phong;
 	m_renderOptions.zBuffered = true;
 	m_renderOptions.bTransparency = false;
-	//m_renderOptions.colorization = new Vector3(1, 0, 0);
-    DirectZob::LogInfo("ZobObject %s added", m_name.c_str());
+	DirectZob::RemoveIndent();
 }
 
 ZobObject::ZobObject(Type t, SubType s, TiXmlElement* node, Mesh* mesh, ZobObject* parent)
-	:ZOBGUID(t,s)
+	:ZOBGUID(t, s)
 {
 	sObjectNumber++;
-	Vector3 position, rotation, scale, orientation = Vector3();	 
+	Vector3 position, rotation, scale, orientation = Vector3();
 	std::string name;
 	float x, y, z;
 	TiXmlElement* f;
 	name = node->Attribute("name");
+	DirectZob::LogInfo("ZobObejct %s creation", name.c_str());
+	DirectZob::AddIndent();
 	f = node->FirstChildElement("Position");
 	x = atof(f->Attribute("x"));
 	y = atof(f->Attribute("y"));
@@ -104,21 +107,13 @@ ZobObject::ZobObject(Type t, SubType s, TiXmlElement* node, Mesh* mesh, ZobObjec
 	SetRotation(rotation.x, rotation.y, rotation.z);
 	SetScale(scale.x, scale.y, scale.z);
 	SetParent(m_parent);
-	DirectZob::LogInfo("ZobObject %s added", m_name.c_str());
+	DirectZob::RemoveIndent();
 }
 
 ZobObject::~ZobObject()
 {
-	Light* l = (Light*)this;
-	if (l)
-	{
-		DirectZob::GetInstance()->GetLightManager()->RemoveLight(l);
-	}
-	Camera* c = (Camera*)this;
-	if (l)
-	{
-		DirectZob::GetInstance()->GetCameraManager()->RemoveCamera(c);
-	}
+	DirectZob::LogInfo("deleet ZobObject %s", m_name.c_str());
+	DirectZob::AddIndent();
 	if (m_parent != NULL)
 	{
 		m_parent->RemoveChildReference(this);
@@ -131,7 +126,7 @@ ZobObject::~ZobObject()
 		delete z;
 	}
 	m_children.clear();
-	DirectZob::LogInfo("Deleted ZobObject %s", m_name.c_str());
+	DirectZob::RemoveIndent();
 }
 
 void ZobObject::SetMesh(std::string name)

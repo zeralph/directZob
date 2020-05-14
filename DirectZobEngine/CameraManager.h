@@ -21,6 +21,7 @@ public:
 	void 							SetNextCamera(std::string& name);
 	void 							RemoveCamera(Camera* c);
 	const std::vector<std::string> 	GetCameraList() const;
+	void							UnloadAll();
 
 private:
 	std::vector<Camera*> m_cameras;

@@ -1,5 +1,6 @@
 #include "Light.h"
 #include "tinyxml.h"
+#include "DirectZob.h"
 
 Light::Light(std::string &name, eLightType type, Vector3 color, float intensity, float distance, ZobObject*parent):
 	ZobObject(ZOBGUID::type_scene, ZOBGUID::subtype_zobLight, name, nullptr, parent)
@@ -58,6 +59,10 @@ Light::Light(TiXmlElement* node, ZobObject* parent)
 
 Light::~Light()
 {
+	DirectZob::LogInfo("Delete Light %s", m_name.c_str());
+	DirectZob::AddIndent();
+	DirectZob::GetInstance()->GetLightManager()->RemoveLight(this);
+	DirectZob::RemoveIndent();
 }
 
 void Light::DrawGizmos(const Camera* camera, Core::Engine* engine)

@@ -2,12 +2,12 @@
 #include "DirectZob.h"
 
 using namespace std;
-
-
 static Vector2 vec2zero = Vector2(0,0);
 
 Mesh::Mesh(std::string& name, std::string& path, std::string& file)
 {	
+	DirectZob::LogInfo("Mesh %s Creation", m_name.c_str());
+	DirectZob::AddIndent();
 	m_subMeshes.clear();
 	m_nbVertices = 0;
 	m_nbUvs = 0;
@@ -34,18 +34,20 @@ Mesh::Mesh(std::string& name, std::string& path, std::string& file)
 	{
 		LoadOBJ(fullPath);
 	}
+	DirectZob::RemoveIndent();
 }
 
 Mesh::Mesh(std::string &parentName, std::string& path, fbxsdk::FbxMesh* mesh)
 {
 	if (mesh)
 	{
-		char buf[256];
 		m_path = path;
 		m_name = parentName+"."+mesh->GetName();
+
+		DirectZob::LogInfo("Mesh %s Creation", m_name.c_str());
+		DirectZob::AddIndent();
+
 		m_nbVertices += mesh->GetPolygonVertexCount();
-		_snprintf_s(buf, 256, "Load sub mesh %s, %i vertices", mesh->GetName(), m_nbVertices);
-		DirectZob::LogInfo(buf);
 		m_nbFaces = 0;
 		m_vertices = (Vector3*)malloc(sizeof(Vector3) * m_nbVertices);
 		m_verticesData = (Vector3*)malloc(sizeof(Vector3) * m_nbVertices);
@@ -62,8 +64,7 @@ Mesh::Mesh(std::string &parentName, std::string& path, fbxsdk::FbxMesh* mesh)
 		m_nbUvs = m_nbVertices;
 		m_uvs = (Vector2*)malloc(sizeof(Vector2) * m_nbUvs);
 		int pc = mesh->GetPolygonCount();
-		_snprintf_s(buf, 256, "Object %s, %i polygons", mesh->GetName(), pc);
-		DirectZob::LogInfo(buf);
+		DirectZob::LogInfo("Object %s, %i polygons", mesh->GetName(), pc);
 		int vIdx = 0;
 		if (mesh && pc > 0)
 		{
@@ -190,13 +191,13 @@ Mesh::Mesh(std::string &parentName, std::string& path, fbxsdk::FbxMesh* mesh)
 		memcpy(m_trianglesNormalsData, m_trianglesNormals, sizeof(Vector3) * m_nbFaces);
 		memcpy(m_trianglesNormalsTmp, m_trianglesNormals, sizeof(Vector3)* m_nbFaces);
 	}
+	DirectZob::RemoveIndent();
 }
 
 void Mesh::LoadFbx(const std::string& fullPath)
 {
-	char buf[256];
-	_snprintf_s(buf, 256, "Load mesh %s", fullPath.c_str());
-	DirectZob::LogInfo(buf);
+	DirectZob::LogInfo("Load FBX %s", fullPath.c_str());
+	DirectZob::AddIndent();
 	FbxManager* fbxManag = DirectZob::GetInstance()->GetMeshManager()->GetFbxManager();
 	FbxImporter* importer = FbxImporter::Create(fbxManag, "");
 	//importer->SetEmbeddingExtractionFolder("C:\\_GIT\\directZob\\resources\\test");
@@ -204,7 +205,7 @@ void Mesh::LoadFbx(const std::string& fullPath)
 	{
 		FbxScene* lScene = FbxScene::Create(fbxManag, "myScene");
 		importer->Import(lScene);
-		importer->Destroy();
+		importer->Destroy(true);
 		if (lScene->GetGlobalSettings().GetSystemUnit() == FbxSystemUnit::cm)
 		{
 			const FbxSystemUnit::ConversionOptions lConversionOptions = {
@@ -232,7 +233,9 @@ void Mesh::LoadFbx(const std::string& fullPath)
 			Mesh* m = new Mesh(m_name, m_path, mesh);
 			m_subMeshes.push_back(m);
 		}
+		lScene->Destroy(true);
 	}
+	DirectZob::RemoveIndent();
 }
 
 void Mesh::FbxMultT(FbxNode* node, FbxVector4 &vector) 
@@ -255,6 +258,8 @@ void Mesh::FbxMultT(FbxNode* node, FbxVector4 &vector)
 
 Mesh::~Mesh()
 {
+	DirectZob::LogInfo("Delete mesh %s", m_name.c_str());
+	DirectZob::AddIndent();
 	for (int i = 0; i < m_subMeshes.size(); i++)
 	{
 		Mesh* m = m_subMeshes[i];
@@ -275,13 +280,14 @@ Mesh::~Mesh()
 	delete m_projectedVertices;
 	delete m_projectedVerticesTmp;
 	delete m_uvs;
+	DirectZob::RemoveIndent();
 }
 
 void Mesh::LoadOBJ(const std::string& fullPath)
 {
 	static std::string sMtllib = std::string("mtllib");
-	std::string s = "Load mesh " + fullPath;
-	DirectZob::LogInfo(s.c_str());
+	DirectZob::LogInfo("Load OBJ %s", fullPath);
+	DirectZob::AddIndent();
 	std::string::size_type sz;
 	// Open the file.
 	std::ifstream sfile(fullPath, ios::in);
@@ -329,11 +335,10 @@ void Mesh::LoadOBJ(const std::string& fullPath)
 		m_nbNormals = 1;
 	}
 	m_vertices = (Vector3*)malloc(sizeof(Vector3) * m_nbVertices);
+	m_verticesData = (Vector3*)malloc(sizeof(Vector3) * m_nbVertices);
 	m_verticesTmp = (Vector3*)malloc(sizeof(Vector3) * m_nbVertices);
 	m_projectedVertices = (Vector3*)malloc(sizeof(Vector3) * m_nbVertices);
 	m_projectedVerticesTmp = (Vector3*)malloc(sizeof(Vector3) * m_nbVertices);
-	m_verticesData = (Vector3*)malloc(sizeof(Vector3) * m_nbVertices);
-	m_verticesTmp = (Vector3*)malloc(sizeof(Vector3) * m_nbVertices);
 	m_uvs = (Vector2*)malloc(sizeof(Vector2) * m_nbUvs);
 	m_verticesNormals = (Vector3*)malloc(sizeof(Vector3) * m_nbNormals);
 	m_verticesNormalsData = (Vector3*)malloc(sizeof(Vector3) * m_nbNormals);
@@ -409,8 +414,7 @@ void Mesh::LoadOBJ(const std::string& fullPath)
 	memcpy(m_verticesData, m_vertices, sizeof(Vector3) * m_nbVertices);
 	memcpy(m_verticesNormalsData, m_verticesNormals, sizeof(Vector3) * m_nbNormals);
 	memcpy(m_trianglesNormalsData, m_trianglesNormals, sizeof(Vector3) * m_nbFaces);
-	s = "Mesh loaded : " + std::string(fullPath);
-	DirectZob::LogInfo(s.c_str());
+	DirectZob::RemoveIndent();
 }
 
 void Mesh::SplitEntry(const std::string* s, std::vector<std::string>* v, const char delim)
@@ -424,17 +428,6 @@ void Mesh::SplitEntry(const std::string* s, std::vector<std::string>* v, const c
 	}
 	v->push_back(s->substr(previous, current - previous));
 }
-
-/*void Mesh::Update()
-{
-	m_modelMatrix.Identity();
-	m_modelMatrixRotationOnly.Identity();
-	m_modelMatrix.SetScale(m_scale.x, m_scale.y, m_scale.z);
-	m_modelMatrix.SetRotation(m_rotation.x, m_rotation.y, m_rotation.z);
-	m_modelMatrix.SetTranslation(m_translation.x, m_translation.y, m_translation.z);
-	m_modelMatrixRotationOnly.SetRotation(m_rotation.x, m_rotation.y, m_rotation.z);
-	ReinitVertices();
-}*/
 
 void Mesh::DrawBoundingBox(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions* options)
 {

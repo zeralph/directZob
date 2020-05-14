@@ -2,6 +2,7 @@
 #include "DirectZob.h"
 #include <math.h>
 #include <mutex>
+#include "DirectZob.h"
 
 static std::mutex g_update_camera_mutex;
 static float ee = 0.0f;
@@ -27,6 +28,10 @@ Camera::Camera(TiXmlElement* node, ZobObject* parent)
 
 Camera::~Camera()
 {
+	DirectZob::LogInfo("Delete Camera %s", m_name.c_str());
+	DirectZob::AddIndent();
+	DirectZob::GetInstance()->GetCameraManager()->RemoveCamera(this);
+	DirectZob::RemoveIndent();
 }
 
 void Camera::DrawGizmos(const Camera* camera, Core::Engine* engine)

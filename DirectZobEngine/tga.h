@@ -437,7 +437,7 @@ namespace tga
 
 		delete[] ColorMap;
 		delete[] Descriptor;
-
+		delete Buffer;
 		return true;
 	}
 

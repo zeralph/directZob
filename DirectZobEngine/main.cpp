@@ -6,6 +6,8 @@ DirectZob m_directZob;
 static int m_mouseLastX;
 static int m_mouseLastY;
 bool bPause = false;
+std::string m_path;
+std::string m_file;
 
 void active(struct Window* window, bool isActive) {
 	const char* window_title = "";
@@ -43,6 +45,14 @@ void keyboard(struct Window* window, Key key, KeyMod mod, bool isPressed) {
 		{
 			bool b = m_directZob.GetEngine()->WireFrame();
 			m_directZob.GetEngine()->WireFrame(!b);
+		}
+		else if (key == KB_KEY_N)
+		{
+			m_directZob.NewScene();
+		}
+		else if (key == KB_KEY_L)
+		{
+			m_directZob.LoadScene(m_path, m_file);
 		}
 		else if (key == KB_KEY_S)
 		{
@@ -222,9 +232,9 @@ int main(int argc, char* argv[])
 		std::cerr << "cannot parse path to file " << scenePath << std::endl;
 		return 1;
 	}
-	std::string path = scenePath.substr(0,found+1);
-	std::string file = scenePath.substr(found + 1, scenePath.length() - found - 1);
-
+	m_path = scenePath.substr(0,found+1);
+	m_file = scenePath.substr(found + 1, scenePath.length() - found - 1);
+	
 	m_mouseLastX = -1;
 	m_mouseLastY = -1;
 	printf("Init Window\n");
@@ -238,7 +248,8 @@ int main(int argc, char* argv[])
 	mfb_mouse_scroll_callback(window, mouse_scroll);
 
 	m_directZob.Init(width, height, false);
-	m_directZob.LoadScene(path, file);
+	m_directZob.LoadScene(m_path, m_file);
+
 	float rot = 0.0f;
 	float to = 0.5f;
     printf("Start rendering\n");
@@ -255,7 +266,8 @@ int main(int argc, char* argv[])
 	m_directZob.GetEngine()->DrawGizmos(false);
 	//m_directZob.GetEngine()->GetBufferData()->zFar = 70.0f;
 	//m_directZob.GetZobObjectManager()->GetZobObject("fbx_example")->SetRotation(0, 90, 0);
-	Vector3 camPos = m_directZob.GetCameraManager()->GetCurrentCamera()->GetTransform();
+	Camera* c = m_directZob.GetCameraManager()->GetCurrentCamera();
+	Vector3 camPos = c?c->GetTransform():Vector3();
 	Vector3 camTo = camPos;
 	camTo.z += 1.0f;
 

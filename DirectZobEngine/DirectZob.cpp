@@ -9,12 +9,14 @@
 static char buffer[MAX_PATH];
 static char logBuffer[LOG_BUFFER_SIZE];
 static bool g_isInEditorMode;
+static int s_logIndent;
 static std::mutex g_render_mutex;
-
+int DirectZob::s_logIndent = 0;
 DirectZob *DirectZob::singleton = nullptr;
 
 DirectZob::DirectZob()
 {
+	
 	m_initialized = false;
 	DirectZob::singleton= this; 
 }
@@ -193,6 +195,10 @@ void DirectZob::LogInfo(const char* format, ...)
 	va_start(args, format);
 	_vsnprintf_s(logBuffer, LOG_BUFFER_SIZE, format, args);
 	std::string s = std::string(logBuffer);
+	for (int i = 0; i < s_logIndent; i++)
+	{
+		s = std::string("\t").append(s);
+	}
 	va_end(args);
 	if (g_isInEditorMode)
 	{
@@ -200,7 +206,7 @@ void DirectZob::LogInfo(const char* format, ...)
 }
 	else
 	{
-		printf("%s\n", logBuffer);
+		printf("%s\n", s.c_str());
 	}
 }
 
@@ -210,6 +216,10 @@ void DirectZob::LogError(const char* format, ...)
 	va_start(args, format);
 	_vsnprintf_s(logBuffer, LOG_BUFFER_SIZE, format, args);
 	std::string s = std::string(logBuffer);
+	for (int i = 0; i < s_logIndent; i++)
+	{
+		s = std::string("\t").append(s);
+	}
     va_end(args);
 	if (g_isInEditorMode)
 	{
@@ -217,7 +227,7 @@ void DirectZob::LogError(const char* format, ...)
 }
 	else
 	{
-		printf("%s\n", logBuffer);
+		printf("%s\n", s.c_str());
 	}
 }
 void DirectZob::LogWarning(const char* format, ...)
@@ -226,6 +236,10 @@ void DirectZob::LogWarning(const char* format, ...)
 	va_start(args, format);
 	_vsnprintf_s(logBuffer, LOG_BUFFER_SIZE, format, args);
 	std::string s = std::string(logBuffer);
+	for (int i = 0; i < s_logIndent; i++)
+	{
+		s = std::string("\t").append(s);
+	}
 	va_end(args);
 	if (g_isInEditorMode)
 	{
@@ -233,6 +247,6 @@ void DirectZob::LogWarning(const char* format, ...)
 	}
 	else
 	{
-		printf("%s\n", logBuffer);
+		printf("%s\n", s.c_str());
 	}
 }

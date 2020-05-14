@@ -55,10 +55,12 @@ void SceneLoader::LoadZobObject(TiXmlElement* node, ZobObject* parent)
 
 void SceneLoader::UnloadScene()
 {
+	DirectZob::AddIndent();
 	MeshManager* meshManager = DirectZob::GetInstance()->GetMeshManager();
 	MaterialManager* materialManager = DirectZob::GetInstance()->GetMaterialManager();
 	ZobObjectManager* zobObjectManager = DirectZob::GetInstance()->GetZobObjectManager();
 	LightManager* lightManager = DirectZob::GetInstance()->GetLightManager();
+	CameraManager* cameraManager = DirectZob::GetInstance()->GetCameraManager();
 	Engine* engine = DirectZob::GetInstance()->GetEngine();
 	engine->Stop();
 	SLEEP(1000);	//ugly but ...
@@ -66,19 +68,24 @@ void SceneLoader::UnloadScene()
 	meshManager->UnloadAll();
 	materialManager->UnloadAll();
 	lightManager->UnloadAll();
+	cameraManager->UnloadAll();
+	DirectZob::RemoveIndent();
 }
 
 void SceneLoader::NewScene()
 {
+	DirectZob::AddIndent();
 	UnloadScene();
 	m_path = "";
 	m_file = "";
 	DirectZob::GetInstance()->GetLightManager()->ReInitGlobalSettings();
 	DirectZob::GetInstance()->GetEngine()->Start();
+	DirectZob::RemoveIndent();
 }
 
 void SceneLoader::LoadScene(std::string& path, std::string& file)
 {
+	DirectZob::AddIndent();
 	DirectZob::LogInfo("Load scene %s%s", path.c_str(), file.c_str());
 	UnloadScene();
 	DirectZob::GetInstance()->GetLightManager()->ReInitGlobalSettings();
@@ -122,6 +129,7 @@ void SceneLoader::LoadScene(std::string& path, std::string& file)
 	}
 	DirectZob::LogInfo("Scene loaded");
 	DirectZob::GetInstance()->GetEngine()->Start();
+	DirectZob::RemoveIndent();
 }
 
 void SceneLoader::SaveScene()

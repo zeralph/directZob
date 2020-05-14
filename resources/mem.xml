@@ -1,0 +1,18 @@
+<root>
+    <Meshes>
+		<Mesh name="_mesh" file="sphere.obj" />
+    </Meshes>
+    <Scene>
+        <ZobObject name="camera" type="camera">
+            <Position x="0" y="0" z="0" />
+            <Rotation x="-90" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+        </ZobObject>
+		<ZobObject name="mesh" type="mesh">
+			<Mesh>_mesh</Mesh>
+            <Position x="0" y="0" z="0" />
+            <Rotation x="-90" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+        </ZobObject>
+    </Scene>
+</root>

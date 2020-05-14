@@ -49,10 +49,10 @@ void LightManager::RemoveLight(Light* l)
 
 void LightManager::UnloadAll()
 {
-	for (int i = 0; i < m_lights.size(); i++)
-	{
-		delete (m_lights[i]);
-	}
+	//for (int i = 0; i < m_lights.size(); i++)
+	//{
+	//	delete (m_lights[i]);
+	//}
 	m_lights.clear();
 }
 

@@ -17,6 +17,11 @@ CameraManager::~CameraManager()
 	m_cameras.clear();
 }
 
+void CameraManager::UnloadAll()
+{
+	m_cameras.clear();
+}
+
 void CameraManager::RemoveCamera(Camera* c)
 {
 	for (int i = 0; i < m_cameras.size(); i++)

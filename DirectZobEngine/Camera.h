@@ -17,7 +17,7 @@ public:
 	};
 	Camera(const std::string& name, float fov, BufferData* bufferData, ZobObject* parent);
 	Camera(TiXmlElement* node, ZobObject* parent);
-	~Camera();
+	~Camera() override;
 
 	void					Update(const Matrix4x4& parentMatrix, const Matrix4x4& parentRSMatrix) override;
 	void					DrawGizmos(const Camera* camera, Core::Engine* engine) override;

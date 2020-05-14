@@ -23,7 +23,7 @@ public :
 	};
 
 	ZOBGUID(Type t, SubType s);
-
+	~ZOBGUID();
 	const Type GetType()const;
 	const SubType GetSubType()const;
 	void ChangeType(Type t);

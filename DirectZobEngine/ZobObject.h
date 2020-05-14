@@ -15,7 +15,7 @@ public:
 
 	ZobObject(ZOBGUID::Type t, ZOBGUID::SubType s, const std::string& name, Mesh* mesh, ZobObject* parent = NULL);
 	ZobObject(ZOBGUID::Type t, ZOBGUID::SubType s, TiXmlElement* node, Mesh* mesh, ZobObject* parent);
-	~ZobObject();
+	virtual ~ZobObject();
 
 	//virtuals
 	virtual void					Update(const Matrix4x4& parentMatrix, const Matrix4x4& parentRSMatrix);
