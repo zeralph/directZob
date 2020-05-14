@@ -73,7 +73,7 @@ namespace Core
 		float											WaitForRasterizersEnd();
 		void											ClearRenderQueues();
 		void											Resize(int width, int height);
-		bool											Engine::GetProjectedCoords(Vector3* worldPos);
+		bool											GetProjectedCoords(Vector3* worldPos);
 		float											GetDistanceToCamera(Vector3* worldPos);
 
 	private:	
