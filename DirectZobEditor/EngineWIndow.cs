@@ -236,29 +236,18 @@ namespace DirectZobEditor
 
         private void EngineRender_MouseMove(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left)
+            int dx = m_lastMouseX - Cursor.Position.X;
+            int dy = m_lastMouseY - Cursor.Position.Y;
+            if (e.Button == MouseButtons.Left && m_mainForm.IsCtrlPressed())
             {
-                if (m_mainForm.IsCtrlPressed())
-                {
-                    int dx = m_lastMouseX - Cursor.Position.X;
-                    int dy = m_lastMouseY - Cursor.Position.Y;
-                    m_mainForm.GetCameraControl().GetWrapper().RotateAroundAxis((float)-dx, (float)dy);
-                    //m_mainForm.GetCameraControl().GetWrapper().Move((float)-dx*2.0f, (float)-dy*2.0f);
-                    //m_lastMouseX = e.X;
-                    //m_lastMouseY = e.Y;
-                }
+                m_mainForm.GetCameraControl().GetWrapper().RotateAroundAxis((float)dx, (float)dy);
             }
             else if (e.Button == MouseButtons.Middle)
             {
-                int dx = m_lastMouseX - Cursor.Position.X;
-                int dy = m_lastMouseY - Cursor.Position.Y;
-                m_mainForm.GetCameraControl().GetWrapper().Move((float)-dx * 2.0f, (float)-dy * 2.0f);
-                //m_lastMouseX = e.X;
-                //m_lastMouseY = e.Y;
+                m_mainForm.GetCameraControl().GetWrapper().Move((float)-dx * 2.0f, (float)dy * 2.0f);
             }
             m_lastMouseX = Cursor.Position.X;
             m_lastMouseY = Cursor.Position.Y;
-           // Console.WriteLine("MouseMove : " + m_lastMouseX + ", " + m_lastMouseY);
         }
 
         private void EngineRender_MouseHover(object sender, EventArgs e)

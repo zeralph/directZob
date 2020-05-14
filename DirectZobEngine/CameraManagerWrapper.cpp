@@ -60,11 +60,12 @@ namespace CLI
 		{
 			Vector3 v = Vector3(0, 1, 0);
 			Vector3 p = Vector3(0, 0, 0);
+			Vector3 l = Vector3(0, 1, 0);
 			c->GetTargetVector(&p);
 			v = c->GetUp();
-			c->RotateAroundPointAxis(&p, &v, x);
+			c->RotateAroundPointAxis(&p, &v, NULL, x);
 			v = c->GetLeft();
-			c->RotateAroundPointAxis(&p, &v, y);
+			c->RotateAroundPointAxis(&p, &v, &l, y);
 		}
 	}
 

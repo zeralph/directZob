@@ -86,18 +86,30 @@ bool Camera::GetTargetVector(Vector3* t)
 	return false;
 }
 
-void Camera::RotateAroundPointAxis(const Vector3* point, const Vector3* axis, float angle)
+void Camera::RotateAroundPointAxis(const Vector3* point, const Vector3* axis, const Vector3* lockAxis, float angle)
 {
-	g_update_camera_mutex.lock();
-	m_nextTranslation.x -= point->x;
-	m_nextTranslation.y -= point->y;
-	m_nextTranslation.z -= point->z;
+	//g_update_camera_mutex.lock();
+	Vector3 t = m_nextTranslation;
+	t.x -= point->x;
+	t.y -= point->y;
+	t.z -= point->z;
 	Matrix4x4 rot = Matrix4x4::RotateAroundAxis(axis, angle);
-	rot.Mul(&m_nextTranslation);
-	m_nextTranslation.x += point->x;
-	m_nextTranslation.y += point->y;
-	m_nextTranslation.z += point->z;
-	g_update_camera_mutex.unlock();
+	rot.Mul(&t);
+	Vector3 tn = t;
+	tn.Normalize();
+	t.x += point->x;
+	t.y += point->y;
+	t.z += point->z;
+	if (lockAxis)
+	{
+		float f = Vector3::Dot(&tn, lockAxis);
+		if (fabs(f) > 0.99)
+		{
+			return;
+		}
+	}
+	m_nextTranslation = t;
+	//g_update_camera_mutex.unlock();
 }
 
 void Camera::Move(float dx, float dy, bool moveTargetVector)
