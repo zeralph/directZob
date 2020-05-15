@@ -18,8 +18,8 @@ public:
 	Mesh(std::string& name, std::string& path, std::string& file);
 	~Mesh();
 
-	void Update(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions* options);
-	void QueueForDrawing(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions* options);
+	virtual void Update(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions* options);
+	virtual void QueueForDrawing(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions* options);
 	void DrawBoundingBox(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions* options);
 	const std::vector<Triangle>* GetTrianglesList() const { return &m_triangles; }
 	const uint GetNbTriangles() const { return m_nbFaces; }
@@ -46,7 +46,7 @@ public:
 	const std::string& GetName() const { return m_name; }
 	const std::string& GetFile() const { return m_file; }
 
-private:
+protected:
 	Mesh(std::string& parentName, std::string& path, fbxsdk::FbxMesh* mesh);
 	void SplitEntry(const std::string* s, std::vector<std::string>* v, const char delim);
 	void CreateTriangles(const std::vector<std::string>* line, std::vector<Triangle>* t, size_t& tArrayIdx, const Material* tex);

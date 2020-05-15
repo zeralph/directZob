@@ -1,6 +1,8 @@
 #include "ZobObject.h"
 #include "DirectZob.h"
 #include "Mesh.h"
+#include "Sprite.h"
+
 static int sObjectNumber = 0;
 ZobObject::ZobObject(Type t, SubType s, const std::string& name, Mesh* mesh, ZobObject* parent /*= NULL*/)
 	:ZOBGUID(t,s)
@@ -375,4 +377,10 @@ TiXmlNode* ZobObject::SaveUnderNode(TiXmlNode* node)
 		o->SetAttribute("type", "mesh");
 	}
 	return o;
+}
+
+void ZobObject::CreateSprite()
+{
+	Sprite* s = DirectZob::GetInstance()->GetMeshManager()->CreateSprite();
+	m_mesh = s;
 }

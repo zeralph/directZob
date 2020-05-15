@@ -334,12 +334,6 @@ namespace DirectZobEditor
             }
         }
 
-        private void createLightToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            m_lightManagerWrapper.CreateLight();
-            PropagateSceneUpdateEvent(e);
-        }
-
         private void ZobObjectListPanel_Paint(object sender, PaintEventArgs e)
         {
 
@@ -359,6 +353,44 @@ namespace DirectZobEditor
                 {
                     ctrl.Width = fl.Width - 15;
                 }
+            }
+        }
+
+        private void spotToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            m_lightManagerWrapper.CreateLight(1);
+            PropagateSceneUpdateEvent(e);
+        }
+
+        private void pointToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            m_lightManagerWrapper.CreateLight(0);
+            PropagateSceneUpdateEvent(e);
+        }
+
+        private void directionalToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            m_lightManagerWrapper.CreateLight(2);
+            PropagateSceneUpdateEvent(e);
+        }
+
+        private void createSpriteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CLI.ZobObjectWrapper z = m_zobObjectList.GetWrapper().AddZobSprite("");
+            EventHandler handler = OnSceneUpdated;
+            if (null != handler)
+            {
+                handler(this, EventArgs.Empty);
+            }
+        }
+
+        private void createZobObjectToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CLI.ZobObjectWrapper z = m_zobObjectList.GetWrapper().AddZobObject("");
+            EventHandler handler = OnSceneUpdated;
+            if (null != handler)
+            {
+                handler(this, EventArgs.Empty);
             }
         }
     }

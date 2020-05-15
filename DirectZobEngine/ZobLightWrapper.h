@@ -18,6 +18,8 @@ namespace CLI {
 		void				SetDistance(float f);
 		int					GetType();
 		void				SetType(int f);
+		float				GetSpotAngle();
+		void				SetSpotAngle(float f);
 	};
 }
 #endif //_WINDLL 

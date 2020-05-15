@@ -61,7 +61,7 @@ public:
 	void							MarkForDeletion() { m_markedForDeletion=true; };
 	const RenderOptions::eLightMode GetLightingMode() const { return m_renderOptions.lightMode; };
 	bool							HasChild(const ZobObject* o);
-
+	void							CreateSprite();
 protected:
 
 	ZobObject* m_parent;

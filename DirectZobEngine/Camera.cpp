@@ -194,6 +194,9 @@ void Camera::UpdateViewProjectionMatrix()
 	m_invRotationMatrix.Mul(&forward);
 	m_invRotationMatrix.Mul(&up);
 	SetViewMatrix(&left, &up, &forward, &p);
+	m_forward = forward;
+	m_up = up;
+	m_left = left;
 	g_update_camera_mutex.unlock();
 }
 

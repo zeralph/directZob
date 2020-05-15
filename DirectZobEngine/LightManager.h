@@ -15,7 +15,7 @@ public:
 	void						Setup(Vector3* fogColor, Vector3* ambientColor, Vector3* clearColor, float fogDistance, float fogDensity, eFogType fogType);
 	void						ReInitGlobalSettings();
 	void						AddLight(Light* l);
-	Light*						CreateLight();
+	Light*						CreateLight(Light::eLightType type);
 	Light*						CreateLight(std::string& name, Light::eLightType type, Vector3 position, Vector3 color, float intensity, float distance, ZobObject* parent);
 	const std::vector<Light*>*  GetActiveLights() const;
 	Light*						GetLight(const std::string& name) const;

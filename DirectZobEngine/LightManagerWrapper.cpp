@@ -7,9 +7,9 @@ namespace CLI
 
 	}
 
-	void LightManagerWrapper::CreateLight()
+	void LightManagerWrapper::CreateLight(int type)
 	{
-		/*return*/ m_Instance->CreateLight();
+		/*return*/ m_Instance->CreateLight((Light::eLightType)type);
 	}
 
 	void LightManagerWrapper::GetLight(System::String^)

@@ -88,18 +88,19 @@
             <Mesh>metric_plane.obj</Mesh>
         </ZobObject>
         <ZobObject name="Camera_1" type="camera">
-            <Position x="20" y="50" z="20" />
+            <Position x="20.8696" y="49.6433" z="20" />
             <Rotation x="-30" y="90" z="0" />
             <Scale x="1" y="1" z="1" />
             <Fov>45.00</Fov>
         </ZobObject>
-        <ZobObject name="Light_0" type="pointlight">
-            <Position x="0" y="80" z="0" />
-            <Rotation x="0" y="0" z="0" />
+        <ZobObject name="Light_0" type="light">
+            <Position x="0" y="33.662" z="21.126" />
+            <Rotation x="-90" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
-            <Color r="252" g="212" b="64" />
+            <Color r="255" g="128" b="64" />
             <Intensity>5.00</Intensity>
             <FallOffDistance>100.00</FallOffDistance>
+            <Type>spot</Type>
         </ZobObject>
     </Scene>
 </root>

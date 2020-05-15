@@ -4,6 +4,7 @@
 #include "MeshManager.h"
 
 static std::thread g_geometryThread;
+static std::string emptyStr = std::string("");
 
 ZobObjectManager::ZobObjectManager()
 {
@@ -30,7 +31,16 @@ ZobObject* ZobObjectManager::CreateZobObject(ZobObject* parent)
 	{
 		parent = m_rootObject;
 	}
-	return new ZobObject(ZOBGUID::type_scene, ZOBGUID::subtype_zobOject, "", NULL, parent);
+	return new ZobObject(ZOBGUID::type_scene, ZOBGUID::subtype_zobOject, emptyStr, NULL, parent);
+}
+
+ZobSprite* ZobObjectManager::CreateZobSprite(ZobObject* parent)
+{
+	if (parent == NULL)
+	{
+		parent = m_rootObject;
+	}
+	return new ZobSprite(emptyStr, parent);
 }
 
 void ZobObjectManager::RemoveZobObject(ZobObject* z)

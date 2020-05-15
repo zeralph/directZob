@@ -39,6 +39,12 @@ public:
 
 	
 private:
+
+	void				NewLightConfiguration();
+	void				drawSpotGizmos(const Camera* camera, Core::Engine* engine);
+	void				drawPointGizmos(const Camera* camera, Core::Engine* engine);
+	void				drawDirectionalGizmos(const Camera* camera, Core::Engine* engine);
+
 	Vector3 m_color;
 	float m_intensity;
 	float m_distance;

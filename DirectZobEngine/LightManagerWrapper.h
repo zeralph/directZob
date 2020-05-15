@@ -14,7 +14,7 @@ namespace CLI
 	public:
 
 		LightManagerWrapper();
-		void			CreateLight();
+		void			CreateLight(int type);
 		void			GetLight(System::String^);
 
 		ManagedVector3^ GetClearColor();

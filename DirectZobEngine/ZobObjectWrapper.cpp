@@ -43,6 +43,11 @@ namespace CLI
 		m_Instance->SetMesh(n);
 	}
 
+	void ZobObjectWrapper::CreateSprite()
+	{
+		m_Instance->CreateSprite();
+	}
+
 	void ZobObjectWrapper::SetName(System::String^ name)
 	{
 		if (m_Instance != NULL)

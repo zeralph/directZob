@@ -23,7 +23,16 @@ namespace CLI
 		v = l->GetColor();
 		return gcnew ManagedVector3(v);
 	}
-
+	float ZobLightWrapper::GetSpotAngle()
+	{
+		Light* l = (Light*)m_Instance;
+		return l->GetSpotAngle();
+	}
+	void ZobLightWrapper::SetSpotAngle(float f)
+	{
+		Light* l = (Light*)m_Instance;
+		l->SetSpotAngle(f);
+	}
 	float ZobLightWrapper::GetIntensity()
 	{	 
 		Light* l = (Light*)m_Instance;

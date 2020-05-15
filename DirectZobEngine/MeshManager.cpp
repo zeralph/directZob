@@ -1,5 +1,8 @@
 #include "MeshManager.h"
 #include "DirectZob.h"
+
+static int spriteIdx = 1;
+
 MeshManager::MeshManager()
 {
 	m_meshes.clear();
@@ -18,6 +21,16 @@ MeshManager::~MeshManager()
 		delete m;
 	}
 	m_meshes.clear();
+}
+
+Sprite* MeshManager::CreateSprite()
+{
+	std::string n = std::string("Sprite_");
+	n.append(std::to_string(spriteIdx));
+	spriteIdx++;
+	Sprite* s = new Sprite(n);
+	m_meshes.push_back(s);
+	return s;
 }
 
 Mesh* MeshManager::LoadMesh(std::string& name, std::string& path, std::string& file)

@@ -35,6 +35,7 @@
                 'MeshManager.cpp',
                 'Rasterizer.cpp',
                 'SceneLoader.cpp',
+				'Sprite.cpp',
                 'Text2D.cpp',
 				'Texture.cpp',
                 'Triangle.cpp',
@@ -42,6 +43,7 @@
                 'Vector3.cpp',
                 'ZOBGUID.cpp',
                 'ZobObject.cpp',
+				'ZobSprite.cpp',
                 'ZobObjectManager.cpp',
             ],
             'conditions': [

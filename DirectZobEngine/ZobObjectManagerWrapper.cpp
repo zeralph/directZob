@@ -79,6 +79,15 @@ namespace CLI
 		return gcnew ZobObjectWrapper(z);
 	}
 
+	ZobObjectWrapper^ ZobObjectManagerWrapper::AddZobSprite(System::String^ parent)
+	{
+		std::string n;
+		MarshalString(parent, n);
+		ZobObject* p = m_Instance->GetZobObject(n);
+		ZobObject* z = m_Instance->CreateZobSprite(p);
+		return gcnew ZobObjectWrapper(z);
+	}
+
 	void ZobObjectManagerWrapper::CreateEditorGizmos(System::String^ editorResourcesPath)
 	{
 		std::string n;

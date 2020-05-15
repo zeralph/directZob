@@ -182,7 +182,16 @@ inline Vector3 Rasterizer::ComputeLightingAtPoint(const Vector3* position, const
 					lightDir.Normalize();
 					Vector3 fw = l->GetForward();
 					float f = Vector3::Dot(&fw, &lightDir);
-					f = f - (90.0f - l->GetSpotAngle()) / 90.0f;
+					/*
+					float r = l->GetSpotAngle() / 2.0f;
+					r = r * M_PI / 180.0f;
+					r = cos(r);
+					if (fabs(f) < fabs(r))
+					{
+						lightPower = 0;
+					}
+					*/
+					f = f - (90.0f - l->GetSpotAngle()/2.0f) / 90.0f;
 					lightPower *= f;
 					lightPower = clamp2(lightPower, 0.0f, 1.0f) * l->GetIntensity();
 				}

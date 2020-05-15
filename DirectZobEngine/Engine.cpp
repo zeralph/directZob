@@ -53,16 +53,16 @@ Engine::Engine(int width, int height, Events* events)
 	m_rasterLineQueues = new std::vector<Line3D>[m_nbRasterizers];
 	//m_rasterizers = new std::vector<Rasterizer*>[m_nbRasterizers];
 	m_rasterizers = (Rasterizer**)malloc(sizeof(Rasterizer) * m_nbRasterizers);
-	int h = height / m_nbRasterizers;
+	m_rasterizerHeight = ceil((float)height / (float)m_nbRasterizers);
 	int h0 = 0;
 	
 	for (int i = 0; i < m_nbRasterizers; i++)
 	{
-		Rasterizer *r = new Rasterizer(width, h0, h0 + h, &m_bufferData);
+		Rasterizer *r = new Rasterizer(width, h0, h0 + m_rasterizerHeight, &m_bufferData);
 		m_rasterizers[i] = r;
 		m_rasterTriangleQueues[i] = (Triangle*)malloc(sizeof(Triangle) * m_triangleQueueSize);
 		m_rasterLineQueues[i].clear();
-		h0 += h;
+		h0 += m_rasterizerHeight;
 	}
 	for (int i = 0; i < m_nbRasterizers; i++)
 	{
@@ -88,9 +88,17 @@ Engine::~Engine()
 {
 	for (int i = 0; i < m_nbRasterizers; i++)
 	{
-
 		m_rasterizers[i]->End();
 	}
+	for (int i = 0; i < m_nbRasterizers; i++)
+	{
+		delete m_rasterizers[i];
+		delete m_rasterTriangleQueues[i];
+	}
+	delete m_rasterTriangleQueues;
+	delete m_rasterNbTriangleQueues;
+	delete m_rasterLineQueues;
+	delete m_rasterizers;
 	m_events = NULL;
 }
 
@@ -136,16 +144,16 @@ void Engine::Resize(int width, int height)
 		m_rasterizers[i] = NULL;
 	}
 
-	int h = height / m_nbRasterizers;
+	m_rasterizerHeight = ceil( (float)height / (float)m_nbRasterizers);
 	int h0 = 0;
 	m_rasterizers = (Rasterizer**)malloc(sizeof(Rasterizer) * m_nbRasterizers);
 	for (int i = 0; i < m_nbRasterizers; i++)
 	{
-		Rasterizer *r = new Rasterizer(width, h0, h0 + h, &m_bufferData);
+		Rasterizer *r = new Rasterizer(width, h0, h0 + m_rasterizerHeight, &m_bufferData);
 		m_rasterizers[i] = r;
 		//m_rasterTriangleQueues[i].clear();
 		m_rasterLineQueues[i].clear();
-		h0 += h;
+		h0 += m_rasterizerHeight;
 	}
 	for (int i = 0; i < m_nbRasterizers; i++)
 	{
@@ -445,8 +453,8 @@ void Engine::QueueLine(const Camera *camera, const Vector3 *v1, const Vector3 *v
 			int max = std::max<int>(a.y, b.y);
 			min = clamp2(min, 0, (int)m_bufferData.height - 1);
 			max = clamp2(max, 0, (int)m_bufferData.height - 1);
-			min /= m_bufferData.height / m_nbRasterizers;
-			max /= m_bufferData.height / m_nbRasterizers;
+			min =  min / m_rasterizerHeight;
+			max =  max / m_rasterizerHeight;
 //			min = 0;
 //			max = m_nbRasterizers-1;
 			if(isinf(l.xa) || isinf(l.xb) || isinf(l.ya) || isinf(l.yb))

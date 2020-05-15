@@ -47,6 +47,16 @@ void DirectZob::LoadScene(std::string& path, std::string& file)
 	}
 }
 
+void DirectZob::Lock()
+{
+	g_render_mutex.lock();
+}
+
+void DirectZob::Unlock()
+{
+	g_render_mutex.unlock();
+}
+
 void DirectZob::SaveScene(std::string& path, std::string& file)
 {
 	SceneLoader::SaveScene(path, file);

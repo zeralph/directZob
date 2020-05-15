@@ -1,5 +1,6 @@
 #ifdef _WINDLL
 #include "CameraManagerWrapper.h"
+#include "DirectZob.h"
 namespace CLI
 {
 	CameraManagerWrapper::CameraManagerWrapper():ManagedObject(DirectZob::GetInstance()->GetCameraManager(), false)
@@ -55,6 +56,7 @@ namespace CLI
 
 	void CameraManagerWrapper::RotateAroundAxis(float x, float y)
 	{
+		DirectZob::GetInstance()->Lock();
 		Camera* c = m_Instance->GetCurrentCamera();
 		if (c)
 		{
@@ -67,34 +69,41 @@ namespace CLI
 			v = c->GetLeft();
 			c->RotateAroundPointAxis(&p, &v, &l, y);
 		}
+		DirectZob::GetInstance()->Unlock();
 	}
 
 	void CameraManagerWrapper::Move(float x, float y)
 	{
+		DirectZob::GetInstance()->Lock();
 		Camera* c = m_Instance->GetCurrentCamera();
 		if (c)
 		{
 			c->Move(x, y, true);
 		}
+		DirectZob::GetInstance()->Unlock();
 	}
 
 	void CameraManagerWrapper::Zoom(float z)
 	{
+		DirectZob::GetInstance()->Lock();
 		Camera* c = m_Instance->GetCurrentCamera();
 		if (c)
 		{
 			c->Zoom(z);
 		}
+		DirectZob::GetInstance()->Unlock();
 	}
 
 	void CameraManagerWrapper::SetCurrentCameraPosition(ManagedVector3^ p)
 	{
+		DirectZob::GetInstance()->Lock();
 		Camera* c = m_Instance->GetCurrentCamera();
 		if (c)
 		{
 			Vector3 v = p->ToVector3();
 			c->SetTranslation(v.x, v.y, v.z);
 		}
+		DirectZob::GetInstance()->Unlock();
 	}
 
 
@@ -110,19 +119,23 @@ namespace CLI
 
 	void CameraManagerWrapper::SetCurrentCamera(System::String^ name)
 	{
+		DirectZob::GetInstance()->Lock();
 		std::string stdName;
 		MarshalString(name, stdName);
 		m_Instance->SetNextCamera(stdName);
+		DirectZob::GetInstance()->Unlock();
 	}
 
 	void CameraManagerWrapper::SetLookAt( ManagedVector3^ target)
 	{
+		DirectZob::GetInstance()->Lock();
 		Camera* c = m_Instance->GetCurrentCamera();
 		if (c)
 		{
 			Vector3 t = target->ToVector3();
 			c->SetTarget(&t);
 		}
+		DirectZob::GetInstance()->Unlock();
 	}
 }
 #endif //_WINDLL

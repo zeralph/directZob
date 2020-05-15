@@ -1,6 +1,7 @@
 #pragma once
 #include "Types.h"
 #include "Mesh.h"
+#include "Sprite.h"
 #include <string>
 #include <fbxsdk.h>
 
@@ -17,6 +18,7 @@ public:
 	const Mesh* GetMesh(const int i) const;
 	void UnloadAll(); 
 	FbxManager* GetFbxManager() { return m_lSdkManager; }
+	Sprite* CreateSprite();
 private:
 	std::vector<Mesh*> m_meshes;
 	FbxManager* m_lSdkManager = NULL;

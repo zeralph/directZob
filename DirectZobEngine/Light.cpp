@@ -11,6 +11,7 @@ Light::Light(std::string &name, eLightType type, Vector3 color, float intensity,
 	m_active = true;
 	m_lightType = type;
 	m_spotAngle = 30.0f;
+	NewLightConfiguration();
 }
 
 Light::Light(TiXmlElement* node, ZobObject* parent)
@@ -55,6 +56,7 @@ Light::Light(TiXmlElement* node, ZobObject* parent)
 		m_intensity = intensity;
 		m_active = true;
 		m_spotAngle = 30.0f;
+		NewLightConfiguration();
 }
 
 Light::~Light()
@@ -65,13 +67,96 @@ Light::~Light()
 	DirectZob::RemoveIndent();
 }
 
-void Light::DrawGizmos(const Camera* camera, Core::Engine* engine)
+void Light::NewLightConfiguration()
 {
-	ZobObject::DrawGizmos(camera, engine);
-	uint c = ((int)(m_color.x * 255) << 16) + ((int)(m_color.y * 255) << 8) + (int)(m_color.z * 255);	
+	switch (m_lightType)
+	{
+	case eLightType_spot:
+		SetRotation(-90, 0, 0);
+		//m_rotation = Vector3(-90.0f, 0.0f, 0.0f);
+		m_distance = 10.0f;
+		m_spotAngle = 10.0f;
+		break;
+	case eLightType_directional:
+		m_rotation = Vector3(-70.0f, 30.0f, 30.0f);
+		break;
+	default:
+		break;
+	}
+}
+
+void Light::drawPointGizmos(const Camera* camera, Core::Engine* engine)
+{
+	uint c = ((int)(m_color.x * 255) << 16) + ((int)(m_color.y * 255) << 8) + (int)(m_color.z * 255);
 	engine->QueueEllipse(camera, &m_translation, &m_up, 1.0f, 1.0f, c, true);
 	engine->QueueEllipse(camera, &m_translation, &m_left, 1.0f, 1.0f, c, true);
 	engine->QueueEllipse(camera, &m_translation, &m_forward, 1.0f, 1.0f, c, true);
+}
+
+void Light::drawSpotGizmos(const Camera* camera, Core::Engine* engine)
+{
+	uint c = ((int)(m_color.x * 255) << 16) + ((int)(m_color.y * 255) << 8) + (int)(m_color.z * 255);
+	Vector3 v1, v2, v;
+	v1 = m_forward;
+	v2 = m_left;
+	v1.Mul(m_distance);
+	v1 = v1 + m_translation;
+	float r = m_spotAngle / 2.0f;
+	r = r * M_PI / 180.0f;
+	r = tan(r) * m_distance;
+	engine->QueueEllipse(camera, &v1, &m_forward, r, r, c, true);
+	v2 = m_left;
+	v = v1 + (v2 * r);
+	engine->QueueLine(camera, &m_translation, &v, c, true);
+	v2 = m_left;
+	v = v1 - (v2 * r);
+	engine->QueueLine(camera, &m_translation, &v, c, true);
+	v2 = m_up;
+	v = v1 + (v2 * r);
+	engine->QueueLine(camera, &m_translation, &v, c, true);
+	v2 = m_up;
+	v = v1 - (v2 * r);
+	engine->QueueLine(camera, &m_translation, &v, c, true);
+}
+
+void Light::drawDirectionalGizmos(const Camera* camera, Core::Engine* engine)
+{
+	uint c = ((int)(m_color.x * 255) << 16) + ((int)(m_color.y * 255) << 8) + (int)(m_color.z * 255);
+	Vector3 v0 = m_translation + m_forward;
+	Vector3 v1 = m_translation - m_forward;
+	v0 = v0 + m_left;
+	v1 = v1 + m_left;
+	engine->QueueLine(camera, &v0, &v1, c, true);
+	v0 = v0 + m_up;
+	v1 = v1 + m_up;
+	engine->QueueLine(camera, &v0, &v1, c, true);
+	v0 = m_translation + m_forward;
+	v1 = m_translation - m_forward;
+	v0 = v0 - m_left;
+	v1 = v1 - m_left;
+	engine->QueueLine(camera, &v0, &v1, c, true);
+	v0 = v0 - m_up;
+	v1 = v1 - m_up;
+	engine->QueueLine(camera, &v0, &v1, c, true);
+	v1 = m_translation - m_forward;
+	engine->QueueEllipse(camera, &v1, &m_forward, 1.0f, 1.0f, c, true);
+}
+
+void Light::DrawGizmos(const Camera* camera, Core::Engine* engine)
+{
+	ZobObject::DrawGizmos(camera, engine);
+	switch (m_lightType)
+	{
+	case eLightType_spot:
+		drawSpotGizmos(camera, engine);
+		break;
+	case eLightType_directional:
+		drawDirectionalGizmos(camera, engine);
+		break;
+	default:
+		drawPointGizmos(camera, engine);
+		break;
+	}
 }
 
 TiXmlNode* Light::SaveUnderNode(TiXmlNode* node)

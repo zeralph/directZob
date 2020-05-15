@@ -137,7 +137,7 @@
             this.zobPosX.Size = new System.Drawing.Size(50, 20);
             this.zobPosX.TabIndex = 32;
             this.zobPosX.Text = "100.00";
-            this.zobPosX.TextChanged += new System.EventHandler(this.valueChanged);
+            this.zobPosX.Leave += new System.EventHandler(this.valueChanged);
             // 
             // zobPosY
             // 
@@ -146,7 +146,7 @@
             this.zobPosY.Size = new System.Drawing.Size(50, 20);
             this.zobPosY.TabIndex = 33;
             this.zobPosY.Text = "100.00";
-            this.zobPosY.TextChanged += new System.EventHandler(this.valueChanged);
+            this.zobPosY.Leave += new System.EventHandler(this.valueChanged);
             // 
             // zobPosZ
             // 
@@ -155,7 +155,7 @@
             this.zobPosZ.Size = new System.Drawing.Size(50, 20);
             this.zobPosZ.TabIndex = 34;
             this.zobPosZ.Text = "100.00";
-            this.zobPosZ.TextChanged += new System.EventHandler(this.valueChanged);
+            this.zobPosZ.Leave += new System.EventHandler(this.valueChanged);
             // 
             // zobScaleZ
             // 
@@ -164,7 +164,7 @@
             this.zobScaleZ.Size = new System.Drawing.Size(50, 20);
             this.zobScaleZ.TabIndex = 42;
             this.zobScaleZ.Text = "100.00";
-            this.zobScaleZ.TextChanged += new System.EventHandler(this.valueChanged);
+            this.zobScaleZ.Leave += new System.EventHandler(this.valueChanged);
             // 
             // label3
             // 
@@ -182,7 +182,7 @@
             this.zobScaleY.Size = new System.Drawing.Size(50, 20);
             this.zobScaleY.TabIndex = 41;
             this.zobScaleY.Text = "100.00";
-            this.zobScaleY.TextChanged += new System.EventHandler(this.valueChanged);
+            this.zobScaleY.Leave += new System.EventHandler(this.valueChanged);
             // 
             // zobRotX
             // 
@@ -191,7 +191,7 @@
             this.zobRotX.Size = new System.Drawing.Size(50, 20);
             this.zobRotX.TabIndex = 36;
             this.zobRotX.Text = "100.00";
-            this.zobRotX.TextChanged += new System.EventHandler(this.valueChanged);
+            this.zobRotX.Leave += new System.EventHandler(this.valueChanged);
             // 
             // zobScaleX
             // 
@@ -200,7 +200,7 @@
             this.zobScaleX.Size = new System.Drawing.Size(50, 20);
             this.zobScaleX.TabIndex = 40;
             this.zobScaleX.Text = "100.00";
-            this.zobScaleX.TextChanged += new System.EventHandler(this.valueChanged);
+            this.zobScaleX.Leave += new System.EventHandler(this.valueChanged);
             // 
             // zobRotY
             // 

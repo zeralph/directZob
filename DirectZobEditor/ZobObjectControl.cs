@@ -50,6 +50,7 @@ namespace DirectZobEditor
             m_currentZobObjectWrapper = e.newZobObject;
             if (m_currentZobObjectWrapper != null)
             {
+
                 SetValues();
                 this.Visible = true;
             }

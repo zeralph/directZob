@@ -103,7 +103,7 @@ namespace Core
 		ulong m_nbPixels;
 		volatile bool m_started = false;
 		bool m_wireFrame = false;
-		
+		int m_rasterizerHeight;
 		bool m_showNormals = false;
 		bool m_showGrid = true;
 		bool m_drawGizmos = true;

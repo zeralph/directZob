@@ -6,6 +6,7 @@
 #include "Camera.h"
 #include "Engine.h"
 #include "Light.h"
+#include "ZobSprite.h"
 
 class ZobObjectManager
 {
@@ -26,6 +27,7 @@ public:
 	std::string GetZobObjectList();
 	ZobObject* GetRootObject() { return m_rootObject;  }
 	ZobObject* CreateZobObject(ZobObject* parent);
+	ZobSprite* CreateZobSprite(ZobObject* parent);
 	void RemoveZobObject(ZobObject* z);
 	void UnloadAll();
 	void CreateEditorGizmos(std::string& editorResourcesPath);
