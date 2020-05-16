@@ -16,6 +16,18 @@ ZobSprite::ZobSprite(const std::string &name, ZobObject*parent):
 ZobSprite::ZobSprite(TiXmlElement* node, ZobObject* parent)
 	:ZobObject(ZOBGUID::type_scene, ZOBGUID::subtype_sprite, node, NULL, parent)
 {
+	m_mesh = DirectZob::GetInstance()->GetMeshManager()->CreateSprite();
+	m_material = DirectZob::GetInstance()->GetMaterialManager()->CreateMaterial();
+	Vector3 c = Vector3(1, 0, 0);
+	m_material->SetDiffuseColor(c);
+	Sprite* s = (Sprite*)m_mesh;
+	s->Setmaterial(m_material);
+	TiXmlElement* f = node->FirstChildElement("Texture");
+	if (f && f->GetText())
+	{
+		std::string tex = std::string(f->GetText());
+		SetTexture(tex);
+	}
 }
 
 ZobSprite::~ZobSprite()
@@ -25,7 +37,17 @@ ZobSprite::~ZobSprite()
 
 TiXmlNode* ZobSprite::SaveUnderNode(TiXmlNode* node)
 {
-	return node;
+	TiXmlNode* n = ZobObject::SaveUnderNode(node);
+	TiXmlElement* ne = (TiXmlElement*)n;
+	ne->SetAttribute("type", "sprite");
+	if (m_material && m_material->GetDiffuseTexture())
+	{
+		TiXmlText t(m_material->GetDiffuseTexture()->GetPath().c_str());
+		TiXmlElement tex = TiXmlElement("Texture");
+		tex.InsertEndChild(t);
+		ne->InsertEndChild(tex);
+	}
+	return n;
 }
 
 void ZobSprite::UpdateMesh(const Camera* camera, Core::Engine* engine)

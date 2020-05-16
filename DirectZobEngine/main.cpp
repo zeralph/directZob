@@ -299,7 +299,11 @@ int main(int argc, char* argv[])
 		}
 		else
 		{
-			m_directZob.GetZobObjectManager()->GetRootObject()->SetRotation(0, rot, 0);
+			if (m_directZob.GetCameraManager()->GetCurrentCamera())
+			{
+				m_directZob.GetCameraManager()->GetCurrentCamera()->SetRotation(0, rot, 0);
+			}
+			//m_directZob.GetZobObjectManager()->GetRootObject()->SetRotation(0, rot, 0);
 		}
 		if (!bPause)
 		{

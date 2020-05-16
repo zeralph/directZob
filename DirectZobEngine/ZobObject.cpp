@@ -349,7 +349,6 @@ void ZobObject::SetLightingMode(RenderOptions::eLightMode l)
 
 TiXmlNode* ZobObject::SaveUnderNode(TiXmlNode* node)
 {
-	char tmpBuffer[256];
 	TiXmlElement* o = new TiXmlElement("ZobObject");
 	TiXmlElement p = TiXmlElement("Position");
 	TiXmlElement r = TiXmlElement("Rotation");

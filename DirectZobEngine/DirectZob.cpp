@@ -138,8 +138,9 @@ int DirectZob::RunAFrame()
 		Camera* cam = m_cameraManager->GetCurrentCamera();
 		if (cam)
 		{
-			cam->UpdateViewProjectionMatrix();
+//			cam->UpdateViewProjectionMatrix();
 			m_engine->StartDrawingScene();
+			cam->UpdateViewProjectionMatrix();
 			m_zobObjectManager->StartUpdateObjects(cam, m_engine);
 			m_geometryTime = m_zobObjectManager->WaitForUpdateObjectend();
 			m_renderTime = m_engine->WaitForRasterizersEnd();

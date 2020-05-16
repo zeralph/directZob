@@ -54,7 +54,7 @@ public:
 	void							AddChildReference(ZobObject* z);
 	int								GetChildPosition(const ZobObject* z);
 	RenderOptions*					GetRenderOptions() { return &m_renderOptions; };
-	const std::string				GetMeshName() const ;
+	virtual const std::string		GetMeshName() const ;
 	void							SetMesh(std::string name);
 	void							SetLightingMode(RenderOptions::eLightMode l);
 	const bool						IsMarkedForDeletion() const { return m_markedForDeletion; };

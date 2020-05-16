@@ -36,6 +36,11 @@ void SceneLoader::LoadZobObject(TiXmlElement* node, ZobObject* parent)
 		DirectZob::GetInstance()->GetCameraManager()->AddCamera(c);
 		zob = c;
 	}
+	else if (type == "sprite")
+	{
+		ZobSprite* s = new ZobSprite(node, parent);
+		zob = s;
+	}
 	else if (type == "light")
 	{
 		Light* l = new Light(node, parent);

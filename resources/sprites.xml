@@ -1,0 +1,43 @@
+<root>
+    <Meshes>
+        <Mesh name="Sprite_1" file="" />
+        <Mesh name="Sprite_2" file="" />
+        <Mesh name="Sprite_1" file="" />
+        <Mesh name="Sprite_2" file="" />
+        <Mesh name="Sprite_3" file="" />
+    </Meshes>
+    <Scene>
+        <Globals>
+            <AmbientColor r="102" g="102" b="102" />
+            <FogColor r="63" g="149" b="255" />
+            <ClearColor r="63" g="149" b="255" />
+            <FogDensity>2.00</FogDensity>
+            <FogDistance>500.00</FogDistance>
+            <FogType>none</FogType>
+        </Globals>
+        <ZobObject name="newObject_4" type="sprite">
+            <Position x="-5" y="0" z="5" />
+            <Rotation x="0" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+            <Texture>D:\_GIT\directZob\resources\beach.png</Texture>
+        </ZobObject>
+        <ZobObject name="newObject_9" type="sprite">
+            <Position x="0" y="2" z="3" />
+            <Rotation x="0" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+            <Texture>D:\_GIT\directZob\resources\font.png</Texture>
+        </ZobObject>
+        <ZobObject name="Camera_1" type="camera">
+            <Position x="0" y="1" z="0" />
+            <Rotation x="0" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+            <Fov>45.00</Fov>
+        </ZobObject>
+        <ZobObject name="newObject_11" type="sprite">
+            <Position x="0.642" y="2.035" z="-5" />
+            <Rotation x="0" y="0" z="0" />
+            <Scale x="2" y="2" z="2" />
+            <Texture>D:\_GIT\directZob\resources\plaque2.png</Texture>
+        </ZobObject>
+    </Scene>
+</root>
