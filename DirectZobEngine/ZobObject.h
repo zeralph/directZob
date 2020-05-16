@@ -19,7 +19,7 @@ public:
 
 	//virtuals
 	virtual void					Update(const Matrix4x4& parentMatrix, const Matrix4x4& parentRSMatrix);
-	void							UpdateMesh(const Camera* camera, Core::Engine* engine);
+	virtual void					UpdateMesh(const Camera* camera, Core::Engine* engine);
 	virtual void					QueueForDrawing(const Camera* camera, Core::Engine* engine);
 	virtual inline void				SetScale(float x, float y, float z) { m_scale.x = x; m_scale.y = y; m_scale.z = z; };
 	virtual inline void				SetRotation(float x, float y, float z) { m_rotation.x = x; m_rotation.y = y; m_rotation.z = z; };

@@ -139,7 +139,7 @@ void Camera::Update(const Matrix4x4& parentMatrix, const Matrix4x4& parentRSMatr
 	g_update_camera_mutex.lock();
 	m_translation = m_nextTranslation;
 	m_left = Vector3(1, 0, 0);
-	m_forward = Vector3(0, 0, 1);
+	//m_forward = Vector3(0, 0, 1);
 	m_up = Vector3(0, 1, 0);
 	if (m_tagetMode != eTarget_none)
 	{
@@ -147,7 +147,7 @@ void Camera::Update(const Matrix4x4& parentMatrix, const Matrix4x4& parentRSMatr
 		{
 			Vector3 v = m_targetVector - m_translation;
 			v.Normalize();
-			m_forward = v;
+			//m_forward = v;
 			m_rotation = Vector3::GetAnglesFromVector(v);
 
 		}
@@ -158,7 +158,7 @@ void Camera::Update(const Matrix4x4& parentMatrix, const Matrix4x4& parentRSMatr
 			{
 				v = m_targetObject->GetTransform() - m_translation;
 				v.Normalize();
-				m_forward = v;
+				//m_forward = v;
 				m_rotation = Vector3::GetAnglesFromVector(v);
 			}
 		}

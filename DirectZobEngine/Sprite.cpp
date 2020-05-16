@@ -5,7 +5,7 @@ using namespace std;
 
 std::string emptyStr = std::string("");
 
-Sprite::Sprite(std::string& name):Mesh(name, emptyStr, emptyStr)
+Sprite::Sprite(std::string& name):Mesh(name)
 {
 	DirectZob::LogInfo("Sprite %s Creation", m_name.c_str());
 	DirectZob::AddIndent();
@@ -14,7 +14,9 @@ Sprite::Sprite(std::string& name):Mesh(name, emptyStr, emptyStr)
 	m_nbNormals = 4;
 	m_nbFaces = 2;
 	m_nbUvs = 4;
-	m_material = NULL;
+
+	m_minBouding = Vector3(-0.5f, -0.5f, 0.0f);
+	m_maxBouding = Vector3(0.5f, 0.5f, 0.0f);
 
 	m_vertices = (Vector3*)malloc(sizeof(Vector3) * m_nbVertices);
 	m_verticesData = (Vector3*)malloc(sizeof(Vector3) * m_nbVertices);
@@ -107,7 +109,6 @@ void Sprite::Update(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatri
 */
 void Sprite::Setmaterial(const Material* m) 
 { 
-	m_material = m; 
 	m_triangles[0].material = m;  
 	m_triangles[1].material = m; 
 }

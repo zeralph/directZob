@@ -19,6 +19,7 @@ public :
 		subtype_zobCamera,
 		subtype_zobLight,
 		subtype_mesh,
+		subtype_sprite,
 		subtype_MAX = 15,
 	};
 

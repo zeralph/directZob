@@ -3,8 +3,8 @@
 
 using namespace std;
 static Vector2 vec2zero = Vector2(0,0);
-
-Mesh::Mesh(std::string& name, std::string& path, std::string& file)
+static std::string emptyStr = std::string("");
+Mesh::Mesh(std::string& name)
 {	
 	DirectZob::LogInfo("Mesh %s Creation", m_name.c_str());
 	DirectZob::AddIndent();
@@ -20,12 +20,18 @@ Mesh::Mesh(std::string& name, std::string& path, std::string& file)
 	m_trianglesNormals = NULL;
 	m_uvs = NULL;
 	m_name = name;
+	m_file = emptyStr;
+	m_path = emptyStr;
+	DirectZob::RemoveIndent();
+}
+
+Mesh::Mesh(std::string& name, std::string& path, std::string& file):Mesh(name)
+{
+	DirectZob::AddIndent();
 	m_file = file;
 	m_path = path;
 	std::string fullPath = path;
 	fullPath.append(file);
-	
-	
 	if (fullPath.find(".fbx") != -1)
 	{
 		LoadFbx(fullPath);

@@ -25,11 +25,18 @@ MaterialManager::~MaterialManager()
 	UnloadAll();
 }
 
+Material* MaterialManager::CreateMaterial()
+{
+	Material* m = new Material();
+	m_materials.push_back(m);
+	return m;
+}
+
 const Material* MaterialManager::LoadMaterial(const std::string& name, const Vector3* ambientColor, const Vector3* diffuseColor, const std::string &textureFile)
 {
 	if (GetMaterial(name) == NULL)
 	{
-		Texture* texture = NULL;
+		const Texture* texture = NULL;
 		if (textureFile.length() > 0)
 		{
 			for (std::vector<Texture*>::const_iterator iter = m_textures.begin(); iter != m_textures.end(); iter++)
@@ -42,9 +49,7 @@ const Material* MaterialManager::LoadMaterial(const std::string& name, const Vec
 			}
 			if(texture == NULL)
 			{
-				texture = new Texture();
-				texture->LoadFromFile(textureFile);
-				m_textures.push_back(texture);
+				texture = LoadTexture(textureFile);
 			}
 		}
 		Material* t = new Material(name, ambientColor, diffuseColor, texture);
@@ -100,37 +105,6 @@ const Material* MaterialManager::LoadFbxMaterial(const fbxsdk::FbxMesh* mesh, co
 							texture_name3 = file_texture->GetMediaName();
 						}
 					}
-					/*int layered_texture_count = prop.GetSrcObjectCount<fbxsdk::FbxLayeredTexture>();
-					if (layered_texture_count > 0)
-					{
-						for (int j = 0; j < layered_texture_count; j++)
-						{
-							FbxLayeredTexture* layered_texture = FbxCast<fbxsdk::FbxLayeredTexture>(prop.GetSrcObject<FbxLayeredTexture>(j));
-							int lcount = layered_texture->GetSrcObjectCount<fbxsdk::FbxTexture>();
-							for (int k = 0; k < lcount; k++)
-							{
-								FbxTexture* texture = FbxCast<fbxsdk::FbxTexture>(layered_texture->GetSrcObject<fbxsdk::FbxTexture>(k));
-								// Then, you can get all the properties of the texture, include its name
-								texture_name = texture->GetName();
-								//texture_name2 = texture->GetRelativeFileName();
-								//texture_name3 = texture->GetMediaName();
-							}
-						}
-					}
-					else
-					{
-						// Directly get textures
-						int texture_count = prop.GetSrcObjectCount<fbxsdk::FbxTexture>();
-						for (int j = 0; j < texture_count; j++)
-						{
-							const fbxsdk::FbxTexture* texture = FbxCast<fbxsdk::FbxTexture>(prop.GetSrcObject<fbxsdk::FbxTexture>(j));
-							//texture->FindSrcObject
-							// Then, you can get all the properties of the texture, include its name
-							texture_name = texture->GetName();
-							//texture_name2 = texture->GetRelativeFileName();
-							//texture_name3 = texture->GetMediaName();
-						}
-					}*/
 					float f;
 					prop = material->FindProperty(fbxsdk::FbxSurfaceMaterial::sDiffuseFactor);
 					f = prop.Get<FbxDouble>();
@@ -253,6 +227,26 @@ const Material* MaterialManager::GetMaterial(const int i) const
 		return m_materials[i];
 	}
 	return NULL;
+}
+
+const Texture* MaterialManager::GetTexture(const std::string name)
+{
+	for(int i=0; i<m_textures.size(); i++)
+	{
+		if (m_textures[i]->GetPath() == name)
+		{
+			return m_textures[i];
+		}
+	}
+	return LoadTexture(name);
+}
+
+const Texture* MaterialManager::LoadTexture(const std::string name)
+{
+	Texture* texture = new Texture();
+	texture->LoadFromFile(name);
+	m_textures.push_back(texture);
+	return texture;
 }
 
 const Material* MaterialManager::GetMaterial(const std::string& name) const

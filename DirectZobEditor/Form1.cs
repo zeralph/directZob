@@ -35,6 +35,7 @@ namespace DirectZobEditor
         private ZobLightControl m_lightControl;
         private ZobCameraControl m_cameraControl;
         private ZobMeshControl m_meshControl;
+        private ZobSpriteControl m_spriteControl;
         private bool m_ctrlPressed = false;
 
         private string m_path;
@@ -62,6 +63,7 @@ namespace DirectZobEditor
             m_lightControl = new ZobLightControl(this);
             m_cameraControl = new ZobCameraControl();
             m_meshControl = new ZobMeshControl();
+            m_spriteControl = new ZobSpriteControl(this);
             m_zobObjectControl = new ZobObjectControl(this, m_lightControl, m_cameraControl, m_meshControl);
             //--
             EngineControlsFlowLayout.Controls.Add(m_camControl);
@@ -73,6 +75,7 @@ namespace DirectZobEditor
             EngineControlsFlowLayout.Controls.Add(m_meshControl);
             EngineControlsFlowLayout.Controls.Add(m_cameraControl);
             EngineControlsFlowLayout.Controls.Add(m_lightControl);
+            EngineControlsFlowLayout.Controls.Add(m_spriteControl);
             //--
             this.propertiesPanel.MinimumSize = new Size(300, 500);
 
@@ -83,6 +86,11 @@ namespace DirectZobEditor
             {
                 handler(this, EventArgs.Empty);
             }
+        }
+
+        public string Getpath()
+        {
+            return m_path;
         }
 
         public void UpdateAfterEngine()

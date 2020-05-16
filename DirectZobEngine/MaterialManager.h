@@ -20,9 +20,10 @@ public:
 	void 					LoadOBJMaterials(std::string& path, std::string& file);
 	const Material* 		LoadFbxMaterial(const fbxsdk::FbxMesh* mesh, const std::string &path);
 	void 					UnloadAll();
-
+	Material*				CreateMaterial();
+	const Texture*			GetTexture(const std::string name);
 private:
-
+	const Texture*			LoadTexture(const std::string name);
 	void 					SplitEntry(const std::string* s, std::vector<std::string>* v, const char delim);
 	std::vector<Material*> 	m_materials;
 	std::vector<Texture*> 	m_textures;

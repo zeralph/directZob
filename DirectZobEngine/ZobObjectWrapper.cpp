@@ -134,6 +134,11 @@ namespace CLI
 		return m_Instance->GetSubType() == ZOBGUID::SubType::subtype_zobCamera;
 	}
 
+	bool ZobObjectWrapper::IsSprite()
+	{
+		return m_Instance->GetSubType() == ZOBGUID::SubType::subtype_sprite;
+	}
+
 	bool ZobObjectWrapper::HasMesh()
 	{
 		return m_Instance->GetSubType() == ZOBGUID::SubType::subtype_zobOject;

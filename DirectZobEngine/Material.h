@@ -11,11 +11,14 @@ class Material
 public:
 
 	//Material(const std::string& path, const std::string& file, const std::string& name);
+	Material();
 	Material(const std::string& name, const Vector3* ambientColor, const Vector3* diffuseColor, const Texture* texture);
 	~Material();
-	inline const Texture* 		GetDiffuseTexture() const { return m_diffuseTexture; }
+	inline const Texture*		GetDiffuseTexture() const { return m_diffuseTexture; }
+	void						SetDiffuseTexture(const Texture* t) { m_diffuseTexture = t; }
 	inline const Vector3* 		GetAmbientColor() const { return &m_ambientColor; }
 	inline const Vector3* 		GetDiffuseColor() const { return &m_diffuseColor; }
+	inline void					SetDiffuseColor(const Vector3& c) { m_diffuseColor = c; }
 	inline const std::string& 	GetName() const { return m_name; }
 
 private:

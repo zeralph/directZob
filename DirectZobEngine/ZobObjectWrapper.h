@@ -31,6 +31,7 @@ namespace CLI {
 		void SetLightingMode(int lightMode);
 		int GetLightingMode();
 		bool IsLight();
+		bool IsSprite();
 		bool IsCamera();
 		bool HasMesh();
 	protected:

@@ -125,13 +125,13 @@ static float rot = 1.0f;
 
 int DirectZob::RunAFrame()
 {
+	g_render_mutex.lock();
 	int state=0;
 	m_frameTime =  (float)(clock() - m_frameTick) / CLOCKS_PER_SEC * 1000;
 	m_fps = 1000.0f / m_frameTime;
 	m_frameTick = clock();
 	if(m_initialized && m_engine->Started())
 	{
-		g_render_mutex.lock();
 		m_cameraManager->UpdateAfter();
 		Color c = Color(DirectZob::GetInstance()->GetLightManager()->GetClearColor());
 		m_engine->ClearBuffer(&c);
@@ -194,8 +194,8 @@ int DirectZob::RunAFrame()
 			m_text->Print(0, 32, 1, &sBuf, 0xFFFFFFFF);
 		}
 		m_engine->SetDisplayedBuffer();
-		g_render_mutex.unlock();
 	}
+	g_render_mutex.unlock();
 	return state;
 }
 

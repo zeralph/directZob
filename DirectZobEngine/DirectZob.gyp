@@ -220,6 +220,7 @@
                             'ZobLightWrapper.cpp',
 							'CameraManagerWrapper.cpp',
                             'ZobCameraWrapper.cpp',
+							'ZobSpriteWrapper.cpp',
                         ],
                         'link_settings': {
                             # links fbxsdk as static

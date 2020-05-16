@@ -2,6 +2,9 @@
 #include "ZobObjectManagerWrapper.h"
 #include "DirectZob.h"
 #include "ZobObject.h"
+#include "ZobLightWrapper.h"
+#include "ZobCameraWrapper.h"
+#include "ZobSpriteWrapper.h"
 namespace CLI
 {
 
@@ -29,7 +32,10 @@ namespace CLI
 		{
 			return gcnew ZobCameraWrapper((Camera*)z);
 		}
-		
+		else if (z->GetSubType() == ZOBGUID::SubType::subtype_sprite)
+		{
+			return gcnew ZobSpriteWrapper((ZobSprite*)z);
+		}
 		return gcnew ZobObjectWrapper(z);
 	}
 

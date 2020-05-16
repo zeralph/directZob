@@ -437,10 +437,10 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 				(w0 * t->na->z + w1 * t->nb->z + w2 * t->nc->z)); 
 			//normal.Mul(-1.0f);
 		}
-		const Texture* texture = material?material->GetDiffuseTexture():NULL;
-		if (texture)
+		if (material)
 		{
-			if (texture->GetData())
+			const Texture* texture = material->GetDiffuseTexture();
+			if (texture && texture->GetData())
 			{
 				tu = 1.0f - tu;
 				su = (int)(su * texture->GetWidth());
@@ -458,7 +458,6 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 			}
 			else
 			{
-
 				r = material->GetDiffuseColor()->x;
 				g = material->GetDiffuseColor()->y;
 				b = material->GetDiffuseColor()->z;
@@ -468,7 +467,7 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 		else
 		{
 			r = 1.0f;
-			g = 1.0f;
+			g = 0.0f;
 			b = 1.0f;
 			a = 1.0f;
 		}

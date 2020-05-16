@@ -16,7 +16,7 @@ public:
 	//void QueueForDrawing(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions* options) override;
 	void Setmaterial(const Material* m);
 private:
-	const Material* m_material = NULL;
+
 	Matrix4x4 m_modelMatrixOverriden;
 	Matrix4x4 m_rotationMatrixOverriden;
 };

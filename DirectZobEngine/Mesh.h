@@ -15,6 +15,7 @@ class Mesh
 {
 public:
 
+	Mesh(std::string& name);
 	Mesh(std::string& name, std::string& path, std::string& file);
 	~Mesh();
 

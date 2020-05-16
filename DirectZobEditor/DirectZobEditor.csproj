@@ -130,6 +130,12 @@
     <Compile Include="ZobObjectListControl.Designer.cs">
       <DependentUpon>ZobObjectListControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="ZobSpriteControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ZobSpriteControl.Designer.cs">
+      <DependentUpon>ZobSpriteControl.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="CameraControl.resx">
       <DependentUpon>CameraControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -169,6 +175,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ZobObjectListControl.resx">
       <DependentUpon>ZobObjectListControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ZobSpriteControl.resx">
+      <DependentUpon>ZobSpriteControl.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
