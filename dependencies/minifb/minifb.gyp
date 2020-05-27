@@ -32,7 +32,7 @@
                 }],
                 ['OS=="linux"', {
                     'sources': [
-                        'src/MiniFB_linux.c'
+                        'src/MiniFB_linux.c',
                         'src/x11/X11MiniFB.c',
                     ]
                 }],
