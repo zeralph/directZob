@@ -2,6 +2,10 @@
     'includes': [
       '../../defaults.gypi',
     ],
+    'variables' : 
+    {
+                'minifb_macos_flags%': "DO_NOT_USE_METAL_API", # fake text, but we need something
+            },
     'targets': [
         {
             'target_name':
@@ -26,8 +30,8 @@
                         'src/macosx/OSXView.m',
                         'src/macosx/OSXViewDelegate.m',
                     ],
-                        'defines': [
-                        'USE_METAL_API',
+                    'defines': [
+                        '<(minifb_macos_flags)',
                     ],
                 }],
                 ['OS=="linux"', {
