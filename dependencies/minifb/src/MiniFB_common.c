@@ -1,9 +1,14 @@
 #include "MiniFB.h"
 #include "WindowData.h"
-#include "MiniFB_internal.h"
+#include <MiniFB_internal.h>
 
 //-------------------------------------
-void mfb_active_callback(struct Window *window, mfb_active_func callback) {
+short int g_keycodes[512] = { 0 };
+//-------------------------------------
+
+//-------------------------------------
+void 
+mfb_set_active_callback(struct mfb_window *window, mfb_active_func callback) {
     if(window != 0x0) {
         SWindowData *window_data = (SWindowData *) window;
         window_data->active_func = callback;
@@ -11,7 +16,8 @@ void mfb_active_callback(struct Window *window, mfb_active_func callback) {
 }
 
 //-------------------------------------
-void mfb_resize_callback(struct Window *window, mfb_resize_func callback) {
+void 
+mfb_set_resize_callback(struct mfb_window *window, mfb_resize_func callback) {
     if(window != 0x0) {
         SWindowData *window_data = (SWindowData *) window;
         window_data->resize_func = callback;
@@ -19,7 +25,8 @@ void mfb_resize_callback(struct Window *window, mfb_resize_func callback) {
 }
 
 //-------------------------------------
-void mfb_keyboard_callback(struct Window *window, mfb_keyboard_func callback) {
+void 
+mfb_set_keyboard_callback(struct mfb_window *window, mfb_keyboard_func callback) {
     if(window != 0x0) {
         SWindowData *window_data = (SWindowData *) window;
         window_data->keyboard_func = callback;
@@ -27,7 +34,8 @@ void mfb_keyboard_callback(struct Window *window, mfb_keyboard_func callback) {
 }
 
 //-------------------------------------
-void mfb_char_input_callback(struct Window *window, mfb_char_input_func callback) {
+void 
+mfb_set_char_input_callback(struct mfb_window *window, mfb_char_input_func callback) {
     if(window != 0x0) {
         SWindowData *window_data = (SWindowData *) window;
         window_data->char_input_func = callback;
@@ -35,7 +43,8 @@ void mfb_char_input_callback(struct Window *window, mfb_char_input_func callback
 }
 
 //-------------------------------------
-void mfb_mouse_button_callback(struct Window *window, mfb_mouse_btn_func callback) {
+void 
+mfb_set_mouse_button_callback(struct mfb_window *window, mfb_mouse_button_func callback) {
     if(window != 0x0) {
         SWindowData *window_data = (SWindowData *) window;
         window_data->mouse_btn_func = callback;
@@ -43,7 +52,8 @@ void mfb_mouse_button_callback(struct Window *window, mfb_mouse_btn_func callbac
 }
 
 //-------------------------------------
-void mfb_mouse_move_callback(struct Window *window, mfb_mouse_move_func callback) {
+void 
+mfb_set_mouse_move_callback(struct mfb_window *window, mfb_mouse_move_func callback) {
     if(window != 0x0) {
         SWindowData *window_data = (SWindowData *) window;
         window_data->mouse_move_func = callback;
@@ -51,7 +61,8 @@ void mfb_mouse_move_callback(struct Window *window, mfb_mouse_move_func callback
 }
 
 //-------------------------------------
-void mfb_mouse_scroll_callback(struct Window *window, mfb_mouse_scroll_func callback) {
+void 
+mfb_set_mouse_scroll_callback(struct mfb_window *window, mfb_mouse_scroll_func callback) {
     if(window != 0x0) {
         SWindowData *window_data = (SWindowData *) window;
         window_data->mouse_wheel_func = callback;
@@ -59,7 +70,8 @@ void mfb_mouse_scroll_callback(struct Window *window, mfb_mouse_scroll_func call
 }
 
 //-------------------------------------
-void mfb_set_user_data(struct Window *window, void *user_data) {
+void 
+mfb_set_user_data(struct mfb_window *window, void *user_data) {
     if(window != 0x0) {
         SWindowData *window_data = (SWindowData *) window;
         window_data->user_data = user_data;
@@ -67,7 +79,8 @@ void mfb_set_user_data(struct Window *window, void *user_data) {
 }
 
 //-------------------------------------
-void *mfb_get_user_data(struct Window *window) {
+void *
+mfb_get_user_data(struct mfb_window *window) {
     if(window != 0x0) {
         SWindowData *window_data = (SWindowData *) window;
         return window_data->user_data;
@@ -77,8 +90,8 @@ void *mfb_get_user_data(struct Window *window) {
 }
 
 //-------------------------------------
-void mfb_close(struct Window *window)
-{
+void 
+mfb_close(struct mfb_window *window) {
     if(window != 0x0) {
         SWindowData *window_data = (SWindowData *) window;
         window_data->close = true;
@@ -86,7 +99,8 @@ void mfb_close(struct Window *window)
 }
 
 //-------------------------------------
-void keyboard_default(struct Window *window, Key key, KeyMod mod, bool isPressed) {
+void 
+keyboard_default(struct mfb_window *window, mfb_key key, mfb_key_mod mod, bool isPressed) {
     kUnused(mod);
     kUnused(isPressed);
     if (key == KB_KEY_ESCAPE) {
@@ -95,9 +109,99 @@ void keyboard_default(struct Window *window, Key key, KeyMod mod, bool isPressed
     }
 }
 
+//-------------------------------------
+bool 
+mfb_is_window_active(struct mfb_window *window) {
+    if(window != 0x0) {
+        SWindowData *window_data = (SWindowData *) window;
+        return window_data->is_active;
+    }
+    return false;
+}
 
 //-------------------------------------
-const char *mfb_get_key_name(Key key) {
+unsigned 
+mfb_get_window_width(struct mfb_window *window) {
+    if(window != 0x0) {
+        SWindowData *window_data = (SWindowData *) window;
+        return window_data->window_width;
+    }
+    return 0;
+}
+
+//-------------------------------------
+unsigned 
+mfb_get_window_height(struct mfb_window *window) {
+    if(window != 0x0) {
+        SWindowData *window_data = (SWindowData *) window;
+        return window_data->window_height;
+    }
+    return 0;
+}
+
+//-------------------------------------
+int 
+mfb_get_mouse_x(struct mfb_window *window) {
+    if(window != 0x0) {
+        SWindowData *window_data = (SWindowData *) window;
+        return window_data->mouse_pos_x;
+    }
+    return 0;
+}
+
+//-------------------------------------
+int 
+mfb_get_mouse_y(struct mfb_window *window) {
+    if(window != 0x0) {
+        SWindowData *window_data = (SWindowData *) window;
+        return window_data->mouse_pos_y;
+    }
+    return 0;
+}
+
+//-------------------------------------
+float 
+mfb_get_mouse_scroll_x(struct mfb_window *window) {
+    if(window != 0x0) {
+        SWindowData *window_data = (SWindowData *) window;
+        return window_data->mouse_wheel_x;
+    }
+    return 0;
+}
+
+//-------------------------------------
+float 
+mfb_get_mouse_scroll_y(struct mfb_window *window) {
+    if(window != 0x0) {
+        SWindowData *window_data = (SWindowData *) window;
+        return window_data->mouse_wheel_y;
+    }
+    return 0;
+}
+
+//-------------------------------------
+const uint8_t * 
+mfb_get_mouse_button_buffer(struct mfb_window *window) {
+    if(window != 0x0) {
+        SWindowData *window_data = (SWindowData *) window;
+        return window_data->mouse_button_status;
+    }
+    return 0;
+}
+
+//-------------------------------------
+const uint8_t * 
+mfb_get_key_buffer(struct mfb_window *window)  {
+    if(window != 0x0) {
+        SWindowData *window_data = (SWindowData *) window;
+        return window_data->key_status;
+    }
+    return 0;
+}
+
+//-------------------------------------
+const char * 
+mfb_get_key_name(mfb_key key) {
 
     switch (key)
     {
@@ -461,6 +565,9 @@ const char *mfb_get_key_name(Key key) {
         case KB_KEY_MENU:
             return "Menu";
 
+        case KB_KEY_UNKNOWN:
+            return "Unknown";
     }
+    
     return "Unknown";
 }

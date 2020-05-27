@@ -9,7 +9,7 @@ bool bPause = false;
 std::string m_path;
 std::string m_file;
 
-void active(struct Window* window, bool isActive) {
+void active(struct mfb_window* window, bool isActive) {
 	const char* window_title = "";
 	if (window) {
 		window_title = (const char*)mfb_get_user_data(window);
@@ -17,7 +17,7 @@ void active(struct Window* window, bool isActive) {
 	fprintf(stdout, "%s > active: %d\n", window_title, isActive);
 }
 
-void resize(struct Window* window, int width, int height) {
+void resize(struct mfb_window* window, int width, int height) {
 	uint32_t x = 0;
 	uint32_t y = 0;
 	//m_engine->Stop();
@@ -26,7 +26,7 @@ void resize(struct Window* window, int width, int height) {
 	//m_engine->Start();
 }
 
-void keyboard(struct Window* window, Key key, KeyMod mod, bool isPressed) {
+void keyboard(struct mfb_window* window, mfb_key key, mfb_key_mod mod, bool isPressed) {
 	const char* window_title = "";
 	if (window) {
 		window_title = (const char*)mfb_get_user_data(window);
@@ -82,7 +82,7 @@ void keyboard(struct Window* window, Key key, KeyMod mod, bool isPressed) {
 	}
 }
 
-void char_input(struct Window* window, unsigned int charCode) {
+void char_input(struct mfb_window* window, unsigned int charCode) {
 	const char* window_title = "";
 	if (window) {
 		window_title = (const char*)mfb_get_user_data(window);
@@ -90,7 +90,7 @@ void char_input(struct Window* window, unsigned int charCode) {
 	fprintf(stdout, "%s > charCode: %d\n", window_title, charCode);
 }
 
-void mouse_btn(struct Window* window, MouseButton button, KeyMod mod, bool isPressed) {
+void mouse_btn(struct mfb_window* window, mfb_mouse_button button, mfb_key_mod mod, bool isPressed) {
 	const char* window_title = "";
 	if (window) {
 		window_title = (const char*)mfb_get_user_data(window);
@@ -99,7 +99,7 @@ void mouse_btn(struct Window* window, MouseButton button, KeyMod mod, bool isPre
 	//m_curCam->OnMouseButton(button, isPressed);
 }
 
-void mouse_move(struct Window* window, int x, int y)
+void mouse_move(struct mfb_window* window, int x, int y)
 {
 	kUnused(window);
 	if (m_mouseLastX < 0)
@@ -121,7 +121,7 @@ void mouse_move(struct Window* window, int x, int y)
 	//m_curCam->OnMouseMove(x, y);
 }
 
-void mouse_scroll(struct Window* window, KeyMod mod, float deltaX, float deltaY) {
+void mouse_scroll(struct mfb_window* window, mfb_key_mod mod, float deltaX, float deltaY) {
 	const char* window_title = "";
 	if (window) {
 		window_title = (const char*)mfb_get_user_data(window);
@@ -238,14 +238,14 @@ int main(int argc, char* argv[])
 	m_mouseLastX = -1;
 	m_mouseLastY = -1;
 	printf("Init Window\n");
-	struct Window* window = mfb_open_ex("DirectZob", width, height, WF_RESIZABLE);
-	mfb_active_callback(window, active);
-	mfb_resize_callback(window, resize);
-	mfb_keyboard_callback(window, keyboard);
-	mfb_char_input_callback(window, char_input);
-	mfb_mouse_button_callback(window, mouse_btn);
-	mfb_mouse_move_callback(window, mouse_move);
-	mfb_mouse_scroll_callback(window, mouse_scroll);
+	struct mfb_window* window = mfb_open_ex("DirectZob", width, height, WF_RESIZABLE);
+	mfb_set_active_callback(window, active);
+	mfb_set_resize_callback(window, resize);
+	mfb_set_keyboard_callback(window, keyboard);
+	mfb_set_char_input_callback(window, char_input);
+	mfb_set_mouse_button_callback(window, mouse_btn);
+	mfb_set_mouse_move_callback(window, mouse_move);
+	mfb_set_mouse_scroll_callback(window, mouse_scroll);
 
 	m_directZob.Init(width, height, false);
 	m_directZob.LoadScene(m_path, m_file);

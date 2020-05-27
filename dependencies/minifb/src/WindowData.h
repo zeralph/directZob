@@ -2,7 +2,7 @@
 
 #include <stdint.h>
 #include <stdbool.h>
-#include "MiniFB_enums.h"
+#include <MiniFB_enums.h>
 
 typedef struct {
     void                    *specific;
@@ -12,7 +12,7 @@ typedef struct {
     mfb_resize_func         resize_func;
     mfb_keyboard_func       keyboard_func;
     mfb_char_input_func     char_input_func;
-    mfb_mouse_btn_func      mouse_btn_func;
+    mfb_mouse_button_func   mouse_btn_func;
     mfb_mouse_move_func     mouse_move_func;
     mfb_mouse_scroll_func   mouse_wheel_func;
 
@@ -28,6 +28,16 @@ typedef struct {
     uint32_t                buffer_width;
     uint32_t                buffer_height;
     uint32_t                buffer_stride;
+    
+    int32_t                 mouse_pos_x;
+    int32_t                 mouse_pos_y;
+    float                   mouse_wheel_x;
+    float                   mouse_wheel_y;
+    uint8_t                 mouse_button_status[8];
+    uint8_t                 key_status[512];
     uint32_t                mod_keys;
+
+    bool                    is_active;
+
     bool                    close;
 } SWindowData;

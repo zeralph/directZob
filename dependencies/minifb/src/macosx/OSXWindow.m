@@ -1,10 +1,8 @@
 #import "OSXWindow.h"
-#import "OSXWindowFrameView.h"
+#import "OSXView.h"
 #include "WindowData_OSX.h"
 #include <MiniFB_internal.h>
 #include <MiniFB_enums.h>
-
-extern short int    g_keycodes[512];
 
 @implementation OSXWindow
 
@@ -26,11 +24,11 @@ extern short int    g_keycodes[512];
     {
         [self setOpaque:YES];
         [self setBackgroundColor:[NSColor clearColor]];
-        
+
         self.delegate = self;
-        
+
         self->window_data = windowData;
-        OSXWindowFrameView *view = (OSXWindowFrameView *) self->childContentView.superview;
+        OSXView *view = (OSXView *) self->childContentView.superview;
         view->window_data = windowData;
     }
     return self;
@@ -40,7 +38,7 @@ extern short int    g_keycodes[512];
 
 - (void) removeWindowData {
     self->window_data = 0x0;
-    OSXWindowFrameView *view = (OSXWindowFrameView *) self->childContentView.superview;
+    OSXView *view = (OSXView *) self->childContentView.superview;
     view->window_data = 0x0;
 }
 
@@ -61,12 +59,12 @@ extern short int    g_keycodes[512];
     NSSize childBoundsSize = [childContentView bounds].size;
     sizeDelta.width -= childBoundsSize.width;
     sizeDelta.height -= childBoundsSize.height;
-    
-    OSXWindowFrameView *frameView = [super contentView];
+
+    OSXView *frameView = [super contentView];
     NSSize newFrameSize = [frameView bounds].size;
     newFrameSize.width += sizeDelta.width;
     newFrameSize.height += sizeDelta.height;
-    
+
     [super setContentSize:newFrameSize];
 }
 
@@ -74,6 +72,9 @@ extern short int    g_keycodes[512];
 
 - (void)flagsChanged:(NSEvent *)event
 {
+    if(window_data == 0x0)
+        return;
+
     const uint32_t flags = [event modifierFlags];
     uint32_t	mod_keys = 0, mod_keys_aux = 0;
 
@@ -99,26 +100,32 @@ extern short int    g_keycodes[512];
     }
 
     if(mod_keys != window_data->mod_keys) {
-        short int keyCode = keycodes[[event keyCode] & 0x1ff];
-        if(keyCode != KB_KEY_UNKNOWN) {
+        short int key_code = g_keycodes[[event keyCode] & 0x1ff];
+        if(key_code != KB_KEY_UNKNOWN) {
             mod_keys_aux = mod_keys ^ window_data->mod_keys;
             if(mod_keys_aux & KB_MOD_CAPS_LOCK) {
-                kCall(keyboard_func, keyCode, mod_keys, (mod_keys & KB_MOD_CAPS_LOCK) != 0);
+                window_data->key_status[key_code] = (mod_keys & KB_MOD_CAPS_LOCK) != 0;
+                kCall(keyboard_func, key_code, mod_keys, window_data->key_status[key_code]);
             }
             if(mod_keys_aux & KB_MOD_SHIFT) {
-                kCall(keyboard_func, keyCode, mod_keys, (mod_keys & KB_MOD_SHIFT) != 0);
+                window_data->key_status[key_code] = (mod_keys & KB_MOD_SHIFT) != 0;
+                kCall(keyboard_func, key_code, mod_keys, window_data->key_status[key_code]);
             }
             if(mod_keys_aux & KB_MOD_CONTROL) {
-                kCall(keyboard_func, keyCode, mod_keys, (mod_keys & KB_MOD_CONTROL) != 0);
+                window_data->key_status[key_code] = (mod_keys & KB_MOD_CONTROL) != 0;
+                kCall(keyboard_func, key_code, mod_keys, window_data->key_status[key_code]);
             }
             if(mod_keys_aux & KB_MOD_ALT) {
-                kCall(keyboard_func, keyCode, mod_keys, (mod_keys & KB_MOD_ALT) != 0);
+                window_data->key_status[key_code] = (mod_keys & KB_MOD_ALT) != 0;
+                kCall(keyboard_func, key_code, mod_keys, window_data->key_status[key_code]);
             }
             if(mod_keys_aux & KB_MOD_SUPER) {
-                kCall(keyboard_func, keyCode, mod_keys, (mod_keys & KB_MOD_SUPER) != 0);
+                window_data->key_status[key_code] = (mod_keys & KB_MOD_SUPER) != 0;
+                kCall(keyboard_func, key_code, mod_keys, window_data->key_status[key_code]);
             }
             if(mod_keys_aux & KB_MOD_NUM_LOCK) {
-                kCall(keyboard_func, keyCode, mod_keys, (mod_keys & KB_MOD_NUM_LOCK) != 0);
+                window_data->key_status[key_code] = (mod_keys & KB_MOD_NUM_LOCK) != 0;
+                kCall(keyboard_func, key_code, mod_keys, window_data->key_status[key_code]);
             }
         }
     }
@@ -131,40 +138,48 @@ extern short int    g_keycodes[512];
 
 - (void)keyDown:(NSEvent *)event
 {
-    short int keyCode = keycodes[[event keyCode] & 0x1ff];
-    kCall(keyboard_func, keyCode, window_data->mod_keys, true);
+    if(window_data != 0x0) {
+        short int key_code = g_keycodes[[event keyCode] & 0x1ff];
+        window_data->key_status[key_code] = true;
+        kCall(keyboard_func, key_code, window_data->mod_keys, true);
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 - (void)keyUp:(NSEvent *)event
 {
-    short int keyCode = keycodes[[event keyCode] & 0x1ff];
-    kCall(keyboard_func, keyCode, window_data->mod_keys, false);
+    if(window_data != 0x0) {
+        short int key_code = g_keycodes[[event keyCode] & 0x1ff];
+        window_data->key_status[key_code] = false;
+        kCall(keyboard_func, key_code, window_data->mod_keys, false);
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 - (void)insertText:(id)string replacementRange:(NSRange)replacementRange
 {
-    NSString    *characters;
-    NSUInteger  length;
-    
     kUnused(replacementRange);
 
-    if ([string isKindOfClass:[NSAttributedString class]])
-        characters = [string string];
-    else
-        characters = (NSString*) string;
+    if(window_data != 0x0) {
+        NSString    *characters;
+        NSUInteger  length;
 
-    length = [characters length];
-    for (NSUInteger i = 0;  i < length;  i++)
-    {
-        const unichar code = [characters characterAtIndex:i];
-        if ((code & 0xff00) == 0xf700)
-            continue;
+        if ([string isKindOfClass:[NSAttributedString class]])
+            characters = [string string];
+        else
+            characters = (NSString*) string;
 
-        kCall(char_input_func, code);
+        length = [characters length];
+        for (NSUInteger i = 0;  i < length;  i++)
+        {
+            const unichar code = [characters characterAtIndex:i];
+            if ((code & 0xff00) == 0xf700)
+                continue;
+
+            kCall(char_input_func, code);
+        }
     }
 }
 
@@ -174,10 +189,11 @@ extern short int    g_keycodes[512];
 {
     kUnused(notification);
 
-    SWindowData_OSX *window_data_osx = (SWindowData_OSX *) window_data->specific;
-    if(window_data_osx->active == true) {
-        window_data_osx->active = false;
-        kCall(active_func, false);
+    if(window_data != 0x0) {
+        if(window_data->is_active == true) {
+            window_data->is_active = false;
+            kCall(active_func, false);
+        }
     }
 }
 
@@ -185,21 +201,21 @@ extern short int    g_keycodes[512];
 
 - (void)setContentView:(NSView *)aView
 {
-    if ([childContentView isEqualTo:aView])
-    {
+    if ([childContentView isEqualTo:aView]) {
         return;
     }
+
     NSRect bounds = [self frame];
     bounds.origin = NSZeroPoint;
 
-    OSXWindowFrameView *frameView = [super contentView];
+    OSXView *frameView = [super contentView];
     if (!frameView)
     {
-        frameView = [[[OSXWindowFrameView alloc] initWithFrame:bounds] autorelease];
-        
+        frameView = [[[OSXView alloc] initWithFrame:bounds] autorelease];
+
         [super setContentView:frameView];
     }
-    
+
     if (childContentView)
     {
         [childContentView removeFromSuperview];
@@ -227,13 +243,19 @@ extern short int    g_keycodes[512];
 - (void)windowDidBecomeKey:(NSNotification *)notification
 {
     kUnused(notification);
-    kCall(active_func, true);
+    if(window_data != 0x0) {
+        window_data->is_active = true;
+        kCall(active_func, true);
+    }
 }
 
 - (void)windowDidResignKey:(NSNotification *)notification
 {
     kUnused(notification);
-    kCall(active_func, false);
+    if(window_data) {
+        window_data->is_active = false;
+        kCall(active_func, false);
+    }
 }
 
 - (void)windowWillClose:(NSNotification *)notification {
@@ -270,20 +292,23 @@ extern short int    g_keycodes[512];
 
 - (void)willClose
 {
-    window_data->close = true;
+    if(window_data != 0x0) {
+        window_data->close = true;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 - (void)windowDidResize:(NSNotification *)notification {
     kUnused(notification);
-    //CGSize
-    NSSize size = [self contentRectForFrameRect:[self frame]].size;
+    if(window_data != 0x0) {
+        CGSize size = [self contentRectForFrameRect:[self frame]].size;
 
-    window_data->window_width  = size.width;
-    window_data->window_height = size.height;
+        window_data->window_width  = size.width;
+        window_data->window_height = size.height;
 
-    kCall(resize_func, size.width, size.height);
+        kCall(resize_func, size.width, size.height);
+    }
 }
 
 @end
