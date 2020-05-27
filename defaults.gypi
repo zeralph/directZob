@@ -19,7 +19,6 @@
                 {
                     'defines': [
                         'MACOS',
-                        #'USE_METAL_API',
                     ],
                     'xcode_settings': {
                         'CC': 'clang++',
@@ -27,18 +26,6 @@
                         'CLANG_CXX_LANGUAGE_STANDARD': 'c++11',
                         'CLANG_CXX_LIBRARY': 'libc++',
                         'ARCHS': ['x86_64'],
-                    },
-                    'link_settings': {
-                        'libraries': [
-                            '$(SDKROOT)/System/Library/Frameworks/Cocoa.framework',
-                            '$(SDKROOT)/System/Library/Frameworks/Metal.framework',
-                            '$(SDKROOT)/System/Library/Frameworks/GameKit.framework',
-                            '-liconv',
-                            '-lz',
-                            '-lxml2',
-                            '-ObjC',
-                            '-v',
-                        ],
                     },
                 },
             ],
