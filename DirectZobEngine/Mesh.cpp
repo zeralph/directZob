@@ -428,11 +428,19 @@ void Mesh::SplitEntry(const std::string* s, std::vector<std::string>* v, const c
 	std::size_t current, previous = 0;
 	current = s->find(delim);
 	while (current != std::string::npos) {
-		v->push_back(s->substr(previous, current - previous));
+		std::string sub = s->substr(previous, current - previous);
+		if (sub.length() > 0)
+		{
+			v->push_back(sub);
+		}
 		previous = current + 1;
 		current = s->find(delim, previous);
 	}
-	v->push_back(s->substr(previous, current - previous));
+	std::string sub = s->substr(previous, current - previous);
+	if (sub.length() > 0)
+	{
+		v->push_back(sub);
+	}
 }
 
 void Mesh::DrawBoundingBox(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions* options)

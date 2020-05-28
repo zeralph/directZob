@@ -115,7 +115,13 @@ const Material* MaterialManager::LoadFbxMaterial(const fbxsdk::FbxMesh* mesh, co
 					std::string texFullPath = "";
 					if (texture_name2)
 					{
-						texFullPath = path + std::string(texture_name2);
+						std::string t = std::string(texture_name2);
+						size_t i = t.rfind('\\');
+						if (i >= 0)
+						{
+							t = t.substr(i+1);
+						}
+						texFullPath = path + std::string(t);
 					}
 					finalMaterial = LoadMaterial(matName, &ambient, &diffuse, texFullPath);
 				}

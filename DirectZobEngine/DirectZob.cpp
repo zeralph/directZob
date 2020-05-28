@@ -205,11 +205,16 @@ void DirectZob::LogInfo(const char* format, ...)
 	va_list args;
 	va_start(args, format);
 	_vsnprintf_s(logBuffer, LOG_BUFFER_SIZE, format, args);
-	std::string s = std::string(logBuffer);
-	for (int i = 0; i < s_logIndent; i++)
+	std::string s = std::string("");
+	if (s_logIndent > 0)
 	{
-		s = std::string("\t").append(s);
+		for (int i = 0; i < s_logIndent; i++)
+		{
+			s.append(std::string(" "));
+		}
+		s.append(std::string("|-"));
 	}
+	s.append(std::string(logBuffer));
 	va_end(args);
 	if (g_isInEditorMode)
 	{

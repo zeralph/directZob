@@ -44,6 +44,8 @@
             this.pointToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.directionalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.createCameraToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.createSpriteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.createZobObjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.FirstPanelSplitter = new System.Windows.Forms.SplitContainer();
             this.ZobObjectListPanel = new System.Windows.Forms.Panel();
             this.SecondPanelSplitter = new System.Windows.Forms.SplitContainer();
@@ -55,8 +57,6 @@
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.propertiesPanel = new System.Windows.Forms.Panel();
             this.EngineControlsFlowLayout = new System.Windows.Forms.FlowLayoutPanel();
-            this.createSpriteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.createZobObjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FirstPanelSplitter)).BeginInit();
             this.FirstPanelSplitter.Panel1.SuspendLayout();
@@ -158,14 +158,14 @@
             // loadTextureToolStripMenuItem
             // 
             this.loadTextureToolStripMenuItem.Name = "loadTextureToolStripMenuItem";
-            this.loadTextureToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.loadTextureToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
             this.loadTextureToolStripMenuItem.Text = "Load Texture ...";
             this.loadTextureToolStripMenuItem.Click += new System.EventHandler(this.LoadTextureToolStripMenuItem_Click);
             // 
             // loadMeshToolStripMenuItem
             // 
             this.loadMeshToolStripMenuItem.Name = "loadMeshToolStripMenuItem";
-            this.loadMeshToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.loadMeshToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
             this.loadMeshToolStripMenuItem.Text = "Load Mesh ...";
             this.loadMeshToolStripMenuItem.Click += new System.EventHandler(this.LoadMeshToolStripMenuItem_Click);
             // 
@@ -176,36 +176,50 @@
             this.pointToolStripMenuItem,
             this.directionalToolStripMenuItem});
             this.createLightToolStripMenuItem.Name = "createLightToolStripMenuItem";
-            this.createLightToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.createLightToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
             this.createLightToolStripMenuItem.Text = "Create Light ";
             // 
             // spotToolStripMenuItem
             // 
             this.spotToolStripMenuItem.Name = "spotToolStripMenuItem";
-            this.spotToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.spotToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
             this.spotToolStripMenuItem.Text = "Spot";
             this.spotToolStripMenuItem.Click += new System.EventHandler(this.spotToolStripMenuItem_Click);
             // 
             // pointToolStripMenuItem
             // 
             this.pointToolStripMenuItem.Name = "pointToolStripMenuItem";
-            this.pointToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.pointToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
             this.pointToolStripMenuItem.Text = "Point";
             this.pointToolStripMenuItem.Click += new System.EventHandler(this.pointToolStripMenuItem_Click);
             // 
             // directionalToolStripMenuItem
             // 
             this.directionalToolStripMenuItem.Name = "directionalToolStripMenuItem";
-            this.directionalToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.directionalToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
             this.directionalToolStripMenuItem.Text = "Directional";
             this.directionalToolStripMenuItem.Click += new System.EventHandler(this.directionalToolStripMenuItem_Click);
             // 
             // createCameraToolStripMenuItem
             // 
             this.createCameraToolStripMenuItem.Name = "createCameraToolStripMenuItem";
-            this.createCameraToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.createCameraToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
             this.createCameraToolStripMenuItem.Text = "Create Camera";
             this.createCameraToolStripMenuItem.Click += new System.EventHandler(this.createCameraToolStripMenuItem_Click);
+            // 
+            // createSpriteToolStripMenuItem
+            // 
+            this.createSpriteToolStripMenuItem.Name = "createSpriteToolStripMenuItem";
+            this.createSpriteToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.createSpriteToolStripMenuItem.Text = "Create Sprite";
+            this.createSpriteToolStripMenuItem.Click += new System.EventHandler(this.createSpriteToolStripMenuItem_Click);
+            // 
+            // createZobObjectToolStripMenuItem
+            // 
+            this.createZobObjectToolStripMenuItem.Name = "createZobObjectToolStripMenuItem";
+            this.createZobObjectToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.createZobObjectToolStripMenuItem.Text = "Create ZobObject";
+            this.createZobObjectToolStripMenuItem.Click += new System.EventHandler(this.createZobObjectToolStripMenuItem_Click);
             // 
             // FirstPanelSplitter
             // 
@@ -273,7 +287,7 @@
             // 
             this.ThirdPanelSPlitter.Panel2.Controls.Add(this.tabControl1);
             this.ThirdPanelSPlitter.Size = new System.Drawing.Size(700, 750);
-            this.ThirdPanelSPlitter.SplitterDistance = 583;
+            this.ThirdPanelSPlitter.SplitterDistance = 600;
             this.ThirdPanelSPlitter.TabIndex = 0;
             // 
             // EngineRendererPanel
@@ -281,7 +295,7 @@
             this.EngineRendererPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.EngineRendererPanel.Location = new System.Drawing.Point(0, 0);
             this.EngineRendererPanel.Name = "EngineRendererPanel";
-            this.EngineRendererPanel.Size = new System.Drawing.Size(698, 581);
+            this.EngineRendererPanel.Size = new System.Drawing.Size(698, 598);
             this.EngineRendererPanel.TabIndex = 0;
             // 
             // tabControl1
@@ -292,7 +306,7 @@
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(698, 161);
+            this.tabControl1.Size = new System.Drawing.Size(698, 144);
             this.tabControl1.TabIndex = 0;
             // 
             // tabPage1
@@ -301,7 +315,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(690, 135);
+            this.tabPage1.Size = new System.Drawing.Size(690, 118);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "tabPage1";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -312,7 +326,7 @@
             this.textLog.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textLog.Location = new System.Drawing.Point(3, 3);
             this.textLog.Name = "textLog";
-            this.textLog.Size = new System.Drawing.Size(684, 129);
+            this.textLog.Size = new System.Drawing.Size(684, 112);
             this.textLog.TabIndex = 0;
             this.textLog.Text = "";
             // 
@@ -348,20 +362,6 @@
             this.EngineControlsFlowLayout.TabIndex = 0;
             this.EngineControlsFlowLayout.WrapContents = false;
             this.EngineControlsFlowLayout.Resize += new System.EventHandler(this.EngineControlsFlowLayout_Resize);
-            // 
-            // createSpriteToolStripMenuItem
-            // 
-            this.createSpriteToolStripMenuItem.Name = "createSpriteToolStripMenuItem";
-            this.createSpriteToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.createSpriteToolStripMenuItem.Text = "Create Sprite";
-            this.createSpriteToolStripMenuItem.Click += new System.EventHandler(this.createSpriteToolStripMenuItem_Click);
-            // 
-            // createZobObjectToolStripMenuItem
-            // 
-            this.createZobObjectToolStripMenuItem.Name = "createZobObjectToolStripMenuItem";
-            this.createZobObjectToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.createZobObjectToolStripMenuItem.Text = "Create ZobObject";
-            this.createZobObjectToolStripMenuItem.Click += new System.EventHandler(this.createZobObjectToolStripMenuItem_Click);
             // 
             // Form1
             // 

@@ -408,8 +408,6 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 	float zf = m_bufferData->zBuffer[k];
 	if ( zRatio >= 0.0f &&  (!t->options->zBuffered || zf < 0.0f  || zRatio < zf ))
 	{
-		m_bufferData->zBuffer[k] = zRatio;
-
 		if (t->options->bColorize)
 		{
 			if (((int)p->x + ((int)p->y % 2)) % 2 == 0)
@@ -454,7 +452,11 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 				r = texPixelData[0];
 				g = texPixelData[1];
 				b = texPixelData[2];
-				a = 1.0f;// texPixelData[3];
+				a = texPixelData[3];
+				if (a == 0.0f)
+				{
+					return;
+				}
 			}
 			else
 			{
@@ -471,6 +473,7 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 			b = 1.0f;
 			a = 1.0f;
 		}
+		m_bufferData->zBuffer[k] = zRatio;
 		//lighting
 		fr = 0.0f;
 		fg = 0.0f;
