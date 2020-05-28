@@ -171,6 +171,14 @@
                         'link_settings': {
                             'libraries': [
                                 '../../../dependencies/fbxsdk/macos/lib/clang/release/libfbxsdk.a',  # relative to xcode project
+                            '$(SDKROOT)/System/Library/Frameworks/Cocoa.framework',
+                            '$(SDKROOT)/System/Library/Frameworks/Metal.framework',
+                            '$(SDKROOT)/System/Library/Frameworks/GameKit.framework',
+                            '-liconv',
+                            '-lz',
+                            '-lxml2',
+                            '-ObjC',
+                            '-v',
                             ],
                         },
                     },					
