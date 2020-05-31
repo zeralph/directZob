@@ -21,6 +21,9 @@ stretch_image(uint32_t *srcImage, uint32_t srcX, uint32_t srcY, uint32_t srcWidt
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void 
+init_keycodes_x11(SWindowData_X11 *window_data_x11);
+
 struct mfb_window *
 mfb_open_ex(const char *title, unsigned width, unsigned height, unsigned flags) {
     int depth, i, formatCount, convDepth = -1;
@@ -50,7 +53,7 @@ mfb_open_ex(const char *title, unsigned width, unsigned height, unsigned flags) 
         return 0x0;
     }
     
-    init_keycodes(window_data_x11);
+    init_keycodes_x11(window_data_x11);
 
     window_data_x11->screen = DefaultScreen(window_data_x11->display);
 
@@ -626,7 +629,7 @@ static int translateKeyCodeA(int keySym) {
 }
 
 void 
-init_keycodes(SWindowData_X11 *window_data_x11) {
+init_keycodes_x11(SWindowData_X11 *window_data_x11) {
     size_t  i;
     int     keySym;
 
