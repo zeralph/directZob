@@ -1,5 +1,5 @@
-#include "Vector3.h"
-
+#include "./Vector3.h"
+using namespace directZob;
 Vector3::Vector3() :
 	x(0.0f),
 	y(0.0f),

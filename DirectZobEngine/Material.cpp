@@ -3,6 +3,8 @@
 #include "DirectZob.h"
 
 static int sMaterialNumber = 0;
+using namespace directZob;
+
 Material::Material()
 {
 	sMaterialNumber++;
@@ -35,6 +37,6 @@ Material::~Material()
 	m_diffuseTexture = NULL;
 	m_name = std::string("");
 	m_ambientColor = Vector3(0, 0, 0);
-	m_diffuseColor = Vector3(0,0,0);
+	m_diffuseColor = Vector3(0, 0, 0);
 	DirectZob::RemoveIndent();
 }

@@ -1,10 +1,10 @@
+#ifndef DZOB_MANAGED_OBJECT_H
+#define DZOB_MANAGED_OBJECT_H
 #ifdef _WINDLL
-#pragma once
 #include <string> 
 #include <iostream>
-
-namespace CLI {
-
+namespace directZobCLI 
+{
 	template<class T>
 	public ref class ManagedObject
 	{
@@ -44,3 +44,4 @@ namespace CLI {
 	};
 }
 #endif //_WINDLL
+#endif //DZOB

@@ -1,6 +1,6 @@
 #include "Triangle.h"
 
-
+using namespace directZob;
 
 Triangle::Triangle()
 {

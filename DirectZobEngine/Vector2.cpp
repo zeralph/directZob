@@ -1,6 +1,6 @@
 #include "Vector2.h"
 #include <math.h>
-
+using namespace directZob;
 Vector2::Vector2() :
 	x(0.0f),
 	y(0.0f),

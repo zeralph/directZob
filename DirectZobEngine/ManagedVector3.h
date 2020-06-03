@@ -1,8 +1,10 @@
 #ifdef _WINDLL
-#pragma once
-#include "Vector3.h"
+#ifndef DZOB_MANAGED_VECTOR3_H
+#define DZOB_MANAGED_VECTOR3_H
 
-namespace CLI {
+#include "./Vector3.h"
+namespace directZobCLI 
+{
 	public ref class ManagedVector3
 	{
 	public:
@@ -21,7 +23,7 @@ namespace CLI {
 			x = x; y = y; z = z;
 		}
 
-		ManagedVector3(const Vector3& v)
+		ManagedVector3(const directZob::Vector3& v)
 		{
 			x = v.x / v.w; y = v.y / v.w; z = v.z / v.w;
 		}
@@ -33,8 +35,8 @@ namespace CLI {
 			z = v->z;
 		}
 
-		Vector3 ToVector3() { return Vector3(x, y, z); }
-		void FromVector3(Vector3& v) { x = v.x / v.w; y = v.y / v.w; z = v.z / v.w; }
+		directZob::Vector3 ToVector3() { return directZob::Vector3(x, y, z); }
+		void FromVector3(directZob::Vector3& v) { x = v.x / v.w; y = v.y / v.w; z = v.z / v.w; }
 		void Add(ManagedVector3^ v)
 		{
 			x += v->x;
@@ -54,4 +56,5 @@ namespace CLI {
 		float z;
 	};
 }
+#endif //DZOB
 #endif //_WINDLL

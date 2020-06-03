@@ -1,9 +1,11 @@
-#pragma once
+#ifndef DZOB_MESH_H
+#define DZOB_MESH_H
+
 #include <string>
 #include <fstream>
 #include <iostream>
 #include <vector>
-#include "Vector3.h"
+#include "./Vector3.h"
 #include "Vector2.h"
 #include "Types.h"
 #include "Triangle.h"
@@ -11,6 +13,7 @@
 #include "Events.h"
 #include "Engine.h"
 #include <fbxsdk.h>
+namespace directZob {
 class Mesh
 {
 public:
@@ -19,9 +22,9 @@ public:
 	Mesh(std::string& name, std::string& path, std::string& file);
 	~Mesh();
 
-	virtual void Update(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions* options);
-	virtual void QueueForDrawing(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions* options);
-	void DrawBoundingBox(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions* options);
+	virtual void Update(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, const Camera* camera, Engine* engine, const uint ownerId, const RenderOptions* options);
+	virtual void QueueForDrawing(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, const Camera* camera, Engine* engine, const uint ownerId, const RenderOptions* options);
+	void DrawBoundingBox(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, const Camera* camera, Engine* engine, const uint ownerId, const RenderOptions* options);
 	const std::vector<Triangle>* GetTrianglesList() const { return &m_triangles; }
 	const uint GetNbTriangles() const { return m_nbFaces; }
 
@@ -68,4 +71,5 @@ protected:
 	Vector3 m_minBouding;
 	Vector3 m_maxBouding;
 };
-
+}
+#endif

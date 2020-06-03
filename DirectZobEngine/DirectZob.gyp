@@ -12,11 +12,13 @@
                 '../dependencies/minifb/minifb.gyp:minifb',
                 '../dependencies/tinyxml/tinyxml.gyp:tinyxml',
                 '../dependencies/nanojpeg/nanojpeg.gyp:nanojpeg',
+				#'../dependencies/reactphysics3d/reactphysics3d.gyp:reactphysics3d',
             ],
             'export_dependent_settings': [
                 '../dependencies/minifb/minifb.gyp:minifb',
                 '../dependencies/tinyxml/tinyxml.gyp:tinyxml',
                 '../dependencies/nanojpeg/nanojpeg.gyp:nanojpeg',
+				#'../dependencies/reactphysics3d/reactphysics3d.gyp:reactphysics3d',
             ],
             'sources': [
                 'Camera.cpp',
@@ -24,6 +26,7 @@
                 'Color.cpp',
                 'DirectZob.cpp',
                 'Engine.cpp',
+				'Events.cpp',
                 'Light.cpp',
                 'LightManager.cpp',
                 'lodepng.cpp',

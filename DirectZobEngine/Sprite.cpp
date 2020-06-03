@@ -1,6 +1,6 @@
 #include "Sprite.h"
 #include "DirectZob.h"
-
+using namespace directZob;
 using namespace std;
 
 std::string emptyStr = std::string("");

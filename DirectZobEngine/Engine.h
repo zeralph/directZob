@@ -1,4 +1,6 @@
-#pragma once
+#ifndef DZOB_ENGINE_H
+#define DZOB_ENGINE_H
+
 #include "Types.h"
 #include "MiniFB.h"
 #include <math.h>
@@ -11,21 +13,21 @@
 #include "Matrix4x4.h"
 #include <stdarg.h>
 #include "Vector2.h"
-#include "Vector3.h"
+#include "./Vector3.h"
 #include "Material.h"
 //#include "Camera.h"
 #include "Events.h"
 
 #define Z_NEAR 0.001f
 #define Z_FAR 5000.0f
-
-class Rasterizer;
-class Camera;
-namespace Core
+namespace directZob 
 {
+	class Rasterizer;
+	class Camera;
 	class Engine
 	{
 	public:
+
 		Engine(int width, int height, Events* events);
 		~Engine();
 
@@ -112,7 +114,8 @@ namespace Core
 		eRenderMode m_renderMode = eRenderMode_fullframe;
 		eLightingPrecision m_lightingPrecision = eLightingPrecision_vertex;
 		const uint oBufferColors[8] = { 0x000000, 0x00FF00, 0x0000FF,
-										 0xFFFF00, 0x00FFFF, 0xFF00FF,
-										 0xFFFFFF, 0xFF0000, };
+											0xFFFF00, 0x00FFFF, 0xFF00FF,
+											0xFFFFFF, 0xFF0000, };
 	};
 }
+#endif

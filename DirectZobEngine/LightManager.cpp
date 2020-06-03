@@ -1,6 +1,6 @@
 #include "LightManager.h"
 #include "DirectZob.h"
-
+using namespace directZob;
 LightManager::LightManager()
 {
 	ReInitGlobalSettings();

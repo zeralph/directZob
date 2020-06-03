@@ -1,10 +1,12 @@
-#pragma once
+#ifndef DZOB_SPRITE_H
+#define DZOB_SPRITE_H
+
 #include <string>
 #include <fstream>
 #include <iostream>
 #include <vector>
 #include "Mesh.h"
-
+namespace directZob {
 class Sprite : public Mesh
 {
 public:
@@ -20,4 +22,5 @@ private:
 	Matrix4x4 m_modelMatrixOverriden;
 	Matrix4x4 m_rotationMatrixOverriden;
 };
-
+}
+#endif

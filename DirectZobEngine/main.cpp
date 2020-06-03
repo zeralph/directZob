@@ -1,7 +1,7 @@
 //#define LINUX 
 #include "DirectZob.h"
 #include <fstream>
-
+using namespace directZob;
 DirectZob m_directZob;
 static int m_mouseLastX;
 static int m_mouseLastY;

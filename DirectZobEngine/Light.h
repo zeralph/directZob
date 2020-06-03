@@ -1,7 +1,9 @@
-#pragma once
-#include "Vector3.h"
-#include "ZobObject.h"
+#ifndef DZOB_LIGHT_H
+#define DZOB_LIGHT_H
 
+#include "./Vector3.h"
+#include "ZobObject.h"
+namespace directZob {
 class Light : public ZobObject
 {
 public:
@@ -19,7 +21,7 @@ public:
 	Light(TiXmlElement* node, ZobObject* parent);
 	~Light() override;
 
-	void				DrawGizmos(const Camera* camera, Core::Engine* engine) override;
+	void				DrawGizmos(const Camera* camera, Engine* engine) override;
 	TiXmlNode*			SaveUnderNode(TiXmlNode* node) override;
 
 	const Vector3*		GetColor() const { return &m_color; }
@@ -41,9 +43,9 @@ public:
 private:
 
 	void				NewLightConfiguration();
-	void				drawSpotGizmos(const Camera* camera, Core::Engine* engine);
-	void				drawPointGizmos(const Camera* camera, Core::Engine* engine);
-	void				drawDirectionalGizmos(const Camera* camera, Core::Engine* engine);
+	void				drawSpotGizmos(const Camera* camera, Engine* engine);
+	void				drawPointGizmos(const Camera* camera, Engine* engine);
+	void				drawDirectionalGizmos(const Camera* camera, Engine* engine);
 
 	Vector3 m_color;
 	float m_intensity;
@@ -52,5 +54,6 @@ private:
 	bool m_active;
 	eLightType m_lightType;
 };
-
+}
+#endif
 

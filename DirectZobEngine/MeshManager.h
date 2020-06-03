@@ -1,10 +1,12 @@
-#pragma once
+#ifndef DZOB_MESH_MANAGER_H
+#define DZOB_MESH_MANAGER_H
+
 #include "Types.h"
 #include "Mesh.h"
 #include "Sprite.h"
 #include <string>
 #include <fbxsdk.h>
-
+namespace directZob {
 class MeshManager
 {
 public:
@@ -23,3 +25,5 @@ private:
 	std::vector<Mesh*> m_meshes;
 	FbxManager* m_lSdkManager = NULL;
 };
+}
+#endif

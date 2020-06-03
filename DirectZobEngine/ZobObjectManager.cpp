@@ -2,7 +2,7 @@
 #include "ZobObjectManager.h"
 #include "DirectZob.h"
 #include "MeshManager.h"
-
+using namespace directZob;
 static std::thread g_geometryThread;
 static std::string emptyStr = std::string("");
 
@@ -106,7 +106,7 @@ ZobObject* ZobObjectManager::GetZobObject(const std::string& name) const
 
 }
 
-void ZobObjectManager::StartUpdateObjects(const Camera* camera, Core::Engine* engine)
+void ZobObjectManager::StartUpdateObjects(const Camera* camera, Engine* engine)
 {
 	m_drawTick = clock();
 	g_geometryThread = std::thread(&ZobObjectManager::UpdateObjects, this, camera, engine);
@@ -119,7 +119,7 @@ float ZobObjectManager::WaitForUpdateObjectend()
 	return m_time;
 }
 
-void ZobObjectManager::UpdateObjects(const Camera* camera, Core::Engine* engine)
+void ZobObjectManager::UpdateObjects(const Camera* camera, Engine* engine)
 {
 	Matrix4x4 m;
 	m.Identity();
@@ -128,7 +128,7 @@ void ZobObjectManager::UpdateObjects(const Camera* camera, Core::Engine* engine)
 	m_time = (float)(clock() - m_drawTick) / CLOCKS_PER_SEC * 1000;
 }
 
-void ZobObjectManager::QueueForDrawing(const Camera* camera, Core::Engine* engine)
+void ZobObjectManager::QueueForDrawing(const Camera* camera, Engine* engine)
 {
 	//m_rootObject->UpdateMesh(camera, engine);
 	m_rootObject->QueueForDrawing(camera, engine);

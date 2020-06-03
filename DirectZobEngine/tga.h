@@ -1,4 +1,5 @@
-#pragma once
+#ifndef TGA_H
+#define TGA_H
 
 #include <algorithm>
 #include <cstdint>
@@ -9,7 +10,8 @@
 * @file tga.hpp
 * @brief All C++ library functional.
 */
-
+namespace directZob 
+{
 namespace tga
 {
 
@@ -442,3 +444,5 @@ namespace tga
 	}
 
 }
+}
+#endif

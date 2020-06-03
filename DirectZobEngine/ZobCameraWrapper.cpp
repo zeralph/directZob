@@ -1,11 +1,11 @@
 #ifdef _WINDLL
 #include "ZobCameraWrapper.h"
 #include "Camera.h"
-namespace CLI
+using namespace directZobCLI;
+
+ZobCameraWrapper::ZobCameraWrapper(directZob::ZobObject* zobObject):ZobObjectWrapper(zobObject)
 {
-	ZobCameraWrapper::ZobCameraWrapper(ZobObject* zobObject):ZobObjectWrapper(zobObject)
-	{
-		m_isValid = zobObject != NULL && IsCamera();
-	}
+	m_isValid = zobObject != NULL && IsCamera();
 }
+
 #endif //_WINDLL

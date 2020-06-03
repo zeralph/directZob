@@ -1,10 +1,12 @@
-#pragma once
+#ifndef DZOB_LIGHT_MANAGER_H
+#define DZOB_LIGHT_MANAGER_H
+
 #include "Types.h"
 #include "Light.h"
-#include "Vector3.h"
+#include "./Vector3.h"
 #include <string>
 #include <vector>
-
+namespace directZob {
 class LightManager
 {
 public:
@@ -50,3 +52,5 @@ private:
 	float m_fogDensity;
 	bool m_lightingEnabled = true;
 };
+}
+#endif

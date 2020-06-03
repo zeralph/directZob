@@ -17,13 +17,13 @@ namespace DirectZobEditor
         
         public delegate void OnObjectSelectedHandler(object s, ObjectSelectionEventArg e);
         public event OnObjectSelectedHandler OnObjectSelected;
-        private CLI.ZobObjectManagerWrapper m_zobObjectManagerWrapper;
+        private directZobCLI.ZobObjectManagerWrapper m_zobObjectManagerWrapper;
         private Form1 m_mainForm = null;
-        private CLI.ZobObjectWrapper m_currentSelectedZobObject = null;
+        private directZobCLI.ZobObjectWrapper m_currentSelectedZobObject = null;
         public ZobObjectListControl(Form1 f)
         {
             InitializeComponent();
-            m_zobObjectManagerWrapper = new CLI.ZobObjectManagerWrapper();
+            m_zobObjectManagerWrapper = new directZobCLI.ZobObjectManagerWrapper();
             m_mainForm = f;
             UpdateTree();
             m_mainForm.OnNewScene += new EventHandler(OnSceneChanged);
@@ -32,7 +32,7 @@ namespace DirectZobEditor
             this.Dock = DockStyle.Fill;
         }
 
-        public CLI.ZobObjectManagerWrapper GetWrapper()
+        public directZobCLI.ZobObjectManagerWrapper GetWrapper()
         {
             return m_zobObjectManagerWrapper;
         }
@@ -40,14 +40,14 @@ namespace DirectZobEditor
         {
 
         }
-        public CLI.ZobObjectWrapper GetObjectAtCoords(int x, int y, CLI.ZobObjectManagerWrapper.eObjectTypes t)
+        public directZobCLI.ZobObjectWrapper GetObjectAtCoords(int x, int y, directZobCLI.ZobObjectManagerWrapper.eObjectTypes t)
         {
             return m_zobObjectManagerWrapper.GetObjectAtCoords(x, y, t);
         }
 
-        public CLI.ZobObjectWrapper SelectObjectAtCoords(int x, int y, CLI.ZobObjectManagerWrapper.eObjectTypes t)
+        public directZobCLI.ZobObjectWrapper SelectObjectAtCoords(int x, int y, directZobCLI.ZobObjectManagerWrapper.eObjectTypes t)
         {
-            CLI.ZobObjectWrapper z = GetObjectAtCoords(x, y, t);
+            directZobCLI.ZobObjectWrapper z = GetObjectAtCoords(x, y, t);
             if(z!=null && z.IsValid())
             {
                 string s = z.GetFullNodeName();
@@ -132,7 +132,7 @@ namespace DirectZobEditor
 
         private void ZobObjectTree_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            CLI.ZobObjectWrapper i = null;
+            directZobCLI.ZobObjectWrapper i = null;
             if (ZobObjectTree.SelectedNode != null && ZobObjectTree.SelectedNode.Name != "root")
             {
                 TreeNode n = ZobObjectTree.SelectedNode;
@@ -142,7 +142,7 @@ namespace DirectZobEditor
             OnZobObjectSelectionChange(i);
         }
 
-        private void OnZobObjectSelectionChange(CLI.ZobObjectWrapper newZobObject)
+        private void OnZobObjectSelectionChange(directZobCLI.ZobObjectWrapper newZobObject)
         {
             OnObjectSelectedHandler handler = OnObjectSelected;
             if (null != handler)
@@ -162,7 +162,7 @@ namespace DirectZobEditor
                 ev.newZobObject = newZobObject;
                 handler(this, ev);
             }
-            CLI.ZobObjectWrapper gizmos = m_zobObjectManagerWrapper.GetEditorGizmos();
+            directZobCLI.ZobObjectWrapper gizmos = m_zobObjectManagerWrapper.GetEditorGizmos();
             m_zobObjectManagerWrapper.Reparent(gizmos, newZobObject);
             UpdateTree();
         }
@@ -208,7 +208,7 @@ namespace DirectZobEditor
         {
             ZobObjectTree.Nodes.Clear();
             string p = Application.StartupPath;
-            CLI.CameraManagerWrapper cm = m_mainForm.GetCameraControl().GetWrapper();
+            directZobCLI.CameraManagerWrapper cm = m_mainForm.GetCameraControl().GetWrapper();
             //create an editor camera
             cm.CreateEditorCamera();
             UpdateTree();
@@ -256,11 +256,11 @@ namespace DirectZobEditor
             TreeNode n = ZobObjectTree.SelectedNode;
             if (n != null)
             {
-                CLI.ZobObjectWrapper z = m_zobObjectManagerWrapper.GetZobObject(GetFullNodeName(n));
+                directZobCLI.ZobObjectWrapper z = m_zobObjectManagerWrapper.GetZobObject(GetFullNodeName(n));
                 if(z != null)
                 {
                     //CLI.ManagedVector3 position = z.GetTransform();
-                    CLI.ManagedVector3 target = z.GetTransform();
+                    directZobCLI.ManagedVector3 target = z.GetTransform();
                     //position.x = position.x - 5;
                     //position.y = position.y + 5;
                     //position.z = position.z - 5;
@@ -282,7 +282,7 @@ namespace DirectZobEditor
 
     public class ObjectSelectionEventArg : EventArgs
     {
-        public CLI.ZobObjectWrapper previousZobObject;
-        public CLI.ZobObjectWrapper newZobObject;
+        public directZobCLI.ZobObjectWrapper previousZobObject;
+        public directZobCLI.ZobObjectWrapper newZobObject;
     }
 }

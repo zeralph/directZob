@@ -1,6 +1,8 @@
-#pragma once
-#include "Types.h"
+#ifndef DZOB_GUID_H
+#define DZOB_GUID_H
 
+#include "Types.h"
+namespace directZob {
 class ZOBGUID
 {
 public :
@@ -36,3 +38,5 @@ private:
 	ZOBGUID::SubType m_subType;
 	static ulong sCurrentId;
 };
+}
+#endif

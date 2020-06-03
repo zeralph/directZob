@@ -1,7 +1,9 @@
-#pragma once
-#include "Types.h"
-#include "Vector3.h"
+#ifndef DZOB_MATRIX44_H
+#define DZOB_MATRIX44_H
 
+#include "Types.h"
+#include "./Vector3.h"
+namespace directZob {
 class Matrix4x4
 {
 public:
@@ -49,3 +51,5 @@ private:
 
 	float m_data[4][4];
 };
+}
+#endif

@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Windows.Forms;
-using CLI;
+using directZobCLI;
 using System.Runtime.CompilerServices;
 using System.Numerics;
 
@@ -18,14 +18,14 @@ namespace DirectZobEditor
     {
         public event EventHandler OnBeginFrame;
         public event EventHandler OnEndFrame;
-        private CLI.DirectZobWrapper m_directZobWrapper;
-        private CLI.EngineWrapper m_engineWrapper;
+        private directZobCLI.DirectZobWrapper m_directZobWrapper;
+        private directZobCLI.EngineWrapper m_engineWrapper;
         private Thread m_engineThread;
         private Form1 m_mainForm;
         public delegate void UpdateEngineWindow();
         public delegate void UpdateLogWindow();
         public UpdateEngineWindow UpdateEngineWindowDelegate;
-        private CLI.ZobObjectWrapper m_selectedObject = null;
+        private directZobCLI.ZobObjectWrapper m_selectedObject = null;
         private string m_currentMouseAction = "";
         Graphics m_EngineGraphics = null;
         Bitmap m_engineBitmap = null;
@@ -35,13 +35,13 @@ namespace DirectZobEditor
         int m_lastMouseX = -1;
         int m_lastMouseY = -1;
 
-        public EngineWindow(Form1 f, CLI.DirectZobWrapper directZobWrapper)
+        public EngineWindow(Form1 f, directZobCLI.DirectZobWrapper directZobWrapper)
         {
             InitializeComponent();
             this.Dock = DockStyle.Fill;
             m_mainForm = f;
             m_directZobWrapper = directZobWrapper;
-            m_engineWrapper = new CLI.EngineWrapper();
+            m_engineWrapper = new directZobCLI.EngineWrapper();
             GenerateRenderWindow();
             bTX.Visible = false;
             bTY.Visible = false;
@@ -118,7 +118,7 @@ namespace DirectZobEditor
             GenerateRenderWindow();
         }
 
-        public CLI.EngineWrapper GetEngineWrapper()
+        public directZobCLI.EngineWrapper GetEngineWrapper()
         {
             return m_engineWrapper;
         }
@@ -277,7 +277,7 @@ namespace DirectZobEditor
             {
                 if (m_selectedObject != null && m_currentMouseAction.Length == 0)
                 {
-                    CLI.ZobObjectWrapper zAction = m_mainForm.GetZobObjectListControl().GetObjectAtCoords(e.X, e.Y, CLI.ZobObjectManagerWrapper.eObjectTypes.eObjectTypes_editor);
+                    directZobCLI.ZobObjectWrapper zAction = m_mainForm.GetZobObjectListControl().GetObjectAtCoords(e.X, e.Y, directZobCLI.ZobObjectManagerWrapper.eObjectTypes.eObjectTypes_editor);
                     if (zAction != null)
                     {
                         m_currentMouseAction = zAction.GetName();
@@ -293,7 +293,7 @@ namespace DirectZobEditor
 
         private void OnObjectSelected(object s, ObjectSelectionEventArg e)
         {
-            CLI.ZobObjectWrapper oldObject = e.previousZobObject;
+            directZobCLI.ZobObjectWrapper oldObject = e.previousZobObject;
             m_selectedObject = e.newZobObject;
             if (m_selectedObject != null)
             {

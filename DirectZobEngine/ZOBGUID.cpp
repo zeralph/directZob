@@ -1,5 +1,5 @@
 #include "ZOBGUID.h"
-
+using namespace directZob;
 ulong ZOBGUID::sCurrentId = 0;
 
 ZOBGUID::ZOBGUID(Type t, SubType s)

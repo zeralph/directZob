@@ -2,7 +2,7 @@
 #include "DirectZob.h"
 #include "Mesh.h"
 #include "Sprite.h"
-
+using namespace directZob;
 static int sObjectNumber = 0;
 ZobObject::ZobObject(Type t, SubType s, const std::string& name, Mesh* mesh, ZobObject* parent /*= NULL*/)
 	:ZOBGUID(t,s)
@@ -146,7 +146,7 @@ const std::string ZobObject::GetMeshName() const
 	return "";
 }
 
-void ZobObject::UpdateMesh(const Camera* camera, Core::Engine* engine)
+void ZobObject::UpdateMesh(const Camera* camera, Engine* engine)
 {
 	if (m_mesh)
 	{
@@ -197,7 +197,7 @@ void ZobObject::Update(const Matrix4x4& parentMatrix, const Matrix4x4& parentRSM
 	}
 }
 
-void ZobObject::QueueForDrawing(const Camera* camera, Core::Engine* engine)
+void ZobObject::QueueForDrawing(const Camera* camera, Engine* engine)
 {
 	if(GetType() == ZOBGUID::type_editor)
 	{
@@ -217,7 +217,7 @@ void ZobObject::QueueForDrawing(const Camera* camera, Core::Engine* engine)
 	}
 }
 
-void ZobObject::DrawGizmos(const Camera* camera, Core::Engine* engine)
+void ZobObject::DrawGizmos(const Camera* camera, Engine* engine)
 {
 	uint c;
 	Vector3 x = m_left;

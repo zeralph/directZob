@@ -1,7 +1,8 @@
 #include "ZobSprite.h"
 #include "tinyxml.h"
 #include "DirectZob.h"
-
+#include "./Vector3.h"
+using namespace directZob;
 ZobSprite::ZobSprite(const std::string &name, ZobObject*parent):
 	ZobObject(ZOBGUID::type_scene, ZOBGUID::subtype_sprite, name, nullptr, parent)
 {
@@ -50,7 +51,7 @@ TiXmlNode* ZobSprite::SaveUnderNode(TiXmlNode* node)
 	return n;
 }
 
-void ZobSprite::UpdateMesh(const Camera* camera, Core::Engine* engine)
+void ZobSprite::UpdateMesh(const Camera* camera, Engine* engine)
 {
 	if (camera)
 	{
@@ -79,7 +80,7 @@ void ZobSprite::Update(const Matrix4x4& parentMatrix, const Matrix4x4& parentRSM
 	ZobObject::Update(parentMatrix, parentRSMatrix);
 }
 
-void ZobSprite::DrawGizmos(const Camera* camera, Core::Engine* engine)
+void ZobSprite::DrawGizmos(const Camera* camera, Engine* engine)
 {
 	ZobObject::DrawGizmos(camera, engine);
 }

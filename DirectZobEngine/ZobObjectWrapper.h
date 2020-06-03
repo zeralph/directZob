@@ -1,16 +1,18 @@
 #ifdef _WINDLL
-#pragma once
+#ifndef DZOB_ZOB_OBJECT_WRAPPER_H
+#define DZOB_ZOB_OBJECT_WRAPPER_H
+
+
 #include "ManagedObject.h"
 #include "ZobObject.h"
 #include "ManagedVector3.h"
 #include "ManagedRenderOptions.h"
-
-namespace CLI {
-	public ref class ZobObjectWrapper : ManagedObject<ZobObject>
+namespace directZobCLI {
+	public ref class ZobObjectWrapper : ManagedObject<directZob::ZobObject>
 	{
 	public:
-		ZobObjectWrapper(ZobObject* zobObject);
-		void SetZobObject(ZobObject* zobObject) { m_Instance = zobObject; }
+		ZobObjectWrapper(directZob::ZobObject* zobObject);
+		void SetZobObject(directZob::ZobObject* zobObject) { m_Instance = zobObject; }
 		System::String^ GetName();
 		System::String^ GetFullNodeName();
 		void SetName(System::String^ name);
@@ -38,4 +40,5 @@ namespace CLI {
 		bool m_isValid;
 	};
 }
+#endif //DZOB
 #endif //_WINDLL 

@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using CLI;
+using directZobCLI;
 
 namespace DirectZobEditor
 {
@@ -95,14 +95,14 @@ namespace DirectZobEditor
             }
         }
 
-        private Color ToColor(CLI.ManagedVector3 v)
+        private Color ToColor(directZobCLI.ManagedVector3 v)
         {
             return Color.FromArgb((int)(v.x * 255), (int)(v.y * 255), (int)(v.z * 255));
         }
 
-        private CLI.ManagedVector3 ToVector(Color c)
+        private directZobCLI.ManagedVector3 ToVector(Color c)
         {
-            CLI.ManagedVector3 v = new ManagedVector3();
+            directZobCLI.ManagedVector3 v = new ManagedVector3();
             v.x = (float)c.R / 255.0f;
             v.y = (float)c.G / 255.0f;
             v.z = (float)c.B / 255.0f;

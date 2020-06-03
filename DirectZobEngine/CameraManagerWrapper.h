@@ -1,15 +1,17 @@
 #ifdef _WINDLL
-#pragma once
+#ifndef DZOB_CAMERA_MANAGER_WRAPPER_H
+#define DZOB_CAMERA_MANAGER_WRAPPER_H
+
+
 #include "ManagedObject.h"
 #include "CameraManager.h"
 #include "DirectZob.h"
 #include "ManagedVector3.h"
 #include <string>
 #include <vector>
-
-namespace CLI
+namespace directZobCLI
 {
-	public ref class CameraManagerWrapper : public ManagedObject<CameraManager>
+	public ref class CameraManagerWrapper : public ManagedObject<directZob::CameraManager>
 	{
 	public:
 
@@ -31,4 +33,5 @@ namespace CLI
 
 	};
 }
+#endif //DZOB
 #endif //_WINDLL

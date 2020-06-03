@@ -1,13 +1,14 @@
 #ifdef _WINDLL
-#pragma once
+#ifndef DZOB_ENGINE_WRAPPER_H
+#define DZOB_ENGINE_WRAPPER_H
+
 #include "ManagedObject.h"
 #include "ManagedVector3.h"
 #include "Engine.h"
 #include "DirectZob.h"
-//using namespace System;
-namespace CLI
+namespace directZobCLI
 {
-	public ref class EngineWrapper: public ManagedObject<Core::Engine>
+	public ref class EngineWrapper: public ManagedObject<directZob::Engine>
 	{
 	public:
 
@@ -28,4 +29,5 @@ namespace CLI
 		//array<int>^ m_buffer;
 	};
 }
+#endif //DZOB
 #endif //_WINDLL

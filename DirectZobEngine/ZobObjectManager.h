@@ -1,4 +1,6 @@
-#pragma once
+#ifndef DZOB_ZOB_OBJECT_MANAGER_H
+#define DZOB_ZOB_OBJECT_MANAGER_H
+
 #include "Types.h"
 #include "ZobObject.h"
 #include <string>
@@ -7,7 +9,7 @@
 #include "Engine.h"
 #include "Light.h"
 #include "ZobSprite.h"
-
+namespace directZob {
 class ZobObjectManager
 {
 public:
@@ -17,9 +19,9 @@ public:
 	//friend void ZobObject::SetParent(ZobObject* o);
 
 
-	void StartUpdateObjects(const Camera* camera, Core::Engine* engine);
+	void StartUpdateObjects(const Camera* camera, Engine* engine);
 	float WaitForUpdateObjectend();
-	void QueueForDrawing(const Camera* camera, Core::Engine* engine);
+	void QueueForDrawing(const Camera* camera, Engine* engine);
 	ZobObject* GetZobObjectFromPartialId(const uint id) const;
 	void AddZobObject(ZobObject* z);
 	ZobObject* GetRootObject() const;
@@ -34,7 +36,7 @@ public:
 	ZobObject* GetEditorGizmos() { return m_editorGizmos; }
 	bool Reparent(ZobObject* o, ZobObject* parent);
 private:
-	void UpdateObjects(const Camera* camera, Core::Engine* engine);
+	void UpdateObjects(const Camera* camera, Engine* engine);
 	void GetZobObjectListInternal(const ZobObject* z, std::string& str);
 	ZobObject* LoadEditorMesh(const char* name, const char* meshPath, const char* meshFile, ZobObject* parent);
 	ZobObject* GetZobObjectFromPartialId(ZobObject* z, const uint id) const;
@@ -56,3 +58,5 @@ private:
 	ZobObject* m_scaleY = nullptr;
 	ZobObject* m_scaleZ = nullptr;
 }; 
+}
+#endif

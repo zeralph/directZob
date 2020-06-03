@@ -4,21 +4,25 @@
 #include "tinyxml.h"
 #include "ZobObject.h"
 #include "SceneLoader.h"
-#define LOG_BUFFER_SIZE 1024
 
+#define LOG_BUFFER_SIZE 1024
 static char buffer[MAX_PATH];
 static char logBuffer[LOG_BUFFER_SIZE];
 static bool g_isInEditorMode;
-static int s_logIndent;
-static std::mutex g_render_mutex;
-int DirectZob::s_logIndent = 0;
-DirectZob *DirectZob::singleton = nullptr;
+static ::std::mutex g_render_mutex;
+//static int s_logIndent = 0;
+
+//static directZob::DirectZob* singleton = nullptr;
+using namespace directZob;
+
+
+static DirectZob* singleton = NULL;
 
 DirectZob::DirectZob()
 {
-	
+//	s_logIndent = 0;
 	m_initialized = false;
-	DirectZob::singleton= this; 
+	singleton = this; 
 }
 
 DirectZob::~DirectZob()
@@ -32,13 +36,13 @@ DirectZob::~DirectZob()
 	delete m_events;
 }
 
-std::string DirectZob::ExePath() {
+::std::string DirectZob::ExePath() {
 
-	//return std::string("D:\\_PERSO\\directZob\\directZob\\resources\\");
-	return std::string("C:\\_GIT\\directZob\\resources");
+	//return ::std::string("D:\\_PERSO\\directZob\\directZob\\resources\\");
+	return ::std::string("C:\\_GIT\\directZob\\resources");
 }
 
-void DirectZob::LoadScene(std::string& path, std::string& file)
+void DirectZob::LoadScene(::std::string& path, ::std::string& file)
 {
 	SceneLoader::LoadScene(path, file);
 	if (m_text == NULL)
@@ -57,7 +61,7 @@ void DirectZob::Unlock()
 	g_render_mutex.unlock();
 }
 
-void DirectZob::SaveScene(std::string& path, std::string& file)
+void DirectZob::SaveScene(::std::string& path, ::std::string& file)
 {
 	SceneLoader::SaveScene(path, file);
 }
@@ -118,6 +122,8 @@ void DirectZob::Init(int width, int height, bool bEditorMode)
 	int state;
 	m_initialized = true;
 	m_frameTick = clock();
+	//reactphysics3d::PhysicsCommon physicsCommon;
+	//m_world = physicsCommon.createPhysicsWorld();
 //	m_engine->Start();
 }
 
@@ -158,17 +164,17 @@ int DirectZob::RunAFrame()
 			if (m_text)
 			{
 				_snprintf_s(buffer, MAX_PATH, "WARNING : NO CAMERA", NULL);
-				std::string sBuf = std::string(buffer);
+				::std::string sBuf = ::std::string(buffer);
 				m_text->Print(m_engine->GetBufferData()->width / 2, m_engine->GetBufferData()->height / 2, 1, &sBuf, 0xFFFF0000);
 			}
 		}
 		if (m_text)
 		{
 			_snprintf_s(buffer, MAX_PATH, "Triangles : %i / %i", m_engine->GetNbDrawnTriangles(), m_engine->GetNbTriangles());
-			std::string sBuf = std::string(buffer);
+			::std::string sBuf = ::std::string(buffer);
 			m_text->Print(0, 0, 1, &sBuf, 0xFFFFFFFF);
 			_snprintf_s(buffer, MAX_PATH, "render : %03i, geom : %03i, cpy : %03i, tot : %03i, FPS : %03i", (int)m_renderTime, (int)m_geometryTime, (int)m_copyTime, (int)m_frameTime, (int)m_fps);
-			sBuf = std::string(buffer);
+			sBuf = ::std::string(buffer);
 			if (m_frameTime < TARGET_MS_PER_FRAME)
 			{
 				m_text->Print(0, 16, 1, &sBuf, 0xFF00FF00);
@@ -182,13 +188,13 @@ int DirectZob::RunAFrame()
 			{
 				default:
 				case eLightingPrecision_noLighting:
-					sBuf = std::string("LighingPrecision : no lighting");
+					sBuf = ::std::string("LighingPrecision : no lighting");
 					break;
 				case eLightingPrecision_pixel:
-					sBuf = std::string("LighingPrecision : pixel");
+					sBuf = ::std::string("LighingPrecision : pixel");
 					break;
 				case eLightingPrecision_vertex:
-					sBuf = std::string("LighingPrecision : vertex");
+					sBuf = ::std::string("LighingPrecision : vertex");
 					break;
 
 			}
@@ -205,20 +211,22 @@ void DirectZob::LogInfo(const char* format, ...)
 	va_list args;
 	va_start(args, format);
 	_vsnprintf_s(logBuffer, LOG_BUFFER_SIZE, format, args);
-	std::string s = std::string("");
+	::std::string s = ::std::string("");
+	/*
 	if (s_logIndent > 0)
 	{
 		for (int i = 0; i < s_logIndent; i++)
 		{
-			s.append(std::string(" "));
+			s.append(::std::string(" "));
 		}
-		s.append(std::string("|-"));
+		s.append(::std::string("|-"));
 	}
-	s.append(std::string(logBuffer));
+	*/
+	s.append(::std::string(logBuffer));
 	va_end(args);
 	if (g_isInEditorMode)
 	{
-		DirectZob::singleton->GetEventManager()->AddEvent(Events::LogInfo, s);
+		DirectZob::GetInstance()->GetEventManager()->AddEvent(Events::LogInfo, s);
 }
 	else
 	{
@@ -231,15 +239,17 @@ void DirectZob::LogError(const char* format, ...)
 	va_list args;
 	va_start(args, format);
 	_vsnprintf_s(logBuffer, LOG_BUFFER_SIZE, format, args);
-	std::string s = std::string(logBuffer);
+	::std::string s = ::std::string(logBuffer);
+	/*
 	for (int i = 0; i < s_logIndent; i++)
 	{
-		s = std::string("\t").append(s);
+		s = ::std::string("\t").append(s);
 	}
+	*/
     va_end(args);
 	if (g_isInEditorMode)
 	{
-		DirectZob::singleton->GetEventManager()->AddEvent(Events::LogError, s);
+		DirectZob::GetInstance()->GetEventManager()->AddEvent(Events::LogError, s);
 }
 	else
 	{
@@ -251,15 +261,17 @@ void DirectZob::LogWarning(const char* format, ...)
 	va_list args;
 	va_start(args, format);
 	_vsnprintf_s(logBuffer, LOG_BUFFER_SIZE, format, args);
-	std::string s = std::string(logBuffer);
+	::std::string s = ::std::string(logBuffer);
+	/*
 	for (int i = 0; i < s_logIndent; i++)
 	{
-		s = std::string("\t").append(s);
+		s = ::std::string("\t").append(s);
 	}
+	*/
 	va_end(args);
 	if (g_isInEditorMode)
 	{
-		DirectZob::singleton->GetEventManager()->AddEvent(Events::LogWarning, s);
+		DirectZob::GetInstance()->GetEventManager()->AddEvent(Events::LogWarning, s);
 	}
 	else
 	{

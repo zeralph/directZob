@@ -1,5 +1,8 @@
-#pragma once
-#include "Vector3.h"
+#ifndef DZOB_ZOB_OBJECT_H
+#define DZOB_ZOB_OBJECT_H
+
+
+#include "./Vector3.h"
 #include "Matrix4x4.h"
 #include <string>
 #include <vector>
@@ -7,7 +10,7 @@
 #include "Engine.h"
 #include "ZOBGUID.h"
 #include "tinyxml.h"
-
+namespace directZob {
 class Mesh;
 class ZobObject:public ZOBGUID
 {
@@ -19,12 +22,12 @@ public:
 
 	//virtuals
 	virtual void					Update(const Matrix4x4& parentMatrix, const Matrix4x4& parentRSMatrix);
-	virtual void					UpdateMesh(const Camera* camera, Core::Engine* engine);
-	virtual void					QueueForDrawing(const Camera* camera, Core::Engine* engine);
+	virtual void					UpdateMesh(const Camera* camera, Engine* engine);
+	virtual void					QueueForDrawing(const Camera* camera, Engine* engine);
 	virtual inline void				SetScale(float x, float y, float z) { m_scale.x = x; m_scale.y = y; m_scale.z = z; };
 	virtual inline void				SetRotation(float x, float y, float z) { m_rotation.x = x; m_rotation.y = y; m_rotation.z = z; };
 	virtual inline void				SetTranslation(float x, float y, float z) { m_translation.x = x; m_translation.y = y; m_translation.z = z; };
-	virtual void					DrawGizmos(const Camera* camera, Core::Engine* engine);
+	virtual void					DrawGizmos(const Camera* camera, Engine* engine);
 	virtual TiXmlNode*				SaveUnderNode(TiXmlNode* node);
 	//
 	const std::vector<ZobObject*>*	GetChildren() const { return &m_children; };
@@ -79,3 +82,5 @@ protected:
 	Vector3 m_forward;
 	Vector3 m_up;
 };
+}
+#endif

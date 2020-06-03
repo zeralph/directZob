@@ -1,6 +1,6 @@
 #include "Color.h"
 #include "MiniFB.h"
-
+using namespace directZob;
 Color::Color() :
 	m_r(0),
 	m_g(0),

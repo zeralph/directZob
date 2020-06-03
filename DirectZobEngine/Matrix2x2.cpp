@@ -2,7 +2,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <string.h>
-
+using namespace directZob;
 static Matrix2x2 tmp;
 static Matrix2x2 tmpMul;
 static float identityArray[9] = {1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f};

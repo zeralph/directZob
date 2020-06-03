@@ -1,9 +1,12 @@
-#pragma once
+#ifndef DZOB_CAMERA_H
+#define DZOB_CAMERA_H
+
 #include "Matrix4x4.h"
 #include "ZobObject.h"
 #include <string>
 #include "tinyxml.h"
-
+namespace directZob 
+{
 class Camera : public ZobObject
 {
 public:
@@ -20,7 +23,7 @@ public:
 	~Camera() override;
 
 	void					Update(const Matrix4x4& parentMatrix, const Matrix4x4& parentRSMatrix) override;
-	void					DrawGizmos(const Camera* camera, Core::Engine* engine) override;
+	void					DrawGizmos(const Camera* camera, Engine* engine) override;
 	TiXmlNode*				SaveUnderNode(TiXmlNode* node) override;
 
 	void					UpdateViewProjectionMatrix();
@@ -81,5 +84,5 @@ private:
 	Vector3 m_targetVector;
 	const ZobObject* m_targetObject;
 	Vector3 m_nextTranslation;
-};
-
+};}
+#endif

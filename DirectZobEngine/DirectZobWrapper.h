@@ -1,12 +1,13 @@
 #ifdef _WINDLL
-#pragma once
+#ifndef DZOB_DIRECTZOB_WRAPPER_H
+#define DZOB_DIRECTZOB_WRAPPER_H
+
 #include "ManagedObject.h"
 #include "DirectZob.h"
 #include <string> 
-//using namespace System;
-namespace CLI
+namespace directZobCLI
 {
-	public ref class DirectZobWrapper: public ManagedObject<DirectZob>
+	public ref class DirectZobWrapper: public ManagedObject<directZob::DirectZob>
 	{
 	public:
 
@@ -18,13 +19,14 @@ namespace CLI
 		bool					CanFastSave();
 		void					SaveScene();
 		void					SaveScene(System::String^ path, System::String^ file);
-		static DirectZob*		GetDirectZobInstance() { return m_directZobInstance; }
+		static directZob::DirectZob*		GetDirectZobInstance() { return m_directZobInstance; }
 		int						RunAFrame();
 		array<System::String^>^ GetEventsAndClear();
 		void					Resize(int width, int height);
 	private:
 		//array<int>^ m_buffer;
-		static DirectZob* m_directZobInstance=NULL;
+		static directZob::DirectZob* m_directZobInstance=NULL;
 	};
 }
+#endif //DZOB
 #endif //_WINDLL

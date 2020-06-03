@@ -1,15 +1,16 @@
 #ifdef _WINDLL
-#pragma once
+#ifndef DZOB_ZOB_LIGHT_WRAPPER_H
+#define DZOB_ZOB_LIGHT_WRAPPER_H
+
 #include "ZobObjectWrapper.h"
 #include "Light.h"
 
-
-namespace CLI {
+namespace directZobCLI {
 	public ref class ZobLightWrapper : ZobObjectWrapper
 	{
 
 	public:
-		ZobLightWrapper(Light* zobObject);
+		ZobLightWrapper(directZob::Light* zobObject);
 		void				SetColor(ManagedVector3^ p);
 		ManagedVector3^		GetColor();
 		float				GetIntensity();
@@ -22,4 +23,5 @@ namespace CLI {
 		void				SetSpotAngle(float f);
 	};
 }
+#endif //DZOB
 #endif //_WINDLL 

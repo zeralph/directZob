@@ -12,9 +12,9 @@ namespace DirectZobEditor
 {
     public partial class EngineControl : UserControl
     {
-        private CLI.EngineWrapper m_engineWrapper;
+        private directZobCLI.EngineWrapper m_engineWrapper;
         private Form1 m_mainForm = null;
-        public EngineControl(Form1 f, CLI.EngineWrapper e)
+        public EngineControl(Form1 f, directZobCLI.EngineWrapper e)
         {
             m_mainForm = f;
             InitializeComponent();

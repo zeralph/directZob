@@ -1,6 +1,6 @@
 #include "CameraManager.h"
 #include "DirectZob.h"
-
+using namespace directZob;
 CameraManager::CameraManager()
 {
 	m_cameras.clear();

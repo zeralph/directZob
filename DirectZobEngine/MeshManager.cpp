@@ -1,6 +1,6 @@
 #include "MeshManager.h"
 #include "DirectZob.h"
-
+using namespace directZob;
 static int spriteIdx = 1;
 
 MeshManager::MeshManager()

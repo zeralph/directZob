@@ -2,8 +2,8 @@
 #include "DirectZob.h"
 #include <fstream>
 #include <iostream>
-#include "Vector3.h"
-
+#include "./Vector3.h"
+using namespace directZob;
 struct OBJMaterialInfo
 {
 	std::string file;

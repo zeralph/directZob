@@ -1,8 +1,10 @@
-#ifndef _COLOR_H_
-#define _COLOR_H_
+#ifndef DZOB_COLOR_H_
+#define DZOB_COLOR_H_
 
 #include "Types.h"
-#include "Vector3.h"
+#include "./Vector3.h"
+namespace directZob 
+{
 class Color
 {
 	public:
@@ -41,5 +43,5 @@ class Color
 		static const Color Cyan;
 		static const Color Grey;
 };
-
+}
 #endif

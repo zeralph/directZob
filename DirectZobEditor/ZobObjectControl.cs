@@ -14,8 +14,8 @@ namespace DirectZobEditor
     public partial class ZobObjectControl : UserControl
     {
         private Form1 m_mainForm;
-        private CLI.ZobObjectWrapper m_currentZobObjectWrapper = null;
-        private CLI.MeshManagerWrapper m_meshManagerWrapper = null;
+        private directZobCLI.ZobObjectWrapper m_currentZobObjectWrapper = null;
+        private directZobCLI.MeshManagerWrapper m_meshManagerWrapper = null;
 
         ZobLightControl m_lightControl = null;
         ZobCameraControl m_cameraControl = null;
@@ -31,7 +31,7 @@ namespace DirectZobEditor
             m_meshControl.Visible = false;
             m_cameraControl.Visible = false;
             this.Visible = false;
-            m_meshManagerWrapper = new CLI.MeshManagerWrapper();
+            m_meshManagerWrapper = new directZobCLI.MeshManagerWrapper();
             m_mainForm.OnNewScene += new EventHandler(OnNewScene);
             ClearValues();
             ZobObjectListControl z = m_mainForm.GetZobObjectListControl();
@@ -46,7 +46,7 @@ namespace DirectZobEditor
 
         private void OnObjectSelected(object s, ObjectSelectionEventArg e)
         {
-            CLI.ZobObjectWrapper oldObject = e.previousZobObject;
+            directZobCLI.ZobObjectWrapper oldObject = e.previousZobObject;
             m_currentZobObjectWrapper = e.newZobObject;
             if (m_currentZobObjectWrapper != null)
             {
@@ -99,9 +99,9 @@ namespace DirectZobEditor
         {
             if (m_currentZobObjectWrapper != null && m_currentZobObjectWrapper.IsValid())
             {
-                CLI.ManagedVector3 p = m_currentZobObjectWrapper.GetTransform();
-                CLI.ManagedVector3 r = m_currentZobObjectWrapper.GetRotation();
-                CLI.ManagedVector3 s = m_currentZobObjectWrapper.GetScale();
+                directZobCLI.ManagedVector3 p = m_currentZobObjectWrapper.GetTransform();
+                directZobCLI.ManagedVector3 r = m_currentZobObjectWrapper.GetRotation();
+                directZobCLI.ManagedVector3 s = m_currentZobObjectWrapper.GetScale();
 
                 float px = p.x;
                 float py = p.y;

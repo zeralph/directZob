@@ -1,15 +1,16 @@
 #ifdef _WINDLL
-#pragma once
+#ifndef DZOB_LIGHT_MANAGER_WRAPPER_H
+#define DZOB_LIGHT_MANAGER_WRAPPER_H
+
 #include "ManagedObject.h"
 #include "LightManager.h"
 #include "DirectZob.h"
 #include "ManagedVector3.h"
 #include <string>
 #include <vector>
-
-namespace CLI
+namespace directZobCLI
 {
-	public ref class LightManagerWrapper : public ManagedObject<LightManager>
+	public ref class LightManagerWrapper : public ManagedObject<directZob::LightManager>
 	{
 	public:
 
@@ -36,4 +37,5 @@ namespace CLI
 
 	};
 }
+#endif //DZOB
 #endif //_WINDLL

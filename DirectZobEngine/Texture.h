@@ -1,9 +1,11 @@
-#pragma once
+#ifndef DZOB_TEXTURE_H
+#define DZOB_TEXTURE_H
+
 #include "Types.h"
 #include <string>
 #include <vector>
 #include "Texture.h"
-
+namespace directZob {
 class Texture
 {
 public:
@@ -28,3 +30,5 @@ private:
 	std::string m_fullPath;
 
 };
+}
+#endif

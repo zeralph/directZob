@@ -1,7 +1,7 @@
 #include "Light.h"
 #include "tinyxml.h"
 #include "DirectZob.h"
-
+using namespace directZob;
 Light::Light(std::string &name, eLightType type, Vector3 color, float intensity, float distance, ZobObject*parent):
 	ZobObject(ZOBGUID::type_scene, ZOBGUID::subtype_zobLight, name, nullptr, parent)
 {
@@ -85,7 +85,7 @@ void Light::NewLightConfiguration()
 	}
 }
 
-void Light::drawPointGizmos(const Camera* camera, Core::Engine* engine)
+void Light::drawPointGizmos(const Camera* camera, Engine* engine)
 {
 	uint c = ((int)(m_color.x * 255) << 16) + ((int)(m_color.y * 255) << 8) + (int)(m_color.z * 255);
 	engine->QueueEllipse(camera, &m_translation, &m_up, 1.0f, 1.0f, c, true);
@@ -93,7 +93,7 @@ void Light::drawPointGizmos(const Camera* camera, Core::Engine* engine)
 	engine->QueueEllipse(camera, &m_translation, &m_forward, 1.0f, 1.0f, c, true);
 }
 
-void Light::drawSpotGizmos(const Camera* camera, Core::Engine* engine)
+void Light::drawSpotGizmos(const Camera* camera, Engine* engine)
 {
 	uint c = ((int)(m_color.x * 255) << 16) + ((int)(m_color.y * 255) << 8) + (int)(m_color.z * 255);
 	Vector3 v1, v2, v;
@@ -119,7 +119,7 @@ void Light::drawSpotGizmos(const Camera* camera, Core::Engine* engine)
 	engine->QueueLine(camera, &m_translation, &v, c, true);
 }
 
-void Light::drawDirectionalGizmos(const Camera* camera, Core::Engine* engine)
+void Light::drawDirectionalGizmos(const Camera* camera, Engine* engine)
 {
 	uint c = ((int)(m_color.x * 255) << 16) + ((int)(m_color.y * 255) << 8) + (int)(m_color.z * 255);
 	Vector3 v0 = m_translation + m_forward;
@@ -142,7 +142,7 @@ void Light::drawDirectionalGizmos(const Camera* camera, Core::Engine* engine)
 	engine->QueueEllipse(camera, &v1, &m_forward, 1.0f, 1.0f, c, true);
 }
 
-void Light::DrawGizmos(const Camera* camera, Core::Engine* engine)
+void Light::DrawGizmos(const Camera* camera, Engine* engine)
 {
 	ZobObject::DrawGizmos(camera, engine);
 	switch (m_lightType)

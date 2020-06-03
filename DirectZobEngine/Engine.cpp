@@ -14,11 +14,11 @@
 #include "Camera.h"
 
 #define MAX_TRIANGLES_PER_IMAGE 400000
+using namespace directZob;
 
-using namespace Core;
 Engine::Engine(int width, int height, Events* events)
 {
-	m_nbRasterizers = std::thread::hardware_concurrency();
+	m_nbRasterizers = ::std::thread::hardware_concurrency();
 	if (m_nbRasterizers % 2 == 1)
 	{
 		m_nbRasterizers--;

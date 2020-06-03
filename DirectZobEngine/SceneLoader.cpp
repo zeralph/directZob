@@ -1,6 +1,6 @@
 #include "SceneLoader.h"
 #include "DirectZob.h"
-
+using namespace directZob;
 std::string SceneLoader::m_path = "";
 std::string SceneLoader::m_file = "";
 char tmpBuffer[256];

@@ -1,7 +1,9 @@
-#pragma once
+#ifndef DZOB_MATRIX22_H
+#define DZOB_MATRIX22_H
+
 #include "Types.h"
 #include "Vector2.h"
-
+namespace directZob {
 class Matrix2x2
 {
 public:
@@ -24,4 +26,5 @@ public:
 private:
 	float 			m_data[3][3];
 };
-
+}
+#endif

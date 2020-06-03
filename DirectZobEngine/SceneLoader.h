@@ -1,4 +1,6 @@
-#pragma once
+#ifndef DZOB_SCENELOADER_H
+#define DZOB_SCENELOADER_H
+
 #include <string>
 #include <vector>
 #include "ZobObjectManager.h"
@@ -10,7 +12,7 @@
 #include "Engine.h"
 #include "tinyxml.h"
 #include "Types.h"
-
+namespace directZob {
 class SceneLoader
 {
 public:
@@ -29,3 +31,5 @@ private:
 	static std::string m_file;
 	static std::vector<Mesh*> m_meshes;
 };
+}
+#endif

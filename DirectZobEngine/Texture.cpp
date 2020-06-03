@@ -3,7 +3,7 @@
 #include "nanojpeg.h"
 #include "lodepng.h"
 #include "tga.h"
-
+using namespace directZob;
 Texture::Texture()
 {
 	float* m_data = NULL;

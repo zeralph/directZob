@@ -1,6 +1,6 @@
 #include "Mesh.h"
 #include "DirectZob.h"
-
+using namespace directZob;
 using namespace std;
 static Vector2 vec2zero = Vector2(0,0);
 static std::string emptyStr = std::string("");
@@ -126,8 +126,8 @@ Mesh::Mesh(std::string &parentName, std::string& path, fbxsdk::FbxMesh* mesh)
 					}
 					if (mesh->GetPolygonVertexNormal(j, k, normal))
 					{
-						//FbxMultT(mesh->GetNode(), normal);
-						//normal.Normalize();
+						FbxMultT(mesh->GetNode(), normal);
+						normal.Normalize();
 						m_verticesNormals[vIdx] = Vector3(normal[0], normal[1], normal[2]);
 						//todo : compute normal
 					}
@@ -443,7 +443,7 @@ void Mesh::SplitEntry(const std::string* s, std::vector<std::string>* v, const c
 	}
 }
 
-void Mesh::DrawBoundingBox(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions* options)
+void Mesh::DrawBoundingBox(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, const Camera* camera, Engine* engine, const uint ownerId, const RenderOptions* options)
 {
 	Vector3 v0 = Vector3(m_minBouding.x, m_minBouding.y, m_minBouding.z);
 	Vector3 v1 = Vector3(m_minBouding.x, m_maxBouding.y, m_minBouding.z);
@@ -478,7 +478,7 @@ void Mesh::DrawBoundingBox(const Matrix4x4& modelMatrix, const Matrix4x4& rotati
 	engine->QueueLine(camera, &v0, &v4, 0xFF00FF00, true);
 }
 
-void Mesh::Update(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions* options)
+void Mesh::Update(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, const Camera* camera, Engine* engine, const uint ownerId, const RenderOptions* options)
 {
 	BufferData* bData = engine->GetBufferData();
 	const Matrix4x4* view = camera->GetViewMatrix();
@@ -517,7 +517,7 @@ void Mesh::Update(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix,
 		m_subMeshes[i]->Update(modelMatrix, rotationMatrix, camera, engine, ownerId, options);
 	}
 }
-void Mesh::QueueForDrawing(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions* options)
+void Mesh::QueueForDrawing(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, const Camera* camera, Engine* engine, const uint ownerId, const RenderOptions* options)
 {
 	memcpy(m_vertices, m_verticesTmp, sizeof(Vector3) * m_nbVertices);
 	memcpy(m_verticesNormals, m_verticesNormalsTmp, sizeof(Vector3) * m_nbNormals);

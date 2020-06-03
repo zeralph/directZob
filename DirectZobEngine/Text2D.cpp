@@ -1,8 +1,7 @@
 #include "text2D.h"
 #include "lodepng.h"
 #include "BaseFont.h"
-
-using namespace Core;
+using namespace directZob;
 
 Text2D::Text2D(Engine* engine, Events* events)
 {

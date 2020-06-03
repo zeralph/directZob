@@ -1,11 +1,13 @@
-#pragma once
+#ifndef DZOB_MATERIAL_MANAGER_H
+#define DZOB_MATERIAL_MANAGER_H
+
 #include "Types.h"
 #include "Material.h"
 #include <fbxsdk.h>
 #include <string>
 #include <vector>
 #include "Texture.h"
-
+namespace directZob {
 class MaterialManager
 {
 public:
@@ -28,3 +30,5 @@ private:
 	std::vector<Material*> 	m_materials;
 	std::vector<Texture*> 	m_textures;
 };
+}
+#endif

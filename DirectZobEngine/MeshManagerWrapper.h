@@ -1,13 +1,14 @@
+#ifndef DZOB_MESH_MANAGER_WRAPPER_H
+#define DZOB_MESH_MANAGER_WRAPPER_H
 #ifdef _WINDLL
-#pragma once
+
 #include "ManagedObject.h"
 #include "MeshManager.h"
 #include "Mesh.h"
 #include <string> 
-//using namespace System;
-namespace CLI
+namespace directZobCLI
 {
-	public ref class MeshManagerWrapper : public ManagedObject<MeshManager>
+	public ref class MeshManagerWrapper : public ManagedObject<directZob::MeshManager>
 	{
 	public:
 
@@ -20,3 +21,4 @@ namespace CLI
 	};
 }
 #endif //_WINDLL
+#endif //DZOB

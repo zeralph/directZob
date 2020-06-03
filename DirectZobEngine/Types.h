@@ -1,9 +1,11 @@
 
-#pragma once
+#ifndef TYPES_H
+#define TYPES_H
+
 #ifdef __clang__
 	#pragma clang diagnostic ignored "-Wpragma-pack"
 #endif
-#include "Vector3.h"
+#include "./Vector3.h"
 #include <stddef.h>
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
@@ -32,7 +34,7 @@
         (*(fp) ) ? 0:errno;\
     })
 #endif //LINUX
-
+namespace directZob {
 enum eRenderOutput
 {
 	eRenderOutput_render = 0,
@@ -131,3 +133,5 @@ typedef struct DirectZobType::RenderOptions RenderOptions;
 
 static Vector3 Vector2Color(Vector3* v) { return Vector3((int)(v->x * 255.0f), (int)(v->y * 255.0f), (int)(v->z * 255.0f)); };
 static Vector3 Color2Vector(Vector3* v) { return Vector3(v->x / 255.0f, v->y / 255.0f, v->z / 255.0f); };
+}
+#endif

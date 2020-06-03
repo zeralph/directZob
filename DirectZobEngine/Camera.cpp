@@ -3,7 +3,7 @@
 #include <math.h>
 #include <mutex>
 #include "DirectZob.h"
-
+using namespace directZob;
 static std::mutex g_update_camera_mutex;
 static float ee = 0.0f;
 
@@ -34,7 +34,7 @@ Camera::~Camera()
 	DirectZob::RemoveIndent();
 }
 
-void Camera::DrawGizmos(const Camera* camera, Core::Engine* engine)
+void Camera::DrawGizmos(const Camera* camera, Engine* engine)
 {
 	if (GetType() == ZOBGUID::type_editor)
 	{

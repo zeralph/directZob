@@ -1,13 +1,15 @@
 #ifdef _WINDLL
-#pragma once
+#ifndef DZOB_ZOB_OBJECT_MANAGER_WRAPPER_H
+#define DZOB_ZOB_OBJECT_MANAGER_WRAPPER_H
+
 #include "ManagedObject.h"
 #include "ZobObjectManager.h"
 #include "ZobObjectWrapper.h"
 #include <string> 
 //using namespace System;
-namespace CLI
+namespace directZobCLI
 {
-	public ref class ZobObjectManagerWrapper : public ManagedObject<ZobObjectManager>
+	public ref class ZobObjectManagerWrapper : public ManagedObject<directZob::ZobObjectManager>
 	{
 	public:
 		enum class eObjectTypes
@@ -33,4 +35,5 @@ namespace CLI
 
 	};
 }
+#endif //DZOB
 #endif //_WINDLL

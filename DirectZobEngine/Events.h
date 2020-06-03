@@ -1,67 +1,43 @@
-#pragma once
+#ifndef DZOB_EVENTS_H
+#define DZOB_EVENTS_H
+
 #include <string>
 #include <sstream>
 #include <vector>
-
-class Events
+namespace directZob 
 {
-public:
-
-	enum LogType
+	class Events
 	{
-		LogInfo = 0,
-		LogWarning,
-		LogError
-	};
+	public:
 
-	Events()
-	{
-		ClearEvents();
-	}
+		enum LogType
+		{
+			LogInfo = 0,
+			LogWarning,
+			LogError
+		};
 
-	~Events()
-	{
-		ClearEvents();
-	}
 
-	void AddEvent(LogType eventType, std::string data)
-	{
-		std::string s = "{ \"type\":\"";
-		s.append(std::to_string((int)eventType));
-		s.append("\", \"data\":\"");
-		s.append(escapeJsonString(data));
-		s.append("\"}");
-		m_events.push_back(s);
-	}
-	std::vector<std::string>* GetEvents() 
-	{ 
-		return &m_events; 
-	}
-	 void ClearEvents() 
-	{ 
-		m_events.clear(); 
-	}
-private:
+		Events();
+		~Events();
 
-	std::string escapeJsonString(const std::string& input) {
-		std::ostringstream ss;
-		for (auto iter = input.cbegin(); iter != input.cend(); iter++) {
-			//C++98/03:
-			//for (std::string::const_iterator iter = input.begin(); iter != input.end(); iter++) {
-			switch (*iter) {
-			case '\\': ss << "\\\\"; break;
-			case '"': ss << "\\\""; break;
-			case '/': ss << "\\/"; break;
-			case '\b': ss << "\\b"; break;
-			case '\f': ss << "\\f"; break;
-			case '\n': ss << "\\n"; break;
-			case '\r': ss << "\\r"; break;
-			case '\t': ss << "\\t"; break;
-			default: ss << *iter; break;
-			}
+		void AddEvent(LogType eventType, ::std::string data);
+
+		::std::vector<::std::string>* GetEvents()
+		{
+			return &m_events;
 		}
-		return ss.str();
-	}
 
-	std::vector<std::string> m_events;
-};
+		void ClearEvents()
+		{
+			m_events.clear();
+		}
+
+	private:
+
+		::std::vector<::std::string> m_events;
+
+		::std::string EscapeJsonString(const ::std::string& input);
+	};
+}
+#endif

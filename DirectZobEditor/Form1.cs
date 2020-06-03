@@ -20,9 +20,9 @@ namespace DirectZobEditor
         public event EventHandler OnSceneSaved;
         public event EventHandler OnSceneUpdated;
 
-        private CLI.DirectZobWrapper m_directZobWrapper;
-        private CLI.MeshManagerWrapper m_meshManagerWrapper;
-        private CLI.LightManagerWrapper m_lightManagerWrapper;
+        private directZobCLI.DirectZobWrapper m_directZobWrapper;
+        private directZobCLI.MeshManagerWrapper m_meshManagerWrapper;
+        private directZobCLI.LightManagerWrapper m_lightManagerWrapper;
 
         //public UpdateLogWindow UpdateLogWindowDelegate;
         
@@ -48,11 +48,11 @@ namespace DirectZobEditor
             m_mainForm = this;
             InitializeComponent();
             this.KeyPreview = true;
-            m_directZobWrapper = new CLI.DirectZobWrapper();
-            m_directZobWrapper.Init(800, 600);
+            m_directZobWrapper = new directZobCLI.DirectZobWrapper();
+            m_directZobWrapper.Init(1024, 768);
 
-            m_meshManagerWrapper = new CLI.MeshManagerWrapper();
-            m_lightManagerWrapper = new CLI.LightManagerWrapper();
+            m_meshManagerWrapper = new directZobCLI.MeshManagerWrapper();
+            m_lightManagerWrapper = new directZobCLI.LightManagerWrapper();
             Application.ApplicationExit += new EventHandler(this.OnApplicationExit);
             //--
             m_camControl = new CameraControl(this);
@@ -167,12 +167,12 @@ namespace DirectZobEditor
             return m_zobObjectList;
         }
 
-        public CLI.DirectZobWrapper GetDirectZobWrapper()
+        public directZobCLI.DirectZobWrapper GetDirectZobWrapper()
         {
             return m_directZobWrapper;
         }
 
-        public CLI.MeshManagerWrapper GetMeshManagerWrapper()
+        public directZobCLI.MeshManagerWrapper GetMeshManagerWrapper()
         {
             return m_meshManagerWrapper;
         }
@@ -302,7 +302,7 @@ namespace DirectZobEditor
                     string name = file;
                     name.Replace(' ', '_');
                     m_meshManagerWrapper.LoadMesh(name, path, file);
-                    CLI.ZobObjectWrapper z = m_zobObjectList.GetWrapper().AddZobObject("");
+                    directZobCLI.ZobObjectWrapper z = m_zobObjectList.GetWrapper().AddZobObject("");
                     z.SetMesh(name);
                     EventHandler handler = OnSceneUpdated;
                     if (null != handler)
@@ -384,7 +384,7 @@ namespace DirectZobEditor
 
         private void createSpriteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            CLI.ZobObjectWrapper z = m_zobObjectList.GetWrapper().AddZobSprite("");
+            directZobCLI.ZobObjectWrapper z = m_zobObjectList.GetWrapper().AddZobSprite("");
             EventHandler handler = OnSceneUpdated;
             if (null != handler)
             {
@@ -394,7 +394,7 @@ namespace DirectZobEditor
 
         private void createZobObjectToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            CLI.ZobObjectWrapper z = m_zobObjectList.GetWrapper().AddZobObject("");
+            directZobCLI.ZobObjectWrapper z = m_zobObjectList.GetWrapper().AddZobObject("");
             EventHandler handler = OnSceneUpdated;
             if (null != handler)
             {

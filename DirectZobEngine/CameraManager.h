@@ -1,9 +1,12 @@
-#pragma once
+#ifndef DZOB_CAMERA_MANAGER_H
+#define DZOB_CAMERA_MANAGER_H
+
 #include "Types.h"
 #include "Camera.h"
 #include <string>
 #include <vector>
-
+namespace directZob 
+{
 class ZobObject;
 class CameraManager
 {
@@ -28,3 +31,5 @@ private:
 	Camera* m_curCam = NULL;
 	Camera* m_nextCamera = NULL;
 };
+}
+#endif

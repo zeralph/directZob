@@ -1,8 +1,11 @@
-#pragma once
+#ifndef DZOB_VECTOR3_H
+#define DZOB_VECTOR3_H
+
 #include <math.h>
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
 #endif
+namespace directZob {
 class Vector3
 {
 public:
@@ -85,3 +88,6 @@ static inline Vector3 operator/ (const Vector3& v, const float f) { return Vecto
 static inline bool operator!= (const Vector3& v1, const Vector3& v2) { return (v1.x != v2.x || v1.y != v2.y || v2.z != v1.z || v1.w != v2.w); }
 static inline bool operator!= (const Vector3* v1, const Vector3& v2) { return (v1->x != v2.x || v1->y != v2.y || v2.z != v1->z || v1->w != v2.w); }
 static inline bool operator!= (const Vector3& v1, const Vector3* v2) { return (v2->x != v1.x || v2->y != v1.y || v1.z != v2->z || v2->w != v1.w); }
+}
+
+#endif

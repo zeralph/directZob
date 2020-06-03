@@ -2,7 +2,7 @@
 #include "DirectZob.h"
 #include "Light.h"
 #include "Texture.h"
-
+using namespace directZob;
 static Vector3 sFog = Vector3(1.0f, 1.0f, 0.95f);
 static float fogDecal = -0.6f;
 

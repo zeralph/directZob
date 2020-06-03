@@ -12,17 +12,17 @@ namespace DirectZobEditor
 {
     public partial class CameraControl : UserControl
     {
-        private CLI.CameraManagerWrapper m_camerManagerWrapper;
+        private directZobCLI.CameraManagerWrapper m_camerManagerWrapper;
         private Form1 m_mainForm = null;
         public CameraControl(Form1 f)
         {
             InitializeComponent();
             m_mainForm = f;
-            m_camerManagerWrapper = new CLI.CameraManagerWrapper();
+            m_camerManagerWrapper = new directZobCLI.CameraManagerWrapper();
             m_mainForm.OnSceneUpdated += new EventHandler(OnSceneUpdated);
         }
 
-        public CLI.CameraManagerWrapper GetWrapper()
+        public directZobCLI.CameraManagerWrapper GetWrapper()
         {
             return m_camerManagerWrapper;
         }
