@@ -18,6 +18,15 @@
                 '../dependencies/tinyxml/tinyxml.gyp:tinyxml',
                 '../dependencies/nanojpeg/nanojpeg.gyp:nanojpeg',
             ],
+            'include_dirs': [
+                '.',
+                '../dependencies/reactphysics3d/include',
+            ],
+            'direct_dependent_settings': {
+                'include_dirs': [
+                    '../dependencies/reactphysics3d/include',
+                ],
+            },
             'sources': [
                 'Camera.cpp',
                 'CameraManager.cpp',
@@ -33,17 +42,17 @@
                 'MeshManager.cpp',
                 'Rasterizer.cpp',
                 'SceneLoader.cpp',
-				'Sprite.cpp',
+                'Sprite.cpp',
                 'Text2D.cpp',
-				'Texture.cpp',
+                'Texture.cpp',
                 'Triangle.cpp',
-				'ZobMatrix2x2.cpp',
+                'ZobMatrix2x2.cpp',
                 'ZobMatrix4x4.cpp',
                 'ZobVector2.cpp',
                 'ZobVector3.cpp',
                 'ZOBGUID.cpp',
                 'ZobObject.cpp',
-				'ZobSprite.cpp',
+                'ZobSprite.cpp',
                 'ZobObjectManager.cpp',
             ],
             'conditions': [
@@ -51,30 +60,28 @@
                     'OS=="win"',
                     {
                         'include_dirs': [
-                            '.',
                             '../dependencies/fbxsdk/windows/include',
-							'../dependencies/reactphysics3d/include',
                         ],
                         'defines': [
                             'FBXSDK_SHARED',  # required to link with dll
                         ],
                         'direct_dependent_settings': {
                             'include_dirs': [
-                                '.',
                                 '../dependencies/fbxsdk/windows/include',
                             ],
                             'defines': [
                                 'FBXSDK_SHARED',
                             ],
                         },
-						'link_settings': {
+                        'link_settings': {
                             'libraries': [
-                                '../../../dependencies/reactphysics3d/lib/reactphysics3d.lib',  # relative to xcode project
+                                # relative to xcode project
+                                '../../../dependencies/reactphysics3d/lib/reactphysics3d.lib',
                             ],
                         },
                         'msvs_settings': {
                             'VCCLCompilerTool': {
-                                'FloatingPointModel': '2', # fast
+                                'FloatingPointModel': '2',  # fast
                             },
                         },
                     },
@@ -83,16 +90,24 @@
                     'OS=="mac"',
                     {
                         'include_dirs': [
-                            '.',
                             '../dependencies/fbxsdk/macos/include',
-							'../dependencies/reactphysics3d/include',
                         ],
+                        'direct_dependent_settings': {
+                            'include_dirs': [
+                                '../dependencies/fbxsdk/macos/include',
+                            ],
+                            'defines': [
+                                'FBXSDK_SHARED',
+                            ],
+                        },
+
                         'defines': [
                             'MACOS',
                         ],
                         'link_settings': {
                             'libraries': [
-                                '../../../dependencies/fbxsdk/macos/lib/clang/release/libfbxsdk.a',  # relative to xcode project
+                                # relative to xcode project
+                                '../../../dependencies/fbxsdk/macos/lib/clang/release/libfbxsdk.a',
                             ],
                         },
                     },
@@ -101,18 +116,14 @@
                     'OS=="linux"',
                     {
                         'include_dirs': [
-                            '.',
                             '../dependencies/fbxsdk/linux/include',
-							'../dependencies/reactphysics3d/include',
                         ],
                         'defines': [
                             'LINUX',
                         ],
                         'direct_dependent_settings': {
                             'include_dirs': [
-                                '.',
                                 '../dependencies/fbxsdk/linux/include',
-								'../dependencies/reactphysics3d/include',
                             ],
                         },
                         'link_settings': {
@@ -125,7 +136,7 @@
                                 '-lz',
                             ],
                             'library_dirs': [
-                                  '/usr/lib/x86_64-linux-gnu',
+                                '/usr/lib/x86_64-linux-gnu',
                             ],
                         },
                     },
@@ -150,7 +161,8 @@
                         'link_settings': {
                             # links fbxsdk as dll
                             'libraries': [
-                                '../../../dependencies/fbxsdk/windows/lib/vs2017/x64/release/libfbxsdk.lib',  # relative to sln
+                                # relative to sln
+                                '../../../dependencies/fbxsdk/windows/lib/vs2017/x64/release/libfbxsdk.lib',
                                 'user32.lib',
                                 'gdi32.lib',
                             ],
@@ -163,11 +175,11 @@
                                 'destination':
                                 '<(PRODUCT_DIR)',
                                 'files': [
-                                    '../dependencies/fbxsdk/windows/lib/vs2017/x64/release/libfbxsdk.dll'  # copy fbxsdk 
+                                    '../dependencies/fbxsdk/windows/lib/vs2017/x64/release/libfbxsdk.dll'  # copy fbxsdk
                                 ],
                             },
                         ],
-                    }, 
+                    },
                     'OS=="linux"',
                     {
                     },
@@ -179,18 +191,19 @@
                         ],
                         'link_settings': {
                             'libraries': [
-                                '../../../dependencies/fbxsdk/macos/lib/clang/release/libfbxsdk.a',  # relative to xcode project
-                            '$(SDKROOT)/System/Library/Frameworks/Cocoa.framework',
-                            '$(SDKROOT)/System/Library/Frameworks/Metal.framework',
-                            '$(SDKROOT)/System/Library/Frameworks/GameKit.framework',
-                            '-liconv',
-                            '-lz',
-                            '-lxml2',
-                            '-ObjC',
-                            '-v',
+                                # relative to xcode project
+                                '../../../dependencies/fbxsdk/macos/lib/clang/release/libfbxsdk.a',
+                                '$(SDKROOT)/System/Library/Frameworks/Cocoa.framework',
+                                '$(SDKROOT)/System/Library/Frameworks/Metal.framework',
+                                '$(SDKROOT)/System/Library/Frameworks/GameKit.framework',
+                                '-liconv',
+                                '-lz',
+                                '-lxml2',
+                                '-ObjC',
+                                '-v',
                             ],
                         },
-                    },					
+                    },
                 ],
             ],
         },
@@ -227,22 +240,23 @@
                         },
                         'sources': [
                             'CameraManagerWrapper.cpp',
-							'LightManagerWrapper.cpp',
+                            'LightManagerWrapper.cpp',
                             'DirectZobWrapper.cpp',
                             'EngineWrapper.cpp',
                             'MeshManagerWrapper.cpp',
                             'ZobObjectManagerWrapper.cpp',
                             'ZobObjectWrapper.cpp',
-							'LightManagerWrapper.cpp',
+                            'LightManagerWrapper.cpp',
                             'ZobLightWrapper.cpp',
-							'CameraManagerWrapper.cpp',
+                            'CameraManagerWrapper.cpp',
                             'ZobCameraWrapper.cpp',
-							'ZobSpriteWrapper.cpp',
+                            'ZobSpriteWrapper.cpp',
                         ],
                         'link_settings': {
                             # links fbxsdk as static
                             'libraries': [
-                                '../../../dependencies/fbxsdk/windows/lib/vs2017/x64/release/libfbxsdk.lib',  # relative to sln
+                                # relative to sln
+                                '../../../dependencies/fbxsdk/windows/lib/vs2017/x64/release/libfbxsdk.lib',
                                 'user32.lib',
                                 'gdi32.lib',
                             ],
@@ -252,7 +266,7 @@
                                 'destination':
                                 '<(PRODUCT_DIR)',
                                 'files': [
-                                    '../dependencies/fbxsdk/windows/lib/vs2017/x64/release/libfbxsdk.dll'  # copy fbxsdk 
+                                    '../dependencies/fbxsdk/windows/lib/vs2017/x64/release/libfbxsdk.dll'  # copy fbxsdk
                                 ],
                             },
                         ],
