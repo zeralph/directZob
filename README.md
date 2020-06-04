@@ -22,8 +22,6 @@ pip install git+https://chromium.googlesource.com/external/gyp
 On windows, vs2017 or the "Build Tools for Visual Studio 2017 (version 15.0)" aka MsBuild, and the windows SDK are required to compile the project. Downloads are available here :
 https://my.visualstudio.com/Downloads?q=Visual%20Studio%202017
 
-When using MsBuild, make sure C++ /CLI support is installed and that msbuild is part of the PATH, then run buildMsBuild.bat; if any errors regarding .NET framework versions happens, tweak the framework version passed as argument in the bat file to the installed version
-
 ### Linux
 
 On linux, compilation is supported with gcc 7.5. The following additional packages are needed : libx11-dev, libxml2-dev
