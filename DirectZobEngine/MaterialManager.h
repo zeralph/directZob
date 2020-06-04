@@ -13,7 +13,7 @@ public:
 	MaterialManager();
 	~MaterialManager();
 
-	const Material* 		LoadMaterial(const std::string& name, const Vector3* ambientColor, const Vector3* diffuseColor, const std::string &textureFile);
+	const Material* 		LoadMaterial(const std::string& name, const ZobVector3* ambientColor, const ZobVector3* diffuseColor, const std::string &textureFile);
 	const Material* 		GetMaterial(const std::string& name) const;
 	const int 				GetNbTextures() const { return (int)m_materials.size(); }
 	const Material* 		GetMaterial(const int i) const;

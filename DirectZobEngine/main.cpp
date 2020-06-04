@@ -267,8 +267,8 @@ int main(int argc, char* argv[])
 	//m_directZob.GetEngine()->GetBufferData()->zFar = 70.0f;
 	//m_directZob.GetZobObjectManager()->GetZobObject("fbx_example")->SetRotation(0, 90, 0);
 	Camera* c = m_directZob.GetCameraManager()->GetCurrentCamera();
-	Vector3 camPos = c?c->GetTransform():Vector3();
-	Vector3 camTo = camPos;
+	ZobVector3 camPos = c?c->GetTransform(): ZobVector3();
+	ZobVector3 camTo = camPos;
 	camTo.z += 1.0f;
 
 	for (;;)

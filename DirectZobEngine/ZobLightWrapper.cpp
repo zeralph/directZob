@@ -11,14 +11,14 @@ namespace CLI
 
 	void ZobLightWrapper::SetColor(ManagedVector3^ p)
 	{		
-		Vector3 v = p->ToVector3();
+		ZobVector3 v = p->ToVector3();
 		Light* l = (Light*)m_Instance;
 		l->SetColor(&v);
 	}
 
 	ManagedVector3^ ZobLightWrapper::GetColor()
 	{
-		Vector3 v;
+		ZobVector3 v;
 		Light* l = (Light*)m_Instance;
 		v = l->GetColor();
 		return gcnew ManagedVector3(v);

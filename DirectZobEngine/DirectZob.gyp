@@ -29,8 +29,6 @@
                 'lodepng.cpp',
                 'Material.cpp',
                 'MaterialManager.cpp',
-                'Matrix2x2.cpp',
-                'Matrix4x4.cpp',
                 'Mesh.cpp',
                 'MeshManager.cpp',
                 'Rasterizer.cpp',
@@ -39,8 +37,10 @@
                 'Text2D.cpp',
 				'Texture.cpp',
                 'Triangle.cpp',
-                'Vector2.cpp',
-                'Vector3.cpp',
+				'ZobMatrix2x2.cpp',
+                'ZobMatrix4x4.cpp',
+                'ZobVector2.cpp',
+                'ZobVector3.cpp',
                 'ZOBGUID.cpp',
                 'ZobObject.cpp',
 				'ZobSprite.cpp',
@@ -53,6 +53,7 @@
                         'include_dirs': [
                             '.',
                             '../dependencies/fbxsdk/windows/include',
+							'../dependencies/reactphysics3d/include',
                         ],
                         'defines': [
                             'FBXSDK_SHARED',  # required to link with dll
@@ -64,6 +65,11 @@
                             ],
                             'defines': [
                                 'FBXSDK_SHARED',
+                            ],
+                        },
+						'link_settings': {
+                            'libraries': [
+                                '../../../dependencies/reactphysics3d/lib/reactphysics3d.lib',  # relative to xcode project
                             ],
                         },
                         'msvs_settings': {
@@ -79,6 +85,7 @@
                         'include_dirs': [
                             '.',
                             '../dependencies/fbxsdk/macos/include',
+							'../dependencies/reactphysics3d/include',
                         ],
                         'defines': [
                             'MACOS',
@@ -96,6 +103,7 @@
                         'include_dirs': [
                             '.',
                             '../dependencies/fbxsdk/linux/include',
+							'../dependencies/reactphysics3d/include',
                         ],
                         'defines': [
                             'LINUX',
@@ -104,6 +112,7 @@
                             'include_dirs': [
                                 '.',
                                 '../dependencies/fbxsdk/linux/include',
+								'../dependencies/reactphysics3d/include',
                             ],
                         },
                         'link_settings': {

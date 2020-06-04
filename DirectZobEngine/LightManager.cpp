@@ -16,16 +16,16 @@ LightManager::~LightManager()
 
 void LightManager::ReInitGlobalSettings()
 {
-	m_fogColor = Vector3(63.0f / 255.0f, 149.0f / 255.0f, 255.0f / 255.0f);
-	m_clearColor = Vector3(63.0f / 255.0f, 149.0f / 255.0f, 255.0f / 255.0f);
-	m_ambientColor = Vector3(0.4f, 0.4f, 0.4f);
+	m_fogColor = ZobVector3(63.0f / 255.0f, 149.0f / 255.0f, 255.0f / 255.0f);
+	m_clearColor = ZobVector3(63.0f / 255.0f, 149.0f / 255.0f, 255.0f / 255.0f);
+	m_ambientColor = ZobVector3(0.4f, 0.4f, 0.4f);
 	m_fogDistance = 500.0f;
 	m_lights.clear();
 	m_fogDensity = 2.0f;
 	m_fogType = eFogType::eFogType_NoFog;
 }
 
-void LightManager::Setup(Vector3* fogColor, Vector3* ambientColor, Vector3* clearColor, float fogDistance, float fogDensity, eFogType fogType)
+void LightManager::Setup(ZobVector3* fogColor, ZobVector3* ambientColor, ZobVector3* clearColor, float fogDistance, float fogDensity, eFogType fogType)
 {
 	m_fogColor = fogColor;
 	m_ambientColor = ambientColor;
@@ -56,7 +56,7 @@ void LightManager::UnloadAll()
 	m_lights.clear();
 }
 
-Light* LightManager::CreateLight(std::string& name, Light::eLightType type, Vector3 position, Vector3 color, float intensity, float distance, ZobObject* parent)
+Light* LightManager::CreateLight(std::string& name, Light::eLightType type, ZobVector3 position, ZobVector3 color, float intensity, float distance, ZobObject* parent)
 {
 	Light* l = new Light(name, type, color, intensity, distance, parent);
 	l->SetTranslation(position.x, position.y, position.z);
@@ -73,8 +73,8 @@ Light* LightManager::CreateLight(Light::eLightType type)
 {
 	int l = m_lights.size();
 	std::string name = std::string("Light_").append(std::to_string((l)));
-	Vector3 color = Vector3(252.0f / 255.0f, 212 / 255.0f, 64.0f / 255.0f);
-	return CreateLight(name, type, Vector3(0, 10, 0), color, 5.0f, 100.0f, NULL);
+	ZobVector3 color = ZobVector3(252.0f / 255.0f, 212 / 255.0f, 64.0f / 255.0f);
+	return CreateLight(name, type, ZobVector3(0, 10, 0), color, 5.0f, 100.0f, NULL);
 }
 
 Light* LightManager::GetLight(const std::string& name) const
@@ -106,32 +106,32 @@ void LightManager::LoadFromNode(TiXmlElement* node)
 	if (node)
 	{
 		TiXmlElement* e;
-		Vector3 ambient = GetAmbientColor();
+		ZobVector3 ambient = GetAmbientColor();
 		e = node->FirstChildElement("AmbientColor");
 		if (e)
 		{
 			float x = atof(e->Attribute("r"));
 			float y = atof(e->Attribute("g"));
 			float z = atof(e->Attribute("b"));
-			ambient = Vector3(x, y, z);
+			ambient = ZobVector3(x, y, z);
 		}
-		Vector3 fog = GetFogColor();
+		ZobVector3 fog = GetFogColor();
 		e = node->FirstChildElement("FogColor");
 		if (e)
 		{
 			float x = atof(e->Attribute("r"));
 			float y = atof(e->Attribute("g"));
 			float z = atof(e->Attribute("b"));
-			fog = Vector3(x, y, z);
+			fog = ZobVector3(x, y, z);
 		}
 		e = node->FirstChildElement("ClearColor");
-		Vector3 clear = GetClearColor();
+		ZobVector3 clear = GetClearColor();
 		if (e)
 		{
 			float x = atof(e->Attribute("r"));
 			float y = atof(e->Attribute("g"));
 			float z = atof(e->Attribute("b"));
-			clear = Vector3(x, y, z);
+			clear = ZobVector3(x, y, z);
 		}
 		e = node->FirstChildElement("FogDensity");
 		float fogDensity = GetFogDensity();
@@ -182,7 +182,7 @@ void LightManager::LoadFromNode(TiXmlElement* node)
 void LightManager::SaveUnderNode(TiXmlElement* node)
 {
 	char tmpBuffer[256];
-	Vector3 ambient = GetAmbientColor();
+	ZobVector3 ambient = GetAmbientColor();
 	ambient = Vector2Color(&ambient);
 	TiXmlText t("");
 	TiXmlElement e = TiXmlElement("AmbientColor");
@@ -190,14 +190,14 @@ void LightManager::SaveUnderNode(TiXmlElement* node)
 	e.SetAttribute("g", ambient.y);
 	e.SetAttribute("b", ambient.z);
 	node->InsertEndChild(e);
-	Vector3 fogColor = GetFogColor();
+	ZobVector3 fogColor = GetFogColor();
 	fogColor = Vector2Color(&fogColor);
 	e = TiXmlElement("FogColor");
 	e.SetAttribute("r", fogColor.x);
 	e.SetAttribute("g", fogColor.y);
 	e.SetAttribute("b", fogColor.z);
 	node->InsertEndChild(e);
-	Vector3 clearColor = GetClearColor();
+	ZobVector3 clearColor = GetClearColor();
 	clearColor = Vector2Color(&clearColor);
 	e = TiXmlElement("ClearColor");
 	e.SetAttribute("r", clearColor.x);

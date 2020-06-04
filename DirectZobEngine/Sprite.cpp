@@ -15,40 +15,40 @@ Sprite::Sprite(std::string& name):Mesh(name)
 	m_nbFaces = 2;
 	m_nbUvs = 4;
 
-	m_minBouding = Vector3(-0.5f, -0.5f, 0.0f);
-	m_maxBouding = Vector3(0.5f, 0.5f, 0.0f);
+	m_minBouding = ZobVector3(-0.5f, -0.5f, 0.0f);
+	m_maxBouding = ZobVector3(0.5f, 0.5f, 0.0f);
 
-	m_vertices = (Vector3*)malloc(sizeof(Vector3) * m_nbVertices);
-	m_verticesData = (Vector3*)malloc(sizeof(Vector3) * m_nbVertices);
-	m_verticesTmp = (Vector3*)malloc(sizeof(Vector3) * m_nbVertices);
-	m_projectedVertices = (Vector3*)malloc(sizeof(Vector3) * m_nbVertices);
-	m_projectedVerticesTmp = (Vector3*)malloc(sizeof(Vector3) * m_nbVertices);
+	m_vertices = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
+	m_verticesData = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
+	m_verticesTmp = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
+	m_projectedVertices = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
+	m_projectedVerticesTmp = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
 	m_nbNormals = m_nbVertices;
-	m_verticesNormals = (Vector3*)malloc(sizeof(Vector3) * m_nbNormals);
-	m_verticesNormalsData = (Vector3*)malloc(sizeof(Vector3) * m_nbNormals);
-	m_verticesNormalsTmp = (Vector3*)malloc(sizeof(Vector3) * m_nbNormals);
-	m_uvs = (Vector2*)malloc(sizeof(Vector2) * m_nbUvs);
-	m_trianglesNormals = (Vector3*)malloc(sizeof(Vector3) * m_nbFaces);
-	m_trianglesNormalsData = (Vector3*)malloc(sizeof(Vector3) * m_nbFaces);
-	m_trianglesNormalsTmp = (Vector3*)malloc(sizeof(Vector3) * m_nbFaces);
+	m_verticesNormals = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbNormals);
+	m_verticesNormalsData = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbNormals);
+	m_verticesNormalsTmp = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbNormals);
+	m_uvs = (ZobVector2*)malloc(sizeof(ZobVector2) * m_nbUvs);
+	m_trianglesNormals = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbFaces);
+	m_trianglesNormalsData = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbFaces);
+	m_trianglesNormalsTmp = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbFaces);
 
-	m_vertices[0] = Vector3(-0.5f, 0.5f, 0.0f);
-	m_vertices[1] = Vector3(0.5f, 0.5f, 0.0f);
-	m_vertices[2] = Vector3(0.5f, -0.5f, 0.0f);
-	m_vertices[3] = Vector3(-0.5f, -0.5f, 0.0f);
+	m_vertices[0] = ZobVector3(-0.5f, 0.5f, 0.0f);
+	m_vertices[1] = ZobVector3(0.5f, 0.5f, 0.0f);
+	m_vertices[2] = ZobVector3(0.5f, -0.5f, 0.0f);
+	m_vertices[3] = ZobVector3(-0.5f, -0.5f, 0.0f);
 
-	m_verticesNormals[0] = Vector3(0, 0, -1);
-	m_verticesNormals[1] = Vector3(0, 0, -1);
-	m_verticesNormals[2] = Vector3(0, 0, -1);
-	m_verticesNormals[3] = Vector3(0, 0, -1);
+	m_verticesNormals[0] = ZobVector3(0, 0, -1);
+	m_verticesNormals[1] = ZobVector3(0, 0, -1);
+	m_verticesNormals[2] = ZobVector3(0, 0, -1);
+	m_verticesNormals[3] = ZobVector3(0, 0, -1);
 
-	m_trianglesNormals[0] = Vector3(0, 0, -1);
-	m_trianglesNormals[1] = Vector3(0, 0, -1);
+	m_trianglesNormals[0] = ZobVector3(0, 0, -1);
+	m_trianglesNormals[1] = ZobVector3(0, 0, -1);
 
-	m_uvs[0] = Vector2(0, 0);
-	m_uvs[1] = Vector2(0, 1);
-	m_uvs[2] = Vector2(1, 1);
-	m_uvs[3] = Vector2(1, 0);
+	m_uvs[0] = ZobVector2(0, 0);
+	m_uvs[1] = ZobVector2(0, 1);
+	m_uvs[2] = ZobVector2(1, 1);
+	m_uvs[3] = ZobVector2(1, 0);
 
 	Triangle t1;
 	t1.va = &m_vertices[0];
@@ -82,12 +82,12 @@ Sprite::Sprite(std::string& name):Mesh(name)
 	t2.material = NULL;
 	m_triangles.push_back(t2);
 
-	memcpy(m_verticesData, m_vertices, sizeof(Vector3) * m_nbVertices);
-	memcpy(m_verticesTmp, m_vertices, sizeof(Vector3) * m_nbVertices);
-	memcpy(m_verticesNormalsData, m_verticesNormals, sizeof(Vector3) * m_nbNormals);
-	memcpy(m_verticesNormalsTmp, m_verticesNormals, sizeof(Vector3) * m_nbNormals);
-	memcpy(m_trianglesNormalsData, m_trianglesNormals, sizeof(Vector3) * m_nbFaces);
-	memcpy(m_trianglesNormalsTmp, m_trianglesNormals, sizeof(Vector3) * m_nbFaces);
+	memcpy(m_verticesData, m_vertices, sizeof(ZobVector3) * m_nbVertices);
+	memcpy(m_verticesTmp, m_vertices, sizeof(ZobVector3) * m_nbVertices);
+	memcpy(m_verticesNormalsData, m_verticesNormals, sizeof(ZobVector3) * m_nbNormals);
+	memcpy(m_verticesNormalsTmp, m_verticesNormals, sizeof(ZobVector3) * m_nbNormals);
+	memcpy(m_trianglesNormalsData, m_trianglesNormals, sizeof(ZobVector3) * m_nbFaces);
+	memcpy(m_trianglesNormalsTmp, m_trianglesNormals, sizeof(ZobVector3) * m_nbFaces);
 	DirectZob::RemoveIndent();
 }
 
@@ -96,13 +96,13 @@ Sprite::~Sprite()
 
 }
 /*
-void Sprite::QueueForDrawing(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions* options)
+void Sprite::QueueForDrawing(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions* options)
 {
 	Mesh::QueueForDrawing(m_modelMatrixOverriden, m_rotationMatrixOverriden, camera, engine, ownerId, options);
 }
 
 
-void Sprite::Update(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions* options)
+void Sprite::Update(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions* options)
 {
 	Mesh::Update(modelMatrix, rotationMatrix, camera, engine, ownerId, options);
 }

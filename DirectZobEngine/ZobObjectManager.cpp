@@ -121,7 +121,7 @@ float ZobObjectManager::WaitForUpdateObjectend()
 
 void ZobObjectManager::UpdateObjects(const Camera* camera, Core::Engine* engine)
 {
-	Matrix4x4 m;
+	ZobMatrix4x4 m;
 	m.Identity();
 	m_rootObject->Update(&m, &m);
 	m_rootObject->UpdateMesh(camera, engine);

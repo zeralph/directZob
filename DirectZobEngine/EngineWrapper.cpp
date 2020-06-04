@@ -43,7 +43,7 @@ namespace CLI
 	}
 	bool EngineWrapper::GetProjectedCoords(ManagedVector3^ worldSpacePos)
 	{
-		Vector3 v = worldSpacePos->ToVector3();
+		ZobVector3 v = worldSpacePos->ToVector3();
 		if (m_Instance->GetProjectedCoords(&v))
 		{
 			worldSpacePos->FromVector3(v);
@@ -53,7 +53,7 @@ namespace CLI
 	}
 	float EngineWrapper::GetDistanceToCamera(ManagedVector3^ worldSpacePos)
 	{
-		Vector3 v = worldSpacePos->ToVector3();
+		ZobVector3 v = worldSpacePos->ToVector3();
 		return m_Instance->GetDistanceToCamera(&v);
 	}
 }

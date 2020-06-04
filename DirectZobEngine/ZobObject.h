@@ -1,6 +1,6 @@
 #pragma once
-#include "Vector3.h"
-#include "Matrix4x4.h"
+#include "ZobVector3.h"
+#include "ZobMatrix4x4.h"
 #include <string>
 #include <vector>
 #include "Types.h"
@@ -18,7 +18,7 @@ public:
 	virtual ~ZobObject();
 
 	//virtuals
-	virtual void					Update(const Matrix4x4& parentMatrix, const Matrix4x4& parentRSMatrix);
+	virtual void					Update(const ZobMatrix4x4& parentMatrix, const ZobMatrix4x4& parentRSMatrix);
 	virtual void					UpdateMesh(const Camera* camera, Core::Engine* engine);
 	virtual void					QueueForDrawing(const Camera* camera, Core::Engine* engine);
 	virtual inline void				SetScale(float x, float y, float z) { m_scale.x = x; m_scale.y = y; m_scale.z = z; };
@@ -32,22 +32,22 @@ public:
 	void							SetParent(ZobObject* o);
 	ZobObject*						GetChild(const std::string& name);
 	ZobObject*						GetChild(const int i);
-	inline const Vector3&			GetTransform() const { return m_translation; };
-	inline const Vector3			GetWorldPosition() const
+	inline const ZobVector3&			GetTransform() const { return m_translation; };
+	inline const ZobVector3			GetWorldPosition() const
 	{
 		return m_modelMatrix.GetTranslation();
 	};
-	inline const Vector3			GetWorldScale() const
+	inline const ZobVector3			GetWorldScale() const
 	{
 		return m_modelMatrix.GetScale();
 	};
-	inline const Vector3&			GetRotation() const { return m_rotation; }
-	inline const Vector3&			GetScale() const { return m_scale; }
+	inline const ZobVector3&			GetRotation() const { return m_rotation; }
+	inline const ZobVector3&			GetScale() const { return m_scale; }
 	inline const std::string&		GetName() const { return m_name; }
 	inline void						SetName(const std::string &name) { m_name = name; }
-	inline Vector3					GetForward() const { return &m_forward; }
-	inline Vector3					GetLeft() const { return &m_left; }
-	inline Vector3					GetUp() const { return &m_up; }
+	inline ZobVector3					GetForward() const { return &m_forward; }
+	inline ZobVector3					GetLeft() const { return &m_left; }
+	inline ZobVector3					GetUp() const { return &m_up; }
 	const void						GetFullNodeName(std::string &fullName) const;
 	inline const int				GetNbChildren() const { return (int)m_children.size(); }
 	void							RemoveChildReference(const ZobObject* z);
@@ -67,15 +67,15 @@ protected:
 	ZobObject* m_parent;
 	Mesh* m_mesh = NULL;
 	std::vector<ZobObject*> m_children;
-	Matrix4x4 m_modelMatrix;
-	Matrix4x4 m_rotationScaleMatrix;
-	Vector3 m_translation;
-	Vector3 m_rotation;
-	Vector3 m_scale;
+	ZobMatrix4x4 m_modelMatrix;
+	ZobMatrix4x4 m_rotationScaleMatrix;
+	ZobVector3 m_translation;
+	ZobVector3 m_rotation;
+	ZobVector3 m_scale;
 	std::string m_name;
 	RenderOptions m_renderOptions;
 	bool m_markedForDeletion;
-	Vector3 m_left;
-	Vector3 m_forward;
-	Vector3 m_up;
+	ZobVector3 m_left;
+	ZobVector3 m_forward;
+	ZobVector3 m_up;
 };

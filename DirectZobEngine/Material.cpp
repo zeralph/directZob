@@ -11,12 +11,12 @@ Material::Material()
 	DirectZob::LogInfo("Material %s creation", m_name.c_str());
 	DirectZob::AddIndent();
 	m_diffuseTexture = NULL;
-	m_ambientColor = Vector3(1, 1, 1);
-	m_diffuseColor = Vector3(1, 1, 1);
+	m_ambientColor = ZobVector3(1, 1, 1);
+	m_diffuseColor = ZobVector3(1, 1, 1);
 	DirectZob::RemoveIndent();
 }
 
-Material::Material(const std::string& name, const Vector3* ambientColor, const Vector3* diffuseColor, const Texture* texture)
+Material::Material(const std::string& name, const ZobVector3* ambientColor, const ZobVector3* diffuseColor, const Texture* texture)
 {
 	sMaterialNumber++;
 	DirectZob::LogInfo("Material %s creation", name.c_str());
@@ -34,7 +34,7 @@ Material::~Material()
 	DirectZob::AddIndent();
 	m_diffuseTexture = NULL;
 	m_name = std::string("");
-	m_ambientColor = Vector3(0, 0, 0);
-	m_diffuseColor = Vector3(0,0,0);
+	m_ambientColor = ZobVector3(0, 0, 0);
+	m_diffuseColor = ZobVector3(0,0,0);
 	DirectZob::RemoveIndent();
 }

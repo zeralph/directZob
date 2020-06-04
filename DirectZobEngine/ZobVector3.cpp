@@ -1,6 +1,6 @@
-#include "Vector3.h"
+#include "ZobVector3.h"
 
-Vector3::Vector3() :
+ZobVector3::ZobVector3() :
 	x(0.0f),
 	y(0.0f),
 	z(0.0f),
@@ -9,7 +9,7 @@ Vector3::Vector3() :
 
 }
 
-Vector3::Vector3(float x, float y, float z) :
+ZobVector3::ZobVector3(float x, float y, float z) :
 	x(x),
 	y(y),
 	z(z),
@@ -18,7 +18,7 @@ Vector3::Vector3(float x, float y, float z) :
 
 }
 
-Vector3::Vector3(const Vector3* v)
+ZobVector3::ZobVector3(const ZobVector3* v)
 {
 	x = v->x;
 	y = v->y;
@@ -26,8 +26,8 @@ Vector3::Vector3(const Vector3* v)
 	w = v-> w;
 }
 
-const Vector3 Vector3::Vector3Zero = Vector3(0.0f, 0.0f, 0.0f);
-const Vector3 Vector3::Vector3One = Vector3(1.0f, 1.0f, 1.0f);
-const Vector3 Vector3::Vector3X = Vector3(1.0f, 0.0f, 0.0f);
-const Vector3 Vector3::Vector3Y = Vector3(0.0f, 1.0f, 0.0f);
-const Vector3 Vector3::Vector3Z = Vector3(0.0f, 0.0f, 1.0f);
+const ZobVector3 ZobVector3::Vector3Zero = ZobVector3(0.0f, 0.0f, 0.0f);
+const ZobVector3 ZobVector3::Vector3One = ZobVector3(1.0f, 1.0f, 1.0f);
+const ZobVector3 ZobVector3::Vector3X = ZobVector3(1.0f, 0.0f, 0.0f);
+const ZobVector3 ZobVector3::Vector3Y = ZobVector3(0.0f, 1.0f, 0.0f);
+const ZobVector3 ZobVector3::Vector3Z = ZobVector3(0.0f, 0.0f, 1.0f);

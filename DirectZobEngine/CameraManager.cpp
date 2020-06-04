@@ -60,7 +60,7 @@ Camera* CameraManager::CreateEditorCamera()
 		c->SetTranslation(1, 5, -10);
 		//c->SetRotation(20, 0, 0);
 		c->SetTranslation(-20, 20, -20);
-		Vector3 v = Vector3(0, 0, 0);
+		ZobVector3 v = ZobVector3(0, 0, 0);
 		c->SetTarget(&v);
 		//c->SetRotation(-20, 0, 0);
 		

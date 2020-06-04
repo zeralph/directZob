@@ -3,8 +3,8 @@
 #include <fstream>
 #include <iostream>
 #include <vector>
-#include "Vector3.h"
-#include "Vector2.h"
+#include "ZobVector3.h"
+#include "ZobVector2.h"
 #include "Types.h"
 #include "Triangle.h"
 #include "Camera.h"
@@ -19,28 +19,28 @@ public:
 	Mesh(std::string& name, std::string& path, std::string& file);
 	~Mesh();
 
-	virtual void Update(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions* options);
-	virtual void QueueForDrawing(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions* options);
-	void DrawBoundingBox(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions* options);
+	virtual void Update(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions* options);
+	virtual void QueueForDrawing(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions* options);
+	void DrawBoundingBox(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions* options);
 	const std::vector<Triangle>* GetTrianglesList() const { return &m_triangles; }
 	const uint GetNbTriangles() const { return m_nbFaces; }
 
-	Vector3* m_vertices = NULL;
-	Vector3* m_verticesTmp = NULL;
-	Vector3* m_verticesData = NULL;
+	ZobVector3* m_vertices = NULL;
+	ZobVector3* m_verticesTmp = NULL;
+	ZobVector3* m_verticesData = NULL;
 
-	Vector3* m_projectedVertices = NULL;
-	Vector3* m_projectedVerticesTmp = NULL;
+	ZobVector3* m_projectedVertices = NULL;
+	ZobVector3* m_projectedVerticesTmp = NULL;
 
-	Vector3* m_verticesNormals = NULL;
-	Vector3* m_verticesNormalsData = NULL;
-	Vector3* m_verticesNormalsTmp = NULL;
+	ZobVector3* m_verticesNormals = NULL;
+	ZobVector3* m_verticesNormalsData = NULL;
+	ZobVector3* m_verticesNormalsTmp = NULL;
 
-	Vector3* m_trianglesNormals = NULL;
-	Vector3* m_trianglesNormalsData = NULL;
-	Vector3* m_trianglesNormalsTmp = NULL;
+	ZobVector3* m_trianglesNormals = NULL;
+	ZobVector3* m_trianglesNormalsData = NULL;
+	ZobVector3* m_trianglesNormalsTmp = NULL;
 
-	Vector2* m_uvs = NULL;
+	ZobVector2* m_uvs = NULL;
 
 	std::vector<Triangle> m_triangles;
 
@@ -65,7 +65,7 @@ protected:
 	std::string m_name;
 	std::string m_file;
 	std::string m_path;
-	Vector3 m_minBouding;
-	Vector3 m_maxBouding;
+	ZobVector3 m_minBouding;
+	ZobVector3 m_maxBouding;
 };
 

@@ -2,7 +2,7 @@
 #include "tinyxml.h"
 #include "DirectZob.h"
 
-Light::Light(std::string &name, eLightType type, Vector3 color, float intensity, float distance, ZobObject*parent):
+Light::Light(std::string &name, eLightType type, ZobVector3 color, float intensity, float distance, ZobObject*parent):
 	ZobObject(ZOBGUID::type_scene, ZOBGUID::subtype_zobLight, name, nullptr, parent)
 {
 	m_color = color;
@@ -24,7 +24,7 @@ Light::Light(TiXmlElement* node, ZobObject* parent)
 			x = atof(f->Attribute("r"));
 			y = atof(f->Attribute("g"));
 			z = atof(f->Attribute("b"));
-			m_color = Vector3(x/255.0f, y/255.0f, z/255.0f);
+			m_color = ZobVector3(x/255.0f, y/255.0f, z/255.0f);
 		}
 		f = node->FirstChildElement("Intensity");
 		float intensity = f ? atof(f->GetText()) : 1.0f;
@@ -73,12 +73,12 @@ void Light::NewLightConfiguration()
 	{
 	case eLightType_spot:
 		SetRotation(-90, 0, 0);
-		//m_rotation = Vector3(-90.0f, 0.0f, 0.0f);
+		//m_rotation = ZobVector3(-90.0f, 0.0f, 0.0f);
 		m_distance = 10.0f;
 		m_spotAngle = 10.0f;
 		break;
 	case eLightType_directional:
-		m_rotation = Vector3(-70.0f, 30.0f, 30.0f);
+		m_rotation = ZobVector3(-70.0f, 30.0f, 30.0f);
 		break;
 	default:
 		break;
@@ -96,7 +96,7 @@ void Light::drawPointGizmos(const Camera* camera, Core::Engine* engine)
 void Light::drawSpotGizmos(const Camera* camera, Core::Engine* engine)
 {
 	uint c = ((int)(m_color.x * 255) << 16) + ((int)(m_color.y * 255) << 8) + (int)(m_color.z * 255);
-	Vector3 v1, v2, v;
+	ZobVector3 v1, v2, v;
 	v1 = m_forward;
 	v2 = m_left;
 	v1.Mul(m_distance);
@@ -122,8 +122,8 @@ void Light::drawSpotGizmos(const Camera* camera, Core::Engine* engine)
 void Light::drawDirectionalGizmos(const Camera* camera, Core::Engine* engine)
 {
 	uint c = ((int)(m_color.x * 255) << 16) + ((int)(m_color.y * 255) << 8) + (int)(m_color.z * 255);
-	Vector3 v0 = m_translation + m_forward;
-	Vector3 v1 = m_translation - m_forward;
+	ZobVector3 v0 = m_translation + m_forward;
+	ZobVector3 v1 = m_translation - m_forward;
 	v0 = v0 + m_left;
 	v1 = v1 + m_left;
 	engine->QueueLine(camera, &v0, &v1, c, true);
@@ -165,7 +165,7 @@ TiXmlNode* Light::SaveUnderNode(TiXmlNode* node)
 	TiXmlNode* n = ZobObject::SaveUnderNode(node);
 	TiXmlElement* ne = (TiXmlElement*)n;
 	ne->SetAttribute("type", "light");
-	Vector3 c = GetColor();
+	ZobVector3 c = GetColor();
 	int r = (int)(c.x * 255.0f);
 	int g = (int)(c.y * 255.0f);
 	int b = (int)(c.z * 255.0f);

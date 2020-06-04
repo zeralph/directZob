@@ -2,15 +2,15 @@
 #include "DirectZob.h"
 #include <fstream>
 #include <iostream>
-#include "Vector3.h"
+#include "ZobVector3.h"
 
 struct OBJMaterialInfo
 {
 	std::string file;
 	std::string name;
 	std::string texture;
-	Vector3 diffuse;
-	Vector3 ambient;
+	ZobVector3 diffuse;
+	ZobVector3 ambient;
 	//put other stuff here
 };
 
@@ -32,7 +32,7 @@ Material* MaterialManager::CreateMaterial()
 	return m;
 }
 
-const Material* MaterialManager::LoadMaterial(const std::string& name, const Vector3* ambientColor, const Vector3* diffuseColor, const std::string &textureFile)
+const Material* MaterialManager::LoadMaterial(const std::string& name, const ZobVector3* ambientColor, const ZobVector3* diffuseColor, const std::string &textureFile)
 {
 	if (GetMaterial(name) == NULL)
 	{
@@ -90,7 +90,7 @@ const Material* MaterialManager::LoadFbxMaterial(const fbxsdk::FbxMesh* mesh, co
 					fbxsdk::FbxProperty prop = material->FindProperty(fbxsdk::FbxSurfaceMaterial::sDiffuse);
 					// Check if it's layeredtextures
 					FbxDouble3 c = prop.Get<FbxDouble3>();
-					Vector3 diffuse = Vector3(c[0], c[1], c[2]);
+					ZobVector3 diffuse = ZobVector3(c[0], c[1], c[2]);
 					const char* texture_name = NULL;
 					const char* texture_name2 = NULL;
 					const char* texture_name3 = NULL;
@@ -111,7 +111,7 @@ const Material* MaterialManager::LoadFbxMaterial(const fbxsdk::FbxMesh* mesh, co
 
 					prop = material->FindProperty(fbxsdk::FbxSurfaceMaterial::sSpecularFactor);
 					f = prop.Get<FbxDouble>();
-					Vector3 ambient;
+					ZobVector3 ambient;
 					std::string texFullPath = "";
 					if (texture_name2)
 					{

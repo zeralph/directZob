@@ -1,7 +1,7 @@
 #pragma once
 #include "Types.h"
 #include "Material.h"
-#include "Matrix2x2.h"
+#include "ZobMatrix2x2.h"
 #include "Engine.h"
 #include "Events.h"
 
@@ -28,5 +28,5 @@ private:
 	uint m_charHeight;
 	uint m_nbCharWidth;
 	uint m_nbCharHeight;
-	Matrix2x2 m_matrix;
+	ZobMatrix2x2 m_matrix;
 };

@@ -60,9 +60,9 @@ namespace CLI
 		Camera* c = m_Instance->GetCurrentCamera();
 		if (c)
 		{
-			Vector3 v = Vector3(0, 1, 0);
-			Vector3 p = Vector3(0, 0, 0);
-			Vector3 l = Vector3(0, 1, 0);
+			ZobVector3 v = ZobVector3(0, 1, 0);
+			ZobVector3 p = ZobVector3(0, 0, 0);
+			ZobVector3 l = ZobVector3(0, 1, 0);
 			c->GetTargetVector(&p);
 			v = c->GetUp();
 			c->RotateAroundPointAxis(&p, &v, NULL, x);
@@ -100,7 +100,7 @@ namespace CLI
 		Camera* c = m_Instance->GetCurrentCamera();
 		if (c)
 		{
-			Vector3 v = p->ToVector3();
+			ZobVector3 v = p->ToVector3();
 			c->SetTranslation(v.x, v.y, v.z);
 		}
 		DirectZob::GetInstance()->Unlock();
@@ -132,7 +132,7 @@ namespace CLI
 		Camera* c = m_Instance->GetCurrentCamera();
 		if (c)
 		{
-			Vector3 t = target->ToVector3();
+			ZobVector3 t = target->ToVector3();
 			c->SetTarget(&t);
 		}
 		DirectZob::GetInstance()->Unlock();

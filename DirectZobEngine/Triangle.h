@@ -1,6 +1,6 @@
 #pragma once
-#include "Vector2.h"
-#include "Vector3.h"
+#include "ZobVector2.h"
+#include "ZobVector3.h"
 #include "Material.h"
 #include "Types.h"
 
@@ -14,23 +14,23 @@ public:
 	Triangle();
 	~Triangle();
 
-	Vector3* va;
-	Vector3* vb;
-	Vector3* vc;
+	ZobVector3* va;
+	ZobVector3* vb;
+	ZobVector3* vc;
 
-	Vector3* pa;
-	Vector3* pb;
-	Vector3* pc;
+	ZobVector3* pa;
+	ZobVector3* pb;
+	ZobVector3* pc;
 
-	Vector3* na;
-	Vector3* nb;
-	Vector3* nc;
+	ZobVector3* na;
+	ZobVector3* nb;
+	ZobVector3* nc;
 
-	Vector3* n;
+	ZobVector3* n;
 
-	Vector2* ua;
-	Vector2* ub;
-	Vector2* uc;
+	ZobVector2* ua;
+	ZobVector2* ub;
+	ZobVector2* uc;
 	const Material* material;
 	float area;
 	uint owner;

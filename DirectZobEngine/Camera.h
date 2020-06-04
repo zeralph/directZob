@@ -1,5 +1,5 @@
 #pragma once
-#include "Matrix4x4.h"
+#include "ZobMatrix4x4.h"
 #include "ZobObject.h"
 #include <string>
 #include "tinyxml.h"
@@ -19,35 +19,35 @@ public:
 	Camera(TiXmlElement* node, ZobObject* parent);
 	~Camera() override;
 
-	void					Update(const Matrix4x4& parentMatrix, const Matrix4x4& parentRSMatrix) override;
+	void					Update(const ZobMatrix4x4& parentMatrix, const ZobMatrix4x4& parentRSMatrix) override;
 	void					DrawGizmos(const Camera* camera, Core::Engine* engine) override;
 	TiXmlNode*				SaveUnderNode(TiXmlNode* node) override;
 
 	void					UpdateViewProjectionMatrix();
-	inline const Matrix4x4* GetViewMatrix() const { return &m_viewRotMatrix; };
-	inline const Matrix4x4* GetProjectionMatrix() const { return &m_projMatrix; };
+	inline const ZobMatrix4x4* GetViewMatrix() const { return &m_viewRotMatrix; };
+	inline const ZobMatrix4x4* GetProjectionMatrix() const { return &m_projMatrix; };
 	inline float			GetFov() const { return m_fov; };
-	void					SetTarget(const Vector3 t) { m_tagetMode = eTarget_Vector; m_targetVector = t; };
+	void					SetTarget(const ZobVector3 t) { m_tagetMode = eTarget_Vector; m_targetVector = t; };
 	void					SetTarget(const ZobObject* z) { m_tagetMode = eTarget_Object; m_targetObject = z; };
 	void					SetNoTarget() { m_tagetMode = eTarget_none; };
-	bool					GetTargetVector(Vector3* t);
+	bool					GetTargetVector(ZobVector3* t);
 	
-	void					RotateAroundPointAxis(const Vector3* point, const Vector3* axis, const Vector3* lockAxis, float angle);
+	void					RotateAroundPointAxis(const ZobVector3* point, const ZobVector3* axis, const ZobVector3* lockAxis, float angle);
 	void					Move(float dx, float dy, bool moveTargetVector);
 	void					Zoom(float z);
-	inline void				ToViewSpace(Vector3* v) const
+	inline void				ToViewSpace(ZobVector3* v) const
 	{
 		v->x -= m_viewTransaltion.x;
 		v->y -= m_viewTransaltion.y;
 		v->z -= m_viewTransaltion.z;
 		m_viewRotMatrix.Mul(v);
 	};
-	inline void				ToProjectedSpace(Vector3* vp)
+	inline void				ToProjectedSpace(ZobVector3* vp)
 	{
 		m_projMatrix.Mul(vp);
 	}
 	/*
-	inline void				ToScreenSpace(Vector3* v)
+	inline void				ToScreenSpace(ZobVector3* v)
 	{
 		BufferData* b = DirectZob::GetInstance()->GetEngine()->GetBufferData();
 		if (b)
@@ -57,7 +57,7 @@ public:
 		}
 	}
 	*/
-	inline void				ProjectPointFromWorld(Vector3* wp)
+	inline void				ProjectPointFromWorld(ZobVector3* wp)
 	{
 		ToViewSpace(wp);
 		ToProjectedSpace(wp);
@@ -70,16 +70,16 @@ public:
 	};
 
 private:
-	void					SetViewMatrix(const Vector3 &left, const Vector3 &up, const Vector3 &fw, const Vector3 &p);
+	void					SetViewMatrix(const ZobVector3 &left, const ZobVector3 &up, const ZobVector3 &fw, const ZobVector3 &p);
 	void					setProjectionMatrix(const float angleOfView, const float width, const float height, const float near, const float far);
 
-	Matrix4x4 m_viewRotMatrix;
-	Matrix4x4 m_projMatrix;
+	ZobMatrix4x4 m_viewRotMatrix;
+	ZobMatrix4x4 m_projMatrix;
 	float m_fov;
-	Vector3 m_viewTransaltion;
+	ZobVector3 m_viewTransaltion;
 	eTargetMode m_tagetMode;
-	Vector3 m_targetVector;
+	ZobVector3 m_targetVector;
 	const ZobObject* m_targetObject;
-	Vector3 m_nextTranslation;
+	ZobVector3 m_nextTranslation;
 };
 

@@ -2,13 +2,13 @@
 #define _COLOR_H_
 
 #include "Types.h"
-#include "Vector3.h"
+#include "ZobVector3.h"
 class Color
 {
 	public:
 		Color();
 		Color(uint rawValue);
-		Color(const Vector3* v);
+		Color(const ZobVector3* v);
 		Color(int a, int r, int g, int b);
 		~Color();
 

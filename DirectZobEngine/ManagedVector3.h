@@ -1,6 +1,6 @@
 #ifdef _WINDLL
 #pragma once
-#include "Vector3.h"
+#include "ZobVector3.h"
 
 namespace CLI {
 	public ref class ManagedVector3
@@ -21,7 +21,7 @@ namespace CLI {
 			x = x; y = y; z = z;
 		}
 
-		ManagedVector3(const Vector3& v)
+		ManagedVector3(const ZobVector3& v)
 		{
 			x = v.x / v.w; y = v.y / v.w; z = v.z / v.w;
 		}
@@ -33,8 +33,8 @@ namespace CLI {
 			z = v->z;
 		}
 
-		Vector3 ToVector3() { return Vector3(x, y, z); }
-		void FromVector3(Vector3& v) { x = v.x / v.w; y = v.y / v.w; z = v.z / v.w; }
+		ZobVector3 ToVector3() { return ZobVector3(x, y, z); }
+		void FromVector3(ZobVector3& v) { x = v.x / v.w; y = v.y / v.w; z = v.z / v.w; }
 		void Add(ManagedVector3^ v)
 		{
 			x += v->x;

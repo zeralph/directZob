@@ -11,7 +11,7 @@ Color::Color() :
 
 }
 
-Color::Color(const Vector3* v)
+Color::Color(const ZobVector3* v)
 {
 	Set(255, (int)(v->x * 255.0f), (int)(v->y * 255.0f), (int)(v->z * 255.0f));
 }

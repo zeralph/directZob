@@ -2,7 +2,7 @@
 #include "DirectZob.h"
 
 using namespace std;
-static Vector2 vec2zero = Vector2(0,0);
+static ZobVector2 vec2zero = ZobVector2(0,0);
 static std::string emptyStr = std::string("");
 Mesh::Mesh(std::string& name)
 {	
@@ -55,20 +55,20 @@ Mesh::Mesh(std::string &parentName, std::string& path, fbxsdk::FbxMesh* mesh)
 
 		m_nbVertices += mesh->GetPolygonVertexCount();
 		m_nbFaces = 0;
-		m_vertices = (Vector3*)malloc(sizeof(Vector3) * m_nbVertices);
-		m_verticesData = (Vector3*)malloc(sizeof(Vector3) * m_nbVertices);
-		m_verticesTmp = (Vector3*)malloc(sizeof(Vector3) * m_nbVertices);
+		m_vertices = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
+		m_verticesData = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
+		m_verticesTmp = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
 
-		m_projectedVertices = (Vector3*)malloc(sizeof(Vector3) * m_nbVertices);
-		m_projectedVerticesTmp = (Vector3*)malloc(sizeof(Vector3) * m_nbVertices);
+		m_projectedVertices = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
+		m_projectedVerticesTmp = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
 
 		m_nbNormals = m_nbVertices;
-		m_verticesNormals = (Vector3*)malloc(sizeof(Vector3) * m_nbNormals);
-		m_verticesNormalsData = (Vector3*)malloc(sizeof(Vector3) * m_nbNormals);
-		m_verticesNormalsTmp = (Vector3*)malloc(sizeof(Vector3) * m_nbNormals);
+		m_verticesNormals = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbNormals);
+		m_verticesNormalsData = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbNormals);
+		m_verticesNormalsTmp = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbNormals);
 
 		m_nbUvs = m_nbVertices;
-		m_uvs = (Vector2*)malloc(sizeof(Vector2) * m_nbUvs);
+		m_uvs = (ZobVector2*)malloc(sizeof(ZobVector2) * m_nbUvs);
 		int pc = mesh->GetPolygonCount();
 		DirectZob::LogInfo("Object %s, %i polygons", mesh->GetName(), pc);
 		int vIdx = 0;
@@ -87,11 +87,11 @@ Mesh::Mesh(std::string &parentName, std::string& path, fbxsdk::FbxMesh* mesh)
 					int ctrlIdx = mesh->GetPolygonVertex(j, k);
 					FbxVector4 v = mesh->GetControlPointAt(ctrlIdx);
 					FbxMultT(mesh->GetNode(), v);
-					m_vertices[vIdx] = Vector3(v[0], v[1], v[2]);
+					m_vertices[vIdx] = ZobVector3(v[0], v[1], v[2]);
 					if (vIdx == 0)
 					{
-						m_minBouding = Vector3(v[0], v[1], v[2]);
-						m_maxBouding = Vector3(v[0], v[1], v[2]);
+						m_minBouding = ZobVector3(v[0], v[1], v[2]);
+						m_maxBouding = ZobVector3(v[0], v[1], v[2]);
 					}
 					else
 					{
@@ -113,27 +113,27 @@ Mesh::Mesh(std::string &parentName, std::string& path, fbxsdk::FbxMesh* mesh)
 						mesh->GetPolygonVertexUV(j, k, uvsNames[0], uv, unmapped);
 						if (!unmapped)
 						{
-							m_uvs[vIdx] = Vector2(uv[0], uv[1]);
+							m_uvs[vIdx] = ZobVector2(uv[0], uv[1]);
 						}
 						else
 						{
-							m_uvs[vIdx] = Vector2(0, 0);
+							m_uvs[vIdx] = ZobVector2(0, 0);
 						}
 					}
 					else
 					{
-						m_uvs[vIdx] = Vector2(0, 0);
+						m_uvs[vIdx] = ZobVector2(0, 0);
 					}
 					if (mesh->GetPolygonVertexNormal(j, k, normal))
 					{
 						//FbxMultT(mesh->GetNode(), normal);
 						//normal.Normalize();
-						m_verticesNormals[vIdx] = Vector3(normal[0], normal[1], normal[2]);
+						m_verticesNormals[vIdx] = ZobVector3(normal[0], normal[1], normal[2]);
 						//todo : compute normal
 					}
 					else
 					{
-						m_verticesNormals[vIdx] = Vector3(0,1,0);
+						m_verticesNormals[vIdx] = ZobVector3(0,1,0);
 					}
 					vIdx++;
 				}
@@ -176,13 +176,13 @@ Mesh::Mesh(std::string &parentName, std::string& path, fbxsdk::FbxMesh* mesh)
 				}
 			}
 		}
-		m_trianglesNormals = (Vector3*)malloc(sizeof(Vector3) * m_nbFaces);
-		m_trianglesNormalsData = (Vector3*)malloc(sizeof(Vector3) * m_nbFaces);
-		m_trianglesNormalsTmp = (Vector3*)malloc(sizeof(Vector3) * m_nbFaces);
+		m_trianglesNormals = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbFaces);
+		m_trianglesNormalsData = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbFaces);
+		m_trianglesNormalsTmp = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbFaces);
 		for (int i = 0; i < m_nbFaces; i++)
 		{
 			Triangle* t = &m_triangles[i];
-			Vector3 v = Vector3(0, 0, 0);
+			ZobVector3 v = ZobVector3(0, 0, 0);
 			v.Add(t->na);
 			v.Add(t->nb);
 			v.Add(t->nc);
@@ -190,12 +190,12 @@ Mesh::Mesh(std::string &parentName, std::string& path, fbxsdk::FbxMesh* mesh)
 			m_trianglesNormals[i] = v;
 			t->n = &m_trianglesNormals[i];
 		}
-		memcpy(m_verticesData, m_vertices, sizeof(Vector3) * m_nbVertices);
-		memcpy(m_verticesTmp, m_vertices, sizeof(Vector3)* m_nbVertices);
-		memcpy(m_verticesNormalsData, m_verticesNormals, sizeof(Vector3) * m_nbNormals);
-		memcpy(m_verticesNormalsTmp, m_verticesNormals, sizeof(Vector3)* m_nbNormals);
-		memcpy(m_trianglesNormalsData, m_trianglesNormals, sizeof(Vector3) * m_nbFaces);
-		memcpy(m_trianglesNormalsTmp, m_trianglesNormals, sizeof(Vector3)* m_nbFaces);
+		memcpy(m_verticesData, m_vertices, sizeof(ZobVector3) * m_nbVertices);
+		memcpy(m_verticesTmp, m_vertices, sizeof(ZobVector3)* m_nbVertices);
+		memcpy(m_verticesNormalsData, m_verticesNormals, sizeof(ZobVector3) * m_nbNormals);
+		memcpy(m_verticesNormalsTmp, m_verticesNormals, sizeof(ZobVector3)* m_nbNormals);
+		memcpy(m_trianglesNormalsData, m_trianglesNormals, sizeof(ZobVector3) * m_nbFaces);
+		memcpy(m_trianglesNormalsTmp, m_trianglesNormals, sizeof(ZobVector3)* m_nbFaces);
 	}
 	DirectZob::RemoveIndent();
 }
@@ -340,25 +340,25 @@ void Mesh::LoadOBJ(const std::string& fullPath)
 	{
 		m_nbNormals = 1;
 	}
-	m_vertices = (Vector3*)malloc(sizeof(Vector3) * m_nbVertices);
-	m_verticesData = (Vector3*)malloc(sizeof(Vector3) * m_nbVertices);
-	m_verticesTmp = (Vector3*)malloc(sizeof(Vector3) * m_nbVertices);
-	m_projectedVertices = (Vector3*)malloc(sizeof(Vector3) * m_nbVertices);
-	m_projectedVerticesTmp = (Vector3*)malloc(sizeof(Vector3) * m_nbVertices);
-	m_uvs = (Vector2*)malloc(sizeof(Vector2) * m_nbUvs);
-	m_verticesNormals = (Vector3*)malloc(sizeof(Vector3) * m_nbNormals);
-	m_verticesNormalsData = (Vector3*)malloc(sizeof(Vector3) * m_nbNormals);
-	m_verticesNormalsTmp = (Vector3*)malloc(sizeof(Vector3) * m_nbNormals);
-	m_trianglesNormals = (Vector3*)malloc(sizeof(Vector3) * m_nbFaces);
-	m_trianglesNormalsData = (Vector3*)malloc(sizeof(Vector3) * m_nbFaces);
-	m_trianglesNormalsTmp = (Vector3*)malloc(sizeof(Vector3) * m_nbFaces);
+	m_vertices = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
+	m_verticesData = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
+	m_verticesTmp = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
+	m_projectedVertices = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
+	m_projectedVerticesTmp = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
+	m_uvs = (ZobVector2*)malloc(sizeof(ZobVector2) * m_nbUvs);
+	m_verticesNormals = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbNormals);
+	m_verticesNormalsData = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbNormals);
+	m_verticesNormalsTmp = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbNormals);
+	m_trianglesNormals = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbFaces);
+	m_trianglesNormalsData = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbFaces);
+	m_trianglesNormalsTmp = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbFaces);
 	m_triangles.clear();
 
 	if (!m_hasNormals)
 	{
 		//TODO ... compute !
-		m_verticesNormals[0] = Vector3(0, 0, 1);
-		m_trianglesNormals[0] = Vector3(0, 0, 1);
+		m_verticesNormals[0] = ZobVector3(0, 0, 1);
+		m_trianglesNormals[0] = ZobVector3(0, 0, 1);
 	}
 
 	size_t curVertice = 0;
@@ -374,7 +374,7 @@ void Mesh::LoadOBJ(const std::string& fullPath)
 			{
 				std::vector<string> vec;
 				SplitEntry(&line, &vec, ' ');
-				Vector2 v = Vector2(std::stof(vec[1], &sz), ::stof(vec[2], &sz));
+				ZobVector2 v = ZobVector2(std::stof(vec[1], &sz), ::stof(vec[2], &sz));
 				m_uvs[curUv] = v;
 				curUv++;
 			}
@@ -382,7 +382,7 @@ void Mesh::LoadOBJ(const std::string& fullPath)
 			{
 				std::vector<string> vec;
 				SplitEntry(&line, &vec, ' ');
-				Vector3 v = Vector3(std::stof(vec[1], &sz), ::stof(vec[2], &sz), ::stof(vec[3], &sz));
+				ZobVector3 v = ZobVector3(std::stof(vec[1], &sz), ::stof(vec[2], &sz), ::stof(vec[3], &sz));
 				m_verticesNormals[curNormal] = v;
 				curNormal++;
 			}
@@ -390,7 +390,7 @@ void Mesh::LoadOBJ(const std::string& fullPath)
 			{
 				std::vector<string> vec;
 				SplitEntry(&line, &vec, ' ');
-				Vector3 v = Vector3(std::stof(vec[1], &sz), ::stof(vec[2], &sz), ::stof(vec[3], &sz));
+				ZobVector3 v = ZobVector3(std::stof(vec[1], &sz), ::stof(vec[2], &sz), ::stof(vec[3], &sz));
 				m_vertices[curVertice] = v;
 				curVertice++;
 			}
@@ -417,9 +417,9 @@ void Mesh::LoadOBJ(const std::string& fullPath)
 			CreateTriangles(&v, &m_triangles, curface, tex);
 		}
 	}
-	memcpy(m_verticesData, m_vertices, sizeof(Vector3) * m_nbVertices);
-	memcpy(m_verticesNormalsData, m_verticesNormals, sizeof(Vector3) * m_nbNormals);
-	memcpy(m_trianglesNormalsData, m_trianglesNormals, sizeof(Vector3) * m_nbFaces);
+	memcpy(m_verticesData, m_vertices, sizeof(ZobVector3) * m_nbVertices);
+	memcpy(m_verticesNormalsData, m_verticesNormals, sizeof(ZobVector3) * m_nbNormals);
+	memcpy(m_trianglesNormalsData, m_trianglesNormals, sizeof(ZobVector3) * m_nbFaces);
 	DirectZob::RemoveIndent();
 }
 
@@ -443,17 +443,17 @@ void Mesh::SplitEntry(const std::string* s, std::vector<std::string>* v, const c
 	}
 }
 
-void Mesh::DrawBoundingBox(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions* options)
+void Mesh::DrawBoundingBox(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions* options)
 {
-	Vector3 v0 = Vector3(m_minBouding.x, m_minBouding.y, m_minBouding.z);
-	Vector3 v1 = Vector3(m_minBouding.x, m_maxBouding.y, m_minBouding.z);
-	Vector3 v2 = Vector3(m_maxBouding.x, m_maxBouding.y, m_minBouding.z);
-	Vector3 v3 = Vector3(m_maxBouding.x, m_minBouding.y, m_minBouding.z);
+	ZobVector3 v0 = ZobVector3(m_minBouding.x, m_minBouding.y, m_minBouding.z);
+	ZobVector3 v1 = ZobVector3(m_minBouding.x, m_maxBouding.y, m_minBouding.z);
+	ZobVector3 v2 = ZobVector3(m_maxBouding.x, m_maxBouding.y, m_minBouding.z);
+	ZobVector3 v3 = ZobVector3(m_maxBouding.x, m_minBouding.y, m_minBouding.z);
 
-	Vector3 v4 = Vector3(m_minBouding.x, m_minBouding.y, m_maxBouding.z);
-	Vector3 v5 = Vector3(m_minBouding.x, m_maxBouding.y, m_maxBouding.z);
-	Vector3 v6 = Vector3(m_maxBouding.x, m_maxBouding.y, m_maxBouding.z);
-	Vector3 v7 = Vector3(m_maxBouding.x, m_minBouding.y, m_maxBouding.z);
+	ZobVector3 v4 = ZobVector3(m_minBouding.x, m_minBouding.y, m_maxBouding.z);
+	ZobVector3 v5 = ZobVector3(m_minBouding.x, m_maxBouding.y, m_maxBouding.z);
+	ZobVector3 v6 = ZobVector3(m_maxBouding.x, m_maxBouding.y, m_maxBouding.z);
+	ZobVector3 v7 = ZobVector3(m_maxBouding.x, m_minBouding.y, m_maxBouding.z);
 	modelMatrix.Mul(&v0);
 	modelMatrix.Mul(&v1);
 	modelMatrix.Mul(&v2);
@@ -478,17 +478,17 @@ void Mesh::DrawBoundingBox(const Matrix4x4& modelMatrix, const Matrix4x4& rotati
 	engine->QueueLine(camera, &v0, &v4, 0xFF00FF00, true);
 }
 
-void Mesh::Update(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions* options)
+void Mesh::Update(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions* options)
 {
 	BufferData* bData = engine->GetBufferData();
-	const Matrix4x4* view = camera->GetViewMatrix();
-	const Matrix4x4* proj = camera->GetProjectionMatrix();
+	const ZobMatrix4x4* view = camera->GetViewMatrix();
+	const ZobMatrix4x4* proj = camera->GetProjectionMatrix();
 	float w = (float)bData->width / 2.0f;
 	float h = (float)bData->height / 2.0f;	
 
-	memcpy(m_verticesTmp, m_verticesData, sizeof(Vector3) * m_nbVertices);
-	memcpy(m_verticesNormalsTmp, m_verticesNormalsData, sizeof(Vector3) * m_nbNormals);
-	memcpy(m_trianglesNormalsTmp, m_trianglesNormalsData, sizeof(Vector3) * m_nbFaces);
+	memcpy(m_verticesTmp, m_verticesData, sizeof(ZobVector3) * m_nbVertices);
+	memcpy(m_verticesNormalsTmp, m_verticesNormalsData, sizeof(ZobVector3) * m_nbNormals);
+	memcpy(m_trianglesNormalsTmp, m_trianglesNormalsData, sizeof(ZobVector3) * m_nbFaces);
 
 	for (uint i = 0; i < m_nbVertices; i++)
 	{
@@ -517,12 +517,12 @@ void Mesh::Update(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix,
 		m_subMeshes[i]->Update(modelMatrix, rotationMatrix, camera, engine, ownerId, options);
 	}
 }
-void Mesh::QueueForDrawing(const Matrix4x4& modelMatrix, const Matrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions* options)
+void Mesh::QueueForDrawing(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions* options)
 {
-	memcpy(m_vertices, m_verticesTmp, sizeof(Vector3) * m_nbVertices);
-	memcpy(m_verticesNormals, m_verticesNormalsTmp, sizeof(Vector3) * m_nbNormals);
-	memcpy(m_trianglesNormals, m_trianglesNormalsTmp, sizeof(Vector3) * m_nbFaces);
-	memcpy(m_projectedVertices, m_projectedVerticesTmp, sizeof(Vector3) * m_nbVertices);
+	memcpy(m_vertices, m_verticesTmp, sizeof(ZobVector3) * m_nbVertices);
+	memcpy(m_verticesNormals, m_verticesNormalsTmp, sizeof(ZobVector3) * m_nbNormals);
+	memcpy(m_trianglesNormals, m_trianglesNormalsTmp, sizeof(ZobVector3) * m_nbFaces);
+	memcpy(m_projectedVertices, m_projectedVerticesTmp, sizeof(ZobVector3) * m_nbVertices);
 
 	if (engine->DrawGizmos())// && engine->ShowBBoxes() )
 	{
@@ -532,7 +532,7 @@ void Mesh::QueueForDrawing(const Matrix4x4& modelMatrix, const Matrix4x4& rotati
 	BufferData* bData = engine->GetBufferData();
 	float znear = bData->zNear;
 	float zfar = bData->zFar;
-	Vector3 n;
+	ZobVector3 n;
 	for (int i = 0; i < m_nbFaces; i++)
 	{
 		Triangle* t = &m_triangles[i];
@@ -556,7 +556,7 @@ void Mesh::QueueForDrawing(const Matrix4x4& modelMatrix, const Matrix4x4& rotati
 				static bool bShowNormal = true;
 				if (engine->ShowNormals())
 				{
-					Vector3 v = t->na;
+					ZobVector3 v = t->na;
 					v = v + t->va;
 					engine->QueueLine(camera, t->va, &v, 0xFF00FF, false);
 					v = t->nb;
@@ -683,7 +683,7 @@ void Mesh::CreateTriangles(const std::vector<std::string>* line, std::vector<Tri
 		float nx = (t.na->x + t.nb->x + t.nc->x) / 3.0f;
 		float ny = (t.na->y + t.nb->y + t.nc->y) / 3.0f;
 		float nz = (t.na->z + t.nb->z + t.nc->z) / 3.0f;
-		m_trianglesNormals[tArrayIdx] = Vector3(nx, ny, nz);
+		m_trianglesNormals[tArrayIdx] = ZobVector3(nx, ny, nz);
 		t.n = &m_trianglesNormals[tArrayIdx];
 		tList->push_back(t);
 		tArrayIdx++;	

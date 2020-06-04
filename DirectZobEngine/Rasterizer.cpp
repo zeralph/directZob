@@ -3,7 +3,7 @@
 #include "Light.h"
 #include "Texture.h"
 
-static Vector3 sFog = Vector3(1.0f, 1.0f, 0.95f);
+static ZobVector3 sFog = ZobVector3(1.0f, 1.0f, 0.95f);
 static float fogDecal = -0.6f;
 
 Rasterizer::Rasterizer(uint width, uint startHeight, uint endHeight, BufferData* bufferData)
@@ -61,8 +61,8 @@ void Rasterizer::Render()
 	m_tick = clock();
 	if (DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera())
 	{
-		const Vector3 camDir = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera()->GetForward();
-		m_camDir = Vector3(-camDir.x, -camDir.y, -camDir.z);
+		const ZobVector3 camDir = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera()->GetForward();
+		m_camDir = ZobVector3(-camDir.x, -camDir.y, -camDir.z);
 		//warning : invert lightdir ! https://fr.wikipedia.org/wiki/Ombrage_de_Phong
 		for (int i = 0; i < m_lines->size(); i++)
 		{
@@ -151,12 +151,12 @@ void Rasterizer::DrawLine(const Line3D* l) const
 	}
 }
 
-inline Vector3 Rasterizer::ComputeLightingAtPoint(const Vector3* position, const Vector3* normal, RenderOptions::eLightMode lighting) const
+inline ZobVector3 Rasterizer::ComputeLightingAtPoint(const ZobVector3* position, const ZobVector3* normal, RenderOptions::eLightMode lighting) const
 {
-	Vector3 outColor = Vector3(0, 0, 0);
+	ZobVector3 outColor = ZobVector3(0, 0, 0);
 	if (m_lights)
 	{
-		Vector3 lightDir = Vector3(0, 0, 0);
+		ZobVector3 lightDir = ZobVector3(0, 0, 0);
 		float lightPower, cl, sl = 0.0f;
 		for (std::vector<Light*>::const_iterator iter = m_lights->begin(); iter != m_lights->end(); iter++)
 		{
@@ -180,8 +180,8 @@ inline Vector3 Rasterizer::ComputeLightingAtPoint(const Vector3* position, const
 					lightDir = position - l->GetWorldPosition();// tpos;
 					lightPower = 1.0f - (lightDir.sqrtLength() / l->GetFallOffDistance());
 					lightDir.Normalize();
-					Vector3 fw = l->GetForward();
-					float f = Vector3::Dot(&fw, &lightDir);
+					ZobVector3 fw = l->GetForward();
+					float f = ZobVector3::Dot(&fw, &lightDir);
 					/*
 					float r = l->GetSpotAngle() / 2.0f;
 					r = r * M_PI / 180.0f;
@@ -222,13 +222,13 @@ inline Vector3 Rasterizer::ComputeLightingAtPoint(const Vector3* position, const
 
 void Rasterizer::DrawTriangle(const Triangle* t) const
 {
-	/*Vector2 v1 = Vector2((int)t->va->x, (int)t->va->y);
-	Vector2 v2 = Vector2((int)t->vb->x, (int)t->vb->y);
-	Vector2 v3 = Vector2((int)t->vc->x, (int)t->vc->y);*/
+	/*ZobVector2 v1 = ZobVector2((int)t->va->x, (int)t->va->y);
+	ZobVector2 v2 = ZobVector2((int)t->vb->x, (int)t->vb->y);
+	ZobVector2 v3 = ZobVector2((int)t->vc->x, (int)t->vc->y);*/
 
-	Vector2 v1 = Vector2((int)t->pa->x, (int)t->pa->y);
-	Vector2 v2 = Vector2((int)t->pb->x, (int)t->pb->y);
-	Vector2 v3 = Vector2((int)t->pc->x, (int)t->pc->y);
+	ZobVector2 v1 = ZobVector2((int)t->pa->x, (int)t->pa->y);
+	ZobVector2 v2 = ZobVector2((int)t->pb->x, (int)t->pb->y);
+	ZobVector2 v3 = ZobVector2((int)t->pc->x, (int)t->pc->y);
 
 	/* at first sort the three vertices by y-coordinate ascending so v1 is the topmost vertice */
 	sortVerticesAscendingByY(&v1, &v2, &v3);
@@ -236,11 +236,11 @@ void Rasterizer::DrawTriangle(const Triangle* t) const
 	//vertex lighting computing
 	if(true/*vertex lighting*/)
 	{
-		Vector3 la, lb, lc = Vector3(0, 0, 0);
+		ZobVector3 la, lb, lc = ZobVector3(0, 0, 0);
 		
 	}
 
-	Vector3 la, lb, lc = Vector3(0, 0, 0);
+	ZobVector3 la, lb, lc = ZobVector3(0, 0, 0);
 	if (m_lightingPrecision == eLightingPrecision_vertex)
 	{
 		la = ComputeLightingAtPoint(t->va, t->na, t->options->lightMode);
@@ -262,17 +262,17 @@ void Rasterizer::DrawTriangle(const Triangle* t) const
 	else
 	{
 		/* general case - split the triangle in a topflat and bottom-flat one */
-		Vector2 v4 = Vector2((int)(v1.x + ((float)(v2.y - v1.y) / (float)(v3.y - v1.y)) * (v3.x - v1.x)), v2.y);
+		ZobVector2 v4 = ZobVector2((int)(v1.x + ((float)(v2.y - v1.y) / (float)(v3.y - v1.y)) * (v3.x - v1.x)), v2.y);
 		FillBottomFlatTriangle2(&v1, &v2, &v4, t, &la, &lb, &lc);
 		FillTopFlatTriangle2(&v2, &v4, &v3, t, &la, &lb, &lc);
 	}
 //	m_drawnTriangles++;
 }
 
-void Rasterizer::FillBottomFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, const Triangle* t, const Vector3* la, const Vector3* lb, const Vector3* lc) const
+void Rasterizer::FillBottomFlatTriangle2(ZobVector2* v1, ZobVector2* v2, ZobVector2* v3, const Triangle* t, const ZobVector3* la, const ZobVector3* lb, const ZobVector3* lc) const
 {
 	uint* buffer = m_bufferData->buffer;
-	Vector3 p;
+	ZobVector3 p;
 	float invslope1 = (v2->x - v1->x) / (v2->y - v1->y);
 	float invslope2 = (v3->x - v1->x) / (v3->y - v1->y);
 	float curx1 = v1->x;
@@ -321,10 +321,10 @@ void Rasterizer::FillBottomFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, 
 	}
 }
 
-void Rasterizer::FillTopFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, const Triangle* t, const Vector3* la, const Vector3* lb, const Vector3* lc) const
+void Rasterizer::FillTopFlatTriangle2(ZobVector2* v1, ZobVector2* v2, ZobVector2* v3, const Triangle* t, const ZobVector3* la, const ZobVector3* lb, const ZobVector3* lc) const
 {
 	uint* buffer = m_bufferData->buffer;
-	Vector3 p;
+	ZobVector3 p;
 	float invslope1 = (v3->x - v1->x) / (v3->y - v1->y);
 	float invslope2 = (v3->x - v2->x) / (v3->y - v2->y);
 	float curx1 = v3->x;
@@ -372,12 +372,12 @@ void Rasterizer::FillTopFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, con
 	}
 }
 
-inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* t, const Vector3* la, const Vector3* lb, const Vector3* lc) const
+inline const void Rasterizer::FillBufferPixel(const ZobVector3* p, const Triangle* t, const ZobVector3* la, const ZobVector3* lb, const ZobVector3* lc) const
 {
 	float w0, w1, w2, su, tu, cl, sl, r, g, b, a, z, zRatio, fr, fg, fb, lightPower;
 	float texPixelData[4];
 	int c, k;
-	Vector3 normal, lightDir;
+	ZobVector3 normal, lightDir;
 
 	k = p->y * m_width + p->x;
 
@@ -397,7 +397,7 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 		}
 	}
 
-	Vector3 tpos = Vector3(	(t->va->x * w0 + t->vb->x * w1 + t->vc->x * w2),
+	ZobVector3 tpos = ZobVector3(	(t->va->x * w0 + t->vb->x * w1 + t->vc->x * w2),
 							(t->va->y * w0 + t->vb->y * w1 + t->vc->y * w2),
 							(t->va->z * w0 + t->vb->z * w1 + t->vc->z * w2));
 
@@ -430,7 +430,7 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 		}
 		else
 		{
-			normal = Vector3((w0 * t->na->x + w1 * t->nb->x + w2 * t->nc->x),
+			normal = ZobVector3((w0 * t->na->x + w1 * t->nb->x + w2 * t->nc->x),
 				(w0 * t->na->y + w1 * t->nb->y + w2 * t->nc->y),
 				(w0 * t->na->z + w1 * t->nb->z + w2 * t->nc->z)); 
 			//normal.Mul(-1.0f);
@@ -493,7 +493,7 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 		}
 		else if(m_lightingPrecision == eLightingPrecision_pixel)
 		{
-			Vector3 l = ComputeLightingAtPoint(&tpos, &normal, lighting);
+			ZobVector3 l = ComputeLightingAtPoint(&tpos, &normal, lighting);
 			fr = l.x * r;
 			fg = l.y * g;
 			fb = l.z * b;
@@ -532,7 +532,7 @@ inline const void Rasterizer::FillBufferPixel(const Vector3* p, const Triangle* 
 	}
 }
 
-void Rasterizer::sortVerticesAscendingByY(Vector2* v1, Vector2* v2, Vector2* v3) const
+void Rasterizer::sortVerticesAscendingByY(ZobVector2* v1, ZobVector2* v2, ZobVector2* v3) const
 {
 	if (v3->y < v2->y)
 	{
@@ -542,7 +542,7 @@ void Rasterizer::sortVerticesAscendingByY(Vector2* v1, Vector2* v2, Vector2* v3)
 	if (v3->y < v2->y) std::swap(*v2, *v3);
 }
 
-void Rasterizer::sortVerticesAscendingByY(Vector2* v1, Vector2* v2, Vector2* v3, Vector2* uv1, Vector2* uv2, Vector2* uv3) const
+void Rasterizer::sortVerticesAscendingByY(ZobVector2* v1, ZobVector2* v2, ZobVector2* v3, ZobVector2* uv1, ZobVector2* uv2, ZobVector2* uv3) const
 {
 	if (v3->y < v2->y)
 	{

@@ -3,7 +3,7 @@
 #ifdef __clang__
 	#pragma clang diagnostic ignored "-Wpragma-pack"
 #endif
-#include "Vector3.h"
+#include "ZobVector3.h"
 #include <stddef.h>
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
@@ -114,7 +114,7 @@ public:
 		};
 		bool bTransparency = false;
 		bool bColorize = false;
-		Vector3 colorization = Vector3();
+		ZobVector3 colorization = ZobVector3();
 		bool zBuffered = true;
 		eLightMode lightMode = eLightMode::eLightMode_phong;
 		eCullMode cullMode = eCullMode_ClockwiseFace;
@@ -129,5 +129,5 @@ typedef struct DirectZobType::BufferData BufferData;
 typedef struct DirectZobType::Line3D Line3D;
 typedef struct DirectZobType::RenderOptions RenderOptions;
 
-static Vector3 Vector2Color(Vector3* v) { return Vector3((int)(v->x * 255.0f), (int)(v->y * 255.0f), (int)(v->z * 255.0f)); };
-static Vector3 Color2Vector(Vector3* v) { return Vector3(v->x / 255.0f, v->y / 255.0f, v->z / 255.0f); };
+static ZobVector3 Vector2Color(ZobVector3* v) { return ZobVector3((int)(v->x * 255.0f), (int)(v->y * 255.0f), (int)(v->z * 255.0f)); };
+static ZobVector3 Color2Vector(ZobVector3* v) { return ZobVector3(v->x / 255.0f, v->y / 255.0f, v->z / 255.0f); };

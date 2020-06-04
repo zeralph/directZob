@@ -1,5 +1,5 @@
 #pragma once
-#include "Vector3.h"
+#include "ZobVector3.h"
 #include "Sprite.h"
 #include "ZobObject.h"
 
@@ -17,7 +17,7 @@ public:
 
 	void				DrawGizmos(const Camera* camera, Core::Engine* engine) override;
 	TiXmlNode*			SaveUnderNode(TiXmlNode* node) override;
-	void				Update(const Matrix4x4& parentMatrix, const Matrix4x4& parentRSMatrix) override;
+	void				Update(const ZobMatrix4x4& parentMatrix, const ZobMatrix4x4& parentRSMatrix) override;
 	void				UpdateMesh(const Camera* camera, Core::Engine* engine) override;
 	void				SetTexture(std::string& path);
 private:

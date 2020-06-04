@@ -285,8 +285,8 @@ float Engine::WaitForRasterizersEnd()
 void Engine::DrawGrid(const Camera *camera)
 {
 	int gridSize = 50;
-	Vector3 a;
-	Vector3 b;
+	ZobVector3 a;
+	ZobVector3 b;
 	bool bold;
 	for (int i = -gridSize; i <= gridSize; i += 1.0f)
 	{
@@ -323,17 +323,17 @@ void Engine::DrawGrid(const Camera *camera)
 		}
 	}
 
-	QueueLine(camera, &Vector3::Vector3Zero, &Vector3::Vector3X, 0xFF0000, true);
-	QueueLine(camera, &Vector3::Vector3Zero, &Vector3::Vector3Y, 0x00FF00, true);
-	QueueLine(camera, &Vector3::Vector3Zero, &Vector3::Vector3Z, 0x0000FF, true);
+	QueueLine(camera, &ZobVector3::Vector3Zero, &ZobVector3::Vector3X, 0xFF0000, true);
+	QueueLine(camera, &ZobVector3::Vector3Zero, &ZobVector3::Vector3Y, 0x00FF00, true);
+	QueueLine(camera, &ZobVector3::Vector3Zero, &ZobVector3::Vector3Z, 0x0000FF, true);
 }
 
-void Engine::ClipSegmentToPlane(Vector3 &s0, Vector3 &s1, Vector3 &pp, Vector3 &pn)
+void Engine::ClipSegmentToPlane(ZobVector3 &s0, ZobVector3 &s1, ZobVector3 &pp, ZobVector3 &pn)
 {
-	Vector3 u = s1 - s0;
-	Vector3 w = s0 - pp;
-	float D = Vector3::Dot(&pn, &u);
-	float N = -Vector3::Dot(&pn, &w);
+	ZobVector3 u = s1 - s0;
+	ZobVector3 w = s0 - pp;
+	float D = ZobVector3::Dot(&pn, &u);
+	float N = -ZobVector3::Dot(&pn, &w);
 	if (fabs(D) < 0.001f)
 	{
 		return;
@@ -347,38 +347,38 @@ void Engine::ClipSegmentToPlane(Vector3 &s0, Vector3 &s1, Vector3 &pp, Vector3 &
 	s1 = s0 + u;
 }
 
-void Engine::QueueEllipse(const Camera* camera, const Vector3* center, const Vector3* vectorUp, const float r1, const float r2, const uint c, bool bold)
+void Engine::QueueEllipse(const Camera* camera, const ZobVector3* center, const ZobVector3* vectorUp, const float r1, const float r2, const uint c, bool bold)
 {
 	int segs = 20;
 	float r = 0.0f;
 	float rot = (2.0f * M_PI) / (float)segs;
-	Vector3 a;
-	Matrix4x4 m;
-	Vector3 up = vectorUp;
-	Vector3 baseUp = Vector3(0, 1, 0);
-	Vector3 left = Vector3(1, 0, 0);
-	Vector3 forward = Vector3(0, 0, 1);
+	ZobVector3 a;
+	ZobMatrix4x4 m;
+	ZobVector3 up = vectorUp;
+	ZobVector3 baseUp = ZobVector3(0, 1, 0);
+	ZobVector3 left = ZobVector3(1, 0, 0);
+	ZobVector3 forward = ZobVector3(0, 0, 1);
 	if (up != baseUp)
 	{
-		left = Vector3::Cross(&up, &baseUp);
+		left = ZobVector3::Cross(&up, &baseUp);
 	}
 	//if (up != &left)
 	{
-		forward = Vector3::Cross(&left, &up);
+		forward = ZobVector3::Cross(&left, &up);
 	}
 	left.Normalize();
 	up.Normalize();
 	forward.Normalize();
 	m.FromVectors(left, up, forward);
-	a = Vector3(r1 * cos(r), 0, r2 * sin(r));
+	a = ZobVector3(r1 * cos(r), 0, r2 * sin(r));
 	m.Mul(&a);
 	a = a + center;
-	Vector3 b = a;
+	ZobVector3 b = a;
 	for(int i=1; i<=segs; i++)
 	{
 		r = rot * i;
 		b = a;
-		a = Vector3(r1 * cos(r), 0, r2 * sin(r));
+		a = ZobVector3(r1 * cos(r), 0, r2 * sin(r));
 		m.Mul(&a);
 		a = a + center;
 		QueueLine(camera, &a, &b, c, bold);
@@ -386,12 +386,12 @@ void Engine::QueueEllipse(const Camera* camera, const Vector3* center, const Vec
 
 }
 
-void Engine::QueueLine(const Camera *camera, const Vector3 *v1, const Vector3 *v2, const uint c, bool bold)
+void Engine::QueueLine(const Camera *camera, const ZobVector3 *v1, const ZobVector3 *v2, const uint c, bool bold)
 {
 	if (m_started)
 	{
-		Vector3 a = Vector3(v1);
-		Vector3 b = Vector3(v2);
+		ZobVector3 a = ZobVector3(v1);
+		ZobVector3 b = ZobVector3(v2);
 		float za, zb = 0.0f;
 		//camera->GetViewMatrix()->Mul(&a);
 		camera->ToViewSpace(&a);
@@ -408,8 +408,8 @@ void Engine::QueueLine(const Camera *camera, const Vector3 *v1, const Vector3 *v
 		}
 		else if (a.z < m_bufferData.zNear || b.z < m_bufferData.zNear)
 		{
-			Vector3 pp = Vector3(0, 0, m_bufferData.zNear);
-			Vector3 pn = Vector3(0, 0, 1);
+			ZobVector3 pp = ZobVector3(0, 0, m_bufferData.zNear);
+			ZobVector3 pn = ZobVector3(0, 0, 1);
 			if (a.z < b.z)
 			{
 				ClipSegmentToPlane(b, a, pp, pn);
@@ -482,7 +482,7 @@ void Engine::CopyBuffer(uint *source, uint *dest)
 	}
 }
 
-bool Engine::ClipSegment(Vector3 *a, Vector3 *b)
+bool Engine::ClipSegment(ZobVector3 *a, ZobVector3 *b)
 {
 	if (a->w < m_zNear && b->w < m_zNear)
 	{
@@ -563,7 +563,7 @@ void Engine::DrawHorizontalLine(const float x1, const float x2, const float y, c
 		}
 	}
 }
-bool Engine::GetProjectedCoords(Vector3* worldPos)
+bool Engine::GetProjectedCoords(ZobVector3* worldPos)
 {
 	Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
 	if (c)
@@ -574,12 +574,12 @@ bool Engine::GetProjectedCoords(Vector3* worldPos)
 	return false;
 }
 
-float Engine::GetDistanceToCamera(Vector3* worldPos)
+float Engine::GetDistanceToCamera(ZobVector3* worldPos)
 {
 	Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
 	if (c)
 	{
-		Vector3 v = c->GetTransform() - worldPos;
+		ZobVector3 v = c->GetTransform() - worldPos;
 		return v.sqrtLength();
 	}
 	return 0.0f;

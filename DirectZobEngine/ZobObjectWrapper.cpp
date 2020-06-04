@@ -96,19 +96,19 @@ namespace CLI
 
 	void ZobObjectWrapper::SetTransform(ManagedVector3^ p)
 	{
-		Vector3 v = p->ToVector3();
+		ZobVector3 v = p->ToVector3();
 		m_Instance->SetTranslation(v.x, v.y, v.z);
 	}
 
 	void ZobObjectWrapper::SetRotation(ManagedVector3^ p)
 	{
-		Vector3 v = p->ToVector3();
+		ZobVector3 v = p->ToVector3();
 		m_Instance->SetRotation(v.x, v.y, v.z);
 	}
 
 	void ZobObjectWrapper::SetScale(ManagedVector3^ p)
 	{
-		Vector3 v = p->ToVector3();
+		ZobVector3 v = p->ToVector3();
 		m_Instance->SetScale(v.x, v.y, v.z);
 	}
 

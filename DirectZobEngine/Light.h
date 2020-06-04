@@ -1,5 +1,5 @@
 #pragma once
-#include "Vector3.h"
+#include "ZobVector3.h"
 #include "ZobObject.h"
 
 class Light : public ZobObject
@@ -15,14 +15,14 @@ public:
 
 	};
 
-	Light(std::string& name, eLightType type, Vector3 color, float intensity, float distance, ZobObject* parent);
+	Light(std::string& name, eLightType type, ZobVector3 color, float intensity, float distance, ZobObject* parent);
 	Light(TiXmlElement* node, ZobObject* parent);
 	~Light() override;
 
 	void				DrawGizmos(const Camera* camera, Core::Engine* engine) override;
 	TiXmlNode*			SaveUnderNode(TiXmlNode* node) override;
 
-	const Vector3*		GetColor() const { return &m_color; }
+	const ZobVector3*		GetColor() const { return &m_color; }
 	const float			GetFallOffDistance() const { return m_distance; }
 	const float			GetIntensity() const { return m_intensity; }
 	const float			GetSpotAngle() const { return m_spotAngle; }
@@ -30,7 +30,7 @@ public:
 	const eLightType	GetType() const { return m_lightType; }
 	inline bool			IsActive() const { return m_active; }
 
-	void				SetColor(const Vector3* v) { m_color = v; }
+	void				SetColor(const ZobVector3* v) { m_color = v; }
 	void				SetFallOffDistance(float f) { m_distance = f; }
 	void				SetIntensity(float f ) { m_intensity=f; }
 	void				SetType(eLightType t) { m_lightType=t; }
@@ -45,7 +45,7 @@ private:
 	void				drawPointGizmos(const Camera* camera, Core::Engine* engine);
 	void				drawDirectionalGizmos(const Camera* camera, Core::Engine* engine);
 
-	Vector3 m_color;
+	ZobVector3 m_color;
 	float m_intensity;
 	float m_distance;
 	float m_spotAngle;

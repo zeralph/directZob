@@ -1,10 +1,10 @@
 #pragma once
 
 #include "Types.h"
-#include "Vector2.h"
-#include "Vector3.h"
+#include "ZobVector2.h"
+#include "ZobVector3.h"
 #include "Material.h"
-#include "Matrix4x4.h"
+#include "ZobMatrix4x4.h"
 #include "Triangle.h"
 #include <thread> 
 
@@ -36,13 +36,13 @@ public:
 
 private:
 
-	void 				FillTopFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, const Triangle* t, const Vector3* la, const Vector3* lb, const Vector3* lc) const;
-	void 				FillBottomFlatTriangle2(Vector2* v1, Vector2* v2, Vector2* v3, const Triangle* t, const Vector3* la, const Vector3* lb, const Vector3* lc) const;
-	inline const void 	FillBufferPixel(const Vector3* p, const Triangle* t, const Vector3* la, const Vector3* lb, const Vector3* lc) const;
-	inline Vector3 		ComputeLightingAtPoint(const Vector3* position, const Vector3* normal, RenderOptions::eLightMode lighting) const;
-	void 				sortVerticesAscendingByY(Vector2* v1, Vector2* v2, Vector2* v3) const ;
-	void 				sortVerticesAscendingByY(Vector2* v1, Vector2* v2, Vector2* v3, Vector2* uv1, Vector2* uv2, Vector2* uv3) const;
-	inline float 		edgeFunction(const Vector3* a, const Vector3* b, const Vector3* c) const { return (c->x - a->x) * (b->y - a->y) - (c->y - a->y) * (b->x - a->x); }
+	void 				FillTopFlatTriangle2(ZobVector2* v1, ZobVector2* v2, ZobVector2* v3, const Triangle* t, const ZobVector3* la, const ZobVector3* lb, const ZobVector3* lc) const;
+	void 				FillBottomFlatTriangle2(ZobVector2* v1, ZobVector2* v2, ZobVector2* v3, const Triangle* t, const ZobVector3* la, const ZobVector3* lb, const ZobVector3* lc) const;
+	inline const void 	FillBufferPixel(const ZobVector3* p, const Triangle* t, const ZobVector3* la, const ZobVector3* lb, const ZobVector3* lc) const;
+	inline ZobVector3 		ComputeLightingAtPoint(const ZobVector3* position, const ZobVector3* normal, RenderOptions::eLightMode lighting) const;
+	void 				sortVerticesAscendingByY(ZobVector2* v1, ZobVector2* v2, ZobVector2* v3) const ;
+	void 				sortVerticesAscendingByY(ZobVector2* v1, ZobVector2* v2, ZobVector2* v3, ZobVector2* uv1, ZobVector2* uv2, ZobVector2* uv3) const;
+	inline float 		edgeFunction(const ZobVector3* a, const ZobVector3* b, const ZobVector3* c) const { return (c->x - a->x) * (b->y - a->y) - (c->y - a->y) * (b->x - a->x); }
 	inline float 		clamp2(float x, const float min, const float max) const { if (x < min) x = min; if (x > max) x = max; return x; }
 	inline const bool 	RenderLine(int line) const 
 	{ 
@@ -55,16 +55,16 @@ private:
 		return clamp2(ambientIntensity, 0.0f, 1.0f);
 	};
 
-	inline const float 	computeLighting(const Vector3* normal, const Vector3* light) const
+	inline const float 	computeLighting(const ZobVector3* normal, const ZobVector3* light) const
 	{
-		return clamp2(-Vector3::Dot(normal, light), 0.0f, 1.0f);
+		return clamp2(-ZobVector3::Dot(normal, light), 0.0f, 1.0f);
 	};
 
-	inline const float 	computeSpecular(const Vector3* normal, const Vector3* light, const Vector3* c, const float lightIntensity, const float specularIntensity) const
+	inline const float 	computeSpecular(const ZobVector3* normal, const ZobVector3* light, const ZobVector3* c, const float lightIntensity, const float specularIntensity) const
 	{
-		Vector3 r = Vector3(normal->x - light->x, normal->y - light->y, normal->z - light->z);
+		ZobVector3 r = ZobVector3(normal->x - light->x, normal->y - light->y, normal->z - light->z);
 		r.Mul(2.0f * lightIntensity);
-		float sl = Vector3::Dot(&r, &m_camDir);
+		float sl = ZobVector3::Dot(&r, &m_camDir);
 		sl = pow(lightIntensity, specularIntensity) * sl;
 		sl = clamp2(sl, 0.0f, 1.0f);
 		return sl;
@@ -73,13 +73,13 @@ private:
 	const std::vector<Light*>* m_lights;
 	const std::vector<Line3D>* m_lines;
 	const Triangle* m_triangles;
-	const Vector3* m_ambientColor;
-	const Vector3* m_fogColor;
+	const ZobVector3* m_ambientColor;
+	const ZobVector3* m_fogColor;
 	float m_fogDistance;
 	float m_fogDensity;
 	eFogType m_fogType;
 	BufferData* m_bufferData;
-	Vector3 m_camDir;
+	ZobVector3 m_camDir;
 	uint m_nbTriangles;
 	//std::thread m_thread;
 	uint m_startHeight;

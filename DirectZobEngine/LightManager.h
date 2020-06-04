@@ -1,7 +1,7 @@
 #pragma once
 #include "Types.h"
 #include "Light.h"
-#include "Vector3.h"
+#include "ZobVector3.h"
 #include <string>
 #include <vector>
 
@@ -12,19 +12,19 @@ public:
 	LightManager();
 	~LightManager();
 
-	void						Setup(Vector3* fogColor, Vector3* ambientColor, Vector3* clearColor, float fogDistance, float fogDensity, eFogType fogType);
+	void						Setup(ZobVector3* fogColor, ZobVector3* ambientColor, ZobVector3* clearColor, float fogDistance, float fogDensity, eFogType fogType);
 	void						ReInitGlobalSettings();
 	void						AddLight(Light* l);
 	Light*						CreateLight(Light::eLightType type);
-	Light*						CreateLight(std::string& name, Light::eLightType type, Vector3 position, Vector3 color, float intensity, float distance, ZobObject* parent);
+	Light*						CreateLight(std::string& name, Light::eLightType type, ZobVector3 position, ZobVector3 color, float intensity, float distance, ZobObject* parent);
 	const std::vector<Light*>*  GetActiveLights() const;
 	Light*						GetLight(const std::string& name) const;
-	const Vector3*				GetAmbientColor() const { return &m_ambientColor; };
-	const Vector3*				GetFogColor() const { return &m_fogColor; };
-	const Vector3*				GetClearColor() const { return &m_clearColor; };
-	void						SetAmbientColor(Vector3* c) { m_ambientColor = c; };
-	void						SetFogColor(Vector3* c) { m_fogColor = c; };
-	void						SetClearColor(Vector3* c) { m_clearColor = c; };
+	const ZobVector3*				GetAmbientColor() const { return &m_ambientColor; };
+	const ZobVector3*				GetFogColor() const { return &m_fogColor; };
+	const ZobVector3*				GetClearColor() const { return &m_clearColor; };
+	void						SetAmbientColor(ZobVector3* c) { m_ambientColor = c; };
+	void						SetFogColor(ZobVector3* c) { m_fogColor = c; };
+	void						SetClearColor(ZobVector3* c) { m_clearColor = c; };
 	void						SetFogDistance(float f) { m_fogDistance = f; };
 	void						SetAmbientColorIntensity(float f) { m_ambientColorIntensity = f; };
 	void						SetFogDensity(float f) { m_fogDensity = f; }
@@ -42,10 +42,10 @@ public:
 private:
 	eFogType m_fogType;
 	std::vector<Light*> m_lights;
-	Vector3 m_ambientColor;
-	Vector3 m_clearColor;
+	ZobVector3 m_ambientColor;
+	ZobVector3 m_clearColor;
 	float m_ambientColorIntensity;
-	Vector3 m_fogColor;
+	ZobVector3 m_fogColor;
 	float m_fogDistance;
 	float m_fogDensity;
 	bool m_lightingEnabled = true;

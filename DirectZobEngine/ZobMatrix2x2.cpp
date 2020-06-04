@@ -1,26 +1,26 @@
-#include "Matrix2x2.h"
+#include "ZobMatrix2x2.h"
 #include <math.h>
 #include <stdio.h>
 #include <string.h>
 
-static Matrix2x2 tmp;
-static Matrix2x2 tmpMul;
+static ZobMatrix2x2 tmp;
+static ZobMatrix2x2 tmpMul;
 static float identityArray[9] = {1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f};
-Matrix2x2::Matrix2x2()
+ZobMatrix2x2::ZobMatrix2x2()
 {
 	Identity();
 }
 
-Matrix2x2::Matrix2x2(const Matrix2x2* m)
+ZobMatrix2x2::ZobMatrix2x2(const ZobMatrix2x2* m)
 {
 	CopyFrom(m);
 }
 
-Matrix2x2::~Matrix2x2()
+ZobMatrix2x2::~ZobMatrix2x2()
 {
 }
 
-void Matrix2x2::Mul(const Matrix2x2* m)
+void ZobMatrix2x2::Mul(const ZobMatrix2x2* m)
 {
 	//tmpMul.Identity();
 	tmpMul.m_data[0][0] = (m_data[0][0] * m->m_data[0][0]) +
@@ -64,17 +64,17 @@ void Matrix2x2::Mul(const Matrix2x2* m)
 	memcpy(&m_data, &tmpMul.m_data, sizeof(tmpMul.m_data));
 }
 
-void Matrix2x2::Identity()
+void ZobMatrix2x2::Identity()
 {
 	memcpy(&m_data, &identityArray, sizeof(identityArray));
 }
 
-void Matrix2x2::CopyFrom(const Matrix2x2* m)
+void ZobMatrix2x2::CopyFrom(const ZobMatrix2x2* m)
 {
 	memcpy(&m_data, &m->m_data, sizeof(m_data));
 }
 
-void Matrix2x2::Mul(Vector2 * v) const
+void ZobMatrix2x2::Mul(ZobVector2 * v) const
 {
 	float fx = m_data[0][0] * v->x + m_data[0][1] * v->y + m_data[0][2] * v->w;
 	float fy = m_data[1][0] * v->x + m_data[1][1] * v->y + m_data[1][2] * v->w;
@@ -84,7 +84,7 @@ void Matrix2x2::Mul(Vector2 * v) const
 	v->w = fw;
 }
 
-void Matrix2x2::SetShear(const float x, const float y)
+void ZobMatrix2x2::SetShear(const float x, const float y)
 {
 	tmp.Identity();
 	tmp.m_data[0][1] = y;
@@ -92,7 +92,7 @@ void Matrix2x2::SetShear(const float x, const float y)
 	Mul(&tmp);
 }
 
-void Matrix2x2::SetScale(const float x, const float y)
+void ZobMatrix2x2::SetScale(const float x, const float y)
 {
 	tmp.Identity();
 	tmp.m_data[0][0] = x;
@@ -100,7 +100,7 @@ void Matrix2x2::SetScale(const float x, const float y)
 	Mul(&tmp);
 }
 
-void Matrix2x2::SetTranslation(const float x, const float y)
+void ZobMatrix2x2::SetTranslation(const float x, const float y)
 {
 	tmp.Identity();
 	tmp.m_data[0][2] = x;
@@ -108,7 +108,7 @@ void Matrix2x2::SetTranslation(const float x, const float y)
 	Mul(&tmp);
 }
 
-void Matrix2x2::SetRotation(const float degrees)
+void ZobMatrix2x2::SetRotation(const float degrees)
 {
 	tmp.Identity();
 	float r = degrees * M_PI / 180.0;

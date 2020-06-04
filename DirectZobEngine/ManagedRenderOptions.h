@@ -12,7 +12,7 @@ namespace CLI {
 		}
 
 		void SetTransparency(bool b) { m_renderOptions->bTransparency = b; }
-		void SetColorization(int r, int g, int b) { m_renderOptions->colorization = Vector3((float)r / 255.0f, (float)g / 255.0f, (float)b / 255.0f); };
+		void SetColorization(int r, int g, int b) { m_renderOptions->colorization = ZobVector3((float)r / 255.0f, (float)g / 255.0f, (float)b / 255.0f); };
 		void EnableColorization(bool b) { m_renderOptions->bColorize = b; };
 		void SetLightMode(int i) {m_renderOptions->lightMode = (RenderOptions::eLightMode)i;};
 		void ZetZBuffer(bool b) { m_renderOptions->zBuffered = b; };

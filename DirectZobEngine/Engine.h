@@ -7,11 +7,11 @@
 #include "Triangle.h"
 #include <string>
 #include <ctime>
-#include "Matrix2x2.h"
-#include "Matrix4x4.h"
+#include "ZobMatrix2x2.h"
+#include "ZobMatrix4x4.h"
 #include <stdarg.h>
-#include "Vector2.h"
-#include "Vector3.h"
+#include "ZobVector2.h"
+#include "ZobVector3.h"
 #include "Material.h"
 //#include "Camera.h"
 #include "Events.h"
@@ -40,9 +40,9 @@ namespace Core
 
 		void											ToggleZbufferOutput() { m_showZBuffer = !m_showZBuffer; }
 
-		void											QueueLine(const Camera* camera, const Vector3* v1, const Vector3* v2, const uint c, bool bold);
-		void											QueueEllipse(const Camera* camera, const Vector3* center, const Vector3* vectorUp, const float r1, const float r2, const uint c, bool bold);
-		bool											ClipSegment(Vector3* a, Vector3* b);
+		void											QueueLine(const Camera* camera, const ZobVector3* v1, const ZobVector3* v2, const uint c, bool bold);
+		void											QueueEllipse(const Camera* camera, const ZobVector3* center, const ZobVector3* vectorUp, const float r1, const float r2, const uint c, bool bold);
+		bool											ClipSegment(ZobVector3* a, ZobVector3* b);
 		int												StartDrawingScene();
 		int												SetDisplayedBuffer();
 		inline ulong									GetCurrentFrame() { return m_currentFrame; }
@@ -73,13 +73,13 @@ namespace Core
 		float											WaitForRasterizersEnd();
 		void											ClearRenderQueues();
 		void											Resize(int width, int height);
-		bool											GetProjectedCoords(Vector3* worldPos);
-		float											GetDistanceToCamera(Vector3* worldPos);
+		bool											GetProjectedCoords(ZobVector3* worldPos);
+		float											GetDistanceToCamera(ZobVector3* worldPos);
 
 	private:	
 		inline float									clamp2(float x, float min, float max) const { if (x < min) x = min; if (x > max) x = max; return x; }
 		void											DrawHorizontalLine(const float x1, const float x2, const float y, const uint color);
-		void											ClipSegmentToPlane(Vector3 &s0, Vector3 &s1, Vector3 &pp, Vector3 &pn);
+		void											ClipSegmentToPlane(ZobVector3 &s0, ZobVector3 &s1, ZobVector3 &pp, ZobVector3 &pn);
 
 		Events* m_events;
 		Triangle** m_rasterTriangleQueues;

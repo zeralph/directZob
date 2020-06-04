@@ -32,9 +32,9 @@ ZobObject::ZobObject(Type t, SubType s, const std::string& name, Mesh* mesh, Zob
 	}
 	m_markedForDeletion = false;
 	m_mesh = mesh;
-	m_translation = Vector3(0, 0, 0);
-	m_rotation = Vector3(0, 0, 0);
-	m_scale = Vector3(1, 1, 1);
+	m_translation = ZobVector3(0, 0, 0);
+	m_rotation = ZobVector3(0, 0, 0);
+	m_scale = ZobVector3(1, 1, 1);
 	m_children.clear();
 	SetParent(m_parent);
 	if (m_parent != NULL)
@@ -51,7 +51,7 @@ ZobObject::ZobObject(Type t, SubType s, TiXmlElement* node, Mesh* mesh, ZobObjec
 	:ZOBGUID(t, s)
 {
 	sObjectNumber++;
-	Vector3 position, rotation, scale, orientation = Vector3();
+	ZobVector3 position, rotation, scale, orientation = ZobVector3();
 	std::string name;
 	float x, y, z;
 	TiXmlElement* f;
@@ -62,14 +62,14 @@ ZobObject::ZobObject(Type t, SubType s, TiXmlElement* node, Mesh* mesh, ZobObjec
 	x = atof(f->Attribute("x"));
 	y = atof(f->Attribute("y"));
 	z = atof(f->Attribute("z"));
-	position = Vector3(x, y, z);
+	position = ZobVector3(x, y, z);
 	f = node->FirstChildElement("Rotation");
 	if (f)
 	{
 		x = atof(f->Attribute("x"));
 		y = atof(f->Attribute("y"));
 		z = atof(f->Attribute("z"));
-		rotation = Vector3(x, y, z);
+		rotation = ZobVector3(x, y, z);
 	}
 	f = node->FirstChildElement("Scale");
 	if (f)
@@ -77,7 +77,7 @@ ZobObject::ZobObject(Type t, SubType s, TiXmlElement* node, Mesh* mesh, ZobObjec
 		x = atof(f->Attribute("x"));
 		y = atof(f->Attribute("y"));
 		z = atof(f->Attribute("z"));
-		scale = Vector3(x, y, z);
+		scale = ZobVector3(x, y, z);
 	}
 	m_name = name;
 	DirectZob::LogInfo("Adding new ZobObject %s", m_name.c_str());
@@ -92,9 +92,9 @@ ZobObject::ZobObject(Type t, SubType s, TiXmlElement* node, Mesh* mesh, ZobObjec
 	}
 	m_markedForDeletion = false;
 	m_mesh = mesh;
-	m_translation = Vector3(0, 0, 0);
-	m_rotation = Vector3(0, 0, 0);
-	m_scale = Vector3(1, 1, 1);
+	m_translation = ZobVector3(0, 0, 0);
+	m_rotation = ZobVector3(0, 0, 0);
+	m_scale = ZobVector3(1, 1, 1);
 	m_children.clear();
 	SetParent(m_parent);
 	if (m_parent != NULL)
@@ -104,7 +104,7 @@ ZobObject::ZobObject(Type t, SubType s, TiXmlElement* node, Mesh* mesh, ZobObjec
 	m_renderOptions.lightMode = RenderOptions::eLightMode_phong;
 	m_renderOptions.zBuffered = true;
 	m_renderOptions.bTransparency = false;
-	//m_renderOptions.colorization = new Vector3(1, 0, 0);
+	//m_renderOptions.colorization = new ZobVector3(1, 0, 0);
 	SetTranslation(position.x, position.y, position.z);
 	SetRotation(rotation.x, rotation.y, rotation.z);
 	SetScale(scale.x, scale.y, scale.z);
@@ -159,11 +159,11 @@ void ZobObject::UpdateMesh(const Camera* camera, Core::Engine* engine)
 	}
 }
 
-void ZobObject::Update(const Matrix4x4& parentMatrix, const Matrix4x4& parentRSMatrix)
+void ZobObject::Update(const ZobMatrix4x4& parentMatrix, const ZobMatrix4x4& parentRSMatrix)
 {
-	Vector3 t = m_translation;
-	Vector3 r = m_rotation;
-	Vector3 s = m_scale;
+	ZobVector3 t = m_translation;
+	ZobVector3 r = m_rotation;
+	ZobVector3 s = m_scale;
 	m_modelMatrix.Identity();
 	m_rotationScaleMatrix.Identity();
 	m_rotationScaleMatrix.SetRotation(&m_rotation);
@@ -175,9 +175,9 @@ void ZobObject::Update(const Matrix4x4& parentMatrix, const Matrix4x4& parentRSM
 	m_modelMatrix.SetScale(&s);
 	m_modelMatrix.Mul(&parentMatrix);
 
-	m_left = Vector3(1, 0, 0);
-	m_forward = Vector3(0, 0, 1);
-	m_up = Vector3(0, 1, 0);
+	m_left = ZobVector3(1, 0, 0);
+	m_forward = ZobVector3(0, 0, 1);
+	m_up = ZobVector3(0, 1, 0);
 	m_rotationScaleMatrix.Mul(&m_left);
 	m_rotationScaleMatrix.Mul(&m_forward);
 	m_rotationScaleMatrix.Mul(&m_up);
@@ -220,9 +220,9 @@ void ZobObject::QueueForDrawing(const Camera* camera, Core::Engine* engine)
 void ZobObject::DrawGizmos(const Camera* camera, Core::Engine* engine)
 {
 	uint c;
-	Vector3 x = m_left;
-	Vector3 y = m_up;
-	Vector3 z = m_forward;
+	ZobVector3 x = m_left;
+	ZobVector3 y = m_up;
+	ZobVector3 z = m_forward;
 	x = x + m_translation;
 	y = y + m_translation;
 	z = z + m_translation;

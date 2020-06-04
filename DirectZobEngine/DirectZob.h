@@ -2,6 +2,7 @@
 #include <string>
 #include <iostream>
 #include <algorithm>
+#include <reactphysics3d/reactphysics3d.h>
 #include "Engine.h"
 #include "Material.h"
 #include "Mesh.h"
@@ -18,6 +19,7 @@
 #define TARGET_MS_PER_FRAME 33.33f
 #define CLAMP(n, low, max) n <= low ? low : n >= max ? max : n;
 
+using namespace std;
 
 class DirectZob
 {
@@ -81,5 +83,4 @@ private:
 	clock_t m_copyTick;
 	clock_t	m_frameTick;
 	static int s_logIndent;
-	
 };

@@ -1,18 +1,18 @@
 #pragma once
-class Vector2
+class ZobVector2
 {
 public:
-	Vector2();
-	Vector2(float x, float y);
+	ZobVector2();
+	ZobVector2(float x, float y);
 
-	static const Vector2 Vector2Zero;
-	static const Vector2 Vector2One;
-	static const Vector2 Vector2X;
-	static const Vector2 Vector2Y;
+	static const ZobVector2 Vector2Zero;
+	static const ZobVector2 Vector2One;
+	static const ZobVector2 Vector2X;
+	static const ZobVector2 Vector2Y;
 
-	bool operator== (const Vector2& v2) { return x == v2.x && y == v2.y && w == v2.w; }
+	bool operator== (const ZobVector2& v2) { return x == v2.x && y == v2.y && w == v2.w; }
 	
-	inline void Copy(Vector2* v)
+	inline void Copy(ZobVector2* v)
 	{
 		x = v->x;
 		y = v->y;
@@ -20,7 +20,7 @@ public:
 	}
 
 	void Norm();
-	float Dot(const Vector2 * v);
+	float Dot(const ZobVector2 * v);
 	float lenght();
 	float sqrtLenght();
 
@@ -30,4 +30,4 @@ public:
 	float w;
 };
 
-static Vector2 operator+ (const Vector2& v1, const Vector2& v2) { return Vector2(v1.x + v2.x, v1.y + v2.y); }
+static ZobVector2 operator+ (const ZobVector2& v1, const ZobVector2& v2) { return ZobVector2(v1.x + v2.x, v1.y + v2.y); }

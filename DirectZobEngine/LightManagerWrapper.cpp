@@ -19,35 +19,35 @@ namespace CLI
 
 	ManagedVector3^ LightManagerWrapper::GetClearColor()
 	{
-		const Vector3* c = m_Instance->GetClearColor();
+		const ZobVector3* c = m_Instance->GetClearColor();
 		ManagedVector3^ v = gcnew CLI::ManagedVector3(c);
 		return v;
 	}
 	void LightManagerWrapper::SetClearColor(ManagedVector3^ c)
 	{
-		Vector3 v = c->ToVector3();
+		ZobVector3 v = c->ToVector3();
 		m_Instance->SetClearColor(&v);
 	}
 	ManagedVector3^ LightManagerWrapper::GetFogColor()
 	{
-		const Vector3* c = m_Instance->GetFogColor();
+		const ZobVector3* c = m_Instance->GetFogColor();
 		ManagedVector3^ v = gcnew CLI::ManagedVector3(c);
 		return v;
 	}
 	void LightManagerWrapper::SetFogColor(ManagedVector3^ c)
 	{
-		Vector3 v = c->ToVector3();
+		ZobVector3 v = c->ToVector3();
 		m_Instance->SetFogColor(&v);
 	}
 	ManagedVector3^ LightManagerWrapper::GetAmbientColor()
 	{
-		const Vector3* c = m_Instance->GetAmbientColor();
+		const ZobVector3* c = m_Instance->GetAmbientColor();
 		ManagedVector3^ v = gcnew CLI::ManagedVector3(c);
 		return v;
 	}
 	void LightManagerWrapper::SetAmbientColor(ManagedVector3^ c)
 	{
-		Vector3 v = c->ToVector3();
+		ZobVector3 v = c->ToVector3();
 		m_Instance->SetAmbientColor(&v);
 	}
 	int	LightManagerWrapper::GetFogType()
