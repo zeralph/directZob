@@ -75,8 +75,7 @@
                         },
                         'link_settings': {
                             'libraries': [
-                                # relative to xcode project
-                                '../../../dependencies/reactphysics3d/lib/reactphysics3d.lib',
+                                '../../../dependencies/reactphysics3d/lib/windows/reactphysics3d.lib',  # relative to xcode project
                             ],
                         },
                         'msvs_settings': {
@@ -103,6 +102,7 @@
 
                         'defines': [
                             'MACOS',
+                            '__APPLE__',
                         ],
                         'link_settings': {
                             'libraries': [
@@ -120,6 +120,7 @@
                         ],
                         'defines': [
                             'LINUX',
+                            'linux',
                         ],
                         'direct_dependent_settings': {
                             'include_dirs': [
@@ -128,7 +129,8 @@
                         },
                         'link_settings': {
                             'libraries': [
-                                '../../../dependencies/fbxsdk/linux/lib/libfbxsdk.a',  # relative to xcode project
+                                '../../../dependencies/fbxsdk/linux/lib/libfbxsdk.a', 
+                                '../../../dependencies/reactphysics3d/lib/linux/libreactphysics3d.a',
                                 '-lpthread',
                                 '-lxml2',
                                 '-lX11',
