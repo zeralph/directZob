@@ -118,6 +118,10 @@ void DirectZob::Init(int width, int height, bool bEditorMode)
 	int state;
 	m_initialized = true;
 	m_frameTick = clock();
+
+	reactphysics3d::PhysicsCommon physicsCommon;
+	world = physicsCommon.createPhysicsWorld();
+
 //	m_engine->Start();
 //	reactphysics3d::PhysicsWorld* m_physicWorld;
 }
