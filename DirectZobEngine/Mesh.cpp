@@ -138,7 +138,7 @@ Mesh::Mesh(std::string &parentName, std::string& path, fbxsdk::FbxMesh* mesh)
 					vIdx++;
 				}
 
-				const Material* material = DirectZob::GetInstance()->GetMaterialManager()->LoadFbxMaterial(mesh, m_path);
+				const ZobMaterial* material = DirectZob::GetInstance()->GetMaterialManager()->LoadFbxMaterial(mesh, m_path);
 				Triangle t;
 				t.va = &m_vertices[startIdx];
 				t.vb = &m_vertices[startIdx + 1];
@@ -365,7 +365,7 @@ void Mesh::LoadOBJ(const std::string& fullPath)
 	size_t curNormal = 0;
 	size_t curUv = 0;
 	size_t curface = 0;
-	const Material* tex = NULL;
+	const ZobMaterial* tex = NULL;
 	while (getline(sfile, line))
 	{
 		if (line[0] == 'v')
@@ -606,7 +606,7 @@ inline bool Mesh::RejectTriangle(const Triangle* t, const float znear, const flo
 	return false;
 }
 
-void Mesh::CreateTriangles(const std::vector<std::string>* line, std::vector<Triangle>* tList, size_t &tArrayIdx, const Material* tex)
+void Mesh::CreateTriangles(const std::vector<std::string>* line, std::vector<Triangle>* tList, size_t &tArrayIdx, const ZobMaterial* tex)
 {
 	size_t nbFaces = line->size() - 2;
 	int a, b, c = 0;

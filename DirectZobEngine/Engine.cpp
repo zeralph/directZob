@@ -579,7 +579,8 @@ float Engine::GetDistanceToCamera(ZobVector3* worldPos)
 	Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
 	if (c)
 	{
-		ZobVector3 v = c->GetTransform() - worldPos;
+		ZobVector3 v = ZobVector3(c->GetPosition());
+		v = v - worldPos;
 		return v.sqrtLength();
 	}
 	return 0.0f;

@@ -4,6 +4,8 @@
 #include "tinyxml.h"
 #include "ZobObject.h"
 #include "SceneLoader.h"
+#include "ZobPhysicsEngine.h"
+
 #define LOG_BUFFER_SIZE 1024
 
 static char buffer[MAX_PATH];
@@ -109,6 +111,7 @@ void DirectZob::Init(int width, int height, bool bEditorMode)
 	m_materialManager = new MaterialManager();
 	m_meshManager = new MeshManager();
 	m_cameraManager = new CameraManager();
+	m_physicsEngine = new ZobPhysicsEngine();
 	int dx = 1;
 	int dy = 1;
 	float r = 0.0f;
@@ -118,12 +121,6 @@ void DirectZob::Init(int width, int height, bool bEditorMode)
 	int state;
 	m_initialized = true;
 	m_frameTick = clock();
-
-	reactphysics3d::PhysicsCommon physicsCommon;
-	world = physicsCommon.createPhysicsWorld();
-
-//	m_engine->Start();
-//	reactphysics3d::PhysicsWorld* m_physicWorld;
 }
 
 static float rot = 1.0f;
@@ -137,6 +134,7 @@ int DirectZob::RunAFrame()
 	m_frameTick = clock();
 	if(m_initialized && m_engine->Started())
 	{
+//		m_physicsEngine->Update();
 		m_cameraManager->UpdateAfter();
 		Color c = Color(DirectZob::GetInstance()->GetLightManager()->GetClearColor());
 		m_engine->ClearBuffer(&c);

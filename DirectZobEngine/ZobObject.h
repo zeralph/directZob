@@ -9,6 +9,7 @@
 #include "tinyxml.h"
 
 class Mesh;
+class ZobPhysicComponent;
 class ZobObject:public ZOBGUID
 {
 public:
@@ -21,9 +22,14 @@ public:
 	virtual void					Update(const ZobMatrix4x4& parentMatrix, const ZobMatrix4x4& parentRSMatrix);
 	virtual void					UpdateMesh(const Camera* camera, Core::Engine* engine);
 	virtual void					QueueForDrawing(const Camera* camera, Core::Engine* engine);
+	inline const ZobVector3&		GetScale() const { return m_scale; }
 	virtual inline void				SetScale(float x, float y, float z) { m_scale.x = x; m_scale.y = y; m_scale.z = z; };
-	virtual inline void				SetRotation(float x, float y, float z) { m_rotation.x = x; m_rotation.y = y; m_rotation.z = z; };
-	virtual inline void				SetTranslation(float x, float y, float z) { m_translation.x = x; m_translation.y = y; m_translation.z = z; };
+
+	void							SetRotation(float x, float y, float z);
+	void							SetPosition(float x, float y, float z);
+	const ZobVector3*				GetRotation() const;
+	const ZobVector3*				GetPosition() const;
+
 	virtual void					DrawGizmos(const Camera* camera, Core::Engine* engine);
 	virtual TiXmlNode*				SaveUnderNode(TiXmlNode* node);
 	//
@@ -32,7 +38,7 @@ public:
 	void							SetParent(ZobObject* o);
 	ZobObject*						GetChild(const std::string& name);
 	ZobObject*						GetChild(const int i);
-	inline const ZobVector3&			GetTransform() const { return m_translation; };
+
 	inline const ZobVector3			GetWorldPosition() const
 	{
 		return m_modelMatrix.GetTranslation();
@@ -41,13 +47,13 @@ public:
 	{
 		return m_modelMatrix.GetScale();
 	};
-	inline const ZobVector3&			GetRotation() const { return m_rotation; }
-	inline const ZobVector3&			GetScale() const { return m_scale; }
+
+	
 	inline const std::string&		GetName() const { return m_name; }
 	inline void						SetName(const std::string &name) { m_name = name; }
-	inline ZobVector3					GetForward() const { return &m_forward; }
-	inline ZobVector3					GetLeft() const { return &m_left; }
-	inline ZobVector3					GetUp() const { return &m_up; }
+	inline ZobVector3				GetForward() const { return &m_forward; }
+	inline ZobVector3				GetLeft() const { return &m_left; }
+	inline ZobVector3				GetUp() const { return &m_up; }
 	const void						GetFullNodeName(std::string &fullName) const;
 	inline const int				GetNbChildren() const { return (int)m_children.size(); }
 	void							RemoveChildReference(const ZobObject* z);
@@ -65,12 +71,11 @@ public:
 protected:
 
 	ZobObject* m_parent;
+	ZobPhysicComponent* m_physicComponent;
 	Mesh* m_mesh = NULL;
 	std::vector<ZobObject*> m_children;
 	ZobMatrix4x4 m_modelMatrix;
 	ZobMatrix4x4 m_rotationScaleMatrix;
-	ZobVector3 m_translation;
-	ZobVector3 m_rotation;
 	ZobVector3 m_scale;
 	std::string m_name;
 	RenderOptions m_renderOptions;

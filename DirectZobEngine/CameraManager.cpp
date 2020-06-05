@@ -55,11 +55,11 @@ Camera* CameraManager::CreateEditorCamera()
 		std::string name = std::string("EditorCamera");
 		c = DirectZob::GetInstance()->GetCameraManager()->CreateCamera(name, 45.0f, NULL);
 		c->ChangeType(ZOBGUID::type_editor);
-		//c->SetTranslation(-1, 7, -10);
+		//c->SetPosition(-1, 7, -10);
 		//c->SetRotation(20, 0, 0);
-		c->SetTranslation(1, 5, -10);
+		c->SetPosition(1, 5, -10);
 		//c->SetRotation(20, 0, 0);
-		c->SetTranslation(-20, 20, -20);
+		c->SetPosition(-20, 20, -20);
 		ZobVector3 v = ZobVector3(0, 0, 0);
 		c->SetTarget(&v);
 		//c->SetRotation(-20, 0, 0);
@@ -82,7 +82,7 @@ Camera* CameraManager::CreateCamera(ZobObject* parent)
 	int l = m_cameras.size();
 	std::string name = std::string("Camera_").append(std::to_string((l)));
 	Camera* c = DirectZob::GetInstance()->GetCameraManager()->CreateCamera(name, 45.0f, parent);
-	c->SetTranslation(0, 5, 0);
+	c->SetPosition(0, 5, 0);
 	return c;
 }
 

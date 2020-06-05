@@ -15,7 +15,7 @@ namespace CLI
 
 		CameraManagerWrapper();
 
-		array<System::String^>^ GetCameraList();
+		cli::array<System::String^>^ GetCameraList();
 		System::String^ 		GetCurrentCamera();
 		ManagedVector3^ 		GetCurrentCameraPosition();
 		ManagedVector3^ 		GetCurrentCameraTarget();

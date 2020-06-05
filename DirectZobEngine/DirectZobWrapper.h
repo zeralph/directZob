@@ -20,7 +20,7 @@ namespace CLI
 		void					SaveScene(System::String^ path, System::String^ file);
 		static DirectZob*		GetDirectZobInstance() { return m_directZobInstance; }
 		int						RunAFrame();
-		array<System::String^>^ GetEventsAndClear();
+		cli::array<System::String^>^ GetEventsAndClear();
 		void					Resize(int width, int height);
 	private:
 		//array<int>^ m_buffer;

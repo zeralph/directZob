@@ -5,7 +5,7 @@
 #include "ZobObject.h"
 #include "MaterialManager.h"
 #include "MeshManager.h"
-#include "Material.h"
+#include "ZobMaterial.h"
 #include "Mesh.h"
 #include "Engine.h"
 #include "tinyxml.h"

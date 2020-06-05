@@ -6,14 +6,14 @@
 #include "Events.h"
 #include "Texture.h"
 
-class Material
+class ZobMaterial
 {
 public:
 
 	//Material(const std::string& path, const std::string& file, const std::string& name);
-	Material();
-	Material(const std::string& name, const ZobVector3* ambientColor, const ZobVector3* diffuseColor, const Texture* texture);
-	~Material();
+	ZobMaterial();
+	ZobMaterial(const std::string& name, const ZobVector3* ambientColor, const ZobVector3* diffuseColor, const Texture* texture);
+	~ZobMaterial();
 	inline const Texture*		GetDiffuseTexture() const { return m_diffuseTexture; }
 	void						SetDiffuseTexture(const Texture* t) { m_diffuseTexture = t; }
 	inline const ZobVector3* 		GetAmbientColor() const { return &m_ambientColor; }

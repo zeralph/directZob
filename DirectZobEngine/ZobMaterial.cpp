@@ -1,9 +1,9 @@
-#include "Material.h"
+#include "ZobMaterial.h"
 #include <iostream>
 #include "DirectZob.h"
 
 static int sMaterialNumber = 0;
-Material::Material()
+ZobMaterial::ZobMaterial()
 {
 	sMaterialNumber++;
 	m_name = std::string("Material_");
@@ -16,7 +16,7 @@ Material::Material()
 	DirectZob::RemoveIndent();
 }
 
-Material::Material(const std::string& name, const ZobVector3* ambientColor, const ZobVector3* diffuseColor, const Texture* texture)
+ZobMaterial::ZobMaterial(const std::string& name, const ZobVector3* ambientColor, const ZobVector3* diffuseColor, const Texture* texture)
 {
 	sMaterialNumber++;
 	DirectZob::LogInfo("Material %s creation", name.c_str());
@@ -28,7 +28,7 @@ Material::Material(const std::string& name, const ZobVector3* ambientColor, cons
 	DirectZob::RemoveIndent();
 }
 
-Material::~Material()
+ZobMaterial::~ZobMaterial()
 {
 	DirectZob::LogInfo("Delete material %s", m_name.c_str());
 	DirectZob::AddIndent();

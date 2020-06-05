@@ -1,7 +1,7 @@
 #pragma once
 #include "ZobVector2.h"
 #include "ZobVector3.h"
-#include "Material.h"
+#include "ZobMaterial.h"
 #include "Types.h"
 
 //FLAGS :
@@ -31,7 +31,7 @@ public:
 	ZobVector2* ua;
 	ZobVector2* ub;
 	ZobVector2* uc;
-	const Material* material;
+	const ZobMaterial* material;
 	float area;
 	uint owner;
 	bool draw;

@@ -8,11 +8,11 @@ namespace CLI
 
 	}
 
-	array<System::String^>^ CameraManagerWrapper::GetCameraList()
+	cli::array<System::String^>^ CameraManagerWrapper::GetCameraList()
 	{
 		const std::vector<std::string> data = m_Instance->GetCameraList();
 		int l = (int)data.size();
-		array<System::String ^>^ arr = gcnew array<System::String ^>(l);
+		cli::array<System::String ^>^ arr = gcnew cli::array<System::String ^>(l);
 		for (int i = 0; i < l; i++)
 		{
 			arr[i] = gcnew System::String(data.at(i).c_str());
@@ -35,7 +35,7 @@ namespace CLI
 		Camera* c = m_Instance->GetCurrentCamera();
 		if (c)
 		{
-			ManagedVector3^ v = gcnew CLI::ManagedVector3(m_Instance->GetCurrentCamera()->GetTransform());
+			ManagedVector3^ v = gcnew CLI::ManagedVector3(m_Instance->GetCurrentCamera()->GetPosition());
 			return v;
 		}
 		return gcnew CLI::ManagedVector3();
@@ -101,7 +101,7 @@ namespace CLI
 		if (c)
 		{
 			ZobVector3 v = p->ToVector3();
-			c->SetTranslation(v.x, v.y, v.z);
+			c->SetPosition(v.x, v.y, v.z);
 		}
 		DirectZob::GetInstance()->Unlock();
 	}

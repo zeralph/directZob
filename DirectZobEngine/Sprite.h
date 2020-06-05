@@ -14,7 +14,7 @@ public:
 
 	//void Update(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions* options) override;
 	//void QueueForDrawing(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions* options) override;
-	void Setmaterial(const Material* m);
+	void Setmaterial(const ZobMaterial* m);
 private:
 
 	ZobMatrix4x4 m_modelMatrixOverriden;

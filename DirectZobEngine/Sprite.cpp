@@ -107,7 +107,7 @@ void Sprite::Update(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotatio
 	Mesh::Update(modelMatrix, rotationMatrix, camera, engine, ownerId, options);
 }
 */
-void Sprite::Setmaterial(const Material* m) 
+void Sprite::Setmaterial(const ZobMaterial* m)
 { 
 	m_triangles[0].material = m;  
 	m_triangles[1].material = m; 

@@ -21,7 +21,7 @@ public:
 	void				UpdateMesh(const Camera* camera, Core::Engine* engine) override;
 	void				SetTexture(std::string& path);
 private:
-	Material* m_material;
+	ZobMaterial* m_material;
 };
 
 

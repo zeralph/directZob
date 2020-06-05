@@ -59,7 +59,7 @@ void LightManager::UnloadAll()
 Light* LightManager::CreateLight(std::string& name, Light::eLightType type, ZobVector3 position, ZobVector3 color, float intensity, float distance, ZobObject* parent)
 {
 	Light* l = new Light(name, type, color, intensity, distance, parent);
-	l->SetTranslation(position.x, position.y, position.z);
+	l->SetPosition(position.x, position.y, position.z);
 	AddLight(l);
 	return l;
 }

@@ -27,12 +27,12 @@ public:
 	inline void SetData(uint i, uint j, float f) { m_data[i][j] = f; }
 	void SetScale(const float x, const float y, const float z);
 	void SetRotation(const float x, const float y, const float z);
-	void SetTranslation(const float x, const float y, const float z);
+	void SetPosition(const float x, const float y, const float z);
 	void SetScale(const ZobVector3& v);
 	void AddScale(const ZobVector3& v);
 	void SetRotation(const ZobVector3& v);
 	void AddRotation(const ZobVector3& v);
-	void SetTranslation(const ZobVector3& v);
+	void SetPosition(const ZobVector3& v);
 	void AddTranslation(const ZobVector3& v);
 	ZobVector3 GetRotation() const;
 	ZobVector3 GetScale() const { return ZobVector3(m_data[0][0], m_data[1][1], m_data[2][2]); }

@@ -60,7 +60,7 @@ namespace CLI
 
 	ManagedVector3^ ZobObjectWrapper::GetTransform()
 	{
-		ManagedVector3^ v = gcnew CLI::ManagedVector3(m_Instance->GetTransform());
+		ManagedVector3^ v = gcnew CLI::ManagedVector3(m_Instance->GetPosition());
 		return v;
 	}
 
@@ -97,7 +97,7 @@ namespace CLI
 	void ZobObjectWrapper::SetTransform(ManagedVector3^ p)
 	{
 		ZobVector3 v = p->ToVector3();
-		m_Instance->SetTranslation(v.x, v.y, v.z);
+		m_Instance->SetPosition(v.x, v.y, v.z);
 	}
 
 	void ZobObjectWrapper::SetRotation(ManagedVector3^ p)

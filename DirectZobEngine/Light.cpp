@@ -78,7 +78,7 @@ void Light::NewLightConfiguration()
 		m_spotAngle = 10.0f;
 		break;
 	case eLightType_directional:
-		m_rotation = ZobVector3(-70.0f, 30.0f, 30.0f);
+		SetRotation(-70.0f, 30.0f, 30.0f);
 		break;
 	default:
 		break;
@@ -87,58 +87,61 @@ void Light::NewLightConfiguration()
 
 void Light::drawPointGizmos(const Camera* camera, Core::Engine* engine)
 {
+	const ZobVector3* t = GetPosition();
 	uint c = ((int)(m_color.x * 255) << 16) + ((int)(m_color.y * 255) << 8) + (int)(m_color.z * 255);
-	engine->QueueEllipse(camera, &m_translation, &m_up, 1.0f, 1.0f, c, true);
-	engine->QueueEllipse(camera, &m_translation, &m_left, 1.0f, 1.0f, c, true);
-	engine->QueueEllipse(camera, &m_translation, &m_forward, 1.0f, 1.0f, c, true);
+	engine->QueueEllipse(camera, t, &m_up, 1.0f, 1.0f, c, true);
+	engine->QueueEllipse(camera, t, &m_left, 1.0f, 1.0f, c, true);
+	engine->QueueEllipse(camera, t, &m_forward, 1.0f, 1.0f, c, true);
 }
 
 void Light::drawSpotGizmos(const Camera* camera, Core::Engine* engine)
 {
+	const ZobVector3* t = GetPosition();
 	uint c = ((int)(m_color.x * 255) << 16) + ((int)(m_color.y * 255) << 8) + (int)(m_color.z * 255);
 	ZobVector3 v1, v2, v;
 	v1 = m_forward;
 	v2 = m_left;
 	v1.Mul(m_distance);
-	v1 = v1 + m_translation;
+	v1 = v1 + GetPosition();
 	float r = m_spotAngle / 2.0f;
 	r = r * M_PI / 180.0f;
 	r = tan(r) * m_distance;
 	engine->QueueEllipse(camera, &v1, &m_forward, r, r, c, true);
 	v2 = m_left;
 	v = v1 + (v2 * r);
-	engine->QueueLine(camera, &m_translation, &v, c, true);
+	engine->QueueLine(camera, t, &v, c, true);
 	v2 = m_left;
 	v = v1 - (v2 * r);
-	engine->QueueLine(camera, &m_translation, &v, c, true);
+	engine->QueueLine(camera, t, &v, c, true);
 	v2 = m_up;
 	v = v1 + (v2 * r);
-	engine->QueueLine(camera, &m_translation, &v, c, true);
+	engine->QueueLine(camera, t, &v, c, true);
 	v2 = m_up;
 	v = v1 - (v2 * r);
-	engine->QueueLine(camera, &m_translation, &v, c, true);
+	engine->QueueLine(camera, t, &v, c, true);
 }
 
 void Light::drawDirectionalGizmos(const Camera* camera, Core::Engine* engine)
 {
+	const ZobVector3* t = GetPosition();
 	uint c = ((int)(m_color.x * 255) << 16) + ((int)(m_color.y * 255) << 8) + (int)(m_color.z * 255);
-	ZobVector3 v0 = m_translation + m_forward;
-	ZobVector3 v1 = m_translation - m_forward;
+	ZobVector3 v0 = t + m_forward;
+	ZobVector3 v1 = t - m_forward;
 	v0 = v0 + m_left;
 	v1 = v1 + m_left;
 	engine->QueueLine(camera, &v0, &v1, c, true);
 	v0 = v0 + m_up;
 	v1 = v1 + m_up;
 	engine->QueueLine(camera, &v0, &v1, c, true);
-	v0 = m_translation + m_forward;
-	v1 = m_translation - m_forward;
+	v0 = t + m_forward;
+	v1 = t - m_forward;
 	v0 = v0 - m_left;
 	v1 = v1 - m_left;
 	engine->QueueLine(camera, &v0, &v1, c, true);
 	v0 = v0 - m_up;
 	v1 = v1 - m_up;
 	engine->QueueLine(camera, &v0, &v1, c, true);
-	v1 = m_translation - m_forward;
+	v1 = t - m_forward;
 	engine->QueueEllipse(camera, &v1, &m_forward, 1.0f, 1.0f, c, true);
 }
 

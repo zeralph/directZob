@@ -38,7 +38,7 @@ namespace DirectZobEditor
         private ZobSpriteControl m_spriteControl;
         private bool m_ctrlPressed = false;
 
-        private string m_path;
+        private string m_path = "C:\\";
         private string m_file;
 
         private string[] m_events;
@@ -49,7 +49,7 @@ namespace DirectZobEditor
             InitializeComponent();
             this.KeyPreview = true;
             m_directZobWrapper = new CLI.DirectZobWrapper();
-            m_directZobWrapper.Init(800, 600);
+            m_directZobWrapper.Init(1024, 768);
 
             m_meshManagerWrapper = new CLI.MeshManagerWrapper();
             m_lightManagerWrapper = new CLI.LightManagerWrapper();
@@ -290,10 +290,10 @@ namespace DirectZobEditor
         {
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
-                openFileDialog.InitialDirectory = m_path;
+//                openFileDialog.InitialDirectory = m_path;
                 openFileDialog.Filter = "all meshes (*.obj;*.fbx)|*.obj;*.fbx|obj files (*.obj)|*.obj|fbx files (*.fbx)|*.fbx";
                 openFileDialog.FilterIndex = 1;
-                openFileDialog.RestoreDirectory = true;
+  //              openFileDialog.RestoreDirectory = true;
                 //openFileDialog.AutoUpgradeEnabled = false;
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {

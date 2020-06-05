@@ -100,7 +100,7 @@ void ZobMatrix2x2::SetScale(const float x, const float y)
 	Mul(&tmp);
 }
 
-void ZobMatrix2x2::SetTranslation(const float x, const float y)
+void ZobMatrix2x2::SetPosition(const float x, const float y)
 {
 	tmp.Identity();
 	tmp.m_data[0][2] = x;

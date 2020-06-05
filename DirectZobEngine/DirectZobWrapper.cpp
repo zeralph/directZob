@@ -64,11 +64,11 @@ namespace CLI
 		return m_Instance->RunAFrame();
 	}
 
-	array<System::String^>^ DirectZobWrapper::GetEventsAndClear()
+	cli::array<System::String^>^ DirectZobWrapper::GetEventsAndClear()
 	{
 		const std::vector<std::string>* data = m_Instance->GetEventManager()->GetEvents();
 		int l = (int)data->size();
-		array<System::String ^>^ arr = gcnew array<System::String ^>(l);
+		cli::array<System::String ^>^ arr = gcnew cli::array<System::String ^>(l);
 		for (int i = 0; i < l; i++)
 		{
 			arr[i] = gcnew System::String(data->at(i).c_str());

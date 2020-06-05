@@ -77,7 +77,7 @@ void ZobMatrix4x4::SetScale(const float x, const float y, const float z)
 	Mul(&tmp);
 }
 
-void ZobMatrix4x4::SetTranslation(const ZobVector3& v)
+void ZobMatrix4x4::SetPosition(const ZobVector3& v)
 {
 	tmp.Identity();
 	tmp.m_data[0][3] = v.x;
@@ -127,7 +127,7 @@ void ZobMatrix4x4::AddTranslation(const ZobVector3& v)
 	m_data[2][3] += v.z;
 }
 
-void ZobMatrix4x4::SetTranslation(const float x, const float y, const float z)
+void ZobMatrix4x4::SetPosition(const float x, const float y, const float z)
 {
 	tmp.Identity();
 	tmp.m_data[0][3] = x;

@@ -2,12 +2,8 @@
 #include <string>
 #include <iostream>
 #include <algorithm>
-// no idea where these are defined; undefine them, as reactphysics will use methods which have these macro names
-#undef min
-#undef max
-#include <reactphysics3d/reactphysics3d.h>
 #include "Engine.h"
-#include "Material.h"
+#include "ZobMaterial.h"
 #include "Mesh.h"
 #include "text2D.h"
 #include "Events.h"
@@ -23,7 +19,7 @@
 #define CLAMP(n, low, max) n <= low ? low : n >= max ? max : n;
 
 using namespace std;
-
+class ZobPhysicsEngine;
 class DirectZob
 {
 	static DirectZob* singleton;
@@ -56,6 +52,7 @@ public :
 	ZobObjectManager*	GetZobObjectManager() const { return m_zobObjectManager; }
 	MeshManager*		GetMeshManager() const { return m_meshManager; }
 	MaterialManager*	GetMaterialManager() const { return m_materialManager;  }
+	ZobPhysicsEngine*	GetPhysicsEngine() const { return m_physicsEngine; }
 	Events*				GetEventManager() { return m_events; }
 	static void			LogInfo(const char* format, ...);
 	static void			LogError(const char* format, ...);
@@ -72,6 +69,7 @@ private:
 	CameraManager* m_cameraManager = NULL;
 	LightManager* m_lightManager = NULL;
 	ZobObjectManager* m_zobObjectManager = NULL;
+	ZobPhysicsEngine* m_physicsEngine = NULL;
 	Engine* m_engine = NULL;
 	Text2D* m_text = NULL;
 	bool m_isRendering = false;
@@ -86,5 +84,4 @@ private:
 	clock_t m_copyTick;
 	clock_t	m_frameTick;
 	static int s_logIndent;
-	reactphysics3d::PhysicsWorld* world;
 };

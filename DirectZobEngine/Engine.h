@@ -12,7 +12,7 @@
 #include <stdarg.h>
 #include "ZobVector2.h"
 #include "ZobVector3.h"
-#include "Material.h"
+#include "ZobMaterial.h"
 //#include "Camera.h"
 #include "Events.h"
 

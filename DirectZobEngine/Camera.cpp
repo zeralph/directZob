@@ -13,7 +13,7 @@ Camera::Camera(const std::string& name, float fov, BufferData* bufferData, ZobOb
 	//RecomputeVectors();
 	m_fov = fov;
 	m_tagetMode = eTarget_none;
-	m_nextTranslation = m_translation;
+	//m_nextTranslation = m_translation;
 }
 
 Camera::Camera(TiXmlElement* node, ZobObject* parent)
@@ -22,7 +22,7 @@ Camera::Camera(TiXmlElement* node, ZobObject* parent)
 	TiXmlElement * f = node->FirstChildElement("Fov");
 	float fov = f ? atof(f->GetText()) : 45.0f; 
 	m_fov = fov;
-	m_nextTranslation = m_translation;
+	//m_nextTranslation = m_translation;
 	m_tagetMode = eTarget_none;
 }
 
@@ -49,27 +49,30 @@ void Camera::DrawGizmos(const Camera* camera, Core::Engine* engine)
 	m_rotationScaleMatrix.Mul(&v1);
 	m_rotationScaleMatrix.Mul(&v2);
 	m_rotationScaleMatrix.Mul(&v3);
-	v0 = v0 + m_translation;
-	v1 = v1 + m_translation;
-	v2 = v2 + m_translation;
-	v3 = v3 + m_translation;
+	const ZobVector3* p = GetPosition();
+	v0 = v0 + p;
+	v1 = v1 + p;
+	v2 = v2 + p;
+	v3 = v3 + p;
 	uint c = 0x000000FF;
 	uint c2 = 0x0000FFFF;
 	engine->QueueLine(camera, &v0, &v1, c, true);
 	engine->QueueLine(camera, &v1, &v3, c, true);
 	engine->QueueLine(camera, &v2, &v3, c2, true);
 	engine->QueueLine(camera, &v2, &v0, c, true);
-	engine->QueueLine(camera, &m_translation, &v1, c, true);
-	engine->QueueLine(camera, &m_translation, &v2, c, true);
-	engine->QueueLine(camera, &m_translation, &v3, c, true);
-	engine->QueueLine(camera, &m_translation, &v0, c, true);
+	engine->QueueLine(camera, p, &v1, c, true);
+	engine->QueueLine(camera, p, &v2, c, true);
+	engine->QueueLine(camera, p, &v3, c, true);
+	engine->QueueLine(camera, p, &v0, c, true);
 }
 
 void Camera::Zoom(float z)
 {
 	ZobVector3 v = m_forward;
 	v = v * (-z);
-	m_nextTranslation = m_nextTranslation + v;
+	//m_nextTranslation = m_nextTranslation + v;
+	v = v + GetPosition();
+	SetPosition(v.x, v.y, v.z);
 }
 
 bool Camera::GetTargetVector(ZobVector3* t)
@@ -83,7 +86,8 @@ bool Camera::GetTargetVector(ZobVector3* t)
 		}
 		else if (m_tagetMode == eTarget_Object && m_targetObject)
 		{
-			ZobVector3 v = m_targetObject->GetTransform();
+			const ZobVector3* merde = m_targetObject->GetPosition();
+			ZobVector3 v = ZobVector3(merde);
 			t->Copy(&v);
 			return true;
 		}
@@ -94,7 +98,8 @@ bool Camera::GetTargetVector(ZobVector3* t)
 void Camera::RotateAroundPointAxis(const ZobVector3* point, const ZobVector3* axis, const ZobVector3* lockAxis, float angle)
 {
 	//g_update_camera_mutex.lock();
-	ZobVector3 t = m_nextTranslation;
+	//ZobVector3 t = m_nextTranslation;
+	ZobVector3 t = GetPosition();
 	t.x -= point->x;
 	t.y -= point->y;
 	t.z -= point->z;
@@ -113,7 +118,7 @@ void Camera::RotateAroundPointAxis(const ZobVector3* point, const ZobVector3* ax
 			return;
 		}
 	}
-	m_nextTranslation = t;
+	//m_nextTranslation = t;
 	//g_update_camera_mutex.unlock();
 }
 
@@ -127,7 +132,10 @@ void Camera::Move(float dx, float dy, bool moveTargetVector)
 	
 	vf = vf * ((float)dy / 20.0f);
 	vf.y = 0;
-	m_nextTranslation = m_nextTranslation - (vl + vf);
+	//m_nextTranslation = m_nextTranslation - (vl + vf);
+	ZobVector3 v = GetPosition();
+	v = v - (vl + vf);
+	SetPosition(v.x, v.y, v.z);
 	if (moveTargetVector)
 	{
 		m_targetVector = m_targetVector - (vl + vf);
@@ -137,36 +145,40 @@ void Camera::Move(float dx, float dy, bool moveTargetVector)
 void Camera::Update(const ZobMatrix4x4& parentMatrix, const ZobMatrix4x4& parentRSMatrix)
 {
 	g_update_camera_mutex.lock();
-	m_translation = m_nextTranslation;
+	//m_translation = m_nextTranslation;
 	m_left = ZobVector3(1, 0, 0);
 	//m_forward = ZobVector3(0, 0, 1);
 	m_up = ZobVector3(0, 1, 0);
 	if (m_tagetMode != eTarget_none)
 	{
-		if (m_tagetMode == eTarget_Vector &&  m_targetVector != m_translation)
+		const ZobVector3* p = GetPosition();
+		if (m_tagetMode == eTarget_Vector &&  m_targetVector != p)
 		{
-			ZobVector3 v = m_targetVector - m_translation;
+			ZobVector3 v = m_targetVector - GetPosition();
 			v.Normalize();
-			//m_forward = v;
-			m_rotation = ZobVector3::GetAnglesFromVector(v);
+			v = ZobVector3::GetAnglesFromVector(v);
+			SetRotation(v.x, v.y, v.z);
 
 		}
 		else if (m_tagetMode == eTarget_Object && m_targetObject)
 		{
-			ZobVector3 v = m_targetObject->GetTransform();
-			if( v != m_translation)
+			const ZobVector3* tp = m_targetObject->GetPosition();
+			ZobVector3 v = ZobVector3(tp);
+			if( v != GetPosition())
 			{
-				v = m_targetObject->GetTransform() - m_translation;
+				v = ZobVector3(tp);
+				v = v - p;
 				v.Normalize();
 				//m_forward = v;
-				m_rotation = ZobVector3::GetAnglesFromVector(v);
+				v = ZobVector3::GetAnglesFromVector(v);
+				SetRotation(v.x, v.y, v.z);
 			}
 		}
 	}
-	m_nextTranslation = m_translation;
+	//m_nextTranslation = m_translation;
 	ZobObject::Update(parentMatrix, parentRSMatrix);
 	m_rotationScaleMatrix.Identity();
-	m_rotationScaleMatrix.SetRotation(&m_rotation);
+	m_rotationScaleMatrix.SetRotation(GetRotation());
 	/*
 	m_left = ZobVector3(1, 0, 0);
 	m_forward = ZobVector3(0, 0, 1);
@@ -181,7 +193,7 @@ void Camera::Update(const ZobMatrix4x4& parentMatrix, const ZobMatrix4x4& parent
 void Camera::UpdateViewProjectionMatrix()
 {
 	g_update_camera_mutex.lock();
-	m_viewTransaltion = m_translation;
+	m_viewTransaltion = GetPosition();
 	BufferData* b = DirectZob::GetInstance()->GetEngine()->GetBufferData();
 	setProjectionMatrix(m_fov, b->width, b->height, b->zNear, b->zFar);
 	ZobVector3 p = m_viewTransaltion;

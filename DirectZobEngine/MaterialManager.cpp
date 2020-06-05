@@ -25,14 +25,14 @@ MaterialManager::~MaterialManager()
 	UnloadAll();
 }
 
-Material* MaterialManager::CreateMaterial()
+ZobMaterial* MaterialManager::CreateMaterial()
 {
-	Material* m = new Material();
+	ZobMaterial* m = new ZobMaterial();
 	m_materials.push_back(m);
 	return m;
 }
 
-const Material* MaterialManager::LoadMaterial(const std::string& name, const ZobVector3* ambientColor, const ZobVector3* diffuseColor, const std::string &textureFile)
+const ZobMaterial* MaterialManager::LoadMaterial(const std::string& name, const ZobVector3* ambientColor, const ZobVector3* diffuseColor, const std::string &textureFile)
 {
 	if (GetMaterial(name) == NULL)
 	{
@@ -52,7 +52,7 @@ const Material* MaterialManager::LoadMaterial(const std::string& name, const Zob
 				texture = LoadTexture(textureFile);
 			}
 		}
-		Material* t = new Material(name, ambientColor, diffuseColor, texture);
+		ZobMaterial* t = new ZobMaterial(name, ambientColor, diffuseColor, texture);
 		m_materials.push_back(t);
 		return t;
 	}
@@ -63,9 +63,9 @@ const Material* MaterialManager::LoadMaterial(const std::string& name, const Zob
 	}
 }
 
-const Material* MaterialManager::LoadFbxMaterial(const fbxsdk::FbxMesh* mesh, const std::string& path)
+const ZobMaterial* MaterialManager::LoadFbxMaterial(const fbxsdk::FbxMesh* mesh, const std::string& path)
 {
-	const Material* finalMaterial = NULL;
+	const ZobMaterial* finalMaterial = NULL;
 	MaterialManager* materialMgr = DirectZob::GetInstance()->GetMaterialManager();
 	int mcount = mesh->GetElementMaterialCount();
 	for (int index = 0; index < mcount; index++)
@@ -226,7 +226,7 @@ void MaterialManager::LoadOBJMaterials(std::string& path, std::string& file)
 	}
 }
 
-const Material* MaterialManager::GetMaterial(const int i) const
+const ZobMaterial* MaterialManager::GetMaterial(const int i) const
 {
 	if (i >= 0 && i < m_materials.size())
 	{
@@ -255,9 +255,9 @@ const Texture* MaterialManager::LoadTexture(const std::string name)
 	return texture;
 }
 
-const Material* MaterialManager::GetMaterial(const std::string& name) const
+const ZobMaterial* MaterialManager::GetMaterial(const std::string& name) const
 {
-	for (std::vector<Material*>::const_iterator iter = m_materials.begin(); iter != m_materials.end(); iter++)
+	for (std::vector<ZobMaterial*>::const_iterator iter = m_materials.begin(); iter != m_materials.end(); iter++)
 	{
 		if ((*iter)->GetName() == name)
 		{
@@ -272,7 +272,7 @@ void MaterialManager::UnloadAll()
 {
 	for (int i = 0; i < m_materials.size(); i++)
 	{
-		Material* m = m_materials[i];
+		ZobMaterial* m = m_materials[i];
 		m_materials[i] = NULL;
 		delete m;
 	}

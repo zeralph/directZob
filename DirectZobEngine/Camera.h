@@ -63,12 +63,13 @@ public:
 		ToProjectedSpace(wp);
 		//ToScreenSpace(wp);
 	}
-	inline void				SetTranslation(float x, float y, float z) override
+	/*
+	inline void				SetPosition(float x, float y, float z) override
 	{
 		m_translation.x = x; m_translation.y = y; m_translation.z = z;
 		m_nextTranslation = m_translation;
 	};
-
+	*/
 private:
 	void					SetViewMatrix(const ZobVector3 &left, const ZobVector3 &up, const ZobVector3 &fw, const ZobVector3 &p);
 	void					setProjectionMatrix(const float angleOfView, const float width, const float height, const float near, const float far);
@@ -80,6 +81,6 @@ private:
 	eTargetMode m_tagetMode;
 	ZobVector3 m_targetVector;
 	const ZobObject* m_targetObject;
-	ZobVector3 m_nextTranslation;
+	//ZobVector3 m_nextTranslation;
 };
 

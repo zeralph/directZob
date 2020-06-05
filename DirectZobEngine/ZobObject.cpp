@@ -2,13 +2,15 @@
 #include "DirectZob.h"
 #include "Mesh.h"
 #include "Sprite.h"
+#include "ZobPhysicComponent.h"
 
 static int sObjectNumber = 0;
 ZobObject::ZobObject(Type t, SubType s, const std::string& name, Mesh* mesh, ZobObject* parent /*= NULL*/)
 	:ZOBGUID(t,s)
 {
-	DirectZob::LogInfo("ZobObejct %s creation", name.c_str());
+	DirectZob::LogInfo("ZobObject %s creation", name.c_str());
 	DirectZob::AddIndent();
+	m_physicComponent = new ZobPhysicComponent();
 	sObjectNumber++;
 	if (name.length() == 0)
 	{
@@ -32,8 +34,6 @@ ZobObject::ZobObject(Type t, SubType s, const std::string& name, Mesh* mesh, Zob
 	}
 	m_markedForDeletion = false;
 	m_mesh = mesh;
-	m_translation = ZobVector3(0, 0, 0);
-	m_rotation = ZobVector3(0, 0, 0);
 	m_scale = ZobVector3(1, 1, 1);
 	m_children.clear();
 	SetParent(m_parent);
@@ -51,6 +51,7 @@ ZobObject::ZobObject(Type t, SubType s, TiXmlElement* node, Mesh* mesh, ZobObjec
 	:ZOBGUID(t, s)
 {
 	sObjectNumber++;
+	m_physicComponent = new ZobPhysicComponent();
 	ZobVector3 position, rotation, scale, orientation = ZobVector3();
 	std::string name;
 	float x, y, z;
@@ -92,8 +93,6 @@ ZobObject::ZobObject(Type t, SubType s, TiXmlElement* node, Mesh* mesh, ZobObjec
 	}
 	m_markedForDeletion = false;
 	m_mesh = mesh;
-	m_translation = ZobVector3(0, 0, 0);
-	m_rotation = ZobVector3(0, 0, 0);
 	m_scale = ZobVector3(1, 1, 1);
 	m_children.clear();
 	SetParent(m_parent);
@@ -105,7 +104,7 @@ ZobObject::ZobObject(Type t, SubType s, TiXmlElement* node, Mesh* mesh, ZobObjec
 	m_renderOptions.zBuffered = true;
 	m_renderOptions.bTransparency = false;
 	//m_renderOptions.colorization = new ZobVector3(1, 0, 0);
-	SetTranslation(position.x, position.y, position.z);
+	SetPosition(position.x, position.y, position.z);
 	SetRotation(rotation.x, rotation.y, rotation.z);
 	SetScale(scale.x, scale.y, scale.z);
 	SetParent(m_parent);
@@ -114,8 +113,9 @@ ZobObject::ZobObject(Type t, SubType s, TiXmlElement* node, Mesh* mesh, ZobObjec
 
 ZobObject::~ZobObject()
 {
-	DirectZob::LogInfo("deleet ZobObject %s", m_name.c_str());
+	DirectZob::LogInfo("delete ZobObject %s", m_name.c_str());
 	DirectZob::AddIndent();
+	delete m_physicComponent;
 	if (m_parent != NULL)
 	{
 		m_parent->RemoveChildReference(this);
@@ -161,16 +161,16 @@ void ZobObject::UpdateMesh(const Camera* camera, Core::Engine* engine)
 
 void ZobObject::Update(const ZobMatrix4x4& parentMatrix, const ZobMatrix4x4& parentRSMatrix)
 {
-	ZobVector3 t = m_translation;
-	ZobVector3 r = m_rotation;
+	ZobVector3 t = GetPosition();
+	ZobVector3 r = GetRotation();
 	ZobVector3 s = m_scale;
 	m_modelMatrix.Identity();
 	m_rotationScaleMatrix.Identity();
-	m_rotationScaleMatrix.SetRotation(&m_rotation);
+	m_rotationScaleMatrix.SetRotation(GetRotation());
 	m_rotationScaleMatrix.SetScale(&m_scale);
 	m_rotationScaleMatrix.Mul(&parentRSMatrix);
 	parentRSMatrix.Mul(&t);
-	m_modelMatrix.SetTranslation(&t);
+	m_modelMatrix.SetPosition(&t);
 	m_modelMatrix.SetRotation(&r);
 	m_modelMatrix.SetScale(&s);
 	m_modelMatrix.Mul(&parentMatrix);
@@ -223,15 +223,16 @@ void ZobObject::DrawGizmos(const Camera* camera, Core::Engine* engine)
 	ZobVector3 x = m_left;
 	ZobVector3 y = m_up;
 	ZobVector3 z = m_forward;
-	x = x + m_translation;
-	y = y + m_translation;
-	z = z + m_translation;
+	const ZobVector3* t = GetPosition();
+	x = x + t;
+	y = y + t;
+	z = z + t;
 	c = 0x00FF0000;
-	engine->QueueLine(camera, &m_translation, &x, c, true);
+	engine->QueueLine(camera, t, &x, c, true);
 	c = 0x0000FF00;
-	engine->QueueLine(camera, &m_translation, &y, c, true);
+	engine->QueueLine(camera, t, &y, c, true);
 	c = 0x000000FF;
-	engine->QueueLine(camera, &m_translation, &z, c, true);
+	engine->QueueLine(camera, t, &z, c, true);
 }
 
 int ZobObject::GetChildPosition(const ZobObject* z)
@@ -355,12 +356,12 @@ TiXmlNode* ZobObject::SaveUnderNode(TiXmlNode* node)
 	TiXmlElement s = TiXmlElement("Scale");
 	o->SetAttribute("name", GetName().c_str());
 	std::string meshName = GetMeshName();
-	p.SetDoubleAttribute("x", GetTransform().x);
-	p.SetDoubleAttribute("y", GetTransform().y);
-	p.SetDoubleAttribute("z", GetTransform().z);
-	r.SetDoubleAttribute("x", GetRotation().x);
-	r.SetDoubleAttribute("y", GetRotation().y);
-	r.SetDoubleAttribute("z", GetRotation().z);
+	p.SetDoubleAttribute("x", GetPosition()->x);
+	p.SetDoubleAttribute("y", GetPosition()->y);
+	p.SetDoubleAttribute("z", GetPosition()->z);
+	r.SetDoubleAttribute("x", GetRotation()->x);
+	r.SetDoubleAttribute("y", GetRotation()->y);
+	r.SetDoubleAttribute("z", GetRotation()->z);
 	s.SetDoubleAttribute("x", GetScale().x);
 	s.SetDoubleAttribute("y", GetScale().y);
 	s.SetDoubleAttribute("z", GetScale().z);
@@ -382,4 +383,25 @@ void ZobObject::CreateSprite()
 {
 	Sprite* s = DirectZob::GetInstance()->GetMeshManager()->CreateSprite();
 	m_mesh = s;
+}
+
+void ZobObject::SetRotation(float x, float y, float z)
+{
+
+	m_physicComponent->SetOrientation(x, y, z);
+}
+
+void ZobObject::SetPosition(float x, float y, float z)
+{
+	m_physicComponent->SetPosition(x, y, z);
+}
+
+const ZobVector3* ZobObject::GetRotation() const
+{
+	return m_physicComponent->GetOrientation();
+}
+
+const ZobVector3* ZobObject::GetPosition() const
+{
+	return m_physicComponent->GetPosition();
 }

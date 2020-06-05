@@ -1,6 +1,6 @@
 #pragma once
 #include "Types.h"
-#include "Material.h"
+#include "ZobMaterial.h"
 #include "ZobMatrix2x2.h"
 #include "Engine.h"
 #include "Events.h"

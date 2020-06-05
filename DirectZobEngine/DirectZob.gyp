@@ -36,7 +36,7 @@
                 'Light.cpp',
                 'LightManager.cpp',
                 'lodepng.cpp',
-                'Material.cpp',
+                'ZobMaterial.cpp',
                 'MaterialManager.cpp',
                 'Mesh.cpp',
                 'MeshManager.cpp',
@@ -54,6 +54,8 @@
                 'ZobObject.cpp',
                 'ZobSprite.cpp',
                 'ZobObjectManager.cpp',
+				'ZobPhysicsEngine.cpp',
+				'ZobPhysicComponent.cpp',
             ],
             'conditions': [
                 [

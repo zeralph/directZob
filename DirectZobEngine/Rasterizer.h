@@ -3,7 +3,7 @@
 #include "Types.h"
 #include "ZobVector2.h"
 #include "ZobVector3.h"
-#include "Material.h"
+#include "ZobMaterial.h"
 #include "ZobMatrix4x4.h"
 #include "Triangle.h"
 #include <thread> 
