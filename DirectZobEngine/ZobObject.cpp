@@ -405,3 +405,8 @@ const ZobVector3* ZobObject::GetPosition() const
 {
 	return m_physicComponent->GetPosition();
 }
+
+void ZobObject::SetPhysicComponent(int i)
+{
+	m_physicComponent->Set(ZobPhysicComponent::ePhysicComponentType_rigidBody);
+}

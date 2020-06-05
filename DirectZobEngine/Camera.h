@@ -73,7 +73,7 @@ public:
 private:
 	void					SetViewMatrix(const ZobVector3 &left, const ZobVector3 &up, const ZobVector3 &fw, const ZobVector3 &p);
 	void					setProjectionMatrix(const float angleOfView, const float width, const float height, const float near, const float far);
-
+	void					RecomputeFLUVectors(const ZobVector3* v);
 	ZobMatrix4x4 m_viewRotMatrix;
 	ZobMatrix4x4 m_projMatrix;
 	float m_fov;

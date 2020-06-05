@@ -134,7 +134,7 @@ int DirectZob::RunAFrame()
 	m_frameTick = clock();
 	if(m_initialized && m_engine->Started())
 	{
-//		m_physicsEngine->Update();
+		m_physicsEngine->Update();
 		m_cameraManager->UpdateAfter();
 		Color c = Color(DirectZob::GetInstance()->GetLightManager()->GetClearColor());
 		m_engine->ClearBuffer(&c);
@@ -143,7 +143,7 @@ int DirectZob::RunAFrame()
 		{
 //			cam->UpdateViewProjectionMatrix();
 			m_engine->StartDrawingScene();
-			cam->UpdateViewProjectionMatrix();
+//			cam->UpdateViewProjectionMatrix();
 			m_zobObjectManager->StartUpdateObjects(cam, m_engine);
 			m_geometryTime = m_zobObjectManager->WaitForUpdateObjectend();
 			m_renderTime = m_engine->WaitForRasterizersEnd();

@@ -20,13 +20,19 @@ public:
 
 	ZobPhysicComponent();
 	~ZobPhysicComponent();
-	void Set(ePhysicComponentType t);
-	void UnSet();
-	void SetPosition(float x, float y, float z);
-	void SetOrientation(float x, float y, float z);
-	const ZobVector3* GetPosition();
-	const ZobVector3* GetOrientation();
+	void								Set(ePhysicComponentType t);
+	void								UnSet();
+	void								SetPosition(float x, float y, float z);
+	void								SetOrientation(float x, float y, float z);
+	const ZobVector3*					GetPosition();
+	const ZobVector3*					GetOrientation();
+
+	void								AddBoxCollider(const ZobVector3* halfExtends );
+	void								AddSphereCollider(float radius);
+	void								AddCapsuleCollider(float radius, float height);
+
 private:
+	void								AddColliderInternal(CollisionShape* c);
 	ePhysicComponentType m_type;
 	CollisionBody* m_collisionBody;
 	RigidBody* m_rigidBody;

@@ -68,6 +68,8 @@ public:
 	const RenderOptions::eLightMode GetLightingMode() const { return m_renderOptions.lightMode; };
 	bool							HasChild(const ZobObject* o);
 	void							CreateSprite();
+	void							SetPhysicComponent(int i);
+	
 protected:
 
 	ZobObject* m_parent;

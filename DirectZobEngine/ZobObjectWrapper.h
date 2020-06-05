@@ -34,6 +34,7 @@ namespace CLI {
 		bool IsSprite();
 		bool IsCamera();
 		bool HasMesh();
+		void SetPhysicComponent(int i);
 	protected:
 		bool m_isValid;
 	};

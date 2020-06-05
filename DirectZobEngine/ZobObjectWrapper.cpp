@@ -106,6 +106,11 @@ namespace CLI
 		m_Instance->SetRotation(v.x, v.y, v.z);
 	}
 
+	void ZobObjectWrapper::SetPhysicComponent(int i)
+	{
+		m_Instance->SetPhysicComponent(i);
+	}
+
 	void ZobObjectWrapper::SetScale(ManagedVector3^ p)
 	{
 		ZobVector3 v = p->ToVector3();

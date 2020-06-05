@@ -63,10 +63,13 @@ namespace CLI
 			ZobVector3 v = ZobVector3(0, 1, 0);
 			ZobVector3 p = ZobVector3(0, 0, 0);
 			ZobVector3 l = ZobVector3(0, 1, 0);
+			ZobVector3 u = ZobVector3(1, 0, 0);
 			c->GetTargetVector(&p);
 			v = c->GetUp();
+			//v = l;
 			c->RotateAroundPointAxis(&p, &v, NULL, x);
 			v = c->GetLeft();
+			//v = u;
 			c->RotateAroundPointAxis(&p, &v, &l, y);
 		}
 		DirectZob::GetInstance()->Unlock();

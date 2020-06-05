@@ -15,6 +15,7 @@ ZobPhysicsEngine::~ZobPhysicsEngine()
 void ZobPhysicsEngine::Update()
 {
     m_timeStep = clock() - m_timeStep;
+    m_timeStep = 1.0f / 20.0f;
     m_world->update(m_timeStep);
 }
 

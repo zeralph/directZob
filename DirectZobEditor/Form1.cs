@@ -25,6 +25,7 @@ namespace DirectZobEditor
         private CLI.LightManagerWrapper m_lightManagerWrapper;
 
         //public UpdateLogWindow UpdateLogWindowDelegate;
+        private OptionsForm m_optionsForm;
         
         private CameraControl m_camControl;
         private ZobObjectListControl m_zobObjectList;
@@ -35,6 +36,7 @@ namespace DirectZobEditor
         private ZobLightControl m_lightControl;
         private ZobCameraControl m_cameraControl;
         private ZobMeshControl m_meshControl;
+        private PhysicControl m_physicsControl;
         private ZobSpriteControl m_spriteControl;
         private bool m_ctrlPressed = false;
 
@@ -64,19 +66,24 @@ namespace DirectZobEditor
             m_cameraControl = new ZobCameraControl();
             m_meshControl = new ZobMeshControl();
             m_spriteControl = new ZobSpriteControl(this);
+            m_physicsControl = new PhysicControl(this);
             m_zobObjectControl = new ZobObjectControl(this, m_lightControl, m_cameraControl, m_meshControl);
             //--
             EngineControlsFlowLayout.Controls.Add(m_camControl);
             EngineRendererPanel.Controls.Add(m_engineWindow);
             ZobObjectListPanel.Controls.Add(m_zobObjectList);
-            EngineControlsFlowLayout.Controls.Add(m_sceneControl);
-            EngineControlsFlowLayout.Controls.Add(m_engineControl);
+            //EngineControlsFlowLayout.Controls.Add(m_sceneControl);
+            //EngineControlsFlowLayout.Controls.Add(m_engineControl);
             EngineControlsFlowLayout.Controls.Add(m_zobObjectControl);
+            EngineControlsFlowLayout.Controls.Add(m_physicsControl);
             EngineControlsFlowLayout.Controls.Add(m_meshControl);
             EngineControlsFlowLayout.Controls.Add(m_cameraControl);
             EngineControlsFlowLayout.Controls.Add(m_lightControl);
             EngineControlsFlowLayout.Controls.Add(m_spriteControl);
             //--
+            m_optionsForm = new OptionsForm(this);
+            m_optionsForm.Hide();
+
             this.propertiesPanel.MinimumSize = new Size(300, 500);
 
             this.WindowState = FormWindowState.Maximized;
@@ -400,6 +407,16 @@ namespace DirectZobEditor
             {
                 handler(this, EventArgs.Empty);
             }
+        }
+
+        private void engineToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            m_optionsForm.Show("Engine", m_engineControl);
+        }
+
+        private void sceneToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            m_optionsForm.Show("Scene", m_sceneControl);
         }
     }
 

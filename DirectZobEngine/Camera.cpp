@@ -69,8 +69,20 @@ void Camera::DrawGizmos(const Camera* camera, Core::Engine* engine)
 void Camera::Zoom(float z)
 {
 	ZobVector3 v = m_forward;
+	if (m_tagetMode != eTarget_none)
+	{
+		if (m_tagetMode == eTarget_Vector)
+		{
+			v = GetPosition() - m_targetVector;
+			v.Normalize();
+		}
+		else if (m_tagetMode == eTarget_Object && m_targetObject)
+		{
+			v = GetPosition();
+			v = v - m_targetObject->GetPosition();
+		}
+	}
 	v = v * (-z);
-	//m_nextTranslation = m_nextTranslation + v;
 	v = v + GetPosition();
 	SetPosition(v.x, v.y, v.z);
 }
@@ -118,8 +130,23 @@ void Camera::RotateAroundPointAxis(const ZobVector3* point, const ZobVector3* ax
 			return;
 		}
 	}
-	//m_nextTranslation = t;
-	//g_update_camera_mutex.unlock();
+	SetPosition(t.x, t.y, t.z);
+
+	ZobVector3 v = GetPosition();
+	v = v - point;
+	v.Normalize();
+	RecomputeFLUVectors(&v);
+}
+
+void Camera::RecomputeFLUVectors(const ZobVector3* v)
+{
+	ZobVector3 fw = v;
+	ZobVector3 up = ZobVector3(0, 1, 0);
+	ZobVector3 left = ZobVector3::Cross(v, &up);
+	up = ZobVector3::Cross(&left, &fw);
+	m_forward = fw;
+	m_up = up;
+	m_left = left;
 }
 
 void Camera::Move(float dx, float dy, bool moveTargetVector)
@@ -187,7 +214,9 @@ void Camera::Update(const ZobMatrix4x4& parentMatrix, const ZobMatrix4x4& parent
 	m_rotationScaleMatrix.Mul(&m_forward);
 	m_rotationScaleMatrix.Mul(&m_up);
 	*/
+	
 	g_update_camera_mutex.unlock();
+	UpdateViewProjectionMatrix();
 }
 
 void Camera::UpdateViewProjectionMatrix()
