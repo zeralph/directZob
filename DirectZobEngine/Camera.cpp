@@ -107,7 +107,7 @@ bool Camera::GetTargetVector(ZobVector3* t)
 	return false;
 }
 
-void Camera::RotateAroundPointAxis(const ZobVector3* point, const ZobVector3* axis, const ZobVector3* lockAxis, float angle)
+void Camera::RotateAroundPointAxis(const ZobVector3* point, const ZobVector3* axis, const ZobVector3* lockAxis, float angle, bool recomputeVectors)
 {
 	//g_update_camera_mutex.lock();
 	//ZobVector3 t = m_nextTranslation;
@@ -131,19 +131,24 @@ void Camera::RotateAroundPointAxis(const ZobVector3* point, const ZobVector3* ax
 		}
 	}
 	SetPosition(t.x, t.y, t.z);
-
-	ZobVector3 v = GetPosition();
-	v = v - point;
-	v.Normalize();
-	RecomputeFLUVectors(&v);
+	if (recomputeVectors)
+	{
+		ZobVector3 v = GetPosition();
+		v = v - point;
+		v.Normalize();
+		RecomputeFLUVectors(&v);
+	}
 }
 
 void Camera::RecomputeFLUVectors(const ZobVector3* v)
 {
 	ZobVector3 fw = v;
+	fw.Normalize();
 	ZobVector3 up = ZobVector3(0, 1, 0);
 	ZobVector3 left = ZobVector3::Cross(v, &up);
+	left.Normalize();
 	up = ZobVector3::Cross(&left, &fw);
+	up.Normalize();
 	m_forward = fw;
 	m_up = up;
 	m_left = left;
@@ -173,9 +178,9 @@ void Camera::Update(const ZobMatrix4x4& parentMatrix, const ZobMatrix4x4& parent
 {
 	g_update_camera_mutex.lock();
 	//m_translation = m_nextTranslation;
-	m_left = ZobVector3(1, 0, 0);
+	//m_left = ZobVector3(1, 0, 0);
 	//m_forward = ZobVector3(0, 0, 1);
-	m_up = ZobVector3(0, 1, 0);
+	//m_up = ZobVector3(0, 1, 0);
 	if (m_tagetMode != eTarget_none)
 	{
 		const ZobVector3* p = GetPosition();
