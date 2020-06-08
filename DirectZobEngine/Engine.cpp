@@ -375,9 +375,49 @@ void Engine::QueueSphere(const Camera* camera, const ZobMatrix4x4* mat, const fl
 	}
 }
 
-void Engine::QueueBox(const Camera* camera, const ZobVector3* center, const ZobVector3 halfExtends)
+void Engine::QueueCapsule(const Camera* camera, const ZobMatrix4x4* mat, float radius, float height, const uint c, bool bold)
 {
 
+}
+
+void Engine::QueueMesh(const Camera* camera, const ZobMatrix4x4* mat, ZobVector3* points, int width, int height, const uint c, bool bold)
+{
+
+}
+
+void Engine::QueueBox(const Camera* camera, const ZobMatrix4x4* mat, const ZobVector3 halfExtends, const uint c, bool bold)
+{
+	ZobVector3 v0 = ZobVector3(-halfExtends.x, -halfExtends.y, -halfExtends.z);
+	ZobVector3 v1 = ZobVector3(-halfExtends.x, halfExtends.y, -halfExtends.z);
+	ZobVector3 v2 = ZobVector3(halfExtends.x, halfExtends.y, -halfExtends.z);
+	ZobVector3 v3 = ZobVector3(halfExtends.x, -halfExtends.y, -halfExtends.z);
+
+	ZobVector3 v4 = ZobVector3(-halfExtends.x, -halfExtends.y, halfExtends.z);
+	ZobVector3 v5 = ZobVector3(-halfExtends.x, halfExtends.y, halfExtends.z);
+	ZobVector3 v6 = ZobVector3(halfExtends.x, halfExtends.y, halfExtends.z);
+	ZobVector3 v7 = ZobVector3(halfExtends.x, -halfExtends.y, halfExtends.z);
+	mat->Mul(&v0);
+	mat->Mul(&v1);
+	mat->Mul(&v2);
+	mat->Mul(&v3);
+	mat->Mul(&v4);
+	mat->Mul(&v5);
+	mat->Mul(&v6);
+	mat->Mul(&v7);
+	QueueLine(camera, &v0, &v1, c, true);
+	QueueLine(camera, &v1, &v2, c, true);
+	QueueLine(camera, &v2, &v3, c, true);
+	QueueLine(camera, &v3, &v0, c, true);
+								
+	QueueLine(camera, &v4, &v5, c, true);
+	QueueLine(camera, &v5, &v6, c, true);
+	QueueLine(camera, &v6, &v7, c, true);
+	QueueLine(camera, &v7, &v4, c, true);
+								
+	QueueLine(camera, &v1, &v5, c, true);
+	QueueLine(camera, &v2, &v6, c, true);
+	QueueLine(camera, &v3, &v7, c, true);
+	QueueLine(camera, &v0, &v4, c, true);
 }
 
 void Engine::QueueEllipse(const Camera* camera, const ZobVector3* center, const ZobVector3* vectorUp, const float r1, const float r2, const uint c, bool bold)

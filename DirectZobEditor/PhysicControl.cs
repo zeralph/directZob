@@ -51,7 +51,8 @@ namespace DirectZobEditor
         {
             if(m_currentZobObjectWrapper != null)
             {
-                m_currentZobObjectWrapper.SetPhysicComponent(1);
+                ComboBox c = (ComboBox)sender;
+                m_currentZobObjectWrapper.SetPhysicComponent(c.SelectedIndex);
             }
         }
     }

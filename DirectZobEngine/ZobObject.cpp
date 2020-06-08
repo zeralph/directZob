@@ -233,7 +233,7 @@ void ZobObject::DrawGizmos(const Camera* camera, Core::Engine* engine)
 	engine->QueueLine(camera, t, &y, c, true);
 	c = 0x000000FF;
 	engine->QueueLine(camera, t, &z, c, true);
-	engine->QueueSphere(camera, &m_modelMatrix, 1.0f, c, false);
+	m_physicComponent->DrawGizmos(camera, &m_modelMatrix);
 }
 
 int ZobObject::GetChildPosition(const ZobObject* z)
@@ -409,7 +409,7 @@ const ZobVector3* ZobObject::GetPosition() const
 
 void ZobObject::SetPhysicComponent(int i)
 {
-	m_physicComponent->Set(ZobPhysicComponent::ePhysicComponentType_rigidBody);
+	m_physicComponent->Set((ZobPhysicComponent::ePhysicComponentType)i);
 }
 
 void ZobObject::SaveTransform()

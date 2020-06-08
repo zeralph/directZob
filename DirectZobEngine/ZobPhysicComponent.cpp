@@ -48,10 +48,14 @@ void ZobPhysicComponent::Set(ePhysicComponentType t)
 	case ePhysicComponentType_collisionBody:
 	{
 		m_collisionBody = DirectZob::GetInstance()->GetPhysicsEngine()->CreateCollisionBody(&m_position, &m_orientation);
+		//test
+		ZobVector3 z = ZobVector3(2, 2, 2);
+		AddBoxCollider(&z);
 		break;
 	}
 	case ePhysicComponentType_rigidBody:
 		m_rigidBody = DirectZob::GetInstance()->GetPhysicsEngine()->CreateRigidBody(&m_position, &m_orientation);
+		AddSphereCollider(2.0f);
 		break;
 	};
 }
@@ -159,14 +163,18 @@ void ZobPhysicComponent::AddBoxCollider(const ZobVector3* halfExtends)
 {
 	PhysicsCommon* pc = DirectZob::GetInstance()->GetPhysicsEngine()->GetPhysicsCommon();
 	Vector3 h = Vector3(halfExtends->x, halfExtends->y, halfExtends->z);
-	BoxShape* boxShape = pc->createBoxShape(h);
-	AddColliderInternal(boxShape);
+	BoxShape* s = pc->createBoxShape(h);
+	m_shapeDraw._type = sShapeDraw::eShapeType::eShapeType_box;
+	m_shapeDraw._halfExtends = halfExtends;;
+	AddColliderInternal(s);
 }
 
 void ZobPhysicComponent::AddSphereCollider(float radius)
 {
 	PhysicsCommon* pc = DirectZob::GetInstance()->GetPhysicsEngine()->GetPhysicsCommon();
 	SphereShape* s= pc->createSphereShape(radius);
+	m_shapeDraw._type = sShapeDraw::eShapeType::eShapeType_sphere;
+	m_shapeDraw._radius = radius;
 	AddColliderInternal(s);
 }
 
@@ -244,6 +252,26 @@ void ZobPhysicComponent::ResetPhysic()
 	case ePhysicComponentType_rigidBody:
 		m_rigidBody->setIsActive(false);
 		m_rigidBody->setIsActive(true);
+		break;
+	}
+}
+
+void ZobPhysicComponent::DrawGizmos(const Camera* camera, const ZobMatrix4x4* mat)
+{
+	uint c = 0x00FF00;
+	bool bold = false;
+	Engine* e = DirectZob::GetInstance()->GetEngine();
+	switch (m_shapeDraw._type)
+	{
+	case sShapeDraw::eShapeType::eShapeType_sphere:
+		e->QueueSphere(camera, mat, m_shapeDraw._radius, c, bold);
+		break;
+	case sShapeDraw::eShapeType::eShapeType_box:
+		e->QueueBox(camera, mat, m_shapeDraw._halfExtends, c, bold);
+		break;
+	case sShapeDraw::eShapeType::eShapeType_capsule:
+	case sShapeDraw::eShapeType::eShapeType_convexMesh:
+	default:
 		break;
 	}
 }

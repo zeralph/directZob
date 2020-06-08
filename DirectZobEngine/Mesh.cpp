@@ -445,37 +445,13 @@ void Mesh::SplitEntry(const std::string* s, std::vector<std::string>* v, const c
 
 void Mesh::DrawBoundingBox(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions* options)
 {
-	ZobVector3 v0 = ZobVector3(m_minBouding.x, m_minBouding.y, m_minBouding.z);
-	ZobVector3 v1 = ZobVector3(m_minBouding.x, m_maxBouding.y, m_minBouding.z);
-	ZobVector3 v2 = ZobVector3(m_maxBouding.x, m_maxBouding.y, m_minBouding.z);
-	ZobVector3 v3 = ZobVector3(m_maxBouding.x, m_minBouding.y, m_minBouding.z);
+	ZobVector3 v = ZobVector3(
+		(m_maxBouding.x - m_minBouding.x) / 2.0f,
+		(m_maxBouding.y - m_minBouding.y) / 2.0f,
+		(m_maxBouding.z - m_minBouding.z) / 2.0f
+	);
 
-	ZobVector3 v4 = ZobVector3(m_minBouding.x, m_minBouding.y, m_maxBouding.z);
-	ZobVector3 v5 = ZobVector3(m_minBouding.x, m_maxBouding.y, m_maxBouding.z);
-	ZobVector3 v6 = ZobVector3(m_maxBouding.x, m_maxBouding.y, m_maxBouding.z);
-	ZobVector3 v7 = ZobVector3(m_maxBouding.x, m_minBouding.y, m_maxBouding.z);
-	modelMatrix.Mul(&v0);
-	modelMatrix.Mul(&v1);
-	modelMatrix.Mul(&v2);
-	modelMatrix.Mul(&v3);
-	modelMatrix.Mul(&v4);
-	modelMatrix.Mul(&v5);
-	modelMatrix.Mul(&v6);
-	modelMatrix.Mul(&v7);
-	engine->QueueLine(camera, &v0, &v1, 0xFF00FF00, true);
-	engine->QueueLine(camera, &v1, &v2, 0xFF00FF00, true);
-	engine->QueueLine(camera, &v2, &v3, 0xFF00FF00, true);
-	engine->QueueLine(camera, &v3, &v0, 0xFF00FF00, true);
-
-	engine->QueueLine(camera, &v4, &v5, 0xFF00FF00, true);
-	engine->QueueLine(camera, &v5, &v6, 0xFF00FF00, true);
-	engine->QueueLine(camera, &v6, &v7, 0xFF00FF00, true);
-	engine->QueueLine(camera, &v7, &v4, 0xFF00FF00, true);
-
-	engine->QueueLine(camera, &v1, &v5, 0xFF00FF00, true);
-	engine->QueueLine(camera, &v2, &v6, 0xFF00FF00, true);
-	engine->QueueLine(camera, &v3, &v7, 0xFF00FF00, true);
-	engine->QueueLine(camera, &v0, &v4, 0xFF00FF00, true);
+	engine->QueueBox(camera, &modelMatrix, v, 0x00FFFFFF, false);
 }
 
 void Mesh::Update(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions* options)
