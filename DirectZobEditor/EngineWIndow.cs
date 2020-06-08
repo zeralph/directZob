@@ -48,6 +48,7 @@ namespace DirectZobEditor
             bTZ.Visible = false;
             bCenter.Visible = false;
             m_mainForm.GetZobObjectListControl().OnObjectSelected += new ZobObjectListControl.OnObjectSelectedHandler(OnObjectSelected);
+            m_mainForm.OnNewScene += new EventHandler(OnSceneChanged);
         }
 
         public void RemoveTranslationGizmos()
@@ -55,6 +56,11 @@ namespace DirectZobEditor
             bTY.Visible = false;
             bTX.Visible = false;
             bTZ.Visible = false;
+        }
+
+        public void OnSceneChanged(object s, EventArgs e)
+        {
+            m_selectedObject = null;
         }
 
         public void SetTranslationGizmos(ZobObjectWrapper z)

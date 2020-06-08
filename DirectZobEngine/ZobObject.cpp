@@ -389,22 +389,28 @@ void ZobObject::CreateSprite()
 void ZobObject::SetRotation(float x, float y, float z)
 {
 
-	m_physicComponent->SetOrientation(x, y, z);
+	if (m_physicComponent)
+	{
+		m_physicComponent->SetOrientation(x, y, z);
+	}
 }
 
 void ZobObject::SetPosition(float x, float y, float z)
 {
-	m_physicComponent->SetPosition(x, y, z);
+	if (m_physicComponent)
+	{
+		m_physicComponent->SetPosition(x, y, z);
+	}
 }
 
 const ZobVector3* ZobObject::GetRotation() const
 {
-	return m_physicComponent->GetOrientation();
+	return m_physicComponent ? m_physicComponent->GetOrientation():&ZobVector3::Vector3Zero;
 }
 
 const ZobVector3* ZobObject::GetPosition() const
 {
-	return m_physicComponent->GetPosition();
+	return m_physicComponent?m_physicComponent->GetPosition():&ZobVector3::Vector3Zero;
 }
 
 void ZobObject::SetPhysicComponent(int i)
