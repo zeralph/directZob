@@ -116,5 +116,15 @@ namespace CLI
 	{
 		return m_Instance->Reparent((o != nullptr) ? o->GetInstance() : NULL, (parent != nullptr) ? parent->GetInstance() : NULL);
 	}
+
+	void ZobObjectManagerWrapper::SaveTransforms()
+	{
+		m_Instance->SaveTransforms();
+	}
+
+	void ZobObjectManagerWrapper::RestoreTransforms()
+	{
+		m_Instance->RestoreTransforms();
+	}
 }
 #endif //_WINDLL

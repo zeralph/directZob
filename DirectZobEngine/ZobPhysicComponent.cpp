@@ -194,3 +194,56 @@ void ZobPhysicComponent::AddColliderInternal(CollisionShape* c)
 		break;
 	}
 }
+
+void ZobPhysicComponent::SaveTransform()
+{
+	switch (m_type)
+	{
+	case ePhysicComponentType_none:
+		break;
+	case ePhysicComponentType_collisionBody:
+	{
+		m_savedTransform = m_collisionBody->getTransform();
+		break;
+	}
+	case ePhysicComponentType_rigidBody:
+		m_savedTransform = m_rigidBody->getTransform();
+		break;
+	}
+}
+
+void ZobPhysicComponent::RestoreTransform()
+{
+	switch (m_type)
+	{
+	case ePhysicComponentType_none:
+		break;
+	case ePhysicComponentType_collisionBody:
+	{
+		m_collisionBody->setTransform(m_savedTransform);
+		break;
+	}
+	case ePhysicComponentType_rigidBody:
+		m_rigidBody->setTransform(m_savedTransform);
+		break;
+	}
+}
+
+void ZobPhysicComponent::ResetPhysic()
+{
+	switch (m_type)
+	{
+	case ePhysicComponentType_none:
+		break;
+	case ePhysicComponentType_collisionBody:
+	{
+		m_collisionBody->setIsActive(false);
+		m_collisionBody->setIsActive(true);
+		break;
+	}
+	case ePhysicComponentType_rigidBody:
+		m_rigidBody->setIsActive(false);
+		m_rigidBody->setIsActive(true);
+		break;
+	}
+}

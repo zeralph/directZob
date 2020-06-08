@@ -11,6 +11,9 @@ namespace CLI
 	public:
 
 		DirectZobWrapper();
+		void					StartPhysic();
+		void					StopPhysic(bool reset);
+		bool					IsPhysicPlaying();
 		void					Init(int width, int height);
 		void					LoadScene(System::String^ path, System::String^ file);
 		void					NewScene();

@@ -233,3 +233,19 @@ bool ZobObjectManager::Reparent(ZobObject*o, ZobObject* parent)
 	}
 	return false;
 }
+
+void ZobObjectManager::SaveTransforms()
+{
+	m_rootObject->SaveTransform();
+
+}
+
+void ZobObjectManager::RestoreTransforms()
+{
+	m_rootObject->RestoreTransform();
+}
+
+void ZobObjectManager::ResetPhysic()
+{
+	m_rootObject->ResetPhysic();
+}

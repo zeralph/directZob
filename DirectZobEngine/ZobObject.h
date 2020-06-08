@@ -30,6 +30,10 @@ public:
 	const ZobVector3*				GetRotation() const;
 	const ZobVector3*				GetPosition() const;
 
+	void							SaveTransform();
+	void							RestoreTransform();
+	void							ResetPhysic();
+
 	virtual void					DrawGizmos(const Camera* camera, Core::Engine* engine);
 	virtual TiXmlNode*				SaveUnderNode(TiXmlNode* node);
 	//

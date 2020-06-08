@@ -245,14 +245,14 @@
             // engineToolStripMenuItem
             // 
             this.engineToolStripMenuItem.Name = "engineToolStripMenuItem";
-            this.engineToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.engineToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
             this.engineToolStripMenuItem.Text = "Engine ...";
             this.engineToolStripMenuItem.Click += new System.EventHandler(this.engineToolStripMenuItem_Click);
             // 
             // sceneToolStripMenuItem
             // 
             this.sceneToolStripMenuItem.Name = "sceneToolStripMenuItem";
-            this.sceneToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.sceneToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
             this.sceneToolStripMenuItem.Text = "Scene ...";
             this.sceneToolStripMenuItem.Click += new System.EventHandler(this.sceneToolStripMenuItem_Click);
             // 
@@ -361,6 +361,7 @@
             this.btnPlay.Name = "btnPlay";
             this.btnPlay.Size = new System.Drawing.Size(23, 22);
             this.btnPlay.Text = "toolStripButton1";
+            this.btnPlay.Click += new System.EventHandler(this.btnPlay_Click);
             // 
             // btnPause
             // 
@@ -370,6 +371,7 @@
             this.btnPause.Name = "btnPause";
             this.btnPause.Size = new System.Drawing.Size(23, 22);
             this.btnPause.Text = "toolStripButton2";
+            this.btnPause.Click += new System.EventHandler(this.btnPause_Click);
             // 
             // btnStop
             // 
@@ -379,6 +381,7 @@
             this.btnStop.Name = "btnStop";
             this.btnStop.Size = new System.Drawing.Size(23, 22);
             this.btnStop.Text = "toolStripButton3";
+            this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
             // 
             // EngineRendererPanel
             // 

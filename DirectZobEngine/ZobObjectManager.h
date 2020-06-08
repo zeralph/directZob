@@ -33,6 +33,9 @@ public:
 	void CreateEditorGizmos(std::string& editorResourcesPath);
 	ZobObject* GetEditorGizmos() { return m_editorGizmos; }
 	bool Reparent(ZobObject* o, ZobObject* parent);
+	void SaveTransforms();
+	void RestoreTransforms();
+	void ResetPhysic();
 private:
 	void UpdateObjects(const Camera* camera, Core::Engine* engine);
 	void GetZobObjectListInternal(const ZobObject* z, std::string& str);

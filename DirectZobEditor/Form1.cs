@@ -13,6 +13,13 @@ namespace DirectZobEditor
 {
     public partial class Form1 : Form
     {
+        enum eplayMode
+        {
+            ePlayMode_play=0,
+            ePlayMode_pause,
+            ePlayMode_stop,
+        }
+
         public static Form1 m_mainForm = null;
         public static Form1 GetMainForm() { return m_mainForm; }
         public event EventHandler OnNewScene;
@@ -44,7 +51,7 @@ namespace DirectZobEditor
         private string m_file;
 
         private string[] m_events;
-
+        private eplayMode m_playMode = eplayMode.ePlayMode_stop;
         public Form1()
         {
             m_mainForm = this;
@@ -109,6 +116,11 @@ namespace DirectZobEditor
             UpdateEventsLog();
             //textLog.Invoke(UpdateLogWindowDelegate);
             //EngineRender.Invoke(UpdateEngineWindowDelegate);
+            if (m_directZobWrapper.IsPhysicPlaying())
+            {
+                EventArgs e = new EventArgs();
+                PropagateSceneUpdateEvent(e);
+            }
         }
 
 
@@ -417,6 +429,48 @@ namespace DirectZobEditor
         private void sceneToolStripMenuItem_Click(object sender, EventArgs e)
         {
             m_optionsForm.Show("Scene", m_sceneControl);
+        }
+
+        private void btnPlay_Click(object sender, EventArgs e)
+        {
+            if (m_playMode != eplayMode.ePlayMode_play)
+            {
+                //save objects position
+                if (m_playMode == eplayMode.ePlayMode_stop)
+                {
+                    m_zobObjectList.SaveTransforms();
+                }
+                m_playMode = eplayMode.ePlayMode_play;
+                m_directZobWrapper.StartPhysic();
+            }
+        }
+
+        private void btnPause_Click(object sender, EventArgs e)
+        {
+            if (m_playMode == eplayMode.ePlayMode_play)
+            {
+                m_directZobWrapper.StopPhysic(false);
+                m_playMode = eplayMode.ePlayMode_pause;
+            }
+            else if (m_playMode == eplayMode.ePlayMode_pause)
+            {
+                m_directZobWrapper.StartPhysic();
+                m_playMode = eplayMode.ePlayMode_play;
+            }
+        }
+
+        private void btnStop_Click(object sender, EventArgs e)
+        {
+            if (m_playMode != eplayMode.ePlayMode_stop)
+            {
+                m_directZobWrapper.StopPhysic(true);
+                if (m_playMode != eplayMode.ePlayMode_stop)
+                {
+                    m_zobObjectList.RestoreTransforms();
+                }
+                m_playMode = eplayMode.ePlayMode_stop;
+                PropagateSceneUpdateEvent(e);
+            }
         }
     }
 

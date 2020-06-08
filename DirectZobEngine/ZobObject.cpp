@@ -233,6 +233,7 @@ void ZobObject::DrawGizmos(const Camera* camera, Core::Engine* engine)
 	engine->QueueLine(camera, t, &y, c, true);
 	c = 0x000000FF;
 	engine->QueueLine(camera, t, &z, c, true);
+	engine->QueueSphere(camera, &m_modelMatrix, 1.0f, c, false);
 }
 
 int ZobObject::GetChildPosition(const ZobObject* z)
@@ -409,4 +410,31 @@ const ZobVector3* ZobObject::GetPosition() const
 void ZobObject::SetPhysicComponent(int i)
 {
 	m_physicComponent->Set(ZobPhysicComponent::ePhysicComponentType_rigidBody);
+}
+
+void ZobObject::SaveTransform()
+{
+	m_physicComponent->SaveTransform();
+	for (std::vector<ZobObject*>::const_iterator iter = m_children.begin(); iter != m_children.end(); iter++)
+	{
+		(*iter)->SaveTransform();
+	}
+}
+
+void ZobObject::RestoreTransform()
+{
+	m_physicComponent->RestoreTransform();
+	for (std::vector<ZobObject*>::const_iterator iter = m_children.begin(); iter != m_children.end(); iter++)
+	{
+		(*iter)->RestoreTransform();
+	}
+}
+
+void ZobObject::ResetPhysic()
+{
+	m_physicComponent->ResetPhysic();
+	for (std::vector<ZobObject*>::const_iterator iter = m_children.begin(); iter != m_children.end(); iter++)
+	{
+		(*iter)->ResetPhysic();
+	}
 }

@@ -32,6 +32,16 @@ namespace DirectZobEditor
             this.Dock = DockStyle.Fill;
         }
 
+        public void RestoreTransforms()
+        {
+            m_zobObjectManagerWrapper.RestoreTransforms();
+        }
+
+        public void SaveTransforms()
+        {
+            m_zobObjectManagerWrapper.SaveTransforms();
+        }
+
         public CLI.ZobObjectManagerWrapper GetWrapper()
         {
             return m_zobObjectManagerWrapper;

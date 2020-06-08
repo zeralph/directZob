@@ -28,6 +28,9 @@ public :
 	DirectZob();
 	~DirectZob();
 
+	void				StartPhysic() { m_physicStarted = true; };
+	void				StopPhysic(bool reset);
+	inline bool			IsPhysicPlaying() const { return m_physicStarted; }
 	void				Init(int width, int height, bool bEditorMode);
 	void				LoadScene(std::string& path, std::string& file);
 	void				Unload();
@@ -84,4 +87,5 @@ private:
 	clock_t m_copyTick;
 	clock_t	m_frameTick;
 	static int s_logIndent;
+	bool m_physicStarted;
 };

@@ -31,6 +31,9 @@ public:
 	void								AddSphereCollider(float radius);
 	void								AddCapsuleCollider(float radius, float height);
 
+	void								SaveTransform();
+	void								RestoreTransform();
+	void								ResetPhysic();
 private:
 	void								AddColliderInternal(CollisionShape* c);
 	ePhysicComponentType m_type;
@@ -38,4 +41,5 @@ private:
 	RigidBody* m_rigidBody;
 	ZobVector3 m_position;
 	ZobVector3 m_orientation;
+	Transform m_savedTransform;
 };

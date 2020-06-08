@@ -72,6 +72,7 @@ void DirectZob::SaveScene()
 void DirectZob::NewScene()
 {
 	g_render_mutex.lock();
+	m_physicStarted = false;
 	SceneLoader::NewScene();
 	if (m_text == NULL)
 	{
@@ -121,9 +122,19 @@ void DirectZob::Init(int width, int height, bool bEditorMode)
 	int state;
 	m_initialized = true;
 	m_frameTick = clock();
+	m_physicStarted = false;
 }
 
 static float rot = 1.0f;
+
+void DirectZob::StopPhysic(bool reset)
+{ 
+	m_physicStarted = false; 
+	if (reset)
+	{
+		DirectZob::GetInstance()->GetZobObjectManager()->ResetPhysic();
+	}
+}
 
 int DirectZob::RunAFrame()
 {
@@ -134,7 +145,10 @@ int DirectZob::RunAFrame()
 	m_frameTick = clock();
 	if(m_initialized && m_engine->Started())
 	{
-		m_physicsEngine->Update();
+		if (m_physicStarted)
+		{
+			m_physicsEngine->Update();
+		}
 		m_cameraManager->UpdateAfter();
 		Color c = Color(DirectZob::GetInstance()->GetLightManager()->GetClearColor());
 		m_engine->ClearBuffer(&c);

@@ -34,7 +34,6 @@ namespace Core
 		void											Stop();
 		void											ClearBuffer(const Color* color);
 		void											CopyBuffer(uint* source, uint* dest);
-
 		void											QueueTriangle(const Triangle* t);
 		void											DrawGrid(const Camera* camera);
 
@@ -42,6 +41,8 @@ namespace Core
 
 		void											QueueLine(const Camera* camera, const ZobVector3* v1, const ZobVector3* v2, const uint c, bool bold);
 		void											QueueEllipse(const Camera* camera, const ZobVector3* center, const ZobVector3* vectorUp, const float r1, const float r2, const uint c, bool bold);
+		void											QueueSphere(const Camera* camera, const ZobMatrix4x4* mat, const float radius, const uint c, bool bold);
+		void											QueueBox(const Camera* camera, const ZobVector3* center, const ZobVector3 halfExtends);
 		bool											ClipSegment(ZobVector3* a, ZobVector3* b);
 		int												StartDrawingScene();
 		int												SetDisplayedBuffer();

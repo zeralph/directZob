@@ -15,6 +15,21 @@ namespace CLI
 
 	}
 
+	void DirectZobWrapper::StartPhysic()
+	{
+		m_Instance->StartPhysic();
+	}
+
+	void DirectZobWrapper::StopPhysic(bool reset)
+	{
+		m_Instance->StopPhysic(reset);
+	}
+
+	bool DirectZobWrapper::IsPhysicPlaying()
+	{
+		return m_Instance->IsPhysicPlaying();
+	}
+
 	void DirectZobWrapper::Init(int width, int height)
 	{
 		m_Instance->Init(width, height, true);

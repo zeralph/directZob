@@ -47,7 +47,6 @@ Engine::Engine(int width, int height, Events* events)
 	//	m_bufferData.oBuffer = m_oBuffer;
 	m_bufferData.size = width * height;
 	m_nbPixels = 0;
-
 	m_rasterTriangleQueues = (Triangle **)malloc(sizeof(Triangle) * m_nbRasterizers);
 	m_rasterNbTriangleQueues = (long *)malloc(sizeof(long) * m_nbRasterizers);
 	m_rasterLineQueues = new std::vector<Line3D>[m_nbRasterizers];
@@ -345,6 +344,40 @@ void Engine::ClipSegmentToPlane(ZobVector3 &s0, ZobVector3 &s1, ZobVector3 &pp, 
 	}
 	u.Mul(sI);
 	s1 = s0 + u;
+}
+
+void Engine::QueueSphere(const Camera* camera, const ZobMatrix4x4* mat, const float radius, const uint c, bool bold)
+{
+	static const int segs = 10;
+	ZobVector3 v[segs+1][segs+1];
+	for (int i = 0; i <= segs; i++)
+	{
+		for (int j = 0; j <= segs; j++)
+		{
+			float lon = (float)i / (float)segs;
+			float lat = (float)j / (float)segs;
+			v[i][j].x = sin(M_PI * lat) * cos(2*M_PI*lon);
+			v[i][j].y = sin(M_PI * lat) * sin(2*M_PI*lon);
+			v[i][j].z = cos(M_PI *lat);
+			mat->Mul(&v[i][j]);
+		}
+	}
+	for (int i = 0; i < segs; i++)
+	{
+		for (int j = 0; j < segs; j++)
+		{
+			QueueLine(camera, &v[i][j], &v[(i+1)%segs][j], c, bold);
+			//if (j < segs - 1)
+			{
+				QueueLine(camera, &v[i][j], &v[i][j + 1], c, bold);
+			}
+		}
+	}
+}
+
+void Engine::QueueBox(const Camera* camera, const ZobVector3* center, const ZobVector3 halfExtends)
+{
+
 }
 
 void Engine::QueueEllipse(const Camera* camera, const ZobVector3* center, const ZobVector3* vectorUp, const float r1, const float r2, const uint c, bool bold)

@@ -18,7 +18,8 @@ namespace CLI
 		};
 
 		ZobObjectManagerWrapper();
-
+		void SaveTransforms();
+		void RestoreTransforms();
 		System::String^ GetZobObjectList();
 		ZobObjectWrapper^ GetZobObject(System::String^ name);
 		ZobObjectWrapper^ GetRootObject();
