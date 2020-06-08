@@ -482,6 +482,7 @@ void Engine::QueueLine(const Camera *camera, const ZobVector3 *v1, const ZobVect
 			l.zb = zb;
 			l.c = c;
 			l.bold = bold;
+			l.bold = false;
 			int min = std::min<int>(a.y, b.y);
 			int max = std::max<int>(a.y, b.y);
 			min = clamp2(min, 0, (int)m_bufferData.height - 1);

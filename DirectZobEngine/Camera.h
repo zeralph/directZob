@@ -32,7 +32,7 @@ public:
 	void					SetNoTarget() { m_tagetMode = eTarget_none; };
 	bool					GetTargetVector(ZobVector3* t);
 	
-	void					RotateAroundPointAxis(const ZobVector3* point, const ZobVector3* axis, const ZobVector3* lockAxis, float angle);
+	void					RotateAroundPointAxis(const ZobVector3* point, const ZobVector3* axis, const ZobVector3* lockAxis, float angle, bool recomputeVectors);
 	void					Move(float dx, float dy, bool moveTargetVector);
 	void					Zoom(float z);
 	inline void				ToViewSpace(ZobVector3* v) const

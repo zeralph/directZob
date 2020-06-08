@@ -56,6 +56,7 @@ namespace CLI
 
 	void CameraManagerWrapper::RotateAroundAxis(float x, float y)
 	{
+		//x = 0;
 		DirectZob::GetInstance()->Lock();
 		Camera* c = m_Instance->GetCurrentCamera();
 		if (c)
@@ -66,11 +67,13 @@ namespace CLI
 			ZobVector3 u = ZobVector3(1, 0, 0);
 			c->GetTargetVector(&p);
 			v = c->GetUp();
-			//v = l;
-			c->RotateAroundPointAxis(&p, &v, NULL, x);
+			v = l;
+			c->RotateAroundPointAxis(&p, &v, NULL, x, false);
 			v = c->GetLeft();
-			//v = u;
-			c->RotateAroundPointAxis(&p, &v, &l, y);
+			v.y = 0.0f;
+			v.Normalize();
+			c->RotateAroundPointAxis(&p, &v, NULL, y, false);
+
 		}
 		DirectZob::GetInstance()->Unlock();
 	}
