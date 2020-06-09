@@ -10,8 +10,8 @@ ZobObject::ZobObject(Type t, SubType s, const std::string& name, Mesh* mesh, Zob
 {
 	DirectZob::LogInfo("ZobObject %s creation", name.c_str());
 	DirectZob::AddIndent();
-	m_physicComponent = new ZobPhysicComponent();
 	sObjectNumber++;
+	m_physicComponent = new ZobPhysicComponent(NULL);
 	if (name.length() == 0)
 	{
 		std::string n = "newObject_";
@@ -51,7 +51,6 @@ ZobObject::ZobObject(Type t, SubType s, TiXmlElement* node, Mesh* mesh, ZobObjec
 	:ZOBGUID(t, s)
 {
 	sObjectNumber++;
-	m_physicComponent = new ZobPhysicComponent();
 	ZobVector3 position, rotation, scale, orientation = ZobVector3();
 	std::string name;
 	float x, y, z;
@@ -59,6 +58,8 @@ ZobObject::ZobObject(Type t, SubType s, TiXmlElement* node, Mesh* mesh, ZobObjec
 	name = node->Attribute("name");
 	DirectZob::LogInfo("ZobObejct %s creation", name.c_str());
 	DirectZob::AddIndent();
+	f = node->FirstChildElement("Physic");
+	m_physicComponent = new ZobPhysicComponent(f);
 	f = node->FirstChildElement("Position");
 	x = atof(f->Attribute("x"));
 	y = atof(f->Attribute("y"));
@@ -116,7 +117,6 @@ ZobObject::~ZobObject()
 	DirectZob::LogInfo("delete ZobObject %s", m_name.c_str());
 	DirectZob::AddIndent();
 	delete m_physicComponent;
-	m_physicComponent = NULL;
 	if (m_parent != NULL)
 	{
 		m_parent->RemoveChildReference(this);
@@ -378,6 +378,7 @@ TiXmlNode* ZobObject::SaveUnderNode(TiXmlNode* node)
 		o->InsertEndChild(m);
 		o->SetAttribute("type", "mesh");
 	}
+	m_physicComponent->SaveUnderNode(o);
 	return o;
 }
 
@@ -389,29 +390,22 @@ void ZobObject::CreateSprite()
 
 void ZobObject::SetRotation(float x, float y, float z)
 {
-
-	if (m_physicComponent)
-	{
-		m_physicComponent->SetOrientation(x, y, z);
-	}
+	m_physicComponent->SetOrientation(x, y, z);
 }
 
 void ZobObject::SetPosition(float x, float y, float z)
 {
-	if (m_physicComponent)
-	{
-		m_physicComponent->SetPosition(x, y, z);
-	}
+	m_physicComponent->SetPosition(x, y, z);
 }
 
 const ZobVector3* ZobObject::GetRotation() const
 {
-	return m_physicComponent ? m_physicComponent->GetOrientation():&ZobVector3::Vector3Zero;
+	return m_physicComponent->GetOrientation();
 }
 
 const ZobVector3* ZobObject::GetPosition() const
 {
-	return m_physicComponent?m_physicComponent->GetPosition():&ZobVector3::Vector3Zero;
+	return m_physicComponent->GetPosition();
 }
 
 void ZobObject::SetPhysicComponent(int i)

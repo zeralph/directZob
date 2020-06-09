@@ -31,7 +31,7 @@ namespace DirectZobEditor
         Bitmap m_engineBitmap = null;
         int m_width;
         int m_height;
-        bool m_exiting = false;
+        bool m_exitEngineThread = false;
         int m_lastMouseX = -1;
         int m_lastMouseY = -1;
 
@@ -131,22 +131,17 @@ namespace DirectZobEditor
 
         public void End()
         {
-            if (m_engineThread.IsAlive)
-            {
-                m_engineThread.Abort();
-            }
-            m_exiting = true;
+			if (m_engineThread != null)
+			{		
+				m_exitEngineThread = true;
+				m_engineThread.Join();
+				m_engineThread = null;
+			}
         }
 
         private void GenerateRenderWindow()
         {
-            if (m_engineThread != null)
-            {
-                if (m_engineThread.IsAlive)
-                {
-                    m_engineThread.Abort();
-                }
-            }
+			End();
             m_engineThread = null;
             m_width = m_engineWrapper.GetBufferWidth();
             m_height = m_engineWrapper.GetBufferHeight();
@@ -208,25 +203,25 @@ namespace DirectZobEditor
 
         private void RunEngineThread()
         {
-            while (!m_exiting)
+            while (!m_exitEngineThread)
             {
-                if (OnBeginFrame != null)
-                {
-                    OnBeginFrame(this, EventArgs.Empty);
-                }
-                try
-                {
-                    m_directZobWrapper.RunAFrame();
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                }
-                EngineRender.Invoke(UpdateEngineWindowDelegate);
-                if (OnEndFrame != null)
-                {
-                    OnEndFrame(this, EventArgs.Empty);
-                }
+				try
+				{
+					if (OnBeginFrame != null)
+					{
+						OnBeginFrame(this, EventArgs.Empty);
+					}
+					m_directZobWrapper.RunAFrame();
+					EngineRender.Invoke(UpdateEngineWindowDelegate);
+					if (OnEndFrame != null)
+					{
+						OnEndFrame(this, EventArgs.Empty);
+					}
+				}
+				catch(Exception e)
+				{
+
+				}
             }
         }
 

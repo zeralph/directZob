@@ -13,8 +13,6 @@ public :
 	ZobPhysicsEngine();
 	~ZobPhysicsEngine();
 	void Update();
-	CollisionBody* CreateCollisionBody(const ZobVector3* position, const ZobVector3* orientation);
-	void DestroyCollisionBody(CollisionBody* cb);
 	RigidBody* CreateRigidBody(const ZobVector3* position, const ZobVector3* orientation);
 	void DestroyRigidBody(RigidBody* rb);
 	PhysicsCommon* GetPhysicsCommon() { return &m_physicsCommon; }

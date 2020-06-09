@@ -107,12 +107,12 @@ void DirectZob::Init(int width, int height, bool bEditorMode)
 	m_events = new Events();
 	DirectZob::LogInfo("Init engine");
 	m_engine = new Engine(width, height, m_events);
+	m_physicsEngine = new ZobPhysicsEngine();
 	m_zobObjectManager = new ZobObjectManager();
 	m_lightManager = new LightManager();
 	m_materialManager = new MaterialManager();
 	m_meshManager = new MeshManager();
 	m_cameraManager = new CameraManager();
-	m_physicsEngine = new ZobPhysicsEngine();
 	int dx = 1;
 	int dy = 1;
 	float r = 0.0f;

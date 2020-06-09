@@ -356,9 +356,9 @@ void Engine::QueueSphere(const Camera* camera, const ZobMatrix4x4* mat, const fl
 		{
 			float lon = (float)i / (float)segs;
 			float lat = (float)j / (float)segs;
-			v[i][j].x = sin(M_PI * lat) * cos(2*M_PI*lon);
-			v[i][j].y = sin(M_PI * lat) * sin(2*M_PI*lon);
-			v[i][j].z = cos(M_PI *lat);
+			v[i][j].x = sin(M_PI * lat) * cos(2*M_PI*lon) * radius;
+			v[i][j].y = sin(M_PI * lat) * sin(2*M_PI*lon) * radius;
+			v[i][j].z = cos(M_PI *lat) * radius;
 			mat->Mul(&v[i][j]);
 		}
 	}

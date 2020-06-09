@@ -5,6 +5,7 @@
 #include <reactphysics3d/reactphysics3d.h>
 #include "ZobVector3.h"
 #include "Camera.h"
+#include "tinyxml.h"
 
 using namespace reactphysics3d;
 
@@ -15,8 +16,8 @@ public:
 	enum ePhysicComponentType
 	{
 		ePhysicComponentType_none = 0,
-		ePhysicComponentType_collisionBody,
-		ePhysicComponentType_rigidBody,
+		ePhysicComponentType_static,
+		ePhysicComponentType_dynamic,
 	};
 
 	//used only for drawing shapes
@@ -38,10 +39,11 @@ public:
 		//a voir pour le mesh
 	};
 
-	ZobPhysicComponent();
+	ZobPhysicComponent(TiXmlNode* t);
 	~ZobPhysicComponent();
+	void								Init();
+	TiXmlNode*							SaveUnderNode(TiXmlNode* node);
 	void								Set(ePhysicComponentType t);
-	void								UnSet();
 	void								SetPosition(float x, float y, float z);
 	void								SetOrientation(float x, float y, float z);
 	const ZobVector3*					GetPosition();
@@ -58,10 +60,10 @@ public:
 private:
 	void								AddColliderInternal(CollisionShape* c);
 	ePhysicComponentType m_type;
-	CollisionBody* m_collisionBody;
 	RigidBody* m_rigidBody;
-	ZobVector3 m_position;
-	ZobVector3 m_orientation;
+	Collider* m_collider;	
 	Transform m_savedTransform;
 	sShapeDraw m_shapeDraw;
+	ZobVector3 m_position;
+	ZobVector3 m_orientation;
 };
