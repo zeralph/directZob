@@ -76,7 +76,7 @@ void ZobPhysicComponent::SetPosition(float x, float y, float z)
 		break;
 	}
 	case ePhysicComponentType_rigidBody:
-		Transform t = Transform(m_collisionBody->getTransform());
+		Transform t = Transform(m_rigidBody->getTransform());
 		Vector3 v = Vector3(x, y, z);
 		t.setPosition(v);
 		m_rigidBody->setTransform(t);
@@ -101,7 +101,7 @@ void ZobPhysicComponent::SetOrientation(float x, float y, float z)
 		break;
 	}
 	case ePhysicComponentType_rigidBody:
-		Transform t = Transform(m_collisionBody->getTransform());
+		Transform t = Transform(m_rigidBody->getTransform());
 		Quaternion q = Quaternion::identity();
 		q.fromEulerAngles(x, y, z);
 		t.setOrientation(q);

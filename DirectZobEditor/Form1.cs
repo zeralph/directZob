@@ -472,6 +472,11 @@ namespace DirectZobEditor
                 PropagateSceneUpdateEvent(e);
             }
         }
+
+        private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+
+        }
     }
 
     public class Event

@@ -116,6 +116,7 @@ ZobObject::~ZobObject()
 	DirectZob::LogInfo("delete ZobObject %s", m_name.c_str());
 	DirectZob::AddIndent();
 	delete m_physicComponent;
+	m_physicComponent = NULL;
 	if (m_parent != NULL)
 	{
 		m_parent->RemoveChildReference(this);
