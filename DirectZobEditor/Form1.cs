@@ -230,7 +230,7 @@ namespace DirectZobEditor
         {
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
-                openFileDialog.InitialDirectory = m_path;
+                //openFileDialog.InitialDirectory = m_path;
                 openFileDialog.Filter = "xml files (*.xml)|*.xml";
                 openFileDialog.FilterIndex = 2;
                 openFileDialog.RestoreDirectory = true;

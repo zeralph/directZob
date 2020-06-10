@@ -136,7 +136,8 @@ const ZobVector3* ZobPhysicComponent::GetOrientation()
 {
 	//if (m_type == ePhysicComponentType_dynamic)
 	{
-		const Quaternion q = m_rigidBody->getTransform().getOrientation();	
+		Quaternion q = m_rigidBody->getTransform().getOrientation();	
+		q.normalize();
 		ZobVector3 z = ZobMatrix4x4::QuaternionToEuler(q.x, q.y, q.z, q.w);
 		m_orientation = ZobVector3(z.x * 180.0f / M_PI, z.y * 180.0f / M_PI, z.z * 180.0f / M_PI);
 	}
