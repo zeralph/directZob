@@ -1,25 +1,33 @@
 #include "ZobPhysicComponent.h"
 #include "ZobPhysicsEngine.h"
 #include "DirectZob.h"
+#include "ZobMatrix4x4.h"
+
 
 ZobPhysicComponent::ZobPhysicComponent(TiXmlNode* t)
 {
 	BodyType rigidBodyType = rp3d::BodyType::STATIC;
 	bool rigidBodyActive = false;
+	m_type = ePhysicComponentType_none;
 	if (t)
 	{
 		TiXmlElement* p = (TiXmlElement*)t;
 		m_type = (ePhysicComponentType)atoi(p->Attribute("type"));
 		TiXmlElement* b = p->FirstChildElement("RigidBody");
-		BodyType rigidBodyType = (BodyType)atoi(b->Attribute("type"));
-		bool rigidBodyActive = (bool)atoi(b->Attribute("active"));
+		rigidBodyType = (BodyType)atoi(b->Attribute("type"));
+		rigidBodyActive = atoi(b->Attribute("active")) == 1 ? true : false;
 		TiXmlElement* c = p->FirstChildElement("Collider");
+		m_shapeDraw._type = (sShapeDraw::eShapeType)atoi(c->Attribute("type"));
+		m_shapeDraw._radius = (float)atof(c->Attribute("radius"));
+		m_shapeDraw._height = (float)atof(c->Attribute("height"));
+		m_shapeDraw._halfExtends.x = (float)atof(c->Attribute("halfExtends_x"));
+		m_shapeDraw._halfExtends.y = (float)atof(c->Attribute("halfExtends_y"));
+		m_shapeDraw._halfExtends.z = (float)atof(c->Attribute("halfExtends_z"));
 	}
-	m_type = ePhysicComponentType_none;
 	m_rigidBody = DirectZob::GetInstance()->GetPhysicsEngine()->CreateRigidBody(&ZobVector3::Vector3Zero, &ZobVector3::Vector3Zero);
 	m_rigidBody->setType(rigidBodyType);
 	m_rigidBody->setIsActive(rigidBodyActive);
-	m_collider = NULL;
+	CreateCollider();
 }
 
 ZobPhysicComponent::~ZobPhysicComponent()
@@ -36,6 +44,22 @@ void ZobPhysicComponent::Init()
 		m_rigidBody = NULL;
 	}
 
+}
+
+void ZobPhysicComponent::CreateCollider()
+{
+	m_collider = NULL;
+	switch (m_shapeDraw._type)
+	{
+	case sShapeDraw::eShapeType::eShapeType_box:
+		AddBoxCollider(&m_shapeDraw._halfExtends);
+		break;
+	case sShapeDraw::eShapeType::eShapeType_sphere:
+		AddSphereCollider(m_shapeDraw._radius);
+		break;
+	default:
+		break;
+	}
 }
 
 TiXmlNode* ZobPhysicComponent::SaveUnderNode(TiXmlNode* node)
@@ -87,6 +111,16 @@ void ZobPhysicComponent::Set(ePhysicComponentType t)
 	}
 }
 
+const ZobVector3* ZobPhysicComponent::GetPosition()
+{
+	//if (m_type == ePhysicComponentType_dynamic)
+	{
+		const Vector3 v = m_rigidBody->getTransform().getPosition();
+		m_position = ZobVector3(v.x, v.y, v.z);
+	}
+	return &m_position;
+}
+
 void ZobPhysicComponent::SetPosition(float x, float y, float z)
 {
 	m_position.x = x;
@@ -98,35 +132,30 @@ void ZobPhysicComponent::SetPosition(float x, float y, float z)
 	m_rigidBody->setTransform(t);
 }
 
+const ZobVector3* ZobPhysicComponent::GetOrientation()
+{
+	//if (m_type == ePhysicComponentType_dynamic)
+	{
+		const Quaternion q = m_rigidBody->getTransform().getOrientation();	
+		ZobVector3 z = ZobMatrix4x4::QuaternionToEuler(q.x, q.y, q.z, q.w);
+		m_orientation = ZobVector3(z.x * 180.0f / M_PI, z.y * 180.0f / M_PI, z.z * 180.0f / M_PI);
+	}
+	return &m_orientation;
+}
+
 void ZobPhysicComponent::SetOrientation(float x, float y, float z)
 {
+	//x = -x;
 	m_orientation.x = x;
 	m_orientation.y = y;
 	m_orientation.z = z;
 	Transform t = Transform(m_rigidBody->getTransform());
-	Quaternion q = Quaternion::fromEulerAngles(x * 180.0f / M_PI, y * 180.0f / M_PI, z * 180.0f / M_PI);
+	Quaternion q = Quaternion::fromEulerAngles(x * M_PI / 180.0f, y * M_PI / 180.0f, z * M_PI / 180.0f);
+	
+	//ZobVector3 zv = ZobMatrix4x4::EulerToQuaternion(x, y, z);
+	//Quaternion q = Quaternion(zv.x, zv.y, zv.z, zv.w);
 	t.setOrientation(q);
 	m_rigidBody->setTransform(t);
-}
-
-const ZobVector3* ZobPhysicComponent::GetPosition()
-{
-	if (m_type == ePhysicComponentType_dynamic)
-	{
-		const Vector3 v = m_rigidBody->getTransform().getPosition();
-		m_position = ZobVector3(v.x, v.y, v.z);
-	}
-	return &m_position;
-}
-
-const ZobVector3* ZobPhysicComponent::GetOrientation()
-{
-	if (m_type == ePhysicComponentType_dynamic)
-	{
-		const Quaternion v = m_rigidBody->getTransform().getOrientation();
-		m_orientation = ZobVector3(v.x *  M_PI / 180.0f, v.y * M_PI / 180.0f, v.z * M_PI / 180.0f);
-	}
-	return &m_orientation;
 }
 
 void ZobPhysicComponent::AddBoxCollider(const ZobVector3* halfExtends)

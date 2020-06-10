@@ -228,6 +228,49 @@ void ZobMatrix4x4::FromVectors(const ZobVector3& left, const ZobVector3& up, con
 	SetData(3, 3, 1);
 }
 
+ZobVector3 ZobMatrix4x4::EulerToQuaternion(float x, float y, float z)
+{
+	float yaw = z;
+	float pitch = y;
+	float roll = x;
+	// Abbreviations for the various angular functions
+	float cy = cos(yaw * 0.5f);
+	float sy = sin(yaw * 0.5f);
+	float cp = cos(pitch * 0.5f);
+	float sp = sin(pitch * 0.5f);
+	float cr = cos(roll * 0.5f);
+	float sr = sin(roll * 0.5f);
+
+	ZobVector3 q;
+	q.w = cr * cp * cy + sr * sp * sy;
+	q.x = sr * cp * cy - cr * sp * sy;
+	q.y = cr * sp * cy + sr * cp * sy;
+	q.z = cr * cp * sy - sr * sp * cy;
+	return q;
+}
+
+ZobVector3 ZobMatrix4x4::QuaternionToEuler(float x, float y, float z, float w)
+{
+	float roll, pitch, yaw;
+	// roll (x-axis rotation)
+	float sinr_cosp = 2 * (w * x + y * z);
+	float cosr_cosp = 1 - 2 * (x * x + y * y);
+	roll = atan2(sinr_cosp, cosr_cosp);
+
+	// pitch (y-axis rotation)
+	float sinp = 2 * (w * y - z * x);
+	if (fabs(sinp) >= 1)
+		pitch = copysign(M_PI / 2, sinp); // use 90 degrees if out of range
+	else
+		pitch = asin(sinp);
+
+	// yaw (z-axis rotation)
+	float siny_cosp = 2 * (w * z + x * y);
+	float cosy_cosp = 1 - 2 * (y * y + z * z);
+	yaw = atan2(siny_cosp, cosy_cosp);
+	return ZobVector3(roll, pitch, yaw);
+}
+
 void ZobMatrix4x4::InvertMatrix4(const ZobMatrix4x4& m, ZobMatrix4x4& im)
 {
 	float det;

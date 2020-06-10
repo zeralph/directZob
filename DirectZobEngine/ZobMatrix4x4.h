@@ -40,6 +40,8 @@ public:
 	inline float GetValue(const int i, const int j) const { return m_data[i][j]; }
 	static void InvertMatrix4(const ZobMatrix4x4& m, ZobMatrix4x4& im);
 	static ZobMatrix4x4 RotateAroundAxis(const ZobVector3& axis, const float angle);
+	static ZobVector3 QuaternionToEuler(float x, float y, float z, float w);
+	static ZobVector3 ZobMatrix4x4::EulerToQuaternion(float x, float y, float z);
 	//float& operator[](int i) {return &m_data[i][j]; };
 private:
 

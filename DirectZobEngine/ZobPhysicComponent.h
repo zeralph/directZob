@@ -59,6 +59,7 @@ public:
 	void								DrawGizmos(const Camera* camera, const ZobMatrix4x4* mat);
 private:
 	void								AddColliderInternal(CollisionShape* c);
+	void								CreateCollider();
 	ePhysicComponentType m_type;
 	RigidBody* m_rigidBody;
 	Collider* m_collider;	
