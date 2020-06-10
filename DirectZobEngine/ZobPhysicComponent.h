@@ -46,6 +46,7 @@ public:
 	void								Set(ePhysicComponentType t);
 	void								SetPosition(float x, float y, float z);
 	void								SetOrientation(float x, float y, float z);
+	void								SetQuaternion(float x, float y, float z, float w);
 	const ZobVector3*					GetPosition();
 	const ZobVector3*					GetOrientation();
 

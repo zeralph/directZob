@@ -32,7 +32,12 @@
         (*(fp) ) ? 0:errno;\
     })
 #endif //LINUX
-
+#ifndef RAD_TO_DEG
+	#define RAD_TO_DEG(x) (x * 180.0f / M_PI)
+#endif
+#ifndef DEG_TO_RAD
+	#define DEG_TO_RAD(x) (x * M_PI / 180.0f)
+#endif
 enum eRenderOutput
 {
 	eRenderOutput_render = 0,

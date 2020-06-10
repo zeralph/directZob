@@ -138,9 +138,9 @@ void ZobMatrix4x4::SetPosition(const float x, const float y, const float z)
 
 void ZobMatrix4x4::SetRotation(const ZobVector3& v)
 {
-	float yaw = v.z * M_PI / 180.0f;
-	float pitch = v.y * M_PI / 180.0f;
-	float roll = v.x * M_PI / 180.0f;
+	float yaw = DEG_TO_RAD(v.z);
+	float pitch = DEG_TO_RAD(v.y);
+	float roll = DEG_TO_RAD(v.x);
 	float cosY = cos(yaw);
 	float sinY = sin(yaw);
 	float cosP = cos(pitch);
@@ -253,7 +253,7 @@ ZobVector3 ZobMatrix4x4::QuaternionToEuler(float x, float y, float z, float w)
 {
 
 	float roll, pitch, yaw;
-	/*
+	
 	// roll (x-axis rotation)
 	float sinr_cosp = 2 * (w * x + y * z);
 	float cosr_cosp = 1 - 2 * (x * x + y * y);
@@ -271,7 +271,8 @@ ZobVector3 ZobMatrix4x4::QuaternionToEuler(float x, float y, float z, float w)
 	float cosy_cosp = 1 - 2 * (y * y + z * z);
 	yaw = atan2(siny_cosp, cosy_cosp);
 	
-	*/
+	
+	/*
 	double sqw = w*w;
 	double sqx = x*x;
 	double sqy = y*y;
@@ -279,6 +280,7 @@ ZobVector3 ZobMatrix4x4::QuaternionToEuler(float x, float y, float z, float w)
 	yaw = atan2(2.0 * (x*y + z*w), (sqx - sqy - sqz + sqw));
 	roll = atan2(2.0 * (y*z + x*w), (-sqx - sqy + sqz + sqw));
 	pitch = asin(-2.0 * (x*z - y*w) / (sqx + sqy + sqz + sqw));
+	*/
 	return ZobVector3(roll, pitch, yaw);
 }
 

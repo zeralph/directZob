@@ -104,7 +104,7 @@ void Light::drawSpotGizmos(const Camera* camera, Core::Engine* engine)
 	v1.Mul(m_distance);
 	v1 = v1 + GetPosition();
 	float r = m_spotAngle / 2.0f;
-	r = r * M_PI / 180.0f;
+	r = DEG_TO_RAD(r);
 	r = tan(r) * m_distance;
 	engine->QueueEllipse(camera, &v1, &m_forward, r, r, c, true);
 	v2 = m_left;

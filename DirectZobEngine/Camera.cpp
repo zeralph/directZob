@@ -186,11 +186,17 @@ void Camera::Update(const ZobMatrix4x4& parentMatrix, const ZobMatrix4x4& parent
 		const ZobVector3* p = GetPosition();
 		if (m_tagetMode == eTarget_Vector &&  m_targetVector != p)
 		{
-			ZobVector3 v = m_targetVector - GetPosition();
+			ZobVector3 v = GetPosition();
+			v = v - m_targetVector;
 			v.Normalize();
-			v = ZobVector3::GetAnglesFromVector(v);
-			SetRotation(v.x, v.y, v.z);
-
+			//v = ZobVector3::GetAnglesFromVector(v);
+			//v = ZobMatrix4x4::QuaternionToEuler(v.x, v.z, v.z, 0.0f);
+			//SetRotation(RAD_TO_DEG(v.x), RAD_TO_DEG(v.y), RAD_TO_DEG(v.z));
+			//SetQuaternion(v.x, v.y, v.z, 0.0001f);
+			static float xx = 45.0f;
+			static float yy = -45.0f;
+			static float zz = 0.0f;
+			SetRotation(xx, yy, zz);
 		}
 		else if (m_tagetMode == eTarget_Object && m_targetObject)
 		{
@@ -202,7 +208,8 @@ void Camera::Update(const ZobMatrix4x4& parentMatrix, const ZobMatrix4x4& parent
 				v = v - p;
 				v.Normalize();
 				//m_forward = v;
-				v = ZobVector3::GetAnglesFromVector(v);
+				//v = ZobVector3::GetAnglesFromVector(v);
+				v = ZobMatrix4x4::QuaternionToEuler(v.x, v.z, v.z, 45.0f);
 				SetRotation(v.x, v.y, v.z);
 			}
 		}

@@ -388,6 +388,11 @@ void ZobObject::CreateSprite()
 	m_mesh = s;
 }
 
+void ZobObject::SetQuaternion(float x, float y, float z, float w)
+{
+	m_physicComponent->SetQuaternion(x, y, z, w);
+}
+
 void ZobObject::SetRotation(float x, float y, float z)
 {
 	m_physicComponent->SetOrientation(x, y, z);

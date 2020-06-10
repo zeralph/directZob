@@ -50,14 +50,22 @@ public:
 	};
 	static inline ZobVector3 GetAnglesFromVector(ZobVector3 v)
 	{
+		
+		
 		ZobVector3 vOut = v;
 		vOut.Normalize();
-		float pitch = asin(-vOut.y);
+		float pitch = asin(vOut.y);
 		float yaw = atan2(vOut.x, vOut.z);
-		vOut.x = -pitch * 180.0f / M_PI;
-		vOut.y = -yaw * 180.0f / M_PI;
+		pitch = atan2(vOut.x, vOut.y);
+		yaw = atan2(vOut.z, sqrt((vOut.x * vOut.x) + (vOut.y * vOut.y)));
+		vOut.x = pitch * 180.0f / M_PI;
+		vOut.y = yaw * 180.0f / M_PI;
 		vOut.z = 0.0f * vOut.z;
 		return vOut;
+		
+		//float yaw = atan2(ds.X, ds.Y); 
+		//float pitch = Math.Atan2(ds.Z, Math.Sqrt((ds.X * ds.X) + (ds.Y * ds.Y)));
+
 	};
 	inline void Add(const ZobVector3* v) { x += v->x; y += v->y; z += v->z; }
 	inline void Div(float f) { x /= f; y /= f; z /= f; }

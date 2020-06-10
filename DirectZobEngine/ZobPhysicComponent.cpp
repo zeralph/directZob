@@ -139,9 +139,20 @@ const ZobVector3* ZobPhysicComponent::GetOrientation()
 		Quaternion q = m_rigidBody->getTransform().getOrientation();	
 		q.normalize();
 		ZobVector3 z = ZobMatrix4x4::QuaternionToEuler(q.x, q.y, q.z, q.w);
-		m_orientation = ZobVector3(z.x * 180.0f / M_PI, z.y * 180.0f / M_PI, z.z * 180.0f / M_PI);
+		m_orientation = ZobVector3(RAD_TO_DEG(z.x), RAD_TO_DEG(z.y), RAD_TO_DEG(z.z));
 	}
 	return &m_orientation;
+}
+
+void ZobPhysicComponent::SetQuaternion(float x, float y, float z, float w)
+{
+	Transform t = Transform(m_rigidBody->getTransform());
+	Quaternion q = Quaternion(x, y, z, w);
+	t.setOrientation(q);
+	m_rigidBody->setTransform(t);
+
+	m_orientation = ZobMatrix4x4::QuaternionToEuler(x, y, z, w);
+	m_orientation = ZobVector3(RAD_TO_DEG(m_orientation.x), RAD_TO_DEG(m_orientation.y), RAD_TO_DEG(m_orientation.z));
 }
 
 void ZobPhysicComponent::SetOrientation(float x, float y, float z)
@@ -151,7 +162,7 @@ void ZobPhysicComponent::SetOrientation(float x, float y, float z)
 	m_orientation.y = y;
 	m_orientation.z = z;
 	Transform t = Transform(m_rigidBody->getTransform());
-	Quaternion q = Quaternion::fromEulerAngles(x * M_PI / 180.0f, y * M_PI / 180.0f, z * M_PI / 180.0f);
+	Quaternion q = Quaternion::fromEulerAngles(DEG_TO_RAD(x), DEG_TO_RAD(y), DEG_TO_RAD(z));
 	
 	//ZobVector3 zv = ZobMatrix4x4::EulerToQuaternion(x, y, z);
 	//Quaternion q = Quaternion(zv.x, zv.y, zv.z, zv.w);

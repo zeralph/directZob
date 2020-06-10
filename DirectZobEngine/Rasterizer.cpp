@@ -184,7 +184,7 @@ inline ZobVector3 Rasterizer::ComputeLightingAtPoint(const ZobVector3* position,
 					float f = ZobVector3::Dot(&fw, &lightDir);
 					/*
 					float r = l->GetSpotAngle() / 2.0f;
-					r = r * M_PI / 180.0f;
+					r = DEG_TO_RAD(r);
 					r = cos(r);
 					if (fabs(f) < fabs(r))
 					{
