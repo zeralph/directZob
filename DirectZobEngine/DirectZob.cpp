@@ -145,22 +145,29 @@ int DirectZob::RunAFrame()
 	m_frameTick = clock();
 	if(m_initialized && m_engine->Started())
 	{
-		if (m_physicStarted)
-		{
-			m_physicsEngine->Update();
-		}
 		m_cameraManager->UpdateAfter();
 		Color c = Color(DirectZob::GetInstance()->GetLightManager()->GetClearColor());
 		m_engine->ClearBuffer(&c);
 		Camera* cam = m_cameraManager->GetCurrentCamera();
 		if (cam)
 		{
+			bool bPhysicUpdated = false;
 //			cam->UpdateViewProjectionMatrix();
 			m_engine->StartDrawingScene();
 //			cam->UpdateViewProjectionMatrix();
-			m_zobObjectManager->StartUpdateObjects(cam, m_engine);
+			if (m_physicStarted)
+			{
+				bPhysicUpdated = true;
+				m_physicsEngine->StartUpdatePhysic();
+			}
+			m_zobObjectManager->StartUpdateScene(cam, m_engine);
 			m_geometryTime = m_zobObjectManager->WaitForUpdateObjectend();
 			m_renderTime = m_engine->WaitForRasterizersEnd();
+			m_physicTime = 0;
+			if (bPhysicUpdated)
+			{
+				m_physicTime = m_physicsEngine->WaitForUpdatePhysicEnd();
+			}
 			m_engine->ClearRenderQueues();
 			m_copyTick = clock();
 			m_zobObjectManager->QueueForDrawing(cam, m_engine);
@@ -184,7 +191,7 @@ int DirectZob::RunAFrame()
 			_snprintf_s(buffer, MAX_PATH, "Triangles : %i / %i", m_engine->GetNbDrawnTriangles(), m_engine->GetNbTriangles());
 			std::string sBuf = std::string(buffer);
 			m_text->Print(0, 0, 1, &sBuf, 0xFFFFFFFF);
-			_snprintf_s(buffer, MAX_PATH, "render : %03i, geom : %03i, cpy : %03i, tot : %03i, FPS : %03i", (int)m_renderTime, (int)m_geometryTime, (int)m_copyTime, (int)m_frameTime, (int)m_fps);
+			_snprintf_s(buffer, MAX_PATH, "render : %03i, geom : %03i, phys : %03i, cpy : %03i, tot : %03i, FPS : %03i", (int)m_renderTime, (int)m_geometryTime, (int)m_physicTime, (int)m_copyTime, (int)m_frameTime, (int)m_fps);
 			sBuf = std::string(buffer);
 			if (m_frameTime < TARGET_MS_PER_FRAME)
 			{
