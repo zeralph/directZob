@@ -84,6 +84,7 @@ private:
 	float m_frameTime;
 	float m_fps;
 	float m_copyTime;
+	float m_physicTime;
 	clock_t m_copyTick;
 	clock_t	m_frameTick;
 	static int s_logIndent;

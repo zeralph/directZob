@@ -2,6 +2,7 @@
 #include "DirectZob.h"
 
 static int spriteIdx = 1;
+static int meshIdx = 1;
 
 MeshManager::MeshManager()
 {
@@ -37,7 +38,7 @@ Mesh* MeshManager::LoadMesh(std::string& name, std::string& path, std::string& f
 {
     DirectZob::LogInfo("Loading mesh %s%s", path.c_str(), file.c_str());
 	Mesh* outMesh = NULL;
-	if (GetMesh(name) == NULL)
+	//if (GetMesh(name) == NULL)
 	{
 		outMesh = new Mesh(name, path, file);
 		m_meshes.push_back(outMesh);

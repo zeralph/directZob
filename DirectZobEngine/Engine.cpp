@@ -27,6 +27,7 @@ Engine::Engine(int width, int height, Events* events)
 	{
 		m_nbRasterizers = 1;
 	}
+	m_nbRasterizers = min(m_nbRasterizers, 4);
 	m_triangleQueueSize = MAX_TRIANGLES_PER_IMAGE / m_nbRasterizers;
 	m_renderOutput = eRenderOutput_render;
 	m_events = events;

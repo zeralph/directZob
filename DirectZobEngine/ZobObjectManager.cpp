@@ -106,7 +106,7 @@ ZobObject* ZobObjectManager::GetZobObject(const std::string& name) const
 
 }
 
-void ZobObjectManager::StartUpdateObjects(const Camera* camera, Core::Engine* engine)
+void ZobObjectManager::StartUpdateScene(const Camera* camera, Core::Engine* engine)
 {
 	m_drawTick = clock();
 	g_geometryThread = std::thread(&ZobObjectManager::UpdateObjects, this, camera, engine);

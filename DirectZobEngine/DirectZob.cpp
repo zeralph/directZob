@@ -158,7 +158,7 @@ int DirectZob::RunAFrame()
 			if (m_physicStarted)
 			{
 				bPhysicUpdated = true;
-				m_physicsEngine->StartUpdatePhysic();
+				m_physicsEngine->StartUpdatePhysic(m_frameTime);
 			}
 			m_zobObjectManager->StartUpdateScene(cam, m_engine);
 			m_geometryTime = m_zobObjectManager->WaitForUpdateObjectend();

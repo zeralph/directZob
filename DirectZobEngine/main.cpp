@@ -259,18 +259,28 @@ int main(int argc, char* argv[])
 	float benchTot = 0.0f;
 	float benchCpy = 0.0f;
 	ulong frames = 0;
+
 	m_directZob.GetEngine()->ShowBBoxes(false);
 	m_directZob.GetEngine()->ShowNormals(false);
 	m_directZob.GetEngine()->ShowGrid(false);
 	m_directZob.GetEngine()->SetRenderMode(eRenderMode::eRenderMode_fullframe);
 	m_directZob.GetEngine()->DrawGizmos(false);
+
+	if (true)
+	{
+		m_directZob.GetEngine()->ShowBBoxes(true);
+		m_directZob.GetEngine()->ShowGrid(true);
+		m_directZob.GetEngine()->SetRenderMode(eRenderMode::eRenderMode_fullframe);
+		m_directZob.GetEngine()->DrawGizmos(true);
+	}
+
 	//m_directZob.GetEngine()->GetBufferData()->zFar = 70.0f;
 	//m_directZob.GetZobObjectManager()->GetZobObject("fbx_example")->SetRotation(0, 90, 0);
 	Camera* c = m_directZob.GetCameraManager()->GetCurrentCamera();
 	ZobVector3 camPos = c?c->GetPosition(): ZobVector3();
 	ZobVector3 camTo = camPos;
 	camTo.z += 1.0f;
-
+	m_directZob.StartPhysic();
 	for (;;)
 	{
 		if (bBench)
@@ -287,13 +297,16 @@ int main(int argc, char* argv[])
 
 			if (!bPause)
 			{
-				if (red->GetPosition()->z >= 110.0f)
+				if (red)
 				{
-					red->SetPosition(red->GetPosition()->x, 2, -20);
-				}
-				else
-				{
-					red->SetPosition(red->GetPosition()->x, 2, red->GetPosition()->z + to);
+					if (red->GetPosition()->z >= 110.0f)
+					{
+						red->SetPosition(red->GetPosition()->x, 2, -20);
+					}
+					else
+					{
+						red->SetPosition(red->GetPosition()->x, 2, red->GetPosition()->z + to);
+					}
 				}
 			}
 		}
@@ -301,7 +314,7 @@ int main(int argc, char* argv[])
 		{
 			if (m_directZob.GetCameraManager()->GetCurrentCamera())
 			{
-				m_directZob.GetCameraManager()->GetCurrentCamera()->SetRotation(0, rot, 0);
+				//m_directZob.GetCameraManager()->GetCurrentCamera()->SetRotation(0, rot, 0);
 			}
 			//m_directZob.GetZobObjectManager()->GetRootObject()->SetRotation(0, rot, 0);
 		}

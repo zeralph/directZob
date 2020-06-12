@@ -12,12 +12,14 @@ class ZobPhysicsEngine
 public :
 	ZobPhysicsEngine();
 	~ZobPhysicsEngine();
-	void Update();
+	void StartUpdatePhysic(float dt);
+	float WaitForUpdatePhysicEnd();
 	RigidBody* CreateRigidBody(const ZobVector3* position, const ZobVector3* orientation);
 	void DestroyRigidBody(RigidBody* rb);
 	PhysicsCommon* GetPhysicsCommon() { return &m_physicsCommon; }
 private:
+	void Update(float dt);
 	PhysicsCommon m_physicsCommon;
 	PhysicsWorld* m_world;
-	decimal m_timeStep;
+	clock_t m_timeStep;
 };

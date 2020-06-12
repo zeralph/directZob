@@ -17,7 +17,7 @@ public:
 	//friend void ZobObject::SetParent(ZobObject* o);
 
 
-	void StartUpdateObjects(const Camera* camera, Core::Engine* engine);
+	void StartUpdateScene(const Camera* camera, Core::Engine* engine);
 	float WaitForUpdateObjectend();
 	void QueueForDrawing(const Camera* camera, Core::Engine* engine);
 	ZobObject* GetZobObjectFromPartialId(const uint id) const;
