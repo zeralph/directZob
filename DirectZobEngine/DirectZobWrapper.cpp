@@ -12,7 +12,6 @@ namespace CLI
 
 	DirectZobWrapper::DirectZobWrapper():ManagedObject(new DirectZob, true)
 	{
-
 	}
 
 	void DirectZobWrapper::StartPhysic()
@@ -72,6 +71,22 @@ namespace CLI
 		std::string stdFile;
 		MarshalString(file, stdFile);
 		m_Instance->SaveScene(stdPath, stdFile);
+	}
+
+	int DirectZobWrapper::Run(onFrameEndCallback^ cb)
+	{
+		for (;;)
+		{
+			m_Instance->RunAFrame();
+			cb();
+			OnFrameEnd();
+		}
+		return 0;
+	}
+
+	void DirectZobWrapper::OnFrameEnd()
+	{
+
 	}
 
 	int DirectZobWrapper::RunAFrame()

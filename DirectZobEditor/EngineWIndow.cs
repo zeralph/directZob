@@ -16,6 +16,7 @@ namespace DirectZobEditor
 {
     public partial class EngineWindow : UserControl
     {
+        public CLI.onFrameEndCallback onFrameEndCallback;
         public event EventHandler OnBeginFrame;
         public event EventHandler OnEndFrame;
         private CLI.DirectZobWrapper m_directZobWrapper;
@@ -151,6 +152,7 @@ namespace DirectZobEditor
             m_engineThread = new Thread(RunEngineThread);
             m_engineThread.IsBackground = true;
             UpdateEngineWindowDelegate = new UpdateEngineWindow(UpdateEngineWindowMethod);
+            onFrameEndCallback = new onFrameEndCallback(onFrameEndCallbackMethod);
             EngineRender.SizeMode = PictureBoxSizeMode.Zoom;
             m_engineThread.Start();
             if (OnBeginFrame != null)
@@ -163,6 +165,12 @@ namespace DirectZobEditor
             {
                 OnEndFrame(this, EventArgs.Empty);
             }
+        }
+
+        private void onFrameEndCallbackMethod()
+        {
+            EngineRender.Invoke(UpdateEngineWindowDelegate);
+            //UpdateEngineWindowMethod();
         }
 
         private void UpdateEngineWindowMethod()
@@ -203,6 +211,8 @@ namespace DirectZobEditor
 
         private void RunEngineThread()
         {
+            m_directZobWrapper.Run(onFrameEndCallback);
+            /*
             while (!m_exitEngineThread)
             {
 				try
@@ -223,6 +233,7 @@ namespace DirectZobEditor
 
 				}
             }
+            */
         }
 
         private void UpdateCamera()

@@ -89,4 +89,7 @@ private:
 	clock_t	m_frameTick;
 	static int s_logIndent;
 	bool m_physicStarted;
+
+	//
+
 };
