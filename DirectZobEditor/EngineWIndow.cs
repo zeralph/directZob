@@ -122,7 +122,20 @@ namespace DirectZobEditor
 
         public void ResizeRenderWindow()
         {
-            GenerateRenderWindow();
+            m_width = m_engineWrapper.GetBufferWidth();
+            m_height = m_engineWrapper.GetBufferHeight();
+            EngineRender.Width = m_width;
+            EngineRender.Height = m_height;
+            if(m_EngineGraphics != null)
+            {
+                m_EngineGraphics = null;
+            }
+            m_EngineGraphics = EngineRender.CreateGraphics();
+            lock (m_engineBitmap)
+            {
+                GenerateEngienBitmap();
+                //GenerateRenderWindow();
+            }
         }
 
         public CLI.EngineWrapper GetEngineWrapper()
@@ -132,12 +145,22 @@ namespace DirectZobEditor
 
         public void End()
         {
-			if (m_engineThread != null)
+			/*if (m_engineThread != null)
 			{		
 				m_exitEngineThread = true;
 				m_engineThread.Join();
 				m_engineThread = null;
-			}
+			}*/
+        }
+
+        private void GenerateEngienBitmap()
+        {
+            if(m_engineBitmap != null)
+            {
+                m_engineBitmap = null;
+            }
+            IntPtr p = m_engineWrapper.GetBufferData();
+            m_engineBitmap = new System.Drawing.Bitmap(m_width, m_height, 4 * m_width, System.Drawing.Imaging.PixelFormat.Format32bppRgb, p);
         }
 
         private void GenerateRenderWindow()
@@ -150,7 +173,7 @@ namespace DirectZobEditor
             EngineRender.Height = m_height;
             m_EngineGraphics = EngineRender.CreateGraphics();
             m_engineThread = new Thread(RunEngineThread);
-            m_engineThread.IsBackground = true;
+            //m_engineThread.IsBackground = true;
             UpdateEngineWindowDelegate = new UpdateEngineWindow(UpdateEngineWindowMethod);
             onFrameEndCallback = new onFrameEndCallback(onFrameEndCallbackMethod);
             EngineRender.SizeMode = PictureBoxSizeMode.Zoom;
@@ -159,8 +182,7 @@ namespace DirectZobEditor
             {
                 OnBeginFrame(this, EventArgs.Empty);
             }
-            IntPtr p = m_engineWrapper.GetBufferData();
-            m_engineBitmap = new System.Drawing.Bitmap(m_width, m_height, 4 * m_width, System.Drawing.Imaging.PixelFormat.Format32bppRgb, p);
+            GenerateEngienBitmap();
             if (OnEndFrame != null)
             {
                 OnEndFrame(this, EventArgs.Empty);
@@ -175,38 +197,42 @@ namespace DirectZobEditor
 
         private void UpdateEngineWindowMethod()
         {
-            IntPtr p = m_engineWrapper.GetBufferData();
-            Rectangle rect = new Rectangle(0, 0, m_engineBitmap.Width, m_engineBitmap.Height);
-            System.Drawing.Imaging.BitmapData bmpData =
-                m_engineBitmap.LockBits(rect, System.Drawing.Imaging.ImageLockMode.WriteOnly,
-                m_engineBitmap.PixelFormat);
-            bmpData.Scan0 = p;
-            m_engineBitmap.UnlockBits(bmpData);
-            IntPtr hwnd = EngineRender.Handle;
-            m_EngineGraphics = Graphics.FromHwnd(hwnd);
-            m_EngineGraphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-            int w = EngineRender.Width;
-            int h = EngineRender.Height;
-            float hFactor = (float)m_engineBitmap.Height / (float)EngineRenderPanel.Height;
-            float wFactor = (float)m_engineBitmap.Width / (float)EngineRenderPanel.Width;
-            if (hFactor > wFactor)
+            lock (m_engineBitmap)
             {
-                h = EngineRenderPanel.Height;
-                w = (int)((float)m_engineBitmap.Width / (float)m_engineBitmap.Height * h);
+                IntPtr p = m_engineWrapper.GetBufferData();
+                Rectangle rect = new Rectangle(0, 0, m_engineBitmap.Width, m_engineBitmap.Height);
+                System.Drawing.Imaging.BitmapData bmpData =
+                    m_engineBitmap.LockBits(rect, System.Drawing.Imaging.ImageLockMode.WriteOnly,
+                    m_engineBitmap.PixelFormat);
+                bmpData.Scan0 = p;
+                m_engineBitmap.UnlockBits(bmpData);
+                IntPtr hwnd = EngineRender.Handle;
+                m_EngineGraphics = Graphics.FromHwnd(hwnd);
+                m_EngineGraphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+                int w = EngineRender.Width;
+                int h = EngineRender.Height;
+                float hFactor = (float)m_engineBitmap.Height / (float)EngineRenderPanel.Height;
+                float wFactor = (float)m_engineBitmap.Width / (float)EngineRenderPanel.Width;
+                if (hFactor > wFactor)
+                {
+                    h = EngineRenderPanel.Height;
+                    w = (int)((float)m_engineBitmap.Width / (float)m_engineBitmap.Height * h);
+                }
+                else
+                {
+                    w = EngineRenderPanel.Width;
+                    h = (int)((float)m_engineBitmap.Height / (float)m_engineBitmap.Width * w);
+                }
+                EngineRender.Width = w;
+                EngineRender.Height = h;
+                m_EngineGraphics.DrawImage(m_engineBitmap, 0, 0, w, h);
+                m_EngineGraphics.Dispose();
+                int x = (EngineRenderPanel.Width - w) / 2;
+                int y = (EngineRenderPanel.Height - h) / 2;
+                EngineRender.Location = new Point(x, y);
+                SetTranslationGizmos(m_selectedObject);
+                m_mainForm.UpdateAfterEngine();
             }
-            else
-            {
-                w = EngineRenderPanel.Width;
-                h = (int)((float)m_engineBitmap.Height / (float)m_engineBitmap.Width * w);
-            }
-            EngineRender.Width = w;
-            EngineRender.Height = h;
-            m_EngineGraphics.DrawImage(m_engineBitmap, 0, 0, w, h);
-            int x = (EngineRenderPanel.Width - w) / 2;
-            int y = (EngineRenderPanel.Height - h) / 2;
-            EngineRender.Location = new Point(x, y);
-            SetTranslationGizmos(m_selectedObject);
-            m_mainForm.UpdateAfterEngine();
         }
 
         private void RunEngineThread()
