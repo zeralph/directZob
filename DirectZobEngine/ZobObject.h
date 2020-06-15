@@ -14,8 +14,8 @@ class ZobObject:public ZOBGUID
 {
 public:
 
-	ZobObject(ZOBGUID::Type t, ZOBGUID::SubType s, const std::string& name, Mesh* mesh, ZobObject* parent = NULL);
-	ZobObject(ZOBGUID::Type t, ZOBGUID::SubType s, TiXmlElement* node, Mesh* mesh, ZobObject* parent);
+	ZobObject(ZOBGUID::Type t, ZOBGUID::SubType s, const std::string& name, ZobObject* parent = NULL);
+	ZobObject(ZOBGUID::Type t, ZOBGUID::SubType s, TiXmlElement* node, ZobObject* parent);
 	virtual ~ZobObject();
 
 	//virtuals
@@ -28,6 +28,7 @@ public:
 	void							SetRotation(float x, float y, float z);
 	void							SetPosition(float x, float y, float z);
 	void							SetQuaternion(float x, float y, float z, float w);
+	void							SetQuaternion(const ZobVector3* left, const ZobVector3* up, const ZobVector3* fw);
 	const ZobVector3*				GetRotation() const;
 	const ZobVector3*				GetPosition() const;
 
@@ -67,6 +68,7 @@ public:
 	RenderOptions*					GetRenderOptions() { return &m_renderOptions; };
 	virtual const std::string		GetMeshName() const ;
 	void							SetMesh(std::string name);
+	void							LoadMesh(std::string name);
 	void							SetLightingMode(RenderOptions::eLightMode l);
 	const bool						IsMarkedForDeletion() const { return m_markedForDeletion; };
 	void							MarkForDeletion() { m_markedForDeletion=true; };

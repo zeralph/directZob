@@ -3,7 +3,7 @@
 #include "DirectZob.h"
 
 ZobSprite::ZobSprite(const std::string &name, ZobObject*parent):
-	ZobObject(ZOBGUID::type_scene, ZOBGUID::subtype_sprite, name, nullptr, parent)
+	ZobObject(ZOBGUID::type_scene, ZOBGUID::subtype_sprite, name, parent)
 {
 	m_mesh = DirectZob::GetInstance()->GetMeshManager()->CreateSprite();
 	m_material = DirectZob::GetInstance()->GetMaterialManager()->CreateMaterial();
@@ -14,7 +14,7 @@ ZobSprite::ZobSprite(const std::string &name, ZobObject*parent):
 }
 
 ZobSprite::ZobSprite(TiXmlElement* node, ZobObject* parent)
-	:ZobObject(ZOBGUID::type_scene, ZOBGUID::subtype_sprite, node, NULL, parent)
+	:ZobObject(ZOBGUID::type_scene, ZOBGUID::subtype_sprite, node, parent)
 {
 	m_mesh = DirectZob::GetInstance()->GetMeshManager()->CreateSprite();
 	m_material = DirectZob::GetInstance()->GetMaterialManager()->CreateMaterial();

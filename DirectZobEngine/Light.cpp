@@ -3,7 +3,7 @@
 #include "DirectZob.h"
 
 Light::Light(std::string &name, eLightType type, ZobVector3 color, float intensity, float distance, ZobObject*parent):
-	ZobObject(ZOBGUID::type_scene, ZOBGUID::subtype_zobLight, name, nullptr, parent)
+	ZobObject(ZOBGUID::type_scene, ZOBGUID::subtype_zobLight, name, parent)
 {
 	m_color = color;
 	m_intensity = intensity;
@@ -15,7 +15,7 @@ Light::Light(std::string &name, eLightType type, ZobVector3 color, float intensi
 }
 
 Light::Light(TiXmlElement* node, ZobObject* parent)
-	:ZobObject(ZOBGUID::type_scene, ZOBGUID::subtype_zobLight, node, NULL, parent)
+	:ZobObject(ZOBGUID::type_scene, ZOBGUID::subtype_zobLight, node, parent)
 {
 		float x, y, z;
 		TiXmlElement* f = node->FirstChildElement("Color");

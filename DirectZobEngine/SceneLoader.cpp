@@ -26,9 +26,11 @@ void SceneLoader::LoadZobObject(TiXmlElement* node, ZobObject* parent)
 	{
 		TiXmlElement* f = node->FirstChildElement("Mesh");
 		std::string meshName = f ? f->GetText() : "";
-		MeshManager* meshManager = DirectZob::GetInstance()->GetMeshManager();
-		Mesh* m = meshManager->GetMesh(meshName);
-		zob = new ZobObject(ZOBGUID::Type::type_scene, ZOBGUID::SubType::subtype_zobOject, node, m, parent);
+		zob = new ZobObject(ZOBGUID::Type::type_scene, ZOBGUID::SubType::subtype_zobOject, node, parent);
+		if (meshName.length() > 0)
+		{
+			zob->LoadMesh(meshName);
+		}
 	}
 	else if (type == "camera")
 	{
@@ -121,9 +123,12 @@ void SceneLoader::LoadScene(std::string& path, std::string& file)
 			LoadTexture(e, MaterialManager);
 		}*/
 		TiXmlElement* meshes = root->FirstChildElement("Meshes");
-		for (TiXmlElement* e = meshes->FirstChildElement("Mesh"); e != NULL; e = e->NextSiblingElement("Mesh"))
+		if (meshes)
 		{
-			LoadMesh(e);
+			for (TiXmlElement* e = meshes->FirstChildElement("Mesh"); e != NULL; e = e->NextSiblingElement("Mesh"))
+			{
+				LoadMesh(e);
+			}
 		}
 		TiXmlElement* scene = root->FirstChildElement("Scene");
 		DirectZob::GetInstance()->GetLightManager()->LoadFromNode(scene->FirstChildElement("Globals"));

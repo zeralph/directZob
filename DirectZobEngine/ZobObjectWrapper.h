@@ -26,6 +26,7 @@ namespace CLI {
 		void SetScale(ManagedVector3^ p);
 		System::String^ GetMeshName();
 		void SetMesh(System::String^ name);
+		void LoadMesh(System::String^ name);
 		void CreateSprite();
 		bool IsValid() { return m_isValid; };
 		void SetLightingMode(int lightMode);

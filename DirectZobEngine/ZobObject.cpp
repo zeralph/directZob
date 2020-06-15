@@ -3,9 +3,10 @@
 #include "Mesh.h"
 #include "Sprite.h"
 #include "ZobPhysicComponent.h"
+#include "SceneLoader.h"
 
 static int sObjectNumber = 0;
-ZobObject::ZobObject(Type t, SubType s, const std::string& name, Mesh* mesh, ZobObject* parent /*= NULL*/)
+ZobObject::ZobObject(Type t, SubType s, const std::string& name, ZobObject* parent /*= NULL*/)
 	:ZOBGUID(t,s)
 {
 	DirectZob::LogInfo("ZobObject %s creation", name.c_str());
@@ -33,7 +34,7 @@ ZobObject::ZobObject(Type t, SubType s, const std::string& name, Mesh* mesh, Zob
 		m_parent = parent;
 	}
 	m_markedForDeletion = false;
-	m_mesh = mesh;
+	m_mesh = NULL;
 	m_scale = ZobVector3(1, 1, 1);
 	m_children.clear();
 	SetParent(m_parent);
@@ -47,7 +48,7 @@ ZobObject::ZobObject(Type t, SubType s, const std::string& name, Mesh* mesh, Zob
 	DirectZob::RemoveIndent();
 }
 
-ZobObject::ZobObject(Type t, SubType s, TiXmlElement* node, Mesh* mesh, ZobObject* parent)
+ZobObject::ZobObject(Type t, SubType s, TiXmlElement* node, ZobObject* parent)
 	:ZOBGUID(t, s)
 {
 	sObjectNumber++;
@@ -93,7 +94,7 @@ ZobObject::ZobObject(Type t, SubType s, TiXmlElement* node, Mesh* mesh, ZobObjec
 		m_parent = parent;
 	}
 	m_markedForDeletion = false;
-	m_mesh = mesh;
+	m_mesh = NULL;
 	m_scale = ZobVector3(1, 1, 1);
 	m_children.clear();
 	SetParent(m_parent);
@@ -130,6 +131,13 @@ ZobObject::~ZobObject()
 	}
 	m_children.clear();
 	DirectZob::RemoveIndent();
+}
+
+void ZobObject::LoadMesh(std::string name)
+{
+	std::string p = std::string(SceneLoader::GetResourcePath());
+	Mesh* m = DirectZob::GetInstance()->GetMeshManager()->LoadMesh(name, p, name);
+	m_mesh = m;
 }
 
 void ZobObject::SetMesh(std::string name)
@@ -386,6 +394,11 @@ void ZobObject::CreateSprite()
 {
 	Sprite* s = DirectZob::GetInstance()->GetMeshManager()->CreateSprite();
 	m_mesh = s;
+}
+
+void ZobObject::SetQuaternion(const ZobVector3* left, const ZobVector3* up, const ZobVector3* fw)
+{
+	m_physicComponent->SetQuaternion(left, up, fw);
 }
 
 void ZobObject::SetQuaternion(float x, float y, float z, float w)

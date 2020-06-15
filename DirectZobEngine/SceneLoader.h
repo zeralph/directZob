@@ -20,6 +20,8 @@ public:
 	static bool CanFastSave() { return m_path.length() > 0 && m_file.length() > 0; }
 	static void NewScene();
 	static void UnloadScene();
+	static const std::string& GetResourcePath() { return m_path; };
+
 private:
 
 	static void LoadMesh(TiXmlElement* node);

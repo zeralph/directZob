@@ -5,6 +5,7 @@
 DirectZob m_directZob;
 static int m_mouseLastX;
 static int m_mouseLastY;
+bool bStartPhysics = false;
 bool bPause = false;
 std::string m_path;
 std::string m_file;
@@ -64,9 +65,13 @@ void keyboard(struct mfb_window* window, mfb_key key, mfb_key_mod mod, bool isPr
 			}
 			m_directZob.GetEngine()->SetRenderMode((eRenderMode)l);
 		}
+		//else if (key == KB_KEY_P)
+		//{
+		//	bPause = !bPause;
+		//}
 		else if (key == KB_KEY_P)
 		{
-			bPause = !bPause;
+			bStartPhysics = !bStartPhysics;
 		}
 		else if (key == KB_KEY_L)
 		{
@@ -280,9 +285,19 @@ int main(int argc, char* argv[])
 	ZobVector3 camPos = c?c->GetPosition(): ZobVector3();
 	ZobVector3 camTo = camPos;
 	camTo.z += 1.0f;
-	m_directZob.StartPhysic();
+	//m_directZob.StartPhysic();
 	for (;;)
 	{
+		if (bStartPhysics && !m_directZob.IsPhysicPlaying())
+		{
+			DirectZob::GetInstance()->GetZobObjectManager()->SaveTransforms();
+			m_directZob.StartPhysic();
+		}
+		else if(!bStartPhysics && m_directZob.IsPhysicPlaying())
+		{
+			m_directZob.StopPhysic(true);
+			DirectZob::GetInstance()->GetZobObjectManager()->RestoreTransforms();
+		}
 		if (bBench)
 		{
 			if (m_directZob.GetCameraManager()->GetCurrentCamera())

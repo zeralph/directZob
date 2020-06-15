@@ -57,7 +57,7 @@ Camera* CameraManager::CreateEditorCamera()
 		c->ChangeType(ZOBGUID::type_editor);
 		c->SetPosition(20, 20, -20);
 
-		//c->SetPosition(20, 0, 0);
+		c->SetPosition(0, 10, -10);
 
 		ZobVector3 v = ZobVector3(0, 0, 0);
 		c->SetTarget(&v);

@@ -320,9 +320,10 @@ namespace DirectZobEditor
                     string file = openFileDialog.SafeFileName;
                     string name = file;
                     name.Replace(' ', '_');
-                    m_meshManagerWrapper.LoadMesh(name, path, file);
+                    //m_meshManagerWrapper.LoadMesh(name, path, file);
                     CLI.ZobObjectWrapper z = m_zobObjectList.GetWrapper().AddZobObject("");
-                    z.SetMesh(name);
+                    //z.SetMesh(name);
+                    z.LoadMesh(name);
                     EventHandler handler = OnSceneUpdated;
                     if (null != handler)
                     {

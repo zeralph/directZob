@@ -9,7 +9,7 @@ static std::string emptyStr = std::string("");
 ZobObjectManager::ZobObjectManager()
 {
 	std::string n = "root";
-	m_rootObject = new ZobObject(ZOBGUID::type_internal, ZOBGUID::subtype_zobOject, n, NULL, NULL);
+	m_rootObject = new ZobObject(ZOBGUID::type_internal, ZOBGUID::subtype_zobOject, n, NULL);
 }
 
 ZobObjectManager::~ZobObjectManager()
@@ -31,7 +31,7 @@ ZobObject* ZobObjectManager::CreateZobObject(ZobObject* parent)
 	{
 		parent = m_rootObject;
 	}
-	return new ZobObject(ZOBGUID::type_scene, ZOBGUID::subtype_zobOject, emptyStr, NULL, parent);
+	return new ZobObject(ZOBGUID::type_scene, ZOBGUID::subtype_zobOject, emptyStr, parent);
 }
 
 ZobSprite* ZobObjectManager::CreateZobSprite(ZobObject* parent)
@@ -182,46 +182,11 @@ void ZobObjectManager::UnloadAll()
 	m_scaleY = NULL;
 	m_scaleZ = NULL;
 	std::string n = "root";
-	m_rootObject = new ZobObject(ZOBGUID::type_internal, ZOBGUID::subtype_zobOject, n, NULL, NULL);
+	m_rootObject = new ZobObject(ZOBGUID::type_internal, ZOBGUID::subtype_zobOject, n, NULL);
 }
 
 void ZobObjectManager::CreateEditorGizmos(std::string& editorResourcesPath)
 {
-	if (m_editorGizmos == NULL)
-	{
-		std::string name;
-		name = "gizmos";
-		m_editorGizmos = new ZobObject(ZOBGUID::type_editor, ZOBGUID::subtype_zobOject, name, NULL, m_rootObject);
-
-		m_transform = LoadEditorMesh("transform", editorResourcesPath.c_str(), "transform.obj", m_editorGizmos);
-		m_transformX = LoadEditorMesh("transformX", editorResourcesPath.c_str(), "transformX.obj", m_transform);
-		m_transformY = LoadEditorMesh("transformY", editorResourcesPath.c_str(), "transformY.obj", m_transform);
-		m_transformZ = LoadEditorMesh("transformZ", editorResourcesPath.c_str(), "transformZ.obj", m_transform);
-
-		m_rotate = LoadEditorMesh("rotate", editorResourcesPath.c_str(), "rotate.obj", m_editorGizmos);
-		m_rotateX = LoadEditorMesh("rotateX", editorResourcesPath.c_str(), "rotateX.obj", m_rotate);
-		m_rotateY = LoadEditorMesh("rotateY", editorResourcesPath.c_str(), "rotateY.obj", m_rotate);
-		m_rotateZ = LoadEditorMesh("rotateZ", editorResourcesPath.c_str(), "rotateZ.obj", m_rotate);
-
-		m_scale = LoadEditorMesh("scale", editorResourcesPath.c_str(), "scale.obj", m_editorGizmos);
-		m_scaleX = LoadEditorMesh("scaleX", editorResourcesPath.c_str(), "scaleX.obj", m_scale);
-		m_scaleY = LoadEditorMesh("scaleY", editorResourcesPath.c_str(), "scaleY.obj", m_scale);
-		m_scaleZ = LoadEditorMesh("scaleZ", editorResourcesPath.c_str(), "scaleZ.obj", m_scale);
-
-	}
-}
-
-ZobObject* ZobObjectManager::LoadEditorMesh(const char* name, const char* meshPath, const char* meshFile, ZobObject* parent)
-{
-	MeshManager* meshMgr = DirectZob::GetInstance()->GetMeshManager();
-	std::string n = std::string(name);
-	std::string p = std::string(meshPath);
-	std::string m = std::string(meshFile);
-	Mesh* mesh = meshMgr->LoadMesh(n, p, m);
-	ZobObject* transform = new ZobObject(ZOBGUID::type_editor, ZOBGUID::subtype_zobOject, n, mesh, parent);
-	transform->GetRenderOptions()->lightMode = RenderOptions::eLightMode_none;
-	transform->GetRenderOptions()->zBuffered =  false;
-	return transform;
 }
 
 bool ZobObjectManager::Reparent(ZobObject*o, ZobObject* parent)

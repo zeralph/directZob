@@ -30,6 +30,7 @@ namespace DirectZobEditor
         private string m_currentMouseAction = "";
         Graphics m_EngineGraphics = null;
         Bitmap m_engineBitmap = null;
+        bool m_destroying = false;
         int m_width;
         int m_height;
         bool m_exitEngineThread = false;
@@ -50,6 +51,13 @@ namespace DirectZobEditor
             bCenter.Visible = false;
             m_mainForm.GetZobObjectListControl().OnObjectSelected += new ZobObjectListControl.OnObjectSelectedHandler(OnObjectSelected);
             m_mainForm.OnNewScene += new EventHandler(OnSceneChanged);
+            EngineRender.HandleDestroyed += new EventHandler(OnClose);
+        }
+
+        private void OnClose(object sender, EventArgs e)
+        {
+            m_destroying = true;
+            m_directZobWrapper.Stop();
         }
 
         public void RemoveTranslationGizmos()
@@ -191,13 +199,20 @@ namespace DirectZobEditor
 
         private void onFrameEndCallbackMethod()
         {
-            EngineRender.Invoke(UpdateEngineWindowDelegate);
+            try
+            {
+                EngineRender.Invoke(UpdateEngineWindowDelegate);
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
             //UpdateEngineWindowMethod();
         }
 
         private void UpdateEngineWindowMethod()
         {
-            lock (m_engineBitmap)
+            lock (EngineRender)
             {
                 IntPtr p = m_engineWrapper.GetBufferData();
                 Rectangle rect = new Rectangle(0, 0, m_engineBitmap.Width, m_engineBitmap.Height);

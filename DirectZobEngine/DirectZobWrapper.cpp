@@ -14,6 +14,7 @@ namespace CLI
 	DirectZobWrapper::DirectZobWrapper():ManagedObject(new DirectZob, true)
 	{
 		m_onFrameEndcallback = nullptr;
+		m_run = false;
 	}
 
 	void DirectZobWrapper::StartPhysic()
@@ -90,11 +91,21 @@ namespace CLI
 		m_Instance->Run(functionPointer);
 		return 0;
 		*/
-		for (;;)
+		m_run = true;
+		while(m_run)
 		{
 			m_Instance->RunAFrame();
-			cb();
+			if (m_run)
+			{
+				cb();
+			}
 		}
+		return 0;
+	}
+
+	int DirectZobWrapper::Stop()
+	{
+		m_run = false;
 		return 0;
 	}
 

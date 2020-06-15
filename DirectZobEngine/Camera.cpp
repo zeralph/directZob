@@ -8,7 +8,7 @@ static std::mutex g_update_camera_mutex;
 static float ee = 0.0f;
 
 Camera::Camera(const std::string& name, float fov, BufferData* bufferData, ZobObject* parent)
-	:ZobObject(ZOBGUID::Type::type_scene, ZOBGUID::SubType::subtype_zobCamera, name, NULL, parent)
+	:ZobObject(ZOBGUID::Type::type_scene, ZOBGUID::SubType::subtype_zobCamera, name, parent)
 {
 	//RecomputeVectors();
 	m_fov = fov;
@@ -17,7 +17,7 @@ Camera::Camera(const std::string& name, float fov, BufferData* bufferData, ZobOb
 }
 
 Camera::Camera(TiXmlElement* node, ZobObject* parent)
-	:ZobObject(ZOBGUID::Type::type_scene, ZOBGUID::SubType::subtype_zobCamera, node, NULL, parent)
+	:ZobObject(ZOBGUID::Type::type_scene, ZOBGUID::SubType::subtype_zobCamera, node, parent)
 {
 	TiXmlElement * f = node->FirstChildElement("Fov");
 	float fov = f ? atof(f->GetText()) : 45.0f; 
@@ -187,23 +187,27 @@ void Camera::Update(const ZobMatrix4x4& parentMatrix, const ZobMatrix4x4& parent
 	//m_left = ZobVector3(1, 0, 0);
 	//m_forward = ZobVector3(0, 0, 1);
 	//m_up = ZobVector3(0, 1, 0);
-	
+	ZobVector3 left = ZobVector3(1, 0, 0);
+	ZobVector3 up = ZobVector3(0, 1, 0);
+	ZobVector3 fw = ZobVector3(0, 0, 1);
 	if (m_tagetMode != eTarget_none)
 	{
 		ZobVector3 v = GetPosition();
 		const ZobVector3* p = GetPosition();
 		if (m_tagetMode == eTarget_Vector &&  m_targetVector != p)
 		{
-			v = v - m_targetVector;
+			v = m_targetVector - v;
 			v.Normalize();
+			fw = v;
 			//v = ZobVector3::GetAnglesFromVector(v);
 			//v = ZobMatrix4x4::QuaternionToEuler(v.x, v.z, v.z, 0.0f);
 			//SetRotation(RAD_TO_DEG(v.x), RAD_TO_DEG(v.y), RAD_TO_DEG(v.z));
-			//SetQuaternion(v.x, v.y, v.z, 0.0001f);
-			static float xx = 45.0f;
-			static float yy = -45.0f;
-			static float zz = 0.0f;
-			SetRotation(xx, yy, zz);
+			//static float qz = 0.0f;
+			left = ZobVector3::Cross(&up, &fw);
+			up = ZobVector3::Cross(&fw, &left);
+			SetQuaternion(&left, &up, &fw);
+			//SetQuaternion(v.x, v.y, v.z, qz);
+			//SetRotation(v.x, v.y, v.z);
 		}
 		else if (m_tagetMode == eTarget_Object && m_targetObject)
 		{
@@ -220,14 +224,18 @@ void Camera::Update(const ZobMatrix4x4& parentMatrix, const ZobMatrix4x4& parent
 				SetRotation(v.x, v.y, v.z);
 			}
 		}
-		SetQuaternion(v.x, v.y, v.z, 0.0f);
+		
+		//static float qz = 0.0f;
+		//SetQuaternion(v.x, v.y, v.z, qz);
 		ZobObject::Update(parentMatrix, parentRSMatrix);
+		/*
 		m_left = ZobVector3(1, 0, 0);
 		m_forward = ZobVector3(0, 0, 1);
 		m_up = ZobVector3(0, 1, 0);
 		m_rotationScaleMatrix.Mul(&m_left);
 		m_rotationScaleMatrix.Mul(&m_forward);
 		m_rotationScaleMatrix.Mul(&m_up);
+		*/
 	}
 	else
 	{

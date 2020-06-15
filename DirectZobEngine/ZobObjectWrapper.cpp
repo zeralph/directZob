@@ -43,6 +43,13 @@ namespace CLI
 		m_Instance->SetMesh(n);
 	}
 
+	void ZobObjectWrapper::LoadMesh(System::String^ name)
+	{
+		std::string n;
+		MarshalString(name, n);
+		m_Instance->LoadMesh(n);
+	}
+
 	void ZobObjectWrapper::CreateSprite()
 	{
 		m_Instance->CreateSprite();

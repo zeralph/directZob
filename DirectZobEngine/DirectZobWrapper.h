@@ -25,6 +25,7 @@ namespace CLI
 		static DirectZob*		GetDirectZobInstance() { return m_directZobInstance; }
 		int						RunAFrame();
 		int						Run(onFrameEndCallback ^cb);
+		int						Stop();
 		void					OnFrameEnd();
 		cli::array<System::String^>^ GetEventsAndClear();
 		void					Resize(int width, int height);
@@ -33,6 +34,7 @@ namespace CLI
 		//array<int>^ m_buffer;
 		static DirectZob*		m_directZobInstance=NULL;
 		onFrameEndCallback^		m_onFrameEndcallback;
+		volatile bool			m_run;
 	};
 }
 #endif //_WINDLL
