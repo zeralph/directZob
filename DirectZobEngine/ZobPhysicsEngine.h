@@ -22,4 +22,5 @@ private:
 	PhysicsCommon m_physicsCommon;
 	PhysicsWorld* m_world;
 	clock_t m_timeStep;
+	float m_accumulator;
 };

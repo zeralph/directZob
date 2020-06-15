@@ -86,31 +86,6 @@ void ZobMatrix4x4::SetPosition(const ZobVector3& v)
 	Mul(&tmp);
 }
 
-ZobVector3 ZobMatrix4x4::GetRotation() const
-{
-	float heading = 0.0f;
-	float bank = 0.0f;
-	float attitude = 0.0f;
-
-	if (m_data[1][0] > 0.998) { // singularity at north pole
-		heading = atan2(m_data[0][2], m_data[2][2]);
-		attitude = M_PI / 2;
-		bank = 0;
-	}
-	else if (m_data[1][0] < -0.998) { // singularity at south pole
-		heading = atan2(m_data[0][2], m_data[2][2]);
-		attitude = -M_PI / 2;
-		bank = 0;
-	}
-	else
-	{
-		heading = atan2(-m_data[2][0], m_data[0][0]);
-		bank = atan2(-m_data[1][2], m_data[1][1]);
-		attitude = asin(m_data[1][0]);
-	}
-	return ZobVector3(heading, bank, attitude);
-}
-
 void ZobMatrix4x4::AddRotation(const ZobVector3& v)
 {
 	ZobVector3 r = GetRotation();
@@ -134,6 +109,31 @@ void ZobMatrix4x4::SetPosition(const float x, const float y, const float z)
 	tmp.m_data[1][3] = y;
 	tmp.m_data[2][3] = z;
 	Mul(&tmp);
+}
+
+ZobVector3 ZobMatrix4x4::GetRotation() const
+{
+	float heading = 0.0f;
+	float bank = 0.0f;
+	float attitude = 0.0f;
+
+	if (m_data[1][0] > 0.998) { // singularity at north pole
+		heading = atan2(m_data[0][2], m_data[2][2]);
+		attitude = M_PI / 2;
+		bank = 0;
+	}
+	else if (m_data[1][0] < -0.998) { // singularity at south pole
+		heading = atan2(m_data[0][2], m_data[2][2]);
+		attitude = -M_PI / 2;
+		bank = 0;
+	}
+	else
+	{
+		heading = atan2(-m_data[2][0], m_data[0][0]);
+		bank = atan2(-m_data[1][2], m_data[1][1]);
+		attitude = asin(m_data[1][0]);
+	}
+	return ZobVector3(heading, bank, attitude);
 }
 
 void ZobMatrix4x4::SetRotation(const ZobVector3& v)
@@ -271,17 +271,14 @@ ZobVector3 ZobMatrix4x4::QuaternionToEuler(float x, float y, float z, float w)
 	float cosy_cosp = 1 - 2 * (y * y + z * z);
 	yaw = atan2(siny_cosp, cosy_cosp);
 	
-	
-	/*
-	double sqw = w*w;
-	double sqx = x*x;
-	double sqy = y*y;
-	double sqz = z*z;
-	yaw = atan2(2.0 * (x*y + z*w), (sqx - sqy - sqz + sqw));
-	roll = atan2(2.0 * (y*z + x*w), (-sqx - sqy + sqz + sqw));
-	pitch = asin(-2.0 * (x*z - y*w) / (sqx + sqy + sqz + sqw));
-	*/
-	return ZobVector3(roll, pitch, yaw);
+	//double sqw = w*w;
+	//double sqx = x*x;
+	//double sqy = y*y;
+	//double sqz = z*z;
+	//yaw = atan2(2.0 * (x*y + z*w), (sqx - sqy - sqz + sqw));
+	//roll = atan2(2.0 * (y*z + x*w), (-sqx - sqy + sqz + sqw));
+	//pitch = asin(-2.0 * (x*z - y*w) / (sqx + sqy + sqz + sqw));
+	return ZobVector3(-roll, pitch, yaw);
 }
 
 void ZobMatrix4x4::InvertMatrix4(const ZobMatrix4x4& m, ZobMatrix4x4& im)

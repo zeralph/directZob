@@ -38,7 +38,7 @@ void Camera::DrawGizmos(const Camera* camera, Core::Engine* engine)
 {
 	if (GetType() == ZOBGUID::type_editor)
 	{
-		return;
+//		return;
 	}
 	ZobObject::DrawGizmos(camera, engine);
 	ZobVector3 v0 = ZobVector3(-2, 1, 1);
@@ -68,13 +68,15 @@ void Camera::DrawGizmos(const Camera* camera, Core::Engine* engine)
 
 void Camera::Zoom(float z)
 {
+	//z = z / abs(z);
 	ZobVector3 v = m_forward;
 	if (m_tagetMode != eTarget_none)
 	{
 		if (m_tagetMode == eTarget_Vector)
 		{
-			v = GetPosition() - m_targetVector;
-			v.Normalize();
+			v = GetPosition();
+			v = v - m_targetVector;
+			
 		}
 		else if (m_tagetMode == eTarget_Object && m_targetObject)
 		{
@@ -82,9 +84,13 @@ void Camera::Zoom(float z)
 			v = v - m_targetObject->GetPosition();
 		}
 	}
-	v = v * (-z);
-	v = v + GetPosition();
-	SetPosition(v.x, v.y, v.z);
+	if (v.sqrtLength() > abs(z) || z < 0.0f)
+	{
+		v.Normalize();
+		v = v * (-z);
+		v = v + GetPosition();
+		SetPosition(v.x, v.y, v.z);
+	}
 }
 
 bool Camera::GetTargetVector(ZobVector3* t)
@@ -181,12 +187,13 @@ void Camera::Update(const ZobMatrix4x4& parentMatrix, const ZobMatrix4x4& parent
 	//m_left = ZobVector3(1, 0, 0);
 	//m_forward = ZobVector3(0, 0, 1);
 	//m_up = ZobVector3(0, 1, 0);
+	
 	if (m_tagetMode != eTarget_none)
 	{
+		ZobVector3 v = GetPosition();
 		const ZobVector3* p = GetPosition();
 		if (m_tagetMode == eTarget_Vector &&  m_targetVector != p)
 		{
-			ZobVector3 v = GetPosition();
 			v = v - m_targetVector;
 			v.Normalize();
 			//v = ZobVector3::GetAnglesFromVector(v);
@@ -213,11 +220,24 @@ void Camera::Update(const ZobMatrix4x4& parentMatrix, const ZobMatrix4x4& parent
 				SetRotation(v.x, v.y, v.z);
 			}
 		}
+		SetQuaternion(v.x, v.y, v.z, 0.0f);
+		ZobObject::Update(parentMatrix, parentRSMatrix);
+		m_left = ZobVector3(1, 0, 0);
+		m_forward = ZobVector3(0, 0, 1);
+		m_up = ZobVector3(0, 1, 0);
+		m_rotationScaleMatrix.Mul(&m_left);
+		m_rotationScaleMatrix.Mul(&m_forward);
+		m_rotationScaleMatrix.Mul(&m_up);
+	}
+	else
+	{
+		ZobObject::Update(parentMatrix, parentRSMatrix);
 	}
 	//m_nextTranslation = m_translation;
-	ZobObject::Update(parentMatrix, parentRSMatrix);
-	m_rotationScaleMatrix.Identity();
-	m_rotationScaleMatrix.SetRotation(GetRotation());
+	
+	//m_rotationScaleMatrix.Identity();
+	//m_rotationScaleMatrix.SetRotation(GetRotation());
+
 	/*
 	m_left = ZobVector3(1, 0, 0);
 	m_forward = ZobVector3(0, 0, 1);

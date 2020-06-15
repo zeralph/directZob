@@ -43,6 +43,11 @@ Mesh::Mesh(std::string& name, std::string& path, std::string& file):Mesh(name)
 	DirectZob::RemoveIndent();
 }
 
+Mesh::Mesh(Mesh* m)
+{
+
+}
+
 Mesh::Mesh(std::string &parentName, std::string& path, fbxsdk::FbxMesh* mesh)
 {
 	if (mesh)

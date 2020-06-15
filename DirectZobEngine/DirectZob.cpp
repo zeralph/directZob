@@ -13,6 +13,7 @@ static char logBuffer[LOG_BUFFER_SIZE];
 static bool g_isInEditorMode;
 static int s_logIndent;
 static std::mutex g_render_mutex;
+static std::thread g_editorModeThread;
 int DirectZob::s_logIndent = 0;
 DirectZob *DirectZob::singleton = nullptr;
 
@@ -136,6 +137,21 @@ void DirectZob::StopPhysic(bool reset)
 	}
 }
 
+int	DirectZob::Run(void func(void))
+{
+	g_editorModeThread = std::thread(&DirectZob::RunInternal, this, func);
+	return 12;
+}
+
+int DirectZob::RunInternal(void func(void))
+{
+	for (;;)
+	{
+		RunAFrame();
+		func();
+	}
+}
+
 int DirectZob::RunAFrame()
 {
 	g_render_mutex.lock();
@@ -158,7 +174,7 @@ int DirectZob::RunAFrame()
 			if (m_physicStarted)
 			{
 				bPhysicUpdated = true;
-				m_physicsEngine->StartUpdatePhysic(m_frameTime);
+				m_physicsEngine->StartUpdatePhysic(m_frameTime/1000.0f);
 			}
 			m_zobObjectManager->StartUpdateScene(cam, m_engine);
 			m_geometryTime = m_zobObjectManager->WaitForUpdateObjectend();

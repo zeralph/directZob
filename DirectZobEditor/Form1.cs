@@ -477,6 +477,16 @@ namespace DirectZobEditor
         {
 
         }
+
+        private void btnGrid_Click(object sender, EventArgs e)
+        {
+            m_engineWindow.GetEngineWrapper().ShowGrid(btnGrid.Checked);
+        }
+
+        private void btnWireframe_Click(object sender, EventArgs e)
+        {
+            m_engineWindow.GetEngineWrapper().WireFrame(btnWireframe.Checked);
+        }
     }
 
     public class Event

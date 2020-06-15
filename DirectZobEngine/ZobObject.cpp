@@ -202,7 +202,7 @@ void ZobObject::QueueForDrawing(const Camera* camera, Core::Engine* engine)
 {
 	if(GetType() == ZOBGUID::type_editor)
 	{
-		return;
+//		return;
 	}
 	if (m_mesh)
 	{

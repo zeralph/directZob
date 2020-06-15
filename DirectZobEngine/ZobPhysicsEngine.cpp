@@ -6,6 +6,7 @@ ZobPhysicsEngine::ZobPhysicsEngine()
 {
     m_world = m_physicsCommon.createPhysicsWorld();
     m_timeStep = clock();
+    m_accumulator = 0;
 }
 
 ZobPhysicsEngine::~ZobPhysicsEngine()
@@ -16,7 +17,7 @@ ZobPhysicsEngine::~ZobPhysicsEngine()
 
 void ZobPhysicsEngine::StartUpdatePhysic(float dt)
 {
-	
+    m_accumulator = 0;
 	g_physicThread = std::thread(&ZobPhysicsEngine::Update, this, dt);
 }
 
@@ -31,7 +32,19 @@ float ZobPhysicsEngine::WaitForUpdatePhysicEnd()
 void ZobPhysicsEngine::Update(float dt)
 {
 	m_timeStep = clock();
-    m_world->update(1.0f / dt);
+    // Constant physics time step 
+    const float timeStep = 1.0f / 60.0f;
+    // Add the time difference in the accumulator 
+    m_accumulator += dt;
+    // While there is enough accumulated time to take 
+    // one or several physics steps 
+    while (m_accumulator >= timeStep)
+    {
+        // Update the Dynamics world with a constant time step 
+        m_world->update(timeStep);
+        // Decrease the accumulated time 
+        m_accumulator -= timeStep;
+    }
 	m_timeStep = (float)(clock() - m_timeStep) / CLOCKS_PER_SEC;
 }
 

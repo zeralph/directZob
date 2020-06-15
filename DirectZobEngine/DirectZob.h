@@ -45,6 +45,7 @@ public :
 	const float			GetFrameTime() const { return m_frameTime; };
 	const float			GetCopyTime() const { return m_copyTime; };
 	int					RunAFrame();
+	int					Run( void func(void) );
 	const uint*			GetBufferData() const { return m_engine->GetBufferData()->buffer; }
 	std::string			ExePath();
 
@@ -64,6 +65,10 @@ public :
 	static void			RemoveIndent() { s_logIndent--; if (s_logIndent < 0) { s_logIndent = 0; } }
 	void				Lock();
 	void				Unlock();
+
+private:
+	int					RunInternal(void func(void));
+
 private:
 	
 	Events* m_events = NULL;

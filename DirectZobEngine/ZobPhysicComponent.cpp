@@ -139,9 +139,28 @@ const ZobVector3* ZobPhysicComponent::GetOrientation()
 		Quaternion q = m_rigidBody->getTransform().getOrientation();	
 		q.normalize();
 		ZobVector3 z = ZobMatrix4x4::QuaternionToEuler(q.x, q.y, q.z, q.w);
-		m_orientation = ZobVector3(RAD_TO_DEG(-z.x), RAD_TO_DEG(z.y), RAD_TO_DEG(z.z));
+		m_orientation = ZobVector3(RAD_TO_DEG(z.x), RAD_TO_DEG(z.y), RAD_TO_DEG(z.z));
 	}
 	return &m_orientation;
+}
+
+const ZobMatrix4x4 ZobPhysicComponent::GetRotationMatrix()
+{
+	reactphysics3d::decimal* mat = (reactphysics3d::decimal*)malloc(sizeof(decimal) * 16);
+	m_rigidBody->getTransform().getOpenGLMatrix(mat);
+	ZobMatrix4x4 m;
+	int k = 0;
+	for (int i = 0; i < 4; i++)
+	{
+		for(int j=0; j<4; j++)
+		{
+			m.SetData(i, j, mat[k]);
+			k++;
+		}
+	}
+	delete mat;
+	m.SetPosition(0, 0, 0);
+	return m;
 }
 
 void ZobPhysicComponent::SetQuaternion(float x, float y, float z, float w)

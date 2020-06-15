@@ -59,6 +59,8 @@
             this.btnPlay = new System.Windows.Forms.ToolStripButton();
             this.btnPause = new System.Windows.Forms.ToolStripButton();
             this.btnStop = new System.Windows.Forms.ToolStripButton();
+            this.btnGrid = new System.Windows.Forms.ToolStripButton();
+            this.btnWireframe = new System.Windows.Forms.ToolStripButton();
             this.EngineRendererPanel = new System.Windows.Forms.Panel();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
@@ -347,7 +349,9 @@
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.btnPlay,
             this.btnPause,
-            this.btnStop});
+            this.btnStop,
+            this.btnGrid,
+            this.btnWireframe});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(698, 25);
@@ -356,6 +360,7 @@
             // 
             // btnPlay
             // 
+            this.btnPlay.CheckOnClick = true;
             this.btnPlay.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.btnPlay.Image = ((System.Drawing.Image)(resources.GetObject("btnPlay.Image")));
             this.btnPlay.ImageTransparentColor = System.Drawing.Color.Magenta;
@@ -383,6 +388,28 @@
             this.btnStop.Size = new System.Drawing.Size(23, 22);
             this.btnStop.Text = "toolStripButton3";
             this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
+            // 
+            // btnGrid
+            // 
+            this.btnGrid.CheckOnClick = true;
+            this.btnGrid.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnGrid.Image = ((System.Drawing.Image)(resources.GetObject("btnGrid.Image")));
+            this.btnGrid.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnGrid.Name = "btnGrid";
+            this.btnGrid.Size = new System.Drawing.Size(23, 22);
+            this.btnGrid.Text = "toolStripButton1";
+            this.btnGrid.Click += new System.EventHandler(this.btnGrid_Click);
+            // 
+            // btnWireframe
+            // 
+            this.btnWireframe.CheckOnClick = true;
+            this.btnWireframe.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnWireframe.Image = ((System.Drawing.Image)(resources.GetObject("btnWireframe.Image")));
+            this.btnWireframe.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnWireframe.Name = "btnWireframe";
+            this.btnWireframe.Size = new System.Drawing.Size(23, 22);
+            this.btnWireframe.Text = "toolStripButton2";
+            this.btnWireframe.Click += new System.EventHandler(this.btnWireframe_Click);
             // 
             // EngineRendererPanel
             // 
@@ -535,6 +562,8 @@
         private System.Windows.Forms.ToolStripMenuItem setupToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem engineToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem sceneToolStripMenuItem;
+        private System.Windows.Forms.ToolStripButton btnGrid;
+        private System.Windows.Forms.ToolStripButton btnWireframe;
     }
 }
 

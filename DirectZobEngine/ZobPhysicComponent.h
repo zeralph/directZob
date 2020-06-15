@@ -49,7 +49,7 @@ public:
 	void								SetQuaternion(float x, float y, float z, float w);
 	const ZobVector3*					GetPosition();
 	const ZobVector3*					GetOrientation();
-
+	const ZobMatrix4x4					GetRotationMatrix();
 	void								AddBoxCollider(const ZobVector3* halfExtends );
 	void								AddSphereCollider(float radius);
 	void								AddCapsuleCollider(float radius, float height);

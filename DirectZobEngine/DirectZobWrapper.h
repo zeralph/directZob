@@ -28,9 +28,11 @@ namespace CLI
 		void					OnFrameEnd();
 		cli::array<System::String^>^ GetEventsAndClear();
 		void					Resize(int width, int height);
+		static void test();
 	private:
 		//array<int>^ m_buffer;
-		static DirectZob* m_directZobInstance=NULL;
+		static DirectZob*		m_directZobInstance=NULL;
+		onFrameEndCallback^		m_onFrameEndcallback;
 	};
 }
 #endif //_WINDLL

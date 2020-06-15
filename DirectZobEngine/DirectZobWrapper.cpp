@@ -9,9 +9,11 @@ namespace CLI
 		pin_ptr<unsigned int> arrayPin = &data[0];
 		unsigned int size = data->Length;
 	}*/
+	typedef void (*Unmanaged_onFrameEndDelegate)();
 
 	DirectZobWrapper::DirectZobWrapper():ManagedObject(new DirectZob, true)
 	{
+		m_onFrameEndcallback = nullptr;
 	}
 
 	void DirectZobWrapper::StartPhysic()
@@ -73,20 +75,35 @@ namespace CLI
 		m_Instance->SaveScene(stdPath, stdFile);
 	}
 
+	void DirectZobWrapper::test()
+	{
+
+	}
+
 	int DirectZobWrapper::Run(onFrameEndCallback^ cb)
 	{
+		/*
+		m_onFrameEndcallback = cb;
+		onFrameEndCallback^ StaticDelInst = gcnew onFrameEndCallback(this, &DirectZobWrapper::OnFrameEnd);
+		System::IntPtr stubPointer = System::Runtime::InteropServices::Marshal::GetFunctionPointerForDelegate(StaticDelInst);
+		Unmanaged_onFrameEndDelegate functionPointer = static_cast<Unmanaged_onFrameEndDelegate>(stubPointer.ToPointer());
+		m_Instance->Run(functionPointer);
+		return 0;
+		*/
 		for (;;)
 		{
 			m_Instance->RunAFrame();
 			cb();
-			OnFrameEnd();
 		}
 		return 0;
 	}
 
 	void DirectZobWrapper::OnFrameEnd()
 	{
-
+		if (m_onFrameEndcallback)
+		{
+			m_onFrameEndcallback();
+		}
 	}
 
 	int DirectZobWrapper::RunAFrame()
