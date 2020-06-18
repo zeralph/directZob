@@ -208,6 +208,7 @@ void Camera::Update(const ZobMatrix4x4& parentMatrix, const ZobMatrix4x4& parent
 			SetQuaternion(&left, &up, &fw);
 			//SetQuaternion(v.x, v.y, v.z, qz);
 			//SetRotation(v.x, v.y, v.z);
+			RecomputeFLUVectors(&v);
 		}
 		else if (m_tagetMode == eTarget_Object && m_targetObject)
 		{
@@ -222,6 +223,7 @@ void Camera::Update(const ZobMatrix4x4& parentMatrix, const ZobMatrix4x4& parent
 				//v = ZobVector3::GetAnglesFromVector(v);
 				v = ZobMatrix4x4::QuaternionToEuler(v.x, v.z, v.z, 45.0f);
 				SetRotation(v.x, v.y, v.z);
+				RecomputeFLUVectors(&v);
 			}
 		}
 		
@@ -275,9 +277,9 @@ void Camera::UpdateViewProjectionMatrix()
 	m_invRotationMatrix.Mul(&forward);
 	m_invRotationMatrix.Mul(&up);
 	SetViewMatrix(&left, &up, &forward, &p);
-	m_forward = forward;
-	m_up = up;
-	m_left = left;
+	//m_forward = forward;
+	//m_up = up;
+	//m_left = left;
 	g_update_camera_mutex.unlock();
 }
 

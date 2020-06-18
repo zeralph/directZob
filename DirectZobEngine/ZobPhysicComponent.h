@@ -58,7 +58,7 @@ public:
 	void								SaveTransform();
 	void								RestoreTransform();
 	void								ResetPhysic();
-	void								DrawGizmos(const Camera* camera, const ZobMatrix4x4* mat);
+	void								DrawGizmos(const Camera* camera, const ZobVector3* position, const ZobVector3* rotation);
 private:
 	void								AddColliderInternal(CollisionShape* c);
 	void								CreateCollider();

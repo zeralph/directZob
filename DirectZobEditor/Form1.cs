@@ -335,7 +335,6 @@ namespace DirectZobEditor
 
         private void OnApplicationExit(object sender, EventArgs e)
         {
-            m_engineWindow.End();
             m_directZobWrapper.Unload();
         }
 

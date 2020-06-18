@@ -242,7 +242,9 @@ void ZobObject::DrawGizmos(const Camera* camera, Core::Engine* engine)
 	engine->QueueLine(camera, t, &y, c, true);
 	c = 0x000000FF;
 	engine->QueueLine(camera, t, &z, c, true);
-	m_physicComponent->DrawGizmos(camera, &m_modelMatrix);
+	ZobVector3 p = GetPosition();
+	ZobVector3 r = GetRotation();
+	m_physicComponent->DrawGizmos(camera, &p, &r);
 }
 
 int ZobObject::GetChildPosition(const ZobObject* z)

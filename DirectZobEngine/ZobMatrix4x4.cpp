@@ -79,7 +79,7 @@ void ZobMatrix4x4::SetScale(const float x, const float y, const float z)
 
 void ZobMatrix4x4::SetPosition(const ZobVector3& v)
 {
-	tmp.Identity();
+	//tmp.Identity();
 	tmp.m_data[0][3] = v.x;
 	tmp.m_data[1][3] = v.y;
 	tmp.m_data[2][3] = v.z;

@@ -258,18 +258,21 @@ void ZobPhysicComponent::ResetPhysic()
 	}
 }
 
-void ZobPhysicComponent::DrawGizmos(const Camera* camera, const ZobMatrix4x4* mat)
+void ZobPhysicComponent::DrawGizmos(const Camera* camera, const ZobVector3* position, const ZobVector3* rotation)
 {
+	ZobMatrix4x4 mat;
+	mat.SetPosition(position);
+	mat.SetRotation(rotation);
 	uint c = 0x00FF00;
 	bool bold = false;
 	Engine* e = DirectZob::GetInstance()->GetEngine();
 	switch (m_shapeDraw._type)
 	{
 	case sShapeDraw::eShapeType::eShapeType_sphere:
-		e->QueueSphere(camera, mat, m_shapeDraw._radius, c, bold);
+		e->QueueSphere(camera, &mat, m_shapeDraw._radius, c, bold);
 		break;
 	case sShapeDraw::eShapeType::eShapeType_box:
-		e->QueueBox(camera, mat, m_shapeDraw._halfExtends, c, bold);
+		e->QueueBox(camera, &mat, m_shapeDraw._halfExtends, c, bold);
 		break;
 	case sShapeDraw::eShapeType::eShapeType_capsule:
 	case sShapeDraw::eShapeType::eShapeType_convexMesh:

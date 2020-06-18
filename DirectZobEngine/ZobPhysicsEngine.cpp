@@ -17,7 +17,7 @@ ZobPhysicsEngine::~ZobPhysicsEngine()
 
 void ZobPhysicsEngine::StartUpdatePhysic(float dt)
 {
-    m_accumulator = 0;
+//    m_accumulator = 0;
 	g_physicThread = std::thread(&ZobPhysicsEngine::Update, this, dt);
 }
 

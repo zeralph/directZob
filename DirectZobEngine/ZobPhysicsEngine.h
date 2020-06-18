@@ -17,6 +17,7 @@ public :
 	RigidBody* CreateRigidBody(const ZobVector3* position, const ZobVector3* orientation);
 	void DestroyRigidBody(RigidBody* rb);
 	PhysicsCommon* GetPhysicsCommon() { return &m_physicsCommon; }
+	void ResetAccumulator() { m_accumulator = 0; }
 private:
 	void Update(float dt);
 	PhysicsCommon m_physicsCommon;

@@ -134,6 +134,7 @@ void DirectZob::StopPhysic(bool reset)
 	if (reset)
 	{
 		DirectZob::GetInstance()->GetZobObjectManager()->ResetPhysic();
+		m_physicsEngine->ResetAccumulator();
 	}
 }
 

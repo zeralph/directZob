@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Newtonsoft.Json;
 using System.IO;
+using CLI;
 
 namespace DirectZobEditor
 {
@@ -30,6 +31,11 @@ namespace DirectZobEditor
             m_mainForm.OnSceneLoaded += new EventHandler(OnSceneChanged);
             m_mainForm.OnSceneUpdated += new EventHandler(OnSceneUpdated);
             this.Dock = DockStyle.Fill;
+        }
+
+        public ZobObjectWrapper GetSelectedZobObject()
+        {
+            return m_currentSelectedZobObject;
         }
 
         public void RestoreTransforms()
@@ -205,6 +211,7 @@ namespace DirectZobEditor
             if(n!=null)
             {
                 m_zobObjectManagerWrapper.RemoveZobObject(GetFullNodeName(n));
+                m_currentSelectedZobObject = null;
                 ZobObjectTree.Nodes.Clear();
                 UpdateTree();
             }
