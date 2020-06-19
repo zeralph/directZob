@@ -205,7 +205,7 @@ int DirectZob::RunAFrame()
 		}
 		if (m_text)
 		{
-			_snprintf_s(buffer, MAX_PATH, "Triangles : %i / %i", m_engine->GetNbDrawnTriangles(), m_engine->GetNbTriangles());
+			_snprintf_s(buffer, MAX_PATH, "Triangles : %i", m_engine->GetNbDrawnTriangles());
 			std::string sBuf = std::string(buffer);
 			m_text->Print(0, 0, 1, &sBuf, 0xFFFFFFFF);
 			_snprintf_s(buffer, MAX_PATH, "render : %03i, geom : %03i, phys : %03i, cpy : %03i, tot : %03i, FPS : %03i", (int)m_renderTime, (int)m_geometryTime, (int)m_physicTime, (int)m_copyTime, (int)m_frameTime, (int)m_fps);

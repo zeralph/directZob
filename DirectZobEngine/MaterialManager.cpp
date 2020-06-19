@@ -87,10 +87,22 @@ const ZobMaterial* MaterialManager::LoadFbxMaterial(const fbxsdk::FbxMesh* mesh,
 				else
 				{
 					// This only gets the material of type sDiffuse, you probably need to traverse all Standard Material Property by its name to get all possible textures.
-					fbxsdk::FbxProperty prop = material->FindProperty(fbxsdk::FbxSurfaceMaterial::sDiffuse);
-					// Check if it's layeredtextures
-					FbxDouble3 c = prop.Get<FbxDouble3>();
-					ZobVector3 diffuse = ZobVector3(c[0], c[1], c[2]);
+					ZobVector3 diffuse = ZobVector3(0, 0, 0);
+					ZobVector3 ambient = ZobVector3(0, 0, 0);
+					fbxsdk::FbxProperty prop;
+					prop = material->FindProperty(fbxsdk::FbxSurfaceMaterial::sDiffuse);
+					FbxDouble3 d;
+					if (prop.IsValid())
+					{
+						d = prop.Get<FbxDouble3>();
+						diffuse = ZobVector3(d[0], d[1], d[2]);
+					}
+					prop = material->FindProperty(fbxsdk::FbxSurfaceMaterial::sAmbient);
+					if (prop.IsValid())
+					{
+						d = prop.Get<FbxDouble3>();
+						ambient = ZobVector3(d[0], d[1], d[2]);
+					}
 					const char* texture_name = NULL;
 					const char* texture_name2 = NULL;
 					const char* texture_name3 = NULL;
@@ -111,7 +123,6 @@ const ZobMaterial* MaterialManager::LoadFbxMaterial(const fbxsdk::FbxMesh* mesh,
 
 					prop = material->FindProperty(fbxsdk::FbxSurfaceMaterial::sSpecularFactor);
 					f = prop.Get<FbxDouble>();
-					ZobVector3 ambient;
 					std::string texFullPath = "";
 					if (texture_name2)
 					{

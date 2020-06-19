@@ -49,7 +49,6 @@ namespace Core
 		int												StartDrawingScene();
 		int												SetDisplayedBuffer();
 		inline ulong									GetCurrentFrame() { return m_currentFrame; }
-		inline const uint								GetNbTriangles() const { return m_sceneTriangles; }
 		inline const uint								GetNbDrawnTriangles() const { return m_drawnTriangles; }
 
 		inline BufferData*								GetBufferData() { return &m_bufferData; }
@@ -101,7 +100,6 @@ namespace Core
 //		uint* m_oBuffer;
 		BufferData m_bufferData;
 		bool m_showZBuffer;
-		uint m_sceneTriangles;
 		uint m_drawnTriangles;
 		ulong m_nbPixels;
 		volatile bool m_started = false;

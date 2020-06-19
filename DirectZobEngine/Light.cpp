@@ -56,7 +56,6 @@ Light::Light(TiXmlElement* node, ZobObject* parent)
 		m_intensity = intensity;
 		m_active = true;
 		m_spotAngle = 30.0f;
-		NewLightConfiguration();
 }
 
 Light::~Light()
