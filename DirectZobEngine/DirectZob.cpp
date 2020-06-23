@@ -1,4 +1,5 @@
 #include <mutex>
+#include <thread>
 #include "DirectZob.h"
 #include "Events.h"
 #include "tinyxml.h"
