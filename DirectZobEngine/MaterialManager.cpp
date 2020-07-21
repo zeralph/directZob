@@ -106,6 +106,7 @@ const ZobMaterial* MaterialManager::LoadFbxMaterial(const fbxsdk::FbxMesh* mesh,
 					const char* texture_name = NULL;
 					const char* texture_name2 = NULL;
 					const char* texture_name3 = NULL;
+					prop = material->FindProperty(fbxsdk::FbxSurfaceMaterial::sDiffuse);
 					int file_texture_count = prop.GetSrcObjectCount<fbxsdk::FbxFileTexture>();
 					if (file_texture_count > 0)
 					{

@@ -4,7 +4,7 @@
     </Meshes>
     <Scene>
         <Globals>
-            <AmbientColor r="200" g="200" b="200" />
+            <AmbientColor r="50" g="50" b="50" />
             <FogColor r="135" g="206" b="235" />
             <ClearColor r="135" g="206" b="235" />
             <FogDensity>0.00</FogDensity>
