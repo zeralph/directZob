@@ -4,12 +4,12 @@
     </Meshes>
     <Scene>
         <Globals>
-            <AmbientColor r="50" g="50" b="50" />
-            <FogColor r="192" g="192" b="192" />
-            <ClearColor r="192" g="192" b="192" />
-            <FogDensity>100.00</FogDensity>
-            <FogDistance>1.00</FogDistance>
-            <FogType>exp</FogType>
+            <AmbientColor r="200" g="200" b="200" />
+            <FogColor r="135" g="206" b="235" />
+            <ClearColor r="135" g="206" b="235" />
+            <FogDensity>0.00</FogDensity>
+            <FogDistance>0.00</FogDistance>
+            <FogType>none</FogType>
         </Globals>
         <ZobObject name="camera_0" type="camera">
             <Position x="0" y="6" z="0" />
@@ -21,7 +21,7 @@
             <Position x="0" y="5" z="0" />
             <Rotation x="0" y="0" z="0" />
             <Scale x="0.1" y="0.1" z="0.1" />
-            <Mesh>fbx_example</Mesh>
+            <Mesh>11.fbx</Mesh>
         </ZobObject>
         <ZobObject name="green" type="light">
             <Position x="0" y="5" z="0" />
@@ -46,7 +46,7 @@
             <Rotation x="-45" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
             <Color r="185" g="185" b="0" />
-            <Intensity>1.00</Intensity>
+            <Intensity>2.00</Intensity>
             <FallOffDistance>60.00</FallOffDistance>
             <Type>directional</Type>
         </ZobObject>
