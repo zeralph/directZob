@@ -250,11 +250,11 @@ void DirectZob::LogInfo(const char* format, ...)
 	std::string s = std::string("");
 	if (s_logIndent > 0)
 	{
-		for (int i = 0; i < s_logIndent; i++)
+		for (int i = 0; i < s_logIndent-1; i++)
 		{
-			s.append(std::string(" "));
+			s.append(std::string("\u2502"));
 		}
-		s.append(std::string("|-"));
+		s.append(std::string("\u251C"));
 	}
 	s.append(std::string(logBuffer));
 	va_end(args);
