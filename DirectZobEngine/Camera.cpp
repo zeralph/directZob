@@ -7,12 +7,17 @@
 static std::mutex g_update_camera_mutex;
 static float ee = 0.0f;
 
+static ZobVector3 sRayDbg;
+static ZobVector3 sRayDbg2;
+
 Camera::Camera(const std::string& name, float fov, BufferData* bufferData, ZobObject* parent)
 	:ZobObject(ZOBGUID::Type::type_scene, ZOBGUID::SubType::subtype_zobCamera, name, parent)
 {
 	//RecomputeVectors();
 	m_fov = fov;
 	m_tagetMode = eTarget_none;
+	sRayDbg = ZobVector3(1000, 1000, 1000);
+	sRayDbg2 = ZobVector3(1000, 1000, 1000);
 	//m_nextTranslation = m_translation;
 }
 
@@ -38,7 +43,7 @@ void Camera::DrawGizmos(const Camera* camera, Core::Engine* engine)
 {
 	if (GetType() == ZOBGUID::type_editor)
 	{
-//		return;
+		//		return;
 	}
 	ZobObject::DrawGizmos(camera, engine);
 	ZobVector3 v0 = ZobVector3(-2, 1, 1);
@@ -56,14 +61,26 @@ void Camera::DrawGizmos(const Camera* camera, Core::Engine* engine)
 	v3 = v3 + p;
 	uint c = 0x000000FF;
 	uint c2 = 0x0000FFFF;
-	engine->QueueLine(camera, &v0, &v1, c, true);
-	engine->QueueLine(camera, &v1, &v3, c, true);
-	engine->QueueLine(camera, &v2, &v3, c2, true);
-	engine->QueueLine(camera, &v2, &v0, c, true);
-	engine->QueueLine(camera, p, &v1, c, true);
-	engine->QueueLine(camera, p, &v2, c, true);
-	engine->QueueLine(camera, p, &v3, c, true);
-	engine->QueueLine(camera, p, &v0, c, true);
+	if (this->GetName() != "EditorCamera")
+	{
+		engine->QueueLine(camera, &v0, &v1, c, true);
+		engine->QueueLine(camera, &v1, &v3, c, true);
+		engine->QueueLine(camera, &v2, &v3, c2, true);
+		engine->QueueLine(camera, &v2, &v0, c, true);
+		engine->QueueLine(camera, p, &v1, c, true);
+		engine->QueueLine(camera, p, &v2, c, true);
+		engine->QueueLine(camera, p, &v3, c, true);
+		engine->QueueLine(camera, p, &v0, c, true);
+	}
+
+	ZobMatrix4x4 z;
+	z.Identity();
+	z.Identity();
+	z.AddTranslation(sRayDbg);
+	//engine->QueueSphere(camera, &z, 0.1f, c2, true);
+	ZobVector3 q = sRayDbg - sRayDbg2;
+	q = sRayDbg2 + q * 500.0f;
+	engine->QueueLine(camera, &sRayDbg, &q, c2, true);
 }
 
 void Camera::Zoom(float z)
@@ -271,15 +288,16 @@ void Camera::UpdateViewProjectionMatrix()
 	ZobVector3 left = ZobVector3(1, 0, 0);
 	ZobVector3 forward = ZobVector3(0, 0, 1);
 	ZobVector3 up = ZobVector3(0, 1, 0);
-	ZobMatrix4x4 m_invRotationMatrix;
-	ZobMatrix4x4::InvertMatrix4(m_rotationScaleMatrix, m_invRotationMatrix);
-	m_invRotationMatrix.Mul(&left);
-	m_invRotationMatrix.Mul(&forward);
-	m_invRotationMatrix.Mul(&up);
+	//TODO : 2 quite same inverse, lot of optims doable
+	ZobMatrix4x4::InvertMatrix4(m_rotationScaleMatrix, m_invModelMatrix);
+	m_invModelMatrix.Mul(&left);
+	m_invModelMatrix.Mul(&forward);
+	m_invModelMatrix.Mul(&up);
 	SetViewMatrix(&left, &up, &forward, &p);
-	//m_forward = forward;
-	//m_up = up;
-	//m_left = left;
+	ZobMatrix4x4::InvertMatrix4(m_modelMatrix, m_invModelMatrix);
+	ZobMatrix4x4::InvertMatrix4(m_projMatrix, m_invProjectionMatrix);
+	ZobMatrix4x4::InvertMatrix4(m_viewRotMatrix, m_invViewMatrix);
+	
 	g_update_camera_mutex.unlock();
 }
 
@@ -312,25 +330,72 @@ void Camera::setProjectionMatrix(const float angleOfView, const float width, con
 	const float zRange = zNear - zFar;
 	const float tanHalfFOV = -tanf(angleOfView / 2.0 * M_PI / 180.0);
 
-	m_projMatrix.SetData(0, 0, 1.0f / (tanHalfFOV * ar));
+	float a = 1.0f / (tanHalfFOV * ar);
+	float b = 1.0f / tanHalfFOV;
+	float c = (-zNear - zFar) / zRange;
+	float d = 2.0f * zFar * zNear / zRange;
+	float e = 1.0f;
+
+	m_projMatrix.SetData(0, 0, a);
 	m_projMatrix.SetData(0, 1, 0.0f);
 	m_projMatrix.SetData(0, 2, 0.0f);
 	m_projMatrix.SetData(0, 3, 0.0f);
 
 	m_projMatrix.SetData(1, 0, 0.0f);
-	m_projMatrix.SetData(1, 1, 1.0f / tanHalfFOV);
+	m_projMatrix.SetData(1, 1, b);
 	m_projMatrix.SetData(1, 2, 0.0f);
 	m_projMatrix.SetData(1, 3, 0.0f);
 
 	m_projMatrix.SetData(2, 0, 0.0f);
 	m_projMatrix.SetData(2, 1, 0.0f);
-	m_projMatrix.SetData(2, 2, (-zNear - zFar) / zRange);
-	m_projMatrix.SetData(2, 3, 2.0f * zFar * zNear / zRange);
+	m_projMatrix.SetData(2, 2, c);
+	m_projMatrix.SetData(2, 3, d);
 
 	m_projMatrix.SetData(3, 0, 0.0f);
 	m_projMatrix.SetData(3, 1, 0.0f);
-	m_projMatrix.SetData(3, 2, 1.0f);
+	m_projMatrix.SetData(3, 2, e);
 	m_projMatrix.SetData(3, 3, 0.0f);
+
+	//ZobMatrix4x4::InvertMatrix4(m_projMatrix, m_invProjectionMatrix);
+
+	m_invProjectionMatrix.SetData(0, 0, 1.0f / a);
+	m_invProjectionMatrix.SetData(0, 1, 0.0f);
+	m_invProjectionMatrix.SetData(0, 2, 0.0f);
+	m_invProjectionMatrix.SetData(0, 3, 0.0f);
+	
+	m_invProjectionMatrix.SetData(1, 0, 0.0f);
+	m_invProjectionMatrix.SetData(1, 1, 1.0f / b);
+	m_invProjectionMatrix.SetData(1, 2, 0.0f);
+	m_invProjectionMatrix.SetData(1, 3, 0.0f);
+	
+	m_invProjectionMatrix.SetData(2, 0, 0.0f);
+	m_invProjectionMatrix.SetData(2, 1, 0.0f);
+	m_invProjectionMatrix.SetData(2, 2, 0.0f);
+	m_invProjectionMatrix.SetData(2, 3, 1.0f / e);
+	
+	m_invProjectionMatrix.SetData(3, 0, 0.0f);
+	m_invProjectionMatrix.SetData(3, 1, 0.0f);
+	m_invProjectionMatrix.SetData(3, 2, 1.0f / d);
+	m_invProjectionMatrix.SetData(3, 3, -c / (d*e) );
+
+}
+
+//v is homogenous
+void Camera::From2DToWorld(ZobVector3* v)
+{
+	//v->z = 0.0f;
+	m_invProjectionMatrix.Mul(v);
+	//v->Normalize();
+	m_invViewMatrix.Mul(v);
+	//v->w = 1.0 / v->w;
+	v->Normalize();
+	
+	v->x += this->GetWorldPosition().x;
+	v->y += this->GetWorldPosition().y;
+	v->z += this->GetWorldPosition().z;
+	//v-> w = 1.0 / v->w;
+	sRayDbg = v;
+	sRayDbg2 = this->GetWorldPosition();
 }
 
 TiXmlNode* Camera::SaveUnderNode(TiXmlNode* node)

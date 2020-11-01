@@ -30,6 +30,8 @@ namespace CLI
 		return nullptr;
 	}
 
+
+
 	ManagedVector3^ CameraManagerWrapper::GetCurrentCameraPosition()
 	{
 		Camera* c = m_Instance->GetCurrentCamera();
@@ -96,6 +98,19 @@ namespace CLI
 		if (c)
 		{
 			c->Zoom(z);
+		}
+		DirectZob::GetInstance()->Unlock();
+	}
+
+	void CameraManagerWrapper::From2DToWorld(ManagedVector3^ p)
+	{
+		DirectZob::GetInstance()->Lock();
+		Camera* c = m_Instance->GetCurrentCamera();
+		if (c)
+		{
+			ZobVector3 v = p->ToVector3();
+			c->From2DToWorld(&v);
+			p->FromVector3(v);
 		}
 		DirectZob::GetInstance()->Unlock();
 	}

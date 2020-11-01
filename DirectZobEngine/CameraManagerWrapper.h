@@ -19,6 +19,7 @@ namespace CLI
 		System::String^ 		GetCurrentCamera();
 		ManagedVector3^ 		GetCurrentCameraPosition();
 		ManagedVector3^ 		GetCurrentCameraTarget();
+		void					From2DToWorld(ManagedVector3^ p);
 		void 					SetCurrentCameraPosition(ManagedVector3^ p);
 		void 					RotateAroundAxis(float x, float y);
 		void 					Move(float x, float y);

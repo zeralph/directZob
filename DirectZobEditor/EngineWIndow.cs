@@ -305,9 +305,31 @@ namespace DirectZobEditor
         {
 
         }
-
+        static float zz = 0;
         private void EngineRender_MouseClick(object sender, MouseEventArgs e)
         {
+            if(e.Button == MouseButtons.Left)
+            {
+                return;
+            }
+            //Point p = new Point(e.X, e.Y);
+            //p = EngineRender.PointToClient(p);
+            float x = (float)e.X;
+            float y = (float)e.Y;
+            x /= EngineRender.Width;
+            y /= EngineRender.Height;
+            x = x * 2.0f - 1.0f;
+            y = y * 2.0f - 1.0f;
+            //x = 0.0f;
+            //y = 0.0f;
+            ManagedVector3 v = new ManagedVector3();
+
+            v.x = x;
+            v.y = y;
+            v.z = zz;
+            m_mainForm.GetCameraControl().GetWrapper().From2DToWorld(v);
+            //z.SetTransform(v);
+            //MoveAlongAxis(z.GetLeft());
         }
 
         private void TRSButton_Click(object sender, EventArgs e)
@@ -352,13 +374,30 @@ namespace DirectZobEditor
             }
             */
         }
-
+        
         private void bTX_MouseMove(object sender, MouseEventArgs e)
         {
             ZobObjectWrapper z = m_mainForm.GetZobObjectListControl().GetSelectedZobObject();
             if (z != null && e.Button == MouseButtons.Left)
             {
-                MoveAlongAxis(z.GetLeft());
+                Point p = bTX.PointToScreen(new Point(e.X, e.Y));
+                p = EngineRender.PointToClient(p);
+                float x = (float)p.X;
+                float y = (float)p.Y;
+                x /= EngineRender.Width;
+                y /= EngineRender.Height;
+                x = x * 2.0f - 1.0f;
+                y = y * 2.0f - 1.0f;
+                //x = 0.0f;
+                //y = 0.0f;
+                ManagedVector3 v = new ManagedVector3();
+
+                v.x = x;
+                v.y = y;
+                v.z = zz;
+                m_mainForm.GetCameraControl().GetWrapper().From2DToWorld(v);
+                z.SetTransform(v);
+                //MoveAlongAxis(z.GetLeft());
             }
         }
         private void bTY_MouseMove(object sender, MouseEventArgs e)

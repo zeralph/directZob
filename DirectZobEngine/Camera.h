@@ -35,6 +35,7 @@ public:
 	void					RotateAroundPointAxis(const ZobVector3* point, const ZobVector3* axis, const ZobVector3* lockAxis, float angle, bool recomputeVectors);
 	void					Move(float dx, float dy, bool moveTargetVector);
 	void					Zoom(float z);
+	void					From2DToWorld(ZobVector3* v);
 	inline void				ToViewSpace(ZobVector3* v) const
 	{
 		v->x -= m_viewTransaltion.x;
@@ -81,6 +82,9 @@ private:
 	eTargetMode m_tagetMode;
 	ZobVector3 m_targetVector;
 	const ZobObject* m_targetObject;
+	ZobMatrix4x4 m_invModelMatrix;
+	ZobMatrix4x4 m_invProjectionMatrix;
+	ZobMatrix4x4 m_invViewMatrix;
 	//ZobVector3 m_nextTranslation;
 };
 
