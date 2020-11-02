@@ -19,7 +19,7 @@ namespace DirectZobEditor
             InitializeComponent();
             m_mainForm = f;
             m_camerManagerWrapper = new CLI.CameraManagerWrapper();
-            m_mainForm.OnSceneUpdated += new EventHandler(OnSceneUpdated);
+            m_mainForm.OnSceneUpdated += new Form1.OnSceneUpdateHandler(OnSceneUpdated);
         }
 
         public CLI.CameraManagerWrapper GetWrapper()
@@ -29,7 +29,7 @@ namespace DirectZobEditor
 
         public void UpdateControl()
         {
-            string s = m_camerManagerWrapper.GetCurrentCamera();
+            string s = m_camerManagerWrapper.GetCurrentCameraName();
             string[] c = m_camerManagerWrapper.GetCameraList();
             if(cameraBox.Items.Count != c.Count())
             {
@@ -55,9 +55,9 @@ namespace DirectZobEditor
             }
         }
 
-        private void OnSceneUpdated(object s, EventArgs e)
+        private void OnSceneUpdated(object s, Form1.SceneUpdateEventArg e)
         {
-            string cn = m_camerManagerWrapper.GetCurrentCamera();
+            string cn = m_camerManagerWrapper.GetCurrentCameraName();
             string [] c = m_camerManagerWrapper.GetCameraList();
             cameraBox.Items.Clear();
             for (int i=0; i<c.Count(); i++)

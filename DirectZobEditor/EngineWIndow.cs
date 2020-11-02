@@ -16,19 +16,28 @@ namespace DirectZobEditor
 {
     public partial class EngineWindow : UserControl
     {
-        public CLI.onFrameStartCallback onFrameStartCallback;
-        public CLI.onFrameEndCallback onFrameEndCallback;
-        public event EventHandler OnBeginFrame;
-        public event EventHandler OnEndFrame;
+
         private CLI.DirectZobWrapper m_directZobWrapper;
         private CLI.EngineWrapper m_engineWrapper;
         private Thread m_engineThread;
         private Form1 m_mainForm;
+        //engine rendering
+        public CLI.onFrameStartCallback onFrameStartCallback;
+        public CLI.onFrameEndCallback onFrameEndCallback;
+        public event EventHandler OnBeginFrame;
+        public event EventHandler OnEndFrame;
         public delegate void BeforeUpdateEngine();
         public delegate void AfterUpdateEngine();
         public delegate void UpdateLogWindow();
         public BeforeUpdateEngine BeforeUpdateEngineWindowDelegate;
         public AfterUpdateEngine AfterUpdateEngineWindowDelegate;
+        //object move, rotate and scale
+        public delegate void OnObjectMovedHandler(object s, ObjectModificationEventArg e);
+        public event OnObjectMovedHandler OnObjectMoved;
+        public delegate void OnObjectRotatedHandler(object s, ObjectModificationEventArg e);
+        public event OnObjectRotatedHandler OnObjectRotated;
+        public delegate void OnObjectScaledHandler(object s, ObjectModificationEventArg e);
+        public event OnObjectScaledHandler OnObjectScaled;
         Graphics m_EngineGraphics = null;
         Bitmap m_engineBitmap = null;
         int m_width;
@@ -378,7 +387,10 @@ namespace DirectZobEditor
                 ManagedVector3 p0 = z.GetTransform();
                 ManagedVector3 pn = z.GetForward();
                 m_mainForm.GetCameraControl().GetWrapper().From2DToWorldOnPlane(v, p0, pn);
+                v.y = p0.y;
+                v.z = p0.z;
                 z.SetTransform(v);
+                OnZobObjectMoved(z);
             }
         }
         private void bTY_MouseMove(object sender, MouseEventArgs e)
@@ -405,7 +417,10 @@ namespace DirectZobEditor
                 ManagedVector3 p0 = z.GetTransform();
                 ManagedVector3 pn = z.GetLeft();
                 m_mainForm.GetCameraControl().GetWrapper().From2DToWorldOnPlane(v, p0, pn);
+                v.x = p0.x;
+                v.z = p0.z;
                 z.SetTransform(v);
+                OnZobObjectMoved(z);
             }
         }
         private void bTZ_MouseMove(object sender, MouseEventArgs e)
@@ -432,7 +447,39 @@ namespace DirectZobEditor
                 ManagedVector3 p0 = z.GetTransform();
                 ManagedVector3 pn = z.GetUp();
                 m_mainForm.GetCameraControl().GetWrapper().From2DToWorldOnPlane(v, p0, pn);
+                v.y = p0.y;
+                v.x = p0.x;
                 z.SetTransform(v);
+                OnZobObjectMoved(z);
+            }
+        }
+        private void bCenter_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (m_engineRendering)
+            {
+                return;
+            }
+            ZobObjectWrapper z = m_mainForm.GetZobObjectListControl().GetSelectedZobObject();
+            ZobCameraWrapper c = m_mainForm.GetCameraControl().GetWrapper().GetCurrentCamera();
+            if (c != null && z != null && e.Button == MouseButtons.Left)
+            {
+                Point p = bTX.PointToScreen(new Point(e.X, e.Y));
+                p = EngineRender.PointToClient(p);
+                float x = (float)p.X;
+                float y = (float)p.Y;
+                x /= EngineRender.Width;
+                y /= EngineRender.Height;
+                x = x * 2.0f - 1.0f;
+                y = y * 2.0f - 1.0f;
+                ManagedVector3 v = new ManagedVector3();
+                v.x = x;
+                v.y = y;
+                v.z = 0.0f;
+                ManagedVector3 p0 = z.GetTransform();
+                ManagedVector3 pn = c.GetForward();
+                m_mainForm.GetCameraControl().GetWrapper().From2DToWorldOnPlane(v, p0, pn);;
+                z.SetTransform(v);
+                OnZobObjectMoved(z);
             }
         }
         private void MoveAlongAxis(ManagedVector3 axis)
@@ -464,11 +511,46 @@ namespace DirectZobEditor
                     p0 = z.GetTransform();
                     p0.Add(pX);
                     z.SetTransform(p0);
-                    m_mainForm.PropagateSceneUpdateEvent(EventArgs.Empty);
+                    Form1.SceneUpdateEventArg ev = new Form1.SceneUpdateEventArg();
+                    ev.type = Form1.SceneUpdateType.objectMoved;
+                    ev.zobObject = z;
+                    m_mainForm.PropagateSceneUpdateEvent(ev);
                 }
             }
             m_lastMouseX = Cursor.Position.X;
             m_lastMouseY = Cursor.Position.Y;
         }
+        #region object handlers for move, scale and rotate
+        private void OnZobObjectMoved(CLI.ZobObjectWrapper zobObject)
+        {
+            OnObjectMovedHandler handler = OnObjectMoved;
+            if (null != handler)
+            {
+                ObjectModificationEventArg ev = new ObjectModificationEventArg();
+                ev.t = zobObject.GetTransform();
+                handler(this, ev);
+            }
+        }
+        private void OnZobObjectScaled(CLI.ZobObjectWrapper zobObject)
+        {
+            OnObjectMovedHandler handler = OnObjectMoved;
+            if (null != handler)
+            {
+                ObjectModificationEventArg ev = new ObjectModificationEventArg();
+                ev.s = zobObject.GetScale();
+                handler(this, ev);
+            }
+        }
+        private void OnZobObjectRotated(CLI.ZobObjectWrapper zobObject)
+        {
+            OnObjectMovedHandler handler = OnObjectMoved;
+            if (null != handler)
+            {
+                ObjectModificationEventArg ev = new ObjectModificationEventArg();
+                ev.r = zobObject.GetRotation();
+                handler(this, ev);
+            }
+        }
+        #endregion
     }
 }

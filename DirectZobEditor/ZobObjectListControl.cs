@@ -29,7 +29,7 @@ namespace DirectZobEditor
             UpdateTree();
             m_mainForm.OnNewScene += new EventHandler(OnSceneChanged);
             m_mainForm.OnSceneLoaded += new EventHandler(OnSceneChanged);
-            m_mainForm.OnSceneUpdated += new EventHandler(OnSceneUpdated);
+            m_mainForm.OnSceneUpdated += new Form1.OnSceneUpdateHandler(OnSceneUpdated);
             this.Dock = DockStyle.Fill;
         }
 
@@ -199,8 +199,12 @@ namespace DirectZobEditor
             TreeNode n = ZobObjectTree.SelectedNode;
             if (n != null)
             {
-                m_zobObjectManagerWrapper.AddZobObject(GetFullNodeName(n));
+                ZobObjectWrapper z = m_zobObjectManagerWrapper.AddZobObject(GetFullNodeName(n));
                 ZobObjectTree.Nodes.Clear();
+                Form1.SceneUpdateEventArg ev = new Form1.SceneUpdateEventArg();
+                ev.type = Form1.SceneUpdateType.objectAdded;
+                ev.zobObject = z;
+                m_mainForm.PropagateSceneUpdateEvent(ev);
                 UpdateTree();
             }
         }
@@ -210,19 +214,25 @@ namespace DirectZobEditor
             TreeNode n = ZobObjectTree.SelectedNode;
             if(n!=null)
             {
+                ZobObjectWrapper z = m_zobObjectManagerWrapper.GetZobObject(GetFullNodeName(n));
                 m_zobObjectManagerWrapper.RemoveZobObject(GetFullNodeName(n));
                 m_currentSelectedZobObject = null;
                 ZobObjectTree.Nodes.Clear();
+                Form1.SceneUpdateEventArg ev = new Form1.SceneUpdateEventArg();
+                ev.type = Form1.SceneUpdateType.objectRemoved;
+                ev.zobObject = z;
+                m_mainForm.PropagateSceneUpdateEvent(ev);
                 UpdateTree();
             }
         }
 
-        private void OnSceneUpdated(object s, EventArgs e)
+        private void OnSceneUpdated(object s, Form1.SceneUpdateEventArg e)
         {
             UpdateTree();
         }
         private void OnSceneChanged(object s, EventArgs e)
         {
+            m_currentSelectedZobObject = null;
             ZobObjectTree.Nodes.Clear();
             string p = Application.StartupPath;
             CLI.CameraManagerWrapper cm = m_mainForm.GetCameraControl().GetWrapper();
@@ -301,5 +311,12 @@ namespace DirectZobEditor
     {
         public CLI.ZobObjectWrapper previousZobObject;
         public CLI.ZobObjectWrapper newZobObject;
+    }
+
+    public class ObjectModificationEventArg : EventArgs
+    {
+        public ManagedVector3 t;
+        public ManagedVector3 r;
+        public ManagedVector3 s;
     }
 }

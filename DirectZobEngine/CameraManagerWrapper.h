@@ -4,6 +4,7 @@
 #include "CameraManager.h"
 #include "DirectZob.h"
 #include "ManagedVector3.h"
+#include "ZobCameraWrapper.h"
 #include <string>
 #include <vector>
 
@@ -16,7 +17,8 @@ namespace CLI
 		CameraManagerWrapper();
 
 		cli::array<System::String^>^ GetCameraList();
-		System::String^ 		GetCurrentCamera();
+		System::String^ 		GetCurrentCameraName();
+		ZobCameraWrapper^		GetCurrentCamera();
 		ManagedVector3^ 		GetCurrentCameraPosition();
 		ManagedVector3^ 		GetCurrentCameraTarget();
 		void					From2DToWorld(ManagedVector3^ p);

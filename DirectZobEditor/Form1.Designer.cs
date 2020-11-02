@@ -61,6 +61,8 @@
             this.btnStop = new System.Windows.Forms.ToolStripButton();
             this.btnGrid = new System.Windows.Forms.ToolStripButton();
             this.btnWireframe = new System.Windows.Forms.ToolStripButton();
+            this.btnGizmos = new System.Windows.Forms.ToolStripButton();
+            this.btnNormals = new System.Windows.Forms.ToolStripButton();
             this.EngineRendererPanel = new System.Windows.Forms.Panel();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
@@ -351,7 +353,9 @@
             this.btnPause,
             this.btnStop,
             this.btnGrid,
-            this.btnWireframe});
+            this.btnWireframe,
+            this.btnGizmos,
+            this.btnNormals});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(698, 25);
@@ -391,25 +395,51 @@
             // 
             // btnGrid
             // 
+            this.btnGrid.Checked = true;
             this.btnGrid.CheckOnClick = true;
-            this.btnGrid.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btnGrid.Image = ((System.Drawing.Image)(resources.GetObject("btnGrid.Image")));
+            this.btnGrid.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.btnGrid.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.btnGrid.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnGrid.Name = "btnGrid";
             this.btnGrid.Size = new System.Drawing.Size(23, 22);
-            this.btnGrid.Text = "toolStripButton1";
+            this.btnGrid.Text = "Gr";
             this.btnGrid.Click += new System.EventHandler(this.btnGrid_Click);
             // 
             // btnWireframe
             // 
             this.btnWireframe.CheckOnClick = true;
-            this.btnWireframe.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnWireframe.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.btnWireframe.Image = ((System.Drawing.Image)(resources.GetObject("btnWireframe.Image")));
             this.btnWireframe.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnWireframe.Name = "btnWireframe";
-            this.btnWireframe.Size = new System.Drawing.Size(23, 22);
-            this.btnWireframe.Text = "toolStripButton2";
+            this.btnWireframe.Size = new System.Drawing.Size(26, 22);
+            this.btnWireframe.Text = "Wf";
+            this.btnWireframe.ToolTipText = "Wireframe";
             this.btnWireframe.Click += new System.EventHandler(this.btnWireframe_Click);
+            // 
+            // btnGizmos
+            // 
+            this.btnGizmos.Checked = true;
+            this.btnGizmos.CheckOnClick = true;
+            this.btnGizmos.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.btnGizmos.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.btnGizmos.Image = ((System.Drawing.Image)(resources.GetObject("btnGizmos.Image")));
+            this.btnGizmos.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnGizmos.Name = "btnGizmos";
+            this.btnGizmos.Size = new System.Drawing.Size(23, 22);
+            this.btnGizmos.Text = "Gi";
+            this.btnGizmos.Click += new System.EventHandler(this.btnGizmos_Click);
+            // 
+            // btnNormals
+            // 
+            this.btnNormals.CheckOnClick = true;
+            this.btnNormals.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.btnNormals.Image = ((System.Drawing.Image)(resources.GetObject("btnNormals.Image")));
+            this.btnNormals.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnNormals.Name = "btnNormals";
+            this.btnNormals.Size = new System.Drawing.Size(25, 22);
+            this.btnNormals.Text = "Ns";
+            this.btnNormals.Click += new System.EventHandler(this.btnNormals_Click);
             // 
             // EngineRendererPanel
             // 
@@ -564,6 +594,8 @@
         private System.Windows.Forms.ToolStripMenuItem sceneToolStripMenuItem;
         private System.Windows.Forms.ToolStripButton btnGrid;
         private System.Windows.Forms.ToolStripButton btnWireframe;
+        private System.Windows.Forms.ToolStripButton btnGizmos;
+        private System.Windows.Forms.ToolStripButton btnNormals;
     }
 }
 

@@ -190,6 +190,9 @@ void ZobObject::Update(const ZobMatrix4x4& parentMatrix, const ZobMatrix4x4& par
 	m_rotationScaleMatrix.Mul(&m_left);
 	m_rotationScaleMatrix.Mul(&m_forward);
 	m_rotationScaleMatrix.Mul(&m_up);
+	m_left.Normalize();
+	m_forward.Normalize();
+	m_up.Normalize();
 
 	for (int i = 0; i < m_children.size(); i++)
 	{

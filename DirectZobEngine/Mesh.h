@@ -49,7 +49,7 @@ protected:
 	std::string m_path;
 	ZobVector3 m_minBouding;
 	ZobVector3 m_maxBouding;
-
+	ZobVector3 m_pivot;
 	ZobVector3* m_vertices = NULL;
 	ZobVector3* m_verticesTmp = NULL;
 	ZobVector3* m_verticesData = NULL;

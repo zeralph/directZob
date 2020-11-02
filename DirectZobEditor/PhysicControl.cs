@@ -21,14 +21,14 @@ namespace DirectZobEditor
             this.Visible = false;
             ZobObjectListControl z = m_mainForm.GetZobObjectListControl();
             z.OnObjectSelected += new ZobObjectListControl.OnObjectSelectedHandler(OnObjectSelected);
-            m_mainForm.OnSceneUpdated += new EventHandler(OnSceneUpdated);
+            m_mainForm.OnSceneUpdated += new Form1.OnSceneUpdateHandler(OnSceneUpdated);
         }
 
         private void Physics_Enter(object sender, EventArgs e)
         {
             comboPhysicType.SelectedIndex = 0;
         }
-        private void OnSceneUpdated(object sender, EventArgs e)
+        private void OnSceneUpdated(object sender, Form1.SceneUpdateEventArg e)
         {
         }
         private void OnObjectSelected(object s, ObjectSelectionEventArg e)

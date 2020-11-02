@@ -20,7 +20,7 @@ namespace CLI
 		return arr;
 	}
 
-	System::String^ CameraManagerWrapper::GetCurrentCamera()
+	System::String^ CameraManagerWrapper::GetCurrentCameraName()
 	{
 		Camera* c = m_Instance->GetCurrentCamera();
 		if (c)
@@ -128,6 +128,16 @@ namespace CLI
 			v->FromVector3(cv);
 		}
 		DirectZob::GetInstance()->Unlock();
+	}
+
+	ZobCameraWrapper^ CameraManagerWrapper::GetCurrentCamera()
+	{
+		Camera* c = m_Instance->GetCurrentCamera();
+		if (c)
+		{
+			return gcnew ZobCameraWrapper(c);
+		}
+		return nullptr;
 	}
 
 	void CameraManagerWrapper::SetCurrentCameraPosition(ManagedVector3^ p)

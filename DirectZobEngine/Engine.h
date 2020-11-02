@@ -42,7 +42,7 @@ namespace Core
 		void											QueueLine(const Camera* camera, const ZobVector3* v1, const ZobVector3* v2, const uint c, bool bold);
 		void											QueueEllipse(const Camera* camera, const ZobVector3* center, const ZobVector3* vectorUp, const float r1, const float r2, const uint c, bool bold);
 		void											QueueSphere(const Camera* camera, const ZobMatrix4x4* mat, const float radius, const uint c, bool bold);
-		void											QueueBox(const Camera* camera, const ZobMatrix4x4* mat, const ZobVector3 halfExtends, const uint c, bool bold);
+		void											QueueBox(const Camera* camera, const ZobMatrix4x4* mat, const ZobVector3* halfExtends, const ZobVector3* pivot, const uint c, bool bold);
 		void											QueueCapsule(const Camera* camera, const ZobMatrix4x4* mat, float radius, float height, const uint c, bool bold);
 		void											QueueMesh(const Camera* camera, const ZobMatrix4x4* mat, ZobVector3* points, int width, int height, const uint c, bool bold);
 		bool											ClipSegment(ZobVector3* a, ZobVector3* b);

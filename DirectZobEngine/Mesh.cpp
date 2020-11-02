@@ -79,8 +79,10 @@ Mesh::Mesh(std::string &parentName, std::string& path, fbxsdk::FbxMesh* mesh)
 		int vIdx = 0;
 		if (mesh && pc > 0)
 		{
-			fbxsdk::FbxAMatrix mat;
-			mesh->GetPivot(mat);
+			FbxVector4 p = mesh->GetNode()->GetGeometricTranslation(FbxNode::eSourcePivot);
+			m_pivot.x = p[0];
+			m_pivot.y = p[1];
+			m_pivot.z = p[2];
 			for (int j = 0; j < pc; j++)
 			{
 				int pSize = mesh->GetPolygonSize(j);
@@ -192,7 +194,7 @@ Mesh::Mesh(std::string &parentName, std::string& path, fbxsdk::FbxMesh* mesh)
 			v.Add(t->nb);
 			v.Add(t->nc);
 			v.Div(3.0f);
-			m_trianglesNormals[i] = v;
+			m_trianglesNormals[i] = &v;
 			t->n = &m_trianglesNormals[i];
 		}
 		memcpy(m_verticesData, m_vertices, sizeof(ZobVector3) * m_nbVertices);
@@ -455,8 +457,8 @@ void Mesh::DrawBoundingBox(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& 
 		(m_maxBouding.y - m_minBouding.y) / 2.0f,
 		(m_maxBouding.z - m_minBouding.z) / 2.0f
 	);
-
-	engine->QueueBox(camera, &modelMatrix, v, 0x00FFFFFF, false);
+	ZobVector3 pivot = ZobVector3(m_minBouding.x + v.x, m_minBouding.y + v.y, m_minBouding.z + v.z);
+	engine->QueueBox(camera, &modelMatrix, &v, &pivot, 0x00FFFFFF, false);
 }
 
 void Mesh::Update(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions* options)

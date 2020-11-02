@@ -36,7 +36,10 @@ namespace DirectZobEditor
             ClearValues();
             ZobObjectListControl z = m_mainForm.GetZobObjectListControl();
             z.OnObjectSelected += new ZobObjectListControl.OnObjectSelectedHandler(OnObjectSelected);
-            m_mainForm.OnSceneUpdated += new EventHandler(OnSceneUpdated);
+            m_mainForm.OnSceneUpdated += new Form1.OnSceneUpdateHandler(OnSceneUpdated);
+            m_mainForm.GetEngineWindow().OnObjectMoved+= new EngineWindow.OnObjectMovedHandler(OnObjectMoved);
+            m_mainForm.GetEngineWindow().OnObjectRotated+= new EngineWindow.OnObjectRotatedHandler(OnObjectRotated);
+            m_mainForm.GetEngineWindow().OnObjectScaled+= new EngineWindow.OnObjectScaledHandler(OnObjectScaled);
         }
 
         private void OnSceneUpdated(object sender, EventArgs e)
@@ -60,6 +63,25 @@ namespace DirectZobEditor
                 ClearValues();
             }
             
+        }
+
+        private void OnObjectMoved(object s, ObjectModificationEventArg e)
+        {
+            zobPosX.Text = String.Format("{0:0.000}",e.t.x);
+            zobPosY.Text = String.Format("{0:0.000}", e.t.y);
+            zobPosZ.Text = String.Format("{0:0.000}", e.t.z);
+        }
+        private void OnObjectRotated(object s, ObjectModificationEventArg e)
+        {
+            zobRotX.Text = String.Format("{0:0.000}", e.r.x);
+            zobRotY.Text = String.Format("{0:0.000}", e.r.y);
+            zobRotZ.Text = String.Format("{0:0.000}", e.r.z);
+        }
+        private void OnObjectScaled(object s, ObjectModificationEventArg e)
+        {
+            zobScaleX.Text = String.Format("{0:0.000}", e.s.x);
+            zobScaleY.Text = String.Format("{0:0.000}", e.s.y);
+            zobScaleZ.Text = String.Format("{0:0.000}", e.s.z);
         }
         private void SetValues()
         {

@@ -144,7 +144,7 @@ std::string ZobObjectManager::GetZobObjectList()
 
 void ZobObjectManager::GetZobObjectListInternal(const ZobObject* z, std::string& str)
 {
-	if (z->GetType() != ZOBGUID::type_editor)
+	if (z->GetType() != ZOBGUID::type_editor && !z->IsMarkedForDeletion())
 	{
 		str.append("{\"name\":\"");
 		str.append(z->GetName());

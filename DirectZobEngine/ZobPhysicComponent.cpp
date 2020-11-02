@@ -272,7 +272,8 @@ void ZobPhysicComponent::DrawGizmos(const Camera* camera, const ZobVector3* posi
 		e->QueueSphere(camera, &mat, m_shapeDraw._radius, c, bold);
 		break;
 	case sShapeDraw::eShapeType::eShapeType_box:
-		e->QueueBox(camera, &mat, m_shapeDraw._halfExtends, c, bold);
+		//TODO ERROR : ajouter le pivot !
+		e->QueueBox(camera, &mat, &m_shapeDraw._halfExtends, position, c, bold);
 		break;
 	case sShapeDraw::eShapeType::eShapeType_capsule:
 	case sShapeDraw::eShapeType::eShapeType_convexMesh:
