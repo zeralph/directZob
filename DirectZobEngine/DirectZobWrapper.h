@@ -7,6 +7,7 @@
 namespace CLI
 {
 	public delegate void onFrameEndCallback();
+	public delegate void onFrameStartCallback();
 	public ref class DirectZobWrapper: public ManagedObject<DirectZob>
 	{
 	public:
@@ -24,7 +25,7 @@ namespace CLI
 		void					SaveScene(System::String^ path, System::String^ file);
 		static DirectZob*		GetDirectZobInstance() { return m_directZobInstance; }
 		int						RunAFrame();
-		int						Run(onFrameEndCallback ^cb);
+		int						Run(onFrameStartCallback^cbStart, onFrameEndCallback ^cbEnd);
 		int						Stop();
 		void					OnFrameEnd();
 		cli::array<System::String^>^ GetEventsAndClear();

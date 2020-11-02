@@ -81,7 +81,7 @@ namespace CLI
 
 	}
 
-	int DirectZobWrapper::Run(onFrameEndCallback^ cb)
+	int DirectZobWrapper::Run(onFrameStartCallback^ cbStart, onFrameEndCallback^ cbEnd)
 	{
 		/*
 		m_onFrameEndcallback = cb;
@@ -94,10 +94,14 @@ namespace CLI
 		m_run = true;
 		while(m_run)
 		{
+			if (m_run)
+			{
+				cbStart();
+			}
 			m_Instance->RunAFrame();
 			if (m_run)
 			{
-				cb();
+				cbEnd();
 			}
 		}
 		return 0;

@@ -16,6 +16,7 @@ namespace DirectZobEditor
 {
     public partial class EngineWindow : UserControl
     {
+        public CLI.onFrameStartCallback onFrameStartCallback;
         public CLI.onFrameEndCallback onFrameEndCallback;
         public event EventHandler OnBeginFrame;
         public event EventHandler OnEndFrame;
@@ -23,16 +24,18 @@ namespace DirectZobEditor
         private CLI.EngineWrapper m_engineWrapper;
         private Thread m_engineThread;
         private Form1 m_mainForm;
-        public delegate void UpdateEngineWindow();
+        public delegate void BeforeUpdateEngine();
+        public delegate void AfterUpdateEngine();
         public delegate void UpdateLogWindow();
-        public UpdateEngineWindow UpdateEngineWindowDelegate;
+        public BeforeUpdateEngine BeforeUpdateEngineWindowDelegate;
+        public AfterUpdateEngine AfterUpdateEngineWindowDelegate;
         Graphics m_EngineGraphics = null;
         Bitmap m_engineBitmap = null;
         int m_width;
         int m_height;
         int m_lastMouseX = -1;
         int m_lastMouseY = -1;
-        private bool mmouseButtonDown = false;
+        private bool m_engineRendering = false;
         public EngineWindow(Form1 f, CLI.DirectZobWrapper directZobWrapper)
         {
             InitializeComponent();
@@ -173,7 +176,9 @@ namespace DirectZobEditor
             m_EngineGraphics = EngineRender.CreateGraphics();
             m_engineThread = new Thread(RunEngineThread);
             //m_engineThread.IsBackground = true;
-            UpdateEngineWindowDelegate = new UpdateEngineWindow(UpdateEngineWindowMethod);
+            BeforeUpdateEngineWindowDelegate = new BeforeUpdateEngine(BeforeUpdateEngineWindowMethod);
+            AfterUpdateEngineWindowDelegate = new AfterUpdateEngine(AfterUpdateEngineWindowMethod);
+            onFrameStartCallback = new onFrameStartCallback(onFrameStartCallbackMethod);
             onFrameEndCallback = new onFrameEndCallback(onFrameEndCallbackMethod);
             EngineRender.SizeMode = PictureBoxSizeMode.Zoom;
             GenerateEngineBitmap();
@@ -192,18 +197,51 @@ namespace DirectZobEditor
             }
         }
 
-        private void onFrameEndCallbackMethod()
+        #region engineSynchronisationDelegates
+        private void onFrameStartCallbackMethod()
         {
             try
             {
-                EngineRender.Invoke(UpdateEngineWindowDelegate);
+                EngineRender.Invoke(BeforeUpdateEngineWindowDelegate);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Console.WriteLine(e.ToString());
             }
         }
-
+        private void BeforeUpdateEngineWindowMethod()
+        {
+            m_engineRendering = true;
+        }
+        private void onFrameEndCallbackMethod()
+        {
+            try
+            {
+                EngineRender.Invoke(AfterUpdateEngineWindowDelegate);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+        }
+        private void AfterUpdateEngineWindowMethod()
+        {
+            lock (EngineRender)
+            {
+                IntPtr p = m_engineWrapper.GetBufferData();
+                Rectangle rect = new Rectangle(0, 0, m_engineBitmap.Width, m_engineBitmap.Height);
+                System.Drawing.Imaging.BitmapData bmpData =
+                    m_engineBitmap.LockBits(rect, System.Drawing.Imaging.ImageLockMode.WriteOnly,
+                    m_engineBitmap.PixelFormat);
+                bmpData.Scan0 = p;
+                m_engineBitmap.UnlockBits(bmpData);
+                UpdateGraphicsParameters();
+                UpdateTranslationGizmos();
+                m_mainForm.UpdateAfterEngine();
+            }
+            m_engineRendering = false;
+        }
+        #endregion
         private void UpdateGraphicsParameters()
         {
             int w = EngineRender.Width;
@@ -230,49 +268,9 @@ namespace DirectZobEditor
             }
             m_EngineGraphics.DrawImage(m_engineBitmap, 0, 0, w, h);
         }
-
-        private void UpdateEngineWindowMethod()
-        {
-            lock (EngineRender)
-            {
-                IntPtr p = m_engineWrapper.GetBufferData();
-                Rectangle rect = new Rectangle(0, 0, m_engineBitmap.Width, m_engineBitmap.Height);
-                System.Drawing.Imaging.BitmapData bmpData =
-                    m_engineBitmap.LockBits(rect, System.Drawing.Imaging.ImageLockMode.WriteOnly,
-                    m_engineBitmap.PixelFormat);
-                bmpData.Scan0 = p;
-                m_engineBitmap.UnlockBits(bmpData);
-                UpdateGraphicsParameters();
-                UpdateTranslationGizmos();
-                m_mainForm.UpdateAfterEngine();
-            }
-        }
-
         private void RunEngineThread()
         {
-            m_directZobWrapper.Run(onFrameEndCallback);
-            /*
-            while (!m_exitEngineThread)
-            {
-				try
-				{
-					if (OnBeginFrame != null)
-					{
-						OnBeginFrame(this, EventArgs.Empty);
-					}
-					m_directZobWrapper.RunAFrame();
-					EngineRender.Invoke(UpdateEngineWindowDelegate);
-					if (OnEndFrame != null)
-					{
-						OnEndFrame(this, EventArgs.Empty);
-					}
-				}
-				catch(Exception e)
-				{
-
-				}
-            }
-            */
+            m_directZobWrapper.Run(onFrameStartCallback, onFrameEndCallback);
         }
 
         private void UpdateCamera()
@@ -287,15 +285,18 @@ namespace DirectZobEditor
 
         private void EngineRender_MouseMove(object sender, MouseEventArgs e)
         {
-            int dx = m_lastMouseX - Cursor.Position.X;
-            int dy = m_lastMouseY - Cursor.Position.Y;
-            if (e.Button == MouseButtons.Left && m_mainForm.IsCtrlPressed())
+            if (!m_engineRendering)
             {
-                m_mainForm.GetCameraControl().GetWrapper().RotateAroundAxis((float)dx, (float)dy);
-            }
-            else if (e.Button == MouseButtons.Middle)
-            {
-                m_mainForm.GetCameraControl().GetWrapper().Move((float)-dx * 2.0f, (float)dy * 2.0f);
+                int dx = m_lastMouseX - Cursor.Position.X;
+                int dy = m_lastMouseY - Cursor.Position.Y;
+                if (e.Button == MouseButtons.Left && m_mainForm.IsCtrlPressed())
+                {
+                    m_mainForm.GetCameraControl().GetWrapper().RotateAroundAxis((float)dx, (float)dy);
+                }
+                else if (e.Button == MouseButtons.Middle)
+                {
+                    m_mainForm.GetCameraControl().GetWrapper().Move((float)-dx * 2.0f, (float)dy * 2.0f);
+                }
             }
             m_lastMouseX = Cursor.Position.X;
             m_lastMouseY = Cursor.Position.Y;
@@ -318,7 +319,6 @@ namespace DirectZobEditor
 
         private void EngineRender_MouseDown(object sender, MouseEventArgs e)
         {
-            mmouseButtonDown = true;
             /*
             if (e.Button == MouseButtons.Left && !m_mainForm.IsCtrlPressed())
             {
@@ -336,7 +336,6 @@ namespace DirectZobEditor
 
         private void EngineRender_MouseUp(object sender, MouseEventArgs e)
         {
-            mmouseButtonDown = false;
         }
 
         private void OnObjectSelected(object s, ObjectSelectionEventArg e)
@@ -357,7 +356,7 @@ namespace DirectZobEditor
         
         private void bTX_MouseMove(object sender, MouseEventArgs e)
         {
-            if(!mmouseButtonDown)
+            if(m_engineRendering)
             { 
                 return; 
             }
@@ -384,6 +383,10 @@ namespace DirectZobEditor
         }
         private void bTY_MouseMove(object sender, MouseEventArgs e)
         {
+            if (m_engineRendering)
+            {
+                return;
+            }
             ZobObjectWrapper z = m_mainForm.GetZobObjectListControl().GetSelectedZobObject();
             if (z != null && e.Button == MouseButtons.Left)
             {
@@ -407,6 +410,10 @@ namespace DirectZobEditor
         }
         private void bTZ_MouseMove(object sender, MouseEventArgs e)
         {
+            if (m_engineRendering)
+            {
+                return;
+            }
             ZobObjectWrapper z = m_mainForm.GetZobObjectListControl().GetSelectedZobObject();
             if (z != null && e.Button == MouseButtons.Left)
             {
