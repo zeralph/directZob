@@ -323,7 +323,7 @@ namespace DirectZobEditor
                     //m_meshManagerWrapper.LoadMesh(name, path, file);
                     CLI.ZobObjectWrapper z = m_zobObjectList.GetWrapper().AddZobObject("");
                     //z.SetMesh(name);
-                    z.LoadMesh(name);
+                    z.LoadMesh(openFileDialog.FileName);
                     EventHandler handler = OnSceneUpdated;
                     if (null != handler)
                     {

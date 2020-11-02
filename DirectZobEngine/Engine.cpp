@@ -327,6 +327,14 @@ void Engine::DrawGrid(const Camera *camera)
 	QueueLine(camera, &ZobVector3::Vector3Zero, &ZobVector3::Vector3Z, 0x0000FF, true);
 }
 
+ZobVector3 Engine::LinePlaneIntersection(const ZobVector3* p0, const ZobVector3* pn, const ZobVector3* l0, const ZobVector3* lv)
+{
+	float d = -(pn->x * p0->x + pn->y * p0->y + pn->z * p0->z);
+	float t = -(pn->x * l0->x + pn->y * l0->y + pn->z * l0->z + d) / (pn->x * lv->x + pn->y * lv->y + pn->z * lv->z);
+	ZobVector3 v = ZobVector3(l0->x + t * lv->x, l0->y + t * lv->y, l0->z + t * lv->z);
+	return v;
+}
+
 void Engine::ClipSegmentToPlane(ZobVector3 &s0, ZobVector3 &s1, ZobVector3 &pp, ZobVector3 &pn)
 {
 	ZobVector3 u = s1 - s0;

@@ -55,6 +55,6 @@ namespace CLI
 	{
 		ZobVector3 v = worldSpacePos->ToVector3();
 		return m_Instance->GetDistanceToCamera(&v);
-	}
+	} 
 }
 #endif //_WINDLL

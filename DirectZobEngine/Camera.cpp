@@ -398,6 +398,17 @@ void Camera::From2DToWorld(ZobVector3* v)
 	sRayDbg2 = this->GetWorldPosition();
 }
 
+void Camera::From2DToWorldOnPlane(ZobVector3* v, ZobVector3* p0, ZobVector3* pn)
+{
+	From2DToWorld(v);
+	ZobVector3 l0 = this->GetWorldPosition();
+	ZobVector3 lv = v - l0;
+	ZobVector3 r = DirectZob::GetInstance()->GetEngine()->LinePlaneIntersection(p0, pn, &l0, &lv);
+	v->x = r.x;
+	v->y = r.y;
+	v->z = r.z;
+}
+
 TiXmlNode* Camera::SaveUnderNode(TiXmlNode* node)
 {
 	char tmpBuffer[256];

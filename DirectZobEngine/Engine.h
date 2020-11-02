@@ -77,7 +77,7 @@ namespace Core
 		void											Resize(int width, int height);
 		bool											GetProjectedCoords(ZobVector3* worldPos);
 		float											GetDistanceToCamera(ZobVector3* worldPos);
-
+		ZobVector3										LinePlaneIntersection(const ZobVector3* p0, const ZobVector3* pn, const ZobVector3* l0, const ZobVector3* lv);
 	private:	
 		inline float									clamp2(float x, float min, float max) const { if (x < min) x = min; if (x > max) x = max; return x; }
 		void											DrawHorizontalLine(const float x1, const float x2, const float y, const uint color);

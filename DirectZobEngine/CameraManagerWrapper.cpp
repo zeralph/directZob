@@ -115,6 +115,21 @@ namespace CLI
 		DirectZob::GetInstance()->Unlock();
 	}
 
+	void CameraManagerWrapper::From2DToWorldOnPlane(ManagedVector3^ v, ManagedVector3^ p0, ManagedVector3^ pn)
+	{
+		DirectZob::GetInstance()->Lock();
+		Camera* c = m_Instance->GetCurrentCamera();
+		if (c)
+		{
+			ZobVector3 cv = v->ToVector3();
+			ZobVector3 cp0 = p0->ToVector3();
+			ZobVector3 cpn = pn->ToVector3();
+			c->From2DToWorldOnPlane(&cv, &cp0, &cpn);
+			v->FromVector3(cv);
+		}
+		DirectZob::GetInstance()->Unlock();
+	}
+
 	void CameraManagerWrapper::SetCurrentCameraPosition(ManagedVector3^ p)
 	{
 		DirectZob::GetInstance()->Lock();

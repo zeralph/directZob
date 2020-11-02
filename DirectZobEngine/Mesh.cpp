@@ -359,7 +359,7 @@ void Mesh::LoadOBJ(const std::string& fullPath)
 	m_trianglesNormalsTmp = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbFaces);
 	m_triangles.clear();
 
-	if (!m_hasNormals)
+	//if (!m_hasNormals)
 	{
 		//TODO ... compute !
 		m_verticesNormals[0] = ZobVector3(0, 0, 1);
@@ -434,7 +434,7 @@ void Mesh::SplitEntry(const std::string* s, std::vector<std::string>* v, const c
 	current = s->find(delim);
 	while (current != std::string::npos) {
 		std::string sub = s->substr(previous, current - previous);
-		if (sub.length() > 0)
+		//if (sub.length() > 0)
 		{
 			v->push_back(sub);
 		}
@@ -618,7 +618,7 @@ void Mesh::CreateTriangles(const std::vector<std::string>* line, std::vector<Tri
 			t.ua = &m_uvs[std::stoi(vec[1], &sz) - 1];
 		else
 			t.ua = &vec2zero;
-		if (m_hasNormals)
+		if (m_hasNormals && vec.size() > 2)
 		{
 			t.na = &m_verticesNormals[std::stoi(vec[2], &sz) - 1];
 		}
@@ -635,7 +635,7 @@ void Mesh::CreateTriangles(const std::vector<std::string>* line, std::vector<Tri
 			t.ub = &m_uvs[std::stoi(vec[1], &sz) - 1];
 		else
 			t.ub = &vec2zero;
-		if (m_hasNormals)
+		if (m_hasNormals && vec.size() >2)
 		{
 			t.nb = &m_verticesNormals[std::stoi(vec[2], &sz) - 1];
 		}
@@ -652,7 +652,7 @@ void Mesh::CreateTriangles(const std::vector<std::string>* line, std::vector<Tri
 			t.uc = &m_uvs[std::stoi(vec[1], &sz) - 1];
 		else
 			t.uc = &vec2zero;
-		if (m_hasNormals)
+		if (m_hasNormals && vec.size() > 2)
 		{
 			t.nc = &m_verticesNormals[std::stoi(vec[2], &sz) - 1];
 		}

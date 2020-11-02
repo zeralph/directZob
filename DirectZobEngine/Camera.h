@@ -36,6 +36,7 @@ public:
 	void					Move(float dx, float dy, bool moveTargetVector);
 	void					Zoom(float z);
 	void					From2DToWorld(ZobVector3* v);
+	void					From2DToWorldOnPlane(ZobVector3* v, ZobVector3* p0, ZobVector3* pn);
 	inline void				ToViewSpace(ZobVector3* v) const
 	{
 		v->x -= m_viewTransaltion.x;
