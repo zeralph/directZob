@@ -410,7 +410,7 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector3* p, const Triangl
 	{
 		if (t->options->bColorize)
 		{
-			if (((int)p->x + ((int)p->y % 2)) % 2 == 0)
+			if (((int)p->x + ((int)p->y % 8)) % 8 == 0)
 			{
 				c = ((int)(t->options->colorization.x * 255) << 16) + ((int)(t->options->colorization.y * 255) << 8) + (int)(t->options->colorization.z * 255);
 				m_bufferData->buffer[k] = c;

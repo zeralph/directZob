@@ -32,6 +32,8 @@ namespace DirectZobEditor
             objectAdded,
             objectRemoved,
             objectMoved,
+            objectSelected,
+            objectDeselected,
         }
         public class SceneUpdateEventArg : EventArgs
         {
@@ -350,7 +352,7 @@ namespace DirectZobEditor
                     //m_meshManagerWrapper.LoadMesh(name, path, file);
                     CLI.ZobObjectWrapper z = m_zobObjectList.GetWrapper().AddZobObject("");
                     //z.SetMesh(name);
-                    z.LoadMesh(openFileDialog.FileName);
+                    z.LoadMesh(file, path);
                     OnSceneUpdateHandler handler = OnSceneUpdated;
                     if (null != handler)
                     {
@@ -534,6 +536,27 @@ namespace DirectZobEditor
         private void btnGizmos_Click(object sender, EventArgs e)
         {
             m_engineWindow.GetEngineWrapper().DrawGizmos(btnGizmos.Checked);
+        }
+
+        private void btnTranslate_Click(object sender, EventArgs e)
+        {
+            m_engineWindow.SetModificator(EngineWindow.objectModificator.translate);
+            btnRotate.Checked = false;
+            btnScale.Checked = false;
+        }
+
+        private void btnRotate_Click(object sender, EventArgs e)
+        {
+            m_engineWindow.SetModificator(EngineWindow.objectModificator.rotate);
+            btnTranslate.Checked = false;
+            btnScale.Checked = false;
+        }
+
+        private void btnScale_Click(object sender, EventArgs e)
+        {
+            m_engineWindow.SetModificator(EngineWindow.objectModificator.scale);
+            btnTranslate.Checked = false;
+            btnRotate.Checked = false;
         }
     }
 

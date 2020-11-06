@@ -24,27 +24,28 @@ public:
 	Rasterizer(uint width, uint startHeight, uint endHeight, BufferData* bufferData);
 	~Rasterizer();
 
-	void 				DrawTriangle(const Triangle* t) const;
-	void 				plotLine(int x0, int y0, int x1, int y1) const;
-	void 				DrawLine(const Line3D* l) const;
-	void 				Start(const Triangle* triangles, const uint nbTriangles, const std::vector<Line3D>* lines, const bool wireFrame, const eRenderMode renderMode, const bool bEvenFrame, const eLightingPrecision lp);
-	float 				WaitForEnd();
-	void 				End();
-	void 				Init();
-	void 				Render();
-	void 				Clear();
-
+	void 					DrawTriangle(const Triangle* t) const;
+	void 					plotLine(int x0, int y0, int x1, int y1) const;
+	void 					DrawLine(const Line3D* l) const;
+	void 					Start(const Triangle* triangles, const uint nbTriangles, const std::vector<Line3D>* lines, const bool wireFrame, const eRenderMode renderMode, const bool bEvenFrame, const eLightingPrecision lp);
+	float 					WaitForEnd();
+	void 					End();
+	void 					Init();
+	void 					Render();
+	void 					Clear();
+	inline const Triangle*	GetTriangle(int i) { return &m_triangles[i]; }
+	inline int				GetNbTriangle() { return m_nbTriangles; }
 private:
 
-	void 				FillTopFlatTriangle2(ZobVector2* v1, ZobVector2* v2, ZobVector2* v3, const Triangle* t, const ZobVector3* la, const ZobVector3* lb, const ZobVector3* lc) const;
-	void 				FillBottomFlatTriangle2(ZobVector2* v1, ZobVector2* v2, ZobVector2* v3, const Triangle* t, const ZobVector3* la, const ZobVector3* lb, const ZobVector3* lc) const;
-	inline const void 	FillBufferPixel(const ZobVector3* p, const Triangle* t, const ZobVector3* la, const ZobVector3* lb, const ZobVector3* lc) const;
+	void 					FillTopFlatTriangle2(ZobVector2* v1, ZobVector2* v2, ZobVector2* v3, const Triangle* t, const ZobVector3* la, const ZobVector3* lb, const ZobVector3* lc) const;
+	void 					FillBottomFlatTriangle2(ZobVector2* v1, ZobVector2* v2, ZobVector2* v3, const Triangle* t, const ZobVector3* la, const ZobVector3* lb, const ZobVector3* lc) const;
+	inline const void 		FillBufferPixel(const ZobVector3* p, const Triangle* t, const ZobVector3* la, const ZobVector3* lb, const ZobVector3* lc) const;
 	inline ZobVector3 		ComputeLightingAtPoint(const ZobVector3* position, const ZobVector3* normal, RenderOptions::eLightMode lighting) const;
-	void 				sortVerticesAscendingByY(ZobVector2* v1, ZobVector2* v2, ZobVector2* v3) const ;
-	void 				sortVerticesAscendingByY(ZobVector2* v1, ZobVector2* v2, ZobVector2* v3, ZobVector2* uv1, ZobVector2* uv2, ZobVector2* uv3) const;
-	inline float 		edgeFunction(const ZobVector3* a, const ZobVector3* b, const ZobVector3* c) const { return (c->x - a->x) * (b->y - a->y) - (c->y - a->y) * (b->x - a->x); }
-	inline float 		clamp2(float x, const float min, const float max) const { if (x < min) x = min; if (x > max) x = max; return x; }
-	inline const bool 	RenderLine(int line) const 
+	void 					sortVerticesAscendingByY(ZobVector2* v1, ZobVector2* v2, ZobVector2* v3) const ;
+	void 					sortVerticesAscendingByY(ZobVector2* v1, ZobVector2* v2, ZobVector2* v3, ZobVector2* uv1, ZobVector2* uv2, ZobVector2* uv3) const;
+	inline float 			edgeFunction(const ZobVector3* a, const ZobVector3* b, const ZobVector3* c) const { return (c->x - a->x) * (b->y - a->y) - (c->y - a->y) * (b->x - a->x); }
+	inline float 			clamp2(float x, const float min, const float max) const { if (x < min) x = min; if (x > max) x = max; return x; }
+	inline const bool 		RenderLine(int line) const 
 	{ 
 		return (m_renderMode == eRenderMode_fullframe) ||
 			(m_renderMode == eRenderMode_interlaced && line % 2 == m_bEvenFrame) ||

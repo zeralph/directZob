@@ -4,6 +4,8 @@
 #include "ZobMaterial.h"
 #include "Types.h"
 
+class ZobObject;
+
 //FLAGS :
 //					7			6			5			4			3			2			1			0
 //		|no lighting|no zBuffer |	...
@@ -32,6 +34,7 @@ public:
 	ZobVector2* ub;
 	ZobVector2* uc;
 	const ZobMaterial* material;
+	ZobObject* zobObject;
 	float area;
 	uint owner;
 	bool draw;

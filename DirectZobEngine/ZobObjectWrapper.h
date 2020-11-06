@@ -24,9 +24,10 @@ namespace CLI {
 		void SetTransform(ManagedVector3^ p);
 		void SetRotation(ManagedVector3^ p);
 		void SetScale(ManagedVector3^ p);
+		void LookAt(ManagedVector3^ forward, ManagedVector3^ left, ManagedVector3^ up);
 		System::String^ GetMeshName();
 		void SetMesh(System::String^ name);
-		void LoadMesh(System::String^ name);
+		void LoadMesh(System::String^ name, System::String^ path);
 		void CreateSprite();
 		bool IsValid() { return m_isValid; };
 		void SetLightingMode(int lightMode);

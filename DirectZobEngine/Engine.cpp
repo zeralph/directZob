@@ -9,16 +9,26 @@
 #include <windows.h>
 #endif //LINUX
 #include <assert.h>
+#include <mutex>
+#include <condition_variable>
 #include "DirectZob.h"
 #include "Rasterizer.h"
 #include "Camera.h"
 
 #define MAX_TRIANGLES_PER_IMAGE 400000
 
+static std::mutex m_mutex;
+static std::condition_variable m_cond;
+
 using namespace Core;
 Engine::Engine(int width, int height, Events* events)
 {
 	m_nbRasterizers = std::thread::hardware_concurrency();
+	while (height % m_nbRasterizers != 0 && m_nbRasterizers>1)
+	{
+		m_nbRasterizers--;
+	}
+	/*
 	if (m_nbRasterizers % 2 == 1)
 	{
 		m_nbRasterizers--;
@@ -28,7 +38,8 @@ Engine::Engine(int width, int height, Events* events)
 		m_nbRasterizers = 1;
 	}
 	m_nbRasterizers = 4;
-	m_triangleQueueSize = MAX_TRIANGLES_PER_IMAGE / m_nbRasterizers;
+	*/
+	m_triangleQueueSize = 50000;// MAX_TRIANGLES_PER_IMAGE / m_nbRasterizers;
 	m_renderOutput = eRenderOutput_render;
 	m_events = events;
 	m_currentFrame = 0;
@@ -333,6 +344,89 @@ ZobVector3 Engine::LinePlaneIntersection(const ZobVector3* p0, const ZobVector3*
 	float t = -(pn->x * l0->x + pn->y * l0->y + pn->z * l0->z + d) / (pn->x * lv->x + pn->y * lv->y + pn->z * lv->z);
 	ZobVector3 v = ZobVector3(l0->x + t * lv->x, l0->y + t * lv->y, l0->z + t * lv->z);
 	return v;
+}
+
+bool Engine::LineTriangleIntersection(const Triangle* t, const ZobVector3* l0, const ZobVector3* lv, ZobVector3& intersectionPt )
+{
+	//int
+	//	intersect3D_RayTriangle(Ray R, Triangle T, Point * I)
+	//{
+		ZobVector3    u, v, n;              // triangle vectors
+		ZobVector3    dir, w0, w;           // ray vectors
+		float     r, a, b;              // params to calc ray-plane intersect
+
+		// get triangle edge vectors and plane normal
+		u.x = t->vb->x - t->va->x;
+		u.y = t->vb->y - t->va->y;
+		u.z = t->vb->z - t->va->z;
+		v.x = t->vc->x - t->va->x;
+		v.y = t->vc->y - t->va->y;
+		v.z = t->vc->z - t->va->z;
+
+		n = u * v;              // cross product
+		//if (n == (ZobVector3)0)             // triangle is degenerate
+		//	return -1;                  // do not deal with this case
+
+		dir = lv;              // ray direction vector
+		w0.x = l0->x - t->va->x;
+		w0.x = l0->y - t->va->y;
+		w0.x = l0->z - t->va->z;
+		a = -ZobVector3::Dot(&n, &w0);
+		b = ZobVector3::Dot(&n, &dir);
+		if (fabs(b) < 0.00000001) {     // ray is  parallel to triangle plane
+			if (a == 0)                 // ray lies in triangle plane
+				return 2;
+			else return 0;              // ray disjoint from plane
+		}
+
+		// get intersect point of ray with triangle plane
+		r = a / b;
+		if (r < 0.0)                    // ray goes away from triangle
+			return 0;                   // => no intersect
+		// for a segment, also test if (r > 1.0) => no intersect
+
+		intersectionPt = l0 + dir * r;            // intersect point of ray and plane
+
+		// is I inside T?
+		float    uu, uv, vv, wu, wv, D;
+		uu = ZobVector3::Dot(&u, &u);
+		uv = ZobVector3::Dot(&u, &v);
+		vv = ZobVector3::Dot(&v, &v);
+		w = intersectionPt - t->va;
+		wu = ZobVector3::Dot(&w, &u);
+		wv = ZobVector3::Dot(&w, &v);
+		D = uv * uv - uu * vv;
+
+		// get and test parametric coords
+		float ss, tt;
+		ss = (uv * wv - vv * wu) / D;
+		if (ss < 0.0 || ss > 1.0)         // I is outside T
+			return 0;
+		tt = (uv * wu - uu * wv) / D;
+		if (tt < 0.0 || (ss + tt) > 1.0)  // I is outside T
+			return false;
+
+		return true;                       // I is in T
+}
+
+ZobObject* Engine::GetObjectAt2DCoords(const ZobVector3* coord2D)
+{
+	Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
+	if (c)
+	{
+		Camera::Ray ray = c->From2DToWorld(coord2D);
+		int  idx = (int)floor((coord2D->y + 1.0f) / 2.0f * m_nbRasterizers);
+		Rasterizer* rast = m_rasterizers[idx];
+		ZobVector3 inter;
+		for (int i = 0; i < rast->GetNbTriangle(); i++)
+		{
+			if (this->LineTriangleIntersection(rast->GetTriangle(i), &ray.p, &ray.n, inter))
+			{
+				return rast->GetTriangle(i)->zobObject;
+			}
+		}
+		return NULL;
+	}
 }
 
 void Engine::ClipSegmentToPlane(ZobVector3 &s0, ZobVector3 &s1, ZobVector3 &pp, ZobVector3 &pn)

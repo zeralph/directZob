@@ -4,7 +4,9 @@
 #include "ManagedVector3.h"
 #include "Engine.h"
 #include "DirectZob.h"
+#include "ZobObjectWrapper.h"
 //using namespace System;
+
 namespace CLI
 {
 	public ref class EngineWrapper: public ManagedObject<Core::Engine>
@@ -24,7 +26,9 @@ namespace CLI
 		void			SetLightingPrecision(int r);
 		bool			GetProjectedCoords(ManagedVector3^ worldSpacePos);
 		float			GetDistanceToCamera(ManagedVector3^ worldPos);
-
+		ZobObjectWrapper^ GetObjectAt2DCoords(ManagedVector3^ v);
+		void			DrawLine(ManagedVector3^ p0, ManagedVector3^ p1, int color);
+		void			DrawCircle(ManagedVector3^ p0, ManagedVector3^ up, float r, int color);
 	private:
 		//array<int>^ m_buffer;
 	};

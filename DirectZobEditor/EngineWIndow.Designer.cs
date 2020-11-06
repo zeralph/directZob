@@ -75,22 +75,23 @@
             this.bCenter.ForeColor = System.Drawing.Color.White;
             this.bCenter.Location = new System.Drawing.Point(734, 325);
             this.bCenter.Name = "bCenter";
-            this.bCenter.Size = new System.Drawing.Size(20, 20);
+            this.bCenter.Size = new System.Drawing.Size(30, 25);
             this.bCenter.TabIndex = 9;
             this.bCenter.Text = "O";
+            this.bCenter.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.bCenter.MouseMove += new System.Windows.Forms.MouseEventHandler(this.bCenter_MouseMove);
             // 
             // bTZ
             // 
-            this.bTZ.AutoSize = true;
             this.bTZ.BackColor = System.Drawing.Color.Blue;
             this.bTZ.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold);
             this.bTZ.ForeColor = System.Drawing.Color.White;
             this.bTZ.Location = new System.Drawing.Point(734, 404);
             this.bTZ.Name = "bTZ";
-            this.bTZ.Size = new System.Drawing.Size(20, 22);
+            this.bTZ.Size = new System.Drawing.Size(30, 25);
             this.bTZ.TabIndex = 8;
             this.bTZ.Text = "Z";
+            this.bTZ.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.bTZ.MouseMove += new System.Windows.Forms.MouseEventHandler(this.bTZ_MouseMove);
             // 
             // bTY
@@ -100,9 +101,10 @@
             this.bTY.ForeColor = System.Drawing.Color.White;
             this.bTY.Location = new System.Drawing.Point(734, 283);
             this.bTY.Name = "bTY";
-            this.bTY.Size = new System.Drawing.Size(20, 20);
+            this.bTY.Size = new System.Drawing.Size(30, 25);
             this.bTY.TabIndex = 7;
             this.bTY.Text = "Y";
+            this.bTY.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.bTY.MouseMove += new System.Windows.Forms.MouseEventHandler(this.bTY_MouseMove);
             // 
             // bTX
@@ -112,9 +114,10 @@
             this.bTX.ForeColor = System.Drawing.Color.White;
             this.bTX.Location = new System.Drawing.Point(734, 365);
             this.bTX.Name = "bTX";
-            this.bTX.Size = new System.Drawing.Size(20, 20);
+            this.bTX.Size = new System.Drawing.Size(30, 25);
             this.bTX.TabIndex = 6;
             this.bTX.Text = "X";
+            this.bTX.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.bTX.MouseMove += new System.Windows.Forms.MouseEventHandler(this.bTX_MouseMove);
             // 
             // EngineWindow
@@ -126,7 +129,6 @@
             this.Size = new System.Drawing.Size(960, 564);
             ((System.ComponentModel.ISupportInitialize)(this.EngineRender)).EndInit();
             this.EngineRenderPanel.ResumeLayout(false);
-            this.EngineRenderPanel.PerformLayout();
             this.ResumeLayout(false);
 
         }

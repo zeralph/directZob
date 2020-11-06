@@ -36,9 +36,13 @@ Mesh::Mesh(std::string& name, std::string& path, std::string& file):Mesh(name)
 	{
 		LoadFbx(fullPath);
 	}
-	else
+	else if (fullPath.find(".obj") != -1)
 	{
 		LoadOBJ(fullPath);
+	}
+	else
+	{
+		DirectZob::LogError("Mesh %s : bad filename extension. Loading ignored", name.c_str());
 	}
 	DirectZob::RemoveIndent();
 }
@@ -500,7 +504,7 @@ void Mesh::Update(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationM
 		m_subMeshes[i]->Update(modelMatrix, rotationMatrix, camera, engine, ownerId, options);
 	}
 }
-void Mesh::QueueForDrawing(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions* options)
+void Mesh::QueueForDrawing(ZobObject* z, const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions* options)
 {
 	memcpy(m_vertices, m_verticesTmp, sizeof(ZobVector3) * m_nbVertices);
 	memcpy(m_verticesNormals, m_verticesNormalsTmp, sizeof(ZobVector3) * m_nbNormals);
@@ -521,6 +525,7 @@ void Mesh::QueueForDrawing(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& 
 		Triangle* t = &m_triangles[i];
 		t->draw = false;
 		t->options = options;
+		t->zobObject = z;
 		if (!RejectTriangle(t, znear, zfar, (float)bData->width, (float)bData->height))
 		{
 			bool bCull = false;
@@ -554,7 +559,7 @@ void Mesh::QueueForDrawing(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& 
 	}
 	for (int i = 0; i < m_subMeshes.size(); i++)
 	{
-		m_subMeshes[i]->QueueForDrawing(modelMatrix, rotationMatrix, camera,  engine, ownerId, options);
+		m_subMeshes[i]->QueueForDrawing(z, modelMatrix, rotationMatrix, camera,  engine, ownerId, options);
 	}
 }
 

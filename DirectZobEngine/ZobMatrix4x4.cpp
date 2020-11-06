@@ -255,21 +255,34 @@ ZobVector3 ZobMatrix4x4::QuaternionToEuler(float x, float y, float z, float w)
 	float roll, pitch, yaw;
 	
 	// roll (x-axis rotation)
-	float sinr_cosp = 2 * (w * x + y * z);
-	float cosr_cosp = 1 - 2 * (x * x + y * y);
-	roll = -atan2(sinr_cosp, cosr_cosp);
+
 
 	// pitch (y-axis rotation)
 	float sinp = 2 * (w * y - z * x);
-	if (fabs(sinp) >= 1)
+	if (sinp >= 1)
+	{
+		yaw = 2 * atan2(x, w);
 		pitch = copysign(M_PI / 2, sinp); // use 90 degrees if out of range
+		roll = 0;
+	}
+	else if (sinp <= -1)
+	{
+		roll = -2 * atan2(x, w);
+		pitch = copysign(M_PI / 2, sinp); // use 90 degrees if out of range
+		yaw = 0;
+	}
 	else
+	{
+		float sinr_cosp = 2 * (w * x + y * z);
+		float cosr_cosp = 1 - 2 * (x * x + y * y);
+		roll = -atan2(sinr_cosp, cosr_cosp);
 		pitch = asin(sinp);
-
+		float siny_cosp = 2 * (w * z + x * y);
+		float cosy_cosp = 1 - 2 * (y * y + z * z);
+		yaw = atan2(siny_cosp, cosy_cosp);
+	}
 	// yaw (z-axis rotation)
-	float siny_cosp = 2 * (w * z + x * y);
-	float cosy_cosp = 1 - 2 * (y * y + z * z);
-	yaw = atan2(siny_cosp, cosy_cosp);
+
 	
 	//double sqw = w*w;
 	//double sqx = x*x;

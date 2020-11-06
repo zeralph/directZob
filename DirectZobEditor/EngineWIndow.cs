@@ -16,7 +16,20 @@ namespace DirectZobEditor
 {
     public partial class EngineWindow : UserControl
     {
-
+        public enum objectModificator
+        {
+            none=0,
+            translate,
+            rotate,
+            scale,
+        };
+        public enum axis
+        {
+            none=0,
+            X,
+            Y,
+            Z,
+        };
         private CLI.DirectZobWrapper m_directZobWrapper;
         private CLI.EngineWrapper m_engineWrapper;
         private Thread m_engineThread;
@@ -45,6 +58,16 @@ namespace DirectZobEditor
         int m_lastMouseX = -1;
         int m_lastMouseY = -1;
         private bool m_engineRendering = false;
+        private objectModificator m_objectModificator = objectModificator.translate;
+
+        private ManagedVector3 m_startTranslation;
+        private ManagedVector3 m_startRotation;
+        private ManagedVector3 m_startLeft;
+        private ManagedVector3 m_startUp;
+        private ManagedVector3 m_startForward;
+        private ManagedVector3 m_lastK = new ManagedVector3();
+        private bool m_objectReadyForModification = false;
+
         public EngineWindow(Form1 f, CLI.DirectZobWrapper directZobWrapper)
         {
             InitializeComponent();
@@ -68,6 +91,10 @@ namespace DirectZobEditor
             m_EngineGraphics.Dispose();
         }
 
+        public void SetModificator(objectModificator m)
+        {
+            m_objectModificator = m;
+        }
         public void RemoveTranslationGizmos()
         {
             bTY.Visible = false;
@@ -79,7 +106,7 @@ namespace DirectZobEditor
         {
         }
 
-        public void UpdateTranslationGizmos()
+        public void UpdateModificationGizmos()
         {
             ZobObjectWrapper z = m_mainForm.GetZobObjectListControl().GetSelectedZobObject();
             if (z != null && z.IsValid())
@@ -124,6 +151,33 @@ namespace DirectZobEditor
                 bTY.Visible = true;
                 bTX.Visible = true;
                 bTZ.Visible = true;
+                p0 = z.GetTransform();
+                pX = z.GetLeft();
+                pY = z.GetUp();
+                pZ = z.GetForward();
+                switch (m_objectModificator)
+                {
+                    case objectModificator.translate:
+                        bTX.Text = "Tx";
+                        bTY.Text = "Ty";
+                        bTZ.Text = "Tz";
+                        break;
+                    case objectModificator.rotate:
+                        bTX.Text = "Rx";
+                        bTY.Text = "Ry";
+                        bTZ.Text = "Rz";                    
+                        m_engineWrapper.DrawLine(p0, pX, 0xFF0000);
+                        m_engineWrapper.DrawLine(p0, pY, 0x00FF00);
+                        m_engineWrapper.DrawLine(p0, pZ, 0x0000FF);
+                        break;
+                    case objectModificator.scale:
+                        bTX.Text = "Sx";
+                        bTY.Text = "Sy";
+                        bTZ.Text = "Sz";
+                        break;
+                    default:
+                        break;
+                }
             }
             else
             {
@@ -245,8 +299,8 @@ namespace DirectZobEditor
                 bmpData.Scan0 = p;
                 m_engineBitmap.UnlockBits(bmpData);
                 UpdateGraphicsParameters();
-                UpdateTranslationGizmos();
                 m_mainForm.UpdateAfterEngine();
+                UpdateModificationGizmos();
             }
             m_engineRendering = false;
         }
@@ -315,9 +369,37 @@ namespace DirectZobEditor
         {
 
         }
-        static float zz = 0;
         private void EngineRender_MouseClick(object sender, MouseEventArgs e)
         {
+            if (m_engineRendering)
+            {
+                //return;
+            }
+            float x = (float)e.X;
+            float y = (float)e.Y;
+            x /= EngineRender.Width;
+            y /= EngineRender.Height;
+            x = x * 2.0f - 1.0f;
+            y = y * 2.0f - 1.0f;
+            ManagedVector3 v = new ManagedVector3();
+            v.x = x;
+            v.y = y;
+            v.z = 0.0f;
+            CLI.ZobObjectWrapper z = GetEngineWrapper().GetObjectAt2DCoords(v);
+            if(z != null)
+            {
+                Form1.SceneUpdateEventArg ev = new Form1.SceneUpdateEventArg();
+                ev.type = Form1.SceneUpdateType.objectSelected;
+                ev.zobObject = z;
+                m_mainForm.PropagateSceneUpdateEvent(ev);
+            }
+            else
+            {
+                Form1.SceneUpdateEventArg ev = new Form1.SceneUpdateEventArg();
+                ev.type = Form1.SceneUpdateType.objectDeselected;
+                ev.zobObject = null;
+                m_mainForm.PropagateSceneUpdateEvent(ev);
+            }
         }
 
         private void TRSButton_Click(object sender, EventArgs e)
@@ -328,23 +410,12 @@ namespace DirectZobEditor
 
         private void EngineRender_MouseDown(object sender, MouseEventArgs e)
         {
-            /*
-            if (e.Button == MouseButtons.Left && !m_mainForm.IsCtrlPressed())
-            {
-                if (m_selectedObject != null && m_currentMouseAction.Length == 0)
-                {
-                    CLI.ZobObjectWrapper zAction = m_mainForm.GetZobObjectListControl().GetObjectAtCoords(e.X, e.Y, CLI.ZobObjectManagerWrapper.eObjectTypes.eObjectTypes_editor);
-                    if (zAction != null)
-                    {
-                        m_currentMouseAction = zAction.GetName();
-                    }
-                }
-            }
-            */
+
         }
 
         private void EngineRender_MouseUp(object sender, MouseEventArgs e)
         {
+            m_objectReadyForModification = false;
         }
 
         private void OnObjectSelected(object s, ObjectSelectionEventArg e)
@@ -363,104 +434,109 @@ namespace DirectZobEditor
             */
         }
         
-        private void bTX_MouseMove(object sender, MouseEventArgs e)
+        private void ModifyObject(MouseEventArgs e, axis a)
         {
-            if(m_engineRendering)
-            { 
-                return; 
-            }
-            ZobObjectWrapper z = m_mainForm.GetZobObjectListControl().GetSelectedZobObject();
-            if (z != null && e.Button == MouseButtons.Left)
+            if(!m_objectReadyForModification && e.Button == MouseButtons.Left)
             {
-                Point p = bTX.PointToScreen(new Point(e.X, e.Y));
-                p = EngineRender.PointToClient(p);
-                float x = (float)p.X;
-                float y = (float)p.Y;
-                x /= EngineRender.Width;
-                y /= EngineRender.Height;
-                x = x * 2.0f - 1.0f;
-                y = y * 2.0f - 1.0f;
-                ManagedVector3 v = new ManagedVector3();
-                v.x = x;
-                v.y = y;
-                v.z = 0.0f;
-                ManagedVector3 p0 = z.GetTransform();
-                ManagedVector3 pn = z.GetForward();
-                m_mainForm.GetCameraControl().GetWrapper().From2DToWorldOnPlane(v, p0, pn);
-                v.y = p0.y;
-                v.z = p0.z;
-                z.SetTransform(v);
-                OnZobObjectMoved(z);
+                ZobObjectWrapper z = m_mainForm.GetZobObjectListControl().GetSelectedZobObject();
+                if (z != null)
+                {
+                    m_startTranslation = z.GetTransform();
+                    m_startRotation = z.GetRotation();
+                    m_startLeft = z.GetLeft();
+                    m_startUp = z.GetUp();
+                    m_startForward = z.GetForward();
+                    m_objectReadyForModification = true;
+                }
+            }
+            else if(m_objectReadyForModification && e.Button != MouseButtons.Left)
+            {
+                m_objectReadyForModification = false;
+            }
+            if (m_objectReadyForModification)
+            {
+                switch (m_objectModificator)
+                {
+                    case objectModificator.rotate:
+                        RotateObject(e, a);
+                        break;
+                    case objectModificator.scale:
+                        ScaleObject(e, a);
+                        break;
+                    case objectModificator.translate:
+                        TranslateObject(e, a);
+                        break;
+                    default:
+                        break;
+                }
             }
         }
-        private void bTY_MouseMove(object sender, MouseEventArgs e)
+        private void RotateObject(MouseEventArgs e, axis a)
         {
             if (m_engineRendering)
             {
                 return;
             }
-            ZobObjectWrapper z = m_mainForm.GetZobObjectListControl().GetSelectedZobObject();
-            if (z != null && e.Button == MouseButtons.Left)
-            {
-                Point p = bTX.PointToScreen(new Point(e.X, e.Y));
-                p = EngineRender.PointToClient(p);
-                float x = (float)p.X;
-                float y = (float)p.Y;
-                x /= EngineRender.Width;
-                y /= EngineRender.Height;
-                x = x * 2.0f - 1.0f;
-                y = y * 2.0f - 1.0f;
-                ManagedVector3 v = new ManagedVector3();
-                v.x = x;
-                v.y = y;
-                v.z = 0.0f;
-                ManagedVector3 p0 = z.GetTransform();
-                ManagedVector3 pn = z.GetLeft();
-                m_mainForm.GetCameraControl().GetWrapper().From2DToWorldOnPlane(v, p0, pn);
-                v.x = p0.x;
-                v.z = p0.z;
-                z.SetTransform(v);
-                OnZobObjectMoved(z);
-            }
-        }
-        private void bTZ_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (m_engineRendering)
-            {
-                return;
-            }
-            ZobObjectWrapper z = m_mainForm.GetZobObjectListControl().GetSelectedZobObject();
-            if (z != null && e.Button == MouseButtons.Left)
-            {
-                Point p = bTX.PointToScreen(new Point(e.X, e.Y));
-                p = EngineRender.PointToClient(p);
-                float x = (float)p.X;
-                float y = (float)p.Y;
-                x /= EngineRender.Width;
-                y /= EngineRender.Height;
-                x = x * 2.0f - 1.0f;
-                y = y * 2.0f - 1.0f;
-                ManagedVector3 v = new ManagedVector3();
-                v.x = x;
-                v.y = y;
-                v.z = 0.0f;
-                ManagedVector3 p0 = z.GetTransform();
-                ManagedVector3 pn = z.GetUp();
-                m_mainForm.GetCameraControl().GetWrapper().From2DToWorldOnPlane(v, p0, pn);
-                v.y = p0.y;
-                v.x = p0.x;
-                z.SetTransform(v);
-                OnZobObjectMoved(z);
-            }
-        }
-        private void bCenter_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (m_engineRendering)
-            {
-                return;
-            }
-            ZobObjectWrapper z = m_mainForm.GetZobObjectListControl().GetSelectedZobObject();
             ZobCameraWrapper c = m_mainForm.GetCameraControl().GetWrapper().GetCurrentCamera();
+            ZobObjectWrapper z = m_mainForm.GetZobObjectListControl().GetSelectedZobObject();
+            if (c != null && z != null && e.Button == MouseButtons.Left && a != axis.none)
+            {
+                Point p = bTX.PointToScreen(new Point(e.X, e.Y));
+                p = EngineRender.PointToClient(p);
+                float x = (float)p.X;
+                float y = (float)p.Y;
+                x /= EngineRender.Width;
+                y /= EngineRender.Height;
+                x = x * 2.0f - 1.0f;
+                y = y * 2.0f - 1.0f;
+                ManagedVector3 v = new ManagedVector3();
+                v.x = x;
+                v.y = y;
+                v.z = 0.0f;
+                ManagedVector3 pn = z.GetUp();
+                switch (a)
+                {
+                    case axis.X:
+                        pn = z.GetUp();
+                        break;
+                    case axis.Y:
+                        pn = z.GetForward();
+                        break;
+                    case axis.Z:
+                        pn = z.GetLeft();
+                        break;
+                }
+
+                ManagedVector3 p0 = m_startTranslation;
+                ManagedVector3 or = m_startRotation;
+                m_mainForm.GetCameraControl().GetWrapper().From2DToWorldOnPlane(v, p0, pn);
+                if (a != axis.none)
+                {
+                    ManagedVector3 forward = new ManagedVector3((v.x - p0.x), (v.y - p0.y), (v.z - p0.z));
+                    ManagedVector3 k3 = forward;
+                    forward.Normalize();
+                    ManagedVector3 up = pn; //z.GetUp(); //new ManagedVector3(0, 1, 0);
+                    ManagedVector3 left = up.Cross(forward);
+                    z.LookAt(forward, left, up);
+                    m_engineWrapper.DrawLine(p0, left, 0xFF00FF);
+                    m_engineWrapper.DrawLine(p0, up, 0xFF00FF);
+                    m_engineWrapper.DrawLine(p0, forward, 0xFF00FF);
+                    OnZobObjectRotated(z);
+                }  
+            }
+        }
+        private void ScaleObject(MouseEventArgs e, axis a)
+        {
+        }
+
+        private void TranslateObject(MouseEventArgs e, axis a)
+        {
+            if (m_engineRendering)
+            {
+                return;
+            }
+            ZobCameraWrapper c = m_mainForm.GetCameraControl().GetWrapper().GetCurrentCamera();
+            ZobObjectWrapper z = m_mainForm.GetZobObjectListControl().GetSelectedZobObject();
             if (c != null && z != null && e.Button == MouseButtons.Left)
             {
                 Point p = bTX.PointToScreen(new Point(e.X, e.Y));
@@ -477,48 +553,53 @@ namespace DirectZobEditor
                 v.z = 0.0f;
                 ManagedVector3 p0 = z.GetTransform();
                 ManagedVector3 pn = c.GetForward();
-                m_mainForm.GetCameraControl().GetWrapper().From2DToWorldOnPlane(v, p0, pn);;
+                m_mainForm.GetCameraControl().GetWrapper().From2DToWorldOnPlane(v, p0, pn);
+                if (a != axis.none)
+                {
+                    ManagedVector3 k = new ManagedVector3((v.x - p0.x), (v.y - p0.y), (v.z - p0.z));
+                    ManagedVector3 k2 = new ManagedVector3(k);
+                    k2.Normalize();
+                    v = c.GetForward();
+                    switch (a)
+                    {
+                        case axis.X:
+                            v = z.GetLeft();
+                            break;
+                        case axis.Y:
+                            v = z.GetUp();
+                            break;
+                        case axis.Z:
+                            v = z.GetForward();
+                            break;
+                    }
+                    k.x = k.x * v.x;
+                    k.y = k.y * v.y;
+                    k.z = k.z * v.z;
+                    float f = k.sqrtLength();
+                    float sign = v.Dot(k2);
+                    v.Mul(f * sign);
+                    v.Add(p0);
+                }
                 z.SetTransform(v);
                 OnZobObjectMoved(z);
             }
         }
-        private void MoveAlongAxis(ManagedVector3 axis)
+
+        private void bTX_MouseMove(object sender, MouseEventArgs e)
         {
-            ZobObjectWrapper z = m_mainForm.GetZobObjectListControl().GetSelectedZobObject();
-            if (z != null)
-            {
-                float speed = 10.0f;
-                ManagedVector3 pX = new ManagedVector3(axis);
-                ManagedVector3 p0 = z.GetTransform();
-                pX.Add(p0);
-                m_engineWrapper.GetProjectedCoords(p0);
-                m_engineWrapper.GetProjectedCoords(pX);
-                p0 = ToScreenCoords(p0);
-                pX = ToScreenCoords(pX);
-                Vector2 v1 = new Vector2(m_lastMouseX - Cursor.Position.X, m_lastMouseY - Cursor.Position.Y);
-                if (v1.X != 0 || v1.Y != 0)
-                {
-                    Vector2 v2 = new Vector2(pX.x - p0.x, pX.y - p0.y);
-                    v1 = Vector2.Normalize(v1);
-                    v2 = Vector2.Normalize(v2);
-                    float d = -Vector2.Dot(v1, v2) / speed;
-                    Vector3 u1 = new Vector3(v1, 0);
-                    Vector3 u2 = new Vector3(v2, 0);
-                    pX = new ManagedVector3(axis);
-                    pX.x *= d;
-                    pX.y *= d;
-                    pX.z *= d;
-                    p0 = z.GetTransform();
-                    p0.Add(pX);
-                    z.SetTransform(p0);
-                    Form1.SceneUpdateEventArg ev = new Form1.SceneUpdateEventArg();
-                    ev.type = Form1.SceneUpdateType.objectMoved;
-                    ev.zobObject = z;
-                    m_mainForm.PropagateSceneUpdateEvent(ev);
-                }
-            }
-            m_lastMouseX = Cursor.Position.X;
-            m_lastMouseY = Cursor.Position.Y;
+            ModifyObject(e, axis.X);
+        }
+        private void bTY_MouseMove(object sender, MouseEventArgs e)
+        {
+            ModifyObject(e, axis.Y);
+        }
+        private void bTZ_MouseMove(object sender, MouseEventArgs e)
+        {
+            ModifyObject(e, axis.Z);
+        }
+        private void bCenter_MouseMove(object sender, MouseEventArgs e)
+        {
+            ModifyObject(e, axis.none);
         }
         #region object handlers for move, scale and rotate
         private void OnZobObjectMoved(CLI.ZobObjectWrapper zobObject)
@@ -543,7 +624,7 @@ namespace DirectZobEditor
         }
         private void OnZobObjectRotated(CLI.ZobObjectWrapper zobObject)
         {
-            OnObjectMovedHandler handler = OnObjectMoved;
+            OnObjectRotatedHandler handler = OnObjectRotated;
             if (null != handler)
             {
                 ObjectModificationEventArg ev = new ObjectModificationEventArg();

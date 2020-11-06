@@ -43,11 +43,13 @@ namespace CLI
 		m_Instance->SetMesh(n);
 	}
 
-	void ZobObjectWrapper::LoadMesh(System::String^ name)
+	void ZobObjectWrapper::LoadMesh(System::String^ name, System::String^ path)
 	{
 		std::string n;
 		MarshalString(name, n);
-		m_Instance->LoadMesh(n);
+		std::string p;
+		MarshalString(path, p);
+		m_Instance->LoadMesh(n, p);
 	}
 
 	void ZobObjectWrapper::CreateSprite()
@@ -105,6 +107,14 @@ namespace CLI
 	{
 		ZobVector3 v = p->ToVector3();
 		m_Instance->SetPosition(v.x, v.y, v.z);
+	}
+
+	void ZobObjectWrapper::LookAt(ManagedVector3^ forward, ManagedVector3^ left, ManagedVector3^ up)
+	{
+		ZobVector3 l = left->ToVector3();
+		ZobVector3 f = forward->ToVector3();
+		ZobVector3 u = up->ToVector3();
+		m_Instance->LookAt(&f, &l, &u);
 	}
 
 	void ZobObjectWrapper::SetRotation(ManagedVector3^ p)

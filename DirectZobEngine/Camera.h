@@ -8,6 +8,13 @@ class Camera : public ZobObject
 {
 public:
 
+	class Ray
+	{
+	public:
+		ZobVector3 p;
+		ZobVector3 n;
+	};
+
 	enum eTargetMode
 	{
 		eTarget_none=0,
@@ -35,8 +42,8 @@ public:
 	void					RotateAroundPointAxis(const ZobVector3* point, const ZobVector3* axis, const ZobVector3* lockAxis, float angle, bool recomputeVectors);
 	void					Move(float dx, float dy, bool moveTargetVector);
 	void					Zoom(float z);
-	void					From2DToWorld(ZobVector3* v);
-	void					From2DToWorldOnPlane(ZobVector3* v, ZobVector3* p0, ZobVector3* pn);
+	Ray						From2DToWorld(const ZobVector3* v2d);
+	void					From2DToWorldOnPlane(ZobVector3* v2d, ZobVector3* p0, ZobVector3* pn);
 	inline void				ToViewSpace(ZobVector3* v) const
 	{
 		v->x -= m_viewTransaltion.x;

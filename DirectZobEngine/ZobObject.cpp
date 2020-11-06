@@ -133,10 +133,14 @@ ZobObject::~ZobObject()
 	DirectZob::RemoveIndent();
 }
 
-void ZobObject::LoadMesh(std::string name)
+void ZobObject::LoadMesh(std::string name, std::string path/* = ""*/)
 {
-	std::string p = std::string(SceneLoader::GetResourcePath());
-	Mesh* m = DirectZob::GetInstance()->GetMeshManager()->LoadMesh(name, p, name);
+	if (path.empty())
+	{
+		path = std::string(SceneLoader::GetResourcePath());
+	}
+	//std::string p = std::string(SceneLoader::GetResourcePath());
+	Mesh* m = DirectZob::GetInstance()->GetMeshManager()->LoadMesh(name, path, name);
 	m_mesh = m;
 }
 
@@ -217,7 +221,7 @@ void ZobObject::QueueForDrawing(const Camera* camera, Core::Engine* engine)
 	}
 	if (m_mesh)
 	{
-		m_mesh->QueueForDrawing(m_modelMatrix, m_rotationScaleMatrix, camera, engine, GetId(), &m_renderOptions);
+		m_mesh->QueueForDrawing(this, m_modelMatrix, m_rotationScaleMatrix, camera, engine, GetId(), &m_renderOptions);
 	}
 	for (int i = 0; i < m_children.size(); i++)
 	{
@@ -409,6 +413,11 @@ void ZobObject::SetQuaternion(const ZobVector3* left, const ZobVector3* up, cons
 void ZobObject::SetQuaternion(float x, float y, float z, float w)
 {
 	m_physicComponent->SetQuaternion(x, y, z, w);
+}
+
+void ZobObject::LookAt(const ZobVector3* forward, const ZobVector3* left, const ZobVector3* up)
+{
+	m_physicComponent->LookAt(forward, left, up);
 }
 
 void ZobObject::SetRotation(float x, float y, float z)

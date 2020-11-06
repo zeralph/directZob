@@ -89,6 +89,7 @@ public:
 static inline ZobVector3 operator+ (const ZobVector3& v1, const ZobVector3& v2) { return ZobVector3(v1.x + v2.x, v1.y + v2.y, v1.z + v2.z); }
 static inline ZobVector3 operator- (const ZobVector3& v1, const ZobVector3& v2) { return ZobVector3(v1.x - v2.x, v1.y - v2.y, v1.z - v2.z); }
 static inline ZobVector3 operator* (const ZobVector3& v, const float f) { return ZobVector3(v.x *f, v.y *f, v.z *f); }
+static inline ZobVector3 operator* (const ZobVector3& u, const ZobVector3& v) { return ZobVector3(v.x * u.x, v.y * u.y, v.z * u.z); }
 static inline ZobVector3 operator/ (const ZobVector3& v, const float f) { return ZobVector3(v.x / f, v.y / f, v.z / f); }
 static inline bool operator!= (const ZobVector3& v1, const ZobVector3& v2) { return (v1.x != v2.x || v1.y != v2.y || v2.z != v1.z || v1.w != v2.w); }
 static inline bool operator!= (const ZobVector3* v1, const ZobVector3& v2) { return (v1->x != v2.x || v1->y != v2.y || v2.z != v1->z || v1->w != v2.w); }

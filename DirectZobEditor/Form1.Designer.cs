@@ -70,6 +70,11 @@
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.propertiesPanel = new System.Windows.Forms.Panel();
             this.EngineControlsFlowLayout = new System.Windows.Forms.FlowLayoutPanel();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.btnTranslate = new System.Windows.Forms.ToolStripButton();
+            this.btnRotate = new System.Windows.Forms.ToolStripButton();
+            this.btnScale = new System.Windows.Forms.ToolStripButton();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FirstPanelSplitter)).BeginInit();
             this.FirstPanelSplitter.Panel1.SuspendLayout();
@@ -352,10 +357,15 @@
             this.btnPlay,
             this.btnPause,
             this.btnStop,
+            this.toolStripSeparator1,
             this.btnGrid,
             this.btnWireframe,
             this.btnGizmos,
-            this.btnNormals});
+            this.btnNormals,
+            this.toolStripSeparator2,
+            this.btnTranslate,
+            this.btnRotate,
+            this.btnScale});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(698, 25);
@@ -514,6 +524,51 @@
             this.EngineControlsFlowLayout.WrapContents = false;
             this.EngineControlsFlowLayout.Resize += new System.EventHandler(this.EngineControlsFlowLayout_Resize);
             // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+            // 
+            // btnTranslate
+            // 
+            this.btnTranslate.Checked = true;
+            this.btnTranslate.CheckOnClick = true;
+            this.btnTranslate.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.btnTranslate.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.btnTranslate.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.btnTranslate.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnTranslate.Name = "btnTranslate";
+            this.btnTranslate.Size = new System.Drawing.Size(23, 22);
+            this.btnTranslate.Text = "T";
+            this.btnTranslate.Click += new System.EventHandler(this.btnTranslate_Click);
+            // 
+            // btnRotate
+            // 
+            this.btnRotate.CheckOnClick = true;
+            this.btnRotate.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.btnRotate.Image = ((System.Drawing.Image)(resources.GetObject("btnRotate.Image")));
+            this.btnRotate.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnRotate.Name = "btnRotate";
+            this.btnRotate.Size = new System.Drawing.Size(23, 22);
+            this.btnRotate.Text = "R";
+            this.btnRotate.Click += new System.EventHandler(this.btnRotate_Click);
+            // 
+            // btnScale
+            // 
+            this.btnScale.CheckOnClick = true;
+            this.btnScale.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.btnScale.Image = ((System.Drawing.Image)(resources.GetObject("btnScale.Image")));
+            this.btnScale.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnScale.Name = "btnScale";
+            this.btnScale.Size = new System.Drawing.Size(23, 22);
+            this.btnScale.Text = "S";
+            this.btnScale.Click += new System.EventHandler(this.btnScale_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -596,6 +651,11 @@
         private System.Windows.Forms.ToolStripButton btnWireframe;
         private System.Windows.Forms.ToolStripButton btnGizmos;
         private System.Windows.Forms.ToolStripButton btnNormals;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripButton btnTranslate;
+        private System.Windows.Forms.ToolStripButton btnRotate;
+        private System.Windows.Forms.ToolStripButton btnScale;
     }
 }
 

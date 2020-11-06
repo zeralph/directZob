@@ -11,14 +11,14 @@ namespace CLI {
 			x = 0; y = 0; z = 0;
 		}
 
-		ManagedVector3(int x, int y, int z)
-		{
-			x = (float)x; y = (float)y; z = (float)z;
-		}
+		//ManagedVector3(int x, int y, int z)
+		//{
+		//	x = (float)x; y = (float)y; z = (float)z;
+		//}
 
 		ManagedVector3(float x, float y, float z)
 		{
-			x = x; y = y; z = z;
+			this->x = x; this->y = y; this->z = z;
 		}
 
 		ManagedVector3(const ZobVector3& v)
@@ -28,26 +28,57 @@ namespace CLI {
 
 		ManagedVector3(ManagedVector3^ v)
 		{
-			x = v->x; 
-			y = v->y; 
-			z = v->z;
+			this->x = v->x; 
+			this->y = v->y;
+			this->z = v->z;
 		}
 
 		ZobVector3 ToVector3() { return ZobVector3(x, y, z); }
 		void FromVector3(ZobVector3& v) { x = v.x / v.w; y = v.y / v.w; z = v.z / v.w; }
-		void Add(ManagedVector3^ v)
+		inline void Add(ManagedVector3^ v)
 		{
 			x += v->x;
 			y += v->y;
 			z += v->z;
 		}
 
-		void Mul(float f)
+		inline void Mul(float f)
 		{
 			x *= f;
 			y *= f;
 			z *= f;
 		}
+
+		inline float sqrtLength()
+		{
+			return (float)sqrt((double)x * (double)x + (double)y * (double)y + (double)z * (double)z);
+		}
+
+		inline void Normalize()
+		{
+			float f = sqrtLength();
+			if (f != 0.0f)
+			{
+				x /= f;
+				y /= f;
+				z /= f;
+			}
+		}
+
+		float Dot(ManagedVector3^ v)
+		{
+			return x * v->x + y * v->y + z * v->z;
+		}
+
+
+		ManagedVector3^ Cross(ManagedVector3^ v)
+		{
+			ManagedVector3^ r = gcnew ManagedVector3(
+				this->y * v->z - this->z * v->y,
+				this->z * v->x - this->x * v->z,
+				this->x * v->y - this->y * v->x);
+			return r;
+		};
 	public:
 		float x;
 		float y;

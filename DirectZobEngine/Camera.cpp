@@ -381,32 +381,30 @@ void Camera::setProjectionMatrix(const float angleOfView, const float width, con
 }
 
 //v is homogenous
-void Camera::From2DToWorld(ZobVector3* v)
+Camera::Ray Camera::From2DToWorld(const ZobVector3* v2d)
 {
-	//v->z = 0.0f;
-	m_invProjectionMatrix.Mul(v);
-	//v->Normalize();
-	m_invViewMatrix.Mul(v);
-	//v->w = 1.0 / v->w;
-	v->Normalize();
-	
-	v->x += this->GetWorldPosition().x;
-	v->y += this->GetWorldPosition().y;
-	v->z += this->GetWorldPosition().z;
-	//v-> w = 1.0 / v->w;
-	sRayDbg = v;
-	sRayDbg2 = this->GetWorldPosition();
+	ZobVector3 v = v2d;
+	m_invProjectionMatrix.Mul(&v);
+	m_invViewMatrix.Mul(&v);
+	v.Normalize();	
+	v.x += this->GetWorldPosition().x;
+	v.y += this->GetWorldPosition().y;
+	v.z += this->GetWorldPosition().z;
+	Ray r;
+	r.p = this->GetWorldPosition();
+	r.n = v - r.p;
+	return r;
 }
 
-void Camera::From2DToWorldOnPlane(ZobVector3* v, ZobVector3* p0, ZobVector3* pn)
+void Camera::From2DToWorldOnPlane(ZobVector3* v2d, ZobVector3* p0, ZobVector3* pn)
 {
-	From2DToWorld(v);
+	Camera::Ray r = From2DToWorld(v2d);
 	ZobVector3 l0 = this->GetWorldPosition();
-	ZobVector3 lv = v - l0;
-	ZobVector3 r = DirectZob::GetInstance()->GetEngine()->LinePlaneIntersection(p0, pn, &l0, &lv);
-	v->x = r.x;
-	v->y = r.y;
-	v->z = r.z;
+	ZobVector3 lv = v2d - l0;
+	ZobVector3 i = DirectZob::GetInstance()->GetEngine()->LinePlaneIntersection(p0, pn, &r.p, &r.n);
+	v2d->x = i.x;
+	v2d->y = i.y;
+	v2d->z = i.z;
 }
 
 TiXmlNode* Camera::SaveUnderNode(TiXmlNode* node)
