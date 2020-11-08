@@ -493,37 +493,102 @@ namespace DirectZobEditor
                 v.x = x;
                 v.y = y;
                 v.z = 0.0f;
-                ManagedVector3 pn = z.GetUp();
                 switch (a)
                 {
                     case axis.X:
-                        pn = z.GetUp();
+                        RotateObjectAroundX(z, v);
                         break;
                     case axis.Y:
-                        pn = z.GetForward();
+                        RotateObjectAroundY(z, v);
+                        //pn =z.GetForward().Copy();
                         break;
                     case axis.Z:
-                        pn = z.GetLeft();
+                        RotateObjectAroundZ(z, v);
+                        //pn = z.GetLeft().Copy();
                         break;
                 }
-
-                ManagedVector3 p0 = m_startTranslation;
-                ManagedVector3 or = m_startRotation;
-                m_mainForm.GetCameraControl().GetWrapper().From2DToWorldOnPlane(v, p0, pn);
-                if (a != axis.none)
-                {
-                    ManagedVector3 forward = new ManagedVector3((v.x - p0.x), (v.y - p0.y), (v.z - p0.z));
-                    ManagedVector3 k3 = forward;
-                    forward.Normalize();
-                    ManagedVector3 up = pn; //z.GetUp(); //new ManagedVector3(0, 1, 0);
-                    ManagedVector3 left = up.Cross(forward);
-                    z.LookAt(forward, left, up);
-                    m_engineWrapper.DrawLine(p0, left, 0xFF00FF);
-                    m_engineWrapper.DrawLine(p0, up, 0xFF00FF);
-                    m_engineWrapper.DrawLine(p0, forward, 0xFF00FF);
-                    OnZobObjectRotated(z);
-                }  
             }
+        }
+
+        private void RotateObjectAroundX(ZobObjectWrapper z, ManagedVector3 mousePositsion)
+        {
+            //ManagedVector3 pn = new ManagedVector3(z.GetUp());
+            ManagedVector3 pn = new ManagedVector3(0,1,0);
+            ManagedVector3 p0 = m_startTranslation.Copy();
+            m_mainForm.GetCameraControl().GetWrapper().From2DToWorldOnPlane(mousePositsion, p0, pn);
+            ManagedVector3 left = new ManagedVector3((mousePositsion.x - p0.x), (mousePositsion.y - p0.y), (mousePositsion.z - p0.z));
+            left.Normalize();
+            ManagedVector3 up = z.GetUp().Copy(); 
+            ManagedVector3 forward = left.Cross(up);
+            z.LookAt(forward, left, up);
+
+            ManagedVector3 p1 = p0.Copy();
+            p1.Add(left);
+            p1.Mul(2.0f);
+            ManagedVector3 p2 = p0.Copy();
+            p2.Add(forward);
+            p2.Mul(2.0f);
+            ManagedVector3 p3 = p0.Copy();
+            p3.Add(up);
+            p3.Mul(2.0f);
+            m_engineWrapper.DrawLine(p0, p1, 0xFF0000);
+            m_engineWrapper.DrawLine(p0, p2, 0x0000FF);
+            m_engineWrapper.DrawLine(p0, p3, 0x0000FF);
+
+            OnZobObjectRotated(z);
+        }
+
+        private void RotateObjectAroundY(ZobObjectWrapper z, ManagedVector3 mousePositsion)
+        {
+            ManagedVector3 pn = new ManagedVector3(0,0,1);
+            ManagedVector3 p0 = m_startTranslation.Copy();
+            m_mainForm.GetCameraControl().GetWrapper().From2DToWorldOnPlane(mousePositsion, p0, pn);
+            ManagedVector3 up = new ManagedVector3((mousePositsion.x - p0.x), (mousePositsion.y - p0.y), (mousePositsion.z - p0.z));
+            up.Normalize();
+            ManagedVector3 forward = z.GetForward().Copy();
+            ManagedVector3 left = up.Cross(forward);
+            //z.LookAt(forward, left, up);
+
+            ManagedVector3 p1 = p0.Copy();
+            p1.Add(left);
+            p1.Mul(2.0f);
+            ManagedVector3 p2 = p0.Copy();
+            p2.Add(forward);
+            p2.Mul(2.0f);
+            ManagedVector3 p3 = p0.Copy();
+            p3.Add(up);
+            p3.Mul(2.0f);
+            m_engineWrapper.DrawLine(p0, p1, 0xFF0000);
+            m_engineWrapper.DrawLine(p0, p2, 0x0000FF);
+            m_engineWrapper.DrawLine(p0, p3, 0x0000FF);
+
+            OnZobObjectRotated(z);
+        }
+        private void RotateObjectAroundZ(ZobObjectWrapper z, ManagedVector3 mousePositsion)
+        {
+            ManagedVector3 pn = new ManagedVector3(1,0,0);
+            ManagedVector3 p0 = m_startTranslation.Copy();
+            m_mainForm.GetCameraControl().GetWrapper().From2DToWorldOnPlane(mousePositsion, p0, pn);
+            ManagedVector3 forward = new ManagedVector3((mousePositsion.x - p0.x), (mousePositsion.y - p0.y), (mousePositsion.z - p0.z));
+            forward.Normalize();
+            ManagedVector3 left = z.GetLeft().Copy();
+            ManagedVector3 up = forward.Cross(left);
+            z.LookAt(forward, left, up);
+
+            ManagedVector3 p1 = p0.Copy();
+            p1.Add(left);
+            p1.Mul(2.0f);
+            ManagedVector3 p2 = p0.Copy();
+            p2.Add(forward);
+            p2.Mul(2.0f);
+            ManagedVector3 p3 = p0.Copy();
+            p3.Add(up);
+            p3.Mul(2.0f);
+            m_engineWrapper.DrawLine(p0, p1, 0xFF0000);
+            m_engineWrapper.DrawLine(p0, p2, 0x0000FF);
+            m_engineWrapper.DrawLine(p0, p3, 0x0000FF);
+
+            OnZobObjectRotated(z);
         }
         private void ScaleObject(MouseEventArgs e, axis a)
         {
