@@ -7,6 +7,8 @@
 #include "ZobObjectWrapper.h"
 //using namespace System;
 
+#define NB_EDITOR_TRIANGLES 1000
+
 namespace CLI
 {
 	public ref class EngineWrapper: public ManagedObject<Core::Engine>
@@ -14,6 +16,7 @@ namespace CLI
 	public:
 
 		EngineWrapper();
+		~EngineWrapper();
 		int				GetBufferWidth();
 		int				GetBufferHeight();
 		System::IntPtr	GetBufferData();
@@ -29,8 +32,12 @@ namespace CLI
 		ZobObjectWrapper^ GetObjectAt2DCoords(ManagedVector3^ v);
 		void			DrawLine(ManagedVector3^ p0, ManagedVector3^ p1, int color);
 		void			DrawCircle(ManagedVector3^ p0, ManagedVector3^ up, float r, int color);
+		void			DrawTriangle(ManagedVector3^ p0, ManagedVector3^ p1, ManagedVector3^ p2, int color);
 	private:
 		//array<int>^ m_buffer;
+		Triangle*		m_triangleList;
+		ZobVector3*		m_vertices;
+		int				m_nbTriangles;
 	};
 }
 #endif //_WINDLL

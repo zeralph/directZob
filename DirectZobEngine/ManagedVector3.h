@@ -71,6 +71,11 @@ namespace CLI {
 		}
 
 
+		ManagedVector3^ Copy()
+		{ 
+			return gcnew ManagedVector3(this->x, this->y, this->z); 
+		}
+
 		ManagedVector3^ Cross(ManagedVector3^ v)
 		{
 			ManagedVector3^ r = gcnew ManagedVector3(

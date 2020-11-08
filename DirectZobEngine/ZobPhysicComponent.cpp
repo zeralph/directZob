@@ -161,7 +161,9 @@ void ZobPhysicComponent::SetQuaternion(float x, float y, float z, float w)
 void ZobPhysicComponent::LookAt(const ZobVector3* forward, const ZobVector3* left, const ZobVector3* up)
 {
 	Transform t = Transform(m_rigidBody->getTransform());
+	Quaternion q;
 	Quaternion q2 = t.getOrientation();
+	/*
 	Matrix3x3 m = Matrix3x3(left->x, up->x, forward->x,
 							left->y, up->y, forward->y,
 							left->z, up->z, forward->z
@@ -170,26 +172,25 @@ void ZobPhysicComponent::LookAt(const ZobVector3* forward, const ZobVector3* lef
 	//	up->x, up->y, up->z,
 	//	forward->x, forward->y, forward->z
 	//);
-	Quaternion q = Quaternion(m);
+	q = Quaternion(m);
+	q.normalize();
 	t.setOrientation(q);
 	m_rigidBody->setTransform(t);
 	return;
-	
+	*/
+	/*
 	float tr = left->x + up->y + forward->z;
 	if (tr > 0) 
 	{
-		float s = 0.5f / sqrtf(tr + 1.0f);
-		q.w = 0.25 / s;
-		//q.x = (up->z - forward->y) * s;
-		//q.y = (forward->x - left->z) * s;
-		//q.z = (left->y - up->x) * s;
-		q.x = (forward->y - up->z) * s;
-		q.y = (left->z - forward->x) * s;
-		q.z = (up->x - left->y) * s;
+		float s = sqrtf(tr + 1.0f) * 2;
+		q.w = 0.25 * s;
+		q.x = (up->z - forward->y) * s;
+		q.y = (forward->x - left->z) * s;
+		q.z = (left->y - up->x) * s;
 	}
 	else if ((left->x > up->y) & (left->x > forward->z)) 
 	{
-		float S = sqrt(1.0 + left->x - up->y - forward->z) * 2.0f; // S=4*qx 
+		float S = sqrtf(1.0f + left->x - up->y - forward->z) * 2.0f; // S=4*qx 
 		q.w = (up->z - forward->y) / S;
 		q.x = 0.25 * S;
 		q.y = (up->x + left->y) / S;
@@ -211,18 +212,23 @@ void ZobPhysicComponent::LookAt(const ZobVector3* forward, const ZobVector3* lef
 		q.y = (forward->y + up->z) / S;
 		q.z = 0.25f * S;
 	}
-/*
-	q.w = sqrt(fmaxf(0, 1 + left->x + up->y + forward->z)) / 2;
-	q.x = sqrt(fmaxf(0, 1 + left->x - up->y - forward->z)) / 2;
-	q.y = sqrt(fmaxf(0, 1 - left->x + up->y - forward->z)) / 2;
-	q.z = sqrt(fmaxf(0, 1 - left->x - up->y + forward->z)) / 2;
+*/
+
+	q.w = sqrt(fmaxf(0, 1 + left->x + up->y + forward->z)) / 2.0f;
+	q.x = sqrt(fmaxf(0, 1 + left->x - up->y - forward->z)) / 2.0f;
+	q.y = sqrt(fmaxf(0, 1 - left->x + up->y - forward->z)) / 2.0f;
+	q.z = sqrt(fmaxf(0, 1 - left->x - up->y + forward->z)) / 2.0f;
 	
-	q.x = copysign(q.x, m21 - m12);
-	q.y = copysign(q.y, m02 - m20);
-	q.z = copysign(q.z, m10 - m01);
-	*/
-	t.setOrientation(q);
-	m_rigidBody->setTransform(t);
+	q.x = copysignf(q.x, up->z - forward->y);
+	q.y = copysignf(q.y, forward->x - left->z);
+	q.z = copysignf(q.z, left->y - up->x);
+	
+	//q.normalize();
+	if (q.isValid())
+	{
+		t.setOrientation(q);
+		m_rigidBody->setTransform(t);
+	}
 }
 
 void ZobPhysicComponent::SetOrientation(float x, float y, float z)
@@ -238,12 +244,12 @@ void ZobPhysicComponent::SetOrientation(float x, float y, float z)
 	dz = DEG_TO_RAD(dz);
 	Transform t = Transform(m_rigidBody->getTransform());
 	Quaternion q;
-	q = Quaternion::fromEulerAngles((dx), (dy), (dz));
-	//ZobVector3 v = ZobMatrix4x4::EulerToQuaternion(dx, dy, dz);
-	//q.x = v.x;
-	//q.y = v.y;
-	//q.z = v.z;
-	//q.w = v.w;
+	//q = Quaternion::fromEulerAngles((dx), (dy), (dz));
+	ZobVector3 v = ZobMatrix4x4::EulerToQuaternion(dx, dy, dz);
+	q.x = v.x;
+	q.y = v.y;
+	q.z = v.z;
+	q.w = v.w;
 	Quaternion q2 = t.getOrientation();
 	q = q2 * q;
 	t.setOrientation(q);
