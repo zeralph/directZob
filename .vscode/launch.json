@@ -9,7 +9,7 @@
             "name": "Linux Debug build and run",
             "type": "cppdbg",
             "request": "launch",
-            "program": "/home/ralph/directZob/DirectZobExe",
+            "program": "${workspaceFolder}/DirectZobExe",
             "args": [ 
                 "--bench",
                 "--scene",
@@ -20,7 +20,7 @@
                 "400"
             ],
             "stopAtEntry": false,
-            "cwd": "/home/ralph/directZob/",
+            "cwd": "${workspaceFolder}/",
             "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",
@@ -37,7 +37,7 @@
         {
             "name": "Linux Release build and run",
             "request": "launch",
-            "program": "/home/ralph/directZob/DirectZobExe",
+            "program": "${workspaceFolder}/DirectZobExe",
             "args": [
                 "--bench",
                 "--scene",
@@ -48,7 +48,7 @@
                 "400"
             ],
             "stopAtEntry": false,
-            "cwd": "/home/ralph/directZob/",
+            "cwd": "${workspaceFolder}/",
             "environment": [],
             "externalConsole": false,
             "type": "cppdbg",
