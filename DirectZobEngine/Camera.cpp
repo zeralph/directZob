@@ -213,18 +213,15 @@ void Camera::Update(const ZobMatrix4x4& parentMatrix, const ZobMatrix4x4& parent
 		const ZobVector3* p = GetPosition();
 		if (m_tagetMode == eTarget_Vector &&  m_targetVector != p)
 		{
+			LookAt(&m_targetVector);
+			/*
 			v = m_targetVector - v;
 			v.Normalize();
 			fw = v;
-			//v = ZobVector3::GetAnglesFromVector(v);
-			//v = ZobMatrix4x4::QuaternionToEuler(v.x, v.z, v.z, 0.0f);
-			//SetRotation(RAD_TO_DEG(v.x), RAD_TO_DEG(v.y), RAD_TO_DEG(v.z));
-			//static float qz = 0.0f;
 			left = ZobVector3::Cross(&up, &fw);
 			up = ZobVector3::Cross(&fw, &left);
 			SetQuaternion(&left, &up, &fw);
-			//SetQuaternion(v.x, v.y, v.z, qz);
-			//SetRotation(v.x, v.y, v.z);
+			*/
 			RecomputeFLUVectors(&v);
 		}
 		else if (m_tagetMode == eTarget_Object && m_targetObject)
@@ -405,6 +402,7 @@ void Camera::From2DToWorldOnPlane(ZobVector3* v2d, ZobVector3* p0, ZobVector3* p
 	v2d->x = i.x;
 	v2d->y = i.y;
 	v2d->z = i.z;
+	DirectZob::GetInstance()->GetEngine()->QueueLine(this, this->GetPosition(), v2d, 0xFF00FF, true);
 }
 
 TiXmlNode* Camera::SaveUnderNode(TiXmlNode* node)

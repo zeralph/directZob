@@ -31,7 +31,6 @@ public:
 	void RemoveZobObject(ZobObject* z);
 	void UnloadAll();
 	void CreateEditorGizmos(std::string& editorResourcesPath);
-	ZobObject* GetEditorGizmos() { return m_editorGizmos; }
 	bool Reparent(ZobObject* o, ZobObject* parent);
 	void SaveTransforms();
 	void RestoreTransforms();
@@ -44,18 +43,4 @@ private:
 	ZobObject* m_rootObject = nullptr;
 	clock_t	m_drawTick;
 	float m_time;
-//Editor objects
-	ZobObject* m_editorGizmos = nullptr;
-	ZobObject* m_transform = nullptr;
-	ZobObject* m_transformX = nullptr;
-	ZobObject* m_transformY = nullptr;
-	ZobObject* m_transformZ = nullptr;
-	ZobObject* m_rotate = nullptr;
-	ZobObject* m_rotateX = nullptr;
-	ZobObject* m_rotateY = nullptr;
-	ZobObject* m_rotateZ = nullptr;
-	ZobObject* m_scale = nullptr;
-	ZobObject* m_scaleX = nullptr;
-	ZobObject* m_scaleY = nullptr;
-	ZobObject* m_scaleZ = nullptr;
 }; 

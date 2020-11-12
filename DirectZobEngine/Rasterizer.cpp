@@ -385,6 +385,10 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector3* p, const Triangl
 	w0 = edgeFunction(t->pb, t->pc, p);
 	w1 = edgeFunction(t->pc, t->pa, p);
 
+	//w1 = edgeFunction(t->pa, t->pb, p);
+	//w2 = edgeFunction(t->pb, t->pc, p);
+	//w0 = edgeFunction(t->pc, t->pa, p);
+
 	w0 /= t->area;
 	w1 /= t->area;
 	w2 /= t->area;
@@ -410,7 +414,7 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector3* p, const Triangl
 	{
 		if (t->options->bColorize)
 		{
-			if (((int)p->x + ((int)p->y % 8)) % 8 == 0)
+			if (((int)p->x + ((int)p->y % 2)) % 2 == 0)
 			{
 				c = ((int)(t->options->colorization.x * 255) << 16) + ((int)(t->options->colorization.y * 255) << 8) + (int)(t->options->colorization.z * 255);
 				m_bufferData->buffer[k] = c;
@@ -418,13 +422,9 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector3* p, const Triangl
 			}
 		}
 
-
-		su = w0 * t->ua->x + w1 * t->ub->x + w2 * t->uc->x;
-		tu = w0 * t->ua->y + w1 * t->ub->y + w2 * t->uc->y;
-
 		cl = 1.0f;
 		RenderOptions::eLightMode lighting = t->options->lightMode;
-		if (lighting == RenderOptions::eLightMode_flat || lighting == RenderOptions::eLightMode_flatPhong)
+		if (lighting == RenderOptions::eLightMode_flat || lighting == RenderOptions::eLightMode_flatPhong || lighting == RenderOptions::eLightMode_none)
 		{
 			normal = t->n;
 		}
@@ -440,6 +440,8 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector3* p, const Triangl
 			const Texture* texture = material->GetDiffuseTexture();
 			if (texture && texture->GetData())
 			{
+				su = w0 * t->ua->x + w1 * t->ub->x + w2 * t->uc->x;
+				tu = w0 * t->ua->y + w1 * t->ub->y + w2 * t->uc->y;
 				tu = 1.0f - tu;
 				su = (int)(su * texture->GetWidth());
 				tu = (int)(tu * texture->GetHeight());

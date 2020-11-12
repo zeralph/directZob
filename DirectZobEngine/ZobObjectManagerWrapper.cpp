@@ -68,29 +68,21 @@ namespace CLI
 		return nullptr;
 	}
 
-	void ZobObjectManagerWrapper::RemoveZobObject(System::String^ name)
+	void ZobObjectManagerWrapper::RemoveZobObject(ZobObjectWrapper^ z)
 	{
-		std::string n;
-		MarshalString(name, n);
-		ZobObject* z = m_Instance->GetZobObject(n);
-		m_Instance->RemoveZobObject(z);
+		m_Instance->RemoveZobObject(z->GetInstance());
 	}
 
-	ZobObjectWrapper^ ZobObjectManagerWrapper::AddZobObject(System::String^ parent)
+	ZobObjectWrapper^ ZobObjectManagerWrapper::AddZobObject(ZobObjectWrapper^ parent)
 	{
-		std::string n;
-		MarshalString(parent, n);
-		ZobObject* p = m_Instance->GetZobObject(n);
+		ZobObject* p = parent->GetInstance();
 		ZobObject* z = m_Instance->CreateZobObject(p);
 		return gcnew ZobObjectWrapper(z);
 	}
 
-	ZobObjectWrapper^ ZobObjectManagerWrapper::AddZobSprite(System::String^ parent)
+	ZobObjectWrapper^ ZobObjectManagerWrapper::AddZobSprite(ZobObjectWrapper^ parent)
 	{
-		std::string n;
-		MarshalString(parent, n);
-		ZobObject* p = m_Instance->GetZobObject(n);
-		ZobObject* z = m_Instance->CreateZobSprite(p);
+		ZobObject* z = m_Instance->CreateZobSprite(parent->GetInstance());
 		return gcnew ZobObjectWrapper(z);
 	}
 
@@ -100,16 +92,15 @@ namespace CLI
 		MarshalString(editorResourcesPath, n);
 		m_Instance->CreateEditorGizmos(n);
 	}
-	ZobObjectWrapper^ ZobObjectManagerWrapper::GetEditorGizmos()
-	{
-		ZobObject* z = m_Instance->GetEditorGizmos();
-		return gcnew ZobObjectWrapper(z);
-	}
 
 	ZobObjectWrapper^ ZobObjectManagerWrapper::GetRootObject()
 	{
 		ZobObject* z = m_Instance->GetRootObject();
-		return gcnew ZobObjectWrapper(z);
+		if (z)
+		{
+			return gcnew ZobObjectWrapper(z);
+		}
+		return nullptr;
 	}
 
 	bool ZobObjectManagerWrapper::Reparent(ZobObjectWrapper^ o, ZobObjectWrapper^ parent)

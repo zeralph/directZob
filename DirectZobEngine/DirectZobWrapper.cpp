@@ -3,17 +3,8 @@
 
 namespace CLI
 {
-
-	/*static void int_array_conversion(array<unsigned int>^ data)
-	{
-		pin_ptr<unsigned int> arrayPin = &data[0];
-		unsigned int size = data->Length;
-	}*/
-	typedef void (*Unmanaged_onFrameEndDelegate)();
-
 	DirectZobWrapper::DirectZobWrapper():ManagedObject(new DirectZob, true)
 	{
-		m_onFrameEndcallback = nullptr;
 		m_run = false;
 	}
 
@@ -81,16 +72,27 @@ namespace CLI
 
 	}
 
-	int DirectZobWrapper::Run(onFrameStartCallback^ cbStart, onFrameEndCallback^ cbEnd)
+	void DirectZobWrapper::CallSceneUpdatedCallback()
 	{
-		/*
-		m_onFrameEndcallback = cb;
-		onFrameEndCallback^ StaticDelInst = gcnew onFrameEndCallback(this, &DirectZobWrapper::OnFrameEnd);
-		System::IntPtr stubPointer = System::Runtime::InteropServices::Marshal::GetFunctionPointerForDelegate(StaticDelInst);
-		Unmanaged_onFrameEndDelegate functionPointer = static_cast<Unmanaged_onFrameEndDelegate>(stubPointer.ToPointer());
-		m_Instance->Run(functionPointer);
-		return 0;
-		*/
+		if (m_sceneUpdatedCb != nullptr)
+		{
+			m_sceneUpdatedCb();
+		};
+	}
+
+	void DirectZobWrapper::CallQueuingCallback()
+	{
+		if (m_queuingCb != nullptr)
+		{
+			m_queuingCb();
+		};
+	}
+
+	int DirectZobWrapper::Run(engineCallback^ cbStart, engineCallback^ cbEnd, engineCallback^ sceneUpdated, engineCallback^ queuing)
+	{
+
+		m_sceneUpdatedCb = sceneUpdated;
+		m_queuingCb = queuing;
 		m_run = true;
 		while(m_run)
 		{
@@ -98,7 +100,8 @@ namespace CLI
 			{
 				cbStart();
 			}
-			m_Instance->RunAFrame();
+			;
+			m_Instance->RunAFrame((DirectZob::engineCallback) DirectZobWrapper::CallSceneUpdatedCallback, (DirectZob::engineCallback) DirectZobWrapper::CallQueuingCallback);
 			if (m_run)
 			{
 				cbEnd();
@@ -111,14 +114,6 @@ namespace CLI
 	{
 		m_run = false;
 		return 0;
-	}
-
-	void DirectZobWrapper::OnFrameEnd()
-	{
-		if (m_onFrameEndcallback)
-		{
-			m_onFrameEndcallback();
-		}
 	}
 
 	int DirectZobWrapper::RunAFrame()

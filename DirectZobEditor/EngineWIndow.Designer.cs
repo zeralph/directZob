@@ -118,6 +118,8 @@
             this.bTX.TabIndex = 6;
             this.bTX.Text = "X";
             this.bTX.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.bTX.MouseDown += new System.Windows.Forms.MouseEventHandler(this.bTX_MouseDown);
+            this.bTX.MouseHover += new System.EventHandler(this.bTX_MouseHover);
             this.bTX.MouseMove += new System.Windows.Forms.MouseEventHandler(this.bTX_MouseMove);
             // 
             // EngineWindow

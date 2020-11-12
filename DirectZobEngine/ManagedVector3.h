@@ -26,7 +26,7 @@ namespace CLI {
 			x = v.x / v.w; y = v.y / v.w; z = v.z / v.w;
 		}
 
-		ManagedVector3(ManagedVector3^ v)
+		ManagedVector3(const ManagedVector3^ v)
 		{
 			this->x = v->x; 
 			this->y = v->y;
@@ -35,7 +35,7 @@ namespace CLI {
 
 		ZobVector3 ToVector3() { return ZobVector3(x, y, z); }
 		void FromVector3(ZobVector3& v) { x = v.x / v.w; y = v.y / v.w; z = v.z / v.w; }
-		inline void Add(ManagedVector3^ v)
+		inline void Add(const ManagedVector3^ v)
 		{
 			x += v->x;
 			y += v->y;
@@ -65,7 +65,7 @@ namespace CLI {
 			}
 		}
 
-		float Dot(ManagedVector3^ v)
+		float Dot(const ManagedVector3^ v)
 		{
 			return x * v->x + y * v->y + z * v->z;
 		}
@@ -76,7 +76,7 @@ namespace CLI {
 			return gcnew ManagedVector3(this->x, this->y, this->z); 
 		}
 
-		ManagedVector3^ Cross(ManagedVector3^ v)
+		ManagedVector3^ Cross(const ManagedVector3^ v)
 		{
 			ManagedVector3^ r = gcnew ManagedVector3(
 				this->y * v->z - this->z * v->y,

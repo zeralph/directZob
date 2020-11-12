@@ -51,6 +51,7 @@ public:
 	const ZobVector3*					GetPosition();
 	const ZobVector3*					GetOrientation();
 	const ZobMatrix4x4					GetRotationMatrix();
+	void								LookAt(const ZobVector3* target);
 	void								LookAt(const ZobVector3* forward, const ZobVector3* left, const ZobVector3* up);
 	void								AddBoxCollider(const ZobVector3* halfExtends );
 	void								AddSphereCollider(float radius);

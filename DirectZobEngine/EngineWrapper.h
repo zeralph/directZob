@@ -33,10 +33,13 @@ namespace CLI
 		void			DrawLine(ManagedVector3^ p0, ManagedVector3^ p1, int color);
 		void			DrawCircle(ManagedVector3^ p0, ManagedVector3^ up, float r, int color);
 		void			DrawTriangle(ManagedVector3^ p0, ManagedVector3^ p1, ManagedVector3^ p2, int color);
+		void			QueueObjectsToRender();
 	private:
 		//array<int>^ m_buffer;
 		Triangle*		m_triangleList;
 		ZobVector3*		m_vertices;
+		ZobVector3*		m_projectedVertices;
+		ZobVector3*		m_normals;
 		int				m_nbTriangles;
 	};
 }

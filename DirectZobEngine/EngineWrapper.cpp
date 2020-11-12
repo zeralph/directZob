@@ -8,17 +8,26 @@ namespace CLI
 	EngineWrapper::EngineWrapper():ManagedObject(DirectZob::GetInstance()->GetEngine(), false)
 	{
 		m_renderOptions.zBuffered = false;
-		m_renderOptions.bColorize = true;
+		m_renderOptions.bColorize = false;
+		m_renderOptions.bTransparency = true;
 		m_renderOptions.colorization = ZobVector3(255, 255, 0);
 		m_renderOptions.cullMode = eCullMode_None;
+		m_renderOptions.lightMode = DirectZobType::RenderOptions::eLightMode_none;
+		m_nbTriangles = 0;
 		m_triangleList = (Triangle*)malloc(sizeof(Triangle) * NB_EDITOR_TRIANGLES);
-		ZobVector3* m_vertices = (ZobVector3*)malloc(sizeof(ZobVector3) * NB_EDITOR_TRIANGLES * 3);
+		m_vertices = (ZobVector3*)malloc(sizeof(ZobVector3) * NB_EDITOR_TRIANGLES * 3);
+		m_projectedVertices = (ZobVector3*)malloc(sizeof(ZobVector3) * NB_EDITOR_TRIANGLES * 3);
+		m_normals = (ZobVector3*)malloc(sizeof(ZobVector3) * NB_EDITOR_TRIANGLES);
 		int vi = 0;
 		for (int i = 0; i < NB_EDITOR_TRIANGLES; i ++)
 		{
-			m_triangleList[i].pa = &m_vertices[vi];
-			m_triangleList[i].pb = &m_vertices[vi+1];
-			m_triangleList[i].pc = &m_vertices[vi+2];
+			m_triangleList[i].va = &m_vertices[vi];
+			m_triangleList[i].vb = &m_vertices[vi+1];
+			m_triangleList[i].vc = &m_vertices[vi+2];
+			m_triangleList[i].pa = &m_projectedVertices[vi];
+			m_triangleList[i].pb = &m_projectedVertices[vi + 1];
+			m_triangleList[i].pc = &m_projectedVertices[vi + 2];
+			m_triangleList[i].n = &m_normals[i];
 			m_triangleList[i].options = &m_renderOptions;
 			vi += 3;
 		}
@@ -27,6 +36,8 @@ namespace CLI
 	EngineWrapper::~EngineWrapper()
 	{
 		delete m_triangleList;
+		delete m_vertices;
+		delete m_projectedVertices;
 	}
 
 	int EngineWrapper::GetBufferWidth()
@@ -99,22 +110,56 @@ namespace CLI
 		}
 	}
 
+	void EngineWrapper::QueueObjectsToRender()
+	{
+		Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
+		BufferData* bData = m_Instance->GetBufferData();
+		float w = (float)bData->width / 2.0f;
+		float h = (float)bData->height / 2.0f;
+		if (c)
+		{
+			for (int i = 0; i < m_nbTriangles; i++)
+			{
+				Triangle t = m_triangleList[i];
+				t.pa->Copy(t.va);
+				t.pb->Copy(t.vb);
+				t.pc->Copy(t.vc);
+				c->ToViewSpace(t.pa);
+				c->ToViewSpace(t.pb);
+				c->ToViewSpace(t.pc);
+				c->GetProjectionMatrix()->Mul(t.pa);
+				c->GetProjectionMatrix()->Mul(t.pb);
+				c->GetProjectionMatrix()->Mul(t.pc);
+				t.pa->x = (t.pa->x / t.pa->z + 1) * w;
+				t.pa->y = (t.pa->y / t.pa->z + 1) * h;
+				t.pb->x = (t.pb->x / t.pb->z + 1) * w;
+				t.pb->y = (t.pb->y / t.pb->z + 1) * h;
+				t.pc->x = (t.pc->x / t.pc->z + 1) * w;
+				t.pc->y = (t.pc->y / t.pc->z + 1) * h;
+				t.draw = true;
+				t.material = NULL;
+				t.ComputeArea();
+				m_Instance->QueueTriangle(&t);
+			}
+		}
+		m_nbTriangles = 0;
+	}
+
 	void EngineWrapper::DrawTriangle(ManagedVector3^ p0, ManagedVector3^ p1, ManagedVector3^ p2, int color)
 	{
-		/*
-		Triangle t = m_triangleList[0];
+		Triangle t = m_triangleList[m_nbTriangles];
 		ZobVector3 pp0 = p0->ToVector3();
 		ZobVector3 pp1 = p1->ToVector3();
 		ZobVector3 pp2 = p2->ToVector3();
-		t.pa->Copy(&pp0);
-		t.pb->Copy(&pp1);
-		t.pc->Copy(&pp2);
+		t.va->Copy(&pp0);
+		t.vb->Copy(&pp1);
+		t.vc->Copy(&pp2);
 		t.na = &ZobVector3(0, 1, 0);
 		t.nb = &ZobVector3(0, 1, 0);
 		t.nc = &ZobVector3(0, 1, 0);
+		m_nbTriangles++;
 		//t.
 //		m_Instance->QueueTriangle(&t);
-*/
 	}
 
 	void EngineWrapper::DrawCircle(ManagedVector3^ p0, ManagedVector3^ up, float r, int color)

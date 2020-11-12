@@ -166,21 +166,7 @@ void ZobObjectManager::GetZobObjectListInternal(const ZobObject* z, std::string&
 
 void ZobObjectManager::UnloadAll()
 {
-	delete m_editorGizmos;
 	delete m_rootObject;
-	m_editorGizmos = NULL;
-	m_transform = NULL;
-	m_transformX = NULL;
-	m_transformY = NULL;
-	m_transformZ = NULL;
-	m_rotate = NULL;
-	m_rotateX = NULL;
-	m_rotateY = NULL;
-	m_rotateZ = NULL;
-	m_scale = NULL;
-	m_scaleX = NULL;
-	m_scaleY = NULL;
-	m_scaleZ = NULL;
 	std::string n = "root";
 	m_rootObject = new ZobObject(ZOBGUID::type_internal, ZOBGUID::subtype_zobOject, n, NULL);
 }

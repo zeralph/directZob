@@ -4,14 +4,17 @@
 #include "DirectZob.h"
 #include <string> 
 //using namespace System;
+
+
 namespace CLI
 {
-	public delegate void onFrameEndCallback();
-	public delegate void onFrameStartCallback();
+	// delegate void onFrameEndCallback();
+	public delegate void engineCallback();
 	public ref class DirectZobWrapper: public ManagedObject<DirectZob>
 	{
 	public:
-
+		static void					CallSceneUpdatedCallback();
+		static void					CallQueuingCallback();
 		DirectZobWrapper();
 		void					StartPhysic();
 		void					StopPhysic(bool reset);
@@ -25,17 +28,19 @@ namespace CLI
 		void					SaveScene(System::String^ path, System::String^ file);
 		static DirectZob*		GetDirectZobInstance() { return m_directZobInstance; }
 		int						RunAFrame();
-		int						Run(onFrameStartCallback^cbStart, onFrameEndCallback ^cbEnd);
+		int						Run(engineCallback^ cbStart, engineCallback^ cbEnd, engineCallback^ sceneUpdated, engineCallback^ queuing);
 		int						Stop();
-		void					OnFrameEnd();
 		cli::array<System::String^>^ GetEventsAndClear();
 		void					Resize(int width, int height);
 		static void test();
 	private:
 		//array<int>^ m_buffer;
+		//void					CallSceneUpdatedCallback();
+		delegate void			Del();
 		static DirectZob*		m_directZobInstance=NULL;
-		onFrameEndCallback^		m_onFrameEndcallback;
 		volatile bool			m_run;
+		static engineCallback^  m_sceneUpdatedCb;
+		static engineCallback^	m_queuingCb;
 	};
 }
 #endif //_WINDLL

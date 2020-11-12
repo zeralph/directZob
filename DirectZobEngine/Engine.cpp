@@ -39,6 +39,7 @@ Engine::Engine(int width, int height, Events* events)
 	}
 	m_nbRasterizers = 4;
 	*/
+	//m_nbRasterizers = 1;
 	m_triangleQueueSize = 50000;// MAX_TRIANGLES_PER_IMAGE / m_nbRasterizers;
 	m_renderOutput = eRenderOutput_render;
 	m_events = events;
@@ -420,7 +421,8 @@ ZobObject* Engine::GetObjectAt2DCoords(const ZobVector3* coord2D)
 		ZobVector3 inter;
 		for (int i = 0; i < rast->GetNbTriangle(); i++)
 		{
-			if (this->LineTriangleIntersection(rast->GetTriangle(i), &ray.p, &ray.n, inter))
+			const Triangle* t = rast->GetTriangle(i);
+			if (this->LineTriangleIntersection(t, &ray.p, &ray.n, inter))
 			{
 				return rast->GetTriangle(i)->zobObject;
 			}

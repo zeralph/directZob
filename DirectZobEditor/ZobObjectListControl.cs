@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using Newtonsoft.Json;
 using System.IO;
 using CLI;
+using System.CodeDom;
 
 namespace DirectZobEditor
 {
@@ -81,105 +82,85 @@ namespace DirectZobEditor
 
         private void UpdateTree()
         {
-            string s = m_zobObjectManagerWrapper.GetZobObjectList();
-            ZobObjectTree z = JsonConvert.DeserializeObject<ZobObjectTree>(s);
-            //ZobObjectTree.Nodes.Clear();
-            AddNode(z, null);
-            ZobObjectTree.ExpandAll();
-        }
-
-        private string GetFullNodeName(TreeNode n)
-        {
-            if (n != null)
+            ZobObjectWrapper test = m_zobObjectManagerWrapper.GetRootObject();
+            test = null;
+            ZobTreeNode rootNode;
+            if (ZobObjectTree.Nodes.Count > 0)
             {
-                string s = "";
-                while (n.Name != "root")
-                {
-                    s = n.Name + "/" + s;
-                    n = n.Parent;
-                }
-                if (s.Length > 0)
-                {
-                    s = s.Substring(0, s.Length - 1);
-                }
-                return s;
+                rootNode = (ZobTreeNode)ZobObjectTree.Nodes[0];
             }
-            return "";
+            else
+            {
+                rootNode = new ZobTreeNode(m_zobObjectManagerWrapper.GetRootObject(), TreeNodeRightClick);
+                ZobObjectTree.Nodes.Add(rootNode);
+            }
+            rootNode.zobOjectWrapper = m_zobObjectManagerWrapper.GetRootObject();
+            MergeNode(rootNode);
         }
 
-        private void AddNode(ZobObjectTree z, TreeNode p)
+        private void MergeNode(ZobTreeNode parent)
         {
-            if (z != null)
+            ZobObjectWrapper z = parent.zobOjectWrapper;
+            List<ZobTreeNode> l = parent.Nodes.Cast<ZobTreeNode>().ToList();
+            List<ZobObjectWrapper> lz = z.GetChildren();
+            for(int i=0; i<lz.Count(); i++)
             {
-                TreeNode n = null;
-                if (p != null)
+                ZobTreeNode n2 = new ZobTreeNode(lz[i], TreeNodeRightClick);
+                int idx = l.IndexOf(n2);
+                if (idx>=0)
                 {
-                    if (!p.Nodes.ContainsKey(z.name))
-                    {
-                        n = p.Nodes.Add(z.name, z.name);
-                        n.ContextMenuStrip = TreeNodeRightClick;
-                    }
-                    else
-                    {
-                        n = p.Nodes[z.name];
-                    }
+                    l.Remove(n2);
+                    n2 = (ZobTreeNode)parent.Nodes[i];
                 }
                 else
                 {
-                    if (!ZobObjectTree.Nodes.ContainsKey(z.name))
-                    {
-                        n = ZobObjectTree.Nodes.Add(z.name, z.name);
-                        n.ContextMenuStrip = TreeNodeRightClick;
-                    }
-                    else
-                    {
-                        n = ZobObjectTree.Nodes[z.name];
-                    }
+                    parent.Nodes.Add(n2);
+                    Console.WriteLine("add " + n2.Name + " under " + parent);
                 }
-                if(z.children != null)
-                {
-                    for (int i = 0; i < z.children.Length; i++)
-                    {
-                        AddNode(z.children[i], n);
-                    }
-                }
+                MergeNode(n2);
             }
+            for( int i=0; i<l.Count; i++)
+            {
+                parent.Nodes.Remove(l[i]);
+            }
+            //for(int i=0; i<z.)
         }
-
         private void ZobObjectTree_AfterSelect(object sender, TreeViewEventArgs e)
         {
             CLI.ZobObjectWrapper i = null;
             if (ZobObjectTree.SelectedNode != null && ZobObjectTree.SelectedNode.Name != "root")
             {
-                TreeNode n = ZobObjectTree.SelectedNode;
-                string s = GetFullNodeName(n);
-                i = m_zobObjectManagerWrapper.GetZobObject(s);
+                ZobTreeNode n = (ZobTreeNode)ZobObjectTree.SelectedNode;
+                OnZobObjectSelectionChange(n.zobOjectWrapper);
             }
             OnZobObjectSelectionChange(i);
         }
-
         private void OnZobObjectSelectionChange(CLI.ZobObjectWrapper newZobObject)
         {
+            if(newZobObject == null)
+            { 
+                return;
+            }
             OnObjectSelectedHandler handler = OnObjectSelected;
             if (null != handler)
             {
                 ObjectSelectionEventArg ev = new ObjectSelectionEventArg();
                 if(m_currentSelectedZobObject != null)
                 {
-                    m_currentSelectedZobObject.GetRenderOptions().EnableColorization(false);
+                    //m_currentSelectedZobObject.GetRenderOptions().EnableColorization(false);
+                    m_currentSelectedZobObject.GetRenderOptions().SetTransparency(false);
                 }
                 ev.previousZobObject = m_currentSelectedZobObject;
                 m_currentSelectedZobObject = newZobObject;
                 if (m_currentSelectedZobObject != null)
                 {
-                    m_currentSelectedZobObject.GetRenderOptions().SetColorization(255, 0, 255);
-                    m_currentSelectedZobObject.GetRenderOptions().EnableColorization(true);
+                    //m_currentSelectedZobObject.GetRenderOptions().SetColorization(255, 0, 255);
+                    //m_currentSelectedZobObject.GetRenderOptions().EnableColorization(true);
+                    m_currentSelectedZobObject.GetRenderOptions().SetTransparency(true);
                 }
                 ev.newZobObject = newZobObject;
                 handler(this, ev);
             }
-            CLI.ZobObjectWrapper gizmos = m_zobObjectManagerWrapper.GetEditorGizmos();
-            m_zobObjectManagerWrapper.Reparent(gizmos, newZobObject);
             UpdateTree();
         }
 
@@ -196,11 +177,11 @@ namespace DirectZobEditor
 
         private void AddToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            TreeNode n = ZobObjectTree.SelectedNode;
+            ZobTreeNode n = (ZobTreeNode)ZobObjectTree.SelectedNode;
             if (n != null)
             {
-                ZobObjectWrapper z = m_zobObjectManagerWrapper.AddZobObject(GetFullNodeName(n));
-                ZobObjectTree.Nodes.Clear();
+                ZobObjectWrapper z = m_zobObjectManagerWrapper.AddZobObject(n.zobOjectWrapper);
+                //ZobObjectTree.Nodes.Clear();
                 Form1.SceneUpdateEventArg ev = new Form1.SceneUpdateEventArg();
                 ev.type = Form1.SceneUpdateType.objectAdded;
                 ev.zobObject = z;
@@ -211,16 +192,15 @@ namespace DirectZobEditor
 
         private void RemoveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            TreeNode n = ZobObjectTree.SelectedNode;
+            ZobTreeNode n = (ZobTreeNode)ZobObjectTree.SelectedNode;
             if(n!=null)
             {
-                ZobObjectWrapper z = m_zobObjectManagerWrapper.GetZobObject(GetFullNodeName(n));
-                m_zobObjectManagerWrapper.RemoveZobObject(GetFullNodeName(n));
+                m_zobObjectManagerWrapper.RemoveZobObject(n.zobOjectWrapper);
                 m_currentSelectedZobObject = null;
-                ZobObjectTree.Nodes.Clear();
+                //ZobObjectTree.Nodes.Clear();
                 Form1.SceneUpdateEventArg ev = new Form1.SceneUpdateEventArg();
                 ev.type = Form1.SceneUpdateType.objectRemoved;
-                ev.zobObject = z;
+                ev.zobObject = n.zobOjectWrapper;
                 m_mainForm.PropagateSceneUpdateEvent(ev);
                 UpdateTree();
             }
@@ -240,18 +220,20 @@ namespace DirectZobEditor
         }
         private void OnSceneChanged(object s, EventArgs e)
         {
+            ZobObjectWrapper root = m_zobObjectManagerWrapper.GetRootObject();
+            ZobTreeNode rootNode = new ZobTreeNode(root, null);
+            ZobObjectTree.Nodes.Add(rootNode);
             m_currentSelectedZobObject = null;
             ZobObjectTree.Nodes.Clear();
             string p = Application.StartupPath;
             CLI.CameraManagerWrapper cm = m_mainForm.GetCameraControl().GetWrapper();
             //create an editor camera
             cm.CreateEditorCamera();
-            UpdateTree();
         }
 
         private void BtnForceRefresh_Click(object sender, EventArgs e)
         {
-            ZobObjectTree.Nodes.Clear();
+            //ZobObjectTree.Nodes.Clear();
             UpdateTree();
         }
 
@@ -288,20 +270,13 @@ namespace DirectZobEditor
 
         private void ZoomToStripMenuItem_Click(object sender, EventArgs e)
         {
-            TreeNode n = ZobObjectTree.SelectedNode;
+            ZobTreeNode n = (ZobTreeNode)ZobObjectTree.SelectedNode;
             if (n != null)
             {
-                CLI.ZobObjectWrapper z = m_zobObjectManagerWrapper.GetZobObject(GetFullNodeName(n));
+                CLI.ZobObjectWrapper z = n.zobOjectWrapper;
                 if(z != null)
                 {
-                    //CLI.ManagedVector3 position = z.GetTransform();
                     CLI.ManagedVector3 target = z.GetTransform();
-                    //position.x = position.x - 5;
-                    //position.y = position.y + 5;
-                    //position.z = position.z - 5;
-                    //CLI.ManagedVector3 up = new CLI.ManagedVector3();
-                    //up.y = 1.0f;
-
                     //TODO : camer wrapper et setlookat
                     m_mainForm.GetCameraControl().GetWrapper().SetLookAt(target);
                 }
@@ -326,5 +301,48 @@ namespace DirectZobEditor
         public ManagedVector3 t;
         public ManagedVector3 r;
         public ManagedVector3 s;
+    }
+    public class ZobTreeNode : TreeNode
+    {
+        private ZobObjectWrapper _zobOjectWrapper;
+        public ZobObjectWrapper zobOjectWrapper
+        {
+            get { return _zobOjectWrapper; }
+            set { _zobOjectWrapper = value; }
+        }
+        public ZobTreeNode(ZobObjectWrapper zobObject, ContextMenuStrip menu):base()
+        {
+            this.Name = zobObject.GetName();
+            this.Text = this.Name;
+            this._zobOjectWrapper = zobObject;
+            this.ContextMenuStrip = menu;
+        }
+
+        public static bool operator ==(ZobTreeNode z1, ZobTreeNode z2) 
+        {
+            if ((Object)z2 == null)
+            {
+                return false;
+            }
+            return z1.Name == z2.Name; 
+        }
+        public static bool operator !=(ZobTreeNode z1, ZobTreeNode z2) 
+        { 
+            if((Object)z2 == null)
+            {
+                return true;
+            }
+            return z1.Name != z2.Name; ; 
+        }
+
+        public override bool Equals(Object o)
+        {
+            if(o == null)
+            { 
+                return false;
+            }
+            ZobTreeNode n = (ZobTreeNode)o;
+            return (ZobTreeNode)this == (ZobTreeNode)o;
+        }
     }
 }

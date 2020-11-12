@@ -415,6 +415,11 @@ void ZobObject::SetQuaternion(float x, float y, float z, float w)
 	m_physicComponent->SetQuaternion(x, y, z, w);
 }
 
+void ZobObject::LookAt(const ZobVector3* target)
+{
+	m_physicComponent->LookAt(target);
+}
+
 void ZobObject::LookAt(const ZobVector3* forward, const ZobVector3* left, const ZobVector3* up)
 {
 	m_physicComponent->LookAt(forward, left, up);

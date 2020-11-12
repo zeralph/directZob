@@ -350,7 +350,8 @@ namespace DirectZobEditor
                     string name = file;
                     name.Replace(' ', '_');
                     //m_meshManagerWrapper.LoadMesh(name, path, file);
-                    CLI.ZobObjectWrapper z = m_zobObjectList.GetWrapper().AddZobObject("");
+                    CLI.ZobObjectWrapper root = m_zobObjectList.GetWrapper().GetRootObject();
+                    CLI.ZobObjectWrapper z = m_zobObjectList.GetWrapper().AddZobObject(root);
                     //z.SetMesh(name);
                     z.LoadMesh(file, path);
                     OnSceneUpdateHandler handler = OnSceneUpdated;
@@ -443,7 +444,8 @@ namespace DirectZobEditor
 
         private void createSpriteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            CLI.ZobObjectWrapper z = m_zobObjectList.GetWrapper().AddZobSprite("");
+            CLI.ZobObjectWrapper root = m_zobObjectList.GetWrapper().GetRootObject();
+            CLI.ZobObjectWrapper z = m_zobObjectList.GetWrapper().AddZobSprite(root);
             Form1.SceneUpdateEventArg ev = new Form1.SceneUpdateEventArg();
             ev.type = Form1.SceneUpdateType.createSprite;
             ev.zobObject = z;
@@ -452,7 +454,8 @@ namespace DirectZobEditor
 
         private void createZobObjectToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            CLI.ZobObjectWrapper z = m_zobObjectList.GetWrapper().AddZobObject("");
+            CLI.ZobObjectWrapper root = m_zobObjectList.GetWrapper().GetRootObject();
+            CLI.ZobObjectWrapper z = m_zobObjectList.GetWrapper().AddZobObject(root);
             Form1.SceneUpdateEventArg ev = new Form1.SceneUpdateEventArg();
             ev.type = Form1.SceneUpdateType.objectAdded;
             ev.zobObject = z;

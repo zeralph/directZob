@@ -22,9 +22,12 @@ using namespace std;
 class ZobPhysicsEngine;
 class DirectZob
 {
+	
 	static DirectZob* singleton;
 public :
-	
+
+	typedef void (*engineCallback)(void);
+
 	DirectZob();
 	~DirectZob();
 
@@ -44,7 +47,7 @@ public :
 	const float			GetGeometryTime() const { return m_geometryTime; };
 	const float			GetFrameTime() const { return m_frameTime; };
 	const float			GetCopyTime() const { return m_copyTime; };
-	int					RunAFrame();
+	int					RunAFrame(engineCallback = NULL, DirectZob::engineCallback OnQueuing = NULL);
 	int					Run( void func(void) );
 	const uint*			GetBufferData() const { return m_engine->GetBufferData()->buffer; }
 	std::string			ExePath();

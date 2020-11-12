@@ -2,7 +2,7 @@
 #pragma once
 #include <string> 
 #include <iostream>
-
+#include "DirectZob.h"
 namespace CLI {
 
 	template<class T>
@@ -19,19 +19,21 @@ namespace CLI {
 		}
 		virtual ~ManagedObject()
 		{
-			if (m_manageDelete && m_Instance != nullptr)
-			{
-				delete m_Instance;
-			}
+			//if (m_manageDelete && m_Instance != nullptr)
+			//{
+			//	delete m_Instance;
+			//}
+			m_Instance = nullptr;
 		}
 		!ManagedObject()
 		{
-			if (m_manageDelete && m_Instance != nullptr)
-			{
-				delete m_Instance;
-			}
+			//if (m_manageDelete && m_Instance != nullptr)
+			//{
+			//	delete m_Instance;
+			//}
+			m_Instance = nullptr;
 		}
-		T* GetInstance()
+		virtual T* GetInstance()
 		{
 			return m_Instance;
 		}

@@ -157,62 +157,34 @@ void ZobPhysicComponent::SetQuaternion(float x, float y, float z, float w)
 	m_orientation = ZobMatrix4x4::QuaternionToEuler(x, y, z, w);
 	m_orientation = ZobVector3(RAD_TO_DEG(m_orientation.x), RAD_TO_DEG(m_orientation.y), RAD_TO_DEG(m_orientation.z));
 }
+void ZobPhysicComponent::LookAt(const ZobVector3* target)
+{
+	Transform t = Transform(m_rigidBody->getTransform());
+	ZobVector3 v = ZobVector3(t.getPosition().x, t.getPosition().y, t.getPosition().z);
+	v.x = target->x - v.x;
+	v.y = target->y - v.y;
+	v.z = target->z - v.z;
+	v.Normalize();
+	if (v.y > 0.99f)
+	{
+		int g = 0;
+		g++;
+	}
+	//TODO if v.y > 0.99 ...
+	ZobVector3 forward = v;
+	ZobVector3 left = ZobVector3::Cross(&forward, &ZobVector3(0, 1, 0));
+	left.Normalize();
+	left.Mul(-1.0f);
+	ZobVector3 up = ZobVector3::Cross(&forward, &left);
+	up.Normalize();
+	LookAt(&forward, &left, &up);
+}
 
 void ZobPhysicComponent::LookAt(const ZobVector3* forward, const ZobVector3* left, const ZobVector3* up)
 {
 	Transform t = Transform(m_rigidBody->getTransform());
 	Quaternion q;
 	Quaternion q2 = t.getOrientation();
-	/*
-	Matrix3x3 m = Matrix3x3(left->x, up->x, forward->x,
-							left->y, up->y, forward->y,
-							left->z, up->z, forward->z
-							);
-	//m = Matrix3x3(left->x, left->y, left->z,
-	//	up->x, up->y, up->z,
-	//	forward->x, forward->y, forward->z
-	//);
-	q = Quaternion(m);
-	q.normalize();
-	t.setOrientation(q);
-	m_rigidBody->setTransform(t);
-	return;
-	*/
-	/*
-	float tr = left->x + up->y + forward->z;
-	if (tr > 0) 
-	{
-		float s = sqrtf(tr + 1.0f) * 2;
-		q.w = 0.25 * s;
-		q.x = (up->z - forward->y) * s;
-		q.y = (forward->x - left->z) * s;
-		q.z = (left->y - up->x) * s;
-	}
-	else if ((left->x > up->y) & (left->x > forward->z)) 
-	{
-		float S = sqrtf(1.0f + left->x - up->y - forward->z) * 2.0f; // S=4*qx 
-		q.w = (up->z - forward->y) / S;
-		q.x = 0.25 * S;
-		q.y = (up->x + left->y) / S;
-		q.z = (forward->x + left->z) / S;
-	}
-	else if (up->y > forward->z) 
-	{
-		float S = sqrt(1.0 + up->y - left->x - forward->z) * 2.0f; // S=4*qy
-		q.w = (forward->x - left->z) / S;
-		q.x = (up->x + left->y) / S;
-		q.y = 0.25 * S;
-		q.z = (forward->y+ up->z) / S;
-	}
-	else 
-	{
-		float S = sqrt(1.0 + forward->z - left->x - up->y) * 2.0f; // S=4*qz
-		q.w = (left->y - up->x) / S;
-		q.x = (forward->x + left->z) / S;
-		q.y = (forward->y + up->z) / S;
-		q.z = 0.25f * S;
-	}
-*/
 
 	q.w = sqrt(fmaxf(0, 1 + left->x + up->y + forward->z)) / 2.0f;
 	q.x = sqrt(fmaxf(0, 1 + left->x - up->y - forward->z)) / 2.0f;

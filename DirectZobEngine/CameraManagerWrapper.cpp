@@ -174,14 +174,14 @@ namespace CLI
 
 	void CameraManagerWrapper::SetLookAt( ManagedVector3^ target)
 	{
-		DirectZob::GetInstance()->Lock();
+		//DirectZob::GetInstance()->Lock();
 		Camera* c = m_Instance->GetCurrentCamera();
 		if (c)
 		{
 			ZobVector3 t = target->ToVector3();
 			c->SetTarget(&t);
 		}
-		DirectZob::GetInstance()->Unlock();
+		//DirectZob::GetInstance()->Unlock();
 	}
 }
 #endif //_WINDLL

@@ -154,7 +154,7 @@ int DirectZob::RunInternal(void func(void))
 	}
 }
 
-int DirectZob::RunAFrame()
+int DirectZob::RunAFrame(DirectZob::engineCallback OnSceneUpdated /*=NULL*/, DirectZob::engineCallback OnQueuing /*=NULL*/)
 {
 	g_render_mutex.lock();
 	int state=0;
@@ -172,6 +172,10 @@ int DirectZob::RunAFrame()
 			bool bPhysicUpdated = false;
 //			cam->UpdateViewProjectionMatrix();
 			m_engine->StartDrawingScene();
+			if (OnSceneUpdated)
+			{
+				OnSceneUpdated();
+			}
 //			cam->UpdateViewProjectionMatrix();
 			if (m_physicStarted)
 			{
@@ -188,6 +192,10 @@ int DirectZob::RunAFrame()
 			}
 			m_engine->ClearRenderQueues();
 			m_copyTick = clock();
+			if (OnQueuing)
+			{
+				OnQueuing();
+			}
 			m_zobObjectManager->QueueForDrawing(cam, m_engine);
 			m_copyTime = (float)(clock() - m_copyTick) / CLOCKS_PER_SEC * 1000;
 			if (m_engine->ShowGrid())

@@ -29,6 +29,7 @@ public:
 	void							SetPosition(float x, float y, float z);
 	void							SetQuaternion(float x, float y, float z, float w);
 	void							SetQuaternion(const ZobVector3* left, const ZobVector3* up, const ZobVector3* fw);
+	void							LookAt(const ZobVector3* target);
 	void							LookAt(const ZobVector3* forward, const ZobVector3* left, const ZobVector3* up);
 	const ZobVector3*				GetRotation() const;
 	const ZobVector3*				GetPosition() const;
