@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<ZobObject name="camaro" type="mesh">
+	<Position x="20" y="20" z="20" />
+	<Rotation x="90" y="0" z="0" />
+	<Scale x="1" y="1" z="1" />
+	<Mesh name="camaro" file="D:\Git\directZob\resources\camaro.obj" />
+	<Physic type="0">
+		<RigidBody type="0" active="0" />
+		<Collider type="0" radius="4465046924396126297517084114944.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
+	</Physic>
+</ZobObject>

@@ -36,6 +36,7 @@ public :
 	inline bool			IsPhysicPlaying() const { return m_physicStarted; }
 	void				Init(int width, int height, bool bEditorMode);
 	void				LoadScene(std::string& path, std::string& file);
+	void				LoadZobObject(std::string& path, std::string& file);
 	void				Unload();
 	void				SaveScene(std::string& path, std::string& file);
 	void				SaveScene();

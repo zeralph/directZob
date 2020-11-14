@@ -260,5 +260,13 @@ namespace DirectZobEditor
         {
             UpdateValues();
         }
+
+        private void zobName_Leave(object sender, EventArgs e)
+        {
+            if (zobName.Text.Length > 0)
+            {
+                m_currentZobObjectWrapper.SetName(zobName.Text);
+            }
+        }
     }
 }

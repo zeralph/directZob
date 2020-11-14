@@ -14,8 +14,8 @@ class ZobObject:public ZOBGUID
 {
 public:
 
-	ZobObject(ZOBGUID::Type t, ZOBGUID::SubType s, const std::string& name, ZobObject* parent = NULL);
-	ZobObject(ZOBGUID::Type t, ZOBGUID::SubType s, TiXmlElement* node, ZobObject* parent);
+	ZobObject(ZOBGUID::Type t, ZOBGUID::SubType s, const std::string& name, ZobObject* parent = NULL, const std::string* factoryFile =NULL);
+	ZobObject(ZOBGUID::Type t, ZOBGUID::SubType s, TiXmlElement* node, ZobObject* parent, const std::string* factoryFile = NULL);
 	virtual ~ZobObject();
 
 	//virtuals
@@ -69,6 +69,7 @@ public:
 	int								GetChildPosition(const ZobObject* z);
 	RenderOptions*					GetRenderOptions() { return &m_renderOptions; };
 	virtual const std::string		GetMeshName() const ;
+	virtual const std::string		GetMeshFile() const;
 	void							SetMesh(std::string name);
 	void							LoadMesh(std::string name, std::string path="");
 	void							SetLightingMode(RenderOptions::eLightMode l);
@@ -78,7 +79,11 @@ public:
 	bool							HasChild(const ZobObject* o);
 	void							CreateSprite();
 	void							SetPhysicComponent(int i);
-	
+	bool							IsFromFactoryFile() {return m_factoryFile.length()>0;}
+	std::string&					FactoryFile() { return m_factoryFile; }
+	void							SaveToFactoryFile(std::string& file);
+private:
+	void							SaveRecusrive(TiXmlNode* node, ZobObject* z);
 protected:
 
 	ZobObject* m_parent;
@@ -94,4 +99,5 @@ protected:
 	ZobVector3 m_left;
 	ZobVector3 m_forward;
 	ZobVector3 m_up;
+	std::string m_factoryFile;
 };

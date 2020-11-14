@@ -120,6 +120,7 @@
             this.zobName.Name = "zobName";
             this.zobName.Size = new System.Drawing.Size(162, 20);
             this.zobName.TabIndex = 30;
+            this.zobName.Leave += new System.EventHandler(this.zobName_Leave);
             // 
             // label2
             // 

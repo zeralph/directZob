@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using Newtonsoft.Json;
 
@@ -48,7 +44,7 @@ namespace DirectZobEditor
         public event EventHandler OnSceneLoaded;
         public event EventHandler OnSceneSaved;
 
-
+        public bool m_isClosing = false;
 
         public delegate void OnSceneUpdateHandler(object s, SceneUpdateEventArg e);
         public event OnSceneUpdateHandler OnSceneUpdated;
@@ -128,6 +124,7 @@ namespace DirectZobEditor
             }
         }
 
+        public bool ShuttingDown { get { return m_isClosing; } }
         public string Getpath()
         {
             return m_path;
@@ -258,7 +255,7 @@ namespace DirectZobEditor
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
                 //openFileDialog.InitialDirectory = m_path;
-                openFileDialog.Filter = "xml files (*.xml)|*.xml";
+                openFileDialog.Filter = "xml files (*.xml)|*.xml|zob scene (*.dzs)|*.dzs";
                 openFileDialog.FilterIndex = 2;
                 openFileDialog.RestoreDirectory = true;
 
@@ -353,7 +350,7 @@ namespace DirectZobEditor
                     CLI.ZobObjectWrapper root = m_zobObjectList.GetWrapper().GetRootObject();
                     CLI.ZobObjectWrapper z = m_zobObjectList.GetWrapper().AddZobObject(root);
                     //z.SetMesh(name);
-                    z.LoadMesh(file, path);
+                    z.LoadMesh(file, path+file);
                     OnSceneUpdateHandler handler = OnSceneUpdated;
                     if (null != handler)
                     {
@@ -560,6 +557,11 @@ namespace DirectZobEditor
             m_engineWindow.SetModificator(EngineWindow.objectModificator.scale);
             btnTranslate.Checked = false;
             btnRotate.Checked = false;
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            m_isClosing = true;
         }
     }
 

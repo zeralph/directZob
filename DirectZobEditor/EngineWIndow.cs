@@ -311,6 +311,17 @@ namespace DirectZobEditor
 
         private void onFrameEndCallbackMethod()
         {
+            /*
+            if (!m_mainForm.ShuttingDown && !EngineRender.IsDisposed && !this.IsDisposed)
+            {
+                EngineRender.Invoke(AfterUpdateEngineWindowDelegate);
+            }
+            else
+            {
+                int h = 0;
+                h++;
+            }
+            */
             try
             {
                 EngineRender.Invoke(AfterUpdateEngineWindowDelegate);
@@ -322,7 +333,7 @@ namespace DirectZobEditor
         }
         private void AfterUpdateEngineWindowMethod()
         {
-            lock (EngineRender)
+            //lock (EngineRender)
             {
                 IntPtr p = m_engineWrapper.GetBufferData();
                 Rectangle rect = new Rectangle(0, 0, m_engineBitmap.Width, m_engineBitmap.Height);
@@ -332,9 +343,9 @@ namespace DirectZobEditor
                 bmpData.Scan0 = p;
                 m_engineBitmap.UnlockBits(bmpData);
                 UpdateGraphicsParameters();
-                m_mainForm.UpdateAfterEngine();
                 UpdateModificationGizmos();
             }
+            m_mainForm.UpdateAfterEngine();
             m_engineRendering = false;
             if(m_newObjectPicked != null)
             {
@@ -396,26 +407,8 @@ namespace DirectZobEditor
                 int dy = m_lastMouseY - Cursor.Position.Y;
                 if (e.Button == MouseButtons.Left && m_mainForm.IsCtrlPressed())
                 {
-                    ManagedVector3 p = m_mainForm.GetCameraControl().GetWrapper().GetCurrentCameraPosition().Copy();
-                    float y = p.y;
-                    ManagedVector3 t = m_mainForm.GetCameraControl().GetWrapper().GetCurrentCameraTarget().Copy();
-                    p.x = t.x - p.x;
-                    p.y = t.y - p.y;
-                    p.z = t.z - p.z;
-                    float d = p.sqrtLength();
-                    float z = Math.Abs(p.z) / p.z;
-                    p.z = 0;
-                    p.Normalize();
-                    float a = p.Dot(new ManagedVector3(1, 0, 0));
-                    a = (float)Math.Acos((double)a) * z;
-                    a += dx/200.0f;
-                    p.x = 1.0f * (float)Math.Cos(a) * d;
-                    p.z = z * (float)Math.Sin(a) * d;
-                    p.y = y;
-                    //m_mainForm.GetCameraControl().GetWrapper().SetCurrentCameraPosition(p);
-                    m_mainForm.GetCameraControl().GetWrapper().RotateAroundAxis((float)dx / 5.0f, (float)dy / 5.0f);
+                    m_mainForm.GetCameraControl().GetWrapper().RotateAroundAxis((float)dx / 2.0f, (float)-dy / 2.0f);
                     m_mainForm.GetCameraControl().GetWrapper().SetLookAt(new ManagedVector3(0, 0, 0));
-                    //m_mainForm.GetCameraControl().GetWrapper().RotateAroundAxis((float)dx/5.0f, (float)dy/5.0f);
                 }
                 else if (e.Button == MouseButtons.Middle)
                 {

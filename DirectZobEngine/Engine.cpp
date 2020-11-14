@@ -376,14 +376,14 @@ bool Engine::LineTriangleIntersection(const Triangle* t, const ZobVector3* l0, c
 		b = ZobVector3::Dot(&n, &dir);
 		if (fabs(b) < 0.00000001) {     // ray is  parallel to triangle plane
 			if (a == 0)                 // ray lies in triangle plane
-				return 2;
-			else return 0;              // ray disjoint from plane
+				return true;
+			else return false;              // ray disjoint from plane
 		}
 
 		// get intersect point of ray with triangle plane
 		r = a / b;
 		if (r < 0.0)                    // ray goes away from triangle
-			return 0;                   // => no intersect
+			return false;                   // => no intersect
 		// for a segment, also test if (r > 1.0) => no intersect
 
 		intersectionPt = l0 + dir * r;            // intersect point of ray and plane
@@ -427,8 +427,8 @@ ZobObject* Engine::GetObjectAt2DCoords(const ZobVector3* coord2D)
 				return rast->GetTriangle(i)->zobObject;
 			}
 		}
-		return NULL;
 	}
+	return NULL;
 }
 
 void Engine::ClipSegmentToPlane(ZobVector3 &s0, ZobVector3 &s1, ZobVector3 &pp, ZobVector3 &pn)

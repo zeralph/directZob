@@ -21,11 +21,13 @@ public:
 	static void NewScene();
 	static void UnloadScene();
 	static const std::string& GetResourcePath() { return m_path; };
+	static void LoadZobObject(std::string& path, std::string& file);
+	static void LoadZobObject(std::string& fullPath, ZobObject* parent = NULL);
 
 private:
 
 	static void LoadMesh(TiXmlElement* node);
-	static void LoadZobObject(TiXmlElement* node, ZobObject* parent);
+	static void LoadZobObject(TiXmlElement* node, ZobObject* parent, const std::string* factoryPath);
 	static void SaveZobObjectRecusrive(TiXmlNode* node, ZobObject* z);
 	static std::string m_path;
 	static std::string m_file;

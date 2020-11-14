@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Newtonsoft.Json;
+using System.Drawing;
 using System.IO;
+using System.Linq;
+using System.Numerics;
+using System.Security.Cryptography;
+using System.Text;
+using System.Windows.Forms;
 using CLI;
-using System.CodeDom;
 
 namespace DirectZobEditor
 {
@@ -27,7 +26,6 @@ namespace DirectZobEditor
             InitializeComponent();
             m_zobObjectManagerWrapper = new CLI.ZobObjectManagerWrapper();
             m_mainForm = f;
-            UpdateTree();
             m_mainForm.OnNewScene += new EventHandler(OnSceneChanged);
             m_mainForm.OnSceneLoaded += new EventHandler(OnSceneChanged);
             m_mainForm.OnSceneUpdated += new Form1.OnSceneUpdateHandler(OnSceneUpdated);
@@ -103,21 +101,24 @@ namespace DirectZobEditor
             ZobObjectWrapper z = parent.zobOjectWrapper;
             List<ZobTreeNode> l = parent.Nodes.Cast<ZobTreeNode>().ToList();
             List<ZobObjectWrapper> lz = z.GetChildren();
-            for(int i=0; i<lz.Count(); i++)
+            if (lz != null)
             {
-                ZobTreeNode n2 = new ZobTreeNode(lz[i], TreeNodeRightClick);
-                int idx = l.IndexOf(n2);
-                if (idx>=0)
+                for (int i = 0; i < lz.Count(); i++)
                 {
-                    l.Remove(n2);
-                    n2 = (ZobTreeNode)parent.Nodes[i];
+                    ZobTreeNode n2 = new ZobTreeNode(lz[i], TreeNodeRightClick);
+                    int idx = l.IndexOf(n2);
+                    if (idx >= 0)
+                    {
+                        l.Remove(n2);
+                        n2 = (ZobTreeNode)parent.Nodes[i];
+                    }
+                    else
+                    {
+                        parent.Nodes.Add(n2);
+                        Console.WriteLine("add " + n2.Name + " under " + parent);
+                    }
+                    MergeNode(n2);
                 }
-                else
-                {
-                    parent.Nodes.Add(n2);
-                    Console.WriteLine("add " + n2.Name + " under " + parent);
-                }
-                MergeNode(n2);
             }
             for( int i=0; i<l.Count; i++)
             {
@@ -229,6 +230,7 @@ namespace DirectZobEditor
             CLI.CameraManagerWrapper cm = m_mainForm.GetCameraControl().GetWrapper();
             //create an editor camera
             cm.CreateEditorCamera();
+            UpdateTree();
         }
 
         private void BtnForceRefresh_Click(object sender, EventArgs e)
@@ -282,6 +284,139 @@ namespace DirectZobEditor
                 }
             }
         }
+
+        private void ZobObjectTree_ItemDrag(object sender, ItemDragEventArgs e)
+        {
+            DoDragDrop((TreeNode)e.Item, DragDropEffects.Move);
+        }
+
+        private void ZobObjectTree_DragDrop(object sender, DragEventArgs e)
+        {
+            // Retrieve the client coordinates of the drop location.
+            Point targetPoint = ZobObjectTree.PointToClient(new Point(e.X, e.Y));
+
+            // Retrieve the node at the drop location.
+            ZobTreeNode targetNode = (ZobTreeNode)ZobObjectTree.GetNodeAt(targetPoint);
+
+            // Retrieve the node that was dragged.
+            ZobTreeNode draggedNode = (ZobTreeNode)e.Data.GetData(typeof(ZobTreeNode));
+
+            ZobObjectWrapper toMoveObj = draggedNode.zobOjectWrapper;
+            ZobObjectWrapper targetObj = targetNode.zobOjectWrapper;
+
+            m_zobObjectManagerWrapper.Reparent(toMoveObj, targetObj);
+            /*
+            // Confirm that the node at the drop location is not 
+            // the dragged node or a descendant of the dragged node.
+            if (!draggedNode.Equals(targetNode) && !ContainsNode(draggedNode, targetNode))
+            {
+                if (e.Effect == DragDropEffects.Move)
+                {
+                    draggedNode.Remove();
+                    targetNode.Nodes.Add(draggedNode);
+                }
+                targetNode.Expand();
+            }
+            */
+            UpdateTree();
+            UpdateTree();
+            //ZobTreeNode nz = FindZobTreeNode(targetObj, (ZobTreeNode)ZobObjectTree.Nodes[0]);
+            //ExpandTo(nz);
+            targetNode.Expand();
+        }
+/*
+        private ZobTreeNode FindZobTreeNode(ZobObjectWrapper z, ZobTreeNode startNode)
+        {
+            if (startNode.zobOjectWrapper.GetName() == z.GetName())
+            {
+                return startNode;
+            }
+            else
+            {
+                for (int i = 0; i < startNode.Nodes.Count; i++)
+                {
+                    return FindZobTreeNode(z, (ZobTreeNode)startNode.Nodes[i]);
+                }
+            }
+            return (ZobTreeNode)null;
+        }
+
+        private void ExpandTo(ZobTreeNode n)
+        {
+            if (n != null && n.Parent != null)
+            {
+                Console.WriteLine("expand " + n.Parent);
+                n.Parent.Expand();
+                ExpandTo((ZobTreeNode)n.Parent);
+            }
+        }
+*/
+        private bool ContainsNode(TreeNode node1, TreeNode node2)
+        {
+            if (node2.Parent == null) return false;
+            if (node2.Parent.Equals(node1)) return true;
+            return ContainsNode(node1, node2.Parent);
+        }
+        private void ZobObjectTree_DragLeave(object sender, EventArgs e)
+        {
+            //ZobTreeNode s = (ZobTreeNode)sender;
+            UpdateTree();
+        }
+
+        private void ZobObjectTree_DragEnter(object sender, DragEventArgs e)
+        {
+            e.Effect = e.AllowedEffect;
+            //ZobTreeNode s = (ZobTreeNode)sender;
+        }
+
+        private void ZobObjectTree_DragOver(object sender, DragEventArgs e)
+        {
+            // Retrieve the client coordinates of the mouse position.
+            Point targetPoint = ZobObjectTree.PointToClient(new Point(e.X, e.Y));
+
+            // Select the node at the mouse position.
+            ZobObjectTree.SelectedNode = ZobObjectTree.GetNodeAt(targetPoint);
+        }
+
+        private void btnAddZobObject_Click(object sender, EventArgs e)
+        {
+            LoadZobObject();
+        }
+
+        public void LoadZobObject()
+        {
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                //openFileDialog.InitialDirectory = m_path;
+                openFileDialog.Filter = "xml files (*.xml)|*.xml|zob object (*.dzo)|*.dzo";
+                openFileDialog.FilterIndex = 2;
+                openFileDialog.RestoreDirectory = true;
+
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    string path = Path.GetDirectoryName(openFileDialog.FileName) + "\\";
+                    string file = openFileDialog.SafeFileName;
+                    m_mainForm.GetDirectZobWrapper().LoadZobObject(path, file);
+                }
+            }
+        }
+
+        private void saveAsFactoryToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (SaveFileDialog saveFileDialog = new SaveFileDialog())
+            {
+                //openFileDialog.InitialDirectory = m_path;
+                saveFileDialog.Filter = "xml files (*.xml)|*.xml|zob object (*.dzo)|*.dzo";
+                saveFileDialog.FilterIndex = 2;
+                saveFileDialog.RestoreDirectory = true;
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    string path = Path.GetDirectoryName(saveFileDialog.FileName) + "\\";
+                    string file = saveFileDialog.FileName;
+                    m_currentSelectedZobObject.SaveToFactoryFile(file);
+                }
+            }
+        }
     }
 
     public class ZobObjectTree
@@ -316,6 +451,10 @@ namespace DirectZobEditor
             this.Text = this.Name;
             this._zobOjectWrapper = zobObject;
             this.ContextMenuStrip = menu;
+            if (zobObject != null && zobObject.IsFromFactoryFile())
+            {
+                this.ForeColor = Color.Blue;
+            }
         }
 
         public static bool operator ==(ZobTreeNode z1, ZobTreeNode z2) 
@@ -333,6 +472,17 @@ namespace DirectZobEditor
                 return true;
             }
             return z1.Name != z2.Name; ; 
+        }
+        public override int GetHashCode()
+        {
+            using (System.Security.Cryptography.MD5 md5 = MD5.Create())
+            {
+                return (int)new BigInteger(md5.ComputeHash(Encoding.Default.GetBytes(this.Name)));
+            }
+        }
+        public override string ToString()
+        {
+            return "ZobTreeNode_"+this.Name;
         }
 
         public override bool Equals(Object o)

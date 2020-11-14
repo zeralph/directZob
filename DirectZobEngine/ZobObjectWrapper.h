@@ -40,6 +40,9 @@ namespace CLI {
 		bool IsCamera();
 		bool HasMesh();
 		void SetPhysicComponent(int i);
+		bool IsFromFactoryFile();
+		System::String^ FactoryFile();
+		void SaveToFactoryFile(System::String^ file);
 	protected:
 		bool m_isValid;
 	};

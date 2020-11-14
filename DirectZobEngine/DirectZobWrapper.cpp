@@ -37,6 +37,15 @@ namespace CLI
 		m_Instance->LoadScene(stdPath, stdFile);
 	}
 
+	void DirectZobWrapper::LoadZobObject(System::String^ path, System::String^ file)
+	{
+		std::string stdPath;
+		MarshalString(path, stdPath);
+		std::string stdFile;
+		MarshalString(file, stdFile);
+		m_Instance->LoadZobObject(stdPath, stdFile);
+	}
+
 	void DirectZobWrapper::NewScene()
 	{
 		m_Instance->NewScene();

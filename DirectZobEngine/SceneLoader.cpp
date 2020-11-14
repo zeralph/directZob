@@ -12,7 +12,34 @@ void SceneLoader::LoadMesh(TiXmlElement* node)
 	DirectZob::GetInstance()->GetMeshManager()->LoadMesh(name, m_path, file);
 }
 
-void SceneLoader::LoadZobObject(TiXmlElement* node, ZobObject* parent)
+void SceneLoader::LoadZobObject(std::string& path, std::string& file)
+{
+	std::string fullPath;
+	TiXmlDocument doc("ZobObject");
+	fullPath = path + file;
+	LoadZobObject(fullPath);
+}
+
+void SceneLoader::LoadZobObject(std::string& fullPath, ZobObject* parent /* = NULL*/)
+{
+	TiXmlDocument doc("ZobObject");
+	doc.ClearError();
+	doc.LoadFile(fullPath.c_str());
+	if (doc.Error())
+	{
+		DirectZob::LogError("Error loading %s : %s", fullPath.c_str(), doc.ErrorDesc());
+		m_path = "";
+		m_file = "";
+	}
+	else
+	{
+		ZobObjectManager* zobObjectManager = DirectZob::GetInstance()->GetZobObjectManager();
+		TiXmlElement* n = doc.FirstChildElement("ZobObject");
+		LoadZobObject(n, parent, &fullPath);
+	}
+}
+
+void SceneLoader::LoadZobObject(TiXmlElement* node, ZobObject* parent, const std::string* factoryPath)
 {	
 	std::string type;
 	ZobObject* zob = NULL;
@@ -24,12 +51,16 @@ void SceneLoader::LoadZobObject(TiXmlElement* node, ZobObject* parent)
 	type = node->Attribute("type")? node->Attribute("type"):"mesh";
 	if (type == "mesh")
 	{
-		TiXmlElement* f = node->FirstChildElement("Mesh");
-		std::string meshName = f ? f->GetText() : "";
-		zob = new ZobObject(ZOBGUID::Type::type_scene, ZOBGUID::SubType::subtype_zobOject, node, parent);
-		if (meshName.length() > 0)
+		zob = new ZobObject(ZOBGUID::Type::type_scene, ZOBGUID::SubType::subtype_zobOject, node, parent, factoryPath);
+		TiXmlElement* meshNode = node->FirstChildElement("Mesh");
+		if(meshNode)
 		{
-			zob->LoadMesh(meshName);
+			std::string name = meshNode->Attribute("name");
+			std::string file = meshNode->Attribute("file");
+			if (name.length() > 0 && file.length() > 0)
+			{
+				zob->LoadMesh(name, file);
+			}
 		}
 	}
 	else if (type == "camera")
@@ -56,7 +87,15 @@ void SceneLoader::LoadZobObject(TiXmlElement* node, ZobObject* parent)
 	}
 	for (TiXmlElement* e = node->FirstChildElement("ZobObject"); e != NULL; e = e->NextSiblingElement("ZobObject"))
 	{
-		LoadZobObject(e, zob);
+		const char* file = e->Attribute("file");
+		if (file)
+		{
+			LoadZobObject(std::string(file), zob);
+		}
+		else
+		{
+			LoadZobObject(e, zob, factoryPath);
+		}
 	}
 }
 
@@ -116,28 +155,34 @@ void SceneLoader::LoadScene(std::string& path, std::string& file)
 	else
 	{
 		DirectZob::LogInfo("loading objects");
-		TiXmlElement* root = doc.FirstChildElement("root");
-		/*TiXmlElement* textures = root->FirstChildElement("Textures");
-		for (TiXmlElement* e = textures->FirstChildElement("Texture"); e != NULL; e = e->NextSiblingElement("Texture"))
+		TiXmlElement* scene = doc.FirstChildElement("Scene");
+		if (scene)
 		{
-			LoadTexture(e, MaterialManager);
-		}*/
-		TiXmlElement* meshes = root->FirstChildElement("Meshes");
-		if (meshes)
-		{
-			for (TiXmlElement* e = meshes->FirstChildElement("Mesh"); e != NULL; e = e->NextSiblingElement("Mesh"))
+			/*TiXmlElement* textures = root->FirstChildElement("Textures");
+			for (TiXmlElement* e = textures->FirstChildElement("Texture"); e != NULL; e = e->NextSiblingElement("Texture"))
 			{
-				LoadMesh(e);
+				LoadTexture(e, MaterialManager);
+			}*/
+			DirectZob::GetInstance()->GetLightManager()->LoadFromNode(scene->FirstChildElement("Globals"));
+			for (TiXmlElement* e = scene->FirstChildElement("ZobObject"); e != NULL; e = e->NextSiblingElement("ZobObject"))
+			{
+				const char* file = e->Attribute("file");
+				if (file)
+				{
+					LoadZobObject(std::string(file));
+				}
+				else
+				{
+					LoadZobObject(e, NULL, NULL);
+				}
 			}
+			DirectZob::LogInfo("Scene loaded");
 		}
-		TiXmlElement* scene = root->FirstChildElement("Scene");
-		DirectZob::GetInstance()->GetLightManager()->LoadFromNode(scene->FirstChildElement("Globals"));
-		for (TiXmlElement* e = scene->FirstChildElement("ZobObject"); e != NULL; e = e->NextSiblingElement("ZobObject"))
+		else
 		{
-			LoadZobObject(e, NULL);
+			DirectZob::LogError("Scene file has error");
 		}
 	}
-	DirectZob::LogInfo("Scene loaded");
 	DirectZob::GetInstance()->GetEngine()->Start();
 	DirectZob::RemoveIndent();
 }
@@ -161,16 +206,6 @@ void SceneLoader::SaveScene(std::string &path, std::string &file)
 	TiXmlDocument doc("Scene");
 	TiXmlElement * root = new TiXmlElement("root");
 	doc.LinkEndChild(root);
-	TiXmlElement meshes = TiXmlElement("Meshes");
-	int n = meshManager->GetNbMeshes();
-	for (int i = 0; i < n; i++)
-	{
-		TiXmlElement e = TiXmlElement("Mesh");
-		e.SetAttribute("name", meshManager->GetMesh(i)->GetName().c_str());
-		e.SetAttribute("file", meshManager->GetMesh(i)->GetFile().c_str());
-		meshes.InsertEndChild(e);
-	}
-	root->InsertEndChild(meshes);
 	TiXmlElement scene = TiXmlElement("Scene");
 	TiXmlElement globals = TiXmlElement("Globals");
 	DirectZob::GetInstance()->GetLightManager()->SaveUnderNode(&globals);

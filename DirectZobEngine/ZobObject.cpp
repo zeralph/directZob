@@ -6,12 +6,13 @@
 #include "SceneLoader.h"
 
 static int sObjectNumber = 0;
-ZobObject::ZobObject(Type t, SubType s, const std::string& name, ZobObject* parent /*= NULL*/)
+ZobObject::ZobObject(Type t, SubType s, const std::string& name, ZobObject* parent /*= NULL*/, const std::string* factoryFile /*=NULL*/)
 	:ZOBGUID(t,s)
 {
 	DirectZob::LogInfo("ZobObject %s creation", name.c_str());
 	DirectZob::AddIndent();
 	sObjectNumber++;
+	m_factoryFile = factoryFile?factoryFile->c_str():"";
 	m_physicComponent = new ZobPhysicComponent(NULL);
 	if (name.length() == 0)
 	{
@@ -48,10 +49,11 @@ ZobObject::ZobObject(Type t, SubType s, const std::string& name, ZobObject* pare
 	DirectZob::RemoveIndent();
 }
 
-ZobObject::ZobObject(Type t, SubType s, TiXmlElement* node, ZobObject* parent)
+ZobObject::ZobObject(Type t, SubType s, TiXmlElement* node, ZobObject* parent, const std::string* factoryFile /*=NULL*/)
 	:ZOBGUID(t, s)
 {
 	sObjectNumber++;
+	m_factoryFile = factoryFile ? factoryFile->c_str() : "";
 	ZobVector3 position, rotation, scale, orientation = ZobVector3();
 	std::string name;
 	float x, y, z;
@@ -135,12 +137,20 @@ ZobObject::~ZobObject()
 
 void ZobObject::LoadMesh(std::string name, std::string path/* = ""*/)
 {
-	if (path.empty())
+	std::string file;
+	int i = path.rfind('\\');
+	if (i == -1)	//no path, only filename
 	{
+		file = path;
 		path = std::string(SceneLoader::GetResourcePath());
 	}
+	else
+	{
+		file = path.substr(i+1, path.size() - i);
+		path = path.substr(0, i + 1);
+	}
 	//std::string p = std::string(SceneLoader::GetResourcePath());
-	Mesh* m = DirectZob::GetInstance()->GetMeshManager()->LoadMesh(name, path, name);
+	Mesh* m = DirectZob::GetInstance()->GetMeshManager()->LoadMesh(name, path, file);
 	m_mesh = m;
 }
 
@@ -155,6 +165,15 @@ const std::string ZobObject::GetMeshName() const
 	if (m_mesh)
 	{
 		return m_mesh->GetName();
+	}
+	return "";
+}
+
+const std::string ZobObject::GetMeshFile() const
+{
+	if (m_mesh)
+	{
+		return m_mesh->GetFile();
 	}
 	return "";
 }
@@ -367,6 +386,31 @@ void ZobObject::SetLightingMode(RenderOptions::eLightMode l)
 	m_renderOptions.lightMode = l;
 }
 
+void ZobObject::SaveToFactoryFile(std::string& file)
+{
+	TiXmlDocument doc("ZobObject");
+	SaveRecusrive(&doc, this);
+	//doc.LinkEndChild(&n);
+	if (!doc.SaveFile(file.c_str()))
+	{
+		DirectZob::LogError("Error saving zobObject : ", doc.ErrorDesc());
+	}
+}
+
+void ZobObject::SaveRecusrive(TiXmlNode* node, ZobObject* z)
+{
+	if (z->GetType() == ZOBGUID::type_editor)
+	{
+		return;
+	}
+	TiXmlNode* newNode = z->SaveUnderNode(node);
+	for (int i = 0; i < z->GetNbChildren(); i++)
+	{
+		SaveRecusrive(newNode, z->GetChild(i));
+	}
+	node->InsertEndChild(*newNode);
+}
+
 TiXmlNode* ZobObject::SaveUnderNode(TiXmlNode* node)
 {
 	TiXmlElement* o = new TiXmlElement("ZobObject");
@@ -375,6 +419,7 @@ TiXmlNode* ZobObject::SaveUnderNode(TiXmlNode* node)
 	TiXmlElement s = TiXmlElement("Scale");
 	o->SetAttribute("name", GetName().c_str());
 	std::string meshName = GetMeshName();
+	std::string meshFile = GetMeshFile();
 	p.SetDoubleAttribute("x", GetPosition()->x);
 	p.SetDoubleAttribute("y", GetPosition()->y);
 	p.SetDoubleAttribute("z", GetPosition()->z);
@@ -387,11 +432,11 @@ TiXmlNode* ZobObject::SaveUnderNode(TiXmlNode* node)
 	o->InsertEndChild(p);
 	o->InsertEndChild(r);
 	o->InsertEndChild(s);
-	if (meshName.length() > 0)
+	if (meshName.length() > 0 && meshFile.length() > 0)
 	{
 		TiXmlElement m = TiXmlElement("Mesh");
-		TiXmlText t = TiXmlText(meshName.c_str());
-		m.InsertEndChild(t);
+		m.SetAttribute("name", meshName.c_str());
+		m.SetAttribute("file", meshFile.c_str());
 		o->InsertEndChild(m);
 		o->SetAttribute("type", "mesh");
 	}

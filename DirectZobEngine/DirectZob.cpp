@@ -50,6 +50,10 @@ void DirectZob::LoadScene(std::string& path, std::string& file)
 		m_text = new Text2D(m_engine, m_events);
 	}
 }
+void DirectZob::LoadZobObject(std::string& path, std::string& file)
+{
+	SceneLoader::LoadZobObject(path, file);
+}
 
 void DirectZob::Lock()
 {

@@ -28,10 +28,10 @@ Mesh::Mesh(std::string& name)
 Mesh::Mesh(std::string& name, std::string& path, std::string& file):Mesh(name)
 {
 	DirectZob::AddIndent();
-	m_file = file;
 	m_path = path;
 	std::string fullPath = path;
 	fullPath.append(file);
+	m_file = fullPath;
 	if (fullPath.find(".fbx") != -1)
 	{
 		LoadFbx(fullPath);
@@ -412,7 +412,7 @@ void Mesh::LoadOBJ(const std::string& fullPath)
 			SplitEntry(&line, &v, ' ');
 			if (v.size() == 2)
 			{
-				std::string matName = m_file;
+				std::string matName = m_name;
 				matName = matName.substr(0, matName.size() - 4);
 				matName.append(".");
 				matName.append(v[1]);

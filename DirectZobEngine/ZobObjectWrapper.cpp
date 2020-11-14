@@ -8,10 +8,6 @@ namespace CLI
 	ZobObjectWrapper::ZobObjectWrapper(ZobObject* zobObject):ManagedObject(zobObject, false)
 	{
 		m_isValid = zobObject != NULL;
-		if (m_isValid)
-		{
-			DirectZob::LogInfo("---------> Create zob object wrapper %s", zobObject->GetName().c_str());
-		}
 	}
 
 	ZobObjectWrapper::~ZobObjectWrapper()
@@ -20,12 +16,40 @@ namespace CLI
 		m_isValid = false;
 	}
 
+	bool ZobObjectWrapper::IsFromFactoryFile()
+	{ 
+		ZobObject* z = GetInstance();
+		if (z)
+		{
+			return z->IsFromFactoryFile();
+		}
+	}
+	System::String^ ZobObjectWrapper::FactoryFile()
+	{ 
+		ZobObject* z = GetInstance();
+		if (z)
+		{
+			return gcnew System::String(z->FactoryFile().c_str());
+		}
+	}
+
+	void ZobObjectWrapper::SaveToFactoryFile(System::String^ file)
+	{
+		ZobObject* z = GetInstance();
+		if (z)
+		{
+			std::string f;
+			MarshalString(file, f);
+			return z->SaveToFactoryFile(f);
+		}
+	}
+
 	System::String^ ZobObjectWrapper::GetName()
 	{
 		ZobObject* z = GetInstance();
 		if (z)
 		{
-			return gcnew System::String(m_Instance->GetName().c_str());
+			return gcnew System::String(z->GetName().c_str());
 		}
 		return nullptr;
 	}

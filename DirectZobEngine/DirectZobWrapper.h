@@ -21,6 +21,7 @@ namespace CLI
 		bool					IsPhysicPlaying();
 		void					Init(int width, int height);
 		void					LoadScene(System::String^ path, System::String^ file);
+		void					LoadZobObject(System::String^ path, System::String^ file);
 		void					NewScene();
 		void					Unload();
 		bool					CanFastSave();
