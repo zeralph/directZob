@@ -172,7 +172,7 @@ void ZobPhysicComponent::LookAt(const ZobVector3* target)
 	}
 	//TODO if v.y > 0.99 ...
 	ZobVector3 forward = v;
-	ZobVector3 left = ZobVector3::Cross(&forward, &ZobVector3(0, 1, 0));
+	ZobVector3 left = ZobVector3::Cross(&forward, &ZobVector3::Vector3Y);
 	left.Normalize();
 	left.Mul(-1.0f);
 	ZobVector3 up = ZobVector3::Cross(&forward, &left);
