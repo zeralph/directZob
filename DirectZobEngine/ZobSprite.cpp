@@ -74,9 +74,9 @@ void ZobSprite::UpdateMesh(const Camera* camera, Core::Engine* engine)
 	ZobObject::UpdateMesh(camera, engine);
 }
 
-void ZobSprite::Update(const ZobMatrix4x4& parentMatrix, const ZobMatrix4x4& parentRSMatrix)
+void ZobSprite::Update(const ZobObject* parent )
 {
-	ZobObject::Update(parentMatrix, parentRSMatrix);
+	ZobObject::Update(this);
 }
 
 void ZobSprite::DrawGizmos(const Camera* camera, Core::Engine* engine)

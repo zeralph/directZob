@@ -19,7 +19,8 @@ public:
 	virtual ~ZobObject();
 
 	//virtuals
-	virtual void					Update(const ZobMatrix4x4& parentMatrix, const ZobMatrix4x4& parentRSMatrix);
+	//virtual void					Update(const ZobMatrix4x4& parentMatrix, const ZobMatrix4x4& parentRSMatrix);
+	virtual void					Update(const ZobObject* parent);
 	virtual void					UpdateMesh(const Camera* camera, Core::Engine* engine);
 	virtual void					QueueForDrawing(const Camera* camera, Core::Engine* engine);
 	inline const ZobVector3&		GetScale() const { return m_scale; }
@@ -82,6 +83,11 @@ public:
 	bool							IsFromFactoryFile() {return m_factoryFile.length()>0;}
 	std::string&					FactoryFile() { return m_factoryFile; }
 	void							SaveToFactoryFile(std::string& file);
+	const ZobPhysicComponent*		GetPhysicComponent() const { return m_physicComponent; };
+
+	//temp ?
+	const ZobMatrix4x4*				GetModelMatrix() const { return &m_modelMatrix; };
+	const ZobMatrix4x4*				GetRotationScaleMatrix() const { return &m_rotationScaleMatrix; };
 private:
 	void							SaveRecusrive(TiXmlNode* node, ZobObject* z);
 protected:

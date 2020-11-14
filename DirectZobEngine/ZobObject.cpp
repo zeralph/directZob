@@ -191,8 +191,11 @@ void ZobObject::UpdateMesh(const Camera* camera, Core::Engine* engine)
 	}
 }
 
-void ZobObject::Update(const ZobMatrix4x4& parentMatrix, const ZobMatrix4x4& parentRSMatrix)
+//void ZobObject::Update(const ZobMatrix4x4& parentMatrix, const ZobMatrix4x4& parentRSMatrix)
+void ZobObject::Update(const ZobObject* parent)
 {
+	const ZobMatrix4x4* parentMatrix = parent?parent->GetModelMatrix():&ZobMatrix4x4::IdentityMatrix;
+	const ZobMatrix4x4* parentRSMatrix = parent?parent->GetRotationScaleMatrix():&ZobMatrix4x4::IdentityMatrix;
 	ZobVector3 t = GetPosition();
 	ZobVector3 r = GetRotation();
 	ZobVector3 s = m_scale;
@@ -200,12 +203,12 @@ void ZobObject::Update(const ZobMatrix4x4& parentMatrix, const ZobMatrix4x4& par
 	m_rotationScaleMatrix.Identity();
 	m_rotationScaleMatrix.SetRotation(GetRotation());
 	m_rotationScaleMatrix.SetScale(&m_scale);
-	m_rotationScaleMatrix.Mul(&parentRSMatrix);
-	parentRSMatrix.Mul(&t);
+	m_rotationScaleMatrix.Mul(parentRSMatrix);
+	parentRSMatrix->Mul(&t);
 	m_modelMatrix.SetPosition(&t);
 	m_modelMatrix.SetRotation(&r);
 	m_modelMatrix.SetScale(&s);
-	m_modelMatrix.Mul(&parentMatrix);
+	//m_modelMatrix.Mul(&parentMatrix);
 
 	m_left = ZobVector3(1, 0, 0);
 	m_forward = ZobVector3(0, 0, 1);
@@ -216,7 +219,6 @@ void ZobObject::Update(const ZobMatrix4x4& parentMatrix, const ZobMatrix4x4& par
 	m_left.Normalize();
 	m_forward.Normalize();
 	m_up.Normalize();
-
 	for (int i = 0; i < m_children.size(); i++)
 	{
 		ZobObject* z = m_children[i];
@@ -227,7 +229,8 @@ void ZobObject::Update(const ZobMatrix4x4& parentMatrix, const ZobMatrix4x4& par
 		}
 		else
 		{
-			z->Update(m_modelMatrix, m_rotationScaleMatrix);
+			//z->Update(m_modelMatrix, m_rotationScaleMatrix);
+			z->Update(this);
 		}
 	}
 }

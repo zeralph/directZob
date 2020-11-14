@@ -8,7 +8,7 @@ public:
 	ZobMatrix4x4();
 	ZobMatrix4x4(const ZobMatrix4x4* m);
 	~ZobMatrix4x4();
-
+	static const ZobMatrix4x4 IdentityMatrix;
 	void Identity();
 	void CopyFrom(const ZobMatrix4x4* m);
 	void Mul(const ZobMatrix4x4* m);

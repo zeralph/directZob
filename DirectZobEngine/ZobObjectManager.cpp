@@ -121,9 +121,7 @@ float ZobObjectManager::WaitForUpdateObjectend()
 
 void ZobObjectManager::UpdateObjects(const Camera* camera, Core::Engine* engine)
 {
-	ZobMatrix4x4 m;
-	m.Identity();
-	m_rootObject->Update(&m, &m);
+	m_rootObject->Update(NULL);
 	m_rootObject->UpdateMesh(camera, engine);
 	m_time = (float)(clock() - m_drawTick) / CLOCKS_PER_SEC * 1000;
 }

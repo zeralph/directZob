@@ -376,3 +376,5 @@ ZobMatrix4x4 ZobMatrix4x4::RotateAroundAxis(const ZobVector3& axis, const float 
 	rotationMatrix.m_data[3][3] = 1.0;
 	return rotationMatrix;
 }
+
+const ZobMatrix4x4 ZobMatrix4x4::IdentityMatrix = ZobMatrix4x4();

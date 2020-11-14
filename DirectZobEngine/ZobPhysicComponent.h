@@ -72,4 +72,5 @@ private:
 	sShapeDraw m_shapeDraw;
 	ZobVector3 m_position;
 	ZobVector3 m_orientation;
+	Transform m_localtransform;
 };

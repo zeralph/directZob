@@ -26,7 +26,8 @@ public:
 	Camera(TiXmlElement* node, ZobObject* parent);
 	~Camera() override;
 
-	void					Update(const ZobMatrix4x4& parentMatrix, const ZobMatrix4x4& parentRSMatrix) override;
+	//void					Update(const ZobMatrix4x4& parentMatrix, const ZobMatrix4x4& parentRSMatrix) override;
+	void					Update(const ZobObject* parent);
 	void					DrawGizmos(const Camera* camera, Core::Engine* engine) override;
 	TiXmlNode*				SaveUnderNode(TiXmlNode* node) override;
 

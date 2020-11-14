@@ -149,7 +149,7 @@ namespace DirectZobEditor
                 if(m_currentSelectedZobObject != null)
                 {
                     //m_currentSelectedZobObject.GetRenderOptions().EnableColorization(false);
-                    m_currentSelectedZobObject.GetRenderOptions().SetTransparency(false);
+                    //m_currentSelectedZobObject.GetRenderOptions().SetTransparency(false);
                 }
                 ev.previousZobObject = m_currentSelectedZobObject;
                 m_currentSelectedZobObject = newZobObject;
@@ -157,7 +157,7 @@ namespace DirectZobEditor
                 {
                     //m_currentSelectedZobObject.GetRenderOptions().SetColorization(255, 0, 255);
                     //m_currentSelectedZobObject.GetRenderOptions().EnableColorization(true);
-                    m_currentSelectedZobObject.GetRenderOptions().SetTransparency(true);
+                    //m_currentSelectedZobObject.GetRenderOptions().SetTransparency(true);
                 }
                 ev.newZobObject = newZobObject;
                 handler(this, ev);

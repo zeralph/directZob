@@ -23,6 +23,7 @@ namespace CLI
 		{
 			return z->IsFromFactoryFile();
 		}
+		return nullptr;
 	}
 	System::String^ ZobObjectWrapper::FactoryFile()
 	{ 
@@ -31,6 +32,7 @@ namespace CLI
 		{
 			return gcnew System::String(z->FactoryFile().c_str());
 		}
+		return nullptr;
 	}
 
 	void ZobObjectWrapper::SaveToFactoryFile(System::String^ file)

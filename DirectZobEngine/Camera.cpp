@@ -197,13 +197,10 @@ void Camera::Move(float dx, float dy, bool moveTargetVector)
 	}
 }
 
-void Camera::Update(const ZobMatrix4x4& parentMatrix, const ZobMatrix4x4& parentRSMatrix)
+//void Camera::Update(const ZobMatrix4x4& parentMatrix, const ZobMatrix4x4& parentRSMatrix)
+void Camera::Update(const ZobObject* parent)
 {
 	g_update_camera_mutex.lock();
-	//m_translation = m_nextTranslation;
-	//m_left = ZobVector3(1, 0, 0);
-	//m_forward = ZobVector3(0, 0, 1);
-	//m_up = ZobVector3(0, 1, 0);
 	ZobVector3 left = ZobVector3(1, 0, 0);
 	ZobVector3 up = ZobVector3(0, 1, 0);
 	ZobVector3 fw = ZobVector3(0, 0, 1);
@@ -214,14 +211,6 @@ void Camera::Update(const ZobMatrix4x4& parentMatrix, const ZobMatrix4x4& parent
 		if (m_tagetMode == eTarget_Vector &&  m_targetVector != p)
 		{
 			LookAt(&m_targetVector);
-			/*
-			v = m_targetVector - v;
-			v.Normalize();
-			fw = v;
-			left = ZobVector3::Cross(&up, &fw);
-			up = ZobVector3::Cross(&fw, &left);
-			SetQuaternion(&left, &up, &fw);
-			*/
 			RecomputeFLUVectors(&v);
 		}
 		else if (m_tagetMode == eTarget_Object && m_targetObject)
@@ -240,37 +229,12 @@ void Camera::Update(const ZobMatrix4x4& parentMatrix, const ZobMatrix4x4& parent
 				RecomputeFLUVectors(&v);
 			}
 		}
-		
-		//static float qz = 0.0f;
-		//SetQuaternion(v.x, v.y, v.z, qz);
-		ZobObject::Update(parentMatrix, parentRSMatrix);
-		/*
-		m_left = ZobVector3(1, 0, 0);
-		m_forward = ZobVector3(0, 0, 1);
-		m_up = ZobVector3(0, 1, 0);
-		m_rotationScaleMatrix.Mul(&m_left);
-		m_rotationScaleMatrix.Mul(&m_forward);
-		m_rotationScaleMatrix.Mul(&m_up);
-		*/
+		ZobObject::Update(parent);
 	}
 	else
 	{
-		ZobObject::Update(parentMatrix, parentRSMatrix);
+		ZobObject::Update(parent);
 	}
-	//m_nextTranslation = m_translation;
-	
-	//m_rotationScaleMatrix.Identity();
-	//m_rotationScaleMatrix.SetRotation(GetRotation());
-
-	/*
-	m_left = ZobVector3(1, 0, 0);
-	m_forward = ZobVector3(0, 0, 1);
-	m_up = ZobVector3(0, 1, 0);
-	m_rotationScaleMatrix.Mul(&m_left);
-	m_rotationScaleMatrix.Mul(&m_forward);
-	m_rotationScaleMatrix.Mul(&m_up);
-	*/
-	
 	g_update_camera_mutex.unlock();
 	UpdateViewProjectionMatrix();
 }
