@@ -25,11 +25,12 @@ public:
 	virtual void					QueueForDrawing(const Camera* camera, Core::Engine* engine);
 	inline const ZobVector3&		GetScale() const { return m_scale; }
 	virtual inline void				SetScale(float x, float y, float z) { m_scale.x = x; m_scale.y = y; m_scale.z = z; };
-
 	void							SetRotation(float x, float y, float z);
-	void							SetPosition(float x, float y, float z);
+	/*
 	void							SetQuaternion(float x, float y, float z, float w);
 	void							SetQuaternion(const ZobVector3* left, const ZobVector3* up, const ZobVector3* fw);
+	*/
+	void							SetPosition(float x, float y, float z);
 	void							LookAt(const ZobVector3* target);
 	void							LookAt(const ZobVector3* forward, const ZobVector3* left, const ZobVector3* up);
 	const ZobVector3*				GetRotation() const;
@@ -84,7 +85,7 @@ public:
 	std::string&					FactoryFile() { return m_factoryFile; }
 	void							SaveToFactoryFile(std::string& file);
 	const ZobPhysicComponent*		GetPhysicComponent() const { return m_physicComponent; };
-
+	
 	//temp ?
 	const ZobMatrix4x4*				GetModelMatrix() const { return &m_modelMatrix; };
 	const ZobMatrix4x4*				GetRotationScaleMatrix() const { return &m_rotationScaleMatrix; };

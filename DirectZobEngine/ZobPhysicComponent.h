@@ -56,11 +56,19 @@ public:
 	void								AddBoxCollider(const ZobVector3* halfExtends );
 	void								AddSphereCollider(float radius);
 	void								AddCapsuleCollider(float radius, float height);
-
+	void								Update() { m_rigidBody->setTransform(m_worldTransform); };
 	void								SaveTransform();
 	void								RestoreTransform();
 	void								ResetPhysic();
 	void								DrawGizmos(const Camera* camera, const ZobVector3* position, const ZobVector3* rotation);
+
+	Transform							GetWorldTransform() const { return m_rigidBody->getTransform();/* Transform(m_worldTransform);*/ };
+	Transform							GetLocalTransform() const { return Transform(m_localTransform); };
+	void								SetWorldTransform(Transform t) { m_worldTransform = Transform(t); };
+	void								SetLocalTransform(Transform t) { m_localTransform = t; };
+	void								SetLocalPosition(Vector3 p) { m_localTransform.setPosition(p); };
+	void								SetLocalOrientation(Quaternion q) { m_localTransform.setOrientation(q); };
+	Quaternion							QuaternionFromAxisAngle(Vector3* axis, float angle);
 private:
 	void								AddColliderInternal(CollisionShape* c);
 	void								CreateCollider();
@@ -72,5 +80,6 @@ private:
 	sShapeDraw m_shapeDraw;
 	ZobVector3 m_position;
 	ZobVector3 m_orientation;
-	Transform m_localtransform;
+	Transform m_localTransform;
+	Transform m_worldTransform;
 };

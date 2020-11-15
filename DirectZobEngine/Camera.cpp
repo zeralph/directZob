@@ -3,6 +3,7 @@
 #include <math.h>
 #include <mutex>
 #include "DirectZob.h"
+#include "ZobPhysicComponent.h"
 
 static std::mutex g_update_camera_mutex;
 static float ee = 0.0f;
@@ -132,35 +133,24 @@ bool Camera::GetTargetVector(ZobVector3* t)
 
 void Camera::RotateAroundPointAxis(const ZobVector3* point, const ZobVector3* axis, const ZobVector3* lockAxis, float angle, bool recomputeVectors)
 {
-	//g_update_camera_mutex.lock();
-	//ZobVector3 t = m_nextTranslation;
-	ZobVector3 t = GetPosition();
-	t.x -= point->x;
-	t.y -= point->y;
-	t.z -= point->z;
-	ZobMatrix4x4 rot = ZobMatrix4x4::RotateAroundAxis(axis, angle);
-	rot.Mul(&t);
-	ZobVector3 tn = t;
-	tn.Normalize();
-	t.x += point->x;
-	t.y += point->y;
-	t.z += point->z;
-	if (lockAxis)
-	{
-		float f = ZobVector3::Dot(&tn, lockAxis);
-		if (fabs(f) > 0.99)
-		{
-			return;
-		}
-	}
-	SetPosition(t.x, t.y, t.z);
-	if (recomputeVectors)
-	{
-		ZobVector3 v = GetPosition();
-		v = v - point;
-		v.Normalize();
-		RecomputeFLUVectors(&v);
-	}
+	angle = angle* M_PI / 180.0;
+	Transform t, t2;
+	Vector3 paxis = Vector3(axis->x, axis->y, axis->z);
+	t = Transform::identity();
+	Vector3 p = Vector3(point->x, point->y, point->z);
+	Quaternion q = m_physicComponent->QuaternionFromAxisAngle(&paxis, angle);
+	q.x = axis->x * sinf(angle / 2.0f);
+	q.y = axis->y * sinf(angle / 2.0f);
+	q.z = axis->z * sinf(angle / 2.0f);
+	q.w = cosf(angle / 2.0f);
+
+	q.normalize();
+	t = Transform(p, q);
+	t2 = Transform::identity();
+	t2.setPosition(m_physicComponent->GetLocalTransform().getPosition());
+	t2 = t * t2;
+	m_physicComponent->SetLocalTransform(t2);
+	LookAt(point);
 }
 
 void Camera::RecomputeFLUVectors(const ZobVector3* v)
@@ -168,9 +158,9 @@ void Camera::RecomputeFLUVectors(const ZobVector3* v)
 	ZobVector3 fw = v;
 	fw.Normalize();
 	ZobVector3 up = ZobVector3(0, 1, 0);
-	ZobVector3 left = ZobVector3::Cross(v, &up);
+	ZobVector3 left = ZobVector3::Cross(&up, v);
 	left.Normalize();
-	up = ZobVector3::Cross(&left, &fw);
+	up = ZobVector3::Cross(&fw, &left);
 	up.Normalize();
 	m_forward = fw;
 	m_up = up;
@@ -194,27 +184,27 @@ void Camera::Move(float dx, float dy, bool moveTargetVector)
 	if (moveTargetVector)
 	{
 		m_targetVector = m_targetVector - (vl + vf);
+		//m_targetVector.Normalize();
 	}
 }
 
 //void Camera::Update(const ZobMatrix4x4& parentMatrix, const ZobMatrix4x4& parentRSMatrix)
 void Camera::Update(const ZobObject* parent)
 {
-	g_update_camera_mutex.lock();
-	ZobVector3 left = ZobVector3(1, 0, 0);
-	ZobVector3 up = ZobVector3(0, 1, 0);
-	ZobVector3 fw = ZobVector3(0, 0, 1);
+	ZobObject::Update(parent);
 	if (m_tagetMode != eTarget_none)
 	{
 		ZobVector3 v = GetPosition();
-		const ZobVector3* p = GetPosition();
-		if (m_tagetMode == eTarget_Vector &&  m_targetVector != p)
+		if (m_tagetMode == eTarget_Vector &&  m_targetVector != v)
 		{
-			LookAt(&m_targetVector);
+			//LookAt(&m_targetVector);
 			RecomputeFLUVectors(&v);
+			LookAt(&m_forward, &m_left, &m_up);
+			
 		}
 		else if (m_tagetMode == eTarget_Object && m_targetObject)
 		{
+			const ZobVector3* p = GetPosition();
 			const ZobVector3* tp = m_targetObject->GetPosition();
 			ZobVector3 v = ZobVector3(tp);
 			if( v != GetPosition())
@@ -229,13 +219,12 @@ void Camera::Update(const ZobObject* parent)
 				RecomputeFLUVectors(&v);
 			}
 		}
-		ZobObject::Update(parent);
+		//ZobObject::Update(parent);
 	}
 	else
 	{
-		ZobObject::Update(parent);
+		//ZobObject::Update(parent);
 	}
-	g_update_camera_mutex.unlock();
 	UpdateViewProjectionMatrix();
 }
 
@@ -244,17 +233,30 @@ void Camera::UpdateViewProjectionMatrix()
 	g_update_camera_mutex.lock();
 	m_viewTransaltion = GetPosition();
 	BufferData* b = DirectZob::GetInstance()->GetEngine()->GetBufferData();
-	setProjectionMatrix(m_fov, b->width, b->height, b->zNear, b->zFar);
-	ZobVector3 p = m_viewTransaltion;
-	ZobVector3 left = ZobVector3(1, 0, 0);
-	ZobVector3 forward = ZobVector3(0, 0, 1);
-	ZobVector3 up = ZobVector3(0, 1, 0);
+	setProjectionMatrix(m_fov, b->width, b->height, b->zNear, b->zFar);	
+
 	//TODO : 2 quite same inverse, lot of optims doable
+	
+
+	ZobVector3 up = ZobVector3::Vector3Y;
+	ZobVector3 eye = GetPosition();
+	ZobVector3 target = m_targetVector;// ZobVector3::Vector3Zero;
+	//ZobVector3 target = m_targetObject;
+	ZobVector3 forward = eye - target;
+	forward = target - eye;
+	forward.Normalize();
+	//left.Mul(-1);
+	ZobVector3 left = ZobVector3::Cross(&up, &forward);
+	left.Normalize();
+	up = ZobVector3::Cross(&forward, &left);
+	up.Normalize();
+	eye = ZobVector3::Vector3Zero;
+	SetViewMatrix(&left, &up, &forward, &eye);
+	m_left = left;
+	m_forward = forward;
+	m_up = up;
+	//todo : clean that
 	ZobMatrix4x4::InvertMatrix4(m_rotationScaleMatrix, m_invModelMatrix);
-	m_invModelMatrix.Mul(&left);
-	m_invModelMatrix.Mul(&forward);
-	m_invModelMatrix.Mul(&up);
-	SetViewMatrix(&left, &up, &forward, &p);
 	ZobMatrix4x4::InvertMatrix4(m_modelMatrix, m_invModelMatrix);
 	ZobMatrix4x4::InvertMatrix4(m_projMatrix, m_invProjectionMatrix);
 	ZobMatrix4x4::InvertMatrix4(m_viewRotMatrix, m_invViewMatrix);
@@ -264,25 +266,30 @@ void Camera::UpdateViewProjectionMatrix()
 
 void Camera::SetViewMatrix(const ZobVector3& left, const ZobVector3& up, const ZobVector3& fw, const ZobVector3& p)
 {
+	float x = -ZobVector3::Dot(&left, &p);
+	float y = -ZobVector3::Dot(&up, &p);
+	float z = -ZobVector3::Dot(&fw, &p);
 	m_viewRotMatrix.SetData(0, 0, left.x);
-	m_viewRotMatrix.SetData(0, 1, up.x);
-	m_viewRotMatrix.SetData(0, 2, fw.x);
+	m_viewRotMatrix.SetData(0, 1, left.y);
+	m_viewRotMatrix.SetData(0, 2, left.z);
 	m_viewRotMatrix.SetData(0, 3, 0);//-p.x);
 
-	m_viewRotMatrix.SetData(1, 0, left.y);
+	m_viewRotMatrix.SetData(1, 0, up.x);
 	m_viewRotMatrix.SetData(1, 1, up.y);
-	m_viewRotMatrix.SetData(1, 2, fw.y);
+	m_viewRotMatrix.SetData(1, 2, up.z);
 	m_viewRotMatrix.SetData(1, 3, 0);//-p.y);
 
-	m_viewRotMatrix.SetData(2, 0, left.z);
-	m_viewRotMatrix.SetData(2, 1, up.z);
+	m_viewRotMatrix.SetData(2, 0, fw.x);
+	m_viewRotMatrix.SetData(2, 1, fw.y);
 	m_viewRotMatrix.SetData(2, 2, fw.z);
 	m_viewRotMatrix.SetData(2, 3, 0);//-p.z);
 
-	m_viewRotMatrix.SetData(3, 0, 0);
-	m_viewRotMatrix.SetData(3, 1, 0);
-	m_viewRotMatrix.SetData(3, 2, 0);
+	m_viewRotMatrix.SetData(3, 0, x);
+	m_viewRotMatrix.SetData(3, 1, y);
+	m_viewRotMatrix.SetData(3, 2, z);
 	m_viewRotMatrix.SetData(3, 3, 1);
+	//-------------------------------------------------------
+
 }
 
 void Camera::setProjectionMatrix(const float angleOfView, const float width, const float height, const float zNear, const float zFar)
