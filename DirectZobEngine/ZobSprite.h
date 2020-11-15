@@ -17,7 +17,7 @@ public:
 
 	void				DrawGizmos(const Camera* camera, Core::Engine* engine) override;
 	TiXmlNode*			SaveUnderNode(TiXmlNode* node) override;
-	void				Update(const ZobObject* parent) override;
+	void				Update() override;
 	void				UpdateMesh(const Camera* camera, Core::Engine* engine) override;
 	void				SetTexture(std::string& path);
 private:

@@ -192,12 +192,12 @@ void ZobObject::UpdateMesh(const Camera* camera, Core::Engine* engine)
 }
 
 //void ZobObject::Update(const ZobMatrix4x4& parentMatrix, const ZobMatrix4x4& parentRSMatrix)
-void ZobObject::Update(const ZobObject* parent)
+void ZobObject::Update()
 {
 	Transform tr;
-	if (parent)
+	if (m_parent)
 	{
-		const ZobPhysicComponent* zpc = parent->GetPhysicComponent();
+		const ZobPhysicComponent* zpc = m_parent->GetPhysicComponent();
 		tr = zpc->GetWorldTransform();
 	}
 	else
@@ -214,8 +214,8 @@ void ZobObject::Update(const ZobObject* parent)
 
 	m_physicComponent->Update();
 
-	const ZobMatrix4x4* parentMatrix = parent?parent->GetModelMatrix():&ZobMatrix4x4::IdentityMatrix;
-	const ZobMatrix4x4* parentRSMatrix = parent?parent->GetRotationScaleMatrix():&ZobMatrix4x4::IdentityMatrix;
+	const ZobMatrix4x4* parentMatrix = m_parent?m_parent->GetModelMatrix():&ZobMatrix4x4::IdentityMatrix;
+	const ZobMatrix4x4* parentRSMatrix = m_parent?m_parent->GetRotationScaleMatrix():&ZobMatrix4x4::IdentityMatrix;
 
 	ZobVector3 t = GetPosition();
 	ZobVector3 r = GetRotation();
@@ -270,7 +270,7 @@ void ZobObject::Update(const ZobObject* parent)
 		else
 		{
 			//z->Update(m_modelMatrix, m_rotationScaleMatrix);
-			z->Update(this);
+			z->Update();
 		}
 	}
 }

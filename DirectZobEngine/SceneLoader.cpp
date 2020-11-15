@@ -90,7 +90,8 @@ void SceneLoader::LoadZobObject(TiXmlElement* node, ZobObject* parent, const std
 		const char* file = e->Attribute("file");
 		if (file)
 		{
-			LoadZobObject(std::string(file), zob);
+			std::string f = std::string(file);
+			LoadZobObject(f, zob);
 		}
 		else
 		{
@@ -169,7 +170,8 @@ void SceneLoader::LoadScene(std::string& path, std::string& file)
 				const char* file = e->Attribute("file");
 				if (file)
 				{
-					LoadZobObject(std::string(file));
+					std::string f = std::string(file);
+					LoadZobObject(f);
 				}
 				else
 				{

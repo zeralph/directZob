@@ -187,9 +187,9 @@ void Camera::Move(float dx, float dy, bool moveTargetVector)
 }
 
 //void Camera::Update(const ZobMatrix4x4& parentMatrix, const ZobMatrix4x4& parentRSMatrix)
-void Camera::Update(const ZobObject* parent)
+void Camera::Update()
 {
-	ZobObject::Update(parent);
+	ZobObject::Update();
 	if (m_tagetMode != eTarget_none)
 	{
 		ZobVector3 v = GetPosition();

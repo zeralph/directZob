@@ -1,54 +1,50 @@
-<root>
-    <Meshes>
+<Scene>
+    <Globals>
+        <AmbientColor r="50" g="50" b="50" />
+        <FogColor r="135" g="206" b="235" />
+        <ClearColor r="135" g="206" b="235" />
+        <FogDensity>0.00</FogDensity>
+        <FogDistance>0.00</FogDistance>
+        <FogType>none</FogType>
+    </Globals>
+    <ZobObject name="camera_0" type="camera">
+        <Position x="0" y="-6" z="0" />
+        <Rotation x="0" y="0" z="0" />
+        <Scale x="1" y="1" z="1" />
+        <Fov>45.00</Fov>
+    </ZobObject>
+    <ZobObject name="fbx_example" type="mesh">
         <Mesh name="fbx_example" file="11.fbx" />
-    </Meshes>
-    <Scene>
-        <Globals>
-            <AmbientColor r="50" g="50" b="50" />
-            <FogColor r="135" g="206" b="235" />
-            <ClearColor r="135" g="206" b="235" />
-            <FogDensity>0.00</FogDensity>
-            <FogDistance>0.00</FogDistance>
-            <FogType>none</FogType>
-        </Globals>
-        <ZobObject name="camera_0" type="camera">
-            <Position x="0" y="6" z="0" />
-            <Rotation x="0" y="0" z="0" />
-            <Scale x="1" y="1" z="1" />
-            <Fov>45.00</Fov>
-        </ZobObject>
-        <ZobObject name="fbx_example" type="mesh">
-            <Position x="0" y="5" z="0" />
-            <Rotation x="0" y="0" z="0" />
-            <Scale x="0.1" y="0.1" z="0.1" />
-            <Mesh>11.fbx</Mesh>
-        </ZobObject>
-        <ZobObject name="green" type="light">
-            <Position x="0" y="5" z="0" />
-            <Rotation x="0" y="0" z="0" />
-            <Scale x="1" y="1" z="1" />
-            <Color r="0" g="255" b="0" />
-            <Intensity>1.00</Intensity>
-            <FallOffDistance>60.00</FallOffDistance>
-            <Type>point</Type>
-        </ZobObject>
-        <ZobObject name="red" type="light">
-            <Position x="0" y="10" z="0" />
-            <Rotation x="0" y="0" z="0" />
-            <Scale x="1" y="1" z="1" />
-            <Color r="255" g="0" b="0" />
-            <Intensity>2.00</Intensity>
-            <FallOffDistance>60.00</FallOffDistance>
-            <Type>spot</Type>
-        </ZobObject>
-        <ZobObject name="blue" type="light">
-            <Position x="0" y="10" z="40" />
-            <Rotation x="-45" y="0" z="0" />
-            <Scale x="1" y="1" z="1" />
-            <Color r="185" g="185" b="0" />
-            <Intensity>2.00</Intensity>
-            <FallOffDistance>60.00</FallOffDistance>
-            <Type>directional</Type>
-        </ZobObject>
-    </Scene>
-</root>
+        <Position x="0" y="5" z="0" />
+        <Rotation x="0" y="0" z="0" />
+        <Scale x="0.1" y="0.1" z="0.1" />
+        <Mesh>11.fbx</Mesh>
+    </ZobObject>
+    <ZobObject name="green" type="light">
+        <Position x="0" y="5" z="0" />
+        <Rotation x="0" y="0" z="0" />
+        <Scale x="1" y="1" z="1" />
+        <Color r="0" g="255" b="0" />
+        <Intensity>1.00</Intensity>
+        <FallOffDistance>60.00</FallOffDistance>
+        <Type>point</Type>
+    </ZobObject>
+    <ZobObject name="red" type="light">
+        <Position x="0" y="10" z="0" />
+        <Rotation x="0" y="0" z="0" />
+        <Scale x="1" y="1" z="1" />
+        <Color r="255" g="0" b="0" />
+        <Intensity>2.00</Intensity>
+        <FallOffDistance>60.00</FallOffDistance>
+        <Type>spot</Type>
+    </ZobObject>
+    <ZobObject name="blue" type="light">
+        <Position x="0" y="10" z="40" />
+        <Rotation x="-45" y="0" z="0" />
+        <Scale x="1" y="1" z="1" />
+        <Color r="185" g="185" b="0" />
+        <Intensity>2.00</Intensity>
+        <FallOffDistance>60.00</FallOffDistance>
+        <Type>directional</Type>
+    </ZobObject>
+</Scene>

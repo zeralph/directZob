@@ -20,7 +20,7 @@ public:
 
 	//virtuals
 	//virtual void					Update(const ZobMatrix4x4& parentMatrix, const ZobMatrix4x4& parentRSMatrix);
-	virtual void					Update(const ZobObject* parent);
+	virtual void					Update();
 	virtual void					UpdateMesh(const Camera* camera, Core::Engine* engine);
 	virtual void					QueueForDrawing(const Camera* camera, Core::Engine* engine);
 	inline const ZobVector3&		GetScale() const { return m_scale; }

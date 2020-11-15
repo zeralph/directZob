@@ -22,7 +22,7 @@ public:
 	void				DrawGizmos(const Camera* camera, Core::Engine* engine) override;
 	TiXmlNode*			SaveUnderNode(TiXmlNode* node) override;
 
-	const ZobVector3*		GetColor() const { return &m_color; }
+	const ZobVector3*	GetColor() const { return &m_color; }
 	const float			GetFallOffDistance() const { return m_distance; }
 	const float			GetIntensity() const { return m_intensity; }
 	const float			GetSpotAngle() const { return m_spotAngle; }
