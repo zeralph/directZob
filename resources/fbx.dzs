@@ -9,7 +9,7 @@
         <FogType>none</FogType>
     </Globals>
     <ZobObject name="camera_0" type="camera">
-        <Position x="0.238952" y="8.16731" z="-5.75095" />
+        <Position x="0.238952" y="1.5" z="-5.75095" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="1" y="1" z="1" />
         <Physic type="0">
