@@ -65,6 +65,7 @@ namespace CLI
 		{
 			ZobVector3 v = ZobVector3::Vector3Y;
 			ZobVector3 p = ZobVector3::Vector3Zero;
+			c->GetTargetVector(&p);
 			c->RotateAroundPointAxis(&p, &v, NULL, x, false);
 			v = c->GetLeft();
 			c->RotateAroundPointAxis(&p, &v, NULL, y, false);

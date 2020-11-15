@@ -55,7 +55,7 @@ Camera* CameraManager::CreateEditorCamera()
 		std::string name = std::string("EditorCamera");
 		c = DirectZob::GetInstance()->GetCameraManager()->CreateCamera(name, 45.0f, NULL);
 		c->ChangeType(ZOBGUID::type_editor);
-		c->SetPosition(-1,1,-1);
+		c->SetPosition(-20,20,-20);
 
 		//c->SetPosition(0, 10, -10);
 

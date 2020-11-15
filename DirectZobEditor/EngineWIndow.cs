@@ -408,7 +408,8 @@ namespace DirectZobEditor
                 if (e.Button == MouseButtons.Left && m_mainForm.IsCtrlPressed())
                 {
                     m_mainForm.GetCameraControl().GetWrapper().RotateAroundAxis((float)dx / 2.0f, (float)-dy / 2.0f);
-                    m_mainForm.GetCameraControl().GetWrapper().SetLookAt(new ManagedVector3(0, 0, 0));
+                    //m_mainForm.GetCameraControl().GetWrapper().GetCurrentCameraTarget();
+                    //m_mainForm.GetCameraControl().GetWrapper().SetLookAt(m_mainForm.GetCameraControl().GetWrapper().GetCurrentCameraTarget());
                 }
                 else if (e.Button == MouseButtons.Middle)
                 {

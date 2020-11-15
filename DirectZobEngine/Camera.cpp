@@ -139,16 +139,14 @@ void Camera::RotateAroundPointAxis(const ZobVector3* point, const ZobVector3* ax
 	t = Transform::identity();
 	Vector3 p = Vector3(point->x, point->y, point->z);
 	Quaternion q = m_physicComponent->QuaternionFromAxisAngle(&paxis, angle);
-	q.x = axis->x * sinf(angle / 2.0f);
-	q.y = axis->y * sinf(angle / 2.0f);
-	q.z = axis->z * sinf(angle / 2.0f);
-	q.w = cosf(angle / 2.0f);
-
 	q.normalize();
-	t = Transform(p, q);
+	t = Transform(Vector3::zero(), q);
 	t2 = Transform::identity();
-	t2.setPosition(m_physicComponent->GetLocalTransform().getPosition());
+	Vector3 localPos = m_physicComponent->GetLocalTransform().getPosition();
+	t2.setPosition(localPos - p);
 	t2 = t * t2;
+	localPos = t2.getPosition();
+	t2.setPosition(p + localPos);
 	m_physicComponent->SetLocalTransform(t2);
 	LookAt(point);
 }
@@ -234,18 +232,10 @@ void Camera::UpdateViewProjectionMatrix()
 	m_viewTransaltion = GetPosition();
 	BufferData* b = DirectZob::GetInstance()->GetEngine()->GetBufferData();
 	setProjectionMatrix(m_fov, b->width, b->height, b->zNear, b->zFar);	
-
-	//TODO : 2 quite same inverse, lot of optims doable
-	
-
 	ZobVector3 up = ZobVector3::Vector3Y;
 	ZobVector3 eye = GetPosition();
-	ZobVector3 target = m_targetVector;// ZobVector3::Vector3Zero;
-	//ZobVector3 target = m_targetObject;
-	ZobVector3 forward = eye - target;
-	forward = target - eye;
+	ZobVector3 forward = m_targetVector - eye;
 	forward.Normalize();
-	//left.Mul(-1);
 	ZobVector3 left = ZobVector3::Cross(&up, &forward);
 	left.Normalize();
 	up = ZobVector3::Cross(&forward, &left);
