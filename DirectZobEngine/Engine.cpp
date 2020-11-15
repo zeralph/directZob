@@ -571,12 +571,12 @@ void Engine::QueueLine(const Camera *camera, const ZobVector3 *v1, const ZobVect
 		ZobVector3 a = ZobVector3(v1);
 		ZobVector3 b = ZobVector3(v2);
 		float za, zb = 0.0f;
-		//camera->GetViewMatrix()->Mul(&a);
-		camera->ToViewSpace(&a);
+		camera->GetViewMatrix()->Mul(&a);
+		//camera->ToViewSpace(&a);
 		za = a.z;
 		camera->GetProjectionMatrix()->Mul(&a);
-		//camera->GetViewMatrix()->Mul(&b);
-		camera->ToViewSpace(&b);
+		camera->GetViewMatrix()->Mul(&b);
+		//camera->ToViewSpace(&b);
 		zb = b.z;
 		camera->GetProjectionMatrix()->Mul(&b);
 

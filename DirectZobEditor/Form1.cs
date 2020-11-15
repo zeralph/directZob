@@ -288,7 +288,7 @@ namespace DirectZobEditor
             using (SaveFileDialog saveFileDialog = new SaveFileDialog())
             {
                 saveFileDialog.InitialDirectory = m_path;
-                saveFileDialog.Filter = "xml files (*.xml)|*.xml";
+                saveFileDialog.Filter = "xml files (*.xml)|*.xml|zob scene (*.dzs)|*.dzs";
                 saveFileDialog.FilterIndex = 2;
                 saveFileDialog.RestoreDirectory = true;
                 //openFileDialog.AutoUpgradeEnabled = false;

@@ -41,7 +41,7 @@ public:
 
 	ZobPhysicComponent(TiXmlNode* t);
 	~ZobPhysicComponent();
-	void								Init();
+	void								Init(const ZobVector3* position, const ZobVector3* rotation);
 	TiXmlNode*							SaveUnderNode(TiXmlNode* node);
 	void								Set(ePhysicComponentType t);
 	void								SetPosition(float x, float y, float z);

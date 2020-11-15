@@ -37,15 +37,13 @@ ZobPhysicComponent::~ZobPhysicComponent()
 	m_type = ePhysicComponentType_none;
 }
 
-void ZobPhysicComponent::Init()
+void ZobPhysicComponent::Init(const ZobVector3* position, const ZobVector3* rotation)
 {
 	m_localTransform = Transform::identity();
 	m_worldTransform = Transform::identity();
-	if (m_rigidBody)
-	{
-		m_rigidBody = NULL;
-	}
-
+	m_worldTransform.setPosition(Vector3(position->x, position->y, position->z));
+	Quaternion q = Quaternion::fromEulerAngles(rotation->x, rotation->y, rotation->z);
+	m_worldTransform.setOrientation(q);
 }
 
 void ZobPhysicComponent::CreateCollider()

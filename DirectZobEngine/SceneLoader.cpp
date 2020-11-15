@@ -206,22 +206,24 @@ void SceneLoader::SaveScene(std::string &path, std::string &file)
 	m_path = path;
 	fullPath = path + file;
 	TiXmlDocument doc("Scene");
-	TiXmlElement * root = new TiXmlElement("root");
+	TiXmlDeclaration* decl = new TiXmlDeclaration("1.0", "", "");
+	doc.LinkEndChild(decl);
+	TiXmlElement * root = new TiXmlElement("Scene");
 	doc.LinkEndChild(root);
-	TiXmlElement scene = TiXmlElement("Scene");
 	TiXmlElement globals = TiXmlElement("Globals");
 	DirectZob::GetInstance()->GetLightManager()->SaveUnderNode(&globals);
-	scene.InsertEndChild(globals);	
+	root->InsertEndChild(globals);	
 	ZobObject* rootObj = zobObjectManager->GetRootObject();
 	for (int i = 0; i < rootObj->GetNbChildren(); i++)
 	{
-		SaveZobObjectRecusrive(&scene, rootObj->GetChild(i));
+		SaveZobObjectRecusrive(root, rootObj->GetChild(i));
 	}
-	root->InsertEndChild(scene);
+	//root->InsertEndChild(scene);
 	if (!doc.SaveFile(fullPath.c_str()))
 	{
 		DirectZob::LogError("Error saving scene : ", doc.ErrorDesc());
 	}
+	//todo : check tinyxml doc for deleting atatched nodes ....
 }
 
 void SceneLoader::SaveZobObjectRecusrive(TiXmlNode* node, ZobObject* z)

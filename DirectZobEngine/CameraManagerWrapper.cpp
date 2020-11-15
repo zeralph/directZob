@@ -158,11 +158,11 @@ namespace CLI
 
 	void CameraManagerWrapper::SetCurrentCamera(System::String^ name)
 	{
-		DirectZob::GetInstance()->Lock();
+		//DirectZob::GetInstance()->Lock();
 		std::string stdName;
 		MarshalString(name, stdName);
 		m_Instance->SetNextCamera(stdName);
-		DirectZob::GetInstance()->Unlock();
+		//DirectZob::GetInstance()->Unlock();
 	}
 
 	void CameraManagerWrapper::SetLookAt( ManagedVector3^ target)

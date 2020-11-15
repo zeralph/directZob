@@ -20,6 +20,7 @@ public:
 		eTarget_none=0,
 		eTarget_Vector,
 		eTarget_Object,
+		eTarget_FPS,
 		__eTarget_MAX__
 	};
 	Camera(const std::string& name, float fov, BufferData* bufferData, ZobObject* parent);
@@ -30,8 +31,9 @@ public:
 	void					Update() override;
 	void					DrawGizmos(const Camera* camera, Core::Engine* engine) override;
 	TiXmlNode*				SaveUnderNode(TiXmlNode* node) override;
-
-	void					UpdateViewProjectionMatrix();
+	void					UpdateViewProjectionMatrix(const ZobVector3* eyeV);
+	void					UpdateViewProjectionMatrix(const ZobVector3 * eyeV, const ZobVector3* targetV, const ZobVector3* upV);
+	void					UpdateViewProjectionMatrix(const ZobVector3* eye, const float pitch, const float yaw);
 	inline const ZobMatrix4x4* GetViewMatrix() const { return &m_viewRotMatrix; };
 	inline const ZobMatrix4x4* GetProjectionMatrix() const { return &m_projMatrix; };
 	inline float			GetFov() const { return m_fov; };
@@ -47,43 +49,22 @@ public:
 	void					From2DToWorldOnPlane(ZobVector3* v2d, ZobVector3* p0, ZobVector3* pn);
 	inline void				ToViewSpace(ZobVector3* v) const
 	{
-		v->x -= m_viewTransaltion.x;
-		v->y -= m_viewTransaltion.y;
-		v->z -= m_viewTransaltion.z;
 		m_viewRotMatrix.Mul(v);
 	};
 	inline void				ToProjectedSpace(ZobVector3* vp)
 	{
 		m_projMatrix.Mul(vp);
 	}
-	/*
-	inline void				ToScreenSpace(ZobVector3* v)
-	{
-		BufferData* b = DirectZob::GetInstance()->GetEngine()->GetBufferData();
-		if (b)
-		{
-			v->x = (v->x / v->z + 1) * b->width;
-			v->y = (v->y / v->z + 1) * b->height;
-		}
-	}
-	*/
 	inline void				ProjectPointFromWorld(ZobVector3* wp)
 	{
 		ToViewSpace(wp);
 		ToProjectedSpace(wp);
-		//ToScreenSpace(wp);
 	}
-	/*
-	inline void				SetPosition(float x, float y, float z) override
-	{
-		m_translation.x = x; m_translation.y = y; m_translation.z = z;
-		m_nextTranslation = m_translation;
-	};
-	*/
+
 private:
 	void					SetViewMatrix(const ZobVector3 &left, const ZobVector3 &up, const ZobVector3 &fw, const ZobVector3 &p);
 	void					setProjectionMatrix(const float angleOfView, const float width, const float height, const float near, const float far);
-	void					RecomputeFLUVectors(const ZobVector3* v);
+	void					RecomputeFLUVectors(const ZobVector3* forwardV, const ZobVector3* upV);
 	ZobMatrix4x4 m_viewRotMatrix;
 	ZobMatrix4x4 m_projMatrix;
 	float m_fov;

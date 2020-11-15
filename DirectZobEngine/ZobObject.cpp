@@ -46,6 +46,8 @@ ZobObject::ZobObject(Type t, SubType s, const std::string& name, ZobObject* pare
 	m_renderOptions.lightMode = RenderOptions::eLightMode_phong;
 	m_renderOptions.zBuffered = true;
 	m_renderOptions.bTransparency = false;
+	ZobVector3 p = ZobVector3::Vector3Zero;
+	m_physicComponent->Init(&p, &p);
 	DirectZob::RemoveIndent();
 }
 
@@ -107,9 +109,7 @@ ZobObject::ZobObject(Type t, SubType s, TiXmlElement* node, ZobObject* parent, c
 	m_renderOptions.lightMode = RenderOptions::eLightMode_phong;
 	m_renderOptions.zBuffered = true;
 	m_renderOptions.bTransparency = false;
-	//m_renderOptions.colorization = new ZobVector3(1, 0, 0);
-	SetPosition(position.x, position.y, position.z);
-	SetRotation(rotation.x, rotation.y, rotation.z);
+	m_physicComponent->Init(&position, &rotation);
 	SetScale(scale.x, scale.y, scale.z);
 	SetParent(m_parent);
 	DirectZob::RemoveIndent();
