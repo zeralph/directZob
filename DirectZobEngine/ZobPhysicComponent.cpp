@@ -44,6 +44,8 @@ void ZobPhysicComponent::Init(const ZobVector3* position, const ZobVector3* rota
 	m_localTransform.setPosition(Vector3(position->x, position->y, position->z));
 	Quaternion q = Quaternion::fromEulerAngles(rotation->x, rotation->y, rotation->z);
 	m_localTransform.setOrientation(q);
+	m_scale = Vector3(1, 1, 1);
+	m_totalScale = Vector3(1, 1, 1);
 	//Update();
 }
 
@@ -112,22 +114,14 @@ void ZobPhysicComponent::Set(ePhysicComponentType t)
 	}
 }
 
-const ZobVector3* ZobPhysicComponent::GetPosition()
+ZobVector3 ZobPhysicComponent::GetPosition() const
 {
-	//if (m_type == ePhysicComponentType_dynamic)
-	{
-		//const Vector3 v = m_worldTransform.getPosition();
-		const Vector3 v = GetWorldTransform().getPosition();
-		m_position = ZobVector3(v.x, v.y, v.z);
-	}
-	return &m_position;
+	const Vector3 v = GetWorldTransform().getPosition();
+	return ZobVector3(v.x, v.y, v.z);
 }
 
 void ZobPhysicComponent::SetPosition(float x, float y, float z)
 {
-	m_position.x = x;
-	m_position.y = y;
-	m_position.z = z;
 	Vector3 v = Vector3(x, y, z);
 	Transform t = Transform(m_rigidBody->getTransform());
 	t.setPosition(v);
@@ -142,17 +136,12 @@ void ZobPhysicComponent::SetQuaternion(const ZobVector3* left, const ZobVector3*
 		left->z, up->z, fw->z);
 	Quaternion q = Quaternion(m);
 	m_worldTransform.setOrientation(q);
-
-	m_orientation = ZobMatrix4x4::QuaternionToEuler(q.x, q.y, q.z, q.w);
-	m_orientation = ZobVector3(RAD_TO_DEG(m_orientation.x), RAD_TO_DEG(m_orientation.y), RAD_TO_DEG(m_orientation.z));
 }
 
 void ZobPhysicComponent::SetQuaternion(float x, float y, float z, float w)
 {
 	Quaternion q = Quaternion(x, y, z, w);
 	m_worldTransform.setOrientation(q);
-	m_orientation = ZobMatrix4x4::QuaternionToEuler(x, y, z, w);
-	m_orientation = ZobVector3(RAD_TO_DEG(m_orientation.x), RAD_TO_DEG(m_orientation.y), RAD_TO_DEG(m_orientation.z));
 }
 void ZobPhysicComponent::LookAt(const ZobVector3* target)
 {
@@ -202,19 +191,13 @@ void ZobPhysicComponent::LookAt(const ZobVector3* forward, const ZobVector3* lef
 
 void ZobPhysicComponent::SetOrientation(float x, float y, float z)
 {
-	float dx = x - m_orientation.x;
-	float dy = y - m_orientation.y;
-	float dz = z - m_orientation.z;
-	m_orientation.x = x;
-	m_orientation.y = y;
-	m_orientation.z = z;
-	dx = DEG_TO_RAD(dx);
-	dy = DEG_TO_RAD(dy);
-	dz = DEG_TO_RAD(dz);
+	float rx = DEG_TO_RAD(x);
+	float ry = DEG_TO_RAD(y);
+	float rz = DEG_TO_RAD(z);
 	Transform t = Transform(m_worldTransform);
 	Quaternion q;
 	//q = Quaternion::fromEulerAngles((dx), (dy), (dz));
-	ZobVector3 v = ZobMatrix4x4::EulerToQuaternion(dx, dy, dz);
+	ZobVector3 v = ZobMatrix4x4::EulerToQuaternion(rx, ry, rz);
 	q.x = v.x;
 	q.y = v.y;
 	q.z = v.z;
@@ -225,32 +208,37 @@ void ZobPhysicComponent::SetOrientation(float x, float y, float z)
 	m_rigidBody->setTransform(t);
 }
 
-const ZobVector3* ZobPhysicComponent::GetOrientation()
+ZobVector3 ZobPhysicComponent::GetOrientation() const
 {
-	//if (m_type == ePhysicComponentType_dynamic)
-	{
-		//Quaternion q = m_worldTransform.getOrientation();	
-		Quaternion q = GetWorldTransform().getOrientation();
-		q.normalize();
-		ZobVector3 z = ZobMatrix4x4::QuaternionToEuler(q.x, q.y, q.z, q.w);
-		float ax = RAD_TO_DEG(z.x);
-		float ay = RAD_TO_DEG(z.y);
-		float az = RAD_TO_DEG(z.z);
-		ClampAngle(ax);
-		ClampAngle(ay);
-		ClampAngle(az);
-		m_orientation = ZobVector3(ax, ay, az);
-	}
-	return &m_orientation;
+	Quaternion q = GetWorldTransform().getOrientation();
+	q.normalize();
+	ZobVector3 z = ZobMatrix4x4::QuaternionToEuler(q.x, q.y, q.z, q.w);
+	float ax = RAD_TO_DEG(z.x);
+	float ay = RAD_TO_DEG(z.y);
+	float az = RAD_TO_DEG(z.z);
+	ax = ClampAngle(ax);
+	ay = ClampAngle(ay);
+	az = ClampAngle(az);
+	return ZobVector3(ax, ay, az);
 }
 
-void ZobPhysicComponent::ClampAngle(float& a)
+float ZobPhysicComponent::ClampAngle(float a) const
 {
 	int i = abs((int)a / 180);
 	a -= 180.0f * (float)i;
+	return a;
 }
 
-const ZobMatrix4x4 ZobPhysicComponent::GetRotationMatrix()
+void ZobPhysicComponent::Update()
+{
+	if (m_rigidBody)
+	{
+		m_rigidBody->setTransform(m_worldTransform);
+	}
+	m_totalScale = Vector3(1, 1, 1);
+}
+
+ZobMatrix4x4 ZobPhysicComponent::GetRotationMatrix() const
 {
 	reactphysics3d::decimal* mat = (reactphysics3d::decimal*)malloc(sizeof(decimal) * 16);
 	m_worldTransform.getOpenGLMatrix(mat);

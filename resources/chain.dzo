@@ -1,0 +1,61 @@
+<?xml version="1.0" ?>
+<ZobObject name="cube1" guid="50397186" type="mesh">
+    <Position x="0" y="0" z="0" />
+    <Rotation x="0" y="0" z="0" />
+    <Scale x="1" y="1" z="1" />
+    <Mesh name="cube.obj" file="D:\Git\directZob\resources\cube.obj" />
+    <Physic type="0">
+        <RigidBody type="0" active="0" />
+        <Collider type="0" radius="0.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
+    </Physic>
+    <ZobObject name="cube2" guid="50397187" type="mesh">
+        <Position x="5" y="0" z="-5" />
+        <Rotation x="0" y="0" z="0" />
+        <Scale x="1" y="1" z="1" />
+        <Mesh name="cube.obj" file="D:\Git\directZob\resources\cube.obj" />
+        <Physic type="0">
+            <RigidBody type="0" active="0" />
+            <Collider type="0" radius="0.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
+        </Physic>
+        <ZobObject name="cube4" guid="50397189" type="mesh">
+            <Position x="5" y="5" z="0" />
+            <Rotation x="0" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+            <Mesh name="cube.obj" file="D:\Git\directZob\resources\cube.obj" />
+            <Physic type="0">
+                <RigidBody type="0" active="0" />
+                <Collider type="0" radius="0.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
+            </Physic>
+        </ZobObject>
+    </ZobObject>
+    <ZobObject name="cube3" guid="50397188" type="mesh">
+        <Position x="5" y="0" z="5" />
+        <Rotation x="0" y="0" z="0" />
+        <Scale x="1" y="1" z="1" />
+        <Mesh name="cube.obj" file="D:\Git\directZob\resources\cube.obj" />
+        <Physic type="0">
+            <RigidBody type="0" active="0" />
+            <Collider type="0" radius="0.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
+        </Physic>
+        <ZobObject name="cube5" guid="50397191" type="mesh">
+            <Position x="3" y="5" z="7" />
+            <Rotation x="0" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+            <Mesh name="cube.obj" file="D:\Git\directZob\resources\cube.obj" />
+            <Physic type="0">
+                <RigidBody type="0" active="0" />
+                <Collider type="0" radius="0.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
+            </Physic>
+            <ZobObject name="cube6" guid="50397190" type="mesh">
+                <Position x="12" y="-5" z="-12" />
+                <Rotation x="0" y="0" z="0" />
+                <Scale x="1" y="1" z="1" />
+                <Mesh name="cube.obj" file="D:\Git\directZob\resources\cube.obj" />
+                <Physic type="0">
+                    <RigidBody type="0" active="0" />
+                    <Collider type="0" radius="0.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
+                </Physic>
+            </ZobObject>
+        </ZobObject>
+    </ZobObject>
+</ZobObject>

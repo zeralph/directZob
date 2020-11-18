@@ -23,8 +23,8 @@ public:
 	virtual void					Update();
 	virtual void					UpdateMesh(const Camera* camera, Core::Engine* engine);
 	virtual void					QueueForDrawing(const Camera* camera, Core::Engine* engine);
-	inline const ZobVector3&		GetScale() const { return m_scale; }
-	virtual inline void				SetScale(float x, float y, float z) { m_scale.x = x; m_scale.y = y; m_scale.z = z; };
+	inline ZobVector3				GetScale() const;
+	virtual inline void				SetScale(float x, float y, float z);
 	void							SetWorldRotation(float x, float y, float z);
 	void							SetWorldPosition(float x, float y, float z);
 	void							LookAt(const ZobVector3* target);
@@ -92,7 +92,6 @@ protected:
 	std::vector<ZobObject*> m_children;
 	ZobMatrix4x4 m_modelMatrix;
 	ZobMatrix4x4 m_rotationScaleMatrix;
-	ZobVector3 m_scale;
 	std::string m_name;
 	RenderOptions m_renderOptions;
 	bool m_markedForDeletion;

@@ -36,7 +36,6 @@ ZobObject::ZobObject(Type t, SubType s, const std::string& name, ZobObject* pare
 	}
 	m_markedForDeletion = false;
 	m_mesh = NULL;
-	m_scale = ZobVector3(1, 1, 1);
 	m_children.clear();
 	SetParent(m_parent);
 	if (m_parent != NULL)
@@ -99,7 +98,6 @@ ZobObject::ZobObject(DirectZobType::guid id, TiXmlElement* node, ZobObject* pare
 	}
 	m_markedForDeletion = false;
 	m_mesh = NULL;
-	m_scale = ZobVector3(1, 1, 1);
 	m_children.clear();
 	SetParent(m_parent);
 	if (m_parent != NULL)
@@ -196,34 +194,41 @@ void ZobObject::UpdateMesh(const Camera* camera, Core::Engine* engine)
 //void ZobObject::Update(const ZobMatrix4x4& parentMatrix, const ZobMatrix4x4& parentRSMatrix)
 void ZobObject::Update()
 {
-	Transform tr;
+	Transform parentTransform;
+	ZobVector3 parentScale;
 	if (m_parent)
 	{
 		const ZobPhysicComponent* zpc = m_parent->GetPhysicComponent();
-		tr = zpc->GetWorldTransform();
+		parentTransform = zpc->GetWorldTransform();
+		parentScale = zpc->GetTotalScale();
 	}
 	else
 	{
-		tr = Transform::identity();
-
+		parentTransform = Transform::identity();
+		parentScale = ZobVector3(1, 1, 1);
 	}
-	Transform newTransform = tr * m_physicComponent->GetLocalTransform();
-	Vector3 pt = tr.getPosition();
-	Quaternion pr = tr.getOrientation();
+	ZobVector3 scale = parentScale * m_physicComponent->GetScale();
+	Transform newTransform = m_physicComponent->GetLocalTransform();
+	Vector3 p = parentTransform.getPosition();
+	p.x *= scale.x;
+	p.y *= scale.y;
+	p.z *= scale.z;
+	parentTransform.setPosition(p);
+	newTransform = parentTransform * newTransform;
 	m_physicComponent->SetWorldTransform(newTransform);
 	m_physicComponent->Update();
+	m_physicComponent->SetTotalScale(scale.x, scale.y, scale.z);
 	const ZobMatrix4x4* parentMatrix = m_parent?m_parent->GetModelMatrix():&ZobMatrix4x4::IdentityMatrix;
 	const ZobMatrix4x4* parentRSMatrix = m_parent?m_parent->GetRotationScaleMatrix():&ZobMatrix4x4::IdentityMatrix;
 	ZobVector3 t = GetWorldPosition();
 	ZobVector3 r = GetWorldRotation();	
-	ZobVector3 s = m_scale;
 	m_modelMatrix.Identity();
 	m_rotationScaleMatrix.Identity();
 	m_rotationScaleMatrix.SetRotation(GetWorldRotation());
-	m_rotationScaleMatrix.SetScale(&m_scale);
+	m_rotationScaleMatrix.SetScale(scale);
 	m_modelMatrix.SetPosition(&t);
 	m_modelMatrix.SetRotation(&r);
-	m_modelMatrix.SetScale(&s);
+	m_modelMatrix.SetScale(scale);
 	m_left = ZobVector3(1, 0, 0);
 	m_forward = ZobVector3(0, 0, 1);
 	m_up = ZobVector3(0, 1, 0);
@@ -273,6 +278,15 @@ void ZobObject::QueueForDrawing(const Camera* camera, Core::Engine* engine)
 	{
 		DrawGizmos(camera, engine);
 	}
+}
+
+ZobVector3 ZobObject::GetScale() const 
+{ 
+	return m_physicComponent->GetScale(); 
+}
+void ZobObject::SetScale(float x, float y, float z)
+{ 
+	m_physicComponent->SetScale(x, y, z);
 }
 
 void ZobObject::DrawGizmos(const Camera* camera, Core::Engine* engine)
@@ -420,6 +434,8 @@ void ZobObject::SetLightingMode(RenderOptions::eLightMode l)
 void ZobObject::SaveToFactoryFile(std::string& file)
 {
 	TiXmlDocument doc("ZobObject");
+	TiXmlDeclaration* decl = new TiXmlDeclaration("1.0", "", "");
+	doc.LinkEndChild(decl);
 	SaveRecusrive(&doc, this);
 	//doc.LinkEndChild(&n);
 	if (!doc.SaveFile(file.c_str()))

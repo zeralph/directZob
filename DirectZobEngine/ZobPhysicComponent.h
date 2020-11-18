@@ -48,20 +48,23 @@ public:
 	void								SetOrientation(float x, float y, float z);
 	void								SetQuaternion(float x, float y, float z, float w);
 	void								SetQuaternion(const ZobVector3* left, const ZobVector3* up, const ZobVector3* fw);
-	const ZobVector3*					GetPosition();
-	const ZobVector3*					GetOrientation();
-	const ZobMatrix4x4					GetRotationMatrix();
+	ZobVector3							GetPosition() const ;
+	ZobVector3							GetOrientation() const ;
+	ZobMatrix4x4						GetRotationMatrix() const;
+	ZobVector3							GetScale() const { return ZobVector3(m_scale.x, m_scale.y, m_scale.z); }
+	void								SetScale(float x, float y, float z) { m_scale.x = x; m_scale.y = y; m_scale.z=z; }
 	void								LookAt(const ZobVector3* target);
 	void								LookAt(const ZobVector3* forward, const ZobVector3* left, const ZobVector3* up);
 	void								AddBoxCollider(const ZobVector3* halfExtends );
 	void								AddSphereCollider(float radius);
 	void								AddCapsuleCollider(float radius, float height);
-	void								Update() { if(m_rigidBody)m_rigidBody->setTransform(m_worldTransform); };
+	void								Update();
 	void								SaveTransform();
 	void								RestoreTransform();
 	void								ResetPhysic();
 	void								DrawGizmos(const Camera* camera, const ZobVector3* position, const ZobVector3* rotation);
-
+	ZobVector3							GetTotalScale() const { return ZobVector3(m_totalScale.x, m_totalScale.y, m_totalScale.z); }
+	void								SetTotalScale(float x, float y, float z) { m_totalScale.x = x; m_totalScale.y = y; m_totalScale.z = z; }
 	const Transform						GetWorldTransform() const { return m_rigidBody?m_rigidBody->getTransform():Transform();/* Transform(m_worldTransform);*/ };
 	Transform							GetLocalTransform() const { return Transform(m_localTransform); };
 	void								SetWorldTransform(Transform t) { m_worldTransform = Transform(t); };
@@ -72,14 +75,15 @@ public:
 private:
 	void								AddColliderInternal(CollisionShape* c);
 	void								CreateCollider();
-	void								ClampAngle(float& a);
+	float								ClampAngle(float a) const;
+	
 	ePhysicComponentType m_type;
 	RigidBody* m_rigidBody;
 	Collider* m_collider;	
 	Transform m_savedTransform;
 	sShapeDraw m_shapeDraw;
-	ZobVector3 m_position;
-	ZobVector3 m_orientation;
 	Transform m_localTransform;
 	Transform m_worldTransform;
+	Vector3 m_scale; 
+	Vector3 m_totalScale;
 };
