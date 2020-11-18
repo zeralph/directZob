@@ -73,13 +73,13 @@ namespace CLI
 		DirectZob::GetInstance()->Unlock();
 	}
 
-	void CameraManagerWrapper::Move(float x, float y)
+	void CameraManagerWrapper::Move(float x, float z, float y)
 	{
 		DirectZob::GetInstance()->Lock();
 		Camera* c = m_Instance->GetCurrentCamera();
 		if (c)
 		{
-			c->Move(x, y, true);
+			c->Move(x, z, y, true);
 		}
 		DirectZob::GetInstance()->Unlock();
 	}
@@ -95,32 +95,34 @@ namespace CLI
 		DirectZob::GetInstance()->Unlock();
 	}
 
-	void CameraManagerWrapper::From2DToWorld(ManagedVector3^ p)
+	CameraManagerWrapper::Ray^ CameraManagerWrapper::From2DToWorld(float x, float y)
 	{
-		DirectZob::GetInstance()->Lock();
 		Camera* c = m_Instance->GetCurrentCamera();
 		if (c)
 		{
-			ZobVector3 v = p->ToVector3();
-			c->From2DToWorld(&v);
-			p->FromVector3(v);
+			Camera::Ray r = c->From2DToWorld(x, y);
+			return gcnew CameraManagerWrapper::Ray(&r.p, &r.n);
 		}
-		DirectZob::GetInstance()->Unlock();
+		return nullptr;
 	}
 
-	void CameraManagerWrapper::From2DToWorldOnPlane(ManagedVector3^ v, ManagedVector3^ p0, ManagedVector3^ pn)
+	bool CameraManagerWrapper::From2DToWorldOnPlane(float x, float y, ManagedVector3^ p0, ManagedVector3^ pn, ManagedVector3^ ret)
 	{
-		DirectZob::GetInstance()->Lock();
 		Camera* c = m_Instance->GetCurrentCamera();
 		if (c)
 		{
-			ZobVector3 cv = v->ToVector3();
 			ZobVector3 cp0 = p0->ToVector3();
 			ZobVector3 cpn = pn->ToVector3();
-			c->From2DToWorldOnPlane(&cv, &cp0, &cpn);
-			v->FromVector3(cv);
+			ZobVector3 cret = ZobVector3(0,0,0);
+			if (c->From2DToWorldOnPlane(x, y, &cp0, &cpn, &cret))
+			{
+				ret->x = cret.x;
+				ret->y = cret.y;
+				ret->z = cret.z;
+				return true;
+			}
 		}
-		DirectZob::GetInstance()->Unlock();
+		return false;
 	}
 
 	ZobCameraWrapper^ CameraManagerWrapper::GetCurrentCamera()

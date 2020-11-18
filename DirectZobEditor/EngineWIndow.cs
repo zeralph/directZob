@@ -41,6 +41,7 @@ namespace DirectZobEditor
         public CLI.engineCallback onQueuingCallback;
         public event EventHandler OnBeginFrame;
         public event EventHandler OnEndFrame;
+        public event EventHandler OnEngineStopped;
         public delegate void BeforeUpdateEngine();
         public delegate void AfterUpdateEngine();
         public delegate void UpdateLogWindow();
@@ -88,14 +89,24 @@ namespace DirectZobEditor
             bCenter.Visible = false;
             m_mainForm.GetZobObjectListControl().OnObjectSelected += new ZobObjectListControl.OnObjectSelectedHandler(OnObjectSelected);
             m_mainForm.OnNewScene += new EventHandler(OnSceneChanged);
+            m_mainForm.Load += new EventHandler(OnMainformLoaded);
             EngineRender.HandleDestroyed += new EventHandler(OnClose);
-            
+                  
+        }
+
+        private void OnMainformLoaded(object sender, EventArgs e)
+        {
             m_engineThread.Start();
+        }
+
+        public void StopEngine()
+        {
+            m_directZobWrapper.Stop();     
         }
 
         private void OnClose(object sender, EventArgs e)
         {
-            m_directZobWrapper.Stop();
+            //StopEngine(); 
             m_EngineGraphics.Dispose();
         }
 
@@ -301,27 +312,18 @@ namespace DirectZobEditor
         }
         private void onEngineSceneUpdated()
         {
+            /*
             if(m_pickObjectPosition != null)
             {
-                CLI.ZobObjectWrapper z = GetEngineWrapper().GetObjectAt2DCoords(m_pickObjectPosition);
+                CLI.ZobObjectWrapper z = GetEngineWrapper().GetObjectAt2DCoords(m_pickObjectPosition.x, m_pickObjectPosition.y);
                 m_newObjectPicked = z;
                 m_pickObjectPosition = null;
             }
+            */
         }
 
         private void onFrameEndCallbackMethod()
         {
-            /*
-            if (!m_mainForm.ShuttingDown && !EngineRender.IsDisposed && !this.IsDisposed)
-            {
-                EngineRender.Invoke(AfterUpdateEngineWindowDelegate);
-            }
-            else
-            {
-                int h = 0;
-                h++;
-            }
-            */
             try
             {
                 EngineRender.Invoke(AfterUpdateEngineWindowDelegate);
@@ -387,6 +389,10 @@ namespace DirectZobEditor
         private void RunEngineThread()
         {
             m_directZobWrapper.Run(onFrameStartCallback, onFrameEndCallback, onSceneUpdatedCallback, onQueuingCallback);
+            if (OnEngineStopped != null)
+            {
+                OnEngineStopped(this, EventArgs.Empty);
+            }
         }
 
         private void UpdateCamera()
@@ -413,11 +419,33 @@ namespace DirectZobEditor
                 }
                 else if (e.Button == MouseButtons.Middle)
                 {
-                    m_mainForm.GetCameraControl().GetWrapper().Move((float)-dx * 2.0f, (float)dy * 2.0f);
+                    if (m_mainForm.IsCtrlPressed())
+                    {
+                        m_mainForm.GetCameraControl().GetWrapper().Move((float)-dx * 2.0f, 0, (float)-dy * 2.0f);
+                    }
+                    else
+                    {
+                        m_mainForm.GetCameraControl().GetWrapper().Move((float)-dx * 2.0f, (float)dy * 2.0f, 0);
+                    }
                 }
             }
             m_lastMouseX = Cursor.Position.X;
             m_lastMouseY = Cursor.Position.Y;
+        }
+        bool From2DToWorldOnPlane(int x, int y, ManagedVector3 p0, ManagedVector3 pn, ref ManagedVector3 ret)
+        {
+            Point p = new Point(x, y);
+            p = EngineRender.PointToClient(p);
+            p.X = x;
+            p.Y = y;
+            float fx = (float)p.X;
+            float fy = (float)p.Y;
+            fx /= EngineRender.Width;
+            fy /= EngineRender.Height;
+            fx = fx * 2.0f - 1.0f;
+            fy = fy * 2.0f - 1.0f;  
+            bool b = m_mainForm.GetCameraControl().GetWrapper().From2DToWorldOnPlane(fx, fy, p0, pn, ret);
+            return b;
         }
 
         private void EngineRender_MouseHover(object sender, EventArgs e)
@@ -432,15 +460,7 @@ namespace DirectZobEditor
             }
             float x = (float)e.X;
             float y = (float)e.Y;
-            x /= EngineRender.Width;
-            y /= EngineRender.Height;
-            x = x * 2.0f - 1.0f;
-            y = y * 2.0f - 1.0f;
-            ManagedVector3 v = new ManagedVector3();
-            v.x = x;
-            v.y = y;
-            v.z = 0.0f;
-            m_pickObjectPosition = v.Copy();
+            m_pickObjectPosition = new ManagedVector3(x, y, 0);
         }
 
         private void TRSButton_Click(object sender, EventArgs e)
@@ -523,105 +543,105 @@ namespace DirectZobEditor
             ZobObjectWrapper z = m_mainForm.GetZobObjectListControl().GetSelectedZobObject();
             if (c != null && z != null && e.Button == MouseButtons.Left && a != axis.none)
             {
-                Point p = bTX.PointToScreen(new Point(e.X, e.Y));
-                p = EngineRender.PointToClient(p);
-                float x = (float)p.X;
-                float y = (float)p.Y;
-                x /= EngineRender.Width;
-                y /= EngineRender.Height;
-                x = x * 2.0f - 1.0f;
-                y = y * 2.0f - 1.0f;
-                ManagedVector3 v = new ManagedVector3();
-                v.x = x;
-                v.y = y;
-                v.z = 0.0f;
+                Point p;
                 switch (a)
                 {
                     case axis.X:
-                        RotateObjectAroundX(z, v);
+                        p = bTX.PointToScreen(new Point(e.X, e.Y));
+                        RotateObjectAroundX(z, p.X, p.Y);
                         break;
                     case axis.Y:
-                        RotateObjectAroundY(z, v);
+                        p = bTY.PointToScreen(new Point(e.X, e.Y));
+                        RotateObjectAroundY(z, p.X, p.Y);
                         //pn =z.GetForward().Copy();
                         break;
                     case axis.Z:
-                        RotateObjectAroundZ(z, v);
+                        p = bTZ.PointToScreen(new Point(e.X, e.Y));
+                        RotateObjectAroundZ(z, p.X, p.Y);
                         //pn = z.GetLeft().Copy();
                         break;
                 }
             }
         }
 
-        private void RotateObjectAroundX(ZobObjectWrapper z, ManagedVector3 mousePositsion)
+        private void RotateObjectAroundX(ZobObjectWrapper z, int x, int y)
         {
             ManagedVector3 pn = z.GetUp().Copy();
             ManagedVector3 p0 = m_startTranslation.Copy();
-            m_mainForm.GetCameraControl().GetWrapper().From2DToWorldOnPlane(mousePositsion, p0, pn);
-            ManagedVector3 left = new ManagedVector3((mousePositsion.x - p0.x), (mousePositsion.y - p0.y), (mousePositsion.z - p0.z));
-            left.Normalize();
-            ManagedVector3 up = z.GetUp().Copy(); 
-            ManagedVector3 forward = left.Cross(up);
-            z.LookAt(forward, left, up);
-
-            ManagedVector3 p1 = p0.Copy();
-            p1.Add(left);
-            p1.Mul(2.0f);
-            ManagedVector3 p2 = p0.Copy();
-            p2.Add(forward);
-            p2.Mul(2.0f);
-            ManagedVector3 p3 = p0.Copy();
-            p3.Add(up);
-            p3.Mul(2.0f);
-            m_engineWrapper.DrawTriangle(p0, p1, p2, 0xFFFF00);
-            OnZobObjectRotated(z);
+            ManagedVector3 wpos = new ManagedVector3(0,0,0);
+            bool b = From2DToWorldOnPlane(x, y, p0, pn, ref wpos);
+            if(b)
+            {
+                ManagedVector3 left = new ManagedVector3((wpos.x - p0.x), (wpos.y - p0.y), (wpos.z - p0.z));
+                left.Normalize();
+                ManagedVector3 up = z.GetUp().Copy(); 
+                ManagedVector3 forward = left.Cross(up);
+                z.LookAt(forward, left, up);
+                ManagedVector3 p1 = p0.Copy();
+                p1.Add(left);
+                p1.Mul(2.0f);
+                ManagedVector3 p2 = p0.Copy();
+                p2.Add(forward);
+                p2.Mul(2.0f);
+                ManagedVector3 p3 = p0.Copy();
+                p3.Add(up);
+                p3.Mul(2.0f);
+                m_engineWrapper.DrawTriangle(p0, p1, p2, 0xFFFF00);
+                OnZobObjectRotated(z);
+            }
         }
 
-        private void RotateObjectAroundY(ZobObjectWrapper z, ManagedVector3 mousePositsion)
+        private void RotateObjectAroundY(ZobObjectWrapper z, int x, int y)
         {
             ManagedVector3 pn = z.GetForward().Copy();
             ManagedVector3 p0 = m_startTranslation.Copy();
-            m_mainForm.GetCameraControl().GetWrapper().From2DToWorldOnPlane(mousePositsion, p0, pn);
-            ManagedVector3 up = new ManagedVector3((mousePositsion.x - p0.x), (mousePositsion.y - p0.y), (mousePositsion.z - p0.z));
-            up.Normalize();
-            ManagedVector3 forward = z.GetForward().Copy();
-            ManagedVector3 left = up.Cross(forward);         
-            z.LookAt(forward, left, up);
-            ManagedVector3 p1 = p0.Copy();
-            p1.Add(left);
-            p1.Mul(2.0f);
-            ManagedVector3 p2 = p0.Copy();
-            p2.Add(forward);
-            p2.Mul(2.0f);
-            ManagedVector3 p3 = p0.Copy();
-            p3.Add(up);
-            p3.Mul(2.0f);
-            m_engineWrapper.DrawTriangle(p0, p1, p2, 0xFFFF00);
-            OnZobObjectRotated(z);
+            ManagedVector3 wpos = new ManagedVector3(0, 0, 0);
+            bool b = From2DToWorldOnPlane(x, y, p0, pn, ref wpos);
+            if (b)
+            {
+                ManagedVector3 up = new ManagedVector3((wpos.x - p0.x), (wpos.y - p0.y), (wpos.z - p0.z));
+                up.Normalize();
+                ManagedVector3 forward = z.GetForward().Copy();
+                ManagedVector3 left = up.Cross(forward);
+                z.LookAt(forward, left, up);
+                ManagedVector3 p1 = p0.Copy();
+                p1.Add(left);
+                p1.Mul(2.0f);
+                ManagedVector3 p2 = p0.Copy();
+                p2.Add(forward);
+                p2.Mul(2.0f);
+                ManagedVector3 p3 = p0.Copy();
+                p3.Add(up);
+                p3.Mul(2.0f);
+                m_engineWrapper.DrawTriangle(p0, p1, p2, 0xFFFF00);
+                OnZobObjectRotated(z);
+            }
         }
-        private void RotateObjectAroundZ(ZobObjectWrapper z, ManagedVector3 mousePositsion)
+        private void RotateObjectAroundZ(ZobObjectWrapper z, int x, int y)
         {
             ManagedVector3 pn = z.GetLeft().Copy();
             ManagedVector3 p0 = m_startTranslation.Copy();
-
-            m_mainForm.GetCameraControl().GetWrapper().From2DToWorldOnPlane(mousePositsion, p0, pn);
-            ManagedVector3 forward= new ManagedVector3((mousePositsion.x - p0.x), (mousePositsion.y - p0.y), (mousePositsion.z - p0.z));
-            forward.Normalize();
-            ManagedVector3 left = z.GetLeft().Copy();
-            ManagedVector3 up = forward.Cross(left);
-            z.LookAt(forward, left, up);
-
-            ManagedVector3 p1 = p0.Copy();
-            p1.Add(left);
-            p1.Mul(2.0f);
-            ManagedVector3 p2 = p0.Copy();
-            p2.Add(forward);
-            p2.Mul(2.0f);
-            ManagedVector3 p3 = p0.Copy();
-            p3.Add(up);
-            p3.Mul(2.0f);
-            m_engineWrapper.DrawTriangle(p0, p1, p2, 0xFFFF00);
-
-            OnZobObjectRotated(z);
+            ManagedVector3 wpos = new ManagedVector3(0, 0, 0);
+            bool b = From2DToWorldOnPlane(x, y, p0, pn, ref wpos);
+            if (b)
+            {
+                ManagedVector3 forward = new ManagedVector3((wpos.x - p0.x), (wpos.y - p0.y), (wpos.z - p0.z));
+                forward.Normalize();
+                ManagedVector3 left = z.GetLeft().Copy();
+                ManagedVector3 up = forward.Cross(left);
+                z.LookAt(forward, left, up);
+                ManagedVector3 p1 = p0.Copy();
+                p1.Add(left);
+                p1.Mul(2.0f);
+                ManagedVector3 p2 = p0.Copy();
+                p2.Add(forward);
+                p2.Mul(2.0f);
+                ManagedVector3 p3 = p0.Copy();
+                p3.Add(up);
+                p3.Mul(2.0f);
+                m_engineWrapper.DrawTriangle(p0, p1, p2, 0xFFFF00);
+                OnZobObjectRotated(z);
+            }
         }
         private void ScaleObject(MouseEventArgs e, axis a)
         {
@@ -633,68 +653,60 @@ namespace DirectZobEditor
             ZobObjectWrapper z = m_mainForm.GetZobObjectListControl().GetSelectedZobObject();
             if (c != null && z != null && e.Button == MouseButtons.Left)
             {
-                Point p = bTX.PointToScreen(new Point(e.X, e.Y));
-                p = EngineRender.PointToClient(p);
-                float x = (float)p.X;
-                float y = (float)p.Y;
-                x /= EngineRender.Width;
-                y /= EngineRender.Height;
-                x = x * 2.0f - 1.0f;
-                y = y * 2.0f - 1.0f;
-                ManagedVector3 v = new ManagedVector3();
-                v.x = x;
-                v.y = y;
-                v.z = 0.0f;
                 ManagedVector3 p0 = z.GetTransform().Copy();
                 ManagedVector3 pn = c.GetForward().Copy();
-                m_mainForm.GetCameraControl().GetWrapper().From2DToWorldOnPlane(v, p0, pn);
-                if (a != axis.none)
+                ManagedVector3 v = new ManagedVector3(0, 0, 0);
+                bool b = From2DToWorldOnPlane(e.X, e.Y, p0, pn, ref v);
+                if (b)
                 {
-                    ManagedVector3 k = new ManagedVector3((v.x - p0.x), (v.y - p0.y), (v.z - p0.z));
-                    float d = k.sqrtLength();
-                    k.Normalize();
-                    d = Math.Max(0.001f, d);
-                    v = new ManagedVector3();
-                    float l = 1.0f;
-                    switch (a)
+                    if (a != axis.none)
                     {
-                        case axis.X:
-                            float t = k.Dot(z.GetLeft());
-                            if (t != 0.0f)
-                            {
-                                d = d  * Math.Abs(t) / t;
-                                l = m_mainForm.IsCtrlPressed() ? d : 1.0f;
-                                v.x = m_startScaleValue.x * d;
-                                v.y = m_startScaleValue.y * l;
-                                v.z = m_startScaleValue.z * l;
-                                z.SetScale(v);
-                                ManagedVector3 v2 = p0.Copy();
-                                v2.x *= v.x;
-                                m_engineWrapper.GetProjectedCoords(v2);
-                                //bTX.
-                                OnZobObjectScaled(z);
-                            }
-                            break;
-                        case axis.Y:
-                            if (k.Dot(z.GetUp()) > 0.0f)
-                            {
-                                v.x = m_startScaleValue.x * l;
-                                v.y = m_startScaleValue.y * d;
-                                v.z = m_startScaleValue.z * l;
-                                z.SetScale(v);
-                                OnZobObjectScaled(z);
-                            }
-                            break;
-                        case axis.Z:
-                            if (k.Dot(z.GetForward()) > 0.0f)
-                            {
-                                v.x = m_startScaleValue.x * l;
-                                v.y = m_startScaleValue.y * l;
-                                v.z = m_startScaleValue.z * d;
-                                z.SetScale(v);
-                                OnZobObjectScaled(z);
-                            }
-                            break;
+                        ManagedVector3 k = new ManagedVector3((v.x - p0.x), (v.y - p0.y), (v.z - p0.z));
+                        float d = k.sqrtLength();
+                        k.Normalize();
+                        d = Math.Max(0.001f, d);
+                        v = new ManagedVector3();
+                        float l = 1.0f;
+                        switch (a)
+                        {
+                            case axis.X:
+                                float t = k.Dot(z.GetLeft());
+                                if (t != 0.0f)
+                                {
+                                    d = d * Math.Abs(t) / t;
+                                    l = m_mainForm.IsCtrlPressed() ? d : 1.0f;
+                                    v.x = m_startScaleValue.x * d;
+                                    v.y = m_startScaleValue.y * l;
+                                    v.z = m_startScaleValue.z * l;
+                                    z.SetScale(v);
+                                    ManagedVector3 v2 = p0.Copy();
+                                    v2.x *= v.x;
+                                    m_engineWrapper.GetProjectedCoords(v2);
+                                    //bTX.
+                                    OnZobObjectScaled(z);
+                                }
+                                break;
+                            case axis.Y:
+                                if (k.Dot(z.GetUp()) > 0.0f)
+                                {
+                                    v.x = m_startScaleValue.x * l;
+                                    v.y = m_startScaleValue.y * d;
+                                    v.z = m_startScaleValue.z * l;
+                                    z.SetScale(v);
+                                    OnZobObjectScaled(z);
+                                }
+                                break;
+                            case axis.Z:
+                                if (k.Dot(z.GetForward()) > 0.0f)
+                                {
+                                    v.x = m_startScaleValue.x * l;
+                                    v.y = m_startScaleValue.y * l;
+                                    v.z = m_startScaleValue.z * d;
+                                    z.SetScale(v);
+                                    OnZobObjectScaled(z);
+                                }
+                                break;
+                        }
                     }
                 }
             }
@@ -710,49 +722,41 @@ namespace DirectZobEditor
             ZobObjectWrapper z = m_mainForm.GetZobObjectListControl().GetSelectedZobObject();
             if (c != null && z != null && e.Button == MouseButtons.Left)
             {
-                Point p = bTX.PointToScreen(new Point(e.X, e.Y));
-                p = EngineRender.PointToClient(p);
-                float x = (float)p.X;
-                float y = (float)p.Y;
-                x /= EngineRender.Width;
-                y /= EngineRender.Height;
-                x = x * 2.0f - 1.0f;
-                y = y * 2.0f - 1.0f;
-                ManagedVector3 v = new ManagedVector3();
-                v.x = x;
-                v.y = y;
-                v.z = 0.0f;
                 ManagedVector3 p0 = z.GetTransform();
                 ManagedVector3 pn = c.GetForward();
-                m_mainForm.GetCameraControl().GetWrapper().From2DToWorldOnPlane(v, p0, pn);
-                if (a != axis.none)
+                ManagedVector3 v = new ManagedVector3(0, 0, 0);
+                bool b = From2DToWorldOnPlane(e.X, e.Y, p0, pn, ref v);
+                if(b)
                 {
-                    ManagedVector3 k = new ManagedVector3((v.x - p0.x), (v.y - p0.y), (v.z - p0.z));
-                    ManagedVector3 k2 = new ManagedVector3(k);
-                    k2.Normalize();
-                    v = c.GetForward();
-                    switch (a)
+                    if (a != axis.none)
                     {
-                        case axis.X:
-                            v = z.GetLeft();
-                            break;
-                        case axis.Y:
-                            v = z.GetUp();
-                            break;
-                        case axis.Z:
-                            v = z.GetForward();
-                            break;
+                        ManagedVector3 k = new ManagedVector3((v.x - p0.x), (v.y - p0.y), (v.z - p0.z));
+                        ManagedVector3 k2 = new ManagedVector3(k);
+                        k2.Normalize();
+                        v = c.GetForward();
+                        switch (a)
+                        {
+                            case axis.X:
+                                v = z.GetLeft();
+                                break;
+                            case axis.Y:
+                                v = z.GetUp();
+                                break;
+                            case axis.Z:
+                                v = z.GetForward();
+                                break;
+                        }
+                        k.x = k.x * v.x;
+                        k.y = k.y * v.y;
+                        k.z = k.z * v.z;
+                        float f = k.sqrtLength();
+                        float sign = v.Dot(k2);
+                        v.Mul(f * sign);
+                        v.Add(p0);
                     }
-                    k.x = k.x * v.x;
-                    k.y = k.y * v.y;
-                    k.z = k.z * v.z;
-                    float f = k.sqrtLength();
-                    float sign = v.Dot(k2);
-                    v.Mul(f * sign);
-                    v.Add(p0);
+                    z.SetTransform(v);
+                    OnZobObjectMoved(z);
                 }
-                z.SetTransform(v);
-                OnZobObjectMoved(z);
             }
         }
 

@@ -339,12 +339,21 @@ void Engine::DrawGrid(const Camera *camera)
 	QueueLine(camera, &ZobVector3::Vector3Zero, &ZobVector3::Vector3Z, 0x0000FF, true);
 }
 
-ZobVector3 Engine::LinePlaneIntersection(const ZobVector3* p0, const ZobVector3* pn, const ZobVector3* l0, const ZobVector3* lv)
+bool Engine::LinePlaneIntersection(const ZobVector3* planeOrigin, const ZobVector3* planeNormal, const ZobVector3* lineOrigin, const ZobVector3* lineDirection, ZobVector3* ret)
 {
-	float d = -(pn->x * p0->x + pn->y * p0->y + pn->z * p0->z);
-	float t = -(pn->x * l0->x + pn->y * l0->y + pn->z * l0->z + d) / (pn->x * lv->x + pn->y * lv->y + pn->z * lv->z);
-	ZobVector3 v = ZobVector3(l0->x + t * lv->x, l0->y + t * lv->y, l0->z + t * lv->z);
-	return v;
+	float d = -(planeNormal->x * planeOrigin->x + planeNormal->y * planeOrigin->y + planeNormal->z * planeOrigin->z);
+	float t = -(planeNormal->x * lineOrigin->x + planeNormal->y * lineOrigin->y + planeNormal->z * lineOrigin->z + d) / (planeNormal->x * lineDirection->x + planeNormal->y * lineDirection->y + planeNormal->z * lineDirection->z);
+	if (std::isfinite(t) && std::isfinite(d))
+	{
+		ret->x = lineOrigin->x + t * lineDirection->x;
+		ret->y = lineOrigin->y + t * lineDirection->y;
+		ret->z = lineOrigin->z + t * lineDirection->z;
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 
 bool Engine::LineTriangleIntersection(const Triangle* t, const ZobVector3* l0, const ZobVector3* lv, ZobVector3& intersectionPt )
@@ -410,13 +419,13 @@ bool Engine::LineTriangleIntersection(const Triangle* t, const ZobVector3* l0, c
 		return true;                       // I is in T
 }
 
-ZobObject* Engine::GetObjectAt2DCoords(const ZobVector3* coord2D)
+ZobObject* Engine::GetObjectAt2DCoords(float x, float y)
 {
 	Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
 	if (c)
 	{
-		Camera::Ray ray = c->From2DToWorld(coord2D);
-		int  idx = (int)floor((coord2D->y + 1.0f) / 2.0f * m_nbRasterizers);
+		Camera::Ray ray = c->From2DToWorld(x, y);
+		int  idx = (int)floor((y + 1.0f) / 2.0f * m_nbRasterizers);
 		Rasterizer* rast = m_rasterizers[idx];
 		ZobVector3 inter;
 		for (int i = 0; i < rast->GetNbTriangle(); i++)

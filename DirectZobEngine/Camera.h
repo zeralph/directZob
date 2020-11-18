@@ -11,6 +11,11 @@ public:
 	class Ray
 	{
 	public:
+		Ray()
+		{
+			p = ZobVector3::Vector3Zero;
+			n = ZobVector3::Vector3Zero;
+		}
 		ZobVector3 p;
 		ZobVector3 n;
 	};
@@ -43,10 +48,10 @@ public:
 	bool					GetTargetVector(ZobVector3* t);
 	
 	void					RotateAroundPointAxis(const ZobVector3* point, const ZobVector3* axis, const ZobVector3* lockAxis, float angle, bool recomputeVectors);
-	void					Move(float dx, float dy, bool moveTargetVector);
+	void					Move(float dx, float dz, float dy, bool moveTargetVector);
 	void					Zoom(float z);
-	Ray						From2DToWorld(const ZobVector3* v2d);
-	void					From2DToWorldOnPlane(ZobVector3* v2d, ZobVector3* p0, ZobVector3* pn);
+	Ray						From2DToWorld(float x, float y);
+	bool					From2DToWorldOnPlane(const float x, const float y, const ZobVector3* p0, const ZobVector3* pn, ZobVector3* ret);
 	inline void				ToViewSpace(ZobVector3* v) const
 	{
 		m_viewRotMatrix.Mul(v);
@@ -72,7 +77,7 @@ private:
 	eTargetMode m_tagetMode;
 	ZobVector3 m_targetVector;
 	const ZobObject* m_targetObject;
-	ZobMatrix4x4 m_invModelMatrix;
+	//ZobMatrix4x4 m_invModelMatrix;
 	ZobMatrix4x4 m_invProjectionMatrix;
 	ZobMatrix4x4 m_invViewMatrix;
 	//ZobVector3 m_nextTranslation;

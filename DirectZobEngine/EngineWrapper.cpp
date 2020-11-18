@@ -4,6 +4,8 @@
 namespace CLI
 {
 	static DirectZobType::RenderOptions m_renderOptions;
+	static Line m_lines[NB_EDITOR_LINES];
+	static Circle m_circles[NB_EDITOR_CIRCLES];
 
 	EngineWrapper::EngineWrapper():ManagedObject(DirectZob::GetInstance()->GetEngine(), false)
 	{
@@ -89,25 +91,14 @@ namespace CLI
 		return m_Instance->GetDistanceToCamera(&v);
 	} 
 
-	ZobObjectWrapper^ EngineWrapper::GetObjectAt2DCoords(ManagedVector3^ v)
+	ZobObjectWrapper^ EngineWrapper::GetObjectAt2DCoords(float x, float y)
 	{
-		ZobVector3 p = v->ToVector3();
-		ZobObject* z = m_Instance->GetObjectAt2DCoords(&p);
+		ZobObject* z = m_Instance->GetObjectAt2DCoords(x, y);
 		if(z)
 		{
 			return gcnew ZobObjectWrapper(z);
 		}
 		return nullptr;
-	}
-	void EngineWrapper::DrawLine(ManagedVector3^ p0, ManagedVector3^ p1, int color)
-	{
-		Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
-		if (c)
-		{
-			ZobVector3 pp0 = p0->ToVector3();
-			ZobVector3 pp1 = p1->ToVector3();
-			m_Instance->QueueLine(c, &pp0, &pp1, color, false);
-		}
 	}
 
 	void EngineWrapper::QueueObjectsToRender()
@@ -143,6 +134,16 @@ namespace CLI
 			}
 		}
 		m_nbTriangles = 0;
+		for (int i = 0; i < m_nbLines; i++)
+		{
+			m_Instance->QueueLine(c, &m_lines[i].p0, &m_lines[i].p1, m_lines[i].color, false);
+		}
+		m_nbLines = 0;
+		for (int i = 0; i < m_nbCircles; i++)
+		{
+			m_Instance->QueueEllipse(c, &m_circles[i].p, &m_circles[i].n, m_circles[i].r, m_circles[i].r, m_circles[i].color, false);
+		}
+		m_nbCircles = 0;
 	}
 
 	void EngineWrapper::DrawTriangle(ManagedVector3^ p0, ManagedVector3^ p1, ManagedVector3^ p2, int color)
@@ -167,11 +168,29 @@ namespace CLI
 		Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
 		if (c)
 		{
-			ZobVector3 pp0 = p0->ToVector3();
-			ZobVector3 pup = up->ToVector3();
-			ZobMatrix4x4 m;
-			m.SetPosition(pp0);
-			m_Instance->QueueEllipse(c, &pp0, &pup, r, r, color, true);
+			if (m_nbCircles < NB_EDITOR_LINES)
+			{
+				m_circles[m_nbCircles].p = p0->ToVector3();
+				m_circles[m_nbCircles].n = up->ToVector3();
+				m_circles[m_nbCircles].r = r;
+				m_circles[m_nbCircles].color = color;
+				m_nbCircles++;
+			}
+		}
+	}
+
+	void EngineWrapper::DrawLine(ManagedVector3^ p0, ManagedVector3^ p1, int color)
+	{
+		Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
+		if (c)
+		{
+			if (m_nbLines < NB_EDITOR_LINES)
+			{
+				m_lines[m_nbLines].p0 = p0->ToVector3();
+				m_lines[m_nbLines].p1 = p1->ToVector3();
+				m_lines[m_nbLines].color = color;
+				m_nbLines++;
+			}
 		}
 	}
 }

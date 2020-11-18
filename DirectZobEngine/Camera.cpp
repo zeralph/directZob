@@ -73,15 +73,6 @@ void Camera::DrawGizmos(const Camera* camera, Core::Engine* engine)
 		engine->QueueLine(camera, p, &v3, c, true);
 		engine->QueueLine(camera, p, &v0, c, true);
 	}
-
-	ZobMatrix4x4 z;
-	z.Identity();
-	z.Identity();
-	z.AddTranslation(sRayDbg);
-	//engine->QueueSphere(camera, &z, 0.1f, c2, true);
-	ZobVector3 q = sRayDbg - sRayDbg2;
-	q = sRayDbg2 + q * 500.0f;
-	engine->QueueLine(camera, &sRayDbg, &q, c2, true);
 }
 
 void Camera::Zoom(float z)
@@ -165,24 +156,21 @@ void Camera::RecomputeFLUVectors(const ZobVector3* forwardV, const ZobVector3* u
 	m_left = left;
 }
 
-void Camera::Move(float dx, float dy, bool moveTargetVector)
+void Camera::Move(float dx, float dz, float dy, bool moveTargetVector)
 {
 	ZobVector3 vl = ZobVector3(m_left);
 	vl = vl * ((float)-dx / 20.0f);
 	vl.y = 0;
-
 	ZobVector3 vf = ZobVector3(m_forward);
-	
-	vf = vf * ((float)dy / 20.0f);
+	vf = vf * ((float)dz / 20.0f);
 	vf.y = 0;
-	//m_nextTranslation = m_nextTranslation - (vl + vf);
+	ZobVector3 vu = ZobVector3(0, (float)dy / 20.0f, 0);
 	ZobVector3 v = GetPosition();
-	v = v - (vl + vf);
+	v = v - (vl + vf + vu);
 	SetPosition(v.x, v.y, v.z);
 	if (moveTargetVector)
 	{
-		m_targetVector = m_targetVector - (vl + vf);
-		//m_targetVector.Normalize();
+		m_targetVector = m_targetVector - (vl + vf + vu);
 	}
 }
 
@@ -257,10 +245,10 @@ void Camera::UpdateViewProjectionMatrix(const ZobVector3* eyeV, const ZobVector3
 	m_forward = forward;
 	m_up = up;
 	//todo : clean that
-	ZobMatrix4x4::InvertMatrix4(m_rotationScaleMatrix, m_invModelMatrix);
-	ZobMatrix4x4::InvertMatrix4(m_modelMatrix, m_invModelMatrix);
-	ZobMatrix4x4::InvertMatrix4(m_projMatrix, m_invProjectionMatrix);
-	ZobMatrix4x4::InvertMatrix4(m_viewRotMatrix, m_invViewMatrix);
+	//ZobMatrix4x4::InvertMatrix4(m_rotationScaleMatrix, m_invModelMatrix);
+	//ZobMatrix4x4::InvertMatrix4(m_modelMatrix, m_invModelMatrix);
+	//ZobMatrix4x4::InvertMatrix4(m_projMatrix, m_invProjectionMatrix);
+	//ZobMatrix4x4::InvertMatrix4(m_viewRotMatrix, m_invViewMatrix);
 	
 	//g_update_camera_mutex.unlock();
 }
@@ -310,7 +298,10 @@ void Camera::SetViewMatrix(const ZobVector3& left, const ZobVector3& up, const Z
 	m_viewRotMatrix.SetData(3, 2, 0);
 	m_viewRotMatrix.SetData(3, 3, 1);
 	//-------------------------------------------------------
-
+	ZobMatrix4x4::InvertMatrix4(m_viewRotMatrix, m_invViewMatrix);
+	m_invViewMatrix.SetData(0, 3, 0.0f);
+	m_invViewMatrix.SetData(1, 3, 0.0f);
+	m_invViewMatrix.SetData(2, 3, 0.0f);
 }
 
 void Camera::setProjectionMatrix(const float angleOfView, const float width, const float height, const float zNear, const float zFar)
@@ -367,34 +358,56 @@ void Camera::setProjectionMatrix(const float angleOfView, const float width, con
 	m_invProjectionMatrix.SetData(3, 2, 1.0f / d);
 	m_invProjectionMatrix.SetData(3, 3, -c / (d*e) );
 
+//	ZobMatrix4x4::InvertMatrix4(m_projMatrix, m_invProjectionMatrix);
 }
 
-//v is homogenous
-Camera::Ray Camera::From2DToWorld(const ZobVector3* v2d)
+// x in [-1,1], y in [-1,1}
+Camera::Ray Camera::From2DToWorld(float x, float y)
 {
-	ZobVector3 v = v2d;
-	m_invProjectionMatrix.Mul(&v);
-	m_invViewMatrix.Mul(&v);
-	v.Normalize();	
-	v.x += this->GetWorldPosition().x;
-	v.y += this->GetWorldPosition().y;
-	v.z += this->GetWorldPosition().z;
 	Ray r;
-	r.p = this->GetWorldPosition();
-	r.n = v - r.p;
+	if(fabsf(x)<=1.0f && fabsf(y)<=1.0f)
+	{
+		BufferData* b = DirectZob::GetInstance()->GetEngine()->GetBufferData();
+		ZobVector3 v = ZobVector3(x, y, b->zNear);
+		static bool mytest = true;
+		if (mytest)
+		{
+			
+			m_invProjectionMatrix.Mul(&v);
+			m_invViewMatrix.Mul(&v);
+			//v.Normalize();
+			r.p = this->GetWorldPosition();
+			v.x /= v.w;
+			v.y /= v.w;
+			v.z /= v.w;
+			v.x /= 1.0f;
+			//v.Normalize();
+			r.n = v;
+		}
+		else
+		{
+			m_invProjectionMatrix.Mul(&v);
+			m_invViewMatrix.Mul(&v);
+			v.Normalize();
+			//v.x += this->GetWorldPosition().x;
+			//v.y += this->GetWorldPosition().y;
+			//v.z += this->GetWorldPosition().z;
+			r.p = this->GetWorldPosition();
+			r.n = v;// -r.p;
+		}
+	}
 	return r;
 }
 
-void Camera::From2DToWorldOnPlane(ZobVector3* v2d, ZobVector3* p0, ZobVector3* pn)
+bool Camera::From2DToWorldOnPlane(const float x, const float y, const ZobVector3* p0, const ZobVector3* pn, ZobVector3* ret)
 {
-	Camera::Ray r = From2DToWorld(v2d);
+	Camera::Ray r = From2DToWorld(x, y);
 	ZobVector3 l0 = this->GetWorldPosition();
-	ZobVector3 lv = v2d - l0;
-	ZobVector3 i = DirectZob::GetInstance()->GetEngine()->LinePlaneIntersection(p0, pn, &r.p, &r.n);
-	v2d->x = i.x;
-	v2d->y = i.y;
-	v2d->z = i.z;
-	DirectZob::GetInstance()->GetEngine()->QueueLine(this, this->GetPosition(), v2d, 0xFF00FF, true);
+	if (DirectZob::GetInstance()->GetEngine()->LinePlaneIntersection(p0, pn, &r.p, &r.n, ret))
+	{
+		return true;
+	}
+	return false;
 }
 
 TiXmlNode* Camera::SaveUnderNode(TiXmlNode* node)

@@ -13,6 +13,7 @@ namespace CLI
 	public ref class DirectZobWrapper: public ManagedObject<DirectZob>
 	{
 	public:
+
 		static void					CallSceneUpdatedCallback();
 		static void					CallQueuingCallback();
 		DirectZobWrapper();

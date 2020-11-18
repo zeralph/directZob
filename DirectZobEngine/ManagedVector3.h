@@ -65,6 +65,9 @@ namespace CLI {
 			}
 		}
 
+		static bool operator==(const ManagedVector3^ v1, const ManagedVector3^ v2) { return (v1->x == v2->x && v1->y == v2->y && v1->z == v2->z); }
+		static bool operator!=(const ManagedVector3^ v1, const ManagedVector3^ v2) { return (v1->x != v2->x || v1->y != v2->y || v1->z != v2->z); }
+
 		float Dot(const ManagedVector3^ v)
 		{
 			return x * v->x + y * v->y + z * v->z;

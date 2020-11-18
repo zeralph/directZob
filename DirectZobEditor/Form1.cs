@@ -44,7 +44,7 @@ namespace DirectZobEditor
         public event EventHandler OnSceneLoaded;
         public event EventHandler OnSceneSaved;
 
-        public bool m_isClosing = false;
+        public bool m_canBeSafelyClosed = false;
 
         public delegate void OnSceneUpdateHandler(object s, SceneUpdateEventArg e);
         public event OnSceneUpdateHandler OnSceneUpdated;
@@ -85,6 +85,7 @@ namespace DirectZobEditor
             m_meshManagerWrapper = new CLI.MeshManagerWrapper();
             m_lightManagerWrapper = new CLI.LightManagerWrapper();
             Application.ApplicationExit += new EventHandler(this.OnApplicationExit);
+            this.Load += new EventHandler(this.Onloaded);
             //--
             m_camControl = new CameraControl(this);
             m_zobObjectList = new ZobObjectListControl(this);
@@ -114,7 +115,7 @@ namespace DirectZobEditor
             m_optionsForm.Hide();
 
             this.propertiesPanel.MinimumSize = new Size(300, 500);
-
+            m_engineWindow.OnEngineStopped += new EventHandler(OnEngineClosed);
             this.WindowState = FormWindowState.Maximized;
             m_directZobWrapper.NewScene();
             EventHandler handler = OnNewScene;
@@ -124,7 +125,6 @@ namespace DirectZobEditor
             }
         }
 
-        public bool ShuttingDown { get { return m_isClosing; } }
         public string Getpath()
         {
             return m_path;
@@ -368,6 +368,11 @@ namespace DirectZobEditor
             m_directZobWrapper.Unload();
         }
 
+        private void Onloaded(object sender, EventArgs e)
+        {
+
+        }
+
         private void ExitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Application.Exit();
@@ -377,9 +382,28 @@ namespace DirectZobEditor
         {
 
         }
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if(!m_canBeSafelyClosed)
+            {
+                m_directZobWrapper.Unload();
+                m_engineWindow.StopEngine();
+                e.Cancel = true;
+            }
+            else
+            {
+                //goodbye !
+            }
+        }
         private void Form1_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            OnApplicationExit(sender, e);
+            
+        }
+
+        private void OnEngineClosed(object sender, EventArgs e)
+        {
+            m_canBeSafelyClosed = true;
+            Application.Exit();
         }
 
         public void PropagateSceneUpdateEvent(SceneUpdateEventArg e)
@@ -557,11 +581,6 @@ namespace DirectZobEditor
             m_engineWindow.SetModificator(EngineWindow.objectModificator.scale);
             btnTranslate.Checked = false;
             btnRotate.Checked = false;
-        }
-
-        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            m_isClosing = true;
         }
     }
 

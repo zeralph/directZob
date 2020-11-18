@@ -8,9 +8,23 @@
 //using namespace System;
 
 #define NB_EDITOR_TRIANGLES 1000
-
+#define NB_EDITOR_LINES 1000
+#define NB_EDITOR_CIRCLES 1000
 namespace CLI
 {
+	struct Line
+	{
+		ZobVector3 p0;
+		ZobVector3 p1;
+		int color;
+	};
+	struct Circle
+	{
+		ZobVector3 p;
+		ZobVector3 n;
+		float r;
+		int color;
+	};
 	public ref class EngineWrapper: public ManagedObject<Core::Engine>
 	{
 	public:
@@ -29,18 +43,19 @@ namespace CLI
 		void			SetLightingPrecision(int r);
 		bool			GetProjectedCoords(ManagedVector3^ worldSpacePos);
 		float			GetDistanceToCamera(ManagedVector3^ worldPos);
-		ZobObjectWrapper^ GetObjectAt2DCoords(ManagedVector3^ v);
+		ZobObjectWrapper^ GetObjectAt2DCoords(float x, float y);
 		void			DrawLine(ManagedVector3^ p0, ManagedVector3^ p1, int color);
 		void			DrawCircle(ManagedVector3^ p0, ManagedVector3^ up, float r, int color);
 		void			DrawTriangle(ManagedVector3^ p0, ManagedVector3^ p1, ManagedVector3^ p2, int color);
 		void			QueueObjectsToRender();
 	private:
-		//array<int>^ m_buffer;
 		Triangle*		m_triangleList;
 		ZobVector3*		m_vertices;
 		ZobVector3*		m_projectedVertices;
 		ZobVector3*		m_normals;
 		int				m_nbTriangles;
+		int				m_nbLines;
+		int				m_nbCircles;
 	};
 }
 #endif //_WINDLL
