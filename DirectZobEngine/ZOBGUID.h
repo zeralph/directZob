@@ -28,10 +28,10 @@ public :
 	const Type GetType()const;
 	const SubType GetSubType()const;
 	void ChangeType(Type t);
-	uint GetId();
+	ulong GetId();
 
 private:
-	uint m_id;
+	ulong m_id;
 	ZOBGUID::Type m_type;
 	ZOBGUID::SubType m_subType;
 	static ulong sCurrentId;

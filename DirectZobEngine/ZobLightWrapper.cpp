@@ -6,7 +6,7 @@ namespace CLI
 {
 	ZobLightWrapper::ZobLightWrapper(Light* zobObject):ZobObjectWrapper(zobObject)
 	{
-		m_isValid = zobObject != NULL && IsLight();
+		//m_isValid = zobObject != NULL && IsLight();
 	}
 
 	void ZobLightWrapper::SetColor(ManagedVector3^ p)

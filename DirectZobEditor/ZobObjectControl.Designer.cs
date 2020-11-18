@@ -30,7 +30,7 @@
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.checkBoxLinkScale = new System.Windows.Forms.CheckBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.zobId = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.zobName = new System.Windows.Forms.TextBox();
@@ -52,7 +52,7 @@
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.checkBoxLinkScale);
-            this.groupBox1.Controls.Add(this.textBox1);
+            this.groupBox1.Controls.Add(this.zobId);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.label7);
             this.groupBox1.Controls.Add(this.zobName);
@@ -88,13 +88,13 @@
             this.checkBoxLinkScale.Text = "L";
             this.checkBoxLinkScale.UseVisualStyleBackColor = true;
             // 
-            // textBox1
+            // zobId
             // 
-            this.textBox1.Location = new System.Drawing.Point(63, 19);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(162, 20);
-            this.textBox1.TabIndex = 44;
+            this.zobId.Location = new System.Drawing.Point(63, 19);
+            this.zobId.Name = "zobId";
+            this.zobId.ReadOnly = true;
+            this.zobId.Size = new System.Drawing.Size(162, 20);
+            this.zobId.TabIndex = 44;
             // 
             // label1
             // 
@@ -247,7 +247,7 @@
 
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.CheckBox checkBoxLinkScale;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox zobId;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.TextBox zobName;

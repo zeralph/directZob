@@ -56,13 +56,13 @@ public:
 	void								AddBoxCollider(const ZobVector3* halfExtends );
 	void								AddSphereCollider(float radius);
 	void								AddCapsuleCollider(float radius, float height);
-	void								Update() { m_rigidBody->setTransform(m_worldTransform); };
+	void								Update() { if(m_rigidBody)m_rigidBody->setTransform(m_worldTransform); };
 	void								SaveTransform();
 	void								RestoreTransform();
 	void								ResetPhysic();
 	void								DrawGizmos(const Camera* camera, const ZobVector3* position, const ZobVector3* rotation);
 
-	Transform							GetWorldTransform() const { return m_rigidBody->getTransform();/* Transform(m_worldTransform);*/ };
+	const Transform						GetWorldTransform() const { return m_rigidBody?m_rigidBody->getTransform():Transform();/* Transform(m_worldTransform);*/ };
 	Transform							GetLocalTransform() const { return Transform(m_localTransform); };
 	void								SetWorldTransform(Transform t) { m_worldTransform = Transform(t); };
 	void								SetLocalTransform(Transform t) { m_localTransform = t; };

@@ -1,13 +1,13 @@
 #include "ZOBGUID.h"
 
-ulong ZOBGUID::sCurrentId = 0;
+ulong ZOBGUID::sCurrentId = 1;
 
 ZOBGUID::ZOBGUID(Type t, SubType s)
 {
-
-	m_id = sCurrentId;
 	m_type = t;
 	m_subType = s;
+	m_id = sCurrentId + (int)s * 1000 + (int)t * 1000 * 1000;
+	sCurrentId++;
 }
 
 ZOBGUID::~ZOBGUID()
@@ -30,7 +30,7 @@ void ZOBGUID::ChangeType(Type t)
 	m_type = t;
 }
 
-uint ZOBGUID::GetId()
+ulong ZOBGUID::GetId()
 {
 	return m_id;
 }

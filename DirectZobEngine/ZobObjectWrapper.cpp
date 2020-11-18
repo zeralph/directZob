@@ -7,13 +7,12 @@ namespace CLI
 {
 	ZobObjectWrapper::ZobObjectWrapper(ZobObject* zobObject):ManagedObject(zobObject, false)
 	{
-		m_isValid = zobObject != NULL;
+		m_id = zobObject->GetId();
 	}
 
 	ZobObjectWrapper::~ZobObjectWrapper()
 	{
 		m_Instance = NULL;
-		m_isValid = false;
 	}
 
 	bool ZobObjectWrapper::IsFromFactoryFile()
@@ -327,11 +326,27 @@ namespace CLI
 		return nullptr;
 	}
 
+	bool ZobObjectWrapper::IsValid()
+	{
+		if (m_Instance)
+		{		
+			if (DirectZob::GetInstance()->GetZobObjectManager()->IsDeleted(m_id))
+			{
+				m_Instance = NULL;
+				return false;
+			}
+			else
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
 	ZobObject* ZobObjectWrapper::GetInstance()
 	{
-		if (!m_Instance || m_Instance->IsMarkedForDeletion())
+		if (!IsValid())
 		{
-			delete(this);
 			return nullptr;
 		}
 		return m_Instance;

@@ -32,19 +32,20 @@ namespace CLI {
 		void SetMesh(System::String^ name);
 		void LoadMesh(System::String^ name, System::String^ path);
 		void CreateSprite();
-		bool IsValid() { return m_isValid && GetInstance() != NULL; };
+		bool IsValid();
 		void SetLightingMode(int lightMode);
 		int GetLightingMode();
 		bool IsLight();
 		bool IsSprite();
 		bool IsCamera();
 		bool HasMesh();
+		ulong GetId() { return m_id; }
 		void SetPhysicComponent(int i);
 		bool IsFromFactoryFile();
 		System::String^ FactoryFile();
 		void SaveToFactoryFile(System::String^ file);
 	protected:
-		bool m_isValid;
+		ulong m_id;
 	};
 }
 #endif //_WINDLL 

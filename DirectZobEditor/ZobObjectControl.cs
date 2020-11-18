@@ -87,6 +87,7 @@ namespace DirectZobEditor
         {
             if (m_currentZobObjectWrapper != null && m_currentZobObjectWrapper.IsValid())
             {
+                zobId.Text = m_currentZobObjectWrapper.GetId().ToString();
                 zobName.Text = m_currentZobObjectWrapper.GetName();
                 zobPosX.Text = String.Format("{0:0.000}", m_currentZobObjectWrapper.GetTransform().x);
                 zobPosY.Text = String.Format("{0:0.000}", m_currentZobObjectWrapper.GetTransform().y);

@@ -119,6 +119,9 @@ ZobObject::~ZobObject()
 {
 	DirectZob::LogInfo("delete ZobObject %s", m_name.c_str());
 	DirectZob::AddIndent();
+
+	DirectZob::GetInstance()->GetZobObjectManager()->AddIdToDeleted(GetId());
+
 	delete m_physicComponent;
 	if (m_parent != NULL)
 	{

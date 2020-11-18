@@ -5,7 +5,7 @@ namespace CLI
 {
 	ZobCameraWrapper::ZobCameraWrapper(ZobObject* zobObject):ZobObjectWrapper(zobObject)
 	{
-		m_isValid = zobObject != NULL && IsCamera();
+		//m_isValid = zobObject != NULL && IsCamera();
 	}
 }
 #endif //_WINDLL

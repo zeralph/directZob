@@ -35,6 +35,8 @@ public:
 	void SaveTransforms();
 	void RestoreTransforms();
 	void ResetPhysic();
+	void AddIdToDeleted(ulong id) { m_deletedIds.push_back(id); }
+	bool IsDeleted(ulong id);
 private:
 	void UpdateObjects(const Camera* camera, Core::Engine* engine);
 	void GetZobObjectListInternal(const ZobObject* z, std::string& str);
@@ -43,4 +45,5 @@ private:
 	ZobObject* m_rootObject = nullptr;
 	clock_t	m_drawTick;
 	float m_time;
+	std::vector<ulong> m_deletedIds;
 }; 

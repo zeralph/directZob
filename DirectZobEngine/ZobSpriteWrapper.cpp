@@ -4,7 +4,7 @@ namespace CLI
 {
 	ZobSpriteWrapper::ZobSpriteWrapper(ZobSprite* zobObject):ZobObjectWrapper(zobObject)
 	{
-		m_isValid = zobObject != NULL && IsSprite();
+		//m_isValid = zobObject != NULL && IsSprite();
 	}
 
 	void ZobSpriteWrapper::SetTexture(System::String^ path)

@@ -8,6 +8,7 @@ static std::string emptyStr = std::string("");
 
 ZobObjectManager::ZobObjectManager()
 {
+	m_deletedIds.clear();
 	std::string n = "root";
 	m_rootObject = new ZobObject(ZOBGUID::type_internal, ZOBGUID::subtype_zobOject, n, NULL);
 }
@@ -15,6 +16,18 @@ ZobObjectManager::ZobObjectManager()
 ZobObjectManager::~ZobObjectManager()
 {
 	WaitForUpdateObjectend();
+}
+
+bool ZobObjectManager::IsDeleted(ulong id)
+{
+	for (std::vector<ulong>::const_iterator iter = m_deletedIds.begin(); iter != m_deletedIds.end(); iter++)
+	{
+		if (*iter == id)
+		{
+			return true;
+		}
+	}
+	return false;
 }
 
 void ZobObjectManager::AddZobObject(ZobObject* z)
