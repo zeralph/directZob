@@ -37,7 +37,7 @@ namespace CLI
 		Camera* c = m_Instance->GetCurrentCamera();
 		if (c)
 		{
-			ManagedVector3^ v = gcnew CLI::ManagedVector3(m_Instance->GetCurrentCamera()->GetPosition());
+			ManagedVector3^ v = gcnew CLI::ManagedVector3(m_Instance->GetCurrentCamera()->GetWorldPosition());
 			return v;
 		}
 		return gcnew CLI::ManagedVector3();
@@ -142,7 +142,7 @@ namespace CLI
 		if (c)
 		{
 			ZobVector3 v = p->ToVector3();
-			c->SetPosition(v.x, v.y, v.z);
+			c->SetWorldPosition(v.x, v.y, v.z);
 		}
 		DirectZob::GetInstance()->Unlock();
 	}

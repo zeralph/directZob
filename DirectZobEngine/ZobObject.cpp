@@ -51,8 +51,8 @@ ZobObject::ZobObject(Type t, SubType s, const std::string& name, ZobObject* pare
 	DirectZob::RemoveIndent();
 }
 
-ZobObject::ZobObject(Type t, SubType s, TiXmlElement* node, ZobObject* parent, const std::string* factoryFile /*=NULL*/)
-	:ZOBGUID(t, s)
+ZobObject::ZobObject(DirectZobType::guid id, TiXmlElement* node, ZobObject* parent, const std::string* factoryFile /*=NULL*/)
+	:ZOBGUID(id)
 {
 	sObjectNumber++;
 	m_factoryFile = factoryFile ? factoryFile->c_str() : "";
@@ -111,7 +111,6 @@ ZobObject::ZobObject(Type t, SubType s, TiXmlElement* node, ZobObject* parent, c
 	m_renderOptions.bTransparency = false;
 	m_physicComponent->Init(&position, &rotation);
 	SetScale(scale.x, scale.y, scale.z);
-	SetParent(m_parent);
 	DirectZob::RemoveIndent();
 }
 
@@ -209,50 +208,22 @@ void ZobObject::Update()
 
 	}
 	Transform newTransform = tr * m_physicComponent->GetLocalTransform();
-	//m_physicComponent->
-
 	Vector3 pt = tr.getPosition();
 	Quaternion pr = tr.getOrientation();
 	m_physicComponent->SetWorldTransform(newTransform);
-
 	m_physicComponent->Update();
-
 	const ZobMatrix4x4* parentMatrix = m_parent?m_parent->GetModelMatrix():&ZobMatrix4x4::IdentityMatrix;
 	const ZobMatrix4x4* parentRSMatrix = m_parent?m_parent->GetRotationScaleMatrix():&ZobMatrix4x4::IdentityMatrix;
-
-	ZobVector3 t = GetPosition();
-	ZobVector3 r = GetRotation();
-/*
-	pt = newTransform.getPosition();
-	//Vector3 pt = newTransform.getPosition();
-
-	Quaternion q = newTransform.getOrientation();
-	q.normalize();
-	ZobVector3 z = ZobMatrix4x4::QuaternionToEuler(q.x, q.y, q.z, q.w);
-	float ax = RAD_TO_DEG(z.x);
-	float ay = RAD_TO_DEG(z.y);
-	float az = RAD_TO_DEG(z.z);
-	//ClampAngle(ax);
-	//ClampAngle(ay);
-	//ClampAngle(az);
-	r = ZobVector3(ax, ay, az);
-
-	t.x = pt.x;
-	t.y = pt.y;
-	t.z = pt.z;
-*/	
+	ZobVector3 t = GetWorldPosition();
+	ZobVector3 r = GetWorldRotation();	
 	ZobVector3 s = m_scale;
 	m_modelMatrix.Identity();
 	m_rotationScaleMatrix.Identity();
-	m_rotationScaleMatrix.SetRotation(GetRotation());
+	m_rotationScaleMatrix.SetRotation(GetWorldRotation());
 	m_rotationScaleMatrix.SetScale(&m_scale);
-	//m_rotationScaleMatrix.Mul(parentRSMatrix);
-	//parentRSMatrix->Mul(&t);
 	m_modelMatrix.SetPosition(&t);
 	m_modelMatrix.SetRotation(&r);
 	m_modelMatrix.SetScale(&s);
-	//m_modelMatrix.Mul(&parentMatrix);
-
 	m_left = ZobVector3(1, 0, 0);
 	m_forward = ZobVector3(0, 0, 1);
 	m_up = ZobVector3(0, 1, 0);
@@ -272,8 +243,14 @@ void ZobObject::Update()
 		}
 		else
 		{
-			//z->Update(m_modelMatrix, m_rotationScaleMatrix);
 			z->Update();
+			Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
+			Engine* e = DirectZob::GetInstance()->GetEngine();
+			if (c && e)
+			{
+
+				e->QueueLine(c, &GetWorldPosition(), &z->GetWorldPosition(), 0x11FF99, true);
+			}
 		}
 	}
 }
@@ -304,18 +281,18 @@ void ZobObject::DrawGizmos(const Camera* camera, Core::Engine* engine)
 	ZobVector3 x = m_left;
 	ZobVector3 y = m_up;
 	ZobVector3 z = m_forward;
-	const ZobVector3* t = GetPosition();
+	ZobVector3 t = GetWorldPosition();
 	x = x + t;
 	y = y + t;
 	z = z + t;
 	c = 0x00FF0000;
-	engine->QueueLine(camera, t, &x, c, true);
+	engine->QueueLine(camera, &t, &x, c, true);
 	c = 0x0000FF00;
-	engine->QueueLine(camera, t, &y, c, true);
+	engine->QueueLine(camera, &t, &y, c, true);
 	c = 0x000000FF;
-	engine->QueueLine(camera, t, &z, c, true);
-	ZobVector3 p = GetPosition();
-	ZobVector3 r = GetRotation();
+	engine->QueueLine(camera, &t, &z, c, true);
+	ZobVector3 p = GetWorldPosition();
+	ZobVector3 r = GetWorldRotation();
 	m_physicComponent->DrawGizmos(camera, &p, &r);
 }
 
@@ -386,6 +363,7 @@ const void ZobObject::GetFullNodeName(std::string& fullname) const
 void ZobObject::SetParent(ZobObject* p)
 {
 	ZobObject* parent = GetParent();
+	bool bOk = false;
 	if (parent != NULL && p != NULL && p!= this && p != parent)
 	{
 		if (!HasChild(p))
@@ -393,6 +371,7 @@ void ZobObject::SetParent(ZobObject* p)
 			parent->RemoveChildReference(this);
 			p->AddChildReference(this);
 			m_parent = p;
+			bOk = true;
 		}
 		else
 		{
@@ -401,12 +380,18 @@ void ZobObject::SetParent(ZobObject* p)
 	}
 	else
 	{
-		//m_parent.reset();
 		if (p)
 		{
 			m_parent = p;
-			//p->AddChildReference(this);
+			bOk = true;
 		}
+	}
+	if (bOk)
+	{
+		ZobVector3 p = GetWorldPosition();
+		ZobVector3 r = GetWorldRotation();
+		SetWorldPosition(p.x, p.y, p.z);
+		SetWorldRotation(r.x, r.y, r.z);
 	}
 }
 
@@ -464,14 +449,15 @@ TiXmlNode* ZobObject::SaveUnderNode(TiXmlNode* node)
 	TiXmlElement r = TiXmlElement("Rotation");
 	TiXmlElement s = TiXmlElement("Scale");
 	o->SetAttribute("name", GetName().c_str());
+	o->SetAttribute("guid", GetId());
 	std::string meshName = GetMeshName();
 	std::string meshFile = GetMeshFile();
-	p.SetDoubleAttribute("x", GetPosition()->x);
-	p.SetDoubleAttribute("y", GetPosition()->y);
-	p.SetDoubleAttribute("z", GetPosition()->z);
-	r.SetDoubleAttribute("x", GetRotation()->x);
-	r.SetDoubleAttribute("y", GetRotation()->y);
-	r.SetDoubleAttribute("z", GetRotation()->z);
+	p.SetDoubleAttribute("x", GetLocalPosition().x);
+	p.SetDoubleAttribute("y", GetLocalPosition().y);
+	p.SetDoubleAttribute("z", GetLocalPosition().z);
+	r.SetDoubleAttribute("x", GetLocalRotation().x);
+	r.SetDoubleAttribute("y", GetLocalRotation().y);
+	r.SetDoubleAttribute("z", GetLocalRotation().z);
 	s.SetDoubleAttribute("x", GetScale().x);
 	s.SetDoubleAttribute("y", GetScale().y);
 	s.SetDoubleAttribute("z", GetScale().z);
@@ -550,7 +536,7 @@ void ZobObject::LookAt(const ZobVector3* forward, const ZobVector3* left, const 
 	}
 }
 
-void ZobObject::SetRotation(float x, float y, float z)
+void ZobObject::SetWorldRotation(float x, float y, float z)
 {
 	//m_physicComponent->SetOrientation(x, y, z);
 	float dy = DEG_TO_RAD(y);
@@ -565,28 +551,57 @@ void ZobObject::SetRotation(float x, float y, float z)
 	m_physicComponent->SetLocalOrientation(q);
 }
 
-void ZobObject::SetPosition(float x, float y, float z)
+void ZobObject::SetWorldPosition(float x, float y, float z)
 {
 	//m_physicComponent->SetPosition(x, y, z);
-	Transform t = Transform::identity();
+	Transform parentTransform = Transform::identity();
 	if (m_parent)
 	{
-		t = m_parent->GetPhysicComponent()->GetWorldTransform();
+		parentTransform = m_parent->GetPhysicComponent()->GetWorldTransform();
 	}
-	//Transform t = Transform::identity();
 	Vector3 position = Vector3(x, y, z);
-	position = position - t.getPosition();
-	m_physicComponent->SetLocalPosition(position);
+//	
+	Transform newTransform = GetPhysicComponent()->GetWorldTransform();
+	newTransform.setPosition(position);
+	newTransform = parentTransform.getInverse() * newTransform;
+	m_physicComponent->SetLocalTransform(newTransform);
+//
+//	position = position - t.getPosition();
+//	m_physicComponent->SetLocalPosition(position);
 }
 
-const ZobVector3* ZobObject::GetRotation() const
+ZobVector3 ZobObject::GetLocalRotation() const
 {
-	return m_physicComponent->GetOrientation();
+	Quaternion q= m_physicComponent->GetLocalTransform().getOrientation();
+	ZobVector3 v = ZobMatrix4x4::QuaternionToEuler(q.x, q.y, q.z, q.w);
+	v.x = RAD_TO_DEG(v.x);
+	v.y = RAD_TO_DEG(v.y);
+	v.z = RAD_TO_DEG(v.z);
+	return v;
 }
 
-const ZobVector3* ZobObject::GetPosition() const
+ZobVector3 ZobObject::GetLocalPosition() const
 {
-	return m_physicComponent->GetPosition();
+	Vector3 p = m_physicComponent->GetLocalTransform().getPosition();
+	ZobVector3 v = ZobVector3(p.x, p.y, p.z);
+	return v;
+}
+
+ZobVector3 ZobObject::GetWorldRotation() const
+{
+	Quaternion q = m_physicComponent->GetWorldTransform().getOrientation();
+	ZobVector3 v = ZobMatrix4x4::QuaternionToEuler(q.x, q.y, q.z, q.w);
+	v.x = RAD_TO_DEG(v.x);
+	v.y = RAD_TO_DEG(v.y);
+	v.z = RAD_TO_DEG(v.z);
+	return v;
+}
+
+ZobVector3 ZobObject::GetWorldPosition() const
+{
+	Vector3 p = m_physicComponent->GetWorldTransform().getPosition();
+	ZobVector3 v = ZobVector3(p.x, p.y, p.z);
+	return v;
 }
 
 void ZobObject::SetPhysicComponent(int i)

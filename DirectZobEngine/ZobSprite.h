@@ -10,7 +10,7 @@ public:
 
 
 	ZobSprite(const std::string& name, ZobObject* parent);
-	ZobSprite(TiXmlElement* node, ZobObject* parent);
+	ZobSprite(ulong id, TiXmlElement* node, ZobObject* parent);
 	~ZobSprite() override;
 
 	const std::string	GetMeshName() const override { return std::string(""); };

@@ -41,10 +41,10 @@ void ZobPhysicComponent::Init(const ZobVector3* position, const ZobVector3* rota
 {
 	m_localTransform = Transform::identity();
 	m_worldTransform = Transform::identity();
-	m_worldTransform.setPosition(Vector3(position->x, position->y, position->z));
+	m_localTransform.setPosition(Vector3(position->x, position->y, position->z));
 	Quaternion q = Quaternion::fromEulerAngles(rotation->x, rotation->y, rotation->z);
-	m_worldTransform.setOrientation(q);
-	Update();
+	m_localTransform.setOrientation(q);
+	//Update();
 }
 
 void ZobPhysicComponent::CreateCollider()

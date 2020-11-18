@@ -49,9 +49,10 @@ void SceneLoader::LoadZobObject(TiXmlElement* node, ZobObject* parent, const std
 		parent = zobObjectManager->GetRootObject();
 	}
 	type = node->Attribute("type")? node->Attribute("type"):"mesh";
+	ulong id = node->Attribute("guid") ? strtoul(node->Attribute("guid"), NULL, 0) : 0;
 	if (type == "mesh")
 	{
-		zob = new ZobObject(ZOBGUID::Type::type_scene, ZOBGUID::SubType::subtype_zobOject, node, parent, factoryPath);
+		zob = new ZobObject(id, node, parent, factoryPath);
 		TiXmlElement* meshNode = node->FirstChildElement("Mesh");
 		if(meshNode)
 		{
@@ -65,18 +66,18 @@ void SceneLoader::LoadZobObject(TiXmlElement* node, ZobObject* parent, const std
 	}
 	else if (type == "camera")
 	{
-		Camera* c = new Camera(node, parent);
+		Camera* c = new Camera(id, node, parent);
 		DirectZob::GetInstance()->GetCameraManager()->AddCamera(c);
 		zob = c;
 	}
 	else if (type == "sprite")
 	{
-		ZobSprite* s = new ZobSprite(node, parent);
+		ZobSprite* s = new ZobSprite(id, node, parent);
 		zob = s;
 	}
 	else if (type == "light")
 	{
-		Light* l = new Light(node, parent);
+		Light* l = new Light(id, node, parent);
 		DirectZob::GetInstance()->GetLightManager()->AddLight(l);
 		zob = l;
 	}

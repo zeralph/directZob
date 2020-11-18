@@ -15,7 +15,7 @@ class ZobObject:public ZOBGUID
 public:
 
 	ZobObject(ZOBGUID::Type t, ZOBGUID::SubType s, const std::string& name, ZobObject* parent = NULL, const std::string* factoryFile =NULL);
-	ZobObject(ZOBGUID::Type t, ZOBGUID::SubType s, TiXmlElement* node, ZobObject* parent, const std::string* factoryFile = NULL);
+	ZobObject(DirectZobType::guid id, TiXmlElement* node, ZobObject* parent, const std::string* factoryFile = NULL);
 	virtual ~ZobObject();
 
 	//virtuals
@@ -25,17 +25,14 @@ public:
 	virtual void					QueueForDrawing(const Camera* camera, Core::Engine* engine);
 	inline const ZobVector3&		GetScale() const { return m_scale; }
 	virtual inline void				SetScale(float x, float y, float z) { m_scale.x = x; m_scale.y = y; m_scale.z = z; };
-	void							SetRotation(float x, float y, float z);
-	/*
-	void							SetQuaternion(float x, float y, float z, float w);
-	void							SetQuaternion(const ZobVector3* left, const ZobVector3* up, const ZobVector3* fw);
-	*/
-	void							SetPosition(float x, float y, float z);
+	void							SetWorldRotation(float x, float y, float z);
+	void							SetWorldPosition(float x, float y, float z);
 	void							LookAt(const ZobVector3* target);
 	void							LookAt(const ZobVector3* forward, const ZobVector3* left, const ZobVector3* up);
-	const ZobVector3*				GetRotation() const;
-	const ZobVector3*				GetPosition() const;
-
+	inline ZobVector3				GetLocalRotation() const;
+	inline ZobVector3				GetLocalPosition() const;
+	inline ZobVector3				GetWorldRotation() const;
+	inline ZobVector3				GetWorldPosition() const;
 	void							SaveTransform();
 	void							RestoreTransform();
 	void							ResetPhysic();
@@ -49,10 +46,6 @@ public:
 	ZobObject*						GetChild(const std::string& name);
 	ZobObject*						GetChild(const int i);
 
-	inline const ZobVector3			GetWorldPosition() const
-	{
-		return m_modelMatrix.GetTranslation();
-	};
 	inline const ZobVector3			GetWorldScale() const
 	{
 		return m_modelMatrix.GetScale();

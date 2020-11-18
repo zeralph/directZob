@@ -131,7 +131,7 @@ namespace DirectZobEditor
             if (z != null && z.IsValid())
             {
                 int btnSize = 20 / 2;
-                ManagedVector3 p0 = z.GetTransform().Copy();
+                ManagedVector3 p0 = z.GetWorldPosition().Copy();
                 ManagedVector3 pX = z.GetLeft().Copy();
                 ManagedVector3 pY = z.GetUp().Copy();
                 ManagedVector3 pZ = z.GetForward().Copy();
@@ -170,7 +170,7 @@ namespace DirectZobEditor
                 bTY.Visible = true;
                 bTX.Visible = true;
                 bTZ.Visible = true;
-                p0 = z.GetTransform().Copy();
+                p0 = z.GetWorldPosition().Copy();
                 pX = z.GetLeft().Copy();
                 pY = z.GetUp().Copy();
                 pZ = z.GetForward().Copy();
@@ -431,6 +431,12 @@ namespace DirectZobEditor
             }
             m_lastMouseX = Cursor.Position.X;
             m_lastMouseY = Cursor.Position.Y;
+
+            ManagedVector3 up = new ManagedVector3(0, 1, 0);
+            ManagedVector3 p0 = new ManagedVector3(0, 0, 0);
+            ManagedVector3 ret = new ManagedVector3(0, 0, 0);
+            From2DToWorldOnPlane(Cursor.Position.X, Cursor.Position.Y, p0, up, ref ret);
+            m_engineWrapper.DrawLine(p0, ret, 0xFF0000);
         }
         bool From2DToWorldOnPlane(int x, int y, ManagedVector3 p0, ManagedVector3 pn, ref ManagedVector3 ret)
         {
@@ -502,8 +508,8 @@ namespace DirectZobEditor
                 ZobObjectWrapper z = m_mainForm.GetZobObjectListControl().GetSelectedZobObject();
                 if (z != null)
                 {
-                    m_startTranslation = z.GetTransform().Copy();
-                    m_startRotation = z.GetRotation().Copy();
+                    m_startTranslation = z.GetWorldPosition().Copy();
+                    m_startRotation = z.GetWorldRotation().Copy();
                     m_startLeft = z.GetLeft().Copy();
                     m_startUp = z.GetUp().Copy();
                     m_startForward = z.GetForward().Copy();
@@ -653,7 +659,7 @@ namespace DirectZobEditor
             ZobObjectWrapper z = m_mainForm.GetZobObjectListControl().GetSelectedZobObject();
             if (c != null && z != null && e.Button == MouseButtons.Left)
             {
-                ManagedVector3 p0 = z.GetTransform().Copy();
+                ManagedVector3 p0 = z.GetWorldPosition().Copy();
                 ManagedVector3 pn = c.GetForward().Copy();
                 ManagedVector3 v = new ManagedVector3(0, 0, 0);
                 bool b = From2DToWorldOnPlane(e.X, e.Y, p0, pn, ref v);
@@ -722,7 +728,7 @@ namespace DirectZobEditor
             ZobObjectWrapper z = m_mainForm.GetZobObjectListControl().GetSelectedZobObject();
             if (c != null && z != null && e.Button == MouseButtons.Left)
             {
-                ManagedVector3 p0 = z.GetTransform();
+                ManagedVector3 p0 = z.GetWorldPosition();
                 ManagedVector3 pn = c.GetForward();
                 ManagedVector3 v = new ManagedVector3(0, 0, 0);
                 bool b = From2DToWorldOnPlane(e.X, e.Y, p0, pn, ref v);
@@ -754,7 +760,7 @@ namespace DirectZobEditor
                         v.Mul(f * sign);
                         v.Add(p0);
                     }
-                    z.SetTransform(v);
+                    z.SetWorldTransform(v);
                     OnZobObjectMoved(z);
                 }
             }
@@ -783,7 +789,7 @@ namespace DirectZobEditor
             if (null != handler)
             {
                 ObjectModificationEventArg ev = new ObjectModificationEventArg();
-                ev.t = zobObject.GetTransform();
+                ev.t = zobObject.GetWorldPosition();
                 handler(this, ev);
             }
         }
@@ -803,7 +809,7 @@ namespace DirectZobEditor
             if (null != handler)
             {
                 ObjectModificationEventArg ev = new ObjectModificationEventArg();
-                ev.r = zobObject.GetRotation();
+                ev.r = zobObject.GetWorldRotation();
                 handler(this, ev);
             }
         }
@@ -818,7 +824,7 @@ namespace DirectZobEditor
                 switch (m_objectModificator)
                 {
                     case objectModificator.rotate:
-                        ManagedVector3 p0 = z.GetTransform().Copy();
+                        ManagedVector3 p0 = z.GetWorldPosition().Copy();
                         ManagedVector3 p1 = p0.Copy();
                         p1.Add(z.GetLeft());
                         p1.Mul(2.0f);

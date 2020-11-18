@@ -278,7 +278,7 @@ namespace DirectZobEditor
                 CLI.ZobObjectWrapper z = n.zobOjectWrapper;
                 if(z != null)
                 {
-                    CLI.ManagedVector3 target = z.GetTransform();
+                    CLI.ManagedVector3 target = z.GetWorldPosition();
                     //TODO : camer wrapper et setlookat
                     m_mainForm.GetCameraControl().GetWrapper().SetLookAt(target);
                 }

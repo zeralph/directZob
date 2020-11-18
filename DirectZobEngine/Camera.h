@@ -29,7 +29,7 @@ public:
 		__eTarget_MAX__
 	};
 	Camera(const std::string& name, float fov, BufferData* bufferData, ZobObject* parent);
-	Camera(TiXmlElement* node, ZobObject* parent);
+	Camera(ulong id, TiXmlElement* node, ZobObject* parent);
 	~Camera() override;
 
 	//void					Update(const ZobMatrix4x4& parentMatrix, const ZobMatrix4x4& parentRSMatrix) override;

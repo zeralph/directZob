@@ -13,8 +13,8 @@ ZobSprite::ZobSprite(const std::string &name, ZobObject*parent):
 	s->Setmaterial(m_material);
 }
 
-ZobSprite::ZobSprite(TiXmlElement* node, ZobObject* parent)
-	:ZobObject(ZOBGUID::type_scene, ZOBGUID::subtype_sprite, node, parent)
+ZobSprite::ZobSprite(ulong id, TiXmlElement* node, ZobObject* parent)
+	:ZobObject(id, node, parent)
 {
 	m_mesh = DirectZob::GetInstance()->GetMeshManager()->CreateSprite();
 	m_material = DirectZob::GetInstance()->GetMaterialManager()->CreateMaterial();

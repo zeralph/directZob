@@ -16,16 +16,16 @@ namespace CLI {
 		System::String^ GetFullNodeName();
 		ZobObject* GetInstance() override;
 		void SetName(System::String^ name);
-		ManagedVector3^ GetTransform();
+		ManagedVector3^ GetWorldPosition();
 		ManagedVector3^ GetLeft();
 		ManagedVector3^ GetForward();
 		ManagedVector3^ GetUp();
-		ManagedVector3^ GetRotation();
+		ManagedVector3^ GetWorldRotation();
 		ManagedVector3^ GetScale();
 		ManagedRenderOptions^ GetRenderOptions();
 		System::Collections::Generic::List<ZobObjectWrapper^>^ GetChildren();
-		void SetTransform(ManagedVector3^ p);
-		void SetRotation(ManagedVector3^ p);
+		void SetWorldTransform(ManagedVector3^ p);
+		void SetWorldRotation(ManagedVector3^ p);
 		void SetScale(ManagedVector3^ p);
 		void LookAt(ManagedVector3^ forward, ManagedVector3^ left, ManagedVector3^ up);
 		System::String^ GetMeshName();
@@ -39,13 +39,13 @@ namespace CLI {
 		bool IsSprite();
 		bool IsCamera();
 		bool HasMesh();
-		ulong GetId() { return m_id; }
+		DirectZobType::guid GetId() { return m_id; }
 		void SetPhysicComponent(int i);
 		bool IsFromFactoryFile();
 		System::String^ FactoryFile();
 		void SaveToFactoryFile(System::String^ file);
 	protected:
-		ulong m_id;
+		DirectZobType::guid m_id;
 	};
 }
 #endif //_WINDLL 

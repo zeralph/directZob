@@ -178,6 +178,8 @@ void ZobObjectManager::GetZobObjectListInternal(const ZobObject* z, std::string&
 void ZobObjectManager::UnloadAll()
 {
 	delete m_rootObject;
+	m_deletedIds.clear();
+	ZOBGUID::Reset();
 	std::string n = "root";
 	m_rootObject = new ZobObject(ZOBGUID::type_internal, ZOBGUID::subtype_zobOject, n, NULL);
 }

@@ -14,8 +14,8 @@ Light::Light(std::string &name, eLightType type, ZobVector3 color, float intensi
 	NewLightConfiguration();
 }
 
-Light::Light(TiXmlElement* node, ZobObject* parent)
-	:ZobObject(ZOBGUID::type_scene, ZOBGUID::subtype_zobLight, node, parent)
+Light::Light(ulong id, TiXmlElement* node, ZobObject* parent)
+	:ZobObject(id, node, parent)
 {
 		float x, y, z;
 		TiXmlElement* f = node->FirstChildElement("Color");
@@ -71,13 +71,13 @@ void Light::NewLightConfiguration()
 	switch (m_lightType)
 	{
 	case eLightType_spot:
-		SetRotation(-90, 0, 0);
+		SetWorldRotation(-90, 0, 0);
 		//m_rotation = ZobVector3(-90.0f, 0.0f, 0.0f);
 		m_distance = 10.0f;
 		m_spotAngle = 10.0f;
 		break;
 	case eLightType_directional:
-		SetRotation(-70.0f, 30.0f, 30.0f);
+		SetWorldRotation(-70.0f, 30.0f, 30.0f);
 		break;
 	default:
 		break;
@@ -86,43 +86,43 @@ void Light::NewLightConfiguration()
 
 void Light::drawPointGizmos(const Camera* camera, Core::Engine* engine)
 {
-	const ZobVector3* t = GetPosition();
+	ZobVector3 t = GetWorldPosition();
 	uint c = ((int)(m_color.x * 255) << 16) + ((int)(m_color.y * 255) << 8) + (int)(m_color.z * 255);
-	engine->QueueEllipse(camera, t, &m_up, 1.0f, 1.0f, c, true);
-	engine->QueueEllipse(camera, t, &m_left, 1.0f, 1.0f, c, true);
-	engine->QueueEllipse(camera, t, &m_forward, 1.0f, 1.0f, c, true);
+	engine->QueueEllipse(camera, &t, &m_up, 1.0f, 1.0f, c, true);
+	engine->QueueEllipse(camera, &t, &m_left, 1.0f, 1.0f, c, true);
+	engine->QueueEllipse(camera, &t, &m_forward, 1.0f, 1.0f, c, true);
 }
 
 void Light::drawSpotGizmos(const Camera* camera, Core::Engine* engine)
 {
-	const ZobVector3* t = GetPosition();
+	ZobVector3 t = GetWorldPosition();
 	uint c = ((int)(m_color.x * 255) << 16) + ((int)(m_color.y * 255) << 8) + (int)(m_color.z * 255);
 	ZobVector3 v1, v2, v;
 	v1 = m_forward;
 	v2 = m_left;
 	v1.Mul(m_distance);
-	v1 = v1 + GetPosition();
+	v1 = v1 + GetWorldPosition();
 	float r = m_spotAngle / 2.0f;
 	r = DEG_TO_RAD(r);
 	r = tan(r) * m_distance;
 	engine->QueueEllipse(camera, &v1, &m_forward, r, r, c, true);
 	v2 = m_left;
 	v = v1 + (v2 * r);
-	engine->QueueLine(camera, t, &v, c, true);
+	engine->QueueLine(camera, &t, &v, c, true);
 	v2 = m_left;
 	v = v1 - (v2 * r);
-	engine->QueueLine(camera, t, &v, c, true);
+	engine->QueueLine(camera, &t, &v, c, true);
 	v2 = m_up;
 	v = v1 + (v2 * r);
-	engine->QueueLine(camera, t, &v, c, true);
+	engine->QueueLine(camera, &t, &v, c, true);
 	v2 = m_up;
 	v = v1 - (v2 * r);
-	engine->QueueLine(camera, t, &v, c, true);
+	engine->QueueLine(camera, &t, &v, c, true);
 }
 
 void Light::drawDirectionalGizmos(const Camera* camera, Core::Engine* engine)
 {
-	const ZobVector3* t = GetPosition();
+	ZobVector3 t = GetWorldPosition();
 	uint c = ((int)(m_color.x * 255) << 16) + ((int)(m_color.y * 255) << 8) + (int)(m_color.z * 255);
 	ZobVector3 v0 = t + m_forward;
 	ZobVector3 v1 = t - m_forward;
