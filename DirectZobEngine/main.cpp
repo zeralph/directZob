@@ -282,7 +282,7 @@ int main(int argc, char* argv[])
 	//m_directZob.GetEngine()->GetBufferData()->zFar = 70.0f;
 	//m_directZob.GetZobObjectManager()->GetZobObject("fbx_example")->SetRotation(0, 90, 0);
 	Camera* c = m_directZob.GetCameraManager()->GetCurrentCamera();
-	ZobVector3 camPos = c?c->GetPosition(): ZobVector3();
+	ZobVector3 camPos = c?c->GetWorldPosition(): ZobVector3();
 	ZobVector3 camTo = camPos;
 	camTo.z += 1.0f;
 	//m_directZob.StartPhysic();
@@ -303,7 +303,7 @@ int main(int argc, char* argv[])
 			if (m_directZob.GetCameraManager()->GetCurrentCamera())
 			{
 				//m_directZob.GetCameraManager()->GetCurrentCamera()->SetLookAt(&camPos, &camTo, &camUp);
-				m_directZob.GetCameraManager()->GetCurrentCamera()->SetPosition(camPos.x, camPos.y, camPos.z);
+				m_directZob.GetCameraManager()->GetCurrentCamera()->SetWorldPosition(camPos.x, camPos.y, camPos.z);
 			//	m_directZob.GetCameraManager()->GetCurrentCamera()->SetRotation(0, rot, 0);
 			}
 			Light* red = m_directZob.GetLightManager()->GetLight("red");
@@ -314,13 +314,13 @@ int main(int argc, char* argv[])
 			{
 				if (red)
 				{
-					if (red->GetPosition()->z >= 110.0f)
+					if (red->GetWorldPosition().z >= 110.0f)
 					{
-						red->SetPosition(red->GetPosition()->x, 2, -20);
+						red->SetWorldPosition(red->GetWorldPosition().x, 2, -20);
 					}
 					else
 					{
-						red->SetPosition(red->GetPosition()->x, 2, red->GetPosition()->z + to);
+						red->SetWorldPosition(red->GetWorldPosition().x, 2, red->GetWorldPosition().z + to);
 					}
 				}
 			}

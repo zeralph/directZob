@@ -221,13 +221,13 @@ void ZobObject::Update()
 	const ZobMatrix4x4* parentMatrix = m_parent?m_parent->GetModelMatrix():&ZobMatrix4x4::IdentityMatrix;
 	const ZobMatrix4x4* parentRSMatrix = m_parent?m_parent->GetRotationScaleMatrix():&ZobMatrix4x4::IdentityMatrix;
 	ZobVector3 t = GetWorldPosition();
-	ZobVector3 r = GetWorldRotation();	
+	ZobVector3 wpos = GetWorldRotation();	
 	m_modelMatrix.Identity();
 	m_rotationScaleMatrix.Identity();
 	m_rotationScaleMatrix.SetRotation(GetWorldRotation());
 	m_rotationScaleMatrix.SetScale(scale);
 	m_modelMatrix.SetPosition(&t);
-	m_modelMatrix.SetRotation(&r);
+	m_modelMatrix.SetRotation(&wpos);
 	m_modelMatrix.SetScale(scale);
 	m_left = ZobVector3(1, 0, 0);
 	m_forward = ZobVector3(0, 0, 1);
@@ -253,8 +253,8 @@ void ZobObject::Update()
 			Engine* e = DirectZob::GetInstance()->GetEngine();
 			if (c && e)
 			{
-
-				e->QueueLine(c, &GetWorldPosition(), &z->GetWorldPosition(), 0x11FF99, true);
+				ZobVector3 childWpos = z->GetWorldPosition();
+				e->QueueLine(c, &wpos, &childWpos, 0x11FF99, true);
 			}
 		}
 	}
@@ -284,6 +284,7 @@ ZobVector3 ZobObject::GetScale() const
 { 
 	return m_physicComponent->GetScale(); 
 }
+
 void ZobObject::SetScale(float x, float y, float z)
 { 
 	m_physicComponent->SetScale(x, y, z);
@@ -586,7 +587,7 @@ void ZobObject::SetWorldPosition(float x, float y, float z)
 //	m_physicComponent->SetLocalPosition(position);
 }
 
-ZobVector3 ZobObject::GetLocalRotation() const
+inline ZobVector3 ZobObject::GetLocalRotation() const
 {
 	Quaternion q= m_physicComponent->GetLocalTransform().getOrientation();
 	ZobVector3 v = ZobMatrix4x4::QuaternionToEuler(q.x, q.y, q.z, q.w);
@@ -596,14 +597,14 @@ ZobVector3 ZobObject::GetLocalRotation() const
 	return v;
 }
 
-ZobVector3 ZobObject::GetLocalPosition() const
+inline ZobVector3 ZobObject::GetLocalPosition() const
 {
 	Vector3 p = m_physicComponent->GetLocalTransform().getPosition();
 	ZobVector3 v = ZobVector3(p.x, p.y, p.z);
 	return v;
 }
 
-ZobVector3 ZobObject::GetWorldRotation() const
+inline ZobVector3 ZobObject::GetWorldRotation() const
 {
 	Quaternion q = m_physicComponent->GetWorldTransform().getOrientation();
 	ZobVector3 v = ZobMatrix4x4::QuaternionToEuler(q.x, q.y, q.z, q.w);

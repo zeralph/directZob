@@ -23,8 +23,8 @@ public:
 	virtual void					Update();
 	virtual void					UpdateMesh(const Camera* camera, Core::Engine* engine);
 	virtual void					QueueForDrawing(const Camera* camera, Core::Engine* engine);
-	inline ZobVector3				GetScale() const;
-	virtual inline void				SetScale(float x, float y, float z);
+	ZobVector3						GetScale() const;
+	void 							SetScale(float x, float y, float z);
 	void							SetWorldRotation(float x, float y, float z);
 	void							SetWorldPosition(float x, float y, float z);
 	void							LookAt(const ZobVector3* target);
@@ -32,7 +32,7 @@ public:
 	inline ZobVector3				GetLocalRotation() const;
 	inline ZobVector3				GetLocalPosition() const;
 	inline ZobVector3				GetWorldRotation() const;
-	inline ZobVector3				GetWorldPosition() const;
+	ZobVector3						GetWorldPosition() const;
 	void							SaveTransform();
 	void							RestoreTransform();
 	void							ResetPhysic();

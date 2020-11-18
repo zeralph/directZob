@@ -23,7 +23,7 @@ ZOBGUID::ZOBGUID(DirectZobType::guid id)
 		last_id++;
 		m_id = ((u16)m_type << 24) + ((u16)m_subType << 16) + last_id;
 	}
-	sCurrentId = max(sCurrentId, last_id);
+	sCurrentId = std::max(sCurrentId, last_id);
 	m_guidList.push_back(m_id);
 	sCurrentId++;
 }

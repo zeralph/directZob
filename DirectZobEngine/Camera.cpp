@@ -183,9 +183,8 @@ void Camera::Update()
 	{
 		if (m_tagetMode == eTarget_Vector &&  m_targetVector != v)
 		{
-//			RecomputeFLUVectors(&v, &ZobVector3::Vector3Y);
-//			LookAt(&m_forward, &m_left, &m_up);
-			UpdateViewProjectionMatrix(&GetWorldPosition(), &m_targetVector, &ZobVector3::Vector3Y);
+			ZobVector3 p = GetWorldPosition();
+			UpdateViewProjectionMatrix(&p, &m_targetVector, &ZobVector3::Vector3Y);
 		}
 		else if (m_tagetMode == eTarget_Object && m_targetObject)
 		{
@@ -204,7 +203,7 @@ void Camera::Update()
 				SetWorldRotation(v.x, v.y, v.z);
 				RecomputeFLUVectors(&v, &ZobVector3::Vector3Y);
 			}
-			UpdateViewProjectionMatrix(&GetWorldPosition(), &m_targetVector, &ZobVector3::Vector3Y);
+			UpdateViewProjectionMatrix(&p, &m_targetVector, &ZobVector3::Vector3Y);
 		}
 		else if ((m_tagetMode == eTarget_FPS))
 		{
