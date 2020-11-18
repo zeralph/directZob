@@ -46,7 +46,7 @@ void ZobPhysicComponent::Init(const ZobVector3* position, const ZobVector3* rota
 	m_localTransform.setOrientation(q);
 	m_scale = Vector3(1, 1, 1);
 	m_totalScale = Vector3(1, 1, 1);
-	//Update();
+	Update();
 }
 
 void ZobPhysicComponent::CreateCollider()

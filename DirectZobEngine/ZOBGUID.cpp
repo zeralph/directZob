@@ -1,5 +1,5 @@
 #include "ZOBGUID.h"
-
+#include <algorithm>
 u16 ZOBGUID::sCurrentId = 1;
 std::vector<DirectZobType::guid> ZOBGUID::m_guidList = std::vector<DirectZobType::guid>();
 
@@ -23,7 +23,7 @@ ZOBGUID::ZOBGUID(DirectZobType::guid id)
 		last_id++;
 		m_id = ((u16)m_type << 24) + ((u16)m_subType << 16) + last_id;
 	}
-	sCurrentId = std::max(sCurrentId, last_id);
+	sCurrentId = std::max<int>(sCurrentId, last_id);
 	m_guidList.push_back(m_id);
 	sCurrentId++;
 }
