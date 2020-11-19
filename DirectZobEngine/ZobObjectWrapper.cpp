@@ -1,5 +1,7 @@
 #ifdef _WINDLL
 #include "ZobObjectWrapper.h"
+#include "ZobCameraWrapper.h"
+#include "ZobLightWrapper.h"
 #include "Light.h"
 #include "Camera.h"
 #include "DirectZob.h"
@@ -315,13 +317,25 @@ namespace CLI
 		ZobObject* z = GetInstance();
 		if (z)
 		{
-			System::Collections::Generic::List<ZobObjectWrapper^>^ l = gcnew System::Collections::Generic::List<ZobObjectWrapper^>();
+			System::Collections::Generic::List<ZobObjectWrapper^>^ list = gcnew System::Collections::Generic::List<ZobObjectWrapper^>();
 			const std::vector<ZobObject*>* v = z->GetChildren();
 			for (std::vector<ZobObject*>::const_iterator iter = v->begin(); iter != v->end(); iter++)
 			{
-				l->Add(gcnew ZobObjectWrapper(*iter));
+				ZobObject* z=*iter;
+				if (dynamic_cast<Light*>(z))
+				{
+					list->Add(gcnew ZobLightWrapper(dynamic_cast<Light*>(z)));
+				}
+				else if (dynamic_cast<Camera*>(z))
+				{
+					list->Add(gcnew ZobCameraWrapper(dynamic_cast<Camera*>(z)));
+				}
+				else
+				{
+					list->Add(gcnew ZobObjectWrapper(z));
+				}
 			}
-			return l;
+			return list;
 		}
 		return nullptr;
 	}
@@ -342,7 +356,7 @@ namespace CLI
 		}
 		return false;
 	}
-
+/*
 	ZobObject* ZobObjectWrapper::GetInstance()
 	{
 		if (!IsValid())
@@ -351,5 +365,6 @@ namespace CLI
 		}
 		return m_Instance;
 	}
+*/
 }
 #endif //_WINDLL

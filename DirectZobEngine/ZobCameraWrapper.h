@@ -7,7 +7,7 @@ namespace CLI {
 	public ref class ZobCameraWrapper : ZobObjectWrapper
 	{
 	public:
-		ZobCameraWrapper(ZobObject* zobObject);
+		ZobCameraWrapper(Camera* zobObject);
 	private:
 
 	};

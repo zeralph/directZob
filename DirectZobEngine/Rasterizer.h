@@ -58,7 +58,10 @@ private:
 
 	inline const float 	computeLighting(const ZobVector3* normal, const ZobVector3* light) const
 	{
-		return clamp2(-ZobVector3::Dot(normal, light), 0.0f, 1.0f);
+		static float rr = 1.0f;
+		float r = ZobVector3::Dot(normal, light);
+		return -r * rr;
+		return clamp2(-ZobVector3::Dot(normal, light), 0.0f, 1.0f) + rr;
 	};
 
 	inline const float 	computeSpecular(const ZobVector3* normal, const ZobVector3* light, const ZobVector3* c, const float lightIntensity, const float specularIntensity) const

@@ -33,9 +33,14 @@ namespace CLI {
 			//}
 			m_Instance = nullptr;
 		}
-		virtual T* GetInstance()
+		T* GetInstance()
 		{
-			return m_Instance;
+			if (IsValid())
+			{
+				return m_Instance;
+				//return dynamic_cast<T*>(m_Instance);
+			}
+			return NULL;
 		}
 		void MarshalString(System::String^ s, std::string& os) {
 			using namespace System::Runtime::InteropServices;
@@ -43,6 +48,7 @@ namespace CLI {
 			os = chars;
 			Marshal::FreeHGlobal(System::IntPtr((void*)chars));
 		}
+		virtual bool IsValid() { return m_Instance != NULL; };
 	};
 }
 #endif //_WINDLL

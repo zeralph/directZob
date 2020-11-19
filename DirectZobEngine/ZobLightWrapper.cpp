@@ -11,57 +11,91 @@ namespace CLI
 
 	void ZobLightWrapper::SetColor(ManagedVector3^ p)
 	{		
-		ZobVector3 v = p->ToVector3();
-		Light* l = (Light*)m_Instance;
-		l->SetColor(&v);
+		Light* l = (Light*)GetInstance();
+		if (l)
+		{
+			ZobVector3 v = p->ToVector3();
+			l->SetColor(&v);
+		}
 	}
 
 	ManagedVector3^ ZobLightWrapper::GetColor()
-	{
-		ZobVector3 v;
-		Light* l = (Light*)m_Instance;
-		v = l->GetColor();
-		return gcnew ManagedVector3(v);
+	{	
+		Light* l = (Light*)GetInstance();
+		if (l)
+		{
+			const ZobVector3* v = l->GetColor();
+			return gcnew ManagedVector3(v->x, v->y, v->z);
+		}
+		return gcnew ManagedVector3(0, 0, 0);
 	}
 	float ZobLightWrapper::GetSpotAngle()
 	{
-		Light* l = (Light*)m_Instance;
-		return l->GetSpotAngle();
+		Light* l = (Light*)GetInstance();
+		if (l)
+		{
+			return l->GetSpotAngle();
+		}
+		return -1.0f;
 	}
 	void ZobLightWrapper::SetSpotAngle(float f)
 	{
-		Light* l = (Light*)m_Instance;
-		l->SetSpotAngle(f);
+		Light* l = (Light*)GetInstance();
+		if (l)
+		{
+			l->SetSpotAngle(f);
+		}
 	}
 	float ZobLightWrapper::GetIntensity()
 	{	 
-		Light* l = (Light*)m_Instance;
-		return l->GetIntensity();
+		Light* l = (Light*)GetInstance();
+		if (l)
+		{
+			return l->GetIntensity();
+		}
+		return -1.0f;
 	}	 
 	void ZobLightWrapper::SetIntensity(float f)
 	{	 
-		Light* l = (Light*)m_Instance;
-		l->SetIntensity(f);
+		Light* l = (Light*)GetInstance();
+		if (l)
+		{
+			l->SetIntensity(f);
+		}
 	}	 
 	float ZobLightWrapper::GetDistance()
 	{	 
-		Light* l = (Light*)m_Instance;
-		return l->GetFallOffDistance();
+		Light* l = (Light*)GetInstance();
+		if (l)
+		{
+			return l->GetFallOffDistance();
+		}
+		return -1.0f;
 	}	 
 	void ZobLightWrapper::SetDistance(float f)
 	{	 
-		Light* l = (Light*)m_Instance;
-		l->SetFallOffDistance(f);
+		Light* l = (Light*)GetInstance();
+		if (l)
+		{
+			l->SetFallOffDistance(f);
+		}
 	}	 
 	int	 ZobLightWrapper::GetType()
 	{	 
-		Light* l = (Light*)m_Instance;
-		return (int)l->GetType();
+		Light* l = (Light*)GetInstance();
+		if (l)
+		{
+			return (int)l->GetType();
+		}
+		return -1;
 	}	 
 	void ZobLightWrapper::SetType(int t)
 	{
-		Light* l = (Light*)m_Instance;
-		return l->SetType((Light::eLightType)t);
+		Light* l = (Light*)GetInstance();
+		if (l)
+		{
+			l->SetType((Light::eLightType)t);
+		}
 	}
 }
 #endif //_WINDLL

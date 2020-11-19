@@ -283,7 +283,7 @@ int main(int argc, char* argv[])
 	//m_directZob.GetZobObjectManager()->GetZobObject("fbx_example")->SetRotation(0, 90, 0);
 	Camera* c = m_directZob.GetCameraManager()->GetCurrentCamera();
 	ZobVector3 camPos = c?c->GetWorldPosition(): ZobVector3();
-	camPos.y = 7;
+	//camPos.y = 7;
 	ZobVector3 camTo = camPos;
 	camTo.z += 1.0f;
 	//m_directZob.StartPhysic();

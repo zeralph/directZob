@@ -11,10 +11,10 @@ namespace CLI {
 	public:
 		ZobObjectWrapper(ZobObject* zobObject);
 		~ZobObjectWrapper() override;
+		bool IsValid() override;
 		void SetZobObject(ZobObject* zobObject) { m_Instance = zobObject; }
 		System::String^ GetName();
 		System::String^ GetFullNodeName();
-		ZobObject* GetInstance() override;
 		void SetName(System::String^ name);
 		ManagedVector3^ GetWorldPosition();
 		ManagedVector3^ GetLeft();
@@ -32,7 +32,6 @@ namespace CLI {
 		void SetMesh(System::String^ name);
 		void LoadMesh(System::String^ name, System::String^ path);
 		void CreateSprite();
-		bool IsValid();
 		void SetLightingMode(int lightMode);
 		int GetLightingMode();
 		bool IsLight();

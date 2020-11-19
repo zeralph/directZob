@@ -1,0 +1,34 @@
+<?xml version="1.0" ?>
+<Scene>
+    <Globals>
+        <AmbientColor r="102" g="102" b="102" />
+        <FogColor r="63" g="149" b="255" />
+        <ClearColor r="63" g="149" b="255" />
+        <FogDensity>2.00</FogDensity>
+        <FogDistance>500.00</FogDistance>
+        <FogType>none</FogType>
+    </Globals>
+    <ZobObject name="newObject_16" guid="50397188" type="mesh">
+        <Position x="1.38342" y="-1.2936" z="-2.09232" />
+        <Rotation x="0" y="0" z="0" />
+        <Scale x="1" y="1" z="1" />
+        <Mesh name="beach2.obj" file="D:\Git\directZob\resources\beach2.obj" />
+        <Physic type="0">
+            <RigidBody type="0" active="0" />
+            <Collider type="0" radius="0.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
+        </Physic>
+    </ZobObject>
+    <ZobObject name="Light_0" guid="50528261" type="light">
+        <Position x="0" y="10" z="0" />
+        <Rotation x="90" y="0" z="0" />
+        <Scale x="1" y="1" z="1" />
+        <Physic type="0">
+            <RigidBody type="0" active="0" />
+            <Collider type="0" radius="0.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
+        </Physic>
+        <Color r="252" g="212" b="64" />
+        <Intensity>5.00</Intensity>
+        <FallOffDistance>10.00</FallOffDistance>
+        <Type>spot</Type>
+    </ZobObject>
+</Scene>

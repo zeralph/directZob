@@ -166,7 +166,7 @@ inline ZobVector3 Rasterizer::ComputeLightingAtPoint(const ZobVector3* position,
 				if (l->GetType() == Light::eLightType_directional)
 				{
 					lightDir = l->GetForward();
-					lightPower = 1.0f;
+					lightPower = l->GetIntensity();
 				}
 				else if(l->GetType() == Light::eLightType_point)
 				{
@@ -200,7 +200,7 @@ inline ZobVector3 Rasterizer::ComputeLightingAtPoint(const ZobVector3* position,
 					static int specularIntensity = 50;
 					static float ambientIntensity = 0.4f;
 					cl = computeLighting(normal, &lightDir);
-					sl = computeSpecular(normal, &lightDir, &m_camDir, cl, specularIntensity);
+					sl = 0.0f;
 					if (lighting == RenderOptions::eLightMode_none)
 					{
 						cl = 0.0f;
@@ -208,7 +208,7 @@ inline ZobVector3 Rasterizer::ComputeLightingAtPoint(const ZobVector3* position,
 					}
 					else if (lighting == RenderOptions::eLightMode_gouraud)
 					{
-						sl = 0.0f;
+						sl = computeSpecular(normal, &lightDir, &m_camDir, cl, specularIntensity);
 					}
 					outColor.x += (cl + sl) * l->GetColor()->x * lightPower;
 					outColor.y += (cl + sl) * l->GetColor()->y * lightPower;

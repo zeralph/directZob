@@ -47,6 +47,7 @@ ZobObject::ZobObject(Type t, SubType s, const std::string& name, ZobObject* pare
 	m_renderOptions.bTransparency = false;
 	ZobVector3 p = ZobVector3::Vector3Zero;
 	m_physicComponent->Init(&p, &p);
+	Update();
 	DirectZob::RemoveIndent();
 }
 
@@ -109,6 +110,7 @@ ZobObject::ZobObject(DirectZobType::guid id, TiXmlElement* node, ZobObject* pare
 	m_renderOptions.bTransparency = false;
 	m_physicComponent->Init(&position, &rotation);
 	SetScale(scale.x, scale.y, scale.z);
+	Update();
 	DirectZob::RemoveIndent();
 }
 
@@ -249,13 +251,6 @@ void ZobObject::Update()
 		else
 		{
 			z->Update();
-			Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
-			Engine* e = DirectZob::GetInstance()->GetEngine();
-			if (c && e)
-			{
-				ZobVector3 childWpos = z->GetWorldPosition();
-				e->QueueLine(c, &wpos, &childWpos, 0x11FF99, true);
-			}
 		}
 	}
 }
