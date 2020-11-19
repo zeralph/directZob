@@ -36,7 +36,7 @@ public:
 	void AddTranslation(const ZobVector3& v);
 	ZobVector3 GetRotation() const;
 	ZobVector3 GetScale() const { return ZobVector3(m_data[0][0], m_data[1][1], m_data[2][2]); }
-	ZobVector3 GetTranslation() const { return ZobVector3{ m_data[0][3], m_data[1][3], m_data[2][3] }; }
+	ZobVector3 GetTranslation() const { return ZobVector3(m_data[0][3], m_data[1][3], m_data[2][3]); }
 	inline float GetValue(const int i, const int j) const { return m_data[i][j]; }
 	static void InvertMatrix4(const ZobMatrix4x4& m, ZobMatrix4x4& im);
 	static ZobMatrix4x4 RotateAroundAxis(const ZobVector3& axis, const float angle);

@@ -205,7 +205,7 @@ void Camera::Update()
 			}
 			UpdateViewProjectionMatrix(&p, &m_targetVector, &ZobVector3::Vector3Y);
 		}
-		else if ((m_tagetMode == eTarget_FPS))
+		else if (m_tagetMode == eTarget_FPS)
 		{
 			UpdateViewProjectionMatrix(&v, 0.0f, 0.0f);
 		}
