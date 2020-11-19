@@ -34,7 +34,7 @@ namespace CLI
 		Light* l = (Light*)GetInstance();
 		if (l)
 		{
-			return l->GetSpotAngle();
+			return DEG_TO_RAD(l->GetSpotAngleRad());
 		}
 		return -1.0f;
 	}

@@ -166,33 +166,31 @@ inline ZobVector3 Rasterizer::ComputeLightingAtPoint(const ZobVector3* position,
 				if (l->GetType() == Light::eLightType_directional)
 				{
 					lightDir = l->GetForward();
+					lightDir.Mul(-1.0f);
 					lightPower = l->GetIntensity();
 				}
 				else if(l->GetType() == Light::eLightType_point)
 				{
-					lightDir = position - l->GetWorldPosition();// tpos;
+					lightDir = l->GetWorldPosition() - position;// tpos;
 					lightPower = 1.0f - (lightDir.sqrtLength() / l->GetFallOffDistance());
 					lightPower = clamp2(lightPower, 0.0f, 1.0f) * l->GetIntensity();
 					lightDir.Normalize();
 				}
 				else if (l->GetType() == Light::eLightType_spot)
 				{
-					lightDir = position - l->GetWorldPosition();// tpos;
+					lightDir = l->GetWorldPosition() - position;// tpos;
 					lightPower = 1.0f - (lightDir.sqrtLength() / l->GetFallOffDistance());
 					lightDir.Normalize();
 					ZobVector3 fw = l->GetForward();
 					float f = ZobVector3::Dot(&fw, &lightDir);
-					/*
-					float r = l->GetSpotAngle() / 2.0f;
-					r = DEG_TO_RAD(r);
-					r = cos(r);
-					if (fabs(f) < fabs(r))
+					if (f > l->GetSpotAngleRad() / 2.0f)
 					{
-						lightPower = 0;
+						f = 0.0f;
 					}
-					*/
-					f = f - (90.0f - l->GetSpotAngle()/2.0f) / 90.0f;
-					lightPower *= f;
+					else
+					{
+						f = 1.0f;
+					}
 					lightPower = clamp2(lightPower, 0.0f, 1.0f) * l->GetIntensity();
 				}
 				if (lightPower > 0.0f)
@@ -487,11 +485,6 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector3* p, const Triangl
 			fr = (w0 * la->x + w1 * lb->x + w2 * lc->x) * r;
 			fg = (w0 * la->y + w1 * lb->y + w2 * lc->y) * g;
 			fb = (w0 * la->z + w1 * lb->z + w2 * lc->z) * b;
-			if (fr > 0.0f || fg > 0.0f || fb > 0.0f)
-			{
-				int gg = 0;
-				gg++;
-			}
 		}
 		else if(m_lightingPrecision == eLightingPrecision_pixel)
 		{

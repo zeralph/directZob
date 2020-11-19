@@ -7,7 +7,7 @@
 #include "ZobMatrix4x4.h"
 #include "Triangle.h"
 #include <thread> 
-
+#include <algorithm>
 #ifdef LINUX
 	#include <unistd.h>
 #elif MACOS
@@ -44,7 +44,7 @@ private:
 	void 					sortVerticesAscendingByY(ZobVector2* v1, ZobVector2* v2, ZobVector2* v3) const ;
 	void 					sortVerticesAscendingByY(ZobVector2* v1, ZobVector2* v2, ZobVector2* v3, ZobVector2* uv1, ZobVector2* uv2, ZobVector2* uv3) const;
 	inline float 			edgeFunction(const ZobVector3* a, const ZobVector3* b, const ZobVector3* c) const { return (c->x - a->x) * (b->y - a->y) - (c->y - a->y) * (b->x - a->x); }
-	inline float 			clamp2(float x, const float min, const float max) const { if (x < min) x = min; if (x > max) x = max; return x; }
+	inline float 			clamp2(float x, const float min, const float max) const { if (x < min) return min; if (x > max) return max; return x; }
 	inline const bool 		RenderLine(int line) const 
 	{ 
 		return (m_renderMode == eRenderMode_fullframe) ||
@@ -58,10 +58,8 @@ private:
 
 	inline const float 	computeLighting(const ZobVector3* normal, const ZobVector3* light) const
 	{
-		static float rr = 1.0f;
-		float r = ZobVector3::Dot(normal, light);
-		return -r * rr;
-		return clamp2(-ZobVector3::Dot(normal, light), 0.0f, 1.0f) + rr;
+		float f = 1.0f - clamp2(-fabsf(ZobVector3::Dot(normal, light)), 0.0f, 1.0f);
+		return f;// clamp2(fabsf(ZobVector3::Dot(normal, light)), 0.0f, 1.0f);
 	};
 
 	inline const float 	computeSpecular(const ZobVector3* normal, const ZobVector3* light, const ZobVector3* c, const float lightIntensity, const float specularIntensity) const

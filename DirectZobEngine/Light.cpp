@@ -10,7 +10,7 @@ Light::Light(std::string &name, eLightType type, ZobVector3 color, float intensi
 	m_distance = distance;
 	m_active = true;
 	m_lightType = type;
-	m_spotAngle = 30.0f;
+	m_spotAngleRad = DEG_TO_RAD(30.0f);
 	NewLightConfiguration();
 }
 
@@ -55,7 +55,7 @@ Light::Light(ulong id, TiXmlElement* node, ZobObject* parent)
 		m_distance = falloff;
 		m_intensity = intensity;
 		m_active = true;
-		m_spotAngle = 30.0f;
+		m_spotAngleRad = DEG_TO_RAD(30.0f);
 }
 
 Light::~Light()
@@ -74,7 +74,7 @@ void Light::NewLightConfiguration()
 		SetWorldRotation(-90, 0, 0);
 		//m_rotation = ZobVector3(-90.0f, 0.0f, 0.0f);
 		m_distance = 10.0f;
-		m_spotAngle = 10.0f;
+		m_spotAngleRad = DEG_TO_RAD(30.0f);
 		break;
 	case eLightType_directional:
 		SetWorldRotation(-70.0f, 30.0f, 30.0f);
@@ -102,7 +102,7 @@ void Light::drawSpotGizmos(const Camera* camera, Core::Engine* engine)
 	v2 = m_left;
 	v1.Mul(m_distance);
 	v1 = v1 + GetWorldPosition();
-	float r = m_spotAngle / 2.0f;
+	float r = RAD_TO_DEG(m_spotAngleRad) / 2.0f;
 	r = DEG_TO_RAD(r);
 	r = tan(r) * m_distance;
 	engine->QueueEllipse(camera, &v1, &m_forward, r, r, c, true);

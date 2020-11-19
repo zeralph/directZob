@@ -25,8 +25,8 @@ public:
 	const ZobVector3*	GetColor() const { return &m_color; }
 	const float			GetFallOffDistance() const { return m_distance; }
 	const float			GetIntensity() const { return m_intensity; }
-	const float			GetSpotAngle() const { return m_spotAngle; }
-	void				SetSpotAngle(float f) { m_spotAngle= fmax(0, fmin(90, fabs(f))); }
+	const float			GetSpotAngleRad() const { return m_spotAngleRad; }
+	void				SetSpotAngle(float f) { m_spotAngleRad = fmax(0, fmin(90, fabs(f))); m_spotAngleRad = DEG_TO_RAD(m_spotAngleRad); }
 	const eLightType	GetType() const { return m_lightType; }
 	inline bool			IsActive() const { return m_active; }
 
@@ -48,7 +48,7 @@ private:
 	ZobVector3 m_color;
 	float m_intensity;
 	float m_distance;
-	float m_spotAngle;
+	float m_spotAngleRad;
 	bool m_active;
 	eLightType m_lightType;
 };
