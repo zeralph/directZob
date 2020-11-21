@@ -1,5 +1,5 @@
 #!/bin/sh
-export SDKROOT="/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk"
+few macos fixesexport SDKROOT="/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk"
 if [ "$1" != "" ]; then
     target="$1"
 else
