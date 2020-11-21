@@ -136,12 +136,12 @@ namespace CLI
 		m_nbTriangles = 0;
 		for (int i = 0; i < m_nbLines; i++)
 		{
-			m_Instance->QueueLine(c, &m_lines[i].p0, &m_lines[i].p1, m_lines[i].color, false);
+			m_Instance->QueueLine(c, &m_lines[i].p0, &m_lines[i].p1, m_lines[i].color, m_lines[i].bold, m_lines[i].noZ);
 		}
 		m_nbLines = 0;
 		for (int i = 0; i < m_nbCircles; i++)
 		{
-			m_Instance->QueueEllipse(c, &m_circles[i].p, &m_circles[i].n, m_circles[i].r, m_circles[i].r, m_circles[i].color, false);
+			m_Instance->QueueEllipse(c, &m_circles[i].p, &m_circles[i].n, m_circles[i].r, m_circles[i].r, m_circles[i].color, m_circles[i].bold, m_circles[i].noZ);
 		}
 		m_nbCircles = 0;
 	}
@@ -163,7 +163,7 @@ namespace CLI
 //		m_Instance->QueueTriangle(&t);
 	}
 
-	void EngineWrapper::DrawCircle(ManagedVector3^ p0, ManagedVector3^ up, float r, int color)
+	void EngineWrapper::DrawCircle(ManagedVector3^ p0, ManagedVector3^ up, float r, int color, bool bold, bool noZ)
 	{
 		Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
 		if (c)
@@ -174,12 +174,14 @@ namespace CLI
 				m_circles[m_nbCircles].n = up->ToVector3();
 				m_circles[m_nbCircles].r = r;
 				m_circles[m_nbCircles].color = color;
+				m_circles[m_nbCircles].bold = bold;
+				m_circles[m_nbCircles].noZ = noZ;
 				m_nbCircles++;
 			}
 		}
 	}
 
-	void EngineWrapper::DrawLine(ManagedVector3^ p0, ManagedVector3^ p1, int color)
+	void EngineWrapper::DrawLine(ManagedVector3^ p0, ManagedVector3^ p1, int color, bool bold, bool noZ)
 	{
 		Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
 		if (c)
@@ -189,6 +191,8 @@ namespace CLI
 				m_lines[m_nbLines].p0 = p0->ToVector3();
 				m_lines[m_nbLines].p1 = p1->ToVector3();
 				m_lines[m_nbLines].color = color;
+				m_lines[m_nbLines].bold = bold;
+				m_lines[m_nbLines].noZ = noZ;
 				m_nbLines++;
 			}
 		}

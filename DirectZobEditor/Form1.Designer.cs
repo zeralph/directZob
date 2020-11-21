@@ -65,8 +65,10 @@
             this.btnGizmos = new System.Windows.Forms.ToolStripButton();
             this.btnNormals = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.btnTranslate = new System.Windows.Forms.ToolStripButton();
-            this.btnRotate = new System.Windows.Forms.ToolStripButton();
+            this.btnTranslateLocal = new System.Windows.Forms.ToolStripButton();
+            this.btnRotateLocal = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.btnTranslateWorld = new System.Windows.Forms.ToolStripButton();
             this.btnScale = new System.Windows.Forms.ToolStripButton();
             this.EngineRendererPanel = new System.Windows.Forms.Panel();
             this.tabControl1 = new System.Windows.Forms.TabControl();
@@ -363,8 +365,10 @@
             this.btnGizmos,
             this.btnNormals,
             this.toolStripSeparator2,
-            this.btnTranslate,
-            this.btnRotate,
+            this.btnTranslateLocal,
+            this.btnRotateLocal,
+            this.toolStripSeparator3,
+            this.btnTranslateWorld,
             this.btnScale});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
@@ -461,29 +465,47 @@
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
             // 
-            // btnTranslate
+            // btnTranslateLocal
             // 
-            this.btnTranslate.Checked = true;
-            this.btnTranslate.CheckOnClick = true;
-            this.btnTranslate.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.btnTranslate.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.btnTranslate.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnTranslate.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnTranslate.Name = "btnTranslate";
-            this.btnTranslate.Size = new System.Drawing.Size(23, 22);
-            this.btnTranslate.Text = "T";
-            this.btnTranslate.Click += new System.EventHandler(this.btnTranslate_Click);
+            this.btnTranslateLocal.Checked = true;
+            this.btnTranslateLocal.CheckOnClick = true;
+            this.btnTranslateLocal.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.btnTranslateLocal.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.btnTranslateLocal.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.btnTranslateLocal.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnTranslateLocal.Name = "btnTranslateLocal";
+            this.btnTranslateLocal.Size = new System.Drawing.Size(23, 22);
+            this.btnTranslateLocal.Text = "TL";
+            this.btnTranslateLocal.ToolTipText = "Translate in object\'s space";
+            this.btnTranslateLocal.Click += new System.EventHandler(this.btnTranslateLocal_Click);
             // 
-            // btnRotate
+            // btnRotateLocal
             // 
-            this.btnRotate.CheckOnClick = true;
-            this.btnRotate.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.btnRotate.Image = ((System.Drawing.Image)(resources.GetObject("btnRotate.Image")));
-            this.btnRotate.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnRotate.Name = "btnRotate";
-            this.btnRotate.Size = new System.Drawing.Size(23, 22);
-            this.btnRotate.Text = "R";
-            this.btnRotate.Click += new System.EventHandler(this.btnRotate_Click);
+            this.btnRotateLocal.CheckOnClick = true;
+            this.btnRotateLocal.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.btnRotateLocal.Image = ((System.Drawing.Image)(resources.GetObject("btnRotateLocal.Image")));
+            this.btnRotateLocal.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnRotateLocal.Name = "btnRotateLocal";
+            this.btnRotateLocal.Size = new System.Drawing.Size(24, 22);
+            this.btnRotateLocal.Text = "RL";
+            this.btnRotateLocal.ToolTipText = "Rotate in object\'s space";
+            this.btnRotateLocal.Click += new System.EventHandler(this.btnRotateLocal_Click);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
+            // 
+            // btnTranslateWorld
+            // 
+            this.btnTranslateWorld.CheckOnClick = true;
+            this.btnTranslateWorld.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.btnTranslateWorld.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnTranslateWorld.Name = "btnTranslateWorld";
+            this.btnTranslateWorld.Size = new System.Drawing.Size(28, 22);
+            this.btnTranslateWorld.Text = "TW";
+            this.btnTranslateWorld.ToolTipText = "Rotate in world space";
+            this.btnTranslateWorld.Click += new System.EventHandler(this.btnTranslateWorld_Click);
             // 
             // btnScale
             // 
@@ -494,6 +516,7 @@
             this.btnScale.Name = "btnScale";
             this.btnScale.Size = new System.Drawing.Size(23, 22);
             this.btnScale.Text = "S";
+            this.btnScale.ToolTipText = "Scale";
             this.btnScale.Click += new System.EventHandler(this.btnScale_Click);
             // 
             // EngineRendererPanel
@@ -655,9 +678,11 @@
         private System.Windows.Forms.ToolStripButton btnNormals;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-        private System.Windows.Forms.ToolStripButton btnTranslate;
-        private System.Windows.Forms.ToolStripButton btnRotate;
+        private System.Windows.Forms.ToolStripButton btnTranslateLocal;
+        private System.Windows.Forms.ToolStripButton btnRotateLocal;
         private System.Windows.Forms.ToolStripButton btnScale;
+        private System.Windows.Forms.ToolStripButton btnTranslateWorld;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
     }
 }
 

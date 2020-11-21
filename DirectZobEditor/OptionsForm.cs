@@ -12,8 +12,10 @@ namespace DirectZobEditor
 {
     public partial class OptionsForm : Form
     {
+        Form1 m_mainForm;
         public OptionsForm(Form1 f)
         {
+            m_mainForm = f;
             InitializeComponent();
         }
 
@@ -27,6 +29,10 @@ namespace DirectZobEditor
             this.Show();
             this.BringToFront();
             this.TopMost = true;
+            Point p = new Point();
+            p.X = m_mainForm.Location.X / 2 + m_mainForm.Width / 2 - this.Width / 2;
+            p.Y = m_mainForm.Location.Y / 2 + m_mainForm.Height/ 2 - this.Height / 2;
+            this.Location = p;
         }
 
         private void OptionsForm_Load(object sender, EventArgs e)
@@ -36,9 +42,12 @@ namespace DirectZobEditor
 
         private void OptionsForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            e.Cancel = true;
-            Hide();
-            this.Controls.Clear();
+            //e.Cancel;
+            //Invoke(delegate
+            //{
+             //   Hide();
+             //   this.Controls.Clear();
+            //});
         }
     }
 }

@@ -53,9 +53,6 @@ namespace DirectZobEditor
         private CLI.MeshManagerWrapper m_meshManagerWrapper;
         private CLI.LightManagerWrapper m_lightManagerWrapper;
 
-        //public UpdateLogWindow UpdateLogWindowDelegate;
-        private OptionsForm m_optionsForm;
-        
         private CameraControl m_camControl;
         private ZobObjectListControl m_zobObjectList;
         private EngineWindow m_engineWindow;
@@ -111,8 +108,6 @@ namespace DirectZobEditor
             EngineControlsFlowLayout.Controls.Add(m_lightControl);
             EngineControlsFlowLayout.Controls.Add(m_spriteControl);
             //--
-            m_optionsForm = new OptionsForm(this);
-            m_optionsForm.Hide();
 
             this.propertiesPanel.MinimumSize = new Size(300, 500);
             m_engineWindow.OnEngineStopped += new EventHandler(OnEngineClosed);
@@ -485,12 +480,14 @@ namespace DirectZobEditor
 
         private void engineToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            m_optionsForm.Show("Engine", m_engineControl);
+            OptionsForm of = new OptionsForm(this);
+            of.Show("Engine", m_engineControl);
         }
 
         private void sceneToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            m_optionsForm.Show("Scene", m_sceneControl);
+            OptionsForm of = new OptionsForm(this);
+            of.Show("Scene", m_sceneControl);
         }
 
         private void btnPlay_Click(object sender, EventArgs e)
@@ -562,25 +559,45 @@ namespace DirectZobEditor
             m_engineWindow.GetEngineWrapper().DrawGizmos(btnGizmos.Checked);
         }
 
-        private void btnTranslate_Click(object sender, EventArgs e)
+        private void btnTranslateLocal_Click(object sender, EventArgs e)
         {
-            m_engineWindow.SetModificator(EngineWindow.objectModificator.translate);
-            btnRotate.Checked = false;
+            m_engineWindow.SetModificator(EngineWindow.objectModificator.translate_local);
+            btnRotateLocal.Checked = false;
             btnScale.Checked = false;
+            btnTranslateWorld.Checked = false;
         }
 
-        private void btnRotate_Click(object sender, EventArgs e)
+        private void btnRotateLocal_Click(object sender, EventArgs e)
         {
-            m_engineWindow.SetModificator(EngineWindow.objectModificator.rotate);
-            btnTranslate.Checked = false;
+            m_engineWindow.SetModificator(EngineWindow.objectModificator.rotate_local);
+            btnTranslateLocal.Checked = false;
+            btnTranslateWorld.Checked = false;
             btnScale.Checked = false;
         }
 
         private void btnScale_Click(object sender, EventArgs e)
         {
             m_engineWindow.SetModificator(EngineWindow.objectModificator.scale);
-            btnTranslate.Checked = false;
-            btnRotate.Checked = false;
+            btnTranslateLocal.Checked = false;
+            btnRotateLocal.Checked = false;
+            btnTranslateWorld.Checked = false;
+        }
+
+        private void btnTranslateWorld_Click(object sender, EventArgs e)
+        {
+            m_engineWindow.SetModificator(EngineWindow.objectModificator.translate_world);
+            btnRotateLocal.Checked = false;
+            btnScale.Checked = false;
+            btnTranslateLocal.Checked = false;
+        }
+
+        private void btnRotateWorld_Click(object sender, EventArgs e)
+        {
+            m_engineWindow.SetModificator(EngineWindow.objectModificator.rotate_world);
+            btnRotateLocal.Checked = false;
+            btnScale.Checked = false;
+            btnTranslateLocal.Checked = false;
+            btnTranslateWorld.Checked = false;
         }
     }
 

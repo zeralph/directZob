@@ -64,14 +64,14 @@ void Camera::DrawGizmos(const Camera* camera, Core::Engine* engine)
 	uint c2 = 0x0000FFFF;
 	if (this->GetName() != "EditorCamera")
 	{
-		engine->QueueLine(camera, &v0, &v1, c, true);
-		engine->QueueLine(camera, &v1, &v3, c, true);
-		engine->QueueLine(camera, &v2, &v3, c2, true);
-		engine->QueueLine(camera, &v2, &v0, c, true);
-		engine->QueueLine(camera, &p, &v1, c, true);
-		engine->QueueLine(camera, &p, &v2, c, true);
-		engine->QueueLine(camera, &p, &v3, c, true);
-		engine->QueueLine(camera, &p, &v0, c, true);
+		engine->QueueLine(camera, &v0, &v1, c,  true, false);
+		engine->QueueLine(camera, &v1, &v3, c,  true, false);
+		engine->QueueLine(camera, &v2, &v3, c2, true, false);
+		engine->QueueLine(camera, &v2, &v0, c,  true, false);
+		engine->QueueLine(camera, &p, &v1, c,   true, false);
+		engine->QueueLine(camera, &p, &v2, c,   true, false);
+		engine->QueueLine(camera, &p, &v3, c,   true, false);
+		engine->QueueLine(camera, &p, &v0, c,   true, false);
 	}
 }
 

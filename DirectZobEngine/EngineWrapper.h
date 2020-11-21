@@ -17,6 +17,8 @@ namespace CLI
 		ZobVector3 p0;
 		ZobVector3 p1;
 		int color;
+		bool bold;
+		bool noZ;
 	};
 	struct Circle
 	{
@@ -24,6 +26,8 @@ namespace CLI
 		ZobVector3 n;
 		float r;
 		int color;
+		bool bold;
+		bool noZ;
 	};
 	public ref class EngineWrapper: public ManagedObject<Core::Engine>
 	{
@@ -44,8 +48,8 @@ namespace CLI
 		bool			GetProjectedCoords(ManagedVector3^ worldSpacePos);
 		float			GetDistanceToCamera(ManagedVector3^ worldPos);
 		ZobObjectWrapper^ GetObjectAt2DCoords(float x, float y);
-		void			DrawLine(ManagedVector3^ p0, ManagedVector3^ p1, int color);
-		void			DrawCircle(ManagedVector3^ p0, ManagedVector3^ up, float r, int color);
+		void			DrawLine(ManagedVector3^ p0, ManagedVector3^ p1, int color, bool bold, bool noZ);
+		void			DrawCircle(ManagedVector3^ p0, ManagedVector3^ up, float r, int color, bool bold, bool noZ);
 		void			DrawTriangle(ManagedVector3^ p0, ManagedVector3^ p1, ManagedVector3^ p2, int color);
 		void			QueueObjectsToRender();
 	private:

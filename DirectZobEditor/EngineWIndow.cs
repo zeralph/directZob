@@ -19,8 +19,10 @@ namespace DirectZobEditor
         public enum objectModificator
         {
             none=0,
-            translate,
-            rotate,
+            translate_world,
+            translate_local,
+            rotate_world,
+            rotate_local,
             scale,
         };
         public enum axis
@@ -61,7 +63,7 @@ namespace DirectZobEditor
         int m_lastMouseX = -1;
         int m_lastMouseY = -1;
         private bool m_engineRendering = false;
-        private objectModificator m_objectModificator = objectModificator.translate;
+        private objectModificator m_objectModificator = objectModificator.translate_world;
 
         private ManagedVector3 m_startTranslation;
         private ManagedVector3 m_startRotation;
@@ -135,6 +137,31 @@ namespace DirectZobEditor
                 ManagedVector3 pX = z.GetLeft().Copy();
                 ManagedVector3 pY = z.GetUp().Copy();
                 ManagedVector3 pZ = z.GetForward().Copy();
+                ManagedVector3 nX = z.GetLeft().Copy();
+                ManagedVector3 nY = z.GetUp().Copy();
+                ManagedVector3 nZ = z.GetForward().Copy();
+                switch (m_objectModificator)
+                {
+                    case objectModificator.translate_world:
+                    case objectModificator.rotate_world:
+                        pX = new ManagedVector3(1, 0, 0);
+                        pY = new ManagedVector3(0, 1, 0);
+                        pZ = new ManagedVector3(0, 0, 1);
+                        nX = pX.Copy();
+                        nY = pY.Copy();
+                        nZ = pZ.Copy();
+                        break;
+                    case objectModificator.translate_local:
+                    case objectModificator.rotate_local:
+                    case objectModificator.scale:
+                        pX = z.GetLeft().Copy();
+                        pY = z.GetUp().Copy();
+                        pZ = z.GetForward().Copy();
+                        nX = pX.Copy();
+                        nY = pY.Copy();
+                        nZ = pZ.Copy();
+                        break;
+                }
                 float d = m_engineWrapper.GetDistanceToCamera(p0) / 10.0f;
                 pX.Mul(d);
                 pY.Mul(d);
@@ -171,37 +198,67 @@ namespace DirectZobEditor
                 bTX.Visible = true;
                 bTZ.Visible = true;
                 p0 = z.GetWorldPosition().Copy();
-                pX = z.GetLeft().Copy();
-                pY = z.GetUp().Copy();
-                pZ = z.GetForward().Copy();
+                switch (m_objectModificator)
+                {
+                    case objectModificator.translate_world:
+                    case objectModificator.rotate_world:
+                        pX = new ManagedVector3(1, 0, 0);
+                        pY = new ManagedVector3(0, 1, 0);
+                        pZ = new ManagedVector3(0, 0, 1);
+                        nX = pX.Copy();
+                        nY = pY.Copy();
+                        nZ = pZ.Copy();
+                        break;
+                    case objectModificator.translate_local:
+                    case objectModificator.rotate_local:
+                    case objectModificator.scale:
+                        pX = z.GetLeft().Copy();
+                        pY = z.GetUp().Copy();
+                        pZ = z.GetForward().Copy();
+                        nX = pX.Copy();
+                        nY = pY.Copy();
+                        nZ = pZ.Copy();
+                        break;
+                }
                 pX.Add(p0);
                 pY.Add(p0);
                 pZ.Add(p0);
                 switch (m_objectModificator)
                 {
-                    case objectModificator.translate:
+                    case objectModificator.translate_world:
+                    case objectModificator.translate_local:
                         bTX.Text = "Tx";
+                        bTX.BackColor = Color.Red;
                         bTY.Text = "Ty";
+                        bTY.BackColor = Color.Green;
                         bTZ.Text = "Tz";
-                        m_engineWrapper.DrawLine(p0, pX, 0xFF0000);
-                        m_engineWrapper.DrawLine(p0, pY, 0x00FF00);
-                        m_engineWrapper.DrawLine(p0, pZ, 0x0000FF);
+                        bTZ.BackColor = Color.Blue;
+                        m_engineWrapper.DrawLine(p0, pX, 0xFF0000, true, true);
+                        m_engineWrapper.DrawLine(p0, pY, 0x00FF00, true, true);
+                        m_engineWrapper.DrawLine(p0, pZ, 0x0000FF, true, true);
                         break;
-                    case objectModificator.rotate:
-                        bTX.Text = "Rx";
-                        bTY.Text = "Ry";
-                        bTZ.Text = "Rz";
-                        m_engineWrapper.DrawCircle(p0, z.GetLeft(), 1.0f, 0xFF0000);
-                        m_engineWrapper.DrawCircle(p0, z.GetUp(), 1.0f, 0x00FF00);
-                        m_engineWrapper.DrawCircle(p0, z.GetForward(), 1.0f, 0x0000FF);
+                    case objectModificator.rotate_world:
+                    case objectModificator.rotate_local:
+                        bTX.Text = "Ry";
+                        bTX.BackColor = Color.Green;
+                        bTY.Text = "Rz";
+                        bTY.BackColor = Color.Blue;
+                        bTZ.Text = "Rx";
+                        bTZ.BackColor = Color.Red;
+                        m_engineWrapper.DrawCircle(p0, nX, 1.0f, 0xFF0000, true, true);
+                        m_engineWrapper.DrawCircle(p0, nY, 1.0f, 0x00FF00, true, true);
+                        m_engineWrapper.DrawCircle(p0, nZ, 1.0f, 0x0000FF, true, true);
                         break;
                     case objectModificator.scale:
                         bTX.Text = "Sx";
+                        bTX.BackColor = Color.Red;
                         bTY.Text = "Sy";
+                        bTY.BackColor = Color.Green;
                         bTZ.Text = "Sz";
-                        m_engineWrapper.DrawLine(p0, pX, 0xFF0000);
-                        m_engineWrapper.DrawLine(p0, pY, 0x00FF00);
-                        m_engineWrapper.DrawLine(p0, pZ, 0x0000FF);
+                        bTZ.BackColor = Color.Blue;
+                        m_engineWrapper.DrawLine(p0, pX, 0xFF0000, true, true);
+                        m_engineWrapper.DrawLine(p0, pY, 0x00FF00, true, true);
+                        m_engineWrapper.DrawLine(p0, pZ, 0x0000FF, true, true);
                         break;
                     default:
                         break;
@@ -435,15 +492,13 @@ namespace DirectZobEditor
             ManagedVector3 up = new ManagedVector3(0, 1, 0);
             ManagedVector3 p0 = new ManagedVector3(0, 0, 0);
             ManagedVector3 ret = new ManagedVector3(0, 0, 0);
-            From2DToWorldOnPlane(Cursor.Position.X, Cursor.Position.Y, p0, up, ref ret);
-            m_engineWrapper.DrawLine(p0, ret, 0xFF0000);
+            FromMouseToWorldOnPlane(p0, up, ref ret);
         }
-        bool From2DToWorldOnPlane(int x, int y, ManagedVector3 p0, ManagedVector3 pn, ref ManagedVector3 ret)
+
+        bool FromMouseToWorldOnPlane(ManagedVector3 p0, ManagedVector3 pn, ref ManagedVector3 ret)
         {
-            Point p = new Point(x, y);
+            Point p = System.Windows.Forms.Control.MousePosition;
             p = EngineRender.PointToClient(p);
-            p.X = x;
-            p.Y = y;
             float fx = (float)p.X;
             float fy = (float)p.Y;
             fx /= EngineRender.Width;
@@ -525,21 +580,27 @@ namespace DirectZobEditor
             {
                 switch (m_objectModificator)
                 {
-                    case objectModificator.rotate:
-                        RotateObject(e, a);
+                    case objectModificator.rotate_local:
+                        RotateObject(e, a, false);
+                        break;
+                    case objectModificator.rotate_world:
+                        RotateObject(e, a, true);
                         break;
                     case objectModificator.scale:
                         ScaleObject(e, a);
                         break;
-                    case objectModificator.translate:
-                        TranslateObject(e, a);
+                    case objectModificator.translate_local:
+                        TranslateObject(e, a, false);
+                        break;
+                    case objectModificator.translate_world:
+                        TranslateObject(e, a, true);
                         break;
                     default:
                         break;
                 }
             }
         }
-        private void RotateObject(MouseEventArgs e, axis a)
+        private void RotateObject(MouseEventArgs e, axis a, bool inWorld)
         {
             if (m_engineRendering)
             {
@@ -554,34 +615,46 @@ namespace DirectZobEditor
                 {
                     case axis.X:
                         p = bTX.PointToScreen(new Point(e.X, e.Y));
-                        RotateObjectAroundX(z, p.X, p.Y);
+                        RotateObjectAroundX(z, p.X, p.Y, inWorld);
                         break;
                     case axis.Y:
                         p = bTY.PointToScreen(new Point(e.X, e.Y));
-                        RotateObjectAroundY(z, p.X, p.Y);
+                        RotateObjectAroundY(z, p.X, p.Y, inWorld);
                         //pn =z.GetForward().Copy();
                         break;
                     case axis.Z:
                         p = bTZ.PointToScreen(new Point(e.X, e.Y));
-                        RotateObjectAroundZ(z, p.X, p.Y);
+                        RotateObjectAroundZ(z, p.X, p.Y, inWorld);
                         //pn = z.GetLeft().Copy();
                         break;
                 }
             }
         }
 
-        private void RotateObjectAroundX(ZobObjectWrapper z, int x, int y)
+        private void RotateObjectAroundX(ZobObjectWrapper z, int x, int y, bool world)
         {
             ManagedVector3 pn = z.GetUp().Copy();
             ManagedVector3 p0 = m_startTranslation.Copy();
             ManagedVector3 wpos = new ManagedVector3(0,0,0);
-            bool b = From2DToWorldOnPlane(x, y, p0, pn, ref wpos);
+            bool b = FromMouseToWorldOnPlane(p0, pn, ref wpos);
             if(b)
             {
-                ManagedVector3 left = new ManagedVector3((wpos.x - p0.x), (wpos.y - p0.y), (wpos.z - p0.z));
-                left.Normalize();
-                ManagedVector3 up = z.GetUp().Copy(); 
-                ManagedVector3 forward = left.Cross(up);
+                ManagedVector3 left;
+                ManagedVector3 up;
+                ManagedVector3 forward;
+                if (!world)
+                {
+                    left = new ManagedVector3((wpos.x - p0.x), (wpos.y - p0.y), (wpos.z - p0.z));
+                    left.Normalize();
+                    up = z.GetUp().Copy();
+                    forward = left.Cross(up);
+                }
+                else
+                {
+                    left = new ManagedVector3(1, 0, 0);
+                    up = new ManagedVector3(0, 1, 0);
+                    forward = new ManagedVector3(0, 0, 1);
+                }
                 z.LookAt(forward, left, up);
                 ManagedVector3 p1 = p0.Copy();
                 p1.Add(left);
@@ -597,18 +670,30 @@ namespace DirectZobEditor
             }
         }
 
-        private void RotateObjectAroundY(ZobObjectWrapper z, int x, int y)
+        private void RotateObjectAroundY(ZobObjectWrapper z, int x, int y, bool world)
         {
             ManagedVector3 pn = z.GetForward().Copy();
             ManagedVector3 p0 = m_startTranslation.Copy();
             ManagedVector3 wpos = new ManagedVector3(0, 0, 0);
-            bool b = From2DToWorldOnPlane(x, y, p0, pn, ref wpos);
+            bool b = FromMouseToWorldOnPlane(p0, pn, ref wpos);
             if (b)
             {
-                ManagedVector3 up = new ManagedVector3((wpos.x - p0.x), (wpos.y - p0.y), (wpos.z - p0.z));
-                up.Normalize();
-                ManagedVector3 forward = z.GetForward().Copy();
-                ManagedVector3 left = up.Cross(forward);
+                ManagedVector3 left;
+                ManagedVector3 up;
+                ManagedVector3 forward;
+                if (!world)
+                {
+                    up = new ManagedVector3((wpos.x - p0.x), (wpos.y - p0.y), (wpos.z - p0.z));
+                    up.Normalize();
+                    forward = z.GetForward().Copy();
+                    left = up.Cross(forward);
+                }
+                else
+                {
+                    left = new ManagedVector3(1, 0, 0);
+                    up = new ManagedVector3(0, 1, 0);
+                    forward = new ManagedVector3(0, 0, 1);
+                }
                 z.LookAt(forward, left, up);
                 ManagedVector3 p1 = p0.Copy();
                 p1.Add(left);
@@ -623,18 +708,30 @@ namespace DirectZobEditor
                 OnZobObjectRotated(z);
             }
         }
-        private void RotateObjectAroundZ(ZobObjectWrapper z, int x, int y)
+        private void RotateObjectAroundZ(ZobObjectWrapper z, int x, int y, bool world)
         {
             ManagedVector3 pn = z.GetLeft().Copy();
             ManagedVector3 p0 = m_startTranslation.Copy();
             ManagedVector3 wpos = new ManagedVector3(0, 0, 0);
-            bool b = From2DToWorldOnPlane(x, y, p0, pn, ref wpos);
+            bool b = FromMouseToWorldOnPlane(p0, pn, ref wpos);
             if (b)
             {
-                ManagedVector3 forward = new ManagedVector3((wpos.x - p0.x), (wpos.y - p0.y), (wpos.z - p0.z));
-                forward.Normalize();
-                ManagedVector3 left = z.GetLeft().Copy();
-                ManagedVector3 up = forward.Cross(left);
+                ManagedVector3 left;
+                ManagedVector3 up;
+                ManagedVector3 forward;
+                if (!world)
+                {
+                    forward = new ManagedVector3((wpos.x - p0.x), (wpos.y - p0.y), (wpos.z - p0.z));
+                    forward.Normalize();
+                    left = z.GetLeft().Copy();
+                    up = forward.Cross(left);
+                }
+                else
+                {
+                    left = new ManagedVector3(1, 0, 0);
+                    up = new ManagedVector3(0, 1, 0);
+                    forward = new ManagedVector3(0, 0, 1);
+                }
                 z.LookAt(forward, left, up);
                 ManagedVector3 p1 = p0.Copy();
                 p1.Add(left);
@@ -662,7 +759,7 @@ namespace DirectZobEditor
                 ManagedVector3 p0 = z.GetWorldPosition().Copy();
                 ManagedVector3 pn = c.GetForward().Copy();
                 ManagedVector3 v = new ManagedVector3(0, 0, 0);
-                bool b = From2DToWorldOnPlane(e.X, e.Y, p0, pn, ref v);
+                bool b = FromMouseToWorldOnPlane(p0, pn, ref v);
                 if (b)
                 {
                     if (a != axis.none)
@@ -718,7 +815,7 @@ namespace DirectZobEditor
             }
         }
 
-        private void TranslateObject(MouseEventArgs e, axis a)
+        private void TranslateObject(MouseEventArgs e, axis a, bool world)
         {
             if (m_engineRendering)
             {
@@ -731,7 +828,7 @@ namespace DirectZobEditor
                 ManagedVector3 p0 = z.GetWorldPosition();
                 ManagedVector3 pn = c.GetForward();
                 ManagedVector3 v = new ManagedVector3(0, 0, 0);
-                bool b = From2DToWorldOnPlane(e.X, e.Y, p0, pn, ref v);
+                bool b = FromMouseToWorldOnPlane(p0, pn, ref v);
                 if(b)
                 {
                     if (a != axis.none)
@@ -743,13 +840,34 @@ namespace DirectZobEditor
                         switch (a)
                         {
                             case axis.X:
-                                v = z.GetLeft();
+                                if (!world)
+                                {
+                                    v = z.GetLeft();
+                                }
+                                else
+                                {
+                                    v = new ManagedVector3(1, 0, 0);
+                                }
                                 break;
                             case axis.Y:
-                                v = z.GetUp();
+                                if (!world)
+                                {
+                                    v = z.GetUp();
+                                }
+                                else
+                                {
+                                    v = new ManagedVector3(0, 1, 0);
+                                }
                                 break;
                             case axis.Z:
-                                v = z.GetForward();
+                                if (!world)
+                                {
+                                    v = z.GetForward();
+                                }
+                                else
+                                {
+                                    v = new ManagedVector3(0, 0, 1);
+                                }
                                 break;
                         }
                         k.x = k.x * v.x;
@@ -814,38 +932,5 @@ namespace DirectZobEditor
             }
         }
         #endregion
-
-        private void bTX_MouseHover(object sender, EventArgs e)
-        {
-            ZobCameraWrapper c = m_mainForm.GetCameraControl().GetWrapper().GetCurrentCamera();
-            ZobObjectWrapper z = m_mainForm.GetZobObjectListControl().GetSelectedZobObject();
-            if (c != null && z != null)// && e.Button == MouseButtons.Left)
-            { 
-                switch (m_objectModificator)
-                {
-                    case objectModificator.rotate:
-                        ManagedVector3 p0 = z.GetWorldPosition().Copy();
-                        ManagedVector3 p1 = p0.Copy();
-                        p1.Add(z.GetLeft());
-                        p1.Mul(2.0f);
-                        ManagedVector3 p2 = p0.Copy();
-                        p2.Add(z.GetForward());
-                        p2.Mul(2.0f);
-                        m_engineWrapper.DrawTriangle(p0, p1, p2, 0xFFFF00);
-                        break;
-                    case objectModificator.scale:
-                        break;
-                    case objectModificator.translate:
-                        break;
-                    default:
-                        break;
-                }
-            }
-        }
-
-        private void bTX_MouseDown(object sender, MouseEventArgs e)
-        {
-
-        }
     }
 }

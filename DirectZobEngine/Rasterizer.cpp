@@ -123,7 +123,7 @@ void Rasterizer::DrawLine(const Line3D* l) const
 			if (k < m_bufferData->size)
 			{
 				float zf = m_bufferData->zBuffer[k];
-				float zRatio = (z  - m_bufferData->zNear) / (m_bufferData->zFar - m_bufferData->zNear);
+				float zRatio = l->noZ?0:(z  - m_bufferData->zNear) / (m_bufferData->zFar - m_bufferData->zNear);
 				if (zRatio >= 0.0f && (zf < 0.0f || zRatio < zf))
 				{
 					m_bufferData->buffer[k] = l->c;
@@ -154,7 +154,7 @@ void Rasterizer::DrawLine(const Line3D* l) const
 inline ZobVector3 Rasterizer::ComputeLightingAtPoint(const ZobVector3* position, const ZobVector3* normal, RenderOptions::eLightMode lighting) const
 {
 	ZobVector3 outColor = ZobVector3(0, 0, 0);
-	if (m_lights)
+	if (m_lights && normal)
 	{
 		ZobVector3 lightDir = ZobVector3(0, 0, 0);
 		float lightPower, cl, sl = 0.0f;
@@ -182,8 +182,8 @@ inline ZobVector3 Rasterizer::ComputeLightingAtPoint(const ZobVector3* position,
 					lightPower = 1.0f - (lightDir.sqrtLength() / l->GetFallOffDistance());
 					lightDir.Normalize();
 					ZobVector3 fw = l->GetForward();
-					float f = ZobVector3::Dot(&fw, &lightDir);
-					if (f > l->GetSpotAngleRad() / 2.0f)
+					float f = (-ZobVector3::Dot(&fw, &lightDir));
+					if (f < (l->GetSpotAngleRad() / 2.0f))
 					{
 						f = 0.0f;
 					}
@@ -191,7 +191,7 @@ inline ZobVector3 Rasterizer::ComputeLightingAtPoint(const ZobVector3* position,
 					{
 						f = 1.0f;
 					}
-					lightPower = clamp2(lightPower, 0.0f, 1.0f) * l->GetIntensity();
+					lightPower = clamp2(f * lightPower, 0.0f, 1.0f) * l->GetIntensity();
 				}
 				if (lightPower > 0.0f)
 				{

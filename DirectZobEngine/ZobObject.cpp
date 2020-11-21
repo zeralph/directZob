@@ -296,11 +296,11 @@ void ZobObject::DrawGizmos(const Camera* camera, Core::Engine* engine)
 	y = y + t;
 	z = z + t;
 	c = 0x00FF0000;
-	engine->QueueLine(camera, &t, &x, c, true);
+	engine->QueueLine(camera, &t, &x, c, true, false);
 	c = 0x0000FF00;
-	engine->QueueLine(camera, &t, &y, c, true);
+	engine->QueueLine(camera, &t, &y, c, true, false);
 	c = 0x000000FF;
-	engine->QueueLine(camera, &t, &z, c, true);
+	engine->QueueLine(camera, &t, &z, c, true, false);
 	ZobVector3 p = GetWorldPosition();
 	ZobVector3 r = GetWorldRotation();
 	m_physicComponent->DrawGizmos(camera, &p, &r);

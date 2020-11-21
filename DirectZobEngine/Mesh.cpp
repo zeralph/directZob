@@ -462,7 +462,7 @@ void Mesh::DrawBoundingBox(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& 
 		(m_maxBouding.z - m_minBouding.z) / 2.0f
 	);
 	ZobVector3 pivot = ZobVector3(m_minBouding.x + v.x, m_minBouding.y + v.y, m_minBouding.z + v.z);
-	engine->QueueBox(camera, &modelMatrix, &v, &pivot, 0x00FFFFFF, false);
+	engine->QueueBox(camera, &modelMatrix, &v, &pivot, 0x00FFFFFF, false, false);
 }
 
 void Mesh::Update(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions* options)
@@ -548,13 +548,13 @@ void Mesh::QueueForDrawing(ZobObject* z, const ZobMatrix4x4& modelMatrix, const 
 				{
 					ZobVector3 v = t->na;
 					v = v + t->va;
-					engine->QueueLine(camera, t->va, &v, 0xFF00FF, false);
+					engine->QueueLine(camera, t->va, &v, 0xFF00FF, false, false);
 					v = t->nb;
 					v = v + t->vb;
-					engine->QueueLine(camera, t->vb, &v, 0xFF00FF, false);
+					engine->QueueLine(camera, t->vb, &v, 0xFF00FF, false, false);
 					v = t->nb;
 					v = v + t->vc;
-					engine->QueueLine(camera, t->vc, &v, 0xFF00FF, false);
+					engine->QueueLine(camera, t->vc, &v, 0xFF00FF, false, false);
 				}
 			}
 		}

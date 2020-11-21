@@ -310,11 +310,11 @@ void Engine::DrawGrid(const Camera *camera)
 		bold = i % 5 == 0;
 		if (bold)
 		{
-			QueueLine(camera, &a, &b, 0xFFFFFF, bold);
+			QueueLine(camera, &a, &b, 0xFFFFFF, bold, false);
 		}
 		else
 		{
-			QueueLine(camera, &a, &b, 0xCCCCCC, bold);
+			QueueLine(camera, &a, &b, 0xCCCCCC, bold, false);
 		}
 	}
 	for (int i = -gridSize; i <= gridSize; i += 1.0f)
@@ -326,17 +326,17 @@ void Engine::DrawGrid(const Camera *camera)
 		bold = i % 5 == 0;
 		if (bold)
 		{
-			QueueLine(camera, &a, &b, 0xFFFFFF, bold);
+			QueueLine(camera, &a, &b, 0xFFFFFF, bold, false);
 		}
 		else
 		{
-			QueueLine(camera, &a, &b, 0xCCCCCC, bold);
+			QueueLine(camera, &a, &b, 0xCCCCCC, bold, false);
 		}
 	}
 
-	QueueLine(camera, &ZobVector3::Vector3Zero, &ZobVector3::Vector3X, 0xFF0000, true);
-	QueueLine(camera, &ZobVector3::Vector3Zero, &ZobVector3::Vector3Y, 0x00FF00, true);
-	QueueLine(camera, &ZobVector3::Vector3Zero, &ZobVector3::Vector3Z, 0x0000FF, true);
+	QueueLine(camera, &ZobVector3::Vector3Zero, &ZobVector3::Vector3X, 0xFF0000, true, false);
+	QueueLine(camera, &ZobVector3::Vector3Zero, &ZobVector3::Vector3Y, 0x00FF00, true, false);
+	QueueLine(camera, &ZobVector3::Vector3Zero, &ZobVector3::Vector3Z, 0x0000FF, true, false);
 }
 
 bool Engine::LinePlaneIntersection(const ZobVector3* planeOrigin, const ZobVector3* planeNormal, const ZobVector3* lineOrigin, const ZobVector3* lineDirection, ZobVector3* ret)
@@ -459,7 +459,7 @@ void Engine::ClipSegmentToPlane(ZobVector3 &s0, ZobVector3 &s1, ZobVector3 &pp, 
 	s1 = s0 + u;
 }
 
-void Engine::QueueSphere(const Camera* camera, const ZobMatrix4x4* mat, const float radius, const uint c, bool bold)
+void Engine::QueueSphere(const Camera* camera, const ZobMatrix4x4* mat, const float radius, const uint c, bool bold, bool noZ)
 {
 	static const int segs = 10;
 	ZobVector3 v[segs+1][segs+1];
@@ -479,16 +479,16 @@ void Engine::QueueSphere(const Camera* camera, const ZobMatrix4x4* mat, const fl
 	{
 		for (int j = 0; j < segs; j++)
 		{
-			QueueLine(camera, &v[i][j], &v[(i+1)%segs][j], c, bold);
+			QueueLine(camera, &v[i][j], &v[(i+1)%segs][j], c, bold, noZ);
 			//if (j < segs - 1)
 			{
-				QueueLine(camera, &v[i][j], &v[i][j + 1], c, bold);
+				QueueLine(camera, &v[i][j], &v[i][j + 1], c, bold, noZ);
 			}
 		}
 	}
 }
 
-void Engine::QueueCapsule(const Camera* camera, const ZobMatrix4x4* mat, float radius, float height, const uint c, bool bold)
+void Engine::QueueCapsule(const Camera* camera, const ZobMatrix4x4* mat, float radius, float height, const uint c, bool bold, bool noZ)
 {
 
 }
@@ -498,7 +498,7 @@ void Engine::QueueMesh(const Camera* camera, const ZobMatrix4x4* mat, ZobVector3
 
 }
 
-void Engine::QueueBox(const Camera* camera, const ZobMatrix4x4* mat, const ZobVector3* halfExtends, const ZobVector3* pivot, const uint c, bool bold)
+void Engine::QueueBox(const Camera* camera, const ZobMatrix4x4* mat, const ZobVector3* halfExtends, const ZobVector3* pivot, const uint c, bool bold, bool noZ)
 {
 	ZobVector3 v0 = ZobVector3(-halfExtends->x, -halfExtends->y, -halfExtends->z) + pivot;
 	ZobVector3 v1 = ZobVector3(-halfExtends->x, halfExtends->y, -halfExtends->z) + pivot;
@@ -518,23 +518,23 @@ void Engine::QueueBox(const Camera* camera, const ZobMatrix4x4* mat, const ZobVe
 	mat->Mul(&v5);
 	mat->Mul(&v6);
 	mat->Mul(&v7);
-	QueueLine(camera, &v0, &v1, c, true);
-	QueueLine(camera, &v1, &v2, c, true);
-	QueueLine(camera, &v2, &v3, c, true);
-	QueueLine(camera, &v3, &v0, c, true);
-								
-	QueueLine(camera, &v4, &v5, c, true);
-	QueueLine(camera, &v5, &v6, c, true);
-	QueueLine(camera, &v6, &v7, c, true);
-	QueueLine(camera, &v7, &v4, c, true);
-								
-	QueueLine(camera, &v1, &v5, c, true);
-	QueueLine(camera, &v2, &v6, c, true);
-	QueueLine(camera, &v3, &v7, c, true);
-	QueueLine(camera, &v0, &v4, c, true);
-}
+	QueueLine(camera, &v0, &v1, c, bold, noZ);
+	QueueLine(camera, &v1, &v2, c, bold, noZ);
+	QueueLine(camera, &v2, &v3, c, bold, noZ);
+	QueueLine(camera, &v3, &v0, c, bold, noZ);
+									
+	QueueLine(camera, &v4, &v5, c, bold, noZ);
+	QueueLine(camera, &v5, &v6, c, bold, noZ);
+	QueueLine(camera, &v6, &v7, c, bold, noZ);
+	QueueLine(camera, &v7, &v4, c, bold, noZ);
+									
+	QueueLine(camera, &v1, &v5, c, bold, noZ);
+	QueueLine(camera, &v2, &v6, c, bold, noZ);
+	QueueLine(camera, &v3, &v7, c, bold, noZ);
+	QueueLine(camera, &v0, &v4, c, bold, noZ);
+}									 
 
-void Engine::QueueEllipse(const Camera* camera, const ZobVector3* center, const ZobVector3* vectorUp, const float r1, const float r2, const uint c, bool bold)
+void Engine::QueueEllipse(const Camera* camera, const ZobVector3* center, const ZobVector3* vectorUp, const float r1, const float r2, const uint c, bool bold, bool noZ)
 {
 	int segs = 20;
 	float r = 0.0f;
@@ -568,12 +568,12 @@ void Engine::QueueEllipse(const Camera* camera, const ZobVector3* center, const 
 		a = ZobVector3(r1 * cos(r), 0, r2 * sin(r));
 		m.Mul(&a);
 		a = a + center;
-		QueueLine(camera, &a, &b, c, bold);
+		QueueLine(camera, &a, &b, c, bold, noZ);
 	}
 
 }
 
-void Engine::QueueLine(const Camera *camera, const ZobVector3 *v1, const ZobVector3 *v2, const uint c, bool bold)
+void Engine::QueueLine(const Camera *camera, const ZobVector3 *v1, const ZobVector3 *v2, const uint c, bool bold, bool noZ)
 {
 	if (m_started)
 	{
@@ -636,7 +636,7 @@ void Engine::QueueLine(const Camera *camera, const ZobVector3 *v1, const ZobVect
 			l.zb = zb;
 			l.c = c;
 			l.bold = bold;
-			l.bold = false;
+			l.noZ = noZ;
 			int min = std::min<int>(a.y, b.y);
 			int max = std::max<int>(a.y, b.y);
 			min = clamp2(min, 0, (int)m_bufferData.height - 1);

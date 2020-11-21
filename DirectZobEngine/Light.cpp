@@ -88,9 +88,9 @@ void Light::drawPointGizmos(const Camera* camera, Core::Engine* engine)
 {
 	ZobVector3 t = GetWorldPosition();
 	uint c = ((int)(m_color.x * 255) << 16) + ((int)(m_color.y * 255) << 8) + (int)(m_color.z * 255);
-	engine->QueueEllipse(camera, &t, &m_up, 1.0f, 1.0f, c, true);
-	engine->QueueEllipse(camera, &t, &m_left, 1.0f, 1.0f, c, true);
-	engine->QueueEllipse(camera, &t, &m_forward, 1.0f, 1.0f, c, true);
+	engine->QueueEllipse(camera, &t, &m_up, 1.0f, 1.0f, c, true, false);
+	engine->QueueEllipse(camera, &t, &m_left, 1.0f, 1.0f, c, true, false);
+	engine->QueueEllipse(camera, &t, &m_forward, 1.0f, 1.0f, c, true, false);
 }
 
 void Light::drawSpotGizmos(const Camera* camera, Core::Engine* engine)
@@ -105,19 +105,19 @@ void Light::drawSpotGizmos(const Camera* camera, Core::Engine* engine)
 	float r = RAD_TO_DEG(m_spotAngleRad) / 2.0f;
 	r = DEG_TO_RAD(r);
 	r = tan(r) * m_distance;
-	engine->QueueEllipse(camera, &v1, &m_forward, r, r, c, true);
+	engine->QueueEllipse(camera, &v1, &m_forward, r, r, c, true, false);
 	v2 = m_left;
 	v = v1 + (v2 * r);
-	engine->QueueLine(camera, &t, &v, c, true);
+	engine->QueueLine(camera, &t, &v, c, true, false);
 	v2 = m_left;
 	v = v1 - (v2 * r);
-	engine->QueueLine(camera, &t, &v, c, true);
+	engine->QueueLine(camera, &t, &v, c, true, false);
 	v2 = m_up;
 	v = v1 + (v2 * r);
-	engine->QueueLine(camera, &t, &v, c, true);
+	engine->QueueLine(camera, &t, &v, c, true, false);
 	v2 = m_up;
 	v = v1 - (v2 * r);
-	engine->QueueLine(camera, &t, &v, c, true);
+	engine->QueueLine(camera, &t, &v, c, true, false);
 }
 
 void Light::drawDirectionalGizmos(const Camera* camera, Core::Engine* engine)
@@ -128,20 +128,20 @@ void Light::drawDirectionalGizmos(const Camera* camera, Core::Engine* engine)
 	ZobVector3 v1 = t - m_forward;
 	v0 = v0 + m_left;
 	v1 = v1 + m_left;
-	engine->QueueLine(camera, &v0, &v1, c, true);
+	engine->QueueLine(camera, &v0, &v1, c, true, false);
 	v0 = v0 + m_up;
 	v1 = v1 + m_up;
-	engine->QueueLine(camera, &v0, &v1, c, true);
+	engine->QueueLine(camera, &v0, &v1, c, true, false);
 	v0 = t + m_forward;
 	v1 = t - m_forward;
 	v0 = v0 - m_left;
 	v1 = v1 - m_left;
-	engine->QueueLine(camera, &v0, &v1, c, true);
+	engine->QueueLine(camera, &v0, &v1, c, true, false);
 	v0 = v0 - m_up;
 	v1 = v1 - m_up;
-	engine->QueueLine(camera, &v0, &v1, c, true);
+	engine->QueueLine(camera, &v0, &v1, c, true, false);
 	v1 = t - m_forward;
-	engine->QueueEllipse(camera, &v1, &m_forward, 1.0f, 1.0f, c, true);
+	engine->QueueEllipse(camera, &v1, &m_forward, 1.0f, 1.0f, c, true, false);
 }
 
 void Light::DrawGizmos(const Camera* camera, Core::Engine* engine)

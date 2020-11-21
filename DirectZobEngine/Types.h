@@ -106,6 +106,7 @@ public:
 		float zb;
 		float c;
 		bool bold = false;
+		bool noZ = false;
 	};
 	struct RenderOptions
 	{
