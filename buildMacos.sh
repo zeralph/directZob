@@ -1,5 +1,5 @@
 #!/bin/sh
-few macos fixesexport SDKROOT="/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk"
+export SDKROOT="/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk"
 if [ "$1" != "" ]; then
     target="$1"
 else
@@ -10,11 +10,11 @@ echo "building target "$target
 if [ "$1" == "Clean" ]; then
     cd ./DirectZobEngine
     rm -rf ./build
-    rm -f ./DirectZobExe
+    rm -f ../DirectZobExe
     echo "Cleaned build dir"
 else
     cd ./DirectZobEngine
-    rm -f ./DirectZobExe
+    rm -f ../DirectZobExe
     gyp DirectZob.gyp --depth=. --generator-output=./build/DirectZob/ --format=make
     cd ./build/DirectZob/
     make DirectZobExe BUILDTYPE=$target
