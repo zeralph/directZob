@@ -210,7 +210,7 @@ namespace CLI
 		}
 	}
 
-	void ZobObjectWrapper::LookAt(ManagedVector3^ forward, ManagedVector3^ left, ManagedVector3^ up)
+	void ZobObjectWrapper::LookAt(ManagedVector3^ forward, ManagedVector3^ left, ManagedVector3^ up, bool addToCurrentRotation)
 	{
 		ZobObject* z = GetInstance();
 		if (z)
@@ -218,7 +218,7 @@ namespace CLI
 			ZobVector3 l = left->ToVector3();
 			ZobVector3 f = forward->ToVector3();
 			ZobVector3 u = up->ToVector3();
-			z->LookAt(&f, &l, &u);
+			z->LookAt(&f, &l, &u, addToCurrentRotation);
 		}
 	}
 

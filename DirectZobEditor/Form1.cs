@@ -565,6 +565,7 @@ namespace DirectZobEditor
             btnRotateLocal.Checked = false;
             btnScale.Checked = false;
             btnTranslateWorld.Checked = false;
+            btnRotateWorld.Checked = false;
         }
 
         private void btnRotateLocal_Click(object sender, EventArgs e)
@@ -573,6 +574,7 @@ namespace DirectZobEditor
             btnTranslateLocal.Checked = false;
             btnTranslateWorld.Checked = false;
             btnScale.Checked = false;
+            btnRotateWorld.Checked = false;
         }
 
         private void btnScale_Click(object sender, EventArgs e)
@@ -581,6 +583,7 @@ namespace DirectZobEditor
             btnTranslateLocal.Checked = false;
             btnRotateLocal.Checked = false;
             btnTranslateWorld.Checked = false;
+            btnRotateWorld.Checked = false;
         }
 
         private void btnTranslateWorld_Click(object sender, EventArgs e)
@@ -589,6 +592,7 @@ namespace DirectZobEditor
             btnRotateLocal.Checked = false;
             btnScale.Checked = false;
             btnTranslateLocal.Checked = false;
+            btnRotateWorld.Checked = false;
         }
 
         private void btnRotateWorld_Click(object sender, EventArgs e)

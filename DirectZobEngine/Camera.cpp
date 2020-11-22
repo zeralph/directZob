@@ -139,7 +139,7 @@ void Camera::RotateAroundPointAxis(const ZobVector3* point, const ZobVector3* ax
 	localPos = t2.getPosition();
 	t2.setPosition(p + localPos);
 	m_physicComponent->SetLocalTransform(t2);
-	LookAt(point);
+	LookAt(point, false);
 }
 
 void Camera::RecomputeFLUVectors(const ZobVector3* forwardV, const ZobVector3* upV)
@@ -210,7 +210,7 @@ void Camera::Update()
 			UpdateViewProjectionMatrix(&v, 0.0f, 0.0f);
 		}
 		//this will update the pysicnode orientation according to the lookAt
-		LookAt(&m_forward, &m_left, &m_up);
+		LookAt(&m_forward, &m_left, &m_up, false);
 	}
 	else 
 	{

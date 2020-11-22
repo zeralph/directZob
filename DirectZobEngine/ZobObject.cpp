@@ -504,7 +504,7 @@ void ZobObject::SetQuaternion(float x, float y, float z, float w)
 	m_physicComponent->SetQuaternion(x, y, z, w);
 }
 */
-void ZobObject::LookAt(const ZobVector3* target)
+void ZobObject::LookAt(const ZobVector3* target, bool addToCurrentRotation)
 {
 	//m_physicComponent->LookAt(target);
 	Transform t = Transform(m_physicComponent->GetWorldTransform());
@@ -525,10 +525,10 @@ void ZobObject::LookAt(const ZobVector3* target)
 	left.Mul(-1.0f);
 	ZobVector3 up = ZobVector3::Cross(&forward, &left);
 	up.Normalize();
-	LookAt(&forward, &left, &up);
+	LookAt(&forward, &left, &up, addToCurrentRotation);
 }
 
-void ZobObject::LookAt(const ZobVector3* forward, const ZobVector3* left, const ZobVector3* up)
+void ZobObject::LookAt(const ZobVector3* forward, const ZobVector3* left, const ZobVector3* up, bool addToCurrentRotation)
 {
 	//m_physicComponent->LookAt(forward, left, up);
 	Quaternion q;
@@ -544,6 +544,13 @@ void ZobObject::LookAt(const ZobVector3* forward, const ZobVector3* left, const 
 	//q.normalize();
 	if (q.isValid())
 	{
+		if (false && addToCurrentRotation)
+		{
+			Quaternion q2 = m_physicComponent->GetLocalTransform().getOrientation();
+			q = q2 * q;
+			q.normalize();
+
+		}
 		m_physicComponent->SetLocalOrientation(q);
 	}
 }

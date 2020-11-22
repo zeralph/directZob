@@ -27,7 +27,7 @@ namespace CLI {
 		void SetWorldTransform(ManagedVector3^ p);
 		void SetWorldRotation(ManagedVector3^ p);
 		void SetScale(ManagedVector3^ p);
-		void LookAt(ManagedVector3^ forward, ManagedVector3^ left, ManagedVector3^ up);
+		void LookAt(ManagedVector3^ forward, ManagedVector3^ left, ManagedVector3^ up, bool addToCurrentRotation);
 		System::String^ GetMeshName();
 		void SetMesh(System::String^ name);
 		void LoadMesh(System::String^ name, System::String^ path);

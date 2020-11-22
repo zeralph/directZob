@@ -634,6 +634,12 @@ namespace DirectZobEditor
         private void RotateObjectAroundX(ZobObjectWrapper z, int x, int y, bool world)
         {
             ManagedVector3 pn = z.GetUp().Copy();
+            if (world)
+            {
+                pn.x = 0;
+                pn.y = 1.0f;
+                pn.z = 0;
+            }
             ManagedVector3 p0 = m_startTranslation.Copy();
             ManagedVector3 wpos = new ManagedVector3(0,0,0);
             bool b = FromMouseToWorldOnPlane(p0, pn, ref wpos);
@@ -642,20 +648,11 @@ namespace DirectZobEditor
                 ManagedVector3 left;
                 ManagedVector3 up;
                 ManagedVector3 forward;
-                if (!world)
-                {
-                    left = new ManagedVector3((wpos.x - p0.x), (wpos.y - p0.y), (wpos.z - p0.z));
-                    left.Normalize();
-                    up = z.GetUp().Copy();
-                    forward = left.Cross(up);
-                }
-                else
-                {
-                    left = new ManagedVector3(1, 0, 0);
-                    up = new ManagedVector3(0, 1, 0);
-                    forward = new ManagedVector3(0, 0, 1);
-                }
-                z.LookAt(forward, left, up);
+                left = new ManagedVector3((wpos.x - p0.x), (wpos.y - p0.y), (wpos.z - p0.z));
+                left.Normalize();
+                up = z.GetUp().Copy();
+                forward = left.Cross(up);
+                z.LookAt(forward, left, up, world);
                 ManagedVector3 p1 = p0.Copy();
                 p1.Add(left);
                 p1.Mul(2.0f);
@@ -673,6 +670,12 @@ namespace DirectZobEditor
         private void RotateObjectAroundY(ZobObjectWrapper z, int x, int y, bool world)
         {
             ManagedVector3 pn = z.GetForward().Copy();
+            if (world)
+            {
+                pn.x = 0;
+                pn.y = 0;
+                pn.z = 1.0f;
+            }
             ManagedVector3 p0 = m_startTranslation.Copy();
             ManagedVector3 wpos = new ManagedVector3(0, 0, 0);
             bool b = FromMouseToWorldOnPlane(p0, pn, ref wpos);
@@ -681,20 +684,11 @@ namespace DirectZobEditor
                 ManagedVector3 left;
                 ManagedVector3 up;
                 ManagedVector3 forward;
-                if (!world)
-                {
-                    up = new ManagedVector3((wpos.x - p0.x), (wpos.y - p0.y), (wpos.z - p0.z));
-                    up.Normalize();
-                    forward = z.GetForward().Copy();
-                    left = up.Cross(forward);
-                }
-                else
-                {
-                    left = new ManagedVector3(1, 0, 0);
-                    up = new ManagedVector3(0, 1, 0);
-                    forward = new ManagedVector3(0, 0, 1);
-                }
-                z.LookAt(forward, left, up);
+                up = new ManagedVector3((wpos.x - p0.x), (wpos.y - p0.y), (wpos.z - p0.z));
+                up.Normalize();
+                forward = z.GetForward().Copy();
+                left = up.Cross(forward);
+                z.LookAt(forward, left, up, world);
                 ManagedVector3 p1 = p0.Copy();
                 p1.Add(left);
                 p1.Mul(2.0f);
@@ -711,6 +705,12 @@ namespace DirectZobEditor
         private void RotateObjectAroundZ(ZobObjectWrapper z, int x, int y, bool world)
         {
             ManagedVector3 pn = z.GetLeft().Copy();
+            if (world)
+            {
+                pn.x = 1.0f;
+                pn.y = 0;
+                pn.z = 0;
+            }
             ManagedVector3 p0 = m_startTranslation.Copy();
             ManagedVector3 wpos = new ManagedVector3(0, 0, 0);
             bool b = FromMouseToWorldOnPlane(p0, pn, ref wpos);
@@ -719,20 +719,11 @@ namespace DirectZobEditor
                 ManagedVector3 left;
                 ManagedVector3 up;
                 ManagedVector3 forward;
-                if (!world)
-                {
-                    forward = new ManagedVector3((wpos.x - p0.x), (wpos.y - p0.y), (wpos.z - p0.z));
-                    forward.Normalize();
-                    left = z.GetLeft().Copy();
-                    up = forward.Cross(left);
-                }
-                else
-                {
-                    left = new ManagedVector3(1, 0, 0);
-                    up = new ManagedVector3(0, 1, 0);
-                    forward = new ManagedVector3(0, 0, 1);
-                }
-                z.LookAt(forward, left, up);
+                forward = new ManagedVector3((wpos.x - p0.x), (wpos.y - p0.y), (wpos.z - p0.z));
+                forward.Normalize();
+                left = z.GetLeft().Copy();
+                up = forward.Cross(left);
+                z.LookAt(forward, left, up, world);
                 ManagedVector3 p1 = p0.Copy();
                 p1.Add(left);
                 p1.Mul(2.0f);

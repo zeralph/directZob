@@ -77,6 +77,7 @@
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.propertiesPanel = new System.Windows.Forms.Panel();
             this.EngineControlsFlowLayout = new System.Windows.Forms.FlowLayoutPanel();
+            this.btnRotateWorld = new System.Windows.Forms.ToolStripButton();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FirstPanelSplitter)).BeginInit();
             this.FirstPanelSplitter.Panel1.SuspendLayout();
@@ -369,6 +370,7 @@
             this.btnRotateLocal,
             this.toolStripSeparator3,
             this.btnTranslateWorld,
+            this.btnRotateWorld,
             this.btnScale});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
@@ -592,6 +594,17 @@
             this.EngineControlsFlowLayout.WrapContents = false;
             this.EngineControlsFlowLayout.Resize += new System.EventHandler(this.EngineControlsFlowLayout_Resize);
             // 
+            // btnRotateWorld
+            // 
+            this.btnRotateWorld.CheckOnClick = true;
+            this.btnRotateWorld.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.btnRotateWorld.Image = ((System.Drawing.Image)(resources.GetObject("btnRotateWorld.Image")));
+            this.btnRotateWorld.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnRotateWorld.Name = "btnRotateWorld";
+            this.btnRotateWorld.Size = new System.Drawing.Size(29, 22);
+            this.btnRotateWorld.Text = "RW";
+            this.btnRotateWorld.Click += new System.EventHandler(this.btnRotateWorld_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -683,6 +696,7 @@
         private System.Windows.Forms.ToolStripButton btnScale;
         private System.Windows.Forms.ToolStripButton btnTranslateWorld;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripButton btnRotateWorld;
     }
 }
 
