@@ -567,7 +567,7 @@ void Mesh::QueueForDrawing(ZobObject* z, const ZobMatrix4x4& modelMatrix, const 
 
 inline bool Mesh::RejectTriangle(const Triangle* t, const float znear, const float zfar, const float width, const float height)
 {
-	//return false;
+	return false;
 	if (t->pa->x < 0 && t->pb->x < 0 && t->pc->x < 0)
 	{
 		return true;

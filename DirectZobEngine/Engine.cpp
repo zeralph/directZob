@@ -575,19 +575,6 @@ void Engine::QueueEllipse(const Camera* camera, const ZobVector3* center, const 
 
 void Engine::QueueLine(const Camera* camera, const ZobVector3* v1, const ZobVector3* v2, const uint c, bool bold, bool noZ)
 {
-	static bool bNew = true;
-	if (bNew)
-	{
-		QueueLine_new(camera, v1, v2, c, bold, noZ);
-	}
-	else
-	{
-		QueueLine_old(camera, v1, v2, c, bold, noZ);
-	}
-}
-
-void Engine::QueueLine_new(const Camera *camera, const ZobVector3 *v1, const ZobVector3 *v2, const uint c, bool bold, bool noZ)
-{
 	if (m_started)
 	{
 		ZobVector3 a = ZobVector3(v1);
@@ -644,90 +631,6 @@ void Engine::QueueLine_new(const Camera *camera, const ZobVector3 *v1, const Zob
 	}
 }
 
-void Engine::QueueLine_old(const Camera* camera, const ZobVector3* v1, const ZobVector3* v2, const uint c, bool bold, bool noZ)
-{
-	if (m_started)
-	{
-		ZobVector3 a = ZobVector3(v1);
-		ZobVector3 b = ZobVector3(v2);
-		float za, zb = 0.0f;
-		camera->GetViewMatrix()->Mul(&a);
-		//camera->ToViewSpace(&a);
-		za = a.z;
-		camera->GetProjectionMatrix()->Mul(&a);
-		camera->GetViewMatrix()->Mul(&b);
-		//camera->ToViewSpace(&b);
-		zb = b.z;
-		camera->GetProjectionMatrix()->Mul(&b);
-
-		if (a.z < m_bufferData.zNear && b.z < m_bufferData.zNear)
-		{
-			return;
-		}
-		else if (a.z < m_bufferData.zNear || b.z < m_bufferData.zNear)
-		{
-			ZobVector3 pp = ZobVector3(0, 0, m_bufferData.zNear);
-			ZobVector3 pn = ZobVector3(0, 0, 1);
-			if (a.z < b.z)
-			{
-				ClipSegmentToPlane(b, a, pp, pn);
-			}
-			else
-			{
-				ClipSegmentToPlane(a, b, pp, pn);
-			}
-		}
-		if (a.w != 1)
-		{
-			a.x /= a.w;
-			a.y /= a.w;
-			a.z /= a.w;
-			a.w /= a.w;
-		}
-		if (b.w != 1)
-		{
-			b.x /= b.w;
-			b.y /= b.w;
-			b.z /= b.w;
-			b.w /= b.w;
-		}
-		//if (ClipSegment(&a, &b))
-		{
-
-			a.x = (a.x + 1) * m_bufferData.width / 2.0f;
-			a.y = (a.y + 1) * m_bufferData.height / 2.0f;
-			b.x = (b.x + 1) * m_bufferData.width / 2.0f;
-			b.y = (b.y + 1) * m_bufferData.height / 2.0f;
-			Line3D l;
-			l.xa = a.x;
-			l.xb = b.x;
-			l.ya = a.y;
-			l.yb = b.y;
-			l.za = za;
-			l.zb = zb;
-			l.c = c;
-			l.bold = bold;
-			l.noZ = noZ;
-			int min = std::min<int>(a.y, b.y);
-			int max = std::max<int>(a.y, b.y);
-			min = clamp2(min, 0, (int)m_bufferData.height - 1);
-			max = clamp2(max, 0, (int)m_bufferData.height - 1);
-			min = min / m_rasterizerHeight;
-			max = max / m_rasterizerHeight;
-			//			min = 0;
-			//			max = m_nbRasterizers-1;
-			if (isinf(l.xa) || isinf(l.xb) || isinf(l.ya) || isinf(l.yb))
-			{
-				return;
-			}
-			for (int i = min; i <= max; i++)
-			{
-				m_rasterLineQueues[i].push_back(l);
-			}
-		}
-	}
-}
-
 void Engine::CopyBuffer(uint *source, uint *dest)
 {
 	int v, r, g, b;
@@ -739,34 +642,6 @@ void Engine::CopyBuffer(uint *source, uint *dest)
 		b = (int)(float)((v & 0x0000FF));
 		dest[i] = MFB_RGB(r, g, b);
 	}
-}
-
-bool Engine::ClipSegment(ZobVector3 *a, ZobVector3 *b)
-{
-	if (a->w < m_zNear && b->w < m_zNear)
-	{
-		return false;
-	}
-	else if (a->w < m_zNear || b->w < m_zNear)
-	{
-		if (a->w < m_zNear)
-		{
-			float n = (a->w - m_zNear) / (a->w - b->w);
-			a->x = (n * a->x) + ((1 - n) * b->x);
-			a->y = (n * a->y) + ((1 - n) * b->y);
-			a->z = (n * a->z) + ((1 - n) * b->z);
-			a->w = m_zNear;
-		}
-		else
-		{
-			float n = (b->w - m_zNear) / (b->w - a->w);
-			b->x = (n * b->x) + ((1 - n) * a->x);
-			b->y = (n * b->y) + ((1 - n) * a->y);
-			b->z = (n * b->z) + ((1 - n) * a->z);
-			b->w = m_zNear;
-		}
-	}
-	return true;
 }
 
 void Engine::QueueTriangle(const Triangle *t)

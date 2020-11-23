@@ -136,7 +136,7 @@ void Rasterizer::DrawLine2(const Line3D* l) const
 		multDiff = (double)shortLen / (double)longLen;
 	}
 	int watchDog = 0;
-	dz = dz / fabsf(longLen);
+	dz = dz / fabsf((float)longLen);
 	if (yLonger) 
 	{
 		

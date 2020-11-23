@@ -45,7 +45,6 @@ namespace Core
 		void											QueueBox(const Camera* camera, const ZobMatrix4x4* mat, const ZobVector3* halfExtends, const ZobVector3* pivot, const uint c, bool bold, bool noZ);
 		void											QueueCapsule(const Camera* camera, const ZobMatrix4x4* mat, float radius, float height, const uint c, bool bold, bool noZ);
 		void											QueueMesh(const Camera* camera, const ZobMatrix4x4* mat, ZobVector3* points, int width, int height, const uint c, bool bold);
-		bool											ClipSegment(ZobVector3* a, ZobVector3* b);
 		int												StartDrawingScene();
 		int												SetDisplayedBuffer();
 		inline ulong									GetCurrentFrame() { return m_currentFrame; }
@@ -84,9 +83,6 @@ namespace Core
 		inline float									clamp2(float x, float min, float max) const { if (x < min) x = min; if (x > max) x = max; return x; }
 		void											DrawHorizontalLine(const float x1, const float x2, const float y, const uint color);
 		void											ClipSegmentToPlane(ZobVector3 &s0, ZobVector3 &s1, ZobVector3 &pp, ZobVector3 &pn);
-
-		void											QueueLine_old(const Camera* camera, const ZobVector3* v1, const ZobVector3* v2, const uint c, bool bold, bool noZ);
-		void											QueueLine_new(const Camera* camera, const ZobVector3* v1, const ZobVector3* v2, const uint c, bool bold, bool noZ);
 
 		Events* m_events;
 		Triangle** m_rasterTriangleQueues;
