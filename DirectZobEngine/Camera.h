@@ -20,6 +20,15 @@ public:
 		ZobVector3 n;
 	};
 
+	class Plane
+	{
+	public:
+		float a;
+		float b;
+		float c;
+		float d;
+	};
+
 	enum eTargetMode
 	{
 		eTarget_none=0,
@@ -51,7 +60,9 @@ public:
 	void					Move(float dx, float dz, float dy, bool moveTargetVector);
 	void					Zoom(float z);
 	Ray						From2DToWorld(float x, float y);
+	const Plane*			GetFrustrumPlanes() const { return &m_frustrumPlanes[0]; };
 	bool					From2DToWorldOnPlane(const float x, const float y, const ZobVector3* p0, const ZobVector3* pn, ZobVector3* ret);
+	bool					ClipSegmentToFrustrum(ZobVector3* p1, ZobVector3* p2) const;
 	inline void				ToViewSpace(ZobVector3* v) const
 	{
 		m_viewRotMatrix.Mul(v);
@@ -70,6 +81,9 @@ private:
 	void					SetViewMatrix(const ZobVector3 &left, const ZobVector3 &up, const ZobVector3 &fw, const ZobVector3 &p);
 	void					setProjectionMatrix(const float angleOfView, const float width, const float height, const float near, const float far);
 	void					RecomputeFLUVectors(const ZobVector3* forwardV, const ZobVector3* upV);
+	void					RecomputeFrustrumPlanes();
+	void					NormalizePlane(Plane& plane);
+
 	ZobMatrix4x4 m_viewRotMatrix;
 	ZobMatrix4x4 m_projMatrix;
 	float m_fov;
@@ -81,5 +95,6 @@ private:
 	ZobMatrix4x4 m_invProjectionMatrix;
 	ZobMatrix4x4 m_invViewMatrix;
 	//ZobVector3 m_nextTranslation;
+	Plane m_frustrumPlanes[6];
 };
 

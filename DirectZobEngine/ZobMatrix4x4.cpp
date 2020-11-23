@@ -42,6 +42,19 @@ void ZobMatrix4x4::Mul(const ZobMatrix4x4* m)
 	memcpy(&m_data, &tmpMul.m_data, sizeof(tmpMul.m_data));
 }
 
+ZobMatrix4x4 ZobMatrix4x4::Transpose() const
+{
+	ZobMatrix4x4 outM;
+	for (int n = 0; n < 4; n++) 
+	{
+		for (int p = 0; p < 4; p++) 
+		{
+			outM.SetData(n, p, m_data[p][n]);
+		}
+	}
+	return outM;
+}
+
 void ZobMatrix4x4::Identity()
 {
 	memcpy(&m_data, &identityArray, sizeof(identityArray));

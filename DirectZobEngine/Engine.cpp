@@ -573,7 +573,78 @@ void Engine::QueueEllipse(const Camera* camera, const ZobVector3* center, const 
 
 }
 
-void Engine::QueueLine(const Camera *camera, const ZobVector3 *v1, const ZobVector3 *v2, const uint c, bool bold, bool noZ)
+void Engine::QueueLine(const Camera* camera, const ZobVector3* v1, const ZobVector3* v2, const uint c, bool bold, bool noZ)
+{
+	static bool bNew = true;
+	if (bNew)
+	{
+		QueueLine_new(camera, v1, v2, c, bold, noZ);
+	}
+	else
+	{
+		QueueLine_old(camera, v1, v2, c, bold, noZ);
+	}
+}
+
+void Engine::QueueLine_new(const Camera *camera, const ZobVector3 *v1, const ZobVector3 *v2, const uint c, bool bold, bool noZ)
+{
+	if (m_started)
+	{
+		ZobVector3 a = ZobVector3(v1);
+		ZobVector3 b = ZobVector3(v2);
+		bool bClipped = camera->ClipSegmentToFrustrum(&a, &b);
+		if (bClipped)
+		{
+			float za, zb = 0.0f;
+			camera->GetViewMatrix()->Mul(&a);
+			//camera->ToViewSpace(&a);
+			za = a.z;
+			camera->GetProjectionMatrix()->Mul(&a);
+			camera->GetViewMatrix()->Mul(&b);
+			//camera->ToViewSpace(&b);
+			zb = b.z;
+			camera->GetProjectionMatrix()->Mul(&b);
+			a.x /= a.w;
+			a.y /= a.w;
+			a.z /= a.w;
+			a.w = 1.0f;
+			b.x /= b.w;
+			b.y /= b.w;
+			b.z /= b.w;
+			b.w = 1.0f;
+			a.x = (a.x + 1) * m_bufferData.width / 2.0f;
+			a.y = (a.y + 1) * m_bufferData.height / 2.0f;
+			b.x = (b.x + 1) * m_bufferData.width / 2.0f;
+			b.y = (b.y + 1) * m_bufferData.height / 2.0f;
+			Line3D l;
+			l.xa = a.x;
+			l.xb = b.x;
+			l.ya = a.y;
+			l.yb = b.y;
+			l.za = za;
+			l.zb = zb;
+			l.c = c;
+			l.bold = bold;
+			l.noZ = noZ;
+			int min = std::min<int>(a.y, b.y);
+			int max = std::max<int>(a.y, b.y);
+			min = clamp2(min, 0, (int)m_bufferData.height - 1);
+			max = clamp2(max, 0, (int)m_bufferData.height - 1);
+			min = min / m_rasterizerHeight;
+			max = max / m_rasterizerHeight;
+			if (isinf(l.xa) || isinf(l.xb) || isinf(l.ya) || isinf(l.yb))
+			{
+				return;
+			}
+			for (int i = min; i <= max; i++)
+			{
+				m_rasterLineQueues[i].push_back(l);
+			}
+		}
+	}
+}
+
+void Engine::QueueLine_old(const Camera* camera, const ZobVector3* v1, const ZobVector3* v2, const uint c, bool bold, bool noZ)
 {
 	if (m_started)
 	{
@@ -641,11 +712,11 @@ void Engine::QueueLine(const Camera *camera, const ZobVector3 *v1, const ZobVect
 			int max = std::max<int>(a.y, b.y);
 			min = clamp2(min, 0, (int)m_bufferData.height - 1);
 			max = clamp2(max, 0, (int)m_bufferData.height - 1);
-			min =  min / m_rasterizerHeight;
-			max =  max / m_rasterizerHeight;
-//			min = 0;
-//			max = m_nbRasterizers-1;
-			if(isinf(l.xa) || isinf(l.xb) || isinf(l.ya) || isinf(l.yb))
+			min = min / m_rasterizerHeight;
+			max = max / m_rasterizerHeight;
+			//			min = 0;
+			//			max = m_nbRasterizers-1;
+			if (isinf(l.xa) || isinf(l.xb) || isinf(l.ya) || isinf(l.yb))
 			{
 				return;
 			}

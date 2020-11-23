@@ -27,6 +27,7 @@ public:
 	void 					DrawTriangle(const Triangle* t) const;
 	void 					plotLine(int x0, int y0, int x1, int y1) const;
 	void 					DrawLine(const Line3D* l) const;
+	void 					DrawLine2(const Line3D* l) const;
 	void 					Start(const Triangle* triangles, const uint nbTriangles, const std::vector<Line3D>* lines, const bool wireFrame, const eRenderMode renderMode, const bool bEvenFrame, const eLightingPrecision lp);
 	float 					WaitForEnd();
 	void 					End();

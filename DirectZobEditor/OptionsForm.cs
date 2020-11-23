@@ -13,26 +13,22 @@ namespace DirectZobEditor
     public partial class OptionsForm : Form
     {
         Form1 m_mainForm;
-        public OptionsForm(Form1 f)
+        public OptionsForm(Form1 f, string title, UserControl c)
         {
             m_mainForm = f;
-            InitializeComponent();
-        }
-
-        public void Show(string title, UserControl c)
-        {
             this.Text = title;
             this.Size = new Size(1, 1);
             this.AutoSize = true;
             this.Controls.Clear();
-            this.Controls.Add(c);
-            this.Show();
+            this.Controls.Add(c);  
             this.BringToFront();
             this.TopMost = true;
             Point p = new Point();
             p.X = m_mainForm.Location.X / 2 + m_mainForm.Width / 2 - this.Width / 2;
-            p.Y = m_mainForm.Location.Y / 2 + m_mainForm.Height/ 2 - this.Height / 2;
+            p.Y = m_mainForm.Location.Y / 2 + m_mainForm.Height / 2 - this.Height / 2;
             this.Location = p;
+            InitializeComponent();
+            this.Show();
         }
 
         private void OptionsForm_Load(object sender, EventArgs e)

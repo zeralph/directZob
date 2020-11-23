@@ -216,13 +216,142 @@ void Camera::Update()
 	{
 		UpdateViewProjectionMatrix(&v);
 	}
+	RecomputeFrustrumPlanes();
 }
+static bool bLock = false;
+void Camera::RecomputeFrustrumPlanes()
+{
+	ZobMatrix4x4 comboMatrix = ZobMatrix4x4(m_projMatrix);
+	ZobMatrix4x4 transpose = m_viewRotMatrix;
+	comboMatrix.Mul(&transpose);
+	m_frustrumPlanes[0].a = comboMatrix.GetValue(3, 0) + comboMatrix.GetValue(0, 0);
+	m_frustrumPlanes[0].b = comboMatrix.GetValue(3, 1) + comboMatrix.GetValue(0, 1);
+	m_frustrumPlanes[0].c = comboMatrix.GetValue(3, 2) + comboMatrix.GetValue(0, 2);
+	m_frustrumPlanes[0].d = comboMatrix.GetValue(3, 3) + comboMatrix.GetValue(0, 3);
+	// Right clipping plane
+	m_frustrumPlanes[1].a = comboMatrix.GetValue(3, 0) - comboMatrix.GetValue(0, 0);
+	m_frustrumPlanes[1].b = comboMatrix.GetValue(3, 1) - comboMatrix.GetValue(0, 1);
+	m_frustrumPlanes[1].c = comboMatrix.GetValue(3, 2) - comboMatrix.GetValue(0, 2);
+	m_frustrumPlanes[1].d = comboMatrix.GetValue(3, 3) - comboMatrix.GetValue(0, 3);
+	// Top clipping plane
+	m_frustrumPlanes[2].a = comboMatrix.GetValue(3, 0) - comboMatrix.GetValue(1, 0);
+	m_frustrumPlanes[2].b = comboMatrix.GetValue(3, 1) - comboMatrix.GetValue(1, 1);
+	m_frustrumPlanes[2].c = comboMatrix.GetValue(3, 2) - comboMatrix.GetValue(1, 2);
+	m_frustrumPlanes[2].d = comboMatrix.GetValue(3, 3) - comboMatrix.GetValue(1, 3);
+	// Bottom clipping plane
+	m_frustrumPlanes[3].a = comboMatrix.GetValue(3, 0) + comboMatrix.GetValue(1, 0);
+	m_frustrumPlanes[3].b = comboMatrix.GetValue(3, 1) + comboMatrix.GetValue(1, 1);
+	m_frustrumPlanes[3].c = comboMatrix.GetValue(3, 2) + comboMatrix.GetValue(1, 2);
+	m_frustrumPlanes[3].d = comboMatrix.GetValue(3, 3) + comboMatrix.GetValue(1, 3);
+	// Near clipping plane
+	m_frustrumPlanes[4].a = comboMatrix.GetValue(3, 0) + comboMatrix.GetValue(2, 0);
+	m_frustrumPlanes[4].b = comboMatrix.GetValue(3, 1) + comboMatrix.GetValue(2, 1);
+	m_frustrumPlanes[4].c = comboMatrix.GetValue(3, 2) + comboMatrix.GetValue(2, 2);
+	m_frustrumPlanes[4].d = comboMatrix.GetValue(3, 3) + comboMatrix.GetValue(2, 3);
+	// Far clipping plane
+	m_frustrumPlanes[5].a = comboMatrix.GetValue(3, 0) - comboMatrix.GetValue(2, 0);
+	m_frustrumPlanes[5].b = comboMatrix.GetValue(3, 1) - comboMatrix.GetValue(2, 1);
+	m_frustrumPlanes[5].c = comboMatrix.GetValue(3, 2) - comboMatrix.GetValue(2, 2);
+	m_frustrumPlanes[5].d = comboMatrix.GetValue(3, 3) - comboMatrix.GetValue(2, 3);
+
+	NormalizePlane(m_frustrumPlanes[0]);
+	NormalizePlane(m_frustrumPlanes[1]);
+	NormalizePlane(m_frustrumPlanes[2]);
+	NormalizePlane(m_frustrumPlanes[3]);
+	NormalizePlane(m_frustrumPlanes[4]);
+	NormalizePlane(m_frustrumPlanes[5]);
+}
+
+void Camera::NormalizePlane(Plane& plane)
+{ 
+	float   mag;    
+	mag = sqrt(plane.a * plane.a + plane.b * plane.b + plane.c * plane.c);    
+	plane.a = plane.a / mag;    
+	plane.b = plane.b / mag;    
+	plane.c = plane.c / mag;    
+	plane.d = plane.d / mag; 
+}
+
+bool Camera::ClipSegmentToFrustrum(ZobVector3* p1, ZobVector3* p2) const
+{
+	ZobVector3 dp = ZobVector3(p2->x - p1->x, p2->y - p1->y, p2->z - p1->z);
+	float p1_fac = 0.0f;
+	float p2_fac = 1.0f;
+	for (int i = 0; i < 6; i++)
+	{
+		Plane p = m_frustrumPlanes[i];
+		ZobVector3 pv = ZobVector3(p.a, p.b, p.c);
+		float div = ZobVector3::Dot(&pv, &dp);
+		if (div != 0.0f)
+		{
+			float t = -(ZobVector3::Dot(&pv, p1) + p.d);
+			if (div > 0.0f)
+			{
+				if (t >= div)
+				{
+					return false;
+				}
+				if (t > 0.0f)
+				{
+					float fac = t / div;
+					if (fac > p1_fac)
+					{
+						p1_fac = fac;
+						if (p1_fac > p2_fac)
+						{
+							return false;
+						}
+					}
+				}
+			}
+			else if(div<0.0f)
+			{
+				if (t > 0.0f) 
+				{
+					return false;
+				}
+				if (t > div)
+				{
+					float fac = t / div;
+					if (fac < p2_fac)
+					{
+						p2_fac = fac;
+						if (p1_fac > p2_fac)
+						{
+							return false;
+						}
+					}
+				}
+			}
+		}
+	}
+	if (p2_fac > 1.0f)
+	{
+		int y = 0;
+		y++;
+	}
+	if (p1_fac > 1.0f)
+	{
+		int y = 0;
+		y++;
+	}
+	p2_fac -= p1_fac;
+	p1->x = p1->x + dp.x * p1_fac;
+	p1->y = p1->y + dp.y * p1_fac;
+	p1->z = p1->z + dp.z * p1_fac;
+	p2->x = p1->x + dp.x * p2_fac;
+	p2->y = p1->y + dp.y * p2_fac;
+	p2->z = p1->z + dp.z * p2_fac;
+	return true;
+}
+
 void Camera::UpdateViewProjectionMatrix(const ZobVector3* eyeV)
 {
 	BufferData* b = DirectZob::GetInstance()->GetEngine()->GetBufferData();
 	setProjectionMatrix(m_fov, b->width, b->height, b->zNear, b->zFar);
 	SetViewMatrix(&m_left, &m_up, &m_forward, eyeV);
 }
+
 void Camera::UpdateViewProjectionMatrix(const ZobVector3* eyeV, const ZobVector3* targetV, const ZobVector3* upV)
 {
 	//g_update_camera_mutex.lock();
@@ -243,13 +372,6 @@ void Camera::UpdateViewProjectionMatrix(const ZobVector3* eyeV, const ZobVector3
 	m_left = left;
 	m_forward = forward;
 	m_up = up;
-	//todo : clean that
-	//ZobMatrix4x4::InvertMatrix4(m_rotationScaleMatrix, m_invModelMatrix);
-	//ZobMatrix4x4::InvertMatrix4(m_modelMatrix, m_invModelMatrix);
-	//ZobMatrix4x4::InvertMatrix4(m_projMatrix, m_invProjectionMatrix);
-	//ZobMatrix4x4::InvertMatrix4(m_viewRotMatrix, m_invViewMatrix);
-	
-	//g_update_camera_mutex.unlock();
 }
 
 void Camera::UpdateViewProjectionMatrix(const ZobVector3* eye, const float pitch, const float yaw)
@@ -298,9 +420,6 @@ void Camera::SetViewMatrix(const ZobVector3& left, const ZobVector3& up, const Z
 	m_viewRotMatrix.SetData(3, 3, 1);
 	//-------------------------------------------------------
 	ZobMatrix4x4::InvertMatrix4(m_viewRotMatrix, m_invViewMatrix);
-	m_invViewMatrix.SetData(0, 3, 0.0f);
-	m_invViewMatrix.SetData(1, 3, 0.0f);
-	m_invViewMatrix.SetData(2, 3, 0.0f);
 }
 
 void Camera::setProjectionMatrix(const float angleOfView, const float width, const float height, const float zNear, const float zFar)
@@ -369,31 +488,16 @@ Camera::Ray Camera::From2DToWorld(float x, float y)
 		BufferData* b = DirectZob::GetInstance()->GetEngine()->GetBufferData();
 		ZobVector3 v = ZobVector3(x, y, b->zNear);
 		static bool mytest = true;
-		if (mytest)
-		{
-			
-			m_invProjectionMatrix.Mul(&v);
-			m_invViewMatrix.Mul(&v);
-			//v.Normalize();
-			r.p = this->GetWorldPosition();
-			v.x /= v.w;
-			v.y /= v.w;
-			v.z /= v.w;
-			v.x /= 1.0f;
-			//v.Normalize();
-			r.n = v;
-		}
-		else
-		{
-			m_invProjectionMatrix.Mul(&v);
-			m_invViewMatrix.Mul(&v);
-			v.Normalize();
-			//v.x += this->GetWorldPosition().x;
-			//v.y += this->GetWorldPosition().y;
-			//v.z += this->GetWorldPosition().z;
-			r.p = this->GetWorldPosition();
-			r.n = v;// -r.p;
-		}
+		m_invProjectionMatrix.Mul(&v);
+		m_invViewMatrix.Mul(&v);
+		r.p = this->GetWorldPosition();
+		v.x /= v.w;
+		v.y /= v.w;
+		v.z /= v.w;
+		v.w = 1.0f;
+		v = v - r.p;
+		v.Normalize();
+		r.n = v;
 	}
 	return r;
 }

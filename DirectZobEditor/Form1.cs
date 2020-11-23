@@ -480,14 +480,12 @@ namespace DirectZobEditor
 
         private void engineToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            OptionsForm of = new OptionsForm(this);
-            of.Show("Engine", m_engineControl);
+            OptionsForm of = new OptionsForm(this, "Engine", m_engineControl);
         }
 
         private void sceneToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            OptionsForm of = new OptionsForm(this);
-            of.Show("Scene", m_sceneControl);
+            OptionsForm of = new OptionsForm(this, "Scene", m_sceneControl);
         }
 
         private void btnPlay_Click(object sender, EventArgs e)

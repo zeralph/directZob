@@ -23,6 +23,7 @@ public:
 		v->z = fz;
 		v->w = fw;
 	};
+	ZobMatrix4x4 Transpose() const;
 	void FromVectors(const ZobVector3& left, const ZobVector3& up, const ZobVector3& forward);
 	inline void SetData(uint i, uint j, float f) { m_data[i][j] = f; }
 	void SetScale(const float x, const float y, const float z);
@@ -38,6 +39,7 @@ public:
 	ZobVector3 GetScale() const { return ZobVector3(m_data[0][0], m_data[1][1], m_data[2][2]); }
 	ZobVector3 GetTranslation() const { return ZobVector3(m_data[0][3], m_data[1][3], m_data[2][3]); }
 	inline float GetValue(const int i, const int j) const { return m_data[i][j]; }
+	inline float GetValueI(const int i, const int j) const { return m_data[j][i]; }
 	static void InvertMatrix4(const ZobMatrix4x4& m, ZobMatrix4x4& im);
 	static ZobMatrix4x4 RotateAroundAxis(const ZobVector3& axis, const float angle);
 	static ZobVector3 QuaternionToEuler(float x, float y, float z, float w);

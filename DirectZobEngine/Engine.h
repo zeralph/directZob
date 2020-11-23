@@ -85,6 +85,9 @@ namespace Core
 		void											DrawHorizontalLine(const float x1, const float x2, const float y, const uint color);
 		void											ClipSegmentToPlane(ZobVector3 &s0, ZobVector3 &s1, ZobVector3 &pp, ZobVector3 &pn);
 
+		void											QueueLine_old(const Camera* camera, const ZobVector3* v1, const ZobVector3* v2, const uint c, bool bold, bool noZ);
+		void											QueueLine_new(const Camera* camera, const ZobVector3* v1, const ZobVector3* v2, const uint c, bool bold, bool noZ);
+
 		Events* m_events;
 		Triangle** m_rasterTriangleQueues;
 		long* m_rasterNbTriangleQueues;
