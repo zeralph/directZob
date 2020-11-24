@@ -95,20 +95,17 @@ namespace DirectZobEditor
             m_spriteControl = new ZobSpriteControl(this);
             m_physicsControl = new PhysicControl(this);
             m_zobObjectControl = new ZobObjectControl(this, m_lightControl, m_cameraControl, m_meshControl);
-            //--
-            EngineControlsFlowLayout.Controls.Add(m_camControl);
+            ObjectControlsFlowLayout.Controls.Add(m_camControl);
             EngineRendererPanel.Controls.Add(m_engineWindow);
             ZobObjectListPanel.Controls.Add(m_zobObjectList);
-            //EngineControlsFlowLayout.Controls.Add(m_sceneControl);
-            //EngineControlsFlowLayout.Controls.Add(m_engineControl);
-            EngineControlsFlowLayout.Controls.Add(m_zobObjectControl);
-            EngineControlsFlowLayout.Controls.Add(m_physicsControl);
-            EngineControlsFlowLayout.Controls.Add(m_meshControl);
-            EngineControlsFlowLayout.Controls.Add(m_cameraControl);
-            EngineControlsFlowLayout.Controls.Add(m_lightControl);
-            EngineControlsFlowLayout.Controls.Add(m_spriteControl);
-            //--
-
+            ObjectControlsFlowLayout.Controls.Add(m_zobObjectControl);
+            ObjectControlsFlowLayout.Controls.Add(m_physicsControl);
+            ObjectControlsFlowLayout.Controls.Add(m_meshControl);
+            ObjectControlsFlowLayout.Controls.Add(m_cameraControl);
+            ObjectControlsFlowLayout.Controls.Add(m_lightControl);
+            ObjectControlsFlowLayout.Controls.Add(m_spriteControl);
+            EngineControlsFlowLayout.Controls.Add(m_engineControl);
+            SceneControlsFlowLayout.Controls.Add(m_sceneControl);
             this.propertiesPanel.MinimumSize = new Size(300, 500);
             m_engineWindow.OnEngineStopped += new EventHandler(OnEngineClosed);
             this.WindowState = FormWindowState.Maximized;
@@ -476,16 +473,6 @@ namespace DirectZobEditor
             ev.type = Form1.SceneUpdateType.objectAdded;
             ev.zobObject = z;
             PropagateSceneUpdateEvent(ev);
-        }
-
-        private void engineToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            OptionsForm of = new OptionsForm(this, "Engine", m_engineControl);
-        }
-
-        private void sceneToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            OptionsForm of = new OptionsForm(this, "Scene", m_sceneControl);
         }
 
         private void btnPlay_Click(object sender, EventArgs e)

@@ -193,6 +193,23 @@ void ZobObject::UpdateMesh(const Camera* camera, Core::Engine* engine)
 	}
 }
 
+void ZobObject::PreUpdate()
+{
+	for (int i = 0; i < m_children.size(); i++)
+	{
+		ZobObject* z = m_children[i];
+		if (z->IsMarkedForDeletion())
+		{
+			RemoveChildReference(z);
+			delete z;
+		}
+		else
+		{
+			z->PreUpdate();
+		}
+	}
+}
+
 //void ZobObject::Update(const ZobMatrix4x4& parentMatrix, const ZobMatrix4x4& parentRSMatrix)
 void ZobObject::Update()
 {
@@ -243,15 +260,7 @@ void ZobObject::Update()
 	for (int i = 0; i < m_children.size(); i++)
 	{
 		ZobObject* z = m_children[i];
-		if(z->IsMarkedForDeletion())
-		{
-			RemoveChildReference(z);
-			delete z;
-		}
-		else
-		{
-			z->Update();
-		}
+		z->Update();
 	}
 }
 

@@ -29,16 +29,22 @@ namespace DirectZobEditor
             trackBarFogDistance.Maximum = 5000;
             trackBarFogIntensity.Minimum = 0;
             trackBarFogIntensity.Maximum = 100;
+            UpdateValues();
         }
 
         public void OnSceneChanged(object s, EventArgs e)
         {
+            UpdateValues();
+        }
+
+        private void UpdateValues()
+        {
             buttonAmbientColor.BackColor = ToColor(m_LightManagerWrapper.GetAmbientColor());
             buttonFogColor.BackColor = ToColor(m_LightManagerWrapper.GetFogColor());
             buttonClearColor.BackColor = ToColor(m_LightManagerWrapper.GetClearColor());
-         //   trackBarAmbientIntensity.Value = (int)(m_LightManagerWrapper.GetAmbientIntensity() * 100);
-         //   trackBarFogIntensity.Value = (int)(m_LightManagerWrapper.GetFogIntensity());
-          //  trackBarFogDistance.Value = (int)(m_LightManagerWrapper.GetFogDistance());
+            trackBarAmbientIntensity.Value = (int)(m_LightManagerWrapper.GetAmbientIntensity() * 100);
+            trackBarFogIntensity.Value = (int)(m_LightManagerWrapper.GetFogIntensity());
+            trackBarFogDistance.Value = (int)(m_LightManagerWrapper.GetFogDistance());
             comboFogType.SelectedIndex = (int)(m_LightManagerWrapper.GetFogType());
         }
 

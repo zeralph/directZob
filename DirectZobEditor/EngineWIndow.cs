@@ -220,6 +220,10 @@ namespace DirectZobEditor
                         nZ = pZ.Copy();
                         break;
                 }
+                d = m_engineWrapper.GetDistanceToCamera(p0) / 10.0f;
+                pX.Mul(d);
+                pY.Mul(d);
+                pZ.Mul(d);
                 pX.Add(p0);
                 pY.Add(p0);
                 pZ.Add(p0);
@@ -245,9 +249,9 @@ namespace DirectZobEditor
                         bTY.BackColor = Color.Blue;
                         bTZ.Text = "Rx";
                         bTZ.BackColor = Color.Red;
-                        m_engineWrapper.DrawCircle(p0, nX, 1.0f, 0xFF0000, true, true);
-                        m_engineWrapper.DrawCircle(p0, nY, 1.0f, 0x00FF00, true, true);
-                        m_engineWrapper.DrawCircle(p0, nZ, 1.0f, 0x0000FF, true, true);
+                        m_engineWrapper.DrawCircle(p0, nX, d, 0xFF0000, true, true);
+                        m_engineWrapper.DrawCircle(p0, nY, d, 0x00FF00, true, true);
+                        m_engineWrapper.DrawCircle(p0, nZ, d, 0x0000FF, true, true);
                         break;
                     case objectModificator.scale:
                         bTX.Text = "Sx";
@@ -518,7 +522,7 @@ namespace DirectZobEditor
         {
             if (m_engineRendering)
             {
-                //return;
+                return;
             }
             float x = (float)e.X;
             float y = (float)e.Y;
@@ -605,7 +609,7 @@ namespace DirectZobEditor
         {
             if (m_engineRendering)
             {
-                //return;
+                return;
             }
             ZobCameraWrapper c = m_mainForm.GetCameraControl().GetWrapper().GetCurrentCamera();
             ZobObjectWrapper z = m_mainForm.GetZobObjectListControl().GetSelectedZobObject();
@@ -663,7 +667,7 @@ namespace DirectZobEditor
                 ManagedVector3 p3 = p0.Copy();
                 p3.Add(up);
                 p3.Mul(2.0f);
-                m_engineWrapper.DrawTriangle(p0, p1, p2, 0xFFFF00);
+                m_engineWrapper.DrawTriangle(p0, p1, p2, 0xFF0000);
                 OnZobObjectRotated(z);
             }
         }
@@ -699,7 +703,7 @@ namespace DirectZobEditor
                 ManagedVector3 p3 = p0.Copy();
                 p3.Add(up);
                 p3.Mul(2.0f);
-                m_engineWrapper.DrawTriangle(p0, p1, p2, 0xFFFF00);
+                m_engineWrapper.DrawTriangle(p0, p1, p2, 0xFF0000);
                 OnZobObjectRotated(z);
             }
         }
@@ -734,7 +738,7 @@ namespace DirectZobEditor
                 ManagedVector3 p3 = p0.Copy();
                 p3.Add(up);
                 p3.Mul(2.0f);
-                m_engineWrapper.DrawTriangle(p0, p1, p2, 0xFFFF00);
+                m_engineWrapper.DrawTriangle(p0, p1, p2, 0x00FF00);
                 OnZobObjectRotated(z);
             }
         }

@@ -528,6 +528,9 @@ void Mesh::QueueForDrawing(ZobObject* z, const ZobMatrix4x4& modelMatrix, const 
 		t->draw = false;
 		t->options = options;
 		t->zobObject = z;
+		t->ca = 0xFF0000;
+		t->cb = 0x00FF00;
+		t->cc = 0x0000FF;
 		if (!RejectTriangle(t, znear, zfar, (float)bData->width, (float)bData->height))
 		{
 			bool bCull = false;
@@ -540,7 +543,7 @@ void Mesh::QueueForDrawing(ZobObject* z, const ZobMatrix4x4& modelMatrix, const 
 			}
 			//if (engine->GetCullMode() == Engine::None )// ( || t->area > sAreaMin && t->area < sAreaMax))
 			{
-				t->owner = ownerId;
+//				t->owner = ownerId;
 				t->draw = true;
 				engine->QueueTriangle(t);
 				static bool bShowNormal = true;

@@ -48,8 +48,6 @@
             this.createSpriteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.createZobObjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.engineToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.sceneToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.FirstPanelSplitter = new System.Windows.Forms.SplitContainer();
             this.ZobObjectListPanel = new System.Windows.Forms.Panel();
             this.SecondPanelSplitter = new System.Windows.Forms.SplitContainer();
@@ -69,6 +67,7 @@
             this.btnRotateLocal = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.btnTranslateWorld = new System.Windows.Forms.ToolStripButton();
+            this.btnRotateWorld = new System.Windows.Forms.ToolStripButton();
             this.btnScale = new System.Windows.Forms.ToolStripButton();
             this.EngineRendererPanel = new System.Windows.Forms.Panel();
             this.tabControl1 = new System.Windows.Forms.TabControl();
@@ -76,8 +75,15 @@
             this.textLog = new System.Windows.Forms.RichTextBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.propertiesPanel = new System.Windows.Forms.Panel();
+            this.ObjectControlsFlowLayout = new System.Windows.Forms.FlowLayoutPanel();
+            this.tabsControl = new System.Windows.Forms.TabControl();
+            this.tabObject = new System.Windows.Forms.TabPage();
+            this.tabScene = new System.Windows.Forms.TabPage();
+            this.tabEngine = new System.Windows.Forms.TabPage();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.SceneControlsFlowLayout = new System.Windows.Forms.FlowLayoutPanel();
+            this.panel2 = new System.Windows.Forms.Panel();
             this.EngineControlsFlowLayout = new System.Windows.Forms.FlowLayoutPanel();
-            this.btnRotateWorld = new System.Windows.Forms.ToolStripButton();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FirstPanelSplitter)).BeginInit();
             this.FirstPanelSplitter.Panel1.SuspendLayout();
@@ -96,6 +102,12 @@
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.propertiesPanel.SuspendLayout();
+            this.tabsControl.SuspendLayout();
+            this.tabObject.SuspendLayout();
+            this.tabScene.SuspendLayout();
+            this.tabEngine.SuspendLayout();
+            this.panel1.SuspendLayout();
+            this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // statusStrip1
@@ -248,26 +260,9 @@
             // 
             // setupToolStripMenuItem
             // 
-            this.setupToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.engineToolStripMenuItem,
-            this.sceneToolStripMenuItem});
             this.setupToolStripMenuItem.Name = "setupToolStripMenuItem";
             this.setupToolStripMenuItem.Size = new System.Drawing.Size(49, 20);
             this.setupToolStripMenuItem.Text = "Setup";
-            // 
-            // engineToolStripMenuItem
-            // 
-            this.engineToolStripMenuItem.Name = "engineToolStripMenuItem";
-            this.engineToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
-            this.engineToolStripMenuItem.Text = "Engine ...";
-            this.engineToolStripMenuItem.Click += new System.EventHandler(this.engineToolStripMenuItem_Click);
-            // 
-            // sceneToolStripMenuItem
-            // 
-            this.sceneToolStripMenuItem.Name = "sceneToolStripMenuItem";
-            this.sceneToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
-            this.sceneToolStripMenuItem.Text = "Scene ...";
-            this.sceneToolStripMenuItem.Click += new System.EventHandler(this.sceneToolStripMenuItem_Click);
             // 
             // FirstPanelSplitter
             // 
@@ -313,7 +308,7 @@
             // SecondPanelSplitter.Panel2
             // 
             this.SecondPanelSplitter.Panel2.AutoScroll = true;
-            this.SecondPanelSplitter.Panel2.Controls.Add(this.propertiesPanel);
+            this.SecondPanelSplitter.Panel2.Controls.Add(this.tabsControl);
             this.SecondPanelSplitter.Panel2MinSize = 350;
             this.SecondPanelSplitter.Size = new System.Drawing.Size(1074, 750);
             this.SecondPanelSplitter.SplitterDistance = 700;
@@ -509,6 +504,17 @@
             this.btnTranslateWorld.ToolTipText = "Rotate in world space";
             this.btnTranslateWorld.Click += new System.EventHandler(this.btnTranslateWorld_Click);
             // 
+            // btnRotateWorld
+            // 
+            this.btnRotateWorld.CheckOnClick = true;
+            this.btnRotateWorld.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.btnRotateWorld.Image = ((System.Drawing.Image)(resources.GetObject("btnRotateWorld.Image")));
+            this.btnRotateWorld.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnRotateWorld.Name = "btnRotateWorld";
+            this.btnRotateWorld.Size = new System.Drawing.Size(29, 22);
+            this.btnRotateWorld.Text = "RW";
+            this.btnRotateWorld.Click += new System.EventHandler(this.btnRotateWorld_Click);
+            // 
             // btnScale
             // 
             this.btnScale.CheckOnClick = true;
@@ -573,37 +579,118 @@
             // 
             // propertiesPanel
             // 
-            this.propertiesPanel.Controls.Add(this.EngineControlsFlowLayout);
+            this.propertiesPanel.Controls.Add(this.ObjectControlsFlowLayout);
             this.propertiesPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.propertiesPanel.Location = new System.Drawing.Point(0, 0);
+            this.propertiesPanel.Location = new System.Drawing.Point(3, 3);
             this.propertiesPanel.MinimumSize = new System.Drawing.Size(300, 0);
             this.propertiesPanel.Name = "propertiesPanel";
-            this.propertiesPanel.Size = new System.Drawing.Size(368, 748);
+            this.propertiesPanel.Size = new System.Drawing.Size(354, 716);
             this.propertiesPanel.TabIndex = 0;
+            // 
+            // ObjectControlsFlowLayout
+            // 
+            this.ObjectControlsFlowLayout.AutoScroll = true;
+            this.ObjectControlsFlowLayout.BackColor = System.Drawing.SystemColors.Control;
+            this.ObjectControlsFlowLayout.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ObjectControlsFlowLayout.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.ObjectControlsFlowLayout.Location = new System.Drawing.Point(0, 0);
+            this.ObjectControlsFlowLayout.MinimumSize = new System.Drawing.Size(300, 0);
+            this.ObjectControlsFlowLayout.Name = "ObjectControlsFlowLayout";
+            this.ObjectControlsFlowLayout.Size = new System.Drawing.Size(354, 716);
+            this.ObjectControlsFlowLayout.TabIndex = 0;
+            this.ObjectControlsFlowLayout.WrapContents = false;
+            this.ObjectControlsFlowLayout.Resize += new System.EventHandler(this.EngineControlsFlowLayout_Resize);
+            // 
+            // tabsControl
+            // 
+            this.tabsControl.Controls.Add(this.tabObject);
+            this.tabsControl.Controls.Add(this.tabScene);
+            this.tabsControl.Controls.Add(this.tabEngine);
+            this.tabsControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabsControl.Location = new System.Drawing.Point(0, 0);
+            this.tabsControl.Name = "tabsControl";
+            this.tabsControl.SelectedIndex = 0;
+            this.tabsControl.Size = new System.Drawing.Size(368, 748);
+            this.tabsControl.TabIndex = 0;
+            // 
+            // tabObject
+            // 
+            this.tabObject.BackColor = System.Drawing.SystemColors.Control;
+            this.tabObject.Controls.Add(this.propertiesPanel);
+            this.tabObject.Location = new System.Drawing.Point(4, 22);
+            this.tabObject.Name = "tabObject";
+            this.tabObject.Padding = new System.Windows.Forms.Padding(3);
+            this.tabObject.Size = new System.Drawing.Size(360, 722);
+            this.tabObject.TabIndex = 0;
+            this.tabObject.Text = "Object";
+            // 
+            // tabScene
+            // 
+            this.tabScene.BackColor = System.Drawing.SystemColors.Control;
+            this.tabScene.Controls.Add(this.panel1);
+            this.tabScene.Location = new System.Drawing.Point(4, 22);
+            this.tabScene.Name = "tabScene";
+            this.tabScene.Padding = new System.Windows.Forms.Padding(3);
+            this.tabScene.Size = new System.Drawing.Size(360, 722);
+            this.tabScene.TabIndex = 1;
+            this.tabScene.Text = "Scene";
+            // 
+            // tabEngine
+            // 
+            this.tabEngine.BackColor = System.Drawing.SystemColors.Control;
+            this.tabEngine.Controls.Add(this.panel2);
+            this.tabEngine.Location = new System.Drawing.Point(4, 22);
+            this.tabEngine.Name = "tabEngine";
+            this.tabEngine.Padding = new System.Windows.Forms.Padding(3);
+            this.tabEngine.Size = new System.Drawing.Size(360, 722);
+            this.tabEngine.TabIndex = 2;
+            this.tabEngine.Text = "Engine";
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.SceneControlsFlowLayout);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel1.Location = new System.Drawing.Point(3, 3);
+            this.panel1.MinimumSize = new System.Drawing.Size(300, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(354, 716);
+            this.panel1.TabIndex = 1;
+            // 
+            // SceneControlsFlowLayout
+            // 
+            this.SceneControlsFlowLayout.AutoScroll = true;
+            this.SceneControlsFlowLayout.BackColor = System.Drawing.SystemColors.Control;
+            this.SceneControlsFlowLayout.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.SceneControlsFlowLayout.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.SceneControlsFlowLayout.Location = new System.Drawing.Point(0, 0);
+            this.SceneControlsFlowLayout.MinimumSize = new System.Drawing.Size(300, 0);
+            this.SceneControlsFlowLayout.Name = "SceneControlsFlowLayout";
+            this.SceneControlsFlowLayout.Size = new System.Drawing.Size(354, 716);
+            this.SceneControlsFlowLayout.TabIndex = 0;
+            this.SceneControlsFlowLayout.WrapContents = false;
+            // 
+            // panel2
+            // 
+            this.panel2.Controls.Add(this.EngineControlsFlowLayout);
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel2.Location = new System.Drawing.Point(3, 3);
+            this.panel2.MinimumSize = new System.Drawing.Size(300, 0);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(354, 716);
+            this.panel2.TabIndex = 1;
             // 
             // EngineControlsFlowLayout
             // 
             this.EngineControlsFlowLayout.AutoScroll = true;
+            this.EngineControlsFlowLayout.BackColor = System.Drawing.SystemColors.Control;
             this.EngineControlsFlowLayout.Dock = System.Windows.Forms.DockStyle.Fill;
             this.EngineControlsFlowLayout.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.EngineControlsFlowLayout.Location = new System.Drawing.Point(0, 0);
             this.EngineControlsFlowLayout.MinimumSize = new System.Drawing.Size(300, 0);
             this.EngineControlsFlowLayout.Name = "EngineControlsFlowLayout";
-            this.EngineControlsFlowLayout.Size = new System.Drawing.Size(368, 748);
+            this.EngineControlsFlowLayout.Size = new System.Drawing.Size(354, 716);
             this.EngineControlsFlowLayout.TabIndex = 0;
             this.EngineControlsFlowLayout.WrapContents = false;
-            this.EngineControlsFlowLayout.Resize += new System.EventHandler(this.EngineControlsFlowLayout_Resize);
-            // 
-            // btnRotateWorld
-            // 
-            this.btnRotateWorld.CheckOnClick = true;
-            this.btnRotateWorld.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.btnRotateWorld.Image = ((System.Drawing.Image)(resources.GetObject("btnRotateWorld.Image")));
-            this.btnRotateWorld.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnRotateWorld.Name = "btnRotateWorld";
-            this.btnRotateWorld.Size = new System.Drawing.Size(29, 22);
-            this.btnRotateWorld.Text = "RW";
-            this.btnRotateWorld.Click += new System.EventHandler(this.btnRotateWorld_Click);
             // 
             // Form1
             // 
@@ -642,6 +729,12 @@
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.propertiesPanel.ResumeLayout(false);
+            this.tabsControl.ResumeLayout(false);
+            this.tabObject.ResumeLayout(false);
+            this.tabScene.ResumeLayout(false);
+            this.tabEngine.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
+            this.panel2.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -671,7 +764,7 @@
         private System.Windows.Forms.ToolStripMenuItem loadMeshToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem createLightToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem createCameraToolStripMenuItem;
-        private System.Windows.Forms.FlowLayoutPanel EngineControlsFlowLayout;
+        private System.Windows.Forms.FlowLayoutPanel ObjectControlsFlowLayout;
         private System.Windows.Forms.ToolStripMenuItem spotToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem pointToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem directionalToolStripMenuItem;
@@ -683,8 +776,6 @@
         private System.Windows.Forms.ToolStripButton btnPause;
         private System.Windows.Forms.ToolStripButton btnStop;
         private System.Windows.Forms.ToolStripMenuItem setupToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem engineToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem sceneToolStripMenuItem;
         private System.Windows.Forms.ToolStripButton btnGrid;
         private System.Windows.Forms.ToolStripButton btnWireframe;
         private System.Windows.Forms.ToolStripButton btnGizmos;
@@ -697,6 +788,14 @@
         private System.Windows.Forms.ToolStripButton btnTranslateWorld;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripButton btnRotateWorld;
+        private System.Windows.Forms.TabControl tabsControl;
+        private System.Windows.Forms.TabPage tabObject;
+        private System.Windows.Forms.TabPage tabScene;
+        private System.Windows.Forms.TabPage tabEngine;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.FlowLayoutPanel SceneControlsFlowLayout;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.FlowLayoutPanel EngineControlsFlowLayout;
     }
 }
 

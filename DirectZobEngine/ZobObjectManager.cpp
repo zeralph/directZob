@@ -119,6 +119,11 @@ ZobObject* ZobObjectManager::GetZobObject(const std::string& name) const
 
 }
 
+void ZobObjectManager::PreUpdate()
+{
+	m_rootObject->PreUpdate();
+}
+
 void ZobObjectManager::StartUpdateScene(const Camera* camera, Core::Engine* engine)
 {
 	m_drawTick = clock();

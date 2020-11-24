@@ -77,6 +77,7 @@ private:
 	const std::vector<Line3D>* m_lines;
 	const Triangle* m_triangles;
 	const ZobVector3* m_ambientColor;
+	float m_ambientIntensity;
 	const ZobVector3* m_fogColor;
 	float m_fogDistance;
 	float m_fogDensity;

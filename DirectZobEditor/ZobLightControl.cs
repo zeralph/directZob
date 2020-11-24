@@ -54,6 +54,26 @@ namespace DirectZobEditor
             }
         }
 
+        private void SetValues()
+        {
+            float f;
+            lightDistance.Text = lightDistance.Text.Replace('.', ',');
+            if (float.TryParse(lightDistance.Text, out f))
+            {
+                m_light.SetDistance(f);
+            }
+            lightIntensity.Text = lightIntensity.Text.Replace('.', ',');
+            if (float.TryParse(lightIntensity.Text, out f))
+            {
+                m_light.SetIntensity(f);
+            }
+            lightAngle.Text = lightAngle.Text.Replace('.', ',');
+            if (float.TryParse(lightAngle.Text, out f))
+            {
+                m_light.SetSpotAngle(f);
+            }
+        }
+
         private void UpdateValues()
         {
             if(m_light != null)
@@ -62,36 +82,9 @@ namespace DirectZobEditor
                 Color c = ToColor(v);
                 buttonColor.BackColor = c;
                 comboBoxLightType.SelectedIndex = m_light.GetType();
-                float f;
-                lightDistance.Text = lightDistance.Text.Replace('.', ',');
-                if (float.TryParse(lightDistance.Text, out f))
-                {
-                    m_light.SetDistance(f);
-                }
-                else
-                {
-                    lightDistance.Text = m_light.GetDistance().ToString();
-                }
-                //--
-                lightIntensity.Text = lightIntensity.Text.Replace('.', ',');
-                if (float.TryParse(lightIntensity.Text, out f))
-                {
-                    m_light.SetIntensity(f);
-                }
-                else
-                {
-                    lightIntensity.Text = m_light.GetIntensity().ToString();
-                }
-                //--
-                lightAngle.Text = lightAngle.Text.Replace('.', ',');
-                if (float.TryParse(lightAngle.Text, out f))
-                {
-                    m_light.SetSpotAngle(f);
-                }
-                else
-                {
-                    lightAngle.Text = m_light.GetSpotAngle().ToString();
-                }
+                lightDistance.Text = m_light.GetDistance().ToString();
+                lightIntensity.Text = m_light.GetIntensity().ToString();
+                lightAngle.Text = m_light.GetSpotAngle().ToString();
             }
         }
 
@@ -121,8 +114,9 @@ namespace DirectZobEditor
 
         private void valueChanged(object sender, EventArgs e)
         {
-            UpdateValues();
+            SetValues();
         }
+
         private void RefreshInterface()
         {
             int i = comboBoxLightType.SelectedIndex;

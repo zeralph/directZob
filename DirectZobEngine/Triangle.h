@@ -33,10 +33,15 @@ public:
 	ZobVector2* ua;
 	ZobVector2* ub;
 	ZobVector2* uc;
+
+	int ca;
+	int cb;
+	int cc;
+
 	const ZobMaterial* material;
 	ZobObject* zobObject;
 	float area;
-	uint owner;
+	//uint owner;
 	bool draw;
 	const DirectZobType::RenderOptions* options;
 

@@ -75,6 +75,7 @@ void Rasterizer::Render()
 		{
 			m_lights = lm->GetActiveLights();
 			m_ambientColor = lm->GetAmbientColor();
+			m_ambientIntensity = lm->GetAmbientColorIntensity();
 			m_fogColor = lm->GetFogColor();
 			m_fogType = lm->GetFogType();
 			m_fogDensity = lm->GetFogDensity();
@@ -137,6 +138,11 @@ void Rasterizer::DrawLine2(const Line3D* l) const
 	}
 	int watchDog = 0;
 	dz = dz / fabsf((float)longLen);
+	if (l->noZ)
+	{
+		sz = m_bufferData->zNear;
+		dz = 0.0f;
+	}
 	if (yLonger) 
 	{
 		
@@ -295,8 +301,8 @@ inline ZobVector3 Rasterizer::ComputeLightingAtPoint(const ZobVector3* position,
 				}
 				if (lightPower > 0.0f)
 				{
+					//Todo : specular intensity setup
 					static int specularIntensity = 50;
-					static float ambientIntensity = 0.4f;
 					cl = computeLighting(normal, &lightDir);
 					sl = 0.0f;
 					if (lighting == RenderOptions::eLightMode_none)
@@ -568,34 +574,40 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector3* p, const Triangl
 		}
 		else
 		{
-			r = 1.0f;
-			g = 0.0f;
-			b = 1.0f;
+			float ra = (float)((t->ca & 0xFF0000) >> 16) / 255.0f;
+			float rb = (float)((t->cb & 0xFF0000) >> 16) / 255.0f;
+			float rc = (float)((t->cc & 0xFF0000) >> 16) / 255.0f;
+			float ga = (float)((t->ca & 0x00FF00) >> 8) / 255.0f;
+			float gb = (float)((t->cb & 0x00FF00) >> 8) / 255.0f;
+			float gc = (float)((t->cc & 0x00FF00) >> 8) / 255.0f;
+			float ba = (float)((t->ca & 0x0000FF)) / 255.0f;
+			float bb = (float)((t->cb & 0x0000FF)) / 255.0f;
+			float bc = (float)((t->cc & 0x0000FF)) / 255.0f;
+			r = (w0 * ra + w1 * rb + w2 * rc);
+			g = (w0 * ga + w1 * gb + w2 * gc);
+			b = (w0 * ba + w1 * bb + w2 * bc);
 			a = 1.0f;
 		}
 		m_bufferData->zBuffer[k] = zRatio;
-		//lighting
-		fr = 0.0f;
-		fg = 0.0f;
-		fb = 0.0f;
+		//lighting ambient
+		fr = r * (m_ambientColor->x * m_ambientIntensity);
+		fg = g * (m_ambientColor->y * m_ambientIntensity);
+		fb = b * (m_ambientColor->z * m_ambientIntensity);
 
 		if (m_lightingPrecision == eLightingPrecision_vertex)
 		{
 			//Vertex lighting
-			fr = (w0 * la->x + w1 * lb->x + w2 * lc->x) * r;
-			fg = (w0 * la->y + w1 * lb->y + w2 * lc->y) * g;
-			fb = (w0 * la->z + w1 * lb->z + w2 * lc->z) * b;
+			fr += (w0 * la->x + w1 * lb->x + w2 * lc->x) * r;
+			fg += (w0 * la->y + w1 * lb->y + w2 * lc->y) * g;
+			fb += (w0 * la->z + w1 * lb->z + w2 * lc->z) * b;
 		}
 		else if(m_lightingPrecision == eLightingPrecision_pixel)
 		{
 			ZobVector3 l = ComputeLightingAtPoint(&tpos, &normal, lighting);
-			fr = l.x * r;
-			fg = l.y * g;
-			fb = l.z * b;
+			fr += l.x * r;
+			fg += l.y * g;
+			fb += l.z * b;
 		}
-		fr += r * m_ambientColor->x;
-		fg += g * m_ambientColor->y;
-		fb += b * m_ambientColor->z;
 		fr = clamp2(fr, 0.0f, 1.0f);
 		fg = clamp2(fg, 0.0f, 1.0f);
 		fb = clamp2(fb, 0.0f, 1.0f);

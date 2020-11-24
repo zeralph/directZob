@@ -158,6 +158,7 @@ namespace CLI
 		t.na = &ZobVector3(0, 1, 0);
 		t.nb = &ZobVector3(0, 1, 0);
 		t.nc = &ZobVector3(0, 1, 0);
+//		t.options->colorization.x = 255;// = ZobVector3(color & 0xFF0000 >> 16, color & 0x00FF00 >> 8, color & 0x0000FF);
 		m_nbTriangles++;
 		//t.
 //		m_Instance->QueueTriangle(&t);
