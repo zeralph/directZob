@@ -187,7 +187,7 @@ void Engine::ClearBuffer(const Color *color)
 		//memset(m_zBuffer, 0, sizeof(float) * m_bufferData.width * m_bufferData.height);
 		for (int i = 0; i < m_bufferData.width * m_bufferData.height; i++)
 		{
-			m_zBuffer[i] = -1.0f;
+			m_zBuffer[i] = 1.0f;
 			m_buffer[i] = v;
 		}
 	}
@@ -207,7 +207,7 @@ void Engine::ClearBuffer(const Color *color)
 			int s = m_bufferData.width * y;
 			for (int i = 0; i < m_bufferData.width; i++)
 			{
-				m_zBuffer[i + s] = -1.0f;
+				m_zBuffer[i + s] = 1.0f;
 				m_buffer[i + s] = c;
 			}
 		}

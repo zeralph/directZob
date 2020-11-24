@@ -153,9 +153,9 @@ void Rasterizer::DrawLine2(const Line3D* l) const
 			py = y + i;
 			if(px < m_bufferData->width && py < m_bufferData->height)
 			{
-				zRatio = 1.0f - (sz - m_bufferData->zNear) / (m_bufferData->zFar - m_bufferData->zNear);
+				zRatio = (sz - m_bufferData->zNear) / (m_bufferData->zFar - m_bufferData->zNear);
 				k = py * m_bufferData->width + px;
-				if (m_bufferData->zBuffer[k] < zRatio)
+				if (m_bufferData->zBuffer[k] > zRatio)
 				{
 					m_bufferData->buffer[k] = l->c;
 					m_bufferData->zBuffer[k] = zRatio;
@@ -178,9 +178,9 @@ void Rasterizer::DrawLine2(const Line3D* l) const
 			k = py * m_bufferData->width + px;
 			if (px < m_bufferData->width && py < m_bufferData->height)
 			{
-				zRatio = 1.0f - (sz - m_bufferData->zNear) / (m_bufferData->zFar - m_bufferData->zNear);
+				zRatio = (sz - m_bufferData->zNear) / (m_bufferData->zFar - m_bufferData->zNear);
 				k = py * m_bufferData->width + px;
-				if (m_bufferData->zBuffer[k] < zRatio)
+				if (m_bufferData->zBuffer[k] > zRatio)
 				{
 					m_bufferData->buffer[k] = l->c;
 					m_bufferData->zBuffer[k] = zRatio;
@@ -273,6 +273,7 @@ inline ZobVector3 Rasterizer::ComputeLightingAtPoint(const ZobVector3* position,
 				{
 					lightDir = l->GetForward();
 					lightDir.Mul(-1.0f);
+					lightDir.Normalize();
 					lightPower = l->GetIntensity();
 				}
 				else if(l->GetType() == Light::eLightType_point)

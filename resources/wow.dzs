@@ -2,6 +2,7 @@
 <Scene>
     <Globals>
         <AmbientColor r="255" g="255" b="0" />
+        <AmbientIntensity>0.06</AmbientIntensity>
         <FogColor r="111" g="111" b="0" />
         <ClearColor r="102" g="102" b="0" />
         <FogDensity>35.00</FogDensity>
@@ -19,7 +20,7 @@
         </Physic>
         <ZobObject name="skull" guid="50397192" type="mesh">
             <Position x="0" y="0" z="0" />
-            <Rotation x="-100" y="-71.868" z="20.558" />
+            <Rotation x="-96.0953" y="-72.972" z="5.28265" />
             <Scale x="1" y="1" z="1" />
             <Mesh name="skull.obj" file="D:\Git\directZob\resources\skull.obj" />
             <Physic type="0">
@@ -28,7 +29,7 @@
             </Physic>
         </ZobObject>
         <ZobObject name="blueLight" guid="4" type="light">
-            <Position x="-12.1108" y="37.023" z="46.1294" />
+            <Position x="-12.1108" y="10.6891" z="22.9452" />
             <Rotation x="0" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
             <Physic type="0">
@@ -55,8 +56,8 @@
         </ZobObject>
     </ZobObject>
     <ZobObject name="Camera_1" guid="3" type="camera">
-        <Position x="37.376" y="10.396" z="55.214" />
-        <Rotation x="174.543" y="27.608" z="164.695" />
+        <Position x="-59.12" y="10.3813" z="39.0735" />
+        <Rotation x="180" y="75.0781" z="180" />
         <Scale x="1" y="1" z="1" />
         <Physic type="0">
             <RigidBody type="0" active="0" />

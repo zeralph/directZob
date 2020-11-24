@@ -12,7 +12,7 @@ public:
 	LightManager();
 	~LightManager();
 
-	void						Setup(ZobVector3* fogColor, ZobVector3* ambientColor, ZobVector3* clearColor, float fogDistance, float fogDensity, eFogType fogType);
+	void						Setup(ZobVector3* fogColor, ZobVector3* ambientColor, ZobVector3* clearColor, float fogDistance, float fogDensity, eFogType fogType, float ambientIntensity);
 	void						ReInitGlobalSettings();
 	void						AddLight(Light* l);
 	Light*						CreateLight(Light::eLightType type);

@@ -42,7 +42,7 @@ void ZobPhysicComponent::Init(const ZobVector3* position, const ZobVector3* rota
 	m_localTransform = Transform::identity();
 	m_worldTransform = Transform::identity();
 	m_localTransform.setPosition(Vector3(position->x, position->y, position->z));
-	Quaternion q = Quaternion::fromEulerAngles(rotation->x, rotation->y, rotation->z);
+	Quaternion q = Quaternion::fromEulerAngles(DEG_TO_RAD(rotation->x), DEG_TO_RAD(rotation->y), DEG_TO_RAD(rotation->z));
 	m_localTransform.setOrientation(q);
 	m_scale = Vector3(1, 1, 1);
 	m_totalScale = Vector3(1, 1, 1);

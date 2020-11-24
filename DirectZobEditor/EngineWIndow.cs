@@ -492,12 +492,13 @@ namespace DirectZobEditor
             }
             m_lastMouseX = Cursor.Position.X;
             m_lastMouseY = Cursor.Position.Y;
-
+/*
             ManagedVector3 up = new ManagedVector3(0, 1, 0);
             ManagedVector3 p0 = new ManagedVector3(0, 0, 0);
             ManagedVector3 ret = new ManagedVector3(0, 0, 0);
             FromMouseToWorldOnPlane(p0, up, ref ret);
             m_engineWrapper.DrawLine(p0, ret, 0xFF0000, true, true);
+*/
         }
 
         bool FromMouseToWorldOnPlane(ManagedVector3 p0, ManagedVector3 pn, ref ManagedVector3 ret)

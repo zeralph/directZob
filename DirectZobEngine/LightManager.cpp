@@ -26,7 +26,7 @@ void LightManager::ReInitGlobalSettings()
 	m_fogType = eFogType::eFogType_NoFog;
 }
 
-void LightManager::Setup(ZobVector3* fogColor, ZobVector3* ambientColor, ZobVector3* clearColor, float fogDistance, float fogDensity, eFogType fogType)
+void LightManager::Setup(ZobVector3* fogColor, ZobVector3* ambientColor, ZobVector3* clearColor, float fogDistance, float fogDensity, eFogType fogType, float ambientIntensity)
 {
 	m_fogColor = fogColor;
 	m_ambientColor = ambientColor;
@@ -34,6 +34,7 @@ void LightManager::Setup(ZobVector3* fogColor, ZobVector3* ambientColor, ZobVect
 	m_fogDistance = fogDistance;
 	m_fogDensity = fogDensity;
 	m_fogType = fogType;
+	m_ambientColorIntensity = ambientIntensity;
 }
 
 void LightManager::RemoveLight(Light* l)
@@ -116,6 +117,12 @@ void LightManager::LoadFromNode(TiXmlElement* node)
 			float z = atof(e->Attribute("b"));
 			ambient = ZobVector3(x, y, z);
 		}
+		e = node->FirstChildElement("AmbientIntensity");
+		float ambientIntensity = GetAmbientColorIntensity();
+		if (e)
+		{
+			ambientIntensity = atof(e->GetText());
+		}
 		ZobVector3 fog = GetFogColor();
 		e = node->FirstChildElement("FogColor");
 		if (e)
@@ -171,7 +178,7 @@ void LightManager::LoadFromNode(TiXmlElement* node)
 		fog /= 255.0f;
 		ambient /= 255.0f;
 		clear /= 255.0f;
-		Setup(&fog, &ambient, &clear, FogDistance, fogDensity, fogType);
+		Setup(&fog, &ambient, &clear, FogDistance, fogDensity, fogType, ambientIntensity);
 		/*
 		int x = 320;
 		int y = 240;
@@ -191,6 +198,12 @@ void LightManager::SaveUnderNode(TiXmlElement* node)
 	e.SetAttribute("g", ambient.y);
 	e.SetAttribute("b", ambient.z);
 	node->InsertEndChild(e);
+	e = TiXmlElement("AmbientIntensity");
+	_snprintf_s(tmpBuffer, 256, "%.2f", GetAmbientColorIntensity());
+	t.SetValue(tmpBuffer);
+	e.InsertEndChild(t);
+	node->InsertEndChild(e);
+	e = TiXmlElement("FogDistance");
 	ZobVector3 fogColor = GetFogColor();
 	fogColor = Vector2Color(&fogColor);
 	e = TiXmlElement("FogColor");
