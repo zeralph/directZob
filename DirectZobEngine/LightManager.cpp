@@ -119,16 +119,18 @@ Light* LightManager::GetLight(const std::string& name) const
 	return NULL;
 }
 
-const std::vector<Light*>* LightManager::GetActiveLights() const
+std::vector<const Light*> LightManager::GetActiveLights() const
 {
+	std::vector<const Light*> lights;
+	lights.clear();
 	if(m_lightingEnabled)
 	{
-		return &m_lights;
+		for (std::vector<Light*>::const_iterator iter = m_lights.begin(); iter != m_lights.end(); iter++)
+		{
+			lights.push_back((*iter));
+		}
 	}
-	else
-	{
-		return NULL;
-	}
+	return lights;
 }
 
 void LightManager::LoadFromNode(TiXmlElement* node)

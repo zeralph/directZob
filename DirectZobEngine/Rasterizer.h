@@ -74,7 +74,7 @@ private:
 		return sl;
 	};
 
-	const std::vector<Light*>* m_lights;
+	std::vector<const Light*> m_lights;
 	const std::vector<Line3D>* m_lines;
 	const Triangle* m_triangles;
 	const ZobVector3* m_ambientColor;

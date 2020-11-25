@@ -69,7 +69,7 @@ void Rasterizer::Render()
 			const Line3D l = m_lines->at(i);
 			DrawLine(&l);
 		}
-		m_lights = NULL;
+		m_lights.clear();
 		LightManager* lm = DirectZob::GetInstance()->GetLightManager();
 		if (lm)
 		{
@@ -260,11 +260,11 @@ void Rasterizer::DrawLine(const Line3D* l) const
 inline ZobVector3 Rasterizer::ComputeLightingAtPoint(const ZobVector3* position, const ZobVector3* normal, RenderOptions::eLightMode lighting) const
 {
 	ZobVector3 outColor = ZobVector3(0, 0, 0);
-	if (m_lights && normal)
+	if (normal)
 	{
 		ZobVector3 lightDir = ZobVector3(0, 0, 0);
 		float lightPower, cl, sl = 0.0f;
-		for (std::vector<Light*>::const_iterator iter = m_lights->begin(); iter != m_lights->end(); iter++)
+		for (std::vector<const Light*>::const_iterator iter = m_lights.begin(); iter != m_lights.end(); iter++)
 		{
 			const Light* l = (*iter);
 			if (l->IsActive())
@@ -327,25 +327,12 @@ inline ZobVector3 Rasterizer::ComputeLightingAtPoint(const ZobVector3* position,
 
 void Rasterizer::DrawTriangle(const Triangle* t) const
 {
-	/*ZobVector2 v1 = ZobVector2((int)t->va->x, (int)t->va->y);
-	ZobVector2 v2 = ZobVector2((int)t->vb->x, (int)t->vb->y);
-	ZobVector2 v3 = ZobVector2((int)t->vc->x, (int)t->vc->y);*/
-
 	ZobVector2 v1 = ZobVector2((int)t->pa->x, (int)t->pa->y);
 	ZobVector2 v2 = ZobVector2((int)t->pb->x, (int)t->pb->y);
 	ZobVector2 v3 = ZobVector2((int)t->pc->x, (int)t->pc->y);
-
+	ZobVector3 la, lb, lc = ZobVector3(0, 0, 0);
 	/* at first sort the three vertices by y-coordinate ascending so v1 is the topmost vertice */
 	sortVerticesAscendingByY(&v1, &v2, &v3);
-
-	//vertex lighting computing
-	if(true/*vertex lighting*/)
-	{
-		ZobVector3 la, lb, lc = ZobVector3(0, 0, 0);
-		
-	}
-
-	ZobVector3 la, lb, lc = ZobVector3(0, 0, 0);
 	if (m_lightingPrecision == eLightingPrecision_vertex)
 	{
 		la = ComputeLightingAtPoint(t->va, t->na, t->options->lightMode);

@@ -84,7 +84,7 @@ void Light::NewLightConfiguration()
 	}
 }
 
-void Light::drawPointGizmos(const Camera* camera, Core::Engine* engine)
+void Light::drawPointGizmos(const Camera* camera, Core::Engine* engine) const
 {
 	ZobVector3 t = GetWorldPosition();
 	uint c = ((int)(m_color.x * 255) << 16) + ((int)(m_color.y * 255) << 8) + (int)(m_color.z * 255);
@@ -93,7 +93,7 @@ void Light::drawPointGizmos(const Camera* camera, Core::Engine* engine)
 	engine->QueueEllipse(camera, &t, &m_forward, 1.0f, 1.0f, c, true, false);
 }
 
-void Light::drawSpotGizmos(const Camera* camera, Core::Engine* engine)
+void Light::drawSpotGizmos(const Camera* camera, Core::Engine* engine) const
 {
 	ZobVector3 t = GetWorldPosition();
 	uint c = ((int)(m_color.x * 255) << 16) + ((int)(m_color.y * 255) << 8) + (int)(m_color.z * 255);
@@ -120,7 +120,7 @@ void Light::drawSpotGizmos(const Camera* camera, Core::Engine* engine)
 	engine->QueueLine(camera, &t, &v, c, true, false);
 }
 
-void Light::drawDirectionalGizmos(const Camera* camera, Core::Engine* engine)
+void Light::drawDirectionalGizmos(const Camera* camera, Core::Engine* engine) const
 {
 	ZobVector3 t = GetWorldPosition();
 	uint c = ((int)(m_color.x * 255) << 16) + ((int)(m_color.y * 255) << 8) + (int)(m_color.z * 255);

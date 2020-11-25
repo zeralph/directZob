@@ -1,0 +1,65 @@
+<?xml version="1.0" ?>
+<Scene>
+    <Globals>
+        <AmbientColor r="102" g="102" b="102" />
+        <AmbientIntensity>0.20</AmbientIntensity>
+        <FogColor r="63" g="149" b="255" />
+        <ClearColor r="63" g="149" b="255" />
+        <FogDensity>7.00</FogDensity>
+        <FogDistance>500.00</FogDistance>
+        <FogType>exp2</FogType>
+    </Globals>
+    <ZobObject name="Light_1" guid="50528262" type="light">
+        <Position x="0" y="10" z="0" />
+        <Rotation x="156.555" y="34.5955" z="-98.6302" />
+        <Scale x="1" y="1" z="1" />
+        <Physic type="0">
+            <RigidBody type="0" active="0" />
+            <Collider type="0" radius="0.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
+        </Physic>
+        <Color r="252" g="212" b="64" />
+        <Intensity>1.00</Intensity>
+        <FallOffDistance>100.00</FallOffDistance>
+        <Type>directional</Type>
+    </ZobObject>
+    <ZobObject name="Camera_1" guid="50462727" type="camera">
+        <Position x="-44.3136" y="3.84058" z="-19.52" />
+        <Rotation x="0" y="53.448" z="0" />
+        <Scale x="1" y="1" z="1" />
+        <Physic type="0">
+            <RigidBody type="0" active="0" />
+            <Collider type="0" radius="0.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
+        </Physic>
+        <Fov>45.00</Fov>
+    </ZobObject>
+    <ZobObject name="newObject_10" guid="50397193" type="mesh">
+        <Position x="0" y="0" z="0" />
+        <Rotation x="0" y="0" z="0" />
+        <Scale x="1" y="1" z="1" />
+        <Mesh name="beach.obj" file="D:\Git\directZob\resources\beach.obj" />
+        <Physic type="0">
+            <RigidBody type="0" active="0" />
+            <Collider type="0" radius="0.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
+        </Physic>
+    </ZobObject>
+    <ZobObject name="newObject_11" guid="50397194" type="mesh">
+        <Position x="0" y="0" z="0" />
+        <Rotation x="0" y="0" z="0" />
+        <Scale x="1" y="1" z="1" />
+        <Mesh name="water.obj" file="D:\Git\directZob\resources\water.obj" />
+        <Physic type="0">
+            <RigidBody type="0" active="0" />
+            <Collider type="0" radius="0.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
+        </Physic>
+    </ZobObject>
+    <ZobObject name="newObject_12" guid="50397195" type="mesh">
+        <Position x="-6.049" y="1.105" z="5.111" />
+        <Rotation x="0" y="-24.884" z="0" />
+        <Scale x="0.4" y="0.4" z="0.4" />
+        <Mesh name="cottage_obj.obj" file="D:\Git\directZob\resources\cottage_obj.obj" />
+        <Physic type="0">
+            <RigidBody type="0" active="0" />
+            <Collider type="0" radius="0.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
+        </Physic>
+    </ZobObject>
+</Scene>

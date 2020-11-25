@@ -68,4 +68,27 @@
             <Collider type="0" radius="0.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
         </Physic>
     </ZobObject>
+    <ZobObject name="Light_green" guid="50528266" type="light">
+        <Position x="-17.8931" y="15.6368" z="-10.3394" />
+        <Rotation x="90.0001" y="-2.21981e-05" z="9.58347" />
+        <Scale x="1" y="1" z="1" />
+        <Physic type="0">
+            <RigidBody type="0" active="0" />
+            <Collider type="0" radius="0.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
+        </Physic>
+        <Color r="0" g="255" b="0" />
+        <Intensity>2.00</Intensity>
+        <FallOffDistance>50.00</FallOffDistance>
+        <Type>spot</Type>
+    </ZobObject>
+    <ZobObject name="Camera_1" guid="50462731" type="camera">
+        <Position x="-14.7333" y="5" z="-30.8119" />
+        <Rotation x="180" y="34.4887" z="180" />
+        <Scale x="1" y="1" z="1" />
+        <Physic type="0">
+            <RigidBody type="0" active="0" />
+            <Collider type="0" radius="0.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
+        </Physic>
+        <Fov>45.00</Fov>
+    </ZobObject>
 </Scene>
