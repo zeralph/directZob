@@ -22,8 +22,11 @@ void LightManager::ReInitGlobalSettings()
 	m_ambientColorIntensity = 0.8f;
 	m_fogDistance = 500.0f;
 	m_lights.clear();
+	m_lightsToAdd.clear();
+	m_lightsToRemove.clear();
 	m_fogDensity = 2.0f;
 	m_fogType = eFogType::eFogType_NoFog;
+	m_lightIndex = 1;
 }
 
 void LightManager::Setup(ZobVector3* fogColor, ZobVector3* ambientColor, ZobVector3* clearColor, float fogDistance, float fogDensity, eFogType fogType, float ambientIntensity)
@@ -37,16 +40,33 @@ void LightManager::Setup(ZobVector3* fogColor, ZobVector3* ambientColor, ZobVect
 	m_ambientColorIntensity = ambientIntensity;
 }
 
-void LightManager::RemoveLight(Light* l)
+void LightManager::PreUpdate()
 {
-	for (int i = 0; i < m_lights.size(); i++)
+	for (std::vector<Light*>::const_iterator iter = m_lightsToAdd.begin(); iter != m_lightsToAdd.end(); iter++)
 	{
-		if (m_lights[i] == l)
+		m_lights.push_back(*iter);
+		m_lightIndex++;
+	}
+	m_lightsToAdd.clear();
+	for (std::vector<Light*>::const_iterator iter = m_lightsToRemove.begin(); iter != m_lightsToRemove.end(); iter++)
+	{
+		Light* toRemove = (*iter);
+		for (int i = 0; i < m_lights.size(); i++)
 		{
-			std::swap(m_lights.at(i), m_lights.at(m_lights.size() - 1));
-			m_lights.pop_back();
+			if (m_lights[i] == toRemove)
+			{
+				std::swap(m_lights.at(i), m_lights.at(m_lights.size() - 1));
+				m_lights.pop_back();
+				m_lightIndex--;
+			}
 		}
 	}
+	m_lightsToRemove.clear();
+}
+
+void LightManager::RemoveLight(Light* l)
+{
+	m_lightsToRemove.push_back(l);
 }
 
 void LightManager::UnloadAll()
@@ -62,18 +82,26 @@ Light* LightManager::CreateLight(std::string& name, Light::eLightType type, ZobV
 {
 	Light* l = new Light(name, type, color, intensity, distance, parent);
 	l->SetWorldPosition(position.x, position.y, position.z);
+	if (type == Light::eLightType_spot)
+	{
+		l->SetWorldRotation(90, 0, 0);
+	}
+	else if (type == Light::eLightType_directional)
+	{
+		l->SetWorldRotation(-45, -45, -45);
+	}
 	AddLight(l);
 	return l;
 }
 
 void LightManager::AddLight(Light* l)
 {
-	m_lights.push_back(l);
+	m_lightsToAdd.push_back(l);
 }
 
 Light* LightManager::CreateLight(Light::eLightType type)
 {
-	int l = m_lights.size();
+	int l = m_lightIndex;
 	std::string name = std::string("Light_").append(std::to_string((l)));
 	ZobVector3 color = ZobVector3(252.0f / 255.0f, 212 / 255.0f, 64.0f / 255.0f);
 	return CreateLight(name, type, ZobVector3(0, 10, 0), color, 5.0f, 100.0f, NULL);

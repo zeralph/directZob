@@ -26,6 +26,7 @@ public:
 	const float			GetFallOffDistance() const { return m_distance; }
 	const float			GetIntensity() const { return m_intensity; }
 	const float			GetSpotAngleRad() const { return m_spotAngleRad; }
+	const float			GetSpotAngleDeg() const { return RAD_TO_DEG(m_spotAngleRad); }
 	void				SetSpotAngle(float f) { m_spotAngleRad = fmax(0, fmin(90, fabs(f))); m_spotAngleRad = DEG_TO_RAD(m_spotAngleRad); }
 	const eLightType	GetType() const { return m_lightType; }
 	inline bool			IsActive() const { return m_active; }

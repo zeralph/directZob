@@ -19,9 +19,9 @@ public:
 	Light*						CreateLight(std::string& name, Light::eLightType type, ZobVector3 position, ZobVector3 color, float intensity, float distance, ZobObject* parent);
 	const std::vector<Light*>*  GetActiveLights() const;
 	Light*						GetLight(const std::string& name) const;
-	const ZobVector3*				GetAmbientColor() const { return &m_ambientColor; };
-	const ZobVector3*				GetFogColor() const { return &m_fogColor; };
-	const ZobVector3*				GetClearColor() const { return &m_clearColor; };
+	const ZobVector3*			GetAmbientColor() const { return &m_ambientColor; };
+	const ZobVector3*			GetFogColor() const { return &m_fogColor; };
+	const ZobVector3*			GetClearColor() const { return &m_clearColor; };
 	void						SetAmbientColor(ZobVector3* c) { m_ambientColor = c; };
 	void						SetFogColor(ZobVector3* c) { m_fogColor = c; };
 	void						SetClearColor(ZobVector3* c) { m_clearColor = c; };
@@ -37,11 +37,15 @@ public:
 	const bool					EnableLighting() const  { return m_lightingEnabled; }
 	void						EnableLighting(bool b) { m_lightingEnabled = b; }
 	void						UnloadAll();
+	void						PreUpdate();
 	void						LoadFromNode(TiXmlElement* node);
 	void						SaveUnderNode(TiXmlElement* node);
 private:
 	eFogType m_fogType;
 	std::vector<Light*> m_lights;
+	std::vector<Light*> m_lightsToAdd;
+	std::vector<Light*> m_lightsToRemove;
+	int m_lightIndex;
 	ZobVector3 m_ambientColor;
 	ZobVector3 m_clearColor;
 	float m_ambientColorIntensity;

@@ -176,6 +176,7 @@ int DirectZob::RunAFrame(DirectZob::engineCallback OnSceneUpdated /*=NULL*/, Dir
 			bool bPhysicUpdated = false;
 //			cam->UpdateViewProjectionMatrix();
 			m_zobObjectManager->PreUpdate();
+			m_lightManager->PreUpdate();
 			m_engine->StartDrawingScene();
 			if (OnSceneUpdated)
 			{

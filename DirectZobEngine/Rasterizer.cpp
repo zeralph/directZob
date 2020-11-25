@@ -272,25 +272,25 @@ inline ZobVector3 Rasterizer::ComputeLightingAtPoint(const ZobVector3* position,
 				if (l->GetType() == Light::eLightType_directional)
 				{
 					lightDir = l->GetForward();
-					lightDir.Mul(-1.0f);
-					lightDir.Normalize();
+					//lightDir.Mul(-1.0f);
+					//lightDir.Normalize();
 					lightPower = l->GetIntensity();
 				}
 				else if(l->GetType() == Light::eLightType_point)
 				{
-					lightDir = l->GetWorldPosition() - position;// tpos;
+					lightDir = position - l->GetWorldPosition();
 					lightPower = 1.0f - (lightDir.sqrtLength() / l->GetFallOffDistance());
 					lightPower = clamp2(lightPower, 0.0f, 1.0f) * l->GetIntensity();
 					lightDir.Normalize();
 				}
 				else if (l->GetType() == Light::eLightType_spot)
 				{
-					lightDir = l->GetWorldPosition() - position;// tpos;
+					lightDir = position - l->GetWorldPosition();
 					lightPower = 1.0f - (lightDir.sqrtLength() / l->GetFallOffDistance());
 					lightDir.Normalize();
 					ZobVector3 fw = l->GetForward();
-					float f = (-ZobVector3::Dot(&fw, &lightDir));
-					if (f < (l->GetSpotAngleRad() / 2.0f))
+					float f = 1.0f - clamp2(ZobVector3::Dot(&fw, &lightDir), 0.0f, 1.0f);
+					if (f > (l->GetSpotAngleRad() / 2.0f))
 					{
 						f = 0.0f;
 					}
