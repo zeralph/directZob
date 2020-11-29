@@ -4,6 +4,7 @@
 #include <mutex>
 #include "DirectZob.h"
 #include "ZobPhysicComponent.h"
+#include "ZobCameraController.h"
 
 static std::mutex g_update_camera_mutex;
 static float ee = 0.0f;
@@ -14,6 +15,7 @@ static ZobVector3 sRayDbg2;
 Camera::Camera(const std::string& name, float fov, BufferData* bufferData, ZobObject* parent)
 	:ZobObject(ZOBGUID::Type::type_scene, ZOBGUID::SubType::subtype_zobCamera, name, parent)
 {
+	m_zobCameraController = new ZobCameraController(this);
 	//RecomputeVectors();
 	m_fov = fov;
 	m_tagetMode = eTarget_none;
@@ -25,6 +27,7 @@ Camera::Camera(const std::string& name, float fov, BufferData* bufferData, ZobOb
 Camera::Camera(ulong id, TiXmlElement* node, ZobObject* parent)
 	:ZobObject(id, node, parent)
 {
+	m_zobCameraController = new ZobCameraController(this);
 	TiXmlElement * f = node->FirstChildElement("Fov");
 	float fov = f ? atof(f->GetText()) : 45.0f; 
 	m_fov = fov;
@@ -37,8 +40,15 @@ Camera::~Camera()
 	DirectZob::LogInfo("Delete Camera %s", m_name.c_str());
 	DirectZob::AddIndent();
 	DirectZob::GetInstance()->GetCameraManager()->RemoveCamera(this);
+	delete m_zobCameraController;
+	m_zobCameraController = NULL;
 	DirectZob::RemoveIndent();
 }
+
+void Camera::SetType(eCameraType type) 
+{
+	m_zobCameraController->SetType(type);
+};
 
 void Camera::DrawGizmos(const Camera* camera, Core::Engine* engine)
 {
@@ -178,6 +188,7 @@ void Camera::Move(float dx, float dz, float dy, bool moveTargetVector)
 void Camera::Update()
 {
 	ZobObject::Update();
+	m_zobCameraController->Update();
 	ZobVector3 v = GetWorldPosition();
 	if (m_tagetMode != eTarget_none)
 	{

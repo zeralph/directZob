@@ -3,8 +3,8 @@
 #include "ZobObject.h"
 #include <string>
 #include "tinyxml.h"
-#include "ZobCameraController.h"
 
+class ZobCameraController;
 class Camera : public ZobObject
 {
 public:
@@ -36,6 +36,7 @@ public:
 		ecamera_revolving=1,
 		ecamera_orbital = 2,
 		eCamera_fps=3,
+		eCamera_follow=4,
 	};
 
 	enum eTargetMode
@@ -60,14 +61,19 @@ public:
 	inline const ZobMatrix4x4* GetViewMatrix() const { return &m_viewRotMatrix; };
 	inline const ZobMatrix4x4* GetProjectionMatrix() const { return &m_projMatrix; };
 	inline float			GetFov() const { return m_fov; };
+	
+	void					SetType(eCameraType type);
+	
 	void					SetTarget(const ZobVector3 t) { m_tagetMode = eTarget_Vector; m_targetVector = t; };
 	void					SetTarget(const ZobObject* z) { m_tagetMode = eTarget_Object; m_targetObject = z; };
 	void					SetNoTarget() { m_tagetMode = eTarget_none; };
 	bool					GetTargetVector(ZobVector3* t);
-	
 	void					RotateAroundPointAxis(const ZobVector3* point, const ZobVector3* axis, const ZobVector3* lockAxis, float angle, bool recomputeVectors);
 	void					Move(float dx, float dz, float dy, bool moveTargetVector);
 	void					Zoom(float z);
+
+
+
 	Ray						From2DToWorld(float x, float y);
 	const Plane*			GetFrustrumPlanes() const { return &m_frustrumPlanes[0]; };
 	bool					From2DToWorldOnPlane(const float x, const float y, const ZobVector3* p0, const ZobVector3* pn, ZobVector3* ret);
@@ -105,6 +111,6 @@ private:
 	ZobMatrix4x4 m_invViewMatrix;
 	//ZobVector3 m_nextTranslation;
 	Plane m_frustrumPlanes[6];
-	ZobCameraController m_zobCameraController;
+	ZobCameraController* m_zobCameraController;
 };
 
