@@ -84,6 +84,8 @@
                 'ZobObjectManager.h',
 				'ZobPhysicsEngine.h',
 				'ZobPhysicComponent.h',
+                'ZobCameraController.h',
+                'ZobCameraController.cpp',
             ],
             'conditions': [
                 [
@@ -299,6 +301,8 @@
                             'CameraManagerWrapper.h',
                             'ZobCameraWrapper.h',
                             'ZobSpriteWrapper.h',
+                            'ZobCameraController.h',
+                            'ZobCameraController.cpp',
                         ],
                         'link_settings': {
                             # links fbxsdk as static

@@ -93,7 +93,7 @@
             "args": [ 
                 "--bench",
                 "--scene",
-                "./resources/fbx.dzs",
+                "./resources/wow.dzs",
                 "--width",
                 "640",
                 "--height",

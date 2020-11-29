@@ -3,6 +3,7 @@
 #include "ZobObject.h"
 #include <string>
 #include "tinyxml.h"
+#include "ZobCameraController.h"
 
 class Camera : public ZobObject
 {
@@ -104,5 +105,6 @@ private:
 	ZobMatrix4x4 m_invViewMatrix;
 	//ZobVector3 m_nextTranslation;
 	Plane m_frustrumPlanes[6];
+	ZobCameraController m_zobCameraController;
 };
 
