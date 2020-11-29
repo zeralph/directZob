@@ -494,7 +494,7 @@ TiXmlNode* ZobObject::SaveUnderNode(TiXmlNode* node)
 		o->SetAttribute("type", "mesh");
 	}
 	m_physicComponent->SaveUnderNode(o);
-	return o;
+	return (TiXmlNode*)o;
 }
 
 void ZobObject::CreateSprite()

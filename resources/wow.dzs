@@ -3,11 +3,11 @@
     <Globals>
         <AmbientColor r="255" g="255" b="0" />
         <AmbientIntensity>0.06</AmbientIntensity>
-        <FogColor r="111" g="111" b="0" />
-        <ClearColor r="102" g="102" b="0" />
-        <FogDensity>35.00</FogDensity>
-        <FogDistance>0.00</FogDistance>
-        <FogType>exp2</FogType>
+        <FogColor r="128" g="128" b="128" />
+        <ClearColor r="128" g="128" b="128" />
+        <FogDensity>19.00</FogDensity>
+        <FogDistance>61.00</FogDistance>
+        <FogType>linear</FogType>
     </Globals>
     <ZobObject name="terrain" guid="1" type="mesh">
         <Position x="0" y="0" z="0" />

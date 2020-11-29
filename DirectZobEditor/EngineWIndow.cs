@@ -449,7 +449,7 @@ namespace DirectZobEditor
         }
         private void RunEngineThread()
         {
-            m_directZobWrapper.Run(onFrameStartCallback, onFrameEndCallback, onSceneUpdatedCallback, onQueuingCallback);
+            m_directZobWrapper.Run(onFrameStartCallback, onFrameEndCallback, null, onQueuingCallback);
             if (OnEngineStopped != null)
             {
                 OnEngineStopped(this, EventArgs.Empty);

@@ -599,32 +599,44 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector3* p, const Triangl
 		fr = clamp2(fr, 0.0f, 1.0f);
 		fg = clamp2(fg, 0.0f, 1.0f);
 		fb = clamp2(fb, 0.0f, 1.0f);
-		z = abs(z);
-		if (m_fogType == eFogType::eFogType_NoFog)
-		{
-			z = 1.0f;
-		}
-		else if (m_fogType == eFogType::eFogType_Linear)
-		{
-			z = (m_bufferData->zFar - z) / (m_fogDistance - m_bufferData->zNear);
-		}
-		else if (m_fogType == eFogType::eFogType_Exp)
-		{
-			//z = (m_bufferData->zFar - z) / (m_fogDistance - m_bufferData->zNear);
-			z = exp(-m_fogDensity * zRatio);
-		}
-		else
-		{
-			//z = (m_bufferData->zFar - z) / (m_fogDistance - m_bufferData->zNear);
-			z = exp(-pow(m_fogDensity*zRatio,2));
-		}
-		z = clamp2(abs(z), 0.0f, 1.0f);
-		fr = fr * z + (1.0f - z) * m_fogColor->x;
-		fg = fg * z + (1.0f - z) * m_fogColor->y;
-		fb = fb * z + (1.0f - z) * m_fogColor->z;
+		z = ComputeFog(z);
+		//fr = fr * z + (1.0f - z) * m_fogColor->x;
+		//fg = fg * z + (1.0f - z) * m_fogColor->y;
+		//fb = fb * z + (1.0f - z) * m_fogColor->z;
+		fr = fr * (1.0f - z) + z * m_fogColor->x;
+		fg = fg * (1.0f - z) + z * m_fogColor->y;
+		fb = fb * (1.0f - z) + z * m_fogColor->z;
+
 		c = ((int)(fr * 255) << 16) + ((int)(fg * 255) << 8) + (int)(fb * 255);
 		m_bufferData->buffer[k] = c;
 	}
+}
+
+const float Rasterizer::ComputeFog(float z) const
+{
+	float dz = /*(m_bufferData->zFar - m_bufferData->zNear) **/ m_fogDistance;
+	z = fmaxf(0, z - dz);
+	z = (m_bufferData->zFar - z) / (m_bufferData->zFar - m_bufferData->zNear);
+	z = (1.0f - z);
+	if (m_fogType == eFogType::eFogType_NoFog)
+	{
+		z = 0.0f;
+	}
+	else if (m_fogType == eFogType::eFogType_Linear)
+	{
+		z = clamp2(z * m_fogDensity, 0.0f, 1.0f);
+	}
+	else if (m_fogType == eFogType::eFogType_Exp)
+	{
+		z = 1.0f - clamp2(exp(-m_fogDensity * z), 0.0f, 1.0f);
+		//z = exp(-m_fogDensity * z);
+	}
+	else
+	{
+		z = 1.0f - clamp2(exp(-pow(m_fogDensity * z, 2)), 0.0f, 1.0f);
+		//z = exp(-pow(m_fogDensity * z, 2));
+	}
+	return z;// clamp2(z, 0.0f, 1.0f);
 }
 
 void Rasterizer::sortVerticesAscendingByY(ZobVector2* v1, ZobVector2* v2, ZobVector2* v3) const

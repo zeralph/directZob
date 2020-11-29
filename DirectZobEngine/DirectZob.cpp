@@ -228,7 +228,7 @@ int DirectZob::RunAFrame(DirectZob::engineCallback OnSceneUpdated /*=NULL*/, Dir
 			if (m_frameTime < TARGET_MS_PER_FRAME)
 			{
 				m_text->Print(0, 16, 1, &sBuf, 0xFF00FF00);
-//				SLEEP((TARGET_MS_PER_FRAME - t));
+				//SLEEP((TARGET_MS_PER_FRAME - m_frameTime));
 			}
 			else
 			{

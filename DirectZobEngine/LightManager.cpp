@@ -20,7 +20,7 @@ void LightManager::ReInitGlobalSettings()
 	m_clearColor = ZobVector3(63.0f / 255.0f, 149.0f / 255.0f, 255.0f / 255.0f);
 	m_ambientColor = ZobVector3(0.4f, 0.4f, 0.4f);
 	m_ambientColorIntensity = 0.8f;
-	m_fogDistance = 500.0f;
+	m_fogDistance = 20.0f;
 	m_lights.clear();
 	m_lightsToAdd.clear();
 	m_lightsToRemove.clear();

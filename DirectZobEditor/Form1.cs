@@ -159,6 +159,7 @@ namespace DirectZobEditor
                 else if (json.type == 2)
                 {
                     AppendText(textLog, json.data + "\n", Color.Red);
+                    MessageBox.Show(json.data, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             if (l > 0)

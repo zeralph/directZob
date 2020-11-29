@@ -51,10 +51,10 @@ void keyboard(struct mfb_window* window, mfb_key key, mfb_key_mod mod, bool isPr
 		{
 			m_directZob.NewScene();
 		}
-		else if (key == KB_KEY_L)
-		{
-			m_directZob.LoadScene(m_path, m_file);
-		}
+		//else if (key == KB_KEY_L)
+		//{
+		//	m_directZob.LoadScene(m_path, m_file);
+		//}
 		else if (key == KB_KEY_S)
 		{
 			int l = (int)m_directZob.GetEngine()->GetRenderMode();
@@ -283,9 +283,7 @@ int main(int argc, char* argv[])
 	//m_directZob.GetZobObjectManager()->GetZobObject("fbx_example")->SetRotation(0, 90, 0);
 	Camera* c = m_directZob.GetCameraManager()->GetCurrentCamera();
 	ZobVector3 camPos = c?c->GetWorldPosition(): ZobVector3();
-	//camPos.y = 7;
-	ZobVector3 camTo = camPos;
-	camTo.z += 1.0f;
+	ZobVector3 initialCamPos = camPos;
 	//m_directZob.StartPhysic();
 	for (;;)
 	{
@@ -303,9 +301,7 @@ int main(int argc, char* argv[])
 		{
 			if (m_directZob.GetCameraManager()->GetCurrentCamera())
 			{
-				//m_directZob.GetCameraManager()->GetCurrentCamera()->SetLookAt(&camPos, &camTo, &camUp);
 				m_directZob.GetCameraManager()->GetCurrentCamera()->SetWorldPosition(camPos.x, camPos.y, camPos.z);
-			//	m_directZob.GetCameraManager()->GetCurrentCamera()->SetRotation(0, rot, 0);
 			}
 			Light* red = m_directZob.GetLightManager()->GetLight("red");
 			Light* blue = m_directZob.GetLightManager()->GetLight("blue");
@@ -315,23 +311,13 @@ int main(int argc, char* argv[])
 			{
 			}
 		}
-		else
-		{
-			if (m_directZob.GetCameraManager()->GetCurrentCamera())
-			{
-				//m_directZob.GetCameraManager()->GetCurrentCamera()->SetRotation(0, rot, 0);
-			}
-			//m_directZob.GetZobObjectManager()->GetRootObject()->SetRotation(0, rot, 0);
-		}
 		if (!bPause)
 		{
-			camPos.z += to;
-			camTo.z += to;
 			rot += 1.0f;
+			camPos.z += m_directZob.GetFrameTime() / 50.0f;
 			if (camPos.z >= 70.0f)
 			{
-				camPos.z = 0.0f;
-				camTo.z = 1.0f;
+				camPos = initialCamPos;
 				if (btest)
 				{
 					break;

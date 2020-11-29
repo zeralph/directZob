@@ -26,7 +26,7 @@ namespace DirectZobEditor
             trackBarAmbientIntensity.Maximum = 100;
             trackBarAmbientIntensity.Minimum = 0;
             trackBarFogDistance.Minimum = 0;
-            trackBarFogDistance.Maximum = 5000;
+            trackBarFogDistance.Maximum = 100;
             trackBarFogIntensity.Minimum = 0;
             trackBarFogIntensity.Maximum = 100;
             UpdateValues();
@@ -43,9 +43,22 @@ namespace DirectZobEditor
             buttonFogColor.BackColor = ToColor(m_LightManagerWrapper.GetFogColor());
             buttonClearColor.BackColor = ToColor(m_LightManagerWrapper.GetClearColor());
             trackBarAmbientIntensity.Value = (int)(m_LightManagerWrapper.GetAmbientIntensity() * 100);
-            trackBarFogIntensity.Value = (int)(m_LightManagerWrapper.GetFogIntensity());
-            trackBarFogDistance.Value = (int)(m_LightManagerWrapper.GetFogDistance());
+            int fogIntensity = (int)(m_LightManagerWrapper.GetFogIntensity());
+            if (fogIntensity < 0 || fogIntensity > 100)
+            {
+                fogIntensity = 0;
+            }
+            trackBarFogIntensity.Value = fogIntensity;
+            int fogDistance = (int)(m_LightManagerWrapper.GetFogDistance());
+            if(fogDistance < 0 || fogDistance > 100 )
+            {
+                fogDistance = 0;
+            }
+            trackBarFogDistance.Value = fogDistance;
             comboFogType.SelectedIndex = (int)(m_LightManagerWrapper.GetFogType());
+            textAmbientIntensity.Text = trackBarAmbientIntensity.Value + "%";
+            textFogDistance.Text = trackBarFogDistance.Value + "%";
+            textFogIntensity.Text = trackBarFogIntensity.Value + "%";
         }
 
         private void buttonClearColor_Click(object sender, EventArgs e)

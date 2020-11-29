@@ -57,6 +57,8 @@ private:
 		return clamp2(ambientIntensity, 0.0f, 1.0f);
 	};
 
+	const float ComputeFog(float z) const;
+
 	inline const float 	computeLighting(const ZobVector3* normal, const ZobVector3* light) const
 	{
 		//float f = 1.0f - clamp2(-fabsf(ZobVector3::Dot(normal, light)), 0.0f, 1.0f);

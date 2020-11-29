@@ -200,6 +200,7 @@ void SceneLoader::SaveScene()
 
 void SceneLoader::SaveScene(std::string &path, std::string &file)
 {
+	DirectZob::LogInfo("Saving scene to %s/%s", path.c_str(), file.c_str());
 	MeshManager* meshManager = DirectZob::GetInstance()->GetMeshManager();
 	ZobObjectManager* zobObjectManager = DirectZob::GetInstance()->GetZobObjectManager();
 	std::string fullPath;
@@ -215,28 +216,44 @@ void SceneLoader::SaveScene(std::string &path, std::string &file)
 	DirectZob::GetInstance()->GetLightManager()->SaveUnderNode(&globals);
 	root->InsertEndChild(globals);	
 	ZobObject* rootObj = zobObjectManager->GetRootObject();
+	bool bok = true;
 	for (int i = 0; i < rootObj->GetNbChildren(); i++)
 	{
-		SaveZobObjectRecusrive(root, rootObj->GetChild(i));
+		bok &= SaveZobObjectRecusrive(root, rootObj->GetChild(i));
 	}
-	//root->InsertEndChild(scene);
-	if (!doc.SaveFile(fullPath.c_str()))
+	if (!bok)
+	{
+		DirectZob::LogError("Error saving objects in scene : ", doc.ErrorDesc());
+	}
+	else if (!doc.SaveFile(fullPath.c_str()))
 	{
 		DirectZob::LogError("Error saving scene : ", doc.ErrorDesc());
 	}
-	//todo : check tinyxml doc for deleting atatched nodes ....
+	else
+	{
+		DirectZob::LogInfo("Scene saved");
+	}
 }
 
-void SceneLoader::SaveZobObjectRecusrive(TiXmlNode* node, ZobObject* z)
+bool SceneLoader::SaveZobObjectRecusrive(TiXmlNode* node, ZobObject* z)
 {
 	if (z->GetType() == ZOBGUID::type_editor)
 	{
-		return;
+		return true;
 	}
 	TiXmlNode* newNode = z->SaveUnderNode(node);
-	for (int i = 0; i < z->GetNbChildren(); i++)
+	if (!newNode)
 	{
-		SaveZobObjectRecusrive(newNode, z->GetChild(i));
+		DirectZob::LogError("Error saving Object : ", z->GetName().c_str());
+		return false;
 	}
-	node->InsertEndChild(*newNode);
+	else
+	{
+		bool bok = true;
+		for (int i = 0; i < z->GetNbChildren(); i++)
+		{
+			bok &= SaveZobObjectRecusrive(newNode, z->GetChild(i));
+		}
+		return bok && (node->InsertEndChild(*newNode) != NULL);
+	}
 }
