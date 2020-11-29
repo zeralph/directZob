@@ -5,8 +5,8 @@
         <AmbientIntensity>0.60</AmbientIntensity>
         <FogColor r="0" g="0" b="0" />
         <ClearColor r="0" g="0" b="0" />
-        <FogDensity>10.00</FogDensity>
-        <FogDistance>500.00</FogDistance>
+        <FogDensity>41.00</FogDensity>
+        <FogDistance>70.00</FogDistance>
         <FogType>exp2</FogType>
     </Globals>
     <ZobObject name="Light_blue" guid="50528259" type="light">
@@ -82,7 +82,7 @@
         <Type>spot</Type>
     </ZobObject>
     <ZobObject name="Camera_1" guid="50462731" type="camera">
-        <Position x="-25.1257" y="5" z="-28.8322" />
+        <Position x="-39.593" y="5" z="-28.1418" />
         <Rotation x="0.0212819" y="73.7968" z="0.0283466" />
         <Scale x="1" y="1" z="1" />
         <Physic type="0">

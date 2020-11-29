@@ -124,6 +124,11 @@ void ZobObjectManager::PreUpdate()
 	m_rootObject->PreUpdate();
 }
 
+void ZobObjectManager::UpdateBehavior()
+{
+	m_rootObject->UpdateBehavior();
+}
+
 void ZobObjectManager::StartUpdateScene(const Camera* camera, Core::Engine* engine)
 {
 	m_drawTick = clock();

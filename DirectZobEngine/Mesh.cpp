@@ -541,7 +541,7 @@ void Mesh::QueueForDrawing(ZobObject* z, const ZobMatrix4x4& modelMatrix, const 
 			{
 				t->area = -t->area;
 			}
-			//if (engine->GetCullMode() == Engine::None )// ( || t->area > sAreaMin && t->area < sAreaMax))
+			if (t->area > sAreaMin)
 			{
 //				t->owner = ownerId;
 				t->draw = true;

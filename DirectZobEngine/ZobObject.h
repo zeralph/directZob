@@ -22,6 +22,7 @@ public:
 	//virtual void					Update(const ZobMatrix4x4& parentMatrix, const ZobMatrix4x4& parentRSMatrix);
 	virtual void					PreUpdate();
 	virtual void					Update();
+	virtual void					UpdateBehavior();
 	virtual void					UpdateMesh(const Camera* camera, Core::Engine* engine);
 	virtual void					QueueForDrawing(const Camera* camera, Core::Engine* engine);
 	ZobVector3						GetScale() const;

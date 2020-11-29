@@ -257,6 +257,7 @@ int main(int argc, char* argv[])
 
 	float rot = 0.0f;
 	float to = 0.5f;
+	float zoom = 1.0f;
     printf("Start rendering\n");
 	float benchFps = 0.0f;
 	float benchRender = 0.0f;
@@ -314,6 +315,7 @@ int main(int argc, char* argv[])
 		if (!bPause)
 		{
 			rot += 1.0f;
+			/*
 			camPos.z += m_directZob.GetFrameTime() / 50.0f;
 			if (camPos.z >= 70.0f)
 			{
@@ -323,6 +325,8 @@ int main(int argc, char* argv[])
 					break;
 				}
 			}
+			*/
+			c->RotateAroundPointAxis(&ZobVector3::Vector3Zero, &ZobVector3::Vector3Y, &ZobVector3::Vector3Y, rot, false);
 		}
 		m_directZob.RunAFrame();
 		benchFps += m_directZob.GetFps();

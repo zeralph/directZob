@@ -210,6 +210,15 @@ void ZobObject::PreUpdate()
 	}
 }
 
+void ZobObject::UpdateBehavior()
+{
+	for (int i = 0; i < m_children.size(); i++)
+	{
+		ZobObject* z = m_children[i];
+		z->UpdateBehavior();
+	}
+}
+
 //void ZobObject::Update(const ZobMatrix4x4& parentMatrix, const ZobMatrix4x4& parentRSMatrix)
 void ZobObject::Update()
 {

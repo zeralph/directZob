@@ -29,6 +29,14 @@ public:
 		float d;
 	};
 
+	enum eCameraType
+	{
+		eCamera_base=0,
+		ecamera_revolving=1,
+		ecamera_orbital = 2,
+		eCamera_fps=3,
+	};
+
 	enum eTargetMode
 	{
 		eTarget_none=0,
