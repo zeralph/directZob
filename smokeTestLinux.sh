@@ -1,4 +1,4 @@
 #!/bin/sh
 echo "*** SMOKE TEST ***"
 
-./DirectZobExe --scene ./resources/fbx.xml --bench --test
+./DirectZobExe --scene ./resources/wow.dzs --bench --test

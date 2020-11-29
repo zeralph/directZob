@@ -13,7 +13,7 @@
         <Position x="0" y="0" z="0" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="1" y="1" z="1" />
-        <Mesh name="terrain2.obj" file="D:\Git\directZob\resources\terrain2.obj" />
+        <Mesh name="terrain2.obj" file="terrain2.obj" />
         <Physic type="0">
             <RigidBody type="0" active="0" />
             <Collider type="0" radius="0.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
@@ -22,7 +22,7 @@
             <Position x="0" y="0" z="0" />
             <Rotation x="-96.0953" y="-72.972" z="5.28265" />
             <Scale x="1" y="1" z="1" />
-            <Mesh name="skull.obj" file="D:\Git\directZob\resources\skull.obj" />
+            <Mesh name="skull.obj" file="skull.obj" />
             <Physic type="0">
                 <RigidBody type="0" active="0" />
                 <Collider type="0" radius="0.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
