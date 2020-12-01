@@ -1,7 +1,7 @@
 #pragma once
-#include "Types.h"
-#include "Mesh.h"
-#include "Sprite.h"
+#include "../Types.h"
+#include "../Mesh.h"
+#include "../Sprite.h"
 #include <string>
 #include <fbxsdk.h>
 

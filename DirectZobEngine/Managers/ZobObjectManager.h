@@ -1,12 +1,12 @@
 #pragma once
-#include "Types.h"
-#include "ZobObjects/ZobObject.h"
+#include "../Types.h"
+#include "../ZobObjects/ZobObject.h"
 #include <string>
 #include <vector>
-#include "ZobObjects/Camera.h"
-#include "Rendering/Engine.h"
-#include "ZobObjects/Light.h"
-#include "ZobObjects/ZobSprite.h"
+#include "../ZobObjects/Camera.h"
+#include "../Rendering/Engine.h"
+#include "../ZobObjects/Light.h"
+#include "../ZobObjects/ZobSprite.h"
 
 class ZobObjectManager
 {

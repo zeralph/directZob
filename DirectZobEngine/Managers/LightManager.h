@@ -1,7 +1,7 @@
 #pragma once
-#include "Types.h"
-#include "ZobObjects/Light.h"
-#include "Rendering/ZobVector3.h"
+#include "../Types.h"
+#include "../ZobObjects/Light.h"
+#include "../Rendering/ZobVector3.h"
 #include <string>
 #include <vector>
 

@@ -1,5 +1,5 @@
 #pragma once
-#include "Types.h"
+#include "../Types.h"
 #include "ZobVector3.h"
 
 class ZobMatrix4x4

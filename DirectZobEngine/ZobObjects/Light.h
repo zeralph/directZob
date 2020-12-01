@@ -1,5 +1,5 @@
 #pragma once
-#include "Rendering/ZobVector3.h"
+#include "../Rendering/ZobVector3.h"
 #include "ZobObject.h"
 
 class Light : public ZobObject

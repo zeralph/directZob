@@ -1,10 +1,10 @@
 #pragma once
-#include "Rendering/ZobVector3.h"
-#include "Rendering/ZobMatrix4x4.h"
+#include "../Rendering/ZobVector3.h"
+#include "../Rendering/ZobMatrix4x4.h"
 #include <string>
 #include <vector>
-#include "Types.h"
-#include "Rendering/Engine.h"
+#include "../Types.h"
+#include "../Rendering/Engine.h"
 #include "ZOBGUID.h"
 #include "tinyxml.h"
 

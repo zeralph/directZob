@@ -1,10 +1,10 @@
 #pragma once
-#include "Types.h"
-#include "ZobMaterial.h"
+#include "../Types.h"
+#include "../ZobMaterial.h"
 #include <fbxsdk.h>
 #include <string>
 #include <vector>
-#include "Rendering/Texture.h"
+#include "../Rendering/Texture.h"
 
 class MaterialManager
 {

@@ -2,6 +2,8 @@
     "files.associations": {
         "atomic": "cpp",
         "algorithm": "cpp",
-        "*.tcc": "cpp"
+        "*.tcc": "cpp",
+        "string": "cpp",
+        "vector": "cpp"
     }
 }

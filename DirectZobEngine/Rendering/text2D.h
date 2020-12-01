@@ -1,9 +1,9 @@
 #pragma once
-#include "Types.h"
-#include "ZobMaterial.h"
+#include "../Types.h"
+#include "../ZobMaterial.h"
 #include "ZobMatrix2x2.h"
 #include "Engine.h"
-#include "Events.h"
+#include "../Events.h"
 
 using namespace Core;
 

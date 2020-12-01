@@ -1,5 +1,5 @@
 #pragma once
-#include "Types.h"
+#include "../Types.h"
 #include "MiniFB.h"
 #include <math.h>
 #include <stdlib.h> 
@@ -12,9 +12,9 @@
 #include <stdarg.h>
 #include "ZobVector2.h"
 #include "ZobVector3.h"
-#include "ZobMaterial.h"
+#include "../ZobMaterial.h"
 //#include "Camera.h"
-#include "Events.h"
+#include "../Events.h"
 
 #define Z_NEAR 0.001f
 #define Z_FAR 1000.0f

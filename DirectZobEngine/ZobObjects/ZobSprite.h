@@ -1,6 +1,6 @@
 #pragma once
-#include "Rendering/ZobVector3.h"
-#include "Sprite.h"
+#include "../Rendering/ZobVector3.h"
+#include "../Sprite.h"
 #include "ZobObject.h"
 
 class ZobSprite : public ZobObject

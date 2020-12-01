@@ -1,8 +1,7 @@
 #pragma once
-#include "Types.h"
+#include "../Types.h"
 #include <string>
 #include <vector>
-#include "Texture.h"
 
 class Texture
 {

@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <cstdint>
 #include <string>
+#include <cstring>
 #include <fstream>
 
 /*!

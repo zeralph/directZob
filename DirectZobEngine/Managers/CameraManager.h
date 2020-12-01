@@ -1,6 +1,6 @@
 #pragma once
-#include "Types.h"
-#include "ZobObjects/Camera.h"
+#include "../Types.h"
+#include "../ZobObjects/Camera.h"
 #include <string>
 #include <vector>
 

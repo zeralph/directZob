@@ -1,8 +1,8 @@
 #pragma once
 #include "ZobVector2.h"
 #include "ZobVector3.h"
-#include "ZobMaterial.h"
-#include "Types.h"
+#include "../ZobMaterial.h"
+#include "../Types.h"
 
 class ZobObject;
 
