@@ -3,9 +3,9 @@
 #include "DirectZob.h"
 #include "Events.h"
 #include "tinyxml.h"
-#include "ZobObject.h"
+#include "ZobObjects/ZobObject.h"
 #include "SceneLoader.h"
-#include "ZobPhysicsEngine.h"
+#include "ZobPhysic/ZobPhysicsEngine.h"
 
 #define LOG_BUFFER_SIZE 1024
 

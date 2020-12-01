@@ -3,13 +3,13 @@
 #include <fstream>
 #include <iostream>
 #include <vector>
-#include "ZobVector3.h"
-#include "ZobVector2.h"
+#include "Rendering/ZobVector3.h"
+#include "Rendering/ZobVector2.h"
 #include "Types.h"
-#include "Triangle.h"
-#include "Camera.h"
+#include "Rendering/Triangle.h"
+#include "ZobObjects/Camera.h"
 #include "Events.h"
-#include "Engine.h"
+#include "Rendering/Engine.h"
 #include <fbxsdk.h>
 
 class ZobObject;

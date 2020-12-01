@@ -2,9 +2,9 @@
 #include "Types.h"
 #include "lodepng.h"
 #include <string>
-#include "ZobVector3.h" 
+#include "Rendering/ZobVector3.h" 
 #include "Events.h"
-#include "Texture.h"
+#include "Rendering/Texture.h"
 
 class ZobMaterial
 {

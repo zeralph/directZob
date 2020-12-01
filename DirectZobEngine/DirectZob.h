@@ -2,16 +2,16 @@
 #include <string>
 #include <iostream>
 #include <algorithm>
-#include "Engine.h"
+#include "Rendering/Engine.h"
 #include "ZobMaterial.h"
 #include "Mesh.h"
-#include "text2D.h"
+#include "Rendering/text2D.h"
 #include "Events.h"
-#include "CameraManager.h"
-#include "MaterialManager.h"
-#include "MeshManager.h"
-#include "LightManager.h"
-#include "ZobObjectManager.h"
+#include "Managers/CameraManager.h"
+#include "Managers/MaterialManager.h"
+#include "Managers/MeshManager.h"
+#include "Managers/LightManager.h"
+#include "Managers/ZobObjectManager.h"
 
 
 #define kUnused(var) (void) var;

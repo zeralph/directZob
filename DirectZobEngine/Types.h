@@ -3,7 +3,7 @@
 #ifdef __clang__
 	#pragma clang diagnostic ignored "-Wpragma-pack"
 #endif
-#include "ZobVector3.h"
+#include "Rendering/ZobVector3.h"
 #include <stddef.h>
 #ifndef M_PI
 #define M_PI 3.14159265358979323846

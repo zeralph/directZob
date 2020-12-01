@@ -1,13 +1,13 @@
 #pragma once
 #include <string>
 #include <vector>
-#include "ZobObjectManager.h"
-#include "ZobObject.h"
-#include "MaterialManager.h"
-#include "MeshManager.h"
+#include "Managers/ZobObjectManager.h"
+#include "ZobObjects/ZobObject.h"
+#include "Managers/MaterialManager.h"
+#include "Managers/MeshManager.h"
 #include "ZobMaterial.h"
 #include "Mesh.h"
-#include "Engine.h"
+#include "Rendering/Engine.h"
 #include "tinyxml.h"
 #include "Types.h"
 
