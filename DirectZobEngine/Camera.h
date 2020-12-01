@@ -7,6 +7,7 @@
 class ZobCameraController;
 class Camera : public ZobObject
 {
+friend class ZobCameraController;
 public:
 
 	class Ray
@@ -33,8 +34,8 @@ public:
 	enum eCameraType
 	{
 		eCamera_base=0,
-		ecamera_revolving=1,
-		ecamera_orbital = 2,
+		eCamera_revolving=1,
+		eCamera_orbital = 2,
 		eCamera_fps=3,
 		eCamera_follow=4,
 	};
@@ -61,7 +62,8 @@ public:
 	inline const ZobMatrix4x4* GetViewMatrix() const { return &m_viewRotMatrix; };
 	inline const ZobMatrix4x4* GetProjectionMatrix() const { return &m_projMatrix; };
 	inline float			GetFov() const { return m_fov; };
-	
+	inline void				SetFov(float fov) { m_fov = fov; };
+
 	void					SetType(eCameraType type);
 	
 	void					SetTarget(const ZobVector3 t) { m_tagetMode = eTarget_Vector; m_targetVector = t; };
@@ -71,8 +73,7 @@ public:
 	void					RotateAroundPointAxis(const ZobVector3* point, const ZobVector3* axis, const ZobVector3* lockAxis, float angle, bool recomputeVectors);
 	void					Move(float dx, float dz, float dy, bool moveTargetVector);
 	void					Zoom(float z);
-
-
+	void					Rotate(float x, float y, float z);
 
 	Ray						From2DToWorld(float x, float y);
 	const Plane*			GetFrustrumPlanes() const { return &m_frustrumPlanes[0]; };

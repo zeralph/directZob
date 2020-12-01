@@ -56,19 +56,14 @@ namespace CLI
 		return gcnew CLI::ManagedVector3();
 	}
 
-	void CameraManagerWrapper::RotateAroundAxis(float x, float y)
+	void CameraManagerWrapper::Rotate(float x, float y, float z)
 	{
 		//x = 0;
 		DirectZob::GetInstance()->Lock();
 		Camera* c = m_Instance->GetCurrentCamera();
 		if (c)
 		{
-			ZobVector3 v = ZobVector3::Vector3Y;
-			ZobVector3 p = ZobVector3::Vector3Zero;
-			c->GetTargetVector(&p);
-			c->RotateAroundPointAxis(&p, &v, NULL, x, false);
-			v = c->GetLeft();
-			c->RotateAroundPointAxis(&p, &v, NULL, y, false);
+			c->Rotate(x, y, z);
 		}
 		DirectZob::GetInstance()->Unlock();
 	}

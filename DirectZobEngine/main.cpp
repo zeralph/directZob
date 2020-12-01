@@ -185,13 +185,13 @@ int main(int argc, char* argv[])
 				}
 				else
 				{
-					std::cerr << "width must be between 1 and 4096 px." << std::endl;
+					std::cout << "width must be between 1 and 4096 px." << std::endl;
 				}
 				i++;
 			}
 			else
 			{
-				std::cerr << "--width option requires one argument." << std::endl;
+				std::cout << "--width option requires one argument." << std::endl;
 				return 1;
 			}
 		}
@@ -206,13 +206,13 @@ int main(int argc, char* argv[])
 				}
 				else
 				{
-					std::cerr << "height must be between 1 and 4096 px." << std::endl;
+					std::cout << "height must be between 1 and 4096 px." << std::endl;
 				}
 				i++;
 			}
 			else
 			{
-				std::cerr << "--height option requires one argument." << std::endl;
+				std::cout << "--height option requires one argument." << std::endl;
 				return 1;
 			}
 		}
@@ -222,8 +222,8 @@ int main(int argc, char* argv[])
 	std::ifstream f(scenePath.c_str());
 	if (!f.good())
 	{
-		std::cerr << "Cannot open " << scenePath << " : File not found or not accessible."<< std::endl;
-		return 1;
+		std::cout << "Cannot open " << scenePath << " : File not found or not accessible."<< std::endl;
+		return 0;
 	}
 #ifdef WINDOWS
 	std::size_t found = scenePath.rfind('\\');

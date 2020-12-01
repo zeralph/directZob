@@ -474,7 +474,7 @@ namespace DirectZobEditor
                 int dy = m_lastMouseY - Cursor.Position.Y;
                 if (e.Button == MouseButtons.Left && m_mainForm.IsCtrlPressed())
                 {
-                    m_mainForm.GetCameraControl().GetWrapper().RotateAroundAxis((float)dx / 2.0f, (float)-dy / 2.0f);
+                    m_mainForm.GetCameraControl().GetWrapper().Rotate((float)dx / 2.0f, (float)-dy / 2.0f, 0.0f);
                     //m_mainForm.GetCameraControl().GetWrapper().GetCurrentCameraTarget();
                     //m_mainForm.GetCameraControl().GetWrapper().SetLookAt(m_mainForm.GetCameraControl().GetWrapper().GetCurrentCameraTarget());
                 }
@@ -486,7 +486,7 @@ namespace DirectZobEditor
                     }
                     else
                     {
-                        m_mainForm.GetCameraControl().GetWrapper().Move((float)-dx * 2.0f, (float)dy * 2.0f, 0);
+                        m_mainForm.GetCameraControl().GetWrapper().Move((float)-dx * 2.0f, (float)dy * 2.0f, 0.0f);
                     }
                 }
             }

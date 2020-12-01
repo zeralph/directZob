@@ -189,44 +189,6 @@ void Camera::Update()
 {
 	ZobObject::Update();
 	m_zobCameraController->Update();
-	ZobVector3 v = GetWorldPosition();
-	if (m_tagetMode != eTarget_none)
-	{
-		if (m_tagetMode == eTarget_Vector &&  m_targetVector != v)
-		{
-			ZobVector3 p = GetWorldPosition();
-			UpdateViewProjectionMatrix(&p, &m_targetVector, &ZobVector3::Vector3Y);
-		}
-		else if (m_tagetMode == eTarget_Object && m_targetObject)
-		{
-			//todo : cette section est a revoir
-			const ZobVector3 p = GetWorldPosition();
-			const ZobVector3 tp = m_targetObject->GetWorldPosition();
-			ZobVector3 v = ZobVector3(tp);
-			if( v != GetWorldPosition())
-			{
-				v = ZobVector3(tp);
-				v = v - p;
-				v.Normalize();
-				//m_forward = v;
-				//v = ZobVector3::GetAnglesFromVector(v);
-				v = ZobMatrix4x4::QuaternionToEuler(v.x, v.z, v.z, 45.0f);
-				SetWorldRotation(v.x, v.y, v.z);
-				RecomputeFLUVectors(&v, &ZobVector3::Vector3Y);
-			}
-			UpdateViewProjectionMatrix(&p, &m_targetVector, &ZobVector3::Vector3Y);
-		}
-		else if (m_tagetMode == eTarget_FPS)
-		{
-			UpdateViewProjectionMatrix(&v, 0.0f, 0.0f);
-		}
-		//this will update the pysicnode orientation according to the lookAt
-		LookAt(&m_forward, &m_left, &m_up, false);
-	}
-	else 
-	{
-		UpdateViewProjectionMatrix(&v);
-	}
 	RecomputeFrustrumPlanes();
 }
 static bool bLock = false;
@@ -522,6 +484,11 @@ bool Camera::From2DToWorldOnPlane(const float x, const float y, const ZobVector3
 		return true;
 	}
 	return false;
+}
+
+void Camera::Rotate(float x, float y, float z)
+{ 
+	m_zobCameraController->Rotate(x, y, z); 
 }
 
 TiXmlNode* Camera::SaveUnderNode(TiXmlNode* node)

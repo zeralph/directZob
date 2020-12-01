@@ -44,7 +44,7 @@ namespace CLI
 		Ray^							From2DToWorld(float x, float y);
 		bool							From2DToWorldOnPlane(float x, float y, ManagedVector3^ p0, ManagedVector3^ pn, ManagedVector3^ ret);
 		void 							SetCurrentCameraPosition(ManagedVector3^ p);
-		void 							RotateAroundAxis(float x, float y);
+		void 							Rotate(float x, float y, float z);
 		void 							Move(float x, float z, float y);
 		void 							Zoom(float z);
 		void 							SetLookAt(ManagedVector3^ target);

@@ -8,6 +8,8 @@ namespace CLI {
 	{
 	public:
 		ZobCameraWrapper(Camera* zobObject);
+		float							GetFOV();
+		void							SetFOV(float fov);
 	private:
 
 	};

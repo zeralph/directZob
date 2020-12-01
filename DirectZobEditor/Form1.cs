@@ -90,7 +90,7 @@ namespace DirectZobEditor
             m_sceneControl = new SceneControl(this, m_lightManagerWrapper);
             m_engineControl = new EngineControl(this, m_engineWindow.GetEngineWrapper());
             m_lightControl = new ZobLightControl(this);
-            m_cameraControl = new ZobCameraControl();
+            m_cameraControl = new ZobCameraControl(this);
             m_meshControl = new ZobMeshControl();
             m_spriteControl = new ZobSpriteControl(this);
             m_physicsControl = new PhysicControl(this);
