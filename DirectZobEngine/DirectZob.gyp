@@ -44,7 +44,7 @@
 				'Sprite.cpp',
 				'Rendering/Color.h',
 				'Rendering/Engine.h',
-				'rendering/Engine.cpp',
+				'Rendering/Engine.cpp',
 				'Rendering/Rasterizer.h',
 				'Rendering/Rasterizer.cpp',
 				'Rendering/Color.cpp',
