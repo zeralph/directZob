@@ -88,6 +88,10 @@
 				'ZobPhysic/ZobPhysicComponent.cpp',
                 'ZobCameraController/ZobCameraController.h',
                 'ZobCameraController/ZobCameraController.cpp',
+				'ZobCameraController/ZobCameraControllerOrbital.h',
+				'ZobCameraController/ZobCameraControllerOrbital.cpp',
+				'ZobCameraController/ZobCameraControllerFPS.h',
+				'ZobCameraController/ZobCameraControllerFPS.cpp',				
             ],
             'conditions': [
                 [

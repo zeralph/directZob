@@ -53,7 +53,7 @@ Camera* CameraManager::CreateEditorCamera()
 	else
 	{
 		std::string name = std::string("EditorCamera");
-		c = DirectZob::GetInstance()->GetCameraManager()->CreateCamera(name, 45.0f, NULL);
+		c = DirectZob::GetInstance()->GetCameraManager()->CreateCamera(name, Camera::eCamera_orbital, 45.0f, NULL);
 		c->ChangeType(ZOBGUID::type_editor);
 		c->SetWorldPosition(-20,20,-20);
 
@@ -80,7 +80,7 @@ Camera* CameraManager::CreateCamera(ZobObject* parent)
 {
 	int l = m_cameras.size();
 	std::string name = std::string("Camera_").append(std::to_string((l)));
-	Camera* c = DirectZob::GetInstance()->GetCameraManager()->CreateCamera(name, 45.0f, parent);
+	Camera* c = DirectZob::GetInstance()->GetCameraManager()->CreateCamera(name, Camera::eCamera_fps, 45.0f, parent);
 	c->SetWorldPosition(0, 5, 0);
 	return c;
 }
@@ -106,11 +106,11 @@ void CameraManager::AddCamera(Camera* c)
 		}
 }
 
-Camera* CameraManager::CreateCamera(std::string& name, float fov, ZobObject* parent)
+Camera* CameraManager::CreateCamera(std::string& name, Camera::eCameraType type, float fov, ZobObject* parent)
 {
 	if (GetCamera(name) == NULL)
 	{
-		Camera* c = new Camera(name, fov, DirectZob::GetInstance()->GetEngine()->GetBufferData(), parent);
+		Camera* c = new Camera(name, type, fov, DirectZob::GetInstance()->GetEngine()->GetBufferData(), parent);
 		AddCamera(c);
 		return c;
 	}

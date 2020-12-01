@@ -13,7 +13,7 @@ public:
 
 	Camera* 						CreateCamera(ZobObject* parent);
 	Camera* 						CreateEditorCamera();
-	Camera* 						CreateCamera(std::string& name, float fov, ZobObject* parent);
+	Camera* 						CreateCamera(std::string& name, Camera::eCameraType type, float fov, ZobObject* parent);
 	Camera*					 		GetCurrentCamera() {return m_curCam;}
 	Camera* 						GetCamera(std::string& name) const;
 	void 							AddCamera(Camera* c);

@@ -5,6 +5,8 @@
 #include "DirectZob.h"
 #include "ZobPhysic/ZobPhysicComponent.h"
 #include "ZobCameraController/ZobCameraController.h"
+#include "ZobCameraController/ZobCameraControllerOrbital.h"
+#include "ZobCameraController/ZobCameraControllerFPS.h"
 
 static std::mutex g_update_camera_mutex;
 static float ee = 0.0f;
@@ -12,11 +14,28 @@ static float ee = 0.0f;
 static ZobVector3 sRayDbg;
 static ZobVector3 sRayDbg2;
 
-Camera::Camera(const std::string& name, float fov, BufferData* bufferData, ZobObject* parent)
+Camera::Camera(const std::string& name, eCameraType type, float fov, BufferData* bufferData, ZobObject* parent)
 	:ZobObject(ZOBGUID::Type::type_scene, ZOBGUID::SubType::subtype_zobCamera, name, parent)
 {
-	m_zobCameraController = new ZobCameraController(this);
-	//RecomputeVectors();
+	switch (type)
+	{
+		case eCamera_fps:
+		{
+			m_zobCameraController = new ZobCameraControllerFPS(this);
+			break;
+		}
+		case eCamera_orbital:
+		{
+			m_zobCameraController = new ZobCameraControllerOrbital(this);
+			break;
+		}
+		case eCamera_base:
+		default:
+		{
+			m_zobCameraController = new ZobCameraController(this);
+			break;
+		}
+	}
 	m_fov = fov;
 	m_tagetMode = eTarget_none;
 	sRayDbg = ZobVector3(1000, 1000, 1000);
@@ -31,7 +50,27 @@ Camera::Camera(ulong id, TiXmlElement* node, ZobObject* parent)
 	TiXmlElement * f = node->FirstChildElement("Fov");
 	float fov = f ? atof(f->GetText()) : 45.0f; 
 	m_fov = fov;
-	//m_nextTranslation = m_translation;
+	f = node->FirstChildElement("Controller");
+	eCameraType type = f ? (eCameraType)atoi(f->GetText()):Camera::eCamera_base;
+	switch (type)
+	{
+		case eCamera_fps:
+		{
+			m_zobCameraController = new ZobCameraControllerFPS(this);
+			break;
+		}
+		case eCamera_orbital:
+		{
+			m_zobCameraController = new ZobCameraControllerOrbital(this);
+			break;
+		}
+		case eCamera_base:
+		default:
+		{
+			m_zobCameraController = new ZobCameraController(this);
+			break;
+		}
+	}
 	m_tagetMode = eTarget_none;
 }
 
@@ -47,7 +86,7 @@ Camera::~Camera()
 
 void Camera::SetType(eCameraType type) 
 {
-	m_zobCameraController->SetType(type);
+	//m_zobCameraController->SetType(type);
 };
 
 void Camera::DrawGizmos(const Camera* camera, Core::Engine* engine)
@@ -168,20 +207,7 @@ void Camera::RecomputeFLUVectors(const ZobVector3* forwardV, const ZobVector3* u
 
 void Camera::Move(float dx, float dz, float dy, bool moveTargetVector)
 {
-	ZobVector3 vl = ZobVector3(m_left);
-	vl = vl * ((float)-dx / 20.0f);
-	vl.y = 0;
-	ZobVector3 vf = ZobVector3(m_forward);
-	vf = vf * ((float)dz / 20.0f);
-	vf.y = 0;
-	ZobVector3 vu = ZobVector3(0, (float)dy / 20.0f, 0);
-	ZobVector3 v = GetWorldPosition();
-	v = v - (vl + vf + vu);
-	SetWorldPosition(v.x, v.y, v.z);
-	if (moveTargetVector)
-	{
-		m_targetVector = m_targetVector - (vl + vf + vu);
-	}
+	m_zobCameraController->Move(dx, dy, dz);
 }
 
 //void Camera::Update(const ZobMatrix4x4& parentMatrix, const ZobMatrix4x4& parentRSMatrix)
@@ -502,6 +528,11 @@ TiXmlNode* Camera::SaveUnderNode(TiXmlNode* node)
 	_snprintf_s(tmpBuffer, 256, "%.2f", GetFov());
 	t.SetValue(tmpBuffer);
 	fov.InsertEndChild(t);
+	TiXmlElement controller = TiXmlElement("Controller");
+	_snprintf_s(tmpBuffer, 256, "%d", (int)m_zobCameraController->GetType());
+	t.SetValue(tmpBuffer);
+	controller.InsertEndChild(t);
+	ne->InsertEndChild(controller);
 	ne->InsertEndChild(fov);
 	return n;
 }

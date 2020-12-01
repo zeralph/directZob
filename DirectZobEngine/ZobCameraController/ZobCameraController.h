@@ -6,18 +6,13 @@ public:
     ZobCameraController(Camera * c);
     ~ZobCameraController();
 
-    void SetType(Camera::eCameraType type) {m_type = type;};
-    void Update();
-
-    //void MoveHorizontal 
-    void        Rotate(float x, float y, float z);
-    void        Move(float x, float y, float z);
+    virtual void            Update();
+    virtual void            Rotate(float x, float y, float z);
+    virtual void            Move(float x, float y, float z);
+    Camera::eCameraType     GetType() const { return m_type; }
 private:
 
-    void RotateOrbital(float x, float y, float z);
-    void MoveOrbital(float x, float y, float z);
-    void UpdateOrbital();
-
+protected:
     Camera* m_zobCamera;
     Camera::eCameraType m_type;
 };
