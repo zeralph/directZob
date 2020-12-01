@@ -137,6 +137,7 @@ void mouse_scroll(struct mfb_window* window, mfb_key_mod mod, float deltaX, floa
 
 int main(int argc, char* argv[])
 {
+	printf("Go\n");
 	bool bBench = false;
 	bool btest = false;
 	std::string scenePath = "";
@@ -148,7 +149,8 @@ int main(int argc, char* argv[])
 		std::cerr << "\t--bench  : run a benchmark" << std::endl;
 		std::cerr << "\t--width  : width" << std::endl;
 		std::cerr << "\t--height : height" << std::endl;
-		return 1;
+		printf("enter --scene argument");
+		return 0;
 	}
 	int i = 0;
 	while( i < argc)
@@ -163,7 +165,8 @@ int main(int argc, char* argv[])
 			else 
 			{ 
 				std::cerr << "--scene option requires one argument." << std::endl;
-				return 1;
+				printf("--scene option requires one argument.");
+				return 0;
 			}
 		}
 		else if (std::string(argv[i]) == "--test")
@@ -186,13 +189,15 @@ int main(int argc, char* argv[])
 				else
 				{
 					std::cout << "width must be between 1 and 4096 px." << std::endl;
+					printf("width must be between 1 and 4096 px.");
 				}
 				i++;
 			}
 			else
 			{
 				std::cout << "--width option requires one argument." << std::endl;
-				return 1;
+				printf("--width option requires one argument.");
+				return 0;
 			}
 		}
 		else if (std::string(argv[i]) == "--height")
@@ -207,13 +212,15 @@ int main(int argc, char* argv[])
 				else
 				{
 					std::cout << "height must be between 1 and 4096 px." << std::endl;
+					printf("height must be between 1 and 4096 px.");
 				}
 				i++;
 			}
 			else
 			{
 				std::cout << "--height option requires one argument." << std::endl;
-				return 1;
+				printf("--height option requires one argument.");
+				return 0;
 			}
 		}
 		i++;
@@ -223,6 +230,7 @@ int main(int argc, char* argv[])
 	if (!f.good())
 	{
 		std::cout << "Cannot open " << scenePath << " : File not found or not accessible."<< std::endl;
+		printf("Cannot open %s : File not found or not accessible.\n", scenePath);
 		return 0;
 	}
 #ifdef WINDOWS
@@ -235,7 +243,8 @@ int main(int argc, char* argv[])
 	if (found == std::string::npos)
 	{
 		std::cerr << "cannot parse path to file " << scenePath << std::endl;
-		return 1;
+		printf("cannot parse path to file %s\n", scenePath);
+		return 0;
 	}
 	m_path = scenePath.substr(0,found+1);
 	m_file = scenePath.substr(found + 1, scenePath.length() - found - 1);
