@@ -230,7 +230,7 @@ int main(int argc, char* argv[])
 	if (!f.good())
 	{
 		std::cout << "Cannot open " << scenePath << " : File not found or not accessible."<< std::endl;
-		printf("Cannot open %s : File not found or not accessible.\n", scenePath);
+		printf("Cannot open %s : File not found or not accessible.\n", scenePath.c_str());
 		return 0;
 	}
 #ifdef WINDOWS
@@ -243,7 +243,7 @@ int main(int argc, char* argv[])
 	if (found == std::string::npos)
 	{
 		std::cerr << "cannot parse path to file " << scenePath << std::endl;
-		printf("cannot parse path to file %s\n", scenePath);
+		printf("cannot parse path to file %s\n", scenePath.c_str());
 		return 0;
 	}
 	m_path = scenePath.substr(0,found+1);
@@ -295,6 +295,7 @@ int main(int argc, char* argv[])
 	ZobVector3 camPos = c?c->GetWorldPosition(): ZobVector3();
 	ZobVector3 initialCamPos = camPos;
 	//m_directZob.StartPhysic();
+	int bTestFrame = 0;
 	for (;;)
 	{
 		if (bStartPhysics && !m_directZob.IsPhysicPlaying())
@@ -324,17 +325,11 @@ int main(int argc, char* argv[])
 		if (!bPause)
 		{
 			rot += 1.0f;
-			/*
-			camPos.z += m_directZob.GetFrameTime() / 50.0f;
-			if (camPos.z >= 70.0f)
+			if (btest && bTestFrame >= 200)
 			{
-				camPos = initialCamPos;
-				if (btest)
-				{
-					break;
-				}
+				break;
 			}
-			*/
+			bTestFrame++;
 			c->RotateAroundPointAxis(&ZobVector3::Vector3Zero, &ZobVector3::Vector3Y, &ZobVector3::Vector3Y, rot, false);
 		}
 		m_directZob.RunAFrame();
