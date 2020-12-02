@@ -89,6 +89,7 @@
             <RigidBody type="0" active="0" />
             <Collider type="0" radius="0.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
         </Physic>
+		<Controller>3</Controller>
         <Fov>45.00</Fov>
     </ZobObject>
 </Scene>

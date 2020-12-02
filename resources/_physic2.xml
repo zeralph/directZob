@@ -91,7 +91,7 @@
             <Scale x="0.1" y="0.1" z="0.1" />
             <Mesh>teapot.obj</Mesh>
             <Physic type="2">
-                <RigidBody type="2" active="1" />
+                <RigidBody type="0" active="1" />
                 <Collider type="1" radius="1.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
             </Physic>
         </ZobObject>
@@ -101,7 +101,7 @@
             <Scale x="0.1" y="0.1" z="0.1" />
             <Mesh>teapot.obj</Mesh>
             <Physic type="2">
-                <RigidBody type="2" active="1" />
+                <RigidBody type="0" active="1" />
                 <Collider type="1" radius="1.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
             </Physic>
         </ZobObject>
@@ -111,7 +111,7 @@
             <Scale x="0.1" y="0.1" z="0.1" />
             <Mesh>teapot.obj</Mesh>
             <Physic type="2">
-                <RigidBody type="2" active="1" />
+                <RigidBody type="0" active="1" />
                 <Collider type="1" radius="1.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
             </Physic>
         </ZobObject>
@@ -121,7 +121,7 @@
             <Scale x="0.1" y="0.1" z="0.1" />
             <Mesh>teapot.obj</Mesh>
             <Physic type="2">
-                <RigidBody type="2" active="1" />
+                <RigidBody type="0" active="1" />
                 <Collider type="1" radius="1.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
             </Physic>
         </ZobObject>
@@ -131,7 +131,7 @@
             <Scale x="0.1" y="0.1" z="0.1" />
             <Mesh>teapot.obj</Mesh>
             <Physic type="2">
-                <RigidBody type="2" active="1" />
+                <RigidBody type="0" active="1" />
                 <Collider type="1" radius="1.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
             </Physic>
         </ZobObject>
@@ -141,7 +141,7 @@
             <Scale x="0.1" y="0.1" z="0.1" />
             <Mesh>teapot.obj</Mesh>
             <Physic type="2">
-                <RigidBody type="2" active="1" />
+                <RigidBody type="0" active="1" />
                 <Collider type="1" radius="1.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
             </Physic>
         </ZobObject>
@@ -151,7 +151,7 @@
             <Scale x="0.1" y="0.1" z="0.1" />
             <Mesh>teapot.obj</Mesh>
             <Physic type="2">
-                <RigidBody type="2" active="1" />
+                <RigidBody type="0" active="1" />
                 <Collider type="1" radius="1.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
             </Physic>
         </ZobObject>
@@ -161,7 +161,7 @@
             <Scale x="0.1" y="0.1" z="0.1" />
             <Mesh>teapot.obj</Mesh>
             <Physic type="2">
-                <RigidBody type="2" active="1" />
+                <RigidBody type="0" active="1" />
                 <Collider type="1" radius="1.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
             </Physic>
         </ZobObject>
@@ -171,7 +171,7 @@
             <Scale x="0.1" y="0.1" z="0.1" />
             <Mesh>teapot.obj</Mesh>
             <Physic type="2">
-                <RigidBody type="2" active="1" />
+                <RigidBody type="0" active="1" />
                 <Collider type="1" radius="1.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
             </Physic>
         </ZobObject>
@@ -181,7 +181,7 @@
             <Scale x="0.1" y="0.1" z="0.1" />
             <Mesh>teapot.obj</Mesh>
             <Physic type="2">
-                <RigidBody type="2" active="1" />
+                <RigidBody type="0" active="1" />
                 <Collider type="1" radius="1.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
             </Physic>
         </ZobObject>
@@ -191,7 +191,7 @@
             <Scale x="0.1" y="0.1" z="0.1" />
             <Mesh>teapot.obj</Mesh>
             <Physic type="2">
-                <RigidBody type="2" active="1" />
+                <RigidBody type="0" active="1" />
                 <Collider type="1" radius="1.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
             </Physic>
         </ZobObject>
@@ -201,7 +201,7 @@
             <Scale x="0.1" y="0.1" z="0.1" />
             <Mesh>teapot.obj</Mesh>
             <Physic type="2">
-                <RigidBody type="2" active="1" />
+                <RigidBody type="0" active="1" />
                 <Collider type="1" radius="1.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
             </Physic>
         </ZobObject>
@@ -211,7 +211,7 @@
             <Scale x="0.1" y="0.1" z="0.1" />
             <Mesh>teapot.obj</Mesh>
             <Physic type="2">
-                <RigidBody type="2" active="1" />
+                <RigidBody type="0" active="1" />
                 <Collider type="1" radius="1.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
             </Physic>
         </ZobObject>
@@ -221,7 +221,7 @@
             <Scale x="0.1" y="0.1" z="0.1" />
             <Mesh>teapot.obj</Mesh>
             <Physic type="2">
-                <RigidBody type="2" active="1" />
+                <RigidBody type="0" active="1" />
                 <Collider type="1" radius="1.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
             </Physic>
         </ZobObject>
@@ -231,7 +231,7 @@
             <Scale x="0.1" y="0.1" z="0.1" />
             <Mesh>teapot.obj</Mesh>
             <Physic type="2">
-                <RigidBody type="2" active="1" />
+                <RigidBody type="0" active="1" />
                 <Collider type="1" radius="1.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
             </Physic>
         </ZobObject>
@@ -241,7 +241,7 @@
             <Scale x="0.1" y="0.1" z="0.1" />
             <Mesh>teapot.obj</Mesh>
             <Physic type="2">
-                <RigidBody type="2" active="1" />
+                <RigidBody type="0" active="1" />
                 <Collider type="1" radius="1.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
             </Physic>
         </ZobObject>
@@ -251,7 +251,7 @@
             <Scale x="0.1" y="0.1" z="0.1" />
             <Mesh>teapot.obj</Mesh>
             <Physic type="2">
-                <RigidBody type="2" active="1" />
+                <RigidBody type="0" active="1" />
                 <Collider type="1" radius="1.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
             </Physic>
         </ZobObject>
@@ -261,7 +261,7 @@
             <Scale x="0.1" y="0.1" z="0.1" />
             <Mesh>teapot.obj</Mesh>
             <Physic type="2">
-                <RigidBody type="2" active="1" />
+                <RigidBody type="0" active="1" />
                 <Collider type="1" radius="1.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
             </Physic>
         </ZobObject>
@@ -271,7 +271,7 @@
             <Scale x="0.1" y="0.1" z="0.1" />
             <Mesh>teapot.obj</Mesh>
             <Physic type="2">
-                <RigidBody type="2" active="1" />
+                <RigidBody type="0" active="1" />
                 <Collider type="1" radius="1.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
             </Physic>
         </ZobObject>
@@ -281,7 +281,7 @@
             <Scale x="0.1" y="0.1" z="0.1" />
             <Mesh>teapot.obj</Mesh>
             <Physic type="2">
-                <RigidBody type="2" active="1" />
+                <RigidBody type="0" active="1" />
                 <Collider type="1" radius="1.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
             </Physic>
         </ZobObject>
@@ -291,7 +291,7 @@
             <Scale x="0.1" y="0.1" z="0.1" />
             <Mesh>teapot.obj</Mesh>
             <Physic type="2">
-                <RigidBody type="2" active="1" />
+                <RigidBody type="0" active="1" />
                 <Collider type="1" radius="1.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
             </Physic>
         </ZobObject>
@@ -301,7 +301,7 @@
             <Scale x="0.1" y="0.1" z="0.1" />
             <Mesh>teapot.obj</Mesh>
             <Physic type="2">
-                <RigidBody type="2" active="1" />
+                <RigidBody type="0" active="1" />
                 <Collider type="1" radius="1.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
             </Physic>
         </ZobObject>

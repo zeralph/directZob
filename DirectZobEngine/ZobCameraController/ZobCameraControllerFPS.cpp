@@ -16,7 +16,14 @@ ZobCameraControllerFPS::~ZobCameraControllerFPS()
 void ZobCameraControllerFPS::Update()
 {
 	ZobVector3 v = m_zobCamera->GetWorldPosition();
-
+	if (m_pitch < DEG_TO_RAD(-90.0f))
+	{
+		m_pitch = DEG_TO_RAD(-90.0f);
+	}
+	if (m_pitch > DEG_TO_RAD(90.0f))
+	{
+		m_pitch = DEG_TO_RAD(90.0f);
+	}
 	ZobVector3 zqNew = ZobMatrix4x4::EulerToQuaternion(m_pitch, m_yaw, 0);
 	Quaternion qNew = Quaternion(zqNew.x, zqNew.y, zqNew.z, zqNew.w);
 	Vector3 vz = Vector3(0,0,0);
@@ -24,10 +31,11 @@ void ZobCameraControllerFPS::Update()
 	Transform newTransform = m_zobCamera->m_physicComponent->GetWorldTransform();
 	tNew = newTransform * tNew;
 	//Quaternion::normalize(tNew);
-	m_zobCamera->m_physicComponent->SetWorldTransform(tNew);
+	
 	Vector3 left = tNew.getOrientation() * Vector3(1, 0, 0);
 	Vector3 up = tNew.getOrientation() * Vector3(0, 1, 0);
 	Vector3 forward = tNew.getOrientation() * Vector3(0, 0, 1);
+	m_zobCamera->m_physicComponent->SetWorldTransform(tNew);
 	m_zobCamera->m_left.x = left.x;
 	m_zobCamera->m_left.y = left.y;
 	m_zobCamera->m_left.z = left.z;
@@ -42,7 +50,6 @@ void ZobCameraControllerFPS::Update()
 	m_zobCamera->m_rotationScaleMatrix.Mul(&m_zobCamera->m_left);
 	m_zobCamera->m_rotationScaleMatrix.Mul(&m_zobCamera->m_forward);
 	m_zobCamera->m_rotationScaleMatrix.Mul(&m_zobCamera->m_up);
-
 	//m_zobCamera->LookAt(&m_zobCamera->m_forward, &m_zobCamera->m_left, &m_zobCamera->m_up, false);
 
 

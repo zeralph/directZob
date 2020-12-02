@@ -65,7 +65,8 @@ public:
 	void								DrawGizmos(const Camera* camera, const ZobVector3* position, const ZobVector3* rotation);
 	ZobVector3							GetTotalScale() const { return ZobVector3(m_totalScale.x, m_totalScale.y, m_totalScale.z); }
 	void								SetTotalScale(float x, float y, float z) { m_totalScale.x = x; m_totalScale.y = y; m_totalScale.z = z; }
-	const Transform						GetWorldTransform() const { return m_rigidBody?m_rigidBody->getTransform():Transform();/* Transform(m_worldTransform);*/ };
+	//const Transform						GetWorldTransform() const { return m_rigidBody?m_rigidBody->getTransform():Transform(); /*Transform(m_worldTransform);*/ };
+	const Transform						GetWorldTransform() const { return Transform(m_worldTransform); };
 	Transform							GetLocalTransform() const { return Transform(m_localTransform); };
 	void								SetWorldTransform(Transform t) { m_worldTransform = Transform(t); };
 	void								SetLocalTransform(Transform t) { m_localTransform = t; };

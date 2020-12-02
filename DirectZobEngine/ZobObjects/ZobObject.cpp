@@ -416,10 +416,12 @@ void ZobObject::SetParent(ZobObject* p)
 	}
 	if (bOk)
 	{
+		/*
 		ZobVector3 p = GetWorldPosition();
 		ZobVector3 r = GetWorldRotation();
 		SetWorldPosition(p.x, p.y, p.z);
 		SetWorldRotation(r.x, r.y, r.z);
+		*/
 	}
 }
 

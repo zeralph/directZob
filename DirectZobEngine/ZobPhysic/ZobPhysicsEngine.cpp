@@ -2,6 +2,8 @@
 #include <thread>
 static std::thread g_physicThread;
 
+static bool sPhysicThreaded = false;
+
 ZobPhysicsEngine::ZobPhysicsEngine()
 {
     m_world = m_physicsCommon.createPhysicsWorld();
@@ -17,14 +19,23 @@ ZobPhysicsEngine::~ZobPhysicsEngine()
 
 void ZobPhysicsEngine::StartUpdatePhysic(float dt)
 {
-//    m_accumulator = 0;
-	g_physicThread = std::thread(&ZobPhysicsEngine::Update, this, dt);
+    if (sPhysicThreaded)
+    {
+        g_physicThread = std::thread(&ZobPhysicsEngine::Update, this, dt);
+    }
+    else
+    {
+        ZobPhysicsEngine::Update(dt);
+    }
 }
 
 float ZobPhysicsEngine::WaitForUpdatePhysicEnd()
 {
-	if (g_physicThread.joinable())
-		g_physicThread.join();
+    if (sPhysicThreaded)
+    {
+        if (g_physicThread.joinable())
+            g_physicThread.join();
+    }
 	return m_timeStep;
 }
 

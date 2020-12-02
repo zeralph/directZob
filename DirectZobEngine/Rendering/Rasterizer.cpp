@@ -493,10 +493,6 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector3* p, const Triangl
 		}
 	}
 
-	ZobVector3 tpos = ZobVector3(	(t->va->x * w0 + t->vb->x * w1 + t->vc->x * w2),
-							(t->va->y * w0 + t->vb->y * w1 + t->vc->y * w2),
-							(t->va->z * w0 + t->vb->z * w1 + t->vc->z * w2));
-
 	const ZobMaterial* material = t->material;
 	z = (t->pa->z * w0 + t->pb->z * w1 + t->pc->z * w2);
 	zRatio = (z - m_bufferData->zNear ) / (m_bufferData->zFar - m_bufferData->zNear);
@@ -591,6 +587,9 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector3* p, const Triangl
 		}
 		else if(m_lightingPrecision == eLightingPrecision_pixel)
 		{
+			ZobVector3 tpos = ZobVector3(	(t->va->x * w0 + t->vb->x * w1 + t->vc->x * w2),
+											(t->va->y * w0 + t->vb->y * w1 + t->vc->y * w2),
+											(t->va->z * w0 + t->vb->z * w1 + t->vc->z * w2));
 			ZobVector3 l = ComputeLightingAtPoint(&tpos, &normal, lighting);
 			fr += l.x * r;
 			fg += l.y * g;

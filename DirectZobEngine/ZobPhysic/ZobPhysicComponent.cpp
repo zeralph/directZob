@@ -231,9 +231,13 @@ float ZobPhysicComponent::ClampAngle(float a) const
 
 void ZobPhysicComponent::Update()
 {
+	bool bPhysicRunning = DirectZob::GetInstance()->IsPhysicPlaying();
 	if (m_rigidBody)
 	{
-		m_rigidBody->setTransform(m_worldTransform);
+		if(bPhysicRunning && m_type == ePhysicComponentType_dynamic)
+		{
+			m_worldTransform = m_rigidBody->getTransform();
+		}
 	}
 	m_totalScale = Vector3(1, 1, 1);
 }
