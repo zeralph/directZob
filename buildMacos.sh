@@ -17,7 +17,7 @@ else
     rm -f ../DirectZobExe
     gyp DirectZob.gyp --depth=. --generator-output=./build/DirectZob/ --format=make
     cd ./build/DirectZob/
-    make DirectZobExe BUILDTYPE=$target
+    make DirectZobExe BUILDTYPE=$target -j 4
     cd $cwd
     cp DirectZobEngine/build/DirectZob/out/$target/DirectZobExe .
     #./DirectZobExe
