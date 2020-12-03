@@ -30,7 +30,8 @@ public:
 	const uint GetNbTriangles() const { return m_nbFaces; }
 
 	const std::string& GetName() const { return m_name; }
-	const std::string& GetFile() const { return m_file; }
+	const std::string& GetPath() const { return m_path; }
+	const std::string& GetFileName() const { return m_fileName; }
 
 protected:
 	Mesh(std::string& parentName, std::string& path, fbxsdk::FbxMesh* mesh);
@@ -48,7 +49,7 @@ protected:
 	
 	bool m_hasNormals = false;
 	std::string m_name;
-	std::string m_file;
+	std::string m_fileName;
 	std::string m_path;
 	ZobVector3 m_minBouding;
 	ZobVector3 m_maxBouding;

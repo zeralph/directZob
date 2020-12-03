@@ -53,16 +53,6 @@ void SceneLoader::LoadZobObject(TiXmlElement* node, ZobObject* parent, const std
 	if (type == "mesh")
 	{
 		zob = new ZobObject(id, node, parent, factoryPath);
-		TiXmlElement* meshNode = node->FirstChildElement("Mesh");
-		if(meshNode)
-		{
-			std::string name = meshNode->Attribute("name");
-			std::string file = meshNode->Attribute("file");
-			if (name.length() > 0 && file.length() > 0)
-			{
-				zob->LoadMesh(name, file);
-			}
-		}
 	}
 	else if (type == "camera")
 	{

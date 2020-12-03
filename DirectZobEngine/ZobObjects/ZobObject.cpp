@@ -111,6 +111,19 @@ ZobObject::ZobObject(DirectZobType::guid id, TiXmlElement* node, ZobObject* pare
 	m_physicComponent->Init(&position, &rotation);
 	SetScale(scale.x, scale.y, scale.z);
 	Update();
+
+	//mesh loading section
+	TiXmlElement* meshNode = node->FirstChildElement("Mesh");
+	if (meshNode)
+	{
+		std::string meshName = meshNode->Attribute("name");
+		std::string meshPath = meshNode->Attribute("path")? meshNode->Attribute("path"):std::string("");
+		std::string meshFile = meshNode->Attribute("file");
+		if (meshName.length() > 0 && meshFile.length() > 0)
+		{
+			LoadMesh(meshName, meshFile, meshPath);
+		}
+	}
 	DirectZob::RemoveIndent();
 }
 
@@ -137,11 +150,10 @@ ZobObject::~ZobObject()
 	DirectZob::RemoveIndent();
 }
 
-void ZobObject::LoadMesh(std::string name, std::string path/* = ""*/)
+void ZobObject::LoadMesh(std::string name, std::string file, std::string path)
 {
-	std::string file;
-	int i = path.rfind('\\');
-	if (i == -1)	//no path, only filename
+/*
+	if (!path.length())	//no path, only filename
 	{
 		file = path;
 		path = std::string(SceneLoader::GetResourcePath());
@@ -151,7 +163,7 @@ void ZobObject::LoadMesh(std::string name, std::string path/* = ""*/)
 		file = path.substr(i+1, path.size() - i);
 		path = path.substr(0, i + 1);
 	}
-	//std::string p = std::string(SceneLoader::GetResourcePath());
+*/
 	Mesh* m = DirectZob::GetInstance()->GetMeshManager()->LoadMesh(name, path, file);
 	m_mesh = m;
 }
@@ -171,11 +183,20 @@ const std::string ZobObject::GetMeshName() const
 	return "";
 }
 
-const std::string ZobObject::GetMeshFile() const
+const std::string ZobObject::GetMeshPath() const
 {
 	if (m_mesh)
 	{
-		return m_mesh->GetFile();
+		return m_mesh->GetPath();
+	}
+	return "";
+}
+
+const std::string ZobObject::GetMeshFileName() const
+{
+	if (m_mesh)
+	{
+		return m_mesh->GetFileName();
 	}
 	return "";
 }
@@ -238,10 +259,10 @@ void ZobObject::Update()
 	ZobVector3 scale = parentScale * m_physicComponent->GetScale();
 	Transform newTransform = m_physicComponent->GetLocalTransform();
 	Vector3 p = parentTransform.getPosition();
-	p.x *= scale.x;
-	p.y *= scale.y;
-	p.z *= scale.z;
-	parentTransform.setPosition(p);
+	//p.x *= scale.x;
+	//p.y *= scale.y;
+	//p.z *= scale.z;
+	//parentTransform.setPosition(p);
 	newTransform = parentTransform * newTransform;
 	m_physicComponent->SetWorldTransform(newTransform);
 	m_physicComponent->Update();
@@ -295,11 +316,15 @@ void ZobObject::QueueForDrawing(const Camera* camera, Core::Engine* engine)
 
 ZobVector3 ZobObject::GetScale() const 
 { 
-	return m_physicComponent->GetScale(); 
+	return m_physicComponent->GetTotalScale(); 
 }
 
 void ZobObject::SetScale(float x, float y, float z)
 { 
+	ZobVector3 s = m_parent->GetScale();
+	x /= s.x;
+	y /= s.y;
+	z /= s.z;
 	m_physicComponent->SetScale(x, y, z);
 }
 
@@ -396,10 +421,21 @@ void ZobObject::SetParent(ZobObject* p)
 	{
 		if (!HasChild(p))
 		{
+			ZobVector3 pos = GetWorldPosition();
+			ZobVector3 rot = GetWorldRotation();
+			ZobVector3 sca = GetScale();
 			parent->RemoveChildReference(this);
 			p->AddChildReference(this);
 			m_parent = p;
 			bOk = true;
+			//remove inherited scale factor
+			//ZobVector3 ps = parent->GetScale();
+			//s.x *= ps.x;
+			//s.y *= ps.y;
+			//s.z *= ps.z;
+			SetWorldPosition(pos.x, pos.y, pos.z);
+			SetWorldRotation(rot.x, rot.y, rot.z);
+			SetScale(sca.x, sca.y, sca.z);
 		}
 		else
 		{
@@ -422,6 +458,12 @@ void ZobObject::SetParent(ZobObject* p)
 		SetWorldPosition(p.x, p.y, p.z);
 		SetWorldRotation(r.x, r.y, r.z);
 		*/
+		//ZobVector3 s = GetScale();
+		//ZobVector3 ps = p->GetScale();
+		//s.x /= ps.x;
+		//s.y /= ps.y;
+		//s.z /= ps.z;
+		//SetScale(s.x, s.y, s.z);
 	}
 }
 
@@ -483,7 +525,8 @@ TiXmlNode* ZobObject::SaveUnderNode(TiXmlNode* node)
 	o->SetAttribute("name", GetName().c_str());
 	o->SetAttribute("guid", GetId());
 	std::string meshName = GetMeshName();
-	std::string meshFile = GetMeshFile();
+	std::string meshFileName = GetMeshFileName();
+	std::string meshPath = GetMeshPath();
 	p.SetDoubleAttribute("x", GetLocalPosition().x);
 	p.SetDoubleAttribute("y", GetLocalPosition().y);
 	p.SetDoubleAttribute("z", GetLocalPosition().z);
@@ -496,11 +539,12 @@ TiXmlNode* ZobObject::SaveUnderNode(TiXmlNode* node)
 	o->InsertEndChild(p);
 	o->InsertEndChild(r);
 	o->InsertEndChild(s);
-	if (meshName.length() > 0 && meshFile.length() > 0)
+	if (meshName.length() > 0 && meshFileName.length() > 0)
 	{
 		TiXmlElement m = TiXmlElement("Mesh");
 		m.SetAttribute("name", meshName.c_str());
-		m.SetAttribute("file", meshFile.c_str());
+		m.SetAttribute("file", meshFileName.c_str());
+		m.SetAttribute("path", meshPath.c_str());
 		o->InsertEndChild(m);
 		o->SetAttribute("type", "mesh");
 	}

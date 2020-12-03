@@ -35,7 +35,7 @@ namespace CLI {
 		}
 		T* GetInstance()
 		{
-			if (IsValid())
+			if ((T*)IsValid())
 			{
 				return m_Instance;
 				//return dynamic_cast<T*>(m_Instance);

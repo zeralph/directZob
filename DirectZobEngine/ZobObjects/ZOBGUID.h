@@ -31,7 +31,6 @@ public :
 	~ZOBGUID();
 	const Type GetType()const;
 	const SubType GetSubType()const;
-	void ChangeType(Type t);
 	DirectZobType::guid GetId();
 	static void Reset() { sCurrentId = 0; m_guidList.clear(); };
 private:

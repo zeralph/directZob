@@ -66,9 +66,10 @@ public:
 	int								GetChildPosition(const ZobObject* z);
 	RenderOptions*					GetRenderOptions() { return &m_renderOptions; };
 	virtual const std::string		GetMeshName() const ;
-	virtual const std::string		GetMeshFile() const;
+	virtual const std::string		GetMeshFileName() const;
+	virtual const std::string		GetMeshPath() const;
 	void							SetMesh(std::string name);
-	void							LoadMesh(std::string name, std::string path="");
+	void							LoadMesh(std::string name, std::string file, std::string path);
 	void							SetLightingMode(RenderOptions::eLightMode l);
 	const bool						IsMarkedForDeletion() const { return m_markedForDeletion; };
 	void							MarkForDeletion() { m_markedForDeletion=true; };

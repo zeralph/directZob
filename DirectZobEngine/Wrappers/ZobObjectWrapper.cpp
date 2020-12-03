@@ -101,16 +101,18 @@ namespace CLI
 		}
 	}
 
-	void ZobObjectWrapper::LoadMesh(System::String^ name, System::String^ path)
+	void ZobObjectWrapper::LoadMesh(System::String^ name, System::String^ file, System::String^ path)
 	{
 		ZobObject* z = GetInstance();
 		if (z)
 		{
 			std::string n;
 			MarshalString(name, n);
+			std::string f;
+			MarshalString(file, f);
 			std::string p;
 			MarshalString(path, p);
-			z->LoadMesh(n, p);
+			z->LoadMesh(n, f, p);
 		}
 	}
 

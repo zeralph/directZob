@@ -238,6 +238,10 @@ void ZobPhysicComponent::Update()
 		{
 			m_worldTransform = m_rigidBody->getTransform();
 		}
+		else
+		{
+			m_rigidBody->setTransform(m_worldTransform);
+		}
 	}
 	m_totalScale = Vector3(1, 1, 1);
 }

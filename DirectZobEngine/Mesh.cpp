@@ -20,7 +20,7 @@ Mesh::Mesh(std::string& name)
 	m_trianglesNormals = NULL;
 	m_uvs = NULL;
 	m_name = name;
-	m_file = emptyStr;
+	m_fileName = emptyStr;
 	m_path = emptyStr;
 	DirectZob::RemoveIndent();
 }
@@ -29,9 +29,13 @@ Mesh::Mesh(std::string& name, std::string& path, std::string& file):Mesh(name)
 {
 	DirectZob::AddIndent();
 	m_path = path;
+	if (path[path.length() - 1] != '\\')
+	{
+		path.append("\\");
+	}
+	m_fileName = file;
 	std::string fullPath = path;
 	fullPath.append(file);
-	m_file = fullPath;
 	if (fullPath.find(".fbx") != -1)
 	{
 		LoadFbx(fullPath);

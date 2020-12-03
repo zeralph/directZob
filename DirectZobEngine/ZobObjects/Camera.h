@@ -52,7 +52,7 @@ public:
 		eTarget_FPS,
 		__eTarget_MAX__
 	};
-	Camera(const std::string& name, eCameraType type, float fov, BufferData* bufferData, ZobObject* parent);
+	Camera(ZOBGUID::Type zobType, const std::string& name, eCameraType type, float fov, BufferData* bufferData, ZobObject* parent);
 	Camera(ulong id, TiXmlElement* node, ZobObject* parent);
 	~Camera() override;
 

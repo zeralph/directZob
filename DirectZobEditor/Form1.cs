@@ -343,7 +343,7 @@ namespace DirectZobEditor
                     CLI.ZobObjectWrapper root = m_zobObjectList.GetWrapper().GetRootObject();
                     CLI.ZobObjectWrapper z = m_zobObjectList.GetWrapper().AddZobObject(root);
                     //z.SetMesh(name);
-                    z.LoadMesh(file, path+file);
+                    z.LoadMesh(file, file, path);
                     OnSceneUpdateHandler handler = OnSceneUpdated;
                     if (null != handler)
                     {

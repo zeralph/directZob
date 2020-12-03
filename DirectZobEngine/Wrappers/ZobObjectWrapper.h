@@ -30,7 +30,7 @@ namespace CLI {
 		void LookAt(ManagedVector3^ forward, ManagedVector3^ left, ManagedVector3^ up, bool addToCurrentRotation);
 		System::String^ GetMeshName();
 		void SetMesh(System::String^ name);
-		void LoadMesh(System::String^ name, System::String^ path);
+		void LoadMesh(System::String^ name, System::String^ file, System::String^ path);
 		void CreateSprite();
 		void SetLightingMode(int lightMode);
 		int GetLightingMode();
