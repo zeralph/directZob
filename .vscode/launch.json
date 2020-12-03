@@ -14,7 +14,7 @@
             "args": [ 
                 "--bench",
                 "--scene",
-                "./resources/fbx.dzs",
+                "./resources/wow.dzs",
                 "--width",
                 "640",
                 "--height",
@@ -42,7 +42,7 @@
             "args": [
                 "--bench",
                 "--scene",
-                "./resources/fbx.dzs",
+                "./resources/wow.dzs",
                 "--width",
                 "640",
                 "--height",

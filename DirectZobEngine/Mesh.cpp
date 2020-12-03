@@ -1,5 +1,6 @@
 #include "Mesh.h"
 #include "DirectZob.h"
+#include "SceneLoader.h"
 
 using namespace std;
 static ZobVector2 vec2zero = ZobVector2(0,0);
@@ -29,12 +30,20 @@ Mesh::Mesh(std::string& name, std::string& path, std::string& file):Mesh(name)
 {
 	DirectZob::AddIndent();
 	m_path = path;
-	if (path[path.length() - 1] != '\\')
-	{
-		path.append("\\");
+	if (m_path.length())
+	{ 
+		if(m_path[m_path.length() - 1] != '\\')
+		{
+			m_path.append("\\");
+		}
 	}
+	else
+	{
+		m_path = std::string(SceneLoader::GetResourcePath());
+	}
+	
 	m_fileName = file;
-	std::string fullPath = path;
+	std::string fullPath = m_path;
 	fullPath.append(file);
 	if (fullPath.find(".fbx") != -1)
 	{
