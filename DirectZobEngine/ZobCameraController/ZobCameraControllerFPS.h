@@ -13,6 +13,10 @@ public:
     void        Move(float x, float y, float z) override;
 private:
         
-    float m_pitch;
-    float m_yaw;
+    float m_deltaPitch;
+    float m_deltaYaw;
+    float m_deltaRoll;
+    float m_totalPitch;
+    float m_totalYaw;
+    float m_totalRoll;
 };

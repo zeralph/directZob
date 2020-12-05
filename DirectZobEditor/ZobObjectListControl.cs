@@ -21,17 +21,21 @@ namespace DirectZobEditor
         private CLI.ZobObjectManagerWrapper m_zobObjectManagerWrapper;
         private Form1 m_mainForm = null;
         private CLI.ZobObjectWrapper m_currentSelectedZobObject = null;
+        private int m_forceUpdateOnNextFrame = 0;
         public ZobObjectListControl(Form1 f)
         {
             InitializeComponent();
             m_zobObjectManagerWrapper = new CLI.ZobObjectManagerWrapper();
             m_mainForm = f;
+            this.Dock = DockStyle.Fill;
+        }
+        public void BindEvents()
+        {
             m_mainForm.OnNewScene += new EventHandler(OnSceneChanged);
             m_mainForm.OnSceneLoaded += new EventHandler(OnSceneChanged);
             m_mainForm.OnSceneUpdated += new Form1.OnSceneUpdateHandler(OnSceneUpdated);
-            this.Dock = DockStyle.Fill;
+            m_mainForm.GetEngineWindow().OnBeginFrame += new EventHandler(OnBeginFrame);
         }
-
         public ZobObjectWrapper GetSelectedZobObject()
         {
             return m_currentSelectedZobObject;
@@ -207,6 +211,18 @@ namespace DirectZobEditor
             }
         }
 
+        private void OnBeginFrame(object s, EventArgs e)
+        {
+            if(m_forceUpdateOnNextFrame > 0)
+            {
+                m_forceUpdateOnNextFrame--;
+                if (m_forceUpdateOnNextFrame == 0)
+                {
+                    UpdateTree();
+                    ZobObjectTree.Enabled = true;
+                }
+            }
+        }
         private void OnSceneUpdated(object s, Form1.SceneUpdateEventArg e)
         {
             UpdateTree();
@@ -292,65 +308,16 @@ namespace DirectZobEditor
 
         private void ZobObjectTree_DragDrop(object sender, DragEventArgs e)
         {
-            // Retrieve the client coordinates of the drop location.
             Point targetPoint = ZobObjectTree.PointToClient(new Point(e.X, e.Y));
-
-            // Retrieve the node at the drop location.
             ZobTreeNode targetNode = (ZobTreeNode)ZobObjectTree.GetNodeAt(targetPoint);
-
-            // Retrieve the node that was dragged.
             ZobTreeNode draggedNode = (ZobTreeNode)e.Data.GetData(typeof(ZobTreeNode));
-
-            ZobObjectWrapper toMoveObj = draggedNode.zobOjectWrapper;
-            ZobObjectWrapper targetObj = targetNode.zobOjectWrapper;
-
+            ZobObjectWrapper toMoveObj = (draggedNode!=null)?draggedNode.zobOjectWrapper:null;
+            ZobObjectWrapper targetObj = (targetNode!=null)?targetNode.zobOjectWrapper:null;
             m_zobObjectManagerWrapper.Reparent(toMoveObj, targetObj);
-            /*
-            // Confirm that the node at the drop location is not 
-            // the dragged node or a descendant of the dragged node.
-            if (!draggedNode.Equals(targetNode) && !ContainsNode(draggedNode, targetNode))
-            {
-                if (e.Effect == DragDropEffects.Move)
-                {
-                    draggedNode.Remove();
-                    targetNode.Nodes.Add(draggedNode);
-                }
-                targetNode.Expand();
-            }
-            */
-            UpdateTree();
-            UpdateTree();
-            //ZobTreeNode nz = FindZobTreeNode(targetObj, (ZobTreeNode)ZobObjectTree.Nodes[0]);
-            //ExpandTo(nz);
+            m_forceUpdateOnNextFrame = 3;
+            ZobObjectTree.Enabled = false;
             targetNode.Expand();
         }
-/*
-        private ZobTreeNode FindZobTreeNode(ZobObjectWrapper z, ZobTreeNode startNode)
-        {
-            if (startNode.zobOjectWrapper.GetName() == z.GetName())
-            {
-                return startNode;
-            }
-            else
-            {
-                for (int i = 0; i < startNode.Nodes.Count; i++)
-                {
-                    return FindZobTreeNode(z, (ZobTreeNode)startNode.Nodes[i]);
-                }
-            }
-            return (ZobTreeNode)null;
-        }
-
-        private void ExpandTo(ZobTreeNode n)
-        {
-            if (n != null && n.Parent != null)
-            {
-                Console.WriteLine("expand " + n.Parent);
-                n.Parent.Expand();
-                ExpandTo((ZobTreeNode)n.Parent);
-            }
-        }
-*/
         private bool ContainsNode(TreeNode node1, TreeNode node2)
         {
             if (node2.Parent == null) return false;

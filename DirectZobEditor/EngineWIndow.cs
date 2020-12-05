@@ -89,11 +89,16 @@ namespace DirectZobEditor
             bTY.Visible = false;
             bTZ.Visible = false;
             bCenter.Visible = false;
+
+                  
+        }
+
+        public void BindEvents()
+        {
             m_mainForm.GetZobObjectListControl().OnObjectSelected += new ZobObjectListControl.OnObjectSelectedHandler(OnObjectSelected);
             m_mainForm.OnNewScene += new EventHandler(OnSceneChanged);
             m_mainForm.Load += new EventHandler(OnMainformLoaded);
             EngineRender.HandleDestroyed += new EventHandler(OnClose);
-                  
         }
 
         private void OnMainformLoaded(object sender, EventArgs e)
@@ -340,14 +345,6 @@ namespace DirectZobEditor
             m_EngineGraphics = Graphics.FromHwnd(hwnd);
             m_EngineGraphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
             UpdateGraphicsParameters();
-            if (OnBeginFrame != null)
-            {
-                OnBeginFrame(this, EventArgs.Empty);
-            }
-            if (OnEndFrame != null)
-            {
-                OnEndFrame(this, EventArgs.Empty);
-            }
         }
 
         #region engineSynchronisationDelegates
@@ -365,6 +362,10 @@ namespace DirectZobEditor
         private void BeforeUpdateEngineWindowMethod()
         {
             m_engineRendering = true;
+            if (OnBeginFrame != null)
+            {
+                OnBeginFrame(this, EventArgs.Empty);
+            }
         }
 
         private void onQueuingCallbackMethod()
@@ -418,6 +419,10 @@ namespace DirectZobEditor
                 m_mainForm.PropagateSceneUpdateEvent(ev);
                 m_newObjectPicked = null;
 
+            }
+            if (OnEndFrame != null)
+            {
+                OnEndFrame(this, EventArgs.Empty);
             }
         }
         #endregion

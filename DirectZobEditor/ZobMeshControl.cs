@@ -16,7 +16,10 @@ namespace DirectZobEditor
         {
             InitializeComponent();
         }
+        public void BindEvents()
+        {
 
+        }
         private void groupBox1_Enter(object sender, EventArgs e)
         {
 

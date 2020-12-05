@@ -259,6 +259,7 @@ ZobVector3 ZobMatrix4x4::EulerToQuaternion(float x, float y, float z)
 	q.x = sr * cp * cy - cr * sp * sy;
 	q.y = cr * sp * cy + sr * cp * sy;
 	q.z = cr * cp * sy - sr * sp * cy;
+
 	return q;
 }
 

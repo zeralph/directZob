@@ -32,6 +32,11 @@ namespace DirectZobEditor
             engineHeight.Text = m_engineWrapper.GetBufferHeight().ToString();
         }
 
+        public void BindEvents()
+        {
+
+        }
+
         private void ShowGrid_CheckedChanged(object sender, EventArgs e)
         {
             m_engineWrapper.ShowGrid(showGrid.Checked);

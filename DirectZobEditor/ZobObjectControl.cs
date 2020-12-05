@@ -32,8 +32,12 @@ namespace DirectZobEditor
             m_cameraControl.Visible = false;
             this.Visible = false;
             m_meshManagerWrapper = new CLI.MeshManagerWrapper();
-            m_mainForm.OnNewScene += new EventHandler(OnNewScene);
             ClearValues();
+        }
+
+        public void BindEvents()
+        {
+            m_mainForm.OnNewScene += new EventHandler(OnNewScene);
             ZobObjectListControl z = m_mainForm.GetZobObjectListControl();
             z.OnObjectSelected += new ZobObjectListControl.OnObjectSelectedHandler(OnObjectSelected);
             m_mainForm.OnSceneUpdated += new Form1.OnSceneUpdateHandler(OnSceneUpdated);
@@ -41,7 +45,6 @@ namespace DirectZobEditor
             m_mainForm.GetEngineWindow().OnObjectRotated+= new EngineWindow.OnObjectRotatedHandler(OnObjectRotated);
             m_mainForm.GetEngineWindow().OnObjectScaled+= new EngineWindow.OnObjectScaledHandler(OnObjectScaled);
         }
-
         private void OnSceneUpdated(object sender, EventArgs e)
         {
             SetValues();

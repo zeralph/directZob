@@ -21,8 +21,6 @@ namespace DirectZobEditor
             m_LightManagerWrapper = l;
             InitializeComponent();
             clearColorDialog.AnyColor = true;
-            m_mainForm.OnNewScene += new EventHandler(OnSceneChanged);
-            m_mainForm.OnSceneLoaded += new EventHandler(OnSceneChanged);
             trackBarAmbientIntensity.Maximum = 100;
             trackBarAmbientIntensity.Minimum = 0;
             trackBarFogDistance.Minimum = 0;
@@ -31,7 +29,11 @@ namespace DirectZobEditor
             trackBarFogIntensity.Maximum = 100;
             UpdateValues();
         }
-
+        public void BindEvents()
+        {
+            m_mainForm.OnNewScene += new EventHandler(OnSceneChanged);
+            m_mainForm.OnSceneLoaded += new EventHandler(OnSceneChanged);
+        }
         public void OnSceneChanged(object s, EventArgs e)
         {
             UpdateValues();

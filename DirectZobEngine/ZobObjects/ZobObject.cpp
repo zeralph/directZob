@@ -37,7 +37,8 @@ ZobObject::ZobObject(Type t, SubType s, const std::string& name, ZobObject* pare
 	m_markedForDeletion = false;
 	m_mesh = NULL;
 	m_children.clear();
-	SetParent(m_parent);
+	m_newParent = m_parent;
+	SetParentInternal();
 	if (m_parent != NULL)
 	{
 		m_parent->AddChildReference(this);
@@ -100,7 +101,8 @@ ZobObject::ZobObject(DirectZobType::guid id, TiXmlElement* node, ZobObject* pare
 	m_markedForDeletion = false;
 	m_mesh = NULL;
 	m_children.clear();
-	SetParent(m_parent);
+	m_newParent = m_parent;
+	SetParentInternal();
 	if (m_parent != NULL)
 	{
 		m_parent->AddChildReference(this);
@@ -216,6 +218,46 @@ void ZobObject::UpdateMesh(const Camera* camera, Core::Engine* engine)
 
 void ZobObject::PreUpdate()
 {
+	SetParentInternal();
+	DeleteInternal();
+}
+
+void ZobObject::SetParentInternal()
+{
+	if (m_newParent != NULL)
+	{
+		if (!HasChild(m_newParent))
+		{
+			DirectZob::LogInfo("Reparented %s \tfrom %s \tto %s", GetName().c_str(), m_parent->GetName().c_str(), m_newParent->GetName().c_str());
+			ZobVector3 pos = GetWorldPosition();
+			ZobVector3 rot = GetWorldRotation();
+			ZobVector3 sca = GetScale();
+			if (GetParent()->RemoveChildReference(this))
+			{
+				if (m_newParent->AddChildReference(this))
+				{
+					m_parent = m_newParent;
+					//remove inherited scale factor
+					//ZobVector3 ps = parent->GetScale();
+					//s.x *= ps.x;
+					//s.y *= ps.y;
+					//s.z *= ps.z;
+					SetWorldPosition(pos.x, pos.y, pos.z);
+					SetWorldRotation(rot.x, rot.y, rot.z);
+					SetScale(sca.x, sca.y, sca.z);
+				}
+			}
+		}
+		else
+		{
+			DirectZob::LogWarning("Trying to reparent an object with one of its descendants !");
+		}
+		m_newParent = NULL;
+	}
+}
+
+void ZobObject::DeleteInternal()
+{
 	for (int i = 0; i < m_children.size(); i++)
 	{
 		ZobObject* z = m_children[i];
@@ -259,10 +301,10 @@ void ZobObject::Update()
 	ZobVector3 scale = parentScale * m_physicComponent->GetScale();
 	Transform newTransform = m_physicComponent->GetLocalTransform();
 	Vector3 p = parentTransform.getPosition();
-	//p.x *= scale.x;
-	//p.y *= scale.y;
-	//p.z *= scale.z;
-	//parentTransform.setPosition(p);
+	p.x *= scale.x;
+	p.y *= scale.y;
+	p.z *= scale.z;
+	parentTransform.setPosition(p);
 	newTransform = parentTransform * newTransform;
 	m_physicComponent->SetWorldTransform(newTransform);
 	m_physicComponent->Update();
@@ -361,19 +403,22 @@ int ZobObject::GetChildPosition(const ZobObject* z)
 	return -1;
 }
 
-void ZobObject::RemoveChildReference(const ZobObject* z)
+bool ZobObject::RemoveChildReference(const ZobObject* z)
 {
 	int i = GetChildPosition(z);
 	if (i >= 0)
 	{
 		std::swap(m_children.at(i), m_children.at(m_children.size() - 1));
 		m_children.pop_back();
+		return true;
 	}
+	return false;
 }
 
-void ZobObject::AddChildReference(ZobObject* z)
+bool ZobObject::AddChildReference(ZobObject* z)
 {
 	m_children.push_back(z);
+	return true;
 }
 
 ZobObject* ZobObject::GetChild(const std::string& name)
@@ -415,56 +460,7 @@ const void ZobObject::GetFullNodeName(std::string& fullname) const
 
 void ZobObject::SetParent(ZobObject* p)
 {
-	ZobObject* parent = GetParent();
-	bool bOk = false;
-	if (parent != NULL && p != NULL && p!= this && p != parent)
-	{
-		if (!HasChild(p))
-		{
-			ZobVector3 pos = GetWorldPosition();
-			ZobVector3 rot = GetWorldRotation();
-			ZobVector3 sca = GetScale();
-			parent->RemoveChildReference(this);
-			p->AddChildReference(this);
-			m_parent = p;
-			bOk = true;
-			//remove inherited scale factor
-			//ZobVector3 ps = parent->GetScale();
-			//s.x *= ps.x;
-			//s.y *= ps.y;
-			//s.z *= ps.z;
-			SetWorldPosition(pos.x, pos.y, pos.z);
-			SetWorldRotation(rot.x, rot.y, rot.z);
-			SetScale(sca.x, sca.y, sca.z);
-		}
-		else
-		{
-			DirectZob::LogWarning("trying to reparent an object with one of its descendants !");
-		}
-	}
-	else
-	{
-		if (p)
-		{
-			m_parent = p;
-			bOk = true;
-		}
-	}
-	if (bOk)
-	{
-		/*
-		ZobVector3 p = GetWorldPosition();
-		ZobVector3 r = GetWorldRotation();
-		SetWorldPosition(p.x, p.y, p.z);
-		SetWorldRotation(r.x, r.y, r.z);
-		*/
-		//ZobVector3 s = GetScale();
-		//ZobVector3 ps = p->GetScale();
-		//s.x /= ps.x;
-		//s.y /= ps.y;
-		//s.z /= ps.z;
-		//SetScale(s.x, s.y, s.z);
-	}
+	m_newParent = p;
 }
 
 bool ZobObject::HasChild(const ZobObject* o)

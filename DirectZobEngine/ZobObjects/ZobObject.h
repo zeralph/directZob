@@ -61,8 +61,8 @@ public:
 	inline ZobVector3				GetUp() const { return &m_up; }
 	const void						GetFullNodeName(std::string &fullName) const;
 	inline const int				GetNbChildren() const { return (int)m_children.size(); }
-	void							RemoveChildReference(const ZobObject* z);
-	void							AddChildReference(ZobObject* z);
+	bool							RemoveChildReference(const ZobObject* z);
+	bool							AddChildReference(ZobObject* z);
 	int								GetChildPosition(const ZobObject* z);
 	RenderOptions*					GetRenderOptions() { return &m_renderOptions; };
 	virtual const std::string		GetMeshName() const ;
@@ -87,9 +87,12 @@ public:
 	const ZobMatrix4x4*				GetRotationScaleMatrix() const { return &m_rotationScaleMatrix; };
 private:
 	void							SaveRecusrive(TiXmlNode* node, ZobObject* z);
+	void							SetParentInternal();
+	void							DeleteInternal();
 protected:
 
 	ZobObject* m_parent;
+	ZobObject* m_newParent;
 	ZobPhysicComponent* m_physicComponent;
 	Mesh* m_mesh = NULL;
 	std::vector<ZobObject*> m_children;

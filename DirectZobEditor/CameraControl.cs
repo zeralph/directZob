@@ -18,10 +18,12 @@ namespace DirectZobEditor
         {
             InitializeComponent();
             m_mainForm = f;
+        }
+        public void BindEvents()
+        {
             m_camerManagerWrapper = new CLI.CameraManagerWrapper();
             m_mainForm.OnSceneUpdated += new Form1.OnSceneUpdateHandler(OnSceneUpdated);
         }
-
         public CLI.CameraManagerWrapper GetWrapper()
         {
             return m_camerManagerWrapper;

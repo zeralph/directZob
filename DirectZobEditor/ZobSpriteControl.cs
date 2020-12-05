@@ -19,10 +19,12 @@ namespace DirectZobEditor
         {
             m_mainForm = f;
             InitializeComponent();
-            m_mainForm.GetZobObjectListControl().OnObjectSelected += new ZobObjectListControl.OnObjectSelectedHandler(OnObjectSelected);
             this.Visible = false;
         }
-
+        public void BindEvents()
+        {
+            m_mainForm.GetZobObjectListControl().OnObjectSelected += new ZobObjectListControl.OnObjectSelectedHandler(OnObjectSelected);
+        }
         private void OnObjectSelected(object s, ObjectSelectionEventArg e)
         {
             if (e.newZobObject != null)

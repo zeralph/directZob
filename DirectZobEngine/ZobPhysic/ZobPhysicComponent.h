@@ -68,7 +68,7 @@ public:
 	//const Transform						GetWorldTransform() const { return m_rigidBody?m_rigidBody->getTransform():Transform(); /*Transform(m_worldTransform);*/ };
 	const Transform						GetWorldTransform() const { return Transform(m_worldTransform); };
 	Transform							GetLocalTransform() const { return Transform(m_localTransform); };
-	void								SetWorldTransform(Transform t) { m_worldTransform = Transform(t); };
+	void								SetWorldTransform(Transform t) { m_worldTransform = t; };
 	void								SetLocalTransform(Transform t) { m_localTransform = t; };
 	void								SetLocalPosition(Vector3 p) { m_localTransform.setPosition(p); };
 	void								SetLocalOrientation(Quaternion q) { m_localTransform.setOrientation(q); };
