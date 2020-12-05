@@ -30,21 +30,29 @@ Mesh::Mesh(std::string& name, std::string& path, std::string& file):Mesh(name)
 {
 	DirectZob::AddIndent();
 	m_path = path;
+	m_fileName = file;
+	bool bOK = false;
+	std::string fullPath;
 	if (m_path.length())
 	{ 
 		if(m_path[m_path.length() - 1] != '\\')
 		{
 			m_path.append("\\");
 		}
+		fullPath = m_path;
+		fullPath.append(file);
+		std::ifstream f(fullPath.c_str());
+		if (f.good())
+		{
+			bOK = true;
+		}
 	}
-	else
+	if(!bOK)
 	{
 		m_path = std::string(SceneLoader::GetResourcePath());
+		fullPath = m_path;
+		fullPath.append(file);
 	}
-	
-	m_fileName = file;
-	std::string fullPath = m_path;
-	fullPath.append(file);
 	if (fullPath.find(".fbx") != -1)
 	{
 		LoadFbx(fullPath);
