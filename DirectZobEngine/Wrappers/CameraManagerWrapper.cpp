@@ -148,9 +148,28 @@ namespace CLI
 		m_Instance->CreateEditorCamera();
 	}
 
-	void CameraManagerWrapper::CreateCamera()
+	void CameraManagerWrapper::CreateCamera(System::String^ sType)
 	{
-		m_Instance->CreateCamera(NULL);
+		Camera::eCameraType type = Camera::eCamera_base;
+		std::string sTypeC;
+		MarshalString(sType, sTypeC);
+		if (sTypeC == "Fixed")
+		{
+			type = Camera::eCamera_base;
+		}
+		else if (sTypeC == "Follow")
+		{
+			type = Camera::eCamera_follow;
+		}
+		else if (sTypeC == "FPS")
+		{
+			type = Camera::eCamera_fps;
+		}
+		else if (sTypeC == "Orbital")
+		{
+			type = Camera::eCamera_orbital;
+		}
+		m_Instance->CreateCamera(type, NULL);
 	}
 
 	void CameraManagerWrapper::SetCurrentCamera(System::String^ name)

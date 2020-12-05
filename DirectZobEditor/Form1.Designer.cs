@@ -74,16 +74,20 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.textLog = new System.Windows.Forms.RichTextBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.propertiesPanel = new System.Windows.Forms.Panel();
-            this.ObjectControlsFlowLayout = new System.Windows.Forms.FlowLayoutPanel();
             this.tabsControl = new System.Windows.Forms.TabControl();
             this.tabObject = new System.Windows.Forms.TabPage();
+            this.propertiesPanel = new System.Windows.Forms.Panel();
+            this.ObjectControlsFlowLayout = new System.Windows.Forms.FlowLayoutPanel();
             this.tabScene = new System.Windows.Forms.TabPage();
-            this.tabEngine = new System.Windows.Forms.TabPage();
             this.panel1 = new System.Windows.Forms.Panel();
             this.SceneControlsFlowLayout = new System.Windows.Forms.FlowLayoutPanel();
+            this.tabEngine = new System.Windows.Forms.TabPage();
             this.panel2 = new System.Windows.Forms.Panel();
             this.EngineControlsFlowLayout = new System.Windows.Forms.FlowLayoutPanel();
+            this.fixedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.fPSToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.orbitalFreeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.orbitalToParentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FirstPanelSplitter)).BeginInit();
             this.FirstPanelSplitter.Panel1.SuspendLayout();
@@ -101,12 +105,12 @@
             this.toolStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
-            this.propertiesPanel.SuspendLayout();
             this.tabsControl.SuspendLayout();
             this.tabObject.SuspendLayout();
+            this.propertiesPanel.SuspendLayout();
             this.tabScene.SuspendLayout();
-            this.tabEngine.SuspendLayout();
             this.panel1.SuspendLayout();
+            this.tabEngine.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -195,14 +199,14 @@
             // loadTextureToolStripMenuItem
             // 
             this.loadTextureToolStripMenuItem.Name = "loadTextureToolStripMenuItem";
-            this.loadTextureToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.loadTextureToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.loadTextureToolStripMenuItem.Text = "Load Texture ...";
             this.loadTextureToolStripMenuItem.Click += new System.EventHandler(this.LoadTextureToolStripMenuItem_Click);
             // 
             // loadMeshToolStripMenuItem
             // 
             this.loadMeshToolStripMenuItem.Name = "loadMeshToolStripMenuItem";
-            this.loadMeshToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.loadMeshToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.loadMeshToolStripMenuItem.Text = "Load Mesh ...";
             this.loadMeshToolStripMenuItem.Click += new System.EventHandler(this.LoadMeshToolStripMenuItem_Click);
             // 
@@ -213,7 +217,7 @@
             this.pointToolStripMenuItem,
             this.directionalToolStripMenuItem});
             this.createLightToolStripMenuItem.Name = "createLightToolStripMenuItem";
-            this.createLightToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.createLightToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.createLightToolStripMenuItem.Text = "Create Light ";
             // 
             // spotToolStripMenuItem
@@ -239,22 +243,27 @@
             // 
             // createCameraToolStripMenuItem
             // 
+            this.createCameraToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fixedToolStripMenuItem,
+            this.fPSToolStripMenuItem,
+            this.orbitalFreeToolStripMenuItem,
+            this.orbitalToParentToolStripMenuItem});
             this.createCameraToolStripMenuItem.Name = "createCameraToolStripMenuItem";
-            this.createCameraToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.createCameraToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.createCameraToolStripMenuItem.Text = "Create Camera";
             this.createCameraToolStripMenuItem.Click += new System.EventHandler(this.createCameraToolStripMenuItem_Click);
             // 
             // createSpriteToolStripMenuItem
             // 
             this.createSpriteToolStripMenuItem.Name = "createSpriteToolStripMenuItem";
-            this.createSpriteToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.createSpriteToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.createSpriteToolStripMenuItem.Text = "Create Sprite";
             this.createSpriteToolStripMenuItem.Click += new System.EventHandler(this.createSpriteToolStripMenuItem_Click);
             // 
             // createZobObjectToolStripMenuItem
             // 
             this.createZobObjectToolStripMenuItem.Name = "createZobObjectToolStripMenuItem";
-            this.createZobObjectToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.createZobObjectToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.createZobObjectToolStripMenuItem.Text = "Create ZobObject";
             this.createZobObjectToolStripMenuItem.Click += new System.EventHandler(this.createZobObjectToolStripMenuItem_Click);
             // 
@@ -577,6 +586,29 @@
             this.tabPage2.Text = "tabPage2";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // tabsControl
+            // 
+            this.tabsControl.Controls.Add(this.tabObject);
+            this.tabsControl.Controls.Add(this.tabScene);
+            this.tabsControl.Controls.Add(this.tabEngine);
+            this.tabsControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabsControl.Location = new System.Drawing.Point(0, 0);
+            this.tabsControl.Name = "tabsControl";
+            this.tabsControl.SelectedIndex = 0;
+            this.tabsControl.Size = new System.Drawing.Size(368, 748);
+            this.tabsControl.TabIndex = 0;
+            // 
+            // tabObject
+            // 
+            this.tabObject.BackColor = System.Drawing.SystemColors.Control;
+            this.tabObject.Controls.Add(this.propertiesPanel);
+            this.tabObject.Location = new System.Drawing.Point(4, 22);
+            this.tabObject.Name = "tabObject";
+            this.tabObject.Padding = new System.Windows.Forms.Padding(3);
+            this.tabObject.Size = new System.Drawing.Size(360, 722);
+            this.tabObject.TabIndex = 0;
+            this.tabObject.Text = "Object";
+            // 
             // propertiesPanel
             // 
             this.propertiesPanel.Controls.Add(this.ObjectControlsFlowLayout);
@@ -601,29 +633,6 @@
             this.ObjectControlsFlowLayout.WrapContents = false;
             this.ObjectControlsFlowLayout.Resize += new System.EventHandler(this.EngineControlsFlowLayout_Resize);
             // 
-            // tabsControl
-            // 
-            this.tabsControl.Controls.Add(this.tabObject);
-            this.tabsControl.Controls.Add(this.tabScene);
-            this.tabsControl.Controls.Add(this.tabEngine);
-            this.tabsControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabsControl.Location = new System.Drawing.Point(0, 0);
-            this.tabsControl.Name = "tabsControl";
-            this.tabsControl.SelectedIndex = 0;
-            this.tabsControl.Size = new System.Drawing.Size(368, 748);
-            this.tabsControl.TabIndex = 0;
-            // 
-            // tabObject
-            // 
-            this.tabObject.BackColor = System.Drawing.SystemColors.Control;
-            this.tabObject.Controls.Add(this.propertiesPanel);
-            this.tabObject.Location = new System.Drawing.Point(4, 22);
-            this.tabObject.Name = "tabObject";
-            this.tabObject.Padding = new System.Windows.Forms.Padding(3);
-            this.tabObject.Size = new System.Drawing.Size(360, 722);
-            this.tabObject.TabIndex = 0;
-            this.tabObject.Text = "Object";
-            // 
             // tabScene
             // 
             this.tabScene.BackColor = System.Drawing.SystemColors.Control;
@@ -634,17 +643,6 @@
             this.tabScene.Size = new System.Drawing.Size(360, 722);
             this.tabScene.TabIndex = 1;
             this.tabScene.Text = "Scene";
-            // 
-            // tabEngine
-            // 
-            this.tabEngine.BackColor = System.Drawing.SystemColors.Control;
-            this.tabEngine.Controls.Add(this.panel2);
-            this.tabEngine.Location = new System.Drawing.Point(4, 22);
-            this.tabEngine.Name = "tabEngine";
-            this.tabEngine.Padding = new System.Windows.Forms.Padding(3);
-            this.tabEngine.Size = new System.Drawing.Size(360, 722);
-            this.tabEngine.TabIndex = 2;
-            this.tabEngine.Text = "Engine";
             // 
             // panel1
             // 
@@ -669,6 +667,17 @@
             this.SceneControlsFlowLayout.TabIndex = 0;
             this.SceneControlsFlowLayout.WrapContents = false;
             // 
+            // tabEngine
+            // 
+            this.tabEngine.BackColor = System.Drawing.SystemColors.Control;
+            this.tabEngine.Controls.Add(this.panel2);
+            this.tabEngine.Location = new System.Drawing.Point(4, 22);
+            this.tabEngine.Name = "tabEngine";
+            this.tabEngine.Padding = new System.Windows.Forms.Padding(3);
+            this.tabEngine.Size = new System.Drawing.Size(360, 722);
+            this.tabEngine.TabIndex = 2;
+            this.tabEngine.Text = "Engine";
+            // 
             // panel2
             // 
             this.panel2.Controls.Add(this.EngineControlsFlowLayout);
@@ -691,6 +700,34 @@
             this.EngineControlsFlowLayout.Size = new System.Drawing.Size(354, 716);
             this.EngineControlsFlowLayout.TabIndex = 0;
             this.EngineControlsFlowLayout.WrapContents = false;
+            // 
+            // fixedToolStripMenuItem
+            // 
+            this.fixedToolStripMenuItem.Name = "fixedToolStripMenuItem";
+            this.fixedToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.fixedToolStripMenuItem.Text = "Fixed";
+            this.fixedToolStripMenuItem.Click += new System.EventHandler(this.fixedToolStripMenuItem_Click);
+            // 
+            // fPSToolStripMenuItem
+            // 
+            this.fPSToolStripMenuItem.Name = "fPSToolStripMenuItem";
+            this.fPSToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.fPSToolStripMenuItem.Text = "FPS";
+            this.fPSToolStripMenuItem.Click += new System.EventHandler(this.fPSToolStripMenuItem_Click);
+            // 
+            // orbitalFreeToolStripMenuItem
+            // 
+            this.orbitalFreeToolStripMenuItem.Name = "orbitalFreeToolStripMenuItem";
+            this.orbitalFreeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.orbitalFreeToolStripMenuItem.Text = "Orbital free";
+            this.orbitalFreeToolStripMenuItem.Click += new System.EventHandler(this.orbitalFreeToolStripMenuItem_Click);
+            // 
+            // orbitalToParentToolStripMenuItem
+            // 
+            this.orbitalToParentToolStripMenuItem.Name = "orbitalToParentToolStripMenuItem";
+            this.orbitalToParentToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.orbitalToParentToolStripMenuItem.Text = "Orbital to parent";
+            this.orbitalToParentToolStripMenuItem.Click += new System.EventHandler(this.orbitalToParentToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -728,12 +765,12 @@
             this.toolStrip1.PerformLayout();
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
-            this.propertiesPanel.ResumeLayout(false);
             this.tabsControl.ResumeLayout(false);
             this.tabObject.ResumeLayout(false);
+            this.propertiesPanel.ResumeLayout(false);
             this.tabScene.ResumeLayout(false);
-            this.tabEngine.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
+            this.tabEngine.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -796,6 +833,10 @@
         private System.Windows.Forms.FlowLayoutPanel SceneControlsFlowLayout;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.FlowLayoutPanel EngineControlsFlowLayout;
+        private System.Windows.Forms.ToolStripMenuItem fixedToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem fPSToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem orbitalFreeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem orbitalToParentToolStripMenuItem;
     }
 }
 

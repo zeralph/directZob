@@ -1,0 +1,45 @@
+<?xml version="1.0" ?>
+<Scene>
+    <Globals>
+        <AmbientColor r="102" g="102" b="102" />
+        <AmbientIntensity>0.80</AmbientIntensity>
+        <FogColor r="63" g="149" b="255" />
+        <ClearColor r="63" g="149" b="255" />
+        <FogDensity>2.00</FogDensity>
+        <FogDistance>20.00</FogDistance>
+        <FogType>none</FogType>
+    </Globals>
+    <ZobObject name="Fixed_camera_1" guid="3002002" type="camera">
+        <Position x="0" y="5" z="0" />
+        <Rotation x="0" y="0" z="0" />
+        <Scale x="1" y="1" z="1" />
+        <Physic type="0">
+            <RigidBody type="0" active="0" />
+            <Collider type="0" radius="0.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
+        </Physic>
+        <Controller>0</Controller>
+        <Fov>45.00</Fov>
+    </ZobObject>
+    <ZobObject name="FPS_camera_2" guid="3002003" type="camera">
+        <Position x="0" y="5" z="0" />
+        <Rotation x="-0" y="0" z="0" />
+        <Scale x="1" y="1" z="1" />
+        <Physic type="0">
+            <RigidBody type="0" active="0" />
+            <Collider type="0" radius="0.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
+        </Physic>
+        <Controller>3</Controller>
+        <Fov>45.00</Fov>
+    </ZobObject>
+    <ZobObject name="Orbital_camera_3" guid="3002004" type="camera">
+        <Position x="0" y="5" z="0" />
+        <Rotation x="0" y="0" z="0" />
+        <Scale x="1" y="1" z="1" />
+        <Physic type="0">
+            <RigidBody type="0" active="0" />
+            <Collider type="0" radius="-0.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
+        </Physic>
+        <Controller>2</Controller>
+        <Fov>45.00</Fov>
+    </ZobObject>
+</Scene>

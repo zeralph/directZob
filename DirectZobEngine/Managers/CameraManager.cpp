@@ -75,11 +75,29 @@ void CameraManager::UpdateAfter()
 	}
 }
 
-Camera* CameraManager::CreateCamera(ZobObject* parent)
+Camera* CameraManager::CreateCamera(Camera::eCameraType type, ZobObject* parent)
 {
 	int l = m_cameras.size();
-	std::string name = std::string("Camera_").append(std::to_string((l)));
-	Camera* c = DirectZob::GetInstance()->GetCameraManager()->CreateCamera(name, Camera::eCamera_fps, 45.0f, parent);
+	std::string name = std::string("camera_").append(std::to_string((l)));
+	switch(type)
+	{
+	case Camera::eCamera_base:
+		name = std::string("Fixed_").append(name);
+		break;
+	case Camera::eCamera_follow:
+		name = std::string("Follow_").append(name);
+		break;
+	case Camera::eCamera_fps:
+		name = std::string("FPS_").append(name);
+		break;
+	case Camera::eCamera_orbital:
+		name = std::string("Orbital_").append(name);
+		break;
+	default:
+		name = std::string("UKN_").append(name);
+		break;
+	}
+	Camera* c = DirectZob::GetInstance()->GetCameraManager()->CreateCamera(name, type, 45.0f, parent);
 	c->SetWorldPosition(0, 5, 0);
 	return c;
 }

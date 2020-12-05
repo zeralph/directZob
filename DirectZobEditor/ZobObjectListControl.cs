@@ -225,8 +225,8 @@ namespace DirectZobEditor
         }
         private void OnSceneUpdated(object s, Form1.SceneUpdateEventArg e)
         {
-            UpdateTree();
-            if(e.type == Form1.SceneUpdateType.objectSelected)
+            m_forceUpdateOnNextFrame = 2;
+            if (e.type == Form1.SceneUpdateType.objectSelected)
             {
                 OnZobObjectSelectionChange(e.zobObject);
             }

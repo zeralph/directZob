@@ -49,7 +49,7 @@ namespace CLI
 		void 							Zoom(float z);
 		void 							SetLookAt(ManagedVector3^ target);
 		void 							SetCurrentCamera(System::String^ name);
-		void 							CreateCamera();
+		void 							CreateCamera(System::String^ sType);
 		void 							CreateEditorCamera();
 	private:
 

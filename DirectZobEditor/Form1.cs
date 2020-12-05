@@ -423,13 +423,6 @@ namespace DirectZobEditor
         {
 
         }
-        private void createCameraToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            m_camControl.GetWrapper().CreateCamera();
-            Form1.SceneUpdateEventArg ev = new Form1.SceneUpdateEventArg();
-            ev.type = Form1.SceneUpdateType.createCamera;
-            PropagateSceneUpdateEvent(ev);
-        }
 
         private void EngineControlsFlowLayout_Resize(object sender, EventArgs e)
         {
@@ -600,6 +593,44 @@ namespace DirectZobEditor
             btnTranslateLocal.Checked = false;
             btnTranslateWorld.Checked = false;
         }
+
+        #region camera_menu
+        private void createCameraToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void fixedToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            m_camControl.GetWrapper().CreateCamera("Fixed");
+            Form1.SceneUpdateEventArg ev = new Form1.SceneUpdateEventArg();
+            ev.type = Form1.SceneUpdateType.createCamera;
+            PropagateSceneUpdateEvent(ev);
+        }
+
+        private void fPSToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            m_camControl.GetWrapper().CreateCamera("FPS");
+            Form1.SceneUpdateEventArg ev = new Form1.SceneUpdateEventArg();
+            ev.type = Form1.SceneUpdateType.createCamera;
+            PropagateSceneUpdateEvent(ev);
+        }
+
+        private void orbitalFreeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            m_camControl.GetWrapper().CreateCamera("Orbital");
+            Form1.SceneUpdateEventArg ev = new Form1.SceneUpdateEventArg();
+            ev.type = Form1.SceneUpdateType.createCamera;
+            PropagateSceneUpdateEvent(ev);
+        }
+
+        private void orbitalToParentToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            m_camControl.GetWrapper().CreateCamera("Orbital");
+            Form1.SceneUpdateEventArg ev = new Form1.SceneUpdateEventArg();
+            ev.type = Form1.SceneUpdateType.createCamera;
+            PropagateSceneUpdateEvent(ev);
+        }
+        #endregion
     }
 
     public class Event

@@ -11,7 +11,7 @@ public:
 	CameraManager();
 	~CameraManager();
 
-	Camera* 						CreateCamera(ZobObject* parent);
+	Camera* 						CreateCamera(Camera::eCameraType type, ZobObject* parent);
 	Camera* 						CreateEditorCamera();
 	Camera*							CreateEditorCamera(std::string& name, Camera::eCameraType type, float fov, ZobObject* parent);
 	Camera* 						CreateCamera(std::string& name, Camera::eCameraType type, float fov, ZobObject* parent);
