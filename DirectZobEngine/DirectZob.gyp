@@ -42,6 +42,7 @@
                 'SceneLoader.h',
                 'Sprite.h',
 				'Sprite.cpp',
+				'EnumString.h',
 				'Rendering/Color.h',
 				'Rendering/Engine.h',
 				'Rendering/Engine.cpp',

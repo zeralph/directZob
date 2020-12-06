@@ -14,6 +14,7 @@ namespace DirectZobEditor
     {
         private Form1 m_mainForm;
         private CLI.ZobObjectWrapper m_currentZobObjectWrapper = null;
+        private int m_forceUpdateOnNextFrame = 0;
         public PhysicControl(Form1 f)
         {
             InitializeComponent();
@@ -25,6 +26,20 @@ namespace DirectZobEditor
             ZobObjectListControl z = m_mainForm.GetZobObjectListControl();
             z.OnObjectSelected += new ZobObjectListControl.OnObjectSelectedHandler(OnObjectSelected);
             m_mainForm.OnSceneUpdated += new Form1.OnSceneUpdateHandler(OnSceneUpdated);
+            m_mainForm.GetEngineWindow().OnBeginFrame += new EventHandler(OnBeginFrame);
+        }
+
+        private void OnBeginFrame(object s, EventArgs e)
+        {
+            if (m_forceUpdateOnNextFrame > 0)
+            {
+                m_forceUpdateOnNextFrame--;
+                if (m_forceUpdateOnNextFrame == 0)
+                {
+                    SetValues();
+                    PhysicsGroupBox.Enabled = true;
+                }
+            }
         }
         private void Physics_Enter(object sender, EventArgs e)
         {
@@ -35,12 +50,12 @@ namespace DirectZobEditor
         }
         private void OnObjectSelected(object s, ObjectSelectionEventArg e)
         {
-            CLI.ZobObjectWrapper oldObject = e.previousZobObject;
             m_currentZobObjectWrapper = e.newZobObject;
             if (e.newZobObject != null)
             {
 
                 this.Visible = true;
+                SetValues();
             }
             else
             {
@@ -49,13 +64,30 @@ namespace DirectZobEditor
 
         }
 
-        private void comboPhysicType_SelectedIndexChanged(object sender, EventArgs e)
+        private void SetValues()
         {
-            if(m_currentZobObjectWrapper != null)
+            if (m_currentZobObjectWrapper != null)
             {
-                ComboBox c = (ComboBox)sender;
-                m_currentZobObjectWrapper.SetPhysicComponent(c.SelectedIndex);
+                string s = m_currentZobObjectWrapper.GetPhysicComponentType();
+                comboPhysicType.SelectedItem = s;
+                s = m_currentZobObjectWrapper.GetPhysicComponentShapeType();
+                comboBoxPhysicShape.SelectedItem = s;
             }
+        }
+
+        private void UpdateValues()
+        {
+            string s = (string)comboPhysicType.SelectedItem;
+            m_currentZobObjectWrapper.SetPhysicComponentType(s);
+            s = (string)comboBoxPhysicShape.SelectedItem;
+            m_currentZobObjectWrapper.SetPhysicComponentShapeType(s);
+            m_forceUpdateOnNextFrame = 2;
+            PhysicsGroupBox.Enabled = false;
+        }
+
+        private void buttonSet_Click(object sender, EventArgs e)
+        {
+            UpdateValues();
         }
     }
 }

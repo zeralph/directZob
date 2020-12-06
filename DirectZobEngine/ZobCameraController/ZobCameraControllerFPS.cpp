@@ -10,6 +10,7 @@ ZobCameraControllerFPS::ZobCameraControllerFPS(Camera* c) :ZobCameraController(c
 	m_totalPitch = 0.0f;
 	m_totalYaw = 0.0f;
 	m_totalRoll = 0.0f;
+	m_typeName = "FPSCamera";
 }
 
 ZobCameraControllerFPS::~ZobCameraControllerFPS()

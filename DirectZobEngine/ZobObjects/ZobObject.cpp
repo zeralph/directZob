@@ -685,7 +685,7 @@ ZobVector3 ZobObject::GetWorldPosition() const
 
 void ZobObject::SetPhysicComponent(int i)
 {
-	m_physicComponent->Set((ZobPhysicComponent::ePhysicComponentType)i);
+	m_physicComponent->SetType((ZobPhysicComponent::ePhysicComponentType)i);
 }
 
 void ZobObject::SaveTransform()
@@ -713,4 +713,121 @@ void ZobObject::ResetPhysic()
 	{
 		(*iter)->ResetPhysic();
 	}
+}
+
+//- Physic editor interface
+std::string ZobObject::GetPhysicComponentType() const
+{
+	std::string s = "Error";
+	ZobPhysicComponent::ePhysicComponentType t = GetPhysicComponent()->GetType();
+	switch (t)
+	{
+	case ZobPhysicComponent::ePhysicComponentType_none:
+		s = std::string("None");
+		break;
+	case ZobPhysicComponent::ePhysicComponentType_dynamic:
+		s = std::string("Dynamic");
+		break;
+	case ZobPhysicComponent::ePhysicComponentType_static:
+		s = std::string("Static");
+		break;
+	default:
+		s = std::string("Error");
+		break;
+	}
+	return s;
+}
+
+void ZobObject::SetPhysicComponentType(std::string& stype)
+{
+	ZobPhysicComponent::ePhysicComponentType t;
+	if (stype == "None")
+	{
+		t = ZobPhysicComponent::ePhysicComponentType_none;
+	}
+	else if (stype == "Dynamic")
+	{
+		t = ZobPhysicComponent::ePhysicComponentType_dynamic;
+	}
+	else if (stype == "Static")
+	{
+		t = ZobPhysicComponent::ePhysicComponentType_static;
+	}
+	else
+	{
+		t = ZobPhysicComponent::ePhysicComponentType_none;
+	}
+	GetPhysicComponentNoConst()->SetType(t);
+}
+std::string ZobObject::GetPhysicComponentShapeType() const
+{
+	std::string s = "Error";
+	ZobPhysicComponent::eShapeType t = GetPhysicComponent()->GetShapeType();
+	switch (t)
+	{
+	case ZobPhysicComponent::eShapeType_box:
+		s = std::string("Box");
+		break;
+	case ZobPhysicComponent::eShapeType_capsule:
+		s = std::string("capsule");
+		break;
+	case ZobPhysicComponent::eShapeType_convexMesh:
+		s = std::string("Mesh");
+		break;
+	case ZobPhysicComponent::eShapeType_sphere:
+		s = std::string("Sphere");
+		break;
+	case ZobPhysicComponent::eShapeType_none:
+		s = std::string("None");
+		break;
+	default:
+		s = std::string("Error");
+		break;
+	}
+	return s;
+}
+void ZobObject::SetPhysicComponentShapeType(std::string& stype)
+{
+	ZobPhysicComponent::eShapeType t;
+	if (stype == "Box")
+	{
+		t = ZobPhysicComponent::eShapeType_box;
+	}
+	else if (stype == "Capsule")
+	{
+		t = ZobPhysicComponent::eShapeType_capsule;
+	}
+	else if (stype == "Mesh")
+	{
+		t = ZobPhysicComponent::eShapeType_convexMesh;
+	}
+	else if (stype == "Sphere")
+	{
+		t = ZobPhysicComponent::eShapeType_sphere;
+	}
+	else
+	{
+		//return error ?
+	}
+	GetPhysicComponentNoConst()->SetShapeType(t);
+}
+void ZobObject::SetPhysicComponentShapeRadius(float radius)
+{
+	GetPhysicComponentNoConst()->SetRadius(radius);
+}
+void ZobObject::SetPhysicComponentShapeHeight(float height)
+{
+	GetPhysicComponentNoConst()->SetHeight(height);
+}
+void ZobObject::SetPhysicComponentShapeHalfExtends(float x, float y, float z)
+{
+	GetPhysicComponentNoConst()->SetHalfextends(x, y, z);
+}
+void ZobObject::SetPhysicComponentMesh(std::string path)
+{
+	//GetPhysicComponentNoConst()->Set
+}
+void ZobObject::SetPhysicComponentTranslation(float x, float y, float z)
+{
+	//GetPhysicComponentNoConst()->SetTr
 }

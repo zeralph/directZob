@@ -500,15 +500,15 @@ void Engine::QueueMesh(const Camera* camera, const ZobMatrix4x4* mat, ZobVector3
 
 void Engine::QueueBox(const Camera* camera, const ZobMatrix4x4* mat, const ZobVector3* halfExtends, const ZobVector3* pivot, const uint c, bool bold, bool noZ)
 {
-	ZobVector3 v0 = ZobVector3(-halfExtends->x, -halfExtends->y, -halfExtends->z) + pivot;
-	ZobVector3 v1 = ZobVector3(-halfExtends->x, halfExtends->y, -halfExtends->z) + pivot;
-	ZobVector3 v2 = ZobVector3(halfExtends->x, halfExtends->y, -halfExtends->z) + pivot;
-	ZobVector3 v3 = ZobVector3(halfExtends->x, -halfExtends->y, -halfExtends->z) + pivot;
+	ZobVector3 v0 = ZobVector3(-halfExtends->x, -halfExtends->y, -halfExtends->z);// +pivot;
+	ZobVector3 v1 = ZobVector3(-halfExtends->x, halfExtends->y, -halfExtends->z);// + pivot;
+	ZobVector3 v2 = ZobVector3(halfExtends->x, halfExtends->y, -halfExtends->z);// + pivot;
+	ZobVector3 v3 = ZobVector3(halfExtends->x, -halfExtends->y, -halfExtends->z);// + pivot;
 
-	ZobVector3 v4 = ZobVector3(-halfExtends->x, -halfExtends->y, halfExtends->z) + pivot;
-	ZobVector3 v5 = ZobVector3(-halfExtends->x, halfExtends->y, halfExtends->z) + pivot;
-	ZobVector3 v6 = ZobVector3(halfExtends->x, halfExtends->y, halfExtends->z) + pivot;
-	ZobVector3 v7 = ZobVector3(halfExtends->x, -halfExtends->y, halfExtends->z) + pivot;
+	ZobVector3 v4 = ZobVector3(-halfExtends->x, -halfExtends->y, halfExtends->z);// + pivot;
+	ZobVector3 v5 = ZobVector3(-halfExtends->x, halfExtends->y, halfExtends->z);// + pivot;
+	ZobVector3 v6 = ZobVector3(halfExtends->x, halfExtends->y, halfExtends->z);// + pivot;
+	ZobVector3 v7 = ZobVector3(halfExtends->x, -halfExtends->y, halfExtends->z);// + pivot;
 
 	mat->Mul(&v0);
 	mat->Mul(&v1);

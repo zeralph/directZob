@@ -81,10 +81,22 @@ public:
 	std::string&					FactoryFile() { return m_factoryFile; }
 	void							SaveToFactoryFile(std::string& file);
 	const ZobPhysicComponent*		GetPhysicComponent() const { return m_physicComponent; };
-	
+	ZobPhysicComponent*				GetPhysicComponentNoConst() { return m_physicComponent; };
 	//temp ?
 	const ZobMatrix4x4*				GetModelMatrix() const { return &m_modelMatrix; };
 	const ZobMatrix4x4*				GetRotationScaleMatrix() const { return &m_rotationScaleMatrix; };
+
+	//Physic interface, mainly for editor
+	std::string						GetPhysicComponentType() const;
+	void							SetPhysicComponentType(std::string& stype);
+	std::string						GetPhysicComponentShapeType() const;
+	void							SetPhysicComponentShapeType(std::string& stype);
+	void							SetPhysicComponentShapeRadius(float radius);
+	void							SetPhysicComponentShapeHeight(float height);
+	void							SetPhysicComponentShapeHalfExtends(float x, float y, float z);
+	void							SetPhysicComponentMesh(std::string path);
+	void							SetPhysicComponentTranslation(float x, float y, float z);
+
 private:
 	void							SaveRecusrive(TiXmlNode* node, ZobObject* z);
 	void							SetParentInternal();

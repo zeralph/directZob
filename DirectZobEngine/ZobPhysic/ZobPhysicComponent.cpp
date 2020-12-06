@@ -7,8 +7,14 @@
 ZobPhysicComponent::ZobPhysicComponent(TiXmlNode* t)
 {
 	BodyType rigidBodyType = rp3d::BodyType::STATIC;
+	m_radius = 1.0f;
+	m_height = 2.0f;
+	m_halfExtends = ZobVector3(1, 1, 1);
 	bool rigidBodyActive = false;
 	m_type = ePhysicComponentType_none;
+	m_shapeType = eShapeType_none;
+	m_nextShapeType = eShapeType_none;
+	m_collider = NULL;
 	if (t)
 	{
 		TiXmlElement* p = (TiXmlElement*)t;
@@ -17,17 +23,18 @@ ZobPhysicComponent::ZobPhysicComponent(TiXmlNode* t)
 		rigidBodyType = (BodyType)atoi(b->Attribute("type"));
 		rigidBodyActive = atoi(b->Attribute("active")) == 1 ? true : false;
 		TiXmlElement* c = p->FirstChildElement("Collider");
-		m_shapeDraw._type = (sShapeDraw::eShapeType)atoi(c->Attribute("type"));
-		m_shapeDraw._radius = (float)atof(c->Attribute("radius"));
-		m_shapeDraw._height = (float)atof(c->Attribute("height"));
-		m_shapeDraw._halfExtends.x = (float)atof(c->Attribute("halfExtends_x"));
-		m_shapeDraw._halfExtends.y = (float)atof(c->Attribute("halfExtends_y"));
-		m_shapeDraw._halfExtends.z = (float)atof(c->Attribute("halfExtends_z"));
+		m_nextShapeType = (eShapeType)atoi(c->Attribute("type"));
+		m_radius = (float)atof(c->Attribute("radius"));
+		m_height = (float)atof(c->Attribute("height"));
+		m_halfExtends.x = (float)atof(c->Attribute("halfExtends_x"));
+		m_halfExtends.y = (float)atof(c->Attribute("halfExtends_y"));
+		m_halfExtends.z = (float)atof(c->Attribute("halfExtends_z"));
 	}
 	m_rigidBody = DirectZob::GetInstance()->GetPhysicsEngine()->CreateRigidBody(&ZobVector3::Vector3Zero, &ZobVector3::Vector3Zero);
 	m_rigidBody->setType(rigidBodyType);
+	UpdateShapeType();
 	m_rigidBody->setIsActive(rigidBodyActive);
-	CreateCollider();
+	
 }
 
 ZobPhysicComponent::~ZobPhysicComponent()
@@ -49,22 +56,6 @@ void ZobPhysicComponent::Init(const ZobVector3* position, const ZobVector3* rota
 	Update();
 }
 
-void ZobPhysicComponent::CreateCollider()
-{
-	m_collider = NULL;
-	switch (m_shapeDraw._type)
-	{
-	case sShapeDraw::eShapeType::eShapeType_box:
-		AddBoxCollider(&m_shapeDraw._halfExtends);
-		break;
-	case sShapeDraw::eShapeType::eShapeType_sphere:
-		AddSphereCollider(m_shapeDraw._radius);
-		break;
-	default:
-		break;
-	}
-}
-
 TiXmlNode* ZobPhysicComponent::SaveUnderNode(TiXmlNode* node)
 {
 	TiXmlElement p = TiXmlElement("Physic");
@@ -73,25 +64,23 @@ TiXmlNode* ZobPhysicComponent::SaveUnderNode(TiXmlNode* node)
 	b.SetAttribute("type", std::to_string((int)m_rigidBody->getType()).c_str());
 	b.SetAttribute("active", std::to_string((int)m_rigidBody->isActive()).c_str());
 	TiXmlElement c = TiXmlElement("Collider");
-	c.SetAttribute("type", std::to_string((int)m_shapeDraw._type).c_str());
-	c.SetAttribute("radius", std::to_string((float)m_shapeDraw._radius).c_str());
-	c.SetAttribute("height", std::to_string((float)m_shapeDraw._height).c_str());
-	c.SetAttribute("halfExtends_x", std::to_string((float)m_shapeDraw._halfExtends.x).c_str());
-	c.SetAttribute("halfExtends_y", std::to_string((float)m_shapeDraw._halfExtends.y).c_str());
-	c.SetAttribute("halfExtends_z", std::to_string((float)m_shapeDraw._halfExtends.z).c_str());
+	c.SetAttribute("type", std::to_string((int)m_shapeType).c_str());
+	c.SetAttribute("radius", std::to_string((float)m_radius).c_str());
+	c.SetAttribute("height", std::to_string((float)m_height).c_str());
+	c.SetAttribute("halfExtends_x", std::to_string((float)m_halfExtends.x).c_str());
+	c.SetAttribute("halfExtends_y", std::to_string((float)m_halfExtends.y).c_str());
+	c.SetAttribute("halfExtends_z", std::to_string((float)m_halfExtends.z).c_str());
 	p.InsertEndChild(b);
 	p.InsertEndChild(c);
 	node->InsertEndChild(p);
 	return NULL;
 }
 
-void ZobPhysicComponent::Set(ePhysicComponentType t)
+void ZobPhysicComponent::SetType(ePhysicComponentType t)
 {
-	ZobVector3 z = ZobVector3(4, 4, 4);
 	if (m_collider)
 	{
 		m_rigidBody->removeCollider(m_collider);
-		delete m_collider;
 		m_collider = NULL;
 	}
 	m_type = t;
@@ -100,19 +89,63 @@ void ZobPhysicComponent::Set(ePhysicComponentType t)
 	case ePhysicComponentType_none:
 		m_rigidBody->setType(rp3d::BodyType::STATIC);
 		m_rigidBody->setIsActive(false);
+		m_nextShapeType = eShapeType_none;
 		break;
 	case ePhysicComponentType_static:
 		m_rigidBody->setType(rp3d::BodyType::STATIC);
 		m_rigidBody->setIsActive(true);
-		AddBoxCollider(&z);
+		AddBoxCollider();
 		break;
 	case ePhysicComponentType_dynamic:
 		m_rigidBody->setType(rp3d::BodyType::DYNAMIC);
 		m_rigidBody->setIsActive(true);
-		AddSphereCollider(2.0f);
+		AddSphereCollider();
 		break;
 	}
 }
+
+void ZobPhysicComponent::SetShapeType(eShapeType t)
+{
+	if (m_type != ePhysicComponentType_none)
+	{
+		m_nextShapeType = t;
+	}
+	else
+	{
+		m_nextShapeType = eShapeType_none;
+	}
+}
+
+void ZobPhysicComponent::UpdateShapeType()
+{
+	if(m_nextShapeType != m_shapeType)
+	{ 
+		m_shapeType = m_nextShapeType;
+		switch(m_shapeType)
+		{
+		case eShapeType_box:
+			AddBoxCollider();
+			break;
+		case eShapeType_capsule:
+			AddCapsuleCollider();
+			break;
+		case eShapeType_convexMesh:
+		
+			break;
+		case eShapeType_sphere:
+			AddSphereCollider();
+			break;
+		default:
+			if (m_collider)
+			{
+				m_rigidBody->removeCollider(m_collider);
+				m_collider = NULL;
+			}
+			break;
+		}
+	}
+}
+
 
 ZobVector3 ZobPhysicComponent::GetPosition() const
 {
@@ -231,6 +264,7 @@ float ZobPhysicComponent::ClampAngle(float a) const
 
 void ZobPhysicComponent::Update()
 {
+	UpdateShapeType();
 	bool bPhysicRunning = DirectZob::GetInstance()->IsPhysicPlaying();
 	if (m_rigidBody)
 	{
@@ -265,36 +299,40 @@ ZobMatrix4x4 ZobPhysicComponent::GetRotationMatrix() const
 	return m;
 }
 
-void ZobPhysicComponent::AddBoxCollider(const ZobVector3* halfExtends)
+void ZobPhysicComponent::AddBoxCollider()
 {
 	PhysicsCommon* pc = DirectZob::GetInstance()->GetPhysicsEngine()->GetPhysicsCommon();
-	Vector3 h = Vector3(halfExtends->x, halfExtends->y, halfExtends->z);
+	Vector3 h = Vector3(m_halfExtends.x, m_halfExtends.y, m_halfExtends.z);
 	BoxShape* s = pc->createBoxShape(h);
-	m_shapeDraw._type = sShapeDraw::eShapeType::eShapeType_box;
-	m_shapeDraw._halfExtends = halfExtends;
+	m_shapeType = eShapeType::eShapeType_box;
 	AddColliderInternal(s);
 }
 
-void ZobPhysicComponent::AddSphereCollider(float radius)
+void ZobPhysicComponent::AddSphereCollider()
 {
 	PhysicsCommon* pc = DirectZob::GetInstance()->GetPhysicsEngine()->GetPhysicsCommon();
-	SphereShape* s= pc->createSphereShape(radius);
-	m_shapeDraw._type = sShapeDraw::eShapeType::eShapeType_sphere;
-	m_shapeDraw._radius = radius;
+	SphereShape* s= pc->createSphereShape(m_radius);
+	m_shapeType = eShapeType::eShapeType_sphere;
 	AddColliderInternal(s);
 }
 
-void ZobPhysicComponent::AddCapsuleCollider(float radius, float height)
+void ZobPhysicComponent::AddCapsuleCollider()
 {
 	PhysicsCommon* pc = DirectZob::GetInstance()->GetPhysicsEngine()->GetPhysicsCommon();
-	CapsuleShape* s = pc->createCapsuleShape(radius, height);
+	CapsuleShape* s = pc->createCapsuleShape(m_radius, m_height);
 	AddColliderInternal(s);
 }
 
 void ZobPhysicComponent::AddColliderInternal(CollisionShape* c)
 {
-
-	m_rigidBody->addCollider(c, m_rigidBody->getTransform());
+	if (m_collider)
+	{
+		m_rigidBody->removeCollider(m_collider);
+		m_collider = NULL;
+	}
+	Transform t = Transform::identity();
+	//t = m_rigidBody->getTransform();
+	m_collider = m_rigidBody->addCollider(c, t);
 
 }
 
@@ -327,17 +365,17 @@ void ZobPhysicComponent::DrawGizmos(const Camera* camera, const ZobVector3* posi
 	uint c = 0x00FF00;
 	bool bold = false;
 	Engine* e = DirectZob::GetInstance()->GetEngine();
-	switch (m_shapeDraw._type)
+	switch (m_shapeType)
 	{
-	case sShapeDraw::eShapeType::eShapeType_sphere:
-		e->QueueSphere(camera, &mat, m_shapeDraw._radius, c, bold, false);
+	case eShapeType::eShapeType_sphere:
+		e->QueueSphere(camera, &mat, m_radius, c, bold, false);
 		break;
-	case sShapeDraw::eShapeType::eShapeType_box:
+	case eShapeType::eShapeType_box:
 		//TODO ERROR : ajouter le pivot !
-		e->QueueBox(camera, &mat, &m_shapeDraw._halfExtends, position, c, bold, false);
+		e->QueueBox(camera, &mat, &m_halfExtends, position, c, bold, false);
 		break;
-	case sShapeDraw::eShapeType::eShapeType_capsule:
-	case sShapeDraw::eShapeType::eShapeType_convexMesh:
+	case eShapeType::eShapeType_capsule:
+	case eShapeType::eShapeType_convexMesh:
 	default:
 		break;
 	}
@@ -352,4 +390,49 @@ Quaternion ZobPhysicComponent::QuaternionFromAxisAngle(Vector3* axis, float angl
 	q.z = axis->z * s;
 	q.w = cosf(angle / 2.0f);
 	return q;
+}
+
+bool ZobPhysicComponent::SetRadius(float f)
+{
+	m_radius = f;
+	return UpdateColliderSize();
+}
+
+bool ZobPhysicComponent::SetHalfextends(float x, float y, float z)
+{
+	m_halfExtends.x = x;
+	m_halfExtends.y = y;
+	m_halfExtends.z = z;
+	return UpdateColliderSize();
+}
+
+bool ZobPhysicComponent::SetHeight(float h)
+{
+	m_height = h;
+	return UpdateColliderSize();
+}
+
+bool ZobPhysicComponent::UpdateColliderSize()
+{
+	CapsuleShape* c = dynamic_cast<CapsuleShape*>(m_collider->getCollisionShape());
+	if (c)
+	{
+		c->setHeight((decimal)m_height);
+		c->setRadius(m_radius);
+		return true;
+	}
+	BoxShape* b = dynamic_cast<BoxShape*>(m_collider->getCollisionShape());
+	if (b)
+	{
+		Vector3 he = Vector3(m_halfExtends.x, m_halfExtends.y, m_halfExtends.z);
+		b->setHalfExtents(he);
+		return true;
+	}
+	SphereShape* s = dynamic_cast<SphereShape*>(m_collider->getCollisionShape());
+	if (b)
+	{
+		s->setRadius(m_radius);
+		return true;
+	}
+	return false;
 }

@@ -199,10 +199,10 @@ int DirectZob::RunAFrame(DirectZob::engineCallback OnSceneUpdated /*=NULL*/, Dir
 			}
 			m_engine->ClearRenderQueues();
 			m_copyTick = clock();
-			if (OnQueuing)
-			{
-				OnQueuing();
-			}
+			//if (OnQueuing)
+			//{
+			//	OnQueuing();
+			//}
 			m_zobObjectManager->QueueForDrawing(cam, m_engine);
 			m_copyTime = (float)(clock() - m_copyTick) / CLOCKS_PER_SEC * 1000;
 			if (m_engine->ShowGrid())

@@ -358,15 +358,67 @@ namespace CLI
 		}
 		return false;
 	}
-/*
-	ZobObject* ZobObjectWrapper::GetInstance()
+
+	System::String^ ZobObjectWrapper::GetPhysicComponentType()
 	{
-		if (!IsValid())
-		{
-			return nullptr;
-		}
-		return m_Instance;
+		std::string s = GetInstance() ? GetInstance()->GetPhysicComponentType() : "Error";
+		return gcnew System::String(s.c_str());
 	}
-*/
+
+	void ZobObjectWrapper::SetPhysicComponentType(System::String^ type)
+	{
+		std::string cType;
+		MarshalString(type, cType);
+		if (GetInstance())
+		{
+			GetInstance()->SetPhysicComponentType(cType);
+		}
+	}
+
+	System::String^ ZobObjectWrapper::GetPhysicComponentShapeType()
+	{
+		std::string s = GetInstance() ? GetInstance()->GetPhysicComponentShapeType() : "Error";
+		return gcnew System::String(s.c_str());
+	}
+	void ZobObjectWrapper::SetPhysicComponentShapeType(System::String^ type)
+	{
+		std::string cType;
+		MarshalString(type, cType);
+		if (GetInstance())
+		{
+			GetInstance()->SetPhysicComponentShapeType(cType);
+		}
+	}
+	void ZobObjectWrapper::SetPhysicComponentShapeRadius(float r)
+	{
+		if (GetInstance())
+		{
+			GetInstance()->SetPhysicComponentShapeRadius(r);
+		}
+	}
+
+	void ZobObjectWrapper::SetPhysicComponentShapeHeight(float h)
+	{
+		if (GetInstance())
+		{
+			GetInstance()->SetPhysicComponentShapeHeight(h);
+		}
+	}
+	void ZobObjectWrapper::SetPhysicComponentShapeHalfExtends(float x, float y, float z)
+	{
+		if (GetInstance())
+		{
+			GetInstance()->SetPhysicComponentShapeHalfExtends(x, y, z);
+		}
+	}
+	
+	void ZobObjectWrapper::SetPhysicComponentShapeMesh(System::String^ type)
+	{
+		std::string s;
+		if (GetInstance())
+		{
+			//GetInstance()->SetPhysicComponentShapeMesh(s);
+		}
+	}
 }
 #endif //_WINDLL

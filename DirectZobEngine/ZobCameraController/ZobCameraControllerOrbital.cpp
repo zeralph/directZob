@@ -4,6 +4,7 @@
 ZobCameraControllerOrbital::ZobCameraControllerOrbital(Camera* c) :ZobCameraController(c)
 {
 	m_type = Camera::eCamera_orbital;
+	m_typeName = "FreeOrbitalCamera";
 }
 
 ZobCameraControllerOrbital::~ZobCameraControllerOrbital()

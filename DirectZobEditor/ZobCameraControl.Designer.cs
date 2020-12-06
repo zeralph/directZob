@@ -31,8 +31,6 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label1 = new System.Windows.Forms.Label();
             this.FovValue = new System.Windows.Forms.TextBox();
-            this.comboBoxLightType = new System.Windows.Forms.ComboBox();
-            this.label2 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -40,8 +38,6 @@
             // 
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.FovValue);
-            this.groupBox1.Controls.Add(this.comboBoxLightType);
-            this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox1.Location = new System.Drawing.Point(0, 0);
             this.groupBox1.Name = "groupBox1";
@@ -67,29 +63,6 @@
             this.FovValue.TabIndex = 21;
             this.FovValue.TextChanged += new System.EventHandler(this.valueChanged);
             // 
-            // comboBoxLightType
-            // 
-            this.comboBoxLightType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxLightType.FormattingEnabled = true;
-            this.comboBoxLightType.Items.AddRange(new object[] {
-            "Point",
-            "Spot",
-            "Directional"});
-            this.comboBoxLightType.Location = new System.Drawing.Point(104, 24);
-            this.comboBoxLightType.Name = "comboBoxLightType";
-            this.comboBoxLightType.Size = new System.Drawing.Size(121, 21);
-            this.comboBoxLightType.TabIndex = 20;
-            this.comboBoxLightType.SelectedIndexChanged += new System.EventHandler(this.valueChanged);
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(65, 27);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(31, 13);
-            this.label2.TabIndex = 19;
-            this.label2.Text = "Type";
-            // 
             // ZobCameraControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -106,8 +79,6 @@
         #endregion
 
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.ComboBox comboBoxLightType;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox FovValue;
     }

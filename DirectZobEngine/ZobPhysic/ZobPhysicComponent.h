@@ -3,8 +3,8 @@
 #undef min
 #undef max
 #include <reactphysics3d/reactphysics3d.h>
-#include "Rendering/ZobVector3.h"
-#include "ZobObjects/Camera.h"
+#include "../Rendering/ZobVector3.h"
+#include "../ZobObjects/Camera.h"
 #include "tinyxml.h"
 
 using namespace reactphysics3d;
@@ -20,30 +20,24 @@ public:
 		ePhysicComponentType_dynamic,
 	};
 
-	//used only for drawing shapes
-	struct sShapeDraw
+	enum eShapeType
 	{
-		enum eShapeType
-		{
-			eShapeType_unknown = 0,
-			eShapeType_sphere,
-			eShapeType_capsule,
-			eShapeType_box,
-			eShapeType_convexMesh,
-			__eShapeType_MAX__
-		};
-		eShapeType _type = eShapeType_unknown;
-		ZobVector3 _halfExtends = ZobVector3();
-		float _radius;
-		float _height;
-		//a voir pour le mesh
+		eShapeType_none = 0,
+		eShapeType_sphere,
+		eShapeType_capsule,
+		eShapeType_box,
+		eShapeType_convexMesh,
+		__eShapeType_MAX__
 	};
 
 	ZobPhysicComponent(TiXmlNode* t);
 	~ZobPhysicComponent();
 	void								Init(const ZobVector3* position, const ZobVector3* rotation);
 	TiXmlNode*							SaveUnderNode(TiXmlNode* node);
-	void								Set(ePhysicComponentType t);
+	void								SetType(ePhysicComponentType t);
+	ePhysicComponentType				GetType() const { return m_type; };
+	void								SetShapeType(eShapeType t);
+	eShapeType							GetShapeType() const { return m_shapeType; };
 	void								SetPosition(float x, float y, float z);
 	void								SetOrientation(float x, float y, float z);
 	void								SetQuaternion(float x, float y, float z, float w);
@@ -55,9 +49,9 @@ public:
 	void								SetScale(float x, float y, float z) { m_scale.x = x; m_scale.y = y; m_scale.z=z; }
 	void								LookAt(const ZobVector3* target);
 	void								LookAt(const ZobVector3* forward, const ZobVector3* left, const ZobVector3* up);
-	void								AddBoxCollider(const ZobVector3* halfExtends );
-	void								AddSphereCollider(float radius);
-	void								AddCapsuleCollider(float radius, float height);
+	void								AddBoxCollider();
+	void								AddSphereCollider();
+	void								AddCapsuleCollider();
 	void								Update();
 	void								SaveTransform();
 	void								RestoreTransform();
@@ -73,18 +67,28 @@ public:
 	void								SetLocalPosition(Vector3 p) { m_localTransform.setPosition(p); };
 	void								SetLocalOrientation(Quaternion q) { m_localTransform.setOrientation(q); };
 	Quaternion							QuaternionFromAxisAngle(Vector3* axis, float angle);
+	bool								SetRadius(float f);
+	bool								SetHalfextends(float x, float y, float z);
+	bool								SetHeight(float h);
+
 private:
 	void								AddColliderInternal(CollisionShape* c);
-	void								CreateCollider();
 	float								ClampAngle(float a) const;
-	
+	bool								UpdateColliderSize();
+	void								UpdateShapeType();
+
 	ePhysicComponentType m_type;
 	RigidBody* m_rigidBody;
 	Collider* m_collider;	
 	Transform m_savedTransform;
-	sShapeDraw m_shapeDraw;
+	eShapeType m_shapeType;
+	eShapeType m_nextShapeType;
 	Transform m_localTransform;
 	Transform m_worldTransform;
 	Vector3 m_scale; 
 	Vector3 m_totalScale;
+
+	float m_radius;
+	ZobVector3 m_halfExtends;
+	float m_height;
 };
