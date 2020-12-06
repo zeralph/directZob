@@ -70,6 +70,10 @@ public:
 	bool								SetRadius(float f);
 	bool								SetHalfextends(float x, float y, float z);
 	bool								SetHeight(float h);
+	float								GetRadius() const { return m_radius; }
+	float								GetHeight() const { return m_height; }
+	ZobVector3							GetHalfExtends() const { return m_halfExtends; }
+	std::string							GetMesh() const { return std::string("not set"); }
 
 private:
 	void								AddColliderInternal(CollisionShape* c);
@@ -91,4 +95,5 @@ private:
 	float m_radius;
 	ZobVector3 m_halfExtends;
 	float m_height;
+	bool m_bUpdateSize;
 };

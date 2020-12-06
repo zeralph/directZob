@@ -831,3 +831,19 @@ void ZobObject::SetPhysicComponentTranslation(float x, float y, float z)
 {
 	//GetPhysicComponentNoConst()->SetTr
 }
+float ZobObject::GetPhysicComponentShapeRadius()
+{
+	return GetPhysicComponentNoConst()->GetRadius();
+}
+float ZobObject::GetPhysicComponentShapeHeight()
+{
+	return GetPhysicComponentNoConst()->GetHeight();
+}
+ZobVector3 ZobObject::GetPhysicComponentShapeHalfExtends()
+{
+	return GetPhysicComponentNoConst()->GetHalfExtends();
+}
+std::string ZobObject::GetPhysicComponentShapeMesh()
+{
+	return GetPhysicComponentNoConst()->GetMesh();
+}

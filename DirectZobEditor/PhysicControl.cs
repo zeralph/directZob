@@ -43,7 +43,7 @@ namespace DirectZobEditor
         }
         private void Physics_Enter(object sender, EventArgs e)
         {
-            comboPhysicType.SelectedIndex = 0;
+
         }
         private void OnSceneUpdated(object sender, Form1.SceneUpdateEventArg e)
         {
@@ -72,6 +72,12 @@ namespace DirectZobEditor
                 comboPhysicType.SelectedItem = s;
                 s = m_currentZobObjectWrapper.GetPhysicComponentShapeType();
                 comboBoxPhysicShape.SelectedItem = s;
+                textRadius.Text = m_currentZobObjectWrapper.GetPhysicComponentShapeRadius().ToString();
+                textBHeight.Text = m_currentZobObjectWrapper.GetPhysicComponentShapeHeight().ToString();
+                CLI.ManagedVector3 v = m_currentZobObjectWrapper.GetPhysicComponentShapeHalfExtends();
+                textHalExtendsX.Text = v.x.ToString();
+                textHalExtendsY.Text = v.y.ToString();
+                textHalExtendsZ.Text = v.z.ToString();
             }
         }
 
@@ -81,6 +87,39 @@ namespace DirectZobEditor
             m_currentZobObjectWrapper.SetPhysicComponentType(s);
             s = (string)comboBoxPhysicShape.SelectedItem;
             m_currentZobObjectWrapper.SetPhysicComponentShapeType(s);
+
+            textHalExtendsX.Text = textHalExtendsX.Text.Replace('.', ',');
+            textHalExtendsY.Text = textHalExtendsY.Text.Replace('.', ',');
+            textHalExtendsZ.Text = textHalExtendsZ.Text.Replace('.', ',');
+            textRadius.Text = textRadius.Text.Replace('.', ',');
+            textBHeight.Text = textBHeight.Text.Replace('.', ',');
+            float f;
+            CLI.ManagedVector3 v = m_currentZobObjectWrapper.GetPhysicComponentShapeHalfExtends();
+            float radius = m_currentZobObjectWrapper.GetPhysicComponentShapeRadius();
+            float height = m_currentZobObjectWrapper.GetPhysicComponentShapeHeight();
+            if (float.TryParse(textHalExtendsX.Text, out f))
+            {
+                v.x = f;
+            }
+            if (float.TryParse(textHalExtendsY.Text, out f))
+            {
+                v.y = f;
+            }
+            if (float.TryParse(textHalExtendsZ.Text, out f))
+            {
+                v.z = f;
+            }
+            if (float.TryParse(textRadius.Text, out f))
+            {
+                radius = f;
+            }
+            if (float.TryParse(textBHeight.Text, out f))
+            {
+                height = f;
+            }
+            m_currentZobObjectWrapper.SetPhysicComponentShapeRadius(radius);
+            m_currentZobObjectWrapper.SetPhysicComponentShapeHeight(height);
+            m_currentZobObjectWrapper.SetPhysicComponentShapeHalfExtends(v.x, v.y, v.z);
             m_forceUpdateOnNextFrame = 2;
             PhysicsGroupBox.Enabled = false;
         }

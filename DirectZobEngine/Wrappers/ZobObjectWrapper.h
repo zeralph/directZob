@@ -53,6 +53,10 @@ namespace CLI {
 		void					SetPhysicComponentShapeHeight(float h);
 		void					SetPhysicComponentShapeHalfExtends(float x, float y, float z);
 		void					SetPhysicComponentShapeMesh(System::String^ type);
+		float					GetPhysicComponentShapeRadius();
+		float					GetPhysicComponentShapeHeight();
+		ManagedVector3^			GetPhysicComponentShapeHalfExtends();
+		System::String^			GetPhysicComponentShapeMesh();
 	protected:
 		DirectZobType::guid m_id;
 	};

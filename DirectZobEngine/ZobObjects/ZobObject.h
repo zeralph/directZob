@@ -96,7 +96,10 @@ public:
 	void							SetPhysicComponentShapeHalfExtends(float x, float y, float z);
 	void							SetPhysicComponentMesh(std::string path);
 	void							SetPhysicComponentTranslation(float x, float y, float z);
-
+	float							GetPhysicComponentShapeRadius();
+	float							GetPhysicComponentShapeHeight();
+	ZobVector3						GetPhysicComponentShapeHalfExtends();
+	std::string						GetPhysicComponentShapeMesh();
 private:
 	void							SaveRecusrive(TiXmlNode* node, ZobObject* z);
 	void							SetParentInternal();

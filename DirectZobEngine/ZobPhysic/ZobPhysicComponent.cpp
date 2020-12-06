@@ -265,6 +265,7 @@ float ZobPhysicComponent::ClampAngle(float a) const
 void ZobPhysicComponent::Update()
 {
 	UpdateShapeType();
+	UpdateColliderSize();
 	bool bPhysicRunning = DirectZob::GetInstance()->IsPhysicPlaying();
 	if (m_rigidBody)
 	{
@@ -395,7 +396,8 @@ Quaternion ZobPhysicComponent::QuaternionFromAxisAngle(Vector3* axis, float angl
 bool ZobPhysicComponent::SetRadius(float f)
 {
 	m_radius = f;
-	return UpdateColliderSize();
+	m_bUpdateSize = true;
+	return true;
 }
 
 bool ZobPhysicComponent::SetHalfextends(float x, float y, float z)
@@ -403,36 +405,42 @@ bool ZobPhysicComponent::SetHalfextends(float x, float y, float z)
 	m_halfExtends.x = x;
 	m_halfExtends.y = y;
 	m_halfExtends.z = z;
-	return UpdateColliderSize();
+	m_bUpdateSize = true;
+	return true;
 }
 
 bool ZobPhysicComponent::SetHeight(float h)
 {
 	m_height = h;
-	return UpdateColliderSize();
+	m_bUpdateSize = true;
+	return true;
 }
 
 bool ZobPhysicComponent::UpdateColliderSize()
 {
-	CapsuleShape* c = dynamic_cast<CapsuleShape*>(m_collider->getCollisionShape());
-	if (c)
+	if (m_bUpdateSize && m_collider)
 	{
-		c->setHeight((decimal)m_height);
-		c->setRadius(m_radius);
-		return true;
-	}
-	BoxShape* b = dynamic_cast<BoxShape*>(m_collider->getCollisionShape());
-	if (b)
-	{
-		Vector3 he = Vector3(m_halfExtends.x, m_halfExtends.y, m_halfExtends.z);
-		b->setHalfExtents(he);
-		return true;
-	}
-	SphereShape* s = dynamic_cast<SphereShape*>(m_collider->getCollisionShape());
-	if (b)
-	{
-		s->setRadius(m_radius);
-		return true;
+		m_bUpdateSize = false;
+		CapsuleShape* c = dynamic_cast<CapsuleShape*>(m_collider->getCollisionShape());
+		if (c)
+		{
+			c->setHeight((decimal)m_height);
+			c->setRadius(m_radius);
+			return true;
+		}
+		BoxShape* b = dynamic_cast<BoxShape*>(m_collider->getCollisionShape());
+		if (b)
+		{
+			Vector3 he = Vector3(m_halfExtends.x, m_halfExtends.y, m_halfExtends.z);
+			b->setHalfExtents(he);
+			return true;
+		}
+		SphereShape* s = dynamic_cast<SphereShape*>(m_collider->getCollisionShape());
+		if (s)
+		{
+			s->setRadius(m_radius);
+			return true;
+		}
 	}
 	return false;
 }

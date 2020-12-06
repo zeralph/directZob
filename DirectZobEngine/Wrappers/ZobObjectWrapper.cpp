@@ -418,7 +418,45 @@ namespace CLI
 		if (GetInstance())
 		{
 			//GetInstance()->SetPhysicComponentShapeMesh(s);
+		} 
+	}
+
+	float ZobObjectWrapper::GetPhysicComponentShapeRadius()
+	{
+		if (GetInstance())
+		{
+			return GetInstance()->GetPhysicComponentShapeRadius();
 		}
+		return 0.0f;
+	}
+
+	float ZobObjectWrapper::GetPhysicComponentShapeHeight()
+	{
+		if (GetInstance())
+		{
+			return GetInstance()->GetPhysicComponentShapeHeight();
+		}
+		return 0.0f;
+	}
+
+	ManagedVector3^ ZobObjectWrapper::GetPhysicComponentShapeHalfExtends()
+	{
+		ManagedVector3 v;
+		if (GetInstance())
+		{
+			ZobVector3 z = GetInstance()->GetPhysicComponentShapeHalfExtends();
+			return gcnew ManagedVector3(z);
+		}
+		return gcnew ManagedVector3();
+	}
+
+	System::String^ ZobObjectWrapper::GetPhysicComponentShapeMesh()
+	{
+		if (GetInstance())
+		{
+			std::string s = GetInstance()->GetPhysicComponentShapeMesh();
+		}
+		return gcnew System::String("not implmented");
 	}
 }
 #endif //_WINDLL
