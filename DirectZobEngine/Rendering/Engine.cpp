@@ -461,6 +461,11 @@ void Engine::ClipSegmentToPlane(ZobVector3 &s0, ZobVector3 &s1, ZobVector3 &pp, 
 
 void Engine::QueueSphere(const Camera* camera, const ZobMatrix4x4* mat, const float radius, const uint c, bool bold, bool noZ)
 {
+	QueuePartialSphere(camera, mat, radius, c, bold, noZ, 0, M_PI);
+}
+
+void Engine::QueuePartialSphere(const Camera* camera, const ZobMatrix4x4* mat, const float radius, const uint c, bool bold, bool noZ, float from, float to)
+{
 	static const int segs = 10;
 	ZobVector3 v[segs+1][segs+1];
 	for (int i = 0; i <= segs; i++)
@@ -469,9 +474,9 @@ void Engine::QueueSphere(const Camera* camera, const ZobMatrix4x4* mat, const fl
 		{
 			float lon = (float)i / (float)segs;
 			float lat = (float)j / (float)segs;
-			v[i][j].x = sin(M_PI * lat) * cos(2*M_PI*lon) * radius;
-			v[i][j].y = sin(M_PI * lat) * sin(2*M_PI*lon) * radius;
-			v[i][j].z = cos(M_PI *lat) * radius;
+			v[i][j].x = sin(from + (to - from) * lat) * cos(2*M_PI*lon) * radius;
+			v[i][j].z = sin(from + (to - from) * lat) * sin(2*M_PI*lon) * radius;
+			v[i][j].y = cos(from + (to - from) * lat) * radius;
 			mat->Mul(&v[i][j]);
 		}
 	}
@@ -488,9 +493,34 @@ void Engine::QueueSphere(const Camera* camera, const ZobMatrix4x4* mat, const fl
 	}
 }
 
-void Engine::QueueCapsule(const Camera* camera, const ZobMatrix4x4* mat, float radius, float height, const uint c, bool bold, bool noZ)
+void Engine::QueueCapsule(const Camera* camera, const ZobMatrix4x4* mat, float radius, float height, const ZobVector3* dir, const uint c, bool bold, bool noZ)
 {
-
+	ZobMatrix4x4 m1;
+	ZobMatrix4x4 m2;
+	ZobVector3 zDir;
+	m1 = ZobMatrix4x4(mat);
+	m2 = ZobMatrix4x4(mat);
+	zDir = dir;
+	zDir.Mul(height/2.0f);
+	m1.AddTranslation(zDir);
+	zDir.Mul(-1.0f);
+	m2.AddTranslation(zDir);
+	QueuePartialSphere(camera, &m1, radius, c, bold, noZ, 0, M_PI / 2.0f);
+	QueuePartialSphere(camera, &m2, radius, c, bold, noZ, M_PI/2.0f, M_PI);
+	static const int segs = 10;
+	ZobVector3 v1;
+	ZobVector3 v2;
+	for (int i = 0; i <= segs; i++)
+	{
+			float lon = (float)i / (float)segs;
+			v1.x = cos(2 * M_PI * lon) * radius;
+			v1.z = sin(2 * M_PI * lon) * radius;
+			v1.y = 0.0f;
+			v2.Copy(&v1);
+			m1.Mul(&v1);
+			m2.Mul(&v2);
+			QueueLine(camera, &v1, &v2, c, bold, noZ);
+	}
 }
 
 void Engine::QueueMesh(const Camera* camera, const ZobMatrix4x4* mat, ZobVector3* points, int width, int height, const uint c, bool bold)

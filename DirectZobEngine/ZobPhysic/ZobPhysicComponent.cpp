@@ -4,7 +4,7 @@
 #include "Rendering/ZobMatrix4x4.h"
 
 
-ZobPhysicComponent::ZobPhysicComponent(TiXmlNode* t)
+ZobPhysicComponent::ZobPhysicComponent(TiXmlNode* node)
 {
 	BodyType rigidBodyType = rp3d::BodyType::STATIC;
 	m_radius = 1.0f;
@@ -15,9 +15,9 @@ ZobPhysicComponent::ZobPhysicComponent(TiXmlNode* t)
 	m_shapeType = eShapeType_none;
 	m_nextShapeType = eShapeType_none;
 	m_collider = NULL;
-	if (t)
+	if (node)
 	{
-		TiXmlElement* p = (TiXmlElement*)t;
+		TiXmlElement* p = (TiXmlElement*)node;
 		m_type = (ePhysicComponentType)atoi(p->Attribute("type"));
 		TiXmlElement* b = p->FirstChildElement("RigidBody");
 		rigidBodyType = (BodyType)atoi(b->Attribute("type"));
@@ -34,7 +34,16 @@ ZobPhysicComponent::ZobPhysicComponent(TiXmlNode* t)
 	m_rigidBody->setType(rigidBodyType);
 	UpdateShapeType();
 	m_rigidBody->setIsActive(rigidBodyActive);
-	
+	if (node && m_collider)
+	{
+		TiXmlElement* p = (TiXmlElement*)node;
+		TiXmlElement* m = p->FirstChildElement("Material");
+		Material& mat = m_collider->getMaterial();
+		mat.setBounciness((float)atof(m->Attribute("bounciness")));
+		mat.setFrictionCoefficient((float)atof(m->Attribute("friction_coeff")));
+		mat.setMassDensity((float)atof(m->Attribute("mass_density")));
+		mat.setRollingResistance((float)atof(m->Attribute("rolling_resistance")));
+	}
 }
 
 ZobPhysicComponent::~ZobPhysicComponent()
@@ -70,8 +79,18 @@ TiXmlNode* ZobPhysicComponent::SaveUnderNode(TiXmlNode* node)
 	c.SetAttribute("halfExtends_x", std::to_string((float)m_halfExtends.x).c_str());
 	c.SetAttribute("halfExtends_y", std::to_string((float)m_halfExtends.y).c_str());
 	c.SetAttribute("halfExtends_z", std::to_string((float)m_halfExtends.z).c_str());
+	TiXmlElement m = TiXmlElement("Material");
+	if (m_collider)
+	{
+		Material& mat = m_collider->getMaterial();
+		m.SetAttribute("bounciness", std::to_string((float)mat.getBounciness()).c_str());
+		m.SetAttribute("friction_coeff", std::to_string((float)mat.getFrictionCoefficient()).c_str());
+		m.SetAttribute("mass_density", std::to_string((float)mat.getMassDensity()).c_str());
+		m.SetAttribute("rolling_resistance", std::to_string((float)mat.getRollingResistance()).c_str());
+	}
 	p.InsertEndChild(b);
 	p.InsertEndChild(c);
+	p.InsertEndChild(m);
 	node->InsertEndChild(p);
 	return NULL;
 }
@@ -334,6 +353,12 @@ void ZobPhysicComponent::AddColliderInternal(CollisionShape* c)
 	Transform t = Transform::identity();
 	//t = m_rigidBody->getTransform();
 	m_collider = m_rigidBody->addCollider(c, t);
+	
+	Material& material = m_collider->getMaterial();
+	material.setBounciness(0.1);
+	material.setFrictionCoefficient(2.01);
+	material.setMassDensity(0.01);
+	material.setRollingResistance(0.01);
 
 }
 
@@ -361,6 +386,7 @@ void ZobPhysicComponent::ResetPhysic()
 void ZobPhysicComponent::DrawGizmos(const Camera* camera, const ZobVector3* position, const ZobVector3* rotation)
 {
 	ZobMatrix4x4 mat;
+	ZobVector3 dir;
 	mat.SetPosition(position);
 	mat.SetRotation(rotation);
 	uint c = 0x00FF00;
@@ -376,6 +402,9 @@ void ZobPhysicComponent::DrawGizmos(const Camera* camera, const ZobVector3* posi
 		e->QueueBox(camera, &mat, &m_halfExtends, position, c, bold, false);
 		break;
 	case eShapeType::eShapeType_capsule:
+		dir = mat.GetY();
+		e->QueueCapsule(camera, &mat, m_radius, m_height, &dir, c, bold, false);
+		break;
 	case eShapeType::eShapeType_convexMesh:
 	default:
 		break;

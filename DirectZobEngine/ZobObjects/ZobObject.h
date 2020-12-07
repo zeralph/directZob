@@ -87,19 +87,13 @@ public:
 	const ZobMatrix4x4*				GetRotationScaleMatrix() const { return &m_rotationScaleMatrix; };
 
 	//Physic interface, mainly for editor
-	std::string						GetPhysicComponentType() const;
-	void							SetPhysicComponentType(std::string& stype);
-	std::string						GetPhysicComponentShapeType() const;
-	void							SetPhysicComponentShapeType(std::string& stype);
-	void							SetPhysicComponentShapeRadius(float radius);
-	void							SetPhysicComponentShapeHeight(float height);
-	void							SetPhysicComponentShapeHalfExtends(float x, float y, float z);
-	void							SetPhysicComponentMesh(std::string path);
-	void							SetPhysicComponentTranslation(float x, float y, float z);
-	float							GetPhysicComponentShapeRadius();
-	float							GetPhysicComponentShapeHeight();
-	ZobVector3						GetPhysicComponentShapeHalfExtends();
-	std::string						GetPhysicComponentShapeMesh();
+	void							GetPhysicComponentInfo(std::string& type, std::string& shapeType) const;
+	void							SetPhysicComponentInfo(std::string& type, std::string& shapeType);
+	void							GetPhysicComponentShapeInfo(float& radius, float& height, float& hx, float& hy, float& hz, std::string&  mesh);
+	void							SetPhysicComponentShapeInfo(float radius, float height, float hx, float hy, float hz, std::string& mesh);
+	void							GetPhysicComponentColliderInfo(float& bounciness, float& frictionCoeff, float& massDensity, float& RollingResistance);
+	void							SetPhysicComponentColliderInfo(float bounciness, float frictionCoeff, float massDensity, float RollingResistance);
+
 private:
 	void							SaveRecusrive(TiXmlNode* node, ZobObject* z);
 	void							SetParentInternal();

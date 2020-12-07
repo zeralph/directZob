@@ -74,7 +74,7 @@ public:
 	float								GetHeight() const { return m_height; }
 	ZobVector3							GetHalfExtends() const { return m_halfExtends; }
 	std::string							GetMesh() const { return std::string("not set"); }
-
+	Collider*							GetCollider() { return m_collider; }
 private:
 	void								AddColliderInternal(CollisionShape* c);
 	float								ClampAngle(float a) const;

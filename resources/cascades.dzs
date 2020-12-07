@@ -1,0 +1,225 @@
+<?xml version="1.0" ?>
+<Scene>
+    <Globals>
+        <AmbientColor r="102" g="102" b="102" />
+        <AmbientIntensity>0.80</AmbientIntensity>
+        <FogColor r="63" g="149" b="255" />
+        <ClearColor r="63" g="149" b="255" />
+        <FogDensity>2.00</FogDensity>
+        <FogDistance>20.00</FogDistance>
+        <FogType>none</FogType>
+    </Globals>
+    <ZobObject name="collisions" guid="3001002">
+        <Position x="0" y="0" z="0" />
+        <Rotation x="0" y="0" z="0" />
+        <Scale x="1" y="1" z="1" />
+        <Physic type="0">
+            <RigidBody type="0" active="0" />
+            <Collider type="0" radius="1.000000" height="2.000000" halfExtends_x="1.000000" halfExtends_y="1.000000" halfExtends_z="1.000000" />
+            <Material />
+        </Physic>
+        <ZobObject name="derriere" guid="3001003">
+            <Position x="0" y="0" z="0.5" />
+            <Rotation x="0" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+            <Physic type="1">
+                <RigidBody type="0" active="1" />
+                <Collider type="3" radius="1.000000" height="2.000000" halfExtends_x="10.000000" halfExtends_y="20.000000" halfExtends_z="0.100000" />
+                <Material bounciness="0.100000" friction_coeff="2.010000" mass_density="0.010000" rolling_resistance="0.010000" />
+            </Physic>
+        </ZobObject>
+        <ZobObject name="devant" guid="3001004">
+            <Position x="0" y="0" z="-1" />
+            <Rotation x="0" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+            <Physic type="1">
+                <RigidBody type="0" active="1" />
+                <Collider type="3" radius="1.000000" height="2.000000" halfExtends_x="10.000000" halfExtends_y="20.000000" halfExtends_z="0.100000" />
+                <Material bounciness="0.100000" friction_coeff="2.010000" mass_density="0.010000" rolling_resistance="0.010000" />
+            </Physic>
+        </ZobObject>
+        <ZobObject name="bas" guid="3001005">
+            <Position x="0" y="-20.5666" z="0" />
+            <Rotation x="0" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+            <Physic type="1">
+                <RigidBody type="0" active="1" />
+                <Collider type="3" radius="1.000000" height="2.000000" halfExtends_x="11.000000" halfExtends_y="1.000000" halfExtends_z="1.000000" />
+                <Material bounciness="0.100000" friction_coeff="2.010000" mass_density="0.010000" rolling_resistance="0.010000" />
+            </Physic>
+        </ZobObject>
+        <ZobObject name="gauche" guid="3001006">
+            <Position x="11" y="0" z="0" />
+            <Rotation x="0" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+            <Physic type="1">
+                <RigidBody type="0" active="1" />
+                <Collider type="3" radius="1.000000" height="2.000000" halfExtends_x="1.000000" halfExtends_y="20.000000" halfExtends_z="1.000000" />
+                <Material bounciness="0.100000" friction_coeff="2.010000" mass_density="0.010000" rolling_resistance="0.010000" />
+            </Physic>
+        </ZobObject>
+        <ZobObject name="droite" guid="3001007">
+            <Position x="-11" y="0" z="0" />
+            <Rotation x="0" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+            <Physic type="1">
+                <RigidBody type="0" active="1" />
+                <Collider type="3" radius="1.000000" height="2.000000" halfExtends_x="1.000000" halfExtends_y="20.000000" halfExtends_z="1.000000" />
+                <Material bounciness="0.100000" friction_coeff="2.010000" mass_density="0.010000" rolling_resistance="0.010000" />
+            </Physic>
+        </ZobObject>
+        <ZobObject name="clou_1" guid="3001010">
+            <Position x="0" y="-1" z="0" />
+            <Rotation x="90" y="0" z="90" />
+            <Scale x="1" y="1" z="1" />
+            <Physic type="1">
+                <RigidBody type="0" active="1" />
+                <Collider type="2" radius="0.200000" height="4.000000" halfExtends_x="1.000000" halfExtends_y="2.000000" halfExtends_z="1.000000" />
+                <Material bounciness="0.100000" friction_coeff="2.010000" mass_density="0.010000" rolling_resistance="0.010000" />
+            </Physic>
+        </ZobObject>
+    </ZobObject>
+    <ZobObject name="billes" guid="3001008">
+        <Position x="0" y="22.5401" z="0" />
+        <Rotation x="0" y="0" z="0" />
+        <Scale x="1" y="1" z="1" />
+        <Physic type="0">
+            <RigidBody type="0" active="0" />
+            <Collider type="0" radius="1.000000" height="2.000000" halfExtends_x="1.000000" halfExtends_y="1.000000" halfExtends_z="1.000000" />
+            <Material />
+        </Physic>
+    </ZobObject>
+    <ZobObject name="bille_1" guid="3001009" type="mesh">
+        <Position x="0.216999" y="23.2887" z="-0.289" />
+        <Rotation x="-5.218" y="0.083" z="15.324" />
+        <Scale x="0.5" y="0.5" z="0.5" />
+        <Mesh name="sphere_r1.obj" file="sphere_r1.obj" path="D:\Git\directZob\resources\" />
+        <Physic type="2">
+            <RigidBody type="2" active="1" />
+            <Collider type="1" radius="0.500000" height="2.000000" halfExtends_x="1.000000" halfExtends_y="1.000000" halfExtends_z="1.000000" />
+            <Material bounciness="0.600000" friction_coeff="0.020000" mass_density="0.010000" rolling_resistance="0.010000" />
+        </Physic>
+    </ZobObject>
+    <ZobObject name="Fixed_camera_1" guid="3047790" type="camera">
+        <Position x="0.181511" y="23.0175" z="-4.35837" />
+        <Rotation x="-5.218" y="0.083" z="15.324" />
+        <Scale x="1" y="1" z="1" />
+        <Physic type="0">
+            <RigidBody type="0" active="0" />
+            <Collider type="0" radius="1.000000" height="2.000000" halfExtends_x="1.000000" halfExtends_y="1.000000" halfExtends_z="1.000000" />
+            <Material />
+        </Physic>
+        <Controller>0</Controller>
+        <Fov>45.00</Fov>
+    </ZobObject>
+    <ZobObject name="bille_1" guid="-2139180338" type="mesh">
+        <Position x="3.10982" y="23.2887" z="-0.289" />
+        <Rotation x="-5.218" y="0.083" z="15.324" />
+        <Scale x="0.5" y="0.5" z="0.5" />
+        <Mesh name="sphere_r1.obj" file="sphere_r1.obj" path="D:\Git\directZob\resources\" />
+        <Physic type="2">
+            <RigidBody type="2" active="1" />
+            <Collider type="1" radius="0.500000" height="2.000000" halfExtends_x="1.000000" halfExtends_y="1.000000" halfExtends_z="1.000000" />
+            <Material bounciness="0.600000" friction_coeff="0.020000" mass_density="0.010000" rolling_resistance="0.010000" />
+        </Physic>
+    </ZobObject>
+    <ZobObject name="bille_1" guid="-2139180337" type="mesh">
+        <Position x="-2.46095" y="23.2887" z="-0.289" />
+        <Rotation x="-5.218" y="0.083" z="15.324" />
+        <Scale x="0.5" y="0.5" z="0.5" />
+        <Mesh name="sphere_r1.obj" file="sphere_r1.obj" path="D:\Git\directZob\resources\" />
+        <Physic type="2">
+            <RigidBody type="2" active="1" />
+            <Collider type="1" radius="0.500000" height="2.000000" halfExtends_x="1.000000" halfExtends_y="1.000000" halfExtends_z="1.000000" />
+            <Material bounciness="0.600000" friction_coeff="0.020000" mass_density="0.010000" rolling_resistance="0.010000" />
+        </Physic>
+    </ZobObject>
+    <ZobObject name="bille_1" guid="-2139180336" type="mesh">
+        <Position x="-8.708" y="22.7558" z="-0.144" />
+        <Rotation x="-140.23" y="15.516" z="60.809" />
+        <Scale x="0.5" y="0.5" z="0.5" />
+        <Mesh name="sphere_r1.obj" file="sphere_r1.obj" path="D:\Git\directZob\resources\" />
+        <Physic type="2">
+            <RigidBody type="2" active="1" />
+            <Collider type="1" radius="0.500000" height="2.000000" halfExtends_x="1.000000" halfExtends_y="1.000000" halfExtends_z="1.000000" />
+            <Material bounciness="0.600000" friction_coeff="0.020000" mass_density="0.010000" rolling_resistance="0.010000" />
+        </Physic>
+    </ZobObject>
+    <ZobObject name="bille_1" guid="-2139180335" type="mesh">
+        <Position x="0.216999" y="23.2887" z="-0.289" />
+        <Rotation x="-5.218" y="0.083" z="15.324" />
+        <Scale x="0.5" y="0.5" z="0.5" />
+        <Mesh name="sphere_r1.obj" file="sphere_r1.obj" path="D:\Git\directZob\resources\" />
+        <Physic type="2">
+            <RigidBody type="2" active="1" />
+            <Collider type="1" radius="0.500000" height="2.000000" halfExtends_x="1.000000" halfExtends_y="1.000000" halfExtends_z="1.000000" />
+            <Material bounciness="0.600000" friction_coeff="0.020000" mass_density="0.010000" rolling_resistance="0.010000" />
+        </Physic>
+    </ZobObject>
+    <ZobObject name="bille_1" guid="-2139180334" type="mesh">
+        <Position x="0.216999" y="23.2887" z="-0.289" />
+        <Rotation x="-5.218" y="0.083" z="15.324" />
+        <Scale x="0.5" y="0.5" z="0.5" />
+        <Mesh name="sphere_r1.obj" file="sphere_r1.obj" path="D:\Git\directZob\resources\" />
+        <Physic type="2">
+            <RigidBody type="2" active="1" />
+            <Collider type="1" radius="0.500000" height="2.000000" halfExtends_x="1.000000" halfExtends_y="1.000000" halfExtends_z="1.000000" />
+            <Material bounciness="0.600000" friction_coeff="0.020000" mass_density="0.010000" rolling_resistance="0.010000" />
+        </Physic>
+    </ZobObject>
+    <ZobObject name="bille_1" guid="-2139180333" type="mesh">
+        <Position x="0.216999" y="23.2887" z="-0.289" />
+        <Rotation x="-5.218" y="0.083" z="15.324" />
+        <Scale x="0.5" y="0.5" z="0.5" />
+        <Mesh name="sphere_r1.obj" file="sphere_r1.obj" path="D:\Git\directZob\resources\" />
+        <Physic type="2">
+            <RigidBody type="2" active="1" />
+            <Collider type="1" radius="0.500000" height="2.000000" halfExtends_x="1.000000" halfExtends_y="1.000000" halfExtends_z="1.000000" />
+            <Material bounciness="0.600000" friction_coeff="0.020000" mass_density="0.010000" rolling_resistance="0.010000" />
+        </Physic>
+    </ZobObject>
+    <ZobObject name="bille_1" guid="-2139180332" type="mesh">
+        <Position x="0.216999" y="23.2887" z="-0.289" />
+        <Rotation x="-5.218" y="0.083" z="15.324" />
+        <Scale x="0.5" y="0.5" z="0.5" />
+        <Mesh name="sphere_r1.obj" file="sphere_r1.obj" path="D:\Git\directZob\resources\" />
+        <Physic type="2">
+            <RigidBody type="2" active="1" />
+            <Collider type="1" radius="0.500000" height="2.000000" halfExtends_x="1.000000" halfExtends_y="1.000000" halfExtends_z="1.000000" />
+            <Material bounciness="0.600000" friction_coeff="0.020000" mass_density="0.010000" rolling_resistance="0.010000" />
+        </Physic>
+    </ZobObject>
+    <ZobObject name="bille_1" guid="-2139180331" type="mesh">
+        <Position x="0.216999" y="23.2887" z="-0.289" />
+        <Rotation x="-5.218" y="0.083" z="15.324" />
+        <Scale x="0.5" y="0.5" z="0.5" />
+        <Mesh name="sphere_r1.obj" file="sphere_r1.obj" path="D:\Git\directZob\resources\" />
+        <Physic type="2">
+            <RigidBody type="2" active="1" />
+            <Collider type="1" radius="0.500000" height="2.000000" halfExtends_x="1.000000" halfExtends_y="1.000000" halfExtends_z="1.000000" />
+            <Material bounciness="0.600000" friction_coeff="0.020000" mass_density="0.010000" rolling_resistance="0.010000" />
+        </Physic>
+    </ZobObject>
+    <ZobObject name="bille_1" guid="-2139180330" type="mesh">
+        <Position x="0.216999" y="23.2887" z="-0.289" />
+        <Rotation x="-5.218" y="0.083" z="15.324" />
+        <Scale x="0.5" y="0.5" z="0.5" />
+        <Mesh name="sphere_r1.obj" file="sphere_r1.obj" path="D:\Git\directZob\resources\" />
+        <Physic type="2">
+            <RigidBody type="2" active="1" />
+            <Collider type="1" radius="0.500000" height="2.000000" halfExtends_x="1.000000" halfExtends_y="1.000000" halfExtends_z="1.000000" />
+            <Material bounciness="0.600000" friction_coeff="0.020000" mass_density="0.010000" rolling_resistance="0.010000" />
+        </Physic>
+    </ZobObject>
+    <ZobObject name="bille_1" guid="-2139180329" type="mesh">
+        <Position x="0.216999" y="23.2887" z="-0.289" />
+        <Rotation x="-5.218" y="0.083" z="15.324" />
+        <Scale x="0.5" y="0.5" z="0.5" />
+        <Mesh name="sphere_r1.obj" file="sphere_r1.obj" path="D:\Git\directZob\resources\" />
+        <Physic type="2">
+            <RigidBody type="2" active="1" />
+            <Collider type="1" radius="0.500000" height="2.000000" halfExtends_x="1.000000" halfExtends_y="1.000000" halfExtends_z="1.000000" />
+            <Material bounciness="0.600000" friction_coeff="0.020000" mass_density="0.010000" rolling_resistance="0.010000" />
+        </Physic>
+    </ZobObject>
+</Scene>

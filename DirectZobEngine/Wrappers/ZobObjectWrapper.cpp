@@ -359,104 +359,76 @@ namespace CLI
 		return false;
 	}
 
-	System::String^ ZobObjectWrapper::GetPhysicComponentType()
+	void ZobObjectWrapper::GetPhysicComponentInfo(System::String^% type, System::String^% shapeType)
 	{
-		std::string s = GetInstance() ? GetInstance()->GetPhysicComponentType() : "Error";
-		return gcnew System::String(s.c_str());
+		if (GetInstance())
+		{
+			std::string cType;
+			std::string cShapeType;
+			GetInstance()->GetPhysicComponentInfo(cType, cShapeType);
+			type = gcnew System::String(cType.c_str());
+			shapeType = gcnew System::String(cShapeType.c_str());
+		};
 	}
 
-	void ZobObjectWrapper::SetPhysicComponentType(System::String^ type)
+	void ZobObjectWrapper::SetPhysicComponentInfo(System::String^ type, System::String^ shapeType)
 	{
 		std::string cType;
+		std::string cShapeType;
 		MarshalString(type, cType);
+		MarshalString(shapeType, cShapeType);
 		if (GetInstance())
 		{
-			GetInstance()->SetPhysicComponentType(cType);
+			GetInstance()->SetPhysicComponentInfo(cType, cShapeType);
 		}
 	}
 
-	System::String^ ZobObjectWrapper::GetPhysicComponentShapeType()
-	{
-		std::string s = GetInstance() ? GetInstance()->GetPhysicComponentShapeType() : "Error";
-		return gcnew System::String(s.c_str());
-	}
-	void ZobObjectWrapper::SetPhysicComponentShapeType(System::String^ type)
-	{
-		std::string cType;
-		MarshalString(type, cType);
-		if (GetInstance())
-		{
-			GetInstance()->SetPhysicComponentShapeType(cType);
-		}
-	}
-	void ZobObjectWrapper::SetPhysicComponentShapeRadius(float r)
+
+	void ZobObjectWrapper::GetPhysicComponentShapeInfo(float% radius, float% height, float% hx, float% hy, float% hz, System::String^% mesh)
 	{
 		if (GetInstance())
 		{
-			GetInstance()->SetPhysicComponentShapeRadius(r);
+			float r, h, x, y, z;
+			std::string s;
+			GetInstance()->GetPhysicComponentShapeInfo(r, h, x, y, z, s);
+			radius = r;
+			height = h;
+			hx = x;
+			hy = y;
+			hz = z;
+			mesh = gcnew System::String(s.c_str());
 		}
 	}
 
-	void ZobObjectWrapper::SetPhysicComponentShapeHeight(float h)
+	void ZobObjectWrapper::SetPhysicComponentShapeInfo(float radius, float height, float hx, float hy, float hz, System::String^ mesh)
 	{
 		if (GetInstance())
 		{
-			GetInstance()->SetPhysicComponentShapeHeight(h);
+			std::string cMesh;
+			MarshalString(mesh, cMesh);
+			GetInstance()->SetPhysicComponentShapeInfo(radius, height, hx, hy, hz, cMesh);
 		}
-	}
-	void ZobObjectWrapper::SetPhysicComponentShapeHalfExtends(float x, float y, float z)
-	{
-		if (GetInstance())
-		{
-			GetInstance()->SetPhysicComponentShapeHalfExtends(x, y, z);
-		}
-	}
-	
-	void ZobObjectWrapper::SetPhysicComponentShapeMesh(System::String^ type)
-	{
-		std::string s;
-		if (GetInstance())
-		{
-			//GetInstance()->SetPhysicComponentShapeMesh(s);
-		} 
 	}
 
-	float ZobObjectWrapper::GetPhysicComponentShapeRadius()
+	void ZobObjectWrapper::GetPhysicComponentColliderInfo(float% bounciness, float% frictionCoeff, float% massDensity, float% RollingResistance)
 	{
 		if (GetInstance())
 		{
-			return GetInstance()->GetPhysicComponentShapeRadius();
+			float b, m, f, r;
+			GetInstance()->GetPhysicComponentColliderInfo(b, f, m, r);
+			bounciness = b;
+			frictionCoeff = f;
+			massDensity = m;
+			RollingResistance = r;
 		}
-		return 0.0f;
 	}
 
-	float ZobObjectWrapper::GetPhysicComponentShapeHeight()
+	void ZobObjectWrapper::SetPhysicComponentColliderInfo(float bounciness, float frictionCoeff, float massDensity, float RollingResistance)
 	{
 		if (GetInstance())
 		{
-			return GetInstance()->GetPhysicComponentShapeHeight();
+			GetInstance()->SetPhysicComponentColliderInfo(bounciness, frictionCoeff, massDensity, RollingResistance);
 		}
-		return 0.0f;
-	}
-
-	ManagedVector3^ ZobObjectWrapper::GetPhysicComponentShapeHalfExtends()
-	{
-		ManagedVector3 v;
-		if (GetInstance())
-		{
-			ZobVector3 z = GetInstance()->GetPhysicComponentShapeHalfExtends();
-			return gcnew ManagedVector3(z);
-		}
-		return gcnew ManagedVector3();
-	}
-
-	System::String^ ZobObjectWrapper::GetPhysicComponentShapeMesh()
-	{
-		if (GetInstance())
-		{
-			std::string s = GetInstance()->GetPhysicComponentShapeMesh();
-		}
-		return gcnew System::String("not implmented");
 	}
 }
 #endif //_WINDLL

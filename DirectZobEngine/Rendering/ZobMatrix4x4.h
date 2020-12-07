@@ -44,6 +44,9 @@ public:
 	static ZobMatrix4x4 RotateAroundAxis(const ZobVector3& axis, const float angle);
 	static ZobVector3 QuaternionToEuler(float x, float y, float z, float w);
 	static ZobVector3 EulerToQuaternion(float x, float y, float z);
+	ZobVector3		  GetX() const { return ZobVector3(m_data[0][0], m_data[1][0], m_data[2][0]); }
+	ZobVector3		  GetY() const { return ZobVector3(m_data[0][1], m_data[1][1], m_data[2][1]); }
+	ZobVector3		  GetZ() const { return ZobVector3(m_data[0][2], m_data[1][2], m_data[2][2]); }
 	//float& operator[](int i) {return &m_data[i][j]; };
 private:
 

@@ -213,8 +213,8 @@ void Camera::Move(float dx, float dz, float dy, bool moveTargetVector)
 //void Camera::Update(const ZobMatrix4x4& parentMatrix, const ZobMatrix4x4& parentRSMatrix)
 void Camera::Update()
 {
-	m_zobCameraController->Update();
 	ZobObject::Update();
+	m_zobCameraController->Update();
 	RecomputeFrustrumPlanes();
 }
 static bool bLock = false;

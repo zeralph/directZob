@@ -716,40 +716,62 @@ void ZobObject::ResetPhysic()
 }
 
 //- Physic editor interface
-std::string ZobObject::GetPhysicComponentType() const
+void ZobObject::GetPhysicComponentInfo(std::string& type, std::string& shapeType) const
 {
-	std::string s = "Error";
+	type = "Error";
+	shapeType = "Error";
 	ZobPhysicComponent::ePhysicComponentType t = GetPhysicComponent()->GetType();
+	ZobPhysicComponent::eShapeType st = GetPhysicComponent()->GetShapeType();
 	switch (t)
 	{
 	case ZobPhysicComponent::ePhysicComponentType_none:
-		s = std::string("None");
+		type = std::string("None");
 		break;
 	case ZobPhysicComponent::ePhysicComponentType_dynamic:
-		s = std::string("Dynamic");
+		type = std::string("Dynamic");
 		break;
 	case ZobPhysicComponent::ePhysicComponentType_static:
-		s = std::string("Static");
+		type = std::string("Static");
 		break;
 	default:
-		s = std::string("Error");
+		type = std::string("Error");
 		break;
 	}
-	return s;
+	switch (st)
+	{
+	case ZobPhysicComponent::eShapeType_box:
+		shapeType = std::string("Box");
+		break;
+	case ZobPhysicComponent::eShapeType_capsule:
+		shapeType = std::string("Capsule");
+		break;
+	case ZobPhysicComponent::eShapeType_convexMesh:
+		shapeType = std::string("Mesh");
+		break;
+	case ZobPhysicComponent::eShapeType_sphere:
+		shapeType = std::string("Sphere");
+		break;
+	case ZobPhysicComponent::eShapeType_none:
+		shapeType = std::string("None");
+		break;
+	default:
+		shapeType = std::string("Error");
+		break;
+	}
 }
 
-void ZobObject::SetPhysicComponentType(std::string& stype)
+void ZobObject::SetPhysicComponentInfo(std::string& type, std::string& shapeType)
 {
 	ZobPhysicComponent::ePhysicComponentType t;
-	if (stype == "None")
+	if (type == "None")
 	{
 		t = ZobPhysicComponent::ePhysicComponentType_none;
 	}
-	else if (stype == "Dynamic")
+	else if (type == "Dynamic")
 	{
 		t = ZobPhysicComponent::ePhysicComponentType_dynamic;
 	}
-	else if (stype == "Static")
+	else if (type == "Static")
 	{
 		t = ZobPhysicComponent::ePhysicComponentType_static;
 	}
@@ -758,92 +780,71 @@ void ZobObject::SetPhysicComponentType(std::string& stype)
 		t = ZobPhysicComponent::ePhysicComponentType_none;
 	}
 	GetPhysicComponentNoConst()->SetType(t);
-}
-std::string ZobObject::GetPhysicComponentShapeType() const
-{
-	std::string s = "Error";
-	ZobPhysicComponent::eShapeType t = GetPhysicComponent()->GetShapeType();
-	switch (t)
+	ZobPhysicComponent::eShapeType st;
+	if (shapeType == "Box")
 	{
-	case ZobPhysicComponent::eShapeType_box:
-		s = std::string("Box");
-		break;
-	case ZobPhysicComponent::eShapeType_capsule:
-		s = std::string("capsule");
-		break;
-	case ZobPhysicComponent::eShapeType_convexMesh:
-		s = std::string("Mesh");
-		break;
-	case ZobPhysicComponent::eShapeType_sphere:
-		s = std::string("Sphere");
-		break;
-	case ZobPhysicComponent::eShapeType_none:
-		s = std::string("None");
-		break;
-	default:
-		s = std::string("Error");
-		break;
+		st = ZobPhysicComponent::eShapeType_box;
 	}
-	return s;
-}
-void ZobObject::SetPhysicComponentShapeType(std::string& stype)
-{
-	ZobPhysicComponent::eShapeType t;
-	if (stype == "Box")
+	else if (shapeType == "Capsule")
 	{
-		t = ZobPhysicComponent::eShapeType_box;
+		st = ZobPhysicComponent::eShapeType_capsule;
 	}
-	else if (stype == "Capsule")
+	else if (shapeType == "Mesh")
 	{
-		t = ZobPhysicComponent::eShapeType_capsule;
+		st = ZobPhysicComponent::eShapeType_convexMesh;
 	}
-	else if (stype == "Mesh")
+	else if (shapeType == "Sphere")
 	{
-		t = ZobPhysicComponent::eShapeType_convexMesh;
-	}
-	else if (stype == "Sphere")
-	{
-		t = ZobPhysicComponent::eShapeType_sphere;
+		st = ZobPhysicComponent::eShapeType_sphere;
 	}
 	else
 	{
 		//return error ?
 	}
-	GetPhysicComponentNoConst()->SetShapeType(t);
+	GetPhysicComponentNoConst()->SetShapeType(st);
 }
-void ZobObject::SetPhysicComponentShapeRadius(float radius)
+
+void ZobObject::GetPhysicComponentShapeInfo(float& radius, float& height, float& hx, float& hy, float& hz, std::string& mesh)
 {
-	GetPhysicComponentNoConst()->SetRadius(radius);
+	radius = m_physicComponent->GetRadius();
+	height = m_physicComponent->GetHeight();
+	ZobVector3 halfExtends = m_physicComponent->GetHalfExtends();
+	hx = halfExtends.x;
+	hy = halfExtends.y;
+	hz = halfExtends.z;
+	mesh = m_physicComponent->GetMesh();
 }
-void ZobObject::SetPhysicComponentShapeHeight(float height)
+
+void ZobObject::SetPhysicComponentShapeInfo(float radius, float height, float hx, float hy, float hz, std::string& mesh)
 {
-	GetPhysicComponentNoConst()->SetHeight(height);
+	m_physicComponent->SetRadius(radius);
+	m_physicComponent->SetHeight(height);
+	m_physicComponent->SetHalfextends(hx, hy, hz);
+	//m_physicComponent->mesh
 }
-void ZobObject::SetPhysicComponentShapeHalfExtends(float x, float y, float z)
+
+void ZobObject::GetPhysicComponentColliderInfo(float& bounciness, float& frictionCoeff, float& massDensity, float& RollingResistance)
 {
-	GetPhysicComponentNoConst()->SetHalfextends(x, y, z);
+	Collider* c = m_physicComponent->GetCollider();
+	if (c)
+	{
+		Material& material = c->getMaterial();
+		bounciness = material.getBounciness();
+		frictionCoeff =  material.getFrictionCoefficient();
+		massDensity = material.getMassDensity();
+		RollingResistance = material.getRollingResistance();
+	}
 }
-void ZobObject::SetPhysicComponentMesh(std::string path)
+
+void ZobObject::SetPhysicComponentColliderInfo(float bounciness, float frictionCoeff, float massDensity, float RollingResistance)
 {
-	//GetPhysicComponentNoConst()->Set
-}
-void ZobObject::SetPhysicComponentTranslation(float x, float y, float z)
-{
-	//GetPhysicComponentNoConst()->SetTr
-}
-float ZobObject::GetPhysicComponentShapeRadius()
-{
-	return GetPhysicComponentNoConst()->GetRadius();
-}
-float ZobObject::GetPhysicComponentShapeHeight()
-{
-	return GetPhysicComponentNoConst()->GetHeight();
-}
-ZobVector3 ZobObject::GetPhysicComponentShapeHalfExtends()
-{
-	return GetPhysicComponentNoConst()->GetHalfExtends();
-}
-std::string ZobObject::GetPhysicComponentShapeMesh()
-{
-	return GetPhysicComponentNoConst()->GetMesh();
+	Collider* c = m_physicComponent->GetCollider();
+	if (c)
+	{
+		Material& material = c->getMaterial();
+		material.setBounciness(bounciness);
+		material.setFrictionCoefficient(frictionCoeff);
+		material.setMassDensity(massDensity);
+		material.setRollingResistance(RollingResistance);
+	}
 }

@@ -1,0 +1,12 @@
+<?xml version="1.0" ?>
+<ZobObject name="bille_1" guid="3001009" type="mesh">
+    <Position x="0.216999" y="23.2887" z="-0.289" />
+    <Rotation x="-5.218" y="0.083" z="15.324" />
+    <Scale x="0.5" y="0.5" z="0.5" />
+    <Mesh name="sphere_r1.obj" file="sphere_r1.obj" path="D:\Git\directZob\resources\" />
+    <Physic type="2">
+        <RigidBody type="2" active="1" />
+        <Collider type="1" radius="0.500000" height="2.000000" halfExtends_x="1.000000" halfExtends_y="1.000000" halfExtends_z="1.000000" />
+        <Material bounciness="0.600000" friction_coeff="0.020000" mass_density="0.010000" rolling_resistance="0.010000" />
+    </Physic>
+</ZobObject>

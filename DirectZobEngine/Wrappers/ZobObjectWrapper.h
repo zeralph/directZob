@@ -45,18 +45,13 @@ namespace CLI {
 		void					SaveToFactoryFile(System::String^ file);
 
 		//Physic
-		System::String^			GetPhysicComponentType();
-		void					SetPhysicComponentType(System::String^ type);
-		System::String^			GetPhysicComponentShapeType();
-		void					SetPhysicComponentShapeType(System::String^ type);
-		void					SetPhysicComponentShapeRadius(float r);
-		void					SetPhysicComponentShapeHeight(float h);
-		void					SetPhysicComponentShapeHalfExtends(float x, float y, float z);
-		void					SetPhysicComponentShapeMesh(System::String^ type);
-		float					GetPhysicComponentShapeRadius();
-		float					GetPhysicComponentShapeHeight();
-		ManagedVector3^			GetPhysicComponentShapeHalfExtends();
-		System::String^			GetPhysicComponentShapeMesh();
+		void					GetPhysicComponentInfo(System::String^% type, System::String^% shapeType);
+		void					SetPhysicComponentInfo(System::String^ type, System::String^ shapeType);
+		void					GetPhysicComponentShapeInfo(float% radius, float% height, float% hx, float% hy, float% hz, System::String^% mesh);
+		void					SetPhysicComponentShapeInfo(float radius, float height, float hx, float hy, float hz, System::String^ mesh);
+		void					GetPhysicComponentColliderInfo(float% bounciness, float% frictionCoeff, float% massDensity, float% RollingResistance);
+		void					SetPhysicComponentColliderInfo(float bounciness, float frictionCoeff, float massDensity, float RollingResistance);
+
 	protected:
 		DirectZobType::guid m_id;
 	};

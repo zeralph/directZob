@@ -9,13 +9,14 @@
         <FogDistance>500.00</FogDistance>
         <FogType>none</FogType>
     </Globals>
-    <ZobObject name="sol" guid="0">
-        <Position x="0" y="-5" z="0" />
+    <ZobObject name="sol" guid="3036160" type="mesh">
+        <Position x="0" y="-4.75833" z="0" />
         <Rotation x="0" y="0" z="0" />
-        <Scale x="1" y="1" z="1" />
+        <Scale x="1" y="0.001" z="1" />
+        <Mesh name="Terrain.obj" file="Terrain.obj" path="D:\Git\directZob\resources\" />
         <Physic type="1">
-            <RigidBody type="1" active="1" />
-            <Collider type="3" radius="0.000000" height="0.000000" halfExtends_x="100.000000" halfExtends_y="0.100000" halfExtends_z="100.000000" />
+            <RigidBody type="0" active="1" />
+            <Collider type="3" radius="1.000000" height="2.000000" halfExtends_x="50.000000" halfExtends_y="0.100000" halfExtends_z="50.000000" />
         </Physic>
     </ZobObject>
     <ZobObject name="Light_0" guid="46" type="light">
@@ -32,7 +33,7 @@
         <Type>directional</Type>
     </ZobObject>
     <ZobObject name="Camera_1" guid="45" type="camera">
-        <Position x="0" y="2" z="-18" />
+        <Position x="0" y="2" z="-15.6" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="0.1" y="0.1" z="0.1" />
         <Physic type="0">
@@ -46,7 +47,7 @@
         <Position x="10" y="4" z="0" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="0.1" y="0.1" z="0.1" />
-        <Mesh name="teapot.obj" file="D:\Git\directZob\resources\teapot.obj" />
+        <Mesh name="teapot.obj" file="teapot.obj" path="D:\Git\directZob\resources\" />
         <Physic type="2">
             <RigidBody type="2" active="1" />
             <Collider type="1" radius="1.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
@@ -69,7 +70,7 @@
         <Position x="8" y="4" z="0" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="0.1" y="0.1" z="0.1" />
-        <Mesh name="teapot.obj" file="D:\Git\directZob\resources\teapot.obj" />
+        <Mesh name="teapot.obj" file="teapot.obj" path="D:\Git\directZob\resources\" />
         <Physic type="2">
             <RigidBody type="2" active="1" />
             <Collider type="1" radius="1.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
@@ -79,7 +80,7 @@
         <Position x="2" y="2" z="5" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="0.1" y="0.1" z="0.1" />
-        <Mesh name="teapot.obj" file="D:\Git\directZob\resources\teapot.obj" />
+        <Mesh name="teapot.obj" file="teapot.obj" path="D:\Git\directZob\resources\" />
         <Physic type="2">
             <RigidBody type="2" active="1" />
             <Collider type="1" radius="1.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
@@ -89,7 +90,7 @@
         <Position x="4" y="2" z="5" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="0.1" y="0.1" z="0.1" />
-        <Mesh name="teapot.obj" file="D:\Git\directZob\resources\teapot.obj" />
+        <Mesh name="teapot.obj" file="teapot.obj" path="D:\Git\directZob\resources\" />
         <Physic type="2">
             <RigidBody type="2" active="1" />
             <Collider type="1" radius="1.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
@@ -99,7 +100,7 @@
         <Position x="6" y="2" z="5" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="0.1" y="0.1" z="0.1" />
-        <Mesh name="teapot.obj" file="D:\Git\directZob\resources\teapot.obj" />
+        <Mesh name="teapot.obj" file="teapot.obj" path="D:\Git\directZob\resources\" />
         <Physic type="2">
             <RigidBody type="2" active="1" />
             <Collider type="1" radius="1.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
@@ -109,7 +110,7 @@
         <Position x="8" y="2" z="5" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="0.1" y="0.1" z="0.1" />
-        <Mesh name="teapot.obj" file="D:\Git\directZob\resources\teapot.obj" />
+        <Mesh name="teapot.obj" file="teapot.obj" path="D:\Git\directZob\resources\" />
         <Physic type="2">
             <RigidBody type="2" active="1" />
             <Collider type="1" radius="1.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
@@ -119,7 +120,7 @@
         <Position x="10" y="2" z="5" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="0.1" y="0.1" z="0.1" />
-        <Mesh name="teapot.obj" file="D:\Git\directZob\resources\teapot.obj" />
+        <Mesh name="teapot.obj" file="teapot.obj" path="D:\Git\directZob\resources\" />
         <Physic type="2">
             <RigidBody type="2" active="1" />
             <Collider type="1" radius="1.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
@@ -129,7 +130,7 @@
         <Position x="-10" y="4" z="5" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="0.1" y="0.1" z="0.1" />
-        <Mesh name="teapot.obj" file="D:\Git\directZob\resources\teapot.obj" />
+        <Mesh name="teapot.obj" file="teapot.obj" path="D:\Git\directZob\resources\" />
         <Physic type="2">
             <RigidBody type="2" active="1" />
             <Collider type="1" radius="1.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
@@ -139,7 +140,7 @@
         <Position x="-8" y="4" z="5" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="0.1" y="0.1" z="0.1" />
-        <Mesh name="teapot.obj" file="D:\Git\directZob\resources\teapot.obj" />
+        <Mesh name="teapot.obj" file="teapot.obj" path="D:\Git\directZob\resources\" />
         <Physic type="2">
             <RigidBody type="2" active="1" />
             <Collider type="1" radius="1.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
@@ -149,7 +150,7 @@
         <Position x="-6" y="4" z="5" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="0.1" y="0.1" z="0.1" />
-        <Mesh name="teapot.obj" file="D:\Git\directZob\resources\teapot.obj" />
+        <Mesh name="teapot.obj" file="teapot.obj" path="D:\Git\directZob\resources\" />
         <Physic type="2">
             <RigidBody type="2" active="1" />
             <Collider type="1" radius="1.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
@@ -159,7 +160,7 @@
         <Position x="-4" y="4" z="5" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="0.1" y="0.1" z="0.1" />
-        <Mesh name="teapot.obj" file="D:\Git\directZob\resources\teapot.obj" />
+        <Mesh name="teapot.obj" file="teapot.obj" path="D:\Git\directZob\resources\" />
         <Physic type="2">
             <RigidBody type="2" active="1" />
             <Collider type="1" radius="1.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
@@ -169,7 +170,7 @@
         <Position x="-2" y="4" z="5" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="0.1" y="0.1" z="0.1" />
-        <Mesh name="teapot.obj" file="D:\Git\directZob\resources\teapot.obj" />
+        <Mesh name="teapot.obj" file="teapot.obj" path="D:\Git\directZob\resources\" />
         <Physic type="2">
             <RigidBody type="2" active="1" />
             <Collider type="1" radius="1.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
@@ -179,7 +180,7 @@
         <Position x="0" y="4" z="5" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="0.1" y="0.1" z="0.1" />
-        <Mesh name="teapot.obj" file="D:\Git\directZob\resources\teapot.obj" />
+        <Mesh name="teapot.obj" file="teapot.obj" path="D:\Git\directZob\resources\" />
         <Physic type="2">
             <RigidBody type="2" active="1" />
             <Collider type="1" radius="1.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
@@ -189,7 +190,7 @@
         <Position x="2" y="4" z="5" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="0.1" y="0.1" z="0.1" />
-        <Mesh name="teapot.obj" file="D:\Git\directZob\resources\teapot.obj" />
+        <Mesh name="teapot.obj" file="teapot.obj" path="D:\Git\directZob\resources\" />
         <Physic type="2">
             <RigidBody type="2" active="1" />
             <Collider type="1" radius="1.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
@@ -199,7 +200,7 @@
         <Position x="4" y="4" z="5" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="0.1" y="0.1" z="0.1" />
-        <Mesh name="teapot.obj" file="D:\Git\directZob\resources\teapot.obj" />
+        <Mesh name="teapot.obj" file="teapot.obj" path="D:\Git\directZob\resources\" />
         <Physic type="2">
             <RigidBody type="2" active="1" />
             <Collider type="1" radius="1.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
@@ -209,7 +210,7 @@
         <Position x="6" y="4" z="5" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="0.1" y="0.1" z="0.1" />
-        <Mesh name="teapot.obj" file="D:\Git\directZob\resources\teapot.obj" />
+        <Mesh name="teapot.obj" file="teapot.obj" path="D:\Git\directZob\resources\" />
         <Physic type="2">
             <RigidBody type="2" active="1" />
             <Collider type="1" radius="1.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
@@ -219,7 +220,7 @@
         <Position x="8" y="4" z="5" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="0.1" y="0.1" z="0.1" />
-        <Mesh name="teapot.obj" file="D:\Git\directZob\resources\teapot.obj" />
+        <Mesh name="teapot.obj" file="teapot.obj" path="D:\Git\directZob\resources\" />
         <Physic type="2">
             <RigidBody type="2" active="1" />
             <Collider type="1" radius="1.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
@@ -229,7 +230,7 @@
         <Position x="10" y="4" z="5" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="0.1" y="0.1" z="0.1" />
-        <Mesh name="teapot.obj" file="D:\Git\directZob\resources\teapot.obj" />
+        <Mesh name="teapot.obj" file="teapot.obj" path="D:\Git\directZob\resources\" />
         <Physic type="2">
             <RigidBody type="2" active="1" />
             <Collider type="1" radius="1.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
@@ -239,7 +240,7 @@
         <Position x="-10" y="2" z="-0.690625" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="0.1" y="0.1" z="0.1" />
-        <Mesh name="teapot.obj" file="D:\Git\directZob\resources\teapot.obj" />
+        <Mesh name="teapot.obj" file="teapot.obj" path="D:\Git\directZob\resources\" />
         <Physic type="2">
             <RigidBody type="2" active="1" />
             <Collider type="1" radius="1.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
@@ -262,7 +263,7 @@
         <Position x="-8" y="2" z="0.577789" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="0.1" y="0.1" z="0.1" />
-        <Mesh name="teapot.obj" file="D:\Git\directZob\resources\teapot.obj" />
+        <Mesh name="teapot.obj" file="teapot.obj" path="D:\Git\directZob\resources\" />
         <Physic type="2">
             <RigidBody type="2" active="1" />
             <Collider type="1" radius="1.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
@@ -272,7 +273,7 @@
         <Position x="-6" y="2" z="-0.158375" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="0.1" y="0.1" z="0.1" />
-        <Mesh name="teapot.obj" file="D:\Git\directZob\resources\teapot.obj" />
+        <Mesh name="teapot.obj" file="teapot.obj" path="D:\Git\directZob\resources\" />
         <Physic type="2">
             <RigidBody type="2" active="1" />
             <Collider type="1" radius="1.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
@@ -282,7 +283,7 @@
         <Position x="-4" y="2" z="-0.211991" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="0.1" y="0.1" z="0.1" />
-        <Mesh name="teapot.obj" file="D:\Git\directZob\resources\teapot.obj" />
+        <Mesh name="teapot.obj" file="teapot.obj" path="D:\Git\directZob\resources\" />
         <Physic type="2">
             <RigidBody type="2" active="1" />
             <Collider type="1" radius="1.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
@@ -292,7 +293,7 @@
         <Position x="-2" y="1.80794" z="0" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="0.1" y="0.1" z="0.1" />
-        <Mesh name="teapot.obj" file="D:\Git\directZob\resources\teapot.obj" />
+        <Mesh name="teapot.obj" file="teapot.obj" path="D:\Git\directZob\resources\" />
         <Physic type="2">
             <RigidBody type="2" active="1" />
             <Collider type="1" radius="1.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
@@ -302,7 +303,7 @@
         <Position x="-0.129289" y="-0.181498" z="0" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="0.1" y="0.1" z="0.1" />
-        <Mesh name="teapot.obj" file="D:\Git\directZob\resources\teapot.obj" />
+        <Mesh name="teapot.obj" file="teapot.obj" path="D:\Git\directZob\resources\" />
         <Physic type="2">
             <RigidBody type="2" active="1" />
             <Collider type="1" radius="1.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
@@ -312,7 +313,7 @@
         <Position x="2" y="2" z="-0.521346" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="0.1" y="0.1" z="0.1" />
-        <Mesh name="teapot.obj" file="D:\Git\directZob\resources\teapot.obj" />
+        <Mesh name="teapot.obj" file="teapot.obj" path="D:\Git\directZob\resources\" />
         <Physic type="2">
             <RigidBody type="2" active="1" />
             <Collider type="1" radius="1.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
@@ -322,7 +323,7 @@
         <Position x="4" y="2" z="1.19161" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="0.1" y="0.1" z="0.1" />
-        <Mesh name="teapot.obj" file="D:\Git\directZob\resources\teapot.obj" />
+        <Mesh name="teapot.obj" file="teapot.obj" path="D:\Git\directZob\resources\" />
         <Physic type="2">
             <RigidBody type="2" active="1" />
             <Collider type="1" radius="1.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
@@ -332,7 +333,7 @@
         <Position x="6" y="2" z="0.258579" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="0.1" y="0.1" z="0.1" />
-        <Mesh name="teapot.obj" file="D:\Git\directZob\resources\teapot.obj" />
+        <Mesh name="teapot.obj" file="teapot.obj" path="D:\Git\directZob\resources\" />
         <Physic type="2">
             <RigidBody type="2" active="1" />
             <Collider type="1" radius="1.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
@@ -342,7 +343,7 @@
         <Position x="8" y="2" z="-0.474347" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="0.1" y="0.1" z="0.1" />
-        <Mesh name="teapot.obj" file="D:\Git\directZob\resources\teapot.obj" />
+        <Mesh name="teapot.obj" file="teapot.obj" path="D:\Git\directZob\resources\" />
         <Physic type="2">
             <RigidBody type="2" active="1" />
             <Collider type="1" radius="1.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
@@ -352,7 +353,7 @@
         <Position x="10" y="2" z="-0.0215377" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="0.1" y="0.1" z="0.1" />
-        <Mesh name="teapot.obj" file="D:\Git\directZob\resources\teapot.obj" />
+        <Mesh name="teapot.obj" file="teapot.obj" path="D:\Git\directZob\resources\" />
         <Physic type="2">
             <RigidBody type="2" active="1" />
             <Collider type="1" radius="1.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
@@ -362,7 +363,7 @@
         <Position x="-10" y="4" z="0" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="0.1" y="0.1" z="0.1" />
-        <Mesh name="teapot.obj" file="D:\Git\directZob\resources\teapot.obj" />
+        <Mesh name="teapot.obj" file="teapot.obj" path="D:\Git\directZob\resources\" />
         <Physic type="2">
             <RigidBody type="2" active="1" />
             <Collider type="1" radius="1.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
@@ -372,7 +373,7 @@
         <Position x="-8" y="4" z="0" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="0.1" y="0.1" z="0.1" />
-        <Mesh name="teapot.obj" file="D:\Git\directZob\resources\teapot.obj" />
+        <Mesh name="teapot.obj" file="teapot.obj" path="D:\Git\directZob\resources\" />
         <Physic type="2">
             <RigidBody type="2" active="1" />
             <Collider type="1" radius="1.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
@@ -382,7 +383,7 @@
         <Position x="-6" y="4" z="0" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="0.1" y="0.1" z="0.1" />
-        <Mesh name="teapot.obj" file="D:\Git\directZob\resources\teapot.obj" />
+        <Mesh name="teapot.obj" file="teapot.obj" path="D:\Git\directZob\resources\" />
         <Physic type="2">
             <RigidBody type="2" active="1" />
             <Collider type="1" radius="1.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
@@ -392,7 +393,7 @@
         <Position x="-4" y="4" z="0" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="0.1" y="0.1" z="0.1" />
-        <Mesh name="teapot.obj" file="D:\Git\directZob\resources\teapot.obj" />
+        <Mesh name="teapot.obj" file="teapot.obj" path="D:\Git\directZob\resources\" />
         <Physic type="2">
             <RigidBody type="2" active="1" />
             <Collider type="1" radius="1.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
@@ -402,7 +403,7 @@
         <Position x="-2" y="4" z="0" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="0.1" y="0.1" z="0.1" />
-        <Mesh name="teapot.obj" file="D:\Git\directZob\resources\teapot.obj" />
+        <Mesh name="teapot.obj" file="teapot.obj" path="D:\Git\directZob\resources\" />
         <Physic type="2">
             <RigidBody type="2" active="1" />
             <Collider type="1" radius="1.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
@@ -412,7 +413,7 @@
         <Position x="0" y="4" z="0" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="0.1" y="0.1" z="0.1" />
-        <Mesh name="teapot.obj" file="D:\Git\directZob\resources\teapot.obj" />
+        <Mesh name="teapot.obj" file="teapot.obj" path="D:\Git\directZob\resources\" />
         <Physic type="2">
             <RigidBody type="2" active="1" />
             <Collider type="1" radius="1.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
@@ -422,7 +423,7 @@
         <Position x="2" y="4" z="0" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="0.1" y="0.1" z="0.1" />
-        <Mesh name="teapot.obj" file="D:\Git\directZob\resources\teapot.obj" />
+        <Mesh name="teapot.obj" file="teapot.obj" path="D:\Git\directZob\resources\" />
         <Physic type="2">
             <RigidBody type="2" active="1" />
             <Collider type="1" radius="1.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
@@ -432,7 +433,7 @@
         <Position x="4" y="4" z="0" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="0.1" y="0.1" z="0.1" />
-        <Mesh name="teapot.obj" file="D:\Git\directZob\resources\teapot.obj" />
+        <Mesh name="teapot.obj" file="teapot.obj" path="D:\Git\directZob\resources\" />
         <Physic type="2">
             <RigidBody type="2" active="1" />
             <Collider type="1" radius="1.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
@@ -442,7 +443,7 @@
         <Position x="6" y="4" z="0" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="0.1" y="0.1" z="0.1" />
-        <Mesh name="teapot.obj" file="D:\Git\directZob\resources\teapot.obj" />
+        <Mesh name="teapot.obj" file="teapot.obj" path="D:\Git\directZob\resources\" />
         <Physic type="2">
             <RigidBody type="2" active="1" />
             <Collider type="1" radius="1.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
