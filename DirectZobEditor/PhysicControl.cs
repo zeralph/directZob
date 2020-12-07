@@ -68,58 +68,74 @@ namespace DirectZobEditor
         {
             if (m_currentZobObjectWrapper != null)
             {
-                string s = m_currentZobObjectWrapper.GetPhysicComponentType();
-                comboPhysicType.SelectedItem = s;
-                s = m_currentZobObjectWrapper.GetPhysicComponentShapeType();
-                comboBoxPhysicShape.SelectedItem = s;
-                textRadius.Text = m_currentZobObjectWrapper.GetPhysicComponentShapeRadius().ToString();
-                textBHeight.Text = m_currentZobObjectWrapper.GetPhysicComponentShapeHeight().ToString();
-                CLI.ManagedVector3 v = m_currentZobObjectWrapper.GetPhysicComponentShapeHalfExtends();
-                textHalExtendsX.Text = v.x.ToString();
-                textHalExtendsY.Text = v.y.ToString();
-                textHalExtendsZ.Text = v.z.ToString();
+                string type = "";
+                string shapeType = "";
+                m_currentZobObjectWrapper.GetPhysicComponentInfo(ref type, ref shapeType);
+                comboPhysicType.SelectedItem = type;
+                comboBoxPhysicShape.SelectedItem = shapeType;
+
+                float radius = 0;
+                float height = 0;
+                float hx = 0;
+                float hy = 0;
+                float hz = 0;
+                string s = "";
+                m_currentZobObjectWrapper.GetPhysicComponentShapeInfo(ref radius, ref height, ref hx, ref hy, ref hz, ref s);
+                textRadius.Text = radius.ToString();
+                textBHeight.Text = height.ToString();
+                textHalExtendsX.Text = hx.ToString();
+                textHalExtendsY.Text = hy.ToString();
+                textHalExtendsZ.Text = hz.ToString();
+                float b = 0;
+                float m = 0;
+                float f = 0;
+                float rr = 0;
+                m_currentZobObjectWrapper.GetPhysicComponentColliderInfo(ref b, ref f, ref m, ref rr);
+                textBounciness.Text = b.ToString();
+                textFrictionCoeff.Text = f.ToString();
+                textMassDensity.Text = m.ToString();
+                textRollingResistance.Text = rr.ToString();
             }
         }
 
         private void UpdateValues()
         {
-            string s = (string)comboPhysicType.SelectedItem;
-            m_currentZobObjectWrapper.SetPhysicComponentType(s);
-            s = (string)comboBoxPhysicShape.SelectedItem;
-            m_currentZobObjectWrapper.SetPhysicComponentShapeType(s);
-
+            string type = (string)comboPhysicType.SelectedItem;
+            string shapeType = (string)comboBoxPhysicShape.SelectedItem;
+            m_currentZobObjectWrapper.SetPhysicComponentInfo(type, shapeType);
             textHalExtendsX.Text = textHalExtendsX.Text.Replace('.', ',');
             textHalExtendsY.Text = textHalExtendsY.Text.Replace('.', ',');
             textHalExtendsZ.Text = textHalExtendsZ.Text.Replace('.', ',');
             textRadius.Text = textRadius.Text.Replace('.', ',');
             textBHeight.Text = textBHeight.Text.Replace('.', ',');
-            float f;
-            CLI.ManagedVector3 v = m_currentZobObjectWrapper.GetPhysicComponentShapeHalfExtends();
-            float radius = m_currentZobObjectWrapper.GetPhysicComponentShapeRadius();
-            float height = m_currentZobObjectWrapper.GetPhysicComponentShapeHeight();
-            if (float.TryParse(textHalExtendsX.Text, out f))
-            {
-                v.x = f;
-            }
-            if (float.TryParse(textHalExtendsY.Text, out f))
-            {
-                v.y = f;
-            }
-            if (float.TryParse(textHalExtendsZ.Text, out f))
-            {
-                v.z = f;
-            }
-            if (float.TryParse(textRadius.Text, out f))
-            {
-                radius = f;
-            }
-            if (float.TryParse(textBHeight.Text, out f))
-            {
-                height = f;
-            }
-            m_currentZobObjectWrapper.SetPhysicComponentShapeRadius(radius);
-            m_currentZobObjectWrapper.SetPhysicComponentShapeHeight(height);
-            m_currentZobObjectWrapper.SetPhysicComponentShapeHalfExtends(v.x, v.y, v.z);
+            textBounciness.Text = textBounciness.Text.Replace('.', ',');
+            textFrictionCoeff.Text = textFrictionCoeff.Text.Replace('.', ',');
+            textMassDensity.Text = textMassDensity.Text.Replace('.', ',');
+            textRollingResistance.Text = textRollingResistance.Text.Replace('.', ',');
+            float radius = 0;
+            float height = 0;
+            float hx = 0;
+            float hy = 0;
+            float hz = 0;
+            string s = "";
+            m_currentZobObjectWrapper.GetPhysicComponentShapeInfo(ref radius, ref height, ref hx, ref hy, ref hz, ref s);
+            float.TryParse(textHalExtendsX.Text, out hx);         
+            float.TryParse(textHalExtendsY.Text, out hy);           
+            float.TryParse(textHalExtendsZ.Text, out hz);          
+            float.TryParse(textRadius.Text, out radius);       
+            float.TryParse(textBHeight.Text, out height);
+            m_currentZobObjectWrapper.SetPhysicComponentShapeInfo(radius, height, hx, hy, hz, s);
+            float b = 0;
+            float m = 0;
+            float f = 0;
+            float rr = 0;
+            m_currentZobObjectWrapper.GetPhysicComponentColliderInfo(ref b, ref f, ref m, ref rr);
+            float.TryParse(textBounciness.Text, out b);
+            float.TryParse(textFrictionCoeff.Text, out f);
+            float.TryParse(textMassDensity.Text, out m);
+            float.TryParse(textRollingResistance.Text, out rr);
+            b = Math.Max(Math.Min(b, 1), 0);
+            m_currentZobObjectWrapper.SetPhysicComponentColliderInfo(b, f, m, rr);
             m_forceUpdateOnNextFrame = 2;
             PhysicsGroupBox.Enabled = false;
         }
@@ -127,6 +143,11 @@ namespace DirectZobEditor
         private void buttonSet_Click(object sender, EventArgs e)
         {
             UpdateValues();
+        }
+
+        private void label8_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
