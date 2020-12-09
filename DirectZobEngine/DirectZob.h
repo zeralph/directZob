@@ -84,6 +84,7 @@ private:
 	ZobPhysicsEngine* m_physicsEngine = NULL;
 	Engine* m_engine = NULL;
 	Text2D* m_text = NULL;
+	gainput::InputManager* m_inputManager = NULL;
 	bool m_isRendering = false;
 	static bool g_bShowGrid;
 	static bool g_bShowMeshes;

@@ -119,6 +119,8 @@ void DirectZob::Init(int width, int height, bool bEditorMode)
 	m_materialManager = new MaterialManager();
 	m_meshManager = new MeshManager();
 	m_cameraManager = new CameraManager();
+	m_inputManager = new gainput::InputManager();
+	m_inputManager->SetDisplaySize(width, height);
 	int dx = 1;
 	int dy = 1;
 	float r = 0.0f;
@@ -167,6 +169,7 @@ int DirectZob::RunAFrame(DirectZob::engineCallback OnSceneUpdated /*=NULL*/, Dir
 	m_frameTick = clock();
 	if(m_initialized && m_engine->Started())
 	{
+		m_inputManager->Update();
 		m_cameraManager->UpdateAfter();
 		Color c = Color(DirectZob::GetInstance()->GetLightManager()->GetClearColor());
 		m_engine->ClearBuffer(&c);
