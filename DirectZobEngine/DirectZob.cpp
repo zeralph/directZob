@@ -34,6 +34,7 @@ DirectZob::~DirectZob()
 	delete m_lightManager;
 	delete m_text;
 	delete m_events;
+	delete m_inputManager;
 }
 
 std::string DirectZob::ExePath() {
