@@ -131,6 +131,8 @@
                     {
                         'include_dirs': [
                             '../dependencies/fbxsdk/macos/include',
+                            '../dependencies/gainput/include',
+                            '../dependencies/reactphysics3d/include',
                         ],
                         'direct_dependent_settings': {
                             'include_dirs': [
@@ -150,7 +152,7 @@
                                 # relative to xcode project
                                 '../../../dependencies/fbxsdk/macos/lib/clang/release/libfbxsdk.a',
                                 '../../../dependencies/reactphysics3d/lib/macos/libreactphysics3d.a',
-                                '../../../dependencies/gainput/lib/macos/libgainputstatic.a'
+                                '../../../dependencies/gainput/lib/macos/libgainputstatic.a',
                             ],
                         },
                     },
@@ -160,6 +162,8 @@
                     {
                         'include_dirs': [
                             '../dependencies/fbxsdk/linux/include',
+                            '../dependencies/gainput/include',
+                            '../dependencies/reactphysics3d/include',
                         ],
                         'defines': [
                             'LINUX',
@@ -174,6 +178,7 @@
                             'libraries': [
                                 '../../../dependencies/fbxsdk/linux/lib/libfbxsdk.a', 
                                 '../../../dependencies/reactphysics3d/lib/linux/libreactphysics3d.a',
+                                '../../../dependencies/gainput/lib/linux/libgainputstatic.a',
                                 '-lpthread',
                                 '-lxml2',
                                 '-lX11',
