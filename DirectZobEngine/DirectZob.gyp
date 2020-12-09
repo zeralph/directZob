@@ -213,6 +213,7 @@
                             'libraries': [
                                 # relative to sln
                                 '../../../dependencies/fbxsdk/windows/lib/vs2017/x64/release/libfbxsdk.lib',
+                                '../../../dependencies/gainput/lib/windows/gainput.lib',
                                 'user32.lib',
                                 'gdi32.lib',
                             ],
@@ -225,7 +226,8 @@
                                 'destination':
                                 '<(PRODUCT_DIR)',
                                 'files': [
-                                    '../dependencies/fbxsdk/windows/lib/vs2017/x64/release/libfbxsdk.dll'  # copy fbxsdk
+                                    '../dependencies/fbxsdk/windows/lib/vs2017/x64/release/libfbxsdk.dll',  # copy fbxsdk
+                                    '../dependencies/gainput/lib/windows/gainput.dll',
                                 ],
                             },
                         ],
