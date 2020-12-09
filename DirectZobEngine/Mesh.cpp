@@ -509,7 +509,8 @@ void Mesh::Update(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationM
 //		camera->ToViewSpace(&m_projectedVerticesTmp[i]);
 		view->Mul(&m_projectedVerticesTmp[i]);
 		proj->Mul(&m_projectedVerticesTmp[i]);
-		m_projectedVerticesTmp[i].x = (m_projectedVerticesTmp[i].x / m_projectedVerticesTmp[i].z + 1) * w;
+		static float kk = 1.0f;
+		m_projectedVerticesTmp[i].x = ((m_projectedVerticesTmp[i].x  + sinf(m_projectedVerticesTmp[i].y) * kk)/ m_projectedVerticesTmp[i].z + 1) * w;
 		m_projectedVerticesTmp[i].y = (m_projectedVerticesTmp[i].y / m_projectedVerticesTmp[i].z + 1) * h;
 	}
 	for (uint i = 0; i < m_nbNormals; i++)

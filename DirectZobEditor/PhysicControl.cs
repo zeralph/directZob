@@ -95,6 +95,9 @@ namespace DirectZobEditor
                 textFrictionCoeff.Text = f.ToString();
                 textMassDensity.Text = m.ToString();
                 textRollingResistance.Text = rr.ToString();
+                bool bScaleWithObject = false;
+                m_currentZobObjectWrapper.GetPhysicComponentScaleWithObject(ref bScaleWithObject);
+                checkBoxScaleWithObject.Checked = bScaleWithObject;
             }
         }
 
@@ -138,6 +141,7 @@ namespace DirectZobEditor
             m_currentZobObjectWrapper.SetPhysicComponentColliderInfo(b, f, m, rr);
             m_forceUpdateOnNextFrame = 2;
             PhysicsGroupBox.Enabled = false;
+            m_currentZobObjectWrapper.SetPhysicComponentScaleWithObject(checkBoxScaleWithObject.Checked);
         }
 
         private void buttonSet_Click(object sender, EventArgs e)
@@ -148,6 +152,11 @@ namespace DirectZobEditor
         private void label8_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void checkBoxScaleWithObject_CheckedChanged(object sender, EventArgs e)
+        {
+            
         }
     }
 }

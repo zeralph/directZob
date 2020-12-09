@@ -64,7 +64,7 @@
             <Scale x="1" y="1" z="1" />
             <Physic type="1">
                 <RigidBody type="0" active="1" />
-                <Collider type="3" radius="1.000000" height="2.000000" halfExtends_x="1.000000" halfExtends_y="20.000000" halfExtends_z="1.000000" />
+                <Collider type="3" radius="1.000000" height="2.000000" halfExtends_x="1.000000" halfExtends_y="20.000000" halfExtends_z="1.000000" scale_with_object="1"/>
                 <Material bounciness="0.100000" friction_coeff="2.010000" mass_density="0.010000" rolling_resistance="0.010000" />
             </Physic>
         </ZobObject>
@@ -74,7 +74,7 @@
             <Scale x="1" y="1" z="1" />
             <Physic type="1">
                 <RigidBody type="0" active="1" />
-                <Collider type="2" radius="0.200000" height="4.000000" halfExtends_x="1.000000" halfExtends_y="2.000000" halfExtends_z="1.000000" />
+                <Collider type="2" radius="0.200000" height="4.000000" halfExtends_x="1.000000" halfExtends_y="2.000000" halfExtends_z="1.000000" scale_with_object="1"/>
                 <Material bounciness="0.100000" friction_coeff="2.010000" mass_density="0.010000" rolling_resistance="0.010000" />
             </Physic>
         </ZobObject>
@@ -85,7 +85,7 @@
         <Scale x="1" y="1" z="1" />
         <Physic type="0">
             <RigidBody type="0" active="0" />
-            <Collider type="0" radius="1.000000" height="2.000000" halfExtends_x="1.000000" halfExtends_y="1.000000" halfExtends_z="1.000000" />
+            <Collider type="0" radius="1.000000" height="2.000000" halfExtends_x="1.000000" halfExtends_y="1.000000" halfExtends_z="1.000000" scale_with_object="1"/>
             <Material />
         </Physic>
     </ZobObject>
@@ -96,7 +96,7 @@
         <Mesh name="sphere_r1.obj" file="sphere_r1.obj" path="D:\Git\directZob\resources\" />
         <Physic type="2">
             <RigidBody type="2" active="1" />
-            <Collider type="1" radius="0.500000" height="2.000000" halfExtends_x="1.000000" halfExtends_y="1.000000" halfExtends_z="1.000000" />
+            <Collider type="1" radius="0.500000" height="2.000000" halfExtends_x="1.000000" halfExtends_y="1.000000" halfExtends_z="1.000000" scale_with_object="1"/>
             <Material bounciness="0.600000" friction_coeff="0.020000" mass_density="0.010000" rolling_resistance="0.010000" />
         </Physic>
     </ZobObject>
@@ -106,7 +106,7 @@
         <Scale x="1" y="1" z="1" />
         <Physic type="0">
             <RigidBody type="0" active="0" />
-            <Collider type="0" radius="1.000000" height="2.000000" halfExtends_x="1.000000" halfExtends_y="1.000000" halfExtends_z="1.000000" />
+            <Collider type="0" radius="1.000000" height="2.000000" halfExtends_x="1.000000" halfExtends_y="1.000000" halfExtends_z="1.000000" scale_with_object="1"/>
             <Material />
         </Physic>
         <Controller>0</Controller>
@@ -119,7 +119,7 @@
         <Mesh name="sphere_r1.obj" file="sphere_r1.obj" path="D:\Git\directZob\resources\" />
         <Physic type="2">
             <RigidBody type="2" active="1" />
-            <Collider type="1" radius="0.500000" height="2.000000" halfExtends_x="1.000000" halfExtends_y="1.000000" halfExtends_z="1.000000" />
+            <Collider type="1" radius="0.500000" height="2.000000" halfExtends_x="1.000000" halfExtends_y="1.000000" halfExtends_z="1.000000" scale_with_object="1"/>
             <Material bounciness="0.600000" friction_coeff="0.020000" mass_density="0.010000" rolling_resistance="0.010000" />
         </Physic>
     </ZobObject>
@@ -130,7 +130,7 @@
         <Mesh name="sphere_r1.obj" file="sphere_r1.obj" path="D:\Git\directZob\resources\" />
         <Physic type="2">
             <RigidBody type="2" active="1" />
-            <Collider type="1" radius="0.500000" height="2.000000" halfExtends_x="1.000000" halfExtends_y="1.000000" halfExtends_z="1.000000" />
+            <Collider type="1" radius="0.500000" height="2.000000" halfExtends_x="1.000000" halfExtends_y="1.000000" halfExtends_z="1.000000" scale_with_object="1"/>
             <Material bounciness="0.600000" friction_coeff="0.020000" mass_density="0.010000" rolling_resistance="0.010000" />
         </Physic>
     </ZobObject>
@@ -141,7 +141,7 @@
         <Mesh name="sphere_r1.obj" file="sphere_r1.obj" path="D:\Git\directZob\resources\" />
         <Physic type="2">
             <RigidBody type="2" active="1" />
-            <Collider type="1" radius="0.500000" height="2.000000" halfExtends_x="1.000000" halfExtends_y="1.000000" halfExtends_z="1.000000" />
+            <Collider type="1" radius="0.500000" height="2.000000" halfExtends_x="1.000000" halfExtends_y="1.000000" halfExtends_z="1.000000" scale_with_object="1"/>
             <Material bounciness="0.600000" friction_coeff="0.020000" mass_density="0.010000" rolling_resistance="0.010000" />
         </Physic>
     </ZobObject>
@@ -152,7 +152,7 @@
         <Mesh name="sphere_r1.obj" file="sphere_r1.obj" path="D:\Git\directZob\resources\" />
         <Physic type="2">
             <RigidBody type="2" active="1" />
-            <Collider type="1" radius="0.500000" height="2.000000" halfExtends_x="1.000000" halfExtends_y="1.000000" halfExtends_z="1.000000" />
+            <Collider type="1" radius="0.500000" height="2.000000" halfExtends_x="1.000000" halfExtends_y="1.000000" halfExtends_z="1.000000" scale_with_object="1"/>
             <Material bounciness="0.600000" friction_coeff="0.020000" mass_density="0.010000" rolling_resistance="0.010000" />
         </Physic>
     </ZobObject>
@@ -163,7 +163,7 @@
         <Mesh name="sphere_r1.obj" file="sphere_r1.obj" path="D:\Git\directZob\resources\" />
         <Physic type="2">
             <RigidBody type="2" active="1" />
-            <Collider type="1" radius="0.500000" height="2.000000" halfExtends_x="1.000000" halfExtends_y="1.000000" halfExtends_z="1.000000" />
+            <Collider type="1" radius="0.500000" height="2.000000" halfExtends_x="1.000000" halfExtends_y="1.000000" halfExtends_z="1.000000" scale_with_object="1"/>
             <Material bounciness="0.600000" friction_coeff="0.020000" mass_density="0.010000" rolling_resistance="0.010000" />
         </Physic>
     </ZobObject>
@@ -174,7 +174,7 @@
         <Mesh name="sphere_r1.obj" file="sphere_r1.obj" path="D:\Git\directZob\resources\" />
         <Physic type="2">
             <RigidBody type="2" active="1" />
-            <Collider type="1" radius="0.500000" height="2.000000" halfExtends_x="1.000000" halfExtends_y="1.000000" halfExtends_z="1.000000" />
+            <Collider type="1" radius="0.500000" height="2.000000" halfExtends_x="1.000000" halfExtends_y="1.000000" halfExtends_z="1.000000" scale_with_object="1"/>
             <Material bounciness="0.600000" friction_coeff="0.020000" mass_density="0.010000" rolling_resistance="0.010000" />
         </Physic>
     </ZobObject>
@@ -185,7 +185,7 @@
         <Mesh name="sphere_r1.obj" file="sphere_r1.obj" path="D:\Git\directZob\resources\" />
         <Physic type="2">
             <RigidBody type="2" active="1" />
-            <Collider type="1" radius="0.500000" height="2.000000" halfExtends_x="1.000000" halfExtends_y="1.000000" halfExtends_z="1.000000" />
+            <Collider type="1" radius="0.500000" height="2.000000" halfExtends_x="1.000000" halfExtends_y="1.000000" halfExtends_z="1.000000" scale_with_object="1"/>
             <Material bounciness="0.600000" friction_coeff="0.020000" mass_density="0.010000" rolling_resistance="0.010000" />
         </Physic>
     </ZobObject>
@@ -196,7 +196,7 @@
         <Mesh name="sphere_r1.obj" file="sphere_r1.obj" path="D:\Git\directZob\resources\" />
         <Physic type="2">
             <RigidBody type="2" active="1" />
-            <Collider type="1" radius="0.500000" height="2.000000" halfExtends_x="1.000000" halfExtends_y="1.000000" halfExtends_z="1.000000" />
+            <Collider type="1" radius="0.500000" height="2.000000" halfExtends_x="1.000000" halfExtends_y="1.000000" halfExtends_z="1.000000" scale_with_object="1"/>
             <Material bounciness="0.600000" friction_coeff="0.020000" mass_density="0.010000" rolling_resistance="0.010000" />
         </Physic>
     </ZobObject>
@@ -207,7 +207,7 @@
         <Mesh name="sphere_r1.obj" file="sphere_r1.obj" path="D:\Git\directZob\resources\" />
         <Physic type="2">
             <RigidBody type="2" active="1" />
-            <Collider type="1" radius="0.500000" height="2.000000" halfExtends_x="1.000000" halfExtends_y="1.000000" halfExtends_z="1.000000" />
+            <Collider type="1" radius="0.500000" height="2.000000" halfExtends_x="1.000000" halfExtends_y="1.000000" halfExtends_z="1.000000" scale_with_object="1"/>
             <Material bounciness="0.600000" friction_coeff="0.020000" mass_density="0.010000" rolling_resistance="0.010000" />
         </Physic>
     </ZobObject>
@@ -218,7 +218,7 @@
         <Mesh name="sphere_r1.obj" file="sphere_r1.obj" path="D:\Git\directZob\resources\" />
         <Physic type="2">
             <RigidBody type="2" active="1" />
-            <Collider type="1" radius="0.500000" height="2.000000" halfExtends_x="1.000000" halfExtends_y="1.000000" halfExtends_z="1.000000" />
+            <Collider type="1" radius="0.500000" height="2.000000" halfExtends_x="1.000000" halfExtends_y="1.000000" halfExtends_z="1.000000" scale_with_object="1"/>
             <Material bounciness="0.600000" friction_coeff="0.020000" mass_density="0.010000" rolling_resistance="0.010000" />
         </Physic>
     </ZobObject>

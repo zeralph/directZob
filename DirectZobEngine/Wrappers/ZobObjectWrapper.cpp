@@ -430,5 +430,23 @@ namespace CLI
 			GetInstance()->SetPhysicComponentColliderInfo(bounciness, frictionCoeff, massDensity, RollingResistance);
 		}
 	}
+
+	void ZobObjectWrapper::SetPhysicComponentScaleWithObject(bool b)
+	{
+		if (GetInstance())
+		{
+			GetInstance()->SetPhysicComponentScaleWithObject(b);
+		}
+	}
+
+	void ZobObjectWrapper::GetPhysicComponentScaleWithObject(bool% b)
+	{
+		if (GetInstance())
+		{
+			bool cb = false;
+			GetInstance()->GetPhysicComponentScaleWithObject(cb);
+			b = cb;
+		}
+	}
 }
 #endif //_WINDLL

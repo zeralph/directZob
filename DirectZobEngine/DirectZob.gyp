@@ -25,10 +25,12 @@
             'include_dirs': [
                 '.',
                 '../dependencies/reactphysics3d/include',
+				'../dependencies/gainput/include',
             ],
             'direct_dependent_settings': {
                 'include_dirs': [
                     '../dependencies/reactphysics3d/include',
+					'../dependencies/gainput/include',
                 ],
             },
             'sources': [        
@@ -42,7 +44,6 @@
                 'SceneLoader.h',
                 'Sprite.h',
 				'Sprite.cpp',
-				'EnumString.h',
 				'Rendering/Color.h',
 				'Rendering/Engine.h',
 				'Rendering/Engine.cpp',
@@ -114,7 +115,8 @@
                         },
                         'link_settings': {
                             'libraries': [
-                                '../../../dependencies/reactphysics3d/lib/windows/reactphysics3d.lib',  # relative to xcode project
+                                '../../../dependencies/reactphysics3d/lib/windows/reactphysics3d.lib',
+								'../../../dependencies/gainput/lib/windows/gainput.lib',
                             ],
                         },
                         'msvs_settings': {

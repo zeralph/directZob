@@ -384,6 +384,11 @@ namespace DirectZobEditor
                 }
             }
         }
+
+        private void duplicateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 
     public class ZobObjectTree

@@ -848,3 +848,13 @@ void ZobObject::SetPhysicComponentColliderInfo(float bounciness, float frictionC
 		material.setRollingResistance(RollingResistance);
 	}
 }
+
+void ZobObject::SetPhysicComponentScaleWithObject(bool b)
+{
+	m_physicComponent->SetScaleWithObject(b);
+}
+
+void ZobObject::GetPhysicComponentScaleWithObject(bool& b)
+{
+	b = m_physicComponent->GetScaleWithObject();
+}

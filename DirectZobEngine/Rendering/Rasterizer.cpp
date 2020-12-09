@@ -95,7 +95,7 @@ void Rasterizer::plotLine(int x0, int y0, int x1, int y1) const
 
 }
 
-void Rasterizer::DrawLine2(const Line3D* l) const
+void Rasterizer::DrawLine(const Line3D* l) const
 {	
 	int x = (int)l->xa;
 	int x2 = (int)l->xb;
@@ -158,7 +158,9 @@ void Rasterizer::DrawLine2(const Line3D* l) const
 				if (m_bufferData->zBuffer[k] > zRatio)
 				{
 					m_bufferData->buffer[k] = l->c;
+					m_bufferData->buffer[k+1] = l->c;
 					m_bufferData->zBuffer[k] = zRatio;
+					m_bufferData->zBuffer[k+1] = zRatio;
 				}
 			}
 			sz += dz;
@@ -193,67 +195,6 @@ void Rasterizer::DrawLine2(const Line3D* l) const
 				break;
 			}
 		}
-	}
-}
-
-void Rasterizer::DrawLine(const Line3D* l) const
-{
-	DrawLine2(l);
-	return;
-	float zRatio, zf = 0.0f;
-	int x0 = (int)l->xa;
-	int x1 = (int)l->xb;
-	int y0 = (int)l->ya;
-	int y1 = (int)l->yb;
-	float z0 = l->za;
-	float z1 = l->zb;
-	float dz = l->zb - l->za;
-	int dx = abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
-	int dy = -abs(y1 - y0), sy = y0 < y1 ? 1 : -1;
-	//dz /= (float)max(abs(x1 - x0) , abs(y1 - y0));
-	float tt = sqrtf((x1 - x0) * (x1 - x0) + (y1 - y0) * (y1 - y0));
-	dz /= tt;
-	int err = dx + dy, e2; /* error value e_xy */
-	bool boldX = false;
-	bool boldY = false;
-	int k, kx, ky;
-	float z = z0;
-	for (;;)
-	{  /* loop */
-
-		if (x0 >= 0 && x0 < m_bufferData->width && y0 >= m_startHeight && y0 < m_endHeight)
-		{
-			k = y0 * m_bufferData->width + x0;
-			kx = y0 * m_bufferData->width + (x0+1);
-			ky = (y0+1) * m_bufferData->width + x0;
-			if (k < m_bufferData->size)
-			{
-				float zf = m_bufferData->zBuffer[k];
-				float zRatio = l->noZ?0:(z  - m_bufferData->zNear) / (m_bufferData->zFar - m_bufferData->zNear);
-				if (zRatio >= 0.0f && (zf < 0.0f || zRatio < zf))
-				{
-					m_bufferData->buffer[k] = l->c;
-					m_bufferData->zBuffer[k] = zRatio;
-					if (boldX && kx < m_bufferData->size)
-					{
-						m_bufferData->buffer[kx] = l->c;
-						m_bufferData->zBuffer[kx] = zRatio;
-					}
-					if (boldY && ky < m_bufferData->size)
-					{
-						m_bufferData->buffer[ky] = l->c;
-						m_bufferData->zBuffer[ky] = zRatio;
-					}
-				}
-			}
-		}
-		if (x0 == x1 && y0 == y1) break;
-		e2 = 2 * err;
-		boldX = false;
-		boldY = false;
-		if (e2 >= dy) { err += dy; x0 += sx; boldY = l->bold; } /* e_xy+e_x > 0 */
-		if (e2 <= dx) { err += dx; y0 += sy; boldX = l->bold; } /* e_xy+e_y < 0 */
-		z += dz;
 	}
 }
 

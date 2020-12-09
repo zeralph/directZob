@@ -29,6 +29,14 @@
         private void InitializeComponent()
         {
             this.PhysicsGroupBox = new System.Windows.Forms.GroupBox();
+            this.textRollingResistance = new System.Windows.Forms.TextBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.textMassDensity = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.textFrictionCoeff = new System.Windows.Forms.TextBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.textBounciness = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
             this.textHalExtendsY = new System.Windows.Forms.TextBox();
             this.textHalExtendsZ = new System.Windows.Forms.TextBox();
             this.textHalExtendsX = new System.Windows.Forms.TextBox();
@@ -42,19 +50,13 @@
             this.label2 = new System.Windows.Forms.Label();
             this.comboPhysicType = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.textBounciness = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.textFrictionCoeff = new System.Windows.Forms.TextBox();
-            this.label7 = new System.Windows.Forms.Label();
-            this.textMassDensity = new System.Windows.Forms.TextBox();
-            this.label8 = new System.Windows.Forms.Label();
-            this.textRollingResistance = new System.Windows.Forms.TextBox();
-            this.label9 = new System.Windows.Forms.Label();
+            this.checkBoxScaleWithObject = new System.Windows.Forms.CheckBox();
             this.PhysicsGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // PhysicsGroupBox
             // 
+            this.PhysicsGroupBox.Controls.Add(this.checkBoxScaleWithObject);
             this.PhysicsGroupBox.Controls.Add(this.textRollingResistance);
             this.PhysicsGroupBox.Controls.Add(this.label9);
             this.PhysicsGroupBox.Controls.Add(this.textMassDensity);
@@ -79,11 +81,76 @@
             this.PhysicsGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.PhysicsGroupBox.Location = new System.Drawing.Point(0, 0);
             this.PhysicsGroupBox.Name = "PhysicsGroupBox";
-            this.PhysicsGroupBox.Size = new System.Drawing.Size(340, 315);
+            this.PhysicsGroupBox.Size = new System.Drawing.Size(340, 386);
             this.PhysicsGroupBox.TabIndex = 0;
             this.PhysicsGroupBox.TabStop = false;
             this.PhysicsGroupBox.Text = "Physics";
             this.PhysicsGroupBox.Enter += new System.EventHandler(this.Physics_Enter);
+            // 
+            // textRollingResistance
+            // 
+            this.textRollingResistance.Location = new System.Drawing.Point(96, 253);
+            this.textRollingResistance.Name = "textRollingResistance";
+            this.textRollingResistance.Size = new System.Drawing.Size(174, 20);
+            this.textRollingResistance.TabIndex = 23;
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(-2, 256);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(92, 13);
+            this.label9.TabIndex = 22;
+            this.label9.Text = "RollingResistance";
+            // 
+            // textMassDensity
+            // 
+            this.textMassDensity.Location = new System.Drawing.Point(96, 227);
+            this.textMassDensity.Name = "textMassDensity";
+            this.textMassDensity.Size = new System.Drawing.Size(174, 20);
+            this.textMassDensity.TabIndex = 21;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(23, 230);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(67, 13);
+            this.label8.TabIndex = 20;
+            this.label8.Text = "MassDensity";
+            this.label8.Click += new System.EventHandler(this.label8_Click);
+            // 
+            // textFrictionCoeff
+            // 
+            this.textFrictionCoeff.Location = new System.Drawing.Point(96, 201);
+            this.textFrictionCoeff.Name = "textFrictionCoeff";
+            this.textFrictionCoeff.Size = new System.Drawing.Size(174, 20);
+            this.textFrictionCoeff.TabIndex = 19;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(24, 204);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(66, 13);
+            this.label7.TabIndex = 18;
+            this.label7.Text = "FrictionCoeff";
+            // 
+            // textBounciness
+            // 
+            this.textBounciness.Location = new System.Drawing.Point(96, 175);
+            this.textBounciness.Name = "textBounciness";
+            this.textBounciness.Size = new System.Drawing.Size(174, 20);
+            this.textBounciness.TabIndex = 17;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(28, 178);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(62, 13);
+            this.label5.TabIndex = 16;
+            this.label5.Text = "Bounciness";
             // 
             // textHalExtendsY
             // 
@@ -149,7 +216,7 @@
             // 
             // buttonSet
             // 
-            this.buttonSet.Location = new System.Drawing.Point(96, 279);
+            this.buttonSet.Location = new System.Drawing.Point(96, 308);
             this.buttonSet.Name = "buttonSet";
             this.buttonSet.Size = new System.Drawing.Size(174, 23);
             this.buttonSet.TabIndex = 4;
@@ -203,70 +270,18 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Type";
             // 
-            // textBounciness
+            // checkBoxScaleWithObject
             // 
-            this.textBounciness.Location = new System.Drawing.Point(96, 175);
-            this.textBounciness.Name = "textBounciness";
-            this.textBounciness.Size = new System.Drawing.Size(174, 20);
-            this.textBounciness.TabIndex = 17;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(28, 178);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(62, 13);
-            this.label5.TabIndex = 16;
-            this.label5.Text = "Bounciness";
-            // 
-            // textFrictionCoeff
-            // 
-            this.textFrictionCoeff.Location = new System.Drawing.Point(96, 201);
-            this.textFrictionCoeff.Name = "textFrictionCoeff";
-            this.textFrictionCoeff.Size = new System.Drawing.Size(174, 20);
-            this.textFrictionCoeff.TabIndex = 19;
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(24, 204);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(66, 13);
-            this.label7.TabIndex = 18;
-            this.label7.Text = "FrictionCoeff";
-            // 
-            // textMassDensity
-            // 
-            this.textMassDensity.Location = new System.Drawing.Point(96, 227);
-            this.textMassDensity.Name = "textMassDensity";
-            this.textMassDensity.Size = new System.Drawing.Size(174, 20);
-            this.textMassDensity.TabIndex = 21;
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(23, 230);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(67, 13);
-            this.label8.TabIndex = 20;
-            this.label8.Text = "MassDensity";
-            this.label8.Click += new System.EventHandler(this.label8_Click);
-            // 
-            // textRollingResistance
-            // 
-            this.textRollingResistance.Location = new System.Drawing.Point(96, 253);
-            this.textRollingResistance.Name = "textRollingResistance";
-            this.textRollingResistance.Size = new System.Drawing.Size(174, 20);
-            this.textRollingResistance.TabIndex = 23;
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(-2, 256);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(92, 13);
-            this.label9.TabIndex = 22;
-            this.label9.Text = "RollingResistance";
+            this.checkBoxScaleWithObject.AutoSize = true;
+            this.checkBoxScaleWithObject.Checked = true;
+            this.checkBoxScaleWithObject.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxScaleWithObject.Location = new System.Drawing.Point(96, 285);
+            this.checkBoxScaleWithObject.Name = "checkBoxScaleWithObject";
+            this.checkBoxScaleWithObject.Size = new System.Drawing.Size(107, 17);
+            this.checkBoxScaleWithObject.TabIndex = 24;
+            this.checkBoxScaleWithObject.Text = "Scale with object";
+            this.checkBoxScaleWithObject.UseVisualStyleBackColor = true;
+            this.checkBoxScaleWithObject.CheckedChanged += new System.EventHandler(this.checkBoxScaleWithObject_CheckedChanged);
             // 
             // PhysicControl
             // 
@@ -274,7 +289,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.PhysicsGroupBox);
             this.Name = "PhysicControl";
-            this.Size = new System.Drawing.Size(340, 315);
+            this.Size = new System.Drawing.Size(340, 386);
             this.PhysicsGroupBox.ResumeLayout(false);
             this.PhysicsGroupBox.PerformLayout();
             this.ResumeLayout(false);
@@ -305,5 +320,6 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.TextBox textBounciness;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.CheckBox checkBoxScaleWithObject;
     }
 }

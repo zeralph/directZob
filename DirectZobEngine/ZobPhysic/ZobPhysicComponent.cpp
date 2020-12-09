@@ -14,6 +14,7 @@ ZobPhysicComponent::ZobPhysicComponent(TiXmlNode* node)
 	m_type = ePhysicComponentType_none;
 	m_shapeType = eShapeType_none;
 	m_nextShapeType = eShapeType_none;
+	m_scaleWithObject = true;
 	m_collider = NULL;
 	if (node)
 	{
@@ -29,6 +30,7 @@ ZobPhysicComponent::ZobPhysicComponent(TiXmlNode* node)
 		m_halfExtends.x = (float)atof(c->Attribute("halfExtends_x"));
 		m_halfExtends.y = (float)atof(c->Attribute("halfExtends_y"));
 		m_halfExtends.z = (float)atof(c->Attribute("halfExtends_z"));
+		m_scaleWithObject = (bool)(c->Attribute("scale_with_object")?atoi(c->Attribute("scale_with_object")):1);
 	}
 	m_rigidBody = DirectZob::GetInstance()->GetPhysicsEngine()->CreateRigidBody(&ZobVector3::Vector3Zero, &ZobVector3::Vector3Zero);
 	m_rigidBody->setType(rigidBodyType);
@@ -79,6 +81,8 @@ TiXmlNode* ZobPhysicComponent::SaveUnderNode(TiXmlNode* node)
 	c.SetAttribute("halfExtends_x", std::to_string((float)m_halfExtends.x).c_str());
 	c.SetAttribute("halfExtends_y", std::to_string((float)m_halfExtends.y).c_str());
 	c.SetAttribute("halfExtends_z", std::to_string((float)m_halfExtends.z).c_str());
+	c.SetAttribute("scale_with_object", std::to_string((bool)m_scaleWithObject).c_str());
+	
 	TiXmlElement m = TiXmlElement("Material");
 	if (m_collider)
 	{
@@ -240,6 +244,16 @@ void ZobPhysicComponent::LookAt(const ZobVector3* forward, const ZobVector3* lef
 		m_rigidBody->setTransform(t);
 	}
 }
+void ZobPhysicComponent::SetTotalScale(float x, float y, float z)
+{ 
+	if (m_totalScale.x != x || m_totalScale.y != y || m_totalScale.z != z)
+	{
+		m_totalScale.x = x;
+		m_totalScale.y = y;
+		m_totalScale.z = z;
+		m_bUpdateSize = true;
+	}
+}
 
 void ZobPhysicComponent::SetOrientation(float x, float y, float z)
 {
@@ -385,29 +399,43 @@ void ZobPhysicComponent::ResetPhysic()
 
 void ZobPhysicComponent::DrawGizmos(const Camera* camera, const ZobVector3* position, const ZobVector3* rotation)
 {
-	ZobMatrix4x4 mat;
-	ZobVector3 dir;
-	mat.SetPosition(position);
-	mat.SetRotation(rotation);
-	uint c = 0x00FF00;
-	bool bold = false;
-	Engine* e = DirectZob::GetInstance()->GetEngine();
-	switch (m_shapeType)
+	if (m_shapeType != eShapeType_none)
 	{
-	case eShapeType::eShapeType_sphere:
-		e->QueueSphere(camera, &mat, m_radius, c, bold, false);
-		break;
-	case eShapeType::eShapeType_box:
-		//TODO ERROR : ajouter le pivot !
-		e->QueueBox(camera, &mat, &m_halfExtends, position, c, bold, false);
-		break;
-	case eShapeType::eShapeType_capsule:
-		dir = mat.GetY();
-		e->QueueCapsule(camera, &mat, m_radius, m_height, &dir, c, bold, false);
-		break;
-	case eShapeType::eShapeType_convexMesh:
-	default:
-		break;
+		ZobMatrix4x4 mat;
+		ZobVector3 dir;
+		mat.SetPosition(position);
+		mat.SetRotation(rotation);
+		uint c = 0x00FF00;
+		bool bold = true;
+		Engine* e = DirectZob::GetInstance()->GetEngine();
+		float h = m_height;
+		float r = m_radius;
+		ZobVector3 he = ZobVector3(m_halfExtends);
+		if (m_scaleWithObject)
+		{
+			he.x *= m_totalScale.x;
+			he.y *= m_totalScale.y;
+			he.z *= m_totalScale.z;
+			h *= m_totalScale.y;
+			r *= fmax(m_totalScale.x, m_totalScale.z);
+		}
+		switch (m_shapeType)
+		{
+		case eShapeType::eShapeType_sphere:
+			e->QueueSphere(camera, &mat, r, c, bold, false);
+			break;
+		case eShapeType::eShapeType_box:
+			//TODO ERROR : ajouter le pivot !
+			e->QueueBox(camera, &mat, &he, position, c, bold, false);
+			break;
+		case eShapeType::eShapeType_capsule:
+			dir = mat.GetY();
+			e->QueueCapsule(camera, &mat, r, h, &dir, c, bold, false);
+			break;
+		case eShapeType::eShapeType_convexMesh:
+		default:
+			break;
+		}
 	}
 }
 
@@ -450,24 +478,37 @@ bool ZobPhysicComponent::UpdateColliderSize()
 	if (m_bUpdateSize && m_collider)
 	{
 		m_bUpdateSize = false;
+		float h = m_height;
+		float r = m_radius;
+		float hx = m_halfExtends.x;
+		float hy = m_halfExtends.y;
+		float hz = m_halfExtends.z;
+		if (m_scaleWithObject)
+		{
+			hx *= m_totalScale.x;
+			hy *= m_totalScale.y;
+			hz *= m_totalScale.z;
+			h *= m_totalScale.y;
+			r *= fmax(m_totalScale.x, m_totalScale.z);
+		}
 		CapsuleShape* c = dynamic_cast<CapsuleShape*>(m_collider->getCollisionShape());
 		if (c)
 		{
-			c->setHeight((decimal)m_height);
-			c->setRadius(m_radius);
+			c->setHeight(h);
+			c->setRadius(r);
 			return true;
 		}
 		BoxShape* b = dynamic_cast<BoxShape*>(m_collider->getCollisionShape());
 		if (b)
 		{
-			Vector3 he = Vector3(m_halfExtends.x, m_halfExtends.y, m_halfExtends.z);
+			Vector3 he = Vector3(hx, hy, hz);
 			b->setHalfExtents(he);
 			return true;
 		}
 		SphereShape* s = dynamic_cast<SphereShape*>(m_collider->getCollisionShape());
 		if (s)
 		{
-			s->setRadius(m_radius);
+			s->setRadius(r);
 			return true;
 		}
 	}

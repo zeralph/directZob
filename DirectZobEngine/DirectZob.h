@@ -12,7 +12,7 @@
 #include "Managers/MeshManager.h"
 #include "Managers/LightManager.h"
 #include "Managers/ZobObjectManager.h"
-
+#include <gainput/gainput.h>
 
 #define kUnused(var) (void) var;
 #define TARGET_MS_PER_FRAME 41.666f

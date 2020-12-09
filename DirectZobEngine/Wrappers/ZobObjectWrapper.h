@@ -51,7 +51,8 @@ namespace CLI {
 		void					SetPhysicComponentShapeInfo(float radius, float height, float hx, float hy, float hz, System::String^ mesh);
 		void					GetPhysicComponentColliderInfo(float% bounciness, float% frictionCoeff, float% massDensity, float% RollingResistance);
 		void					SetPhysicComponentColliderInfo(float bounciness, float frictionCoeff, float massDensity, float RollingResistance);
-
+		void					SetPhysicComponentScaleWithObject(bool b);
+		void					GetPhysicComponentScaleWithObject(bool% b);
 	protected:
 		DirectZobType::guid m_id;
 	};

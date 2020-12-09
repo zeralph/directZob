@@ -41,6 +41,7 @@
             this.saveAsFactoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.duplicateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -120,12 +121,13 @@
             this.TreeNodeRightClick.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.addToolStripMenuItem,
             this.removeToolStripMenuItem,
+            this.duplicateToolStripMenuItem,
             this.ZoomToStripMenuItem,
             this.saveAsFactoryToolStripMenuItem,
             this.editToolStripMenuItem,
             this.saveToolStripMenuItem});
             this.TreeNodeRightClick.Name = "contextMenuStrip1";
-            this.TreeNodeRightClick.Size = new System.Drawing.Size(181, 158);
+            this.TreeNodeRightClick.Size = new System.Drawing.Size(181, 180);
             this.TreeNodeRightClick.Closed += new System.Windows.Forms.ToolStripDropDownClosedEventHandler(this.TreeNodeRightClick_Closed);
             this.TreeNodeRightClick.Opening += new System.ComponentModel.CancelEventHandler(this.TreeNodeRightClick_Opening);
             this.TreeNodeRightClick.Opened += new System.EventHandler(this.TreeNodeRightClick_Opened);
@@ -133,21 +135,21 @@
             // addToolStripMenuItem
             // 
             this.addToolStripMenuItem.Name = "addToolStripMenuItem";
-            this.addToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.addToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.addToolStripMenuItem.Text = "Add ...";
             this.addToolStripMenuItem.Click += new System.EventHandler(this.AddToolStripMenuItem_Click);
             // 
             // removeToolStripMenuItem
             // 
             this.removeToolStripMenuItem.Name = "removeToolStripMenuItem";
-            this.removeToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.removeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.removeToolStripMenuItem.Text = "Remove";
             this.removeToolStripMenuItem.Click += new System.EventHandler(this.RemoveToolStripMenuItem_Click);
             // 
             // ZoomToStripMenuItem
             // 
             this.ZoomToStripMenuItem.Name = "ZoomToStripMenuItem";
-            this.ZoomToStripMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.ZoomToStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.ZoomToStripMenuItem.Text = "Zoom to";
             this.ZoomToStripMenuItem.Click += new System.EventHandler(this.ZoomToStripMenuItem_Click);
             // 
@@ -161,14 +163,21 @@
             // editToolStripMenuItem
             // 
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
-            this.editToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.editToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.editToolStripMenuItem.Text = "Edit";
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.saveToolStripMenuItem.Text = "Save";
+            // 
+            // duplicateToolStripMenuItem
+            // 
+            this.duplicateToolStripMenuItem.Name = "duplicateToolStripMenuItem";
+            this.duplicateToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.duplicateToolStripMenuItem.Text = "Duplicate";
+            this.duplicateToolStripMenuItem.Click += new System.EventHandler(this.duplicateToolStripMenuItem_Click);
             // 
             // ZobObjectListControl
             // 
@@ -201,5 +210,6 @@
         private System.Windows.Forms.ToolStripMenuItem saveAsFactoryToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem duplicateToolStripMenuItem;
     }
 }

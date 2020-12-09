@@ -93,6 +93,8 @@ public:
 	void							SetPhysicComponentShapeInfo(float radius, float height, float hx, float hy, float hz, std::string& mesh);
 	void							GetPhysicComponentColliderInfo(float& bounciness, float& frictionCoeff, float& massDensity, float& RollingResistance);
 	void							SetPhysicComponentColliderInfo(float bounciness, float frictionCoeff, float massDensity, float RollingResistance);
+	void							GetPhysicComponentScaleWithObject(bool& b);
+	void							SetPhysicComponentScaleWithObject(bool b);
 
 private:
 	void							SaveRecusrive(TiXmlNode* node, ZobObject* z);

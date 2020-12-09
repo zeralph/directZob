@@ -58,8 +58,7 @@ public:
 	void								ResetPhysic();
 	void								DrawGizmos(const Camera* camera, const ZobVector3* position, const ZobVector3* rotation);
 	ZobVector3							GetTotalScale() const { return ZobVector3(m_totalScale.x, m_totalScale.y, m_totalScale.z); }
-	void								SetTotalScale(float x, float y, float z) { m_totalScale.x = x; m_totalScale.y = y; m_totalScale.z = z; }
-	//const Transform						GetWorldTransform() const { return m_rigidBody?m_rigidBody->getTransform():Transform(); /*Transform(m_worldTransform);*/ };
+	void								SetTotalScale(float x, float y, float z);
 	const Transform						GetWorldTransform() const { return Transform(m_worldTransform); };
 	Transform							GetLocalTransform() const { return Transform(m_localTransform); };
 	void								SetWorldTransform(Transform t) { m_worldTransform = t; };
@@ -75,6 +74,9 @@ public:
 	ZobVector3							GetHalfExtends() const { return m_halfExtends; }
 	std::string							GetMesh() const { return std::string("not set"); }
 	Collider*							GetCollider() { return m_collider; }
+	void								SetScaleWithObject(bool b) { m_scaleWithObject = b; m_bUpdateSize = true; }
+	bool								GetScaleWithObject() const { return m_scaleWithObject; }
+
 private:
 	void								AddColliderInternal(CollisionShape* c);
 	float								ClampAngle(float a) const;
@@ -91,7 +93,7 @@ private:
 	Transform m_worldTransform;
 	Vector3 m_scale; 
 	Vector3 m_totalScale;
-
+	bool m_scaleWithObject;
 	float m_radius;
 	ZobVector3 m_halfExtends;
 	float m_height;
