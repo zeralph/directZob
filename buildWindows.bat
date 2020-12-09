@@ -14,4 +14,5 @@ msbuild build\DirectZob\DirectZob.sln /m /p:Configuration=%target%
 XCOPY .\build\DirectZob\%target%\DirectZobExe.exe .. /Y
 XCOPY .\build\DirectZob\%target%\DirectZobExe.pdb .. /Y
 XCOPY .\build\DirectZob\%target%\libfbxsdk.dll .. /Y
+XCOPY .\build\DirectZob\%target%\gainput.dll .. /Y
 popd
