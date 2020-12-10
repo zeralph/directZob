@@ -1,5 +1,7 @@
 #include "ZobCameraControllerFPS.h"
 #include "../ZobPhysic/ZobPhysicComponent.h"
+#include "../Managers/ZobInputManager.h"
+#include "../DirectZob.h"
 
 ZobCameraControllerFPS::ZobCameraControllerFPS(Camera* c) :ZobCameraController(c)
 {
@@ -63,10 +65,16 @@ void ZobCameraControllerFPS::Update()
 		m_deltaRoll = 0.0f;
 		m_zobCamera->LookAt(&m_zobCamera->m_forward, &m_zobCamera->m_left, &m_zobCamera->m_up, false);
 	}
+	
+	const gainput::InputMap* inputMap = DirectZob::GetInstance()->GetInputManager()->GetMap();
+	float x = inputMap->GetFloat(ZobInputManager::LeftStickX) * 1.0f;
+	float y = inputMap->GetFloat(ZobInputManager::LeftStickY) * 1.0f;
+	Rotate(x, y, 0);
 }
 
 void ZobCameraControllerFPS::Rotate(float x, float y, float z)
 {
+	//return;
 	m_deltaPitch = DEG_TO_RAD(y / 2.0f);
 	m_deltaYaw = DEG_TO_RAD(x / 2.0f);
 	m_deltaRoll = DEG_TO_RAD(0.0f);

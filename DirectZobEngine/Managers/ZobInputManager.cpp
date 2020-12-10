@@ -26,4 +26,6 @@ void ZobInputManager::Map()
 {
 	const gainput::DeviceId padId = m_gainputManager.CreateDevice<gainput::InputDevicePad>(0);
 	m_map->MapFloat(buttonA, padId, gainput::PadButtonA);
+	m_map->MapFloat(LeftStickX, padId, gainput::PadButtonLeftStickX);
+	m_map->MapFloat(LeftStickY, padId, gainput::PadButtonLeftStickY);
 }

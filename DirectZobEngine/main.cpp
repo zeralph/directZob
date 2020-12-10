@@ -330,7 +330,7 @@ int main(int argc, char* argv[])
 				break;
 			}
 			bTestFrame++;
-			c->RotateAroundPointAxis(&ZobVector3::Vector3Zero, &ZobVector3::Vector3Y, &ZobVector3::Vector3Y, rot, false);
+//			c->RotateAroundPointAxis(&ZobVector3::Vector3Zero, &ZobVector3::Vector3Y, &ZobVector3::Vector3Y, rot, false);
 		}
 		m_directZob.RunAFrame();
 		benchFps += m_directZob.GetFps();
