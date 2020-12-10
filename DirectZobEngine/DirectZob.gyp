@@ -84,6 +84,8 @@
                 'Managers/LightManager.h',
 				'Managers/MeshManager.h',
 				'Managers/MeshManager.cpp',
+				'Managers/ZobInputManager.h',
+				'Managers/ZobInputManager.cpp',
 				'ZobPhysic/ZobPhysicsEngine.h',
 				'ZobPhysic/ZobPhysicsEngine.cpp',
 				'ZobPhysic/ZobPhysicComponent.h',
@@ -334,6 +336,7 @@
                                 '<(PRODUCT_DIR)',
                                 'files': [
                                     '../dependencies/fbxsdk/windows/lib/vs2017/x64/release/libfbxsdk.dll'  # copy fbxsdk
+									'../dependencies/gainput/lib/windows/gainput.dll'
                                 ],
                             },
                         ],
