@@ -8,7 +8,7 @@ public:
     ~ZobCameraControllerFPS();
 
     void        Update() override;
-
+    void        PreUpdate() override;
     void        Rotate(float x, float y, float z) override;
     void        Move(float x, float y, float z) override;
 private:
@@ -19,4 +19,7 @@ private:
     float m_totalPitch;
     float m_totalYaw;
     float m_totalRoll;
+    float m_moveX;
+    float m_moveY;
+    float m_moveZ;
 };

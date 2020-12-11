@@ -7,6 +7,7 @@ public:
     ~ZobCameraController();
 
     virtual void            Update();
+    virtual void            PreUpdate();
     virtual void            Rotate(float x, float y, float z);
     virtual void            Move(float x, float y, float z);
     Camera::eCameraType     GetType() const { return m_type; }

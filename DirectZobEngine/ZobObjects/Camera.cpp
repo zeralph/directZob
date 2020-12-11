@@ -37,6 +37,7 @@ Camera::Camera(ZOBGUID::Type zobType, const std::string& name, eCameraType type,
 		}
 	}
 	m_fov = fov;
+	m_active = false;
 	m_tagetMode = eTarget_none;
 	sRayDbg = ZobVector3(1000, 1000, 1000);
 	sRayDbg2 = ZobVector3(1000, 1000, 1000);
@@ -50,6 +51,7 @@ Camera::Camera(ulong id, TiXmlElement* node, ZobObject* parent)
 	TiXmlElement * f = node->FirstChildElement("Fov");
 	float fov = f ? atof(f->GetText()) : 45.0f; 
 	m_fov = fov;
+	m_active = false;
 	f = node->FirstChildElement("Controller");
 	eCameraType type = f ? (eCameraType)atoi(f->GetText()):Camera::eCamera_base;
 	switch (type)
@@ -188,11 +190,30 @@ void Camera::RotateAroundPointAxis(const ZobVector3* point, const ZobVector3* ax
 	localPos = t2.getPosition();
 	t2.setPosition(p + localPos);
 	m_physicComponent->SetLocalTransform(t2);
+
+	Transform parentTransform = m_parent->GetPhysicComponent()->GetWorldTransform();
+	t2 = parentTransform * t2;
+	m_physicComponent->SetWorldTransform(t2);
+
 	LookAt(point, false);
 }
 
 void Camera::RecomputeFLUVectors(const ZobVector3* forwardV, const ZobVector3* upV)
 {
+	Quaternion q = m_physicComponent->GetWorldTransform().getOrientation();
+	Vector3 left = q * Vector3(1, 0, 0);
+	Vector3 up = q * Vector3(0, 1, 0);
+	Vector3 forward = q * Vector3(0, 0, 1);
+	m_left.x = left.x;
+	m_left.y = left.y;
+	m_left.z = left.z;
+	m_up.x = up.x;
+	m_up.y = up.y;
+	m_up.z = up.z;
+	m_forward.x = forward.x;
+	m_forward.y = forward.y;
+	m_forward.z = forward.z;
+	/*
 	ZobVector3 fw = forwardV;
 	fw.Normalize();
 	ZobVector3 up = upV;
@@ -203,6 +224,7 @@ void Camera::RecomputeFLUVectors(const ZobVector3* forwardV, const ZobVector3* u
 	m_forward = fw;
 	m_up = up;
 	m_left = left;
+	*/
 }
 
 void Camera::Move(float dx, float dz, float dy, bool moveTargetVector)
@@ -213,11 +235,20 @@ void Camera::Move(float dx, float dz, float dy, bool moveTargetVector)
 //void Camera::Update(const ZobMatrix4x4& parentMatrix, const ZobMatrix4x4& parentRSMatrix)
 void Camera::Update()
 {
-	ZobObject::Update();
+	//ZobObject::Update();
+	m_physicComponent->Update();
 	m_zobCameraController->Update();
+	ZobObject::Update();
+	UpdateViewProjectionMatrix();
 	RecomputeFrustrumPlanes();
 }
-static bool bLock = false;
+
+void Camera::PreUpdate()
+{
+	ZobObject::PreUpdate();
+	m_zobCameraController->PreUpdate();
+}
+
 void Camera::RecomputeFrustrumPlanes()
 {
 	ZobMatrix4x4 comboMatrix = ZobMatrix4x4(m_projMatrix);
@@ -344,11 +375,11 @@ bool Camera::ClipSegmentToFrustrum(ZobVector3* p1, ZobVector3* p2) const
 	return true;
 }
 
-void Camera::UpdateViewProjectionMatrix(const ZobVector3* eyeV)
+void Camera::UpdateViewProjectionMatrix(/*const ZobVector3* eyeV*/)
 {
 	BufferData* b = DirectZob::GetInstance()->GetEngine()->GetBufferData();
 	setProjectionMatrix(m_fov, b->width, b->height, b->zNear, b->zFar);
-	SetViewMatrix(&m_left, &m_up, &m_forward, eyeV);
+	SetViewMatrix(&m_left, &m_up, &m_forward, GetWorldPosition());
 }
 
 void Camera::UpdateViewProjectionMatrix(const ZobVector3* eyeV, const ZobVector3* targetV, const ZobVector3* upV)

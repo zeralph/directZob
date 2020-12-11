@@ -58,9 +58,10 @@ public:
 
 	//void					Update(const ZobMatrix4x4& parentMatrix, const ZobMatrix4x4& parentRSMatrix) override;
 	void					Update() override;
+	void					PreUpdate() override;
 	void					DrawGizmos(const Camera* camera, Core::Engine* engine) override;
 	TiXmlNode*				SaveUnderNode(TiXmlNode* node) override;
-	void					UpdateViewProjectionMatrix(const ZobVector3* eyeV);
+	void					UpdateViewProjectionMatrix(/*const ZobVector3* eyeV*/);
 	void					UpdateViewProjectionMatrix(const ZobVector3 * eyeV, const ZobVector3* targetV, const ZobVector3* upV);
 	void					UpdateViewProjectionMatrix(const ZobVector3* eye, const float pitch, const float yaw);
 	inline const ZobMatrix4x4* GetViewMatrix() const { return &m_viewRotMatrix; };
@@ -78,7 +79,7 @@ public:
 	void					Move(float dx, float dz, float dy, bool moveTargetVector);
 	void					Zoom(float z);
 	void					Rotate(float x, float y, float z);
-
+	void					SetActive(bool b) { m_active = b; }
 	Ray						From2DToWorld(float x, float y);
 	const Plane*			GetFrustrumPlanes() const { return &m_frustrumPlanes[0]; };
 	bool					From2DToWorldOnPlane(const float x, const float y, const ZobVector3* p0, const ZobVector3* pn, ZobVector3* ret);
@@ -117,5 +118,6 @@ private:
 	//ZobVector3 m_nextTranslation;
 	Plane m_frustrumPlanes[6];
 	ZobCameraController* m_zobCameraController;
+	float m_active;
 };
 

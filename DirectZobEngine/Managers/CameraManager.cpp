@@ -33,10 +33,12 @@ void CameraManager::RemoveCamera(Camera* c)
 		}
 		if (c == m_curCam)
 		{
+			m_curCam->SetActive(false);
 			m_curCam = NULL;
 		}
 		if (c == m_nextCamera)
 		{
+			m_nextCamera->SetActive(false);
 			m_nextCamera = NULL;
 		}
 	}
@@ -70,7 +72,9 @@ void CameraManager::UpdateAfter()
 {
 	if (m_nextCamera)
 	{
+		m_curCam->SetActive(false);
 		m_curCam = m_nextCamera;
+		m_curCam->SetActive(true);
 		m_nextCamera = NULL;
 	}
 }
@@ -116,11 +120,12 @@ void CameraManager::SetNextCamera(std::string& name)
 
 void CameraManager::AddCamera(Camera* c)
 {
-		m_cameras.push_back(c);
-		if (!m_curCam)
-		{
-			m_curCam = c;
-		}
+	m_cameras.push_back(c);
+	if (!m_curCam)
+	{
+		m_curCam = c;
+		m_curCam->SetActive(true);
+	}
 }
 
 Camera* CameraManager::CreateEditorCamera(std::string& name, Camera::eCameraType type, float fov, ZobObject* parent)

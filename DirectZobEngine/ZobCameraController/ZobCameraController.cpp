@@ -15,8 +15,12 @@ ZobCameraController::~ZobCameraController()
 
 void ZobCameraController::Update()
 {
-    ZobVector3 v = m_zobCamera->GetWorldPosition();
-    m_zobCamera->UpdateViewProjectionMatrix(&v);
+    //ZobVector3 v = m_zobCamera->GetWorldPosition();
+    //m_zobCamera->UpdateViewProjectionMatrix(&v);
+}
+
+void ZobCameraController::PreUpdate()
+{
 }
 
 void ZobCameraController::Rotate(float x, float y, float z)

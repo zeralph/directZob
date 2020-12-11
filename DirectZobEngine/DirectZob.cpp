@@ -169,7 +169,7 @@ int DirectZob::RunAFrame(DirectZob::engineCallback OnSceneUpdated /*=NULL*/, Dir
 	m_frameTick = clock();
 	if(m_initialized && m_engine->Started())
 	{
-		m_inputManager->Update();
+		m_inputManager->Update(m_frameTick);
 		m_cameraManager->UpdateAfter();
 		Color c = Color(DirectZob::GetInstance()->GetLightManager()->GetClearColor());
 		m_engine->ClearBuffer(&c);
@@ -232,7 +232,7 @@ int DirectZob::RunAFrame(DirectZob::engineCallback OnSceneUpdated /*=NULL*/, Dir
 			if (m_frameTime < TARGET_MS_PER_FRAME)
 			{
 				m_text->Print(0, 16, 1, &sBuf, 0xFF00FF00);
-				//SLEEP((TARGET_MS_PER_FRAME - m_frameTime));
+				SLEEP((TARGET_MS_PER_FRAME - m_frameTime));
 			}
 			else
 			{
@@ -253,6 +253,12 @@ int DirectZob::RunAFrame(DirectZob::engineCallback OnSceneUpdated /*=NULL*/, Dir
 
 			}
 			m_text->Print(0, 32, 1, &sBuf, 0xFFFFFFFF);
+			_snprintf_s(buffer, MAX_PATH, "Controller LX : %.2f, LY  : %.2f, RX : %.2f, RY : %.2f", m_inputManager->GetMap()->GetFloat(ZobInputManager::LeftStickX), 
+																									m_inputManager->GetMap()->GetFloat(ZobInputManager::LeftStickY),
+																									m_inputManager->GetMap()->GetFloat(ZobInputManager::RightStickX),
+																									m_inputManager->GetMap()->GetFloat(ZobInputManager::RightStickY));
+			sBuf = std::string(buffer);
+			m_text->Print(0, 48, 1, &sBuf, 0xFF0000FF);
 		}
 		m_engine->SetDisplayedBuffer();
 	}
