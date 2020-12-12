@@ -7,11 +7,14 @@
 #include "../Rendering/Engine.h"
 #include "ZOBGUID.h"
 #include "tinyxml.h"
+#include "Behaviors/ZobBehaviorFactory.h"
 
 class Mesh;
 class ZobPhysicComponent;
 class ZobObject:public ZOBGUID
 {
+friend class ZobBehavior;
+friend class ZobBehaviorCar;
 public:
 
 	ZobObject(ZOBGUID::Type t, ZOBGUID::SubType s, const std::string& name, ZobObject* parent = NULL, const std::string* factoryFile =NULL);
@@ -107,6 +110,7 @@ protected:
 	ZobPhysicComponent* m_physicComponent;
 	Mesh* m_mesh = NULL;
 	std::vector<ZobObject*> m_children;
+	ZobBehavior* m_behavior;
 	ZobMatrix4x4 m_modelMatrix;
 	ZobMatrix4x4 m_rotationScaleMatrix;
 	std::string m_name;

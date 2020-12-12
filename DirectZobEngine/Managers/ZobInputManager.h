@@ -19,7 +19,7 @@ public:
 		LeftShoulder,
 		RightStickX,
 		RightStickY,
-
+		RightShoulder,
 	};
 
 	ZobInputManager(int width, int height);

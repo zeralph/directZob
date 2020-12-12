@@ -74,6 +74,7 @@ public:
 	ZobVector3							GetHalfExtends() const { return m_halfExtends; }
 	std::string							GetMesh() const { return std::string("not set"); }
 	Collider*							GetCollider() { return m_collider; }
+	RigidBody*							GetRigicBody() { return m_rigidBody; }
 	void								SetScaleWithObject(bool b) { m_scaleWithObject = b; m_bUpdateSize = true; }
 	bool								GetScaleWithObject() const { return m_scaleWithObject; }
 

@@ -120,12 +120,16 @@ namespace DirectZobEditor
             this.propertiesPanel.MinimumSize = new Size(300, 500);
             m_engineWindow.OnEngineStopped += new EventHandler(OnEngineClosed);
             this.WindowState = FormWindowState.Maximized;
-            m_directZobWrapper.NewScene();
+            //m_directZobWrapper.NewScene();
+            
             EventHandler handler = OnNewScene;
             if (null != handler)
             {
                 handler(this, EventArgs.Empty);
             }
+            m_directZobWrapper.LoadScene("D:\\Git\\directZob\\resources\\", "carTest.dzs");
+            m_engineWindow.GetEngineWrapper().ShowGrid(false);
+            m_directZobWrapper.StartPhysic();
         }
 
         public string Getpath()

@@ -14,7 +14,7 @@ public:
 	Text2D(Engine* engine, Events* events);
 	~Text2D();
 	void Print(uint x, uint y, uint size, const std::string* text, uint color);
-
+	void Print(uint x, uint y, uint size, uint color, const char* fmt, ...);
 private:
 
 	void PrintChar(uint x, uint y, uint size, const char c, uint color);

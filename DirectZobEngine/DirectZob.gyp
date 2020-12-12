@@ -95,7 +95,11 @@
 				'ZobCameraController/ZobCameraControllerOrbital.h',
 				'ZobCameraController/ZobCameraControllerOrbital.cpp',
 				'ZobCameraController/ZobCameraControllerFPS.h',
-				'ZobCameraController/ZobCameraControllerFPS.cpp',				
+				'ZobCameraController/ZobCameraControllerFPS.cpp',
+				'Behaviors/ZobBehaviorFactory.h',
+				'Behaviors/ZobBehavior.h',
+				'Behaviors/ZobBehaviorCar.h',
+				'Behaviors/ZobBehaviorCar.cpp',				
             ],
             'conditions': [
                 [

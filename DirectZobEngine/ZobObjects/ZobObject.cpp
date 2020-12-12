@@ -12,6 +12,7 @@ ZobObject::ZobObject(Type t, SubType s, const std::string& name, ZobObject* pare
 	DirectZob::LogInfo("ZobObject %s creation", name.c_str());
 	DirectZob::AddIndent();
 	sObjectNumber++;
+	m_behavior = NULL;
 	m_factoryFile = factoryFile?factoryFile->c_str():"";
 	m_physicComponent = new ZobPhysicComponent(NULL);
 	if (name.length() == 0)
@@ -55,6 +56,7 @@ ZobObject::ZobObject(Type t, SubType s, const std::string& name, ZobObject* pare
 ZobObject::ZobObject(DirectZobType::guid id, TiXmlElement* node, ZobObject* parent, const std::string* factoryFile /*=NULL*/)
 	:ZOBGUID(id)
 {
+	m_behavior = NULL;
 	sObjectNumber++;
 	m_factoryFile = factoryFile ? factoryFile->c_str() : "";
 	ZobVector3 position, rotation, scale, orientation = ZobVector3();
@@ -113,7 +115,8 @@ ZobObject::ZobObject(DirectZobType::guid id, TiXmlElement* node, ZobObject* pare
 	m_physicComponent->Init(&position, &rotation);
 	SetScale(scale.x, scale.y, scale.z);
 	Update();
-
+	TiXmlElement* behaviorNode = node->FirstChildElement("Behavior");
+	m_behavior = ZobBehaviorFactory::CreateBehavior(this, behaviorNode);
 	//mesh loading section
 	TiXmlElement* meshNode = node->FirstChildElement("Mesh");
 	if (meshNode)
@@ -135,7 +138,10 @@ ZobObject::~ZobObject()
 	DirectZob::AddIndent();
 
 	DirectZob::GetInstance()->GetZobObjectManager()->AddIdToDeleted(GetId());
-
+	if (m_behavior)
+	{
+		delete m_behavior;
+	}
 	delete m_physicComponent;
 	if (m_parent != NULL)
 	{
@@ -218,6 +224,10 @@ void ZobObject::UpdateMesh(const Camera* camera, Core::Engine* engine)
 
 void ZobObject::PreUpdate()
 {
+	if (m_behavior)
+	{
+		m_behavior->PreUpdate();
+	}
 	SetParentInternal();
 	DeleteInternal();
 }
@@ -285,6 +295,10 @@ void ZobObject::UpdateBehavior()
 //void ZobObject::Update(const ZobMatrix4x4& parentMatrix, const ZobMatrix4x4& parentRSMatrix)
 void ZobObject::Update()
 {
+	if (m_behavior)
+	{
+		m_behavior->Update();
+	}
 	Transform parentTransform;
 	ZobVector3 parentScale;
 	if (m_parent)
@@ -389,6 +403,10 @@ void ZobObject::DrawGizmos(const Camera* camera, Core::Engine* engine)
 	ZobVector3 p = GetWorldPosition();
 	ZobVector3 r = GetWorldRotation();
 	m_physicComponent->DrawGizmos(camera, &p, &r);
+	if (m_behavior)
+	{
+		m_behavior->DrawGizmos(camera, &p, &r);
+	}
 }
 
 int ZobObject::GetChildPosition(const ZobObject* z)
@@ -514,12 +532,12 @@ void ZobObject::SaveRecusrive(TiXmlNode* node, ZobObject* z)
 
 TiXmlNode* ZobObject::SaveUnderNode(TiXmlNode* node)
 {
-	TiXmlElement* o = new TiXmlElement("ZobObject");
+	TiXmlElement* objectNode = new TiXmlElement("ZobObject");
 	TiXmlElement p = TiXmlElement("Position");
 	TiXmlElement r = TiXmlElement("Rotation");
 	TiXmlElement s = TiXmlElement("Scale");
-	o->SetAttribute("name", GetName().c_str());
-	o->SetAttribute("guid", GetId());
+	objectNode->SetAttribute("name", GetName().c_str());
+	objectNode->SetAttribute("guid", GetId());
 	std::string meshName = GetMeshName();
 	std::string meshFileName = GetMeshFileName();
 	std::string meshPath = GetMeshPath();
@@ -532,20 +550,24 @@ TiXmlNode* ZobObject::SaveUnderNode(TiXmlNode* node)
 	s.SetDoubleAttribute("x", GetScale().x);
 	s.SetDoubleAttribute("y", GetScale().y);
 	s.SetDoubleAttribute("z", GetScale().z);
-	o->InsertEndChild(p);
-	o->InsertEndChild(r);
-	o->InsertEndChild(s);
+	objectNode->InsertEndChild(p);
+	objectNode->InsertEndChild(r);
+	objectNode->InsertEndChild(s);
 	if (meshName.length() > 0 && meshFileName.length() > 0)
 	{
-		TiXmlElement m = TiXmlElement("Mesh");
-		m.SetAttribute("name", meshName.c_str());
-		m.SetAttribute("file", meshFileName.c_str());
-		m.SetAttribute("path", meshPath.c_str());
-		o->InsertEndChild(m);
-		o->SetAttribute("type", "mesh");
+		TiXmlElement meshNode = TiXmlElement("Mesh");
+		meshNode.SetAttribute("name", meshName.c_str());
+		meshNode.SetAttribute("file", meshFileName.c_str());
+		meshNode.SetAttribute("path", meshPath.c_str());
+		objectNode->InsertEndChild(meshNode);
+		objectNode->SetAttribute("type", "mesh");
 	}
-	m_physicComponent->SaveUnderNode(o);
-	return (TiXmlNode*)o;
+	if (m_behavior)
+	{
+		m_behavior->SaveUnderNode(objectNode);
+	}
+	m_physicComponent->SaveUnderNode(objectNode);
+	return (TiXmlNode*)objectNode;
 }
 
 void ZobObject::CreateSprite()

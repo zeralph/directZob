@@ -1,8 +1,13 @@
 #include "text2D.h"
 #include "lodepng.h"
 #include "BaseFont.h"
-
+#include "../Types.h"
+#include <stdio.h>
+#include <string>
+#include <iostream>
 using namespace Core;
+
+static char buffer[MAX_PATH];
 
 Text2D::Text2D(Engine* engine, Events* events)
 {
@@ -33,6 +38,26 @@ void Text2D::Print(uint x, uint y, uint size, const std::string* text, uint colo
 		{
 			int xx = x + i * m_charWidth;
 			PrintChar(xx, y, size, text->at(i), color);
+		}
+	}
+}
+
+void Text2D::Print(uint x, uint y, uint size, uint color, const char* fmt, ...)
+{
+	if (m_data != NULL)
+	{
+		va_list vl;
+		va_start(vl, fmt);
+		int size = _vscprintf(fmt, vl);
+		std::string buf;
+		buf.reserve(size + 1);
+		buf.resize(size);
+		vsnprintf_s((char*)buf.data(), size, _TRUNCATE, fmt, vl);
+		va_end(vl);
+		for (size_t i = 0; i < size; i++)
+		{
+			int xx = x + i * m_charWidth;
+			PrintChar(xx, y, size, buf[i], color);
 		}
 	}
 }
