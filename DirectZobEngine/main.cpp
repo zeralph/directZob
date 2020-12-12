@@ -296,6 +296,7 @@ int main(int argc, char* argv[])
 	ZobVector3 initialCamPos = camPos;
 	//m_directZob.StartPhysic();
 	int bTestFrame = 0;
+	bStartPhysics = true;
 	for (;;)
 	{
 		if (bStartPhysics && !m_directZob.IsPhysicPlaying())
