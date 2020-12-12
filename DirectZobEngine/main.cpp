@@ -279,14 +279,14 @@ int main(int argc, char* argv[])
 	m_directZob.GetEngine()->ShowNormals(false);
 	m_directZob.GetEngine()->ShowGrid(false);
 	m_directZob.GetEngine()->SetRenderMode(eRenderMode::eRenderMode_fullframe);
-	m_directZob.GetEngine()->DrawGizmos(false);
+	m_directZob.GetEngine()->DrawGizmos(true);
 
 	if (true)
 	{
 		m_directZob.GetEngine()->ShowBBoxes(false);
 		m_directZob.GetEngine()->ShowGrid(false);
 		m_directZob.GetEngine()->SetRenderMode(eRenderMode::eRenderMode_fullframe);
-		m_directZob.GetEngine()->DrawGizmos(false);
+		m_directZob.GetEngine()->DrawGizmos(true);
 	}
 
 	//m_directZob.GetEngine()->GetBufferData()->zFar = 70.0f;

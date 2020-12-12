@@ -90,7 +90,7 @@ TiXmlNode* ZobBehaviorCar::SaveUnderNode(TiXmlNode* node)
 	TiXmlElement m = TiXmlElement("Behavior");
 	m.SetAttribute("type", (int)eBehavior_car);
 	node->InsertEndChild(m);
-	return &m;
+	return NULL;
 }
 
 void ZobBehaviorCar::DrawGizmos(const Camera* camera, const ZobVector3* position, const ZobVector3* rotation) const
