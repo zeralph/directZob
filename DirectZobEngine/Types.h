@@ -14,7 +14,7 @@
 	#define SLEEP(a) sleep(a/1000)
 	#define _TRUNCATE ((size_t)-1)
 	#define _snprintf_s(a,b,c,...) snprintf(a,b,c,__VA_ARGS__)
-	#define _vsnprintf_s(a,b,c,...) vsnprintf(a,b,c,__VA_ARGS__)
+	#define _vsnprintf(a,b,c,...) vsnprintf(a,b,c,__VA_ARGS__)
 	#define _vscprintf(a,...) snprintf(NULL,0,a,__VA_ARGS__)
     #define fopen_s(fp, fmt, mode)  ({\
         *(fp)=fopen( (fmt), (mode));\
@@ -29,7 +29,7 @@
 	#define SLEEP(a) sleep(a/1000)
 	#define _TRUNCATE ((size_t)-1)
 	#define _snprintf_s(a,b,c,...) snprintf(a,b,c,__VA_ARGS__)
-	#define _vsnprintf_s(a,b,c,...) vsnprintf(a,b,c,__VA_ARGS__)
+	#define _vsnprintf(a,b,c,...) vsnprintf(a,b,c,__VA_ARGS__)
 	#define _vscprintf(a,...) snprintf(NULL,0,a,__VA_ARGS__)
 	#define fopen_s(fp, fmt, mode)  ({\
         *(fp)=fopen( (fmt), (mode));\

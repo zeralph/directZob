@@ -291,9 +291,9 @@ int main(int argc, char* argv[])
 
 	//m_directZob.GetEngine()->GetBufferData()->zFar = 70.0f;
 	//m_directZob.GetZobObjectManager()->GetZobObject("fbx_example")->SetRotation(0, 90, 0);
-	Camera* c = m_directZob.GetCameraManager()->GetCurrentCamera();
-	ZobVector3 camPos = c?c->GetWorldPosition(): ZobVector3();
-	ZobVector3 initialCamPos = camPos;
+	//Camera* c = m_directZob.GetCameraManager()->GetCurrentCamera();
+	//ZobVector3 camPos = c?c->GetWorldPosition(): ZobVector3();
+	//ZobVector3 initialCamPos = camPos;
 	//m_directZob.StartPhysic();
 	int bTestFrame = 0;
 	bStartPhysics = true;
@@ -311,10 +311,10 @@ int main(int argc, char* argv[])
 		}
 		if (bBench)
 		{
-			if (m_directZob.GetCameraManager()->GetCurrentCamera())
-			{
-				m_directZob.GetCameraManager()->GetCurrentCamera()->SetWorldPosition(camPos.x, camPos.y, camPos.z);
-			}
+			//if (m_directZob.GetCameraManager()->GetCurrentCamera())
+			//{
+			//	m_directZob.GetCameraManager()->GetCurrentCamera()->SetWorldPosition(camPos.x, camPos.y, camPos.z);
+			//}
 			Light* red = m_directZob.GetLightManager()->GetLight("red");
 			Light* blue = m_directZob.GetLightManager()->GetLight("blue");
 			Light* green = m_directZob.GetLightManager()->GetLight("green");

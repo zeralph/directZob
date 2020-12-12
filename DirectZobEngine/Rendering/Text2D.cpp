@@ -52,7 +52,7 @@ void Text2D::Print(uint x, uint y, uint size, uint color, const char* fmt, ...)
 		std::string buf;
 		buf.reserve(size + 1);
 		buf.resize(size);
-		_vsnprintf_s((char*)buf.data(), size, fmt, vl);
+		_vsnprintf((char*)buf.data(), size, fmt, vl);
 		va_end(vl);
 		for (size_t i = 0; i < size; i++)
 		{

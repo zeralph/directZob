@@ -44,6 +44,7 @@
                 'SceneLoader.h',
                 'Sprite.h',
 				'Sprite.cpp',
+				'Types.h'
 				'Rendering/Color.h',
 				'Rendering/Engine.h',
 				'Rendering/Engine.cpp',
