@@ -7,7 +7,7 @@
 #include "../Rendering/Engine.h"
 #include "ZOBGUID.h"
 #include "tinyxml.h"
-#include "Behaviors/ZobBehaviorFactory.h"
+#include "../Behaviors/ZobBehaviorFactory.h"
 
 class Mesh;
 class ZobPhysicComponent;
