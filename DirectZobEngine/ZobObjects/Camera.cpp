@@ -170,6 +170,15 @@ bool Camera::GetTargetVector(ZobVector3* t)
 			return true;
 		}
 	}
+	else
+	{
+		ZobVector3 v = ZobVector3(m_parent->GetWorldPosition());
+		//v = v - GetWorldPosition();
+		//v.Normalize();
+		t->Copy(&v);
+		m_targetVector = ZobVector3(v);
+		return true;
+	}
 	return false;
 }
 

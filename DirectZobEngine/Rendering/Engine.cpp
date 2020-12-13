@@ -299,14 +299,16 @@ void Engine::DrawGrid(const Camera *camera)
 	ZobVector3 a;
 	ZobVector3 b;
 	bool bold;
+	float cx = 0; // (int)(camera->GetWorldPosition().x);
+	float cz = 0; // (int)(camera->GetWorldPosition().z);
 	for (int i = -gridSize; i <= gridSize; i += 1.0f)
 	{
-		a.x = i;
-		b.x = i;
+		a.x = i + cx;
+		b.x = i + cx;
 		a.y = 0.0f;
 		b.y = 0.0f;
-		a.z = -gridSize;
-		b.z = gridSize;
+		a.z = -gridSize + cz;
+		b.z = gridSize + cz;
 		bold = i % 5 == 0;
 		if (bold)
 		{
@@ -319,10 +321,10 @@ void Engine::DrawGrid(const Camera *camera)
 	}
 	for (int i = -gridSize; i <= gridSize; i += 1.0f)
 	{
-		a.z = b.z = i;
+		a.z = b.z = i +cz;
 		a.y = b.y = 0.0f;
-		a.x = -gridSize;
-		b.x = gridSize;
+		a.x = -gridSize + cx;
+		b.x = gridSize + cx;
 		bold = i % 5 == 0;
 		if (bold)
 		{

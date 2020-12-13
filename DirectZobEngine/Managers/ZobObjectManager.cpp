@@ -124,9 +124,9 @@ void ZobObjectManager::PreUpdate()
 	m_rootObject->PreUpdate();
 }
 
-void ZobObjectManager::UpdateBehavior()
+void ZobObjectManager::UpdateBehavior(float dt)
 {
-	m_rootObject->UpdateBehavior();
+	m_rootObject->UpdateBehavior(dt);
 }
 
 void ZobObjectManager::StartUpdateScene(const Camera* camera, Core::Engine* engine)

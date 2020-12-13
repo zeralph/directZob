@@ -283,22 +283,22 @@ void ZobObject::DeleteInternal()
 	}
 }
 
-void ZobObject::UpdateBehavior()
+void ZobObject::UpdateBehavior(float dt)
 {
+	if (m_behavior)
+	{
+		m_behavior->Update(dt);
+	}
 	for (int i = 0; i < m_children.size(); i++)
 	{
 		ZobObject* z = m_children[i];
-		z->UpdateBehavior();
+		z->UpdateBehavior(dt);
 	}
 }
 
 //void ZobObject::Update(const ZobMatrix4x4& parentMatrix, const ZobMatrix4x4& parentRSMatrix)
 void ZobObject::Update()
 {
-	if (m_behavior)
-	{
-		m_behavior->Update();
-	}
 	Transform parentTransform;
 	ZobVector3 parentScale;
 	if (m_parent)

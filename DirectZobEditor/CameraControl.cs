@@ -67,7 +67,7 @@ namespace DirectZobEditor
                 cameraBox.Items.Add(c[i]);
                 if (c[i] == cn)
                 {
-                    cameraBox.SelectedIndex = i;
+//                    cameraBox.SelectedIndex = i;
                 }
             }
         }

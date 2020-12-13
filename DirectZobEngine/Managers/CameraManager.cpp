@@ -118,6 +118,24 @@ void CameraManager::SetNextCamera(std::string& name)
 	}
 }
 
+void CameraManager::SwitchToNextAvailableCamera()
+{
+	int idx = 0;
+	for (int i = 0; i < m_cameras.size(); i++)
+	{
+		if (m_cameras[i]->GetName() == m_curCam->GetName())
+		{
+			idx = i + 1;
+			break;
+		}
+	}
+	if(idx == m_cameras.size())
+	{
+		idx = 0;
+	}
+	m_nextCamera = m_cameras[idx];
+}
+
 void CameraManager::AddCamera(Camera* c)
 {
 	m_cameras.push_back(c);

@@ -120,7 +120,7 @@ namespace DirectZobEditor
             this.propertiesPanel.MinimumSize = new Size(300, 500);
             m_engineWindow.OnEngineStopped += new EventHandler(OnEngineClosed);
             this.WindowState = FormWindowState.Maximized;
-            //m_directZobWrapper.NewScene();
+            m_directZobWrapper.NewScene();
             
             EventHandler handler = OnNewScene;
             if (null != handler)

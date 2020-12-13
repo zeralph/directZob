@@ -16,7 +16,7 @@
 
 
 #define kUnused(var) (void) var;
-#define TARGET_MS_PER_FRAME 20.0f//33.3333f
+#define TARGET_MS_PER_FRAME 16.0f//33.3333f
 #define CLAMP(n, low, max) n <= low ? low : n >= max ? max : n;
 
 using namespace std;
