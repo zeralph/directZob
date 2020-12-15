@@ -254,7 +254,7 @@ void ZobObject::SetParentInternal()
 					//s.z *= ps.z;
 					SetWorldPosition(pos.x, pos.y, pos.z);
 					SetWorldRotation(rot.x, rot.y, rot.z);
-					SetScale(sca.x, sca.y, sca.z);
+					//SetScale(sca.x, sca.y, sca.z);
 				}
 			}
 		}
@@ -315,9 +315,9 @@ void ZobObject::Update()
 	ZobVector3 scale = parentScale * m_physicComponent->GetScale();
 	Transform newTransform = m_physicComponent->GetLocalTransform();
 	Vector3 p = parentTransform.getPosition();
-	p.x *= scale.x;
-	p.y *= scale.y;
-	p.z *= scale.z;
+	//p.x *= scale.x;
+	//p.y *= scale.y;
+	//p.z *= scale.z;
 	parentTransform.setPosition(p);
 	newTransform = parentTransform * newTransform;
 	m_physicComponent->SetWorldTransform(newTransform);

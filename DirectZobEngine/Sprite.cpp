@@ -20,7 +20,6 @@ Sprite::Sprite(std::string& name):Mesh(name)
 
 	m_vertices = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
 	m_verticesData = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
-	m_verticesTmp = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
 	m_projectedVertices = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
 	m_projectedVerticesTmp = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
 	m_nbNormals = m_nbVertices;
@@ -83,7 +82,6 @@ Sprite::Sprite(std::string& name):Mesh(name)
 	m_triangles.push_back(t2);
 
 	memcpy(m_verticesData, m_vertices, sizeof(ZobVector3) * m_nbVertices);
-	memcpy(m_verticesTmp, m_vertices, sizeof(ZobVector3) * m_nbVertices);
 	memcpy(m_verticesNormalsData, m_verticesNormals, sizeof(ZobVector3) * m_nbNormals);
 	memcpy(m_verticesNormalsTmp, m_verticesNormals, sizeof(ZobVector3) * m_nbNormals);
 	memcpy(m_trianglesNormalsData, m_trianglesNormals, sizeof(ZobVector3) * m_nbFaces);

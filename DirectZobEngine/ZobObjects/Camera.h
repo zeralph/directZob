@@ -4,6 +4,7 @@
 #include <string>
 #include "tinyxml.h"
 
+
 class ZobCameraController;
 class ZobCameraControllerOrbital;
 class ZobCameraControllerFPS;
@@ -13,28 +14,6 @@ friend class ZobCameraController;
 friend class ZobCameraControllerOrbital;
 friend class ZobCameraControllerFPS;
 public:
-
-	class Ray
-	{
-	public:
-		Ray()
-		{
-			p = ZobVector3::Vector3Zero;
-			n = ZobVector3::Vector3Zero;
-		}
-		ZobVector3 p;
-		ZobVector3 n;
-	};
-
-	class Plane
-	{
-	public:
-		float a;
-		float b;
-		float c;
-		float d;
-	};
-
 	enum eCameraType
 	{
 		eCamera_base=0,
@@ -52,6 +31,17 @@ public:
 		eTarget_FPS,
 		__eTarget_MAX__
 	};
+
+	enum eFrustrumPlanes
+	{
+		eFrustrumPlaneLeft=0,
+		eFrustrumPlaneRight = 1,
+		eFrustrumPlaneBottom = 2,
+		eFrustrumPlaneTop = 3,
+		eFrustrumPlaneNear = 5,
+		eFrustrumPlaneFar = 4,		
+	};
+
 	Camera(ZOBGUID::Type zobType, const std::string& name, eCameraType type, float fov, BufferData* bufferData, ZobObject* parent);
 	Camera(ulong id, TiXmlElement* node, ZobObject* parent);
 	~Camera() override;
@@ -59,6 +49,7 @@ public:
 	//void					Update(const ZobMatrix4x4& parentMatrix, const ZobMatrix4x4& parentRSMatrix) override;
 	void					Update() override;
 	void					PreUpdate() override;
+	void					UpdateAfter();
 	void					DrawGizmos(const Camera* camera, Core::Engine* engine) override;
 	TiXmlNode*				SaveUnderNode(TiXmlNode* node) override;
 	void					UpdateViewProjectionMatrix(/*const ZobVector3* eyeV*/);
@@ -80,10 +71,13 @@ public:
 	void					Zoom(float z);
 	void					Rotate(float x, float y, float z);
 	void					SetActive(bool b) { m_active = b; }
-	Ray						From2DToWorld(float x, float y);
+	DirectZobType::Ray		From2DToWorld(float x, float y);
 	const Plane*			GetFrustrumPlanes() const { return &m_frustrumPlanes[0]; };
 	bool					From2DToWorldOnPlane(const float x, const float y, const ZobVector3* p0, const ZobVector3* pn, ZobVector3* ret);
-	bool					ClipSegmentToFrustrum(ZobVector3* p1, ZobVector3* p2) const;
+	bool					ClipSegmentToFrustrum(ZobVector3* p1, ZobVector3* p2, bool bCheckOnly) const;
+	static bool				ClipSegmentToPlanes(ZobVector3* p1, ZobVector3* p2, bool bCheckOnly, const DirectZobType::Plane* planes);
+	bool					ClipSegmentToNearPlane(ZobVector3* p1, ZobVector3* p2, bool bCheckOnly) const;
+	bool					PointIsInFrustrum(const ZobVector3* pt) const;
 	inline void				ToViewSpace(ZobVector3* v) const
 	{
 		m_viewRotMatrix.Mul(v);

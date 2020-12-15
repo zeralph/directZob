@@ -13,6 +13,21 @@ class ZobObject;
 class Triangle
 {
 public:
+
+	enum eClip
+	{
+		eClip_0_in=0,
+		eClip_1_in,
+		eClip_A_in_BC_out,
+		eClip_B_in_AC_out,
+		eClip_C_in_AB_out,
+		eClip_2_in,
+		eClip_AB_in_C_out,
+		eClip_AC_in_B_out,
+		eClip_BC_in_A_out,
+		eClip_3_in,
+	};
+
 	Triangle();
 	~Triangle();
 
@@ -34,6 +49,12 @@ public:
 	ZobVector2* ub;
 	ZobVector2* uc;
 
+	int verticeAIndex;
+	int verticeBIndex;
+	int verticeCIndex;
+
+	eClip clipMode;
+
 	int ca;
 	int cb;
 	int cc;
@@ -41,7 +62,6 @@ public:
 	const ZobMaterial* material;
 	ZobObject* zobObject;
 	float area;
-	//uint owner;
 	bool draw;
 	const DirectZobType::RenderOptions* options;
 

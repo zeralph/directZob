@@ -40,12 +40,12 @@ Engine::Engine(int width, int height, Events* events)
 	m_nbRasterizers = 4;
 	*/
 	//m_nbRasterizers = 1;
-	m_triangleQueueSize = 50000;// MAX_TRIANGLES_PER_IMAGE / m_nbRasterizers;
+	m_triangleQueueSize = 100000;// MAX_TRIANGLES_PER_IMAGE / m_nbRasterizers;
 	m_renderOutput = eRenderOutput_render;
 	m_events = events;
 	m_currentFrame = 0;
-	m_zNear = Z_NEAR;
-	m_zFar = Z_FAR;
+	m_zNear = 0.11f;
+	m_zFar = 1000.0f;
 	m_buffer = (uint *)malloc(sizeof(uint) * width * height);
 	m_zBuffer = (float *)malloc(sizeof(float) * width * height);
 	//	m_oBuffer = (uint*)malloc(sizeof(uint) * width * height);
@@ -233,9 +233,10 @@ int Engine::StartDrawingScene()
 	{
 		return 0;
 	}
+	const ZobVector3 camForward = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera()->GetForward();
 	for (int i = 0; i < m_nbRasterizers; i++)
 	{
-		m_rasterizers[i]->Start(m_rasterTriangleQueues[i], m_rasterNbTriangleQueues[i], &m_rasterLineQueues[i], m_wireFrame, m_renderMode, m_currentFrame % 2, m_lightingPrecision);
+		m_rasterizers[i]->Start(m_rasterTriangleQueues[i], m_rasterNbTriangleQueues[i], &m_rasterLineQueues[i], m_wireFrame, m_renderMode, m_currentFrame % 2, m_lightingPrecision, camForward);
 	}
 	return 0;
 }
@@ -426,7 +427,7 @@ ZobObject* Engine::GetObjectAt2DCoords(float x, float y)
 	Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
 	if (c)
 	{
-		Camera::Ray ray = c->From2DToWorld(x, y);
+		Ray ray = c->From2DToWorld(x, y);
 		int  idx = (int)floor((y + 1.0f) / 2.0f * m_nbRasterizers);
 		Rasterizer* rast = m_rasterizers[idx];
 		ZobVector3 inter;
@@ -611,7 +612,7 @@ void Engine::QueueLine(const Camera* camera, const ZobVector3* v1, const ZobVect
 	{
 		ZobVector3 a = ZobVector3(v1);
 		ZobVector3 b = ZobVector3(v2);
-		bool bClipped = camera->ClipSegmentToFrustrum(&a, &b);
+		bool bClipped = camera->ClipSegmentToFrustrum(&a, &b, false);
 		if (bClipped)
 		{
 			float za, zb = 0.0f;
@@ -686,7 +687,7 @@ void Engine::QueueTriangle(const Triangle *t)
 		max = clamp2(max, 0, (int)m_bufferData.height - 1);
 		min /= m_bufferData.height / m_nbRasterizers;
 		max /= m_bufferData.height / m_nbRasterizers;
-
+		Camera* camera = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
 		assert(min >= 0);
 		assert(min < m_nbRasterizers);
 		assert(max >= 0);
@@ -698,7 +699,6 @@ void Engine::QueueTriangle(const Triangle *t)
 			if (j < m_triangleQueueSize)
 			{
 				memcpy(&m_rasterTriangleQueues[i][j], t, sizeof(Triangle));
-				//m_rasterTriangleQueues[i][j].Copy(t);
 				m_rasterNbTriangleQueues[i]++;
 				m_drawnTriangles++;
 			}

@@ -249,7 +249,11 @@ void Camera::Update()
 	m_zobCameraController->Update();
 	ZobObject::Update();
 	UpdateViewProjectionMatrix();
-	RecomputeFrustrumPlanes();
+	static bool bComputeFrustrum = true;
+	if (bComputeFrustrum)
+	{
+		RecomputeFrustrumPlanes();
+	}
 }
 
 void Camera::PreUpdate()
@@ -258,47 +262,52 @@ void Camera::PreUpdate()
 	m_zobCameraController->PreUpdate();
 }
 
+void Camera::UpdateAfter()
+{
+}
+
+
 void Camera::RecomputeFrustrumPlanes()
 {
 	ZobMatrix4x4 comboMatrix = ZobMatrix4x4(m_projMatrix);
 	ZobMatrix4x4 transpose = m_viewRotMatrix;
 	comboMatrix.Mul(&transpose);
-	m_frustrumPlanes[0].a = comboMatrix.GetValue(3, 0) + comboMatrix.GetValue(0, 0);
-	m_frustrumPlanes[0].b = comboMatrix.GetValue(3, 1) + comboMatrix.GetValue(0, 1);
-	m_frustrumPlanes[0].c = comboMatrix.GetValue(3, 2) + comboMatrix.GetValue(0, 2);
-	m_frustrumPlanes[0].d = comboMatrix.GetValue(3, 3) + comboMatrix.GetValue(0, 3);
+	m_frustrumPlanes[eFrustrumPlaneLeft].a = comboMatrix.GetValue(3, 0) + comboMatrix.GetValue(0, 0);
+	m_frustrumPlanes[eFrustrumPlaneLeft].b = comboMatrix.GetValue(3, 1) + comboMatrix.GetValue(0, 1);
+	m_frustrumPlanes[eFrustrumPlaneLeft].c = comboMatrix.GetValue(3, 2) + comboMatrix.GetValue(0, 2);
+	m_frustrumPlanes[eFrustrumPlaneLeft].d = comboMatrix.GetValue(3, 3) + comboMatrix.GetValue(0, 3);
 	// Right clipping plane
-	m_frustrumPlanes[1].a = comboMatrix.GetValue(3, 0) - comboMatrix.GetValue(0, 0);
-	m_frustrumPlanes[1].b = comboMatrix.GetValue(3, 1) - comboMatrix.GetValue(0, 1);
-	m_frustrumPlanes[1].c = comboMatrix.GetValue(3, 2) - comboMatrix.GetValue(0, 2);
-	m_frustrumPlanes[1].d = comboMatrix.GetValue(3, 3) - comboMatrix.GetValue(0, 3);
+	m_frustrumPlanes[eFrustrumPlaneRight].a = comboMatrix.GetValue(3, 0) - comboMatrix.GetValue(0, 0);
+	m_frustrumPlanes[eFrustrumPlaneRight].b = comboMatrix.GetValue(3, 1) - comboMatrix.GetValue(0, 1);
+	m_frustrumPlanes[eFrustrumPlaneRight].c = comboMatrix.GetValue(3, 2) - comboMatrix.GetValue(0, 2);
+	m_frustrumPlanes[eFrustrumPlaneRight].d = comboMatrix.GetValue(3, 3) - comboMatrix.GetValue(0, 3);
 	// Top clipping plane
-	m_frustrumPlanes[2].a = comboMatrix.GetValue(3, 0) - comboMatrix.GetValue(1, 0);
-	m_frustrumPlanes[2].b = comboMatrix.GetValue(3, 1) - comboMatrix.GetValue(1, 1);
-	m_frustrumPlanes[2].c = comboMatrix.GetValue(3, 2) - comboMatrix.GetValue(1, 2);
-	m_frustrumPlanes[2].d = comboMatrix.GetValue(3, 3) - comboMatrix.GetValue(1, 3);
+	m_frustrumPlanes[eFrustrumPlaneNear].a = comboMatrix.GetValue(3, 0) - comboMatrix.GetValue(1, 0);
+	m_frustrumPlanes[eFrustrumPlaneNear].b = comboMatrix.GetValue(3, 1) - comboMatrix.GetValue(1, 1);
+	m_frustrumPlanes[eFrustrumPlaneNear].c = comboMatrix.GetValue(3, 2) - comboMatrix.GetValue(1, 2);
+	m_frustrumPlanes[eFrustrumPlaneNear].d = comboMatrix.GetValue(3, 3) - comboMatrix.GetValue(1, 3);
 	// Bottom clipping plane
-	m_frustrumPlanes[3].a = comboMatrix.GetValue(3, 0) + comboMatrix.GetValue(1, 0);
-	m_frustrumPlanes[3].b = comboMatrix.GetValue(3, 1) + comboMatrix.GetValue(1, 1);
-	m_frustrumPlanes[3].c = comboMatrix.GetValue(3, 2) + comboMatrix.GetValue(1, 2);
-	m_frustrumPlanes[3].d = comboMatrix.GetValue(3, 3) + comboMatrix.GetValue(1, 3);
+	m_frustrumPlanes[eFrustrumPlaneFar].a = comboMatrix.GetValue(3, 0) + comboMatrix.GetValue(1, 0);
+	m_frustrumPlanes[eFrustrumPlaneFar].b = comboMatrix.GetValue(3, 1) + comboMatrix.GetValue(1, 1);
+	m_frustrumPlanes[eFrustrumPlaneFar].c = comboMatrix.GetValue(3, 2) + comboMatrix.GetValue(1, 2);
+	m_frustrumPlanes[eFrustrumPlaneFar].d = comboMatrix.GetValue(3, 3) + comboMatrix.GetValue(1, 3);
 	// Near clipping plane
-	m_frustrumPlanes[4].a = comboMatrix.GetValue(3, 0) + comboMatrix.GetValue(2, 0);
-	m_frustrumPlanes[4].b = comboMatrix.GetValue(3, 1) + comboMatrix.GetValue(2, 1);
-	m_frustrumPlanes[4].c = comboMatrix.GetValue(3, 2) + comboMatrix.GetValue(2, 2);
-	m_frustrumPlanes[4].d = comboMatrix.GetValue(3, 3) + comboMatrix.GetValue(2, 3);
+	m_frustrumPlanes[eFrustrumPlaneTop].a = comboMatrix.GetValue(3, 0) + comboMatrix.GetValue(2, 0);
+	m_frustrumPlanes[eFrustrumPlaneTop].b = comboMatrix.GetValue(3, 1) + comboMatrix.GetValue(2, 1);
+	m_frustrumPlanes[eFrustrumPlaneTop].c = comboMatrix.GetValue(3, 2) + comboMatrix.GetValue(2, 2);
+	m_frustrumPlanes[eFrustrumPlaneTop].d = comboMatrix.GetValue(3, 3) + comboMatrix.GetValue(2, 3);
 	// Far clipping plane
-	m_frustrumPlanes[5].a = comboMatrix.GetValue(3, 0) - comboMatrix.GetValue(2, 0);
-	m_frustrumPlanes[5].b = comboMatrix.GetValue(3, 1) - comboMatrix.GetValue(2, 1);
-	m_frustrumPlanes[5].c = comboMatrix.GetValue(3, 2) - comboMatrix.GetValue(2, 2);
-	m_frustrumPlanes[5].d = comboMatrix.GetValue(3, 3) - comboMatrix.GetValue(2, 3);
+	m_frustrumPlanes[eFrustrumPlaneBottom].a = comboMatrix.GetValue(3, 0) - comboMatrix.GetValue(2, 0);
+	m_frustrumPlanes[eFrustrumPlaneBottom].b = comboMatrix.GetValue(3, 1) - comboMatrix.GetValue(2, 1);
+	m_frustrumPlanes[eFrustrumPlaneBottom].c = comboMatrix.GetValue(3, 2) - comboMatrix.GetValue(2, 2);
+	m_frustrumPlanes[eFrustrumPlaneBottom].d = comboMatrix.GetValue(3, 3) - comboMatrix.GetValue(2, 3);
 
-	NormalizePlane(m_frustrumPlanes[0]);
-	NormalizePlane(m_frustrumPlanes[1]);
-	NormalizePlane(m_frustrumPlanes[2]);
-	NormalizePlane(m_frustrumPlanes[3]);
-	NormalizePlane(m_frustrumPlanes[4]);
-	NormalizePlane(m_frustrumPlanes[5]);
+	NormalizePlane(m_frustrumPlanes[eFrustrumPlaneLeft]);
+	NormalizePlane(m_frustrumPlanes[eFrustrumPlaneRight]);
+	NormalizePlane(m_frustrumPlanes[eFrustrumPlaneNear]);
+	NormalizePlane(m_frustrumPlanes[eFrustrumPlaneFar]);
+	NormalizePlane(m_frustrumPlanes[eFrustrumPlaneTop]);
+	NormalizePlane(m_frustrumPlanes[eFrustrumPlaneBottom]);
 }
 
 void Camera::NormalizePlane(Plane& plane)
@@ -311,14 +320,108 @@ void Camera::NormalizePlane(Plane& plane)
 	plane.d = plane.d / mag; 
 }
 
-bool Camera::ClipSegmentToFrustrum(ZobVector3* p1, ZobVector3* p2) const
+bool Camera::ClipSegmentToNearPlane(ZobVector3* p1, ZobVector3* p2, bool bCheckOnly) const
+{
+	ZobVector3 dp = ZobVector3(p2->x - p1->x, p2->y - p1->y, p2->z - p1->z);
+	float p1_fac = 0.0f;
+	float p2_fac = 1.0f;
+	static eFrustrumPlanes pEnum = eFrustrumPlaneNear;
+	Plane p = m_frustrumPlanes[pEnum];
+	ZobVector3 pv = ZobVector3(p.a, p.b, p.c);
+	float div = ZobVector3::Dot(&pv, &dp);
+	if (div != 0.0f)
+	{
+		float t = -(ZobVector3::Dot(&pv, p1) + p.d);
+		if (div > 0.0f)
+		{
+			if (t >= div)
+			{
+				return false;
+			}
+			if (t > 0.0f)
+			{
+				float fac = t / div;
+				if (fac > p1_fac)
+				{
+					p1_fac = fac;
+					if (p1_fac > p2_fac)
+					{
+						return false;
+					}
+				}
+			}
+		}
+		else if (div < 0.0f)
+		{
+			if (t > 0.0f)
+			{
+				return false;
+			}
+			if (t > div)
+			{
+				float fac = t / div;
+				if (fac < p2_fac)
+				{
+					p2_fac = fac;
+					if (p1_fac > p2_fac)
+					{
+						return false;
+					}
+				}
+			}
+		}
+	}
+	if (p2_fac > 1.0f)
+	{
+		int y = 0;
+		y++;
+	}
+	if (p1_fac > 1.0f)
+	{
+		int y = 0;
+		y++;
+	}
+	p2_fac -= p1_fac;
+	if (!bCheckOnly)
+	{
+		p1->x = p1->x + dp.x * p1_fac;
+		p1->y = p1->y + dp.y * p1_fac;
+		p1->z = p1->z + dp.z * p1_fac;
+		p2->x = p1->x + dp.x * p2_fac;
+		p2->y = p1->y + dp.y * p2_fac;
+		p2->z = p1->z + dp.z * p2_fac;
+	}
+	return true;
+}
+
+bool Camera::PointIsInFrustrum(const ZobVector3* pt) const
+{
+	for (int i = 0; i < 6; ++i) 
+	{
+		Plane p = m_frustrumPlanes[i];
+		ZobVector3 pv = ZobVector3(p.a, p.b, p.c);
+		float d = ZobVector3::Dot(&pv, pt) + p.d;
+		if (d<0)
+		{
+			return false;
+		}
+	}
+	return true;
+}
+
+bool Camera::ClipSegmentToFrustrum(ZobVector3* p1, ZobVector3* p2, bool bCheckOnly) const
+{
+	return ClipSegmentToPlanes(p1, p2, bCheckOnly, m_frustrumPlanes);
+}
+
+bool Camera::ClipSegmentToPlanes(ZobVector3* p1, ZobVector3* p2, bool bCheckOnly, const DirectZobType::Plane* planes)
 {
 	ZobVector3 dp = ZobVector3(p2->x - p1->x, p2->y - p1->y, p2->z - p1->z);
 	float p1_fac = 0.0f;
 	float p2_fac = 1.0f;
 	for (int i = 0; i < 6; i++)
 	{
-		Plane p = m_frustrumPlanes[i];
+		Plane p = planes[i];
 		ZobVector3 pv = ZobVector3(p.a, p.b, p.c);
 		float div = ZobVector3::Dot(&pv, &dp);
 		if (div != 0.0f)
@@ -364,23 +467,16 @@ bool Camera::ClipSegmentToFrustrum(ZobVector3* p1, ZobVector3* p2) const
 			}
 		}
 	}
-	if (p2_fac > 1.0f)
-	{
-		int y = 0;
-		y++;
-	}
-	if (p1_fac > 1.0f)
-	{
-		int y = 0;
-		y++;
-	}
 	p2_fac -= p1_fac;
-	p1->x = p1->x + dp.x * p1_fac;
-	p1->y = p1->y + dp.y * p1_fac;
-	p1->z = p1->z + dp.z * p1_fac;
-	p2->x = p1->x + dp.x * p2_fac;
-	p2->y = p1->y + dp.y * p2_fac;
-	p2->z = p1->z + dp.z * p2_fac;
+	if (!bCheckOnly)
+	{
+		p1->x = p1->x + dp.x * p1_fac;
+		p1->y = p1->y + dp.y * p1_fac;
+		p1->z = p1->z + dp.z * p1_fac;
+		p2->x = p1->x + dp.x * p2_fac;
+		p2->y = p1->y + dp.y * p2_fac;
+		p2->z = p1->z + dp.z * p2_fac;
+	}
 	return true;
 }
 
@@ -464,13 +560,13 @@ void Camera::SetViewMatrix(const ZobVector3& left, const ZobVector3& up, const Z
 void Camera::setProjectionMatrix(const float angleOfView, const float width, const float height, const float zNear, const float zFar)
 {
 	const float ar = width / height;
-	const float zRange = zNear - zFar;
+	const float zRange = zFar- zNear;
 	const float tanHalfFOV = -tanf(angleOfView / 2.0 * M_PI / 180.0);
 
 	float a = 1.0f / (tanHalfFOV * ar);
 	float b = 1.0f / tanHalfFOV;
-	float c = (-zNear - zFar) / zRange;
-	float d = 2.0f * zFar * zNear / zRange;
+	float c = (zNear + zFar) / zRange;
+	float d = -2.0f * zFar * zNear / zRange;
 	float e = 1.0f;
 
 	m_projMatrix.SetData(0, 0, a);
@@ -519,9 +615,9 @@ void Camera::setProjectionMatrix(const float angleOfView, const float width, con
 }
 
 // x in [-1,1], y in [-1,1}
-Camera::Ray Camera::From2DToWorld(float x, float y)
+DirectZobType::Ray Camera::From2DToWorld(float x, float y)
 {
-	Ray r;
+	DirectZobType::Ray r;
 	if(fabsf(x)<=1.0f && fabsf(y)<=1.0f)
 	{
 		BufferData* b = DirectZob::GetInstance()->GetEngine()->GetBufferData();
@@ -543,7 +639,7 @@ Camera::Ray Camera::From2DToWorld(float x, float y)
 
 bool Camera::From2DToWorldOnPlane(const float x, const float y, const ZobVector3* p0, const ZobVector3* pn, ZobVector3* ret)
 {
-	Camera::Ray r = From2DToWorld(x, y);
+	DirectZobType::Ray r = From2DToWorld(x, y);
 	ZobVector3 l0 = this->GetWorldPosition();
 	if (DirectZob::GetInstance()->GetEngine()->LinePlaneIntersection(p0, pn, &r.p, &r.n, ret))
 	{

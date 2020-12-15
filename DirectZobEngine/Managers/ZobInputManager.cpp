@@ -59,4 +59,7 @@ void ZobInputManager::Map()
 	m_map->SetDeadZone(gainput::PadButtonRightStickY, m_deadZone);
 
 	m_map->MapBool(buttonA, padId, gainput::PadButtonA);
+	m_map->MapBool(buttonB, padId, gainput::PadButtonB);
+	m_map->MapBool(buttonX, padId, gainput::PadButtonX);
+	m_map->MapBool(buttonY, padId, gainput::PadButtonY);
 }

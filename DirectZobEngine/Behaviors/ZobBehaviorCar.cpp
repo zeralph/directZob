@@ -17,8 +17,8 @@ ZobBehaviorCar::~ZobBehaviorCar()
 ZobBehaviorCar::ZobBehaviorCar(ZobObject* zobObject, TiXmlElement* node) : ZobBehavior(zobObject, node)
 {
 	m_type = eBehavior_car;
-	m_frontWheelPosition = ZobVector3(0, 0, 4);
-	m_rearWheelPosition = ZobVector3(0, 0, -2);
+	m_frontWheelPosition = ZobVector3(0, 0, 2);
+	m_rearWheelPosition = ZobVector3(0, 0, -1);
 	m_rollingTorquePower = 1.0f;
 	m_steeringTorque = 1.0f * 60.0f;
 	m_rollingTorqueMaxPower = 30.0f;
@@ -29,7 +29,7 @@ ZobBehaviorCar::ZobBehaviorCar(ZobObject* zobObject, TiXmlElement* node) : ZobBe
 	m_drifting = false;
 	RigidBody* rb = m_zobObject->m_physicComponent->GetRigicBody();
 	Vector3 centerOfMass = rb->getLocalCenterOfMass();
-	rb->setLocalCenterOfMass(Vector3(0, 0, -2.5));
+	rb->setLocalCenterOfMass(Vector3(0, 0, -1.5));
 }
 
 void ZobBehaviorCar::PreUpdate()
@@ -156,17 +156,18 @@ void ZobBehaviorCar::Update(float dt)
 	}
 
 	//update current camera
-	if (inputMap->GetBool(ZobInputManager::buttonA))
+	if (inputMap->GetBoolIsNew(ZobInputManager::buttonA))
 	{
-		if (m_bCcanChangeCamera)
-		{
-			m_bCcanChangeCamera = false;
-			directZob->GetCameraManager()->SwitchToNextAvailableCamera();
-		}
+		directZob->GetCameraManager()->SwitchToNextAvailableCamera();
 	}
-	else
+	if (inputMap->GetBoolIsNew(ZobInputManager::buttonY))
 	{
-		m_bCcanChangeCamera = true;
+		directZob->GetEngine()->DrawGizmos(!directZob->GetEngine()->DrawGizmos());
+	}
+	if (inputMap->GetBoolIsNew(ZobInputManager::buttonX))
+	{
+		directZob->StopPhysic(true);
+		directZob->StartPhysic();
 	}
 }
 

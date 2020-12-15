@@ -20,7 +20,7 @@ void Rasterizer::Init()
 	//m_thread.detach();
 }
 
-void Rasterizer::Start(const Triangle* triangles, const uint nbTriangles, const std::vector<Line3D>* lines, const bool wireFrame, const eRenderMode renderMode, const bool bEvenFrame, const eLightingPrecision lp)
+void Rasterizer::Start(Triangle* triangles, const uint nbTriangles, const std::vector<Line3D>* lines, const bool wireFrame, const eRenderMode renderMode, const bool bEvenFrame, const eLightingPrecision lp, ZobVector3 camForward)
 {
 	m_lines = lines;
 	m_triangles = triangles;
@@ -30,6 +30,7 @@ void Rasterizer::Start(const Triangle* triangles, const uint nbTriangles, const 
 	m_bEvenFrame = bEvenFrame ? 1 : 0;
 	m_renderMode = renderMode;
 	m_lightingPrecision = lp;
+	m_camDir = ZobVector3(-camForward.x, -camForward.y, -camForward.z);
 }
 
 float Rasterizer::WaitForEnd() 
@@ -59,31 +60,29 @@ void Rasterizer::Clear()
 void Rasterizer::Render() 
 {
 	m_tick = clock();
-	if (DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera())
+	//warning : invert lightdir ! https://fr.wikipedia.org/wiki/Ombrage_de_Phong
+	for (int i = 0; i < m_lines->size(); i++)
 	{
-		const ZobVector3 camDir = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera()->GetForward();
-		m_camDir = ZobVector3(-camDir.x, -camDir.y, -camDir.z);
-		//warning : invert lightdir ! https://fr.wikipedia.org/wiki/Ombrage_de_Phong
-		for (int i = 0; i < m_lines->size(); i++)
+		const Line3D l = m_lines->at(i);
+		DrawLine(&l);
+	}
+	m_lights.clear();
+	LightManager* lm = DirectZob::GetInstance()->GetLightManager();
+	if (lm)
+	{
+		m_lights = lm->GetActiveLights();
+		m_ambientColor = lm->GetAmbientColor();
+		m_ambientIntensity = lm->GetAmbientColorIntensity();
+		m_fogColor = lm->GetFogColor();
+		m_fogType = lm->GetFogType();
+		m_fogDensity = lm->GetFogDensity();
+		m_fogDistance = lm->GetFogDistance();
+	}
+	for (int i = 0; i < m_nbTriangles; i++)
+	{
+		Triangle* t = &m_triangles[i];
+		if (t->clipMode == Triangle::eClip_3_in)
 		{
-			const Line3D l = m_lines->at(i);
-			DrawLine(&l);
-		}
-		m_lights.clear();
-		LightManager* lm = DirectZob::GetInstance()->GetLightManager();
-		if (lm)
-		{
-			m_lights = lm->GetActiveLights();
-			m_ambientColor = lm->GetAmbientColor();
-			m_ambientIntensity = lm->GetAmbientColorIntensity();
-			m_fogColor = lm->GetFogColor();
-			m_fogType = lm->GetFogType();
-			m_fogDensity = lm->GetFogDensity();
-			m_fogDistance = lm->GetFogDistance();
-		}
-		for (int i = 0; i < m_nbTriangles; i++)
-		{
-			const Triangle* t = &m_triangles[i];
 			DrawTriangle(t);
 		}
 	}

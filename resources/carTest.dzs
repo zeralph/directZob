@@ -15,7 +15,7 @@
         <Scale x="1" y="1" z="1" />
         <Physic type="1">
             <RigidBody type="0" active="1" />
-            <Collider type="3" radius="1.000000" height="2.000000" halfExtends_x="10000.000000" halfExtends_y="0.100000" halfExtends_z="10000.000000" scale_with_object="1" />
+            <Collider type="3" radius="1.000000" height="2.000000" halfExtends_x="1000.000000" halfExtends_y="0.100000" halfExtends_z="1000.000000" scale_with_object="1" />
             <Material bounciness="0.000000" friction_coeff="0.000000" mass_density="0.000000" rolling_resistance="0.000000" />
         </Physic>
     </ZobObject>
@@ -26,11 +26,11 @@
         <Behavior type="1" />
         <Physic type="2">
             <RigidBody type="2" active="1" />
-            <Collider type="3" radius="1.000000" height="2.000000" halfExtends_x="3.000000" halfExtends_y="2.000000" halfExtends_z="8.000000" scale_with_object="1" />
-            <Material bounciness="0.500000" friction_coeff="0.000000" mass_density="750.010010" rolling_resistance="0.010000" />
+            <Collider type="3" radius="1.000000" height="2.000000" halfExtends_x="1.000000" halfExtends_y="0.700000" halfExtends_z="2.500000" scale_with_object="1" />
+            <Material bounciness="0.100000" friction_coeff="2.010000" mass_density="0.010000" rolling_resistance="0.010000" />
         </Physic>
         <ZobObject name="rearCamera" guid="3002004" type="camera">
-            <Position x="0" y="5.59532" z="-12.5763" />
+            <Position x="0" y="1.51833" z="-4.77269" />
             <Rotation x="15.0562" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
             <Physic type="0">
@@ -42,9 +42,9 @@
             <Fov>70.00</Fov>
         </ZobObject>
         <ZobObject name="camaro" guid="3046785" type="mesh">
-            <Position x="0" y="0.91459" z="0" />
+            <Position x="0" y="0.20109" z="-0.01703" />
             <Rotation x="0" y="0" z="0" />
-            <Scale x="1" y="1" z="1" />
+            <Scale x="0.3" y="0.3" z="0.3" />
             <Mesh name="camaro.obj" file="camaro.obj" path="D:\Git\directZob\resources\" />
             <Physic type="0">
                 <RigidBody type="0" active="0" />
@@ -53,7 +53,7 @@
             </Physic>
         </ZobObject>
         <ZobObject name="FrontCamera" guid="3067491" type="camera">
-            <Position x="0" y="-0.287747" z="7.69661" />
+            <Position x="0" y="0.286124" z="2.14935" />
             <Rotation x="0" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
             <Physic type="0">
@@ -65,7 +65,7 @@
             <Fov>70.00</Fov>
         </ZobObject>
         <ZobObject name="windshieldCamera" guid="3067492" type="camera">
-            <Position x="0" y="2.34049" z="0.959632" />
+            <Position x="0" y="0.665553" z="0.262912" />
             <Rotation x="0" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
             <Physic type="0">
@@ -74,10 +74,10 @@
                 <Material />
             </Physic>
             <Controller>0</Controller>
-            <Fov>70.00</Fov>
+            <Fov>80.00</Fov>
         </ZobObject>
         <ZobObject name="sideCamera" guid="3067493" type="camera">
-            <Position x="-11.0536" y="1.69909" z="11.8434" />
+            <Position x="-5.88051" y="1.69909" z="5.75917" />
             <Rotation x="-180" y="40.3727" z="-180" />
             <Scale x="1" y="1" z="1" />
             <Physic type="0">
@@ -89,7 +89,7 @@
             <Fov>45.00</Fov>
         </ZobObject>
         <ZobObject name="orbitalCamera" guid="3067494" type="camera">
-            <Position x="0.751323" y="1.05705" z="-17.3437" />
+            <Position x="6.53909" y="-1.45521" z="-16.1842" />
             <Rotation x="0" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
             <Physic type="0">
@@ -139,13 +139,13 @@
         <Type>directional</Type>
     </ZobObject>
     <ZobObject name="house" guid="3066496" type="mesh">
-        <Position x="37.7482" y="0" z="26.6284" />
+        <Position x="17.4096" y="-0.104829" z="26.628" />
         <Rotation x="0" y="0" z="0" />
-        <Scale x="1" y="1" z="1" />
+        <Scale x="0.5" y="0.5" z="0.5" />
         <Mesh name="cottage_obj.obj" file="cottage_obj.obj" path="D:\Git\directZob\resources\" />
         <Physic type="1">
             <RigidBody type="0" active="1" />
-            <Collider type="3" radius="1.000000" height="2.000000" halfExtends_x="18.000000" halfExtends_y="15.000000" halfExtends_z="10.000000" scale_with_object="1" />
+            <Collider type="3" radius="1.000000" height="2.000000" halfExtends_x="9.000000" halfExtends_y="5.000000" halfExtends_z="5.000000" scale_with_object="0" />
             <Material bounciness="0.000000" friction_coeff="0.000000" mass_density="0.000000" rolling_resistance="0.000000" />
         </Physic>
     </ZobObject>

@@ -132,6 +132,25 @@ public:
 		eLightMode lightMode = eLightMode::eLightMode_phong;
 		eCullMode cullMode = eCullMode_ClockwiseFace;
 	};
+	class Ray
+	{
+	public:
+		Ray()
+		{
+			p = ZobVector3::Vector3Zero;
+			n = ZobVector3::Vector3Zero;
+		}
+		ZobVector3 p;
+		ZobVector3 n;
+	};
+	class Plane
+	{
+	public:
+		float a;
+		float b;
+		float c;
+		float d;
+	};
 };
 
 typedef DirectZobType::u8 u8;
@@ -143,6 +162,8 @@ typedef unsigned long long zobId;
 typedef struct DirectZobType::BufferData BufferData;
 typedef struct DirectZobType::Line3D Line3D;
 typedef struct DirectZobType::RenderOptions RenderOptions;
+typedef class DirectZobType::Ray Ray;
+typedef class DirectZobType::Plane Plane;
 
 static ZobVector3 Vector2Color(ZobVector3* v) { return ZobVector3((int)(v->x * 255.0f), (int)(v->y * 255.0f), (int)(v->z * 255.0f)); };
 static ZobVector3 Color2Vector(ZobVector3* v) { return ZobVector3(v->x / 255.0f, v->y / 255.0f, v->z / 255.0f); };

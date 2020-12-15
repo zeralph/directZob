@@ -27,7 +27,7 @@ public:
 	void 					DrawTriangle(const Triangle* t) const;
 	void 					plotLine(int x0, int y0, int x1, int y1) const;
 	void 					DrawLine(const Line3D* l) const;
-	void 					Start(const Triangle* triangles, const uint nbTriangles, const std::vector<Line3D>* lines, const bool wireFrame, const eRenderMode renderMode, const bool bEvenFrame, const eLightingPrecision lp);
+	void 					Start(Triangle* triangles, const uint nbTriangles, const std::vector<Line3D>* lines, const bool wireFrame, const eRenderMode renderMode, const bool bEvenFrame, const eLightingPrecision lp, ZobVector3 camForward);
 	float 					WaitForEnd();
 	void 					End();
 	void 					Init();
@@ -77,7 +77,7 @@ private:
 
 	std::vector<const Light*> m_lights;
 	const std::vector<Line3D>* m_lines;
-	const Triangle* m_triangles;
+	Triangle* m_triangles;
 	const ZobVector3* m_ambientColor;
 	float m_ambientIntensity;
 	const ZobVector3* m_fogColor;

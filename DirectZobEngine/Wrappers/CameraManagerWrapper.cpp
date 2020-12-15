@@ -95,7 +95,7 @@ namespace CLI
 		Camera* c = m_Instance->GetCurrentCamera();
 		if (c)
 		{
-			Camera::Ray r = c->From2DToWorld(x, y);
+			DirectZobType::Ray r = c->From2DToWorld(x, y);
 			return gcnew CameraManagerWrapper::Ray(&r.p, &r.n);
 		}
 		return nullptr;

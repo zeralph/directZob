@@ -23,6 +23,7 @@ Mesh::Mesh(std::string& name)
 	m_name = name;
 	m_fileName = emptyStr;
 	m_path = emptyStr;
+	m_cullUsingFrustrum = false;
 	DirectZob::RemoveIndent();
 }
 
@@ -172,6 +173,9 @@ Mesh::Mesh(std::string &parentName, std::string& path, fbxsdk::FbxMesh* mesh)
 
 				const ZobMaterial* material = DirectZob::GetInstance()->GetMaterialManager()->LoadFbxMaterial(mesh, m_path);
 				Triangle t;
+				t.verticeAIndex = startIdx;
+				t.verticeBIndex = startIdx + 1;
+				t.verticeCIndex = startIdx + 2;
 				t.va = &m_vertices[startIdx];
 				t.vb = &m_vertices[startIdx + 1];
 				t.vc = &m_vertices[startIdx + 2];
@@ -190,6 +194,9 @@ Mesh::Mesh(std::string &parentName, std::string& path, fbxsdk::FbxMesh* mesh)
 				if (pSize == 4)
 				{
 					Triangle t;
+					t.verticeAIndex = startIdx + 3;
+					t.verticeBIndex = startIdx + 0;
+					t.verticeCIndex = startIdx + 2;
 					t.va = &m_vertices[startIdx + 3];
 					t.vb = &m_vertices[startIdx + 0];
 					t.vc = &m_vertices[startIdx + 2];
@@ -494,6 +501,7 @@ void Mesh::Update(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationM
 	float w = (float)bData->width / 2.0f;
 	float h = (float)bData->height / 2.0f;	
 
+	memcpy(m_vertices, m_verticesData, sizeof(ZobVector3) * m_nbVertices);
 	memcpy(m_verticesTmp, m_verticesData, sizeof(ZobVector3) * m_nbVertices);
 	memcpy(m_verticesNormalsTmp, m_verticesNormalsData, sizeof(ZobVector3) * m_nbNormals);
 	memcpy(m_trianglesNormalsTmp, m_trianglesNormalsData, sizeof(ZobVector3) * m_nbFaces);
@@ -501,12 +509,63 @@ void Mesh::Update(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationM
 	for (uint i = 0; i < m_nbVertices; i++)
 	{
 		modelMatrix.Mul(&m_verticesTmp[i]);
+	}
+	int c = 0;
+	if (m_cullUsingFrustrum)
+	{
+		
+		for (uint i = 0; i < m_triangles.size(); i++)
+		{
+			Triangle* t = &m_triangles.at(i);
+			t->draw = false;
+			ZobVector3* va = &m_verticesTmp[t->verticeAIndex];
+			ZobVector3* vb = &m_verticesTmp[t->verticeBIndex];
+			ZobVector3* vc = &m_verticesTmp[t->verticeCIndex];
+			
+			bool aIn = camera->PointIsInFrustrum(va);
+			bool bIn = camera->PointIsInFrustrum(vb);
+			bool cIn = camera->PointIsInFrustrum(vc);
+			if(aIn && bIn && cIn)
+			{
+				t->clipMode = Triangle::eClip_3_in;
+			}
+			else if(aIn && cIn)
+			{
+				t->clipMode = Triangle::eClip_AC_in_B_out;
+			}
+			else if (aIn && bIn)
+			{
+				t->clipMode = Triangle::eClip_AB_in_C_out;
+			}
+			else if (aIn)
+			{
+				t->clipMode = Triangle::eClip_A_in_BC_out;
+			}
+			else if (bIn && cIn)
+			{
+				t->clipMode = Triangle::eClip_BC_in_A_out;
+			}
+			else if (bIn)
+			{
+				t->clipMode = Triangle::eClip_B_in_AC_out;
+			}
+			else if(cIn)
+			{
+				t->clipMode = Triangle::eClip_C_in_AB_out;
+			}
+			else
+			{
+				t->clipMode = Triangle::eClip_0_in;
+			}
+			t->draw = (t->clipMode != Triangle::eClip_0_in);
+		}
+	}
+	for (uint i = 0; i < m_nbVertices; i++)
+	{
 		m_projectedVerticesTmp[i].x = m_verticesTmp[i].x;
 		m_projectedVerticesTmp[i].y = m_verticesTmp[i].y;
 		m_projectedVerticesTmp[i].z = m_verticesTmp[i].z;
 		m_projectedVerticesTmp[i].w = m_verticesTmp[i].w;
-
-//		camera->ToViewSpace(&m_projectedVerticesTmp[i]);
 		view->Mul(&m_projectedVerticesTmp[i]);
 		proj->Mul(&m_projectedVerticesTmp[i]);
 		static float kk = 1.0f;
@@ -547,13 +606,23 @@ void Mesh::QueueForDrawing(ZobObject* z, const ZobMatrix4x4& modelMatrix, const 
 	for (int i = 0; i < m_nbFaces; i++)
 	{
 		Triangle* t = &m_triangles[i];
-		t->draw = false;
 		t->options = options;
 		t->zobObject = z;
 		t->ca = 0xFF0000;
 		t->cb = 0x00FF00;
 		t->cc = 0x0000FF;
-		if (!RejectTriangle(t, znear, zfar, (float)bData->width, (float)bData->height))
+		bool bDraw = false;
+		if (!m_cullUsingFrustrum)
+		{
+			bDraw = !RejectTriangle(t, znear, zfar, (float)bData->width, (float)bData->height);
+			t->draw = bDraw;
+			t->clipMode = Triangle::eClip_3_in;
+		}
+		else
+		{
+			bDraw = t->draw;
+		}
+		if(bDraw)
 		{
 			bool bCull = false;
 			t->ComputeArea();
@@ -565,8 +634,6 @@ void Mesh::QueueForDrawing(ZobObject* z, const ZobMatrix4x4& modelMatrix, const 
 			}
 			if (t->area > sAreaMin)
 			{
-//				t->owner = ownerId;
-				t->draw = true;
 				engine->QueueTriangle(t);
 				static bool bShowNormal = true;
 				if (engine->ShowNormals())
@@ -646,6 +713,7 @@ void Mesh::CreateTriangles(const std::vector<std::string>* line, std::vector<Tri
 
 		vec.clear();
 		SplitEntry(&line->at(a), &vec, '/');
+		t.verticeAIndex = std::stoi(vec[0], &sz) - 1;
 		t.va = &m_vertices[std::stoi(vec[0], &sz) - 1];
 		t.pa = &m_projectedVertices[std::stoi(vec[0], &sz) - 1];
 		if (vec[1].size() > 0)
@@ -663,6 +731,7 @@ void Mesh::CreateTriangles(const std::vector<std::string>* line, std::vector<Tri
 
 		vec.clear();
 		SplitEntry(&line->at(b), &vec, '/');
+		t.verticeBIndex = std::stoi(vec[0], &sz) - 1;
 		t.vb = &m_vertices[std::stoi(vec[0], &sz) - 1];
 		t.pb = &m_projectedVertices[std::stoi(vec[0], &sz) - 1];
 		if (vec[1].size() > 0)
@@ -680,6 +749,7 @@ void Mesh::CreateTriangles(const std::vector<std::string>* line, std::vector<Tri
 
 		vec.clear();
 		SplitEntry(&line->at(c), &vec, '/');
+		t.verticeCIndex = std::stoi(vec[0], &sz) - 1;
 		t.vc = &m_vertices[std::stoi(vec[0], &sz) - 1];
 		t.pc = &m_projectedVertices[std::stoi(vec[0], &sz) - 1];
 		if (vec[1].size() > 0)

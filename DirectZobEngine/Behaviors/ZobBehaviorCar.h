@@ -26,6 +26,5 @@ class ZobBehaviorCar : public ZobBehavior
 		float m_airFriction;
 		ZobVector3 m_frontWheelPosition;
 		ZobVector3 m_rearWheelPosition;
-		bool m_bCcanChangeCamera;
 		bool m_drifting;
 };

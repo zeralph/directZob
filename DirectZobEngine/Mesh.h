@@ -72,5 +72,6 @@ protected:
 	ZobVector2* m_uvs = NULL;
 
 	std::vector<Triangle> m_triangles;
+	bool m_cullUsingFrustrum;
 };
 

@@ -16,9 +16,6 @@
 //#include "Camera.h"
 #include "../Events.h"
 
-#define Z_NEAR 0.001f
-#define Z_FAR 1000.0f
-
 class Rasterizer;
 class Camera;
 namespace Core
