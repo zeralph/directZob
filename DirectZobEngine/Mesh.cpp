@@ -23,7 +23,7 @@ Mesh::Mesh(std::string& name)
 	m_name = name;
 	m_fileName = emptyStr;
 	m_path = emptyStr;
-	m_cullUsingFrustrum = false;
+	m_cullUsingFrustrum = true;
 	DirectZob::RemoveIndent();
 }
 
@@ -557,7 +557,35 @@ void Mesh::Update(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationM
 			{
 				t->clipMode = Triangle::eClip_0_in;
 			}
-			t->draw = (t->clipMode != Triangle::eClip_0_in);
+			t->draw = t->clipMode != Triangle::eClip_0_in;
+
+			//need to clip triangles
+			if(t->draw &&  t->clipMode != Triangle::eClip_3_in)
+			{
+				if (t->clipMode > Triangle::eClip_2_in)
+				{
+					//worst case
+					t->draw = false;
+				}
+				else if(t->clipMode > Triangle::eClip_1_in)
+				{
+					if(t->clipMode  == Triangle::eClip_A_in_BC_out)
+					{
+						camera->ClipSegmentToFrustrum(va, vb, false);
+						camera->ClipSegmentToFrustrum(va, vc, false);
+					}
+					else if(t->clipMode == Triangle::eClip_B_in_AC_out)
+					{
+						camera->ClipSegmentToFrustrum(vb, va, false);
+						camera->ClipSegmentToFrustrum(vb, vc, false);
+					}
+					else //eClip_C_in_AB_out
+					{
+						camera->ClipSegmentToFrustrum(vc, va, false);
+						camera->ClipSegmentToFrustrum(vc, vb, false);
+					}
+				}
+			}
 		}
 	}
 	for (uint i = 0; i < m_nbVertices; i++)

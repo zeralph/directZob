@@ -81,7 +81,7 @@ void Rasterizer::Render()
 	for (int i = 0; i < m_nbTriangles; i++)
 	{
 		Triangle* t = &m_triangles[i];
-		if (t->clipMode == Triangle::eClip_3_in)
+		if (t->draw)
 		{
 			DrawTriangle(t);
 		}
