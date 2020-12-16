@@ -49,6 +49,7 @@ Engine::Engine(int width, int height, Events* events)
 	*/
 	//m_nbRasterizers = 4;
 	m_maxTrianglesQueueSize = 200000;// MAX_TRIANGLES_PER_IMAGE / m_nbRasterizers;
+	m_maxLineQueueSize = 1000;
 	m_renderOutput = eRenderOutput_render;
 	m_events = events;
 	m_currentFrame = 0;
@@ -79,7 +80,7 @@ Engine::Engine(int width, int height, Events* events)
 		h0 += m_rasterizerHeight;
 	}
 
-	m_LineQueue = (Line3D*)malloc(sizeof(Triangle) * m_maxLineQueueSize);
+	m_LineQueue = (Line3D*)malloc(sizeof(Line3D) * m_maxLineQueueSize);
 	m_TrianglesQueue = (Triangle*)malloc(sizeof(Triangle) * m_maxTrianglesQueueSize);
 	for (int i = 0; i < m_maxTrianglesQueueSize; i++)
 	{
