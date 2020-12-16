@@ -77,7 +77,7 @@ namespace Core
 		float											GetDistanceToCamera(ZobVector3* worldPos);
 		bool											LinePlaneIntersection(const ZobVector3* planeOrigin, const ZobVector3* planeNormal, const ZobVector3* lineOrigin, const ZobVector3* lineDirection, ZobVector3* ret);
 		bool											LineTriangleIntersection(const Triangle* t, const ZobVector3* l0, const ZobVector3* lv, ZobVector3& intersectionPt);
-		bool											LineLineIntersection(const ZobVector3* s0, const ZobVector3* s1, const ZobVector3* e0, const ZobVector3* e1, ZobVector3 &out) const;
+		bool											LineLineIntersection(const ZobVector3* s0, const ZobVector3* s1, const ZobVector3* e0, const ZobVector3* e1, ZobVector3 &out, float& outFactor) const;
 		ZobObject*										GetObjectAt2DCoords(float x, float y);
 	private:	
 		inline float									clamp2(float x, float min, float max) const { if (x < min) x = min; if (x > max) x = max; return x; }
@@ -89,6 +89,11 @@ namespace Core
 		uint											ClipTriangle(const Camera* c, const Triangle* t);
 		void											QueueTriangleInRasters(const Triangle* t) const;
 		void											QueueLineInRasters(const Line3D* l) const;
+		inline void										RecomputeUv(const ZobVector2* uva, ZobVector2* uvb, float r) const
+		{
+			uvb->x = uva->x + (uvb->x - uva->x) * r;
+			uvb->y = uva->y + (uvb->y - uva->y) * r;
+		}
 		Events* m_events;
 		Triangle* m_TrianglesQueue;
 		long m_TriangleQueueSize;

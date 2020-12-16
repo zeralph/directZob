@@ -4,6 +4,12 @@ class ZobVector2
 public:
 	ZobVector2();
 	ZobVector2(float x, float y);
+	ZobVector2(const ZobVector2* v)
+	{
+		x = v->x;
+		y = v->y;
+		w = v->w;
+	}
 
 	static const ZobVector2 Vector2Zero;
 	static const ZobVector2 Vector2One;

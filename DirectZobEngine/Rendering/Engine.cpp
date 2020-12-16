@@ -810,32 +810,25 @@ uint Engine::ClipTriangle(const Camera* c, const Triangle* t)
 		if (t->clipMode == Triangle::eClip_A_in_BC_out)
 		{
 			c->ClipSegmentToFrustrum(nt->va, nt->vb, outP2factor);
-			nt->ub->x = nt->ua->x + (nt->ub->x - nt->ua->x) * outP2factor;
-			nt->ub->y = nt->ua->y + (nt->ub->y - nt->ua->y) * outP2factor;
+			RecomputeUv(nt->ua, nt->ub, outP2factor);
 			c->ClipSegmentToFrustrum(nt->va, nt->vc, outP2factor);
-			nt->uc->x = nt->ua->x + (nt->uc->x - nt->ua->x) * outP2factor;
-			nt->uc->y = nt->ua->y + (nt->uc->y - nt->ua->y) * outP2factor;
+			RecomputeUv(nt->ua, nt->uc, outP2factor);
 		}
 		else if (t->clipMode == Triangle::eClip_B_in_AC_out)
 		{
 			c->ClipSegmentToFrustrum(nt->vb, nt->va, outP2factor);
-			nt->ua->x = nt->ub->x + (nt->ua->x - nt->ub->x) * outP2factor;
-			nt->ua->y = nt->ub->y + (nt->ua->y - nt->ub->y) * outP2factor;
+			RecomputeUv(nt->ub, nt->ua, outP2factor);
 			c->ClipSegmentToFrustrum(nt->vb, nt->vc, outP2factor);
-			nt->uc->x = nt->ub->x + (nt->uc->x - nt->ub->x) * outP2factor;
-			nt->uc->y = nt->ub->y + (nt->uc->y - nt->ub->y) * outP2factor;
+			RecomputeUv(nt->ub, nt->uc, outP2factor);
 		}
 		else //eClip_C_in_AB_out
 		{
 			c->ClipSegmentToFrustrum(nt->vc, nt->va, outP2factor);
-			nt->ua->x = nt->uc->x + (nt->ua->x - nt->uc->x) * outP2factor;
-			nt->ua->y = nt->uc->y + (nt->ua->y - nt->uc->y) * outP2factor;
+			RecomputeUv(nt->uc, nt->ua, outP2factor);
 			c->ClipSegmentToFrustrum(nt->vc, nt->vb, outP2factor); 
-			nt->ub->x = nt->uc->x + (nt->ub->x - nt->uc->x) * outP2factor;
-			nt->ub->y = nt->uc->y + (nt->ub->y - nt->uc->y) * outP2factor;
+			RecomputeUv(nt->uc, nt->ub, outP2factor);
 		}
 		RecomputeTriangleProj(c, nt);
-		//m_rasterNbTriangleQueues[rasterIndex]++;
 		return 1;
 	}
 	return 0;
@@ -845,26 +838,41 @@ uint Engine::SubDivideClippedTriangle(const Camera* c, const Triangle* t)
 {
 	int nbDrawn = 0;
 	ZobVector3 pIn1;
+	ZobVector2 pIn1Uv;
 	ZobVector3 pIn2;
+	ZobVector2 pIn2Uv;
 	ZobVector3 pOut1;
+	ZobVector2 pOut1Uv;
 	ZobVector3 pOut2;
+	ZobVector2 pOut2Uv;
+	ZobVector3 pi;
+	ZobVector2 piUv;
 	if (t->clipMode == Triangle::eClip_AB_in_C_out)
 	{
 		pIn1 = t->va;
+		pIn1Uv = t->ua;
 		pIn2 = t->vb;
+		pIn2Uv = t->ub;
 		pOut1 = t->vc;
+		pOut1Uv = t->uc;
 	}
 	else if (t->clipMode == Triangle::eClip_AC_in_B_out)
 	{
 		pIn1 = t->va;
+		pIn1Uv = t->ua;
 		pIn2 = t->vc;
+		pIn2Uv = t->uc;
 		pOut1 = t->vb;
+		pOut1Uv = t->ub;
 	}
 	else if(Triangle::eClip_BC_in_A_out)
 	{
 		pOut1 = t->va;
+		pOut1Uv = t->ua;
 		pIn1 = t->vc;
+		pIn1Uv = t->uc;
 		pIn2 = t->vb;
+		pIn2Uv = t->ub;
 	}
 	else
 	{
@@ -874,10 +882,15 @@ uint Engine::SubDivideClippedTriangle(const Camera* c, const Triangle* t)
 	pOut2 = pOut1;
 	float outP2Factor = 0.0f;
 	c->ClipSegmentToFrustrum(&pIn1, &pOut1, outP2Factor);
+	RecomputeUv(&pIn1Uv, &pOut1Uv, outP2Factor);
 	c->ClipSegmentToFrustrum(&pIn2, &pOut2, outP2Factor);
-	ZobVector3 pi;
-	if (LineLineIntersection(&pIn1, &pOut2, &pIn2, &pOut1, pi))
+	RecomputeUv(&pIn2Uv, &pOut2Uv, outP2Factor);
+	if (LineLineIntersection(&pIn1, &pOut2, &pIn2, &pOut1, pi, outP2Factor))
 	{
+		piUv.Copy(&pOut2Uv);
+		//piUv.x /= 2.0f;
+		//piUv.y /= 2.0f;
+		RecomputeUv(&pIn1Uv, &piUv, outP2Factor);
 		uint j;
 		j = m_TriangleQueueSize + nbDrawn;
 		if (j < m_maxTrianglesQueueSize)
@@ -885,8 +898,11 @@ uint Engine::SubDivideClippedTriangle(const Camera* c, const Triangle* t)
 			Triangle* nt = &m_TrianglesQueue[j];
 			Triangle::CopyTriangle(nt, t);
 			nt->va->Copy(&pIn1);
+			nt->ua->Copy(&pIn1Uv);
 			nt->vb->Copy(&pi);
+			nt->ub->Copy(&piUv);
 			nt->vc->Copy(&pIn2);
+			nt->uc->Copy(&pIn2Uv);
 			RecomputeTriangleProj(c, nt);
 			nbDrawn++;
 		}
@@ -896,8 +912,11 @@ uint Engine::SubDivideClippedTriangle(const Camera* c, const Triangle* t)
 			Triangle* nt = &m_TrianglesQueue[j];
 			Triangle::CopyTriangle(nt, t);
 			nt->va->Copy(&pIn2);
+			nt->ua->Copy(&pIn2Uv);
 			nt->vb->Copy(&pi);
+			nt->ub->Copy(&piUv);
 			nt->vc->Copy(&pOut2);
+			nt->uc->Copy(&pOut2Uv);
 			RecomputeTriangleProj(c, nt);
 			nbDrawn++;
 		}
@@ -907,8 +926,11 @@ uint Engine::SubDivideClippedTriangle(const Camera* c, const Triangle* t)
 			Triangle* nt = &m_TrianglesQueue[j];
 			Triangle::CopyTriangle(nt, t);
 			nt->va->Copy(&pi);
+			nt->ua->Copy(&piUv);
 			nt->vb->Copy(&pOut1);
+			nt->ub->Copy(&pOut1Uv);
 			nt->vc->Copy(&pOut2);
+			nt->uc->Copy(&pOut2Uv);
 			RecomputeTriangleProj(c, nt);
 			nbDrawn++;
 		}
@@ -918,8 +940,11 @@ uint Engine::SubDivideClippedTriangle(const Camera* c, const Triangle* t)
 			Triangle* nt = &m_TrianglesQueue[j];
 			Triangle::CopyTriangle(nt, t);
 			nt->va->Copy(&pIn1);
+			nt->ua->Copy(&pIn1Uv);
 			nt->vb->Copy(&pOut1);
+			nt->ub->Copy(&pOut1Uv);
 			nt->vc->Copy(&pi);
+			nt->uc->Copy(&piUv);
 			RecomputeTriangleProj(c, nt);
 			nbDrawn++;
 		}
@@ -973,7 +998,7 @@ void Engine::RecomputeTriangleProj(const Camera* c, Triangle* t)
 	//t->material = NULL;
 }
 
-bool Engine::LineLineIntersection(const ZobVector3* a0, const ZobVector3* a1, const ZobVector3* b0, const ZobVector3* b1, ZobVector3& out) const
+bool Engine::LineLineIntersection(const ZobVector3* a0, const ZobVector3* a1, const ZobVector3* b0, const ZobVector3* b1, ZobVector3& out, float &outFactor) const
 {
 	ZobVector3 da = ZobVector3(a1->x - a0->x, a1->y - a0->y, a1->z - a0->z);
 	ZobVector3 db = ZobVector3(b1->x - b0->x, b1->y - b0->y, b1->z - b0->z);
@@ -991,6 +1016,7 @@ bool Engine::LineLineIntersection(const ZobVector3* a0, const ZobVector3* a1, co
 		out = da;
 		out.Mul(s);
 		out.Add(a0);
+		outFactor = s;
 		return true;
 	}
 	return false;
