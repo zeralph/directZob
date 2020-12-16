@@ -1,5 +1,6 @@
 #pragma once
 #include <math.h>
+#include <string.h>
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
 #endif
@@ -18,10 +19,11 @@ public:
 
 	inline void Copy(const ZobVector3* v)
 	{
-		x = v->x;
-		y = v->y;
-		z = v->z;
-		w = v->w;
+		memcpy(this, v, sizeof(ZobVector3));
+		//x = v->x;
+		//y = v->y;
+		//z = v->z;
+		//w = v->w;
 	}
 
 	inline void Normalize() 
@@ -37,7 +39,7 @@ public:
 	}
 
 	inline float sqrtLength() { return (float)sqrt((double)x * (double)x + (double)y * (double)y + (double)z * (double)z); }
-
+	inline float length2() { return (float)((double)x * (double)x + (double)y * (double)y + (double)z * (double)z); }
 	static inline float Dot(const ZobVector3* v1, const ZobVector3* v2) { return v1->x * v2->x + v1->y * v2->y + v1->z * v2->z; };
 	static inline ZobVector3 Cross(const ZobVector3* v1, const ZobVector3* v2)
 	{

@@ -249,8 +249,7 @@ void Camera::Update()
 	m_zobCameraController->Update();
 	ZobObject::Update();
 	UpdateViewProjectionMatrix();
-	static bool bComputeFrustrum = true;
-	if (bComputeFrustrum)
+	if (!DirectZob::GetInstance()->GetEngine()->LockFrustrum())
 	{
 		RecomputeFrustrumPlanes();
 	}
@@ -315,93 +314,19 @@ void Camera::NormalizePlane(Plane& plane)
 	float   mag;    
 	mag = sqrt(plane.a * plane.a + plane.b * plane.b + plane.c * plane.c);    
 	plane.a = plane.a / mag;    
-	plane.b = plane.b / mag;    
-	plane.c = plane.c / mag;    
-	plane.d = plane.d / mag; 
-}
-
-bool Camera::ClipSegmentToNearPlane(ZobVector3* p1, ZobVector3* p2, bool bCheckOnly) const
-{
-	ZobVector3 dp = ZobVector3(p2->x - p1->x, p2->y - p1->y, p2->z - p1->z);
-	float p1_fac = 0.0f;
-	float p2_fac = 1.0f;
-	static eFrustrumPlanes pEnum = eFrustrumPlaneNear;
-	Plane p = m_frustrumPlanes[pEnum];
-	ZobVector3 pv = ZobVector3(p.a, p.b, p.c);
-	float div = ZobVector3::Dot(&pv, &dp);
-	if (div != 0.0f)
-	{
-		float t = -(ZobVector3::Dot(&pv, p1) + p.d);
-		if (div > 0.0f)
-		{
-			if (t >= div)
-			{
-				return false;
-			}
-			if (t > 0.0f)
-			{
-				float fac = t / div;
-				if (fac > p1_fac)
-				{
-					p1_fac = fac;
-					if (p1_fac > p2_fac)
-					{
-						return false;
-					}
-				}
-			}
-		}
-		else if (div < 0.0f)
-		{
-			if (t > 0.0f)
-			{
-				return false;
-			}
-			if (t > div)
-			{
-				float fac = t / div;
-				if (fac < p2_fac)
-				{
-					p2_fac = fac;
-					if (p1_fac > p2_fac)
-					{
-						return false;
-					}
-				}
-			}
-		}
-	}
-	if (p2_fac > 1.0f)
-	{
-		int y = 0;
-		y++;
-	}
-	if (p1_fac > 1.0f)
-	{
-		int y = 0;
-		y++;
-	}
-	p2_fac -= p1_fac;
-	if (!bCheckOnly)
-	{
-		p1->x = p1->x + dp.x * p1_fac;
-		p1->y = p1->y + dp.y * p1_fac;
-		p1->z = p1->z + dp.z * p1_fac;
-		p2->x = p1->x + dp.x * p2_fac;
-		p2->y = p1->y + dp.y * p2_fac;
-		p2->z = p1->z + dp.z * p2_fac;
-	}
-	return true;
+	plane.b = plane.b / mag;
+	plane.c = plane.c / mag;
+	plane.d = plane.d / mag;
 }
 
 bool Camera::PointIsInFrustrum(const ZobVector3* pt) const
 {
-	for (int i = 0; i < 6; ++i) 
+	for (int i = 0; i < 6; ++i)
 	{
 		Plane p = m_frustrumPlanes[i];
 		ZobVector3 pv = ZobVector3(p.a, p.b, p.c);
 		float d = ZobVector3::Dot(&pv, pt) + p.d;
-		if (d<0)
+		if (d < 0)
 		{
 			return false;
 		}
@@ -409,13 +334,14 @@ bool Camera::PointIsInFrustrum(const ZobVector3* pt) const
 	return true;
 }
 
-bool Camera::ClipSegmentToFrustrum(ZobVector3* p1, ZobVector3* p2, bool bCheckOnly) const
+bool Camera::ClipSegmentToFrustrum(ZobVector3* p1, ZobVector3* p2, float& outP2Factor) const
 {
-	return ClipSegmentToPlanes(p1, p2, bCheckOnly, m_frustrumPlanes);
+	return ClipSegmentToPlanes(p1, p2, m_frustrumPlanes, outP2Factor);
 }
 
-bool Camera::ClipSegmentToPlanes(ZobVector3* p1, ZobVector3* p2, bool bCheckOnly, const DirectZobType::Plane* planes)
+bool Camera::ClipSegmentToPlanes(ZobVector3* p1, ZobVector3* p2, const DirectZobType::Plane* planes, float& outP2Factor)
 {
+	outP2Factor = 1.0f;
 	ZobVector3 dp = ZobVector3(p2->x - p1->x, p2->y - p1->y, p2->z - p1->z);
 	float p1_fac = 0.0f;
 	float p2_fac = 1.0f;
@@ -468,15 +394,13 @@ bool Camera::ClipSegmentToPlanes(ZobVector3* p1, ZobVector3* p2, bool bCheckOnly
 		}
 	}
 	p2_fac -= p1_fac;
-	if (!bCheckOnly)
-	{
-		p1->x = p1->x + dp.x * p1_fac;
-		p1->y = p1->y + dp.y * p1_fac;
-		p1->z = p1->z + dp.z * p1_fac;
-		p2->x = p1->x + dp.x * p2_fac;
-		p2->y = p1->y + dp.y * p2_fac;
-		p2->z = p1->z + dp.z * p2_fac;
-	}
+	p1->x = p1->x + dp.x * p1_fac;
+	p1->y = p1->y + dp.y * p1_fac;
+	p1->z = p1->z + dp.z * p1_fac;
+	p2->x = p1->x + dp.x * p2_fac;
+	p2->y = p1->y + dp.y * p2_fac;
+	p2->z = p1->z + dp.z * p2_fac;
+	outP2Factor = p2_fac;
 	return true;
 }
 

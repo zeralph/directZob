@@ -42,6 +42,8 @@ namespace CLI
 		void			WireFrame(bool b) { m_Instance->WireFrame(b); }
 		void			ShowNormals(bool b) { m_Instance->ShowNormals(b); }
 		void			DrawGizmos(bool b) { m_Instance->DrawGizmos(b); }
+		void			LockFrustrum(bool b) { m_Instance->LockFrustrum(b); }
+		bool			LockFrustrum()	{ return m_Instance->LockFrustrum(); }
 		void			SetRenderOutput(int r);
 		void			SetRenderMode(int r);
 		void			SetLightingPrecision(int r);

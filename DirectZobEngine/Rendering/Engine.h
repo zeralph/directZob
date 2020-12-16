@@ -31,7 +31,7 @@ namespace Core
 		void											Stop();
 		void											ClearBuffer(const Color* color);
 		void											CopyBuffer(uint* source, uint* dest);
-		void											QueueTriangle(const Triangle* t);
+		void											QueueTriangle(const Camera* c, const Triangle* t);
 		void											DrawGrid(const Camera* camera);
 
 		void											ToggleZbufferOutput() { m_showZBuffer = !m_showZBuffer; }
@@ -57,10 +57,12 @@ namespace Core
 		inline bool										WireFrame() { return m_wireFrame; }
 		inline void										ShowNormals(bool b) { m_showNormals = b; }
 		inline void										DrawGizmos(bool b) { m_drawGizmos = b; }
+		inline void										LockFrustrum(bool b) { m_lockFrustrum=b; }
 		inline bool										ShowGrid() { return m_showGrid; }
 		inline bool										ShowNormals() { return m_showNormals; }
 		inline bool										DrawGizmos() { return m_drawGizmos; }
 		inline bool										ShowBBoxes() { return m_showBBoxes; }
+		inline bool										LockFrustrum() { return m_lockFrustrum;  }
 		inline void										SetRenderMode(eRenderMode b) { m_renderMode = b; }
 		inline const eRenderMode						GetRenderMode() { return m_renderMode; }
 		inline void										SetRenderOutput(eRenderOutput r) { m_renderOutput = r; }
@@ -75,20 +77,29 @@ namespace Core
 		float											GetDistanceToCamera(ZobVector3* worldPos);
 		bool											LinePlaneIntersection(const ZobVector3* planeOrigin, const ZobVector3* planeNormal, const ZobVector3* lineOrigin, const ZobVector3* lineDirection, ZobVector3* ret);
 		bool											LineTriangleIntersection(const Triangle* t, const ZobVector3* l0, const ZobVector3* lv, ZobVector3& intersectionPt);
+		bool											LineLineIntersection(const ZobVector3* s0, const ZobVector3* s1, const ZobVector3* e0, const ZobVector3* e1, ZobVector3 &out) const;
 		ZobObject*										GetObjectAt2DCoords(float x, float y);
 	private:	
 		inline float									clamp2(float x, float min, float max) const { if (x < min) x = min; if (x > max) x = max; return x; }
 		void											DrawHorizontalLine(const float x1, const float x2, const float y, const uint color);
 		void											ClipSegmentToPlane(ZobVector3 &s0, ZobVector3 &s1, ZobVector3 &pp, ZobVector3 &pn);
 		void											QueuePartialSphere(const Camera* camera, const ZobMatrix4x4* mat, const float radius, const uint c, bool bold, bool noZ, float from, float to);
+		uint											SubDivideClippedTriangle(const Camera* c, const Triangle* t);
+		void											RecomputeTriangleProj(const Camera* c, Triangle* t);
+		uint											ClipTriangle(const Camera* c, const Triangle* t);
+		void											QueueTriangleInRasters(const Triangle* t) const;
+		void											QueueLineInRasters(const Line3D* l) const;
 		Events* m_events;
-		Triangle** m_rasterTriangleQueues;
-		long* m_rasterNbTriangleQueues;
-		std::vector<Line3D>* m_rasterLineQueues;
-		//std::vector<Rasterizer*>* m_rasterizers;
+		Triangle* m_TrianglesQueue;
+		long m_TriangleQueueSize;
+		long m_maxTrianglesQueueSize;
+
+		Line3D* m_LineQueue;
+		long m_lineQueueSize;
+		long m_maxLineQueueSize;
+		
 		Rasterizer** m_rasterizers;
 		uint m_nbRasterizers;
-		uint m_triangleQueueSize;
 		float m_zNear;
 		float m_zFar;
 		int m_curBuffer;
@@ -100,13 +111,14 @@ namespace Core
 		bool m_showZBuffer;
 		uint m_drawnTriangles;
 		ulong m_nbPixels;
-		volatile bool m_started = false;
-		bool m_wireFrame = false;
+		volatile bool m_started;
+		bool m_wireFrame;
 		int m_rasterizerHeight;
-		bool m_showNormals = false;
-		bool m_showGrid = true;
-		bool m_drawGizmos = true;
-		bool m_showBBoxes = true;
+		bool m_showNormals;
+		bool m_showGrid;
+		bool m_drawGizmos;
+		bool m_showBBoxes;
+		volatile bool m_lockFrustrum;
 		eRenderOutput m_renderOutput;
 		eRenderMode m_renderMode = eRenderMode_fullframe;
 		eLightingPrecision m_lightingPrecision = eLightingPrecision_vertex;

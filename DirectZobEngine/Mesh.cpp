@@ -517,7 +517,7 @@ void Mesh::Update(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationM
 		for (uint i = 0; i < m_triangles.size(); i++)
 		{
 			Triangle* t = &m_triangles.at(i);
-			t->draw = false;
+			t->draw = true;
 			ZobVector3* va = &m_verticesTmp[t->verticeAIndex];
 			ZobVector3* vb = &m_verticesTmp[t->verticeBIndex];
 			ZobVector3* vc = &m_verticesTmp[t->verticeCIndex];
@@ -557,18 +557,18 @@ void Mesh::Update(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationM
 			{
 				t->clipMode = Triangle::eClip_0_in;
 			}
-			t->draw = t->clipMode != Triangle::eClip_0_in;
+			//t->draw = t->clipMode != Triangle::eClip_0_in;
 
 			//need to clip triangles
-			if(t->draw &&  t->clipMode != Triangle::eClip_3_in)
+			if(/*t->draw &&  */t->clipMode != Triangle::eClip_3_in)
 			{
 				if (t->clipMode > Triangle::eClip_2_in)
 				{
-					//worst case
-					t->draw = false;
+					//handled when adding triangle
 				}
 				else if(t->clipMode > Triangle::eClip_1_in)
 				{
+					/*
 					if(t->clipMode  == Triangle::eClip_A_in_BC_out)
 					{
 						camera->ClipSegmentToFrustrum(va, vb, false);
@@ -584,10 +584,13 @@ void Mesh::Update(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationM
 						camera->ClipSegmentToFrustrum(vc, va, false);
 						camera->ClipSegmentToFrustrum(vc, vb, false);
 					}
+					*/
+					//t->draw = false;
 				}
 			}
 		}
 	}
+/*
 	for (uint i = 0; i < m_nbVertices; i++)
 	{
 		m_projectedVerticesTmp[i].x = m_verticesTmp[i].x;
@@ -596,10 +599,11 @@ void Mesh::Update(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationM
 		m_projectedVerticesTmp[i].w = m_verticesTmp[i].w;
 		view->Mul(&m_projectedVerticesTmp[i]);
 		proj->Mul(&m_projectedVerticesTmp[i]);
-		static float kk = 1.0f;
-		m_projectedVerticesTmp[i].x = ((m_projectedVerticesTmp[i].x  /*+ sinf(m_projectedVerticesTmp[i].y) * kk*/)/ m_projectedVerticesTmp[i].z + 1) * w;
+		//static float kk = 1.0f; // sinf(m_projectedVerticesTmp[i].y) * kk
+		m_projectedVerticesTmp[i].x = ((m_projectedVerticesTmp[i].x )/ m_projectedVerticesTmp[i].z + 1) * w;
 		m_projectedVerticesTmp[i].y = (m_projectedVerticesTmp[i].y / m_projectedVerticesTmp[i].z + 1) * h;
 	}
+*/	
 	for (uint i = 0; i < m_nbNormals; i++)
 	{
 		rotationMatrix.Mul(&m_verticesNormalsTmp[i]);
@@ -615,7 +619,7 @@ void Mesh::Update(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationM
 		m_subMeshes[i]->Update(modelMatrix, rotationMatrix, camera, engine, ownerId, options);
 	}
 }
-void Mesh::QueueForDrawing(ZobObject* z, const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions* options)
+void Mesh::QueueForDrawing(ZobObject* z, const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, RenderOptions* options)
 {
 	memcpy(m_vertices, m_verticesTmp, sizeof(ZobVector3) * m_nbVertices);
 	memcpy(m_verticesNormals, m_verticesNormalsTmp, sizeof(ZobVector3) * m_nbNormals);
@@ -650,7 +654,7 @@ void Mesh::QueueForDrawing(ZobObject* z, const ZobMatrix4x4& modelMatrix, const 
 		{
 			bDraw = t->draw;
 		}
-		if(bDraw)
+		if(true || bDraw)
 		{
 			bool bCull = false;
 			t->ComputeArea();
@@ -660,9 +664,9 @@ void Mesh::QueueForDrawing(ZobObject* z, const ZobMatrix4x4& modelMatrix, const 
 			{
 				t->area = -t->area;
 			}
-			if (t->area > sAreaMin)
+			//if (t->area > sAreaMin)
 			{
-				engine->QueueTriangle(t);
+				engine->QueueTriangle(camera, t);
 				static bool bShowNormal = true;
 				if (engine->ShowNormals())
 				{

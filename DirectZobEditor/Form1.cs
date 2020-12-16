@@ -127,9 +127,11 @@ namespace DirectZobEditor
             {
                 handler(this, EventArgs.Empty);
             }
+            /*
             m_directZobWrapper.LoadScene("D:\\Git\\directZob\\resources\\", "carTest.dzs");
             m_engineWindow.GetEngineWrapper().ShowGrid(false);
             m_directZobWrapper.StartPhysic();
+            */
         }
 
         public string Getpath()

@@ -27,14 +27,16 @@ public:
 	void 					DrawTriangle(const Triangle* t) const;
 	void 					plotLine(int x0, int y0, int x1, int y1) const;
 	void 					DrawLine(const Line3D* l) const;
-	void 					Start(Triangle* triangles, const uint nbTriangles, const std::vector<Line3D>* lines, const bool wireFrame, const eRenderMode renderMode, const bool bEvenFrame, const eLightingPrecision lp, ZobVector3 camForward);
+	void 					Start(const bool wireFrame, const eRenderMode renderMode, const bool bEvenFrame, const eLightingPrecision lp, ZobVector3 camForward);
 	float 					WaitForEnd();
 	void 					End();
 	void 					Init();
 	void 					Render();
 	void 					Clear();
-	inline const Triangle*	GetTriangle(int i) { return &m_triangles[i]; }
-	inline int				GetNbTriangle() { return m_nbTriangles; }
+	void					QueueTriangle(const Triangle* t);
+	void					QueueLine(const Line3D* l);
+	inline const Triangle*	GetTriangle(int i) { return m_triangles[i]; }
+	inline int				GetNbTriangle() { return m_triangles.size(); }
 private:
 
 	void 					FillTopFlatTriangle2(ZobVector2* v1, ZobVector2* v2, ZobVector2* v3, const Triangle* t, const ZobVector3* la, const ZobVector3* lb, const ZobVector3* lc) const;
@@ -76,8 +78,8 @@ private:
 	};
 
 	std::vector<const Light*> m_lights;
-	const std::vector<Line3D>* m_lines;
-	Triangle* m_triangles;
+	std::vector<const Line3D*> m_lines;
+	std::vector<const Triangle*> m_triangles;
 	const ZobVector3* m_ambientColor;
 	float m_ambientIntensity;
 	const ZobVector3* m_fogColor;
@@ -86,7 +88,6 @@ private:
 	eFogType m_fogType;
 	BufferData* m_bufferData;
 	ZobVector3 m_camDir;
-	uint m_nbTriangles;
 	//std::thread m_thread;
 	uint m_startHeight;
 	uint m_width;

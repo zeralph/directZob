@@ -29,6 +29,11 @@
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.comboLighting = new System.Windows.Forms.ComboBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.comboRender = new System.Windows.Forms.ComboBox();
+            this.drawGizmos = new System.Windows.Forms.CheckBox();
             this.showNormals = new System.Windows.Forms.CheckBox();
             this.label3 = new System.Windows.Forms.Label();
             this.engineSetSize = new System.Windows.Forms.Button();
@@ -39,16 +44,13 @@
             this.comboBuffer = new System.Windows.Forms.ComboBox();
             this.wireframe = new System.Windows.Forms.CheckBox();
             this.showGrid = new System.Windows.Forms.CheckBox();
-            this.drawGizmos = new System.Windows.Forms.CheckBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.comboRender = new System.Windows.Forms.ComboBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.comboLighting = new System.Windows.Forms.ComboBox();
+            this.lockFrustrum = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.lockFrustrum);
             this.groupBox1.Controls.Add(this.label5);
             this.groupBox1.Controls.Add(this.comboLighting);
             this.groupBox1.Controls.Add(this.label4);
@@ -67,10 +69,72 @@
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox1.Location = new System.Drawing.Point(0, 0);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(340, 138);
+            this.groupBox1.Size = new System.Drawing.Size(340, 205);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Engine";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(161, 23);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(44, 13);
+            this.label5.TabIndex = 14;
+            this.label5.Text = "Lighting";
+            // 
+            // comboLighting
+            // 
+            this.comboLighting.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboLighting.FormattingEnabled = true;
+            this.comboLighting.Items.AddRange(new object[] {
+            "No lighting",
+            "Vertex lighting",
+            "Pixel lighting"});
+            this.comboLighting.Location = new System.Drawing.Point(208, 19);
+            this.comboLighting.Name = "comboLighting";
+            this.comboLighting.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.comboLighting.Size = new System.Drawing.Size(117, 21);
+            this.comboLighting.TabIndex = 13;
+            this.comboLighting.SelectedIndexChanged += new System.EventHandler(this.comboLighting_SelectedIndexChanged);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(161, 50);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(42, 13);
+            this.label4.TabIndex = 12;
+            this.label4.Text = "Render";
+            // 
+            // comboRender
+            // 
+            this.comboRender.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboRender.FormattingEnabled = true;
+            this.comboRender.Items.AddRange(new object[] {
+            "Full frame",
+            "Interlaced",
+            "Scanline"});
+            this.comboRender.Location = new System.Drawing.Point(208, 46);
+            this.comboRender.Name = "comboRender";
+            this.comboRender.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.comboRender.Size = new System.Drawing.Size(117, 21);
+            this.comboRender.TabIndex = 11;
+            this.comboRender.SelectedIndexChanged += new System.EventHandler(this.comboRender_SelectedIndexChanged);
+            // 
+            // drawGizmos
+            // 
+            this.drawGizmos.AutoSize = true;
+            this.drawGizmos.Checked = true;
+            this.drawGizmos.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.drawGizmos.Location = new System.Drawing.Point(12, 82);
+            this.drawGizmos.Name = "drawGizmos";
+            this.drawGizmos.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.drawGizmos.Size = new System.Drawing.Size(86, 17);
+            this.drawGizmos.TabIndex = 10;
+            this.drawGizmos.Text = "Draw gizmos";
+            this.drawGizmos.UseVisualStyleBackColor = true;
+            this.drawGizmos.CheckedChanged += new System.EventHandler(this.drawGizmos_CheckedChanged);
             // 
             // showNormals
             // 
@@ -95,7 +159,7 @@
             // 
             // engineSetSize
             // 
-            this.engineSetSize.Location = new System.Drawing.Point(223, 111);
+            this.engineSetSize.Location = new System.Drawing.Point(223, 141);
             this.engineSetSize.Name = "engineSetSize";
             this.engineSetSize.Size = new System.Drawing.Size(40, 23);
             this.engineSetSize.TabIndex = 7;
@@ -106,7 +170,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(153, 116);
+            this.label2.Location = new System.Drawing.Point(153, 146);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(14, 13);
             this.label2.TabIndex = 6;
@@ -115,7 +179,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(39, 115);
+            this.label1.Location = new System.Drawing.Point(39, 145);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(57, 13);
             this.label1.TabIndex = 5;
@@ -123,14 +187,14 @@
             // 
             // engineHeight
             // 
-            this.engineHeight.Location = new System.Drawing.Point(170, 112);
+            this.engineHeight.Location = new System.Drawing.Point(170, 142);
             this.engineHeight.Name = "engineHeight";
             this.engineHeight.Size = new System.Drawing.Size(46, 20);
             this.engineHeight.TabIndex = 4;
             // 
             // engineWidth
             // 
-            this.engineWidth.Location = new System.Drawing.Point(102, 112);
+            this.engineWidth.Location = new System.Drawing.Point(102, 142);
             this.engineWidth.Name = "engineWidth";
             this.engineWidth.Size = new System.Drawing.Size(46, 20);
             this.engineWidth.TabIndex = 3;
@@ -174,67 +238,17 @@
             this.showGrid.UseVisualStyleBackColor = true;
             this.showGrid.CheckedChanged += new System.EventHandler(this.ShowGrid_CheckedChanged);
             // 
-            // drawGizmos
+            // lockFrustrum
             // 
-            this.drawGizmos.AutoSize = true;
-            this.drawGizmos.Checked = true;
-            this.drawGizmos.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.drawGizmos.Location = new System.Drawing.Point(12, 82);
-            this.drawGizmos.Name = "drawGizmos";
-            this.drawGizmos.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.drawGizmos.Size = new System.Drawing.Size(86, 17);
-            this.drawGizmos.TabIndex = 10;
-            this.drawGizmos.Text = "Draw gizmos";
-            this.drawGizmos.UseVisualStyleBackColor = true;
-            this.drawGizmos.CheckedChanged += new System.EventHandler(this.drawGizmos_CheckedChanged);
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(161, 50);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(42, 13);
-            this.label4.TabIndex = 12;
-            this.label4.Text = "Render";
-            // 
-            // comboRender
-            // 
-            this.comboRender.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboRender.FormattingEnabled = true;
-            this.comboRender.Items.AddRange(new object[] {
-            "Full frame",
-            "Interlaced",
-            "Scanline"});
-            this.comboRender.Location = new System.Drawing.Point(208, 46);
-            this.comboRender.Name = "comboRender";
-            this.comboRender.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.comboRender.Size = new System.Drawing.Size(117, 21);
-            this.comboRender.TabIndex = 11;
-            this.comboRender.SelectedIndexChanged += new System.EventHandler(this.comboRender_SelectedIndexChanged);
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(161, 23);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(44, 13);
-            this.label5.TabIndex = 14;
-            this.label5.Text = "Lighting";
-            // 
-            // comboLighting
-            // 
-            this.comboLighting.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboLighting.FormattingEnabled = true;
-            this.comboLighting.Items.AddRange(new object[] {
-            "No lighting",
-            "Vertex lighting",
-            "Pixel lighting"});
-            this.comboLighting.Location = new System.Drawing.Point(208, 19);
-            this.comboLighting.Name = "comboLighting";
-            this.comboLighting.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.comboLighting.Size = new System.Drawing.Size(117, 21);
-            this.comboLighting.TabIndex = 13;
-            this.comboLighting.SelectedIndexChanged += new System.EventHandler(this.comboLighting_SelectedIndexChanged);
+            this.lockFrustrum.AutoSize = true;
+            this.lockFrustrum.Location = new System.Drawing.Point(12, 105);
+            this.lockFrustrum.Name = "lockFrustrum";
+            this.lockFrustrum.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.lockFrustrum.Size = new System.Drawing.Size(90, 17);
+            this.lockFrustrum.TabIndex = 15;
+            this.lockFrustrum.Text = "Lock frustrum";
+            this.lockFrustrum.UseVisualStyleBackColor = true;
+            this.lockFrustrum.CheckedChanged += new System.EventHandler(this.lockFrustrum_CheckedChanged);
             // 
             // EngineControl
             // 
@@ -242,7 +256,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.groupBox1);
             this.Name = "EngineControl";
-            this.Size = new System.Drawing.Size(340, 138);
+            this.Size = new System.Drawing.Size(340, 205);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
@@ -267,5 +281,6 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.ComboBox comboRender;
         private System.Windows.Forms.CheckBox drawGizmos;
+        private System.Windows.Forms.CheckBox lockFrustrum;
     }
 }

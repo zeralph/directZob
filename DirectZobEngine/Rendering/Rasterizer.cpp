@@ -12,6 +12,8 @@ Rasterizer::Rasterizer(uint width, uint startHeight, uint endHeight, BufferData*
 	m_bufferData = bufferData;
 	m_endHeight = endHeight;
 	m_width = width;
+	m_lines.clear();
+	m_triangles.clear();
 }
 
 void Rasterizer::Init()
@@ -20,11 +22,8 @@ void Rasterizer::Init()
 	//m_thread.detach();
 }
 
-void Rasterizer::Start(Triangle* triangles, const uint nbTriangles, const std::vector<Line3D>* lines, const bool wireFrame, const eRenderMode renderMode, const bool bEvenFrame, const eLightingPrecision lp, ZobVector3 camForward)
+void Rasterizer::Start(const bool wireFrame, const eRenderMode renderMode, const bool bEvenFrame, const eLightingPrecision lp, ZobVector3 camForward)
 {
-	m_lines = lines;
-	m_triangles = triangles;
-	m_nbTriangles = nbTriangles;
 	m_wireFrame = wireFrame;
 	m_thread = std::thread(&Rasterizer::Render, this);
 	m_bEvenFrame = bEvenFrame ? 1 : 0;
@@ -52,19 +51,28 @@ Rasterizer::~Rasterizer()
 
 void Rasterizer::Clear()
 {
-	m_lines = NULL;
-	m_triangles = NULL;
-	m_nbTriangles = 0;
+	m_lines.clear();
+	m_triangles.clear();
+}
+
+void Rasterizer::QueueTriangle(const Triangle* t)
+{
+	m_triangles.push_back(t);
+}
+
+void Rasterizer::QueueLine(const Line3D* l)
+{
+	m_lines.push_back(l);
 }
 
 void Rasterizer::Render() 
 {
 	m_tick = clock();
 	//warning : invert lightdir ! https://fr.wikipedia.org/wiki/Ombrage_de_Phong
-	for (int i = 0; i < m_lines->size(); i++)
+	for (int i = 0; i < m_lines.size(); i++)
 	{
-		const Line3D l = m_lines->at(i);
-		DrawLine(&l);
+		const Line3D* l = m_lines.at(i);
+		DrawLine(l);
 	}
 	m_lights.clear();
 	LightManager* lm = DirectZob::GetInstance()->GetLightManager();
@@ -78,9 +86,9 @@ void Rasterizer::Render()
 		m_fogDensity = lm->GetFogDensity();
 		m_fogDistance = lm->GetFogDistance();
 	}
-	for (int i = 0; i < m_nbTriangles; i++)
+	for (int i = 0; i < m_triangles.size(); i++)
 	{
-		Triangle* t = &m_triangles[i];
+		const Triangle* t = m_triangles[i];
 		if (t->draw)
 		{
 			DrawTriangle(t);
@@ -454,7 +462,7 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector3* p, const Triangl
 		RenderOptions::eLightMode lighting = t->options->lightMode;
 		if (lighting == RenderOptions::eLightMode_flat || lighting == RenderOptions::eLightMode_flatPhong || lighting == RenderOptions::eLightMode_none)
 		{
-			normal = t->n;
+			normal = t->n? t->n:ZobVector3(0,0,1);
 		}
 		else
 		{

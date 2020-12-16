@@ -23,6 +23,14 @@ static std::condition_variable m_cond;
 using namespace Core;
 Engine::Engine(int width, int height, Events* events)
 {
+	m_started = false;
+	m_wireFrame = false;
+	m_rasterizerHeight = 0;
+	m_showNormals = false;
+	m_showGrid = true;
+	m_drawGizmos = true;
+	m_showBBoxes = true;
+	m_lockFrustrum = false;
 	m_nbRasterizers = std::thread::hardware_concurrency();
 	while (height % m_nbRasterizers != 0 && m_nbRasterizers>1)
 	{
@@ -39,8 +47,8 @@ Engine::Engine(int width, int height, Events* events)
 	}
 	m_nbRasterizers = 4;
 	*/
-	//m_nbRasterizers = 1;
-	m_triangleQueueSize = 100000;// MAX_TRIANGLES_PER_IMAGE / m_nbRasterizers;
+	//m_nbRasterizers = 4;
+	m_maxTrianglesQueueSize = 200000;// MAX_TRIANGLES_PER_IMAGE / m_nbRasterizers;
 	m_renderOutput = eRenderOutput_render;
 	m_events = events;
 	m_currentFrame = 0;
@@ -60,29 +68,54 @@ Engine::Engine(int width, int height, Events* events)
 	//	m_bufferData.oBuffer = m_oBuffer;
 	m_bufferData.size = width * height;
 	m_nbPixels = 0;
-	m_rasterTriangleQueues = (Triangle **)malloc(sizeof(Triangle) * m_nbRasterizers);
-	m_rasterNbTriangleQueues = (long *)malloc(sizeof(long) * m_nbRasterizers);
-	m_rasterLineQueues = new std::vector<Line3D>[m_nbRasterizers];
-	//m_rasterizers = new std::vector<Rasterizer*>[m_nbRasterizers];
+
 	m_rasterizers = (Rasterizer**)malloc(sizeof(Rasterizer) * m_nbRasterizers);
 	m_rasterizerHeight = ceil((float)height / (float)m_nbRasterizers);
 	int h0 = 0;
-	
 	for (int i = 0; i < m_nbRasterizers; i++)
 	{
-		Rasterizer *r = new Rasterizer(width, h0, h0 + m_rasterizerHeight, &m_bufferData);
+		Rasterizer* r = new Rasterizer(width, h0, h0 + m_rasterizerHeight, &m_bufferData);
 		m_rasterizers[i] = r;
-		m_rasterTriangleQueues[i] = (Triangle*)malloc(sizeof(Triangle) * m_triangleQueueSize);
-		m_rasterLineQueues[i].clear();
 		h0 += m_rasterizerHeight;
 	}
+
+	m_LineQueue = (Line3D*)malloc(sizeof(Triangle) * m_maxLineQueueSize);
+	m_TrianglesQueue = (Triangle*)malloc(sizeof(Triangle) * m_maxTrianglesQueueSize);
+	for (int i = 0; i < m_maxTrianglesQueueSize; i++)
+	{
+		m_TrianglesQueue[i].va = new ZobVector3();
+		m_TrianglesQueue[i].vb = new ZobVector3();
+		m_TrianglesQueue[i].vc = new ZobVector3();
+		m_TrianglesQueue[i].pa = new ZobVector3();
+		m_TrianglesQueue[i].pb = new ZobVector3();
+		m_TrianglesQueue[i].pc = new ZobVector3(); 
+		m_TrianglesQueue[i].na = new ZobVector3(); 
+		m_TrianglesQueue[i].nb = new ZobVector3(); 
+		m_TrianglesQueue[i].nc = new ZobVector3(); 
+		m_TrianglesQueue[i].ua = new ZobVector2(); 
+		m_TrianglesQueue[i].ub = new ZobVector2(); 
+		m_TrianglesQueue[i].uc = new ZobVector2(); 
+		m_TrianglesQueue[i].n = new ZobVector3();
+		m_TrianglesQueue[i].options = (DirectZobType::RenderOptions*)malloc(sizeof(DirectZobType::RenderOptions));
+		m_TrianglesQueue[i].options->zBuffered = true;
+		m_TrianglesQueue[i].options->bTransparency = false;
+		m_TrianglesQueue[i].options->cullMode = eCullMode_ClockwiseFace;
+		m_TrianglesQueue[i].draw = false;
+		m_TrianglesQueue[i].area = 0;
+		m_TrianglesQueue[i].material = NULL;
+		m_TrianglesQueue[i].zobObject = NULL;
+		m_TrianglesQueue[i].ca = 0;
+		m_TrianglesQueue[i].cb = 0;
+		m_TrianglesQueue[i].cc = 0;
+	}
+	m_lineQueueSize = 0;
+	m_TriangleQueueSize = 0;
 	for (int i = 0; i < m_nbRasterizers; i++)
 	{
-		m_rasterLineQueues[i].clear();
-		m_rasterNbTriangleQueues[i] = 0;
+
 		m_rasterizers[i]->Init();
 	}
-	std::string n = "Engine initialized with " + std::to_string(m_nbRasterizers) + " rasterizer(s) for " + std::to_string(m_triangleQueueSize) + " triangles per image";
+	std::string n = "Engine initialized with " + std::to_string(m_nbRasterizers) + " rasterizer(s) for " + std::to_string(m_maxTrianglesQueueSize) + " triangles per image";
 	DirectZob::LogInfo(n.c_str());
 }
 
@@ -105,11 +138,9 @@ Engine::~Engine()
 	for (int i = 0; i < m_nbRasterizers; i++)
 	{
 		delete m_rasterizers[i];
-		delete m_rasterTriangleQueues[i];
+		delete m_TrianglesQueue;
 	}
-	delete m_rasterTriangleQueues;
-	delete m_rasterNbTriangleQueues;
-	delete m_rasterLineQueues;
+	delete m_TrianglesQueue;
 	delete m_rasterizers;
 	m_events = NULL;
 }
@@ -163,8 +194,8 @@ void Engine::Resize(int width, int height)
 	{
 		Rasterizer *r = new Rasterizer(width, h0, h0 + m_rasterizerHeight, &m_bufferData);
 		m_rasterizers[i] = r;
-		//m_rasterTriangleQueues[i].clear();
-		m_rasterLineQueues[i].clear();
+		//m_TrianglesQueue[i].clear();
+		//m_rasterLineQueues.clear();
 		h0 += m_rasterizerHeight;
 	}
 	for (int i = 0; i < m_nbRasterizers; i++)
@@ -236,7 +267,7 @@ int Engine::StartDrawingScene()
 	const ZobVector3 camForward = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera()->GetForward();
 	for (int i = 0; i < m_nbRasterizers; i++)
 	{
-		m_rasterizers[i]->Start(m_rasterTriangleQueues[i], m_rasterNbTriangleQueues[i], &m_rasterLineQueues[i], m_wireFrame, m_renderMode, m_currentFrame % 2, m_lightingPrecision, camForward);
+		m_rasterizers[i]->Start(m_wireFrame, m_renderMode, m_currentFrame % 2, m_lightingPrecision, camForward);
 	}
 	return 0;
 }
@@ -272,10 +303,8 @@ void Engine::ClearRenderQueues()
 {
 	for (int i = 0; i < m_nbRasterizers; i++)
 	{
-		//m_rasterTriangleQueues[i]->clear();
-		m_rasterLineQueues[i].clear();
-		m_rasterLineQueues[i].shrink_to_fit();
-		m_rasterNbTriangleQueues[i] = 0;
+		m_lineQueueSize = 0;
+		m_TriangleQueueSize = 0;
 		m_rasterizers[i]->Clear();
 	}
 }
@@ -612,59 +641,55 @@ void Engine::QueueLine(const Camera* camera, const ZobVector3* v1, const ZobVect
 	{
 		ZobVector3 a = ZobVector3(v1);
 		ZobVector3 b = ZobVector3(v2);
-		bool bClipped = camera->ClipSegmentToFrustrum(&a, &b, false);
+		float outP2factor = 0.0f;
+		bool bClipped = camera->ClipSegmentToFrustrum(&a, &b, outP2factor);
 		if (bClipped)
 		{
-			float za, zb = 0.0f;
-			camera->GetViewMatrix()->Mul(&a);
-			//camera->ToViewSpace(&a);
-			za = a.z;
-			camera->GetProjectionMatrix()->Mul(&a);
-			camera->GetViewMatrix()->Mul(&b);
-			//camera->ToViewSpace(&b);
-			zb = b.z;
-			camera->GetProjectionMatrix()->Mul(&b);
-			a.x /= a.w;
-			a.y /= a.w;
-			a.z /= a.w;
-			a.w = 1.0f;
-			b.x /= b.w;
-			b.y /= b.w;
-			b.z /= b.w;
-			b.w = 1.0f;
-			a.x = (a.x + 1) * m_bufferData.width / 2.0f;
-			a.y = (a.y + 1) * m_bufferData.height / 2.0f;
-			b.x = (b.x + 1) * m_bufferData.width / 2.0f;
-			b.y = (b.y + 1) * m_bufferData.height / 2.0f;
-			Line3D l;
-			l.xa = a.x;
-			l.xb = b.x;
-			l.ya = a.y;
-			l.yb = b.y;
-			l.za = za;
-			l.zb = zb;
-			l.c = c;
-			l.bold = bold;
-			l.noZ = noZ;
-			int min = std::min<int>(a.y, b.y);
-			int max = std::max<int>(a.y, b.y);
-			min = clamp2(min, 0, (int)m_bufferData.height - 1);
-			max = clamp2(max, 0, (int)m_bufferData.height - 1);
-			min = min / m_rasterizerHeight;
-			max = max / m_rasterizerHeight;
-			if (isinf(l.xa) || isinf(l.xb) || isinf(l.ya) || isinf(l.yb))
+			if (m_lineQueueSize < m_maxLineQueueSize)
 			{
-				return;
-			}
-			for (int i = min; i <= max; i++)
-			{
-				m_rasterLineQueues[i].push_back(l);
+				Line3D* l = &m_LineQueue[m_lineQueueSize];
+				float za, zb = 0.0f;
+				camera->GetViewMatrix()->Mul(&a);
+				za = a.z;
+				camera->GetProjectionMatrix()->Mul(&a);
+				camera->GetViewMatrix()->Mul(&b);
+				zb = b.z;
+				camera->GetProjectionMatrix()->Mul(&b);
+				a.x /= a.w;
+				a.y /= a.w;
+				a.z /= a.w;
+				a.w = 1.0f;
+				b.x /= b.w;
+				b.y /= b.w;
+				b.z /= b.w;
+				b.w = 1.0f;
+				a.x = (a.x + 1) * m_bufferData.width / 2.0f;
+				a.y = (a.y + 1) * m_bufferData.height / 2.0f;
+				b.x = (b.x + 1) * m_bufferData.width / 2.0f;
+				b.y = (b.y + 1) * m_bufferData.height / 2.0f;
+				l->xa = a.x;
+				l->xb = b.x;
+				l->ya = a.y;
+				l->yb = b.y;
+				l->za = za;
+				l->zb = zb;
+				l->c = c;
+				l->bold = bold;
+				l->noZ = noZ;
+				int min = std::min<int>(a.y, b.y);
+				int max = std::max<int>(a.y, b.y);
+				min = clamp2(min, 0, (int)m_bufferData.height - 1);
+				max = clamp2(max, 0, (int)m_bufferData.height - 1);
+				min = min / m_rasterizerHeight;
+				max = max / m_rasterizerHeight;
+				QueueLineInRasters(l);
+				m_lineQueueSize++;
 			}
 		}
 	}
 }
 
-void Engine::CopyBuffer(uint *source, uint *dest)
+void Engine::CopyBuffer(uint* source, uint* dest)
 {
 	int v, r, g, b;
 	for (int i = 0; i < m_bufferData.size; i++)
@@ -677,33 +702,298 @@ void Engine::CopyBuffer(uint *source, uint *dest)
 	}
 }
 
-void Engine::QueueTriangle(const Triangle *t)
+void Engine::QueueLineInRasters(const Line3D* l) const
+{
+	int min = std::min<int>(l->ya, l->yb);
+	int max = std::max<int>(l->ya, l->yb);
+	min = clamp2(min, 0, (int)m_bufferData.height - 1);
+	max = clamp2(max, 0, (int)m_bufferData.height - 1);
+	min /= m_bufferData.height / m_nbRasterizers;
+	max /= m_bufferData.height / m_nbRasterizers;
+	assert(min >= 0);
+	assert(min < m_nbRasterizers);
+	assert(max >= 0);
+	assert(max < m_nbRasterizers);
+	assert(min <= max);
+	for (int i = min; i <= max; i++)
+	{
+		m_rasterizers[i]->QueueLine(l);
+	}
+}
+
+void Engine::QueueTriangleInRasters(const Triangle* t) const
+{
+	int min = std::min<int>(t->pa->y, std::min<int>(t->pb->y, t->pc->y));
+	int max = std::max<int>(t->pa->y, std::max<int>(t->pb->y, t->pc->y));
+	min = clamp2(min, 0, (int)m_bufferData.height - 1);
+	max = clamp2(max, 0, (int)m_bufferData.height - 1);
+	min /= m_bufferData.height / m_nbRasterizers;
+	max /= m_bufferData.height / m_nbRasterizers;
+	assert(min >= 0);
+	assert(min < m_nbRasterizers);
+	assert(max >= 0);
+	assert(max < m_nbRasterizers);
+	assert(min <= max);
+	for (int i = min; i <= max; i++)
+	{
+		m_rasterizers[i]->QueueTriangle(t);
+	}
+}
+
+void Engine::QueueTriangle(const Camera* c, const Triangle* t)
 {
 	if (m_started)
 	{
-		int min = std::min<int>(t->pa->y, std::min<int>(t->pb->y, t->pc->y));
-		int max = std::max<int>(t->pa->y, std::max<int>(t->pb->y, t->pc->y));
-		min = clamp2(min, 0, (int)m_bufferData.height - 1);
-		max = clamp2(max, 0, (int)m_bufferData.height - 1);
-		min /= m_bufferData.height / m_nbRasterizers;
-		max /= m_bufferData.height / m_nbRasterizers;
-		Camera* camera = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
-		assert(min >= 0);
-		assert(min < m_nbRasterizers);
-		assert(max >= 0);
-		assert(max < m_nbRasterizers);
-		assert(min <= max);
-		for (int i = min; i <= max; i++)
+		uint j = m_TriangleQueueSize;
+		if (j < m_maxTrianglesQueueSize)
 		{
-			uint j = m_rasterNbTriangleQueues[i];
-			if (j < m_triangleQueueSize)
+			if (t->clipMode > Triangle::eClip_0_in)
 			{
-				memcpy(&m_rasterTriangleQueues[i][j], t, sizeof(Triangle));
-				m_rasterNbTriangleQueues[i]++;
-				m_drawnTriangles++;
+				if (t->clipMode < Triangle::eClip_2_in)
+				{
+					if (t->clipMode == Triangle::eClip_A_in_BC_out)
+					{
+						int nbNewTriangles = ClipTriangle(c, t);
+						QueueTriangleInRasters(&m_TrianglesQueue[j]);
+						m_TriangleQueueSize += nbNewTriangles;
+						m_drawnTriangles += nbNewTriangles;
+					}
+					else if (t->clipMode == Triangle::eClip_B_in_AC_out)
+					{
+						int nbNewTriangles = ClipTriangle(c, t);
+						QueueTriangleInRasters(&m_TrianglesQueue[j]);
+						m_TriangleQueueSize += nbNewTriangles;
+						m_drawnTriangles += nbNewTriangles;
+					}
+					else if (t->clipMode == Triangle::eClip_C_in_AB_out)
+					{
+						int nbNewTriangles = ClipTriangle(c, t);
+						QueueTriangleInRasters(&m_TrianglesQueue[j]);
+						m_TriangleQueueSize+=nbNewTriangles;
+						m_drawnTriangles+= nbNewTriangles;
+					}
+						
+				}
+				else if (t->clipMode < Triangle::eClip_3_in)
+				{
+					int nbNewTriangles = SubDivideClippedTriangle(c, t);
+					QueueTriangleInRasters(&m_TrianglesQueue[j]);
+					QueueTriangleInRasters(&m_TrianglesQueue[j+1]);
+					QueueTriangleInRasters(&m_TrianglesQueue[j+2]);
+					QueueTriangleInRasters(&m_TrianglesQueue[j+3]);
+					m_TriangleQueueSize += nbNewTriangles;
+					m_drawnTriangles += nbNewTriangles;				
+				}
+				else
+				{
+					//memcpy(&m_TrianglesQueue[i][j], t, sizeof(Triangle));
+					Triangle::CopyTriangle(&m_TrianglesQueue[j], t);
+					RecomputeTriangleProj(c, &m_TrianglesQueue[j]);
+					QueueTriangleInRasters(&m_TrianglesQueue[j]);
+					m_TriangleQueueSize++;
+					m_drawnTriangles++;
+				}
 			}
 		}
 	}
+}
+
+uint Engine::ClipTriangle(const Camera* c, const Triangle* t)
+{
+	uint j;
+	j = m_TriangleQueueSize;
+	if (j < m_maxTrianglesQueueSize)
+	{
+		Triangle* nt = &m_TrianglesQueue[j];
+		Triangle::CopyTriangle(nt, t);
+		float outP2factor = 0.0f;
+		if (t->clipMode == Triangle::eClip_A_in_BC_out)
+		{
+			c->ClipSegmentToFrustrum(nt->va, nt->vb, outP2factor);
+			nt->ub->x = nt->ua->x + (nt->ub->x - nt->ua->x) * outP2factor;
+			nt->ub->y = nt->ua->y + (nt->ub->y - nt->ua->y) * outP2factor;
+			c->ClipSegmentToFrustrum(nt->va, nt->vc, outP2factor);
+			nt->uc->x = nt->ua->x + (nt->uc->x - nt->ua->x) * outP2factor;
+			nt->uc->y = nt->ua->y + (nt->uc->y - nt->ua->y) * outP2factor;
+		}
+		else if (t->clipMode == Triangle::eClip_B_in_AC_out)
+		{
+			c->ClipSegmentToFrustrum(nt->vb, nt->va, outP2factor);
+			nt->ua->x = nt->ub->x + (nt->ua->x - nt->ub->x) * outP2factor;
+			nt->ua->y = nt->ub->y + (nt->ua->y - nt->ub->y) * outP2factor;
+			c->ClipSegmentToFrustrum(nt->vb, nt->vc, outP2factor);
+			nt->uc->x = nt->ub->x + (nt->uc->x - nt->ub->x) * outP2factor;
+			nt->uc->y = nt->ub->y + (nt->uc->y - nt->ub->y) * outP2factor;
+		}
+		else //eClip_C_in_AB_out
+		{
+			c->ClipSegmentToFrustrum(nt->vc, nt->va, outP2factor);
+			nt->ua->x = nt->uc->x + (nt->ua->x - nt->uc->x) * outP2factor;
+			nt->ua->y = nt->uc->y + (nt->ua->y - nt->uc->y) * outP2factor;
+			c->ClipSegmentToFrustrum(nt->vc, nt->vb, outP2factor); 
+			nt->ub->x = nt->uc->x + (nt->ub->x - nt->uc->x) * outP2factor;
+			nt->ub->y = nt->uc->y + (nt->ub->y - nt->uc->y) * outP2factor;
+		}
+		RecomputeTriangleProj(c, nt);
+		//m_rasterNbTriangleQueues[rasterIndex]++;
+		return 1;
+	}
+	return 0;
+}
+
+uint Engine::SubDivideClippedTriangle(const Camera* c, const Triangle* t)
+{
+	int nbDrawn = 0;
+	ZobVector3 pIn1;
+	ZobVector3 pIn2;
+	ZobVector3 pOut1;
+	ZobVector3 pOut2;
+	if (t->clipMode == Triangle::eClip_AB_in_C_out)
+	{
+		pIn1 = t->va;
+		pIn2 = t->vb;
+		pOut1 = t->vc;
+	}
+	else if (t->clipMode == Triangle::eClip_AC_in_B_out)
+	{
+		pIn1 = t->va;
+		pIn2 = t->vc;
+		pOut1 = t->vb;
+	}
+	else if(Triangle::eClip_BC_in_A_out)
+	{
+		pOut1 = t->va;
+		pIn1 = t->vc;
+		pIn2 = t->vb;
+	}
+	else
+	{
+		//?
+		return 0;
+	}
+	pOut2 = pOut1;
+	float outP2Factor = 0.0f;
+	c->ClipSegmentToFrustrum(&pIn1, &pOut1, outP2Factor);
+	c->ClipSegmentToFrustrum(&pIn2, &pOut2, outP2Factor);
+	ZobVector3 pi;
+	if (LineLineIntersection(&pIn1, &pOut2, &pIn2, &pOut1, pi))
+	{
+		uint j;
+		j = m_TriangleQueueSize + nbDrawn;
+		if (j < m_maxTrianglesQueueSize)
+		{
+			Triangle* nt = &m_TrianglesQueue[j];
+			Triangle::CopyTriangle(nt, t);
+			nt->va->Copy(&pIn1);
+			nt->vb->Copy(&pi);
+			nt->vc->Copy(&pIn2);
+			RecomputeTriangleProj(c, nt);
+			nbDrawn++;
+		}
+		j = m_TriangleQueueSize + nbDrawn;
+		if (j < m_maxTrianglesQueueSize)
+		{
+			Triangle* nt = &m_TrianglesQueue[j];
+			Triangle::CopyTriangle(nt, t);
+			nt->va->Copy(&pIn2);
+			nt->vb->Copy(&pi);
+			nt->vc->Copy(&pOut2);
+			RecomputeTriangleProj(c, nt);
+			nbDrawn++;
+		}
+		j = m_TriangleQueueSize + nbDrawn;
+		if (j < m_maxTrianglesQueueSize)
+		{
+			Triangle* nt = &m_TrianglesQueue[j];
+			Triangle::CopyTriangle(nt, t);
+			nt->va->Copy(&pi);
+			nt->vb->Copy(&pOut1);
+			nt->vc->Copy(&pOut2);
+			RecomputeTriangleProj(c, nt);
+			nbDrawn++;
+		}
+		j = m_TriangleQueueSize + nbDrawn;
+		if (j < m_maxTrianglesQueueSize)
+		{
+			Triangle* nt = &m_TrianglesQueue[j];
+			Triangle::CopyTriangle(nt, t);
+			nt->va->Copy(&pIn1);
+			nt->vb->Copy(&pOut1);
+			nt->vc->Copy(&pi);
+			RecomputeTriangleProj(c, nt);
+			nbDrawn++;
+		}
+	}
+	else
+	{
+		int yt = 0;
+		yt++;
+	}
+	return nbDrawn;
+}
+
+void Engine::RecomputeTriangleProj(const Camera* c, Triangle* t)
+{
+	t->draw = true;
+	t->clipMode = Triangle::eClip_3_in;
+	t->pa->x = t->va->x;
+	t->pa->y = t->va->y;
+	t->pa->z = t->va->z;
+	t->pa->w = t->va->w;
+	t->pb->x = t->vb->x;
+	t->pb->y = t->vb->y;
+	t->pb->z = t->vb->z;
+	t->pb->w = t->vb->w;
+	t->pc->x = t->vc->x;
+	t->pc->y = t->vc->y;
+	t->pc->z = t->vc->z;
+	t->pc->w = t->vc->w;
+	BufferData* bData = GetBufferData();
+	const ZobMatrix4x4* view = c->GetViewMatrix();
+	const ZobMatrix4x4* proj = c->GetProjectionMatrix();
+	float w = (float)bData->width / 2.0f;
+	float h = (float)bData->height / 2.0f;
+	view->Mul(t->pa);
+	view->Mul(t->pb);
+	view->Mul(t->pc);
+	proj->Mul(t->pa);
+	proj->Mul(t->pb);
+	proj->Mul(t->pc);
+	t->pa->x = (t->pa->x / t->pa->z + 1) * w;
+	t->pa->y = (t->pa->y / t->pa->z + 1) * h;
+	t->pb->x = (t->pb->x / t->pb->z + 1) * w;
+	t->pb->y = (t->pb->y / t->pb->z + 1) * h;
+	t->pc->x = (t->pc->x / t->pc->z + 1) * w;
+	t->pc->y = (t->pc->y / t->pc->z + 1) * h;
+	t->ComputeArea();
+	if (t->options->cullMode == eCullMode_CounterClockwiseFace)
+	{
+		t->area = -t->area;
+	}
+	//t->material = NULL;
+}
+
+bool Engine::LineLineIntersection(const ZobVector3* a0, const ZobVector3* a1, const ZobVector3* b0, const ZobVector3* b1, ZobVector3& out) const
+{
+	ZobVector3 da = ZobVector3(a1->x - a0->x, a1->y - a0->y, a1->z - a0->z);
+	ZobVector3 db = ZobVector3(b1->x - b0->x, b1->y - b0->y, b1->z - b0->z);
+	ZobVector3 dc = ZobVector3(b0->x - a0->x, b0->y - a0->y, b0->z - a0->z);
+	ZobVector3 cross = ZobVector3::Cross(&da, &db);
+	if (ZobVector3::Dot(&dc, &cross) != 0.0)
+	{
+		//return false;
+	}
+	ZobVector3 crossA = ZobVector3::Cross(&dc, &db);
+	ZobVector3 crossB = ZobVector3::Cross(&da, &db);
+	float s = ZobVector3::Dot(&crossA, &crossB) / crossB.length2();
+	if (s >= 0.0 && s <= 1.0)
+	{
+		out = da;
+		out.Mul(s);
+		out.Add(a0);
+		return true;
+	}
+	return false;
 }
 
 void Engine::DrawHorizontalLine(const float x1, const float x2, const float y, const uint color)

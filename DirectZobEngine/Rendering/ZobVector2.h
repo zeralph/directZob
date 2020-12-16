@@ -18,7 +18,11 @@ public:
 		y = v->y;
 		w = v->w;
 	}
-
+	inline void Mul(float f)
+	{
+		x *= f;
+		y *= f;
+	}
 	void Norm();
 	float Dot(const ZobVector2 * v);
 	float lenght();

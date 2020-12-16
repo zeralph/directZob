@@ -30,6 +30,7 @@ namespace DirectZobEditor
             m_engineWrapper.DrawGizmos(drawGizmos.Checked);
             engineWidth.Text = m_engineWrapper.GetBufferWidth().ToString();
             engineHeight.Text = m_engineWrapper.GetBufferHeight().ToString();
+            lockFrustrum.Checked = m_engineWrapper.LockFrustrum();
         }
 
         public void BindEvents()
@@ -85,6 +86,14 @@ namespace DirectZobEditor
         private void drawGizmos_CheckedChanged(object sender, EventArgs e)
         {
             m_engineWrapper.DrawGizmos(drawGizmos.Checked);
+        }
+
+        private void lockFrustrum_CheckedChanged(object sender, EventArgs e)
+        {
+            bool bLock = m_engineWrapper.LockFrustrum();
+            bLock = !bLock;
+            lockFrustrum.Checked = bLock;
+            m_engineWrapper.LockFrustrum(bLock);
         }
     }
 }

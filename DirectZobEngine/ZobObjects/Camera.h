@@ -74,9 +74,8 @@ public:
 	DirectZobType::Ray		From2DToWorld(float x, float y);
 	const Plane*			GetFrustrumPlanes() const { return &m_frustrumPlanes[0]; };
 	bool					From2DToWorldOnPlane(const float x, const float y, const ZobVector3* p0, const ZobVector3* pn, ZobVector3* ret);
-	bool					ClipSegmentToFrustrum(ZobVector3* p1, ZobVector3* p2, bool bCheckOnly) const;
-	static bool				ClipSegmentToPlanes(ZobVector3* p1, ZobVector3* p2, bool bCheckOnly, const DirectZobType::Plane* planes);
-	bool					ClipSegmentToNearPlane(ZobVector3* p1, ZobVector3* p2, bool bCheckOnly) const;
+	bool					ClipSegmentToFrustrum(ZobVector3* p1, ZobVector3* p2, float& outP2Factor) const;
+	static bool				ClipSegmentToPlanes(ZobVector3* p1, ZobVector3* p2, const DirectZobType::Plane* planes, float& outP2Factor);
 	bool					PointIsInFrustrum(const ZobVector3* pt) const;
 	inline void				ToViewSpace(ZobVector3* v) const
 	{

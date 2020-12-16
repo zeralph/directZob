@@ -130,7 +130,7 @@ namespace CLI
 				t.draw = true;
 				t.material = NULL;
 				t.ComputeArea();
-				m_Instance->QueueTriangle(&t);
+				m_Instance->QueueTriangle(c, &t);
 			}
 		}
 		m_nbTriangles = 0;
