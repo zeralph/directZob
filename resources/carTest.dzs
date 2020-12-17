@@ -1,13 +1,13 @@
 <?xml version="1.0" ?>
 <Scene>
     <Globals>
-        <AmbientColor r="255" g="255" b="255" />
-        <AmbientIntensity>0.40</AmbientIntensity>
-        <FogColor r="63" g="149" b="255" />
-        <ClearColor r="63" g="149" b="255" />
-        <FogDensity>2.00</FogDensity>
-        <FogDistance>20.00</FogDistance>
-        <FogType>none</FogType>
+        <AmbientColor r="206" g="206" b="0" />
+        <AmbientIntensity>0.39</AmbientIntensity>
+        <FogColor r="255" g="128" b="0" />
+        <ClearColor r="255" g="128" b="0" />
+        <FogDensity>10.00</FogDensity>
+        <FogDistance>42.00</FogDistance>
+        <FogType>exp2</FogType>
     </Globals>
     <ZobObject name="sol" guid="3001002">
         <Position x="0" y="0" z="0" />
@@ -30,7 +30,7 @@
             <Material bounciness="0.100000" friction_coeff="2.010000" mass_density="0.010000" rolling_resistance="0.010000" />
         </Physic>
         <ZobObject name="rearCamera" guid="3002004" type="camera">
-            <Position x="0" y="1.51833" z="-4.77269" />
+            <Position x="0" y="1.92052" z="-4.78713" />
             <Rotation x="15.0562" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
             <Physic type="0">
@@ -78,7 +78,7 @@
         </ZobObject>
         <ZobObject name="sideCamera" guid="3067493" type="camera">
             <Position x="-5.88051" y="1.69909" z="5.75917" />
-            <Rotation x="-180" y="40.3727" z="-180" />
+            <Rotation x="180" y="40.3727" z="180" />
             <Scale x="1" y="1" z="1" />
             <Physic type="0">
                 <RigidBody type="0" active="0" />
@@ -133,8 +133,8 @@
             <Collider type="0" radius="1.000000" height="2.000000" halfExtends_x="1.000000" halfExtends_y="1.000000" halfExtends_z="1.000000" scale_with_object="1" />
             <Material />
         </Physic>
-        <Color r="255" g="255" b="128" />
-        <Intensity>0.50</Intensity>
+        <Color r="255" g="128" b="64" />
+        <Intensity>1.00</Intensity>
         <FallOffDistance>100.00</FallOffDistance>
         <Type>directional</Type>
     </ZobObject>

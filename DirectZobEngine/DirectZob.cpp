@@ -6,6 +6,7 @@
 #include "ZobObjects/ZobObject.h"
 #include "SceneLoader.h"
 #include "ZobPhysic/ZobPhysicsEngine.h"
+#include "Rendering/Rasterizer.h"
 
 #define LOG_BUFFER_SIZE 1024
 
@@ -167,8 +168,10 @@ int DirectZob::RunAFrame(DirectZob::engineCallback OnSceneUpdated /*=NULL*/, Dir
 	m_frameTime =  (float)(clock() - m_frameTick) / CLOCKS_PER_SEC * 1000;
 	m_fps = 1000.0f / m_frameTime;
 	m_frameTick = clock();
+	clock_t clTest;
 	if(m_initialized && m_engine->Started())
 	{
+		clTest = clock();
 		m_inputManager->Update(m_frameTick);
 		m_cameraManager->UpdateAfter();
 		Color c = Color(DirectZob::GetInstance()->GetLightManager()->GetClearColor());
@@ -225,6 +228,7 @@ int DirectZob::RunAFrame(DirectZob::engineCallback OnSceneUpdated /*=NULL*/, Dir
 				m_text->Print(m_engine->GetBufferData()->width / 2, m_engine->GetBufferData()->height / 2, 1, &sBuf, 0xFFFF0000);
 			}
 		}
+		clTest = clock() - clTest;
 		if (m_text)
 		{
 			_snprintf_s(buffer, MAX_PATH, "Triangles : %i", m_engine->GetNbDrawnTriangles());
@@ -265,6 +269,15 @@ int DirectZob::RunAFrame(DirectZob::engineCallback OnSceneUpdated /*=NULL*/, Dir
 				m_inputManager->GetMap()->GetFloat(ZobInputManager::RightShoulder));
 			sBuf = std::string(buffer);
 			m_text->Print(0, 48, 1, &sBuf, 0xFF0000FF);
+			int txtW = m_engine->GetBufferData()->width - 170;
+			for (int i = 0; i < m_engine->GetNbRasterizer(); i++)
+			{
+				int nb = m_engine->GetRasterizer(i)->GetNbTriangle();
+				float fms = m_engine->GetRasterizer(i)->GetRenderTimeMS();
+				
+				m_text->Print(txtW, 10+i*20, 1, 0xFFFFFFFF, "R%i : %it %.2fms", (i+1), nb, fms);
+			}
+			m_text->Print(100, 100, 1, 0xFFFFFFFF, "my time %.2f", ((float)((float)clTest / (float)CLOCKS_PER_SEC * (float)1000)));
 		}
 		m_engine->SetDisplayedBuffer();
 	}

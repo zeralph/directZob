@@ -46,7 +46,8 @@ namespace Core
 		int												SetDisplayedBuffer();
 		inline ulong									GetCurrentFrame() { return m_currentFrame; }
 		inline const uint								GetNbDrawnTriangles() const { return m_drawnTriangles; }
-
+		const Rasterizer*								GetRasterizer(int idx) const { return m_rasterizers[idx]; }
+		int												GetNbRasterizer() const { return m_nbRasterizers; }
 		inline BufferData*								GetBufferData() { return &m_bufferData; }
 		inline const float								GetZNear() { return m_zNear; }
 		inline const float								GetZFar() { return m_zFar; }

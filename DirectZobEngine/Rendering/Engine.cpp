@@ -881,79 +881,40 @@ uint Engine::SubDivideClippedTriangle(const Camera* c, const Triangle* t)
 		return 0;
 	}
 	pOut2 = pOut1;
+	pOut2Uv = pOut1Uv;
 	float outP2Factor = 0.0f;
 	c->ClipSegmentToFrustrum(&pIn1, &pOut1, outP2Factor);
 	RecomputeUv(&pIn1Uv, &pOut1Uv, outP2Factor);
 	c->ClipSegmentToFrustrum(&pIn2, &pOut2, outP2Factor);
 	RecomputeUv(&pIn2Uv, &pOut2Uv, outP2Factor);
-	if (LineLineIntersection(&pIn1, &pOut2, &pIn2, &pOut1, pi, outP2Factor))
+	uint j;
+	j = m_TriangleQueueSize + nbDrawn;
+	if (j < m_maxTrianglesQueueSize)
 	{
-		piUv.Copy(&pOut2Uv);
-		//piUv.x /= 2.0f;
-		//piUv.y /= 2.0f;
-		RecomputeUv(&pIn1Uv, &piUv, outP2Factor);
-		uint j;
-		j = m_TriangleQueueSize + nbDrawn;
-		if (j < m_maxTrianglesQueueSize)
-		{
-			Triangle* nt = &m_TrianglesQueue[j];
-			Triangle::CopyTriangle(nt, t);
-			nt->va->Copy(&pIn1);
-			nt->ua->Copy(&pIn1Uv);
-			nt->vb->Copy(&pi);
-			nt->ub->Copy(&piUv);
-			nt->vc->Copy(&pIn2);
-			nt->uc->Copy(&pIn2Uv);
-			RecomputeTriangleProj(c, nt);
-			nbDrawn++;
-		}
-		j = m_TriangleQueueSize + nbDrawn;
-		if (j < m_maxTrianglesQueueSize)
-		{
-			Triangle* nt = &m_TrianglesQueue[j];
-			Triangle::CopyTriangle(nt, t);
-			nt->va->Copy(&pIn2);
-			nt->ua->Copy(&pIn2Uv);
-			nt->vb->Copy(&pi);
-			nt->ub->Copy(&piUv);
-			nt->vc->Copy(&pOut2);
-			nt->uc->Copy(&pOut2Uv);
-			RecomputeTriangleProj(c, nt);
-			nbDrawn++;
-		}
-		j = m_TriangleQueueSize + nbDrawn;
-		if (j < m_maxTrianglesQueueSize)
-		{
-			Triangle* nt = &m_TrianglesQueue[j];
-			Triangle::CopyTriangle(nt, t);
-			nt->va->Copy(&pi);
-			nt->ua->Copy(&piUv);
-			nt->vb->Copy(&pOut1);
-			nt->ub->Copy(&pOut1Uv);
-			nt->vc->Copy(&pOut2);
-			nt->uc->Copy(&pOut2Uv);
-			RecomputeTriangleProj(c, nt);
-			nbDrawn++;
-		}
-		j = m_TriangleQueueSize + nbDrawn;
-		if (j < m_maxTrianglesQueueSize)
-		{
-			Triangle* nt = &m_TrianglesQueue[j];
-			Triangle::CopyTriangle(nt, t);
-			nt->va->Copy(&pIn1);
-			nt->ua->Copy(&pIn1Uv);
-			nt->vb->Copy(&pOut1);
-			nt->ub->Copy(&pOut1Uv);
-			nt->vc->Copy(&pi);
-			nt->uc->Copy(&piUv);
-			RecomputeTriangleProj(c, nt);
-			nbDrawn++;
-		}
+		Triangle* nt = &m_TrianglesQueue[j];
+		Triangle::CopyTriangle(nt, t);
+		nt->va->Copy(&pIn1);
+		nt->ua->Copy(&pIn1Uv);
+		nt->vb->Copy(&pOut2);
+		nt->ub->Copy(&pOut2Uv);
+		nt->vc->Copy(&pIn2);
+		nt->uc->Copy(&pIn2Uv);
+		RecomputeTriangleProj(c, nt);
+		nbDrawn++;
 	}
-	else
+	j = m_TriangleQueueSize + nbDrawn;
+	if (j < m_maxTrianglesQueueSize)
 	{
-		int yt = 0;
-		yt++;
+		Triangle* nt = &m_TrianglesQueue[j];
+		Triangle::CopyTriangle(nt, t);
+		nt->va->Copy(&pIn1);
+		nt->ua->Copy(&pIn1Uv);
+		nt->vb->Copy(&pOut1);
+		nt->ub->Copy(&pOut1Uv);
+		nt->vc->Copy(&pOut2);
+		nt->uc->Copy(&pOut2Uv);
+		RecomputeTriangleProj(c, nt);
+		nbDrawn++;
 	}
 	return nbDrawn;
 }

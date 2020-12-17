@@ -70,7 +70,6 @@ void Text2D::PrintChar(uint x, uint y, uint size, const char c, uint color)
 	uint pc = (int)c;
 	uint ii = pc % m_nbCharWidth * m_charWidth;
 	uint jj = pc / m_nbCharWidth * m_charHeight;
-
 	int k = 0;
 	for (int j = 0; j < m_charHeight; j++)
 	{
@@ -81,6 +80,7 @@ void Text2D::PrintChar(uint x, uint y, uint size, const char c, uint color)
 			{
 				k = (y + j) * ew + (x + i);
 				m_engine->GetBufferData()->buffer[k] = color;
+				m_engine->GetBufferData()->zBuffer[k] = 0;
 			}
 		}
 	}

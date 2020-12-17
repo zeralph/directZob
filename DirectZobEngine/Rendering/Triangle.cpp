@@ -48,7 +48,7 @@ Triangle::~Triangle()
 void Triangle::CopyTriangle(Triangle* dst, const Triangle* src)
 {
 	//memcpy(dst, src, sizeof(Triangle));
-	
+	//return;
 	dst->va->Copy(src->va);
 	dst->vb->Copy(src->vb);
 	dst->vc->Copy(src->vc);
