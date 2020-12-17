@@ -26,7 +26,7 @@ public:
 	virtual void Update(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions* options);
 	virtual void QueueForDrawing(ZobObject* z, const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, RenderOptions* options);
 	void DrawBoundingBox(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions* options);
-	const std::vector<Triangle>* GetTrianglesList() const { return &m_triangles; }
+//	const std::vector<Triangle>* GetTrianglesList() const { return &m_triangles; }
 	const uint GetNbTriangles() const { return m_nbFaces; }
 
 	const std::string& GetName() const { return m_name; }
@@ -72,6 +72,5 @@ protected:
 	ZobVector2* m_uvs = NULL;
 
 	std::vector<Triangle> m_triangles;
-	bool m_cullUsingFrustrum;
 };
 

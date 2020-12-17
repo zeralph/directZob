@@ -23,7 +23,6 @@ Mesh::Mesh(std::string& name)
 	m_name = name;
 	m_fileName = emptyStr;
 	m_path = emptyStr;
-	m_cullUsingFrustrum = true;
 	DirectZob::RemoveIndent();
 }
 
@@ -80,7 +79,6 @@ Mesh::Mesh(std::string &parentName, std::string& path, fbxsdk::FbxMesh* mesh)
 	{
 		m_path = path;
 		m_name = parentName+"."+mesh->GetName();
-
 		DirectZob::LogInfo("Mesh %s Creation", m_name.c_str());
 		DirectZob::AddIndent();
 
@@ -511,83 +509,48 @@ void Mesh::Update(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationM
 		modelMatrix.Mul(&m_verticesTmp[i]);
 	}
 	int c = 0;
-	if (m_cullUsingFrustrum)
+	for (uint i = 0; i < m_triangles.size(); i++)
 	{
-		
-		for (uint i = 0; i < m_triangles.size(); i++)
-		{
-			Triangle* t = &m_triangles.at(i);
-			t->draw = true;
-			ZobVector3* va = &m_verticesTmp[t->verticeAIndex];
-			ZobVector3* vb = &m_verticesTmp[t->verticeBIndex];
-			ZobVector3* vc = &m_verticesTmp[t->verticeCIndex];
+		Triangle* t = &m_triangles.at(i);
+		t->draw = true;
+		ZobVector3* va = &m_verticesTmp[t->verticeAIndex];
+		ZobVector3* vb = &m_verticesTmp[t->verticeBIndex];
+		ZobVector3* vc = &m_verticesTmp[t->verticeCIndex];
 			
-			bool aIn = camera->PointIsInFrustrum(va);
-			bool bIn = camera->PointIsInFrustrum(vb);
-			bool cIn = camera->PointIsInFrustrum(vc);
-			if(aIn && bIn && cIn)
-			{
-				t->clipMode = Triangle::eClip_3_in;
-			}
-			else if(aIn && cIn)
-			{
-				t->clipMode = Triangle::eClip_AC_in_B_out;
-			}
-			else if (aIn && bIn)
-			{
-				t->clipMode = Triangle::eClip_AB_in_C_out;
-			}
-			else if (aIn)
-			{
-				t->clipMode = Triangle::eClip_A_in_BC_out;
-			}
-			else if (bIn && cIn)
-			{
-				t->clipMode = Triangle::eClip_BC_in_A_out;
-			}
-			else if (bIn)
-			{
-				t->clipMode = Triangle::eClip_B_in_AC_out;
-			}
-			else if(cIn)
-			{
-				t->clipMode = Triangle::eClip_C_in_AB_out;
-			}
-			else
-			{
-				t->clipMode = Triangle::eClip_0_in;
-			}
-			//t->draw = t->clipMode != Triangle::eClip_0_in;
-
-			//need to clip triangles
-			if(/*t->draw &&  */t->clipMode != Triangle::eClip_3_in)
-			{
-				if (t->clipMode > Triangle::eClip_2_in)
-				{
-					//handled when adding triangle
-				}
-				else if(t->clipMode > Triangle::eClip_1_in)
-				{
-					/*
-					if(t->clipMode  == Triangle::eClip_A_in_BC_out)
-					{
-						camera->ClipSegmentToFrustrum(va, vb, false);
-						camera->ClipSegmentToFrustrum(va, vc, false);
-					}
-					else if(t->clipMode == Triangle::eClip_B_in_AC_out)
-					{
-						camera->ClipSegmentToFrustrum(vb, va, false);
-						camera->ClipSegmentToFrustrum(vb, vc, false);
-					}
-					else //eClip_C_in_AB_out
-					{
-						camera->ClipSegmentToFrustrum(vc, va, false);
-						camera->ClipSegmentToFrustrum(vc, vb, false);
-					}
-					*/
-					//t->draw = false;
-				}
-			}
+		bool aIn = camera->PointIsInFrustrum(va);
+		bool bIn = camera->PointIsInFrustrum(vb);
+		bool cIn = camera->PointIsInFrustrum(vc);
+		if(aIn && bIn && cIn)
+		{
+			t->clipMode = Triangle::eClip_3_in;
+		}
+		else if(aIn && cIn)
+		{
+			t->clipMode = Triangle::eClip_AC_in_B_out;
+		}
+		else if (aIn && bIn)
+		{
+			t->clipMode = Triangle::eClip_AB_in_C_out;
+		}
+		else if (aIn)
+		{
+			t->clipMode = Triangle::eClip_A_in_BC_out;
+		}
+		else if (bIn && cIn)
+		{
+			t->clipMode = Triangle::eClip_BC_in_A_out;
+		}
+		else if (bIn)
+		{
+			t->clipMode = Triangle::eClip_B_in_AC_out;
+		}
+		else if(cIn)
+		{
+			t->clipMode = Triangle::eClip_C_in_AB_out;
+		}
+		else
+		{
+			t->clipMode = Triangle::eClip_0_in;
 		}
 	}
 /*
@@ -643,18 +606,7 @@ void Mesh::QueueForDrawing(ZobObject* z, const ZobMatrix4x4& modelMatrix, const 
 		t->ca = 0xFF0000;
 		t->cb = 0x00FF00;
 		t->cc = 0x0000FF;
-		bool bDraw = false;
-		if (!m_cullUsingFrustrum)
-		{
-			bDraw = !RejectTriangle(t, znear, zfar, (float)bData->width, (float)bData->height);
-			t->draw = bDraw;
-			t->clipMode = Triangle::eClip_3_in;
-		}
-		else
-		{
-			bDraw = t->draw;
-		}
-		if(true || bDraw)
+		if(t->draw)
 		{
 			bool bCull = false;
 			t->ComputeArea();

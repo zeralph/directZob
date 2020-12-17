@@ -40,11 +40,14 @@ ZobPhysicComponent::ZobPhysicComponent(TiXmlNode* node)
 	{
 		TiXmlElement* p = (TiXmlElement*)node;
 		TiXmlElement* m = p->FirstChildElement("Material");
-		Material& mat = m_collider->getMaterial();
-		mat.setBounciness((float)atof(m->Attribute("bounciness")));
-		mat.setFrictionCoefficient((float)atof(m->Attribute("friction_coeff")));
-		mat.setMassDensity((float)atof(m->Attribute("mass_density")));
-		mat.setRollingResistance((float)atof(m->Attribute("rolling_resistance")));
+		if (m)
+		{
+			Material& mat = m_collider->getMaterial();
+			mat.setBounciness((float)atof(m->Attribute("bounciness")));
+			mat.setFrictionCoefficient((float)atof(m->Attribute("friction_coeff")));
+			mat.setMassDensity((float)atof(m->Attribute("mass_density")));
+			mat.setRollingResistance((float)atof(m->Attribute("rolling_resistance")));
+		}
 	}
 }
 

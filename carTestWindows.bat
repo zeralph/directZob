@@ -10,4 +10,4 @@ XCOPY .\build\DirectZob\%target%\DirectZobExe.pdb .. /Y
 XCOPY .\build\DirectZob\%target%\libfbxsdk.dll .. /Y
 XCOPY .\build\DirectZob\%target%\gainput.dll .. /Y
 popd
-.\DirectZobExe.exe --scene .\resources\carTest.dzs --width 800 --height 600
+.\DirectZobExe.exe --scene .\resources\wow.dzs --width 1368 --height 720

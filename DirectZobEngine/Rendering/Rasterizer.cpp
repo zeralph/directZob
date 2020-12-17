@@ -89,7 +89,7 @@ void Rasterizer::Render()
 	for (int i = 0; i < m_triangles.size(); i++)
 	{
 		const Triangle* t = m_triangles[i];
-		if (t->draw)
+		//if (t->draw)
 		{
 			DrawTriangle(t);
 		}
