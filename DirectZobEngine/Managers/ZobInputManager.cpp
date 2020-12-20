@@ -13,11 +13,25 @@ ZobInputManager::~ZobInputManager()
 	delete m_gainputManager;
 	delete m_map;
 }
-
+#ifdef WINDOWS
+void ZobInputManager::Update(uint64_t tick, HWND hWnd)
+{
+	MSG msg;
+	while (PeekMessage(&msg, hWnd, 0, 0, PM_REMOVE))
+	{
+		TranslateMessage(&msg);
+		DispatchMessage(&msg);
+		m_gainputManager->HandleMessage(msg);
+	}
+	m_gainputManager->Update(tick);
+}
+#else
 void ZobInputManager::Update(uint64_t tick)
 {
 	m_gainputManager->Update(tick);
 }
+#endif
+
 
 float MapToOne(float const value, void* userData)
 {

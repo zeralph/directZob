@@ -13,7 +13,7 @@
 #include "Managers/LightManager.h"
 #include "Managers/ZobObjectManager.h"
 #include "Managers/ZobInputManager.h"
-
+#include "../minifb/src/WindowData.h"
 
 #define kUnused(var) (void) var;
 #define TARGET_MS_PER_FRAME 16.0f//33.3333f
@@ -49,7 +49,7 @@ public :
 	const float				GetGeometryTime() const { return m_geometryTime; };
 	const float				GetFrameTime() const { return m_frameTime; };
 	const float				GetCopyTime() const { return m_copyTime; };
-	int						RunAFrame(engineCallback = NULL, DirectZob::engineCallback OnQueuing = NULL);
+	int						RunAFrame(mfb_window* window, engineCallback = NULL, DirectZob::engineCallback OnQueuing = NULL);
 	int						Run( void func(void) );
 	const uint*				GetBufferData() const { return m_engine->GetBufferData()->buffer; }
 	std::string				ExePath();

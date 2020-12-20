@@ -24,9 +24,13 @@ public:
 
 	ZobInputManager(int width, int height);
 	~ZobInputManager();
-	
-	const gainput::InputMap*	GetMap() { return m_map;}
+#ifdef WINDOWS
+	void						Update(uint64_t tick, HWND hWnd);
+#else
 	void						Update(uint64_t tick);
+#endif
+	const gainput::InputMap*	GetMap() { return m_map;}
+	
 	void						Map();
 private:
 	gainput::InputManager* m_gainputManager;

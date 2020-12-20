@@ -7,7 +7,9 @@
 #include "SceneLoader.h"
 #include "ZobPhysic/ZobPhysicsEngine.h"
 #include "Rendering/Rasterizer.h"
-
+#ifdef WINDOWS
+#include "../minifb/src/windows/WindowData_Win.h"
+#endif
 #define LOG_BUFFER_SIZE 1024
 
 static char buffer[MAX_PATH];
@@ -156,12 +158,12 @@ int DirectZob::RunInternal(void func(void))
 {
 	for (;;)
 	{
-		RunAFrame();
+		RunAFrame(0);
 		func();
 	}
 }
 
-int DirectZob::RunAFrame(DirectZob::engineCallback OnSceneUpdated /*=NULL*/, DirectZob::engineCallback OnQueuing /*=NULL*/)
+int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUpdated /*=NULL*/, DirectZob::engineCallback OnQueuing /*=NULL*/)
 {
 	g_render_mutex.lock();
 	int state=0;
@@ -172,7 +174,15 @@ int DirectZob::RunAFrame(DirectZob::engineCallback OnSceneUpdated /*=NULL*/, Dir
 	if(m_initialized && m_engine->Started())
 	{
 		clTest = clock();
+#ifdef WINDOWS
+		HWND hWnd;
+		SWindowData* window_data = (SWindowData*)window;
+		SWindowData_Win* window_data_win = (SWindowData_Win*)window_data->specific;
+		hWnd = window_data_win->window;
+		m_inputManager->Update(m_frameTick, hWnd);
+#else
 		m_inputManager->Update(m_frameTick);
+#endif
 		m_cameraManager->UpdateAfter();
 		Color c = Color(DirectZob::GetInstance()->GetLightManager()->GetClearColor());
 		m_engine->ClearBuffer(&c);

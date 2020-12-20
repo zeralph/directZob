@@ -395,10 +395,10 @@ mfb_update(struct mfb_window *window, void *buffer) {
     InvalidateRect(window_data_win->window, 0x0, TRUE);
     SendMessage(window_data_win->window, WM_PAINT, 0, 0);
 
-    while (window_data->close == false && PeekMessage(&msg, window_data_win->window, 0, 0, PM_REMOVE)) {
-        TranslateMessage(&msg);
-        DispatchMessage(&msg);
-    }
+ //   while (window_data->close == false && PeekMessage(&msg, window_data_win->window, 0, 0, PM_REMOVE)) {
+ //       TranslateMessage(&msg);
+//        DispatchMessage(&msg);
+//    }
 
     return STATE_OK;
 }

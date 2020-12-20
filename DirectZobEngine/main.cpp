@@ -254,6 +254,7 @@ int main(int argc, char* argv[])
 	m_mouseLastY = -1;
 	printf("Init Window %ix%i\n", width, height);
 	m_window = mfb_open_ex("DirectZob", width, height, WF_RESIZABLE);
+	/*
 	mfb_set_active_callback(m_window, active);
 	mfb_set_resize_callback(m_window, resize);
 	mfb_set_keyboard_callback(m_window, keyboard);
@@ -261,7 +262,7 @@ int main(int argc, char* argv[])
 	mfb_set_mouse_button_callback(m_window, mouse_btn);
 	mfb_set_mouse_move_callback(m_window, mouse_move);
 	mfb_set_mouse_scroll_callback(m_window, mouse_scroll);
-
+	*/
 	m_directZob.Init(width, height, false);
 	m_directZob.LoadScene(m_path, m_file);
 
@@ -334,7 +335,7 @@ int main(int argc, char* argv[])
 			bTestFrame++;
 //			c->RotateAroundPointAxis(&ZobVector3::Vector3Zero, &ZobVector3::Vector3Y, &ZobVector3::Vector3Y, rot, false);
 		}
-		m_directZob.RunAFrame();
+		m_directZob.RunAFrame(m_window);
 		benchFps += m_directZob.GetFps();
 		benchRender += m_directZob.GetRenderTime();
 		benchGeom += m_directZob.GetGeometryTime();

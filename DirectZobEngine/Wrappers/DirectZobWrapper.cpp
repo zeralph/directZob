@@ -110,7 +110,7 @@ namespace CLI
 				cbStart();
 			}
 			;
-			m_Instance->RunAFrame((DirectZob::engineCallback) DirectZobWrapper::CallSceneUpdatedCallback, (DirectZob::engineCallback) DirectZobWrapper::CallQueuingCallback);
+			m_Instance->RunAFrame(0, (DirectZob::engineCallback) DirectZobWrapper::CallSceneUpdatedCallback, (DirectZob::engineCallback) DirectZobWrapper::CallQueuingCallback);
 			if (m_run)
 			{
 				cbEnd();
@@ -127,7 +127,7 @@ namespace CLI
 
 	int DirectZobWrapper::RunAFrame()
 	{
-		return m_Instance->RunAFrame();
+		return m_Instance->RunAFrame(0);
 	}
 
 	cli::array<System::String^>^ DirectZobWrapper::GetEventsAndClear()
