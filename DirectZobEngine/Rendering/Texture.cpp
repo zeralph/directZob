@@ -17,7 +17,7 @@ Texture::~Texture()
 {
 	DirectZob::LogInfo("Delete Texture %s", m_fullPath.c_str());
 	DirectZob::AddIndent();
-	delete m_data;
+	free(m_data);
 	uint m_dataSize = 0;
 	uint m_width = 0;
 	uint m_height = 0;

@@ -34,6 +34,7 @@
                 {
                     'defines': [
                         'LINUX',
+                        '__LINUX__',
                     ],
                 },
             ],
@@ -72,7 +73,10 @@
                         },
                         'OS=="linux"',
                         {
-                            'cflags': ['-g'],
+                            'cflags': [
+                                '-g',
+                                '-ggdb3',
+                                ],
                         }
                     ],
                 ],
@@ -122,7 +126,11 @@
                         'OS=="linux"',
                         {
                             'cflags':
-                            ['-Ofast', '-march=haswell', '-ffast-math'],
+                            [   
+                                '-Ofast', 
+                                '-march=native', 
+                                '-ffast-math',
+                            ],
                         }
                     ],
                 ],

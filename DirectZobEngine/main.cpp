@@ -9,6 +9,7 @@ bool bStartPhysics = false;
 bool bPause = false;
 std::string m_path;
 std::string m_file;
+struct mfb_window* m_window;
 
 void active(struct mfb_window* window, bool isActive) {
 	const char* window_title = "";
@@ -251,15 +252,15 @@ int main(int argc, char* argv[])
 	
 	m_mouseLastX = -1;
 	m_mouseLastY = -1;
-	printf("Init Window\n");
-	struct mfb_window* window = mfb_open_ex("DirectZob", width, height, WF_RESIZABLE);
-	mfb_set_active_callback(window, active);
-	mfb_set_resize_callback(window, resize);
-	mfb_set_keyboard_callback(window, keyboard);
-	mfb_set_char_input_callback(window, char_input);
-	mfb_set_mouse_button_callback(window, mouse_btn);
-	mfb_set_mouse_move_callback(window, mouse_move);
-	mfb_set_mouse_scroll_callback(window, mouse_scroll);
+	printf("Init Window %ix%i\n", width, height);
+	m_window = mfb_open_ex("DirectZob", width, height, WF_RESIZABLE);
+	mfb_set_active_callback(m_window, active);
+	mfb_set_resize_callback(m_window, resize);
+	mfb_set_keyboard_callback(m_window, keyboard);
+	mfb_set_char_input_callback(m_window, char_input);
+	mfb_set_mouse_button_callback(m_window, mouse_btn);
+	mfb_set_mouse_move_callback(m_window, mouse_move);
+	mfb_set_mouse_scroll_callback(m_window, mouse_scroll);
 
 	m_directZob.Init(width, height, false);
 	m_directZob.LoadScene(m_path, m_file);
@@ -340,7 +341,7 @@ int main(int argc, char* argv[])
 		benchTot += m_directZob.GetFrameTime();
 		benchCpy += m_directZob.GetCopyTime();
 		frames++;
-		int state = mfb_update(window, (void*)m_directZob.GetBufferData() );
+		int state = mfb_update(m_window, (void*)m_directZob.GetBufferData() );
 		if (state < 0)
 		{
 			break;
@@ -350,7 +351,7 @@ int main(int argc, char* argv[])
     printf("Closing\n");
     m_directZob.NewScene();
     printf("Exiting\n");
-	mfb_close(window);
+	mfb_close(m_window);
 	if (bBench)
 	{
 		int fps = (int)(benchFps / (float)frames);

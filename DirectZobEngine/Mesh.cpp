@@ -311,18 +311,30 @@ Mesh::~Mesh()
 	}
 	m_subMeshes.clear();
 	m_triangles.clear();
-	delete m_vertices;
-	delete m_verticesData;
-	delete m_verticesTmp;
-	delete m_verticesNormals;
-	delete m_verticesNormalsData;
-	delete m_verticesNormalsTmp;
-	delete m_trianglesNormals;
-	delete m_trianglesNormalsTmp;
-	delete m_trianglesNormalsData;
-	delete m_projectedVertices;
-	delete m_projectedVerticesTmp;
-	delete m_uvs;
+	free(m_vertices);
+	free(m_verticesData);
+	free(m_verticesTmp);
+	free(m_verticesNormals);
+	free(m_verticesNormalsData);
+	free(m_verticesNormalsTmp);
+	free(m_trianglesNormals);
+	free(m_trianglesNormalsTmp);
+	free(m_trianglesNormalsData);
+	free(m_projectedVertices);
+	free(m_projectedVerticesTmp);
+	free(m_uvs);
+	m_vertices = NULL;
+	m_verticesData = NULL;
+	m_verticesTmp = NULL;
+	m_verticesNormals = NULL;
+	m_verticesNormalsData = NULL;
+	m_verticesNormalsTmp = NULL;
+	m_trianglesNormals = NULL;
+	m_trianglesNormalsTmp = NULL;
+	m_trianglesNormalsData = NULL;
+	m_projectedVertices = NULL;
+	m_projectedVerticesTmp = NULL;
+	m_uvs = NULL;
 	DirectZob::RemoveIndent();
 }
 

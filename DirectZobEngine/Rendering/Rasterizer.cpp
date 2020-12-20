@@ -14,6 +14,7 @@ Rasterizer::Rasterizer(uint width, uint startHeight, uint endHeight, BufferData*
 	m_width = width;
 	m_lines.clear();
 	m_triangles.clear();
+	m_time = 0.0f;
 }
 
 void Rasterizer::Init()

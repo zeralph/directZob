@@ -6,7 +6,7 @@ static bool sPhysicThreaded = false;
 
 ZobPhysicsEngine::ZobPhysicsEngine()
 {
-    m_world = m_physicsCommon.createPhysicsWorld();
+    m_world = m_physicsCommon.createPhysicsWorld(m_worldSettings);
     m_timeStep = clock();
     m_accumulator = 0;
 }

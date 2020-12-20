@@ -22,6 +22,7 @@ private:
 	void Update(float dt);
 	PhysicsCommon m_physicsCommon;
 	PhysicsWorld* m_world;
+	PhysicsWorld::WorldSettings m_worldSettings;
 	clock_t m_timeStep;
 	float m_accumulator;
 };

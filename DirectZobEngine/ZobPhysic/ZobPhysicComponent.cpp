@@ -16,6 +16,7 @@ ZobPhysicComponent::ZobPhysicComponent(TiXmlNode* node)
 	m_nextShapeType = eShapeType_none;
 	m_scaleWithObject = true;
 	m_collider = NULL;
+	m_bUpdateSize = true;
 	if (node)
 	{
 		TiXmlElement* p = (TiXmlElement*)node;

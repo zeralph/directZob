@@ -175,6 +175,7 @@
                         'defines': [
                             'LINUX',
                             'linux',
+                            '__LINUX__',
                         ],
                         'direct_dependent_settings': {
                             'include_dirs': [

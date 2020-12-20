@@ -4,6 +4,13 @@
         "algorithm": "cpp",
         "*.tcc": "cpp",
         "string": "cpp",
-        "vector": "cpp"
+        "vector": "cpp",
+        "new": "cpp"
+    },
+    "files.watcherExclude": 
+    {
+        "**/.git/objects/**": true,
+        "**/.git/subtree-cache/**": true,
+        "**/node_modules/*/**": true
     }
 }
