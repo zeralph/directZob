@@ -71,7 +71,35 @@ public:
 		//area = (vc->x - va->x) * (vb->y - va->y) - (vc->y - va->y) * (vb->x - va->x);
 	}
 
-	static void CopyTriangle(Triangle* dst, const Triangle* src);
+	static inline void CopyTriangle(Triangle* dst, const Triangle* src)
+	{
+		//memcpy(dst, src, sizeof(Triangle));
+		//return;
+		dst->va->Copy(src->va);
+		dst->vb->Copy(src->vb);
+		dst->vc->Copy(src->vc);
+		dst->pa->Copy(src->pa);
+		dst->pb->Copy(src->pb);
+		dst->pc->Copy(src->pc);
+		dst->na->Copy(src->na);
+		dst->nb->Copy(src->nb);
+		dst->nc->Copy(src->nc);
+		dst->n->Copy(src->n);
+		dst->ua->Copy(src->ua);
+		dst->ub->Copy(src->ub);
+		dst->uc->Copy(src->uc);
+
+		dst->material = src->material;
+		dst->options = src->options;
+		dst->draw = src->draw;
+		dst->clipMode = src->clipMode;
+		dst->ca = src->ca;
+		dst->cb = src->cb;
+		dst->cc = src->cc;
+		dst->zobObject = src->zobObject;
+		dst->area = src->area;
+
+	}
 
 };
 

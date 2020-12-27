@@ -222,11 +222,29 @@ void ZobObject::UpdateMesh(const Camera* camera, Core::Engine* engine)
 	}
 }
 
+void ZobObject::Init()
+{
+	if (m_behavior)
+	{
+		m_behavior->Init();
+	}
+	for (int i = 0; i < m_children.size(); i++)
+	{
+		ZobObject* z = m_children[i];
+		z->Init();
+	}
+}
+
 void ZobObject::PreUpdate()
 {
 	if (m_behavior)
 	{
 		m_behavior->PreUpdate();
+	}
+	for (int i = 0; i < m_children.size(); i++)
+	{
+		ZobObject* z = m_children[i];
+		z->PreUpdate();
 	}
 	SetParentInternal();
 	DeleteInternal();

@@ -20,6 +20,7 @@ public:
 	void StartUpdateScene(const Camera* camera, Core::Engine* engine);
 	float WaitForUpdateObjectend();
 	void QueueForDrawing(const Camera* camera, Core::Engine* engine);
+	void Init();
 	void PreUpdate();
 	void UpdateBehavior(float dt);
 	ZobObject* GetZobObjectFromPartialId(const uint id) const;

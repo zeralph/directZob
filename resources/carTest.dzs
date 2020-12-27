@@ -38,7 +38,7 @@
                 <Collider type="0" radius="1.000000" height="2.000000" halfExtends_x="1.000000" halfExtends_y="1.000000" halfExtends_z="1.000000" scale_with_object="1" />
                 <Material />
             </Physic>
-            <Controller>0</Controller>
+            <Controller>5</Controller>
             <Fov>70.00</Fov>
         </ZobObject>
         <ZobObject name="camaro" guid="3046785" type="mesh">

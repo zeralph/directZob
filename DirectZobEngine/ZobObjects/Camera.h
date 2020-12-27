@@ -8,11 +8,13 @@
 class ZobCameraController;
 class ZobCameraControllerOrbital;
 class ZobCameraControllerFPS;
+class ZobCameraControllerFollowCar;
 class Camera : public ZobObject
 {
 friend class ZobCameraController;
 friend class ZobCameraControllerOrbital;
 friend class ZobCameraControllerFPS;
+friend class ZobCameraControllerFollowCar;
 public:
 	enum eCameraType
 	{
@@ -21,6 +23,7 @@ public:
 		eCamera_orbital = 2,
 		eCamera_fps=3,
 		eCamera_follow=4,
+		eCamera_followCar=5,
 	};
 
 	enum eTargetMode
@@ -49,6 +52,8 @@ public:
 	//void					Update(const ZobMatrix4x4& parentMatrix, const ZobMatrix4x4& parentRSMatrix) override;
 	void					Update() override;
 	void					PreUpdate() override;
+	void					UpdateBehavior(float dt) override;
+	void					Init() override;
 	void					UpdateAfter();
 	void					DrawGizmos(const Camera* camera, Core::Engine* engine) override;
 	TiXmlNode*				SaveUnderNode(TiXmlNode* node) override;

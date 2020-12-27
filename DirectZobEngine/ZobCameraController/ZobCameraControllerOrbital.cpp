@@ -32,7 +32,7 @@ void ZobCameraControllerOrbital::PreUpdate()
 	}
 }
 
-void ZobCameraControllerOrbital::Update()
+void ZobCameraControllerOrbital::Update(float dt)
 {
 	//rotation section
 	ZobVector3 v = ZobVector3::Vector3Y;

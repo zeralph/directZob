@@ -1,5 +1,6 @@
 #ifdef _WINDLL
 #include "DirectZobWrapper.h"
+#include "../../dependencies/minifb/include/MiniFB_enums.h"
 
 namespace CLI
 {

@@ -93,6 +93,8 @@
 				'ZobPhysic/ZobPhysicComponent.cpp',
                 'ZobCameraController/ZobCameraController.h',
                 'ZobCameraController/ZobCameraController.cpp',
+				'ZobCameraController/ZobCameraControllerFollowCar.h',
+                'ZobCameraController/ZobCameraControllerFollowCar.cpp',
 				'ZobCameraController/ZobCameraControllerOrbital.h',
 				'ZobCameraController/ZobCameraControllerOrbital.cpp',
 				'ZobCameraController/ZobCameraControllerFPS.h',

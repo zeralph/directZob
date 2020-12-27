@@ -20,7 +20,7 @@ ZobBehaviorCar::ZobBehaviorCar(ZobObject* zobObject, TiXmlElement* node) : ZobBe
 	m_frontWheelPosition = ZobVector3(0, 0, 2);
 	m_rearWheelPosition = ZobVector3(0, 0, -1);
 	m_rollingTorquePower = 1.0f;
-	m_steeringTorque = 1.0f * 60.0f;
+	m_steeringTorque = 2.0f * 60.0f;
 	m_rollingTorqueMaxPower = 30.0f;
 	m_currentMaxTorqueApplicable = 40.0f;
 	m_motorForce = 10.0f * 60.0f;
@@ -36,6 +36,12 @@ void ZobBehaviorCar::PreUpdate()
 {
 
 }
+
+void ZobBehaviorCar::Init()
+{
+
+}
+
 
 void ZobBehaviorCar::Update(float dt)
 {

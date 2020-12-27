@@ -175,10 +175,13 @@ int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUp
 	{
 		clTest = clock();
 #ifdef WINDOWS
-		HWND hWnd;
+		HWND hWnd = 0;
 		SWindowData* window_data = (SWindowData*)window;
-		SWindowData_Win* window_data_win = (SWindowData_Win*)window_data->specific;
-		hWnd = window_data_win->window;
+		if (window_data)
+		{
+			SWindowData_Win* window_data_win = (SWindowData_Win*)window_data->specific;
+			hWnd = window_data_win->window;
+		}
 		m_inputManager->Update(m_frameTick, hWnd);
 #else
 		m_inputManager->Update(m_frameTick);

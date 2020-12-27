@@ -37,7 +37,7 @@ void ZobCameraControllerFPS::PreUpdate()
 	}
 }
 
-void ZobCameraControllerFPS::Update()
+void ZobCameraControllerFPS::Update(float dt)
 {
 	m_totalPitch += m_deltaPitch;
 	m_totalRoll += m_deltaRoll;

@@ -7,6 +7,7 @@
 #include "ZobCameraController/ZobCameraController.h"
 #include "ZobCameraController/ZobCameraControllerOrbital.h"
 #include "ZobCameraController/ZobCameraControllerFPS.h"
+#include "ZobCameraController/ZobCameraControllerFollowCar.h"
 
 static std::mutex g_update_camera_mutex;
 static float ee = 0.0f;
@@ -30,9 +31,18 @@ Camera::Camera(ZOBGUID::Type zobType, const std::string& name, eCameraType type,
 			break;
 		}
 		case eCamera_base:
-		default:
 		{
 			m_zobCameraController = new ZobCameraController(this);
+			break;
+		}
+		case eCamera_followCar:
+		{
+			m_zobCameraController = new ZobCameraControllerFollowCar(this);
+			break;
+		}
+		default:
+		{
+			DirectZob::LogError("Error creating camera");
 			break;
 		}
 	}
@@ -67,9 +77,18 @@ Camera::Camera(ulong id, TiXmlElement* node, ZobObject* parent)
 			break;
 		}
 		case eCamera_base:
-		default:
 		{
 			m_zobCameraController = new ZobCameraController(this);
+			break;
+		}
+		case eCamera_followCar:
+		{
+			m_zobCameraController = new ZobCameraControllerFollowCar(this);
+			break;
+		}
+		default:
+		{
+			DirectZob::LogError("Error creating camera");
 			break;
 		}
 	}
@@ -96,6 +115,10 @@ void Camera::DrawGizmos(const Camera* camera, Core::Engine* engine)
 	if (GetType() == ZOBGUID::type_editor)
 	{
 		//		return;
+	}
+	if (m_zobCameraController)
+	{
+		m_zobCameraController->DrawGizmos(camera, engine);
 	}
 	ZobObject::DrawGizmos(camera, engine);
 	ZobVector3 v0 = ZobVector3(-2, 1, 1);
@@ -244,21 +267,30 @@ void Camera::Move(float dx, float dz, float dy, bool moveTargetVector)
 //void Camera::Update(const ZobMatrix4x4& parentMatrix, const ZobMatrix4x4& parentRSMatrix)
 void Camera::Update()
 {
-	//ZobObject::Update();
-	m_physicComponent->Update();
-	m_zobCameraController->Update();
 	ZobObject::Update();
 	UpdateViewProjectionMatrix();
 	if (!DirectZob::GetInstance()->GetEngine()->LockFrustrum())
 	{
 		RecomputeFrustrumPlanes();
-	}
+	}	
 }
 
 void Camera::PreUpdate()
 {
 	ZobObject::PreUpdate();
 	m_zobCameraController->PreUpdate();
+}
+
+void Camera::Init()
+{
+	ZobObject::Init();
+	m_zobCameraController->Init();
+}
+
+void Camera::UpdateBehavior(float dt)
+{
+	ZobObject::UpdateBehavior(dt);
+	m_zobCameraController->Update(dt);
 }
 
 void Camera::UpdateAfter()

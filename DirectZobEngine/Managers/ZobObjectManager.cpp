@@ -119,6 +119,11 @@ ZobObject* ZobObjectManager::GetZobObject(const std::string& name) const
 
 }
 
+void ZobObjectManager::Init()
+{
+	m_rootObject->Init();
+}
+
 void ZobObjectManager::PreUpdate()
 {
 	m_rootObject->PreUpdate();

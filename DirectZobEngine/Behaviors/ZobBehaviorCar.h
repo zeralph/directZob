@@ -11,6 +11,7 @@ class ZobBehaviorCar : public ZobBehavior
 		~ZobBehaviorCar() override;
 		const char* GetBehaviorTypeStr() override { return "car"; }
 		TiXmlNode*	SaveUnderNode(TiXmlNode* node) override;
+		void		Init() override;
 		void		PreUpdate() override;
 		void		Update(float dt) override;
 		void		DrawGizmos(const Camera* camera, const ZobVector3* position, const ZobVector3* rotation) const override;

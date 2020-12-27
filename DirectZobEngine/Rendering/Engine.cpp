@@ -83,32 +83,43 @@ Engine::Engine(int width, int height, Events* events)
 
 	m_LineQueue = (Line3D*)malloc(sizeof(Line3D) * m_maxLineQueueSize);
 	m_TrianglesQueue = (Triangle*)malloc(sizeof(Triangle) * m_maxTrianglesQueueSize);
+	m_verticesData = (ZobVector3*)malloc(sizeof(ZobVector3) * m_maxTrianglesQueueSize * 10);
+	m_uvData = (ZobVector2*)malloc(sizeof(ZobVector2) * m_maxTrianglesQueueSize * 3);
+
+	ulong tot = sizeof(Triangle);
+	tot = sizeof(Line3D)* m_maxLineQueueSize + sizeof(Triangle) * m_maxTrianglesQueueSize + sizeof(ZobVector3) * m_maxTrianglesQueueSize * 10 + sizeof(ZobVector2) * m_maxTrianglesQueueSize * 3;
+	tot /= 1024*1024;
+
+	int vertexIdx = 0;
+	int uvIdx = 0;
 	for (int i = 0; i < m_maxTrianglesQueueSize; i++)
 	{
-		m_TrianglesQueue[i].va = new ZobVector3();
-		m_TrianglesQueue[i].vb = new ZobVector3();
-		m_TrianglesQueue[i].vc = new ZobVector3();
-		m_TrianglesQueue[i].pa = new ZobVector3();
-		m_TrianglesQueue[i].pb = new ZobVector3();
-		m_TrianglesQueue[i].pc = new ZobVector3(); 
-		m_TrianglesQueue[i].na = new ZobVector3(); 
-		m_TrianglesQueue[i].nb = new ZobVector3(); 
-		m_TrianglesQueue[i].nc = new ZobVector3(); 
-		m_TrianglesQueue[i].ua = new ZobVector2(); 
-		m_TrianglesQueue[i].ub = new ZobVector2(); 
-		m_TrianglesQueue[i].uc = new ZobVector2(); 
-		m_TrianglesQueue[i].n = new ZobVector3();
-		m_TrianglesQueue[i].options = (DirectZobType::RenderOptions*)malloc(sizeof(DirectZobType::RenderOptions));
-		m_TrianglesQueue[i].options->zBuffered = true;
-		m_TrianglesQueue[i].options->bTransparency = false;
-		m_TrianglesQueue[i].options->cullMode = eCullMode_ClockwiseFace;
-		m_TrianglesQueue[i].draw = false;
-		m_TrianglesQueue[i].area = 0;
+		m_TrianglesQueue[i].va = &m_verticesData[vertexIdx + 0];
+		m_TrianglesQueue[i].vb = &m_verticesData[vertexIdx + 1];
+		m_TrianglesQueue[i].vc = &m_verticesData[vertexIdx + 2];
+		m_TrianglesQueue[i].pa = &m_verticesData[vertexIdx + 3];
+		m_TrianglesQueue[i].pb = &m_verticesData[vertexIdx + 4];
+		m_TrianglesQueue[i].pc = &m_verticesData[vertexIdx + 5]; 
+		m_TrianglesQueue[i].na = &m_verticesData[vertexIdx + 6]; 
+		m_TrianglesQueue[i].nb = &m_verticesData[vertexIdx + 7]; 
+		m_TrianglesQueue[i].nc = &m_verticesData[vertexIdx + 8]; 
+		m_TrianglesQueue[i].n  = &m_verticesData[vertexIdx + 9];
+		m_TrianglesQueue[i].ua = &m_uvData[uvIdx + 0]; 
+		m_TrianglesQueue[i].ub = &m_uvData[uvIdx + 1]; 
+		m_TrianglesQueue[i].uc = &m_uvData[uvIdx + 2]; 
+		m_TrianglesQueue[i].options = NULL;
 		m_TrianglesQueue[i].material = NULL;
 		m_TrianglesQueue[i].zobObject = NULL;
 		m_TrianglesQueue[i].ca = 0;
 		m_TrianglesQueue[i].cb = 0;
 		m_TrianglesQueue[i].cc = 0;
+		m_TrianglesQueue[i].draw = false;
+		m_TrianglesQueue[i].area = 0;
+		m_TrianglesQueue[i].verticeAIndex = 0;
+		m_TrianglesQueue[i].verticeBIndex = 0;
+		m_TrianglesQueue[i].verticeCIndex = 0;
+		vertexIdx += 10;
+		uvIdx += 3;
 	}
 	m_lineQueueSize = 0;
 	m_TriangleQueueSize = 0;
@@ -140,11 +151,19 @@ Engine::~Engine()
 	for (int i = 0; i < m_nbRasterizers; i++)
 	{
 		delete m_rasterizers[i];
-		delete m_TrianglesQueue;
 	}
-	delete m_TrianglesQueue;
-	delete m_rasterizers;
+	free(m_TrianglesQueue);
+	free(m_verticesData);
+	free(m_uvData);
+	free(m_rasterizers);
 	m_events = NULL;
+}
+
+void Engine::Start()
+{
+	DirectZob::GetInstance()->GetZobObjectManager()->Init();
+	for (int i = 0; i < m_nbRasterizers; i++)
+	m_started = true;
 }
 
 void Engine::Stop()
@@ -706,23 +725,6 @@ void Engine::CopyBuffer(uint* source, uint* dest)
 
 void Engine::QueueLineInRasters(const Line3D* l, int idx) const
 {
-	/*
-	int min = std::min<int>(l->ya, l->yb);
-	int max = std::max<int>(l->ya, l->yb);
-	min = clamp2(min, 0, (int)m_bufferData.height - 1);
-	max = clamp2(max, 0, (int)m_bufferData.height - 1);
-	min /= m_bufferData.height / m_nbRasterizers;
-	max /= m_bufferData.height / m_nbRasterizers;
-	assert(min >= 0);
-	assert(min < m_nbRasterizers);
-	assert(max >= 0);
-	assert(max < m_nbRasterizers);
-	assert(min <= max);
-	for (int i = min; i <= max; i++)
-	{
-		m_rasterizers[i]->QueueLine(l);
-	}
-	*/
 	int i = idx % m_nbRasterizers;
 	assert(i >= 0);
 	assert(i < m_nbRasterizers);
@@ -731,23 +733,6 @@ void Engine::QueueLineInRasters(const Line3D* l, int idx) const
 
 void Engine::QueueTriangleInRasters(const Triangle* t, int idx) const
 {
-	/*
-	int min = std::min<int>(t->pa->y, std::min<int>(t->pb->y, t->pc->y));
-	int max = std::max<int>(t->pa->y, std::max<int>(t->pb->y, t->pc->y));
-	min = clamp2(min, 0, (int)m_bufferData.height - 1);
-	max = clamp2(max, 0, (int)m_bufferData.height - 1);
-	min /= m_bufferData.height / m_nbRasterizers;
-	max /= m_bufferData.height / m_nbRasterizers;
-	assert(min >= 0);
-	assert(min < m_nbRasterizers);
-	assert(max >= 0);
-	assert(max < m_nbRasterizers);
-	assert(min <= max);
-	for (int i = min; i <= max; i++)
-	{
-		m_rasterizers[i]->QueueTriangle(t);
-	}
-	*/
 	int i = idx % m_nbRasterizers;
 	assert(i >= 0);
 	assert(i < m_nbRasterizers);

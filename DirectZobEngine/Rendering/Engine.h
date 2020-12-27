@@ -26,7 +26,7 @@ namespace Core
 		Engine(int width, int height, Events* events);
 		~Engine();
 
-		inline void										Start() { m_started = true; }
+		void											Start();
 		const inline bool								Started() const { return m_started; }
 		void											Stop();
 		void											ClearBuffer(const Color* color);
@@ -95,16 +95,22 @@ namespace Core
 			uvb->x = uva->x + (uvb->x - uva->x) * r;
 			uvb->y = uva->y + (uvb->y - uva->y) * r;
 		}
+
+		Rasterizer** m_rasterizers;
 		Events* m_events;
+
+		Line3D* m_LineQueue;
 		Triangle* m_TrianglesQueue;
+		ZobVector3* m_verticesData;
+		ZobVector2* m_uvData;
+
 		long m_TriangleQueueSize;
 		long m_maxTrianglesQueueSize;
 
-		Line3D* m_LineQueue;
 		long m_lineQueueSize;
 		long m_maxLineQueueSize;
 		
-		Rasterizer** m_rasterizers;
+		
 		uint m_nbRasterizers;
 		float m_zNear;
 		float m_zFar;

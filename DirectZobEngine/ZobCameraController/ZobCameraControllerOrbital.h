@@ -7,7 +7,7 @@ public:
     ZobCameraControllerOrbital(Camera * c);
     ~ZobCameraControllerOrbital();
 
-    void        Update() override;
+    void        Update(float dt) override;
     void        PreUpdate() override;
     void        Rotate(float x, float y, float z) override;
     void        Move(float x, float y, float z) override;
