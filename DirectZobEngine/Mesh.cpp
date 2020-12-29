@@ -15,6 +15,7 @@ Mesh::Mesh(std::string& name)
 	m_nbNormals = 0;
 	m_nbFaces = 0;
 	m_hasNormals = false;
+	m_indices = NULL;
 	m_vertices = NULL;
 	m_projectedVertices = NULL;
 	m_verticesNormals = NULL;
@@ -84,6 +85,7 @@ Mesh::Mesh(std::string &parentName, std::string& path, fbxsdk::FbxMesh* mesh)
 
 		m_nbVertices += mesh->GetPolygonVertexCount();
 		m_nbFaces = 0;
+		
 		m_vertices = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
 		m_verticesData = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
 		m_verticesTmp = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
@@ -226,6 +228,10 @@ Mesh::Mesh(std::string &parentName, std::string& path, fbxsdk::FbxMesh* mesh)
 			v.Div(3.0f);
 			m_trianglesNormals[i] = &v;
 			t->n = &m_trianglesNormals[i];
+			//indices 
+			m_indices[i * 3 + 0] = t->verticeAIndex;
+			m_indices[i * 3 + 1] = t->verticeBIndex;
+			m_indices[i * 3 + 2] = t->verticeCIndex;
 		}
 		memcpy(m_verticesData, m_vertices, sizeof(ZobVector3) * m_nbVertices);
 		memcpy(m_verticesTmp, m_vertices, sizeof(ZobVector3)* m_nbVertices);
@@ -311,6 +317,7 @@ Mesh::~Mesh()
 	}
 	m_subMeshes.clear();
 	m_triangles.clear();
+	free(m_indices);
 	free(m_vertices);
 	free(m_verticesData);
 	free(m_verticesTmp);
@@ -323,6 +330,7 @@ Mesh::~Mesh()
 	free(m_projectedVertices);
 	free(m_projectedVerticesTmp);
 	free(m_uvs);
+	m_indices = NULL;
 	m_vertices = NULL;
 	m_verticesData = NULL;
 	m_verticesTmp = NULL;
@@ -389,6 +397,7 @@ void Mesh::LoadOBJ(const std::string& fullPath)
 	{
 		m_nbNormals = 1;
 	}
+	m_indices = (uint*)malloc(sizeof(ZobVector3) * m_nbFaces);
 	m_vertices = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
 	m_verticesData = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
 	m_verticesTmp = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
@@ -767,6 +776,12 @@ void Mesh::CreateTriangles(const std::vector<std::string>* line, std::vector<Tri
 		m_trianglesNormals[tArrayIdx] = ZobVector3(nx, ny, nz);
 		t.n = &m_trianglesNormals[tArrayIdx];
 		tList->push_back(t);
+
+		//indices 
+		m_indices[tArrayIdx * 3 + 0] = t.verticeAIndex;
+		m_indices[tArrayIdx * 3 + 1] = t.verticeBIndex;
+		m_indices[tArrayIdx * 3 + 2] = t.verticeCIndex;
+
 		tArrayIdx++;	
 	}
 }

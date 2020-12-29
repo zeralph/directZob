@@ -17,6 +17,8 @@ ZobPhysicComponent::ZobPhysicComponent(TiXmlNode* node)
 	m_scaleWithObject = true;
 	m_collider = NULL;
 	m_bUpdateSize = true;
+	m_concaveMeshVertices = NULL;
+	m_concaveMeshIndices = NULL;
 	if (node)
 	{
 		TiXmlElement* p = (TiXmlElement*)node;
@@ -103,13 +105,22 @@ TiXmlNode* ZobPhysicComponent::SaveUnderNode(TiXmlNode* node)
 	return NULL;
 }
 
-void ZobPhysicComponent::SetType(ePhysicComponentType t)
+void ZobPhysicComponent::RemoveCollider()
 {
 	if (m_collider)
 	{
 		m_rigidBody->removeCollider(m_collider);
 		m_collider = NULL;
 	}
+	free(m_concaveMeshVertices);
+	free(m_concaveMeshIndices);
+	m_concaveMeshVertices = NULL;
+	m_concaveMeshIndices = NULL;
+}
+
+void ZobPhysicComponent::SetType(ePhysicComponentType t)
+{
+	RemoveCollider();
 	m_type = t;
 	switch (m_type)
 	{
@@ -163,11 +174,7 @@ void ZobPhysicComponent::UpdateShapeType()
 			AddSphereCollider();
 			break;
 		default:
-			if (m_collider)
-			{
-				m_rigidBody->removeCollider(m_collider);
-				m_collider = NULL;
-			}
+			RemoveCollider();
 			break;
 		}
 	}
@@ -361,13 +368,47 @@ void ZobPhysicComponent::AddCapsuleCollider()
 	AddColliderInternal(s);
 }
 
+void ZobPhysicComponent::AddMeshCollider(const Mesh* m)
+{
+	PhysicsCommon* pc = DirectZob::GetInstance()->GetPhysicsEngine()->GetPhysicsCommon();
+	
+	const int nbVertices = m->GetNbVertices();
+	const int nbTriangles = m->GetNbTriangles();
+	float* vertices = (float*)malloc(sizeof(float) * nbVertices * 3);
+	int* indices = (int*)malloc(sizeof(int) * nbTriangles * 3);
+	int idx = 0;
+	for (int i = 0; i < nbVertices; i++)
+	{
+		vertices[idx] = m->GetVertices()[i].x;
+		idx++;
+		vertices[idx] = m->GetVertices()[i].y;
+		idx++;
+		vertices[idx] = m->GetVertices()[i].z;
+	}
+	idx = 0;
+	for (std::vector<Triangle>::const_iterator iter = m->GetTriangles().begin(); iter != m->GetTriangles().end(); iter++)
+	{
+		indices[idx] = (*iter).verticeAIndex;
+		idx++;
+		indices[idx] = (*iter).verticeBIndex;
+		idx++;
+		indices[idx] = (*iter).verticeCIndex;
+	}
+	TriangleVertexArray* triangleArray =
+		new TriangleVertexArray(nbVertices, vertices, 3 * sizeof(float), nbTriangles,
+			indices, 3 * sizeof(int),
+			TriangleVertexArray::VertexDataType::VERTEX_FLOAT_TYPE,
+			TriangleVertexArray::IndexDataType::INDEX_INTEGER_TYPE);
+
+	TriangleMesh* triangleMesh = pc->createTriangleMesh();
+	triangleMesh->addSubpart(triangleArray);
+	ConcaveMeshShape* concaveMesh = pc->createConcaveMeshShape(triangleMesh);
+	AddColliderInternal(concaveMesh);
+}
+
 void ZobPhysicComponent::AddColliderInternal(CollisionShape* c)
 {
-	if (m_collider)
-	{
-		m_rigidBody->removeCollider(m_collider);
-		m_collider = NULL;
-	}
+	RemoveCollider();
 	Transform t = Transform::identity();
 	//t = m_rigidBody->getTransform();
 	m_collider = m_rigidBody->addCollider(c, t);

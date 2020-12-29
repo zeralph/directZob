@@ -18,29 +18,34 @@ class Mesh
 {
 public:
 
-	Mesh(std::string& name);
-	Mesh(Mesh* m);
-	Mesh(std::string& name, std::string& path, std::string& file);
-	~Mesh();
+										Mesh(std::string& name);
+										Mesh(Mesh* m);
+										Mesh(std::string& name, std::string& path, std::string& file);
+										~Mesh();
 
-	virtual void Update(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions* options);
-	virtual void QueueForDrawing(ZobObject* z, const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, RenderOptions* options);
-	void DrawBoundingBox(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions* options);
-//	const std::vector<Triangle>* GetTrianglesList() const { return &m_triangles; }
-	const uint GetNbTriangles() const { return m_nbFaces; }
+	virtual void						Update(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions* options);
+	virtual void						QueueForDrawing(ZobObject* z, const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, RenderOptions* options);
+	void								DrawBoundingBox(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions* options);
 
-	const std::string& GetName() const { return m_name; }
-	const std::string& GetPath() const { return m_path; }
-	const std::string& GetFileName() const { return m_fileName; }
+	const uint							GetNbTriangles() const { return m_nbFaces; }
+	const uint							GetNbVertices() const { return m_nbVertices; }
+	const ZobVector3*					GetVertices() const { return m_vertices; }
+	const std::vector<Triangle>			GetTriangles() const { return m_triangles; }
+	const uint*							GetIndices() const { return m_indices; }
+	const std::string&					GetName() const { return m_name; }
+	const std::string&					GetPath() const { return m_path; }
+	const std::string&					GetFileName() const { return m_fileName; }
 
 protected:
-	Mesh(std::string& parentName, std::string& path, fbxsdk::FbxMesh* mesh);
-	void SplitEntry(const std::string* s, std::vector<std::string>* v, const char delim);
-	void CreateTriangles(const std::vector<std::string>* line, std::vector<Triangle>* t, size_t& tArrayIdx, const ZobMaterial* tex);
-	void LoadOBJ(const std::string& fullPath);
-	void LoadFbx(const std::string& fullPath);
-	void FbxMultT(FbxNode* node, FbxVector4 &vector);
-	inline bool RejectTriangle(const Triangle* t, const float znear, const float zfar, const float width, const float height);
+										Mesh(std::string& parentName, std::string& path, fbxsdk::FbxMesh* mesh);
+	void								SplitEntry(const std::string* s, std::vector<std::string>* v, const char delim);
+	void								CreateTriangles(const std::vector<std::string>* line, std::vector<Triangle>* t, size_t& tArrayIdx, const ZobMaterial* tex);
+	void								LoadOBJ(const std::string& fullPath);
+	void								LoadFbx(const std::string& fullPath);
+	void								FbxMultT(FbxNode* node, FbxVector4 &vector);
+	inline bool							RejectTriangle(const Triangle* t, const float znear, const float zfar, const float width, const float height);
+
+
 	std::vector<Mesh*> m_subMeshes;
 	uint m_nbVertices = 0;
 	uint m_nbUvs = 0;
@@ -54,6 +59,9 @@ protected:
 	ZobVector3 m_minBouding;
 	ZobVector3 m_maxBouding;
 	ZobVector3 m_pivot;
+
+	uint* m_indices = NULL;
+
 	ZobVector3* m_vertices = NULL;
 	ZobVector3* m_verticesTmp = NULL;
 	ZobVector3* m_verticesData = NULL;

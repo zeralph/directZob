@@ -52,6 +52,7 @@ public:
 	void								AddBoxCollider();
 	void								AddSphereCollider();
 	void								AddCapsuleCollider();
+	void								AddMeshCollider(const Mesh* m);
 	void								Update();
 	void								SaveTransform();
 	void								RestoreTransform();
@@ -83,6 +84,10 @@ private:
 	float								ClampAngle(float a) const;
 	bool								UpdateColliderSize();
 	void								UpdateShapeType();
+	void								RemoveCollider();
+
+	float*	m_concaveMeshVertices;
+	int* m_concaveMeshIndices;
 
 	ePhysicComponentType m_type;
 	RigidBody* m_rigidBody;
