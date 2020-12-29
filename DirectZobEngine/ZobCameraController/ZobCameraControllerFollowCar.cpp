@@ -50,13 +50,6 @@ void ZobCameraControllerFollowCar::PreUpdate()
 {
     if (m_zobCamera->m_active)
     {
-        float parentY = m_zobCamera->m_parent->GetWorldRotation().y;
-        float myY = m_zobCamera->GetWorldRotation().y;
-        //m_deltaY = parentY - myY;
-        const gainput::InputMap* inputMap = DirectZob::GetInstance()->GetInputManager()->GetMap();
-        float mx = fabsf(inputMap->GetFloat(ZobInputManager::LeftStickX));
-        //m_deltaY += mx;
-        //m_deltaY = fminf(0.5f, m_deltaY);
     }
 }
 
