@@ -37,7 +37,7 @@ public:
 	void							LookAt(const ZobVector3* forward, const ZobVector3* left, const ZobVector3* up, bool addToCurrentRotation);
 	inline ZobVector3				GetLocalRotation() const;
 	inline ZobVector3				GetLocalPosition() const;
-	inline ZobVector3				GetWorldRotation() const;
+	ZobVector3						GetWorldRotation() const;
 	ZobVector3						GetWorldPosition() const;
 	void							SaveTransform();
 	void							RestoreTransform();

@@ -41,7 +41,7 @@ void ZobCameraControllerFollowCar::Update(float dt)
     newT = parentT.getInverse() * newT;
     m_zobCamera->GetPhysicComponentNoConst()->SetLocalTransform(newT);
     m_deltaY = dt;
-    float d = 0.09f;
+    float d = 0.9f;
     q = Quaternion::slerp(m_lastOrientation, q, d);
     m_lastOrientation = q;
 }
@@ -70,6 +70,6 @@ void ZobCameraControllerFollowCar::Move(float x, float y, float z)
 
 void ZobCameraControllerFollowCar::DrawGizmos(const Camera* camera, Core::Engine* engine) const
 {
-    Text2D* m_textManager = DirectZob::GetInstance()->GetTextManager();
-    m_textManager->Print(50, 200, 4, 0xFFFFFF, "ACC : %.2f, dy : %.2f", m_accY, m_deltaY);
+    //Text2D* m_textManager = DirectZob::GetInstance()->GetTextManager();
+    //m_textManager->Print(50, 200, 4, 0xFFFFFF, "ACC : %.2f, dy : %.2f", m_accY, m_deltaY);
 }
