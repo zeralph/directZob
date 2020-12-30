@@ -52,7 +52,7 @@ public:
 	void								AddBoxCollider();
 	void								AddSphereCollider();
 	void								AddCapsuleCollider();
-	void								AddMeshCollider(const Mesh* m);
+	void								AddMeshCollider();
 	void								Update();
 	void								SaveTransform();
 	void								RestoreTransform();
@@ -102,6 +102,7 @@ private:
 	bool m_scaleWithObject;
 	float m_radius;
 	ZobVector3 m_halfExtends;
+	std::string m_convexMeshName;
 	float m_height;
 	bool m_bUpdateSize;
 };

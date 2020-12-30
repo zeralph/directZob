@@ -66,8 +66,6 @@ ZobObject::ZobObject(DirectZobType::guid id, TiXmlElement* node, ZobObject* pare
 	name = node->Attribute("name");
 	DirectZob::LogInfo("ZobObejct %s creation", name.c_str());
 	DirectZob::AddIndent();
-	f = node->FirstChildElement("Physic");
-	m_physicComponent = new ZobPhysicComponent(f);
 	f = node->FirstChildElement("Position");
 	x = atof(f->Attribute("x"));
 	y = atof(f->Attribute("y"));
@@ -102,21 +100,9 @@ ZobObject::ZobObject(DirectZobType::guid id, TiXmlElement* node, ZobObject* pare
 	}
 	m_markedForDeletion = false;
 	m_mesh = NULL;
-	m_children.clear();
-	m_newParent = m_parent;
-	SetParentInternal();
-	if (m_parent != NULL)
-	{
-		m_parent->AddChildReference(this);
-	}
 	m_renderOptions.lightMode = RenderOptions::eLightMode_phong;
 	m_renderOptions.zBuffered = true;
 	m_renderOptions.bTransparency = false;
-	m_physicComponent->Init(&position, &rotation);
-	SetScale(scale.x, scale.y, scale.z);
-	Update();
-	TiXmlElement* behaviorNode = node->FirstChildElement("Behavior");
-	m_behavior = ZobBehaviorFactory::CreateBehavior(this, behaviorNode);
 	//mesh loading section
 	TiXmlElement* meshNode = node->FirstChildElement("Mesh");
 	if (meshNode)
@@ -129,6 +115,24 @@ ZobObject::ZobObject(DirectZobType::guid id, TiXmlElement* node, ZobObject* pare
 			LoadMesh(meshName, meshFile, meshPath);
 		}
 	}
+	//Physics
+	f = node->FirstChildElement("Physic");
+	m_physicComponent = new ZobPhysicComponent(f);
+	//parenting
+	m_children.clear();
+	m_newParent = m_parent;
+	SetParentInternal();
+	if (m_parent != NULL)
+	{
+		m_parent->AddChildReference(this);
+	}
+	//Behavior
+	TiXmlElement* behaviorNode = node->FirstChildElement("Behavior");
+	m_behavior = ZobBehaviorFactory::CreateBehavior(this, behaviorNode);
+	//Init
+	m_physicComponent->Init(&position, &rotation);
+	SetScale(scale.x, scale.y, scale.z);
+	Update();
 	DirectZob::RemoveIndent();
 }
 
@@ -824,24 +828,28 @@ void ZobObject::SetPhysicComponentInfo(std::string& type, std::string& shapeType
 	if (shapeType == "Box")
 	{
 		st = ZobPhysicComponent::eShapeType_box;
+		GetPhysicComponentNoConst()->SetShapeType(st);
 	}
 	else if (shapeType == "Capsule")
 	{
 		st = ZobPhysicComponent::eShapeType_capsule;
+		GetPhysicComponentNoConst()->SetShapeType(st);
 	}
 	else if (shapeType == "Mesh")
 	{
 		st = ZobPhysicComponent::eShapeType_convexMesh;
+		GetPhysicComponentNoConst()->AddMeshCollider();
 	}
 	else if (shapeType == "Sphere")
 	{
 		st = ZobPhysicComponent::eShapeType_sphere;
+		GetPhysicComponentNoConst()->SetShapeType(st);
 	}
 	else
 	{
 		//return error ?
+		GetPhysicComponentNoConst()->SetShapeType(ZobPhysicComponent::eShapeType_none);
 	}
-	GetPhysicComponentNoConst()->SetShapeType(st);
 }
 
 void ZobObject::GetPhysicComponentShapeInfo(float& radius, float& height, float& hx, float& hy, float& hz, std::string& mesh)

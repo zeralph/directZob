@@ -9,6 +9,7 @@ ZobPhysicComponent::ZobPhysicComponent(TiXmlNode* node)
 	BodyType rigidBodyType = rp3d::BodyType::STATIC;
 	m_radius = 1.0f;
 	m_height = 2.0f;
+	m_convexMeshName = "";
 	m_halfExtends = ZobVector3(1, 1, 1);
 	bool rigidBodyActive = false;
 	m_type = ePhysicComponentType_none;
@@ -33,6 +34,7 @@ ZobPhysicComponent::ZobPhysicComponent(TiXmlNode* node)
 		m_halfExtends.x = (float)atof(c->Attribute("halfExtends_x"));
 		m_halfExtends.y = (float)atof(c->Attribute("halfExtends_y"));
 		m_halfExtends.z = (float)atof(c->Attribute("halfExtends_z"));
+		m_convexMeshName = c->Attribute("convexMeshName")? c->Attribute("convexMeshName"):"";
 		m_scaleWithObject = (bool)(c->Attribute("scale_with_object")?atoi(c->Attribute("scale_with_object")):1);
 	}
 	m_rigidBody = DirectZob::GetInstance()->GetPhysicsEngine()->CreateRigidBody(&ZobVector3::Vector3Zero, &ZobVector3::Vector3Zero);
@@ -87,6 +89,7 @@ TiXmlNode* ZobPhysicComponent::SaveUnderNode(TiXmlNode* node)
 	c.SetAttribute("halfExtends_x", std::to_string((float)m_halfExtends.x).c_str());
 	c.SetAttribute("halfExtends_y", std::to_string((float)m_halfExtends.y).c_str());
 	c.SetAttribute("halfExtends_z", std::to_string((float)m_halfExtends.z).c_str());
+	c.SetAttribute("convexMeshName", m_convexMeshName.c_str());
 	c.SetAttribute("scale_with_object", std::to_string((bool)m_scaleWithObject).c_str());
 	
 	TiXmlElement m = TiXmlElement("Material");
@@ -168,7 +171,7 @@ void ZobPhysicComponent::UpdateShapeType()
 			AddCapsuleCollider();
 			break;
 		case eShapeType_convexMesh:
-		
+			AddMeshCollider();
 			break;
 		case eShapeType_sphere:
 			AddSphereCollider();
@@ -368,42 +371,53 @@ void ZobPhysicComponent::AddCapsuleCollider()
 	AddColliderInternal(s);
 }
 
-void ZobPhysicComponent::AddMeshCollider(const Mesh* m)
+void ZobPhysicComponent::AddMeshCollider()
 {
-	PhysicsCommon* pc = DirectZob::GetInstance()->GetPhysicsEngine()->GetPhysicsCommon();
-	
-	const int nbVertices = m->GetNbVertices();
-	const int nbTriangles = m->GetNbTriangles();
-	float* vertices = (float*)malloc(sizeof(float) * nbVertices * 3);
-	int* indices = (int*)malloc(sizeof(int) * nbTriangles * 3);
-	int idx = 0;
-	for (int i = 0; i < nbVertices; i++)
+	const Mesh* m = DirectZob::GetInstance()->GetMeshManager()->GetMesh(m_convexMeshName);
+	if (m)
 	{
-		vertices[idx] = m->GetVertices()[i].x;
-		idx++;
-		vertices[idx] = m->GetVertices()[i].y;
-		idx++;
-		vertices[idx] = m->GetVertices()[i].z;
-	}
-	idx = 0;
-	for (std::vector<Triangle>::const_iterator iter = m->GetTriangles().begin(); iter != m->GetTriangles().end(); iter++)
-	{
-		indices[idx] = (*iter).verticeAIndex;
-		idx++;
-		indices[idx] = (*iter).verticeBIndex;
-		idx++;
-		indices[idx] = (*iter).verticeCIndex;
-	}
-	TriangleVertexArray* triangleArray =
-		new TriangleVertexArray(nbVertices, vertices, 3 * sizeof(float), nbTriangles,
-			indices, 3 * sizeof(int),
-			TriangleVertexArray::VertexDataType::VERTEX_FLOAT_TYPE,
-			TriangleVertexArray::IndexDataType::INDEX_INTEGER_TYPE);
+		PhysicsCommon* pc = DirectZob::GetInstance()->GetPhysicsEngine()->GetPhysicsCommon();
+		SetShapeType(eShapeType_convexMesh);
+		const int nbVertices = m->GetNbVertices();
+		const int nbTriangles = m->GetNbTriangles();
+		float* vertices = (float*)malloc(sizeof(float) * nbVertices * 3);
+		int* indices = (int*)malloc(sizeof(int) * nbTriangles * 3);
+		int idx = 0;
+		for (int i = 0; i < nbVertices; i++)
+		{
+			vertices[idx] = m->GetVertices()[i].x;
+			idx++;
+			vertices[idx] = m->GetVertices()[i].y;
+			idx++;
+			vertices[idx] = m->GetVertices()[i].z;
+		}
+		idx = 0;
+		//for (std::vector<Triangle>::const_iterator iter = m->GetTriangles().begin(); iter != m->GetTriangles().end(); iter++)
+		for(int i=0; i<nbTriangles; i++)
+		{
 
-	TriangleMesh* triangleMesh = pc->createTriangleMesh();
-	triangleMesh->addSubpart(triangleArray);
-	ConcaveMeshShape* concaveMesh = pc->createConcaveMeshShape(triangleMesh);
-	AddColliderInternal(concaveMesh);
+			const Triangle* t = &m->GetTriangles()->at(i);
+			indices[idx] = t->verticeAIndex;
+			idx++;
+			indices[idx] = t->verticeBIndex;
+			idx++;
+			indices[idx] = t->verticeCIndex;
+		}
+		TriangleVertexArray* triangleArray =
+			new TriangleVertexArray(nbVertices, vertices, 3 * sizeof(float), nbTriangles,
+				indices, 3 * sizeof(int),
+				TriangleVertexArray::VertexDataType::VERTEX_FLOAT_TYPE,
+				TriangleVertexArray::IndexDataType::INDEX_INTEGER_TYPE);
+
+		TriangleMesh* triangleMesh = pc->createTriangleMesh();
+		triangleMesh->addSubpart(triangleArray);
+		ConcaveMeshShape* concaveMesh = pc->createConcaveMeshShape(triangleMesh);
+		AddColliderInternal(concaveMesh);
+	}
+	else
+	{
+		RemoveCollider();
+	}
 }
 
 void ZobPhysicComponent::AddColliderInternal(CollisionShape* c)

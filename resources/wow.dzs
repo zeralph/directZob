@@ -13,28 +13,20 @@
         <Position x="0" y="0" z="0" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="1" y="1" z="1" />
-        <Mesh name="terrain2.obj" path="D:\Git\directZob\resources\" file="terrain2.obj" />
-        <Physic type="0">
-            <RigidBody type="0" active="0" />
-            <Collider type="0" radius="0.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
+        <Mesh name="terrain2.obj" file="terrain2.obj" path="D:\_GIT\directZob\resources\" />
+        <Physic type="1">
+            <RigidBody type="1" active="1" />
+            <Collider type="4" radius="0.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" convexMeshName="terrain2.obj" scale_with_object="1" />
+            <Material bounciness="0.100000" friction_coeff="2.010000" mass_density="0.010000" rolling_resistance="0.010000" />
         </Physic>
-        <ZobObject name="skull" guid="50397192" type="mesh">
-            <Position x="0" y="0" z="0" />
-            <Rotation x="-96.0953" y="-72.972" z="5.28264" />
-            <Scale x="1" y="1" z="1" />
-            <Mesh name="skull.obj" path="D:\Git\directZob\resources\" file="skull.obj" />
-            <Physic type="0">
-                <RigidBody type="0" active="0" />
-                <Collider type="0" radius="0.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
-            </Physic>
-        </ZobObject>
         <ZobObject name="blueLight" guid="4" type="light">
             <Position x="-12.1108" y="10.6891" z="22.9452" />
             <Rotation x="0" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
             <Physic type="0">
                 <RigidBody type="0" active="0" />
-                <Collider type="0" radius="0.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
+                <Collider type="0" radius="0.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" convexMeshName="" scale_with_object="1" />
+                <Material />
             </Physic>
             <Color r="0" g="0" b="255" />
             <Intensity>2.00</Intensity>
@@ -47,7 +39,8 @@
             <Scale x="1" y="1" z="1" />
             <Physic type="0">
                 <RigidBody type="0" active="0" />
-                <Collider type="0" radius="0.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
+                <Collider type="0" radius="0.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" convexMeshName="" scale_with_object="1" />
+                <Material />
             </Physic>
             <Color r="255" g="0" b="0" />
             <Intensity>2.00</Intensity>
@@ -55,13 +48,176 @@
             <Type>point</Type>
         </ZobObject>
     </ZobObject>
+    <ZobObject name="sphere_1" guid="50397189" type="mesh">
+        <Position x="0.239249" y="12.5663" z="-0.513038" />
+        <Rotation x="0" y="0" z="0" />
+        <Scale x="1" y="1" z="1" />
+        <Mesh name="sphere_r1.obj" file="sphere_r1.obj" path="D:\_GIT\directZob\resources\" />
+        <Physic type="2">
+            <RigidBody type="2" active="1" />
+            <Collider type="1" radius="1.000000" height="57589370978304.000000" halfExtends_x="1.000000" halfExtends_y="1.000000" halfExtends_z="1.000000" convexMeshName="" scale_with_object="1" />
+            <Material bounciness="0.100000" friction_coeff="2.010000" mass_density="0.010000" rolling_resistance="0.010000" />
+        </Physic>
+        <ZobObject name="Light_3" guid="50528277" type="light">
+            <Position x="-0.239249" y="-2.5663" z="0.513038" />
+            <Rotation x="0" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+            <Physic type="0">
+                <RigidBody type="0" active="0" />
+                <Collider type="0" radius="0.000000" height="1.000000" halfExtends_x="1.000000" halfExtends_y="1.000000" halfExtends_z="1.000000" convexMeshName="" scale_with_object="1" />
+                <Material />
+            </Physic>
+            <Color r="0" g="0" b="255" />
+            <Intensity>1.00</Intensity>
+            <FallOffDistance>20.00</FallOffDistance>
+            <Type>point</Type>
+        </ZobObject>
+        <ZobObject name="Fixed_camera_1" guid="3062996" type="camera">
+            <Position x="-0.000249013" y="-0.000300407" z="-4.61837" />
+            <Rotation x="-2.8392" y="-4.42707" z="0.22091" />
+            <Scale x="1" y="1" z="1" />
+            <Physic type="0">
+                <RigidBody type="0" active="0" />
+                <Collider type="0" radius="1.000000" height="2.000000" halfExtends_x="1.000000" halfExtends_y="1.000000" halfExtends_z="1.000000" convexMeshName="" scale_with_object="1" />
+                <Material />
+            </Physic>
+            <Controller>0</Controller>
+            <Fov>45.00</Fov>
+        </ZobObject>
+    </ZobObject>
+    <ZobObject name="sphere_2" guid="50397192" type="mesh">
+        <Position x="-1.10005" y="12.0887" z="0.888823" />
+        <Rotation x="0" y="0" z="0" />
+        <Scale x="1" y="1" z="1" />
+        <Mesh name="sphere_r1.obj" file="sphere_r1.obj" path="D:\_GIT\directZob\resources\" />
+        <Physic type="2">
+            <RigidBody type="2" active="1" />
+            <Collider type="1" radius="1.000000" height="1.000000" halfExtends_x="1.000000" halfExtends_y="1.000000" halfExtends_z="1.000000" convexMeshName="" scale_with_object="1" />
+            <Material bounciness="0.100000" friction_coeff="2.010000" mass_density="0.010000" rolling_resistance="0.010000" />
+        </Physic>
+        <ZobObject name="Light_5" guid="50528279" type="light">
+            <Position x="1.10005" y="-2.0887" z="-0.888823" />
+            <Rotation x="0" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+            <Physic type="0">
+                <RigidBody type="0" active="0" />
+                <Collider type="0" radius="0.000000" height="1.000000" halfExtends_x="1.000000" halfExtends_y="1.000000" halfExtends_z="1.000000" convexMeshName="" scale_with_object="1" />
+                <Material />
+            </Physic>
+            <Color r="255" g="0" b="255" />
+            <Intensity>1.00</Intensity>
+            <FallOffDistance>20.00</FallOffDistance>
+            <Type>point</Type>
+        </ZobObject>
+    </ZobObject>
+    <ZobObject name="sphere_3" guid="134742025" type="mesh">
+        <Position x="1.81416" y="7.06142" z="0.888823" />
+        <Rotation x="0" y="0" z="0" />
+        <Scale x="1" y="1" z="1" />
+        <Mesh name="sphere_r1.obj" file="sphere_r1.obj" path="D:\_GIT\directZob\resources\" />
+        <Physic type="2">
+            <RigidBody type="2" active="1" />
+            <Collider type="1" radius="1.000000" height="1.000000" halfExtends_x="1.000000" halfExtends_y="1.000000" halfExtends_z="1.000000" convexMeshName="" scale_with_object="1" />
+            <Material bounciness="0.100000" friction_coeff="2.010000" mass_density="0.010000" rolling_resistance="0.010000" />
+        </Physic>
+        <ZobObject name="light_point" guid="50528269" type="light">
+            <Position x="5.48747" y="0.44445" z="-0.208832" />
+            <Rotation x="90" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+            <Physic type="0">
+                <RigidBody type="0" active="0" />
+                <Collider type="0" radius="0.000000" height="0.010000" halfExtends_x="1.000000" halfExtends_y="1.000000" halfExtends_z="1.000000" convexMeshName="" scale_with_object="1" />
+                <Material />
+            </Physic>
+            <Color r="255" g="0" b="0" />
+            <Intensity>1.00</Intensity>
+            <FallOffDistance>10.00</FallOffDistance>
+            <Type>point</Type>
+        </ZobObject>
+    </ZobObject>
+    <ZobObject name="sphere_2" guid="134742026" type="mesh">
+        <Position x="-1.10005" y="7.06142" z="0.888823" />
+        <Rotation x="0" y="0" z="0" />
+        <Scale x="1" y="1" z="1" />
+        <Mesh name="sphere_r1.obj" file="sphere_r1.obj" path="D:\_GIT\directZob\resources\" />
+        <Physic type="2">
+            <RigidBody type="2" active="1" />
+            <Collider type="1" radius="1.000000" height="1.000000" halfExtends_x="1.000000" halfExtends_y="1.000000" halfExtends_z="1.000000" convexMeshName="" scale_with_object="1" />
+            <Material bounciness="0.100000" friction_coeff="2.010000" mass_density="0.010000" rolling_resistance="0.010000" />
+        </Physic>
+        <ZobObject name="Light_2" guid="50528274" type="light">
+            <Position x="1.10005" y="2.93858" z="-0.888823" />
+            <Rotation x="0" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+            <Physic type="0">
+                <RigidBody type="0" active="0" />
+                <Collider type="0" radius="1881142305353587752960.000000" height="1.000000" halfExtends_x="1.000000" halfExtends_y="1.000000" halfExtends_z="1.000000" convexMeshName="" scale_with_object="1" />
+                <Material />
+            </Physic>
+            <Color r="0" g="255" b="0" />
+            <Intensity>1.00</Intensity>
+            <FallOffDistance>20.00</FallOffDistance>
+            <Type>point</Type>
+        </ZobObject>
+    </ZobObject>
+    <ZobObject name="sphere_2" guid="134742027" type="mesh">
+        <Position x="-0.023706" y="10.2696" z="-0.605568" />
+        <Rotation x="0" y="0" z="0" />
+        <Scale x="1" y="1" z="1" />
+        <Mesh name="sphere_r1.obj" file="sphere_r1.obj" path="D:\_GIT\directZob\resources\" />
+        <Physic type="2">
+            <RigidBody type="2" active="1" />
+            <Collider type="1" radius="1.000000" height="1.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" convexMeshName="" scale_with_object="1" />
+            <Material bounciness="0.100000" friction_coeff="2.010000" mass_density="0.010000" rolling_resistance="0.010000" />
+        </Physic>
+        <ZobObject name="Light_4" guid="50528278" type="light">
+            <Position x="0.023706" y="-0.2696" z="0.605568" />
+            <Rotation x="0" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+            <Physic type="0">
+                <RigidBody type="0" active="0" />
+                <Collider type="0" radius="0.000000" height="1.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" convexMeshName="" scale_with_object="1" />
+                <Material />
+            </Physic>
+            <Color r="64" g="0" b="128" />
+            <Intensity>1.00</Intensity>
+            <FallOffDistance>20.00</FallOffDistance>
+            <Type>point</Type>
+        </ZobObject>
+    </ZobObject>
+    <ZobObject name="cube" guid="3051275" type="mesh">
+        <Position x="2.851" y="15.112" z="6.177" />
+        <Rotation x="76.8126" y="32.5021" z="97.7653" />
+        <Scale x="2" y="2" z="2" />
+        <Mesh name="cube.obj" file="cube.obj" path="D:\_GIT\directZob\resources\" />
+        <Physic type="2">
+            <RigidBody type="2" active="1" />
+            <Collider type="3" radius="1.000000" height="2.000000" halfExtends_x="1.000000" halfExtends_y="1.000000" halfExtends_z="1.000000" convexMeshName="" scale_with_object="1" />
+            <Material bounciness="0.100000" friction_coeff="2.010000" mass_density="0.010000" rolling_resistance="0.010000" />
+        </Physic>
+        <ZobObject name="Light_6" guid="3053276" type="light">
+            <Position x="-0.178331" y="-1.50056" z="0.272859" />
+            <Rotation x="-172.884" y="-46.4542" z="-148.632" />
+            <Scale x="1" y="1" z="1" />
+            <Physic type="0">
+                <RigidBody type="0" active="0" />
+                <Collider type="0" radius="1.000000" height="2.000000" halfExtends_x="1.000000" halfExtends_y="1.000000" halfExtends_z="1.000000" convexMeshName="" scale_with_object="1" />
+                <Material />
+            </Physic>
+            <Color r="255" g="255" b="0" />
+            <Intensity>5.00</Intensity>
+            <FallOffDistance>50.00</FallOffDistance>
+            <Type>spot</Type>
+        </ZobObject>
+    </ZobObject>
     <ZobObject name="Camera_1" guid="3" type="camera">
         <Position x="-59.12" y="10.3813" z="39.0735" />
-        <Rotation x="-180" y="75.0781" z="-180" />
+        <Rotation x="179.97" y="75.0781" z="179.977" />
         <Scale x="1" y="1" z="1" />
         <Physic type="0">
             <RigidBody type="0" active="0" />
-            <Collider type="0" radius="0.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
+            <Collider type="0" radius="0.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" convexMeshName="" scale_with_object="1" />
+            <Material />
         </Physic>
         <Controller>3</Controller>
         <Fov>45.00</Fov>

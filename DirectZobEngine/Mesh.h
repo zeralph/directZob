@@ -30,7 +30,7 @@ public:
 	const uint							GetNbTriangles() const { return m_nbFaces; }
 	const uint							GetNbVertices() const { return m_nbVertices; }
 	const ZobVector3*					GetVertices() const { return m_vertices; }
-	const std::vector<Triangle>			GetTriangles() const { return m_triangles; }
+	const std::vector<Triangle>*		GetTriangles() const { return &m_triangles; }
 	const uint*							GetIndices() const { return m_indices; }
 	const std::string&					GetName() const { return m_name; }
 	const std::string&					GetPath() const { return m_path; }
