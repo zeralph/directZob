@@ -7,13 +7,13 @@
         <ClearColor r="128" g="128" b="128" />
         <FogDensity>19.00</FogDensity>
         <FogDistance>61.00</FogDistance>
-        <FogType>linear</FogType>
+        <FogType>none</FogType>
     </Globals>
-    <ZobObject name="terrain" guid="1" type="mesh">
+    <ZobObject name="beach2" guid="1" type="mesh">
         <Position x="0" y="0" z="0" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="1" y="1" z="1" />
-        <Mesh name="terrain2.obj" file="terrain2.obj" path="D:\_GIT\directZob\resources\" />
+        <Mesh name="terrain2.obj" file="terrain2.obj" path="D:\Git\directZob\resources\" />
         <Physic type="1">
             <RigidBody type="1" active="1" />
             <Collider type="4" radius="0.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" convexMeshName="terrain2.obj" scale_with_object="1" />
@@ -52,10 +52,10 @@
         <Position x="0.239249" y="12.5663" z="-0.513038" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="1" y="1" z="1" />
-        <Mesh name="sphere_r1.obj" file="sphere_r1.obj" path="D:\_GIT\directZob\resources\" />
+        <Mesh name="sphere_r1.obj" file="sphere_r1.obj" path="D:\Git\directZob\resources\" />
         <Physic type="2">
             <RigidBody type="2" active="1" />
-            <Collider type="1" radius="1.000000" height="57589370978304.000000" halfExtends_x="1.000000" halfExtends_y="1.000000" halfExtends_z="1.000000" convexMeshName="" scale_with_object="1" />
+            <Collider type="1" radius="1.000000" height="1.000000" halfExtends_x="1.000000" halfExtends_y="1.000000" halfExtends_z="1.000000" convexMeshName="" scale_with_object="1" />
             <Material bounciness="0.100000" friction_coeff="2.010000" mass_density="0.010000" rolling_resistance="0.010000" />
         </Physic>
         <ZobObject name="Light_3" guid="50528277" type="light">
@@ -73,7 +73,7 @@
             <Type>point</Type>
         </ZobObject>
         <ZobObject name="Fixed_camera_1" guid="3062996" type="camera">
-            <Position x="-0.000249013" y="-0.000300407" z="-4.61837" />
+            <Position x="-0.000249013" y="-0.000300407" z="-18.1401" />
             <Rotation x="-2.8392" y="-4.42707" z="0.22091" />
             <Scale x="1" y="1" z="1" />
             <Physic type="0">
@@ -89,7 +89,7 @@
         <Position x="-1.10005" y="12.0887" z="0.888823" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="1" y="1" z="1" />
-        <Mesh name="sphere_r1.obj" file="sphere_r1.obj" path="D:\_GIT\directZob\resources\" />
+        <Mesh name="sphere_r1.obj" file="sphere_r1.obj" path="D:\Git\directZob\resources\" />
         <Physic type="2">
             <RigidBody type="2" active="1" />
             <Collider type="1" radius="1.000000" height="1.000000" halfExtends_x="1.000000" halfExtends_y="1.000000" halfExtends_z="1.000000" convexMeshName="" scale_with_object="1" />
@@ -114,7 +114,7 @@
         <Position x="1.81416" y="7.06142" z="0.888823" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="1" y="1" z="1" />
-        <Mesh name="sphere_r1.obj" file="sphere_r1.obj" path="D:\_GIT\directZob\resources\" />
+        <Mesh name="sphere_r1.obj" file="sphere_r1.obj" path="D:\Git\directZob\resources\" />
         <Physic type="2">
             <RigidBody type="2" active="1" />
             <Collider type="1" radius="1.000000" height="1.000000" halfExtends_x="1.000000" halfExtends_y="1.000000" halfExtends_z="1.000000" convexMeshName="" scale_with_object="1" />
@@ -139,7 +139,7 @@
         <Position x="-1.10005" y="7.06142" z="0.888823" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="1" y="1" z="1" />
-        <Mesh name="sphere_r1.obj" file="sphere_r1.obj" path="D:\_GIT\directZob\resources\" />
+        <Mesh name="sphere_r1.obj" file="sphere_r1.obj" path="D:\Git\directZob\resources\" />
         <Physic type="2">
             <RigidBody type="2" active="1" />
             <Collider type="1" radius="1.000000" height="1.000000" halfExtends_x="1.000000" halfExtends_y="1.000000" halfExtends_z="1.000000" convexMeshName="" scale_with_object="1" />
@@ -164,7 +164,7 @@
         <Position x="-0.023706" y="10.2696" z="-0.605568" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="1" y="1" z="1" />
-        <Mesh name="sphere_r1.obj" file="sphere_r1.obj" path="D:\_GIT\directZob\resources\" />
+        <Mesh name="sphere_r1.obj" file="sphere_r1.obj" path="D:\Git\directZob\resources\" />
         <Physic type="2">
             <RigidBody type="2" active="1" />
             <Collider type="1" radius="1.000000" height="1.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" convexMeshName="" scale_with_object="1" />
@@ -189,7 +189,7 @@
         <Position x="2.851" y="15.112" z="6.177" />
         <Rotation x="76.8126" y="32.5021" z="97.7653" />
         <Scale x="2" y="2" z="2" />
-        <Mesh name="cube.obj" file="cube.obj" path="D:\_GIT\directZob\resources\" />
+        <Mesh name="cube.obj" file="cube.obj" path="D:\Git\directZob\resources\" />
         <Physic type="2">
             <RigidBody type="2" active="1" />
             <Collider type="3" radius="1.000000" height="2.000000" halfExtends_x="1.000000" halfExtends_y="1.000000" halfExtends_z="1.000000" convexMeshName="" scale_with_object="1" />

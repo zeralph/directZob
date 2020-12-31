@@ -20,6 +20,7 @@ ZobPhysicComponent::ZobPhysicComponent(TiXmlNode* node)
 	m_bUpdateSize = true;
 	m_concaveMeshVertices = NULL;
 	m_concaveMeshIndices = NULL;
+	m_concaveMeshNbTriangles = 0;
 	if (node)
 	{
 		TiXmlElement* p = (TiXmlElement*)node;
@@ -115,10 +116,6 @@ void ZobPhysicComponent::RemoveCollider()
 		m_rigidBody->removeCollider(m_collider);
 		m_collider = NULL;
 	}
-	free(m_concaveMeshVertices);
-	free(m_concaveMeshIndices);
-	m_concaveMeshVertices = NULL;
-	m_concaveMeshIndices = NULL;
 }
 
 void ZobPhysicComponent::SetType(ePhysicComponentType t)
@@ -161,6 +158,14 @@ void ZobPhysicComponent::UpdateShapeType()
 {
 	if(m_nextShapeType != m_shapeType)
 	{ 
+		if (m_shapeType == eShapeType_convexMesh)
+		{
+			free(m_concaveMeshVertices);
+			free(m_concaveMeshIndices);
+			m_concaveMeshVertices = NULL;
+			m_concaveMeshIndices = NULL;
+			m_concaveMeshNbTriangles = 0;
+		}
 		m_shapeType = m_nextShapeType;
 		switch(m_shapeType)
 		{
@@ -380,34 +385,38 @@ void ZobPhysicComponent::AddMeshCollider()
 		SetShapeType(eShapeType_convexMesh);
 		const int nbVertices = m->GetNbVertices();
 		const int nbTriangles = m->GetNbTriangles();
-		float* vertices = (float*)malloc(sizeof(float) * nbVertices * 3);
-		int* indices = (int*)malloc(sizeof(int) * nbTriangles * 3);
+		m_concaveMeshVertices = (float*)malloc(sizeof(float) * nbVertices * 3);
+		m_concaveMeshIndices = (uint*)malloc(sizeof(uint) * nbTriangles * 3);
+		m_concaveMeshNbTriangles = nbTriangles;
 		int idx = 0;
 		for (int i = 0; i < nbVertices; i++)
 		{
-			vertices[idx] = m->GetVertices()[i].x;
+			m_concaveMeshVertices[idx] = m->GetVertices()[i].x;
 			idx++;
-			vertices[idx] = m->GetVertices()[i].y;
+			m_concaveMeshVertices[idx] = m->GetVertices()[i].y;
 			idx++;
-			vertices[idx] = m->GetVertices()[i].z;
+			m_concaveMeshVertices[idx] = m->GetVertices()[i].z;
+			idx++;
 		}
+		assert(idx == nbVertices * 3);
 		idx = 0;
 		//for (std::vector<Triangle>::const_iterator iter = m->GetTriangles().begin(); iter != m->GetTriangles().end(); iter++)
 		for(int i=0; i<nbTriangles; i++)
 		{
-
 			const Triangle* t = &m->GetTriangles()->at(i);
-			indices[idx] = t->verticeAIndex;
+			m_concaveMeshIndices[idx] = (uint)t->verticeAIndex;
 			idx++;
-			indices[idx] = t->verticeBIndex;
+			m_concaveMeshIndices[idx] = (uint)t->verticeBIndex;
 			idx++;
-			indices[idx] = t->verticeCIndex;
+			m_concaveMeshIndices[idx] = (uint)t->verticeCIndex;
+			idx++;
 		}
+		assert(idx == nbTriangles * 3);
 		TriangleVertexArray* triangleArray =
-			new TriangleVertexArray(nbVertices, vertices, 3 * sizeof(float), nbTriangles,
-				indices, 3 * sizeof(int),
-				TriangleVertexArray::VertexDataType::VERTEX_FLOAT_TYPE,
-				TriangleVertexArray::IndexDataType::INDEX_INTEGER_TYPE);
+			new TriangleVertexArray(nbVertices,  m_concaveMeshVertices, 3 * sizeof(float), 
+									nbTriangles, m_concaveMeshIndices,  3 * sizeof(uint),
+									TriangleVertexArray::VertexDataType::VERTEX_FLOAT_TYPE,
+									TriangleVertexArray::IndexDataType::INDEX_INTEGER_TYPE);
 
 		TriangleMesh* triangleMesh = pc->createTriangleMesh();
 		triangleMesh->addSubpart(triangleArray);
@@ -492,6 +501,18 @@ void ZobPhysicComponent::DrawGizmos(const Camera* camera, const ZobVector3* posi
 			e->QueueCapsule(camera, &mat, r, h, &dir, c, bold, false);
 			break;
 		case eShapeType::eShapeType_convexMesh:
+			for (int i=0; i< m_concaveMeshNbTriangles; i+=3)
+			{
+				int i1 = m_concaveMeshIndices[i] * 3;
+				int i2 = m_concaveMeshIndices[i+1] * 3;
+				int i3 = m_concaveMeshIndices[i+2] * 3;
+				ZobVector3 v0 = ZobVector3(m_concaveMeshVertices[i1], m_concaveMeshVertices[i1 + 1], m_concaveMeshVertices[i1 + 2]);
+				ZobVector3 v1 = ZobVector3(m_concaveMeshVertices[i2], m_concaveMeshVertices[i2 + 1], m_concaveMeshVertices[i2 + 2]);
+				ZobVector3 v2 = ZobVector3(m_concaveMeshVertices[i3], m_concaveMeshVertices[i3 + 1], m_concaveMeshVertices[i3 + 2]);
+				e->QueueLine(camera, &v0, &v1, c, bold, false);
+				e->QueueLine(camera, &v1, &v2, c, bold, false);
+				e->QueueLine(camera, &v2, &v0, c, bold, false);
+			}
 		default:
 			break;
 		}

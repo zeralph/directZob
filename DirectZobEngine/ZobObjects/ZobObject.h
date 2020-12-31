@@ -25,7 +25,7 @@ public:
 	//virtual void					Update(const ZobMatrix4x4& parentMatrix, const ZobMatrix4x4& parentRSMatrix);
 	virtual void					Init();
 	virtual void					PreUpdate();
-	virtual void					Update();
+	virtual void					Update(float dt);
 	virtual void					UpdateBehavior(float dt);
 	virtual void					UpdateMesh(const Camera* camera, Core::Engine* engine);
 	virtual void					QueueForDrawing(const Camera* camera, Core::Engine* engine);

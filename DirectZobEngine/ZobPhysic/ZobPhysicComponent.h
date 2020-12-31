@@ -87,8 +87,8 @@ private:
 	void								RemoveCollider();
 
 	float*	m_concaveMeshVertices;
-	int* m_concaveMeshIndices;
-
+	uint* m_concaveMeshIndices;
+	int m_concaveMeshNbTriangles;
 	ePhysicComponentType m_type;
 	RigidBody* m_rigidBody;
 	Collider* m_collider;	

@@ -134,10 +134,10 @@ void ZobObjectManager::UpdateBehavior(float dt)
 	m_rootObject->UpdateBehavior(dt);
 }
 
-void ZobObjectManager::StartUpdateScene(const Camera* camera, Core::Engine* engine)
+void ZobObjectManager::StartUpdateScene(const Camera* camera, Core::Engine* engine, float dt)
 {
 	m_drawTick = clock();
-	g_geometryThread = std::thread(&ZobObjectManager::UpdateObjects, this, camera, engine);
+	g_geometryThread = std::thread(&ZobObjectManager::UpdateObjects, this, camera, engine, dt);
 }
 
 float ZobObjectManager::WaitForUpdateObjectend()
@@ -147,9 +147,9 @@ float ZobObjectManager::WaitForUpdateObjectend()
 	return m_time;
 }
 
-void ZobObjectManager::UpdateObjects(const Camera* camera, Core::Engine* engine)
+void ZobObjectManager::UpdateObjects(const Camera* camera, Core::Engine* engine, float dt)
 {
-	m_rootObject->Update();
+	m_rootObject->Update(dt);
 	m_rootObject->UpdateMesh(camera, engine);
 	m_time = (float)(clock() - m_drawTick) / CLOCKS_PER_SEC * 1000;
 }

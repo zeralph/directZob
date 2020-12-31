@@ -17,7 +17,7 @@ public:
 	//friend void ZobObject::SetParent(ZobObject* o);
 
 
-	void StartUpdateScene(const Camera* camera, Core::Engine* engine);
+	void StartUpdateScene(const Camera* camera, Core::Engine* engine, float dt);
 	float WaitForUpdateObjectend();
 	void QueueForDrawing(const Camera* camera, Core::Engine* engine);
 	void Init();
@@ -41,7 +41,7 @@ public:
 	void AddIdToDeleted(ulong id) { m_deletedIds.push_back(id); }
 	bool IsDeleted(ulong id);
 private:
-	void UpdateObjects(const Camera* camera, Core::Engine* engine);
+	void UpdateObjects(const Camera* camera, Core::Engine* engine, float dt);
 	void GetZobObjectListInternal(const ZobObject* z, std::string& str);
 	ZobObject* LoadEditorMesh(const char* name, const char* meshPath, const char* meshFile, ZobObject* parent);
 	ZobObject* GetZobObjectFromPartialId(ZobObject* z, const uint id) const;

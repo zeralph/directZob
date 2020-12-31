@@ -49,7 +49,7 @@ ZobObject::ZobObject(Type t, SubType s, const std::string& name, ZobObject* pare
 	m_renderOptions.bTransparency = false;
 	ZobVector3 p = ZobVector3::Vector3Zero;
 	m_physicComponent->Init(&p, &p);
-	Update();
+	Update(0);
 	DirectZob::RemoveIndent();
 }
 
@@ -132,7 +132,7 @@ ZobObject::ZobObject(DirectZobType::guid id, TiXmlElement* node, ZobObject* pare
 	//Init
 	m_physicComponent->Init(&position, &rotation);
 	SetScale(scale.x, scale.y, scale.z);
-	Update();
+	Update(0);
 	DirectZob::RemoveIndent();
 }
 
@@ -319,7 +319,7 @@ void ZobObject::UpdateBehavior(float dt)
 }
 
 //void ZobObject::Update(const ZobMatrix4x4& parentMatrix, const ZobMatrix4x4& parentRSMatrix)
-void ZobObject::Update()
+void ZobObject::Update(float dt)
 {
 	Transform parentTransform;
 	ZobVector3 parentScale;
@@ -368,7 +368,7 @@ void ZobObject::Update()
 	for (int i = 0; i < m_children.size(); i++)
 	{
 		ZobObject* z = m_children[i];
-		z->Update();
+		z->Update(dt);
 	}
 }
 

@@ -50,7 +50,7 @@ public:
 	~Camera() override;
 
 	//void					Update(const ZobMatrix4x4& parentMatrix, const ZobMatrix4x4& parentRSMatrix) override;
-	void					Update() override;
+	void					Update(float dt) override;
 	void					PreUpdate() override;
 	void					UpdateBehavior(float dt) override;
 	void					Init() override;

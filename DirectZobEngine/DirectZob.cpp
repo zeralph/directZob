@@ -211,7 +211,7 @@ int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUp
 			}
 			cam->UpdateAfter();
 
-			m_zobObjectManager->StartUpdateScene(cam, m_engine);
+			m_zobObjectManager->StartUpdateScene(cam, m_engine, m_frameTime / 1000.0f);
 			m_geometryTime = m_zobObjectManager->WaitForUpdateObjectend();
 			m_renderTime = m_engine->WaitForRasterizersEnd();
 			m_physicTime = 0;
