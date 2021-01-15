@@ -15,13 +15,13 @@ public:
 
 	enum ePhysicComponentType
 	{
-		ePhysicComponentType_none = 0,
-		ePhysicComponentType_static,
-		ePhysicComponentType_dynamic,
+		ePhysicComponentType_static= rp3d::BodyType::STATIC,
+		ePhysicComponentType_dynamic = rp3d::BodyType::DYNAMIC,
 	};
 
 	enum eShapeType
 	{
+		eShapeType_uninit=-1,
 		eShapeType_none = 0,
 		eShapeType_sphere,
 		eShapeType_capsule,
@@ -85,7 +85,10 @@ private:
 	bool								UpdateColliderSize();
 	void								UpdateShapeType();
 	void								RemoveCollider();
-
+	void								WriteColliderNode(TiXmlNode* node);
+	void								ReadColliderNode(TiXmlNode* node);
+	void								WriteMaterialNode(TiXmlNode* node);
+	void								ReadMaterialNode(TiXmlNode* node);
 	float*	m_concaveMeshVertices;
 	uint* m_concaveMeshIndices;
 	int m_concaveMeshNbTriangles;
@@ -103,6 +106,8 @@ private:
 	float m_radius;
 	ZobVector3 m_halfExtends;
 	std::string m_convexMeshName;
+	std::string m_convexMeshPath;
+	std::string m_convexMeshFile;
 	float m_height;
 	bool m_bUpdateSize;
 };

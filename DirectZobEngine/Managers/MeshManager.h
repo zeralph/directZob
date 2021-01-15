@@ -13,6 +13,7 @@ public:
 
 	Mesh* LoadMesh(std::string& name, std::string& path, std::string& file);
 	Mesh* GetMesh(std::string& name) const;
+	Mesh* GetOrLoadMesh(std::string& name, std::string& path, std::string& file);
 	const int GetNbMeshes() const { return (int)m_meshes.size(); }
 	std::string GetMeshList();
 	const Mesh* GetMesh(const int i) const;

@@ -28,4 +28,5 @@ class ZobBehaviorCar : public ZobBehavior
 		ZobVector3 m_frontWheelPosition;
 		ZobVector3 m_rearWheelPosition;
 		bool m_drifting;
+		ZobVector3 m_groundContactPoint;
 };

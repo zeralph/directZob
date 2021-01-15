@@ -158,5 +158,10 @@ namespace DirectZobEditor
         {
             
         }
+
+        private void comboPhysicType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

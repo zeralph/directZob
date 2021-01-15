@@ -768,9 +768,6 @@ void ZobObject::GetPhysicComponentInfo(std::string& type, std::string& shapeType
 	ZobPhysicComponent::eShapeType st = GetPhysicComponent()->GetShapeType();
 	switch (t)
 	{
-	case ZobPhysicComponent::ePhysicComponentType_none:
-		type = std::string("None");
-		break;
 	case ZobPhysicComponent::ePhysicComponentType_dynamic:
 		type = std::string("Dynamic");
 		break;
@@ -807,11 +804,7 @@ void ZobObject::GetPhysicComponentInfo(std::string& type, std::string& shapeType
 void ZobObject::SetPhysicComponentInfo(std::string& type, std::string& shapeType)
 {
 	ZobPhysicComponent::ePhysicComponentType t;
-	if (type == "None")
-	{
-		t = ZobPhysicComponent::ePhysicComponentType_none;
-	}
-	else if (type == "Dynamic")
+	if (type == "Dynamic")
 	{
 		t = ZobPhysicComponent::ePhysicComponentType_dynamic;
 	}
@@ -821,7 +814,7 @@ void ZobObject::SetPhysicComponentInfo(std::string& type, std::string& shapeType
 	}
 	else
 	{
-		t = ZobPhysicComponent::ePhysicComponentType_none;
+		t = ZobPhysicComponent::ePhysicComponentType_static;
 	}
 	GetPhysicComponentNoConst()->SetType(t);
 	ZobPhysicComponent::eShapeType st;
@@ -894,6 +887,7 @@ void ZobObject::SetPhysicComponentColliderInfo(float bounciness, float frictionC
 		material.setFrictionCoefficient(frictionCoeff);
 		material.setMassDensity(massDensity);
 		material.setRollingResistance(RollingResistance);
+		c->setMaterial(material);
 	}
 }
 

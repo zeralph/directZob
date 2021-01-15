@@ -67,6 +67,16 @@ Mesh* MeshManager::GetMesh(std::string& name) const
 	return NULL;
 }
 
+Mesh* MeshManager::GetOrLoadMesh(std::string& name, std::string& path, std::string& file)
+{
+	Mesh* m = GetMesh(name);
+	if (!m)
+	{
+		m = LoadMesh(name, path, file);
+	}
+	return m;
+}
+
 std::string MeshManager::GetMeshList()
 {
 	std::string s = "[";

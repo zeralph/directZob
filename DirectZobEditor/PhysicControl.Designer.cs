@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.PhysicsGroupBox = new System.Windows.Forms.GroupBox();
+            this.checkBoxScaleWithObject = new System.Windows.Forms.CheckBox();
             this.textRollingResistance = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
             this.textMassDensity = new System.Windows.Forms.TextBox();
@@ -50,7 +51,6 @@
             this.label2 = new System.Windows.Forms.Label();
             this.comboPhysicType = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.checkBoxScaleWithObject = new System.Windows.Forms.CheckBox();
             this.PhysicsGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -86,6 +86,19 @@
             this.PhysicsGroupBox.TabStop = false;
             this.PhysicsGroupBox.Text = "Physics";
             this.PhysicsGroupBox.Enter += new System.EventHandler(this.Physics_Enter);
+            // 
+            // checkBoxScaleWithObject
+            // 
+            this.checkBoxScaleWithObject.AutoSize = true;
+            this.checkBoxScaleWithObject.Checked = true;
+            this.checkBoxScaleWithObject.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxScaleWithObject.Location = new System.Drawing.Point(96, 285);
+            this.checkBoxScaleWithObject.Name = "checkBoxScaleWithObject";
+            this.checkBoxScaleWithObject.Size = new System.Drawing.Size(107, 17);
+            this.checkBoxScaleWithObject.TabIndex = 24;
+            this.checkBoxScaleWithObject.Text = "Scale with object";
+            this.checkBoxScaleWithObject.UseVisualStyleBackColor = true;
+            this.checkBoxScaleWithObject.CheckedChanged += new System.EventHandler(this.checkBoxScaleWithObject_CheckedChanged);
             // 
             // textRollingResistance
             // 
@@ -253,13 +266,13 @@
             this.comboPhysicType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboPhysicType.FormattingEnabled = true;
             this.comboPhysicType.Items.AddRange(new object[] {
-            "None",
             "Static",
             "Dynamic"});
             this.comboPhysicType.Location = new System.Drawing.Point(96, 43);
             this.comboPhysicType.Name = "comboPhysicType";
             this.comboPhysicType.Size = new System.Drawing.Size(174, 21);
             this.comboPhysicType.TabIndex = 1;
+            this.comboPhysicType.SelectedIndexChanged += new System.EventHandler(this.comboPhysicType_SelectedIndexChanged);
             // 
             // label1
             // 
@@ -269,19 +282,6 @@
             this.label1.Size = new System.Drawing.Size(31, 13);
             this.label1.TabIndex = 0;
             this.label1.Text = "Type";
-            // 
-            // checkBoxScaleWithObject
-            // 
-            this.checkBoxScaleWithObject.AutoSize = true;
-            this.checkBoxScaleWithObject.Checked = true;
-            this.checkBoxScaleWithObject.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxScaleWithObject.Location = new System.Drawing.Point(96, 285);
-            this.checkBoxScaleWithObject.Name = "checkBoxScaleWithObject";
-            this.checkBoxScaleWithObject.Size = new System.Drawing.Size(107, 17);
-            this.checkBoxScaleWithObject.TabIndex = 24;
-            this.checkBoxScaleWithObject.Text = "Scale with object";
-            this.checkBoxScaleWithObject.UseVisualStyleBackColor = true;
-            this.checkBoxScaleWithObject.CheckedChanged += new System.EventHandler(this.checkBoxScaleWithObject_CheckedChanged);
             // 
             // PhysicControl
             // 

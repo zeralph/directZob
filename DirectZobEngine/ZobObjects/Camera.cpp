@@ -213,21 +213,24 @@ void Camera::RotateAroundPointAxis(const ZobVector3* point, const ZobVector3* ax
 	t = Transform::identity();
 	Vector3 p = Vector3(point->x, point->y, point->z);
 	Quaternion q = m_physicComponent->QuaternionFromAxisAngle(&paxis, angle);
-	q.normalize();
-	t = Transform(Vector3::zero(), q);
-	t2 = Transform::identity();
-	Vector3 localPos = m_physicComponent->GetLocalTransform().getPosition();
-	t2.setPosition(localPos - p);
-	t2 = t * t2;
-	localPos = t2.getPosition();
-	t2.setPosition(p + localPos);
-	m_physicComponent->SetLocalTransform(t2);
+	if (q.isValid() && q.isFinite())
+	{
+		q.normalize();
+		t = Transform(Vector3::zero(), q);
+		t2 = Transform::identity();
+		Vector3 localPos = m_physicComponent->GetLocalTransform().getPosition();
+		t2.setPosition(localPos - p);
+		t2 = t * t2;
+		localPos = t2.getPosition();
+		t2.setPosition(p + localPos);
+		m_physicComponent->SetLocalTransform(t2);
 
-	Transform parentTransform = m_parent->GetPhysicComponent()->GetWorldTransform();
-	t2 = parentTransform * t2;
-	m_physicComponent->SetWorldTransform(t2);
+		Transform parentTransform = m_parent->GetPhysicComponent()->GetWorldTransform();
+		t2 = parentTransform * t2;
+		m_physicComponent->SetWorldTransform(t2);
 
-	LookAt(point, false);
+		LookAt(point, false);
+	}
 }
 
 void Camera::RecomputeFLUVectors(const ZobVector3* forwardV, const ZobVector3* upV)

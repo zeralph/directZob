@@ -3,40 +3,32 @@
     <Globals>
         <AmbientColor r="206" g="206" b="0" />
         <AmbientIntensity>0.39</AmbientIntensity>
-        <FogColor r="0" g="128" b="255" />
-        <ClearColor r="0" g="128" b="255" />
-        <FogDensity>0.00</FogDensity>
+        <FogColor r="255" g="128" b="0" />
+        <ClearColor r="255" g="128" b="0" />
+        <FogDensity>10.00</FogDensity>
         <FogDistance>42.00</FogDistance>
         <FogType>exp2</FogType>
     </Globals>
-    <ZobObject name="newObject_21" guid="3066498" type="mesh">
+    <ZobObject name="sol" guid="3001002">
         <Position x="0" y="0" z="0" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="1" y="1" z="1" />
-        <Mesh name="bigPlane.obj" file="bigPlane.obj" path="D:\Git\directZob\resources\" />
-        <Physic>
-            <RigidBody type="0" active="1">
-                <Box halfExtends_x="1000.000000" halfExtends_y="0.100000" halfExtends_z="1000.000000">
-                    <Material bounciness="0.100000" friction_coeff="2.010000" mass_density="0.010000" rolling_resistance="0.010000" />
-                </Box>
-            </RigidBody>
-        </Physic>
     </ZobObject>
     <ZobObject name="car" guid="3001003">
-        <Position x="0.000310642" y="1.10515" z="2.0197" />
-        <Rotation x="0.101911" y="-87.1501" z="-0.0969636" />
+        <Position x="0" y="3.30091" z="2.02003" />
+        <Rotation x="0" y="0" z="0" />
         <Scale x="1" y="1" z="1" />
         <Behavior type="1" />
         <Physic>
             <RigidBody type="0" active="1">
                 <Box halfExtends_x="1.000000" halfExtends_y="0.700000" halfExtends_z="2.500000">
-                    <Material bounciness="0.000000" friction_coeff="0.000000" mass_density="1000.000000" rolling_resistance="0.000000" />
+                    <Material bounciness="0.100000" friction_coeff="2.010000" mass_density="1000.010010" rolling_resistance="0.010000" />
                 </Box>
             </RigidBody>
         </Physic>
         <ZobObject name="rearCamera" guid="3002004" type="camera">
             <Position x="-1.3339e-39" y="1.92052" z="-4.78713" />
-            <Rotation x="15.0562" y="-4.82047e-43" z="3.97921e-38" />
+            <Rotation x="15.0562" y="-3.20897e-43" z="3.97935e-38" />
             <Scale x="1" y="1" z="1" />
             <Controller>0</Controller>
             <Fov>70.00</Fov>
@@ -69,8 +61,8 @@
             <Fov>45.00</Fov>
         </ZobObject>
         <ZobObject name="orbitalCamera" guid="3067494" type="camera">
-            <Position x="-1.83432" y="-1.4618" z="-11.8361" />
-            <Rotation x="0" y="0" z="4.16882e-10" />
+            <Position x="6.53909" y="-1.45521" z="-16.1842" />
+            <Rotation x="0" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
             <Controller>2</Controller>
             <Fov>45.00</Fov>
@@ -87,7 +79,7 @@
         <Position x="0" y="10" z="0" />
         <Rotation x="-45" y="-45" z="-45" />
         <Scale x="1" y="1" z="1" />
-        <Color r="251" g="228" b="206" />
+        <Color r="255" g="128" b="64" />
         <Intensity>1.00</Intensity>
         <FallOffDistance>100.00</FallOffDistance>
         <Type>directional</Type>
@@ -104,16 +96,10 @@
         <Scale x="1" y="1" z="1" />
         <Mesh name="road.obj" file="road.obj" path="D:\Git\directZob\resources\" />
     </ZobObject>
-    <ZobObject name="road_ground_physic" guid="3066498">
+    <ZobObject name="road_ground_physic" guid="3066498" type="mesh">
         <Position x="0" y="0" z="0" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="1" y="1" z="1" />
-        <Physic>
-            <RigidBody type="0" active="1">
-                <StaticMesh name="road_ground_physic.obj" path="D:\Git\directZob\resources\" file="road_ground_physic.obj">
-                    <Material bounciness="0.000000" friction_coeff="0.000000" mass_density="0.000000" rolling_resistance="0.000000" />
-                </StaticMesh>
-            </RigidBody>
-        </Physic>
+        <Mesh name="road_ground_physic.obj" file="road_ground_physic.obj" path="D:\Git\directZob\resources\" />
     </ZobObject>
 </Scene>
