@@ -9,22 +9,22 @@
 #define MS_TO_KMH(a) a * 3.6f 
 #define KMH_TO_MS(a) a / 3.6f 
 
-class MyCallbackClass : public RaycastCallback {
+class ZobPhysicsRaycastCallback : public RaycastCallback {
 
 public:
 
-	virtual decimal notifyRaycastHit(const RaycastInfo& info) {
-
-		// Display the world hit point coordinates 
-		std::cout << "Hit point : " <<
-			info.worldPoint.x <<
-			info.worldPoint.y <<
-			info.worldPoint.z <<
-			std::endl;
-
-		// Return a fraction of 1.0 to gather all hits 
+	virtual decimal notifyRaycastHit(const RaycastInfo& info)
+	{
+		m_hit.x = info.worldPoint.x;
+		m_hit.y = info.worldPoint.y;
+		m_hit.z = info.worldPoint.z;
+		m_body = info.body;
+		m_collider = info.collider;
 		return decimal(1.0);
 	}
+	ZobVector3 m_hit;
+	CollisionBody* m_body;
+	Collider* m_collider;
 };
 
 ZobBehaviorCar::~ZobBehaviorCar()
@@ -35,19 +35,14 @@ ZobBehaviorCar::~ZobBehaviorCar()
 ZobBehaviorCar::ZobBehaviorCar(ZobObject* zobObject, TiXmlElement* node) : ZobBehavior(zobObject, node)
 {
 	m_type = eBehavior_car;
-	m_frontWheelPosition = ZobVector3(0, 0, 2);
-	m_rearWheelPosition = ZobVector3(0, 0, -1);
-	m_rollingTorquePower = 1.0f;
-	m_steeringTorque = 2.0f * 60.0f;
-	m_rollingTorqueMaxPower = 30.0f;
-	m_currentMaxTorqueApplicable = 40.0f;
-	m_motorForce = 10.0f * 60.0f;
-	m_breakForce = 10.0f * 60.0f;
-	m_airFriction = 0.005f * 60.0f;
+	m_motorForce = 5.0f;
+	m_breakForce = 10.0f;
+	m_lineaVelocityMS = 0.0f;
 	m_drifting = false;
-	RigidBody* rb = m_zobObject->m_physicComponent->GetRigicBody();
-	Vector3 centerOfMass = rb->getLocalCenterOfMass();
-	rb->setLocalCenterOfMass(Vector3(0, 0, -1.5));
+	m_mass = 750.0f;
+	m_heightAboveGround = 1.0f;
+	m_direction = ZobVector3(0, 0, 0);
+	m_lastGroundPosition = ZobVector3(0, 0, 0);
 }
 
 void ZobBehaviorCar::PreUpdate()
@@ -60,141 +55,76 @@ void ZobBehaviorCar::Init()
 
 }
 
+void ZobBehaviorCar::CheckCollisions()
+{
+	DirectZob* directZob = DirectZob::GetInstance();
+	RigidBody* rb = m_zobObject->m_physicComponent->GetRigicBody();
+	Vector3 p = Vector3(rb->getTransform().getPosition());
+	Vector3 e = Vector3(rb->getTransform().getPosition());
+	p.y -= 1000.0f;
+	e.y += 1000.0f;
+	reactphysics3d::Ray ray(p, e);
+	ZobPhysicsRaycastCallback callbackObject;
+	directZob->GetPhysicsEngine()->GetWorld()->raycast(ray, &callbackObject);
+	m_lastGroundPosition = callbackObject.m_hit;
+}
+
 void ZobBehaviorCar::Update(float dt)
 {
-	//dt = 1.0f / 60.0f;
+	CheckCollisions();
 	const gainput::InputMap* inputMap = DirectZob::GetInstance()->GetInputManager()->GetMap();
 	DirectZob* directZob = DirectZob::GetInstance();
 	if (directZob->IsPhysicPlaying())
 	{
-		RigidBody* rb = m_zobObject->m_physicComponent->GetRigicBody();
-		Vector3 p = rb->getTransform().getPosition();
-		Vector3 e = p;
-		e.y += -1000;
-		reactphysics3d::Ray ray(p, e);
-		// Create an instance of your callback class 
-		MyCallbackClass callbackObject;
-
-		// Raycast test 
-		directZob->GetPhysicsEngine()->GetWorld()->raycast(ray, &callbackObject);
-		
-		if (rb->getNbColliders() > 0)
+		float acc = 0.0f;
+		float brk = 0.0f;
+		float dir = 0.0f;
+		acc = inputMap->GetFloat(ZobInputManager::RightShoulder) * m_motorForce;
+		if (m_lineaVelocityMS > 0.1f)
 		{
-			Collider* collider = rb->getCollider(0);
-			Vector3 centerOfMass = rb->getLocalCenterOfMass();
-			//rb->setLocalCenterOfMass(Vector3(0, 0, -2));
-			ZobVector3 fw = m_zobObject->GetForward();
-			ZobVector3 lt = m_zobObject->GetLeft();
-			Vector3 forward = rb->getWorldVector(Vector3(0, 0, 1));
-			Vector3 left = rb->getWorldVector(Vector3(1, 0, 0));
-			Vector3 linearVelocity = rb->getLinearVelocity();
-			Vector3 linearVelocityLocal = rb->getLocalVector(linearVelocity);
-			Vector3 angulaVelocity = rb->getAngularVelocity();
-			Vector3 angulaVelocityLocal = rb->getLocalVector(angulaVelocity);
-			Vector3 rearWheelPosition = Vector3(m_rearWheelPosition.x, m_rearWheelPosition.y, m_rearWheelPosition.z);
-			Vector3 frontWheelPosition = Vector3(m_frontWheelPosition.x, m_frontWheelPosition.y, m_frontWheelPosition.z);
-			float speedKMH = MS_TO_KMH(fabs(linearVelocityLocal.z));
-			float rollingTorque = 0.0f;
-			float frictioncoeff = 0.0f;
-			Material* mat = &collider->getMaterial();
-			if (mat)
-			{
-				frictioncoeff = mat->getFrictionCoefficient();
-			}
-			float currentMaxTorque = m_currentMaxTorqueApplicable * (1.0f - fmaxf(0, speedKMH - 50.0f) / 170.0f) * dt;
-			float acc = 0.0f;
-			float brk = 0.0f;
-			float dir = 0.0f;
-
-			acc = inputMap->GetFloat(ZobInputManager::RightShoulder) * m_motorForce * dt;
-			if (linearVelocityLocal.z > 0.1f)
-			{
-				dir = -inputMap->GetFloat(ZobInputManager::LeftStickX) * m_steeringTorque * dt;
-				brk = -inputMap->GetFloat(ZobInputManager::LeftShoulder) * m_breakForce * dt;
-
-
-			}
-			Vector3 acceleration = forward * acc;
-			Vector3 breaking = forward * brk;
-			Vector3 velocityFriction = forward * (-(linearVelocityLocal.z * linearVelocityLocal.z) * m_airFriction * dt);
-			rb->applyForceAtLocalPosition(acceleration, rearWheelPosition);
-			rb->applyForceAtLocalPosition(breaking, frontWheelPosition);
-			rb->applyForceToCenterOfMass(velocityFriction);
-
-			if (dir != 0.0f /*&& fabs(angulaVelocityLocal.y) < currentMaxTorque*/ && linearVelocityLocal.z > KMH_TO_MS(10.0f))
-			{
-				static bool bUseTorque = true;
-				if (bUseTorque)
-				{
-					//todo; dir torque decrease with speed
-					Vector3 str = Vector3(0, dir, 0);
-					rb->applyTorque(str);
-				}
-				else
-				{
-					Vector3 str = Vector3(dir, 0, 0);
-					str = rb->getWorldVector(str);
-					rb->applyForceAtLocalPosition(str, frontWheelPosition);
-				}
-			}
-			else
-			{
-				angulaVelocityLocal.y *= 0.5f;
-				angulaVelocityLocal.y = 0.0f;
-				angulaVelocity = rb->getWorldVector(angulaVelocityLocal);
-				rb->setAngularVelocity(angulaVelocity);
-			}
-
-			//clamp torque
-			angulaVelocity = rb->getAngularVelocity();
-			angulaVelocityLocal = rb->getLocalVector(angulaVelocity);
-			float f = fmaxf(-currentMaxTorque, fminf(angulaVelocityLocal.y, currentMaxTorque));
-			m_drifting = m_drifting || (f != angulaVelocityLocal.y);
-			angulaVelocityLocal.y = f;
-			angulaVelocity = rb->getWorldVector(angulaVelocityLocal);
-			rb->setAngularVelocity(angulaVelocity);
-
-			//Rolling
-			/*
-			rollingTorque = copysignf(min(m_rollingTorqueMaxPower, m_rollingTorquePower * linearVelocityLocal.z), dir);
-			Vector3 rolling = Vector3(0, 0, rollingTorque);
-			rb->applyTorque(rolling);
-			*/
-			m_drifting = false;
-
-			//wheel friction
-			if (!m_drifting)
-			{
-				linearVelocityLocal.x = 0.0f;
-				linearVelocity = rb->getWorldVector(linearVelocityLocal);
-				rb->setLinearVelocity(linearVelocity);
-			}
-			else
-			{
-				m_drifting = !(linearVelocityLocal.x <= 0.01f);
-				if (dir == 0.0f)
-				{
-					linearVelocityLocal.x /= (2.0f);
-					linearVelocity = rb->getWorldVector(linearVelocityLocal);
-					rb->setLinearVelocity(linearVelocity);
-				}
-			}
-			//stop vehicle if no force and no speed
-			if ((linearVelocityLocal.z < KMH_TO_MS(10)) && (acc == 0.0f))
-			{
-				rb->setLinearVelocity(Vector3(0, linearVelocity.y, 0));
-			}
-			uint color = 0xFFFF00;
-			if (m_drifting)
-			{
-				color = 0xFF0000;
-			}
-			Text2D* m_textManager = directZob->GetTextManager();
-			m_textManager->Print(10, 60, 4, color, "speed            : %.2f km/h", speedKMH);
-			m_textManager->Print(10, 75, 4, color, "angular/max velocity : %.2f/%.2f", fabs(angulaVelocity.y), currentMaxTorque);
-			m_textManager->Print(10, 90, 4, color, "rolling torque : %.2f", fabs(rollingTorque));
-			m_textManager->Print(10, 105, 4, color, "drift : %.2f", fabs(linearVelocityLocal.x));
+			dir = inputMap->GetFloat(ZobInputManager::LeftStickX) * 30.0f / m_lineaVelocityMS;
+			brk = inputMap->GetFloat(ZobInputManager::LeftShoulder) * m_breakForce;
 		}
+		
+		float f = (acc-brk);
+		m_lineaVelocityMS += f * dt;
+		float p = m_lineaVelocityMS * dt;
+		m_direction = m_zobObject->GetForward();	
+		m_direction.y = 0.0f;
+		m_direction.Normalize();
+
+		float angle = DEG_TO_RAD(dir);
+		//angle = M_PI / 2.0f;
+		float sinA = sinf(angle);
+		float cosA = cosf(angle);
+
+		m_direction.x = m_direction.x * cosA - m_direction.z * sinA;
+		m_direction.z = m_direction.x * sinA + m_direction.z * cosA;
+		m_direction.Normalize();
+		ZobVector3 forward = m_direction;
+		m_direction.Mul(p);
+		ZobVector3 pos = m_zobObject->GetWorldPosition();
+		pos.Add(&m_direction);
+		m_zobObject->SetWorldPosition(pos.x, m_lastGroundPosition.y + m_heightAboveGround, pos.z);
+		
+		
+		ZobVector3 left = ZobVector3::Cross(&forward, &ZobVector3::Vector3Y);
+		left.Normalize();
+		left.Mul(-1.0f);
+		ZobVector3 up = ZobVector3::Cross(&forward, &left);
+		up.Normalize();
+		m_zobObject->LookAt(&forward, &left, &up, false);
+
+		uint color = 0xFFFF00;
+		if (m_drifting)
+		{
+			color = 0xFF0000;
+		}
+		Text2D* m_textManager = directZob->GetTextManager();
+		m_textManager->Print(10, 60, 4, color, "speed            : %.2f km/h", MS_TO_KMH(m_lineaVelocityMS));
+		m_textManager->Print(10, 75, 4, color, "angle            : %.2f / %.2f", dir, DEG_TO_RAD(dir));
+		//m_textManager->Print(10, 90, 4, color, "rolling torque : %.2f", fabs(rollingTorque));
+		//m_textManager->Print(10, 105, 4, color, "drift : %.2f", fabs(linearVelocityLocal.x));
 	}
 
 	//update current camera
@@ -227,13 +157,13 @@ void ZobBehaviorCar::DrawGizmos(const Camera* camera, const ZobVector3* position
 	DirectZob* directZob = DirectZob::GetInstance();
 	if (directZob->IsPhysicPlaying())
 	{
-		RigidBody* rb = m_zobObject->m_physicComponent->GetRigicBody();
 		Engine* e = DirectZob::GetInstance()->GetEngine();
 		ZobVector3 p = m_zobObject->GetWorldPosition();
-		ZobVector3 v = ZobVector3(rb->getLinearVelocity().x, rb->getLinearVelocity().y, rb->getLinearVelocity().z);
+		ZobVector3 v = m_direction;
+		v.Mul(10.0f);
 		v.x += p.x;
 		v.y += p.y;
 		v.z += p.z;
-		e->QueueLine(camera, &p, &v, 0x0000FF, true, false);
+		e->QueueLine(camera, &p, &v, 0xFFFFFF, true, true);
 	}
 }

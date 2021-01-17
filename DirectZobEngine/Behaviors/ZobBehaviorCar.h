@@ -3,7 +3,6 @@
 #include "../tinyxml/tinyxml.h"
 #include "ZobBehavior.h"
 
-
 class ZobBehaviorCar : public ZobBehavior
 {
 	friend class ZobBehaviorFactory;
@@ -17,16 +16,13 @@ class ZobBehaviorCar : public ZobBehavior
 		void		DrawGizmos(const Camera* camera, const ZobVector3* position, const ZobVector3* rotation) const override;
 	private:	
 		ZobBehaviorCar(ZobObject* zobObject, TiXmlElement* node);
-
-		float m_rollingTorquePower ;
-		float m_steeringTorque;
-		float m_rollingTorqueMaxPower;
-		float m_currentMaxTorqueApplicable;
+		void CheckCollisions();
 		float m_motorForce;
 		float m_breakForce;
-		float m_airFriction;
-		ZobVector3 m_frontWheelPosition;
-		ZobVector3 m_rearWheelPosition;
-		bool m_drifting;
-		ZobVector3 m_groundContactPoint;
+		float m_lineaVelocityMS;
+		float m_mass;
+		float m_heightAboveGround;
+		bool m_drifting;		
+		ZobVector3 m_direction;
+		ZobVector3 m_lastGroundPosition;
 };
