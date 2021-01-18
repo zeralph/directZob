@@ -15,8 +15,8 @@ public:
 
 	enum ePhysicComponentType
 	{
-		ePhysicComponentType_static= rp3d::BodyType::STATIC,
-		ePhysicComponentType_dynamic = rp3d::BodyType::DYNAMIC,
+		ePhysicComponentType_static= (int)rp3d::BodyType::STATIC,
+		ePhysicComponentType_dynamic = (int)rp3d::BodyType::DYNAMIC,
 	};
 
 	enum eShapeType
