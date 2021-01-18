@@ -4,8 +4,9 @@
 #include "Rendering/ZobMatrix4x4.h"
 
 
-ZobPhysicComponent::ZobPhysicComponent(TiXmlNode* node)
+ZobPhysicComponent::ZobPhysicComponent(ZobObject* z, TiXmlNode* node)
 {
+	m_zobObject = z;
 	BodyType rigidBodyType = rp3d::BodyType::STATIC;
 	m_radius = 1.0f;
 	m_height = 2.0f;
@@ -25,6 +26,7 @@ ZobPhysicComponent::ZobPhysicComponent(TiXmlNode* node)
 	m_shapeType = eShapeType_uninit;
 	m_nextShapeType = eShapeType_none;
 	m_collider = NULL;
+	m_lastCollision.Reset();
 	if (node)
 	{
 		TiXmlElement* p = (TiXmlElement*)node;
@@ -37,11 +39,13 @@ ZobPhysicComponent::ZobPhysicComponent(TiXmlNode* node)
 	m_rigidBody->setType(rigidBodyType);
 	rigidBodyActive = true;
 	m_rigidBody->setIsActive(rigidBodyActive);
+	DirectZob::GetInstance()->GetPhysicsEngine()->AddBody(this);
 }
 
 ZobPhysicComponent::~ZobPhysicComponent()
 {
 	RemoveCollider();
+	DirectZob::GetInstance()->GetPhysicsEngine()->RemoveBody(this);
 	DirectZob::GetInstance()->GetPhysicsEngine()->DestroyRigidBody(m_rigidBody);
 	m_rigidBody = NULL;
 }
@@ -417,6 +421,7 @@ void ZobPhysicComponent::ResetPhysic()
 
 void ZobPhysicComponent::DrawGizmos(const Camera* camera, const ZobVector3* position, const ZobVector3* rotation)
 {
+	return;
 	if (m_shapeType != eShapeType_none)
 	{
 		ZobMatrix4x4 mat;
@@ -656,4 +661,10 @@ void ZobPhysicComponent::ReadMaterialNode(TiXmlNode* node)
 		mat.setMassDensity((float)atof(m->Attribute("mass_density")));
 		mat.setRollingResistance((float)atof(m->Attribute("rolling_resistance")));
 	}
+}
+
+void ZobPhysicComponent::OnCollide(collision coll)
+{
+	m_lastCollision = coll;
+	m_lastCollision.handled = false;
 }

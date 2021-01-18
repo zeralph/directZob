@@ -226,6 +226,7 @@ int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUp
 				OnQueuing();
 			}
 			m_zobObjectManager->QueueForDrawing(cam, m_engine);
+			m_physicsEngine->DrawGizmos();
 			m_copyTime = (float)(clock() - m_copyTick) / CLOCKS_PER_SEC * 1000;
 			if (m_engine->ShowGrid())
 			{
@@ -282,13 +283,14 @@ int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUp
 				m_inputManager->GetMap()->GetFloat(ZobInputManager::RightShoulder));
 			sBuf = std::string(buffer);
 			m_text->Print(0, 48, 1, &sBuf, 0xFF0000FF);
-			int txtW = m_engine->GetBufferData()->width - 170;
+			int txtW = m_engine->GetBufferData()->width - 190;
 			for (int i = 0; i < m_engine->GetNbRasterizer(); i++)
 			{
-				int nb = m_engine->GetRasterizer(i)->GetNbTriangle();
+				int nbt = m_engine->GetRasterizer(i)->GetNbTriangle();
+				int nbl = m_engine->GetRasterizer(i)->GetNbLine();
 				float fms = m_engine->GetRasterizer(i)->GetRenderTimeMS();
 				
-				m_text->Print(txtW, 10+i*20, 1, 0xFFFFFFFF, "R%i : %it %.2fms", (i+1), nb, fms);
+				m_text->Print(txtW, 10+i*20, 1, 0xFFFFFFFF, "R%i : %it %il %.2fms", (i+1), nbt, nbl, fms);
 			}
 			m_text->Print(100, 100, 1, 0xFFFFFFFF, "my time %.2f", ((float)((float)clTest / (float)CLOCKS_PER_SEC * (float)1000)));
 		}
