@@ -115,6 +115,7 @@ void ZobBehaviorCar::Update(float dt)
 			collNormal.y = 0;
 			collNormal.Mul(-1.0f);
 			collNormal.Normalize();
+			/*
 			float d = -ZobVector3::Dot(&collRebound , &collNormal);
 			float angle = -M_PI / 2.0f;// *d / fabsf(d);
 			float sinA = sinf(angle);
@@ -123,7 +124,8 @@ void ZobBehaviorCar::Update(float dt)
 			collRebound.z = collRebound.x * sinA + collRebound.z * cosA;
 			collRebound.Normalize();
 			//collRebound.Mul(fminf(fmaxf(1.0f, m_lineaVelocityMS), 5.0f));
-			collRebound.Mul(10);
+			*/
+			collRebound.Mul(fminf(fmaxf(1.0f, m_lineaVelocityMS), 5.0f));
 			pos.Add(&collRebound);
 			coll->Reset();
 		}
@@ -151,11 +153,18 @@ void ZobBehaviorCar::Update(float dt)
 		m_lastGroundNormal.Normalize();
 		m_direction.Normalize();
 		ZobVector3 forward = m_direction;
-		ZobVector3 left = ZobVector3::Cross(&forward, &m_lastGroundNormal);
+		ZobVector3 up = m_zobObject->GetUp();
+		up.x = up.x * 0.7f + m_lastGroundNormal.x * 0.3f;
+		up.y = up.y * 0.7f + m_lastGroundNormal.y * 0.3f;
+		up.z = up.z * 0.7f + m_lastGroundNormal.z * 0.3f;
+		up.Normalize();
+		ZobVector3 left = ZobVector3::Cross(&forward, &up);
 		left.Normalize();
 		left.Mul(-1.0f);
-		ZobVector3 up = ZobVector3::Cross(&forward, &left);
-		up.Normalize();
+
+		
+		forward = ZobVector3::Cross(&left, &up);
+		forward.Normalize();
 		m_zobObject->LookAt(&forward, &left, &up, false);
 		uint color = 0xFFFF00;
 		if (m_drifting)
