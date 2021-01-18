@@ -8,10 +8,24 @@
 #include "tinyxml.h"
 
 using namespace reactphysics3d;
-
+class ZobObject;
 class ZobPhysicComponent
 {
 public:
+
+	struct collision
+	{
+		const ZobPhysicComponent* other;
+		ZobVector3 worldPosition;
+		ZobVector3 worldNormal;
+		float penetration;
+		bool handled;
+		void Reset()
+		{
+			other = NULL;
+			handled = true;
+		};
+	};
 
 	enum ePhysicComponentType
 	{
@@ -30,7 +44,7 @@ public:
 		__eShapeType_MAX__
 	};
 
-	ZobPhysicComponent(TiXmlNode* t);
+	ZobPhysicComponent(ZobObject* z, TiXmlNode* t);
 	~ZobPhysicComponent();
 	void								Init(const ZobVector3* position, const ZobVector3* rotation);
 	TiXmlNode*							SaveUnderNode(TiXmlNode* node);
@@ -78,7 +92,8 @@ public:
 	RigidBody*							GetRigicBody() { return m_rigidBody; }
 	void								SetScaleWithObject(bool b) { m_scaleWithObject = b; m_bUpdateSize = true; }
 	bool								GetScaleWithObject() const { return m_scaleWithObject; }
-
+	void								OnCollide(collision coll);
+	collision*							GetLastCollision() { return &m_lastCollision; }
 private:
 	void								AddColliderInternal(CollisionShape* c);
 	float								ClampAngle(float a) const;
@@ -92,6 +107,7 @@ private:
 	float*	m_concaveMeshVertices;
 	uint* m_concaveMeshIndices;
 	int m_concaveMeshNbTriangles;
+	const ZobObject* m_zobObject;
 	ePhysicComponentType m_type;
 	RigidBody* m_rigidBody;
 	Collider* m_collider;	
@@ -110,4 +126,5 @@ private:
 	std::string m_convexMeshFile;
 	float m_height;
 	bool m_bUpdateSize;
+	collision m_lastCollision;
 };

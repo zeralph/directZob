@@ -37,6 +37,7 @@ public:
 	void					QueueLine(const Line3D* l);
 	inline const Triangle*	GetTriangle(int i) { return m_triangles[i]; }
 	inline int				GetNbTriangle() const { return m_triangles.size(); }
+	inline int				GetNbLine() const { return m_lines.size(); }
 	inline float			GetRenderTimeMS() const { return m_time;  }
 private:
 

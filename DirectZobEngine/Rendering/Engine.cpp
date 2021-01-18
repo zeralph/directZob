@@ -49,7 +49,7 @@ Engine::Engine(int width, int height, Events* events)
 	*/
 	//m_nbRasterizers *= 2;
 	m_maxTrianglesQueueSize = 200000;// MAX_TRIANGLES_PER_IMAGE / m_nbRasterizers;
-	m_maxLineQueueSize = 1000;
+	m_maxLineQueueSize = 20000;
 	m_renderOutput = eRenderOutput_render;
 	m_events = events;
 	m_currentFrame = 0;

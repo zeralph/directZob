@@ -70,11 +70,6 @@ void Rasterizer::Render()
 {
 	m_tick = clock();
 	//warning : invert lightdir ! https://fr.wikipedia.org/wiki/Ombrage_de_Phong
-	for (int i = 0; i < m_lines.size(); i++)
-	{
-		const Line3D* l = m_lines.at(i);
-		DrawLine(l);
-	}
 	m_lights.clear();
 	LightManager* lm = DirectZob::GetInstance()->GetLightManager();
 	if (lm)
@@ -94,6 +89,11 @@ void Rasterizer::Render()
 		{
 			DrawTriangle(t);
 		}
+	}
+	for (int i = 0; i < m_lines.size(); i++)
+	{
+		const Line3D* l = m_lines.at(i);
+		DrawLine(l);
 	}
 	m_time = (float)(clock() - m_tick) / CLOCKS_PER_SEC * 1000;
 }
@@ -159,21 +159,28 @@ void Rasterizer::DrawLine(const Line3D* l) const
 		{
 			px = x + (int)((double)i * multDiff);
 			py = y + i;
-			if(px < m_bufferData->width && py < m_bufferData->height)
+			if (px < m_bufferData->width && py < m_bufferData->height)
 			{
 				zRatio = (sz - m_bufferData->zNear) / (m_bufferData->zFar - m_bufferData->zNear);
+				if (l->noZ)
+				{
+					zRatio = 0;
+				}
 				k = py * m_bufferData->width + px;
 				if (m_bufferData->zBuffer[k] > zRatio)
 				{
 					m_bufferData->buffer[k] = l->c;
-					m_bufferData->buffer[k+1] = l->c;
 					m_bufferData->zBuffer[k] = zRatio;
-					m_bufferData->zBuffer[k+1] = zRatio;
+					if (l->bold)
+					{
+						m_bufferData->buffer[k + 1] = l->c;
+						m_bufferData->zBuffer[k + 1] = zRatio;
+					}
 				}
 			}
 			sz += dz;
 			watchDog++;
-			if (watchDog > 2000)
+			if (watchDog > 20000)
 			{
 				break;
 			}
@@ -198,7 +205,7 @@ void Rasterizer::DrawLine(const Line3D* l) const
 			}
 			sz += dz;
 			watchDog++;
-			if (watchDog > 2000)
+			if (watchDog > 20000)
 			{
 				break;
 			}

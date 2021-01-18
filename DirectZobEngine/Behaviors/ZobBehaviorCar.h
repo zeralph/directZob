@@ -16,13 +16,16 @@ class ZobBehaviorCar : public ZobBehavior
 		void		DrawGizmos(const Camera* camera, const ZobVector3* position, const ZobVector3* rotation) const override;
 	private:	
 		ZobBehaviorCar(ZobObject* zobObject, TiXmlElement* node);
-		void CheckCollisions();
+		void CheckGroundCollisions();
+		void CheckEnvironmentCollision();
 		float m_motorForce;
 		float m_breakForce;
 		float m_lineaVelocityMS;
 		float m_mass;
 		float m_heightAboveGround;
-		bool m_drifting;		
+		bool m_drifting;	
+		float m_steeringMaxAngle;
 		ZobVector3 m_direction;
 		ZobVector3 m_lastGroundPosition;
+		ZobVector3 m_lastGroundNormal;
 };

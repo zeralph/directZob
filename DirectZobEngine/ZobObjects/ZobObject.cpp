@@ -14,7 +14,7 @@ ZobObject::ZobObject(Type t, SubType s, const std::string& name, ZobObject* pare
 	sObjectNumber++;
 	m_behavior = NULL;
 	m_factoryFile = factoryFile?factoryFile->c_str():"";
-	m_physicComponent = new ZobPhysicComponent(NULL);
+	m_physicComponent = new ZobPhysicComponent(this, NULL);
 	if (name.length() == 0)
 	{
 		std::string n = "newObject_";
@@ -117,7 +117,7 @@ ZobObject::ZobObject(DirectZobType::guid id, TiXmlElement* node, ZobObject* pare
 	}
 	//Physics
 	f = node->FirstChildElement("Physic");
-	m_physicComponent = new ZobPhysicComponent(f);
+	m_physicComponent = new ZobPhysicComponent(this, f);
 	//parenting
 	m_children.clear();
 	m_newParent = m_parent;
