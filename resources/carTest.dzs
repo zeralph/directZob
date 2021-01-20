@@ -38,7 +38,7 @@
             <Position x="-1.3339e-39" y="1.92052" z="-4.78713" />
             <Rotation x="15.0562" y="-4.82047e-43" z="3.97921e-38" />
             <Scale x="1" y="1" z="1" />
-            <Controller>0</Controller>
+            <Controller>5</Controller>
             <Fov>70.00</Fov>
         </ZobObject>
         <ZobObject name="camaro" guid="3046785" type="mesh">
