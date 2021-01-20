@@ -1,4 +1,5 @@
 #pragma once
+#undef PropertyNotify
 #include <string>
 #include <fstream>
 #include <iostream>

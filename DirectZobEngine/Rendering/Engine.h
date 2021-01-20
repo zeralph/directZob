@@ -1,6 +1,6 @@
 #pragma once
 #include "../Types.h"
-#include "MiniFB.h"
+#include "../../dependencies/minifb/include/MiniFB.h"
 #include <math.h>
 #include <stdlib.h> 
 #include "Color.h"

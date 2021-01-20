@@ -212,6 +212,7 @@ int translate_mod_ex(int key, int state, int is_pressed);
 static void 
 processEvent(SWindowData *window_data, XEvent *event) {
     switch (event->type) {
+        /*
         case KeyPress:
         case KeyRelease: 
         {
@@ -257,13 +258,13 @@ processEvent(SWindowData *window_data, XEvent *event) {
             }
         }
         break;
-
+        
         case MotionNotify:
             window_data->mouse_pos_x = event->xmotion.x;
             window_data->mouse_pos_y = event->xmotion.y;
             kCall(mouse_move_func, event->xmotion.x, event->xmotion.y);
             break;
-
+        */
         case ConfigureNotify: 
         {
             window_data->window_width  = event->xconfigure.width;
@@ -304,9 +305,11 @@ static void
 processEvents(SWindowData *window_data) {
     XEvent          event;
     SWindowData_X11 *window_data_x11 = (SWindowData_X11 *) window_data->specific;
-
-    while ((window_data->close == false) && XPending(window_data_x11->display)) {
-        XNextEvent(window_data_x11->display, &event);
+    long event_mask = NoEventMask | ExposureMask | VisibilityChangeMask | StructureNotifyMask | ResizeRedirectMask | SubstructureNotifyMask| SubstructureRedirectMask |
+                       FocusChangeMask | PropertyChangeMask | ColormapChangeMask | OwnerGrabButtonMask;
+    while ((window_data->close == false) && XCheckMaskEvent(window_data_x11->display, event_mask, &event)) {
+        //XNextEvent(window_data_x11->display, &event);
+        //XCheckMaskEvent(window_data_x11->display, event_mask, &event);
         processEvent(window_data, &event);
     }
 }

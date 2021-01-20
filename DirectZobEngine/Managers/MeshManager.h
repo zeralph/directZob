@@ -3,6 +3,7 @@
 #include "../Mesh.h"
 #include "../Sprite.h"
 #include <string>
+#undef PropertyNotify
 #include <fbxsdk.h>
 
 class MeshManager

@@ -1,6 +1,7 @@
 #pragma once
 #include "../Types.h"
 #include "../ZobMaterial.h"
+#undef PropertyNotify
 #include <fbxsdk.h>
 #include <string>
 #include <vector>

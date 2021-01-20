@@ -25,6 +25,20 @@ void ZobInputManager::Update(uint64_t tick, HWND hWnd)
 	}
 	m_gainputManager->Update(tick);
 }
+#elif LINUX
+void ZobInputManager::Update(uint64_t tick, Display* display)
+{
+	m_gainputManager->Update(tick);
+	if(display)
+	{
+		XEvent event;
+		while (XPending(display))
+		{
+			XNextEvent(display, &event);
+			m_gainputManager->HandleEvent(event);
+		}
+	}
+}
 #else
 void ZobInputManager::Update(uint64_t tick)
 {
@@ -59,8 +73,8 @@ void ZobInputManager::Map()
 
 	m_map->MapFloat(LeftStickX, keyboardId, gainput::KeyLeft, 0.0f, 1.0f, &MapToMinusOne);
 	m_map->MapFloat(LeftStickX, keyboardId, gainput::KeyRight, 0.0f, 1.0f, &MapToOne);
-	m_map->MapFloat(LeftShoulder, keyboardId, gainput::KeyDown);
-	m_map->MapFloat(RightShoulder, keyboardId, gainput::KeyUp);
+	m_map->MapFloat(LeftShoulder, keyboardId, gainput::KeyDown, 0.0f, 1.0f, &MapToOne);
+	m_map->MapFloat(RightShoulder, keyboardId, gainput::KeyUp, 0.0f, 1.0f, &MapToOne);
 
 	m_map->MapFloat(LeftStickX, padId, gainput::PadButtonLeftStickX);
 	m_map->MapFloat(LeftStickY, padId, gainput::PadButtonLeftStickY);

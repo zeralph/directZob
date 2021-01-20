@@ -2,6 +2,7 @@
 // no idea where these are defined; undefine them, as reactphysics will use methods which have these macro names
 #undef min
 #undef max
+#undef None
 #include <reactphysics3d/reactphysics3d.h>
 #include "ZobPhysicsEngine.h"
 #include "ZobPhysicComponent.h"

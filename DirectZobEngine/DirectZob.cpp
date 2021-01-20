@@ -9,6 +9,8 @@
 #include "Rendering/Rasterizer.h"
 #ifdef WINDOWS
 #include "../minifb/src/windows/WindowData_Win.h"
+#elif LINUX
+#include "../minifb/src/x11/WindowData_X11.h"
 #endif
 #define LOG_BUFFER_SIZE 1024
 
@@ -183,6 +185,15 @@ int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUp
 			hWnd = window_data_win->window;
 		}
 		m_inputManager->Update(m_frameTick, hWnd);
+#elif LINUX
+		Display* display = NULL;
+		SWindowData* window_data = (SWindowData*)window;
+		if (window_data)
+		{
+			SWindowData_X11* window_data_x11 = (SWindowData_X11*)window_data->specific;
+			display = window_data_x11->display;
+		}
+		m_inputManager->Update(m_frameTick, display);
 #else
 		m_inputManager->Update(m_frameTick);
 #endif
