@@ -304,6 +304,15 @@ int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUp
 				m_text->Print(txtW, 10+i*20, 1, 0xFFFFFFFF, "R%i : %it %il %.2fms", (i+1), nbt, nbl, fms);
 			}
 			m_text->Print(100, 100, 1, 0xFFFFFFFF, "my time %.2f", ((float)((float)clTest / (float)CLOCKS_PER_SEC * (float)1000)));
+
+			if (m_inputManager->GetMap()->GetBoolIsNew(ZobInputManager::buttonX) || m_inputManager->GetMap()->GetBoolIsNew(ZobInputManager::WireFrame))
+			{
+				m_engine->WireFrame(!m_engine->WireFrame());
+			}
+			if (m_inputManager->GetMap()->GetBoolIsNew(ZobInputManager::buttonY) || m_inputManager->GetMap()->GetBoolIsNew(ZobInputManager::Gizmos))
+			{
+				m_engine->DrawGizmos(!m_engine->DrawGizmos());
+			}
 		}
 		m_engine->SetDisplayedBuffer();
 	}

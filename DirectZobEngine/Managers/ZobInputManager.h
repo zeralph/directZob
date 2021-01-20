@@ -22,6 +22,8 @@ public:
 		RightStickX,
 		RightStickY,
 		RightShoulder,
+		WireFrame,
+		Gizmos,
 	};
 
 	ZobInputManager(int width, int height);

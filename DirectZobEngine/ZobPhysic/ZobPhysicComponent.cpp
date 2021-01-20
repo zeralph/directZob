@@ -665,6 +665,9 @@ void ZobPhysicComponent::ReadMaterialNode(TiXmlNode* node)
 
 void ZobPhysicComponent::OnCollide(collision coll)
 {
-	m_lastCollision = coll;
-	m_lastCollision.handled = false;
+	if (m_lastCollision.handled)
+	{
+		m_lastCollision = coll;
+		m_lastCollision.handled = false;
+	}
 }

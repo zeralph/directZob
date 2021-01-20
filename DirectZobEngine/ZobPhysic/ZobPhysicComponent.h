@@ -17,8 +17,9 @@ public:
 	struct collision
 	{
 		const ZobPhysicComponent* other;
-		ZobVector3 worldPosition;
-		ZobVector3 worldNormal;
+		ZobVector3 collisionWorldPosition;
+		ZobVector3 collisionWorldNormal;
+		ZobVector3 collisionWorldDirection;
 		float penetration;
 		bool handled;
 		void Reset()

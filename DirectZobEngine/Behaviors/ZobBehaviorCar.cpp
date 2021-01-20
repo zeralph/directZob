@@ -23,10 +23,15 @@ ZobBehaviorCar::ZobBehaviorCar(ZobObject* zobObject, TiXmlElement* node) : ZobBe
 	m_steeringMaxAngle = 10.0f;
 	m_drifting = false;
 	m_mass = 750.0f;
-	m_heightAboveGround = 1.9f;
+	m_heightAboveGround = 0.9f;
 	m_direction = ZobVector3(0, 0, 0);
 	m_lastGroundPosition = ZobVector3(0, 0, 0);
 	m_lastGroundNormal = ZobVector3(0, 1, 0);
+
+	m_lastCollPosition = ZobVector3(0, 0, 0);
+	m_lastCollDirection= ZobVector3(0, 0, 0);
+	m_lastCollRebound  = ZobVector3(0, 0, 0);
+	m_lastCollNormal   = ZobVector3(0, 0, 0);
 }
 
 void ZobBehaviorCar::PreUpdate()
@@ -107,24 +112,30 @@ void ZobBehaviorCar::Update(float dt)
 		ZobPhysicComponent::collision* coll = zc->GetLastCollision();
 		if (!coll->handled)
 		{
+			m_lastCollPosition = coll->collisionWorldPosition;
+			m_lastCollDirection = coll->collisionWorldDirection;
+			m_lastCollNormal = coll->collisionWorldNormal;
+
 			m_lineaVelocityMS /= 2.0f;
-			collRebound = pos - coll->worldPosition;
+			collRebound = pos - coll->collisionWorldPosition;
 			collRebound.y = 0;
 			collRebound.Normalize();
-			ZobVector3 collNormal = coll->worldNormal;
+			ZobVector3 collNormal = coll->collisionWorldNormal;
 			collNormal.y = 0;
 			collNormal.Mul(-1.0f);
 			collNormal.Normalize();
-			/*
-			float d = -ZobVector3::Dot(&collRebound , &collNormal);
-			float angle = -M_PI / 2.0f;// *d / fabsf(d);
+			
+			m_lastCollRebound = collRebound;
+			float d = -ZobVector3::Dot(&m_lastCollRebound, &collNormal);
+			float angle = M_PI / 2.0f;// *d / fabsf(d);
 			float sinA = sinf(angle);
 			float cosA = cosf(angle);
-			collRebound.x = collRebound.x * cosA - collRebound.z * sinA;
-			collRebound.z = collRebound.x * sinA + collRebound.z * cosA;
-			collRebound.Normalize();
+			m_lastCollRebound.x = m_lastCollRebound.x * cosA - m_lastCollRebound.z * sinA;
+			m_lastCollRebound.z = m_lastCollRebound.x * sinA + m_lastCollRebound.z * cosA;
+			m_lastCollRebound.Normalize();
 			//collRebound.Mul(fminf(fmaxf(1.0f, m_lineaVelocityMS), 5.0f));
-			*/
+			m_lastCollRebound.Mul(10);
+
 			collRebound.Mul(fminf(fmaxf(1.0f, m_lineaVelocityMS), 5.0f));
 			pos.Add(&collRebound);
 			coll->Reset();
@@ -183,16 +194,6 @@ void ZobBehaviorCar::Update(float dt)
 	{
 		directZob->GetCameraManager()->SwitchToNextAvailableCamera();
 	}
-	if (inputMap->GetBoolIsNew(ZobInputManager::buttonY))
-	{
-		directZob->GetEngine()->DrawGizmos(!directZob->GetEngine()->DrawGizmos());
-	}
-	if (inputMap->GetBoolIsNew(ZobInputManager::buttonX))
-	{
-		directZob->StopPhysic(true);
-		directZob->StartPhysic();
-	}
-
 }
 
 TiXmlNode* ZobBehaviorCar::SaveUnderNode(TiXmlNode* node)
@@ -216,11 +217,26 @@ void ZobBehaviorCar::DrawGizmos(const Camera* camera, const ZobVector3* position
 		v.y += p.y;
 		v.z += p.z;
 		e->QueueLine(camera, &p, &v, 0xFFFFFF, true, true);
-		v = m_lastGroundNormal;
+
+		p = m_lastCollPosition;
+		v = m_lastCollDirection;
 		v.Mul(10.0f);
-		v.x += p.x;
-		v.y += p.y;
-		v.z += p.z;
-		e->QueueLine(camera, &p, &v, 0xFFFFFF, true, true);
+		v = v + p;
+		e->QueueLine(camera, &p, &v, 0x00FFFF, true, true);
+		ZobMatrix4x4 m = ZobMatrix4x4();
+		m.AddTranslation(m_lastCollPosition);
+		e->QueueSphere(camera, &m, 1, 0xFF0000, false, false);
+
+		p = m_lastCollPosition;
+		v = m_lastCollRebound;
+		v = v + p;
+		v.Mul(10.0f);
+		e->QueueLine(camera, &p, &v, 0xFF00FF, true, true);
+
+		p = m_lastCollPosition;
+		v = m_lastCollNormal;
+		v = v + p;
+		v.Mul(10.0f);
+		e->QueueLine(camera, &p, &v, 0xFFFF00, true, true);
 	}
 }

@@ -36,14 +36,19 @@ public :
                 ZobPhysicComponent::collision coll;
                 //only first contact for now
                 CollisionCallback::ContactPoint contactPoint = contactPair.getContactPoint(0);
-                Vector3 v = contactPair.getCollider1()->getLocalToWorldTransform() * contactPoint.getLocalPointOnCollider1();
-                coll.worldPosition.x = v.x;
-                coll.worldPosition.y = v.y;
-                coll.worldPosition.z = v.z;
-                v = contactPoint.getWorldNormal();
-                coll.worldNormal.x = v.x;
-                coll.worldNormal.y = v.y;
-                coll.worldNormal.z = v.z;
+                Vector3 v1 = contactPair.getCollider1()->getLocalToWorldTransform() * contactPoint.getLocalPointOnCollider1();
+                Vector3 v2 = contactPair.getCollider2()->getLocalToWorldTransform() * contactPoint.getLocalPointOnCollider2();
+                Vector3 n = contactPoint.getWorldNormal();
+                coll.collisionWorldPosition.x = v2.x;
+                coll.collisionWorldPosition.y = v2.y;
+                coll.collisionWorldPosition.z = v2.z;
+                coll.collisionWorldNormal.x = n.x;
+                coll.collisionWorldNormal.y = n.y;
+                coll.collisionWorldNormal.z = n.z;
+                coll.collisionWorldDirection.x = v2.x - v1.x;
+                coll.collisionWorldDirection.y = v2.y - v1.y;
+                coll.collisionWorldDirection.z = v2.z - v1.z;
+                coll.collisionWorldDirection.Normalize();
                 coll.penetration = contactPoint.getPenetrationDepth();
                 zobComp1->OnCollide(coll);
             }
@@ -52,14 +57,15 @@ public :
                 ZobPhysicComponent::collision coll;
                 //only first contact for now
                 CollisionCallback::ContactPoint contactPoint = contactPair.getContactPoint(0);
-                Vector3 v = contactPair.getCollider2()->getLocalToWorldTransform() * contactPoint.getLocalPointOnCollider2();
-                coll.worldPosition.x = v.x;
-                coll.worldPosition.y = v.y;
-                coll.worldPosition.z = v.z;
+                Vector3 v = contactPair.getCollider1()->getLocalToWorldTransform() * contactPoint.getLocalPointOnCollider1();
+                Vector3 n = contactPoint.getWorldNormal();
+                coll.collisionWorldPosition.x = v.x;
+                coll.collisionWorldPosition.y = v.y;
+                coll.collisionWorldPosition.z = v.z;
                 v = contactPoint.getWorldNormal();
-                coll.worldNormal.x = -v.x;
-                coll.worldNormal.y = -v.y;
-                coll.worldNormal.z = -v.z;
+                coll.collisionWorldDirection.x = -v.x;
+                coll.collisionWorldDirection.y = -v.y;
+                coll.collisionWorldDirection.z = -v.z;
                 coll.penetration = contactPoint.getPenetrationDepth();
                 zobComp1->OnCollide(coll);
             }

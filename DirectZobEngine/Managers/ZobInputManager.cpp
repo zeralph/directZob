@@ -75,6 +75,8 @@ void ZobInputManager::Map()
 	m_map->MapFloat(LeftStickX, keyboardId, gainput::KeyRight, 0.0f, 1.0f, &MapToOne);
 	m_map->MapFloat(LeftShoulder, keyboardId, gainput::KeyDown, 0.0f, 1.0f, &MapToOne);
 	m_map->MapFloat(RightShoulder, keyboardId, gainput::KeyUp, 0.0f, 1.0f, &MapToOne);
+	m_map->MapBool(WireFrame, keyboardId, gainput::KeyW);
+	m_map->MapBool(Gizmos, keyboardId, gainput::KeyD);
 
 	m_map->MapFloat(LeftStickX, padId, gainput::PadButtonLeftStickX);
 	m_map->MapFloat(LeftStickY, padId, gainput::PadButtonLeftStickY);
@@ -90,6 +92,7 @@ void ZobInputManager::Map()
 
 	m_map->MapBool(buttonA, padId, gainput::PadButtonA);
 	m_map->MapBool(buttonB, padId, gainput::PadButtonB);
+
 	m_map->MapBool(buttonX, padId, gainput::PadButtonX);
 	m_map->MapBool(buttonY, padId, gainput::PadButtonY);
 }
