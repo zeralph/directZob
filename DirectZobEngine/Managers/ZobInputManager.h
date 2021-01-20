@@ -24,6 +24,7 @@ public:
 		RightShoulder,
 		WireFrame,
 		Gizmos,
+		Quit,
 	};
 
 	ZobInputManager(int width, int height);

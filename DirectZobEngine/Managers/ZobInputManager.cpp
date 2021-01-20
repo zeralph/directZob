@@ -77,6 +77,7 @@ void ZobInputManager::Map()
 	m_map->MapFloat(RightShoulder, keyboardId, gainput::KeyUp, 0.0f, 1.0f, &MapToOne);
 	m_map->MapBool(WireFrame, keyboardId, gainput::KeyW);
 	m_map->MapBool(Gizmos, keyboardId, gainput::KeyD);
+	m_map->MapBool(Quit, keyboardId, gainput::KeyEscape);
 
 	m_map->MapFloat(LeftStickX, padId, gainput::PadButtonLeftStickX);
 	m_map->MapFloat(LeftStickY, padId, gainput::PadButtonLeftStickY);

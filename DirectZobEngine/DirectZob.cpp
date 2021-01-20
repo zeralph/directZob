@@ -313,6 +313,10 @@ int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUp
 			{
 				m_engine->DrawGizmos(!m_engine->DrawGizmos());
 			}
+			if (m_inputManager->GetMap()->GetBoolIsNew(ZobInputManager::Quit))
+			{
+				mfb_close(window);
+			}
 		}
 		m_engine->SetDisplayedBuffer();
 	}
