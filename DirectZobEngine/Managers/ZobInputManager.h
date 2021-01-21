@@ -25,6 +25,7 @@ public:
 		WireFrame,
 		Gizmos,
 		Quit,
+		NextCamera,
 	};
 
 	ZobInputManager(int width, int height);

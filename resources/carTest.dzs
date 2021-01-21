@@ -111,16 +111,40 @@
         <Scale x="1" y="1" z="1" />
         <Mesh name="road2_d.obj" file="road2_d.obj" path="D:\Git\directZob\resources\" />
     </ZobObject>
-    <ZobObject name="road_ground_physic" guid="3066498">
+    <ZobObject name="road2_p_ground" guid="3066499">
         <Position x="0" y="0" z="0" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="1" y="1" z="1" />
         <Physic>
             <RigidBody type="0" active="1">
-                <StaticMesh name="road2_p.obj" path="D:\Git\directZob\resources\" file="road2_p.obj" layers="3">
+                <StaticMesh name="road2_p_ground.obj" path="D:\Git\directZob\resources\" file="road2_p_ground.obj" layers="1">
                     <Material bounciness="0.000000" friction_coeff="0.000000" mass_density="0.000000" rolling_resistance="0.000000" />
                 </StaticMesh>
             </RigidBody>
         </Physic>
-    </ZobObject>
+    </ZobObject>	
+	<ZobObject name="road2_p_leftWall" guid="3066500">
+		<Position x="0" y="0" z="0" />
+		<Rotation x="0" y="0" z="0" />
+		<Scale x="1" y="1" z="1" />
+		<Physic>
+			<RigidBody type="0" active="1">
+				<StaticMesh name="road2_p_leftWall.obj" path="D:\Git\directZob\resources\" file="road2_p_leftWall.obj" layers="2">
+					<Material bounciness="0.000000" friction_coeff="0.000000" mass_density="0.000000" rolling_resistance="0.000000" />
+				</StaticMesh>
+			</RigidBody>
+		</Physic>
+	</ZobObject>
+	<ZobObject name="road2_p_rightWall" guid="3066501">
+		<Position x="0" y="0" z="0" />
+		<Rotation x="0" y="0" z="0" />
+		<Scale x="1" y="1" z="1" />
+		<Physic>
+			<RigidBody type="0" active="1">
+				<StaticMesh name="road2_p_rightWall.obj" path="D:\Git\directZob\resources\" file="road2_p_rightWall.obj" layers="2">
+					<Material bounciness="0.000000" friction_coeff="0.000000" mass_density="0.000000" rolling_resistance="0.000000" />
+				</StaticMesh>
+			</RigidBody>
+		</Physic>
+	</ZobObject>	
 </Scene>

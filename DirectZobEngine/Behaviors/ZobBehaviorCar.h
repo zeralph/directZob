@@ -25,6 +25,7 @@ class ZobBehaviorCar : public ZobBehavior
 		float m_heightAboveGround;
 		bool m_drifting;	
 		float m_steeringMaxAngle;
+		bool m_bRear;
 		ZobVector3 m_direction;
 		ZobVector3 m_lastGroundPosition;
 		ZobVector3 m_lastGroundNormal;

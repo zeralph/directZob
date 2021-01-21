@@ -70,6 +70,7 @@ public:
 
 	};
 	inline void Add(const ZobVector3* v) { x += v->x; y += v->y; z += v->z; }
+	inline void Sub(const ZobVector3* v) { x -= v->x; y -= v->y; z -= v->z; }
 	inline void Div(float f) { x /= f; y /= f; z /= f; }
 	inline void Mul(float f) { x *= f; y *= f; z *= f; }
 	inline void Set(const ZobVector3* v) { x = v->x; y = v->y; z = v->z; }

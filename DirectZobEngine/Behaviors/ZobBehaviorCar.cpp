@@ -18,11 +18,12 @@ ZobBehaviorCar::ZobBehaviorCar(ZobObject* zobObject, TiXmlElement* node) : ZobBe
 {
 	m_type = eBehavior_car;
 	m_motorForce = 5.0f;
-	m_breakForce = 10.0f;
+	m_breakForce = 20.0f;
 	m_lineaVelocityMS = 0.0f;
 	m_steeringMaxAngle = 10.0f;
 	m_drifting = false;
 	m_mass = 750.0f;
+	m_bRear = false;
 	m_heightAboveGround = 0.9f;
 	m_direction = ZobVector3(0, 0, 0);
 	m_lastGroundPosition = ZobVector3(0, 0, 0);
@@ -100,10 +101,14 @@ void ZobBehaviorCar::Update(float dt)
 		float brk = 0.0f;
 		float dir = 0.0f;
 		acc = inputMap->GetFloat(ZobInputManager::RightShoulder) * m_motorForce;
-		if (m_lineaVelocityMS > 0.1f)
+		if (m_bRear)
+		{
+			acc *= 10.0f;
+		}
+		brk = inputMap->GetFloat(ZobInputManager::LeftShoulder) * m_breakForce;
+		if (fabsf(m_lineaVelocityMS) > 0.5f)
 		{
 			dir = inputMap->GetFloat(ZobInputManager::LeftStickX) * m_steeringMaxAngle / m_lineaVelocityMS;
-			brk = inputMap->GetFloat(ZobInputManager::LeftShoulder) * m_breakForce;
 		}
 		ZobVector3 pos = m_zobObject->GetWorldPosition();
 		m_direction = m_zobObject->GetForward();
@@ -147,13 +152,22 @@ void ZobBehaviorCar::Update(float dt)
 			}
 			coll->Reset();
 		}
-		else
+		//else
 		{
 			float f = (acc - brk);
 			m_lineaVelocityMS += f * dt;
-			if (m_lineaVelocityMS > 1.0f)
+			if (m_lineaVelocityMS < 0.0f)
 			{
-				float p = m_lineaVelocityMS * dt;
+				m_lineaVelocityMS = fmaxf(m_lineaVelocityMS, -10.0f);
+				m_bRear = true;
+			}
+			else
+			{
+				m_bRear = false;
+			}
+			if (fabsf(m_lineaVelocityMS) > 1.0f)
+			{
+				float p = fabsf(m_lineaVelocityMS) * dt;
 				m_direction.y = 0.0f;
 				m_direction.Normalize();
 				float angle = DEG_TO_RAD(dir);
@@ -164,9 +178,17 @@ void ZobBehaviorCar::Update(float dt)
 				m_direction.z = m_direction.x * sinA + m_direction.z * cosA;
 				m_direction.Normalize();
 				m_direction.Mul(p);
-				pos.Add(&m_direction);
+				if (m_bRear)
+				{
+					pos.Sub(&m_direction);
+				}
+				else
+				{
+					pos.Add(&m_direction);
+				}
 			}
 		}
+		
 		m_zobObject->SetWorldPosition(pos.x, m_lastGroundPosition.y + m_heightAboveGround, pos.z);
 		m_lastGroundNormal.Normalize();
 		m_direction.Normalize();
@@ -197,7 +219,7 @@ void ZobBehaviorCar::Update(float dt)
 	}
 
 	//update current camera
-	if (inputMap->GetBoolIsNew(ZobInputManager::buttonA))
+	if (inputMap->GetBoolIsNew(ZobInputManager::buttonA) || inputMap->GetBoolIsNew(ZobInputManager::NextCamera))
 	{
 		directZob->GetCameraManager()->SwitchToNextAvailableCamera();
 	}
