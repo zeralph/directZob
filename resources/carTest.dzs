@@ -34,53 +34,53 @@
                 </Box>
             </RigidBody>
         </Physic>
-        <ZobObject name="rearCamera" guid="3002004" type="camera">
-            <Position x="7.32543e-07" y="1.92052" z="-4.78713" />
-            <Rotation x="15.0562" y="-6.9511e-06" z="-9.18598e-07" />
-            <Scale x="1" y="1" z="1" />
-            <Controller>0</Controller>
-            <Fov>70.00</Fov>
-        </ZobObject>
         <ZobObject name="camaro" guid="3046785" type="mesh">
-            <Position x="0" y="0.20109" z="-0.01703" />
+            <Position x="0" y="0.20109" z="1.01703" />
             <Rotation x="0" y="0" z="0" />
             <Scale x="0.3" y="0.3" z="0.3" />
             <Mesh name="camaro.obj" file="camaro.obj" path="D:\Git\directZob\resources\" />
-        </ZobObject>
-        <ZobObject name="FrontCamera" guid="3067491" type="camera">
-            <Position x="0" y="0.286124" z="2.14935" />
-            <Rotation x="0" y="0" z="0" />
-            <Scale x="1" y="1" z="1" />
-            <Controller>0</Controller>
-            <Fov>70.00</Fov>
-        </ZobObject>
-        <ZobObject name="windshieldCamera" guid="3067492" type="camera">
-            <Position x="0" y="0.665553" z="0.262912" />
-            <Rotation x="0" y="0" z="0" />
-            <Scale x="1" y="1" z="1" />
-            <Controller>0</Controller>
-            <Fov>80.00</Fov>
-        </ZobObject>
-        <ZobObject name="sideCamera" guid="3067493" type="camera">
-            <Position x="-5.88051" y="1.69909" z="5.75917" />
-            <Rotation x="-180" y="40.3727" z="-180" />
-            <Scale x="1" y="1" z="1" />
-            <Controller>0</Controller>
-            <Fov>45.00</Fov>
-        </ZobObject>
-        <ZobObject name="orbitalCamera" guid="3067494" type="camera">
-            <Position x="-1.83267" y="-1.45933" z="-11.8255" />
-            <Rotation x="-6.94716" y="-78.3402" z="4.11889e-05" />
-            <Scale x="1" y="1" z="1" />
-            <Controller>2</Controller>
-            <Fov>45.00</Fov>
-        </ZobObject>
-        <ZobObject name="topCamera" guid="3067495" type="camera">
-            <Position x="0" y="58.9772" z="-2.02003" />
-            <Rotation x="88.2659" y="0" z="0" />
-            <Scale x="1" y="1" z="1" />
-            <Controller>0</Controller>
-            <Fov>45.00</Fov>
+            <ZobObject name="rearCamera" guid="3002004" type="camera">
+                <Position x="7.35978e-07" y="1.92052" z="-4.78713" />
+                <Rotation x="15.0562" y="-6.9511e-06" z="-9.18598e-07" />
+                <Scale x="1" y="1" z="1" />
+                <Controller>0</Controller>
+                <Fov>70.00</Fov>
+            </ZobObject>
+            <ZobObject name="FrontCamera" guid="3067491" type="camera">
+                <Position x="0" y="0.286124" z="2.14935" />
+                <Rotation x="0" y="0" z="0" />
+                <Scale x="1" y="1" z="1" />
+                <Controller>0</Controller>
+                <Fov>70.00</Fov>
+            </ZobObject>
+            <ZobObject name="windshieldCamera" guid="3067492" type="camera">
+                <Position x="0" y="0.665553" z="0.262912" />
+                <Rotation x="0" y="0" z="0" />
+                <Scale x="1" y="1" z="1" />
+                <Controller>0</Controller>
+                <Fov>80.00</Fov>
+            </ZobObject>
+            <ZobObject name="sideCamera" guid="3067493" type="camera">
+                <Position x="-5.88051" y="1.69909" z="5.75917" />
+                <Rotation x="-180" y="40.3727" z="-180" />
+                <Scale x="1" y="1" z="1" />
+                <Controller>0</Controller>
+                <Fov>45.00</Fov>
+            </ZobObject>
+            <ZobObject name="orbitalCamera" guid="3067494" type="camera">
+                <Position x="-1.83213" y="-1.45616" z="-11.8103" />
+                <Rotation x="-6.94086" y="-78.3316" z="5.38232e-05" />
+                <Scale x="1" y="1" z="1" />
+                <Controller>2</Controller>
+                <Fov>45.00</Fov>
+            </ZobObject>
+            <ZobObject name="topCamera" guid="3067495" type="camera">
+                <Position x="0" y="58.9772" z="-2.02003" />
+                <Rotation x="88.2659" y="0" z="0" />
+                <Scale x="1" y="1" z="1" />
+                <Controller>0</Controller>
+                <Fov>45.00</Fov>
+            </ZobObject>
         </ZobObject>
     </ZobObject>
     <ZobObject name="Light_1" guid="3068489" type="light">
@@ -147,15 +147,15 @@
             </RigidBody>
         </Physic>
     </ZobObject>
-    <ZobObject name="building_1" guid="3066500" type="mesh">
-        <Position x="0" y="-10.067" z="-36.7" />
-        <Rotation x="0" y="-34" z="0" />
+    <ZobObject name="building_1" guid="3066501" type="mesh">
+        <Position x="-13.563" y="-10" z="-19.37" />
+        <Rotation x="0" y="35" z="0" />
         <Scale x="1" y="1" z="1" />
         <Mesh name="building_1.obj" file="building_1.obj" path="D:\Git\directZob\resources\" />
     </ZobObject>
-    <ZobObject name="building_2" guid="3066501" type="mesh">
-        <Position x="-34.1233" y="-10" z="-23.0164" />
-        <Rotation x="0" y="-34" z="0" />
+    <ZobObject name="building_2" guid="3066502" type="mesh">
+        <Position x="-41.419" y="-10" z="-29.212" />
+        <Rotation x="0" y="35" z="0" />
         <Scale x="1" y="1" z="1" />
         <Mesh name="building_1.obj" file="building_1.obj" path="D:\Git\directZob\resources\" />
     </ZobObject>
