@@ -236,7 +236,7 @@ int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUp
 			{
 				OnQueuing();
 			}
-			m_zobObjectManager->QueueForDrawing(cam, m_engine);
+  			m_zobObjectManager->QueueForDrawing(cam, m_engine);
 			m_physicsEngine->DrawGizmos();
 			m_copyTime = (float)(clock() - m_copyTick) / CLOCKS_PER_SEC * 1000;
 			if (m_engine->ShowGrid())
