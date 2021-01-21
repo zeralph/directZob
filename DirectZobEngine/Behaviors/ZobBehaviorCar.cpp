@@ -117,7 +117,7 @@ void ZobBehaviorCar::Update(float dt)
 		ZobPhysicComponent::collision* coll = zc->GetLastCollision();
 		if (!coll->handled)
 		{
-			if (coll->collisionLayer & ZobPhysicComponent::eLayer_wall)
+			if ((coll->collisionLayer & ZobPhysicComponent::eLayer_wall))
 			{
 				m_lastCollPosition = coll->collisionWorldPosition;
 				m_lastCollDirection = coll->collisionWorldDirection;
@@ -146,7 +146,7 @@ void ZobBehaviorCar::Update(float dt)
 				collRebound.Mul(fminf(fmaxf(1.0f, m_lineaVelocityMS), 5.0f));
 				pos.Add(&collRebound);
 			}
-			else if (coll->collisionLayer & ZobPhysicComponent::eLayer_objects == 1)
+			else if ((coll->collisionLayer & ZobPhysicComponent::eLayer_objects))
 			{
 				//other cars
 			}
