@@ -334,9 +334,9 @@ void DirectZob::LogInfo(const char* format, ...)
 	{
 		for (int i = 0; i < s_logIndent-1; i++)
 		{
-			s.append(std::string("\u2502"));
+			s.append(std::string("|"));
 		}
-		s.append(std::string("\u251C"));
+		s.append(std::string(">"));
 	}
 	s.append(std::string(logBuffer));
 	va_end(args);

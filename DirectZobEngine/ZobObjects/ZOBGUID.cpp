@@ -1,5 +1,6 @@
 #include "ZOBGUID.h"
 #include <algorithm>
+#include <DirectZob.h>
 u16 ZOBGUID::sCurrentId = 1;
 std::vector<DirectZobType::guid> ZOBGUID::m_guidList = std::vector<DirectZobType::guid>();
 
@@ -39,6 +40,7 @@ bool ZOBGUID::IsUsed(DirectZobType::guid id)
 	{
 		if ((DirectZobType::guid)(*iter) == id)
 		{
+			DirectZob::LogWarning("Found duplicate guid %i", (int)id);
 			return true;
 		}
 	}

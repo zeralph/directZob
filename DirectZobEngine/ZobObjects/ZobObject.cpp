@@ -64,7 +64,7 @@ ZobObject::ZobObject(DirectZobType::guid id, TiXmlElement* node, ZobObject* pare
 	float x, y, z;
 	TiXmlElement* f;
 	name = node->Attribute("name");
-	DirectZob::LogInfo("ZobObejct %s creation", name.c_str());
+	DirectZob::LogInfo("ZobObject %s creation", name.c_str());
 	DirectZob::AddIndent();
 	f = node->FirstChildElement("Position");
 	x = atof(f->Attribute("x"));

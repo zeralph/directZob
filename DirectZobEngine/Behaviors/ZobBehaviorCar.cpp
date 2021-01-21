@@ -108,7 +108,7 @@ void ZobBehaviorCar::Update(float dt)
 		brk = inputMap->GetFloat(ZobInputManager::LeftShoulder) * m_breakForce;
 		if (fabsf(m_lineaVelocityMS) > 0.5f)
 		{
-			dir = inputMap->GetFloat(ZobInputManager::LeftStickX) * m_steeringMaxAngle / m_lineaVelocityMS;
+			dir = inputMap->GetFloat(ZobInputManager::LeftStickX) * m_steeringMaxAngle / (m_lineaVelocityMS/2.0f);
 		}
 		ZobVector3 pos = m_zobObject->GetWorldPosition();
 		m_direction = m_zobObject->GetForward();
