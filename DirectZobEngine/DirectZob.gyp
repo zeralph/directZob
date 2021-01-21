@@ -91,6 +91,7 @@
 				'ZobPhysic/ZobPhysicsEngine.cpp',
 				'ZobPhysic/ZobPhysicComponent.h',
 				'ZobPhysic/ZobPhysicComponent.cpp',
+				'ZobPhysic/ZobPhysicsContactsListener.h',
                 'ZobCameraController/ZobCameraController.h',
                 'ZobCameraController/ZobCameraController.cpp',
 				'ZobCameraController/ZobCameraControllerFollowCar.h',
@@ -160,7 +161,7 @@
                             'libraries': [
                                 # relative to xcode project
                                 '../../../dependencies/fbxsdk/macos/lib/clang/release/libfbxsdk.a',
-                                '../../../dependencies/reactphysics3d/lib/macos/libreactphysics3d.a',
+                                '../../../dependencies/reactphysics3d/lib/macos/libreact"sics3d.a',
                                 '../../../dependencies/gainput/lib/macos/libgainputstatic.a',
                             ],
                         },

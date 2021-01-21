@@ -14,21 +14,6 @@ class ZobPhysicComponent
 {
 public:
 
-	struct collision
-	{
-		const ZobPhysicComponent* other;
-		ZobVector3 collisionWorldPosition;
-		ZobVector3 collisionWorldNormal;
-		ZobVector3 collisionWorldDirection;
-		float penetration;
-		bool handled;
-		void Reset()
-		{
-			other = NULL;
-			handled = true;
-		};
-	};
-
 	enum ePhysicComponentType
 	{
 		ePhysicComponentType_static= (int)rp3d::BodyType::STATIC,
@@ -44,6 +29,30 @@ public:
 		eShapeType_box,
 		eShapeType_convexMesh,
 		__eShapeType_MAX__
+	};
+
+	enum eLayer
+	{
+		eLayer_none = 0,
+		eLayer_ground = 1,
+		eLayer_wall = 2, 
+		eLayer_objects=4,
+	};
+
+	struct collision
+	{
+		const ZobPhysicComponent* other;
+		ZobVector3 collisionWorldPosition;
+		ZobVector3 collisionWorldNormal;
+		ZobVector3 collisionWorldDirection;
+		ZobPhysicComponent::eLayer collisionLayer;
+		float penetration;
+		bool handled;
+		void Reset()
+		{
+			other = NULL;
+			handled = true;
+		};
 	};
 
 	ZobPhysicComponent(ZobObject* z, TiXmlNode* t);
@@ -83,6 +92,7 @@ public:
 	void								SetLocalPosition(Vector3 p) { m_localTransform.setPosition(p); };
 	void								SetLocalOrientation(Quaternion q) { m_localTransform.setOrientation(q); };
 	Quaternion							QuaternionFromAxisAngle(Vector3* axis, float angle);
+	inline const eLayer					GetLayers() const { return m_layers; }
 	bool								SetRadius(float f);
 	bool								SetHalfextends(float x, float y, float z);
 	bool								SetHeight(float h);
@@ -129,4 +139,5 @@ private:
 	float m_height;
 	bool m_bUpdateSize;
 	collision m_lastCollision;
+	eLayer m_layers;
 };

@@ -7,6 +7,7 @@
 ZobPhysicComponent::ZobPhysicComponent(ZobObject* z, TiXmlNode* node)
 {
 	m_zobObject = z;
+	m_layers = eLayer_none;
 	BodyType rigidBodyType = rp3d::BodyType::STATIC;
 	m_radius = 1.0f;
 	m_height = 2.0f;
@@ -580,6 +581,8 @@ void ZobPhysicComponent::WriteColliderNode(TiXmlNode* node)
 			c.SetAttribute("path", m_convexMeshPath.c_str());
 			c.SetAttribute("file", m_convexMeshFile.c_str());
 		}
+		c.SetAttribute("layers", std::to_string((int)m_layers).c_str());
+		c.SetAttribute("scale_with_object", std::to_string((int)m_scaleWithObject).c_str());
 		WriteMaterialNode(&c);
 		node->InsertEndChild(c);
 	}
@@ -630,6 +633,7 @@ void ZobPhysicComponent::ReadColliderNode(TiXmlNode* node)
 				m_convexMeshFile = c->Attribute("file") ? c->Attribute("file") : "";
 			}
 			m_scaleWithObject = (bool)(c->Attribute("scale_with_object") ? atoi(c->Attribute("scale_with_object")) : 1);
+			m_layers = (eLayer)(c->Attribute("layers") ? atoi(c->Attribute("layers")) : 0);
 			UpdateShapeType();
 			ReadMaterialNode(c->FirstChild("Material"));
 		}

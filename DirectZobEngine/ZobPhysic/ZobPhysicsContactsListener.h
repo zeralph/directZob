@@ -50,6 +50,7 @@ public :
                 coll.collisionWorldDirection.z = v2.z - v1.z;
                 coll.collisionWorldDirection.Normalize();
                 coll.penetration = contactPoint.getPenetrationDepth();
+                coll.collisionLayer = zobComp2->GetLayers();
                 zobComp1->OnCollide(coll);
             }
             if (zobComp2->GetType() != ZobPhysicComponent::ePhysicComponentType_static)
@@ -67,6 +68,7 @@ public :
                 coll.collisionWorldDirection.y = -v.y;
                 coll.collisionWorldDirection.z = -v.z;
                 coll.penetration = contactPoint.getPenetrationDepth();
+                coll.collisionLayer = zobComp1->GetLayers();
                 zobComp1->OnCollide(coll);
             }
         }

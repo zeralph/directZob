@@ -64,7 +64,7 @@ void ZobBehaviorCar::CheckGroundCollisions()
 	for (iter = bodies->begin(); iter != bodies->end(); iter++)
 	{
 		RigidBody* rb2 = (*iter)->GetRigicBody();
-		if (rb2 != rb)
+		if (((*iter)->GetLayers() & ZobPhysicComponent::eLayer_ground) && rb2 != rb)
 		{
 			if (rb2->raycast(ray, info))
 			{
@@ -112,32 +112,39 @@ void ZobBehaviorCar::Update(float dt)
 		ZobPhysicComponent::collision* coll = zc->GetLastCollision();
 		if (!coll->handled)
 		{
-			m_lastCollPosition = coll->collisionWorldPosition;
-			m_lastCollDirection = coll->collisionWorldDirection;
-			m_lastCollNormal = coll->collisionWorldNormal;
+			if (coll->collisionLayer & ZobPhysicComponent::eLayer_wall)
+			{
+				m_lastCollPosition = coll->collisionWorldPosition;
+				m_lastCollDirection = coll->collisionWorldDirection;
+				m_lastCollNormal = coll->collisionWorldNormal;
 
-			m_lineaVelocityMS /= 2.0f;
-			collRebound = pos - coll->collisionWorldPosition;
-			collRebound.y = 0;
-			collRebound.Normalize();
-			ZobVector3 collNormal = coll->collisionWorldNormal;
-			collNormal.y = 0;
-			collNormal.Mul(-1.0f);
-			collNormal.Normalize();
-			
-			m_lastCollRebound = collRebound;
-			float d = -ZobVector3::Dot(&m_lastCollRebound, &collNormal);
-			float angle = M_PI / 2.0f;// *d / fabsf(d);
-			float sinA = sinf(angle);
-			float cosA = cosf(angle);
-			m_lastCollRebound.x = m_lastCollRebound.x * cosA - m_lastCollRebound.z * sinA;
-			m_lastCollRebound.z = m_lastCollRebound.x * sinA + m_lastCollRebound.z * cosA;
-			m_lastCollRebound.Normalize();
-			//collRebound.Mul(fminf(fmaxf(1.0f, m_lineaVelocityMS), 5.0f));
-			m_lastCollRebound.Mul(10);
+				m_lineaVelocityMS /= 2.0f;
+				collRebound = pos - coll->collisionWorldPosition;
+				collRebound.y = 0;
+				collRebound.Normalize();
+				ZobVector3 collNormal = coll->collisionWorldNormal;
+				collNormal.y = 0;
+				collNormal.Mul(-1.0f);
+				collNormal.Normalize();
 
-			collRebound.Mul(fminf(fmaxf(1.0f, m_lineaVelocityMS), 5.0f));
-			pos.Add(&collRebound);
+				m_lastCollRebound = collRebound;
+				float d = -ZobVector3::Dot(&m_lastCollRebound, &collNormal);
+				float angle = M_PI / 2.0f;// *d / fabsf(d);
+				float sinA = sinf(angle);
+				float cosA = cosf(angle);
+				m_lastCollRebound.x = m_lastCollRebound.x * cosA - m_lastCollRebound.z * sinA;
+				m_lastCollRebound.z = m_lastCollRebound.x * sinA + m_lastCollRebound.z * cosA;
+				m_lastCollRebound.Normalize();
+				//collRebound.Mul(fminf(fmaxf(1.0f, m_lineaVelocityMS), 5.0f));
+				m_lastCollRebound.Mul(10);
+
+				collRebound.Mul(fminf(fmaxf(1.0f, m_lineaVelocityMS), 5.0f));
+				pos.Add(&collRebound);
+			}
+			else if (coll->collisionLayer & ZobPhysicComponent::eLayer_objects == 1)
+			{
+				//other cars
+			}
 			coll->Reset();
 		}
 		else
