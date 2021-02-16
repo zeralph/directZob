@@ -20,9 +20,6 @@ public:
 private:
 
 protected:
-    Camera* m_zobCamera;
-    Camera::eCameraType m_type;
-    std::string m_typeName;
     float m_cumulatedExtraRotation;
     float m_startExtraRotation;
     float m_rotationSpeed;

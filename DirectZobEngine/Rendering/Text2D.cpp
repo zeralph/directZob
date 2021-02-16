@@ -31,7 +31,7 @@ Text2D::~Text2D()
 
 void Text2D::Print(uint x, uint y, uint size, const std::string* text, uint color)
 {
-	if (m_data != NULL)
+	if (m_engine->ShowText() && m_data != NULL)
 	{
 		size_t l = text->length();
 		for (size_t i = 0; i < l; i++)
@@ -44,7 +44,7 @@ void Text2D::Print(uint x, uint y, uint size, const std::string* text, uint colo
 
 void Text2D::Print(uint x, uint y, uint size, uint color, const char* fmt, ...)
 {
-	if (m_data != NULL)
+	if (m_engine->ShowText() && m_data != NULL)
 	{
 		va_list vl;
 		va_start(vl, fmt);

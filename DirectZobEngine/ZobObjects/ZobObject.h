@@ -76,6 +76,7 @@ public:
 	void							LoadMesh(std::string name, std::string file, std::string path);
 	void							SetLightingMode(RenderOptions::eLightMode l);
 	const bool						IsMarkedForDeletion() const { return m_markedForDeletion; };
+	inline const Mesh*				GetMesh() const { return m_mesh; }
 	void							MarkForDeletion() { m_markedForDeletion=true; };
 	const RenderOptions::eLightMode GetLightingMode() const { return m_renderOptions.lightMode; };
 	bool							HasChild(const ZobObject* o);

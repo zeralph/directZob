@@ -43,6 +43,7 @@ public:
 		eFrustrumPlaneTop = 3,
 		eFrustrumPlaneNear = 5,
 		eFrustrumPlaneFar = 4,		
+		__eFrustrumPlane_MAX__ = 6
 	};
 
 	Camera(ZOBGUID::Type zobType, const std::string& name, eCameraType type, float fov, BufferData* bufferData, ZobObject* parent);
@@ -82,6 +83,7 @@ public:
 	bool					ClipSegmentToFrustrum(ZobVector3* p1, ZobVector3* p2, float& outP2Factor) const;
 	static bool				ClipSegmentToPlanes(ZobVector3* p1, ZobVector3* p2, const DirectZobType::Plane* planes, float& outP2Factor);
 	bool					PointIsInFrustrum(const ZobVector3* pt) const;
+	bool					AABBIsInFrustrum(const ZobVector3* aabbMin, const ZobVector3* aabbMax) const;
 	inline void				ToViewSpace(ZobVector3* v) const
 	{
 		m_viewRotMatrix.Mul(v);

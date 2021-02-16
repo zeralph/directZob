@@ -876,9 +876,16 @@ namespace DirectZobEditor
                         k.y = k.y * v.y;
                         k.z = k.z * v.z;
                         float f = k.sqrtLength();
-                        float sign = v.Dot(k2);
+                        float sign = v.Dot(k2);  
                         v.Mul(f * sign);
                         v.Add(p0);
+                    }
+                    if (m_mainForm.Snap())
+                    {
+                        v.x = (int)v.x;
+                        v.y = (int)v.y;
+                        v.z = (int)v.z;
+
                     }
                     z.SetWorldTransform(v);
                     OnZobObjectMoved(z);

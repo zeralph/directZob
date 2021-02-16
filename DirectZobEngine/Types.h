@@ -151,6 +151,18 @@ public:
 		float c;
 		float d;
 	};
+	class Box 
+	{
+	public:
+		ZobVector3 p0;
+		ZobVector3 p1;
+		ZobVector3 p2;
+		ZobVector3 p3;
+		ZobVector3 p4;
+		ZobVector3 p5;
+		ZobVector3 p6;
+		ZobVector3 p7;
+	};
 };
 
 typedef DirectZobType::u8 u8;
@@ -164,6 +176,6 @@ typedef struct DirectZobType::Line3D Line3D;
 typedef struct DirectZobType::RenderOptions RenderOptions;
 typedef class DirectZobType::Ray Ray;
 typedef class DirectZobType::Plane Plane;
-
+typedef class DirectZobType::Box Box;
 static ZobVector3 Vector2Color(ZobVector3* v) { return ZobVector3((int)(v->x * 255.0f), (int)(v->y * 255.0f), (int)(v->z * 255.0f)); };
 static ZobVector3 Color2Vector(ZobVector3* v) { return ZobVector3(v->x / 255.0f, v->y / 255.0f, v->z / 255.0f); };

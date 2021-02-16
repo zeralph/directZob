@@ -42,8 +42,13 @@ namespace CLI
 		void			WireFrame(bool b) { m_Instance->WireFrame(b); }
 		void			ShowNormals(bool b) { m_Instance->ShowNormals(b); }
 		void			DrawGizmos(bool b) { m_Instance->DrawGizmos(b); }
+		void			DrawPhysicsGizmos(bool b) { m_Instance->DrawPhysyicsGizmos(b); }
+		void			ShowBBoxes(bool b) { m_Instance->ShowBBoxes(b); }
+		void			ShowText(bool b) { m_Instance->ShowText(b); }
 		void			LockFrustrum(bool b) { m_Instance->LockFrustrum(b); }
 		bool			LockFrustrum()	{ return m_Instance->LockFrustrum(); }
+		void			DrawCameraGizmos(bool b) { m_Instance->DrawCameraGizmos(b); }
+		bool			DrawCameraGizmos() { return m_Instance->DrawCameraGizmos(); }
 		void			SetRenderOutput(int r);
 		void			SetRenderMode(int r);
 		void			SetLightingPrecision(int r);
@@ -59,6 +64,7 @@ namespace CLI
 		ZobVector3*		m_vertices;
 		ZobVector3*		m_projectedVertices;
 		ZobVector3*		m_normals;
+		ZobVector2*		m_uvs;
 		int				m_nbTriangles;
 		int				m_nbLines;
 		int				m_nbCircles;

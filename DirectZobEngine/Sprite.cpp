@@ -15,8 +15,8 @@ Sprite::Sprite(std::string& name):Mesh(name)
 	m_nbFaces = 2;
 	m_nbUvs = 4;
 
-	m_minBouding = ZobVector3(-0.5f, -0.5f, 0.0f);
-	m_maxBouding = ZobVector3(0.5f, 0.5f, 0.0f);
+	m_minBoundingBox = ZobVector3(-0.5f, -0.5f, 0.0f);
+	m_maxBoundingBox = ZobVector3(0.5f, 0.5f, 0.0f);
 
 	m_vertices = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
 	m_verticesData = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);

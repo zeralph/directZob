@@ -15,6 +15,7 @@ Mesh::Mesh(std::string& name)
 	m_nbNormals = 0;
 	m_nbFaces = 0;
 	m_hasNormals = false;
+	m_bDrawn = false;
 	m_indices = NULL;
 	m_vertices = NULL;
 	m_projectedVertices = NULL;
@@ -123,17 +124,17 @@ Mesh::Mesh(std::string &parentName, std::string& path, fbxsdk::FbxMesh* mesh)
 					m_vertices[vIdx] = ZobVector3(v[0], v[1], v[2]);
 					if (vIdx == 0)
 					{
-						m_minBouding = ZobVector3(v[0], v[1], v[2]);
-						m_maxBouding = ZobVector3(v[0], v[1], v[2]);
+						m_minBoundingBox = ZobVector3(v[0], v[1], v[2]);
+						m_maxBoundingBox = ZobVector3(v[0], v[1], v[2]);
 					}
 					else
 					{
-						m_minBouding.x = min(m_minBouding.x, (float)v[0]);
-						m_minBouding.y = min(m_minBouding.y, (float)v[1]);
-						m_minBouding.z = min(m_minBouding.z, (float)v[2]);
-						m_maxBouding.x = max(m_maxBouding.x, (float)v[0]);
-						m_maxBouding.y = max(m_maxBouding.y, (float)v[1]);
-						m_maxBouding.z = max(m_maxBouding.z, (float)v[2]);
+						m_minBoundingBox.x = min(m_minBoundingBox.x, (float)v[0]);
+						m_minBoundingBox.y = min(m_minBoundingBox.y, (float)v[1]);
+						m_minBoundingBox.z = min(m_minBoundingBox.z, (float)v[2]);
+						m_maxBoundingBox.x = max(m_maxBoundingBox.x, (float)v[0]);
+						m_maxBoundingBox.y = max(m_maxBoundingBox.y, (float)v[1]);
+						m_maxBoundingBox.z = max(m_maxBoundingBox.z, (float)v[2]);
 					}
 					//UVs
 					fbxsdk::FbxStringList uvsNames;
@@ -418,7 +419,8 @@ void Mesh::LoadOBJ(const std::string& fullPath)
 		m_verticesNormals[0] = ZobVector3(0, 0, 1);
 		m_trianglesNormals[0] = ZobVector3(0, 0, 1);
 	}
-
+	m_minBoundingBox = ZobVector3(0, 0, 0);
+	m_maxBoundingBox = ZobVector3(0, 0, 0);
 	size_t curVertice = 0;
 	size_t curNormal = 0;
 	size_t curUv = 0;
@@ -450,6 +452,12 @@ void Mesh::LoadOBJ(const std::string& fullPath)
 				SplitEntry(&line, &vec, ' ');
 				ZobVector3 v = ZobVector3(std::stof(vec[1], &sz), ::stof(vec[2], &sz), ::stof(vec[3], &sz));
 				m_vertices[curVertice] = v;
+				m_minBoundingBox.x = min(v.x, m_minBoundingBox.x);
+				m_minBoundingBox.y = min(v.y, m_minBoundingBox.y);
+				m_minBoundingBox.z = min(v.z, m_minBoundingBox.z);
+				m_maxBoundingBox.x = max(v.x, m_maxBoundingBox.x);
+				m_maxBoundingBox.y = max(v.y, m_maxBoundingBox.y);
+				m_maxBoundingBox.z = max(v.z, m_maxBoundingBox.z);
 				curVertice++;
 			}
 		}
@@ -503,162 +511,179 @@ void Mesh::SplitEntry(const std::string* s, std::vector<std::string>* v, const c
 
 void Mesh::DrawBoundingBox(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions* options)
 {
-	ZobVector3 v = ZobVector3(
-		(m_maxBouding.x - m_minBouding.x) / 2.0f,
-		(m_maxBouding.y - m_minBouding.y) / 2.0f,
-		(m_maxBouding.z - m_minBouding.z) / 2.0f
-	);
-	ZobVector3 pivot = ZobVector3(m_minBouding.x + v.x, m_minBouding.y + v.y, m_minBouding.z + v.z);
-	engine->QueueBox(camera, &modelMatrix, &v, &pivot, 0x00FFFFFF, false, false);
+	engine->QueueWorldBox(camera, &m_AABB, 0xFFFFFF, false, false);
+	engine->QueueWorldBox(camera, &m_OBB, 0xDDDDDD, false, false);
+}
+
+bool Mesh::IsInFrustrum(const ZobMatrix4x4& modelMatrix, const Camera* c)
+{
+	ZobVector3 minaabb, maxaabb;
+	maxaabb.x = fmaxf(fmaxf(fmaxf(fmaxf(fmaxf(fmaxf(fmaxf(m_AABB.p0.x, m_AABB.p1.x), m_AABB.p2.x), m_AABB.p3.x), m_AABB.p4.x), m_AABB.p5.x), m_AABB.p6.x), m_AABB.p7.x);
+	maxaabb.y = fmaxf(fmaxf(fmaxf(fmaxf(fmaxf(fmaxf(fmaxf(m_AABB.p0.y, m_AABB.p1.y), m_AABB.p2.y), m_AABB.p3.y), m_AABB.p4.y), m_AABB.p5.y), m_AABB.p6.y), m_AABB.p7.y);
+	maxaabb.z = fmaxf(fmaxf(fmaxf(fmaxf(fmaxf(fmaxf(fmaxf(m_AABB.p0.z, m_AABB.p1.z), m_AABB.p2.z), m_AABB.p3.z), m_AABB.p4.z), m_AABB.p5.z), m_AABB.p6.z), m_AABB.p7.z);
+	ZobVector3 min;
+	minaabb.x = fminf(fminf(fminf(fminf(fminf(fminf(fminf(m_AABB.p0.x, m_AABB.p1.x), m_AABB.p2.x), m_AABB.p3.x), m_AABB.p4.x), m_AABB.p5.x), m_AABB.p6.x), m_AABB.p7.x);
+	minaabb.y = fminf(fminf(fminf(fminf(fminf(fminf(fminf(m_AABB.p0.y, m_AABB.p1.y), m_AABB.p2.y), m_AABB.p3.y), m_AABB.p4.y), m_AABB.p5.y), m_AABB.p6.y), m_AABB.p7.y);
+	minaabb.z = fminf(fminf(fminf(fminf(fminf(fminf(fminf(m_AABB.p0.z, m_AABB.p1.z), m_AABB.p2.z), m_AABB.p3.z), m_AABB.p4.z), m_AABB.p5.z), m_AABB.p6.z), m_AABB.p7.z);
+	return c->AABBIsInFrustrum(&minaabb, &maxaabb);
 }
 
 void Mesh::Update(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions* options)
 {
-	BufferData* bData = engine->GetBufferData();
-	const ZobMatrix4x4* view = camera->GetViewMatrix();
-	const ZobMatrix4x4* proj = camera->GetProjectionMatrix();
-	float w = (float)bData->width / 2.0f;
-	float h = (float)bData->height / 2.0f;	
+	ComputeBoundingBoxes(modelMatrix, camera, engine);
 
-	memcpy(m_vertices, m_verticesData, sizeof(ZobVector3) * m_nbVertices);
-	memcpy(m_verticesTmp, m_verticesData, sizeof(ZobVector3) * m_nbVertices);
-	memcpy(m_verticesNormalsTmp, m_verticesNormalsData, sizeof(ZobVector3) * m_nbNormals);
-	memcpy(m_trianglesNormalsTmp, m_trianglesNormalsData, sizeof(ZobVector3) * m_nbFaces);
+	m_bDrawn = IsInFrustrum(modelMatrix, camera);
+	if (m_bDrawn)
+	{
+		BufferData* bData = engine->GetBufferData();
+		const ZobMatrix4x4* view = camera->GetViewMatrix();
+		const ZobMatrix4x4* proj = camera->GetProjectionMatrix();
+		float w = (float)bData->width / 2.0f;
+		float h = (float)bData->height / 2.0f;	
 
-	for (uint i = 0; i < m_nbVertices; i++)
-	{
-		modelMatrix.Mul(&m_verticesTmp[i]);
-	}
-	int c = 0;
-	for (uint i = 0; i < m_triangles.size(); i++)
-	{
-		Triangle* t = &m_triangles.at(i);
-		t->draw = true;
-		ZobVector3* va = &m_verticesTmp[t->verticeAIndex];
-		ZobVector3* vb = &m_verticesTmp[t->verticeBIndex];
-		ZobVector3* vc = &m_verticesTmp[t->verticeCIndex];
+		memcpy(m_vertices, m_verticesData, sizeof(ZobVector3) * m_nbVertices);
+		memcpy(m_verticesTmp, m_verticesData, sizeof(ZobVector3) * m_nbVertices);
+		memcpy(m_verticesNormalsTmp, m_verticesNormalsData, sizeof(ZobVector3) * m_nbNormals);
+		memcpy(m_trianglesNormalsTmp, m_trianglesNormalsData, sizeof(ZobVector3) * m_nbFaces);
+
+		for (uint i = 0; i < m_nbVertices; i++)
+		{
+			modelMatrix.Mul(&m_verticesTmp[i]);
+		}
+		int c = 0;
+		for (uint i = 0; i < m_triangles.size(); i++)
+		{
+			Triangle* t = &m_triangles.at(i);
+			t->draw = true;
+			ZobVector3* va = &m_verticesTmp[t->verticeAIndex];
+			ZobVector3* vb = &m_verticesTmp[t->verticeBIndex];
+			ZobVector3* vc = &m_verticesTmp[t->verticeCIndex];
 			
-		bool aIn = camera->PointIsInFrustrum(va);
-		bool bIn = camera->PointIsInFrustrum(vb);
-		bool cIn = camera->PointIsInFrustrum(vc);
-		if(aIn && bIn && cIn)
-		{
-			t->clipMode = Triangle::eClip_3_in;
+			bool aIn = camera->PointIsInFrustrum(va);
+			bool bIn = camera->PointIsInFrustrum(vb);
+			bool cIn = camera->PointIsInFrustrum(vc);
+			if(aIn && bIn && cIn)
+			{
+				t->clipMode = Triangle::eClip_3_in;
+			}
+			else if(aIn && cIn)
+			{
+				t->clipMode = Triangle::eClip_AC_in_B_out;
+			}
+			else if (aIn && bIn)
+			{
+				t->clipMode = Triangle::eClip_AB_in_C_out;
+			}
+			else if (aIn)
+			{
+				t->clipMode = Triangle::eClip_A_in_BC_out;
+			}
+			else if (bIn && cIn)
+			{
+				t->clipMode = Triangle::eClip_BC_in_A_out;
+			}
+			else if (bIn)
+			{
+				t->clipMode = Triangle::eClip_B_in_AC_out;
+			}
+			else if(cIn)
+			{
+				t->clipMode = Triangle::eClip_C_in_AB_out;
+			}
+			else
+			{
+				t->clipMode = Triangle::eClip_0_in;
+			}
 		}
-		else if(aIn && cIn)
+	/*
+		for (uint i = 0; i < m_nbVertices; i++)
 		{
-			t->clipMode = Triangle::eClip_AC_in_B_out;
+			m_projectedVerticesTmp[i].x = m_verticesTmp[i].x;
+			m_projectedVerticesTmp[i].y = m_verticesTmp[i].y;
+			m_projectedVerticesTmp[i].z = m_verticesTmp[i].z;
+			m_projectedVerticesTmp[i].w = m_verticesTmp[i].w;
+			view->Mul(&m_projectedVerticesTmp[i]);
+			proj->Mul(&m_projectedVerticesTmp[i]);
+			//static float kk = 1.0f; // sinf(m_projectedVerticesTmp[i].y) * kk
+			m_projectedVerticesTmp[i].x = ((m_projectedVerticesTmp[i].x )/ m_projectedVerticesTmp[i].z + 1) * w;
+			m_projectedVerticesTmp[i].y = (m_projectedVerticesTmp[i].y / m_projectedVerticesTmp[i].z + 1) * h;
 		}
-		else if (aIn && bIn)
+	*/	
+		for (uint i = 0; i < m_nbNormals; i++)
 		{
-			t->clipMode = Triangle::eClip_AB_in_C_out;
+			rotationMatrix.Mul(&m_verticesNormalsTmp[i]);
+			m_verticesNormalsTmp[i].Normalize();
 		}
-		else if (aIn)
+		for (uint i = 0; i < m_nbFaces; i++)
 		{
-			t->clipMode = Triangle::eClip_A_in_BC_out;
+			rotationMatrix.Mul(&m_trianglesNormalsTmp[i]);
+			m_trianglesNormalsTmp[i].Normalize();
 		}
-		else if (bIn && cIn)
+		for (int i = 0; i < m_subMeshes.size(); i++)
 		{
-			t->clipMode = Triangle::eClip_BC_in_A_out;
+			m_subMeshes[i]->Update(modelMatrix, rotationMatrix, camera, engine, ownerId, options);
 		}
-		else if (bIn)
-		{
-			t->clipMode = Triangle::eClip_B_in_AC_out;
-		}
-		else if(cIn)
-		{
-			t->clipMode = Triangle::eClip_C_in_AB_out;
-		}
-		else
-		{
-			t->clipMode = Triangle::eClip_0_in;
-		}
-	}
-/*
-	for (uint i = 0; i < m_nbVertices; i++)
-	{
-		m_projectedVerticesTmp[i].x = m_verticesTmp[i].x;
-		m_projectedVerticesTmp[i].y = m_verticesTmp[i].y;
-		m_projectedVerticesTmp[i].z = m_verticesTmp[i].z;
-		m_projectedVerticesTmp[i].w = m_verticesTmp[i].w;
-		view->Mul(&m_projectedVerticesTmp[i]);
-		proj->Mul(&m_projectedVerticesTmp[i]);
-		//static float kk = 1.0f; // sinf(m_projectedVerticesTmp[i].y) * kk
-		m_projectedVerticesTmp[i].x = ((m_projectedVerticesTmp[i].x )/ m_projectedVerticesTmp[i].z + 1) * w;
-		m_projectedVerticesTmp[i].y = (m_projectedVerticesTmp[i].y / m_projectedVerticesTmp[i].z + 1) * h;
-	}
-*/	
-	for (uint i = 0; i < m_nbNormals; i++)
-	{
-		rotationMatrix.Mul(&m_verticesNormalsTmp[i]);
-		m_verticesNormalsTmp[i].Normalize();
-	}
-	for (uint i = 0; i < m_nbFaces; i++)
-	{
-		rotationMatrix.Mul(&m_trianglesNormalsTmp[i]);
-		m_trianglesNormalsTmp[i].Normalize();
-	}
-	for (int i = 0; i < m_subMeshes.size(); i++)
-	{
-		m_subMeshes[i]->Update(modelMatrix, rotationMatrix, camera, engine, ownerId, options);
 	}
 }
 void Mesh::QueueForDrawing(ZobObject* z, const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, RenderOptions* options)
 {
-	memcpy(m_vertices, m_verticesTmp, sizeof(ZobVector3) * m_nbVertices);
-	memcpy(m_verticesNormals, m_verticesNormalsTmp, sizeof(ZobVector3) * m_nbNormals);
-	memcpy(m_trianglesNormals, m_trianglesNormalsTmp, sizeof(ZobVector3) * m_nbFaces);
-	memcpy(m_projectedVertices, m_projectedVerticesTmp, sizeof(ZobVector3) * m_nbVertices);
+	if (m_bDrawn)
+	{
+		memcpy(m_vertices, m_verticesTmp, sizeof(ZobVector3) * m_nbVertices);
+		memcpy(m_verticesNormals, m_verticesNormalsTmp, sizeof(ZobVector3) * m_nbNormals);
+		memcpy(m_trianglesNormals, m_trianglesNormalsTmp, sizeof(ZobVector3) * m_nbFaces);
+		memcpy(m_projectedVertices, m_projectedVerticesTmp, sizeof(ZobVector3) * m_nbVertices);
 
-	if (engine->DrawGizmos())// && engine->ShowBBoxes() )
-	{
-		DrawBoundingBox(modelMatrix, rotationMatrix, camera, engine, ownerId, options);
-	}
-	//Update(modelMatrix, rotationMatrix, camera, engine, ownerId, options);
-	BufferData* bData = engine->GetBufferData();
-	float znear = bData->zNear;
-	float zfar = bData->zFar;
-	ZobVector3 n;
-	for (int i = 0; i < m_nbFaces; i++)
-	{
-		Triangle* t = &m_triangles[i];
-		t->options = options;
-		t->zobObject = z;
-		t->ca = 0xFF0000;
-		t->cb = 0x00FF00;
-		t->cc = 0x0000FF;
-		if(t->draw)
+		if (engine->DrawGizmos() && engine->ShowBBoxes() )
 		{
-			bool bCull = false;
-			t->ComputeArea();
-			static float sAreaMin = 0.0f;
-			static float sAreaMax = 50000.0f;
-			if (t->options->cullMode == eCullMode_CounterClockwiseFace)
+			DrawBoundingBox(modelMatrix, rotationMatrix, camera, engine, ownerId, options);
+		}
+		//Update(modelMatrix, rotationMatrix, camera, engine, ownerId, options);
+		BufferData* bData = engine->GetBufferData();
+		float znear = bData->zNear;
+		float zfar = bData->zFar;
+		ZobVector3 n;
+		for (int i = 0; i < m_nbFaces; i++)
+		{
+			Triangle* t = &m_triangles[i];
+			t->options = options;
+			t->zobObject = z;
+			t->ca = 0xFF0000;
+			t->cb = 0x00FF00;
+			t->cc = 0x0000FF;
+			if(t->draw)
 			{
-				t->area = -t->area;
-			}
-			//if (t->area > sAreaMin)
-			{
-				engine->QueueTriangle(camera, t);
-				static bool bShowNormal = true;
-				if (engine->ShowNormals())
+				bool bCull = false;
+				t->ComputeArea();
+				static float sAreaMin = 0.0f;
+				static float sAreaMax = 50000.0f;
+				if (t->options->cullMode == eCullMode_CounterClockwiseFace)
 				{
-					ZobVector3 v = t->na;
-					v = v + t->va;
-					engine->QueueLine(camera, t->va, &v, 0xFF00FF, false, false);
-					v = t->nb;
-					v = v + t->vb;
-					engine->QueueLine(camera, t->vb, &v, 0xFF00FF, false, false);
-					v = t->nb;
-					v = v + t->vc;
-					engine->QueueLine(camera, t->vc, &v, 0xFF00FF, false, false);
+					t->area = -t->area;
+				}
+				//if (t->area > sAreaMin)
+				{
+					engine->QueueTriangle(camera, t);
+					static bool bShowNormal = true;
+					if (engine->ShowNormals())
+					{
+						ZobVector3 v = t->na;
+						v = v + t->va;
+						engine->QueueLine(camera, t->va, &v, 0xFF00FF, false, false);
+						v = t->nb;
+						v = v + t->vb;
+						engine->QueueLine(camera, t->vb, &v, 0xFF00FF, false, false);
+						v = t->nb;
+						v = v + t->vc;
+						engine->QueueLine(camera, t->vc, &v, 0xFF00FF, false, false);
+					}
 				}
 			}
 		}
-	}
-	for (int i = 0; i < m_subMeshes.size(); i++)
-	{
-		m_subMeshes[i]->QueueForDrawing(z, modelMatrix, rotationMatrix, camera,  engine, ownerId, options);
+		for (int i = 0; i < m_subMeshes.size(); i++)
+		{
+			m_subMeshes[i]->QueueForDrawing(z, modelMatrix, rotationMatrix, camera,  engine, ownerId, options);
+		}
 	}
 }
 
@@ -784,4 +809,82 @@ void Mesh::CreateTriangles(const std::vector<std::string>* line, std::vector<Tri
 
 		tArrayIdx++;	
 	}
+}
+
+
+void Mesh::ComputeBoundingBoxes(const ZobMatrix4x4& modelMatrix, const Camera* camera, Core::Engine* engine)
+{
+	//update Bounding boxes
+	ZobVector3 v = ZobVector3(
+		(m_maxBoundingBox.x - m_minBoundingBox.x) / 2.0f,
+		(m_maxBoundingBox.y - m_minBoundingBox.y) / 2.0f,
+		(m_maxBoundingBox.z - m_minBoundingBox.z) / 2.0f
+	);
+	/*
+	ZobVector3 v0 = ZobVector3(-v.x, -v.y, -v.z);
+	ZobVector3 v1 = ZobVector3(-v.x, v.y, -v.z);
+	ZobVector3 v2 = ZobVector3(v.x, v.y, -v.z);
+	ZobVector3 v3 = ZobVector3(v.x, -v.y, -v.z);
+	ZobVector3 v4 = ZobVector3(-v.x, -v.y, v.z);
+	ZobVector3 v5 = ZobVector3(-v.x, v.y, v.z);
+	ZobVector3 v6 = ZobVector3(v.x, v.y, v.z);
+	ZobVector3 v7 = ZobVector3(v.x, -v.y, v.z);
+	*/
+	ZobVector3 v0 = ZobVector3(m_minBoundingBox.x, m_minBoundingBox.y, m_minBoundingBox.z);
+	ZobVector3 v1 = ZobVector3(m_minBoundingBox.x, m_maxBoundingBox.y, m_minBoundingBox.z);
+	ZobVector3 v2 = ZobVector3(m_maxBoundingBox.x, m_maxBoundingBox.y, m_minBoundingBox.z);
+	ZobVector3 v3 = ZobVector3(m_maxBoundingBox.x, m_minBoundingBox.y, m_minBoundingBox.z);
+	ZobVector3 v4 = ZobVector3(m_minBoundingBox.x, m_minBoundingBox.y, m_maxBoundingBox.z);
+	ZobVector3 v5 = ZobVector3(m_minBoundingBox.x, m_maxBoundingBox.y, m_maxBoundingBox.z);
+	ZobVector3 v6 = ZobVector3(m_maxBoundingBox.x, m_maxBoundingBox.y, m_maxBoundingBox.z);
+	ZobVector3 v7 = ZobVector3(m_maxBoundingBox.x, m_minBoundingBox.y, m_maxBoundingBox.z);
+
+	m_OBB.p0 = v0;
+	m_OBB.p1 = v1;
+	m_OBB.p2 = v2;
+	m_OBB.p3 = v3;
+	m_OBB.p4 = v4;
+	m_OBB.p5 = v5;
+	m_OBB.p6 = v6;
+	m_OBB.p7 = v7;
+	modelMatrix.Mul(&m_OBB.p0);
+	modelMatrix.Mul(&m_OBB.p1);
+	modelMatrix.Mul(&m_OBB.p2);
+	modelMatrix.Mul(&m_OBB.p3);
+	modelMatrix.Mul(&m_OBB.p4);
+	modelMatrix.Mul(&m_OBB.p5);
+	modelMatrix.Mul(&m_OBB.p6);
+	modelMatrix.Mul(&m_OBB.p7);
+
+	ZobVector3 max;
+	max.x = fmaxf(fmaxf(fmaxf(fmaxf(fmaxf(fmaxf(fmaxf(m_OBB.p0.x, m_OBB.p1.x), m_OBB.p2.x), m_OBB.p3.x), m_OBB.p4.x), m_OBB.p5.x), m_OBB.p6.x), m_OBB.p7.x);
+	max.y = fmaxf(fmaxf(fmaxf(fmaxf(fmaxf(fmaxf(fmaxf(m_OBB.p0.y, m_OBB.p1.y), m_OBB.p2.y), m_OBB.p3.y), m_OBB.p4.y), m_OBB.p5.y), m_OBB.p6.y), m_OBB.p7.y);
+	max.z = fmaxf(fmaxf(fmaxf(fmaxf(fmaxf(fmaxf(fmaxf(m_OBB.p0.z, m_OBB.p1.z), m_OBB.p2.z), m_OBB.p3.z), m_OBB.p4.z), m_OBB.p5.z), m_OBB.p6.z), m_OBB.p7.z);
+	ZobVector3 min;
+	min.x = fminf(fminf(fminf(fminf(fminf(fminf(fminf(m_OBB.p0.x, m_OBB.p1.x), m_OBB.p2.x), m_OBB.p3.x), m_OBB.p4.x), m_OBB.p5.x), m_OBB.p6.x), m_OBB.p7.x);
+	min.y = fminf(fminf(fminf(fminf(fminf(fminf(fminf(m_OBB.p0.y, m_OBB.p1.y), m_OBB.p2.y), m_OBB.p3.y), m_OBB.p4.y), m_OBB.p5.y), m_OBB.p6.y), m_OBB.p7.y);
+	min.z = fminf(fminf(fminf(fminf(fminf(fminf(fminf(m_OBB.p0.z, m_OBB.p1.z), m_OBB.p2.z), m_OBB.p3.z), m_OBB.p4.z), m_OBB.p5.z), m_OBB.p6.z), m_OBB.p7.z);
+
+	v = ZobVector3(
+		(max.x - min.x) / 2.0f,
+		(max.y - min.y) / 2.0f,
+		(max.z - min.z) / 2.0f
+	);
+	v0 = ZobVector3(min.x, min.y, min.z);
+	v1 = ZobVector3(min.x, max.y, min.z);
+	v2 = ZobVector3(max.x, max.y, min.z);
+	v3 = ZobVector3(max.x, min.y, min.z);
+	v4 = ZobVector3(min.x, min.y, max.z);
+	v5 = ZobVector3(min.x, max.y, max.z);
+	v6 = ZobVector3(max.x, max.y, max.z);
+	v7 = ZobVector3(max.x, min.y, max.z);
+
+	m_AABB.p0 = v0;
+	m_AABB.p1 = v1;
+	m_AABB.p2 = v2;
+	m_AABB.p3 = v3;
+	m_AABB.p4 = v4;
+	m_AABB.p5 = v5;
+	m_AABB.p6 = v6;
+	m_AABB.p7 = v7;
 }

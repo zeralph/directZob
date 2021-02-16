@@ -160,12 +160,29 @@ void ZobObjectManager::QueueForDrawing(const Camera* camera, Core::Engine* engin
 	m_rootObject->QueueForDrawing(camera, engine);
 }
 
-std::string ZobObjectManager::GetZobObjectList()
+void ZobObjectManager::GetZobObjectList(std::string& s)
 {
-	std::string outStr = "";
-	GetZobObjectListInternal(m_rootObject, outStr);
-	outStr.append("");
-	return outStr;
+	GetZobObjectListInternal(m_rootObject, s);
+	s.append("");
+}
+
+ void ZobObjectManager::GetZobObjectList(std::vector<const ZobObject*>& v)
+{
+	v.clear();
+	GetZobObjectListInternal(m_rootObject, v);
+}
+
+void ZobObjectManager::GetZobObjectListInternal(const ZobObject* z, std::vector<const ZobObject*>& v)
+{
+	if (z->GetType() != ZOBGUID::type_editor && !z->IsMarkedForDeletion())
+	{
+		v.push_back(z);
+		const std::vector<ZobObject*>* c = z->GetChildren();
+		for (int i = 0; i < c->size(); i++)
+		{
+			GetZobObjectListInternal(c->at(i), v);
+		}
+	}
 }
 
 void ZobObjectManager::GetZobObjectListInternal(const ZobObject* z, std::string& str)

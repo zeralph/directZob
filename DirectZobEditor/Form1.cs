@@ -64,6 +64,7 @@ namespace DirectZobEditor
         private ZobMeshControl m_meshControl;
         private PhysicControl m_physicsControl;
         private ZobSpriteControl m_spriteControl;
+        private bool m_snap = false;
         private bool m_ctrlPressed = false;
 
         private string m_path = "C:\\";
@@ -132,6 +133,14 @@ namespace DirectZobEditor
             m_engineWindow.GetEngineWrapper().ShowGrid(false);
             m_directZobWrapper.StartPhysic();
             */
+            bBoxToolStripMenuItem.Checked = false;
+            m_engineWindow.GetEngineWrapper().ShowBBoxes(false);
+            cameraToolStripMenuItem.Checked = false;
+            //m_engineWindow.GetEngineWrapper().DrawPhysicsGizmos(false);
+            textToolStripMenuItem.Checked = false;
+            m_engineWindow.GetEngineWrapper().ShowText(false);
+            physicsToolStripMenuItem.Checked = false;
+            m_engineWindow.GetEngineWrapper().DrawPhysicsGizmos(false);
         }
 
         public string Getpath()
@@ -139,6 +148,10 @@ namespace DirectZobEditor
             return m_path;
         }
 
+        public bool Snap()
+        {
+            return m_snap;
+        }
         public void UpdateAfterEngine()
         {
             m_camControl.UpdateControl();
@@ -637,6 +650,35 @@ namespace DirectZobEditor
             PropagateSceneUpdateEvent(ev);
         }
         #endregion
+
+        private void bBoxToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            bBoxToolStripMenuItem.Checked = !bBoxToolStripMenuItem.Checked;
+            m_engineWindow.GetEngineWrapper().ShowBBoxes(bBoxToolStripMenuItem.Checked);
+        }
+
+        private void cameraToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            cameraToolStripMenuItem.Checked = !cameraToolStripMenuItem.Checked;
+            m_engineWindow.GetEngineWrapper().DrawCameraGizmos(cameraToolStripMenuItem.Checked);
+        }
+
+        private void physicsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            physicsToolStripMenuItem.Checked = !physicsToolStripMenuItem.Checked;
+            m_engineWindow.GetEngineWrapper().DrawPhysicsGizmos(physicsToolStripMenuItem.Checked);
+        }
+
+        private void textToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            textToolStripMenuItem.Checked = !textToolStripMenuItem.Checked;
+            m_engineWindow.GetEngineWrapper().ShowText(textToolStripMenuItem.Checked);
+        }
+
+        private void toolStripSnap_Click(object sender, EventArgs e)
+        {
+            m_snap = toolStripSnap.Checked;
+        }
     }
 
     public class Event

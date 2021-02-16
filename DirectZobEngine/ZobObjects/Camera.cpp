@@ -112,6 +112,10 @@ void Camera::SetType(eCameraType type)
 
 void Camera::DrawGizmos(const Camera* camera, Core::Engine* engine)
 {
+	if (!engine->DrawCameraGizmos())
+	{
+		return;
+	}
 	if (GetType() == ZOBGUID::type_editor)
 	{
 		//		return;
@@ -357,7 +361,7 @@ void Camera::NormalizePlane(Plane& plane)
 
 bool Camera::PointIsInFrustrum(const ZobVector3* pt) const
 {
-	for (int i = 0; i < 6; ++i)
+	for (int i = 0; i < __eFrustrumPlane_MAX__; ++i)
 	{
 		Plane p = m_frustrumPlanes[i];
 		ZobVector3 pv = ZobVector3(p.a, p.b, p.c);
@@ -381,7 +385,7 @@ bool Camera::ClipSegmentToPlanes(ZobVector3* p1, ZobVector3* p2, const DirectZob
 	ZobVector3 dp = ZobVector3(p2->x - p1->x, p2->y - p1->y, p2->z - p1->z);
 	float p1_fac = 0.0f;
 	float p2_fac = 1.0f;
-	for (int i = 0; i < 6; i++)
+	for (int i = 0; i < __eFrustrumPlane_MAX__; i++)
 	{
 		Plane p = planes[i];
 		ZobVector3 pv = ZobVector3(p.a, p.b, p.c);
@@ -438,6 +442,60 @@ bool Camera::ClipSegmentToPlanes(ZobVector3* p1, ZobVector3* p2, const DirectZob
 	p2->z = p1->z + dp.z * p2_fac;
 	outP2Factor = p2_fac;
 	return true;
+}
+
+bool Camera::AABBIsInFrustrum(const ZobVector3* aabbMin, const ZobVector3* aabbMax) const
+{
+	int INTERSECT = 2;
+	int INSIDE = 1;
+	int OUTSIDE = 0;
+	
+	int ret = INSIDE;
+	ZobVector3 vmin, vmax, normal;
+
+	for (int i = 0; i < __eFrustrumPlane_MAX__; i++) {
+		normal = ZobVector3(m_frustrumPlanes[i].a, m_frustrumPlanes[i].b, m_frustrumPlanes[i].c);
+		
+		// X axis 
+		if (normal.x > 0)
+		{
+			vmin.x = aabbMin->x;
+			vmax.x = aabbMax->x;
+		}
+		else 
+		{
+			vmin.x = aabbMax->x;
+			vmax.x = aabbMin->x;
+		}
+		// Y axis 
+		if (normal.y > 0) 
+		{
+			vmin.y = aabbMin->y;
+			vmax.y = aabbMax->y;
+		}
+		else 
+		{
+			vmin.y = aabbMax->y;
+			vmax.y = aabbMin->y;
+		}
+		// Z axis 
+		if (normal.z > 0) 
+		{
+			vmin.z = aabbMin->z;
+			vmax.z = aabbMax->z;
+		}
+		else 
+		{
+			vmin.z = aabbMax->z;
+			vmax.z = aabbMin->z;
+		}
+		//normal.Mul(-1);
+		if (ZobVector3::Dot(&normal, &vmax) + m_frustrumPlanes[i].d < 0)
+			return OUTSIDE;
+		if (ZobVector3::Dot(&normal, &vmin) + m_frustrumPlanes[i].d <= 0)
+			ret = INTERSECT;
+	}
+	return ret;
 }
 
 void Camera::UpdateViewProjectionMatrix(/*const ZobVector3* eyeV*/)
@@ -625,7 +683,7 @@ TiXmlNode* Camera::SaveUnderNode(TiXmlNode* node)
 	t.SetValue(tmpBuffer);
 	fov.InsertEndChild(t);
 	TiXmlElement controller = TiXmlElement("Controller");
-	_snprintf_s(tmpBuffer, 256, "%d", (int)m_zobCameraController->GetType());
+	_snprintf_s(tmpBuffer, 256, "%i", (int)m_zobCameraController->GetType());
 	t.SetValue(tmpBuffer);
 	controller.InsertEndChild(t);
 	ne->InsertEndChild(controller);

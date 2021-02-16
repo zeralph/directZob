@@ -15,7 +15,9 @@ namespace CLI
 
 	System::String^ ZobObjectManagerWrapper::GetZobObjectList()
 	{
-		return gcnew System::String(m_Instance->GetZobObjectList().c_str());
+		std::string s;
+		m_Instance->GetZobObjectList(s);
+		return gcnew System::String(s.c_str());
 	}
 
 	ZobObjectWrapper^ ZobObjectManagerWrapper::GetZobObject(System::String^ name)

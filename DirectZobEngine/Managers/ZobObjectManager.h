@@ -27,7 +27,8 @@ public:
 	void AddZobObject(ZobObject* z);
 	ZobObject* GetRootObject() const;
 	ZobObject* GetZobObject(const std::string& name) const;
-	std::string GetZobObjectList();
+	void GetZobObjectList(std::string &s);
+	void GetZobObjectList(std::vector<const ZobObject*> &v);
 	ZobObject* GetRootObject() { return m_rootObject;  }
 	ZobObject* CreateZobObject(ZobObject* parent);
 	ZobSprite* CreateZobSprite(ZobObject* parent);
@@ -43,6 +44,7 @@ public:
 private:
 	void UpdateObjects(const Camera* camera, Core::Engine* engine, float dt);
 	void GetZobObjectListInternal(const ZobObject* z, std::string& str);
+	void GetZobObjectListInternal(const ZobObject* z, std::vector<const ZobObject*>& v);
 	ZobObject* LoadEditorMesh(const char* name, const char* meshPath, const char* meshFile, ZobObject* parent);
 	ZobObject* GetZobObjectFromPartialId(ZobObject* z, const uint id) const;
 	ZobObject* m_rootObject = nullptr;

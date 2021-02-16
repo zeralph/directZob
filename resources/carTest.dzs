@@ -1,30 +1,17 @@
 <?xml version="1.0" ?>
 <Scene>
     <Globals>
-        <AmbientColor r="206" g="206" b="0" />
-        <AmbientIntensity>0.39</AmbientIntensity>
+        <AmbientColor r="0" g="128" b="255" />
+        <AmbientIntensity>0.07</AmbientIntensity>
         <FogColor r="0" g="128" b="255" />
         <ClearColor r="0" g="128" b="255" />
         <FogDensity>0.00</FogDensity>
         <FogDistance>42.00</FogDistance>
         <FogType>exp2</FogType>
     </Globals>
-    <ZobObject name="ground" guid="3066498" type="mesh">
-        <Position x="0" y="-10" z="0" />
-        <Rotation x="0" y="0" z="0" />
-        <Scale x="1" y="1" z="1" />
-        <Mesh name="bigPlane.obj" file="bigPlane.obj" path="D:\Git\directZob\resources\" />
-        <Physic>
-            <RigidBody type="0" active="1">
-                <Box halfExtends_x="1000.000000" halfExtends_y="0.100000" halfExtends_z="1000.000000" layers="1" scale_with_object="1">
-                    <Material bounciness="0.100000" friction_coeff="2.010000" mass_density="0.010000" rolling_resistance="0.010000" />
-                </Box>
-            </RigidBody>
-        </Physic>
-    </ZobObject>
     <ZobObject name="car" guid="3001003">
-        <Position x="0.000310642" y="1.10515" z="2.0197" />
-        <Rotation x="0.101911" y="-87.1501" z="-0.0969636" />
+        <Position x="-20.1749" y="-0.394062" z="4.06875" />
+        <Rotation x="-177.684" y="-79.775" z="-179.714" />
         <Scale x="1" y="1" z="1" />
         <Behavior type="1" />
         <Physic>
@@ -40,10 +27,10 @@
             <Scale x="0.3" y="0.3" z="0.3" />
             <Mesh name="camaro.obj" file="camaro.obj" path="D:\Git\directZob\resources\" />
             <ZobObject name="rearCamera" guid="3002004" type="camera">
-                <Position x="7.35978e-07" y="1.92052" z="-4.78713" />
-                <Rotation x="15.0562" y="-6.9511e-06" z="-9.18598e-07" />
+                <Position x="-4.45172e-07" y="1.92052" z="-4.78713" />
+                <Rotation x="15.0562" y="-3.44838e-05" z="-1.3169e-05" />
                 <Scale x="1" y="1" z="1" />
-                <Controller>0</Controller>
+                <Controller>5</Controller>
                 <Fov>70.00</Fov>
             </ZobObject>
             <ZobObject name="FrontCamera" guid="3067491" type="camera">
@@ -68,8 +55,8 @@
                 <Fov>45.00</Fov>
             </ZobObject>
             <ZobObject name="orbitalCamera" guid="3067494" type="camera">
-                <Position x="-1.83213" y="-1.45616" z="-11.8103" />
-                <Rotation x="-6.94086" y="-78.3316" z="5.38232e-05" />
+                <Position x="-2.02888" y="-1.44695" z="-11.7519" />
+                <Rotation x="175.649" y="-89.5302" z="-179.998" />
                 <Scale x="1" y="1" z="1" />
                 <Controller>2</Controller>
                 <Fov>45.00</Fov>
@@ -84,18 +71,18 @@
         </ZobObject>
     </ZobObject>
     <ZobObject name="Light_1" guid="3068489" type="light">
-        <Position x="0" y="10" z="0" />
+        <Position x="0" y="60.0368" z="0" />
         <Rotation x="-45" y="-45" z="-45" />
         <Scale x="1" y="1" z="1" />
-        <Color r="251" g="228" b="206" />
+        <Color r="255" g="255" b="140" />
         <Intensity>1.00</Intensity>
         <FallOffDistance>100.00</FallOffDistance>
         <Type>directional</Type>
     </ZobObject>
     <ZobObject name="house" guid="3066496" type="mesh">
-        <Position x="17.4096" y="-0.104829" z="26.628" />
-        <Rotation x="0" y="0" z="0" />
-        <Scale x="0.5" y="0.5" z="0.5" />
+        <Position x="-281.384" y="-3.67123" z="26.628" />
+        <Rotation x="0" y="30.7585" z="0" />
+        <Scale x="0.3" y="0.3" z="0.3" />
         <Mesh name="cottage_obj.obj" file="cottage_obj.obj" path="D:\Git\directZob\resources\" />
         <Physic>
             <RigidBody type="0" active="1">
@@ -147,16 +134,87 @@
             </RigidBody>
         </Physic>
     </ZobObject>
-    <ZobObject name="building_1" guid="3066501" type="mesh">
+    <ZobObject name="building_1" guid="-2143505736" type="mesh">
         <Position x="-13.563" y="-10" z="-19.37" />
         <Rotation x="0" y="35" z="0" />
         <Scale x="1" y="1" z="1" />
         <Mesh name="building_1.obj" file="building_1.obj" path="D:\Git\directZob\resources\" />
     </ZobObject>
     <ZobObject name="building_2" guid="3066502" type="mesh">
-        <Position x="-41.419" y="-10" z="-29.212" />
+        <Position x="-53.1885" y="-10" z="-45.478" />
         <Rotation x="0" y="35" z="0" />
         <Scale x="1" y="1" z="1" />
         <Mesh name="building_1.obj" file="building_1.obj" path="D:\Git\directZob\resources\" />
+    </ZobObject>
+    <ZobObject name="building_3" guid="3066503" type="mesh">
+        <Position x="-83.37" y="-10" z="0" />
+        <Rotation x="0" y="35" z="0" />
+        <Scale x="1" y="1" z="1" />
+        <Mesh name="building_1.obj" file="building_1.obj" path="D:\Git\directZob\resources\" />
+    </ZobObject>
+    <ZobObject name="building_4" guid="3066504" type="mesh">
+        <Position x="-52.153" y="-10" z="22.163" />
+        <Rotation x="0" y="35" z="0" />
+        <Scale x="1" y="1" z="1" />
+        <Mesh name="building_1.obj" file="building_1.obj" path="D:\Git\directZob\resources\" />
+    </ZobObject>
+    <ZobObject name="some_lights" guid="3066510">
+        <Position x="0" y="0" z="0" />
+        <Rotation x="0" y="0" z="0" />
+        <Scale x="1" y="1" z="1" />
+        <ZobObject name="Light_5" guid="3068509" type="light">
+            <Position x="-31.6222" y="10" z="-3.56345" />
+            <Rotation x="90" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+            <Color r="255" g="0" b="255" />
+            <Intensity>2.00</Intensity>
+            <FallOffDistance>30.00</FallOffDistance>
+            <Type>spot</Type>
+        </ZobObject>
+        <ZobObject name="Light_4" guid="3068508" type="light">
+            <Position x="-27.429" y="10" z="13.8418" />
+            <Rotation x="90" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+            <Color r="0" g="0" b="255" />
+            <Intensity>2.00</Intensity>
+            <FallOffDistance>30.00</FallOffDistance>
+            <Type>spot</Type>
+        </ZobObject>
+        <ZobObject name="Light_3" guid="3068507" type="light">
+            <Position x="-13.8097" y="10" z="0.114154" />
+            <Rotation x="-71.2625" y="-66.1895" z="-171.321" />
+            <Scale x="1" y="1" z="1" />
+            <Color r="0" g="255" b="0" />
+            <Intensity>2.00</Intensity>
+            <FallOffDistance>20.00</FallOffDistance>
+            <Type>spot</Type>
+        </ZobObject>
+        <ZobObject name="Light_2" guid="3068506" type="light">
+            <Position x="5.41638" y="10.0001" z="13.7989" />
+            <Rotation x="-90.0001" y="-70.7708" z="180" />
+            <Scale x="1" y="1" z="1" />
+            <Color r="255" g="0" b="0" />
+            <Intensity>2.00</Intensity>
+            <FallOffDistance>50.00</FallOffDistance>
+            <Type>spot</Type>
+        </ZobObject>
+    </ZobObject>
+    <ZobObject name="Hill_1" guid="-2143505745" type="mesh">
+        <Position x="0" y="1" z="101" />
+        <Rotation x="0.0139885" y="-0.433636" z="-5.29355e-05" />
+        <Scale x="1" y="1" z="1" />
+        <Mesh name="hill_1.obj" file="hill_1.obj" path="D:\Git\directZob\resources\" />
+    </ZobObject>
+    <ZobObject name="Hill_2" guid="3066511" type="mesh">
+        <Position x="-78" y="0" z="105" />
+        <Rotation x="-180" y="0" z="-180" />
+        <Scale x="1" y="1" z="1" />
+        <Mesh name="hill_1.obj" file="hill_1.obj" path="D:\Git\directZob\resources\" />
+    </ZobObject>
+    <ZobObject name="Hill_3" guid="3066512" type="mesh">
+        <Position x="-275.055" y="0" z="0" />
+        <Rotation x="0" y="0" z="0" />
+        <Scale x="1" y="1" z="1" />
+        <Mesh name="hill_2.obj" file="hill_2.obj" path="D:\Git\directZob\resources\" />
     </ZobObject>
 </Scene>

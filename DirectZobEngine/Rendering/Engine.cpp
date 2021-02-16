@@ -27,10 +27,15 @@ Engine::Engine(int width, int height, Events* events)
 	m_wireFrame = false;
 	m_rasterizerHeight = 0;
 	m_showNormals = false;
-	m_showGrid = true;
-	m_drawGizmos = true;
-	m_showBBoxes = true;
+	m_showGrid = false;
+	m_drawGizmos = false;
+	m_showBBoxes = false;
+	m_drawPhysicsGizmos = false;
 	m_lockFrustrum = false;
+	m_drawZobObjectGizmos = true;
+	m_drawCameraGizmos = false;
+	m_drawZobObjectGizmos = false;
+	m_showText = true;
 	m_nbRasterizers = std::thread::hardware_concurrency();
 	while (height % m_nbRasterizers != 0 && m_nbRasterizers>1)
 	{
@@ -579,6 +584,34 @@ void Engine::QueueCapsule(const Camera* camera, const ZobMatrix4x4* mat, float r
 void Engine::QueueMesh(const Camera* camera, const ZobMatrix4x4* mat, ZobVector3* points, int width, int height, const uint c, bool bold)
 {
 
+}
+
+void Engine::QueueWorldBox(const Camera* camera, const Box* box, const uint c, bool bold, bool noZ)
+{
+	ZobVector3 p0, p1, p2, p3, p4, p5, p6, p7;
+	p0 = box->p0;
+	p1 = box->p1;
+	p2 = box->p2;
+	p3 = box->p3;
+	p4 = box->p4;
+	p5 = box->p5;
+	p6 = box->p6;
+	p7 = box->p7;
+
+	QueueLine(camera, &p0, &p1, c, bold, noZ);
+	QueueLine(camera, &p1, &p2, c, bold, noZ);
+	QueueLine(camera, &p2, &p3, c, bold, noZ);
+	QueueLine(camera, &p3, &p0, c, bold, noZ);
+							 
+	QueueLine(camera, &p4, &p5, c, bold, noZ);
+	QueueLine(camera, &p5, &p6, c, bold, noZ);
+	QueueLine(camera, &p6, &p7, c, bold, noZ);
+	QueueLine(camera, &p7, &p4, c, bold, noZ);
+							 
+	QueueLine(camera, &p1, &p5, c, bold, noZ);
+	QueueLine(camera, &p2, &p6, c, bold, noZ);
+	QueueLine(camera, &p3, &p7, c, bold, noZ);
+	QueueLine(camera, &p0, &p4, c, bold, noZ);
 }
 
 void Engine::QueueBox(const Camera* camera, const ZobMatrix4x4* mat, const ZobVector3* halfExtends, const ZobVector3* pivot, const uint c, bool bold, bool noZ)

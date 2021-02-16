@@ -14,6 +14,8 @@
 #endif
 #define LOG_BUFFER_SIZE 1024
 
+#define TARGET_MS_PER_FRAME 0.0f//16.0f//33.3333f
+
 static char buffer[MAX_PATH];
 static char logBuffer[LOG_BUFFER_SIZE];
 static bool g_isInEditorMode;
@@ -28,6 +30,7 @@ DirectZob::DirectZob()
 	
 	m_initialized = false;
 	DirectZob::singleton= this; 
+	m_frameTime = 1.0f;
 }
 
 DirectZob::~DirectZob()
@@ -135,6 +138,7 @@ void DirectZob::Init(int width, int height, bool bEditorMode)
 	int state;
 	m_initialized = true;
 	m_frameTick = clock();
+	m_frameTime = 1000.0f;
 	m_physicStarted = false;
 }
 
@@ -167,11 +171,11 @@ int DirectZob::RunInternal(void func(void))
 
 int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUpdated /*=NULL*/, DirectZob::engineCallback OnQueuing /*=NULL*/)
 {
+	m_frameTick = clock();
 	g_render_mutex.lock();
 	int state=0;
-	m_frameTime =  (float)(clock() - m_frameTick) / CLOCKS_PER_SEC * 1000;
 	m_fps = 1000.0f / m_frameTime;
-	m_frameTick = clock();
+	//m_frameTick = clock();
 	clock_t clTest;
 	if(m_initialized && m_engine->Started())
 	{
@@ -237,7 +241,10 @@ int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUp
 				OnQueuing();
 			}
   			m_zobObjectManager->QueueForDrawing(cam, m_engine);
-			m_physicsEngine->DrawGizmos();
+			if (m_engine->DrawPhysyicsGizmos())
+			{
+				m_physicsEngine->DrawGizmos();
+			}
 			m_copyTime = (float)(clock() - m_copyTick) / CLOCKS_PER_SEC * 1000;
 			if (m_engine->ShowGrid())
 			{
@@ -261,10 +268,9 @@ int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUp
 			m_text->Print(0, 0, 1, &sBuf, 0xFFFFFFFF);
 			_snprintf_s(buffer, MAX_PATH, "render : %03i, geom : %03i, phys : %03i, cpy : %03i, tot : %03i, FPS : %03i", (int)m_renderTime, (int)m_geometryTime, (int)m_physicTime, (int)m_copyTime, (int)m_frameTime, (int)m_fps);
 			sBuf = std::string(buffer);
-			if (m_frameTime < TARGET_MS_PER_FRAME)
+			if (m_frameTime <= TARGET_MS_PER_FRAME)
 			{
 				m_text->Print(0, 16, 1, &sBuf, 0xFF00FF00);
-				//SLEEP((TARGET_MS_PER_FRAME - m_frameTime));
 			}
 			else
 			{
@@ -294,16 +300,9 @@ int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUp
 				m_inputManager->GetMap()->GetFloat(ZobInputManager::RightShoulder));
 			sBuf = std::string(buffer);
 			m_text->Print(0, 48, 1, &sBuf, 0xFF0000FF);
-			int txtW = m_engine->GetBufferData()->width - 190;
-			for (int i = 0; i < m_engine->GetNbRasterizer(); i++)
-			{
-				int nbt = m_engine->GetRasterizer(i)->GetNbTriangle();
-				int nbl = m_engine->GetRasterizer(i)->GetNbLine();
-				float fms = m_engine->GetRasterizer(i)->GetRenderTimeMS();
-				
-				m_text->Print(txtW, 10+i*20, 1, 0xFFFFFFFF, "R%i : %it %il %.2fms", (i+1), nbt, nbl, fms);
-			}
-			m_text->Print(100, 100, 1, 0xFFFFFFFF, "my time %.2f", ((float)((float)clTest / (float)CLOCKS_PER_SEC * (float)1000)));
+			
+			
+			PrintObjectList();
 
 			if (m_inputManager->GetMap()->GetBoolIsNew(ZobInputManager::buttonX) || m_inputManager->GetMap()->GetBoolIsNew(ZobInputManager::WireFrame))
 			{
@@ -321,7 +320,35 @@ int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUp
 		m_engine->SetDisplayedBuffer();
 	}
 	g_render_mutex.unlock();
+	m_frameTime = (float)(clock() - m_frameTick) / CLOCKS_PER_SEC * 1000;
+	float dt = TARGET_MS_PER_FRAME - m_frameTime;
+	if (dt > 0)
+	{
+		SLEEP(dt);
+		m_frameTime = TARGET_MS_PER_FRAME;
+	}
 	return state;
+}
+
+void DirectZob::PrintObjectList()
+{
+	int txtW = m_engine->GetBufferData()->width - 190;
+	std::vector<const ZobObject*> v;
+	m_zobObjectManager->GetZobObjectList(v);
+	for (int i = 0; i < v.size(); i++)
+	{
+		const ZobObject* z = v.at(i);
+		int c = 0xFF0000FF;
+		if (z->GetMesh())
+		{
+			c = 0xFFFF0000;
+			if (z->GetMesh()->IsDrawn())
+			{
+				c = 0xFF00FF00;
+			}
+		}
+		m_text->Print(txtW, (i*10), 1, c, z->GetName().c_str());
+	}
 }
 
 void DirectZob::LogInfo(const char* format, ...)

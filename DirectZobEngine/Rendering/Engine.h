@@ -39,6 +39,7 @@ namespace Core
 		void											QueueLine(const Camera* camera, const ZobVector3* v1, const ZobVector3* v2, const uint c, bool bold, bool noZ);
 		void											QueueEllipse(const Camera* camera, const ZobVector3* center, const ZobVector3* vectorUp, const float r1, const float r2, const uint c, bool bold, bool noZ);
 		void											QueueSphere(const Camera* camera, const ZobMatrix4x4* mat, const float radius, const uint c, bool bold, bool noZ);
+		void											QueueWorldBox(const Camera* camera, const Box* box, const uint c, bool bold, bool noZ);
 		void											QueueBox(const Camera* camera, const ZobMatrix4x4* mat, const ZobVector3* halfExtends, const ZobVector3* pivot, const uint c, bool bold, bool noZ);
 		void											QueueCapsule(const Camera* camera, const ZobMatrix4x4* mat, float radius, float height, const ZobVector3* dir, const uint c, bool bold, bool noZ);
 		void											QueueMesh(const Camera* camera, const ZobMatrix4x4* mat, ZobVector3* points, int width, int height, const uint c, bool bold);
@@ -54,15 +55,23 @@ namespace Core
 		inline const ulong								GetNbPixels() { return m_nbPixels; }
 		inline void										ShowGrid(bool b) { m_showGrid = b; }
 		inline void										ShowBBoxes(bool b) { m_showBBoxes = b; }
+		inline void										DrawPhysyicsGizmos(bool b) { m_drawPhysicsGizmos = b; }
+		inline void										ShowText(bool b) { m_showText = b; }
 		inline void										WireFrame(bool b) { m_wireFrame = b; }
-		inline bool										WireFrame() { return m_wireFrame; }
 		inline void										ShowNormals(bool b) { m_showNormals = b; }
 		inline void										DrawGizmos(bool b) { m_drawGizmos = b; }
 		inline void										LockFrustrum(bool b) { m_lockFrustrum=b; }
+		inline void										DrawCameraGizmos(bool b) { m_drawCameraGizmos = b; }
+		inline void										DrawZobObjectGizmos(bool b) { m_drawZobObjectGizmos = b; }
+		inline bool										WireFrame() { return m_wireFrame; }
 		inline bool										ShowGrid() { return m_showGrid; }
 		inline bool										ShowNormals() { return m_showNormals; }
 		inline bool										DrawGizmos() { return m_drawGizmos; }
 		inline bool										ShowBBoxes() { return m_showBBoxes; }
+		inline bool										ShowText() { return m_showText; }
+		inline bool										DrawPhysyicsGizmos() { return m_drawPhysicsGizmos; }
+		inline bool										DrawCameraGizmos() { return m_drawCameraGizmos; }
+		inline bool										DrawZobObjectGizmos() { return m_drawZobObjectGizmos; }
 		inline bool										LockFrustrum() { return m_lockFrustrum;  }
 		inline void										SetRenderMode(eRenderMode b) { m_renderMode = b; }
 		inline const eRenderMode						GetRenderMode() { return m_renderMode; }
@@ -129,7 +138,11 @@ namespace Core
 		bool m_showNormals;
 		bool m_showGrid;
 		bool m_drawGizmos;
+		bool m_drawPhysicsGizmos;
+		bool m_drawCameraGizmos;
+		bool m_drawZobObjectGizmos;
 		bool m_showBBoxes;
+		bool m_showText;
 		volatile bool m_lockFrustrum;
 		eRenderOutput m_renderOutput;
 		eRenderMode m_renderMode = eRenderMode_fullframe;

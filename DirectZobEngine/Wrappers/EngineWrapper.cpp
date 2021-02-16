@@ -18,8 +18,9 @@ namespace CLI
 		m_nbTriangles = 0;
 		m_triangleList = (Triangle*)malloc(sizeof(Triangle) * NB_EDITOR_TRIANGLES);
 		m_vertices = (ZobVector3*)malloc(sizeof(ZobVector3) * NB_EDITOR_TRIANGLES * 3);
+		m_uvs = (ZobVector2*)malloc(sizeof(ZobVector2) * NB_EDITOR_TRIANGLES * 3);
 		m_projectedVertices = (ZobVector3*)malloc(sizeof(ZobVector3) * NB_EDITOR_TRIANGLES * 3);
-		m_normals = (ZobVector3*)malloc(sizeof(ZobVector3) * NB_EDITOR_TRIANGLES);
+		m_normals = (ZobVector3*)malloc(sizeof(ZobVector3) * NB_EDITOR_TRIANGLES * 3);
 		int vi = 0;
 		for (int i = 0; i < NB_EDITOR_TRIANGLES; i ++)
 		{
@@ -29,6 +30,12 @@ namespace CLI
 			m_triangleList[i].pa = &m_projectedVertices[vi];
 			m_triangleList[i].pb = &m_projectedVertices[vi + 1];
 			m_triangleList[i].pc = &m_projectedVertices[vi + 2];
+			m_triangleList[i].na = &m_normals[vi];
+			m_triangleList[i].nb = &m_normals[vi + 1];
+			m_triangleList[i].nc = &m_normals[vi + 2];
+			m_triangleList[i].ua = &m_uvs[vi];
+			m_triangleList[i].ub = &m_uvs[vi + 1];
+			m_triangleList[i].uc = &m_uvs[vi + 2];
 			m_triangleList[i].n = &m_normals[i];
 			m_triangleList[i].options = &m_renderOptions;
 			vi += 3;
@@ -111,26 +118,27 @@ namespace CLI
 		{
 			for (int i = 0; i < m_nbTriangles; i++)
 			{
-				Triangle t = m_triangleList[i];
-				t.pa->Copy(t.va);
-				t.pb->Copy(t.vb);
-				t.pc->Copy(t.vc);
-				c->ToViewSpace(t.pa);
-				c->ToViewSpace(t.pb);
-				c->ToViewSpace(t.pc);
-				c->GetProjectionMatrix()->Mul(t.pa);
-				c->GetProjectionMatrix()->Mul(t.pb);
-				c->GetProjectionMatrix()->Mul(t.pc);
-				t.pa->x = (t.pa->x / t.pa->z + 1) * w;
-				t.pa->y = (t.pa->y / t.pa->z + 1) * h;
-				t.pb->x = (t.pb->x / t.pb->z + 1) * w;
-				t.pb->y = (t.pb->y / t.pb->z + 1) * h;
-				t.pc->x = (t.pc->x / t.pc->z + 1) * w;
-				t.pc->y = (t.pc->y / t.pc->z + 1) * h;
-				t.draw = true;
-				t.material = NULL;
-				t.ComputeArea();
-				m_Instance->QueueTriangle(c, &t);
+				Triangle* t = &m_triangleList[i];
+				t->pa->Copy(t->va);
+				t->pb->Copy(t->vb);
+				t->pc->Copy(t->vc);
+				c->ToViewSpace(t->pa);
+				c->ToViewSpace(t->pb);
+				c->ToViewSpace(t->pc);
+				c->GetProjectionMatrix()->Mul(t->pa);
+				c->GetProjectionMatrix()->Mul(t->pb);
+				c->GetProjectionMatrix()->Mul(t->pc);
+				t->pa->x = (t->pa->x / t->pa->z + 1) * w;
+				t->pa->y = (t->pa->y / t->pa->z + 1) * h;
+				t->pb->x = (t->pb->x / t->pb->z + 1) * w;
+				t->pb->y = (t->pb->y / t->pb->z + 1) * h;
+				t->pc->x = (t->pc->x / t->pc->z + 1) * w;
+				t->pc->y = (t->pc->y / t->pc->z + 1) * h;
+				t->draw = true;
+				t->material = NULL;
+				t->ComputeArea();
+				t->clipMode = Triangle::eClip_3_in;
+				m_Instance->QueueTriangle(c, t);
 			}
 		}
 		m_nbTriangles = 0;
