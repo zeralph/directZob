@@ -28,7 +28,7 @@
             <Mesh name="camaro.obj" file="camaro.obj" path="D:\Git\directZob\resources\" />
             <ZobObject name="rearCamera" guid="3002004" type="camera">
                 <Position x="-4.45172e-07" y="1.92052" z="-4.78713" />
-                <Rotation x="15.0562" y="-3.44838e-05" z="-1.3169e-05" />
+                <Rotation x="15.0562" y="-3.11113e-05" z="-1.27234e-05" />
                 <Scale x="1" y="1" z="1" />
                 <Controller>5</Controller>
                 <Fov>70.00</Fov>
@@ -49,14 +49,14 @@
             </ZobObject>
             <ZobObject name="sideCamera" guid="3067493" type="camera">
                 <Position x="-5.88051" y="1.69909" z="5.75917" />
-                <Rotation x="-180" y="40.3727" z="-180" />
+                <Rotation x="180" y="40.3727" z="180" />
                 <Scale x="1" y="1" z="1" />
                 <Controller>0</Controller>
                 <Fov>45.00</Fov>
             </ZobObject>
             <ZobObject name="orbitalCamera" guid="3067494" type="camera">
-                <Position x="-2.02888" y="-1.44695" z="-11.7519" />
-                <Rotation x="175.649" y="-89.5302" z="-179.998" />
+                <Position x="-2.07793" y="-1.44584" z="-11.7431" />
+                <Rotation x="175.655" y="-89.7693" z="179.999" />
                 <Scale x="1" y="1" z="1" />
                 <Controller>2</Controller>
                 <Fov>45.00</Fov>
@@ -91,12 +91,6 @@
                 </Box>
             </RigidBody>
         </Physic>
-    </ZobObject>
-    <ZobObject name="road_mesh" guid="3066497" type="mesh">
-        <Position x="0" y="0" z="0" />
-        <Rotation x="0" y="0" z="0" />
-        <Scale x="1" y="1" z="1" />
-        <Mesh name="road2_d.obj" file="road2_d.obj" path="D:\Git\directZob\resources\" />
     </ZobObject>
     <ZobObject name="road2_p_ground" guid="3066499">
         <Position x="0" y="0" z="0" />
@@ -191,7 +185,7 @@
         </ZobObject>
         <ZobObject name="Light_2" guid="3068506" type="light">
             <Position x="5.41638" y="10.0001" z="13.7989" />
-            <Rotation x="-90.0001" y="-70.7708" z="180" />
+            <Rotation x="-90.0001" y="-70.7708" z="-180" />
             <Scale x="1" y="1" z="1" />
             <Color r="255" g="0" b="0" />
             <Intensity>2.00</Intensity>
@@ -207,7 +201,7 @@
     </ZobObject>
     <ZobObject name="Hill_2" guid="3066511" type="mesh">
         <Position x="-78" y="0" z="105" />
-        <Rotation x="-180" y="0" z="-180" />
+        <Rotation x="180" y="0" z="180" />
         <Scale x="1" y="1" z="1" />
         <Mesh name="hill_1.obj" file="hill_1.obj" path="D:\Git\directZob\resources\" />
     </ZobObject>
@@ -216,5 +210,58 @@
         <Rotation x="0" y="0" z="0" />
         <Scale x="1" y="1" z="1" />
         <Mesh name="hill_2.obj" file="hill_2.obj" path="D:\Git\directZob\resources\" />
+    </ZobObject>
+    <ZobObject name="road_sections" guid="3066513">
+        <Position x="0" y="0" z="0" />
+        <Rotation x="0" y="0" z="0" />
+        <Scale x="1" y="1" z="1" />
+        <ZobObject name="road01" guid="3066514" type="mesh">
+            <Position x="0" y="0" z="0" />
+            <Rotation x="0" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+            <Mesh name="road_block_01.obj" file="road_block_01.obj" path="D:\Git\directZob\resources\" />
+        </ZobObject>
+        <ZobObject name="road02" guid="3066515" type="mesh">
+            <Position x="0" y="0" z="0" />
+            <Rotation x="0" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+            <Mesh name="road_block_02.obj" file="road_block_02.obj" path="D:\Git\directZob\resources\" />
+        </ZobObject>
+        <ZobObject name="road03" guid="3066516" type="mesh">
+            <Position x="0" y="0" z="0" />
+            <Rotation x="0" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+            <Mesh name="road_block_03.obj" file="road_block_03.obj" path="D:\Git\directZob\resources\" />
+        </ZobObject>
+        <ZobObject name="road04" guid="3066517" type="mesh">
+            <Position x="0" y="0" z="0" />
+            <Rotation x="0" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+            <Mesh name="road_block_04.obj" file="road_block_04.obj" path="D:\Git\directZob\resources\" />
+        </ZobObject>
+        <ZobObject name="road05" guid="3066518" type="mesh">
+            <Position x="0" y="0" z="0" />
+            <Rotation x="0" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+            <Mesh name="road_block_05.obj" file="road_block_05.obj" path="D:\Git\directZob\resources\" />
+        </ZobObject>
+        <ZobObject name="road06" guid="3066519" type="mesh">
+            <Position x="0" y="0" z="0" />
+            <Rotation x="0" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+            <Mesh name="road_block_06.obj" file="road_block_06.obj" path="D:\Git\directZob\resources\" />
+        </ZobObject>
+        <ZobObject name="road07" guid="3066520" type="mesh">
+            <Position x="0" y="0" z="0" />
+            <Rotation x="0" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+            <Mesh name="road_block_07.obj" file="road_block_07.obj" path="D:\Git\directZob\resources\" />
+        </ZobObject>
+        <ZobObject name="road08" guid="3066521" type="mesh">
+            <Position x="0" y="0" z="0" />
+            <Rotation x="0" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+            <Mesh name="road_block_08.obj" file="road_block_08.obj" path="D:\Git\directZob\resources\" />
+        </ZobObject>
     </ZobObject>
 </Scene>

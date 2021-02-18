@@ -94,7 +94,14 @@ namespace CLI
 	{
 		if (m_queuingCb != nullptr)
 		{
-			m_queuingCb();
+			try
+			{
+				m_queuingCb();
+			}
+			catch (exception e)
+			{
+				DirectZob::GetInstance()->LogError("error : %s", e.what());
+			}
 		};
 	}
 

@@ -11,6 +11,7 @@ Light::Light(std::string &name, eLightType type, ZobVector3 color, float intensi
 	m_active = true;
 	m_lightType = type;
 	m_spotAngleRad = DEG_TO_RAD(30.0f);
+	m_inFrtustrum = false;
 	NewLightConfiguration();
 }
 
@@ -84,6 +85,41 @@ void Light::NewLightConfiguration()
 	}
 }
 
+void Light::Update(float dt)
+{
+	ZobObject::Update(dt);
+	if (m_lightType == eLightType_directional)
+	{
+		m_inFrtustrum = true;
+	}
+	else
+	{
+		ZobVector3 min, max;
+		if (m_lightType == eLightType_point)
+		{
+			min.x = -m_distance / 2;
+			min.y = -m_distance / 2;
+			min.z = -m_distance / 2;
+			max.x = m_distance / 2;
+			max.y = m_distance / 2;
+			max.z = m_distance / 2;
+		}
+		else
+		{
+			min.x = -m_distance / 2;
+			min.y = -m_distance / 2;
+			min.z = -m_distance / 2;
+			max.x = m_distance / 2;
+			max.y = m_distance / 2;
+			max.z = m_distance / 2;
+		}
+		const Engine* e = DirectZob::GetInstance()->GetEngine();
+		const Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
+		e->ComputeBoundingBoxes(&m_modelMatrix, &min, &max, &m_OBB, &m_AABB);
+		m_inFrtustrum = e->IsInFrustrum(c, &m_AABB);
+	}
+}
+
 void Light::drawPointGizmos(const Camera* camera, Core::Engine* engine) const
 {
 	ZobVector3 t = GetWorldPosition();
@@ -147,6 +183,8 @@ void Light::drawDirectionalGizmos(const Camera* camera, Core::Engine* engine) co
 void Light::DrawGizmos(const Camera* camera, Core::Engine* engine)
 {
 	ZobObject::DrawGizmos(camera, engine);
+	engine->QueueWorldBox(camera, &m_AABB, 0xFFFFFF, false, false);
+	engine->QueueWorldBox(camera, &m_OBB, 0xDDDDDD, false, false);
 	switch (m_lightType)
 	{
 	case eLightType_spot:

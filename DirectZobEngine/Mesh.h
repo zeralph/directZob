@@ -46,7 +46,7 @@ protected:
 	void								FbxMultT(FbxNode* node, FbxVector4 &vector);
 	inline bool							RejectTriangle(const Triangle* t, const float znear, const float zfar, const float width, const float height);
 	bool								IsInFrustrum(const ZobMatrix4x4& modelMatrix, const Camera* c);
-	void								ComputeBoundingBoxes(const ZobMatrix4x4& modelMatrix, const Camera* camera, Core::Engine* engine);
+
 	std::vector<Mesh*> m_subMeshes;
 	uint m_nbVertices = 0;
 	uint m_nbUvs = 0;

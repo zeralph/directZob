@@ -34,7 +34,6 @@ Engine::Engine(int width, int height, Events* events)
 	m_lockFrustrum = false;
 	m_drawZobObjectGizmos = true;
 	m_drawCameraGizmos = false;
-	m_drawZobObjectGizmos = false;
 	m_showText = true;
 	m_nbRasterizers = std::thread::hardware_concurrency();
 	while (height % m_nbRasterizers != 0 && m_nbRasterizers>1)
@@ -1059,4 +1058,78 @@ float Engine::GetDistanceToCamera(ZobVector3* worldPos)
 		return v.sqrtLength();
 	}
 	return 0.0f;
+}
+
+void Engine::ComputeBoundingBoxes(const ZobMatrix4x4* modelMatrix, const ZobVector3* minBounding, const ZobVector3* maxBounding, Box* obb, Box* aabb) const
+{
+	ZobVector3 v0 = ZobVector3(minBounding->x, minBounding->y, minBounding->z);
+	ZobVector3 v1 = ZobVector3(minBounding->x, maxBounding->y, minBounding->z);
+	ZobVector3 v2 = ZobVector3(maxBounding->x, maxBounding->y, minBounding->z);
+	ZobVector3 v3 = ZobVector3(maxBounding->x, minBounding->y, minBounding->z);
+	ZobVector3 v4 = ZobVector3(minBounding->x, minBounding->y, maxBounding->z);
+	ZobVector3 v5 = ZobVector3(minBounding->x, maxBounding->y, maxBounding->z);
+	ZobVector3 v6 = ZobVector3(maxBounding->x, maxBounding->y, maxBounding->z);
+	ZobVector3 v7 = ZobVector3(maxBounding->x, minBounding->y, maxBounding->z);
+
+	obb->p0 = v0;
+	obb->p1 = v1;
+	obb->p2 = v2;
+	obb->p3 = v3;
+	obb->p4 = v4;
+	obb->p5 = v5;
+	obb->p6 = v6;
+	obb->p7 = v7;
+	modelMatrix->Mul(&obb->p0);
+	modelMatrix->Mul(&obb->p1);
+	modelMatrix->Mul(&obb->p2);
+	modelMatrix->Mul(&obb->p3);
+	modelMatrix->Mul(&obb->p4);
+	modelMatrix->Mul(&obb->p5);
+	modelMatrix->Mul(&obb->p6);
+	modelMatrix->Mul(&obb->p7);
+
+	ZobVector3 max;
+	max.x = fmaxf(fmaxf(fmaxf(fmaxf(fmaxf(fmaxf(fmaxf(obb->p0.x, obb->p1.x), obb->p2.x), obb->p3.x), obb->p4.x), obb->p5.x), obb->p6.x), obb->p7.x);
+	max.y = fmaxf(fmaxf(fmaxf(fmaxf(fmaxf(fmaxf(fmaxf(obb->p0.y, obb->p1.y), obb->p2.y), obb->p3.y), obb->p4.y), obb->p5.y), obb->p6.y), obb->p7.y);
+	max.z = fmaxf(fmaxf(fmaxf(fmaxf(fmaxf(fmaxf(fmaxf(obb->p0.z, obb->p1.z), obb->p2.z), obb->p3.z), obb->p4.z), obb->p5.z), obb->p6.z), obb->p7.z);
+	ZobVector3 min;
+	min.x = fminf(fminf(fminf(fminf(fminf(fminf(fminf(obb->p0.x, obb->p1.x), obb->p2.x), obb->p3.x), obb->p4.x), obb->p5.x), obb->p6.x), obb->p7.x);
+	min.y = fminf(fminf(fminf(fminf(fminf(fminf(fminf(obb->p0.y, obb->p1.y), obb->p2.y), obb->p3.y), obb->p4.y), obb->p5.y), obb->p6.y), obb->p7.y);
+	min.z = fminf(fminf(fminf(fminf(fminf(fminf(fminf(obb->p0.z, obb->p1.z), obb->p2.z), obb->p3.z), obb->p4.z), obb->p5.z), obb->p6.z), obb->p7.z);
+
+	ZobVector3 v = ZobVector3(
+		(max.x - min.x) / 2.0f,
+		(max.y - min.y) / 2.0f,
+		(max.z - min.z) / 2.0f
+	);
+	v0 = ZobVector3(min.x, min.y, min.z);
+	v1 = ZobVector3(min.x, max.y, min.z);
+	v2 = ZobVector3(max.x, max.y, min.z);
+	v3 = ZobVector3(max.x, min.y, min.z);
+	v4 = ZobVector3(min.x, min.y, max.z);
+	v5 = ZobVector3(min.x, max.y, max.z);
+	v6 = ZobVector3(max.x, max.y, max.z);
+	v7 = ZobVector3(max.x, min.y, max.z);
+
+	aabb->p0 = v0;
+	aabb->p1 = v1;
+	aabb->p2 = v2;
+	aabb->p3 = v3;
+	aabb->p4 = v4;
+	aabb->p5 = v5;
+	aabb->p6 = v6;
+	aabb->p7 = v7;
+}
+
+bool Engine::IsInFrustrum(const Camera* c, const Box* aabb) const
+{
+	ZobVector3 minaabb, maxaabb;
+	maxaabb.x = fmaxf(fmaxf(fmaxf(fmaxf(fmaxf(fmaxf(fmaxf(aabb->p0.x, aabb->p1.x), aabb->p2.x), aabb->p3.x), aabb->p4.x), aabb->p5.x), aabb->p6.x), aabb->p7.x);
+	maxaabb.y = fmaxf(fmaxf(fmaxf(fmaxf(fmaxf(fmaxf(fmaxf(aabb->p0.y, aabb->p1.y), aabb->p2.y), aabb->p3.y), aabb->p4.y), aabb->p5.y), aabb->p6.y), aabb->p7.y);
+	maxaabb.z = fmaxf(fmaxf(fmaxf(fmaxf(fmaxf(fmaxf(fmaxf(aabb->p0.z, aabb->p1.z), aabb->p2.z), aabb->p3.z), aabb->p4.z), aabb->p5.z), aabb->p6.z), aabb->p7.z);
+	ZobVector3 min;
+	minaabb.x = fminf(fminf(fminf(fminf(fminf(fminf(fminf(aabb->p0.x, aabb->p1.x), aabb->p2.x), aabb->p3.x), aabb->p4.x), aabb->p5.x), aabb->p6.x), aabb->p7.x);
+	minaabb.y = fminf(fminf(fminf(fminf(fminf(fminf(fminf(aabb->p0.y, aabb->p1.y), aabb->p2.y), aabb->p3.y), aabb->p4.y), aabb->p5.y), aabb->p6.y), aabb->p7.y);
+	minaabb.z = fminf(fminf(fminf(fminf(fminf(fminf(fminf(aabb->p0.z, aabb->p1.z), aabb->p2.z), aabb->p3.z), aabb->p4.z), aabb->p5.z), aabb->p6.z), aabb->p7.z);
+	return c->AABBIsInFrustrum(&minaabb, &maxaabb);
 }

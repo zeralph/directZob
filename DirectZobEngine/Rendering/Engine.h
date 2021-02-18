@@ -89,6 +89,8 @@ namespace Core
 		bool											LineTriangleIntersection(const Triangle* t, const ZobVector3* l0, const ZobVector3* lv, ZobVector3& intersectionPt);
 		bool											LineLineIntersection(const ZobVector3* s0, const ZobVector3* s1, const ZobVector3* e0, const ZobVector3* e1, ZobVector3 &out, float& outFactor) const;
 		ZobObject*										GetObjectAt2DCoords(float x, float y);
+		void											ComputeBoundingBoxes(const ZobMatrix4x4* modelMatrix, const ZobVector3* minBounding, const ZobVector3* maxBounding, Box* obb, Box* aabb) const;
+		bool											IsInFrustrum(const Camera* c, const Box* aabb) const;
 	private:	
 		inline float									clamp2(float x, float min, float max) const { if (x < min) x = min; if (x > max) x = max; return x; }
 		void											DrawHorizontalLine(const float x1, const float x2, const float y, const uint color);
