@@ -98,7 +98,7 @@ private:
 	float m_copyTime;
 	float m_physicTime;
 	clock_t m_copyTick;
-	clock_t	m_frameTick;
+	float m_frameTick;
 	static int s_logIndent;
 	bool m_physicStarted;
 

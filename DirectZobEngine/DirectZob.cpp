@@ -137,8 +137,8 @@ void DirectZob::Init(int width, int height, bool bEditorMode)
 	char frameCharBuffer[sizeof(ulong)];
 	int state;
 	m_initialized = true;
-	m_frameTick = clock();
-	m_frameTime = 1000.0f;
+	m_frameTick=0;
+	m_frameTime = 1.0f;
 	m_physicStarted = false;
 }
 
@@ -171,7 +171,8 @@ int DirectZob::RunInternal(void func(void))
 
 int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUpdated /*=NULL*/, DirectZob::engineCallback OnQueuing /*=NULL*/)
 {
-	m_frameTick = clock();
+	timespec tstart;
+	clock_gettime (CLOCK_REALTIME, &tstart);
 	g_render_mutex.lock();
 	int state=0;
 	m_fps = 1000.0f / m_frameTime;
@@ -320,7 +321,10 @@ int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUp
 		m_engine->SetDisplayedBuffer();
 	}
 	g_render_mutex.unlock();
-	m_frameTime = (float)(clock() - m_frameTick) / CLOCKS_PER_SEC * 1000;
+	timespec tsend;
+	clock_gettime (CLOCK_REALTIME, &tsend);
+	//m_frameTime = (float)(tsend.tv_nsec - tstart.tv_nsec)  / 1000000.0f;
+	m_frameTime = (float)( tsend.tv_sec - tstart.tv_sec + ( tsend.tv_nsec - tstart.tv_nsec ) / 1000000.0f);
 	float dt = TARGET_MS_PER_FRAME - m_frameTime;
 	if (dt > 0)
 	{
