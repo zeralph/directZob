@@ -1,12 +1,12 @@
 <?xml version="1.0" ?>
 <Scene>
     <Globals>
-        <AmbientColor r="0" g="128" b="255" />
-        <AmbientIntensity>0.07</AmbientIntensity>
+        <AmbientColor r="192" g="192" b="192" />
+        <AmbientIntensity>0.48</AmbientIntensity>
         <FogColor r="0" g="128" b="255" />
         <ClearColor r="0" g="128" b="255" />
-        <FogDensity>0.00</FogDensity>
-        <FogDistance>42.00</FogDistance>
+        <FogDensity>1.00</FogDensity>
+        <FogDistance>83.00</FogDistance>
         <FogType>exp2</FogType>
     </Globals>
     <ZobObject name="car" guid="3001003">
@@ -27,8 +27,8 @@
             <Scale x="0.3" y="0.3" z="0.3" />
             <Mesh name="camaro.obj" file="camaro.obj" path="D:\Git\directZob\resources\" />
             <ZobObject name="rearCamera" guid="3002004" type="camera">
-                <Position x="-4.45172e-07" y="1.92052" z="-4.78713" />
-                <Rotation x="15.0562" y="-3.11113e-05" z="-1.27234e-05" />
+                <Position x="-3.31365e-06" y="1.92052" z="-4.78713" />
+                <Rotation x="15.0562" y="-7.91745e-05" z="-1.30466e-05" />
                 <Scale x="1" y="1" z="1" />
                 <Controller>5</Controller>
                 <Fov>70.00</Fov>
@@ -49,14 +49,14 @@
             </ZobObject>
             <ZobObject name="sideCamera" guid="3067493" type="camera">
                 <Position x="-5.88051" y="1.69909" z="5.75917" />
-                <Rotation x="180" y="40.3727" z="180" />
+                <Rotation x="-180" y="40.3727" z="-180" />
                 <Scale x="1" y="1" z="1" />
                 <Controller>0</Controller>
                 <Fov>45.00</Fov>
             </ZobObject>
             <ZobObject name="orbitalCamera" guid="3067494" type="camera">
-                <Position x="-2.07793" y="-1.44584" z="-11.7431" />
-                <Rotation x="175.655" y="-89.7693" z="179.999" />
+                <Position x="-2.30606" y="-1.4406" z="-11.6993" />
+                <Rotation x="-4.33123" y="-89.1195" z="0.0010836" />
                 <Scale x="1" y="1" z="1" />
                 <Controller>2</Controller>
                 <Fov>45.00</Fov>
@@ -70,12 +70,12 @@
             </ZobObject>
         </ZobObject>
     </ZobObject>
-    <ZobObject name="Light_1" guid="3068489" type="light">
+    <ZobObject name="sun" guid="3068489" type="light">
         <Position x="0" y="60.0368" z="0" />
         <Rotation x="-45" y="-45" z="-45" />
         <Scale x="1" y="1" z="1" />
-        <Color r="255" g="255" b="140" />
-        <Intensity>1.00</Intensity>
+        <Color r="241" g="218" b="164" />
+        <Intensity>0.50</Intensity>
         <FallOffDistance>100.00</FallOffDistance>
         <Type>directional</Type>
     </ZobObject>
@@ -170,7 +170,7 @@
             <Rotation x="90" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
             <Color r="0" g="0" b="255" />
-            <Intensity>2.00</Intensity>
+            <Intensity>0.50</Intensity>
             <FallOffDistance>30.00</FallOffDistance>
             <Type>spot</Type>
         </ZobObject>
@@ -179,16 +179,16 @@
             <Rotation x="-71.2625" y="-66.1895" z="-171.321" />
             <Scale x="1" y="1" z="1" />
             <Color r="0" g="255" b="0" />
-            <Intensity>2.00</Intensity>
+            <Intensity>0.50</Intensity>
             <FallOffDistance>20.00</FallOffDistance>
             <Type>spot</Type>
         </ZobObject>
         <ZobObject name="Light_2" guid="3068506" type="light">
             <Position x="5.41638" y="10.0001" z="13.7989" />
-            <Rotation x="-90.0001" y="-70.7708" z="-180" />
+            <Rotation x="-151.948" y="-45.5637" z="-110.832" />
             <Scale x="1" y="1" z="1" />
             <Color r="255" g="0" b="0" />
-            <Intensity>2.00</Intensity>
+            <Intensity>0.50</Intensity>
             <FallOffDistance>50.00</FallOffDistance>
             <Type>spot</Type>
         </ZobObject>
@@ -201,7 +201,7 @@
     </ZobObject>
     <ZobObject name="Hill_2" guid="3066511" type="mesh">
         <Position x="-78" y="0" z="105" />
-        <Rotation x="180" y="0" z="180" />
+        <Rotation x="-180" y="0" z="-180" />
         <Scale x="1" y="1" z="1" />
         <Mesh name="hill_1.obj" file="hill_1.obj" path="D:\Git\directZob\resources\" />
     </ZobObject>
@@ -262,6 +262,65 @@
             <Rotation x="0" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
             <Mesh name="road_block_08.obj" file="road_block_08.obj" path="D:\Git\directZob\resources\" />
+        </ZobObject>
+    </ZobObject>
+    <ZobObject name="beach" guid="-2143505756" type="mesh">
+        <Position x="0" y="0" z="0" />
+        <Rotation x="0" y="0" z="0" />
+        <Scale x="1" y="1" z="1" />
+        <Mesh name="beach.obj" file="beach.obj" path="D:\Git\directZob\resources\" />
+    </ZobObject>
+    <ZobObject name="boat" guid="3066522" type="mesh">
+        <Position x="0" y="-4.25613" z="8.77317" />
+        <Rotation x="0" y="0" z="0" />
+        <Scale x="1" y="1" z="1" />
+        <Mesh name="boat.obj" file="boat.obj" path="D:\Git\directZob\resources\" />
+    </ZobObject>
+    <ZobObject name="skybox" guid="3066523" type="mesh">
+        <Position x="0" y="0" z="0" />
+        <Rotation x="0" y="0" z="0" />
+        <Scale x="1" y="1" z="1" />
+        <Mesh name="skybox.obj" file="skybox.obj" path="D:\Git\directZob\resources\" />
+    </ZobObject>
+    <ZobObject name="trees" guid="3066525">
+        <Position x="0" y="0" z="0" />
+        <Rotation x="0" y="0" z="0" />
+        <Scale x="1" y="1" z="1" />
+        <ZobObject name="tree_1" guid="3066524" type="mesh">
+            <Position x="135" y="0" z="2" />
+            <Rotation x="0" y="-22.9556" z="0" />
+            <Scale x="2" y="2" z="2" />
+            <Mesh name="tree.obj" file="tree.obj" path="D:\Git\directZob\resources\" />
+        </ZobObject>
+        <ZobObject name="tree_2" guid="3066526" type="mesh">
+            <Position x="142" y="0" z="65" />
+            <Rotation x="0" y="0" z="0" />
+            <Scale x="2" y="2" z="2" />
+            <Mesh name="tree.obj" file="tree.obj" path="D:\Git\directZob\resources\" />
+        </ZobObject>
+        <ZobObject name="tree_4" guid="3066527" type="mesh">
+            <Position x="143" y="0" z="13" />
+            <Rotation x="0.0206755" y="52.6753" z="0.0102354" />
+            <Scale x="2" y="2" z="2" />
+            <Mesh name="tree.obj" file="tree.obj" path="D:\Git\directZob\resources\" />
+        </ZobObject>
+        <ZobObject name="tree_3" guid="3066528" type="mesh">
+            <Position x="139" y="0" z="35" />
+            <Rotation x="0" y="0" z="0" />
+            <Scale x="2" y="2" z="2" />
+            <Mesh name="tree.obj" file="tree.obj" path="D:\Git\directZob\resources\" />
+        </ZobObject>
+        <ZobObject name="tree_6" guid="3066529" type="mesh">
+            <Position x="144" y="0" z="53" />
+            <Rotation x="0" y="0" z="0" />
+            <Scale x="2" y="2" z="2" />
+            <Mesh name="tree.obj" file="tree.obj" path="D:\Git\directZob\resources\" />
+        </ZobObject>
+        <ZobObject name="tree_5" guid="3066530" type="mesh">
+            <Position x="133" y="0" z="78" />
+            <Rotation x="0" y="-22.2393" z="0" />
+            <Scale x="2" y="2" z="2" />
+            <Mesh name="tree.obj" file="tree.obj" path="D:\Git\directZob\resources\" />
         </ZobObject>
     </ZobObject>
 </Scene>
