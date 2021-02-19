@@ -17,7 +17,10 @@
 
 #define kUnused(var) (void) var;
 #define CLAMP(n, low, max) n <= low ? low : n >= max ? max : n;
-
+#ifdef WINDOWS
+#define CLOCK_REALTIME 1
+#define BILLION 1000000.0f
+#endif
 using namespace std;
 class ZobPhysicsEngine;
 class DirectZob
@@ -25,6 +28,18 @@ class DirectZob
 	
 	static DirectZob* singleton;
 public :
+
+#ifdef WINDOWS
+	struct timespec { long tv_sec; long tv_nsec; };    //header part
+	int clock_gettime(int, struct timespec* spec)      //C-file part
+	{
+		__int64 wintime; GetSystemTimeAsFileTime((FILETIME*)&wintime);
+		wintime -= 116444736000000000i64;  //1jan1601 to 1jan1970
+		spec->tv_sec = wintime / 10000000i64;           //seconds
+		spec->tv_nsec = wintime % 10000000i64 * 100;      //nano-seconds
+		return 0;
+	}
+#endif
 
 	typedef void (*engineCallback)(void);
 

@@ -14,7 +14,7 @@
 #endif
 #define LOG_BUFFER_SIZE 1024
 
-#define TARGET_MS_PER_FRAME 0.0f//16.0f//33.3333f
+#define TARGET_MS_PER_FRAME 16.66f//0.0f//16.0f//33.3333f
 
 static char buffer[MAX_PATH];
 static char logBuffer[LOG_BUFFER_SIZE];
@@ -323,8 +323,18 @@ int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUp
 	g_render_mutex.unlock();
 	timespec tsend;
 	clock_gettime (CLOCK_REALTIME, &tsend);
-	//m_frameTime = (float)(tsend.tv_nsec - tstart.tv_nsec)  / 1000000.0f;
-	m_frameTime = (float)( tsend.tv_sec - tstart.tv_sec + ( tsend.tv_nsec - tstart.tv_nsec ) / 1000000.0f);
+	if (tsend.tv_sec == tstart.tv_sec)
+	{
+		m_frameTime = (float)(tsend.tv_nsec - tstart.tv_nsec) / BILLION;
+	}
+	else
+	{
+		m_frameTime = (float)(BILLION - tstart.tv_nsec + tsend.tv_nsec) / BILLION;
+	}
+	if (m_frameTime < 0.0f)
+	{
+		m_frameTime = 1.0f;
+	}
 	float dt = TARGET_MS_PER_FRAME - m_frameTime;
 	if (dt > 0)
 	{
