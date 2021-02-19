@@ -19,8 +19,8 @@
 #define CLAMP(n, low, max) n <= low ? low : n >= max ? max : n;
 #ifdef WINDOWS
 #define CLOCK_REALTIME 1
-#define BILLION 1000000.0f
 #endif
+#define BILLION 1000000.0f
 using namespace std;
 class ZobPhysicsEngine;
 class DirectZob
