@@ -172,15 +172,13 @@ int DirectZob::RunInternal(void func(void))
 int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUpdated /*=NULL*/, DirectZob::engineCallback OnQueuing /*=NULL*/)
 {
 	timespec tstart;
-	clock_gettime (CLOCK_REALTIME, &tstart);
+	timespec tend;
+	SaveTime(&tstart);
 	g_render_mutex.lock();
 	int state=0;
 	m_fps = 1000.0f / m_frameTime;
-	//m_frameTick = clock();
-	clock_t clTest;
 	if(m_initialized && m_engine->Started())
 	{
-		clTest = clock();
 #ifdef WINDOWS
 		HWND hWnd = 0;
 		SWindowData* window_data = (SWindowData*)window;
@@ -236,7 +234,8 @@ int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUp
 				m_physicTime = m_physicsEngine->WaitForUpdatePhysicEnd();
 			}
 			m_engine->ClearRenderQueues();
-			m_copyTick = clock();
+			SaveTime( &tend);
+			m_copyTime = GetDeltaTime_MS(tstart, tend);
 			if (OnQueuing)
 			{
 				OnQueuing();
@@ -246,7 +245,6 @@ int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUp
 			{
 				m_physicsEngine->DrawGizmos();
 			}
-			m_copyTime = (float)(clock() - m_copyTick) / CLOCKS_PER_SEC * 1000;
 			if (m_engine->ShowGrid())
 			{
 				m_engine->DrawGrid(cam);
@@ -261,7 +259,6 @@ int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUp
 				m_text->Print(m_engine->GetBufferData()->width / 2, m_engine->GetBufferData()->height / 2, 1, &sBuf, 0xFFFF0000);
 			}
 		}
-		clTest = clock() - clTest;
 		if (m_text)
 		{
 			_snprintf_s(buffer, MAX_PATH, "Triangles : %i", m_engine->GetNbDrawnTriangles());
@@ -321,20 +318,8 @@ int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUp
 		m_engine->SetDisplayedBuffer();
 	}
 	g_render_mutex.unlock();
-	timespec tsend;
-	clock_gettime (CLOCK_REALTIME, &tsend);
-	if (tsend.tv_sec == tstart.tv_sec)
-	{
-		m_frameTime = (float)(tsend.tv_nsec - tstart.tv_nsec) / BILLION;
-	}
-	else
-	{
-		m_frameTime = (float)(BILLION - tstart.tv_nsec + tsend.tv_nsec) / BILLION;
-	}
-	if (m_frameTime < 0.0f)
-	{
-		m_frameTime = 1.0f;
-	}
+	SaveTime(&tend);
+	m_frameTime = GetDeltaTime_MS(tstart, tend);
 	float dt = TARGET_MS_PER_FRAME - m_frameTime;
 	if (dt > 0)
 	{
@@ -342,6 +327,25 @@ int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUp
 		m_frameTime = TARGET_MS_PER_FRAME;
 	}
 	return state;
+}
+
+double DirectZob::GetDeltaTime_MS(timespec& start, timespec& end) const
+{
+	double f;
+	double billion = 1000000000.0;
+	if (end.tv_sec < start.tv_sec)
+	{
+		throw exception("Time error");
+	}
+	else if (end.tv_sec == start.tv_sec)
+	{
+		f = (double)(end.tv_nsec - start.tv_nsec) / billion;
+	}
+	else 
+	{
+		f =  (double)(billion - start.tv_nsec + end.tv_nsec) / billion + (double)(end.tv_sec - start.tv_sec - 1 );
+	}
+	return f * 1000.0;
 }
 
 void DirectZob::PrintObjectList()

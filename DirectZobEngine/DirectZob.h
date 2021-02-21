@@ -17,10 +17,6 @@
 
 #define kUnused(var) (void) var;
 #define CLAMP(n, low, max) n <= low ? low : n >= max ? max : n;
-#ifdef WINDOWS
-#define CLOCK_REALTIME 1
-#endif
-#define BILLION 1000000.0f
 using namespace std;
 class ZobPhysicsEngine;
 class DirectZob
@@ -31,7 +27,7 @@ public :
 
 #ifdef WINDOWS
 	struct timespec { long tv_sec; long tv_nsec; };    //header part
-	int clock_gettime(int, struct timespec* spec)      //C-file part
+	int SaveTime(struct timespec* spec)      //C-file part
 	{
 		__int64 wintime; GetSystemTimeAsFileTime((FILETIME*)&wintime);
 		wintime -= 116444736000000000i64;  //1jan1601 to 1jan1970
@@ -39,8 +35,13 @@ public :
 		spec->tv_nsec = wintime % 10000000i64 * 100;      //nano-seconds
 		return 0;
 	}
+#elif LINUX || MACOS
+	int SaveTime(struct timespec* spec)
+	{
+		return clock_gettime(CLOCK_REALTIME, &tend);
+	}
 #endif
-
+	
 	typedef void (*engineCallback)(void);
 
 	DirectZob();
@@ -67,7 +68,7 @@ public :
 	int						Run( void func(void) );
 	const uint*				GetBufferData() const { return m_engine->GetBufferData()->buffer; }
 	std::string				ExePath();
-
+	double					GetDeltaTime_MS(timespec& start, timespec& end) const;
 	static DirectZob*		GetInstance() { return DirectZob::singleton; }
 	Engine*					GetEngine() const { return m_engine; }
 	CameraManager*			GetCameraManager() const { return m_cameraManager; }
@@ -112,7 +113,6 @@ private:
 	float m_fps;
 	float m_copyTime;
 	float m_physicTime;
-	clock_t m_copyTick;
 	float m_frameTick;
 	static int s_logIndent;
 	bool m_physicStarted;
