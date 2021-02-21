@@ -335,7 +335,7 @@ double DirectZob::GetDeltaTime_MS(timespec& start, timespec& end) const
 	double billion = 1000000000.0;
 	if (end.tv_sec < start.tv_sec)
 	{
-		throw exception("Time error");
+		throw "Time error";
 	}
 	else if (end.tv_sec == start.tv_sec)
 	{

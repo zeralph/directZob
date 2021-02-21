@@ -58,7 +58,7 @@ void ZobCameraControllerOrbital::Update(float dt)
 	}
 	//Update section
 	ZobVector3 worldPos = m_zobCamera->GetWorldPosition();
-	if (true || m_zobCamera->m_tagetMode == Camera::eTarget_Vector && m_zobCamera->m_targetVector != worldPos)
+	if (true || (m_zobCamera->m_tagetMode == Camera::eTarget_Vector && m_zobCamera->m_targetVector != worldPos))
 	{
 		ZobVector3 up = ZobVector3::Vector3Y;
 		ZobVector3 forward = &m_zobCamera->m_targetVector;

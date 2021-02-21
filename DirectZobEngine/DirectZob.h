@@ -38,7 +38,7 @@ public :
 #elif LINUX || MACOS
 	int SaveTime(struct timespec* spec)
 	{
-		return clock_gettime(CLOCK_REALTIME, &tend);
+		return clock_gettime(CLOCK_REALTIME, spec);
 	}
 #endif
 	
