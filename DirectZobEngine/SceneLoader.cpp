@@ -101,7 +101,7 @@ void SceneLoader::UnloadScene()
 	CameraManager* cameraManager = DirectZob::GetInstance()->GetCameraManager();
 	Engine* engine = DirectZob::GetInstance()->GetEngine();
 	engine->Stop();
-	SLEEP(1000);	//ugly but ...
+	SLEEP_MS(1000);	//ugly but ...
 	zobObjectManager->UnloadAll();
 	meshManager->UnloadAll();
 	materialManager->UnloadAll();

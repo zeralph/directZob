@@ -185,7 +185,7 @@ void Engine::Resize(int width, int height)
 {
 	bool bStarted = m_started;
 	Stop();
-	SLEEP(100);
+	SLEEP_MS(100);
 	for (int i = 0; i < m_nbRasterizers; i++)
 	{
 		m_rasterizers[i]->End();

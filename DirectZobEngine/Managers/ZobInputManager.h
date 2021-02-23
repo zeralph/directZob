@@ -12,10 +12,6 @@ public:
 
 	enum Button
 	{
-		buttonA,
-		buttonB,
-		buttonX,
-		buttonY,
 		LeftStickX,
 		LeftStickY,
 		LeftShoulder,
@@ -31,11 +27,11 @@ public:
 	ZobInputManager(int width, int height);
 	~ZobInputManager();
 #ifdef WINDOWS
-	void						Update(uint64_t tick, HWND hWnd);
+	void						Update(uint64_t deltaTimeMS, HWND hWnd);
 #elif LINUX
-	void						Update(uint64_t tick, Display* display);
+	void						Update(uint64_t deltaTimeMS, Display* display);
 #else
-	void						Update(uint64_t tick);
+	void						Update(uint64_t deltaTimeMS);
 #endif
 	const gainput::InputMap*	GetMap() { return m_map;}
 	

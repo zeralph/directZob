@@ -187,7 +187,7 @@ int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUp
 			SWindowData_Win* window_data_win = (SWindowData_Win*)window_data->specific;
 			hWnd = window_data_win->window;
 		}
-		m_inputManager->Update(m_frameTick, hWnd);
+		m_inputManager->Update(m_frameTime, hWnd);
 #elif LINUX
 		Display* display = NULL;
 		SWindowData* window_data = (SWindowData*)window;
@@ -196,9 +196,9 @@ int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUp
 			SWindowData_X11* window_data_x11 = (SWindowData_X11*)window_data->specific;
 			display = window_data_x11->display;
 		}
-		m_inputManager->Update(m_frameTick, display);
+		m_inputManager->Update(m_frameTime, display);
 #else
-		m_inputManager->Update(m_frameTick);
+		m_inputManager->Update(m_frameTime);
 #endif
 		m_cameraManager->UpdateAfter();
 		Color c = Color(DirectZob::GetInstance()->GetLightManager()->GetClearColor());
@@ -256,23 +256,23 @@ int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUp
 			{
 				_snprintf_s(buffer, MAX_PATH, "WARNING : %s", "NO CAMERA");
 				std::string sBuf = std::string(buffer);
-				m_text->Print(m_engine->GetBufferData()->width / 2, m_engine->GetBufferData()->height / 2, 1, &sBuf, 0xFFFF0000);
+				m_text->Print(m_engine->GetBufferData()->width / 2, m_engine->GetBufferData()->height / 2, &sBuf, 0xFFFF0000);
 			}
 		}
 		if (m_text)
 		{
 			_snprintf_s(buffer, MAX_PATH, "Triangles : %i", m_engine->GetNbDrawnTriangles());
 			std::string sBuf = std::string(buffer);
-			m_text->Print(0, 0, 1, &sBuf, 0xFFFFFFFF);
+			m_text->Print(0, 0, &sBuf, 0xFFFFFFFF);
 			_snprintf_s(buffer, MAX_PATH, "render : %03i, geom : %03i, phys : %03i, cpy : %03i, tot : %03i, FPS : %03i", (int)m_renderTime, (int)m_geometryTime, (int)m_physicTime, (int)m_copyTime, (int)m_frameTime, (int)m_fps);
 			sBuf = std::string(buffer);
 			if (m_frameTime <= TARGET_MS_PER_FRAME)
 			{
-				m_text->Print(0, 16, 1, &sBuf, 0xFF00FF00);
+				m_text->Print(0, 16, &sBuf, 0xFF00FF00);
 			}
 			else
 			{
-				m_text->Print(0, 16, 1, &sBuf, 0xFFFF0000);
+				m_text->Print(0, 16, &sBuf, 0xFFFF0000);
 			}
 			switch(m_engine->GetLightingPrecision())
 			{
@@ -288,7 +288,7 @@ int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUp
 					break;
 
 			}
-			m_text->Print(0, 32, 1, &sBuf, 0xFFFFFFFF);
+			m_text->Print(0, 32, &sBuf, 0xFFFFFFFF);
 			_snprintf_s(buffer, MAX_PATH, "Controller LX : %.2f, LY  : %.2f, RX : %.2f, RY : %.2f, LT : %.2f, RT : %.2f", 
 				m_inputManager->GetMap()->GetFloat(ZobInputManager::LeftStickX), 
 				m_inputManager->GetMap()->GetFloat(ZobInputManager::LeftStickY),
@@ -297,16 +297,16 @@ int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUp
 				m_inputManager->GetMap()->GetFloat(ZobInputManager::LeftShoulder),
 				m_inputManager->GetMap()->GetFloat(ZobInputManager::RightShoulder));
 			sBuf = std::string(buffer);
-			m_text->Print(0, 48, 1, &sBuf, 0xFF0000FF);
+			m_text->Print(0, 48, &sBuf, 0xFF0000FF);
 			
 			
 			PrintObjectList();
 
-			if (m_inputManager->GetMap()->GetBoolIsNew(ZobInputManager::buttonX) || m_inputManager->GetMap()->GetBoolIsNew(ZobInputManager::WireFrame))
+			if (m_inputManager->GetMap()->GetBoolIsNew(ZobInputManager::WireFrame))
 			{
 				m_engine->WireFrame(!m_engine->WireFrame());
 			}
-			if (m_inputManager->GetMap()->GetBoolIsNew(ZobInputManager::buttonY) || m_inputManager->GetMap()->GetBoolIsNew(ZobInputManager::Gizmos))
+			if (m_inputManager->GetMap()->GetBoolIsNew(ZobInputManager::Gizmos))
 			{
 				m_engine->DrawGizmos(!m_engine->DrawGizmos());
 			}
@@ -319,11 +319,11 @@ int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUp
 	}
 	g_render_mutex.unlock();
 	SaveTime(&tend);
-	m_frameTime = GetDeltaTime_MS(tstart, tend);
+	m_frameTime = (float)GetDeltaTime_MS(tstart, tend);
 	float dt = TARGET_MS_PER_FRAME - m_frameTime;
-	if (dt > 0)
+	if (dt > 0.0f)
 	{
-		SLEEP(dt);
+		SLEEP_MS(dt);
 		m_frameTime = TARGET_MS_PER_FRAME;
 	}
 	return state;
@@ -365,7 +365,7 @@ void DirectZob::PrintObjectList()
 				c = 0xFF00FF00;
 			}
 		}
-		m_text->Print(txtW, (i*10), 1, c, z->GetName().c_str());
+		m_text->Print(txtW, (i*10), c, z->GetName().c_str());
 	}
 }
 
