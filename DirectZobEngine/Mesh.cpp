@@ -55,11 +55,11 @@ Mesh::Mesh(std::string& name, std::string& path, std::string& file):Mesh(name)
 		fullPath = m_path;
 		fullPath.append(file);
 	}
-	if (fullPath.find(".fbx") != -1)
+	if (fullPath.find(".fbx") != -1 || fullPath.find(".FBX") != -1)
 	{
 		LoadFbx(fullPath);
 	}
-	else if (fullPath.find(".obj") != -1)
+	else if (fullPath.find(".obj") != -1 || fullPath.find(".OBJ") != -1)
 	{
 		LoadOBJ(fullPath);
 	}
@@ -122,20 +122,12 @@ Mesh::Mesh(std::string &parentName, std::string& path, fbxsdk::FbxMesh* mesh)
 					FbxVector4 v = mesh->GetControlPointAt(ctrlIdx);
 					FbxMultT(mesh->GetNode(), v);
 					m_vertices[vIdx] = ZobVector3(v[0], v[1], v[2]);
-					if (vIdx == 0)
-					{
-						m_minBoundingBox = ZobVector3(v[0], v[1], v[2]);
-						m_maxBoundingBox = ZobVector3(v[0], v[1], v[2]);
-					}
-					else
-					{
-						m_minBoundingBox.x = min(m_minBoundingBox.x, (float)v[0]);
-						m_minBoundingBox.y = min(m_minBoundingBox.y, (float)v[1]);
-						m_minBoundingBox.z = min(m_minBoundingBox.z, (float)v[2]);
-						m_maxBoundingBox.x = max(m_maxBoundingBox.x, (float)v[0]);
-						m_maxBoundingBox.y = max(m_maxBoundingBox.y, (float)v[1]);
-						m_maxBoundingBox.z = max(m_maxBoundingBox.z, (float)v[2]);
-					}
+					m_minBoundingBox.x = min(m_minBoundingBox.x, (float)v[0]);
+					m_minBoundingBox.y = min(m_minBoundingBox.y, (float)v[1]);
+					m_minBoundingBox.z = min(m_minBoundingBox.z, (float)v[2]);
+					m_maxBoundingBox.x = max(m_maxBoundingBox.x, (float)v[0]);
+					m_maxBoundingBox.y = max(m_maxBoundingBox.y, (float)v[1]);
+					m_maxBoundingBox.z = max(m_maxBoundingBox.z, (float)v[2]);
 					//UVs
 					fbxsdk::FbxStringList uvsNames;
 					mesh->GetUVSetNames(uvsNames);
@@ -216,6 +208,7 @@ Mesh::Mesh(std::string &parentName, std::string& path, fbxsdk::FbxMesh* mesh)
 				}
 			}
 		}
+		m_indices = (uint*)malloc(sizeof(ZobVector3) * m_nbFaces);
 		m_trianglesNormals = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbFaces);
 		m_trianglesNormalsData = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbFaces);
 		m_trianglesNormalsTmp = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbFaces);
@@ -282,6 +275,12 @@ void Mesh::LoadFbx(const std::string& fullPath)
 			FbxMesh* mesh = (FbxMesh*)lScene->GetGeometry(i);
 			Mesh* m = new Mesh(m_name, m_path, mesh);
 			m_subMeshes.push_back(m);
+			m_minBoundingBox.x = fminf(m_minBoundingBox.x, m->m_minBoundingBox.x);
+			m_minBoundingBox.y = fminf(m_minBoundingBox.y, m->m_minBoundingBox.y);
+			m_minBoundingBox.z = fminf(m_minBoundingBox.z, m->m_minBoundingBox.z);
+			m_maxBoundingBox.x = fmaxf(m_maxBoundingBox.x, m->m_maxBoundingBox.x);
+			m_maxBoundingBox.y = fmaxf(m_maxBoundingBox.y, m->m_maxBoundingBox.y);
+			m_maxBoundingBox.z = fmaxf(m_maxBoundingBox.z, m->m_maxBoundingBox.z);
 		}
 		lScene->Destroy(true);
 	}
@@ -489,13 +488,13 @@ void Mesh::LoadOBJ(const std::string& fullPath)
 	DirectZob::RemoveIndent();
 }
 
-void Mesh::SplitEntry(const std::string* s, std::vector<std::string>* v, const char delim)
+void Mesh::SplitEntry(const std::string* s, std::vector<std::string>* v, const char delim) const
 {
 	std::size_t current, previous = 0;
 	current = s->find(delim);
 	while (current != std::string::npos) {
 		std::string sub = s->substr(previous, current - previous);
-		//if (sub.length() > 0)
+		if (sub.length() > 0 && sub != " ")
 		{
 			v->push_back(sub);
 		}
@@ -503,7 +502,7 @@ void Mesh::SplitEntry(const std::string* s, std::vector<std::string>* v, const c
 		current = s->find(delim, previous);
 	}
 	std::string sub = s->substr(previous, current - previous);
-	if (sub.length() > 0)
+	if (sub.length() > 0 && sub != " ")
 	{
 		v->push_back(sub);
 	}
@@ -705,11 +704,43 @@ inline bool Mesh::RejectTriangle(const Triangle* t, const float znear, const flo
 	return false;
 }
 
+void Mesh::ParseObjFaceData(const std::string *s, int& v, int& u, int& n, bool &hasUv, bool &hasNormals) const
+{
+	std::vector<std::string> vec;
+	std::string::size_type sz;
+	vec.clear();
+	SplitEntry(s, &vec, '/');
+	hasUv = false;
+	hasNormals = false;
+	v = std::stoi(vec[0], &sz) - 1;
+	if (v< 0)
+	{
+		v = m_nbVertices + v - 1;
+	}
+	if (vec.size() > 1)
+	{
+		u = std::stoi(vec[1], &sz) - 1;
+		hasUv = true;
+		if (u < 0)
+		{
+			u = m_nbUvs + u - 1;
+		}
+	}
+	if (vec.size() > 2)
+	{
+		n = std::stoi(vec[2], &sz) - 1;
+		hasNormals = true;
+		if (n < 0)
+		{
+			n = m_nbNormals + n - 1;
+		}
+	}
+}
+
 void Mesh::CreateTriangles(const std::vector<std::string>* line, std::vector<Triangle>* tList, size_t &tArrayIdx, const ZobMaterial* tex)
 {
 	size_t nbFaces = line->size() - 2;
 	int a, b, c = 0;
-	std::vector<std::string> vec;
 	for (size_t i = 0; i < nbFaces; i++)
 	{
 		if (i % 2 == 0)
@@ -726,56 +757,56 @@ void Mesh::CreateTriangles(const std::vector<std::string>* line, std::vector<Tri
 		}
 
 		Triangle t;
-		std::string::size_type sz;
-
-		vec.clear();
-		SplitEntry(&line->at(a), &vec, '/');
-		t.verticeAIndex = std::stoi(vec[0], &sz) - 1;
-		t.va = &m_vertices[std::stoi(vec[0], &sz) - 1];
-		t.pa = &m_projectedVertices[std::stoi(vec[0], &sz) - 1];
-		if (vec[1].size() > 0)
-			t.ua = &m_uvs[std::stoi(vec[1], &sz) - 1];
+		int v;
+		int u;
+		int n;
+		bool bHasUv;
+		bool bHasNormals;
+		ParseObjFaceData(&line->at(a), v, u, n, bHasUv, bHasNormals);
+		t.verticeAIndex = v;
+		t.va = &m_vertices[v];
+		t.pa = &m_projectedVertices[v];
+		if (bHasUv)
+			t.ua = &m_uvs[u];
 		else
 			t.ua = &vec2zero;
-		if (m_hasNormals && vec.size() > 2)
+		if (bHasNormals)
 		{
-			t.na = &m_verticesNormals[std::stoi(vec[2], &sz) - 1];
+			t.na = &m_verticesNormals[n];
 		}
 		else
 		{
 			t.na = &m_verticesNormals[0];
 		}
 
-		vec.clear();
-		SplitEntry(&line->at(b), &vec, '/');
-		t.verticeBIndex = std::stoi(vec[0], &sz) - 1;
-		t.vb = &m_vertices[std::stoi(vec[0], &sz) - 1];
-		t.pb = &m_projectedVertices[std::stoi(vec[0], &sz) - 1];
-		if (vec[1].size() > 0)
-			t.ub = &m_uvs[std::stoi(vec[1], &sz) - 1];
+		ParseObjFaceData(&line->at(b), v, u, n, bHasUv, bHasNormals);
+		t.verticeBIndex = v;
+		t.vb = &m_vertices[v];
+		t.pb = &m_projectedVertices[v];
+		if (bHasUv)
+			t.ub = &m_uvs[u];
 		else
 			t.ub = &vec2zero;
-		if (m_hasNormals && vec.size() >2)
+		if (bHasNormals)
 		{
-			t.nb = &m_verticesNormals[std::stoi(vec[2], &sz) - 1];
+			t.nb = &m_verticesNormals[n];
 		}
 		else
 		{
 			t.nb = &m_verticesNormals[0];
 		}
 
-		vec.clear();
-		SplitEntry(&line->at(c), &vec, '/');
-		t.verticeCIndex = std::stoi(vec[0], &sz) - 1;
-		t.vc = &m_vertices[std::stoi(vec[0], &sz) - 1];
-		t.pc = &m_projectedVertices[std::stoi(vec[0], &sz) - 1];
-		if (vec[1].size() > 0)
-			t.uc = &m_uvs[std::stoi(vec[1], &sz) - 1];
+		ParseObjFaceData(&line->at(c), v, u, n, bHasUv, bHasNormals);
+		t.verticeCIndex = v;
+		t.vc = &m_vertices[v];
+		t.pc = &m_projectedVertices[v];
+		if (bHasUv)
+			t.uc = &m_uvs[u];
 		else
 			t.uc = &vec2zero;
-		if (m_hasNormals && vec.size() > 2)
+		if (bHasNormals)
 		{
-			t.nc = &m_verticesNormals[std::stoi(vec[2], &sz) - 1];
+			t.nc = &m_verticesNormals[n];
 		}
 		else
 		{

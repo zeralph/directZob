@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.bottomStatusBar = new System.Windows.Forms.StatusStrip();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -78,6 +78,7 @@
             this.btnTranslateWorld = new System.Windows.Forms.ToolStripButton();
             this.btnRotateWorld = new System.Windows.Forms.ToolStripButton();
             this.btnScale = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSnap = new System.Windows.Forms.ToolStripButton();
             this.EngineRendererPanel = new System.Windows.Forms.Panel();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
@@ -93,7 +94,8 @@
             this.tabEngine = new System.Windows.Forms.TabPage();
             this.panel2 = new System.Windows.Forms.Panel();
             this.EngineControlsFlowLayout = new System.Windows.Forms.FlowLayoutPanel();
-            this.toolStripSnap = new System.Windows.Forms.ToolStripButton();
+            this.toolStripStatusEngineState = new System.Windows.Forms.ToolStripStatusLabel();
+            this.bottomStatusBar.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FirstPanelSplitter)).BeginInit();
             this.FirstPanelSplitter.Panel1.SuspendLayout();
@@ -120,13 +122,15 @@
             this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
-            // statusStrip1
+            // bottomStatusBar
             // 
-            this.statusStrip1.Location = new System.Drawing.Point(0, 774);
-            this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(1278, 22);
-            this.statusStrip1.TabIndex = 1;
-            this.statusStrip1.Text = "statusStrip1";
+            this.bottomStatusBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusEngineState});
+            this.bottomStatusBar.Location = new System.Drawing.Point(0, 774);
+            this.bottomStatusBar.Name = "bottomStatusBar";
+            this.bottomStatusBar.Size = new System.Drawing.Size(1278, 22);
+            this.bottomStatusBar.TabIndex = 1;
+            this.bottomStatusBar.Text = "statusStrip1";
             // 
             // menuStrip1
             // 
@@ -611,6 +615,17 @@
             this.btnScale.ToolTipText = "Scale";
             this.btnScale.Click += new System.EventHandler(this.btnScale_Click);
             // 
+            // toolStripSnap
+            // 
+            this.toolStripSnap.CheckOnClick = true;
+            this.toolStripSnap.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripSnap.Image = ((System.Drawing.Image)(resources.GetObject("toolStripSnap.Image")));
+            this.toolStripSnap.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripSnap.Name = "toolStripSnap";
+            this.toolStripSnap.Size = new System.Drawing.Size(37, 22);
+            this.toolStripSnap.Text = "Snap";
+            this.toolStripSnap.Click += new System.EventHandler(this.toolStripSnap_Click);
+            // 
             // EngineRendererPanel
             // 
             this.EngineRendererPanel.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -776,16 +791,11 @@
             this.EngineControlsFlowLayout.TabIndex = 0;
             this.EngineControlsFlowLayout.WrapContents = false;
             // 
-            // toolStripSnap
+            // toolStripStatusEngineState
             // 
-            this.toolStripSnap.CheckOnClick = true;
-            this.toolStripSnap.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolStripSnap.Image = ((System.Drawing.Image)(resources.GetObject("toolStripSnap.Image")));
-            this.toolStripSnap.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripSnap.Name = "toolStripSnap";
-            this.toolStripSnap.Size = new System.Drawing.Size(37, 22);
-            this.toolStripSnap.Text = "Snap";
-            this.toolStripSnap.Click += new System.EventHandler(this.toolStripSnap_Click);
+            this.toolStripStatusEngineState.Name = "toolStripStatusEngineState";
+            this.toolStripStatusEngineState.Size = new System.Drawing.Size(36, 17);
+            this.toolStripStatusEngineState.Text = "NULL";
             // 
             // Form1
             // 
@@ -793,7 +803,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1278, 796);
             this.Controls.Add(this.FirstPanelSplitter);
-            this.Controls.Add(this.statusStrip1);
+            this.Controls.Add(this.bottomStatusBar);
             this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
@@ -803,6 +813,8 @@
             this.Load += new System.EventHandler(this.Form1_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyUp);
+            this.bottomStatusBar.ResumeLayout(false);
+            this.bottomStatusBar.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.FirstPanelSplitter.Panel1.ResumeLayout(false);
@@ -836,7 +848,7 @@
         }
 
         #endregion
-        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.StatusStrip bottomStatusBar;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.SplitContainer FirstPanelSplitter;
@@ -901,6 +913,7 @@
         private System.Windows.Forms.ToolStripMenuItem physicsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem textToolStripMenuItem;
         private System.Windows.Forms.ToolStripButton toolStripSnap;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusEngineState;
     }
 }
 

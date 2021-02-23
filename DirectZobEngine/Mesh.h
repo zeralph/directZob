@@ -39,14 +39,13 @@ public:
 	inline bool							IsDrawn() const { return m_bDrawn; }
 protected:
 										Mesh(std::string& parentName, std::string& path, fbxsdk::FbxMesh* mesh);
-	void								SplitEntry(const std::string* s, std::vector<std::string>* v, const char delim);
+	void								SplitEntry(const std::string* s, std::vector<std::string>* v, const char delim) const;
 	void								CreateTriangles(const std::vector<std::string>* line, std::vector<Triangle>* t, size_t& tArrayIdx, const ZobMaterial* tex);
 	void								LoadOBJ(const std::string& fullPath);
 	void								LoadFbx(const std::string& fullPath);
 	void								FbxMultT(FbxNode* node, FbxVector4 &vector);
 	inline bool							RejectTriangle(const Triangle* t, const float znear, const float zfar, const float width, const float height);
-	bool								IsInFrustrum(const ZobMatrix4x4& modelMatrix, const Camera* c);
-
+	void								ParseObjFaceData(const std::string* s, int &v, int &u, int &n, bool& hasUv, bool& hasNormals) const;
 	std::vector<Mesh*> m_subMeshes;
 	uint m_nbVertices = 0;
 	uint m_nbUvs = 0;

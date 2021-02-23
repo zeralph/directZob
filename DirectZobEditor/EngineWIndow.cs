@@ -424,6 +424,14 @@ namespace DirectZobEditor
             {
                 OnEndFrame(this, EventArgs.Empty);
             }
+            if (m_directZobWrapper.IsPhysicPlaying())
+            {
+                m_mainForm.InformEngineStatus("RUNNING");
+            }
+            else
+            {
+                m_mainForm.InformEngineStatus("STOPPED");
+            }
         }
         #endregion
         private void UpdateGraphicsParameters()

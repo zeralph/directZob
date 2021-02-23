@@ -543,6 +543,11 @@ namespace DirectZobEditor
             }
         }
 
+        public void InformEngineStatus(string s)
+        {
+            toolStripStatusEngineState.Text = s;
+        }
+
         private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
 
