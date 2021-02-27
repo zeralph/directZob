@@ -123,15 +123,16 @@ void SceneLoader::NewScene()
 
 void SceneLoader::LoadScene(std::string& path, std::string& file)
 {
+	m_path = path;
+	m_file = file;
 	DirectZob::AddIndent();
-	DirectZob::LogInfo("Load scene %s%s", path.c_str(), file.c_str());
+	DirectZob::LogInfo("WORKSPACE PATH : %s", path.c_str());
+	DirectZob::LogInfo("loading scene %s", file.c_str());
 	UnloadScene();
 	DirectZob::GetInstance()->GetLightManager()->ReInitGlobalSettings();
 	MeshManager* meshManager = DirectZob::GetInstance()->GetMeshManager();
 	MaterialManager* materialManager = DirectZob::GetInstance()->GetMaterialManager();
 	ZobObjectManager* zobObjectManager = DirectZob::GetInstance()->GetZobObjectManager();
-	m_path = path;
-	m_file = file;
 	float x, y, z, fov, znear, zfar;
 	std::string name, texture, fullPath;
 	TiXmlDocument doc("Scene");
