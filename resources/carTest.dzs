@@ -39,7 +39,7 @@
             <Position x="0.000315119" y="-0.699426" z="3.2681e-05" />
             <Rotation x="-180" y="-1.03086e-05" z="-180" />
             <Scale x="0.01" y="0.01" z="0.01" />
-            <Mesh name="Peugeot_405" file="GLX_400.FBX" path="D:\Git\directZob\resources\_cars\GLX-400-FBX\" />
+            <Mesh name="Peugeot_405" file="GLX_400.FBX" path="_cars\GLX-400-FBX\" />
         </ZobObject>
         <ZobObject name="rearCamera" guid="3002004" type="camera">
             <Position x="-8.47504e-06" y="1.92052" z="-4.78713" />
@@ -83,7 +83,7 @@
         <Position x="-281.384" y="-3.67123" z="26.628" />
         <Rotation x="0" y="30.7585" z="0" />
         <Scale x="0.3" y="0.3" z="0.3" />
-        <Mesh name="cottage_obj.obj" file="cottage_obj.obj" path="D:\Git\directZob\resources\" />
+        <Mesh name="cottage_obj.obj" file="cottage_obj.obj" path="" />
         <Physic>
             <RigidBody type="0" active="1">
                 <Box halfExtends_x="10.000000" halfExtends_y="10.000000" halfExtends_z="10.000000" layers="0" scale_with_object="1">
@@ -98,7 +98,7 @@
         <Scale x="1" y="1" z="1" />
         <Physic>
             <RigidBody type="0" active="1">
-                <StaticMesh name="road2_p_ground.obj" path="D:\Git\directZob\resources\" file="road2_p_ground.obj" layers="1" scale_with_object="1">
+                <StaticMesh name="road2_p_ground.obj" path="" file="road2_p_ground.obj" layers="1" scale_with_object="1">
                     <Material bounciness="0.000000" friction_coeff="0.000000" mass_density="0.000000" rolling_resistance="0.000000" />
                 </StaticMesh>
             </RigidBody>
@@ -110,7 +110,7 @@
         <Scale x="1" y="1" z="1" />
         <Physic>
             <RigidBody type="0" active="1">
-                <StaticMesh name="road2_p_leftWall.obj" path="D:\Git\directZob\resources\" file="road2_p_leftWall.obj" layers="2" scale_with_object="1">
+                <StaticMesh name="road2_p_leftWall.obj" path="" file="road2_p_leftWall.obj" layers="2" scale_with_object="1">
                     <Material bounciness="0.000000" friction_coeff="0.000000" mass_density="0.000000" rolling_resistance="0.000000" />
                 </StaticMesh>
             </RigidBody>
@@ -122,7 +122,7 @@
         <Scale x="1" y="1" z="1" />
         <Physic>
             <RigidBody type="0" active="1">
-                <StaticMesh name="road2_p_rightWall.obj" path="D:\Git\directZob\resources\" file="road2_p_rightWall.obj" layers="2" scale_with_object="1">
+                <StaticMesh name="road2_p_rightWall.obj" path="" file="road2_p_rightWall.obj" layers="2" scale_with_object="1">
                     <Material bounciness="0.000000" friction_coeff="0.000000" mass_density="0.000000" rolling_resistance="0.000000" />
                 </StaticMesh>
             </RigidBody>
@@ -132,25 +132,25 @@
         <Position x="-13.563" y="-10" z="-19.37" />
         <Rotation x="0" y="35" z="0" />
         <Scale x="1" y="1" z="1" />
-        <Mesh name="building_1.obj" file="building_1.obj" path="D:\Git\directZob\resources\" />
+        <Mesh name="building_1.obj" file="building_1.obj" path="" />
     </ZobObject>
     <ZobObject name="building_2" guid="3066502" type="mesh">
         <Position x="-53.1885" y="-10" z="-45.478" />
         <Rotation x="0" y="35" z="0" />
         <Scale x="1" y="1" z="1" />
-        <Mesh name="building_1.obj" file="building_1.obj" path="D:\Git\directZob\resources\" />
+        <Mesh name="building_1.obj" file="building_1.obj" path="" />
     </ZobObject>
     <ZobObject name="building_3" guid="3066503" type="mesh">
         <Position x="-83.37" y="-10" z="0" />
         <Rotation x="0" y="35" z="0" />
         <Scale x="1" y="1" z="1" />
-        <Mesh name="building_1.obj" file="building_1.obj" path="D:\Git\directZob\resources\" />
+        <Mesh name="building_1.obj" file="building_1.obj" path="" />
     </ZobObject>
     <ZobObject name="building_4" guid="3066504" type="mesh">
         <Position x="-52.153" y="-10" z="22.163" />
         <Rotation x="0" y="35" z="0" />
         <Scale x="1" y="1" z="1" />
-        <Mesh name="building_1.obj" file="building_1.obj" path="D:\Git\directZob\resources\" />
+        <Mesh name="building_1.obj" file="building_1.obj" path="" />
     </ZobObject>
     <ZobObject name="some_lights" guid="3066510">
         <Position x="0" y="0" z="0" />
@@ -197,19 +197,19 @@
         <Position x="0" y="1" z="101" />
         <Rotation x="0.0139885" y="-0.433636" z="-5.29355e-05" />
         <Scale x="1" y="1" z="1" />
-        <Mesh name="hill_1.obj" file="hill_1.obj" path="D:\Git\directZob\resources\" />
+        <Mesh name="hill_1.obj" file="hill_1.obj" path="" />
     </ZobObject>
     <ZobObject name="Hill_2" guid="3066511" type="mesh">
         <Position x="-78" y="0" z="105" />
         <Rotation x="180" y="0" z="180" />
         <Scale x="1" y="1" z="1" />
-        <Mesh name="hill_1.obj" file="hill_1.obj" path="D:\Git\directZob\resources\" />
+        <Mesh name="hill_1.obj" file="hill_1.obj" path="" />
     </ZobObject>
     <ZobObject name="Hill_3" guid="3066512" type="mesh">
         <Position x="-275.055" y="0" z="0" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="1" y="1" z="1" />
-        <Mesh name="hill_2.obj" file="hill_2.obj" path="D:\Git\directZob\resources\" />
+        <Mesh name="hill_2.obj" file="hill_2.obj" path="" />
     </ZobObject>
     <ZobObject name="road_sections" guid="3066513">
         <Position x="0" y="0" z="0" />
@@ -219,68 +219,68 @@
             <Position x="0" y="0" z="0" />
             <Rotation x="0" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
-            <Mesh name="road_block_01.obj" file="road_block_01.obj" path="D:\Git\directZob\resources\" />
+            <Mesh name="road_block_01.obj" file="road_block_01.obj" path="" />
         </ZobObject>
         <ZobObject name="road02" guid="3066515" type="mesh">
             <Position x="0" y="0" z="0" />
             <Rotation x="0" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
-            <Mesh name="road_block_02.obj" file="road_block_02.obj" path="D:\Git\directZob\resources\" />
+            <Mesh name="road_block_02.obj" file="road_block_02.obj" path="" />
         </ZobObject>
         <ZobObject name="road03" guid="3066516" type="mesh">
             <Position x="0" y="0" z="0" />
             <Rotation x="0" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
-            <Mesh name="road_block_03.obj" file="road_block_03.obj" path="D:\Git\directZob\resources\" />
+            <Mesh name="road_block_03.obj" file="road_block_03.obj" path="" />
         </ZobObject>
         <ZobObject name="road04" guid="3066517" type="mesh">
             <Position x="0" y="0" z="0" />
             <Rotation x="0" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
-            <Mesh name="road_block_04.obj" file="road_block_04.obj" path="D:\Git\directZob\resources\" />
+            <Mesh name="road_block_04.obj" file="road_block_04.obj" path="" />
         </ZobObject>
         <ZobObject name="road05" guid="3066518" type="mesh">
             <Position x="0" y="0" z="0" />
             <Rotation x="0" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
-            <Mesh name="road_block_05.obj" file="road_block_05.obj" path="D:\Git\directZob\resources\" />
+            <Mesh name="road_block_05.obj" file="road_block_05.obj" path="" />
         </ZobObject>
         <ZobObject name="road06" guid="3066519" type="mesh">
             <Position x="0" y="0" z="0" />
             <Rotation x="0" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
-            <Mesh name="road_block_06.obj" file="road_block_06.obj" path="D:\Git\directZob\resources\" />
+            <Mesh name="road_block_06.obj" file="road_block_06.obj" path="" />
         </ZobObject>
         <ZobObject name="road07" guid="3066520" type="mesh">
             <Position x="0" y="0" z="0" />
             <Rotation x="0" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
-            <Mesh name="road_block_07.obj" file="road_block_07.obj" path="D:\Git\directZob\resources\" />
+            <Mesh name="road_block_07.obj" file="road_block_07.obj" path="" />
         </ZobObject>
         <ZobObject name="road08" guid="3066521" type="mesh">
             <Position x="0" y="0" z="0" />
             <Rotation x="0" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
-            <Mesh name="road_block_08.obj" file="road_block_08.obj" path="D:\Git\directZob\resources\" />
+            <Mesh name="road_block_08.obj" file="road_block_08.obj" path="" />
         </ZobObject>
     </ZobObject>
     <ZobObject name="beach" guid="-2143505756" type="mesh">
         <Position x="0" y="0" z="0" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="1" y="1" z="1" />
-        <Mesh name="beach.obj" file="beach.obj" path="D:\Git\directZob\resources\" />
+        <Mesh name="beach.obj" file="beach.obj" path="" />
     </ZobObject>
     <ZobObject name="boat" guid="3066522" type="mesh">
         <Position x="0" y="-4.25613" z="8.77317" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="1" y="1" z="1" />
-        <Mesh name="boat.obj" file="boat.obj" path="D:\Git\directZob\resources\" />
+        <Mesh name="boat.obj" file="boat.obj" path="" />
     </ZobObject>
     <ZobObject name="skybox" guid="3066523" type="mesh">
         <Position x="0" y="0" z="0" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="1" y="1" z="1" />
-        <Mesh name="skybox.obj" file="skybox.obj" path="D:\Git\directZob\resources\" />
+        <Mesh name="skybox.obj" file="skybox.obj" path="" />
     </ZobObject>
     <ZobObject name="trees" guid="3066525">
         <Position x="0" y="0" z="0" />
@@ -290,37 +290,37 @@
             <Position x="135" y="0" z="2" />
             <Rotation x="0" y="-22.9556" z="0" />
             <Scale x="2" y="2" z="2" />
-            <Mesh name="tree.obj" file="tree.obj" path="D:\Git\directZob\resources\" />
+            <Mesh name="tree.obj" file="tree.obj" path="" />
         </ZobObject>
         <ZobObject name="tree_2" guid="3066526" type="mesh">
             <Position x="142" y="0" z="65" />
             <Rotation x="0" y="0" z="0" />
             <Scale x="2" y="2" z="2" />
-            <Mesh name="tree.obj" file="tree.obj" path="D:\Git\directZob\resources\" />
+            <Mesh name="tree.obj" file="tree.obj" path="" />
         </ZobObject>
         <ZobObject name="tree_4" guid="3066527" type="mesh">
             <Position x="143" y="0" z="13" />
             <Rotation x="0.0206755" y="52.6753" z="0.0102354" />
             <Scale x="2" y="2" z="2" />
-            <Mesh name="tree.obj" file="tree.obj" path="D:\Git\directZob\resources\" />
+            <Mesh name="tree.obj" file="tree.obj" path="" />
         </ZobObject>
         <ZobObject name="tree_3" guid="3066528" type="mesh">
             <Position x="139" y="0" z="35" />
             <Rotation x="0" y="0" z="0" />
             <Scale x="2" y="2" z="2" />
-            <Mesh name="tree.obj" file="tree.obj" path="D:\Git\directZob\resources\" />
+            <Mesh name="tree.obj" file="tree.obj" path="" />
         </ZobObject>
         <ZobObject name="tree_6" guid="3066529" type="mesh">
             <Position x="144" y="0" z="53" />
             <Rotation x="0" y="0" z="0" />
             <Scale x="2" y="2" z="2" />
-            <Mesh name="tree.obj" file="tree.obj" path="D:\Git\directZob\resources\" />
+            <Mesh name="tree.obj" file="tree.obj" path="" />
         </ZobObject>
         <ZobObject name="tree_5" guid="3066530" type="mesh">
             <Position x="133" y="0" z="78" />
             <Rotation x="0" y="-22.2393" z="0" />
             <Scale x="2" y="2" z="2" />
-            <Mesh name="tree.obj" file="tree.obj" path="D:\Git\directZob\resources\" />
+            <Mesh name="tree.obj" file="tree.obj" path="" />
         </ZobObject>
     </ZobObject>
 </Scene>

@@ -31,41 +31,43 @@ Mesh::Mesh(std::string& name)
 Mesh::Mesh(std::string& name, std::string& path, std::string& file):Mesh(name)
 {
 	DirectZob::AddIndent();
-	m_path = path;
+	m_path = std::string(SceneLoader::GetResourcePath());
+	m_path.append(path);
+	std::replace(m_path.begin(), m_path.end(), '\\', '/');
+	if(m_path[m_path.length() - 1] != '/')
+	{
+		m_path.append("/");
+	}
 	m_fileName = file;
-	bool bOK = false;
-	std::string fullPath;
-	if (m_path.length())
+	std::string fullPath = m_path;
+	fullPath.append(file);
+	if (fullPath.length())
 	{ 
-		if(m_path[m_path.length() - 1] != '\\')
-		{
-			m_path.append("\\");
-		}
-		fullPath = m_path;
-		fullPath.append(file);
 		std::ifstream f(fullPath.c_str());
-		if (f.good())
+		if (!f.good())
 		{
-			bOK = true;
+			//throw error
+			DirectZob::LogError("Cannot load %s, path not found", name.c_str());	
 		}
-	}
-	if(!bOK)
-	{
-		m_path = std::string(SceneLoader::GetResourcePath());
-		fullPath = m_path;
-		fullPath.append(file);
-	}
-	if (fullPath.find(".fbx") != -1 || fullPath.find(".FBX") != -1)
-	{
-		LoadFbx(fullPath);
-	}
-	else if (fullPath.find(".obj") != -1 || fullPath.find(".OBJ") != -1)
-	{
-		LoadOBJ(fullPath);
+		else
+		{
+			if (fullPath.find(".fbx") != -1 || fullPath.find(".FBX") != -1)
+			{
+				LoadFbx(fullPath);
+			}
+			else if (fullPath.find(".obj") != -1 || fullPath.find(".OBJ") != -1)
+			{
+				LoadOBJ(fullPath);
+			}
+			else
+			{
+				DirectZob::LogError("Mesh %s : bad filename extension. Loading ignored", name.c_str());
+			}
+		}
 	}
 	else
 	{
-		DirectZob::LogError("Mesh %s : bad filename extension. Loading ignored", name.c_str());
+		DirectZob::LogError("Cannot load %s, path empty", name.c_str());	
 	}
 	DirectZob::RemoveIndent();
 }
