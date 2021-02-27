@@ -31,22 +31,17 @@ Mesh::Mesh(std::string& name)
 Mesh::Mesh(std::string& name, std::string& path, std::string& file):Mesh(name)
 {
 	DirectZob::AddIndent();
-	m_path = std::string(SceneLoader::GetResourcePath());
-	m_path.append(path);
-	std::replace(m_path.begin(), m_path.end(), '\\', '/');
-	if(m_path[m_path.length() - 1] != '/')
-	{
-		m_path.append("/");
-	}
+	m_path = path;
 	m_fileName = file;
-	std::string fullPath = m_path;
+	std::string fullPath = std::string(SceneLoader::GetResourcePath());
+	fullPath.append(path);
 	fullPath.append(file);
 	if (fullPath.length())
 	{ 
 		std::ifstream f(fullPath.c_str());
 		if (!f.good())
 		{
-			//throw error
+			//throw errorB
 			DirectZob::LogError("Cannot load %s, path not found", name.c_str());	
 		}
 		else

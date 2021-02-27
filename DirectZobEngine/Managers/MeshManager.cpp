@@ -36,11 +36,17 @@ Sprite* MeshManager::CreateSprite()
 
 Mesh* MeshManager::LoadMesh(std::string& name, std::string& path, std::string& file)
 {
-    DirectZob::LogInfo("Loading mesh %s%s", path.c_str(), file.c_str());
+	std::string p = path;
+	std::replace(p.begin(), p.end(), '\\', '/');
+	if (p[p.length() - 1] != '/')
+	{
+		p.append("/");
+	}
+    DirectZob::LogInfo("Loading mesh %s%s", p.c_str(), file.c_str());
 	Mesh* outMesh = NULL;
 	//if (GetMesh(name) == NULL)
 	{
-		outMesh = new Mesh(name, path, file);
+		outMesh = new Mesh(name, p, file);
 		m_meshes.push_back(outMesh);
 	}
 	return outMesh;

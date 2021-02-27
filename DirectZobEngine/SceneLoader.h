@@ -25,8 +25,8 @@ public:
 	static void LoadZobObject(std::string& fullPath, ZobObject* parent = NULL);
 
 private:
-
 	static void LoadMesh(TiXmlElement* node);
+	static void CleanPath(std::string &path);
 	static void LoadZobObject(TiXmlElement* node, ZobObject* parent, const std::string* factoryPath);
 	static bool SaveZobObjectRecusrive(TiXmlNode* node, ZobObject* z);
 	static std::string m_path;

@@ -124,6 +124,7 @@ void SceneLoader::NewScene()
 void SceneLoader::LoadScene(std::string& path, std::string& file)
 {
 	m_path = path;
+	CleanPath(m_path);
 	m_file = file;
 	DirectZob::AddIndent();
 	DirectZob::LogInfo("WORKSPACE PATH : %s", path.c_str());
@@ -246,5 +247,14 @@ bool SceneLoader::SaveZobObjectRecusrive(TiXmlNode* node, ZobObject* z)
 			bok &= SaveZobObjectRecusrive(newNode, z->GetChild(i));
 		}
 		return bok && (node->InsertEndChild(*newNode) != NULL);
+	}
+}
+
+void SceneLoader::CleanPath(std::string& p)
+{
+	std::replace(p.begin(), p.end(), '\\', '/');
+	if (p[p.length() - 1] != '/')
+	{
+		p.append("/");
 	}
 }

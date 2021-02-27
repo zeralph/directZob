@@ -3,6 +3,7 @@
 #include <fstream>
 #include <iostream>
 #include "Rendering/ZobVector3.h"
+#include <SceneLoader.h>
 
 struct OBJMaterialInfo
 {
@@ -135,7 +136,13 @@ const ZobMaterial* MaterialManager::LoadFbxMaterial(const fbxsdk::FbxMesh* mesh,
 						}
 						texFullPath = path + std::string(t);
 					}
-					finalMaterial = LoadMaterial(matName, &ambient, &diffuse, texFullPath);
+					std::string p = "";
+					if (texFullPath.length())
+					{
+						p = SceneLoader::GetResourcePath();
+						p.append(texFullPath);
+					}	
+					finalMaterial = LoadMaterial(matName, &ambient, &diffuse, p);
 				}
 			}
 		}
@@ -148,7 +155,8 @@ void MaterialManager::LoadOBJMaterials(std::string& path, std::string& file)
 {
 	std::string::size_type sz;
 	// Open the file.
-	std::string fullPath = path;
+	std::string fullPath = std::string(SceneLoader::GetResourcePath());
+	fullPath.append(path);
 	fullPath.append(file);
 	std::ifstream sfile(fullPath, std::ios::in);
 	std::string line;
@@ -219,15 +227,16 @@ void MaterialManager::LoadOBJMaterials(std::string& path, std::string& file)
 			}
 		}
 	}
+	std::string matPath = std::string(SceneLoader::GetResourcePath());
+	matPath.append(path);
 	for (int i = 0; i < materials.size(); i++)
 	{
 		std::string n = materials.at(i).file;
 		n.append(".");
 		n.append(materials.at(i).name);
-
 		if (materials.at(i).texture.length() > 0)
 		{
-			std::string p = path;
+			std::string p = matPath;
 			p.append(materials.at(i).texture);
 			LoadMaterial(n, &materials.at(i).ambient, &materials.at(i).diffuse, p);
 		}

@@ -1,111 +1,326 @@
 <?xml version="1.0" ?>
 <Scene>
     <Globals>
-        <AmbientColor r="206" g="206" b="0" />
-        <AmbientIntensity>0.39</AmbientIntensity>
-        <FogColor r="255" g="128" b="0" />
-        <ClearColor r="255" g="128" b="0" />
-        <FogDensity>10.00</FogDensity>
-        <FogDistance>42.00</FogDistance>
+        <AmbientColor r="192" g="192" b="192" />
+        <AmbientIntensity>0.48</AmbientIntensity>
+        <FogColor r="0" g="128" b="255" />
+        <ClearColor r="0" g="128" b="255" />
+        <FogDensity>1.00</FogDensity>
+        <FogDistance>83.00</FogDistance>
         <FogType>exp2</FogType>
     </Globals>
-    <ZobObject name="sol" guid="3001002">
-        <Position x="0" y="0" z="0" />
-        <Rotation x="0" y="0" z="0" />
-        <Scale x="1" y="1" z="1" />
-    </ZobObject>
     <ZobObject name="car" guid="3001003">
-        <Position x="0.000310642" y="1.10515" z="2.0197" />
-        <Rotation x="0.101911" y="-87.1501" z="-0.0969636" />
+        <Position x="-20.1749" y="-0.413712" z="4.06875" />
+        <Rotation x="-177.685" y="-79.775" z="-179.72" />
         <Scale x="1" y="1" z="1" />
         <Behavior type="1" />
         <Physic>
-            <RigidBody type="0" active="1">
-                <Box halfExtends_x="1.000000" halfExtends_y="0.700000" halfExtends_z="2.500000">
+            <RigidBody type="1" active="1">
+                <Box halfExtends_x="1.000000" halfExtends_y="0.700000" halfExtends_z="2.500000" layers="4" scale_with_object="1">
                     <Material bounciness="0.000000" friction_coeff="0.000000" mass_density="1000.000000" rolling_resistance="0.000000" />
                 </Box>
             </RigidBody>
         </Physic>
-        <ZobObject name="rearCamera" guid="3002004" type="camera">
-            <Position x="-1.3339e-39" y="1.92052" z="-4.78713" />
-            <Rotation x="15.0562" y="-4.82047e-43" z="3.97921e-38" />
+        <ZobObject name="FrontCamera" guid="3067491" type="camera">
+            <Position x="-0.0774962" y="0.0879834" z="1.94431" />
+            <Rotation x="0" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
             <Controller>0</Controller>
             <Fov>70.00</Fov>
         </ZobObject>
-        <ZobObject name="camaro" guid="3046785" type="mesh">
-            <Position x="0" y="0.20109" z="-0.01703" />
-            <Rotation x="0" y="0" z="0" />
-            <Scale x="0.3" y="0.3" z="0.3" />
-            <Mesh name="camaro.obj" file="camaro.obj" path="D:\Git\directZob\resources\" />
-        </ZobObject>
-        <ZobObject name="FrontCamera" guid="3067491" type="camera">
-            <Position x="0" y="0.286124" z="2.14935" />
-            <Rotation x="0" y="0" z="0" />
+        <ZobObject name="topCamera" guid="3067495" type="camera">
+            <Position x="0.00013119" y="59.1781" z="-1.00273" />
+            <Rotation x="-89.4191" y="-79.775" z="-179.72" />
             <Scale x="1" y="1" z="1" />
             <Controller>0</Controller>
+            <Fov>45.00</Fov>
+        </ZobObject>
+        <ZobObject name="carMesh" guid="3066531" type="mesh">
+            <Position x="0.000315119" y="-0.699426" z="3.2681e-05" />
+            <Rotation x="180" y="-1.03086e-05" z="180" />
+            <Scale x="0.01" y="0.01" z="0.01" />
+            <Mesh name="Peugeot_405" file="GLX_400.FBX" path="_cars/GLX-400-FBX/" />
+        </ZobObject>
+        <ZobObject name="rearCamera" guid="3002004" type="camera">
+            <Position x="-9.42498e-06" y="1.92052" z="-4.78713" />
+            <Rotation x="15.0562" y="-2.28622e-05" z="-1.68004e-05" />
+            <Scale x="1" y="1" z="1" />
+            <Controller>5</Controller>
             <Fov>70.00</Fov>
         </ZobObject>
         <ZobObject name="windshieldCamera" guid="3067492" type="camera">
-            <Position x="0" y="0.665553" z="0.262912" />
+            <Position x="0.0657781" y="0.632988" z="0.62512" />
             <Rotation x="0" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
             <Controller>0</Controller>
             <Fov>80.00</Fov>
         </ZobObject>
         <ZobObject name="sideCamera" guid="3067493" type="camera">
-            <Position x="-5.88051" y="1.69909" z="5.75917" />
-            <Rotation x="180" y="40.3727" z="180" />
+            <Position x="-5.88038" y="1.89999" z="6.77647" />
+            <Rotation x="-176.34" y="35.9339" z="-176.794" />
             <Scale x="1" y="1" z="1" />
             <Controller>0</Controller>
             <Fov>45.00</Fov>
         </ZobObject>
         <ZobObject name="orbitalCamera" guid="3067494" type="camera">
-            <Position x="-1.83609" y="-1.46621" z="-11.8541" />
-            <Rotation x="0" y="0" z="0" />
+            <Position x="-2.42224" y="-1.23666" z="-10.629" />
+            <Rotation x="-3.93521" y="-87.4361" z="0.00035308" />
             <Scale x="1" y="1" z="1" />
             <Controller>2</Controller>
             <Fov>45.00</Fov>
         </ZobObject>
-        <ZobObject name="topCamera" guid="3067495" type="camera">
-            <Position x="0" y="58.9772" z="-2.02003" />
-            <Rotation x="88.2659" y="0" z="0" />
-            <Scale x="1" y="1" z="1" />
-            <Controller>0</Controller>
-            <Fov>45.00</Fov>
-        </ZobObject>
     </ZobObject>
-    <ZobObject name="Light_1" guid="3068489" type="light">
-        <Position x="0" y="10" z="0" />
+    <ZobObject name="sun" guid="3068489" type="light">
+        <Position x="0" y="60.0368" z="0" />
         <Rotation x="-45" y="-45" z="-45" />
         <Scale x="1" y="1" z="1" />
-        <Color r="255" g="128" b="64" />
-        <Intensity>1.00</Intensity>
+        <Color r="241" g="218" b="164" />
+        <Intensity>0.50</Intensity>
         <FallOffDistance>100.00</FallOffDistance>
         <Type>directional</Type>
     </ZobObject>
     <ZobObject name="house" guid="3066496" type="mesh">
-        <Position x="17.4096" y="-0.104829" z="26.628" />
-        <Rotation x="0" y="0" z="0" />
-        <Scale x="0.5" y="0.5" z="0.5" />
-        <Mesh name="cottage_obj.obj" file="cottage_obj.obj" path="D:\Git\directZob\resources\" />
+        <Position x="-281.384" y="-3.67123" z="26.628" />
+        <Rotation x="0" y="30.7585" z="0" />
+        <Scale x="0.3" y="0.3" z="0.3" />
+        <Mesh name="cottage_obj.obj" file="cottage_obj.obj" path="/" />
+        <Physic>
+            <RigidBody type="0" active="1">
+                <Box halfExtends_x="10.000000" halfExtends_y="10.000000" halfExtends_z="10.000000" layers="0" scale_with_object="1">
+                    <Material bounciness="0.100000" friction_coeff="2.010000" mass_density="0.010000" rolling_resistance="0.010000" />
+                </Box>
+            </RigidBody>
+        </Physic>
     </ZobObject>
-    <ZobObject name="road_mesh" guid="3066497" type="mesh">
-        <Position x="0" y="0" z="0" />
-        <Rotation x="0" y="0" z="0" />
-        <Scale x="1" y="1" z="1" />
-        <Mesh name="road.obj" file="road.obj" path="D:\Git\directZob\resources\" />
-    </ZobObject>
-    <ZobObject name="road_ground_physic" guid="3066498">
+    <ZobObject name="road2_p_ground" guid="3066499">
         <Position x="0" y="0" z="0" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="1" y="1" z="1" />
         <Physic>
             <RigidBody type="0" active="1">
-                <StaticMesh name="road_ground_physic.obj" path="D:\Git\directZob\resources\" file="road_ground_physic.obj">
+                <StaticMesh name="road2_p_ground.obj" path="" file="road2_p_ground.obj" layers="1" scale_with_object="1">
                     <Material bounciness="0.000000" friction_coeff="0.000000" mass_density="0.000000" rolling_resistance="0.000000" />
                 </StaticMesh>
             </RigidBody>
         </Physic>
+    </ZobObject>
+    <ZobObject name="road2_p_leftWall" guid="3066500">
+        <Position x="0" y="0" z="0" />
+        <Rotation x="0" y="0" z="0" />
+        <Scale x="1" y="1" z="1" />
+        <Physic>
+            <RigidBody type="0" active="1">
+                <StaticMesh name="road2_p_leftWall.obj" path="" file="road2_p_leftWall.obj" layers="2" scale_with_object="1">
+                    <Material bounciness="0.000000" friction_coeff="0.000000" mass_density="0.000000" rolling_resistance="0.000000" />
+                </StaticMesh>
+            </RigidBody>
+        </Physic>
+    </ZobObject>
+    <ZobObject name="road2_p_rightWall" guid="3066501">
+        <Position x="0" y="0" z="0" />
+        <Rotation x="0" y="0" z="0" />
+        <Scale x="1" y="1" z="1" />
+        <Physic>
+            <RigidBody type="0" active="1">
+                <StaticMesh name="road2_p_rightWall.obj" path="" file="road2_p_rightWall.obj" layers="2" scale_with_object="1">
+                    <Material bounciness="0.000000" friction_coeff="0.000000" mass_density="0.000000" rolling_resistance="0.000000" />
+                </StaticMesh>
+            </RigidBody>
+        </Physic>
+    </ZobObject>
+    <ZobObject name="building_1" guid="-2143505736" type="mesh">
+        <Position x="-13.563" y="-10" z="-19.37" />
+        <Rotation x="0" y="35" z="0" />
+        <Scale x="1" y="1" z="1" />
+        <Mesh name="building_1.obj" file="building_1.obj" path="/" />
+    </ZobObject>
+    <ZobObject name="building_2" guid="3066502" type="mesh">
+        <Position x="-53.1885" y="-10" z="-45.478" />
+        <Rotation x="0" y="35" z="0" />
+        <Scale x="1" y="1" z="1" />
+        <Mesh name="building_1.obj" file="building_1.obj" path="/" />
+    </ZobObject>
+    <ZobObject name="building_3" guid="3066503" type="mesh">
+        <Position x="-83.37" y="-10" z="0" />
+        <Rotation x="0" y="35" z="0" />
+        <Scale x="1" y="1" z="1" />
+        <Mesh name="building_1.obj" file="building_1.obj" path="/" />
+    </ZobObject>
+    <ZobObject name="building_4" guid="3066504" type="mesh">
+        <Position x="-52.153" y="-10" z="22.163" />
+        <Rotation x="0" y="35" z="0" />
+        <Scale x="1" y="1" z="1" />
+        <Mesh name="building_1.obj" file="building_1.obj" path="/" />
+    </ZobObject>
+    <ZobObject name="some_lights" guid="3066510">
+        <Position x="0" y="0" z="0" />
+        <Rotation x="0" y="0" z="0" />
+        <Scale x="1" y="1" z="1" />
+        <ZobObject name="Light_5" guid="3068509" type="light">
+            <Position x="-31.6222" y="10" z="-3.56345" />
+            <Rotation x="90" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+            <Color r="255" g="0" b="255" />
+            <Intensity>2.00</Intensity>
+            <FallOffDistance>30.00</FallOffDistance>
+            <Type>spot</Type>
+        </ZobObject>
+        <ZobObject name="Light_4" guid="3068508" type="light">
+            <Position x="-27.429" y="10" z="13.8418" />
+            <Rotation x="90" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+            <Color r="0" g="0" b="255" />
+            <Intensity>0.50</Intensity>
+            <FallOffDistance>30.00</FallOffDistance>
+            <Type>spot</Type>
+        </ZobObject>
+        <ZobObject name="Light_3" guid="3068507" type="light">
+            <Position x="-13.8097" y="10" z="0.114154" />
+            <Rotation x="-71.2625" y="-66.1895" z="-171.321" />
+            <Scale x="1" y="1" z="1" />
+            <Color r="0" g="255" b="0" />
+            <Intensity>0.50</Intensity>
+            <FallOffDistance>20.00</FallOffDistance>
+            <Type>spot</Type>
+        </ZobObject>
+        <ZobObject name="Light_2" guid="3068506" type="light">
+            <Position x="5.41638" y="10.0001" z="13.7989" />
+            <Rotation x="-151.948" y="-45.5637" z="-110.832" />
+            <Scale x="1" y="1" z="1" />
+            <Color r="255" g="0" b="0" />
+            <Intensity>0.50</Intensity>
+            <FallOffDistance>50.00</FallOffDistance>
+            <Type>spot</Type>
+        </ZobObject>
+    </ZobObject>
+    <ZobObject name="Hill_1" guid="-2143505745" type="mesh">
+        <Position x="0" y="1" z="101" />
+        <Rotation x="0.0139885" y="-0.433636" z="-5.29355e-05" />
+        <Scale x="1" y="1" z="1" />
+        <Mesh name="hill_1.obj" file="hill_1.obj" path="/" />
+    </ZobObject>
+    <ZobObject name="Hill_2" guid="3066511" type="mesh">
+        <Position x="-78" y="0" z="105" />
+        <Rotation x="-180" y="0" z="-180" />
+        <Scale x="1" y="1" z="1" />
+        <Mesh name="hill_1.obj" file="hill_1.obj" path="/" />
+    </ZobObject>
+    <ZobObject name="Hill_3" guid="3066512" type="mesh">
+        <Position x="-275.055" y="0" z="0" />
+        <Rotation x="0" y="0" z="0" />
+        <Scale x="1" y="1" z="1" />
+        <Mesh name="hill_2.obj" file="hill_2.obj" path="/" />
+    </ZobObject>
+    <ZobObject name="road_sections" guid="3066513">
+        <Position x="0" y="0" z="0" />
+        <Rotation x="0" y="0" z="0" />
+        <Scale x="1" y="1" z="1" />
+        <ZobObject name="road01" guid="3066514" type="mesh">
+            <Position x="0" y="0" z="0" />
+            <Rotation x="0" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+            <Mesh name="road_block_01.obj" file="road_block_01.obj" path="/" />
+        </ZobObject>
+        <ZobObject name="road02" guid="3066515" type="mesh">
+            <Position x="0" y="0" z="0" />
+            <Rotation x="0" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+            <Mesh name="road_block_02.obj" file="road_block_02.obj" path="/" />
+        </ZobObject>
+        <ZobObject name="road03" guid="3066516" type="mesh">
+            <Position x="0" y="0" z="0" />
+            <Rotation x="0" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+            <Mesh name="road_block_03.obj" file="road_block_03.obj" path="/" />
+        </ZobObject>
+        <ZobObject name="road04" guid="3066517" type="mesh">
+            <Position x="0" y="0" z="0" />
+            <Rotation x="0" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+            <Mesh name="road_block_04.obj" file="road_block_04.obj" path="/" />
+        </ZobObject>
+        <ZobObject name="road05" guid="3066518" type="mesh">
+            <Position x="0" y="0" z="0" />
+            <Rotation x="0" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+            <Mesh name="road_block_05.obj" file="road_block_05.obj" path="/" />
+        </ZobObject>
+        <ZobObject name="road06" guid="3066519" type="mesh">
+            <Position x="0" y="0" z="0" />
+            <Rotation x="0" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+            <Mesh name="road_block_06.obj" file="road_block_06.obj" path="/" />
+        </ZobObject>
+        <ZobObject name="road07" guid="3066520" type="mesh">
+            <Position x="0" y="0" z="0" />
+            <Rotation x="0" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+            <Mesh name="road_block_07.obj" file="road_block_07.obj" path="/" />
+        </ZobObject>
+        <ZobObject name="road08" guid="3066521" type="mesh">
+            <Position x="0" y="0" z="0" />
+            <Rotation x="0" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+            <Mesh name="road_block_08.obj" file="road_block_08.obj" path="/" />
+        </ZobObject>
+    </ZobObject>
+    <ZobObject name="beach" guid="-2143505756" type="mesh">
+        <Position x="0" y="0" z="0" />
+        <Rotation x="0" y="0" z="0" />
+        <Scale x="1" y="1" z="1" />
+        <Mesh name="beach.obj" file="beach.obj" path="/" />
+    </ZobObject>
+    <ZobObject name="boat" guid="3066522" type="mesh">
+        <Position x="0" y="-4.25613" z="8.77317" />
+        <Rotation x="0" y="0" z="0" />
+        <Scale x="1" y="1" z="1" />
+        <Mesh name="boat.obj" file="boat.obj" path="/" />
+    </ZobObject>
+    <ZobObject name="skybox" guid="3066523" type="mesh">
+        <Position x="0" y="0" z="0" />
+        <Rotation x="0" y="0" z="0" />
+        <Scale x="1" y="1" z="1" />
+        <Mesh name="skybox.obj" file="skybox.obj" path="/" />
+    </ZobObject>
+    <ZobObject name="trees" guid="3066525">
+        <Position x="0" y="0" z="0" />
+        <Rotation x="0" y="0" z="0" />
+        <Scale x="1" y="1" z="1" />
+        <ZobObject name="tree_1" guid="3066524" type="mesh">
+            <Position x="135" y="0" z="2" />
+            <Rotation x="0" y="-22.9556" z="0" />
+            <Scale x="2" y="2" z="2" />
+            <Mesh name="tree.obj" file="tree.obj" path="/" />
+        </ZobObject>
+        <ZobObject name="tree_2" guid="3066526" type="mesh">
+            <Position x="142" y="0" z="65" />
+            <Rotation x="0" y="0" z="0" />
+            <Scale x="2" y="2" z="2" />
+            <Mesh name="tree.obj" file="tree.obj" path="/" />
+        </ZobObject>
+        <ZobObject name="tree_4" guid="3066527" type="mesh">
+            <Position x="143" y="0" z="13" />
+            <Rotation x="0.0206755" y="52.6753" z="0.0102354" />
+            <Scale x="2" y="2" z="2" />
+            <Mesh name="tree.obj" file="tree.obj" path="/" />
+        </ZobObject>
+        <ZobObject name="tree_3" guid="3066528" type="mesh">
+            <Position x="139" y="0" z="35" />
+            <Rotation x="0" y="0" z="0" />
+            <Scale x="2" y="2" z="2" />
+            <Mesh name="tree.obj" file="tree.obj" path="/" />
+        </ZobObject>
+        <ZobObject name="tree_6" guid="3066529" type="mesh">
+            <Position x="144" y="0" z="53" />
+            <Rotation x="0" y="0" z="0" />
+            <Scale x="2" y="2" z="2" />
+            <Mesh name="tree.obj" file="tree.obj" path="/" />
+        </ZobObject>
+        <ZobObject name="tree_5" guid="3066530" type="mesh">
+            <Position x="133" y="0" z="78" />
+            <Rotation x="0" y="-22.2393" z="0" />
+            <Scale x="2" y="2" z="2" />
+            <Mesh name="tree.obj" file="tree.obj" path="/" />
+        </ZobObject>
     </ZobObject>
 </Scene>
