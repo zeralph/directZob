@@ -1,7 +1,7 @@
 #include <thread>
 #include "ZobHUDManager.h"
 #include "DirectZob.h"
-
+#include "../SceneLoader.h"
 #define NB_HUD_TRIANGLES 2000
 
 ZobHUDManager::ZobHUDManager()
@@ -56,7 +56,9 @@ ZobHUDManager::~ZobHUDManager()
 
 void ZobHUDManager::Init()
 {
-	m_font = new Font("D:\\Git\\directZob\\resources\\font2.png", 32, 8);
+	std::string p = SceneLoader::GetResourcePath();
+	p.append("font2.png");
+	m_font = new Font(p, 32, 8);
 	//m_font = new Font("D:\\Git\\directZob\\resources\\font3.png", 16, 14);
 }
 

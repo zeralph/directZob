@@ -148,38 +148,6 @@ Sprite::~Sprite()
 void Sprite::QueueForDrawing(ZobObject* z, const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, RenderOptions* options)
 {
 	Mesh::QueueForDrawing(z, modelMatrix, rotationMatrix, camera, engine, ownerId, options);
-	return;
-	float minX = 50;
-	float maxX = 200;
-	float minY = 50;
-	float maxY = 200;
-	float pz = engine->GetBufferData()->zNear;
-	m_projectedVertices[0].x = minX;
-	m_projectedVertices[0].y = minY;
-	m_projectedVertices[0].z = pz;
-	m_projectedVertices[0].w = 1;
-
-	m_projectedVertices[1].x = maxX;
-	m_projectedVertices[1].y = minY;
-	m_projectedVertices[1].z = pz;
-	m_projectedVertices[1].w = 1;
-
-	m_projectedVertices[2].x = minX;
-	m_projectedVertices[2].y = maxY;
-	m_projectedVertices[2].z = pz;
-	m_projectedVertices[2].w = 1;
-
-	m_projectedVertices[3].x = maxX;
-	m_projectedVertices[3].y = maxY;
-	m_projectedVertices[3].z = pz;
-	m_projectedVertices[3].w = 1;
-
-
-
-	//memcpy(m_projectedVertice, m_vertices, sizeof(ZobVector3) * m_nbVertices);
-	
-	engine->QueueProjectedTriangle(camera, &m_triangles[0]);
-	engine->QueueProjectedTriangle(camera, &m_triangles[1]);
 }
 
 /*

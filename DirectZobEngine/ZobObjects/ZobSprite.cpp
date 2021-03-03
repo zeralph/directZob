@@ -54,11 +54,7 @@ void ZobSprite::UpdateMesh(const Camera* camera, Core::Engine* engine)
 {
 	if (camera)
 	{
-		ZobVector3 t = camera->GetForward();
-		static float toto = 3.0f;
-		t.Mul(toto);
-		t.Add(&camera->GetWorldPosition());
-		//ZobVector3 t = m_modelMatrix.GetTranslation();
+		ZobVector3 t = m_modelMatrix.GetTranslation();
 		ZobVector3 l = camera->GetLeft();
 		ZobVector3 u = camera->GetUp();
 		ZobVector3 f = camera->GetForward();
@@ -66,7 +62,7 @@ void ZobSprite::UpdateMesh(const Camera* camera, Core::Engine* engine)
 		m_modelMatrix.FromVectors(l, u, f);
 		m_rotationScaleMatrix.SetScale(GetScale());
 		m_modelMatrix.AddTranslation(t);
-		//m_modelMatrix.SetScale(GetScale());
+		m_modelMatrix.SetScale(GetScale());
 
 		m_left = ZobVector3(1, 0, 0);
 		m_forward = ZobVector3(0, 0, 1);
