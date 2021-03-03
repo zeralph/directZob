@@ -46,6 +46,7 @@ private:
 	ZobVector3* m_projectedVertices;
 	ZobVector3* m_normals;
 	ZobVector2* m_uvs;
+	ZobVector3* m_colors;
 	int	m_nbDrawnTriangles;
 	DirectZobType::RenderOptions m_renderOptions;
 	ZobFont* m_font;

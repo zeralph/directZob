@@ -87,9 +87,9 @@ Engine::Engine(int width, int height, Events* events)
 
 	m_LineQueue = (Line3D*)malloc(sizeof(Line3D) * m_maxLineQueueSize);
 	m_TrianglesQueue = (Triangle*)malloc(sizeof(Triangle) * m_maxTrianglesQueueSize);
-	m_verticesData = (ZobVector3*)malloc(sizeof(ZobVector3) * m_maxTrianglesQueueSize * 10);
+	m_verticesData = (ZobVector3*)malloc(sizeof(ZobVector3) * m_maxTrianglesQueueSize * 10); // vertices plus normals plus ...
 	m_uvData = (ZobVector2*)malloc(sizeof(ZobVector2) * m_maxTrianglesQueueSize * 3);
-
+	m_colorData = (ZobVector3*)malloc(sizeof(ZobVector3) * m_maxTrianglesQueueSize * 3);
 	ulong tot = sizeof(Triangle);
 	tot = sizeof(Line3D)* m_maxLineQueueSize + sizeof(Triangle) * m_maxTrianglesQueueSize + sizeof(ZobVector3) * m_maxTrianglesQueueSize * 10 + sizeof(ZobVector2) * m_maxTrianglesQueueSize * 3;
 	tot /= 1024*1024;
@@ -111,6 +111,9 @@ Engine::Engine(int width, int height, Events* events)
 		m_TrianglesQueue[i].ua = &m_uvData[uvIdx + 0]; 
 		m_TrianglesQueue[i].ub = &m_uvData[uvIdx + 1]; 
 		m_TrianglesQueue[i].uc = &m_uvData[uvIdx + 2]; 
+		m_TrianglesQueue[i].ca = &m_colorData[uvIdx + 0];
+		m_TrianglesQueue[i].cb = &m_colorData[uvIdx + 1];
+		m_TrianglesQueue[i].cc = &m_colorData[uvIdx + 2];
 		m_TrianglesQueue[i].options = NULL;
 		m_TrianglesQueue[i].material = NULL;
 		m_TrianglesQueue[i].zobObject = NULL;
@@ -156,6 +159,7 @@ Engine::~Engine()
 	free(m_TrianglesQueue);
 	free(m_verticesData);
 	free(m_uvData);
+	free(m_colorData);
 	free(m_rasterizers);
 	m_events = NULL;
 }
@@ -934,13 +938,13 @@ uint Engine::SubDivideClippedTriangle(const Camera* c, const Triangle* t)
 		Triangle* nt = &m_TrianglesQueue[j];
 		Triangle::CopyTriangle(nt, t);
 		nt->va->Copy(&pIn1);
-		nt->ca = t->ca;
+		nt->ca->Copy(t->ca);	//TODO : interpolate color
 		nt->ua->Copy(&pIn1Uv);
 		nt->vb->Copy(&pOut2);
-		nt->cb = t->cb;
+		nt->cb->Copy(t->cb);
 		nt->ub->Copy(&pOut2Uv);
 		nt->vc->Copy(&pIn2);
-		nt->cc = t->cc;
+		nt->cc->Copy(t->cc);
 		nt->uc->Copy(&pIn2Uv);
 		RecomputeTriangleProj(c, nt);
 		nbDrawn++;
@@ -951,13 +955,13 @@ uint Engine::SubDivideClippedTriangle(const Camera* c, const Triangle* t)
 		Triangle* nt = &m_TrianglesQueue[j];
 		Triangle::CopyTriangle(nt, t);
 		nt->va->Copy(&pIn1);
-		nt->ca = t->ca;
+		nt->ca->Copy(t->ca);	//TODO : interpolate color
 		nt->ua->Copy(&pIn1Uv);
 		nt->vb->Copy(&pOut1);
-		nt->cb = t->cb;
+		nt->cb->Copy(t->cb);	//TODO : interpolate color
 		nt->ub->Copy(&pOut1Uv);
 		nt->vc->Copy(&pOut2);
-		nt->cc = t->cc;
+		nt->cc->Copy(t->cc);	//TODO : interpolate color
 		nt->uc->Copy(&pOut2Uv);
 		RecomputeTriangleProj(c, nt);
 		nbDrawn++;

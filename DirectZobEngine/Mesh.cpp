@@ -125,7 +125,13 @@ Mesh::Mesh(std::string &parentName, std::string& path, fbxsdk::FbxMesh* mesh)
 					//c->get
 					FbxMultT(mesh->GetNode(), v);
 					m_vertices[vIdx] = ZobVector3(v[0], v[1], v[2]);
-					m_colors[vIdx] = ZobVector3(1, 1, 1);
+					float ccr = (((vIdx + 0) % 3) == 0) ? 1 : 0;
+					float ccg = (((vIdx + 1) % 3) == 0) ? 1 : 0;
+					float ccb = (((vIdx + 2) % 3) == 0) ? 1 : 0;
+					ccr = 1;
+					ccb = 1;
+					ccg = 1;
+					m_colors[vIdx] = ZobVector3(ccr, ccb, ccg);
 					m_minBoundingBox.x = min(m_minBoundingBox.x, (float)v[0]);
 					m_minBoundingBox.y = min(m_minBoundingBox.y, (float)v[1]);
 					m_minBoundingBox.z = min(m_minBoundingBox.z, (float)v[2]);
@@ -186,8 +192,8 @@ Mesh::Mesh(std::string &parentName, std::string& path, fbxsdk::FbxMesh* mesh)
 				t.ub = &m_uvs[startIdx + 1];
 				t.uc = &m_uvs[startIdx + 2];
 				t.ca = &m_colors[startIdx];
-				t.cc = &m_colors[startIdx + 1];
-				t.ca = &m_colors[startIdx + 2];
+				t.cb = &m_colors[startIdx + 1];
+				t.cc = &m_colors[startIdx + 2];
 				t.material = material;
 				m_triangles.push_back(t);
 				m_nbFaces++;
@@ -210,8 +216,8 @@ Mesh::Mesh(std::string &parentName, std::string& path, fbxsdk::FbxMesh* mesh)
 					t.ub = &m_uvs[startIdx + 0];
 					t.uc = &m_uvs[startIdx + 2];
 					t.ca = &m_colors[startIdx + 3];
-					t.cc = &m_colors[startIdx + 0];
-					t.ca = &m_colors[startIdx + 2];
+					t.cb = &m_colors[startIdx + 0];
+					t.cc = &m_colors[startIdx + 2];
 					t.material = material;
 					m_triangles.push_back(t);
 					m_nbFaces++;
@@ -328,6 +334,7 @@ Mesh::~Mesh()
 	m_subMeshes.clear();
 	m_triangles.clear();
 	free(m_indices);
+	free(m_colors);
 	free(m_vertices);
 	free(m_verticesData);
 	free(m_verticesTmp);
@@ -341,6 +348,7 @@ Mesh::~Mesh()
 	free(m_projectedVerticesTmp);
 	free(m_uvs);
 	m_indices = NULL;
+	m_colors = NULL;
 	m_vertices = NULL;
 	m_verticesData = NULL;
 	m_verticesTmp = NULL;
@@ -463,7 +471,14 @@ void Mesh::LoadOBJ(const std::string& fullPath)
 				SplitEntry(&line, &vec, ' ');
 				ZobVector3 v = ZobVector3(std::stof(vec[1], &sz), ::stof(vec[2], &sz), ::stof(vec[3], &sz));
 				m_vertices[curVertice] = v;
-				m_colors[curVertice] = ZobVector3(1, 1, 1);
+
+				float ccr = (((curVertice + 0) % 3) == 0) ? 1 : 0;
+				float ccg = (((curVertice + 1) % 3) == 0) ? 1 : 0;
+				float ccb = (((curVertice+ 2) % 3) == 0) ? 1 : 0;
+				ccr = 1;
+				ccb = 1;
+				ccg = 1;
+				m_colors[curVertice] = ZobVector3(ccr, ccg, ccb);
 				m_minBoundingBox.x = min(v.x, m_minBoundingBox.x);
 				m_minBoundingBox.y = min(v.y, m_minBoundingBox.y);
 				m_minBoundingBox.z = min(v.z, m_minBoundingBox.z);

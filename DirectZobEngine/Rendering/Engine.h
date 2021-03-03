@@ -116,6 +116,7 @@ namespace Core
 		Triangle* m_TrianglesQueue;
 		ZobVector3* m_verticesData;
 		ZobVector2* m_uvData;
+		ZobVector3* m_colorData;
 
 		long m_TriangleQueueSize;
 		long m_maxTrianglesQueueSize;

@@ -17,6 +17,7 @@ ZobHUDManager::ZobHUDManager()
 	m_trianglesBuffer = (Triangle*)malloc(sizeof(Triangle) * NB_HUD_TRIANGLES);
 	m_vertices = (ZobVector3*)malloc(sizeof(ZobVector3) * NB_HUD_TRIANGLES * 3);
 	m_uvs = (ZobVector2*)malloc(sizeof(ZobVector2) * NB_HUD_TRIANGLES * 3);
+	m_colors = (ZobVector3*)malloc(sizeof(ZobVector3) * NB_HUD_TRIANGLES * 3);
 	m_projectedVertices = (ZobVector3*)malloc(sizeof(ZobVector3) * NB_HUD_TRIANGLES * 3);
 	m_normals = (ZobVector3*)malloc(sizeof(ZobVector3) * NB_HUD_TRIANGLES * 3);
 	m_nbDrawnTriangles = 0;
@@ -38,6 +39,9 @@ ZobHUDManager::ZobHUDManager()
 		m_trianglesBuffer[i].ua = &m_uvs[vi];
 		m_trianglesBuffer[i].ub = &m_uvs[vi + 1];
 		m_trianglesBuffer[i].uc = &m_uvs[vi + 2];
+		m_trianglesBuffer[i].ca = &m_colors[vi];
+		m_trianglesBuffer[i].cb = &m_colors[vi + 1];
+		m_trianglesBuffer[i].cc = &m_colors[vi + 2];
 		m_trianglesBuffer[i].n = &m_normals[i];
 		m_trianglesBuffer[i].options = &m_renderOptions;
 		m_trianglesBuffer[i].material = NULL;
@@ -63,6 +67,10 @@ void ZobHUDManager::Init()
 		p.append("font2.png");
 		m_font = new ZobFont(p, 32, 8);
 		//m_font = new ZobFont("D:\\Git\\directZob\\resources\\font3.png", 16, 14);
+	}
+	else
+	{
+		m_font = new ZobFont("D:\\Git\\directZob\\resources\\font2.png", 32, 8);
 	}
 }
 
@@ -138,9 +146,9 @@ bool ZobHUDManager::CreateQuad(float xMin, float yMin, float xMax, float yMax, H
 	t1->uc->x = 0;
 	t1->uc->y = 0;
 	t1->material = elem->mat;
-	t1->ca = &elem->color;
-	t1->cb = &elem->color;
-	t1->cc = &elem->color;
+	t1->ca->Copy(&elem->color);
+	t1->cb->Copy(&elem->color);
+	t1->cc->Copy(&elem->color);
 	t1->ComputeArea();
 
 	t2->pa->x = xMax;
@@ -159,9 +167,9 @@ bool ZobHUDManager::CreateQuad(float xMin, float yMin, float xMax, float yMax, H
 	t2->uc->x = 0;
 	t2->uc->y = 0;
 	t2->material = elem->mat;
-	t2->ca = &elem->color;
-	t2->cb = &elem->color;
-	t2->cc = &elem->color;
+	t2->ca->Copy(&elem->color);
+	t2->cb->Copy(&elem->color);
+	t2->cc->Copy(&elem->color);
 
 	t2->ComputeArea();
 	return true;

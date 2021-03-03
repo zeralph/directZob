@@ -39,9 +39,9 @@ public:
 	ZobVector3* pb;
 	ZobVector3* pc;
 
-	const ZobVector3* ca;
-	const ZobVector3* cb;
-	const ZobVector3* cc;
+	ZobVector3* ca;
+	ZobVector3* cb;
+	ZobVector3* cc;
 
 	ZobVector3* na;
 	ZobVector3* nb;
@@ -89,9 +89,9 @@ public:
 		dst->ub->Copy(src->ub);
 		dst->uc->Copy(src->uc);
 
-		dst->ca = (src->ca);
-		dst->cb = (src->cb);
-		dst->cc = (src->cc);
+		dst->ca->Copy(src->ca);
+		dst->cb->Copy(src->cb);
+		dst->cc->Copy(src->cc);
 
 		dst->material = src->material;
 		dst->options = src->options;
