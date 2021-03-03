@@ -6,6 +6,7 @@
 
 ZobHUDManager::ZobHUDManager()
 {
+	m_font = NULL;
 	m_started = false;
 	m_renderOptions.zBuffered = false;
 	m_renderOptions.bColorize = false;
@@ -57,9 +58,12 @@ ZobHUDManager::~ZobHUDManager()
 void ZobHUDManager::Init()
 {
 	std::string p = SceneLoader::GetResourcePath();
-	p.append("font2.png");
-	m_font = new ZobFont(p, 32, 8);
-	//m_font = new ZobFont("D:\\Git\\directZob\\resources\\font3.png", 16, 14);
+	if (p.length())
+	{
+		p.append("font2.png");
+		m_font = new ZobFont(p, 32, 8);
+		//m_font = new ZobFont("D:\\Git\\directZob\\resources\\font3.png", 16, 14);
+	}
 }
 
 void ZobHUDManager::Stop()
@@ -176,7 +180,7 @@ bool ZobHUDManager::CreateQuad(float xMin, float yMin, float xMax, float yMax, c
 
 void ZobHUDManager::Print(float x, float y, float w, float h, const ZobVector3* color, const char* fmt, ...)
 {
-	if (m_started) //if (m_engine->ShowText() && m_data != NULL)
+	if (m_font && m_started) //if (m_engine->ShowText() && m_data != NULL)
 	{
 		size_t size = strlen(fmt) + 1;
 		va_list vl;
@@ -193,7 +197,7 @@ void ZobHUDManager::Print(float x, float y, float w, float h, const ZobVector3* 
 
 void ZobHUDManager::Print(float x, float y, float w, float h, const char* fmt, ...)
 {
-	if (m_started) //if (m_engine->ShowText() && m_data != NULL)
+	if (m_font && m_started) //if (m_engine->ShowText() && m_data != NULL)
 	{
 		size_t size = strlen(fmt) + 1;
 		va_list vl;
@@ -211,30 +215,33 @@ void ZobHUDManager::Print(float x, float y, float w, float h, const char* fmt, .
 
 void ZobHUDManager::PrintInternal(float x, float y, float w, float h, const ZobVector3* color, std::string s)
 {
-	int horiz = 0;
-	int vert = 0;
-	int size = s.size();
-	for (size_t i = 0; i < size; i++)
+	if (m_font)
 	{
-		char c = s[i];
-		if (c != '\0')
+		int horiz = 0;
+		int vert = 0;
+		int size = s.size();
+		for (size_t i = 0; i < size; i++)
 		{
-			if (c != '\n')
+			char c = s[i];
+			if (c != '\0')
 			{
-				HUDElement e;
-				e.color = color;
-				e.x = x + w * horiz;
-				e.y = y + h * vert;
-				e.w = w;
-				e.h = h;
-				e.mat = m_font->GetChar(c);
-				m_hudElements.push_back(e);
-				horiz++;
-			}
-			else
-			{
-				horiz = 0;
-				vert++;
+				if (c != '\n')
+				{
+					HUDElement e;
+					e.color = color;
+					e.x = x + w * horiz;
+					e.y = y + h * vert;
+					e.w = w;
+					e.h = h;
+					e.mat = m_font->GetChar(c);
+					m_hudElements.push_back(e);
+					horiz++;
+				}
+				else
+				{
+					horiz = 0;
+					vert++;
+				}
 			}
 		}
 	}
