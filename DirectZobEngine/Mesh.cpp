@@ -22,6 +22,7 @@ Mesh::Mesh(std::string& name)
 	m_verticesNormals = NULL;
 	m_trianglesNormals = NULL;
 	m_uvs = NULL;
+	m_colors = NULL;
 	m_name = name;
 	m_fileName = emptyStr;
 	m_path = emptyStr;
@@ -88,6 +89,8 @@ Mesh::Mesh(std::string &parentName, std::string& path, fbxsdk::FbxMesh* mesh)
 		m_verticesData = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
 		m_verticesTmp = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
 
+		m_colors = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
+
 		m_projectedVertices = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
 		m_projectedVerticesTmp = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
 
@@ -117,8 +120,12 @@ Mesh::Mesh(std::string &parentName, std::string& path, fbxsdk::FbxMesh* mesh)
 					int polyGroup = mesh->GetPolygonGroup(j);
 					int ctrlIdx = mesh->GetPolygonVertex(j, k);
 					FbxVector4 v = mesh->GetControlPointAt(ctrlIdx);
+					FbxGeometryElementVertexColor* c = mesh->GetElementVertexColor(ctrlIdx);
+					// TODO : get vertex color
+					//c->get
 					FbxMultT(mesh->GetNode(), v);
 					m_vertices[vIdx] = ZobVector3(v[0], v[1], v[2]);
+					m_colors[vIdx] = ZobVector3(1, 1, 1);
 					m_minBoundingBox.x = min(m_minBoundingBox.x, (float)v[0]);
 					m_minBoundingBox.y = min(m_minBoundingBox.y, (float)v[1]);
 					m_minBoundingBox.z = min(m_minBoundingBox.z, (float)v[2]);
@@ -178,6 +185,9 @@ Mesh::Mesh(std::string &parentName, std::string& path, fbxsdk::FbxMesh* mesh)
 				t.ua = &m_uvs[startIdx];
 				t.ub = &m_uvs[startIdx + 1];
 				t.uc = &m_uvs[startIdx + 2];
+				t.ca = &m_colors[startIdx];
+				t.cc = &m_colors[startIdx + 1];
+				t.ca = &m_colors[startIdx + 2];
 				t.material = material;
 				m_triangles.push_back(t);
 				m_nbFaces++;
@@ -199,6 +209,9 @@ Mesh::Mesh(std::string &parentName, std::string& path, fbxsdk::FbxMesh* mesh)
 					t.ua = &m_uvs[startIdx + 3];
 					t.ub = &m_uvs[startIdx + 0];
 					t.uc = &m_uvs[startIdx + 2];
+					t.ca = &m_colors[startIdx + 3];
+					t.cc = &m_colors[startIdx + 0];
+					t.ca = &m_colors[startIdx + 2];
 					t.material = material;
 					m_triangles.push_back(t);
 					m_nbFaces++;
@@ -340,6 +353,7 @@ Mesh::~Mesh()
 	m_projectedVertices = NULL;
 	m_projectedVerticesTmp = NULL;
 	m_uvs = NULL;
+	m_colors = NULL;
 	DirectZob::RemoveIndent();
 }
 
@@ -396,6 +410,7 @@ void Mesh::LoadOBJ(const std::string& fullPath)
 	}
 	m_indices = (uint*)malloc(sizeof(int) * 3 * m_nbFaces);
 	m_vertices = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
+	m_colors = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
 	m_verticesData = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
 	m_verticesTmp = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
 	m_projectedVertices = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
@@ -448,6 +463,7 @@ void Mesh::LoadOBJ(const std::string& fullPath)
 				SplitEntry(&line, &vec, ' ');
 				ZobVector3 v = ZobVector3(std::stof(vec[1], &sz), ::stof(vec[2], &sz), ::stof(vec[3], &sz));
 				m_vertices[curVertice] = v;
+				m_colors[curVertice] = ZobVector3(1, 1, 1);
 				m_minBoundingBox.x = min(v.x, m_minBoundingBox.x);
 				m_minBoundingBox.y = min(v.y, m_minBoundingBox.y);
 				m_minBoundingBox.z = min(v.z, m_minBoundingBox.z);
@@ -762,6 +778,7 @@ void Mesh::CreateTriangles(const std::vector<std::string>* line, std::vector<Tri
 		ParseObjFaceData(&line->at(a), v, u, n, bHasUv, bHasNormals);
 		t.verticeAIndex = v;
 		t.va = &m_vertices[v];
+		t.ca  = &m_colors[v];
 		t.pa = &m_projectedVertices[v];
 		if (bHasUv)
 			t.ua = &m_uvs[u];
@@ -779,6 +796,7 @@ void Mesh::CreateTriangles(const std::vector<std::string>* line, std::vector<Tri
 		ParseObjFaceData(&line->at(b), v, u, n, bHasUv, bHasNormals);
 		t.verticeBIndex = v;
 		t.vb = &m_vertices[v];
+		t.cb  = &m_colors[v];
 		t.pb = &m_projectedVertices[v];
 		if (bHasUv)
 			t.ub = &m_uvs[u];
@@ -796,6 +814,7 @@ void Mesh::CreateTriangles(const std::vector<std::string>* line, std::vector<Tri
 		ParseObjFaceData(&line->at(c), v, u, n, bHasUv, bHasNormals);
 		t.verticeCIndex = v;
 		t.vc = &m_vertices[v];
+		t.cc  = &m_colors[v];
 		t.pc = &m_projectedVertices[v];
 		if (bHasUv)
 			t.uc = &m_uvs[u];

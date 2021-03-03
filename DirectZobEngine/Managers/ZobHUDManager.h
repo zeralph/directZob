@@ -39,7 +39,7 @@ public:
 
 private:
 	void Init();
-	bool CreateQuad(float xMin, float yMin, float xMax, float yMax, const HUDElement* elem);
+	bool CreateQuad(float xMin, float yMin, float xMax, float yMax, HUDElement* elem);
 	void PrintInternal(float x, float y, float w, float h, const ZobVector3* color, std::string s);
 	Triangle* m_trianglesBuffer;
 	ZobVector3* m_vertices;

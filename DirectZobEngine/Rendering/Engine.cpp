@@ -934,10 +934,13 @@ uint Engine::SubDivideClippedTriangle(const Camera* c, const Triangle* t)
 		Triangle* nt = &m_TrianglesQueue[j];
 		Triangle::CopyTriangle(nt, t);
 		nt->va->Copy(&pIn1);
+		nt->ca = t->ca;
 		nt->ua->Copy(&pIn1Uv);
 		nt->vb->Copy(&pOut2);
+		nt->cb = t->cb;
 		nt->ub->Copy(&pOut2Uv);
 		nt->vc->Copy(&pIn2);
+		nt->cc = t->cc;
 		nt->uc->Copy(&pIn2Uv);
 		RecomputeTriangleProj(c, nt);
 		nbDrawn++;
@@ -948,10 +951,13 @@ uint Engine::SubDivideClippedTriangle(const Camera* c, const Triangle* t)
 		Triangle* nt = &m_TrianglesQueue[j];
 		Triangle::CopyTriangle(nt, t);
 		nt->va->Copy(&pIn1);
+		nt->ca = t->ca;
 		nt->ua->Copy(&pIn1Uv);
 		nt->vb->Copy(&pOut1);
+		nt->cb = t->cb;
 		nt->ub->Copy(&pOut1Uv);
 		nt->vc->Copy(&pOut2);
+		nt->cc = t->cc;
 		nt->uc->Copy(&pOut2Uv);
 		RecomputeTriangleProj(c, nt);
 		nbDrawn++;

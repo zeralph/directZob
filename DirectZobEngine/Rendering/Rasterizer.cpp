@@ -537,9 +537,9 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector3* p, const Triangl
 			b *= (w0 * ba + w1 * bb + w2 * bc);
 			a = 1.0f;
 			*/
-			r *= (w0 * t->ar + w1 * t->br + w2 * t->cr);
-			g *= (w0 * t->ag + w1 * t->bg + w2 * t->cg);
-			b *= (w0 * t->ab + w1 * t->bb + w2 * t->cb);
+			r *= (w0 * t->ca->x + w1 * t->cb->x + w2 * t->cc->x);
+			g *= (w0 * t->ca->y + w1 * t->cb->y + w2 * t->cc->y);
+			b *= (w0 * t->ca->z + w1 * t->cb->z + w2 * t->cc->z);
 		}
 		m_bufferData->zBuffer[k] = zRatio;
 		if (lighting != RenderOptions::eLightMode_none)

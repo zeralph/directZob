@@ -39,6 +39,10 @@ public:
 	ZobVector3* pb;
 	ZobVector3* pc;
 
+	const ZobVector3* ca;
+	const ZobVector3* cb;
+	const ZobVector3* cc;
+
 	ZobVector3* na;
 	ZobVector3* nb;
 	ZobVector3* nc;
@@ -54,16 +58,6 @@ public:
 	int verticeCIndex;
 
 	eClip clipMode;
-
-	float ar;
-	float ab;
-	float ag;
-	float br;
-	float bb;
-	float bg;
-	float cr;
-	float cb;
-	float cg;
 
 	const ZobMaterial* material;
 	ZobObject* zobObject;
@@ -95,19 +89,14 @@ public:
 		dst->ub->Copy(src->ub);
 		dst->uc->Copy(src->uc);
 
+		dst->ca = (src->ca);
+		dst->cb = (src->cb);
+		dst->cc = (src->cc);
+
 		dst->material = src->material;
 		dst->options = src->options;
 		dst->draw = src->draw;
 		dst->clipMode = src->clipMode;
-		dst->ar = src->ar;
-		dst->ag = src->ag;
-		dst->ab = src->ab;
-		dst->br = src->br;
-		dst->bg = src->bg;
-		dst->bb = src->bb;
-		dst->cr = src->cr;
-		dst->cg = src->cg;
-		dst->cb = src->cb;
 		dst->zobObject = src->zobObject;
 		dst->area = src->area;
 

@@ -114,7 +114,7 @@ void ZobHUDManager::QueueForDrawing(const Camera* camera, Core::Engine* engine)
 	m_nbDrawnTriangles = 0;
 }
 
-bool ZobHUDManager::CreateQuad(float xMin, float yMin, float xMax, float yMax, const HUDElement* elem)
+bool ZobHUDManager::CreateQuad(float xMin, float yMin, float xMax, float yMax, HUDElement* elem)
 {
 	Triangle* t1 = &m_trianglesBuffer[m_nbDrawnTriangles];
 	m_nbDrawnTriangles++;
@@ -138,15 +138,9 @@ bool ZobHUDManager::CreateQuad(float xMin, float yMin, float xMax, float yMax, c
 	t1->uc->x = 0;
 	t1->uc->y = 0;
 	t1->material = elem->mat;
-	t1->ar = elem->color.x;
-	t1->ag = elem->color.y;
-	t1->ab = elem->color.z;
-	t1->br = elem->color.x;
-	t1->bg = elem->color.y;
-	t1->bb = elem->color.z;
-	t1->cr = elem->color.x;
-	t1->cg = elem->color.y;
-	t1->cb = elem->color.z;
+	t1->ca = &elem->color;
+	t1->cb = &elem->color;
+	t1->cc = &elem->color;
 	t1->ComputeArea();
 
 	t2->pa->x = xMax;
@@ -165,15 +159,10 @@ bool ZobHUDManager::CreateQuad(float xMin, float yMin, float xMax, float yMax, c
 	t2->uc->x = 0;
 	t2->uc->y = 0;
 	t2->material = elem->mat;
-	t2->ar = elem->color.x;
-	t2->ag = elem->color.y;
-	t2->ab = elem->color.z;
-	t2->br = elem->color.x;
-	t2->bg = elem->color.y;
-	t2->bb = elem->color.z;
-	t2->cr = elem->color.x;
-	t2->cg = elem->color.y;
-	t2->cb = elem->color.z;
+	t2->ca = &elem->color;
+	t2->cb = &elem->color;
+	t2->cc = &elem->color;
+
 	t2->ComputeArea();
 	return true;
 }
