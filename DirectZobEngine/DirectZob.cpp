@@ -174,6 +174,7 @@ int DirectZob::RunInternal(void func(void))
 
 int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUpdated /*=NULL*/, DirectZob::engineCallback OnQueuing /*=NULL*/)
 {
+	ZobVector3 color = ZobVector3(1, 1, 1);
 	timespec tstart;
 	timespec tend;
 	SaveTime(&tstart);
@@ -265,55 +266,27 @@ int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUp
 		{
 			if (m_text)
 			{
-				_snprintf_s(buffer, MAX_PATH, "WARNING : %s", "NO CAMERA");
-				std::string sBuf = std::string(buffer);
-				m_text->Print(m_engine->GetBufferData()->width / 2, m_engine->GetBufferData()->height / 2, &sBuf, 0xFFFF0000);
+				m_hudManager->Print(0.5f, 0.5f, 0.01f, 0.01f, &color, "WARNING : %s", "NO CAMERA");
 			}
 		}
 		if (m_text)
 		{
-			_snprintf_s(buffer, MAX_PATH, "Triangles : %i", m_engine->GetNbDrawnTriangles());
-			std::string sBuf = std::string(buffer);
-			m_text->Print(0, 0, &sBuf, 0xFFFFFFFF);
-			_snprintf_s(buffer, MAX_PATH, "render : %03i, geom : %03i, phys : %03i, cpy : %03i, tot : %03i, FPS : %03i", (int)m_renderTime, (int)m_geometryTime, (int)m_physicTime, (int)m_copyTime, (int)m_frameTime, (int)m_fps);
-			sBuf = std::string(buffer);
+			m_hudManager->Print(0.01f, 0.01f, 0.0125f, 0.0125f, &color, "Triangles : %i", m_engine->GetNbDrawnTriangles());
+			color = ZobVector3(0, 1, 0);
 			if (m_frameTime <= TARGET_MS_PER_FRAME)
 			{
-				m_text->Print(0, 16, &sBuf, 0xFF00FF00);
+				ZobVector3 color = ZobVector3(1, 0, 0);
 			}
-			else
-			{
-				m_text->Print(0, 16, &sBuf, 0xFFFF0000);
-			}
-			ZobVector3 color = ZobVector3(1, 0, 0);
-			m_hudManager->Print(0.01f, 0.01f, 0.01f, 0.01f, &color, "render : %03i, geom : %03i, phys : %03i, cpy : %03i, tot : %03i, FPS : %03i", (int)m_renderTime, (int)m_geometryTime, (int)m_physicTime, (int)m_copyTime, (int)m_frameTime, (int)m_fps);
-			switch(m_engine->GetLightingPrecision())
-			{
-				default:
-				case eLightingPrecision_noLighting:
-					sBuf = std::string("LighingPrecision : no lighting");
-					break;
-				case eLightingPrecision_pixel:
-					sBuf = std::string("LighingPrecision : pixel");
-					break;
-				case eLightingPrecision_vertex:
-					sBuf = std::string("LighingPrecision : vertex");
-					break;
-
-			}
-			m_text->Print(0, 32, &sBuf, 0xFFFFFFFF);
-			_snprintf_s(buffer, MAX_PATH, "Controller LX : %.2f, LY  : %.2f, RX : %.2f, RY : %.2f, LT : %.2f, RT : %.2f", 
+			m_hudManager->Print(0.01f, 0.04f, 0.0125f, 0.0125f, &color, "render : %03i, geom : %03i, phys : %03i, cpy : %03i, tot : %03i, FPS : %03i", (int)m_renderTime, (int)m_geometryTime, (int)m_physicTime, (int)m_copyTime, (int)m_frameTime, (int)m_fps);
+			color = ZobVector3(1, 1, 1);
+			m_hudManager->Print(0.01f, 0.07f, 0.01f, 0.01f, &color, "Controller LX : %.2f, LY  : %.2f, RX : %.2f, RY : %.2f, LT : %.2f, RT : %.2f", 
 				m_inputManager->GetMap()->GetFloat(ZobInputManager::LeftStickX), 
 				m_inputManager->GetMap()->GetFloat(ZobInputManager::LeftStickY),
 				m_inputManager->GetMap()->GetFloat(ZobInputManager::RightStickX),
 				m_inputManager->GetMap()->GetFloat(ZobInputManager::RightStickY),
 				m_inputManager->GetMap()->GetFloat(ZobInputManager::LeftShoulder),
 				m_inputManager->GetMap()->GetFloat(ZobInputManager::RightShoulder));
-			sBuf = std::string(buffer);
-			m_text->Print(0, 48, &sBuf, 0xFF0000FF);
-			
-			
-			PrintObjectList();
+			//PrintObjectList();
 
 			if (m_inputManager->GetMap()->GetBoolIsNew(ZobInputManager::WireFrame))
 			{

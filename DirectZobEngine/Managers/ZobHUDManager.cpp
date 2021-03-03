@@ -108,6 +108,13 @@ void ZobHUDManager::UpdateObjects(const Camera* camera, Core::Engine* engine, fl
 		float yMin = e.y * h;
 		float xMax = xMin + e.w * w;
 		float yMax = yMin + e.w * h;
+
+		//xMin = e.x * w;
+		//yMin = e.y * h;
+		//xMax = xMin + 8;
+		//yMax = yMin + 8;
+
+
 		CreateQuad(xMin, yMin, xMax, yMax, &e);
 	}
 }
