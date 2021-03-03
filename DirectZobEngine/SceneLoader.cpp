@@ -99,8 +99,10 @@ void SceneLoader::UnloadScene()
 	ZobObjectManager* zobObjectManager = DirectZob::GetInstance()->GetZobObjectManager();
 	LightManager* lightManager = DirectZob::GetInstance()->GetLightManager();
 	CameraManager* cameraManager = DirectZob::GetInstance()->GetCameraManager();
+	ZobHUDManager* hudManager = DirectZob::GetInstance()->GetHudManager();
 	Engine* engine = DirectZob::GetInstance()->GetEngine();
 	engine->Stop();
+	hudManager->Stop();
 	SLEEP_MS(1000);	//ugly but ...
 	zobObjectManager->UnloadAll();
 	meshManager->UnloadAll();
@@ -116,6 +118,7 @@ void SceneLoader::NewScene()
 	UnloadScene();
 	m_path = "";
 	m_file = "";
+	DirectZob::GetInstance()->GetHudManager()->Start();
 	DirectZob::GetInstance()->GetLightManager()->ReInitGlobalSettings();
 	DirectZob::GetInstance()->GetEngine()->Start();
 	DirectZob::RemoveIndent();
@@ -179,6 +182,7 @@ void SceneLoader::LoadScene(std::string& path, std::string& file)
 		}
 	}
 	DirectZob::GetInstance()->GetEngine()->Start();
+	DirectZob::GetInstance()->GetHudManager()->Start();
 	DirectZob::RemoveIndent();
 }
 

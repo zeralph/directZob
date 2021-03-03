@@ -205,7 +205,7 @@ Mesh::Mesh(std::string &parentName, std::string& path, fbxsdk::FbxMesh* mesh)
 				}
 			}
 		}
-		m_indices = (uint*)malloc(sizeof(ZobVector3) * m_nbFaces);
+		m_indices = (uint*)malloc(sizeof(int) * 3 * m_nbFaces);
 		m_trianglesNormals = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbFaces);
 		m_trianglesNormalsData = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbFaces);
 		m_trianglesNormalsTmp = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbFaces);
@@ -394,7 +394,7 @@ void Mesh::LoadOBJ(const std::string& fullPath)
 	{
 		m_nbNormals = 1;
 	}
-	m_indices = (uint*)malloc(sizeof(ZobVector3) * m_nbFaces);
+	m_indices = (uint*)malloc(sizeof(int) * 3 * m_nbFaces);
 	m_vertices = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
 	m_verticesData = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
 	m_verticesTmp = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
@@ -631,9 +631,9 @@ void Mesh::QueueForDrawing(ZobObject* z, const ZobMatrix4x4& modelMatrix, const 
 			Triangle* t = &m_triangles[i];
 			t->options = options;
 			t->zobObject = z;
-			t->ca = 0xFF0000;
-			t->cb = 0x00FF00;
-			t->cc = 0x0000FF;
+			//t->ca = 0xFF0000;
+			//t->cb = 0x00FF00;
+			//t->cc = 0x0000FF;
 			if(t->draw)
 			{
 				bool bCull = false;
@@ -646,7 +646,7 @@ void Mesh::QueueForDrawing(ZobObject* z, const ZobMatrix4x4& modelMatrix, const 
 				}
 				//if (t->area > sAreaMin)
 				{
-					engine->QueueTriangle(camera, t);
+					engine->QueueWorldTriangle(camera, t);
 					static bool bShowNormal = true;
 					if (engine->ShowNormals())
 					{

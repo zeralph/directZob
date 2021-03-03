@@ -21,6 +21,18 @@ Triangle::Triangle()
 	ub = NULL;
 	uc = NULL;
 
+	ar = 1.0f;
+	ab = 1.0f;
+	ag = 1.0f;
+
+	br = 1.0f;
+	bb = 1.0f;
+	bg = 1.0f;
+
+	cr = 1.0f;
+	cb = 1.0f;
+	cg = 1.0f;
+
 	draw = false;
 	options = NULL;
 }

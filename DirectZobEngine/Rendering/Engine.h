@@ -31,7 +31,8 @@ namespace Core
 		void											Stop();
 		void											ClearBuffer(const Color* color);
 		void											CopyBuffer(uint* source, uint* dest);
-		void											QueueTriangle(const Camera* c, const Triangle* t);
+		void											QueueWorldTriangle(const Camera* c, const Triangle* t);
+		void											QueueProjectedTriangle(const Camera* c, const Triangle* t);
 		void											DrawGrid(const Camera* camera);
 
 		void											ToggleZbufferOutput() { m_showZBuffer = !m_showZBuffer; }
@@ -91,6 +92,7 @@ namespace Core
 		ZobObject*										GetObjectAt2DCoords(float x, float y);
 		void											ComputeBoundingBoxes(const ZobMatrix4x4* modelMatrix, const ZobVector3* minBounding, const ZobVector3* maxBounding, Box* obb, Box* aabb) const;
 		bool											IsInFrustrum(const Camera* c, const Box* aabb) const;
+
 	private:	
 		inline float									clamp2(float x, float min, float max) const { if (x < min) x = min; if (x > max) x = max; return x; }
 		void											DrawHorizontalLine(const float x1, const float x2, const float y, const uint color);

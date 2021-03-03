@@ -25,6 +25,15 @@ Texture::~Texture()
 	DirectZob::RemoveIndent();
 }
 
+void Texture::LoadFromData(std::string &name, int w, int h, float* data)
+{
+	m_fullPath = name;
+	m_width = w;
+	m_height = h;
+	m_data = data;
+	m_dataSize = w * h * 4;
+}
+
 void Texture::LoadFromFile(const std::string& textureFile)
 {
 	m_fullPath = textureFile;

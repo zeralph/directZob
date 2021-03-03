@@ -13,6 +13,7 @@
 #include "Managers/LightManager.h"
 #include "Managers/ZobObjectManager.h"
 #include "Managers/ZobInputManager.h"
+#include "Managers/ZobHUDManager.h"
 #include "../minifb/src/WindowData.h"
 
 #define kUnused(var) (void) var;
@@ -73,6 +74,7 @@ public :
 	Engine*					GetEngine() const { return m_engine; }
 	CameraManager*			GetCameraManager() const { return m_cameraManager; }
 	LightManager*			GetLightManager() const { return m_lightManager; }
+	ZobHUDManager*			GetHudManager() const { return m_hudManager; }
 	ZobObjectManager*		GetZobObjectManager() const { return m_zobObjectManager; }
 	MeshManager*			GetMeshManager() const { return m_meshManager; }
 	MaterialManager*		GetMaterialManager() const { return m_materialManager;  }
@@ -100,6 +102,7 @@ private:
 	LightManager* m_lightManager = NULL;
 	ZobObjectManager* m_zobObjectManager = NULL;
 	ZobPhysicsEngine* m_physicsEngine = NULL;
+	ZobHUDManager* m_hudManager = NULL;
 	Engine* m_engine = NULL;
 	Text2D* m_text = NULL;
 	ZobInputManager* m_inputManager = NULL;

@@ -33,6 +33,22 @@ ZobMaterial* MaterialManager::CreateMaterial()
 	return m;
 }
 
+const ZobMaterial* MaterialManager::LoadMaterial(const std::string& name, const ZobVector3* ambientColor, const ZobVector3* diffuseColor, Texture* texture)
+{
+	m_textures.push_back(texture);
+	if (GetMaterial(name) == NULL)
+	{
+		ZobMaterial* t = new ZobMaterial(name, ambientColor, diffuseColor, texture);
+		m_materials.push_back(t);
+		return t;
+	}
+	else
+	{
+		//output error
+		return GetMaterial(name);
+	}
+}
+
 const ZobMaterial* MaterialManager::LoadMaterial(const std::string& name, const ZobVector3* ambientColor, const ZobVector3* diffuseColor, const std::string &textureFile)
 {
 	if (GetMaterial(name) == NULL)

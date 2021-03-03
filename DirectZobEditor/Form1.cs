@@ -409,8 +409,8 @@ namespace DirectZobEditor
         {
             if(!m_canBeSafelyClosed)
             {
-                m_directZobWrapper.Unload();
                 m_engineWindow.StopEngine();
+                m_directZobWrapper.Unload();
                 e.Cancel = true;
             }
             else

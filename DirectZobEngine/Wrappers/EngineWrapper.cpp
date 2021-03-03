@@ -24,6 +24,9 @@ namespace CLI
 		int vi = 0;
 		for (int i = 0; i < NB_EDITOR_TRIANGLES; i ++)
 		{
+			m_triangleList[i].verticeAIndex = vi;
+			m_triangleList[i].verticeBIndex = vi + 1;
+			m_triangleList[i].verticeCIndex = vi + 2;
 			m_triangleList[i].va = &m_vertices[vi];
 			m_triangleList[i].vb = &m_vertices[vi+1];
 			m_triangleList[i].vc = &m_vertices[vi+2];
@@ -44,9 +47,11 @@ namespace CLI
 
 	EngineWrapper::~EngineWrapper()
 	{
-		delete m_triangleList;
-		delete m_vertices;
-		delete m_projectedVertices;
+		free(m_triangleList);
+		free(m_vertices);
+		free(m_uvs);
+		free(m_projectedVertices);
+		free(m_normals);
 	}
 
 	int EngineWrapper::GetBufferWidth()
@@ -138,7 +143,7 @@ namespace CLI
 				t->material = NULL;
 				t->ComputeArea();
 				t->clipMode = Triangle::eClip_3_in;
-				m_Instance->QueueTriangle(c, t);
+				m_Instance->QueueWorldTriangle(c, t);
 			}
 		}
 		m_nbTriangles = 0;

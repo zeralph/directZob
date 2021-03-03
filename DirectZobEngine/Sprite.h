@@ -13,11 +13,12 @@ public:
 	~Sprite();
 
 	//void Update(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions* options) override;
-	//void QueueForDrawing(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions* options) override;
+	void QueueForDrawing(ZobObject* z, const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, RenderOptions* options) override;
 	void Setmaterial(const ZobMaterial* m);
 private:
 
 	ZobMatrix4x4 m_modelMatrixOverriden;
 	ZobMatrix4x4 m_rotationMatrixOverriden;
+	DirectZobType::RenderOptions m_triangleOptions;
 };
 

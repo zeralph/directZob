@@ -254,6 +254,19 @@ void ZobObject::PreUpdate()
 	DeleteInternal();
 }
 
+void ZobObject::UpdateBehavior(float dt)
+{
+	if (m_behavior)
+	{
+		m_behavior->Update(dt);
+	}
+	for (int i = 0; i < m_children.size(); i++)
+	{
+		ZobObject* z = m_children[i];
+		z->UpdateBehavior(dt);
+	}
+}
+
 void ZobObject::SetParentInternal()
 {
 	if (m_newParent != NULL)
@@ -302,19 +315,6 @@ void ZobObject::DeleteInternal()
 		{
 			z->PreUpdate();
 		}
-	}
-}
-
-void ZobObject::UpdateBehavior(float dt)
-{
-	if (m_behavior)
-	{
-		m_behavior->Update(dt);
-	}
-	for (int i = 0; i < m_children.size(); i++)
-	{
-		ZobObject* z = m_children[i];
-		z->UpdateBehavior(dt);
 	}
 }
 
@@ -869,7 +869,7 @@ void ZobObject::GetPhysicComponentColliderInfo(float& bounciness, float& frictio
 	Collider* c = m_physicComponent->GetCollider();
 	if (c)
 	{
-		Material& material = c->getMaterial();
+		reactphysics3d::Material& material = c->getMaterial();
 		bounciness = material.getBounciness();
 		frictionCoeff =  material.getFrictionCoefficient();
 		massDensity = material.getMassDensity();
@@ -882,7 +882,7 @@ void ZobObject::SetPhysicComponentColliderInfo(float bounciness, float frictionC
 	Collider* c = m_physicComponent->GetCollider();
 	if (c)
 	{
-		Material& material = c->getMaterial();
+		reactphysics3d::Material& material = c->getMaterial();
 		material.setBounciness(bounciness);
 		material.setFrictionCoefficient(frictionCoeff);
 		material.setMassDensity(massDensity);

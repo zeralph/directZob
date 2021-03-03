@@ -36,6 +36,7 @@ DirectZob::DirectZob()
 DirectZob::~DirectZob()
 {
 	//delete m_engine;
+	delete m_hudManager;
 	delete m_meshManager;
 	delete m_materialManager;
 	delete m_cameraManager;
@@ -108,6 +109,7 @@ void DirectZob::Unload()
 	g_render_mutex.lock();
 	SceneLoader::UnloadScene();
 	DirectZob::GetInstance()->GetEngine()->Stop();
+	delete DirectZob::GetInstance();
 	g_render_mutex.unlock();
 }
 
@@ -124,6 +126,7 @@ void DirectZob::Init(int width, int height, bool bEditorMode)
 	m_engine = new Engine(width, height, m_events);
 	m_physicsEngine = new ZobPhysicsEngine();
 	m_zobObjectManager = new ZobObjectManager();
+	m_hudManager = new ZobHUDManager();
 	m_lightManager = new LightManager();
 	m_materialManager = new MaterialManager();
 	m_meshManager = new MeshManager();
@@ -208,7 +211,9 @@ int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUp
 		{
 			bool bPhysicUpdated = false;
 //			cam->UpdateViewProjectionMatrix();
+
 			m_zobObjectManager->PreUpdate();
+			m_hudManager->PreUpdate();
 			m_lightManager->PreUpdate();
 			m_engine->StartDrawingScene();
 			if (OnSceneUpdated)
@@ -220,12 +225,17 @@ int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUp
 			{
 				bPhysicUpdated = true;
 				m_zobObjectManager->UpdateBehavior(m_frameTime / 1000.0f);
+				m_hudManager->UpdateBehavior(m_frameTime / 1000.0f);
 				m_physicsEngine->StartUpdatePhysic(m_frameTime/1000.0f);
 				
 			}
 			cam->UpdateAfter();
 
+			m_hudManager->Print(0.1f, 0.1f, 0.05f, 0.05f, "Bonjour\ntoto");
+
+
 			m_zobObjectManager->StartUpdateScene(cam, m_engine, m_frameTime / 1000.0f);
+			m_hudManager->UpdateObjects(cam, m_engine, m_frameTime / 1000.0f);
 			m_geometryTime = m_zobObjectManager->WaitForUpdateObjectend();
 			m_renderTime = m_engine->WaitForRasterizersEnd();
 			m_physicTime = 0;
@@ -238,9 +248,10 @@ int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUp
 			m_copyTime = GetDeltaTime_MS(tstart, tend);
 			if (OnQueuing)
 			{
-				OnQueuing();
+				//OnQueuing();
 			}
   			m_zobObjectManager->QueueForDrawing(cam, m_engine);
+			m_hudManager->QueueForDrawing(cam, m_engine);
 			if (m_engine->DrawPhysyicsGizmos())
 			{
 				m_physicsEngine->DrawGizmos();
@@ -274,6 +285,8 @@ int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUp
 			{
 				m_text->Print(0, 16, &sBuf, 0xFFFF0000);
 			}
+			ZobVector3 color = ZobVector3(1, 0, 0);
+			m_hudManager->Print(0.01f, 0.01f, 0.01f, 0.01f, &color, "render : %03i, geom : %03i, phys : %03i, cpy : %03i, tot : %03i, FPS : %03i", (int)m_renderTime, (int)m_geometryTime, (int)m_physicTime, (int)m_copyTime, (int)m_frameTime, (int)m_fps);
 			switch(m_engine->GetLightingPrecision())
 			{
 				default:

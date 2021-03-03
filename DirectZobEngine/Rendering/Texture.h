@@ -9,6 +9,7 @@ public:
 	Texture();
 	~Texture();
 	void LoadFromFile(const std::string& filePath);
+	void LoadFromData(std::string& name, int w, int h, float* data);
 
 	inline const uint GetWidth() const { return m_width; }
 	inline const uint GetHeight() const { return m_height; }

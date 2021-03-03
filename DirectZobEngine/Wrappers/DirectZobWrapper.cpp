@@ -11,70 +11,105 @@ namespace CLI
 
 	void DirectZobWrapper::StartPhysic()
 	{
-		m_Instance->StartPhysic();
+		if (GetInstance())
+		{
+			GetInstance()->StartPhysic();
+		}
 	}
 
 	void DirectZobWrapper::StopPhysic(bool reset)
 	{
-		m_Instance->StopPhysic(reset);
+		if (GetInstance())
+		{
+			GetInstance()->StopPhysic(reset);
+		}
 	}
 
 	bool DirectZobWrapper::IsPhysicPlaying()
 	{
-		return m_Instance->IsPhysicPlaying();
+		if (GetInstance())
+		{
+			return GetInstance()->IsPhysicPlaying();
+		}
+		return false;
 	}
 
 	void DirectZobWrapper::Init(int width, int height)
 	{
-		m_Instance->Init(width, height, true);
+		if (GetInstance())
+		{
+			GetInstance()->Init(width, height, true);
+		}
 	}
 
 	void DirectZobWrapper::LoadScene(System::String^ path, System::String^ file)
 	{
-		std::string stdPath;
-		MarshalString(path, stdPath);
-		std::string stdFile;
-		MarshalString(file, stdFile);
-		m_Instance->LoadScene(stdPath, stdFile);
+		if (GetInstance())
+		{
+			std::string stdPath;
+			MarshalString(path, stdPath);
+			std::string stdFile;
+			MarshalString(file, stdFile);
+			GetInstance()->LoadScene(stdPath, stdFile); 
+		}
 	}
 
 	void DirectZobWrapper::LoadZobObject(System::String^ path, System::String^ file)
 	{
-		std::string stdPath;
-		MarshalString(path, stdPath);
-		std::string stdFile;
-		MarshalString(file, stdFile);
-		m_Instance->LoadZobObject(stdPath, stdFile);
+		if (GetInstance())
+		{
+			std::string stdPath;
+			MarshalString(path, stdPath);
+			std::string stdFile;
+			MarshalString(file, stdFile);
+			GetInstance()->LoadZobObject(stdPath, stdFile);
+		}
 	}
 
 	void DirectZobWrapper::NewScene()
 	{
-		m_Instance->NewScene();
+		if (GetInstance())
+		{
+			GetInstance()->NewScene();
+		}
 	}
 
 	void DirectZobWrapper::Unload()
 	{
-		m_Instance->Unload();
+		if (GetInstance() != NULL)
+		{
+			GetInstance()->Unload();
+		}
+		m_Instance = NULL;
 	}
 
 
 	bool DirectZobWrapper::CanFastSave()
 	{
-		return m_Instance->CanFastSave();
+		if (GetInstance())
+		{
+			return GetInstance()->CanFastSave();
+		}
 	}
 
 	void DirectZobWrapper::SaveScene()
 	{
-		m_Instance->SaveScene();
+		if (GetInstance())
+		{
+			GetInstance()->SaveScene();
+		}
 	}
 
 	void DirectZobWrapper::SaveScene(System::String^ path, System::String^ file)
 	{
-		std::string stdPath;
-		MarshalString(path, stdPath);
-		std::string stdFile;
-		MarshalString(file, stdFile);
-		m_Instance->SaveScene(stdPath, stdFile);
+		if (GetInstance())
+		{
+			std::string stdPath;
+			MarshalString(path, stdPath);
+			std::string stdFile;
+			MarshalString(file, stdFile);
+			GetInstance()->SaveScene(stdPath, stdFile);
+		}
 	}
 
 	void DirectZobWrapper::test()
@@ -117,8 +152,10 @@ namespace CLI
 			{
 				cbStart();
 			}
-			;
-			m_Instance->RunAFrame(0, (DirectZob::engineCallback) DirectZobWrapper::CallSceneUpdatedCallback, (DirectZob::engineCallback) DirectZobWrapper::CallQueuingCallback);
+			if (GetInstance())
+			{
+				GetInstance()->RunAFrame(0, (DirectZob::engineCallback)DirectZobWrapper::CallSceneUpdatedCallback, (DirectZob::engineCallback)DirectZobWrapper::CallQueuingCallback);
+			}
 			if (m_run)
 			{
 				cbEnd();
@@ -135,27 +172,37 @@ namespace CLI
 
 	int DirectZobWrapper::RunAFrame()
 	{
-		return m_Instance->RunAFrame(0);
+		if (GetInstance())
+		{
+			return GetInstance()->RunAFrame(0);
+		}
 	}
 
 	cli::array<System::String^>^ DirectZobWrapper::GetEventsAndClear()
 	{
-		const std::vector<std::string>* data = m_Instance->GetEventManager()->GetEvents();
-		int l = (int)data->size();
-		cli::array<System::String ^>^ arr = gcnew cli::array<System::String ^>(l);
-		for (int i = 0; i < l; i++)
+		if (GetInstance())
 		{
-			arr[i] = gcnew System::String(data->at(i).c_str());
+			const std::vector<std::string>* data = GetInstance()->GetEventManager()->GetEvents();
+			int l = (int)data->size();
+			cli::array<System::String^>^ arr = gcnew cli::array<System::String^>(l);
+			for (int i = 0; i < l; i++)
+			{
+				arr[i] = gcnew System::String(data->at(i).c_str());
+			}
+			GetInstance()->GetEventManager()->ClearEvents();
+			return arr;
 		}
-		m_Instance->GetEventManager()->ClearEvents();
-		return arr;
+		return gcnew cli::array<System::String^>(0);
 	}
 
 	void DirectZobWrapper::Resize(int w, int h)
 	{
-		if (w > 0 && h > 0 && w <= 1920 && h <= 1080)
+		if (GetInstance())
 		{
-			m_Instance->Resize(w, h);
+			if (w > 0 && h > 0 && w <= 1920 && h <= 1080)
+			{
+				GetInstance()->Resize(w, h);
+			}
 		}
 	}
 }

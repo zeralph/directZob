@@ -114,9 +114,6 @@ Engine::Engine(int width, int height, Events* events)
 		m_TrianglesQueue[i].options = NULL;
 		m_TrianglesQueue[i].material = NULL;
 		m_TrianglesQueue[i].zobObject = NULL;
-		m_TrianglesQueue[i].ca = 0;
-		m_TrianglesQueue[i].cb = 0;
-		m_TrianglesQueue[i].cc = 0;
 		m_TrianglesQueue[i].draw = false;
 		m_TrianglesQueue[i].area = 0;
 		m_TrianglesQueue[i].verticeAIndex = 0;
@@ -771,7 +768,19 @@ void Engine::QueueTriangleInRasters(const Triangle* t, int idx) const
 	m_rasterizers[i]->QueueTriangle(t);
 }
 
-void Engine::QueueTriangle(const Camera* c, const Triangle* t)
+void Engine::QueueProjectedTriangle(const Camera* c, const Triangle* t)
+{
+	uint j = m_TriangleQueueSize;
+	if (j < m_maxTrianglesQueueSize)
+	{
+		Triangle::CopyTriangle(&m_TrianglesQueue[j], t);
+		//TODO : adjust to frustrums 
+		QueueTriangleInRasters(&m_TrianglesQueue[j], j);
+		m_TriangleQueueSize++;
+	}
+}
+
+void Engine::QueueWorldTriangle(const Camera* c, const Triangle* t)
 {
 	static bool ba = true;
 	static bool bb = true;

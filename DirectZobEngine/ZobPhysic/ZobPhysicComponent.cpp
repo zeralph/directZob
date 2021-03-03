@@ -391,7 +391,7 @@ void ZobPhysicComponent::AddColliderInternal(CollisionShape* c)
 	//t = m_rigidBody->getTransform();
 	m_collider = m_rigidBody->addCollider(c, t);
 	
-	Material& material = m_collider->getMaterial();
+	reactphysics3d::Material& material = m_collider->getMaterial();
 	material.setBounciness(0.1);
 	material.setFrictionCoefficient(2.01);
 	material.setMassDensity(0.01);
@@ -644,7 +644,7 @@ void ZobPhysicComponent::WriteMaterialNode(TiXmlNode* node)
 {
 	if (m_collider && node)
 	{
-		Material& mat = m_collider->getMaterial();
+		reactphysics3d::Material& mat = m_collider->getMaterial();
 		TiXmlElement m = TiXmlElement("Material");
 		m.SetAttribute("bounciness", std::to_string((float)mat.getBounciness()).c_str());
 		m.SetAttribute("friction_coeff", std::to_string((float)mat.getFrictionCoefficient()).c_str());
@@ -659,7 +659,7 @@ void ZobPhysicComponent::ReadMaterialNode(TiXmlNode* node)
 	if (m_collider && node)
 	{
 		TiXmlElement* m = (TiXmlElement*)node;
-		Material& mat = m_collider->getMaterial();
+		reactphysics3d::Material& mat = m_collider->getMaterial();
 		mat.setBounciness((float)atof(m->Attribute("bounciness")));
 		mat.setFrictionCoefficient((float)atof(m->Attribute("friction_coeff")));
 		mat.setMassDensity((float)atof(m->Attribute("mass_density")));

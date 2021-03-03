@@ -29,6 +29,10 @@ Text2D::~Text2D()
 {
 }
 
+void Text2D::GetChar(char c, Texture& tex) const
+{
+}
+
 void Text2D::Print(uint x, uint y, const std::string* text, uint color)
 {
 	if (m_engine->ShowText() && m_data != NULL)

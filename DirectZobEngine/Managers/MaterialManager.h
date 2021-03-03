@@ -15,13 +15,14 @@ public:
 	~MaterialManager();
 
 	const ZobMaterial* 		LoadMaterial(const std::string& name, const ZobVector3* ambientColor, const ZobVector3* diffuseColor, const std::string &textureFile);
+	const ZobMaterial*		LoadMaterial(const std::string& name, const ZobVector3* ambientColor, const ZobVector3* diffuseColor, Texture* texture);
 	const ZobMaterial* 		GetMaterial(const std::string& name) const;
 	const int 				GetNbTextures() const { return (int)m_materials.size(); }
 	const ZobMaterial* 		GetMaterial(const int i) const;
 	void 					LoadOBJMaterials(std::string& path, std::string& file);
 	const ZobMaterial* 		LoadFbxMaterial(const fbxsdk::FbxMesh* mesh, const std::string &path);
 	void 					UnloadAll();
-	ZobMaterial*				CreateMaterial();
+	ZobMaterial*			CreateMaterial();
 	const Texture*			GetTexture(const std::string name);
 private:
 	const Texture*			LoadTexture(const std::string name);

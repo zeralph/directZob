@@ -212,10 +212,10 @@ void ZobBehaviorCar::Update(float dt)
 			color = 0xFF0000;
 		}
 		Text2D* m_textManager = directZob->GetTextManager();
-		m_textManager->Print(10, 60, color, "speed            : %.2f km/h", MS_TO_KMH(m_lineaVelocityMS));
+		ZobVector3 c = ZobVector3(255.0f, 1.0f, 0.1f);
+		DirectZob::GetInstance()->GetHudManager()->Print(0.5f, 0.9f, 0.05f, 0.05f, &c, "%.2f kmh", MS_TO_KMH(m_lineaVelocityMS));
+		//m_textManager->Print(10, 60, color, "speed            : %.2f km/h", MS_TO_KMH(m_lineaVelocityMS));
 		m_textManager->Print(10, 75, color, "angle            : %.2f / %.2f", dir, DEG_TO_RAD(dir));
-		//m_textManager->Print(10, 90, 4, color, "rolling torque : %.2f", fabs(rollingTorque));
-		//m_textManager->Print(10, 105, 4, color, "drift : %.2f", fabs(linearVelocityLocal.x));
 	}
 
 	//update current camera

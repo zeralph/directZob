@@ -55,9 +55,15 @@ public:
 
 	eClip clipMode;
 
-	int ca;
-	int cb;
-	int cc;
+	float ar;
+	float ab;
+	float ag;
+	float br;
+	float bb;
+	float bg;
+	float cr;
+	float cb;
+	float cg;
 
 	const ZobMaterial* material;
 	ZobObject* zobObject;
@@ -93,9 +99,15 @@ public:
 		dst->options = src->options;
 		dst->draw = src->draw;
 		dst->clipMode = src->clipMode;
-		dst->ca = src->ca;
+		dst->ar = src->ar;
+		dst->ag = src->ag;
+		dst->ab = src->ab;
+		dst->br = src->br;
+		dst->bg = src->bg;
+		dst->bb = src->bb;
+		dst->cr = src->cr;
+		dst->cg = src->cg;
 		dst->cb = src->cb;
-		dst->cc = src->cc;
 		dst->zobObject = src->zobObject;
 		dst->area = src->area;
 

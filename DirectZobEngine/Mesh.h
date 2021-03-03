@@ -22,7 +22,7 @@ public:
 										Mesh(std::string& name);
 										Mesh(Mesh* m);
 										Mesh(std::string& name, std::string& path, std::string& file);
-										~Mesh();
+	virtual								~Mesh();
 
 	virtual void						Update(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions* options);
 	virtual void						QueueForDrawing(ZobObject* z, const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, RenderOptions* options);
