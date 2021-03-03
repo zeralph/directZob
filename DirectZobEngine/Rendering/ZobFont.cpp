@@ -1,15 +1,15 @@
-#include "Font.h"
+#include "ZobFont.h"
 #include "lodepng.h"
 #include "BaseFont.h"
 #include "../Types.h"
-#include "DirectZob.h"
+#include "../DirectZob.h"
 #include "../Managers/MaterialManager.h"
 #include <stdio.h>
 #include <string>
 #include <iostream>
 using namespace Core;
 
-Font::Font(const std::string& file, int nbCharWidth, int nbCharHeight)
+ZobFont::ZobFont(const std::string& file, int nbCharWidth, int nbCharHeight)
 {
 	m_color = ZobVector3(1, 1, 1);
 	m_baseTexture.LoadFromFile(file);
@@ -48,12 +48,12 @@ Font::Font(const std::string& file, int nbCharWidth, int nbCharHeight)
 	}
 }
 
-Font::~Font()
+ZobFont::~ZobFont()
 {
 
 }
 
-const ZobMaterial* Font::GetChar(char c) const
+const ZobMaterial* ZobFont::GetChar(char c) const
 {
 	int i = (int)c;// -32;
 	if (i > 0 && i < m_nbCharWidth * m_nbCharHeight)

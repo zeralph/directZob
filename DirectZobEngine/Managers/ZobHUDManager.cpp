@@ -58,8 +58,8 @@ void ZobHUDManager::Init()
 {
 	std::string p = SceneLoader::GetResourcePath();
 	p.append("font2.png");
-	m_font = new Font(p, 32, 8);
-	//m_font = new Font("D:\\Git\\directZob\\resources\\font3.png", 16, 14);
+	m_font = new ZobFont(p, 32, 8);
+	//m_font = new ZobFont("D:\\Git\\directZob\\resources\\font3.png", 16, 14);
 }
 
 void ZobHUDManager::Stop()

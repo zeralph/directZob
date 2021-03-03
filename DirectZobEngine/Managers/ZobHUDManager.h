@@ -7,7 +7,7 @@
 #include "../Rendering/Engine.h"
 #include "../ZobObjects/Light.h"
 #include "../ZobObjects/ZobSprite.h"
-#include "../Rendering/Font.h"
+#include "../Rendering/ZobFont.h"
 #include "../ZobMaterial.h"
 
 class ZobHUDManager
@@ -48,7 +48,7 @@ private:
 	ZobVector2* m_uvs;
 	int	m_nbDrawnTriangles;
 	DirectZobType::RenderOptions m_renderOptions;
-	Font* m_font;
+	ZobFont* m_font;
 	std::vector<HUDElement> m_hudElements;
 	bool m_started;
 }; 

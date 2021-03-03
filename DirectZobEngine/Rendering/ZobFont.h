@@ -9,12 +9,12 @@
 using namespace Core;
 
 
-class Font
+class ZobFont
 {
 public:
 
-	Font(const std::string &file, int nbCharWidth, int nbCharHeight);
-	~Font();
+	ZobFont(const std::string &file, int nbCharWidth, int nbCharHeight);
+	~ZobFont();
 
 	const ZobMaterial* GetChar(char c) const;
 
