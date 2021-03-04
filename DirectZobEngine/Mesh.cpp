@@ -475,9 +475,9 @@ void Mesh::LoadOBJ(const std::string& fullPath)
 				float ccr = (((curVertice + 0) % 3) == 0) ? 1 : 0;
 				float ccg = (((curVertice + 1) % 3) == 0) ? 1 : 0;
 				float ccb = (((curVertice+ 2) % 3) == 0) ? 1 : 0;
-				ccr = 1;
-				ccb = 1;
-				ccg = 1;
+				//ccr = 1;
+				//ccb = 1;
+				//ccg = 1;
 				m_colors[curVertice] = ZobVector3(ccr, ccg, ccb);
 				m_minBoundingBox.x = min(v.x, m_minBoundingBox.x);
 				m_minBoundingBox.y = min(v.y, m_minBoundingBox.y);

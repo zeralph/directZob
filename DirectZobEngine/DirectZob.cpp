@@ -232,9 +232,6 @@ int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUp
 			}
 			cam->UpdateAfter();
 
-			m_hudManager->Print(0.1f, 0.1f, 0.05f, 0.05f, "Bonjour\ntoto");
-
-
 			m_zobObjectManager->StartUpdateScene(cam, m_engine, m_frameTime / 1000.0f);
 			m_hudManager->UpdateObjects(cam, m_engine, m_frameTime / 1000.0f);
 			m_geometryTime = m_zobObjectManager->WaitForUpdateObjectend();
@@ -269,6 +266,7 @@ int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUp
 				m_hudManager->Print(0.5f, 0.5f, 0.01f, 0.01f, &color, "WARNING : %s", "NO CAMERA");
 			}
 		}
+		/*
 		if (m_text)
 		{
 			m_hudManager->Print(0.01f, 0.01f, 0.0125f, 0.0125f, &color, "Triangles : %i", m_engine->GetNbDrawnTriangles());
@@ -286,6 +284,7 @@ int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUp
 				m_inputManager->GetMap()->GetFloat(ZobInputManager::RightStickY),
 				m_inputManager->GetMap()->GetFloat(ZobInputManager::LeftShoulder),
 				m_inputManager->GetMap()->GetFloat(ZobInputManager::RightShoulder));
+			
 			//PrintObjectList();
 
 			if (m_inputManager->GetMap()->GetBoolIsNew(ZobInputManager::WireFrame))
@@ -301,6 +300,7 @@ int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUp
 				mfb_close(window);
 			}
 		}
+		*/
 		m_engine->SetDisplayedBuffer();
 	}
 	g_render_mutex.unlock();

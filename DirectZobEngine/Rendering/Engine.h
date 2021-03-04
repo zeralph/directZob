@@ -108,7 +108,12 @@ namespace Core
 			uvb->x = uva->x + (uvb->x - uva->x) * r;
 			uvb->y = uva->y + (uvb->y - uva->y) * r;
 		}
-
+		inline void										RecomputeColor(const ZobVector3* ca, ZobVector3* cb, float r) const
+		{
+			cb->x = ca->x + (cb->x - ca->x) * r;
+			cb->y = ca->y + (cb->y - ca->y) * r;
+			cb->z = ca->z + (cb->z - ca->z) * r;
+		}
 		Rasterizer** m_rasterizers;
 		Events* m_events;
 

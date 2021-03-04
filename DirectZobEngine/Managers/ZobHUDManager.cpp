@@ -2,6 +2,7 @@
 #include "ZobHUDManager.h"
 #include "DirectZob.h"
 #include "../SceneLoader.h"
+#include <BaseFont.h>
 #define NB_HUD_TRIANGLES 2000
 
 ZobHUDManager::ZobHUDManager()
@@ -59,6 +60,9 @@ ZobHUDManager::~ZobHUDManager()
 	delete m_font;
 }
 
+//static Texture sTex;
+static const ZobMaterial* sMat;
+static ZobHUDManager::HUDElement sElem;
 void ZobHUDManager::Init()
 {
 	std::string p = SceneLoader::GetResourcePath();
@@ -70,8 +74,18 @@ void ZobHUDManager::Init()
 	}
 	else
 	{
-		m_font = new ZobFont("D:\\Git\\directZob\\resources\\font2.png", 32, 8);
+		const u8* data = BaseFont.pixel_data;
+		m_font = new ZobFont(data, BaseFont.width, BaseFont.height, BaseFont.nbCharWidth, BaseFont.nbCharHeight);
 	}
+	//sTex.LoadFromFile("D:\\Git\\directZob\\resources\\BRAKDISC.png");
+	ZobVector3 color = ZobVector3(1, 1, 1);
+	sMat = DirectZob::GetInstance()->GetMaterialManager()->LoadMaterial("TEST", &color, &color, "D:\\Git\\directZob\\resources\\BRAKDISC.png");
+	sElem.mat = sMat;
+	sElem.color = color;
+	sElem.x = 0.3f;
+	sElem.y = 0.3f;
+	sElem.w = 0.5f;
+	sElem.h = 0.5f;
 }
 
 void ZobHUDManager::Stop()
@@ -98,6 +112,7 @@ void ZobHUDManager::UpdateBehavior(float dt)
 
 void ZobHUDManager::UpdateObjects(const Camera* camera, Core::Engine* engine, float dt)
 {
+	//m_hudElements.push_back(sElem);
 	for (std::vector<HUDElement>::const_iterator iter = m_hudElements.begin(); iter != m_hudElements.end(); iter++)
 	{
 		HUDElement e = *iter;
@@ -129,6 +144,11 @@ void ZobHUDManager::QueueForDrawing(const Camera* camera, Core::Engine* engine)
 	m_nbDrawnTriangles = 0;
 }
 
+static ZobVector3 sca = ZobVector3(1, 0, 0);
+static ZobVector3 scb = ZobVector3(0, 1, 0);
+static ZobVector3 scc = ZobVector3(0, 0, 1);
+static ZobVector3 scd = ZobVector3(1, 0, 0);
+
 bool ZobHUDManager::CreateQuad(float xMin, float yMin, float xMax, float yMax, HUDElement* elem)
 {
 	Triangle* t1 = &m_trianglesBuffer[m_nbDrawnTriangles];
@@ -141,43 +161,48 @@ bool ZobHUDManager::CreateQuad(float xMin, float yMin, float xMax, float yMax, H
 	t1->pa->y = yMin;
 	t1->pa->z = z;
 	t1->ua->x = 0;
-	t1->ua->y = 1;
+	t1->ua->y = 0;
 	t1->pb->x = xMax;
 	t1->pb->y = yMin;
 	t1->pb->z = z;
 	t1->ub->x = 1;
-	t1->ub->y = 1;
+	t1->ub->y = 0;
 	t1->pc->x = xMin;
 	t1->pc->y = yMax;
 	t1->pc->z = z;
 	t1->uc->x = 0;
-	t1->uc->y = 0;
+	t1->uc->y = 1;
 	t1->material = elem->mat;
 	t1->ca->Copy(&elem->color);
 	t1->cb->Copy(&elem->color);
 	t1->cc->Copy(&elem->color);
+	t1->ca->Copy(&sca);
+	t1->cb->Copy(&scb);
+	t1->cc->Copy(&scc);
 	t1->ComputeArea();
 
 	t2->pa->x = xMax;
 	t2->pa->y = yMin;
 	t2->pa->z = z;
 	t2->ua->x = 1;
-	t2->ua->y = 1;
+	t2->ua->y = 0;
 	t2->pb->x = xMax;
 	t2->pb->y = yMax;
 	t2->pb->z = z;
 	t2->ub->x = 1;
-	t2->ub->y = 0;
+	t2->ub->y = 1;
 	t2->pc->x = xMin;
 	t2->pc->y = yMax;
 	t2->pc->z = z;
 	t2->uc->x = 0;
-	t2->uc->y = 0;
+	t2->uc->y = 1;
 	t2->material = elem->mat;
 	t2->ca->Copy(&elem->color);
 	t2->cb->Copy(&elem->color);
 	t2->cc->Copy(&elem->color);
-
+	t1->ca->Copy(&scc);
+	t2->cb->Copy(&scb);
+	t2->cc->Copy(&scd);
 	t2->ComputeArea();
 	return true;
 }

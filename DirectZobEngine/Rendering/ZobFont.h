@@ -14,13 +14,14 @@ class ZobFont
 public:
 
 	ZobFont(const std::string &file, int nbCharWidth, int nbCharHeight);
+	ZobFont(const u8* data, int width, int height, int nbCharWidth, int nbCharHeight);
+	ZobFont(const float* data, int width, int height, int nbCharWidth, int nbCharHeight);
 	~ZobFont();
 
 	const ZobMaterial* GetChar(char c) const;
 
 private:
-
-	Texture m_baseTexture;
+	void InitFont(const float* data, int width, int height, int nbCharWidth, int nbCharHeight);
 	ZobVector3 m_color;
 	const ZobMaterial** m_charMaterials;
 	int m_nbCharWidth;
