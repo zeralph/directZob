@@ -39,7 +39,11 @@
             <Position x="0.000315119" y="-0.699426" z="3.2681e-05" />
             <Rotation x="-180" y="-1.03086e-05" z="-180" />
             <Scale x="0.01" y="0.01" z="0.01" />
-            <Mesh name="Peugeot_405" file="GLX_400.FBX" path="_cars\GLX-400-FBX\" />
+            <Mesh name="Peugeot_405" file="GLX_400.FBX" path="_cars\GLX-400-FBX\">
+                <RenderOptions>
+                    <Lighting>flat</Lighting>
+                </RenderOptions>
+            </Mesh>
         </ZobObject>
         <ZobObject name="rearCamera" guid="3002004" type="camera">
             <Position x="-8.47504e-06" y="1.92052" z="-4.78713" />
@@ -72,10 +76,10 @@
     </ZobObject>
     <ZobObject name="sun" guid="3068489" type="light">
         <Position x="0" y="60.0368" z="0" />
-        <Rotation x="-45" y="-45" z="-45" />
+        <Rotation x="-45" y="45" z="-45" />
         <Scale x="1" y="1" z="1" />
         <Color r="241" g="218" b="164" />
-        <Intensity>0.50</Intensity>
+        <Intensity>1.20</Intensity>
         <FallOffDistance>100.00</FallOffDistance>
         <Type>directional</Type>
     </ZobObject>
@@ -280,7 +284,11 @@
         <Position x="0" y="0" z="0" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="1" y="1" z="1" />
-        <Mesh name="skybox.obj" file="skybox.obj" path="" />
+        <Mesh name="skybox.obj" file="skybox.obj" path="">
+        <RenderOptions>
+            <Lighting>none</Lighting>
+        </RenderOptions>
+        </Mesh>
     </ZobObject>
     <ZobObject name="trees" guid="3066525">
         <Position x="0" y="0" z="0" />

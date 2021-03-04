@@ -266,27 +266,25 @@ int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUp
 				m_hudManager->Print(0.5f, 0.5f, 0.01f, 0.01f, &color, "WARNING : %s", "NO CAMERA");
 			}
 		}
+		m_hudManager->Print(0.01f, 0.01f, 0.0125f, 0.0125f, &color, "Triangles : %i", m_engine->GetNbDrawnTriangles());
+		color = ZobVector3(0, 1, 0);
+		if (m_frameTime <= TARGET_MS_PER_FRAME)
+		{
+			ZobVector3 color = ZobVector3(1, 0, 0);
+		}
+		m_hudManager->Print(0.01f, 0.04f, 0.0125f, 0.0125f, &color, "render : %03i, geom : %03i, phys : %03i, cpy : %03i, tot : %03i, FPS : %03i", (int)m_renderTime, (int)m_geometryTime, (int)m_physicTime, (int)m_copyTime, (int)m_frameTime, (int)m_fps);
+		color = ZobVector3(1, 1, 1);
+		m_hudManager->Print(0.01f, 0.07f, 0.01f, 0.01f, &color, "Controller LX : %.2f, LY  : %.2f, RX : %.2f, RY : %.2f, LT : %.2f, RT : %.2f", 
+			m_inputManager->GetMap()->GetFloat(ZobInputManager::LeftStickX), 
+			m_inputManager->GetMap()->GetFloat(ZobInputManager::LeftStickY),
+			m_inputManager->GetMap()->GetFloat(ZobInputManager::RightStickX),
+			m_inputManager->GetMap()->GetFloat(ZobInputManager::RightStickY),
+			m_inputManager->GetMap()->GetFloat(ZobInputManager::LeftShoulder),
+			m_inputManager->GetMap()->GetFloat(ZobInputManager::RightShoulder));
 		/*
 		if (m_text)
-		{
-			m_hudManager->Print(0.01f, 0.01f, 0.0125f, 0.0125f, &color, "Triangles : %i", m_engine->GetNbDrawnTriangles());
-			color = ZobVector3(0, 1, 0);
-			if (m_frameTime <= TARGET_MS_PER_FRAME)
-			{
-				ZobVector3 color = ZobVector3(1, 0, 0);
-			}
-			m_hudManager->Print(0.01f, 0.04f, 0.0125f, 0.0125f, &color, "render : %03i, geom : %03i, phys : %03i, cpy : %03i, tot : %03i, FPS : %03i", (int)m_renderTime, (int)m_geometryTime, (int)m_physicTime, (int)m_copyTime, (int)m_frameTime, (int)m_fps);
-			color = ZobVector3(1, 1, 1);
-			m_hudManager->Print(0.01f, 0.07f, 0.01f, 0.01f, &color, "Controller LX : %.2f, LY  : %.2f, RX : %.2f, RY : %.2f, LT : %.2f, RT : %.2f", 
-				m_inputManager->GetMap()->GetFloat(ZobInputManager::LeftStickX), 
-				m_inputManager->GetMap()->GetFloat(ZobInputManager::LeftStickY),
-				m_inputManager->GetMap()->GetFloat(ZobInputManager::RightStickX),
-				m_inputManager->GetMap()->GetFloat(ZobInputManager::RightStickY),
-				m_inputManager->GetMap()->GetFloat(ZobInputManager::LeftShoulder),
-				m_inputManager->GetMap()->GetFloat(ZobInputManager::RightShoulder));
-			
+		{			
 			//PrintObjectList();
-
 			if (m_inputManager->GetMap()->GetBoolIsNew(ZobInputManager::WireFrame))
 			{
 				m_engine->WireFrame(!m_engine->WireFrame());

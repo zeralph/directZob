@@ -114,6 +114,35 @@ ZobObject::ZobObject(DirectZobType::guid id, TiXmlElement* node, ZobObject* pare
 		{
 			LoadMesh(meshName, meshFile, meshPath);
 		}
+		f = meshNode->FirstChildElement("RenderOptions");
+		if (f)
+		{
+			TiXmlElement* n = f->FirstChildElement("Lighting");
+			if(n)
+			{
+				std::string l  = n->GetText();
+				if(l == "none")
+				{
+					m_renderOptions.lightMode = RenderOptions::eLightMode_none;
+				}
+				else if(l == "flat")
+				{
+					m_renderOptions.lightMode = RenderOptions::eLightMode_flat;
+				}
+				else if(l == "flatPhong")
+				{
+					m_renderOptions.lightMode = RenderOptions::eLightMode_flatPhong;
+				}
+				else if(l == "gouraud")
+				{
+					m_renderOptions.lightMode = RenderOptions::eLightMode_gouraud;
+				}
+				else if(l == "phong")
+				{
+					m_renderOptions.lightMode = RenderOptions::eLightMode_phong;
+				}
+			}
+		}
 	}
 	//Physics
 	f = node->FirstChildElement("Physic");
