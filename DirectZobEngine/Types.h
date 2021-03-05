@@ -126,8 +126,6 @@ public:
 			__eLightMode_MAX__
 		};
 		bool bTransparency = false;
-		bool bColorize = false;
-		ZobVector3 colorization = ZobVector3();
 		bool zBuffered = true;
 		eLightMode lightMode = eLightMode::eLightMode_phong;
 		eCullMode cullMode = eCullMode_ClockwiseFace;

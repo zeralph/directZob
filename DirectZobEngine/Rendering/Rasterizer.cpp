@@ -463,22 +463,14 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector3* p, const Triangl
 	float zf = m_bufferData->zBuffer[k];
 	if ( zRatio >= 0.0f &&  (zf < 0.0f  || zRatio < zf ))
 	{
-		if (t->options->bColorize)
-		{
-			//if (((int)p->x + ((int)p->y % 2)) % 2 == 0)
-			{
-				c = ((int)(t->options->colorization.x * 255) << 16) + ((int)(t->options->colorization.y * 255) << 8) + (int)(t->options->colorization.z * 255);
-				m_bufferData->buffer[k] = c;
-				m_bufferData->zBuffer[k] = zRatio;
-				return;
-			}
-		}
-
 		cl = 1.0f;
 		RenderOptions::eLightMode lighting = t->options->lightMode;
 		if (lighting == RenderOptions::eLightMode_flat || lighting == RenderOptions::eLightMode_flatPhong || lighting == RenderOptions::eLightMode_none)
 		{
-			normal = t->n? t->n:ZobVector3(0,0,1);
+			normal = ZobVector3((t->na->x + t->nb->x +t->nc->x),
+				(t->na->y + t->nb->y + t->nc->y),
+				(t->na->z + t->nb->z + t->nc->z));
+			normal.Div(3.0f);
 		}
 		else
 		{
@@ -552,9 +544,18 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector3* p, const Triangl
 			if (m_lightingPrecision == eLightingPrecision_vertex)
 			{
 				//Vertex lighting
-				fr += (w0 * la->x + w1 * lb->x + w2 * lc->x) * r;
-				fg += (w0 * la->y + w1 * lb->y + w2 * lc->y) * g;
-				fb += (w0 * la->z + w1 * lb->z + w2 * lc->z) * b;
+				float w0t = 1.0f / 3.0f;
+				float w1t = 1.0f / 3.0f;
+				float w2t = 1.0f / 3.0f;
+				if (lighting == RenderOptions::eLightMode_flat || lighting == RenderOptions::eLightMode_flatPhong)
+				{
+c					w0t = w0;
+					w1t = w1;
+					w2t = w2;
+				}
+				fr += (w0t * la->x + w1t * lb->x + w2t * lc->x) * r;
+				fg += (w0t * la->y + w1t * lb->y + w2t * lc->y) * g;
+				fb += (w0t * la->z + w1t * lb->z + w2t * lc->z) * b;
 			}
 			else if (m_lightingPrecision == eLightingPrecision_pixel)
 			{

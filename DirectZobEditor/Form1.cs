@@ -92,7 +92,7 @@ namespace DirectZobEditor
             m_sceneControl = new SceneControl(this, m_lightManagerWrapper);
             m_lightControl = new ZobLightControl(this);
             m_cameraControl = new ZobCameraControl(this);
-            m_meshControl = new ZobMeshControl();
+            m_meshControl = new ZobMeshControl(this);
             m_spriteControl = new ZobSpriteControl(this);
             m_physicsControl = new PhysicControl(this);
             m_zobObjectControl = new ZobObjectControl(this, m_lightControl, m_cameraControl, m_meshControl);

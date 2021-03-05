@@ -8,4 +8,4 @@ python.exe .\strip_emptylines.py .\build\DirectZob\DirectZob.sln
 msbuild build\DirectZob\DirectZob.sln /m /p:Configuration=Release -v:diag
 popd
 rem start /W DirectZobEngine\build\DirectZob\Release\DirectZobExe.exe --scene .\resources\fbx.xml --bench
-start /W DirectZobEngine\build\DirectZob\Release\DirectZobExe.exe --scene .\resources\_physics3.xml --bench
+start /W DirectZobEngine\build\DirectZob\Release\DirectZobExe.exe --scene .\resources\carTest.dzs --bench

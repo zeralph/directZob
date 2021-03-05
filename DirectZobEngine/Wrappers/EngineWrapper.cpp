@@ -10,9 +10,7 @@ namespace CLI
 	EngineWrapper::EngineWrapper():ManagedObject(DirectZob::GetInstance()->GetEngine(), false)
 	{
 		m_renderOptions.zBuffered = false;
-		m_renderOptions.bColorize = false;
 		m_renderOptions.bTransparency = true;
-		m_renderOptions.colorization = ZobVector3(255, 255, 0);
 		m_renderOptions.cullMode = eCullMode_None;
 		m_renderOptions.lightMode = DirectZobType::RenderOptions::eLightMode_none;
 		m_nbTriangles = 0;
