@@ -110,6 +110,7 @@ void ZobHUDManager::UpdateBehavior(float dt)
 
 void ZobHUDManager::UpdateObjects(const Camera* camera, Core::Engine* engine, float dt)
 {
+	//return;
 	//m_hudElements.push_back(sElem);
 	for (std::vector<HUDElement>::const_iterator iter = m_hudElements.begin(); iter != m_hudElements.end(); iter++)
 	{

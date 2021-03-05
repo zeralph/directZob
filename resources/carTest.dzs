@@ -39,15 +39,18 @@
             <Position x="0.000315119" y="-0.699426" z="3.2681e-05" />
             <Rotation x="-180" y="-1.03086e-05" z="-180" />
             <Scale x="0.01" y="0.01" z="0.01" />
-            <Mesh name="Peugeot_405" file="GLX_400.FBX" path="_cars\GLX-400-FBX\">
+            <Mesh name="Peugeot_405" file="GLX_400.FBX" path="_cars/GLX-400-FBX/">
                 <RenderOptions>
-                    <Lighting>flat</Lighting>
+                    <Lighting>Flat</Lighting>
+                    <ZBuffer>True</ZBuffer>
+                    <Transparency>False</Transparency>
+                    <CullMode>Clockwise</CullMode>
                 </RenderOptions>
             </Mesh>
         </ZobObject>
         <ZobObject name="rearCamera" guid="3002004" type="camera">
-            <Position x="-8.47504e-06" y="1.92052" z="-4.78713" />
-            <Rotation x="15.0562" y="-2.64186e-05" z="-1.5548e-05" />
+            <Position x="-1.03842e-05" y="1.92052" z="-4.78713" />
+            <Rotation x="15.0562" y="-2.59651e-05" z="-1.97941e-05" />
             <Scale x="1" y="1" z="1" />
             <Controller>5</Controller>
             <Fov>70.00</Fov>
@@ -67,8 +70,8 @@
             <Fov>45.00</Fov>
         </ZobObject>
         <ZobObject name="orbitalCamera" guid="3067494" type="camera">
-            <Position x="-2.42224" y="-1.23666" z="-10.629" />
-            <Rotation x="-3.93521" y="-87.4361" z="0.00035308" />
+            <Position x="-2.42997" y="-1.23651" z="-10.6256" />
+            <Rotation x="-3.93493" y="-87.3927" z="-0.000417584" />
             <Scale x="1" y="1" z="1" />
             <Controller>2</Controller>
             <Fov>45.00</Fov>
@@ -76,7 +79,7 @@
     </ZobObject>
     <ZobObject name="sun" guid="3068489" type="light">
         <Position x="0" y="60.0368" z="0" />
-        <Rotation x="-45" y="45" z="-45" />
+        <Rotation x="83.5889" y="37.513" z="45.2391" />
         <Scale x="1" y="1" z="1" />
         <Color r="241" g="218" b="164" />
         <Intensity>1.20</Intensity>
@@ -87,7 +90,14 @@
         <Position x="-281.384" y="-3.67123" z="26.628" />
         <Rotation x="0" y="30.7585" z="0" />
         <Scale x="0.3" y="0.3" z="0.3" />
-        <Mesh name="cottage_obj.obj" file="cottage_obj.obj" path="" />
+        <Mesh name="cottage_obj.obj" file="cottage_obj.obj" path="/">
+            <RenderOptions>
+                <Lighting>Phong</Lighting>
+                <ZBuffer>True</ZBuffer>
+                <Transparency>False</Transparency>
+                <CullMode>Clockwise</CullMode>
+            </RenderOptions>
+        </Mesh>
         <Physic>
             <RigidBody type="0" active="1">
                 <Box halfExtends_x="10.000000" halfExtends_y="10.000000" halfExtends_z="10.000000" layers="0" scale_with_object="1">
@@ -136,25 +146,53 @@
         <Position x="-13.563" y="-10" z="-19.37" />
         <Rotation x="0" y="35" z="0" />
         <Scale x="1" y="1" z="1" />
-        <Mesh name="building_1.obj" file="building_1.obj" path="" />
+        <Mesh name="building_1.obj" file="building_1.obj" path="/">
+            <RenderOptions>
+                <Lighting>Phong</Lighting>
+                <ZBuffer>True</ZBuffer>
+                <Transparency>False</Transparency>
+                <CullMode>Clockwise</CullMode>
+            </RenderOptions>
+        </Mesh>
     </ZobObject>
     <ZobObject name="building_2" guid="3066502" type="mesh">
         <Position x="-53.1885" y="-10" z="-45.478" />
         <Rotation x="0" y="35" z="0" />
         <Scale x="1" y="1" z="1" />
-        <Mesh name="building_1.obj" file="building_1.obj" path="" />
+        <Mesh name="building_1.obj" file="building_1.obj" path="/">
+            <RenderOptions>
+                <Lighting>Phong</Lighting>
+                <ZBuffer>True</ZBuffer>
+                <Transparency>False</Transparency>
+                <CullMode>Clockwise</CullMode>
+            </RenderOptions>
+        </Mesh>
     </ZobObject>
     <ZobObject name="building_3" guid="3066503" type="mesh">
         <Position x="-83.37" y="-10" z="0" />
         <Rotation x="0" y="35" z="0" />
         <Scale x="1" y="1" z="1" />
-        <Mesh name="building_1.obj" file="building_1.obj" path="" />
+        <Mesh name="building_1.obj" file="building_1.obj" path="/">
+            <RenderOptions>
+                <Lighting>Phong</Lighting>
+                <ZBuffer>True</ZBuffer>
+                <Transparency>False</Transparency>
+                <CullMode>Clockwise</CullMode>
+            </RenderOptions>
+        </Mesh>
     </ZobObject>
     <ZobObject name="building_4" guid="3066504" type="mesh">
         <Position x="-52.153" y="-10" z="22.163" />
         <Rotation x="0" y="35" z="0" />
         <Scale x="1" y="1" z="1" />
-        <Mesh name="building_1.obj" file="building_1.obj" path="" />
+        <Mesh name="building_1.obj" file="building_1.obj" path="/">
+            <RenderOptions>
+                <Lighting>Phong</Lighting>
+                <ZBuffer>True</ZBuffer>
+                <Transparency>False</Transparency>
+                <CullMode>Clockwise</CullMode>
+            </RenderOptions>
+        </Mesh>
     </ZobObject>
     <ZobObject name="some_lights" guid="3066510">
         <Position x="0" y="0" z="0" />
@@ -201,19 +239,40 @@
         <Position x="0" y="1" z="101" />
         <Rotation x="0.0139885" y="-0.433636" z="-5.29355e-05" />
         <Scale x="1" y="1" z="1" />
-        <Mesh name="hill_1.obj" file="hill_1.obj" path="" />
+        <Mesh name="hill_1.obj" file="hill_1.obj" path="/">
+            <RenderOptions>
+                <Lighting>Phong</Lighting>
+                <ZBuffer>True</ZBuffer>
+                <Transparency>False</Transparency>
+                <CullMode>Clockwise</CullMode>
+            </RenderOptions>
+        </Mesh>
     </ZobObject>
     <ZobObject name="Hill_2" guid="3066511" type="mesh">
         <Position x="-78" y="0" z="105" />
         <Rotation x="180" y="0" z="180" />
         <Scale x="1" y="1" z="1" />
-        <Mesh name="hill_1.obj" file="hill_1.obj" path="" />
+        <Mesh name="hill_1.obj" file="hill_1.obj" path="/">
+            <RenderOptions>
+                <Lighting>Phong</Lighting>
+                <ZBuffer>True</ZBuffer>
+                <Transparency>False</Transparency>
+                <CullMode>Clockwise</CullMode>
+            </RenderOptions>
+        </Mesh>
     </ZobObject>
     <ZobObject name="Hill_3" guid="3066512" type="mesh">
         <Position x="-275.055" y="0" z="0" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="1" y="1" z="1" />
-        <Mesh name="hill_2.obj" file="hill_2.obj" path="" />
+        <Mesh name="hill_2.obj" file="hill_2.obj" path="/">
+            <RenderOptions>
+                <Lighting>Phong</Lighting>
+                <ZBuffer>True</ZBuffer>
+                <Transparency>False</Transparency>
+                <CullMode>Clockwise</CullMode>
+            </RenderOptions>
+        </Mesh>
     </ZobObject>
     <ZobObject name="road_sections" guid="3066513">
         <Position x="0" y="0" z="0" />
@@ -223,71 +282,144 @@
             <Position x="0" y="0" z="0" />
             <Rotation x="0" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
-            <Mesh name="road_block_01.obj" file="road_block_01.obj" path="" />
+            <Mesh name="road_block_01.obj" file="road_block_01.obj" path="/">
+                <RenderOptions>
+                    <Lighting>Phong</Lighting>
+                    <ZBuffer>True</ZBuffer>
+                    <Transparency>False</Transparency>
+                    <CullMode>Clockwise</CullMode>
+                </RenderOptions>
+            </Mesh>
         </ZobObject>
         <ZobObject name="road02" guid="3066515" type="mesh">
             <Position x="0" y="0" z="0" />
             <Rotation x="0" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
-            <Mesh name="road_block_02.obj" file="road_block_02.obj" path="" />
+            <Mesh name="road_block_02.obj" file="road_block_02.obj" path="/">
+                <RenderOptions>
+                    <Lighting>Phong</Lighting>
+                    <ZBuffer>True</ZBuffer>
+                    <Transparency>False</Transparency>
+                    <CullMode>Clockwise</CullMode>
+                </RenderOptions>
+            </Mesh>
         </ZobObject>
         <ZobObject name="road03" guid="3066516" type="mesh">
             <Position x="0" y="0" z="0" />
             <Rotation x="0" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
-            <Mesh name="road_block_03.obj" file="road_block_03.obj" path="" />
+            <Mesh name="road_block_03.obj" file="road_block_03.obj" path="/">
+                <RenderOptions>
+                    <Lighting>Phong</Lighting>
+                    <ZBuffer>True</ZBuffer>
+                    <Transparency>False</Transparency>
+                    <CullMode>Clockwise</CullMode>
+                </RenderOptions>
+            </Mesh>
         </ZobObject>
         <ZobObject name="road04" guid="3066517" type="mesh">
             <Position x="0" y="0" z="0" />
             <Rotation x="0" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
-            <Mesh name="road_block_04.obj" file="road_block_04.obj" path="" />
+            <Mesh name="road_block_04.obj" file="road_block_04.obj" path="/">
+                <RenderOptions>
+                    <Lighting>Phong</Lighting>
+                    <ZBuffer>True</ZBuffer>
+                    <Transparency>False</Transparency>
+                    <CullMode>Clockwise</CullMode>
+                </RenderOptions>
+            </Mesh>
         </ZobObject>
         <ZobObject name="road05" guid="3066518" type="mesh">
             <Position x="0" y="0" z="0" />
             <Rotation x="0" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
-            <Mesh name="road_block_05.obj" file="road_block_05.obj" path="" />
+            <Mesh name="road_block_05.obj" file="road_block_05.obj" path="/">
+                <RenderOptions>
+                    <Lighting>Phong</Lighting>
+                    <ZBuffer>True</ZBuffer>
+                    <Transparency>False</Transparency>
+                    <CullMode>Clockwise</CullMode>
+                </RenderOptions>
+            </Mesh>
         </ZobObject>
         <ZobObject name="road06" guid="3066519" type="mesh">
             <Position x="0" y="0" z="0" />
             <Rotation x="0" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
-            <Mesh name="road_block_06.obj" file="road_block_06.obj" path="" />
+            <Mesh name="road_block_06.obj" file="road_block_06.obj" path="/">
+                <RenderOptions>
+                    <Lighting>Phong</Lighting>
+                    <ZBuffer>True</ZBuffer>
+                    <Transparency>False</Transparency>
+                    <CullMode>Clockwise</CullMode>
+                </RenderOptions>
+            </Mesh>
         </ZobObject>
         <ZobObject name="road07" guid="3066520" type="mesh">
             <Position x="0" y="0" z="0" />
             <Rotation x="0" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
-            <Mesh name="road_block_07.obj" file="road_block_07.obj" path="" />
+            <Mesh name="road_block_07.obj" file="road_block_07.obj" path="/">
+                <RenderOptions>
+                    <Lighting>Phong</Lighting>
+                    <ZBuffer>True</ZBuffer>
+                    <Transparency>False</Transparency>
+                    <CullMode>Clockwise</CullMode>
+                </RenderOptions>
+            </Mesh>
         </ZobObject>
         <ZobObject name="road08" guid="3066521" type="mesh">
             <Position x="0" y="0" z="0" />
             <Rotation x="0" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
-            <Mesh name="road_block_08.obj" file="road_block_08.obj" path="" />
+            <Mesh name="road_block_08.obj" file="road_block_08.obj" path="/">
+                <RenderOptions>
+                    <Lighting>Phong</Lighting>
+                    <ZBuffer>True</ZBuffer>
+                    <Transparency>False</Transparency>
+                    <CullMode>Clockwise</CullMode>
+                </RenderOptions>
+            </Mesh>
         </ZobObject>
     </ZobObject>
     <ZobObject name="beach" guid="-2143505756" type="mesh">
         <Position x="0" y="0" z="0" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="1" y="1" z="1" />
-        <Mesh name="beach.obj" file="beach.obj" path="" />
+        <Mesh name="beach.obj" file="beach.obj" path="/">
+            <RenderOptions>
+                <Lighting>Phong</Lighting>
+                <ZBuffer>True</ZBuffer>
+                <Transparency>False</Transparency>
+                <CullMode>Clockwise</CullMode>
+            </RenderOptions>
+        </Mesh>
     </ZobObject>
     <ZobObject name="boat" guid="3066522" type="mesh">
         <Position x="0" y="-4.25613" z="8.77317" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="1" y="1" z="1" />
-        <Mesh name="boat.obj" file="boat.obj" path="" />
+        <Mesh name="boat.obj" file="boat.obj" path="/">
+            <RenderOptions>
+                <Lighting>Phong</Lighting>
+                <ZBuffer>True</ZBuffer>
+                <Transparency>False</Transparency>
+                <CullMode>Clockwise</CullMode>
+            </RenderOptions>
+        </Mesh>
     </ZobObject>
     <ZobObject name="skybox" guid="3066523" type="mesh">
         <Position x="0" y="0" z="0" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="1" y="1" z="1" />
-        <Mesh name="skybox.obj" file="skybox.obj" path="">
-        <RenderOptions>
-            <Lighting>none</Lighting>
-        </RenderOptions>
+        <Mesh name="skybox.obj" file="skybox.obj" path="/">
+            <RenderOptions>
+                <Lighting>None</Lighting>
+                <ZBuffer>True</ZBuffer>
+                <Transparency>False</Transparency>
+                <CullMode>Clockwise</CullMode>
+            </RenderOptions>
         </Mesh>
     </ZobObject>
     <ZobObject name="trees" guid="3066525">
@@ -298,37 +430,79 @@
             <Position x="135" y="0" z="2" />
             <Rotation x="0" y="-22.9556" z="0" />
             <Scale x="2" y="2" z="2" />
-            <Mesh name="tree.obj" file="tree.obj" path="" />
+            <Mesh name="tree.obj" file="tree.obj" path="/">
+                <RenderOptions>
+                    <Lighting>Phong</Lighting>
+                    <ZBuffer>True</ZBuffer>
+                    <Transparency>False</Transparency>
+                    <CullMode>Clockwise</CullMode>
+                </RenderOptions>
+            </Mesh>
         </ZobObject>
         <ZobObject name="tree_2" guid="3066526" type="mesh">
             <Position x="142" y="0" z="65" />
             <Rotation x="0" y="0" z="0" />
             <Scale x="2" y="2" z="2" />
-            <Mesh name="tree.obj" file="tree.obj" path="" />
+            <Mesh name="tree.obj" file="tree.obj" path="/">
+                <RenderOptions>
+                    <Lighting>Phong</Lighting>
+                    <ZBuffer>True</ZBuffer>
+                    <Transparency>False</Transparency>
+                    <CullMode>Clockwise</CullMode>
+                </RenderOptions>
+            </Mesh>
         </ZobObject>
         <ZobObject name="tree_4" guid="3066527" type="mesh">
             <Position x="143" y="0" z="13" />
             <Rotation x="0.0206755" y="52.6753" z="0.0102354" />
             <Scale x="2" y="2" z="2" />
-            <Mesh name="tree.obj" file="tree.obj" path="" />
+            <Mesh name="tree.obj" file="tree.obj" path="/">
+                <RenderOptions>
+                    <Lighting>Phong</Lighting>
+                    <ZBuffer>True</ZBuffer>
+                    <Transparency>False</Transparency>
+                    <CullMode>Clockwise</CullMode>
+                </RenderOptions>
+            </Mesh>
         </ZobObject>
         <ZobObject name="tree_3" guid="3066528" type="mesh">
             <Position x="139" y="0" z="35" />
             <Rotation x="0" y="0" z="0" />
             <Scale x="2" y="2" z="2" />
-            <Mesh name="tree.obj" file="tree.obj" path="" />
+            <Mesh name="tree.obj" file="tree.obj" path="/">
+                <RenderOptions>
+                    <Lighting>Phong</Lighting>
+                    <ZBuffer>True</ZBuffer>
+                    <Transparency>False</Transparency>
+                    <CullMode>Clockwise</CullMode>
+                </RenderOptions>
+            </Mesh>
         </ZobObject>
         <ZobObject name="tree_6" guid="3066529" type="mesh">
             <Position x="144" y="0" z="53" />
             <Rotation x="0" y="0" z="0" />
             <Scale x="2" y="2" z="2" />
-            <Mesh name="tree.obj" file="tree.obj" path="" />
+            <Mesh name="tree.obj" file="tree.obj" path="/">
+                <RenderOptions>
+                    <Lighting>Phong</Lighting>
+                    <ZBuffer>True</ZBuffer>
+                    <Transparency>False</Transparency>
+                    <CullMode>Clockwise</CullMode>
+                </RenderOptions>
+            </Mesh>
         </ZobObject>
         <ZobObject name="tree_5" guid="3066530" type="mesh">
             <Position x="133" y="0" z="78" />
             <Rotation x="0" y="-22.2393" z="0" />
             <Scale x="2" y="2" z="2" />
-            <Mesh name="tree.obj" file="tree.obj" path="" />
+            <Mesh name="tree.obj" file="tree.obj" path="/">
+                <RenderOptions>
+                    <Lighting>Phong</Lighting>
+                    <ZBuffer>True</ZBuffer>
+                    <Transparency>False</Transparency>
+                    <CullMode>Clockwise</CullMode>
+                </RenderOptions>
+            </Mesh>
         </ZobObject>
     </ZobObject>
 </Scene>

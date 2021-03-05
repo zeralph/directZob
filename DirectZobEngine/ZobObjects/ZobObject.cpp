@@ -121,25 +121,68 @@ ZobObject::ZobObject(DirectZobType::guid id, TiXmlElement* node, ZobObject* pare
 			if(n)
 			{
 				std::string l  = n->GetText();
-				if(l == "none")
+				if(l == "None")
 				{
 					m_renderOptions.lightMode = RenderOptions::eLightMode_none;
 				}
-				else if(l == "flat")
+				else if(l == "Flat")
 				{
 					m_renderOptions.lightMode = RenderOptions::eLightMode_flat;
 				}
-				else if(l == "flatPhong")
+				else if(l == "FlatPhong")
 				{
 					m_renderOptions.lightMode = RenderOptions::eLightMode_flatPhong;
 				}
-				else if(l == "gouraud")
+				else if(l == "Gouraud")
 				{
 					m_renderOptions.lightMode = RenderOptions::eLightMode_gouraud;
 				}
-				else if(l == "phong")
+				else if(l == "Phong")
 				{
 					m_renderOptions.lightMode = RenderOptions::eLightMode_phong;
+				}
+			}
+			n = f->FirstChildElement("ZBuffer");
+			if (n)
+			{
+				std::string l = n->GetText();
+				if (l == "True")
+				{
+					m_renderOptions.zBuffered = true;
+				}
+				else
+				{
+					m_renderOptions.zBuffered = false;
+				}
+			}
+			n = f->FirstChildElement("Transparency");
+			if (n)
+			{
+				std::string l = n->GetText();
+				if (l == "True")
+				{
+					m_renderOptions.bTransparency = true;
+				}
+				else
+				{
+					m_renderOptions.bTransparency = false;
+				}
+			}
+			n = f->FirstChildElement("CullMode");
+			if (n)
+			{
+				std::string l = n->GetText();
+				if (l == "Clockwise")
+				{
+					m_renderOptions.cullMode = eCullMode_ClockwiseFace;
+				}
+				else if (l == "CounterClockwise")
+				{
+					m_renderOptions.cullMode = eCullMode_CounterClockwiseFace;
+				}
+				else
+				{
+					m_renderOptions.cullMode = eCullMode_None;
 				}
 			}
 		}
@@ -610,8 +653,69 @@ TiXmlNode* ZobObject::SaveUnderNode(TiXmlNode* node)
 		meshNode.SetAttribute("name", meshName.c_str());
 		meshNode.SetAttribute("file", meshFileName.c_str());
 		meshNode.SetAttribute("path", meshPath.c_str());
-		objectNode->InsertEndChild(meshNode);
 		objectNode->SetAttribute("type", "mesh");
+		TiXmlElement renderOptions = TiXmlElement("RenderOptions");
+		TiXmlElement lighting = TiXmlElement("Lighting");
+		TiXmlText t("None");
+		if (m_renderOptions.lightMode == RenderOptions::eLightMode_flat)
+		{
+			t = "Flat";
+		}
+		else if (m_renderOptions.lightMode == RenderOptions::eLightMode_flat)
+		{
+			t = "Flat";
+		}
+		else if (m_renderOptions.lightMode == RenderOptions::eLightMode_flatPhong)
+		{
+			t = "FlatPhong";
+		}
+		else if (m_renderOptions.lightMode == RenderOptions::eLightMode_gouraud)
+		{
+			t = "Gouraud";
+		}
+		else if (m_renderOptions.lightMode == RenderOptions::eLightMode_phong)
+		{
+			t = "Phong";
+		}
+		lighting.InsertEndChild(t);
+		renderOptions.InsertEndChild(lighting);
+		TiXmlElement zBuffer = TiXmlElement("ZBuffer");
+		if (m_renderOptions.zBuffered)
+		{
+			t = "True";
+		}
+		else
+		{
+			t = "False";
+		}
+		zBuffer.InsertEndChild(t);
+		renderOptions.InsertEndChild(zBuffer);
+		TiXmlElement transparency = TiXmlElement("Transparency");
+		if (m_renderOptions.bTransparency)
+		{
+			t = "True";
+		}
+		else
+		{
+			t = "False";
+		}
+		transparency.InsertEndChild(t);
+		renderOptions.InsertEndChild(transparency);
+
+		TiXmlElement cullMode = TiXmlElement("CullMode");
+		t = "None";
+		if (m_renderOptions.cullMode == eCullMode_ClockwiseFace)
+		{
+			t = "Clockwise";
+		}
+		else if (m_renderOptions.cullMode == eCullMode_CounterClockwiseFace)
+		{
+			t = "CounterClockwise";
+		}
+		cullMode.InsertEndChild(t);
+		renderOptions.InsertEndChild(cullMode);
+		meshNode.InsertEndChild(renderOptions);
+		objectNode->InsertEndChild(meshNode);
 	}
 	if (m_behavior)
 	{

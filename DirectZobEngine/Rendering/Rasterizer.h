@@ -65,7 +65,7 @@ private:
 	inline const float 	computeLighting(const ZobVector3* normal, const ZobVector3* light) const
 	{
 		//float f = 1.0f - clamp2(-fabsf(ZobVector3::Dot(normal, light)), 0.0f, 1.0f);
-		float f = 1.0f - clamp2(ZobVector3::Dot(normal, light), 0.0f, 1.0f);
+		float f = /*1.0f - */clamp2(-ZobVector3::Dot(normal, light), 0.0f, 1.0f);
 		return f;// clamp2(fabsf(ZobVector3::Dot(normal, light)), 0.0f, 1.0f);
 	};
 

@@ -41,8 +41,14 @@ namespace DirectZobEditor
 
         private void UpdateValues()
         {
-            ManagedRenderOptions o = m_zobObject.GetRenderOptions();
-            int lightmode = o.GetLightMode();
+            if (m_zobObject != null)
+            {
+                ManagedRenderOptions o = m_zobObject.GetRenderOptions();
+                if (o != null)
+                {
+                    int lightmode = o.GetLightMode();
+                }
+            }
         }
         private void valueChanged(object sender, EventArgs e)
         {

@@ -307,9 +307,9 @@ namespace CLI
 	bool ZobObjectWrapper::HasMesh()
 	{
 		ZobObject* z = GetInstance();
-		if (z)
+		if (z->GetMesh())
 		{
-			return z->GetSubType() == ZOBGUID::SubType::subtype_zobOject;
+			return true;
 		}
 		return false;
 	}

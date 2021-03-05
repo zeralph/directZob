@@ -479,6 +479,11 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector3* p, const Triangl
 				(w0 * t->na->z + w1 * t->nb->z + w2 * t->nc->z)); 
 			//normal.Mul(-1.0f);
 		}
+		//Start with vertex color
+		r = (w0 * t->ca->x + w1 * t->cb->x + w2 * t->cc->x);
+		g = (w0 * t->ca->y + w1 * t->cb->y + w2 * t->cc->y);
+		b = (w0 * t->ca->z + w1 * t->cb->z + w2 * t->cc->z);
+		a = 1.0f;
 		if (material)
 		{
 			const Texture* texture = material->GetDiffuseTexture();
@@ -495,10 +500,10 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector3* p, const Triangl
 				c = (int)(((int)tu * (int)texture->GetWidth() + (int)su) * 4);
 				const float* d = texture->GetData();
 				memcpy(texPixelData, &d[c], sizeof(float) * 4);
-				r = texPixelData[0];
-				g = texPixelData[1];
-				b = texPixelData[2];
-				a = texPixelData[3];
+				r *= texPixelData[0];
+				g *= texPixelData[1];
+				b *= texPixelData[2];
+				a *= texPixelData[3];
 				if (a == 0.0f)
 				{
 					return;
@@ -506,32 +511,11 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector3* p, const Triangl
 			}
 			else
 			{
-				r = material->GetDiffuseColor()->x;
-				g = material->GetDiffuseColor()->y;
-				b = material->GetDiffuseColor()->z;
+				r *= material->GetDiffuseColor()->x;
+				g *= material->GetDiffuseColor()->y;
+				b *= material->GetDiffuseColor()->z;
 				a = 1.0f;
 			}
-		}
-		//else
-		{
-			/*
-			float ra = (float)((t->ca & 0xFF0000) >> 16) / 255.0f;
-			float rb = (float)((t->cb & 0xFF0000) >> 16) / 255.0f;
-			float rc = (float)((t->cc & 0xFF0000) >> 16) / 255.0f;
-			float ga = (float)((t->ca & 0x00FF00) >> 8) / 255.0f;
-			float gb = (float)((t->cb & 0x00FF00) >> 8) / 255.0f;
-			float gc = (float)((t->cc & 0x00FF00) >> 8) / 255.0f;
-			float ba = (float)((t->ca & 0x0000FF)) / 255.0f;
-			float bb = (float)((t->cb & 0x0000FF)) / 255.0f;
-			float bc = (float)((t->cc & 0x0000FF)) / 255.0f;
-			r *= (w0 * ra + w1 * rb + w2 * rc);
-			g *= (w0 * ga + w1 * gb + w2 * gc);
-			b *= (w0 * ba + w1 * bb + w2 * bc);
-			a = 1.0f;
-			*/
-			r *= (w0 * t->ca->x + w1 * t->cb->x + w2 * t->cc->x);
-			g *= (w0 * t->ca->y + w1 * t->cb->y + w2 * t->cc->y);
-			b *= (w0 * t->ca->z + w1 * t->cb->z + w2 * t->cc->z);
 		}
 		m_bufferData->zBuffer[k] = zRatio;
 		if (lighting != RenderOptions::eLightMode_none)
@@ -544,14 +528,14 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector3* p, const Triangl
 			if (m_lightingPrecision == eLightingPrecision_vertex)
 			{
 				//Vertex lighting
-				float w0t = 1.0f / 3.0f;
-				float w1t = 1.0f / 3.0f;
-				float w2t = 1.0f / 3.0f;
+				float w0t = w0;
+				float w1t = w1;
+				float w2t = w2;
 				if (lighting == RenderOptions::eLightMode_flat || lighting == RenderOptions::eLightMode_flatPhong)
 				{
-c					w0t = w0;
-					w1t = w1;
-					w2t = w2;
+					w0t = 1.0f / 3.0f;
+					w1t = 1.0f / 3.0f;
+					w2t = 1.0f / 3.0f;
 				}
 				fr += (w0t * la->x + w1t * lb->x + w2t * lc->x) * r;
 				fg += (w0t * la->y + w1t * lb->y + w2t * lc->y) * g;
