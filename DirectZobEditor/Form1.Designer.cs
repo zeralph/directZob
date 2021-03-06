@@ -63,6 +63,8 @@
             this.SecondPanelSplitter = new System.Windows.Forms.SplitContainer();
             this.ThirdPanelSPlitter = new System.Windows.Forms.SplitContainer();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.cameraBox = new System.Windows.Forms.ComboBox();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.btnPlay = new System.Windows.Forms.ToolStripButton();
             this.btnPause = new System.Windows.Forms.ToolStripButton();
@@ -80,6 +82,8 @@
             this.btnRotateWorld = new System.Windows.Forms.ToolStripButton();
             this.btnScale = new System.Windows.Forms.ToolStripButton();
             this.toolStripSnap = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripComboBoxCurrentCamera = new System.Windows.Forms.ToolStripComboBox();
             this.EngineRendererPanel = new System.Windows.Forms.Panel();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
@@ -168,35 +172,35 @@
             // newToolStripMenuItem
             // 
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.newToolStripMenuItem.Text = "New scene";
             this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
             // 
             // loadSceneToolStripMenuItem
             // 
             this.loadSceneToolStripMenuItem.Name = "loadSceneToolStripMenuItem";
-            this.loadSceneToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.loadSceneToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.loadSceneToolStripMenuItem.Text = "Load scene ...";
             this.loadSceneToolStripMenuItem.Click += new System.EventHandler(this.loadSceneToolStripMenuItem_Click);
             // 
             // saveSceneAsToolStripMenuItem
             // 
             this.saveSceneAsToolStripMenuItem.Name = "saveSceneAsToolStripMenuItem";
-            this.saveSceneAsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveSceneAsToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.saveSceneAsToolStripMenuItem.Text = "Save scene as ...";
             this.saveSceneAsToolStripMenuItem.Click += new System.EventHandler(this.saveSceneAsToolStripMenuItem_Click);
             // 
             // saveSceneToolStripMenuItem1
             // 
             this.saveSceneToolStripMenuItem1.Name = "saveSceneToolStripMenuItem1";
-            this.saveSceneToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.saveSceneToolStripMenuItem1.Size = new System.Drawing.Size(157, 22);
             this.saveSceneToolStripMenuItem1.Text = "Save scene";
             this.saveSceneToolStripMenuItem1.Click += new System.EventHandler(this.saveSceneToolStripMenuItem1_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.ExitToolStripMenuItem_Click);
             // 
@@ -430,16 +434,38 @@
             // 
             this.tableLayoutPanel1.ColumnCount = 1;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.Controls.Add(this.comboBox1, 0, 3);
+            this.tableLayoutPanel1.Controls.Add(this.cameraBox, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.toolStrip1, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.EngineRendererPanel, 0, 1);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 2;
+            this.tableLayoutPanel1.RowCount = 4;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(698, 586);
             this.tableLayoutPanel1.TabIndex = 0;
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Location = new System.Drawing.Point(3, 652);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(162, 21);
+            this.comboBox1.TabIndex = 3;
+            // 
+            // cameraBox
+            // 
+            this.cameraBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cameraBox.FormattingEnabled = true;
+            this.cameraBox.Location = new System.Drawing.Point(3, 632);
+            this.cameraBox.Name = "cameraBox";
+            this.cameraBox.Size = new System.Drawing.Size(162, 21);
+            this.cameraBox.TabIndex = 2;
             // 
             // toolStrip1
             // 
@@ -460,7 +486,9 @@
             this.btnTranslateWorld,
             this.btnRotateWorld,
             this.btnScale,
-            this.toolStripSnap});
+            this.toolStripSnap,
+            this.toolStripSeparator4,
+            this.toolStripComboBoxCurrentCamera});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(698, 25);
@@ -632,6 +660,17 @@
             this.toolStripSnap.Text = "Snap";
             this.toolStripSnap.Click += new System.EventHandler(this.toolStripSnap_Click);
             // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 25);
+            // 
+            // toolStripComboBoxCurrentCamera
+            // 
+            this.toolStripComboBoxCurrentCamera.Name = "toolStripComboBoxCurrentCamera";
+            this.toolStripComboBoxCurrentCamera.Size = new System.Drawing.Size(121, 25);
+            this.toolStripComboBoxCurrentCamera.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBoxCurrentCamera_SelectedIndexChanged);
+            // 
             // EngineRendererPanel
             // 
             this.EngineRendererPanel.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -677,7 +716,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(690, 118);
+            this.tabPage2.Size = new System.Drawing.Size(690, 115);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "tabPage2";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -736,7 +775,7 @@
             this.tabScene.Location = new System.Drawing.Point(4, 22);
             this.tabScene.Name = "tabScene";
             this.tabScene.Padding = new System.Windows.Forms.Padding(3);
-            this.tabScene.Size = new System.Drawing.Size(360, 722);
+            this.tabScene.Size = new System.Drawing.Size(360, 707);
             this.tabScene.TabIndex = 1;
             this.tabScene.Text = "Scene";
             // 
@@ -747,7 +786,7 @@
             this.panel1.Location = new System.Drawing.Point(3, 3);
             this.panel1.MinimumSize = new System.Drawing.Size(300, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(354, 716);
+            this.panel1.Size = new System.Drawing.Size(354, 701);
             this.panel1.TabIndex = 1;
             // 
             // SceneControlsFlowLayout
@@ -759,7 +798,7 @@
             this.SceneControlsFlowLayout.Location = new System.Drawing.Point(0, 0);
             this.SceneControlsFlowLayout.MinimumSize = new System.Drawing.Size(300, 0);
             this.SceneControlsFlowLayout.Name = "SceneControlsFlowLayout";
-            this.SceneControlsFlowLayout.Size = new System.Drawing.Size(354, 716);
+            this.SceneControlsFlowLayout.Size = new System.Drawing.Size(354, 701);
             this.SceneControlsFlowLayout.TabIndex = 0;
             this.SceneControlsFlowLayout.WrapContents = false;
             // 
@@ -770,7 +809,7 @@
             this.tabEngine.Location = new System.Drawing.Point(4, 22);
             this.tabEngine.Name = "tabEngine";
             this.tabEngine.Padding = new System.Windows.Forms.Padding(3);
-            this.tabEngine.Size = new System.Drawing.Size(360, 722);
+            this.tabEngine.Size = new System.Drawing.Size(360, 707);
             this.tabEngine.TabIndex = 2;
             this.tabEngine.Text = "Engine";
             // 
@@ -781,7 +820,7 @@
             this.panel2.Location = new System.Drawing.Point(3, 3);
             this.panel2.MinimumSize = new System.Drawing.Size(300, 0);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(354, 716);
+            this.panel2.Size = new System.Drawing.Size(354, 701);
             this.panel2.TabIndex = 1;
             // 
             // EngineControlsFlowLayout
@@ -793,7 +832,7 @@
             this.EngineControlsFlowLayout.Location = new System.Drawing.Point(0, 0);
             this.EngineControlsFlowLayout.MinimumSize = new System.Drawing.Size(300, 0);
             this.EngineControlsFlowLayout.Name = "EngineControlsFlowLayout";
-            this.EngineControlsFlowLayout.Size = new System.Drawing.Size(354, 716);
+            this.EngineControlsFlowLayout.Size = new System.Drawing.Size(354, 701);
             this.EngineControlsFlowLayout.TabIndex = 0;
             this.EngineControlsFlowLayout.WrapContents = false;
             // 
@@ -914,6 +953,10 @@
         private System.Windows.Forms.ToolStripMenuItem textToolStripMenuItem;
         private System.Windows.Forms.ToolStripButton toolStripSnap;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusEngineState;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.ComboBox cameraBox;
+        private System.Windows.Forms.ToolStripComboBox toolStripComboBoxCurrentCamera;
     }
 }
 

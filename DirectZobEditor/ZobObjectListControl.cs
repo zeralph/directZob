@@ -243,7 +243,7 @@ namespace DirectZobEditor
             m_currentSelectedZobObject = null;
             ZobObjectTree.Nodes.Clear();
             string p = Application.StartupPath;
-            CLI.CameraManagerWrapper cm = m_mainForm.GetCameraControl().GetWrapper();
+            CLI.CameraManagerWrapper cm = m_mainForm.GetCameraManagerWrapper();
             //create an editor camera
             cm.CreateEditorCamera();
             UpdateTree();
@@ -296,7 +296,7 @@ namespace DirectZobEditor
                 {
                     CLI.ManagedVector3 target = z.GetWorldPosition();
                     //TODO : camer wrapper et setlookat
-                    m_mainForm.GetCameraControl().GetWrapper().SetLookAt(target);
+                    m_mainForm.GetCameraManagerWrapper().SetLookAt(target);
                 }
             }
         }

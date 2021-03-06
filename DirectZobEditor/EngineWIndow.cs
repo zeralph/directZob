@@ -476,7 +476,7 @@ namespace DirectZobEditor
 
         private void EngineRender_MouseWheel(object sender, MouseEventArgs e)
         {
-            m_mainForm.GetCameraControl().GetWrapper().Zoom(-e.Delta / 50.0f);
+            m_mainForm.GetCameraManagerWrapper().Zoom(-e.Delta / 50.0f);
         }
 
         private void EngineRender_MouseMove(object sender, MouseEventArgs e)
@@ -487,7 +487,7 @@ namespace DirectZobEditor
                 int dy = m_lastMouseY - Cursor.Position.Y;
                 if (e.Button == MouseButtons.Left && m_mainForm.IsCtrlPressed())
                 {
-                    m_mainForm.GetCameraControl().GetWrapper().Rotate((float)dx / 2.0f, (float)-dy / 2.0f, 0.0f);
+                    m_mainForm.GetCameraManagerWrapper().Rotate((float)dx / 2.0f, (float)-dy / 2.0f, 0.0f);
                     //m_mainForm.GetCameraControl().GetWrapper().GetCurrentCameraTarget();
                     //m_mainForm.GetCameraControl().GetWrapper().SetLookAt(m_mainForm.GetCameraControl().GetWrapper().GetCurrentCameraTarget());
                 }
@@ -495,11 +495,11 @@ namespace DirectZobEditor
                 {
                     if (m_mainForm.IsCtrlPressed())
                     {
-                        m_mainForm.GetCameraControl().GetWrapper().Move((float)-dx * 2.0f, 0, (float)-dy * 2.0f);
+                        m_mainForm.GetCameraManagerWrapper().Move((float)-dx * 2.0f, 0, (float)-dy * 2.0f);
                     }
                     else
                     {
-                        m_mainForm.GetCameraControl().GetWrapper().Move((float)-dx * 2.0f, (float)dy * 2.0f, 0.0f);
+                        m_mainForm.GetCameraManagerWrapper().Move((float)-dx * 2.0f, (float)dy * 2.0f, 0.0f);
                     }
                 }
             }
@@ -524,7 +524,7 @@ namespace DirectZobEditor
             fy /= EngineRender.Height;
             fx = fx * 2.0f - 1.0f;
             fy = fy * 2.0f - 1.0f;  
-            bool b = m_mainForm.GetCameraControl().GetWrapper().From2DToWorldOnPlane(fx, fy, p0, pn, ret);
+            bool b = m_mainForm.GetCameraManagerWrapper().From2DToWorldOnPlane(fx, fy, p0, pn, ret);
             return b;
         }
 
@@ -625,7 +625,7 @@ namespace DirectZobEditor
             {
                 return;
             }
-            ZobCameraWrapper c = m_mainForm.GetCameraControl().GetWrapper().GetCurrentCamera();
+            ZobCameraWrapper c = m_mainForm.GetCameraManagerWrapper().GetCurrentCamera();
             ZobObjectWrapper z = m_mainForm.GetZobObjectListControl().GetSelectedZobObject();
             if (c != null && z != null && e.Button == MouseButtons.Left && a != axis.none)
             {
@@ -762,7 +762,7 @@ namespace DirectZobEditor
             {
                 return;
             }
-            ZobCameraWrapper c = m_mainForm.GetCameraControl().GetWrapper().GetCurrentCamera();
+            ZobCameraWrapper c = m_mainForm.GetCameraManagerWrapper().GetCurrentCamera();
             ZobObjectWrapper z = m_mainForm.GetZobObjectListControl().GetSelectedZobObject();
             if (c != null && z != null && e.Button == MouseButtons.Left)
             {
@@ -831,7 +831,7 @@ namespace DirectZobEditor
             {
                 return;
             }
-            ZobCameraWrapper c = m_mainForm.GetCameraControl().GetWrapper().GetCurrentCamera();
+            ZobCameraWrapper c = m_mainForm.GetCameraManagerWrapper().GetCurrentCamera();
             ZobObjectWrapper z = m_mainForm.GetZobObjectListControl().GetSelectedZobObject();
             if (c != null && z != null && e.Button == MouseButtons.Left)
             {

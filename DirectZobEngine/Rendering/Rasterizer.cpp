@@ -30,7 +30,8 @@ void Rasterizer::Start(const bool wireFrame, const eRenderMode renderMode, const
 	m_bEvenFrame = bEvenFrame ? 1 : 0;
 	m_renderMode = renderMode;
 	m_lightingPrecision = lp;
-	m_camDir = ZobVector3(-camForward.x, -camForward.y, -camForward.z);
+	m_camPos = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera()->GetWorldPosition();
+		//ZobVector3(-camForward.x, -camForward.y, -camForward.z);
 }
 
 float Rasterizer::WaitForEnd() 
@@ -219,12 +220,14 @@ inline ZobVector3 Rasterizer::ComputeLightingAtPoint(const ZobVector3* position,
 	if (normal)
 	{
 		ZobVector3 lightDir = ZobVector3(0, 0, 0);
+		ZobVector3 lightPos = ZobVector3(0, 0, 0);
 		float lightPower, cl, sl = 0.0f;
 		for (std::vector<const Light*>::const_iterator iter = m_lights.begin(); iter != m_lights.end(); iter++)
 		{
 			const Light* l = (*iter);
 			if (l->IsActive())
 			{
+				lightPos = l->GetWorldPosition();
 				if (l->GetType() == Light::eLightType_directional)
 				{
 					lightDir = l->GetForward();
@@ -267,9 +270,9 @@ inline ZobVector3 Rasterizer::ComputeLightingAtPoint(const ZobVector3* position,
 						cl = 0.0f;
 						sl = 0.0f;
 					}
-					else if (lighting == RenderOptions::eLightMode_gouraud)
+					else if (lighting == RenderOptions::eLightMode_phong || lighting == RenderOptions::eLightMode_flatPhong)
 					{
-						sl = computeSpecular(normal, &lightDir, &m_camDir, cl, specularIntensity);
+						sl = computeSpecular(normal, &lightPos, position, cl, specularIntensity);
 					}
 					outColor.x += (cl + sl) * l->GetColor()->x * lightPower;
 					outColor.y += (cl + sl) * l->GetColor()->y * lightPower;

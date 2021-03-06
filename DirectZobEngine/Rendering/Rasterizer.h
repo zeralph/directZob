@@ -69,13 +69,27 @@ private:
 		return f;// clamp2(fabsf(ZobVector3::Dot(normal, light)), 0.0f, 1.0f);
 	};
 
-	inline const float 	computeSpecular(const ZobVector3* normal, const ZobVector3* light, const ZobVector3* c, const float lightIntensity, const float specularIntensity) const
+	inline const float 	computeSpecular(const ZobVector3* normal, const ZobVector3* lightPos, const ZobVector3* position, const float lightIntensity, const float specularIntensity) const
 	{
+		/*
 		ZobVector3 r = ZobVector3(normal->x - light->x, normal->y - light->y, normal->z - light->z);
 		r.Mul(2.0f * lightIntensity);
 		float sl = ZobVector3::Dot(&r, &m_camDir);
 		sl = pow(lightIntensity, specularIntensity) * sl;
 		sl = clamp2(sl, 0.0f, 1.0f);
+		*/
+		float sl;
+		float alpha = 50.0f;
+		ZobVector3 o = m_camPos - position;
+		ZobVector3 l = lightPos;
+		l.Sub(position);
+		o.Normalize();
+		l.Normalize();
+		ZobVector3 h = o + l;
+		h.Normalize();
+		float cos_theta_h = ZobVector3::Dot(normal, &h);
+		float cos_theta = fmaxf(0, ZobVector3::Dot(normal, &l));
+		sl = (alpha + 8.0f) / (8.0f * M_PI) * pow(cos_theta_h, alpha);
 		return sl;
 	};
 
@@ -89,7 +103,7 @@ private:
 	float m_fogDensity;
 	eFogType m_fogType;
 	BufferData* m_bufferData;
-	ZobVector3 m_camDir;
+	ZobVector3 m_camPos;
 	//std::thread m_thread;
 	uint m_startHeight;
 	uint m_width;

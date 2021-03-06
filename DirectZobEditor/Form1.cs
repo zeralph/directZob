@@ -52,8 +52,8 @@ namespace DirectZobEditor
         private CLI.DirectZobWrapper m_directZobWrapper;
         private CLI.MeshManagerWrapper m_meshManagerWrapper;
         private CLI.LightManagerWrapper m_lightManagerWrapper;
+        private CLI.CameraManagerWrapper m_cameraManagerWrapper;
 
-        private CameraControl m_camControl;
         private ZobObjectListControl m_zobObjectList;
         private EngineWindow m_engineWindow;
         private EngineControl m_engineControl;
@@ -82,12 +82,12 @@ namespace DirectZobEditor
 
             m_meshManagerWrapper = new CLI.MeshManagerWrapper();
             m_lightManagerWrapper = new CLI.LightManagerWrapper();
+            m_cameraManagerWrapper = new CLI.CameraManagerWrapper();
             Application.ApplicationExit += new EventHandler(this.OnApplicationExit);
             this.Load += new EventHandler(this.Onloaded);
             //--
             m_engineWindow = new EngineWindow(this, m_directZobWrapper);
             m_engineControl = new EngineControl(this, m_engineWindow.GetEngineWrapper());
-            m_camControl = new CameraControl(this);
             m_zobObjectList = new ZobObjectListControl(this);
             m_sceneControl = new SceneControl(this, m_lightManagerWrapper);
             m_lightControl = new ZobLightControl(this);
@@ -98,7 +98,6 @@ namespace DirectZobEditor
             m_zobObjectControl = new ZobObjectControl(this, m_lightControl, m_cameraControl, m_meshControl);
             m_engineWindow.BindEvents();
             m_engineControl.BindEvents();
-            m_camControl.BindEvents();
             m_zobObjectList.BindEvents();
             m_sceneControl.BindEvents();
             m_lightControl.BindEvents();
@@ -107,7 +106,6 @@ namespace DirectZobEditor
             m_spriteControl.BindEvents();
             m_physicsControl.BindEvents();
             m_zobObjectControl.BindEvents();
-            ObjectControlsFlowLayout.Controls.Add(m_camControl);
             EngineRendererPanel.Controls.Add(m_engineWindow);
             ZobObjectListPanel.Controls.Add(m_zobObjectList);
             ObjectControlsFlowLayout.Controls.Add(m_zobObjectControl);
@@ -154,7 +152,7 @@ namespace DirectZobEditor
         }
         public void UpdateAfterEngine()
         {
-            m_camControl.UpdateControl();
+            UpdateCameraList();
             m_zobObjectList.UpdateControl();
 
             m_events = m_directZobWrapper.GetEventsAndClear();
@@ -169,8 +167,23 @@ namespace DirectZobEditor
             }
         }
 
-
-
+        private void UpdateCameraList()
+        {
+            string s = m_cameraManagerWrapper.GetCurrentCameraName();
+            string[] c = m_cameraManagerWrapper.GetCameraList();
+            if (toolStripComboBoxCurrentCamera.Items.Count != c.Count())
+            {
+                toolStripComboBoxCurrentCamera.Items.Clear();
+                for (int i = 0; i < c.Count(); i++)
+                {
+                    toolStripComboBoxCurrentCamera.Items.Add(c[i]);
+                    if (c[i] == s)
+                    {
+                        toolStripComboBoxCurrentCamera.SelectedIndex = i;
+                    }
+                }
+            }
+        }
 
         private void UpdateEventsLog()
         {
@@ -214,10 +227,6 @@ namespace DirectZobEditor
             return m_ctrlPressed;
         }
 
-        public CameraControl GetCameraControl()
-        {
-            return m_camControl;
-        }
         public EngineWindow GetEngineWindow()
         {
             return m_engineWindow;
@@ -243,6 +252,10 @@ namespace DirectZobEditor
             return m_meshManagerWrapper;
         }
 
+        public CLI.CameraManagerWrapper GetCameraManagerWrapper()
+        {
+            return m_cameraManagerWrapper;
+        }
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
             if(e.KeyCode == Keys.ControlKey)
@@ -625,7 +638,7 @@ namespace DirectZobEditor
 
         private void fixedToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            m_camControl.GetWrapper().CreateCamera("Fixed");
+            m_cameraManagerWrapper.CreateCamera("Fixed");
             Form1.SceneUpdateEventArg ev = new Form1.SceneUpdateEventArg();
             ev.type = Form1.SceneUpdateType.createCamera;
             PropagateSceneUpdateEvent(ev);
@@ -633,7 +646,7 @@ namespace DirectZobEditor
 
         private void fPSToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            m_camControl.GetWrapper().CreateCamera("FPS");
+            m_cameraManagerWrapper.CreateCamera("FPS");
             Form1.SceneUpdateEventArg ev = new Form1.SceneUpdateEventArg();
             ev.type = Form1.SceneUpdateType.createCamera;
             PropagateSceneUpdateEvent(ev);
@@ -641,7 +654,7 @@ namespace DirectZobEditor
 
         private void orbitalFreeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            m_camControl.GetWrapper().CreateCamera("Orbital");
+            m_cameraManagerWrapper.CreateCamera("Orbital");
             Form1.SceneUpdateEventArg ev = new Form1.SceneUpdateEventArg();
             ev.type = Form1.SceneUpdateType.createCamera;
             PropagateSceneUpdateEvent(ev);
@@ -649,7 +662,7 @@ namespace DirectZobEditor
 
         private void orbitalToParentToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            m_camControl.GetWrapper().CreateCamera("Orbital");
+            m_cameraManagerWrapper.CreateCamera("Orbital");
             Form1.SceneUpdateEventArg ev = new Form1.SceneUpdateEventArg();
             ev.type = Form1.SceneUpdateType.createCamera;
             PropagateSceneUpdateEvent(ev);
@@ -683,6 +696,15 @@ namespace DirectZobEditor
         private void toolStripSnap_Click(object sender, EventArgs e)
         {
             m_snap = toolStripSnap.Checked;
+        }
+
+        private void toolStripComboBoxCurrentCamera_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string s = (string)toolStripComboBoxCurrentCamera.SelectedItem;
+            if (!string.IsNullOrEmpty(s))
+            {
+                m_cameraManagerWrapper.SetCurrentCamera(s);
+            }
         }
     }
 

@@ -31,20 +31,7 @@ namespace DirectZobEditor
 
         public void UpdateControl()
         {
-            string s = m_camerManagerWrapper.GetCurrentCameraName();
-            string[] c = m_camerManagerWrapper.GetCameraList();
-            if(cameraBox.Items.Count != c.Count())
-            {
-                cameraBox.Items.Clear();
-                for (int i = 0; i < c.Count(); i++)
-                {
-                    cameraBox.Items.Add(c[i]);
-                    if(c[i] == s)
-                    {
-                        cameraBox.SelectedIndex = i;
-                    }
-                }
-            }
+
         }
 
         
