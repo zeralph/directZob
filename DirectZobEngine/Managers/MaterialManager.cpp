@@ -12,6 +12,9 @@ struct OBJMaterialInfo
 	std::string texture;
 	ZobVector3 diffuse;
 	ZobVector3 ambient;
+	ZobVector3 specular;
+	float transparency;
+	float specularExponent;
 	//put other stuff here
 };
 
@@ -33,12 +36,13 @@ ZobMaterial* MaterialManager::CreateMaterial()
 	return m;
 }
 
-const ZobMaterial* MaterialManager::LoadMaterial(const std::string& name, const ZobVector3* ambientColor, const ZobVector3* diffuseColor, Texture* texture)
+const ZobMaterial* MaterialManager::LoadMaterial(const std::string& name, const ZobVector3* ambientColor, const ZobVector3* diffuseColor, const ZobVector3* specularColor, 
+												float specularExponent, float transparency, Texture* texture)
 {
 	m_textures.push_back(texture);
 	if (GetMaterial(name) == NULL)
 	{
-		ZobMaterial* t = new ZobMaterial(name, ambientColor, diffuseColor, texture);
+		ZobMaterial* t = new ZobMaterial(name, ambientColor, diffuseColor, specularColor, specularExponent, transparency, texture);
 		m_materials.push_back(t);
 		return t;
 	}
@@ -49,7 +53,8 @@ const ZobMaterial* MaterialManager::LoadMaterial(const std::string& name, const 
 	}
 }
 
-const ZobMaterial* MaterialManager::LoadMaterial(const std::string& name, const ZobVector3* ambientColor, const ZobVector3* diffuseColor, const std::string &textureFile)
+const ZobMaterial* MaterialManager::LoadMaterial(const std::string& name, const ZobVector3* ambientColor, const ZobVector3* diffuseColor, const ZobVector3* specularColor,
+												float specularExponent, float transparency, const std::string &textureFile)
 {
 	if (GetMaterial(name) == NULL)
 	{
@@ -69,7 +74,7 @@ const ZobMaterial* MaterialManager::LoadMaterial(const std::string& name, const 
 				texture = LoadTexture(textureFile);
 			}
 		}
-		ZobMaterial* t = new ZobMaterial(name, ambientColor, diffuseColor, texture);
+		ZobMaterial* t = new ZobMaterial(name, ambientColor, diffuseColor, specularColor, specularExponent, transparency, texture);
 		m_materials.push_back(t);
 		return t;
 	}
@@ -106,9 +111,12 @@ const ZobMaterial* MaterialManager::LoadFbxMaterial(const fbxsdk::FbxMesh* mesh,
 					// This only gets the material of type sDiffuse, you probably need to traverse all Standard Material Property by its name to get all possible textures.
 					ZobVector3 diffuse = ZobVector3(0, 0, 0);
 					ZobVector3 ambient = ZobVector3(0, 0, 0);
+					ZobVector3 specular = ZobVector3(0, 0, 0);
+					float specularExponent = 0;
+					float transparency = 1;
 					fbxsdk::FbxProperty prop;
-					prop = material->FindProperty(fbxsdk::FbxSurfaceMaterial::sDiffuse);
 					FbxDouble3 d;
+					prop = material->FindProperty(fbxsdk::FbxSurfaceMaterial::sDiffuse);
 					if (prop.IsValid())
 					{
 						d = prop.Get<FbxDouble3>();
@@ -119,6 +127,12 @@ const ZobMaterial* MaterialManager::LoadFbxMaterial(const fbxsdk::FbxMesh* mesh,
 					{
 						d = prop.Get<FbxDouble3>();
 						ambient = ZobVector3(d[0], d[1], d[2]);
+					}
+					prop = material->FindProperty(fbxsdk::FbxSurfaceMaterial::sSpecular);
+					if (prop.IsValid())
+					{
+						d = prop.Get<FbxDouble3>();
+						specular = ZobVector3(d[0], d[1], d[2]);
 					}
 					const char* texture_name = NULL;
 					const char* texture_name2 = NULL;
@@ -137,10 +151,15 @@ const ZobMaterial* MaterialManager::LoadFbxMaterial(const fbxsdk::FbxMesh* mesh,
 					}
 					float f;
 					prop = material->FindProperty(fbxsdk::FbxSurfaceMaterial::sDiffuseFactor);
-					f = prop.Get<FbxDouble>();
-
+					if (prop.IsValid())
+					{
+						f = prop.Get<FbxDouble>();
+					}
 					prop = material->FindProperty(fbxsdk::FbxSurfaceMaterial::sSpecularFactor);
-					f = prop.Get<FbxDouble>();
+					if (prop.IsValid())
+					{
+						specularExponent = prop.Get<FbxDouble>();
+					}
 					std::string texFullPath = "";
 					if (texture_name2)
 					{
@@ -158,7 +177,7 @@ const ZobMaterial* MaterialManager::LoadFbxMaterial(const fbxsdk::FbxMesh* mesh,
 						p = SceneLoader::GetResourcePath();
 						p.append(texFullPath);
 					}	
-					finalMaterial = LoadMaterial(matName, &ambient, &diffuse, p);
+					finalMaterial = LoadMaterial(matName, &ambient, &diffuse, &specular, specularExponent, transparency, p);
 				}
 			}
 		}
@@ -222,6 +241,26 @@ void MaterialManager::LoadOBJMaterials(std::string& path, std::string& file)
 							matInfo.ambient.z = (float)atof(v[3].c_str());
 						}
 					}
+					if (line.rfind("Ks", 0) == 0)
+					{
+						v.clear();
+						SplitEntry(&line, &v, ' ');
+						if (v.size() == 4)
+						{
+							matInfo.specular.x = (float)atof(v[1].c_str());
+							matInfo.specular.y = (float)atof(v[2].c_str());
+							matInfo.specular.z = (float)atof(v[3].c_str());
+						}
+					}
+					if (line.rfind("Ns", 0) == 0)
+					{
+						v.clear();
+						SplitEntry(&line, &v, ' ');
+						if (v.size() == 2)
+						{
+							matInfo.specularExponent = (float)atof(v[1].c_str());
+						}
+					}
 					if (line.rfind("Kd", 0) == 0)
 					{
 						v.clear();
@@ -254,11 +293,11 @@ void MaterialManager::LoadOBJMaterials(std::string& path, std::string& file)
 		{
 			std::string p = matPath;
 			p.append(materials.at(i).texture);
-			LoadMaterial(n, &materials.at(i).ambient, &materials.at(i).diffuse, p);
+			LoadMaterial(n, &materials.at(i).ambient, &materials.at(i).diffuse, &materials.at(i).specular, materials.at(i).specularExponent, materials.at(i).transparency, p);
 		}
 		else
 		{
-			LoadMaterial(n, &materials.at(i).ambient, &materials.at(i).diffuse, "");
+			LoadMaterial(n, &materials.at(i).ambient, &materials.at(i).diffuse, &materials.at(i).specular, materials.at(i).specularExponent, materials.at(i).transparency, "");
 		}
 	}
 }

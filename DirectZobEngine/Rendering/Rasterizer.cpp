@@ -214,9 +214,9 @@ void Rasterizer::DrawLine(const Line3D* l) const
 	}
 }
 
-inline ZobVector3 Rasterizer::ComputeLightingAtPoint(const ZobVector3* position, const ZobVector3* normal, RenderOptions::eLightMode lighting) const
+inline void Rasterizer::ComputeLightingAtPoint(const ZobVector3* position, const ZobVector3* normal, const Triangle* t, LightingData& outlData) const
 {
-	ZobVector3 outColor = ZobVector3(0, 0, 0);
+	outlData.Init();
 	if (normal)
 	{
 		ZobVector3 lightDir = ZobVector3(0, 0, 0);
@@ -263,25 +263,30 @@ inline ZobVector3 Rasterizer::ComputeLightingAtPoint(const ZobVector3* position,
 				{
 					//Todo : specular intensity setup
 					static int specularIntensity = 50;
-					cl = computeLighting(normal, &lightDir);
+					cl = clamp2(-ZobVector3::Dot(normal, &lightDir), 0.0f, 1.0f);
 					sl = 0.0f;
-					if (lighting == RenderOptions::eLightMode_none)
+					if (t->options->lightMode == RenderOptions::eLightMode_none)
 					{
 						cl = 0.0f;
 						sl = 0.0f;
 					}
-					else if (lighting == RenderOptions::eLightMode_phong || lighting == RenderOptions::eLightMode_flatPhong)
+					else if (t->options->lightMode == RenderOptions::eLightMode_phong || t->options->lightMode == RenderOptions::eLightMode_flatPhong)
 					{
-						sl = computeSpecular(normal, &lightPos, position, cl, specularIntensity);
+						sl = computeSpecular(normal, &lightPos, position, t);
 					}
-					outColor.x += (cl + sl) * l->GetColor()->x * lightPower;
-					outColor.y += (cl + sl) * l->GetColor()->y * lightPower;
-					outColor.z += (cl + sl) * l->GetColor()->z * lightPower;
+					float a = l->GetColor()->x * lightPower;
+					float b = l->GetColor()->y * lightPower;
+					float c = l->GetColor()->z * lightPower;
+					outlData.LightingDiffuseR += cl * a;
+					outlData.LightingDiffuseG += cl * b;
+					outlData.LightingDiffuseB += cl * c;
+					outlData.LightingSpecularR += sl * a;
+					outlData.LightingSpecularG += sl * b;
+					outlData.LightingSpecularB += sl * c;
 				}
 			}
 		}
 	}
-	return outColor;
 }
 
 void Rasterizer::DrawTriangle(const Triangle* t) const
@@ -289,38 +294,38 @@ void Rasterizer::DrawTriangle(const Triangle* t) const
 	ZobVector2 v1 = ZobVector2((int)t->pa->x, (int)t->pa->y);
 	ZobVector2 v2 = ZobVector2((int)t->pb->x, (int)t->pb->y);
 	ZobVector2 v3 = ZobVector2((int)t->pc->x, (int)t->pc->y);
-	ZobVector3 la, lb, lc = ZobVector3(0, 0, 0);
+	LightingData verticeALightingData, verticeBLightingData, verticeCLightingData;
 	/* at first sort the three vertices by y-coordinate ascending so v1 is the topmost vertice */
 	sortVerticesAscendingByY(&v1, &v2, &v3);
 	if (m_lightingPrecision == eLightingPrecision_vertex)
 	{
-		la = ComputeLightingAtPoint(t->va, t->na, t->options->lightMode);
-		lb = ComputeLightingAtPoint(t->vb, t->nb, t->options->lightMode);
-		lc = ComputeLightingAtPoint(t->vc, t->nc, t->options->lightMode);
+		ComputeLightingAtPoint(t->va, t->na, t, verticeALightingData);
+		ComputeLightingAtPoint(t->vb, t->nb, t, verticeBLightingData);
+		ComputeLightingAtPoint(t->vc, t->nc, t, verticeCLightingData);
 	}
 
 	/* here we know that v1.y <= v2.y <= v3.y */
 	/* check for trivial case of bottom-flat triangle */
 	if (v2.y == v3.y)
 	{
-		FillBottomFlatTriangle2(&v1, &v2, &v3, t, &la, &lb, &lc);
+		FillBottomFlatTriangle2(&v1, &v2, &v3, t, &verticeALightingData, &verticeBLightingData, &verticeCLightingData);
 	}
 	/* check for trivial case of top-flat triangle */
 	else if (v1.y == v2.y)
 	{
-		FillTopFlatTriangle2(&v1, &v2, &v3, t, &la, &lb, &lc);
+		FillTopFlatTriangle2(&v1, &v2, &v3, t, &verticeALightingData, &verticeBLightingData, &verticeCLightingData);
 	}
 	else
 	{
 		/* general case - split the triangle in a topflat and bottom-flat one */
 		ZobVector2 v4 = ZobVector2((int)(v1.x + ((float)(v2.y - v1.y) / (float)(v3.y - v1.y)) * (v3.x - v1.x)), v2.y);
-		FillBottomFlatTriangle2(&v1, &v2, &v4, t, &la, &lb, &lc);
-		FillTopFlatTriangle2(&v2, &v4, &v3, t, &la, &lb, &lc);
+		FillBottomFlatTriangle2(&v1, &v2, &v4, t, &verticeALightingData, &verticeBLightingData, &verticeCLightingData);
+		FillTopFlatTriangle2(&v2, &v4, &v3, t, &verticeALightingData, &verticeBLightingData, &verticeCLightingData);
 	}
 //	m_drawnTriangles++;
 }
 
-void Rasterizer::FillBottomFlatTriangle2(ZobVector2* v1, ZobVector2* v2, ZobVector2* v3, const Triangle* t, const ZobVector3* la, const ZobVector3* lb, const ZobVector3* lc) const
+void Rasterizer::FillBottomFlatTriangle2(ZobVector2* v1, ZobVector2* v2, ZobVector2* v3, const Triangle* t, const LightingData* lDataA, const LightingData* lDataB, const LightingData* lDataC) const
 {
 	uint* buffer = m_bufferData->buffer;
 	ZobVector3 p;
@@ -348,11 +353,11 @@ void Rasterizer::FillBottomFlatTriangle2(ZobVector2* v1, ZobVector2* v2, ZobVect
 						p.x = a;
 						p.y = scanlineY;
 						p.z = -1;
-						FillBufferPixel(&p, t, la, lb, lc);
+						FillBufferPixel(&p, t, lDataA, lDataB, lDataC);
 						p.x = b - 1;
 						p.y = scanlineY;
 						p.z = -1;
-						FillBufferPixel(&p, t, la, lb, lc);
+						FillBufferPixel(&p, t, lDataA, lDataB, lDataC);
 					}
 				}
 				else
@@ -362,7 +367,7 @@ void Rasterizer::FillBottomFlatTriangle2(ZobVector2* v1, ZobVector2* v2, ZobVect
 						p.x = i;
 						p.y = scanlineY;
 						p.z = -1;
-						FillBufferPixel(&p, t, la, lb, lc);
+						FillBufferPixel(&p, t, lDataA, lDataB, lDataC);
 					}
 				}
 			}
@@ -372,7 +377,7 @@ void Rasterizer::FillBottomFlatTriangle2(ZobVector2* v1, ZobVector2* v2, ZobVect
 	}
 }
 
-void Rasterizer::FillTopFlatTriangle2(ZobVector2* v1, ZobVector2* v2, ZobVector2* v3, const Triangle* t, const ZobVector3* la, const ZobVector3* lb, const ZobVector3* lc) const
+void Rasterizer::FillTopFlatTriangle2(ZobVector2* v1, ZobVector2* v2, ZobVector2* v3, const Triangle* t, const LightingData* lDataA, const LightingData* lDataB, const LightingData* lDataC) const
 {
 	uint* buffer = m_bufferData->buffer;
 	ZobVector3 p;
@@ -399,11 +404,11 @@ void Rasterizer::FillTopFlatTriangle2(ZobVector2* v1, ZobVector2* v2, ZobVector2
 						p.x = a;
 						p.y = scanlineY;
 						p.z = -1;
-						FillBufferPixel(&p, t, la, lb, lc);
+						FillBufferPixel(&p, t, lDataA, lDataB, lDataC);
 						p.x = b - 1;
 						p.y = scanlineY;
 						p.z = -1;
-						FillBufferPixel(&p, t, la, lb, lc);
+						FillBufferPixel(&p, t, lDataA, lDataB, lDataC);
 					}
 				}
 				else
@@ -413,7 +418,7 @@ void Rasterizer::FillTopFlatTriangle2(ZobVector2* v1, ZobVector2* v2, ZobVector2
 						p.x = i;
 						p.y = scanlineY;
 						p.z = -1;
-						FillBufferPixel(&p, t, la, lb, lc);
+						FillBufferPixel(&p, t, lDataA, lDataB, lDataC);
 					}
 				}
 			}
@@ -423,9 +428,9 @@ void Rasterizer::FillTopFlatTriangle2(ZobVector2* v1, ZobVector2* v2, ZobVector2
 	}
 }
 
-inline const void Rasterizer::FillBufferPixel(const ZobVector3* p, const Triangle* t, const ZobVector3* la, const ZobVector3* lb, const ZobVector3* lc) const
+inline const void Rasterizer::FillBufferPixel(const ZobVector3* p, const Triangle* t, const LightingData* lDataA, const LightingData* lDataB, const LightingData* lDataC) const
 {
-	float w0, w1, w2, su, tu, cl, sl, r, g, b, a, z, zRatio, fr, fg, fb, lightPower;
+	float w0, w1, w2, su, tu, cl, sl, dr, dg, db, sr, sg, sb, a, z, zRatio, fr, fg, fb, lightPower;
 	float texPixelData[4];
 	int c, k;
 	ZobVector3 normal, lightDir;
@@ -483,9 +488,12 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector3* p, const Triangl
 			//normal.Mul(-1.0f);
 		}
 		//Start with vertex color
-		r = (w0 * t->ca->x + w1 * t->cb->x + w2 * t->cc->x);
-		g = (w0 * t->ca->y + w1 * t->cb->y + w2 * t->cc->y);
-		b = (w0 * t->ca->z + w1 * t->cb->z + w2 * t->cc->z);
+		dr = (w0 * t->ca->x + w1 * t->cb->x + w2 * t->cc->x);
+		dg = (w0 * t->ca->y + w1 * t->cb->y + w2 * t->cc->y);
+		db = (w0 * t->ca->z + w1 * t->cb->z + w2 * t->cc->z);
+		sr = 0.0f;
+		sg = 0.0f;
+		sb = 0.0f;
 		a = 1.0f;
 		if (material)
 		{
@@ -503,9 +511,9 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector3* p, const Triangl
 				c = (int)(((int)tu * (int)texture->GetWidth() + (int)su) * 4);
 				const float* d = texture->GetData();
 				memcpy(texPixelData, &d[c], sizeof(float) * 4);
-				r *= texPixelData[0];
-				g *= texPixelData[1];
-				b *= texPixelData[2];
+				dr *= texPixelData[0];
+				dg *= texPixelData[1];
+				db *= texPixelData[2];
 				a *= texPixelData[3];
 				if (a == 0.0f)
 				{
@@ -514,19 +522,22 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector3* p, const Triangl
 			}
 			else
 			{
-				r *= material->GetDiffuseColor()->x;
-				g *= material->GetDiffuseColor()->y;
-				b *= material->GetDiffuseColor()->z;
+				dr *= material->GetDiffuseColor()->x;
+				dg *= material->GetDiffuseColor()->y;
+				db *= material->GetDiffuseColor()->z;
 				a = 1.0f;
 			}
+			sr = material->GetSpecularColor()->x;
+			sg = material->GetSpecularColor()->y;
+			sb = material->GetSpecularColor()->z;
 		}
 		m_bufferData->zBuffer[k] = zRatio;
 		if (lighting != RenderOptions::eLightMode_none)
 		{
 			//lighting ambient
-			fr = r * (m_ambientColor->x * m_ambientIntensity);
-			fg = g * (m_ambientColor->y * m_ambientIntensity);
-			fb = b * (m_ambientColor->z * m_ambientIntensity);
+			fr = dr * (m_ambientColor->x * m_ambientIntensity);
+			fg = dg * (m_ambientColor->y * m_ambientIntensity);
+			fb = db * (m_ambientColor->z * m_ambientIntensity);
 
 			if (m_lightingPrecision == eLightingPrecision_vertex)
 			{
@@ -540,19 +551,26 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector3* p, const Triangl
 					w1t = 1.0f / 3.0f;
 					w2t = 1.0f / 3.0f;
 				}
-				fr += (w0t * la->x + w1t * lb->x + w2t * lc->x) * r;
-				fg += (w0t * la->y + w1t * lb->y + w2t * lc->y) * g;
-				fb += (w0t * la->z + w1t * lb->z + w2t * lc->z) * b;
+				fr += (w0t * lDataA->LightingDiffuseR + w1t * lDataB->LightingDiffuseR + w2t * lDataC->LightingDiffuseR) * dr;
+				fg += (w0t * lDataA->LightingDiffuseG + w1t * lDataB->LightingDiffuseG + w2t * lDataC->LightingDiffuseG) * dg;
+				fb += (w0t * lDataA->LightingDiffuseB + w1t * lDataB->LightingDiffuseB + w2t * lDataC->LightingDiffuseB) * db;
+				fr += (w0t * lDataA->LightingSpecularR + w1t * lDataB->LightingSpecularR + w2t * lDataC->LightingSpecularR) * sr;
+				fg += (w0t * lDataA->LightingSpecularG + w1t * lDataB->LightingSpecularG + w2t * lDataC->LightingSpecularG) * sg;
+				fb += (w0t * lDataA->LightingSpecularB + w1t * lDataB->LightingSpecularB + w2t * lDataC->LightingSpecularB) * sb;
 			}
 			else if (m_lightingPrecision == eLightingPrecision_pixel)
 			{
 				ZobVector3 tpos = ZobVector3((t->va->x * w0 + t->vb->x * w1 + t->vc->x * w2),
 					(t->va->y * w0 + t->vb->y * w1 + t->vc->y * w2),
 					(t->va->z * w0 + t->vb->z * w1 + t->vc->z * w2));
-				ZobVector3 l = ComputeLightingAtPoint(&tpos, &normal, lighting);
-				fr += l.x * r;
-				fg += l.y * g;
-				fb += l.z * b;
+				LightingData pixelLightingData;
+				ComputeLightingAtPoint(&tpos, &normal, t, pixelLightingData);
+				fr += pixelLightingData.LightingDiffuseR * dr;
+				fg += pixelLightingData.LightingDiffuseG * dg;
+				fb += pixelLightingData.LightingDiffuseB * db;
+				fr += pixelLightingData.LightingSpecularR * sr;
+				fg += pixelLightingData.LightingSpecularG * sg;
+				fb += pixelLightingData.LightingSpecularB * sb;
 			}
 			fr = clamp2(fr, 0.0f, 1.0f);
 			fg = clamp2(fg, 0.0f, 1.0f);
@@ -567,9 +585,9 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector3* p, const Triangl
 		}
 		else
 		{
-			fr = r;
-			fg = g;
-			fb = b;
+			fr = dr;
+			fg = dg;
+			fb = db;
 		}
 		c = ((int)(fr * 255) << 16) + ((int)(fg * 255) << 8) + (int)(fb * 255);
 		m_bufferData->buffer[k] = c;

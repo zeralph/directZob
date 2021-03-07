@@ -37,7 +37,7 @@
         </ZobObject>
         <ZobObject name="carMesh" guid="3066531" type="mesh">
             <Position x="0.000315119" y="-0.699426" z="3.2681e-05" />
-            <Rotation x="-180" y="-1.03086e-05" z="-180" />
+            <Rotation x="180" y="-1.03086e-05" z="180" />
             <Scale x="0.01" y="0.01" z="0.01" />
             <Mesh name="Peugeot_405" file="GLX_400.FBX" path="_cars/GLX-400-FBX/">
                 <RenderOptions>
@@ -49,8 +49,8 @@
             </Mesh>
         </ZobObject>
         <ZobObject name="rearCamera" guid="3002004" type="camera">
-            <Position x="-1.03842e-05" y="1.92052" z="-4.78713" />
-            <Rotation x="15.0562" y="-2.59651e-05" z="-1.97941e-05" />
+            <Position x="-1.03805e-05" y="1.92052" z="-4.78713" />
+            <Rotation x="15.0562" y="-2.57811e-05" z="-2.14921e-05" />
             <Scale x="1" y="1" z="1" />
             <Controller>5</Controller>
             <Fov>70.00</Fov>
@@ -241,7 +241,7 @@
         <Scale x="1" y="1" z="1" />
         <Mesh name="hill_1.obj" file="hill_1.obj" path="/">
             <RenderOptions>
-                <Lighting>Phong</Lighting>
+                <Lighting>Gouraud</Lighting>
                 <ZBuffer>True</ZBuffer>
                 <Transparency>False</Transparency>
                 <CullMode>Clockwise</CullMode>
@@ -250,11 +250,11 @@
     </ZobObject>
     <ZobObject name="Hill_2" guid="3066511" type="mesh">
         <Position x="-78" y="0" z="105" />
-        <Rotation x="180" y="0" z="180" />
+        <Rotation x="-180" y="0" z="-180" />
         <Scale x="1" y="1" z="1" />
         <Mesh name="hill_1.obj" file="hill_1.obj" path="/">
             <RenderOptions>
-                <Lighting>Phong</Lighting>
+                <Lighting>Gouraud</Lighting>
                 <ZBuffer>True</ZBuffer>
                 <Transparency>False</Transparency>
                 <CullMode>Clockwise</CullMode>
@@ -267,7 +267,7 @@
         <Scale x="1" y="1" z="1" />
         <Mesh name="hill_2.obj" file="hill_2.obj" path="/">
             <RenderOptions>
-                <Lighting>Phong</Lighting>
+                <Lighting>Gouraud</Lighting>
                 <ZBuffer>True</ZBuffer>
                 <Transparency>False</Transparency>
                 <CullMode>Clockwise</CullMode>
@@ -389,7 +389,7 @@
         <Scale x="1" y="1" z="1" />
         <Mesh name="beach.obj" file="beach.obj" path="/">
             <RenderOptions>
-                <Lighting>Phong</Lighting>
+                <Lighting>Gouraud</Lighting>
                 <ZBuffer>True</ZBuffer>
                 <Transparency>False</Transparency>
                 <CullMode>Clockwise</CullMode>
@@ -432,7 +432,7 @@
             <Scale x="2" y="2" z="2" />
             <Mesh name="tree.obj" file="tree.obj" path="/">
                 <RenderOptions>
-                    <Lighting>Phong</Lighting>
+                    <Lighting>Gouraud</Lighting>
                     <ZBuffer>True</ZBuffer>
                     <Transparency>False</Transparency>
                     <CullMode>Clockwise</CullMode>
@@ -445,7 +445,7 @@
             <Scale x="2" y="2" z="2" />
             <Mesh name="tree.obj" file="tree.obj" path="/">
                 <RenderOptions>
-                    <Lighting>Phong</Lighting>
+                    <Lighting>Gouraud</Lighting>
                     <ZBuffer>True</ZBuffer>
                     <Transparency>False</Transparency>
                     <CullMode>Clockwise</CullMode>
@@ -458,7 +458,7 @@
             <Scale x="2" y="2" z="2" />
             <Mesh name="tree.obj" file="tree.obj" path="/">
                 <RenderOptions>
-                    <Lighting>Phong</Lighting>
+                    <Lighting>Gouraud</Lighting>
                     <ZBuffer>True</ZBuffer>
                     <Transparency>False</Transparency>
                     <CullMode>Clockwise</CullMode>
@@ -471,7 +471,7 @@
             <Scale x="2" y="2" z="2" />
             <Mesh name="tree.obj" file="tree.obj" path="/">
                 <RenderOptions>
-                    <Lighting>Phong</Lighting>
+                    <Lighting>Gouraud</Lighting>
                     <ZBuffer>True</ZBuffer>
                     <Transparency>False</Transparency>
                     <CullMode>Clockwise</CullMode>
@@ -484,7 +484,7 @@
             <Scale x="2" y="2" z="2" />
             <Mesh name="tree.obj" file="tree.obj" path="/">
                 <RenderOptions>
-                    <Lighting>Phong</Lighting>
+                    <Lighting>Gouraud</Lighting>
                     <ZBuffer>True</ZBuffer>
                     <Transparency>False</Transparency>
                     <CullMode>Clockwise</CullMode>
@@ -497,7 +497,7 @@
             <Scale x="2" y="2" z="2" />
             <Mesh name="tree.obj" file="tree.obj" path="/">
                 <RenderOptions>
-                    <Lighting>Phong</Lighting>
+                    <Lighting>Gouraud</Lighting>
                     <ZBuffer>True</ZBuffer>
                     <Transparency>False</Transparency>
                     <CullMode>Clockwise</CullMode>

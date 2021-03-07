@@ -14,8 +14,10 @@ public:
 	MaterialManager();
 	~MaterialManager();
 
-	const ZobMaterial* 		LoadMaterial(const std::string& name, const ZobVector3* ambientColor, const ZobVector3* diffuseColor, const std::string &textureFile);
-	const ZobMaterial*		LoadMaterial(const std::string& name, const ZobVector3* ambientColor, const ZobVector3* diffuseColor, Texture* texture);
+	const ZobMaterial* 		LoadMaterial(const std::string& name, const ZobVector3* ambientColor, const ZobVector3* diffuseColor, const ZobVector3* specularColor,
+										float specularExponent, float transparency, const std::string &textureFile);
+	const ZobMaterial*		LoadMaterial(const std::string& name, const ZobVector3* ambientColor, const ZobVector3* diffuseColor, const ZobVector3* specularColor,
+										float specularExponent, float transparency, Texture* texture);
 	const ZobMaterial* 		GetMaterial(const std::string& name) const;
 	const int 				GetNbTextures() const { return (int)m_materials.size(); }
 	const ZobMaterial* 		GetMaterial(const int i) const;

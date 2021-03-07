@@ -60,7 +60,6 @@ ZobHUDManager::~ZobHUDManager()
 
 //static Texture sTex;
 static const ZobMaterial* sMat;
-static ZobHUDManager::HUDElement sElem;
 void ZobHUDManager::Init()
 {
 	std::string p = SceneLoader::GetResourcePath();
@@ -75,15 +74,7 @@ void ZobHUDManager::Init()
 		const u8* data = BaseFont.pixel_data;
 		m_font = new ZobFont(data, BaseFont.width, BaseFont.height, BaseFont.nbCharWidth, BaseFont.nbCharHeight);
 	}
-	//sTex.LoadFromFile("D:\\Git\\directZob\\resources\\BRAKDISC.png");
-	ZobVector3 color = ZobVector3(1, 1, 1);
-	sMat = DirectZob::GetInstance()->GetMaterialManager()->LoadMaterial("TEST", &color, &color, "D:\\Git\\directZob\\resources\\BRAKDISC.png");
-	sElem.mat = sMat;
-	sElem.color = color;
-	sElem.x = 0.3f;
-	sElem.y = 0.3f;
-	sElem.w = 0.5f;
-	sElem.h = 0.5f;
+
 }
 
 void ZobHUDManager::Stop()
@@ -110,8 +101,6 @@ void ZobHUDManager::UpdateBehavior(float dt)
 
 void ZobHUDManager::UpdateObjects(const Camera* camera, Core::Engine* engine, float dt)
 {
-	//return;
-	//m_hudElements.push_back(sElem);
 	for (std::vector<HUDElement>::const_iterator iter = m_hudElements.begin(); iter != m_hudElements.end(); iter++)
 	{
 		HUDElement e = *iter;

@@ -76,7 +76,7 @@ void ZobFont::InitFont(const float* data, int width, int height, int nbCharWidth
 		matName += std::to_string(c);
 		Texture* tex = new Texture();
 		tex->LoadFromData(matName, m_charWidth, m_charHeight, tdata);
-		const ZobMaterial* zm = DirectZob::GetInstance()->GetMaterialManager()->LoadMaterial(matName, &m_color, &m_color, tex);
+		const ZobMaterial* zm = DirectZob::GetInstance()->GetMaterialManager()->LoadMaterial(matName, &m_color, &m_color, &m_color, 0, 1, tex);
 		m_charMaterials[c] = zm;
 	}
 }

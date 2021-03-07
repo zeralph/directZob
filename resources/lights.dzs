@@ -2,94 +2,33 @@
 <Scene>
     <Globals>
         <AmbientColor r="102" g="102" b="102" />
-        <AmbientIntensity>0.60</AmbientIntensity>
-        <FogColor r="0" g="0" b="0" />
-        <ClearColor r="0" g="0" b="0" />
-        <FogDensity>41.00</FogDensity>
-        <FogDistance>70.00</FogDistance>
-        <FogType>exp2</FogType>
+        <AmbientIntensity>0.80</AmbientIntensity>
+        <FogColor r="63" g="149" b="255" />
+        <ClearColor r="63" g="149" b="255" />
+        <FogDensity>2.00</FogDensity>
+        <FogDistance>20.00</FogDistance>
+        <FogType>none</FogType>
     </Globals>
-    <ZobObject name="Light_blue" guid="50528259" type="light">
-        <Position x="7.05553" y="16.6126" z="-19.8549" />
-        <Rotation x="69.6007" y="6.93867" z="-9.70233" />
-        <Scale x="1" y="1" z="1" />
-        <Physic type="0">
-            <RigidBody type="0" active="0" />
-            <Collider type="0" radius="0.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
-        </Physic>
-        <Color r="55" g="55" b="255" />
-        <Intensity>4.00</Intensity>
-        <FallOffDistance>30.00</FallOffDistance>
-        <Type>spot</Type>
-    </ZobObject>
-    <ZobObject name="Light_yellow" guid="50528260" type="light">
-        <Position x="9.81079" y="14.5947" z="20.0614" />
-        <Rotation x="120.151" y="21.8495" z="-14.237" />
-        <Scale x="1" y="1" z="1" />
-        <Physic type="0">
-            <RigidBody type="0" active="0" />
-            <Collider type="0" radius="0.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
-        </Physic>
-        <Color r="255" g="255" b="0" />
-        <Intensity>4.00</Intensity>
-        <FallOffDistance>30.00</FallOffDistance>
-        <Type>spot</Type>
-    </ZobObject>
-    <ZobObject name="Light_red" guid="50528261" type="light">
-        <Position x="-16.5092" y="10" z="20.3528" />
-        <Rotation x="108.948" y="-6.654" z="23.116" />
-        <Scale x="1" y="1" z="1" />
-        <Physic type="0">
-            <RigidBody type="0" active="0" />
-            <Collider type="0" radius="0.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
-        </Physic>
-        <Color r="255" g="0" b="0" />
-        <Intensity>4.00</Intensity>
-        <FallOffDistance>30.00</FallOffDistance>
-        <Type>spot</Type>
-    </ZobObject>
-    <ZobObject name="newObject_8" guid="50397190" type="mesh">
+    <ZobObject name="newObject_4" guid="3001002" type="mesh">
         <Position x="0" y="0" z="0" />
         <Rotation x="0" y="0" z="0" />
-        <Scale x="1" y="1" z="1" />
-        <Mesh name="camaro.obj" path="D:\Git\directZob\resources" file="camaro.obj" />
-        <Physic type="0">
-            <RigidBody type="0" active="0" />
-            <Collider type="0" radius="-0.000000" height="-0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
-        </Physic>
+        <Scale x="0.1" y="0.1" z="0.1" />
+        <Mesh name="sphere.obj" file="sphere.obj" path="/">
+            <RenderOptions>
+                <Lighting>Phong</Lighting>
+                <ZBuffer>True</ZBuffer>
+                <Transparency>False</Transparency>
+                <CullMode>Clockwise</CullMode>
+            </RenderOptions>
+        </Mesh>
     </ZobObject>
-    <ZobObject name="newObject_15" guid="50397192" type="mesh">
-        <Position x="0" y="-2.1" z="0" />
+    <ZobObject name="Light_1" guid="3003003" type="light">
+        <Position x="0" y="3.15001" z="-4.38212" />
         <Rotation x="0" y="0" z="0" />
-        <Scale x="2" y="0.2" z="2" />
-        <Mesh name="Terrain.obj" path="D:\Git\directZob\resources\" file="Terrain.obj" />
-        <Physic type="0">
-            <RigidBody type="0" active="0" />
-            <Collider type="0" radius="0.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
-        </Physic>
-    </ZobObject>
-    <ZobObject name="Light_green" guid="50528266" type="light">
-        <Position x="-17.8931" y="15.6368" z="-10.3394" />
-        <Rotation x="90.0001" y="-2.21981e-05" z="9.58347" />
         <Scale x="1" y="1" z="1" />
-        <Physic type="0">
-            <RigidBody type="0" active="0" />
-            <Collider type="0" radius="0.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
-        </Physic>
-        <Color r="0" g="255" b="0" />
-        <Intensity>4.00</Intensity>
-        <FallOffDistance>30.00</FallOffDistance>
-        <Type>spot</Type>
-    </ZobObject>
-    <ZobObject name="Camera_1" guid="50462731" type="camera">
-        <Position x="-39.593" y="5" z="-28.1418" />
-        <Rotation x="0.0212819" y="73.7968" z="0.0283466" />
-        <Scale x="1" y="1" z="1" />
-        <Physic type="0">
-            <RigidBody type="0" active="0" />
-            <Collider type="0" radius="0.000000" height="0.000000" halfExtends_x="0.000000" halfExtends_y="0.000000" halfExtends_z="0.000000" />
-        </Physic>
-		<Controller>3</Controller>
-        <Fov>45.00</Fov>
+        <Color r="252" g="212" b="64" />
+        <Intensity>1.00</Intensity>
+        <FallOffDistance>100.00</FallOffDistance>
+        <Type>point</Type>
     </ZobObject>
 </Scene>

@@ -21,6 +21,25 @@ class Rasterizer
 {
 public:
 
+	struct LightingData
+	{
+		float LightingDiffuseR;
+		float LightingDiffuseG;
+		float LightingDiffuseB;
+		float LightingSpecularR;
+		float LightingSpecularG;
+		float LightingSpecularB;
+		inline void Init()
+		{
+			LightingDiffuseR = 0.0f;
+			LightingDiffuseG = 0.0f;
+			LightingDiffuseB = 0.0f;
+			LightingSpecularR = 0.0f;
+			LightingSpecularG = 0.0f;
+			LightingSpecularB = 0.0f;
+		}
+	};
+
 	Rasterizer(uint width, uint startHeight, uint endHeight, BufferData* bufferData);
 	~Rasterizer();
 
@@ -41,10 +60,10 @@ public:
 	inline float			GetRenderTimeMS() const { return m_time;  }
 private:
 
-	void 					FillTopFlatTriangle2(ZobVector2* v1, ZobVector2* v2, ZobVector2* v3, const Triangle* t, const ZobVector3* la, const ZobVector3* lb, const ZobVector3* lc) const;
-	void 					FillBottomFlatTriangle2(ZobVector2* v1, ZobVector2* v2, ZobVector2* v3, const Triangle* t, const ZobVector3* la, const ZobVector3* lb, const ZobVector3* lc) const;
-	inline const void 		FillBufferPixel(const ZobVector3* p, const Triangle* t, const ZobVector3* la, const ZobVector3* lb, const ZobVector3* lc) const;
-	inline ZobVector3 		ComputeLightingAtPoint(const ZobVector3* position, const ZobVector3* normal, RenderOptions::eLightMode lighting) const;
+	void 					FillTopFlatTriangle2(ZobVector2* v1, ZobVector2* v2, ZobVector2* v3, const Triangle* t, const LightingData* lDataA, const LightingData* lDataB, const LightingData* lDataC) const;
+	void 					FillBottomFlatTriangle2(ZobVector2* v1, ZobVector2* v2, ZobVector2* v3, const Triangle* t, const LightingData* lDataA, const LightingData* lDataB, const LightingData* lDataC) const;
+	inline const void 		FillBufferPixel(const ZobVector3* p, const Triangle* t, const LightingData* lDataA, const LightingData* lDataB, const LightingData* lDataC) const;
+	inline void		 		ComputeLightingAtPoint(const ZobVector3* position, const ZobVector3* normal, const Triangle* t, LightingData& outlData) const;
 	void 					sortVerticesAscendingByY(ZobVector2* v1, ZobVector2* v2, ZobVector2* v3) const ;
 	void 					sortVerticesAscendingByY(ZobVector2* v1, ZobVector2* v2, ZobVector2* v3, ZobVector2* uv1, ZobVector2* uv2, ZobVector2* uv3) const;
 	inline float 			edgeFunction(const ZobVector3* a, const ZobVector3* b, const ZobVector3* c) const { return (c->x - a->x) * (b->y - a->y) - (c->y - a->y) * (b->x - a->x); }
@@ -62,34 +81,27 @@ private:
 
 	const float ComputeFog(float z) const;
 
-	inline const float 	computeLighting(const ZobVector3* normal, const ZobVector3* light) const
+	inline const float computeSpecular(const ZobVector3* normal, const ZobVector3* lightPos, const ZobVector3* position, const Triangle* t) const
 	{
-		//float f = 1.0f - clamp2(-fabsf(ZobVector3::Dot(normal, light)), 0.0f, 1.0f);
-		float f = /*1.0f - */clamp2(-ZobVector3::Dot(normal, light), 0.0f, 1.0f);
-		return f;// clamp2(fabsf(ZobVector3::Dot(normal, light)), 0.0f, 1.0f);
-	};
-
-	inline const float 	computeSpecular(const ZobVector3* normal, const ZobVector3* lightPos, const ZobVector3* position, const float lightIntensity, const float specularIntensity) const
-	{
-		/*
-		ZobVector3 r = ZobVector3(normal->x - light->x, normal->y - light->y, normal->z - light->z);
-		r.Mul(2.0f * lightIntensity);
-		float sl = ZobVector3::Dot(&r, &m_camDir);
-		sl = pow(lightIntensity, specularIntensity) * sl;
-		sl = clamp2(sl, 0.0f, 1.0f);
-		*/
-		float sl;
-		float alpha = 50.0f;
-		ZobVector3 o = m_camPos - position;
-		ZobVector3 l = lightPos;
-		l.Sub(position);
-		o.Normalize();
-		l.Normalize();
-		ZobVector3 h = o + l;
-		h.Normalize();
-		float cos_theta_h = ZobVector3::Dot(normal, &h);
-		float cos_theta = fmaxf(0, ZobVector3::Dot(normal, &l));
-		sl = (alpha + 8.0f) / (8.0f * M_PI) * pow(cos_theta_h, alpha);
+		float sl = 0.0f;
+		float exp = 50.0f;
+		if (t->material)
+		{
+			exp = t->material->GetSpecularExponent();
+		}
+		if (exp > 0.0f)
+		{
+			ZobVector3 o = m_camPos - position;
+			ZobVector3 l = lightPos;
+			l.Sub(position);
+			o.Normalize();
+			l.Normalize();
+			ZobVector3 h = o + l;
+			h.Normalize();
+			float cos_theta_h = ZobVector3::Dot(normal, &h);
+			float cos_theta = fmaxf(0, ZobVector3::Dot(normal, &l));
+			sl = (exp + 8.0f) / (8.0f * M_PI) * pow(cos_theta_h, exp);
+		}
 		return sl;
 	};
 
