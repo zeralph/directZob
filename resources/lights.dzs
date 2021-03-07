@@ -13,7 +13,7 @@
         <Position x="0" y="0" z="0" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="0.1" y="0.1" z="0.1" />
-        <Mesh name="sphere.obj" file="sphere.obj" path="/">
+        <Mesh name="GLX_400.FBX" file="GLX_400.FBX" path="/_cars/GLX-400-FBX/">
             <RenderOptions>
                 <Lighting>Phong</Lighting>
                 <ZBuffer>True</ZBuffer>
@@ -23,12 +23,25 @@
         </Mesh>
     </ZobObject>
     <ZobObject name="Light_1" guid="3003003" type="light">
-        <Position x="0" y="3.15001" z="-4.38212" />
+        <Position x="10.0693" y="13.3864" z="-13.9308" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="1" y="1" z="1" />
         <Color r="252" g="212" b="64" />
-        <Intensity>1.00</Intensity>
+        <Intensity>5.00</Intensity>
         <FallOffDistance>100.00</FallOffDistance>
         <Type>point</Type>
+    </ZobObject>
+    <ZobObject name="newObject_6" guid="3001004" type="mesh">
+        <Position x="-13.39" y="17.7506" z="-8.10319" />
+        <Rotation x="0" y="0" z="0" />
+        <Scale x="0.1" y="0.1" z="0.1" />
+        <Mesh name="sphere.obj" file="sphere.obj" path="/">
+            <RenderOptions>
+                <Lighting>Phong</Lighting>
+                <ZBuffer>True</ZBuffer>
+                <Transparency>False</Transparency>
+                <CullMode>Clockwise</CullMode>
+            </RenderOptions>
+        </Mesh>
     </ZobObject>
 </Scene>

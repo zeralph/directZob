@@ -41,7 +41,7 @@
             <Scale x="0.01" y="0.01" z="0.01" />
             <Mesh name="Peugeot_405" file="GLX_400.FBX" path="_cars/GLX-400-FBX/">
                 <RenderOptions>
-                    <Lighting>Flat</Lighting>
+                    <Lighting>Phong</Lighting>
                     <ZBuffer>True</ZBuffer>
                     <Transparency>False</Transparency>
                     <CullMode>Clockwise</CullMode>
@@ -79,7 +79,7 @@
     </ZobObject>
     <ZobObject name="sun" guid="3068489" type="light">
         <Position x="0" y="60.0368" z="0" />
-        <Rotation x="83.5889" y="37.513" z="45.2391" />
+        <Rotation x="45" y="0" z="45" />
         <Scale x="1" y="1" z="1" />
         <Color r="241" g="218" b="164" />
         <Intensity>1.20</Intensity>

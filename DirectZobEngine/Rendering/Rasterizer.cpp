@@ -231,8 +231,9 @@ inline void Rasterizer::ComputeLightingAtPoint(const ZobVector3* position, const
 				if (l->GetType() == Light::eLightType_directional)
 				{
 					lightDir = l->GetForward();
-					//lightDir.Mul(-1.0f);
-					//lightDir.Normalize();
+					lightPos = l->GetForward();
+					//for a directional light, simulate a far one
+					lightPos.Mul(-10000.0f);
 					lightPower = l->GetIntensity();
 				}
 				else if(l->GetType() == Light::eLightType_point)
@@ -530,6 +531,9 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector3* p, const Triangl
 			sr = material->GetSpecularColor()->x;
 			sg = material->GetSpecularColor()->y;
 			sb = material->GetSpecularColor()->z;
+			sr = 1.0f;
+			sg = 1.0f;
+			sb = 1.0f;
 		}
 		m_bufferData->zBuffer[k] = zRatio;
 		if (lighting != RenderOptions::eLightMode_none)

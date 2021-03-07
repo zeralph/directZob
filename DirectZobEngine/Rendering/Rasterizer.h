@@ -87,7 +87,9 @@ private:
 		float exp = 50.0f;
 		if (t->material)
 		{
-			exp = t->material->GetSpecularExponent();
+			//exp = (int)(t->material->GetSpecularExponent() * 10.0f);
+			//exp = 2.0f;// 1.70;
+			exp = 50.0f;
 		}
 		if (exp > 0.0f)
 		{
@@ -100,7 +102,12 @@ private:
 			h.Normalize();
 			float cos_theta_h = ZobVector3::Dot(normal, &h);
 			float cos_theta = fmaxf(0, ZobVector3::Dot(normal, &l));
-			sl = (exp + 8.0f) / (8.0f * M_PI) * pow(cos_theta_h, exp);
+			sl = (exp + 8.0f) / (8.0f * M_PI) * pow(cos_theta_h, exp) * cos_theta;
+			if (!isfinite(sl))
+			{
+				int y = 0;
+				y++;
+			}
 		}
 		return sl;
 	};

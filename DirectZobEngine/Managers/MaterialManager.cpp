@@ -155,10 +155,10 @@ const ZobMaterial* MaterialManager::LoadFbxMaterial(const fbxsdk::FbxMesh* mesh,
 					{
 						f = prop.Get<FbxDouble>();
 					}
-					prop = material->FindProperty(fbxsdk::FbxSurfaceMaterial::sSpecularFactor);
+					prop = material->FindProperty(fbxsdk::FbxSurfaceMaterial::sShininess);
 					if (prop.IsValid())
 					{
-						specularExponent = prop.Get<FbxDouble>();
+						specularExponent = (float)prop.Get<FbxDouble>();
 					}
 					std::string texFullPath = "";
 					if (texture_name2)
