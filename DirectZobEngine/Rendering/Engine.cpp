@@ -51,7 +51,7 @@ Engine::Engine(int width, int height, Events* events)
 	}
 	m_nbRasterizers = 4;
 	*/
-	//m_nbRasterizers *= 2;
+	//m_nbRasterizers = 2;
 	m_maxTrianglesQueueSize = 200000;// MAX_TRIANGLES_PER_IMAGE / m_nbRasterizers;
 	m_maxLineQueueSize = 200000;
 	m_renderOutput = eRenderOutput_render;
@@ -80,7 +80,7 @@ Engine::Engine(int width, int height, Events* events)
 	int h1 = height;
 	for (int i = 0; i < m_nbRasterizers; i++)
 	{
-		Rasterizer* r = new Rasterizer(width, 0, height /*+ m_rasterizerHeight*/, &m_bufferData);
+		Rasterizer* r = new Rasterizer(width, height, 0, height /*+ m_rasterizerHeight*/, &m_bufferData);
 		m_rasterizers[i] = r;
 		h0 += m_rasterizerHeight;
 	}
@@ -218,7 +218,7 @@ void Engine::Resize(int width, int height)
 	m_rasterizers = (Rasterizer**)malloc(sizeof(Rasterizer) * m_nbRasterizers);
 	for (int i = 0; i < m_nbRasterizers; i++)
 	{
-		Rasterizer *r = new Rasterizer(width, h0, h0 + m_rasterizerHeight, &m_bufferData);
+		Rasterizer *r = new Rasterizer(width, height, h0, h0 + m_rasterizerHeight, &m_bufferData);
 		m_rasterizers[i] = r;
 		//m_TrianglesQueue[i].clear();
 		//m_rasterLineQueues.clear();
@@ -766,10 +766,31 @@ void Engine::QueueLineInRasters(const Line3D* l, int idx) const
 
 void Engine::QueueTriangleInRasters(const Triangle* t, int idx) const
 {
-	int i = idx % m_nbRasterizers;
-	assert(i >= 0);
-	assert(i < m_nbRasterizers);
-	m_rasterizers[i]->QueueTriangle(t);
+
+	static bool bEqual = false;
+	if (!bEqual)
+	{
+		int min = (int)fmaxf(0, fminf(t->pa->y, fminf(t->pb->y, t->pc->y)));
+		int max = (int)fminf(m_bufferData.height, fmaxf(t->pa->y, fmaxf(t->pb->y, t->pc->y)));
+		int h = m_bufferData.height / m_nbRasterizers;
+		min /= h;
+		max /= h;
+		if (max >= m_nbRasterizers)
+		{
+			max = m_nbRasterizers - 1;
+		}
+		for (int i = min; i <= max; i++)
+		{
+			m_rasterizers[i]->QueueTriangle(t);
+		}
+	}
+	else
+	{
+		int i = (idx) % m_nbRasterizers;
+		assert(i >= 0);
+		assert(i < m_nbRasterizers);
+		m_rasterizers[i]->QueueTriangle(t);
+	}
 }
 
 void Engine::QueueProjectedTriangle(const Camera* c, const Triangle* t)

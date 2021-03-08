@@ -2,16 +2,17 @@
 #include "DirectZob.h"
 #include "ZobObjects/Light.h"
 #include "Texture.h"
-
+#include <mutex>
 static ZobVector3 sFog = ZobVector3(1.0f, 1.0f, 0.95f);
 static float fogDecal = -0.6f;
-
-Rasterizer::Rasterizer(uint width, uint startHeight, uint endHeight, BufferData* bufferData)
+static std::mutex zBufferLock;
+Rasterizer::Rasterizer(uint width, uint height, uint startHeight, uint endHeight, BufferData* bufferData)
 {
 	m_startHeight = startHeight;
 	m_bufferData = bufferData;
 	m_endHeight = endHeight;
 	m_width = width;
+	m_height = height;
 	m_lines.clear();
 	m_triangles.clear();
 	m_time = 0.0f;
@@ -431,24 +432,31 @@ void Rasterizer::FillTopFlatTriangle2(ZobVector2* v1, ZobVector2* v2, ZobVector2
 
 inline const void Rasterizer::FillBufferPixel(const ZobVector3* p, const Triangle* t, const LightingData* lDataA, const LightingData* lDataB, const LightingData* lDataC) const
 {
-	float w0, w1, w2, su, tu, cl, sl, dr, dg, db, sr, sg, sb, a, z, zRatio, fr, fg, fb, lightPower;
+	float wa, wb, wc, su, tu, cl, sl, dr, dg, db, sr, sg, sb, a, z, zRatio, fr, fg, fb, lightPower;
 	float texPixelData[4];
 	int c, k;
 	ZobVector3 normal, lightDir;
 
+
+
 	k = p->y * m_width + p->x;
 
-	w2 = edgeFunction(t->pa, t->pb, p);
-	w0 = edgeFunction(t->pb, t->pc, p);
-	w1 = edgeFunction(t->pc, t->pa, p);
+	wa = edgeFunction(t->pb, t->pc, p);
+	wb = edgeFunction(t->pc, t->pa, p);
+	wc = edgeFunction(t->pa, t->pb, p);
+	wa /= t->area;
+	wb /= t->area;
+	wc /= t->area;
+	
+	float w = (t->pa->w * wa + t->pb->w * wb + t->pc->w * wc);
 
-	//w1 = edgeFunction(t->pa, t->pb, p);
-	//w2 = edgeFunction(t->pb, t->pc, p);
-	//w0 = edgeFunction(t->pc, t->pa, p);
-
-	w0 /= t->area;
-	w1 /= t->area;
-	w2 /= t->area;
+	z = (t->pa->z * wa + t->pb->z * wb + t->pc->z * wc);
+	//p->z = z;
+	// 
+	//if (p->x <0 || p->x > m_width - 1 || p->y <0 || p->y > m_height - 1)// || z <= (m_bufferData->zNear + 0.01f))
+	//{
+	//	return;
+	//}
 
 	if (t->options->bTransparency)
 	{
@@ -459,7 +467,7 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector3* p, const Triangl
 	}
 
 	const ZobMaterial* material = t->material;
-	z = (t->pa->z * w0 + t->pb->z * w1 + t->pc->z * w2);
+	
 	if (!t->options->zBuffered)
 	{
 		zRatio = 0.0f;
@@ -483,15 +491,15 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector3* p, const Triangl
 		}
 		else
 		{
-			normal = ZobVector3((w0 * t->na->x + w1 * t->nb->x + w2 * t->nc->x),
-				(w0 * t->na->y + w1 * t->nb->y + w2 * t->nc->y),
-				(w0 * t->na->z + w1 * t->nb->z + w2 * t->nc->z)); 
+			normal = ZobVector3((wa * t->na->x + wb * t->nb->x + wc * t->nc->x),
+				(wa * t->na->y + wb * t->nb->y + wc * t->nc->y),
+				(wa * t->na->z + wb * t->nb->z + wc * t->nc->z)); 
 			//normal.Mul(-1.0f);
 		}
 		//Start with vertex color
-		dr = (w0 * t->ca->x + w1 * t->cb->x + w2 * t->cc->x);
-		dg = (w0 * t->ca->y + w1 * t->cb->y + w2 * t->cc->y);
-		db = (w0 * t->ca->z + w1 * t->cb->z + w2 * t->cc->z);
+		dr = (wa * t->ca->x + wb * t->cb->x + wc * t->cc->x);
+		dg = (wa * t->ca->y + wb * t->cb->y + wc * t->cc->y);
+		db = (wa * t->ca->z + wb * t->cb->z + wc * t->cc->z);
 		sr = 0.0f;
 		sg = 0.0f;
 		sb = 0.0f;
@@ -501,8 +509,8 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector3* p, const Triangl
 			const Texture* texture = material->GetDiffuseTexture();
 			if (texture && texture->GetData())
 			{
-				su = w0 * t->ua->x + w1 * t->ub->x + w2 * t->uc->x;
-				tu = w0 * t->ua->y + w1 * t->ub->y + w2 * t->uc->y;
+				su = wa * t->ua->x + wb * t->ub->x + wc * t->uc->x;
+				tu = wa * t->ua->y + wb * t->ub->y + wc * t->uc->y;
 				tu = 1.0f - tu;
 				su = (int)(su * texture->GetWidth());
 				tu = (int)(tu * texture->GetHeight());
@@ -535,7 +543,6 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector3* p, const Triangl
 			sg = 1.0f;
 			sb = 1.0f;
 		}
-		m_bufferData->zBuffer[k] = zRatio;
 		if (lighting != RenderOptions::eLightMode_none)
 		{
 			//lighting ambient
@@ -546,9 +553,9 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector3* p, const Triangl
 			if (m_lightingPrecision == eLightingPrecision_vertex)
 			{
 				//Vertex lighting
-				float w0t = w0;
-				float w1t = w1;
-				float w2t = w2;
+				float w0t = wa;
+				float w1t = wb;
+				float w2t = wc;
 				if (lighting == RenderOptions::eLightMode_flat || lighting == RenderOptions::eLightMode_flatPhong)
 				{
 					w0t = 1.0f / 3.0f;
@@ -564,9 +571,9 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector3* p, const Triangl
 			}
 			else if (m_lightingPrecision == eLightingPrecision_pixel)
 			{
-				ZobVector3 tpos = ZobVector3((t->va->x * w0 + t->vb->x * w1 + t->vc->x * w2),
-					(t->va->y * w0 + t->vb->y * w1 + t->vc->y * w2),
-					(t->va->z * w0 + t->vb->z * w1 + t->vc->z * w2));
+				ZobVector3 tpos = ZobVector3((t->va->x * wa + t->vb->x * wb + t->vc->x * wc),
+					(t->va->y * wa + t->vb->y * wb + t->vc->y * wc),
+					(t->va->z * wa + t->vb->z * wb + t->vc->z * wc));
 				LightingData pixelLightingData;
 				ComputeLightingAtPoint(&tpos, &normal, t, pixelLightingData);
 				fr += pixelLightingData.LightingDiffuseR * dr;
@@ -576,16 +583,6 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector3* p, const Triangl
 				fg += pixelLightingData.LightingSpecularG * sg;
 				fb += pixelLightingData.LightingSpecularB * sb;
 			}
-			fr = clamp2(fr, 0.0f, 1.0f);
-			fg = clamp2(fg, 0.0f, 1.0f);
-			fb = clamp2(fb, 0.0f, 1.0f);
-			z = ComputeFog(z);
-			//fr = fr * z + (1.0f - z) * m_fogColor->x;
-			//fg = fg * z + (1.0f - z) * m_fogColor->y;
-			//fb = fb * z + (1.0f - z) * m_fogColor->z;
-			fr = fr * (1.0f - z) + z * m_fogColor->x;
-			fg = fg * (1.0f - z) + z * m_fogColor->y;
-			fb = fb * (1.0f - z) + z * m_fogColor->z;
 		}
 		else
 		{
@@ -593,8 +590,18 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector3* p, const Triangl
 			fg = dg;
 			fb = db;
 		}
-		c = ((int)(fr * 255) << 16) + ((int)(fg * 255) << 8) + (int)(fb * 255);
+		fr = clamp2(fr, 0.0f, 1.0f);
+		fg = clamp2(fg, 0.0f, 1.0f);
+		fb = clamp2(fb, 0.0f, 1.0f);
+		z = ComputeFog(z);
+		fr = fr * (1.0f - z) + z * m_fogColor->x;
+		fg = fg * (1.0f - z) + z * m_fogColor->y;
+		fb = fb * (1.0f - z) + z * m_fogColor->z;
+		c = ((int)(fr * 255.0f) << 16) + ((int)(fg * 255.0f) << 8) + (int)(fb * 255.0f);
 		m_bufferData->buffer[k] = c;
+		//zBufferLock.lock();
+		m_bufferData->zBuffer[k] = zRatio;
+		//zBufferLock.unlock();
 	}
 }
 

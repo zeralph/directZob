@@ -139,7 +139,7 @@ static ZobVector3 scd = ZobVector3(1, 0, 0);
 
 bool ZobHUDManager::CreateQuad(float xMin, float yMin, float xMax, float yMax, HUDElement* elem)
 {
-	float z = 0.0f;
+	float z = DirectZob::GetInstance()->GetEngine()->GetBufferData()->zNear + 1.0f;
 	Triangle* t1 = &m_trianglesBuffer[m_nbDrawnTriangles];
 	t1->pa->x = xMin;
 	t1->pa->y = yMin;
@@ -198,10 +198,10 @@ void ZobHUDManager::Print(float x, float y, float w, float h, const ZobVector3* 
 {
 	if (m_font && m_started) //if (m_engine->ShowText() && m_data != NULL)
 	{
-		size_t size = strlen(fmt) + 1;
+		//size_t size = strlen(fmt) + 1;
 		va_list vl;
 		va_start(vl, fmt);
-		//int size = _vscprintf(fmt, vl);
+		int size = _vscprintf(fmt, vl);
 		std::string buf;
 		buf.reserve(size + 1);
 		buf.resize(size);

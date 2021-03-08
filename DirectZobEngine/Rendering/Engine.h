@@ -108,6 +108,16 @@ namespace Core
 			uvb->x = uva->x + (uvb->x - uva->x) * r;
 			uvb->y = uva->y + (uvb->y - uva->y) * r;
 		}
+		inline void										RecomputeNormal(const ZobVector3* na, ZobVector3* nb, float r) const
+		{
+			static bool  titi = true;
+			if (titi)
+			{
+				nb->x = na->x + (nb->x - na->x) * r;
+				nb->y = na->y + (nb->y - na->y) * r;
+				nb->z = na->z + (nb->z - na->z) * r;
+			}
+		}
 		inline void										RecomputeColor(const ZobVector3* ca, ZobVector3* cb, float r) const
 		{
 			cb->x = ca->x + (cb->x - ca->x) * r;

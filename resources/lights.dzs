@@ -23,7 +23,7 @@
         </Mesh>
     </ZobObject>
     <ZobObject name="Light_1" guid="3003003" type="light">
-        <Position x="10.0693" y="13.3864" z="-13.9308" />
+        <Position x="10.0693" y="13.3864" z="23.7958" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="1" y="1" z="1" />
         <Color r="252" g="212" b="64" />

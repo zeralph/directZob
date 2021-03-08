@@ -40,7 +40,7 @@ public:
 		}
 	};
 
-	Rasterizer(uint width, uint startHeight, uint endHeight, BufferData* bufferData);
+	Rasterizer(uint width, uint height, uint startHeight, uint endHeight, BufferData* bufferData);
 	~Rasterizer();
 
 	void 					DrawTriangle(const Triangle* t) const;
@@ -84,12 +84,10 @@ private:
 	inline const float computeSpecular(const ZobVector3* normal, const ZobVector3* lightPos, const ZobVector3* position, const Triangle* t) const
 	{
 		float sl = 0.0f;
-		float exp = 50.0f;
+		float exp = 1.0f;
 		if (t->material)
 		{
-			//exp = (int)(t->material->GetSpecularExponent() * 10.0f);
-			//exp = 2.0f;// 1.70;
-			exp = 50.0f;
+			exp = t->material->GetSpecularExponent();
 		}
 		if (exp > 0.0f)
 		{
@@ -102,7 +100,8 @@ private:
 			h.Normalize();
 			float cos_theta_h = ZobVector3::Dot(normal, &h);
 			float cos_theta = fmaxf(0, ZobVector3::Dot(normal, &l));
-			sl = (exp + 8.0f) / (8.0f * M_PI) * pow(cos_theta_h, exp) * cos_theta;
+			static float tt = 100.0f;
+			sl = (exp + 8.0f) / (8.0f * M_PI) * pow(cos_theta_h, tt) * cos_theta;
 			if (!isfinite(sl))
 			{
 				int y = 0;
@@ -126,6 +125,7 @@ private:
 	//std::thread m_thread;
 	uint m_startHeight;
 	uint m_width;
+	uint m_height;
 	uint m_endHeight;
 	std::thread m_thread;
 	bool m_wireFrame = false;
