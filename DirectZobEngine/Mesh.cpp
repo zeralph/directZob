@@ -374,6 +374,7 @@ void Mesh::LoadOBJ(const std::string& fullPath)
 	// Open the file.
 	std::ifstream sfile(fullPath, ios::in);
 	std::string line;
+	std::string mtlFile = "";
 	if (!sfile.is_open())
 	{
 		DirectZob::LogError("Error opening %s", fullPath.c_str());
@@ -402,6 +403,7 @@ void Mesh::LoadOBJ(const std::string& fullPath)
 			SplitEntry(&line, &v, ' ');
 			if (v.size() == 2)
 			{
+				mtlFile = v[1];
 				DirectZob::GetInstance()->GetMaterialManager()->LoadOBJMaterials(m_path, v[1]);
 			}
 		}
@@ -494,7 +496,7 @@ void Mesh::LoadOBJ(const std::string& fullPath)
 			SplitEntry(&line, &v, ' ');
 			if (v.size() == 2)
 			{
-				std::string matName = m_fileName;
+				std::string matName = mtlFile;
 				matName = matName.substr(0, matName.size() - 4);
 				matName.append(".");
 				matName.append(v[1]);
