@@ -7,7 +7,9 @@
 #include "ZobMatrix4x4.h"
 #include "Triangle.h"
 #include <thread> 
+#include <mutex>
 #include <algorithm>
+#include <condition_variable>
 #ifdef LINUX
 	#include <unistd.h>
 #elif MACOS
