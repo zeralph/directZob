@@ -1,4 +1,10 @@
 //#define LINUX 
+
+#ifdef WINDOWS
+	#define OPTIK_PROFILING 
+	#include "../dependencies/optick/include/optick.h"
+#endif
+
 #include "DirectZob.h"
 #include <fstream>
 
@@ -194,6 +200,9 @@ int main(int argc, char* argv[])
 	bStartPhysics = true;
 	for (;;)
 	{
+#ifdef OPTIK_PROFILING
+		OPTICK_FRAME("MainThread");
+#endif
 		if (bStartPhysics && !m_directZob.IsPhysicPlaying())
 		{
 			DirectZob::GetInstance()->GetZobObjectManager()->SaveTransforms();
@@ -255,6 +264,9 @@ int main(int argc, char* argv[])
 		int c = (int)(benchCpy / (float)frames);
 		std::cout << "\n\t\tBenchmark:\nRender\tGeom\tCpy\tFrame\tFps\n" << r <<"\t"<<g<<"\t"<<c<<"\t"<<t<<"\t"<<fps<< std::endl;
 	}
+#ifdef OPTIK_PROFILING
+	OPTICK_SHUTDOWN();
+#endif
 	return 0;
 }
 

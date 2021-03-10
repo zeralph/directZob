@@ -3,6 +3,7 @@
 #include "DirectZob.h"
 #include "../SceneLoader.h"
 #include <BaseFont.h>
+#include "../../dependencies/optick/include/optick.h"
 #define NB_HUD_TRIANGLES 2000
 
 ZobHUDManager::ZobHUDManager()
@@ -101,6 +102,7 @@ void ZobHUDManager::UpdateBehavior(float dt)
 
 void ZobHUDManager::UpdateObjects(const Camera* camera, Core::Engine* engine, float dt)
 {
+	OPTICK_EVENT();
 	for (std::vector<HUDElement>::const_iterator iter = m_hudElements.begin(); iter != m_hudElements.end(); iter++)
 	{
 		HUDElement e = *iter;
@@ -124,6 +126,7 @@ void ZobHUDManager::UpdateObjects(const Camera* camera, Core::Engine* engine, fl
 
 void ZobHUDManager::QueueForDrawing(const Camera* camera, Core::Engine* engine)
 {
+	OPTICK_EVENT();
 	for (int i = 0; i < m_nbDrawnTriangles; i++)
 	{
 		engine->QueueProjectedTriangle(camera, &m_trianglesBuffer[i]);

@@ -134,4 +134,5 @@ private:
 	eLightingPrecision m_lightingPrecision;
 	clock_t	m_tick;
 	float m_time;
+	int m_num;
 };

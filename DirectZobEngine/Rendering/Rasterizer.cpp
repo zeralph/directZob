@@ -2,10 +2,14 @@
 #include "DirectZob.h"
 #include "ZobObjects/Light.h"
 #include "Texture.h"
-#include <mutex>
+#ifdef WINDOWS
+	#include "../../dependencies/optick/include/optick.h"
+#endif
 static ZobVector3 sFog = ZobVector3(1.0f, 1.0f, 0.95f);
 static float fogDecal = -0.6f;
-static std::mutex zBufferLock;
+
+static int num = 0;
+
 Rasterizer::Rasterizer(uint width, uint height, uint startHeight, uint endHeight, BufferData* bufferData)
 {
 	m_startHeight = startHeight;
@@ -16,6 +20,8 @@ Rasterizer::Rasterizer(uint width, uint height, uint startHeight, uint endHeight
 	m_lines.clear();
 	m_triangles.clear();
 	m_time = 0.0f;
+	m_num = num;
+	num++;
 }
 
 void Rasterizer::Init()
@@ -26,6 +32,7 @@ void Rasterizer::Init()
 
 void Rasterizer::Start(const bool wireFrame, const eRenderMode renderMode, const bool bEvenFrame, const eLightingPrecision lp, ZobVector3 camForward)
 {
+	OPTICK_EVENT();
 	m_wireFrame = wireFrame;
 	m_thread = std::thread(&Rasterizer::Render, this);
 	m_bEvenFrame = bEvenFrame ? 1 : 0;
@@ -70,6 +77,7 @@ void Rasterizer::QueueLine(const Line3D* l)
 
 void Rasterizer::Render() 
 {
+	std::string tt = "r_" + m_num;
 	m_tick = clock();
 	//warning : invert lightdir ! https://fr.wikipedia.org/wiki/Ombrage_de_Phong
 	m_lights.clear();

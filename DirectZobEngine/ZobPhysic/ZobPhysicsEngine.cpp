@@ -2,6 +2,7 @@
 #include "ZobPhysicComponent.h"
 #include "ZobPhysicsContactsListener.h"
 #include <thread>
+#include "../dependencies/optick/include/optick.h"
 static std::thread g_physicThread;
 
 static bool sPhysicThreaded = false;
@@ -67,6 +68,7 @@ int ZobPhysicsEngine::GetBodyWorldIndex(const ZobPhysicComponent* b) const
 
 void ZobPhysicsEngine::StartUpdatePhysic(float dt)
 {
+    OPTICK_EVENT();
     if (sPhysicThreaded)
     {
         g_physicThread = std::thread(&ZobPhysicsEngine::Update, this, dt);

@@ -2,7 +2,9 @@
 #include "ZobObjectManager.h"
 #include "DirectZob.h"
 #include "MeshManager.h"
-
+#ifdef WINDOWS
+	#include "../../dependencies/optick/include/optick.h"
+#endif
 static std::thread g_geometryThread;
 static std::string emptyStr = std::string("");
 
@@ -126,22 +128,26 @@ void ZobObjectManager::Init()
 
 void ZobObjectManager::PreUpdate()
 {
+	OPTICK_EVENT();
 	m_rootObject->PreUpdate();
 }
 
 void ZobObjectManager::UpdateBehavior(float dt)
 {
+	OPTICK_EVENT();
 	m_rootObject->UpdateBehavior(dt);
 }
 
 void ZobObjectManager::StartUpdateScene(const Camera* camera, Core::Engine* engine, float dt)
 {
+	OPTICK_EVENT();
 	m_drawTick = clock();
 	g_geometryThread = std::thread(&ZobObjectManager::UpdateObjects, this, camera, engine, dt);
 }
 
 float ZobObjectManager::WaitForUpdateObjectend()
 {
+	OPTICK_EVENT();
 	if (g_geometryThread.joinable())
 		g_geometryThread.join();
 	return m_time;
@@ -156,6 +162,7 @@ void ZobObjectManager::UpdateObjects(const Camera* camera, Core::Engine* engine,
 
 void ZobObjectManager::QueueForDrawing(const Camera* camera, Core::Engine* engine)
 {
+	OPTICK_EVENT();
 	//m_rootObject->UpdateMesh(camera, engine);
 	m_rootObject->QueueForDrawing(camera, engine);
 }
