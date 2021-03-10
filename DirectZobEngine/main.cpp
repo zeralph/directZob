@@ -198,6 +198,7 @@ int main(int argc, char* argv[])
 	//m_directZob.StartPhysic();
 	int bTestFrame = 0;
 	bStartPhysics = true;
+	OPTICK_THREAD("main thread");
 	for (;;)
 	{
 #ifdef OPTIK_PROFILING

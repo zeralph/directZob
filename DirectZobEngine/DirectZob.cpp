@@ -12,6 +12,7 @@
 #elif LINUX
 #include "../minifb/src/x11/WindowData_X11.h"
 #endif
+#include "../../dependencies/optick/include/optick.h"
 #define LOG_BUFFER_SIZE 1024
 
 #define TARGET_MS_PER_FRAME 16.66f//0.0f//16.0f//33.3333f
@@ -174,6 +175,7 @@ int DirectZob::RunInternal(void func(void))
 
 int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUpdated /*=NULL*/, DirectZob::engineCallback OnQueuing /*=NULL*/)
 {
+	OPTICK_EVENT();
 	ZobVector3 color = ZobVector3(1, 1, 1);
 	timespec tstart;
 	timespec tend;
@@ -216,7 +218,6 @@ int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUp
 			m_zobObjectManager->PreUpdate();
 			m_hudManager->PreUpdate();
 			m_lightManager->PreUpdate();
-			m_engine->StartDrawingScene();
 			if (OnSceneUpdated)
 			{
 				OnSceneUpdated();
@@ -231,8 +232,8 @@ int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUp
 				
 			}
 			cam->UpdateAfter();
-
 			m_zobObjectManager->StartUpdateScene(cam, m_engine, m_frameTime / 1000.0f);
+			m_engine->StartDrawingScene();
 			m_hudManager->UpdateObjects(cam, m_engine, m_frameTime / 1000.0f);
 			m_geometryTime = m_zobObjectManager->WaitForUpdateObjectend();
 			m_renderTime = m_engine->WaitForRasterizersEnd();

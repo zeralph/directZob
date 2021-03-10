@@ -15,6 +15,7 @@
 #elif WINDOWS
 	#include <windows.h>
 #endif //LINUX
+#include <mutex>
 
 class Light;
 class Rasterizer
@@ -49,7 +50,7 @@ public:
 	void 					Start(const bool wireFrame, const eRenderMode renderMode, const bool bEvenFrame, const eLightingPrecision lp, ZobVector3 camForward);
 	float 					WaitForEnd();
 	void 					End();
-	void 					Init();
+	void 					Init(std::mutex* drawMutex, std::condition_variable* cv, bool* startDraw);
 	void 					Render();
 	void 					Clear();
 	void					QueueTriangle(const Triangle* t);
@@ -58,8 +59,10 @@ public:
 	inline int				GetNbTriangle() const { return m_triangles.size(); }
 	inline int				GetNbLine() const { return m_lines.size(); }
 	inline float			GetRenderTimeMS() const { return m_time;  }
+	std::mutex&				GetLockMutex() { return m_drawMutex;  }
 private:
 
+	void					RenderInternal();
 	void 					FillTopFlatTriangle2(ZobVector2* v1, ZobVector2* v2, ZobVector2* v3, const Triangle* t, const LightingData* lDataA, const LightingData* lDataB, const LightingData* lDataC) const;
 	void 					FillBottomFlatTriangle2(ZobVector2* v1, ZobVector2* v2, ZobVector2* v3, const Triangle* t, const LightingData* lDataA, const LightingData* lDataB, const LightingData* lDataC) const;
 	inline const void 		FillBufferPixel(const ZobVector3* p, const Triangle* t, const LightingData* lDataA, const LightingData* lDataB, const LightingData* lDataC) const;
@@ -135,4 +138,7 @@ private:
 	clock_t	m_tick;
 	float m_time;
 	int m_num;
+	std::mutex m_drawMutex;
+	bool* m_startDraw;
+	std::condition_variable* m_startConditionVariable;
 };

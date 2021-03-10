@@ -17,12 +17,14 @@
 #include "../../dependencies/optick/include/optick.h"
 #define MAX_TRIANGLES_PER_IMAGE 400000
 
-static std::mutex m_mutex;
-static std::condition_variable m_cond;
+bool startDraw;
+std::mutex startDrawMutex;
+std::condition_variable startDrawConditionVariable;
 
 using namespace Core;
 Engine::Engine(int width, int height, Events* events)
 {
+	startDraw = false;
 	m_started = false;
 	m_wireFrame = false;
 	m_rasterizerHeight = 0;
@@ -130,7 +132,7 @@ Engine::Engine(int width, int height, Events* events)
 	for (int i = 0; i < m_nbRasterizers; i++)
 	{
 
-		m_rasterizers[i]->Init();
+		m_rasterizers[i]->Init(&startDrawMutex, &startDrawConditionVariable, &startDraw);
 	}
 	std::string n = "Engine initialized with " + std::to_string(m_nbRasterizers) + " rasterizer(s) for " + std::to_string(m_maxTrianglesQueueSize) + " triangles per image";
 	DirectZob::LogInfo(n.c_str());
@@ -226,7 +228,7 @@ void Engine::Resize(int width, int height)
 	}
 	for (int i = 0; i < m_nbRasterizers; i++)
 	{
-		m_rasterizers[i]->Init();
+		m_rasterizers[i]->Init(&startDrawMutex, &startDrawConditionVariable, &startDraw);
 	}
 	if (bStarted)
 	{
@@ -292,11 +294,15 @@ int Engine::StartDrawingScene()
 	{
 		return 0;
 	}
+	
 	const ZobVector3 camForward = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera()->GetForward();
 	for (int i = 0; i < m_nbRasterizers; i++)
 	{
 		m_rasterizers[i]->Start(m_wireFrame, m_renderMode, m_currentFrame % 2, m_lightingPrecision, camForward);
 	}
+	
+	startDraw = true;
+	startDrawConditionVariable.notify_all();
 	return 0;
 }
 int Engine::SetDisplayedBuffer()
@@ -341,13 +347,16 @@ void Engine::ClearRenderQueues()
 float Engine::WaitForRasterizersEnd()
 {
 	OPTICK_EVENT();
+	
+	startDraw = false;
 	float t = 0.0f;
 	for (int i = 0; i < m_nbRasterizers; i++)
 	{
 		if (m_rasterizers[i])
 		{
-			float t2 = m_rasterizers[i]->WaitForEnd();
-			t = fmax(t, t2);
+			std::lock_guard<std::mutex> g(m_rasterizers[i]->GetLockMutex());
+			//float t2 = m_rasterizers[i]->WaitForEnd();
+			//t = fmax(t, t2);
 		}
 	}
 	return t;

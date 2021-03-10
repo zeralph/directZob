@@ -2,17 +2,24 @@
 #include "ZobObjectManager.h"
 #include "DirectZob.h"
 #include "MeshManager.h"
+#include <mutex>
 #ifdef WINDOWS
 	#include "../../dependencies/optick/include/optick.h"
 #endif
 static std::thread g_geometryThread;
 static std::string emptyStr = std::string("");
 
+bool startUpdate;
+std::mutex startObjectUpdateMutex;
+std::condition_variable startObjectConditionVariable;
+
 ZobObjectManager::ZobObjectManager()
 {
 	m_deletedIds.clear();
 	std::string n = "root";
 	m_rootObject = new ZobObject(ZOBGUID::type_internal, ZOBGUID::subtype_zobOject, n, NULL);
+	
+	g_geometryThread = std::thread(&ZobObjectManager::UpdateObjectThreadFunction, this); 
 }
 
 ZobObjectManager::~ZobObjectManager()
@@ -138,23 +145,47 @@ void ZobObjectManager::UpdateBehavior(float dt)
 	m_rootObject->UpdateBehavior(dt);
 }
 
+void ZobObjectManager::UpdateObjectThreadFunction()
+{
+	OPTICK_THREAD("object thread");
+	while (true)
+	{
+		//OPTICK_FRAME("objects update");
+		//needed scope for the lock
+		{
+			std::unique_lock<std::mutex> g(startObjectUpdateMutex);
+			startObjectConditionVariable.wait(g, [] { return startUpdate; });
+			Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
+			Engine* e = DirectZob::GetInstance()->GetEngine();
+			float dt = 0.33f;
+			UpdateObjects(c, e, dt);
+			startUpdate = false;
+		}
+	}
+}
+
 void ZobObjectManager::StartUpdateScene(const Camera* camera, Core::Engine* engine, float dt)
 {
 	OPTICK_EVENT();
+	
+	startUpdate = true;
+	startObjectConditionVariable.notify_one();
 	m_drawTick = clock();
-	g_geometryThread = std::thread(&ZobObjectManager::UpdateObjects, this, camera, engine, dt);
+	//g_geometryThread = std::thread(&ZobObjectManager::UpdateObjects, this, camera, engine, dt);
 }
 
 float ZobObjectManager::WaitForUpdateObjectend()
 {
 	OPTICK_EVENT();
-	if (g_geometryThread.joinable())
-		g_geometryThread.join();
+	std::lock_guard<std::mutex> g(startObjectUpdateMutex);
+	//if (g_geometryThread.joinable())
+	//	g_geometryThread.join();
 	return m_time;
 }
 
 void ZobObjectManager::UpdateObjects(const Camera* camera, Core::Engine* engine, float dt)
 {
+	OPTICK_EVENT();
 	m_rootObject->Update(dt);
 	m_rootObject->UpdateMesh(camera, engine);
 	m_time = (float)(clock() - m_drawTick) / CLOCKS_PER_SEC * 1000;
