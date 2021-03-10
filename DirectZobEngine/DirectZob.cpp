@@ -331,13 +331,11 @@ void DirectZob::WaitToTargetFrameTime(float dt)
 void DirectZob::SleepMS(float ms)
 {
 #ifdef LINUX
-	usleep((uint)(ms * 1000.0f))
+	usleep((uint)(ms * 1000.0f));
 #elif WINDOWS
-	//DWORD d = *reinterpret_cast<DWORD const*>(&ms);
-	//Sleep(d);
 	std::this_thread::sleep_for(std::chrono::milliseconds((uint)ms/2));
 #elif MACOS
-	usleep((uint)(ms*1000.0f))
+	usleep((uint)(ms*1000.0f));
 #endif //LINUX
 }
 

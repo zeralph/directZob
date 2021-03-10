@@ -50,7 +50,7 @@ public:
 	void 					Start(const bool wireFrame, const eRenderMode renderMode, const bool bEvenFrame, const eLightingPrecision lp, ZobVector3 camForward);
 	float 					WaitForEnd();
 	void 					End();
-	void 					Init(std::mutex* drawMutex, std::condition_variable* cv, bool* startDraw);
+	void 					Init(std::condition_variable* cv, std::mutex* m);
 	void 					Render();
 	void 					Clear();
 	void					QueueTriangle(const Triangle* t);
@@ -59,7 +59,7 @@ public:
 	inline int				GetNbTriangle() const { return m_triangles.size(); }
 	inline int				GetNbLine() const { return m_lines.size(); }
 	inline float			GetRenderTimeMS() const { return m_time;  }
-	std::mutex&				GetLockMutex() { return m_drawMutex;  }
+
 private:
 
 	void					RenderInternal();
@@ -138,7 +138,6 @@ private:
 	clock_t	m_tick;
 	float m_time;
 	int m_num;
-	std::mutex m_drawMutex;
-	bool* m_startDraw;
+	std::mutex* m_drawMutex;
 	std::condition_variable* m_startConditionVariable;
 };

@@ -1,9 +1,7 @@
 //#define LINUX 
 
-#ifdef WINDOWS
-	#define OPTIK_PROFILING 
-	#include "../dependencies/optick/include/optick.h"
-#endif
+#define OPTIK_PROFILING 
+#include "../dependencies/optick/include/optick.h"
 
 #include "DirectZob.h"
 #include <fstream>

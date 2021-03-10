@@ -17,14 +17,9 @@
 #include "../../dependencies/optick/include/optick.h"
 #define MAX_TRIANGLES_PER_IMAGE 400000
 
-bool startDraw;
-std::mutex startDrawMutex;
-std::condition_variable startDrawConditionVariable;
-
 using namespace Core;
 Engine::Engine(int width, int height, Events* events)
 {
-	startDraw = false;
 	m_started = false;
 	m_wireFrame = false;
 	m_rasterizerHeight = 0;
@@ -54,7 +49,7 @@ Engine::Engine(int width, int height, Events* events)
 	m_nbRasterizers = 4;
 	*/
 	m_nbRasterizers -= 2;
-	m_nbRasterizers = max(m_nbRasterizers, 1);
+	m_nbRasterizers = max(m_nbRasterizers, (uint)1);
 	//m_nbRasterizers = 4;
 	m_maxTrianglesQueueSize = 200000;// MAX_TRIANGLES_PER_IMAGE / m_nbRasterizers;
 	m_maxLineQueueSize = 200000;
@@ -79,6 +74,9 @@ Engine::Engine(int width, int height, Events* events)
 	m_nbPixels = 0;
 
 	m_rasterizers = (Rasterizer**)malloc(sizeof(Rasterizer) * m_nbRasterizers);
+	m_conditionvariables = (std::condition_variable**)malloc(sizeof(std::condition_variable) * m_nbRasterizers);
+	m_mutexes = (std::mutex**)malloc(sizeof(std::mutex) * m_nbRasterizers);
+
 	m_rasterizerHeight = ceil((float)height / (float)m_nbRasterizers);
 	int h0 = 0;
 	int h1 = height;
@@ -86,6 +84,8 @@ Engine::Engine(int width, int height, Events* events)
 	{
 		Rasterizer* r = new Rasterizer(width, height, 0, height /*+ m_rasterizerHeight*/, &m_bufferData);
 		m_rasterizers[i] = r;
+		m_conditionvariables[i] = new std::condition_variable();
+		m_mutexes[i] = new std::mutex();
 		h0 += m_rasterizerHeight;
 	}
 
@@ -134,7 +134,7 @@ Engine::Engine(int width, int height, Events* events)
 	for (int i = 0; i < m_nbRasterizers; i++)
 	{
 
-		m_rasterizers[i]->Init(&startDrawMutex, &startDrawConditionVariable, &startDraw);
+		m_rasterizers[i]->Init(m_conditionvariables[i], m_mutexes[i]);
 	}
 	std::string n = "Engine initialized with " + std::to_string(m_nbRasterizers) + " rasterizer(s) for " + std::to_string(m_maxTrianglesQueueSize) + " triangles per image";
 	DirectZob::LogInfo(n.c_str());
@@ -230,7 +230,7 @@ void Engine::Resize(int width, int height)
 	}
 	for (int i = 0; i < m_nbRasterizers; i++)
 	{
-		m_rasterizers[i]->Init(&startDrawMutex, &startDrawConditionVariable, &startDraw);
+		m_rasterizers[i]->Init(m_conditionvariables[i], m_mutexes[i]);
 	}
 	if (bStarted)
 	{
@@ -300,9 +300,8 @@ int Engine::StartDrawingScene()
 	for (int i = 0; i < m_nbRasterizers; i++)
 	{
 		m_rasterizers[i]->Start(m_wireFrame, m_renderMode, m_currentFrame % 2, m_lightingPrecision, camForward);
+		m_conditionvariables[i]->notify_one();
 	}
-	startDraw = true;
-	startDrawConditionVariable.notify_all();
 	return 0;
 }
 int Engine::SetDisplayedBuffer()
@@ -347,14 +346,12 @@ void Engine::ClearRenderQueues()
 float Engine::WaitForRasterizersEnd()
 {
 	OPTICK_EVENT();
-	
-	startDraw = false;
 	float t = 0.0f;
 	for (int i = 0; i < m_nbRasterizers; i++)
 	{
 		if (m_rasterizers[i])
 		{
-			std::unique_lock<std::mutex> g(m_rasterizers[i]->GetLockMutex());
+			std::unique_lock<std::mutex> g(*m_mutexes[i]);
 			//float t2 = m_rasterizers[i]->WaitForEnd();
 			//t = fmax(t, t2);
 		}

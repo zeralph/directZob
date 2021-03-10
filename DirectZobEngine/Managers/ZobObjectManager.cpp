@@ -3,9 +3,8 @@
 #include "DirectZob.h"
 #include "MeshManager.h"
 #include <mutex>
-#ifdef WINDOWS
-	#include "../../dependencies/optick/include/optick.h"
-#endif
+#include "../../dependencies/optick/include/optick.h"
+
 static std::thread g_geometryThread;
 static std::string emptyStr = std::string("");
 

@@ -169,6 +169,7 @@
                                 '../../../dependencies/fbxsdk/macos/lib/clang/release/libfbxsdk.a',
                                 '../../../dependencies/reactphysics3d/lib/macos/libreactphysics3d.a',
                                 '../../../dependencies/gainput/lib/macos/libgainputstatic.a',
+                                '../../../dependencies/optick/lib/macos/libOptickCore.dylib',
                             ],
                         },
                     },

@@ -124,7 +124,11 @@ namespace Core
 			cb->y = ca->y + (cb->y - ca->y) * r;
 			cb->z = ca->z + (cb->z - ca->z) * r;
 		}
+		
 		Rasterizer** m_rasterizers;
+		std::condition_variable** m_conditionvariables; 
+		std::mutex** m_mutexes;
+
 		Events* m_events;
 
 		Line3D* m_LineQueue;

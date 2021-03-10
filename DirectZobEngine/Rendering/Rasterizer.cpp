@@ -2,9 +2,8 @@
 #include "DirectZob.h"
 #include "ZobObjects/Light.h"
 #include "Texture.h"
-#ifdef WINDOWS
-	#include "../../dependencies/optick/include/optick.h"
-#endif
+#include "../../dependencies/optick/include/optick.h"
+
 static ZobVector3 sFog = ZobVector3(1.0f, 1.0f, 0.95f);
 static float fogDecal = -0.6f;
 
@@ -25,13 +24,13 @@ Rasterizer::Rasterizer(uint width, uint height, uint startHeight, uint endHeight
 	num++;
 }
 
-void Rasterizer::Init(std::mutex* drawMutex, std::condition_variable* cv, bool* startDraw)
+void Rasterizer::Init(std::condition_variable* cv, std::mutex *m)
 {
 	//m_thread = std::thread(&Rasterizer::Run, this);
 	//m_thread.detach();
 	//m_drawMutex = drawMutex;
-	m_startDraw = startDraw;
 	m_startConditionVariable = cv;
+	m_drawMutex = m;
 	bStartDraw = false;
 	m_thread = std::thread(&Rasterizer::Render, this);
 }
@@ -86,7 +85,7 @@ void Rasterizer::Render()
 	OPTICK_THREAD("render thread");
 	while (true)
 	{
-		std::unique_lock<std::mutex> g(m_drawMutex);
+		std::unique_lock<std::mutex> g(*m_drawMutex);
 		(*m_startConditionVariable).wait(g, [] { return bStartDraw; });
 		RenderInternal();
 		bStartDraw = false;
