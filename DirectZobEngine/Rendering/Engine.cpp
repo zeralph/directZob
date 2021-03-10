@@ -14,13 +14,15 @@
 #include "DirectZob.h"
 #include "Rasterizer.h"
 #include "../ZobObjects/Camera.h"
-
+#include "../../dependencies/optick/include/optick.h"
+#include <mutex>
 #define MAX_TRIANGLES_PER_IMAGE 400000
 
-static std::mutex m_mutex;
-static std::condition_variable m_cond;
-
 using namespace Core;
+
+std::condition_variable** m_conditionvariables;
+std::mutex** m_mutexes;
+
 Engine::Engine(int width, int height, Events* events)
 {
 	m_started = false;
@@ -51,7 +53,9 @@ Engine::Engine(int width, int height, Events* events)
 	}
 	m_nbRasterizers = 4;
 	*/
-	//m_nbRasterizers = 2;
+	m_nbRasterizers -= 2;
+	m_nbRasterizers = max(m_nbRasterizers, (uint)1);
+	//m_nbRasterizers = 4;
 	m_maxTrianglesQueueSize = 200000;// MAX_TRIANGLES_PER_IMAGE / m_nbRasterizers;
 	m_maxLineQueueSize = 200000;
 	m_renderOutput = eRenderOutput_render;
@@ -75,6 +79,9 @@ Engine::Engine(int width, int height, Events* events)
 	m_nbPixels = 0;
 
 	m_rasterizers = (Rasterizer**)malloc(sizeof(Rasterizer) * m_nbRasterizers);
+	m_conditionvariables = (std::condition_variable**)malloc(sizeof(std::condition_variable) * m_nbRasterizers);
+	m_mutexes = (std::mutex**)malloc(sizeof(std::mutex) * m_nbRasterizers);
+
 	m_rasterizerHeight = ceil((float)height / (float)m_nbRasterizers);
 	int h0 = 0;
 	int h1 = height;
@@ -82,6 +89,8 @@ Engine::Engine(int width, int height, Events* events)
 	{
 		Rasterizer* r = new Rasterizer(width, height, 0, height /*+ m_rasterizerHeight*/, &m_bufferData);
 		m_rasterizers[i] = r;
+		m_conditionvariables[i] = new std::condition_variable();
+		m_mutexes[i] = new std::mutex();
 		h0 += m_rasterizerHeight;
 	}
 
@@ -130,7 +139,7 @@ Engine::Engine(int width, int height, Events* events)
 	for (int i = 0; i < m_nbRasterizers; i++)
 	{
 
-		m_rasterizers[i]->Init();
+		m_rasterizers[i]->Init(m_conditionvariables[i], m_mutexes[i]);
 	}
 	std::string n = "Engine initialized with " + std::to_string(m_nbRasterizers) + " rasterizer(s) for " + std::to_string(m_maxTrianglesQueueSize) + " triangles per image";
 	DirectZob::LogInfo(n.c_str());
@@ -148,19 +157,21 @@ uint Engine::GetObjectIdAtCoords(uint x, uint y)
 
 Engine::~Engine()
 {
-	for (int i = 0; i < m_nbRasterizers; i++)
-	{
-		m_rasterizers[i]->End();
-	}
+	StopRasterizers();
+	WaitForRasterizersEnd();
 	for (int i = 0; i < m_nbRasterizers; i++)
 	{
 		delete m_rasterizers[i];
+		delete m_conditionvariables[i];
+		delete m_mutexes[i];
 	}
 	free(m_TrianglesQueue);
 	free(m_verticesData);
 	free(m_uvData);
 	free(m_colorData);
 	free(m_rasterizers);
+	free(m_conditionvariables);
+	free(m_mutexes);
 	m_events = NULL;
 }
 
@@ -186,7 +197,7 @@ void Engine::Resize(int width, int height)
 {
 	bool bStarted = m_started;
 	Stop();
-	SLEEP_MS(100);
+	DirectZob::GetInstance()->SleepMS(1000);
 	for (int i = 0; i < m_nbRasterizers; i++)
 	{
 		m_rasterizers[i]->End();
@@ -226,7 +237,7 @@ void Engine::Resize(int width, int height)
 	}
 	for (int i = 0; i < m_nbRasterizers; i++)
 	{
-		m_rasterizers[i]->Init();
+		m_rasterizers[i]->Init(m_conditionvariables[i], m_mutexes[i]);
 	}
 	if (bStarted)
 	{
@@ -236,6 +247,7 @@ void Engine::Resize(int width, int height)
 
 void Engine::ClearBuffer(const Color *color)
 {
+	OPTICK_EVENT();
 	uint v = color->GetRawValue();
 	//Color cc = Color(63, 149, 255, 255);
 	//v = cc.GetRawValue();
@@ -286,14 +298,16 @@ void Engine::ClearBuffer(const Color *color)
 
 int Engine::StartDrawingScene()
 {
+	OPTICK_EVENT();
 	if (!m_started)
 	{
 		return 0;
 	}
-	const ZobVector3 camForward = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera()->GetForward();
+	const ZobVector3 camForward = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera()->GetForward();	
 	for (int i = 0; i < m_nbRasterizers; i++)
 	{
-		m_rasterizers[i]->Start(m_wireFrame, m_renderMode, m_currentFrame % 2, m_lightingPrecision, camForward);
+		m_rasterizers[i]->Start();
+		m_conditionvariables[i]->notify_one();
 	}
 	return 0;
 }
@@ -327,6 +341,7 @@ int Engine::SetDisplayedBuffer()
 
 void Engine::ClearRenderQueues()
 {
+	OPTICK_EVENT();
 	for (int i = 0; i < m_nbRasterizers; i++)
 	{
 		m_lineQueueSize = 0;
@@ -335,15 +350,23 @@ void Engine::ClearRenderQueues()
 	}
 }
 
+void Engine::StopRasterizers()
+{
+	for (int i = 0; i < m_nbRasterizers; i++)
+	{
+		m_rasterizers[i]->End();
+	}
+}
+
 float Engine::WaitForRasterizersEnd()
 {
+	OPTICK_EVENT();
 	float t = 0.0f;
 	for (int i = 0; i < m_nbRasterizers; i++)
 	{
 		if (m_rasterizers[i])
 		{
-			float t2 = m_rasterizers[i]->WaitForEnd();
-			t = fmax(t, t2);
+			std::unique_lock<std::mutex> g(*m_mutexes[i]);
 		}
 	}
 	return t;
@@ -766,7 +789,6 @@ void Engine::QueueLineInRasters(const Line3D* l, int idx) const
 
 void Engine::QueueTriangleInRasters(const Triangle* t, int idx) const
 {
-
 	static bool bEqual = false;
 	if (!bEqual)
 	{
@@ -906,15 +928,19 @@ uint Engine::SubDivideClippedTriangle(const Camera* c, const Triangle* t)
 	ZobVector3 pIn1;
 	ZobVector2 pIn1Uv;
 	ZobVector3 pIn1Cv;
+	ZobVector3 pIn1n;
 	ZobVector3 pIn2;
 	ZobVector2 pIn2Uv;
 	ZobVector3 pIn2Cv;
+	ZobVector3 pIn2n;
 	ZobVector3 pOut1;
 	ZobVector2 pOut1Uv;
 	ZobVector3 pOut1Cv;
+	ZobVector3 pOut1n;
 	ZobVector3 pOut2;
 	ZobVector2 pOut2Uv;
 	ZobVector3 pOut2Cv;
+	ZobVector3 pOut2n;
 	ZobVector3 pi;
 	ZobVector2 piUv;
 	if (t->clipMode == Triangle::eClip_AB_in_C_out)
@@ -922,42 +948,51 @@ uint Engine::SubDivideClippedTriangle(const Camera* c, const Triangle* t)
 		pIn1 = t->va;
 		pIn1Uv = t->ua;
 		pIn1Cv = t->ca;
+		pIn1n = t->na;
 
 		pIn2 = t->vb;
 		pIn2Uv = t->ub;
 		pIn2Cv = t->cb;
+		pIn2n = t->nb;
 
 		pOut1 = t->vc;
 		pOut1Uv = t->uc;
 		pOut1Cv = t->cc;
+		pOut1n = t->nc;
 	}
 	else if (t->clipMode == Triangle::eClip_AC_in_B_out)
 	{
 		pIn1 = t->va;
 		pIn1Uv = t->ua;
 		pIn1Cv = t->ca;
+		pIn1n = t->na;
 
 		pIn2 = t->vc;
 		pIn2Uv = t->uc;
 		pIn2Cv = t->cc;
+		pIn2n = t->nc;
 
 		pOut1 = t->vb;
 		pOut1Uv = t->ub;
 		pOut1Cv = t->cb;
+		pOut1n = t->nb;
 	}
 	else if(Triangle::eClip_BC_in_A_out)
 	{
 		pOut1 = t->va;
 		pOut1Uv = t->ua;
 		pOut1Cv = t->ca;
+		pOut1n = t->na;
 
 		pIn1 = t->vc;
 		pIn1Uv = t->uc;
 		pIn1Cv = t->cc;
+		pIn1n = t->nc;
 
 		pIn2 = t->vb;
 		pIn2Uv = t->ub;
 		pIn2Cv = t->cb;
+		pIn2n = t->nb;
 	}
 	else
 	{
@@ -967,48 +1002,65 @@ uint Engine::SubDivideClippedTriangle(const Camera* c, const Triangle* t)
 	pOut2 = pOut1;
 	pOut2Uv = pOut1Uv;
 	pOut2Cv = pOut1Cv;
+	pOut2n = pOut1n;
 	float outP2Factor = 0.0f;
 	c->ClipSegmentToFrustrum(&pIn1, &pOut1, outP2Factor);
 	RecomputeUv(&pIn1Uv, &pOut1Uv, outP2Factor);
 	RecomputeColor(&pIn1Cv, &pOut1Cv, outP2Factor);
+	RecomputeNormal(&pIn1n, &pOut1n, outP2Factor);
 	c->ClipSegmentToFrustrum(&pIn2, &pOut2, outP2Factor);
 	RecomputeUv(&pIn2Uv, &pOut2Uv, outP2Factor);
 	RecomputeColor(&pIn2Cv, &pOut2Cv, outP2Factor);
+	RecomputeNormal(&pIn2n, &pOut2n, outP2Factor);
 	uint j;
+	
 	j = m_TriangleQueueSize + nbDrawn;
 	if (j < m_maxTrianglesQueueSize)
 	{
 		Triangle* nt = &m_TrianglesQueue[j];
 		Triangle::CopyTriangle(nt, t);
-		nt->va->Copy(&pIn1);
-		nt->ca->Copy(&pIn1Cv);	//TODO : interpolate color
-		nt->ua->Copy(&pIn1Uv);
+		nt->vc->Copy(&pIn1);
+		nt->cc->Copy(&pIn1Cv);	
+		nt->uc->Copy(&pIn1Uv);
+		nt->nc->Copy(&pIn1n);
+
 		nt->vb->Copy(&pOut2);
 		nt->cb->Copy(&pOut2Cv);
 		nt->ub->Copy(&pOut2Uv);
-		nt->vc->Copy(&pIn2);
-		nt->cc->Copy(&pIn2Cv);
-		nt->uc->Copy(&pIn2Uv);
+		nt->nb->Copy(&pOut2n);
+
+		nt->va->Copy(&pIn2);
+		nt->ca->Copy(&pIn2Cv);
+		nt->ua->Copy(&pIn2Uv);
+		nt->na->Copy(&pIn2n);
 		RecomputeTriangleProj(c, nt);
 		nbDrawn++;
 	}
+	
 	j = m_TriangleQueueSize + nbDrawn;
 	if (j < m_maxTrianglesQueueSize)
 	{
 		Triangle* nt = &m_TrianglesQueue[j];
 		Triangle::CopyTriangle(nt, t);
-		nt->va->Copy(&pIn1);
-		nt->ca->Copy(&pIn1Cv);	//TODO : interpolate color
-		nt->ua->Copy(&pIn1Uv);
+		nt->vc->Copy(&pIn1);
+		nt->cc->Copy(&pIn1Cv);
+		nt->uc->Copy(&pIn1Uv);
+		nt->nc->Copy(&pIn1n);
+
 		nt->vb->Copy(&pOut1);
-		nt->cb->Copy(&pOut1Cv);	//TODO : interpolate color
+		nt->cb->Copy(&pOut1Cv);
 		nt->ub->Copy(&pOut1Uv);
-		nt->vc->Copy(&pOut2);
-		nt->cc->Copy(&pOut2Cv);	//TODO : interpolate color
-		nt->uc->Copy(&pOut2Uv);
+		nt->nb->Copy(&pOut1n);
+
+		nt->va->Copy(&pOut2);
+		nt->ca->Copy(&pOut2Cv);
+		nt->ua->Copy(&pOut2Uv);
+		nt->na->Copy(&pOut2n);
+
 		RecomputeTriangleProj(c, nt);
 		nbDrawn++;
 	}
+	
 	return nbDrawn;
 }
 

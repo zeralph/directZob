@@ -89,10 +89,14 @@ public :
 	static void				RemoveIndent() { s_logIndent--; if (s_logIndent < 0) { s_logIndent = 0; } }
 	void					Lock();
 	void					Unlock();
-
+	float					GetLastDt() const { return m_frameTime / 1000.0f; }
+	void					SleepMS(float ms);
+	void					Shutdown();
 private:
 	int						RunInternal(void func(void));
 	void					PrintObjectList();
+	void					WaitToTargetFrameTime(float dt);
+	
 private:
 	
 	Events* m_events = NULL;
@@ -112,7 +116,7 @@ private:
 	bool m_initialized = false;
 	float m_renderTime;
 	float m_geometryTime;
-	float m_frameTime;
+	volatile float m_frameTime;
 	float m_fps;
 	float m_copyTime;
 	float m_physicTime;

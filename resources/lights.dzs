@@ -13,7 +13,7 @@
         <Position x="0" y="0" z="0" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="0.1" y="0.1" z="0.1" />
-        <Mesh name="GLX_400.FBX" file="GLX_400.FBX" path="/_cars/GLX-400-FBX/">
+        <Mesh name="GLX_400.OBJ" file="GLX_400.OBJ" path="/_cars/GLX-400-OBJ/">
             <RenderOptions>
                 <Lighting>Phong</Lighting>
                 <ZBuffer>True</ZBuffer>

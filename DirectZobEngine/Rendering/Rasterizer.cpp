@@ -2,10 +2,13 @@
 #include "DirectZob.h"
 #include "ZobObjects/Light.h"
 #include "Texture.h"
-#include <mutex>
+#include "../../dependencies/optick/include/optick.h"
+
 static ZobVector3 sFog = ZobVector3(1.0f, 1.0f, 0.95f);
 static float fogDecal = -0.6f;
-static std::mutex zBufferLock;
+
+volatile bool bStartDraw;
+
 Rasterizer::Rasterizer(uint width, uint height, uint startHeight, uint endHeight, BufferData* bufferData)
 {
 	m_startHeight = startHeight;
@@ -16,40 +19,51 @@ Rasterizer::Rasterizer(uint width, uint height, uint startHeight, uint endHeight
 	m_lines.clear();
 	m_triangles.clear();
 	m_time = 0.0f;
+	m_runThread = true;
 }
 
-void Rasterizer::Init()
+void Rasterizer::Init(std::condition_variable* cv, std::mutex *m)
 {
 	//m_thread = std::thread(&Rasterizer::Run, this);
 	//m_thread.detach();
+	//m_drawMutex = drawMutex;
+	m_startConditionVariable = cv;
+	m_drawMutex = m;
+	bStartDraw = false;
+	m_thread = std::thread(&Rasterizer::Render, this);
+	m_thread.detach();
 }
 
-void Rasterizer::Start(const bool wireFrame, const eRenderMode renderMode, const bool bEvenFrame, const eLightingPrecision lp, ZobVector3 camForward)
+void Rasterizer::Start()
 {
-	m_wireFrame = wireFrame;
-	m_thread = std::thread(&Rasterizer::Render, this);
-	m_bEvenFrame = bEvenFrame ? 1 : 0;
-	m_renderMode = renderMode;
-	m_lightingPrecision = lp;
-	m_camPos = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera()->GetWorldPosition();
-		//ZobVector3(-camForward.x, -camForward.y, -camForward.z);
+	//OPTICK_EVENT();
+	//const bool wireFrame, const eRenderMode renderMode, const bool bEvenFrame, const eLightingPrecision lp, ZobVector3 camForward)
+
+	const Engine* e = DirectZob::GetInstance()->GetEngine();
+	const Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
+	bStartDraw = true;
+	m_wireFrame = e->WireFrame();
+	m_renderMode = e->GetRenderMode();
+	m_lightingPrecision = e->GetLightingPrecision();
+	m_bEvenFrame = (e->GetCurrentFrame() % 2 ==0)? 1 : 0;
+	m_camPos = c->GetWorldPosition();
 }
 
 float Rasterizer::WaitForEnd() 
 {
-	if (m_thread.joinable())
-		m_thread.join();
+	//if (m_thread.joinable())
+	//	m_thread.join();
 	return m_time;
 }
 
-void Rasterizer::End() {
-	if (m_thread.joinable())
-		m_thread.join();
+void Rasterizer::End() 
+{
+	m_runThread = false;
 }
 
 Rasterizer::~Rasterizer()
 {
-	Clear();
+	End();
 }
 
 void Rasterizer::Clear()
@@ -68,8 +82,28 @@ void Rasterizer::QueueLine(const Line3D* l)
 	m_lines.push_back(l);
 }
 
-void Rasterizer::Render() 
+void Rasterizer::Render()
 {
+	OPTICK_THREAD("render thread");
+	while (m_runThread)
+	{
+		std::unique_lock<std::mutex> g(*m_drawMutex);
+		(*m_startConditionVariable).wait(g, [] { return bStartDraw; });
+		RenderInternal();
+		bStartDraw = false;
+	}
+}
+void Rasterizer::RenderInternal()
+{
+	OPTICK_CATEGORY("Rendering", Optick::Category::Rendering);
+	m_camPos = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera()->GetWorldPosition();
+
+	//todo
+	m_wireFrame = false;
+	m_bEvenFrame = 0;
+	m_renderMode = eRenderMode_fullframe;
+	m_lightingPrecision = eLightingPrecision_vertex;
+
 	m_tick = clock();
 	//warning : invert lightdir ! https://fr.wikipedia.org/wiki/Ombrage_de_Phong
 	m_lights.clear();

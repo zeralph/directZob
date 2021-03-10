@@ -42,7 +42,8 @@ public:
 	void AddIdToDeleted(ulong id) { m_deletedIds.push_back(id); }
 	bool IsDeleted(ulong id);
 private:
-	void UpdateObjects(const Camera* camera, Core::Engine* engine, float dt);
+	void UpdateObjectThreadFunction();
+	void UpdateObjects();
 	void GetZobObjectListInternal(const ZobObject* z, std::string& str);
 	void GetZobObjectListInternal(const ZobObject* z, std::vector<const ZobObject*>& v);
 	ZobObject* LoadEditorMesh(const char* name, const char* meshPath, const char* meshFile, ZobObject* parent);
@@ -51,4 +52,5 @@ private:
 	clock_t	m_drawTick;
 	float m_time;
 	std::vector<ulong> m_deletedIds;
+	bool m_runThread;
 }; 

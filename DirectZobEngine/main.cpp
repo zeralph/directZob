@@ -1,4 +1,8 @@
 //#define LINUX 
+
+#define OPTIK_PROFILING 
+#include "../dependencies/optick/include/optick.h"
+
 #include "DirectZob.h"
 #include <fstream>
 
@@ -26,6 +30,12 @@ void resize(struct mfb_window* window, int width, int height) {
 	//m_engine->Resize(width, height);
 	mfb_set_viewport(window, x, y, width, height);
 	//m_engine->Start();
+}
+
+int UpdateImageToScreen()
+{
+	OPTICK_EVENT()
+	return mfb_update(m_window, (void*)m_directZob.GetBufferData());
 }
 
 int main(int argc, char* argv[])
@@ -192,8 +202,12 @@ int main(int argc, char* argv[])
 	//m_directZob.StartPhysic();
 	int bTestFrame = 0;
 	bStartPhysics = true;
+	OPTICK_THREAD("main thread");
 	for (;;)
 	{
+#ifdef OPTIK_PROFILING
+		OPTICK_FRAME("MainThread");
+#endif
 		if (bStartPhysics && !m_directZob.IsPhysicPlaying())
 		{
 			DirectZob::GetInstance()->GetZobObjectManager()->SaveTransforms();
@@ -235,7 +249,7 @@ int main(int argc, char* argv[])
 		benchTot += m_directZob.GetFrameTime();
 		benchCpy += m_directZob.GetCopyTime();
 		frames++;
-		int state = mfb_update(m_window, (void*)m_directZob.GetBufferData() );
+		int state = UpdateImageToScreen();
 		if (state < 0)
 		{
 			break;
@@ -255,6 +269,10 @@ int main(int argc, char* argv[])
 		int c = (int)(benchCpy / (float)frames);
 		std::cout << "\n\t\tBenchmark:\nRender\tGeom\tCpy\tFrame\tFps\n" << r <<"\t"<<g<<"\t"<<c<<"\t"<<t<<"\t"<<fps<< std::endl;
 	}
+#ifdef OPTIK_PROFILING
+	OPTICK_SHUTDOWN();
+#endif
+	m_directZob.Shutdown();
 	return 0;
 }
 

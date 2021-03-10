@@ -15,6 +15,7 @@
 #elif WINDOWS
 	#include <windows.h>
 #endif //LINUX
+#include <mutex>
 
 class Light;
 class Rasterizer
@@ -46,10 +47,10 @@ public:
 	void 					DrawTriangle(const Triangle* t) const;
 	void 					plotLine(int x0, int y0, int x1, int y1) const;
 	void 					DrawLine(const Line3D* l) const;
-	void 					Start(const bool wireFrame, const eRenderMode renderMode, const bool bEvenFrame, const eLightingPrecision lp, ZobVector3 camForward);
+	void 					Start();
 	float 					WaitForEnd();
 	void 					End();
-	void 					Init();
+	void 					Init(std::condition_variable* cv, std::mutex* m);
 	void 					Render();
 	void 					Clear();
 	void					QueueTriangle(const Triangle* t);
@@ -58,8 +59,10 @@ public:
 	inline int				GetNbTriangle() const { return m_triangles.size(); }
 	inline int				GetNbLine() const { return m_lines.size(); }
 	inline float			GetRenderTimeMS() const { return m_time;  }
+
 private:
 
+	void					RenderInternal();
 	void 					FillTopFlatTriangle2(ZobVector2* v1, ZobVector2* v2, ZobVector2* v3, const Triangle* t, const LightingData* lDataA, const LightingData* lDataB, const LightingData* lDataC) const;
 	void 					FillBottomFlatTriangle2(ZobVector2* v1, ZobVector2* v2, ZobVector2* v3, const Triangle* t, const LightingData* lDataA, const LightingData* lDataB, const LightingData* lDataC) const;
 	inline const void 		FillBufferPixel(const ZobVector3* p, const Triangle* t, const LightingData* lDataA, const LightingData* lDataB, const LightingData* lDataC) const;
@@ -134,4 +137,8 @@ private:
 	eLightingPrecision m_lightingPrecision;
 	clock_t	m_tick;
 	float m_time;
+	int m_num;
+	std::mutex* m_drawMutex;
+	std::condition_variable* m_startConditionVariable;
+	bool m_runThread;
 };

@@ -115,6 +115,7 @@
                     {
                         'include_dirs': [
                             '../dependencies/fbxsdk/windows/include',
+							'../dependencies/optick/windows/include',
                         ],
                         'defines': [
                             'FBXSDK_SHARED',  # required to link with dll
@@ -130,6 +131,7 @@
                         'link_settings': {
                             'libraries': [
                                 '../../../dependencies/reactphysics3d/lib/windows/reactphysics3d.lib',
+								'../../../dependencies/optick/lib/windows/OptickCore.lib',
 								'../../../dependencies/gainput/lib/windows/gainput.lib',
                             ],
                         },
@@ -167,6 +169,7 @@
                                 '../../../dependencies/fbxsdk/macos/lib/clang/release/libfbxsdk.a',
                                 '../../../dependencies/reactphysics3d/lib/macos/libreactphysics3d.a',
                                 '../../../dependencies/gainput/lib/macos/libgainputstatic.a',
+                                '../../../dependencies/optick/lib/macos/libOptickCore.dylib',
                             ],
                         },
                     },
@@ -242,6 +245,7 @@
                                 '<(PRODUCT_DIR)',
                                 'files': [
                                     '../dependencies/fbxsdk/windows/lib/vs2017/x64/release/libfbxsdk.dll',  # copy fbxsdk
+									'../dependencies/optick/lib/windows/OptickCore.dll',  # copy OptickCore.dll
                                     '../dependencies/gainput/lib/windows/gainput.dll',
                                 ],
                             },
@@ -354,6 +358,7 @@
                                 '<(PRODUCT_DIR)',
                                 'files': [
                                     '../dependencies/fbxsdk/windows/lib/vs2017/x64/release/libfbxsdk.dll'  # copy fbxsdk
+									'../dependencies/optick/lib/windows/OptickCore.dll',  # copy OptickCore.dll
 									'../dependencies/gainput/lib/windows/gainput.dll'
                                 ],
                             },

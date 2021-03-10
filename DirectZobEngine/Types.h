@@ -11,7 +11,6 @@
 #ifdef LINUX
     #define MAX_PATH 256
     #include <unistd.h>
-	#define SLEEP_MS(a) usleep((uint)(a*1000.0f))
 	#define _TRUNCATE ((size_t)-1)
 	#define _snprintf_s(a,b,c,...) snprintf(a,b,c,__VA_ARGS__)
 	#define _vsnprintf(a,b,c,...) vsnprintf(a,b,c,__VA_ARGS__)
@@ -23,11 +22,9 @@
     })
 #elif WINDOWS
 	#include <windows.h>
-	#define SLEEP_MS(a) Sleep(a)
 #elif MACOS
     #define MAX_PATH 256
     #include <unistd.h>
-	#define SLEEP_MS(a) sleep(a/1000)
 	#define _TRUNCATE ((size_t)-1)
 	#define _snprintf_s(a,b,c,...) snprintf(a,b,c,__VA_ARGS__)
 	#define _vsnprintf(a,b,c,...) vsnprintf(a,b,c,__VA_ARGS__)
@@ -38,6 +35,9 @@
         (*(fp) ) ? 0:errno;\
     })
 #endif //LINUX
+
+
+
 #ifndef RAD_TO_DEG
 	#define RAD_TO_DEG(x) (x * 180.0f / M_PI)
 #endif
