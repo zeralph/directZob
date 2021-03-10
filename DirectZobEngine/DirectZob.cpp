@@ -287,24 +287,18 @@ int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUp
 			m_inputManager->GetMap()->GetFloat(ZobInputManager::RightStickY),
 			m_inputManager->GetMap()->GetFloat(ZobInputManager::LeftShoulder),
 			m_inputManager->GetMap()->GetFloat(ZobInputManager::RightShoulder));
-		/*
-		if (m_text)
-		{			
-			//PrintObjectList();
-			if (m_inputManager->GetMap()->GetBoolIsNew(ZobInputManager::WireFrame))
-			{
-				m_engine->WireFrame(!m_engine->WireFrame());
-			}
-			if (m_inputManager->GetMap()->GetBoolIsNew(ZobInputManager::Gizmos))
-			{
-				m_engine->DrawGizmos(!m_engine->DrawGizmos());
-			}
-			if (m_inputManager->GetMap()->GetBoolIsNew(ZobInputManager::Quit))
-			{
-				mfb_close(window);
-			}
+		if (m_inputManager->GetMap()->GetBoolIsNew(ZobInputManager::WireFrame))
+		{
+			m_engine->WireFrame(!m_engine->WireFrame());
 		}
-		*/
+		if (m_inputManager->GetMap()->GetBoolIsNew(ZobInputManager::Gizmos))
+		{
+			m_engine->DrawGizmos(!m_engine->DrawGizmos());
+		}
+		if (m_inputManager->GetMap()->GetBoolIsNew(ZobInputManager::Quit))
+		{
+			mfb_close(window);
+		}
 		m_engine->SetDisplayedBuffer();
 	}
 	g_render_mutex.unlock();

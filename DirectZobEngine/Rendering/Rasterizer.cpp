@@ -96,14 +96,6 @@ void Rasterizer::Render()
 void Rasterizer::RenderInternal()
 {
 	OPTICK_CATEGORY("Rendering", Optick::Category::Rendering);
-	m_camPos = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera()->GetWorldPosition();
-
-	//todo
-	m_wireFrame = false;
-	m_bEvenFrame = 0;
-	m_renderMode = eRenderMode_fullframe;
-	m_lightingPrecision = eLightingPrecision_vertex;
-
 	m_tick = clock();
 	//warning : invert lightdir ! https://fr.wikipedia.org/wiki/Ombrage_de_Phong
 	m_lights.clear();

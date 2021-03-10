@@ -789,7 +789,7 @@ void Engine::QueueLineInRasters(const Line3D* l, int idx) const
 
 void Engine::QueueTriangleInRasters(const Triangle* t, int idx) const
 {
-	static bool bEqual = false;
+	static bool bEqual = true;
 	if (!bEqual)
 	{
 		int min = (int)fmaxf(0, fminf(t->pa->y, fminf(t->pb->y, t->pc->y)));
