@@ -8,7 +8,7 @@ ZobMaterial::ZobMaterial()
 	sMaterialNumber++;
 	m_name = std::string("Material_");
 	m_name.append(std::to_string(sMaterialNumber));
-	DirectZob::LogInfo("Material %s creation", m_name.c_str());
+	//DirectZob::LogInfo("Material %s creation", m_name.c_str());
 	DirectZob::AddIndent();
 	m_diffuseTexture = NULL;
 	m_ambientColor = ZobVector3(1, 1, 1);
@@ -21,7 +21,7 @@ ZobMaterial::ZobMaterial()
 ZobMaterial::ZobMaterial(const std::string& name, const ZobVector3* ambientColor, const ZobVector3* diffuseColor, const ZobVector3* specularColor, float specularExponent, float transparency, const Texture* texture)
 {
 	sMaterialNumber++;
-	DirectZob::LogInfo("Material %s creation", name.c_str());
+	//DirectZob::LogInfo("Material %s creation", name.c_str());
 	DirectZob::AddIndent();
 	m_diffuseTexture = texture;
 	m_name = name;
@@ -34,7 +34,7 @@ ZobMaterial::ZobMaterial(const std::string& name, const ZobVector3* ambientColor
 
 ZobMaterial::~ZobMaterial()
 {
-	DirectZob::LogInfo("Delete material %s", m_name.c_str());
+	//DirectZob::LogInfo("Delete material %s", m_name.c_str());
 	DirectZob::AddIndent();
 	m_diffuseTexture = NULL;
 	m_name = std::string("");
