@@ -248,9 +248,11 @@ void Engine::Resize(int width, int height)
 void Engine::ClearBuffer(const Color *color)
 {
 	OPTICK_EVENT();
+
+	memset(m_zBuffer, 0, sizeof(float) * m_bufferData.width * m_bufferData.height);
+	memset(m_buffer, 0, sizeof(uint) * m_bufferData.width * m_bufferData.height);
+	return;
 	uint v = color->GetRawValue();
-	//Color cc = Color(63, 149, 255, 255);
-	//v = cc.GetRawValue();
 	if (m_renderMode == eRenderMode_fullframe )
 	{
 		//memset(m_zBuffer, 0, sizeof(float) * m_bufferData.width * m_bufferData.height);

@@ -189,10 +189,10 @@ void Rasterizer::DrawLine(const Line3D* l) const
 			py = y + i;
 			if (px < m_bufferData->width && py < m_bufferData->height)
 			{
-				zRatio = (sz - m_bufferData->zNear) / (m_bufferData->zFar - m_bufferData->zNear);
+				zRatio = m_bufferData->zNear + (sz - m_bufferData->zNear) / (m_bufferData->zFar - m_bufferData->zNear);
 				if (l->noZ)
 				{
-					zRatio = 0;
+					zRatio = m_bufferData->zNear;
 				}
 				k = py * m_bufferData->width + px;
 				if (m_bufferData->zBuffer[k] > zRatio)
@@ -223,7 +223,7 @@ void Rasterizer::DrawLine(const Line3D* l) const
 			k = py * m_bufferData->width + px;
 			if (px < m_bufferData->width && py < m_bufferData->height)
 			{
-				zRatio = (sz - m_bufferData->zNear) / (m_bufferData->zFar - m_bufferData->zNear);
+				zRatio = m_bufferData->zNear + (sz - m_bufferData->zNear) / (m_bufferData->zFar - m_bufferData->zNear);
 				k = py * m_bufferData->width + px;
 				if (m_bufferData->zBuffer[k] > zRatio)
 				{
@@ -496,15 +496,15 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector3* p, const Triangl
 	
 	if (!t->options->zBuffered)
 	{
-		zRatio = 0.0f;
+		zRatio = m_bufferData->zNear;
 	}
 	else
 	{
-		zRatio = (z - m_bufferData->zNear) / (m_bufferData->zFar - m_bufferData->zNear);
+		zRatio = m_bufferData->zNear + (z - m_bufferData->zNear) / (m_bufferData->zFar - m_bufferData->zNear);
 	}
 	
 	float zf = m_bufferData->zBuffer[k];
-	if ( zRatio >= 0.0f &&  (zf < 0.0f  || zRatio < zf ))
+	if ( zRatio > 0.0f &&  (zf == 0.0f  || zRatio < zf ))
 	{
 		cl = 1.0f;
 		RenderOptions::eLightMode lighting = t->options->lightMode;
