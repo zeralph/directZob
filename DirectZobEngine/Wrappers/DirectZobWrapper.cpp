@@ -90,6 +90,7 @@ namespace CLI
 		{
 			return GetInstance()->CanFastSave();
 		}
+		return false;
 	}
 
 	void DirectZobWrapper::SaveScene()
@@ -176,6 +177,7 @@ namespace CLI
 		{
 			return GetInstance()->RunAFrame(0);
 		}
+		return 0;
 	}
 
 	cli::array<System::String^>^ DirectZobWrapper::GetEventsAndClear()

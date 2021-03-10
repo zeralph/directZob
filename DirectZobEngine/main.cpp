@@ -272,6 +272,7 @@ int main(int argc, char* argv[])
 #ifdef OPTIK_PROFILING
 	OPTICK_SHUTDOWN();
 #endif
+	m_directZob.Shutdown();
 	return 0;
 }
 

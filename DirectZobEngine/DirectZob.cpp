@@ -36,7 +36,6 @@ DirectZob::DirectZob()
 
 DirectZob::~DirectZob()
 {
-	//delete m_engine;
 	delete m_hudManager;
 	delete m_meshManager;
 	delete m_materialManager;
@@ -45,6 +44,12 @@ DirectZob::~DirectZob()
 	delete m_text;
 	delete m_events;
 	delete m_inputManager;
+	delete m_engine;
+}
+
+void DirectZob::Shutdown()
+{
+
 }
 
 std::string DirectZob::ExePath() {

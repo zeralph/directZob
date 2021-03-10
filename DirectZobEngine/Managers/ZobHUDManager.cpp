@@ -51,6 +51,7 @@ ZobHUDManager::ZobHUDManager()
 
 ZobHUDManager::~ZobHUDManager()
 {
+	return;
 	free(m_trianglesBuffer);
 	free(m_vertices);
 	free(m_uvs);

@@ -52,4 +52,5 @@ private:
 	clock_t	m_drawTick;
 	float m_time;
 	std::vector<ulong> m_deletedIds;
+	bool m_runThread;
 }; 

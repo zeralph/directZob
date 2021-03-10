@@ -15,9 +15,14 @@
 #include "Rasterizer.h"
 #include "../ZobObjects/Camera.h"
 #include "../../dependencies/optick/include/optick.h"
+#include <mutex>
 #define MAX_TRIANGLES_PER_IMAGE 400000
 
 using namespace Core;
+
+std::condition_variable** m_conditionvariables;
+std::mutex** m_mutexes;
+
 Engine::Engine(int width, int height, Events* events)
 {
 	m_started = false;
@@ -152,19 +157,21 @@ uint Engine::GetObjectIdAtCoords(uint x, uint y)
 
 Engine::~Engine()
 {
-	for (int i = 0; i < m_nbRasterizers; i++)
-	{
-		m_rasterizers[i]->End();
-	}
+	StopRasterizers();
+	WaitForRasterizersEnd();
 	for (int i = 0; i < m_nbRasterizers; i++)
 	{
 		delete m_rasterizers[i];
+		delete m_conditionvariables[i];
+		delete m_mutexes[i];
 	}
 	free(m_TrianglesQueue);
 	free(m_verticesData);
 	free(m_uvData);
 	free(m_colorData);
 	free(m_rasterizers);
+	free(m_conditionvariables);
+	free(m_mutexes);
 	m_events = NULL;
 }
 
@@ -299,7 +306,7 @@ int Engine::StartDrawingScene()
 	const ZobVector3 camForward = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera()->GetForward();	
 	for (int i = 0; i < m_nbRasterizers; i++)
 	{
-		m_rasterizers[i]->Start(m_wireFrame, m_renderMode, m_currentFrame % 2, m_lightingPrecision, camForward);
+		m_rasterizers[i]->Start();
 		m_conditionvariables[i]->notify_one();
 	}
 	return 0;
@@ -343,6 +350,14 @@ void Engine::ClearRenderQueues()
 	}
 }
 
+void Engine::StopRasterizers()
+{
+	for (int i = 0; i < m_nbRasterizers; i++)
+	{
+		m_rasterizers[i]->End();
+	}
+}
+
 float Engine::WaitForRasterizersEnd()
 {
 	OPTICK_EVENT();
@@ -352,8 +367,6 @@ float Engine::WaitForRasterizersEnd()
 		if (m_rasterizers[i])
 		{
 			std::unique_lock<std::mutex> g(*m_mutexes[i]);
-			//float t2 = m_rasterizers[i]->WaitForEnd();
-			//t = fmax(t, t2);
 		}
 	}
 	return t;

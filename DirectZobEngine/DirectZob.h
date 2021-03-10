@@ -91,6 +91,7 @@ public :
 	void					Unlock();
 	float					GetLastDt() const { return m_frameTime / 1000.0f; }
 	void					SleepMS(float ms);
+	void					Shutdown();
 private:
 	int						RunInternal(void func(void));
 	void					PrintObjectList();

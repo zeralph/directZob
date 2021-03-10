@@ -46,14 +46,14 @@ namespace Core
 		void											QueueMesh(const Camera* camera, const ZobMatrix4x4* mat, ZobVector3* points, int width, int height, const uint c, bool bold);
 		int												StartDrawingScene();
 		int												SetDisplayedBuffer();
-		inline ulong									GetCurrentFrame() { return m_currentFrame; }
+		inline ulong									GetCurrentFrame() const { return m_currentFrame; }
 		inline const uint								GetNbDrawnTriangles() const { return m_drawnTriangles; }
 		const Rasterizer*								GetRasterizer(int idx) const { return m_rasterizers[idx]; }
 		int												GetNbRasterizer() const { return m_nbRasterizers; }
 		inline BufferData*								GetBufferData() { return &m_bufferData; }
-		inline const float								GetZNear() { return m_zNear; }
-		inline const float								GetZFar() { return m_zFar; }
-		inline const ulong								GetNbPixels() { return m_nbPixels; }
+		inline const float								GetZNear() const { return m_zNear; }
+		inline const float								GetZFar() const { return m_zFar; }
+		inline const ulong								GetNbPixels() const { return m_nbPixels; }
 		inline void										ShowGrid(bool b) { m_showGrid = b; }
 		inline void										ShowBBoxes(bool b) { m_showBBoxes = b; }
 		inline void										DrawPhysyicsGizmos(bool b) { m_drawPhysicsGizmos = b; }
@@ -64,24 +64,25 @@ namespace Core
 		inline void										LockFrustrum(bool b) { m_lockFrustrum=b; }
 		inline void										DrawCameraGizmos(bool b) { m_drawCameraGizmos = b; }
 		inline void										DrawZobObjectGizmos(bool b) { m_drawZobObjectGizmos = b; }
-		inline bool										WireFrame() { return m_wireFrame; }
-		inline bool										ShowGrid() { return m_showGrid; }
-		inline bool										ShowNormals() { return m_showNormals; }
-		inline bool										DrawGizmos() { return m_drawGizmos; }
-		inline bool										ShowBBoxes() { return m_showBBoxes; }
-		inline bool										ShowText() { return m_showText; }
-		inline bool										DrawPhysyicsGizmos() { return m_drawPhysicsGizmos; }
-		inline bool										DrawCameraGizmos() { return m_drawCameraGizmos; }
-		inline bool										DrawZobObjectGizmos() { return m_drawZobObjectGizmos; }
-		inline bool										LockFrustrum() { return m_lockFrustrum;  }
+		inline bool										WireFrame() const { return m_wireFrame; }
+		inline bool										ShowGrid() const { return m_showGrid; }
+		inline bool										ShowNormals() const { return m_showNormals; }
+		inline bool										DrawGizmos() const { return m_drawGizmos; }
+		inline bool										ShowBBoxes() const { return m_showBBoxes; }
+		inline bool										ShowText() const { return m_showText; }
+		inline bool										DrawPhysyicsGizmos() const { return m_drawPhysicsGizmos; }
+		inline bool										DrawCameraGizmos() const { return m_drawCameraGizmos; }
+		inline bool										DrawZobObjectGizmos() const { return m_drawZobObjectGizmos; }
+		inline bool										LockFrustrum() const { return m_lockFrustrum;  }
 		inline void										SetRenderMode(eRenderMode b) { m_renderMode = b; }
-		inline const eRenderMode						GetRenderMode() { return m_renderMode; }
+		inline const eRenderMode						GetRenderMode() const { return m_renderMode; }
 		inline void										SetRenderOutput(eRenderOutput r) { m_renderOutput = r; }
-		inline const eRenderOutput						GetRenderOutput() { return m_renderOutput; }
+		inline const eRenderOutput						GetRenderOutput() const { return m_renderOutput; }
 		inline const eLightingPrecision					GetLightingPrecision() const  { return m_lightingPrecision ; }
 		void											SetLightingPrecision(eLightingPrecision l) { m_lightingPrecision = l; }
 		uint											GetObjectIdAtCoords(uint x, uint y);
 		float											WaitForRasterizersEnd();
+		void											StopRasterizers();
 		void											ClearRenderQueues();
 		void											Resize(int width, int height);
 		bool											GetProjectedCoords(ZobVector3* worldPos);
@@ -126,8 +127,6 @@ namespace Core
 		}
 		
 		Rasterizer** m_rasterizers;
-		std::condition_variable** m_conditionvariables; 
-		std::mutex** m_mutexes;
 
 		Events* m_events;
 

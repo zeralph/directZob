@@ -47,7 +47,7 @@ public:
 	void 					DrawTriangle(const Triangle* t) const;
 	void 					plotLine(int x0, int y0, int x1, int y1) const;
 	void 					DrawLine(const Line3D* l) const;
-	void 					Start(const bool wireFrame, const eRenderMode renderMode, const bool bEvenFrame, const eLightingPrecision lp, ZobVector3 camForward);
+	void 					Start();
 	float 					WaitForEnd();
 	void 					End();
 	void 					Init(std::condition_variable* cv, std::mutex* m);
@@ -140,4 +140,5 @@ private:
 	int m_num;
 	std::mutex* m_drawMutex;
 	std::condition_variable* m_startConditionVariable;
+	bool m_runThread;
 };

@@ -17,12 +17,14 @@ ZobObjectManager::ZobObjectManager()
 	m_deletedIds.clear();
 	std::string n = "root";
 	m_rootObject = new ZobObject(ZOBGUID::type_internal, ZOBGUID::subtype_zobOject, n, NULL);
-	
+	m_runThread = true;
 	g_geometryThread = std::thread(&ZobObjectManager::UpdateObjectThreadFunction, this); 
+	g_geometryThread.detach();
 }
 
 ZobObjectManager::~ZobObjectManager()
 {
+	m_runThread = false;
 	WaitForUpdateObjectend();
 }
 
@@ -147,7 +149,7 @@ void ZobObjectManager::UpdateBehavior(float dt)
 void ZobObjectManager::UpdateObjectThreadFunction()
 {
 	OPTICK_THREAD("object thread");
-	while (true)
+	while (m_runThread)
 	{
 		//OPTICK_FRAME("objects update");
 		//needed scope for the lock
@@ -163,19 +165,15 @@ void ZobObjectManager::UpdateObjectThreadFunction()
 void ZobObjectManager::StartUpdateScene(const Camera* camera, Core::Engine* engine, float dt)
 {
 	OPTICK_EVENT();
-	
 	startUpdate = true;
 	startObjectConditionVariable.notify_one();
 	m_drawTick = clock();
-	//g_geometryThread = std::thread(&ZobObjectManager::UpdateObjects, this, camera, engine, dt);
 }
 
 float ZobObjectManager::WaitForUpdateObjectend()
 {
 	OPTICK_EVENT();
 	std::lock_guard<std::mutex> g(startObjectUpdateMutex);
-	//if (g_geometryThread.joinable())
-	//	g_geometryThread.join();
 	return m_time;
 }
 
