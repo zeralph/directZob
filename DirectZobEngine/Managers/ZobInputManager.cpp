@@ -67,7 +67,7 @@ float MapToMinusOne(float const value, void* userData)
 void ZobInputManager::Map()
 {
 	m_deadZone = 0.f;
-	const gainput::DeviceId padId = m_gainputManager->CreateDevice<gainput::InputDevicePad>(0);
+	const gainput::InputDevicePad* pad = m_gainputManager->CreateAndGetDevice<gainput::InputDevicePad>(0);
 	const gainput::DeviceId keyboardId = m_gainputManager->CreateDevice<gainput::InputDeviceKeyboard>(0);
 	const gainput::DeviceId mouseId = m_gainputManager->CreateDevice<gainput::InputDeviceMouse>(0);
 
@@ -83,8 +83,9 @@ void ZobInputManager::Map()
 	m_map->MapBool(Quit, keyboardId, gainput::KeyEscape);
 	m_map->MapBool(NextCamera, keyboardId, gainput::KeyC);
 
-	if(padId)
+	if(pad)
 	{
+		const gainput::DeviceId padId = pad->GetDeviceId();
 		m_map->MapFloat(LeftStickX, padId, gainput::PadButtonLeftStickX);
 		m_map->MapFloat(LeftStickY, padId, gainput::PadButtonLeftStickY);
 		m_map->MapFloat(RightStickX, padId, gainput::PadButtonRightStickX);
