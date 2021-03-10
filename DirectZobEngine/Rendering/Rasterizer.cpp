@@ -9,7 +9,7 @@ static ZobVector3 sFog = ZobVector3(1.0f, 1.0f, 0.95f);
 static float fogDecal = -0.6f;
 
 static int num = 0;
-bool bStartDraw;
+volatile bool bStartDraw;
 
 Rasterizer::Rasterizer(uint width, uint height, uint startHeight, uint endHeight, BufferData* bufferData)
 {

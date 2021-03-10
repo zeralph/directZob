@@ -15,7 +15,7 @@
 #include "../../dependencies/optick/include/optick.h"
 #define LOG_BUFFER_SIZE 1024
 
-#define TARGET_MS_PER_FRAME 16.66f//0.0f//16.0f//33.3333f
+static float TargetMSPerFrame = 16.66666667f;
 
 static char buffer[MAX_PATH];
 static char logBuffer[LOG_BUFFER_SIZE];
@@ -218,6 +218,7 @@ int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUp
 			m_zobObjectManager->PreUpdate();
 			m_hudManager->PreUpdate();
 			m_lightManager->PreUpdate();
+			m_engine->StartDrawingScene();
 			if (OnSceneUpdated)
 			{
 				OnSceneUpdated();
@@ -232,8 +233,7 @@ int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUp
 				
 			}
 			cam->UpdateAfter();
-			m_zobObjectManager->StartUpdateScene(cam, m_engine, m_frameTime / 1000.0f);
-			m_engine->StartDrawingScene();
+			m_zobObjectManager->StartUpdateScene(cam, m_engine, m_frameTime / 1000.0f);			
 			m_hudManager->UpdateObjects(cam, m_engine, m_frameTime / 1000.0f);
 			m_geometryTime = m_zobObjectManager->WaitForUpdateObjectend();
 			m_renderTime = m_engine->WaitForRasterizersEnd();
@@ -269,7 +269,7 @@ int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUp
 		}
 		m_hudManager->Print(0.01f, 0.01f, 0.0125f, 0.0125f, &color, "Triangles : %i", m_engine->GetNbDrawnTriangles());
 		color = ZobVector3(0, 1, 0);
-		if (m_frameTime <= TARGET_MS_PER_FRAME)
+		if (m_frameTime <= TargetMSPerFrame)
 		{
 			ZobVector3 color = ZobVector3(1, 0, 0);
 		}
@@ -304,14 +304,41 @@ int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUp
 	}
 	g_render_mutex.unlock();
 	SaveTime(&tend);
-	m_frameTime = (float)GetDeltaTime_MS(tstart, tend);
-	float dt = TARGET_MS_PER_FRAME - m_frameTime;
-	if (dt > 0.0f)
-	{
-		SLEEP_MS(dt);
-		m_frameTime = TARGET_MS_PER_FRAME;
-	}
+	float dt = (float)GetDeltaTime_MS(tstart, tend);
+	WaitToTargetFrameTime(dt);
 	return state;
+}
+
+void DirectZob::WaitToTargetFrameTime(float dt)
+{
+	OPTICK_EVENT();
+	if (dt < 0)
+	{
+		throw "rput";
+	}
+	float targetDt = TargetMSPerFrame - dt;
+	if (targetDt > 0.0f)
+	{
+		SleepMS(targetDt);
+		m_frameTime = TargetMSPerFrame;
+	}
+	else
+	{
+		m_frameTime = dt;
+	}
+}
+
+void DirectZob::SleepMS(float ms)
+{
+#ifdef LINUX
+	usleep((uint)(ms * 1000.0f))
+#elif WINDOWS
+	//DWORD d = *reinterpret_cast<DWORD const*>(&ms);
+	//Sleep(d);
+	std::this_thread::sleep_for(std::chrono::milliseconds((uint)ms/2));
+#elif MACOS
+	usleep((uint)(ms*1000.0f))
+#endif //LINUX
 }
 
 double DirectZob::GetDeltaTime_MS(timespec& start, timespec& end) const

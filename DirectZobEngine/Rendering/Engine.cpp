@@ -53,7 +53,9 @@ Engine::Engine(int width, int height, Events* events)
 	}
 	m_nbRasterizers = 4;
 	*/
-	//m_nbRasterizers = 2;
+	m_nbRasterizers -= 2;
+	m_nbRasterizers = max(m_nbRasterizers, 1);
+	//m_nbRasterizers = 4;
 	m_maxTrianglesQueueSize = 200000;// MAX_TRIANGLES_PER_IMAGE / m_nbRasterizers;
 	m_maxLineQueueSize = 200000;
 	m_renderOutput = eRenderOutput_render;
@@ -188,7 +190,7 @@ void Engine::Resize(int width, int height)
 {
 	bool bStarted = m_started;
 	Stop();
-	SLEEP_MS(100);
+	DirectZob::GetInstance()->SleepMS(1000);
 	for (int i = 0; i < m_nbRasterizers; i++)
 	{
 		m_rasterizers[i]->End();
@@ -294,13 +296,11 @@ int Engine::StartDrawingScene()
 	{
 		return 0;
 	}
-	
-	const ZobVector3 camForward = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera()->GetForward();
+	const ZobVector3 camForward = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera()->GetForward();	
 	for (int i = 0; i < m_nbRasterizers; i++)
 	{
 		m_rasterizers[i]->Start(m_wireFrame, m_renderMode, m_currentFrame % 2, m_lightingPrecision, camForward);
 	}
-	
 	startDraw = true;
 	startDrawConditionVariable.notify_all();
 	return 0;
@@ -354,7 +354,7 @@ float Engine::WaitForRasterizersEnd()
 	{
 		if (m_rasterizers[i])
 		{
-			std::lock_guard<std::mutex> g(m_rasterizers[i]->GetLockMutex());
+			std::unique_lock<std::mutex> g(m_rasterizers[i]->GetLockMutex());
 			//float t2 = m_rasterizers[i]->WaitForEnd();
 			//t = fmax(t, t2);
 		}

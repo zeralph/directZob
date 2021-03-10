@@ -43,7 +43,7 @@ public:
 	bool IsDeleted(ulong id);
 private:
 	void UpdateObjectThreadFunction();
-	void UpdateObjects(const Camera* camera, Core::Engine* engine, float dt);
+	void UpdateObjects();
 	void GetZobObjectListInternal(const ZobObject* z, std::string& str);
 	void GetZobObjectListInternal(const ZobObject* z, std::vector<const ZobObject*>& v);
 	ZobObject* LoadEditorMesh(const char* name, const char* meshPath, const char* meshFile, ZobObject* parent);

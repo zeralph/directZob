@@ -34,6 +34,12 @@ void resize(struct mfb_window* window, int width, int height) {
 	//m_engine->Start();
 }
 
+int UpdateImageToScreen()
+{
+	OPTICK_EVENT()
+	return mfb_update(m_window, (void*)m_directZob.GetBufferData());
+}
+
 int main(int argc, char* argv[])
 {
 	printf("Go\n");
@@ -245,7 +251,7 @@ int main(int argc, char* argv[])
 		benchTot += m_directZob.GetFrameTime();
 		benchCpy += m_directZob.GetCopyTime();
 		frames++;
-		int state = mfb_update(m_window, (void*)m_directZob.GetBufferData() );
+		int state = UpdateImageToScreen();
 		if (state < 0)
 		{
 			break;

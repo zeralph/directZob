@@ -155,10 +155,7 @@ void ZobObjectManager::UpdateObjectThreadFunction()
 		{
 			std::unique_lock<std::mutex> g(startObjectUpdateMutex);
 			startObjectConditionVariable.wait(g, [] { return startUpdate; });
-			Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
-			Engine* e = DirectZob::GetInstance()->GetEngine();
-			float dt = 0.33f;
-			UpdateObjects(c, e, dt);
+			UpdateObjects();
 			startUpdate = false;
 		}
 	}
@@ -183,11 +180,14 @@ float ZobObjectManager::WaitForUpdateObjectend()
 	return m_time;
 }
 
-void ZobObjectManager::UpdateObjects(const Camera* camera, Core::Engine* engine, float dt)
+void ZobObjectManager::UpdateObjects()
 {
 	OPTICK_EVENT();
+	Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
+	Engine* e = DirectZob::GetInstance()->GetEngine();
+	float dt = DirectZob::GetInstance()->GetLastDt();
 	m_rootObject->Update(dt);
-	m_rootObject->UpdateMesh(camera, engine);
+	m_rootObject->UpdateMesh(c, e);
 	m_time = (float)(clock() - m_drawTick) / CLOCKS_PER_SEC * 1000;
 }
 
