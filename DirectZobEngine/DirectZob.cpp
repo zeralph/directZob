@@ -12,6 +12,7 @@
 #elif LINUX
 #include "../minifb/src/x11/WindowData_X11.h"
 #endif
+#undef None
 #include "../../dependencies/optick/include/optick.h"
 #define LOG_BUFFER_SIZE 1024
 

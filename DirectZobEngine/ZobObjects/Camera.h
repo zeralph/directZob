@@ -46,7 +46,7 @@ public:
 		__eFrustrumPlane_MAX__ = 6
 	};
 
-	Camera(ZOBGUID::Type zobType, const std::string& name, eCameraType type, float fov, BufferData* bufferData, ZobObject* parent);
+	Camera(ZOBGUID::ZobType zobType, const std::string& name, eCameraType type, float fov, BufferData* bufferData, ZobObject* parent);
 	Camera(ulong id, TiXmlElement* node, ZobObject* parent);
 	~Camera() override;
 

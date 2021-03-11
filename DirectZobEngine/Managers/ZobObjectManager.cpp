@@ -3,6 +3,8 @@
 #include "DirectZob.h"
 #include "MeshManager.h"
 #include <mutex>
+#include <condition_variable>
+#undef None
 #include "../../dependencies/optick/include/optick.h"
 
 

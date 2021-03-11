@@ -15,8 +15,8 @@ static float ee = 0.0f;
 static ZobVector3 sRayDbg;
 static ZobVector3 sRayDbg2;
 
-Camera::Camera(ZOBGUID::Type zobType, const std::string& name, eCameraType type, float fov, BufferData* bufferData, ZobObject* parent)
-	:ZobObject(zobType, ZOBGUID::SubType::subtype_zobCamera, name, parent)
+Camera::Camera(ZOBGUID::ZobType zobType, const std::string& name, eCameraType type, float fov, BufferData* bufferData, ZobObject* parent)
+	:ZobObject(zobType, ZOBGUID::ZobSubType::subtype_zobCamera, name, parent)
 {
 	switch (type)
 	{

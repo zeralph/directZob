@@ -14,8 +14,10 @@
 #include "DirectZob.h"
 #include "Rasterizer.h"
 #include "../ZobObjects/Camera.h"
-#include "../../dependencies/optick/include/optick.h"
 #include <mutex>
+#undef None
+#include "../../dependencies/optick/include/optick.h"
+
 #define MAX_TRIANGLES_PER_IMAGE 400000
 
 using namespace Core;

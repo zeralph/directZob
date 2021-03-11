@@ -6,7 +6,7 @@ class ZOBGUID
 {
 public :
 
-	enum Type
+	enum ZobType
 	{
 		type_unknown=0,
 		type_internal,
@@ -15,7 +15,7 @@ public :
 		type_MAX = 15,
 	};
 
-	enum SubType
+	enum ZobSubType
 	{
 		subtype_unknown=0,
 		subtype_zobOject,
@@ -26,18 +26,18 @@ public :
 		subtype_MAX = 15,
 	};
 
-	ZOBGUID(Type t, SubType s);
+	ZOBGUID(ZobType t, ZobSubType s);
 	ZOBGUID(DirectZobType::guid id);
 	~ZOBGUID();
-	const Type GetType()const;
-	const SubType GetSubType()const;
+	const ZobType GetType()const;
+	const ZobSubType GetSubType()const;
 	DirectZobType::guid GetId();
 	static void Reset() { sCurrentId = 0; m_guidList.clear(); };
 private:
 	bool IsUsed(DirectZobType::guid id);
 	DirectZobType::guid m_id;
-	ZOBGUID::Type m_type;
-	ZOBGUID::SubType m_subType;
+	ZOBGUID::ZobType m_type;
+	ZOBGUID::ZobSubType m_subType;
 	static std::vector<DirectZobType::guid> m_guidList;
 	static u16 sCurrentId;
 };

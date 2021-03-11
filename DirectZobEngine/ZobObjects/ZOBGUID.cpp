@@ -4,7 +4,7 @@
 u16 ZOBGUID::sCurrentId = 1;
 std::vector<DirectZobType::guid> ZOBGUID::m_guidList = std::vector<DirectZobType::guid>();
 
-ZOBGUID::ZOBGUID(Type t, SubType s)
+ZOBGUID::ZOBGUID(ZobType t, ZobSubType s)
 {
 	m_type = t;
 	m_subType = s;
@@ -15,8 +15,8 @@ ZOBGUID::ZOBGUID(Type t, SubType s)
 
 ZOBGUID::ZOBGUID(DirectZobType::guid id)
 {
-	m_type = (ZOBGUID::Type)(id  / 1000 / 1000);
-	m_subType = (ZOBGUID::SubType)((m_type - id) / 1000);
+	m_type = (ZOBGUID::ZobType)(id  / 1000 / 1000);
+	m_subType = (ZOBGUID::ZobSubType)((m_type - id) / 1000);
 	u16 last_id = (u16)((m_subType - id));
 	m_id = id;
 	while(IsUsed(m_id))
@@ -47,12 +47,12 @@ bool ZOBGUID::IsUsed(DirectZobType::guid id)
 	return false;
 }
 
-const ZOBGUID::Type ZOBGUID::GetType() const
+const ZOBGUID::ZobType ZOBGUID::GetType() const
 {
 	return m_type;
 }
 
-const ZOBGUID::SubType ZOBGUID::GetSubType() const
+const ZOBGUID::ZobSubType ZOBGUID::GetSubType() const
 {
 	return m_subType;
 }

@@ -197,6 +197,7 @@
                                 '../../../dependencies/fbxsdk/linux/lib/libfbxsdk.a', 
                                 '../../../dependencies/reactphysics3d/lib/linux/libreactphysics3d.a',
                                 '../../../dependencies/gainput/lib/linux/libgainputstatic.a',
+                                '../../../dependencies/optick/lib/linux/libOptickCore.so',
                                 '-lpthread',
                                 '-lxml2',
                                 '-lX11',

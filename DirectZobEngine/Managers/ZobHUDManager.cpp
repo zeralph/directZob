@@ -3,6 +3,7 @@
 #include "DirectZob.h"
 #include "../SceneLoader.h"
 #include <BaseFont.h>
+#undef None
 #include "../../dependencies/optick/include/optick.h"
 #define NB_HUD_TRIANGLES 2000
 

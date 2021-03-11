@@ -2,6 +2,7 @@
 #include "ZobPhysicComponent.h"
 #include "ZobPhysicsContactsListener.h"
 #include <thread>
+#undef None
 #include "../dependencies/optick/include/optick.h"
 static std::thread g_physicThread;
 

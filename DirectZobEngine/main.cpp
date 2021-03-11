@@ -1,6 +1,7 @@
 //#define LINUX 
 
 #define OPTIK_PROFILING 
+#undef None
 #include "../dependencies/optick/include/optick.h"
 
 #include "DirectZob.h"

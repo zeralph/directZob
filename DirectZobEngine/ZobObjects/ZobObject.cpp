@@ -7,7 +7,7 @@
 #include "../../dependencies/optick/include/optick.h"
 
 static int sObjectNumber = 0;
-ZobObject::ZobObject(Type t, SubType s, const std::string& name, ZobObject* parent /*= NULL*/, const std::string* factoryFile /*=NULL*/)
+ZobObject::ZobObject(ZobType t, ZobSubType s, const std::string& name, ZobObject* parent /*= NULL*/, const std::string* factoryFile /*=NULL*/)
 	:ZOBGUID(t,s)
 {
 	DirectZob::LogInfo("ZobObject %s creation", name.c_str());

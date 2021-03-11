@@ -2,6 +2,7 @@
 #include "DirectZob.h"
 #include "ZobObjects/Light.h"
 #include "Texture.h"
+#undef None
 #include "../../dependencies/optick/include/optick.h"
 
 static ZobVector3 sFog = ZobVector3(1.0f, 1.0f, 0.95f);
