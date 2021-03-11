@@ -5,27 +5,18 @@
 #include <mutex>
 #include "../../dependencies/optick/include/optick.h"
 
-static std::thread g_geometryThread;
-static std::string emptyStr = std::string("");
 
-bool startUpdate;
-std::mutex startObjectUpdateMutex;
-std::condition_variable startObjectConditionVariable;
+static std::string emptyStr = std::string("");
 
 ZobObjectManager::ZobObjectManager()
 {
 	m_deletedIds.clear();
 	std::string n = "root";
 	m_rootObject = new ZobObject(ZOBGUID::type_internal, ZOBGUID::subtype_zobOject, n, NULL);
-	m_runThread = true;
-	g_geometryThread = std::thread(&ZobObjectManager::UpdateObjectThreadFunction, this); 
-	g_geometryThread.detach();
 }
 
 ZobObjectManager::~ZobObjectManager()
 {
-	m_runThread = false;
-	WaitForUpdateObjectend();
 }
 
 bool ZobObjectManager::IsDeleted(ulong id)
@@ -146,45 +137,11 @@ void ZobObjectManager::UpdateBehavior(float dt)
 	m_rootObject->UpdateBehavior(dt);
 }
 
-void ZobObjectManager::UpdateObjectThreadFunction()
-{
-	OPTICK_THREAD("object thread");
-	while (m_runThread)
-	{
-		//OPTICK_FRAME("objects update");
-		//needed scope for the lock
-		{
-			std::unique_lock<std::mutex> g(startObjectUpdateMutex);
-			startObjectConditionVariable.wait(g, [] { return startUpdate; });
-			UpdateObjects();
-			startUpdate = false;
-		}
-	}
-}
-
-void ZobObjectManager::StartUpdateScene(const Camera* camera, Core::Engine* engine, float dt)
+void ZobObjectManager::UpdateObjects(const Camera* camera, Core::Engine* engine, float dt)
 {
 	OPTICK_EVENT();
-	startUpdate = true;
-	startObjectConditionVariable.notify_one();
-	m_drawTick = clock();
-}
-
-float ZobObjectManager::WaitForUpdateObjectend()
-{
-	OPTICK_EVENT();
-	std::lock_guard<std::mutex> g(startObjectUpdateMutex);
-	return m_time;
-}
-
-void ZobObjectManager::UpdateObjects()
-{
-	OPTICK_EVENT();
-	Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
-	Engine* e = DirectZob::GetInstance()->GetEngine();
-	float dt = DirectZob::GetInstance()->GetLastDt();
 	m_rootObject->Update(dt);
-	m_rootObject->UpdateMesh(c, e);
+	m_rootObject->UpdateMesh(camera, engine);
 	m_time = (float)(clock() - m_drawTick) / CLOCKS_PER_SEC * 1000;
 }
 

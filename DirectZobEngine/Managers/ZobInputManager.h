@@ -22,6 +22,9 @@ public:
 		Gizmos,
 		Quit,
 		NextCamera,
+		SwitchEqualizeTriangleQueues,
+		NextLightMode,
+		SwitchBuffers,
 	};
 
 	ZobInputManager(int width, int height);

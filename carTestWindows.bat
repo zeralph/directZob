@@ -13,3 +13,4 @@ XCOPY .\build\DirectZob\%target%\OptickCore.dll .. /Y
 popd
 .\DirectZobExe.exe --scene .\resources\carTest.dzs --width 1368 --height 720
 rem .\DirectZobExe.exe --scene .\resources\carTest.dzs --width 320 --height 240
+rem .\DirectZobExe.exe --scene .\resources\carTest.dzs --width 1920 --height 1080

@@ -4,6 +4,7 @@
 #include "Sprite.h"
 #include "ZobPhysic/ZobPhysicComponent.h"
 #include "SceneLoader.h"
+#include "../../dependencies/optick/include/optick.h"
 
 static int sObjectNumber = 0;
 ZobObject::ZobObject(Type t, SubType s, const std::string& name, ZobObject* parent /*= NULL*/, const std::string* factoryFile /*=NULL*/)
@@ -287,6 +288,7 @@ const std::string ZobObject::GetMeshFileName() const
 
 void ZobObject::UpdateMesh(const Camera* camera, Core::Engine* engine)
 {
+	OPTICK_EVENT();
 	if (m_mesh)
 	{
 		m_mesh->Update(&m_modelMatrix, &m_rotationScaleMatrix, camera, engine, GetId(), &m_renderOptions);
@@ -313,6 +315,7 @@ void ZobObject::Init()
 
 void ZobObject::PreUpdate()
 {
+	OPTICK_EVENT();
 	if (m_behavior)
 	{
 		m_behavior->PreUpdate();
@@ -328,6 +331,7 @@ void ZobObject::PreUpdate()
 
 void ZobObject::UpdateBehavior(float dt)
 {
+	OPTICK_EVENT();
 	if (m_behavior)
 	{
 		m_behavior->Update(dt);
@@ -393,6 +397,7 @@ void ZobObject::DeleteInternal()
 //void ZobObject::Update(const ZobMatrix4x4& parentMatrix, const ZobMatrix4x4& parentRSMatrix)
 void ZobObject::Update(float dt)
 {
+	OPTICK_EVENT();
 	Transform parentTransform;
 	ZobVector3 parentScale;
 	if (m_parent)
@@ -446,6 +451,7 @@ void ZobObject::Update(float dt)
 
 void ZobObject::QueueForDrawing(const Camera* camera, Core::Engine* engine)
 {
+	OPTICK_EVENT();
 	if(GetType() == ZOBGUID::type_editor)
 	{
 //		return;

@@ -212,11 +212,12 @@ int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUp
 		m_inputManager->Update(m_frameTime);
 #endif
 		m_cameraManager->UpdateAfter();
-		Color c = Color(DirectZob::GetInstance()->GetLightManager()->GetClearColor());
-		m_engine->ClearBuffer(&c);
+//		Color c = Color(DirectZob::GetInstance()->GetLightManager()->GetClearColor());
+//		m_engine->ClearBuffer(&c);
 		Camera* cam = m_cameraManager->GetCurrentCamera();
 		if (cam)
 		{
+			m_engine->SwapBuffers();
 			bool bPhysicUpdated = false;
 //			cam->UpdateViewProjectionMatrix();
 
@@ -224,6 +225,8 @@ int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUp
 			m_hudManager->PreUpdate();
 			m_lightManager->PreUpdate();
 			m_engine->StartDrawingScene();
+			Color c = Color(DirectZob::GetInstance()->GetLightManager()->GetClearColor());
+			m_engine->ClearBuffer(&c);
 			if (OnSceneUpdated)
 			{
 				OnSceneUpdated();
@@ -238,9 +241,8 @@ int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUp
 				
 			}
 			cam->UpdateAfter();
-			m_zobObjectManager->StartUpdateScene(cam, m_engine, m_frameTime / 1000.0f);			
+			m_zobObjectManager->UpdateObjects(cam, m_engine, m_frameTime / 1000.0f);			
 			m_hudManager->UpdateObjects(cam, m_engine, m_frameTime / 1000.0f);
-			m_geometryTime = m_zobObjectManager->WaitForUpdateObjectend();
 			m_renderTime = m_engine->WaitForRasterizersEnd();
 			m_physicTime = 0;
 			if (bPhysicUpdated)
@@ -310,7 +312,7 @@ int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUp
 
 void DirectZob::WaitToTargetFrameTime(float dt)
 {
-	OPTICK_EVENT();
+	OPTICK_CATEGORY("WaitToTargetFrameTime", Optick::Category::Wait);
 	if (dt < 0)
 	{
 		throw "rput";

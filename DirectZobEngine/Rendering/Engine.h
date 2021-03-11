@@ -93,7 +93,7 @@ namespace Core
 		ZobObject*										GetObjectAt2DCoords(float x, float y);
 		void											ComputeBoundingBoxes(const ZobMatrix4x4* modelMatrix, const ZobVector3* minBounding, const ZobVector3* maxBounding, Box* obb, Box* aabb) const;
 		bool											IsInFrustrum(const Camera* c, const Box* aabb) const;
-
+		void											SwapBuffers();
 	private:	
 		inline float									clamp2(float x, float min, float max) const { if (x < min) x = min; if (x > max) x = max; return x; }
 		void											DrawHorizontalLine(const float x1, const float x2, const float y, const uint color);
@@ -146,10 +146,10 @@ namespace Core
 		uint m_nbRasterizers;
 		float m_zNear;
 		float m_zFar;
-		int m_curBuffer;
 		ulong m_currentFrame;
-		uint* m_buffer;
-		float* m_zBuffer;
+		uint** m_buffer;
+		float** m_zBuffer;
+		int m_currentBuffer;
 //		uint* m_oBuffer;
 		BufferData m_bufferData;
 		bool m_showZBuffer;

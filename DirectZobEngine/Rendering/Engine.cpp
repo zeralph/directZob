@@ -20,6 +20,8 @@
 
 using namespace Core;
 
+static bool sEqualizeTriangleQueues = false;
+
 std::condition_variable** m_conditionvariables;
 std::mutex** m_mutexes;
 
@@ -53,7 +55,7 @@ Engine::Engine(int width, int height, Events* events)
 	}
 	m_nbRasterizers = 4;
 	*/
-	m_nbRasterizers -= 2;
+	m_nbRasterizers --;
 	m_nbRasterizers = max(m_nbRasterizers, (uint)1);
 	//m_nbRasterizers = 4;
 	m_maxTrianglesQueueSize = 200000;// MAX_TRIANGLES_PER_IMAGE / m_nbRasterizers;
@@ -63,17 +65,21 @@ Engine::Engine(int width, int height, Events* events)
 	m_currentFrame = 0;
 	m_zNear = 0.11f;
 	m_zFar = 1000.0f;
-	m_buffer = (uint *)malloc(sizeof(uint) * width * height);
-	m_zBuffer = (float *)malloc(sizeof(float) * width * height);
-	//	m_oBuffer = (uint*)malloc(sizeof(uint) * width * height);
-	m_curBuffer = 0;
+	m_currentBuffer = 0;
+	m_buffer = (uint**)malloc(sizeof(uint*) * 2);
+	m_zBuffer = (float**)malloc(sizeof(float*) * 2);
+	for (int i = 0; i < 2; i++)
+	{
+		m_buffer[i] = (uint*)malloc(sizeof(uint) * width * height);
+		m_zBuffer[i] = (float*)malloc(sizeof(float) * width * height);
+	}
 	m_showZBuffer = false;
 	m_bufferData.height = height;
 	m_bufferData.width = width;
 	m_bufferData.zNear = m_zNear;
 	m_bufferData.zFar = m_zFar;
-	m_bufferData.buffer = m_buffer;
-	m_bufferData.zBuffer = m_zBuffer;
+	m_bufferData.buffer = m_buffer[m_currentBuffer];
+	m_bufferData.zBuffer = m_zBuffer[m_currentBuffer];
 	//	m_bufferData.oBuffer = m_oBuffer;
 	m_bufferData.size = width * height;
 	m_nbPixels = 0;
@@ -204,15 +210,20 @@ void Engine::Resize(int width, int height)
 	}
 	delete m_buffer;
 	delete m_zBuffer;
-	//	delete m_oBuffer;
-	m_buffer = (uint *)malloc(sizeof(uint) * width * height);
-	m_zBuffer = (float *)malloc(sizeof(float) * width * height);
-	//	m_oBuffer = (uint*)malloc(sizeof(float) * width * height);
+
+	m_buffer = (uint**)malloc(sizeof(uint*) * 2);
+	m_zBuffer = (float**)malloc(sizeof(float*) * 2);
+	for (int i = 0; i < 2; i++)
+	{
+		m_buffer[i] = (uint*)malloc(sizeof(uint) * width * height);
+		m_zBuffer[i] = (float*)malloc(sizeof(float) * width * height);
+	}
+
 	m_bufferData.height = height;
 	m_bufferData.width = width;
-	m_bufferData.buffer = m_buffer;
-	m_bufferData.zBuffer = m_zBuffer;
-	//	m_bufferData.oBuffer = m_oBuffer;
+	m_bufferData.buffer = m_buffer[m_currentBuffer];
+	m_bufferData.zBuffer = m_zBuffer[m_currentBuffer];
+
 	m_bufferData.zNear = m_zNear;
 	m_bufferData.zFar = m_zFar;
 	m_bufferData.size = width * height;
@@ -248,18 +259,18 @@ void Engine::Resize(int width, int height)
 void Engine::ClearBuffer(const Color *color)
 {
 	OPTICK_EVENT();
-
-	memset(m_zBuffer, 0, sizeof(float) * m_bufferData.width * m_bufferData.height);
-	memset(m_buffer, 0, sizeof(uint) * m_bufferData.width * m_bufferData.height);
-	return;
+	int oldBuffer = (m_currentBuffer + 1) % 2;
+	//memset(m_zBuffer, 0, sizeof(float) * m_bufferData.width * m_bufferData.height);
+	//memset(m_buffer, 0, sizeof(uint) * m_bufferData.width * m_bufferData.height);
+	//return;
 	uint v = color->GetRawValue();
 	if (m_renderMode == eRenderMode_fullframe )
 	{
 		//memset(m_zBuffer, 0, sizeof(float) * m_bufferData.width * m_bufferData.height);
 		for (int i = 0; i < m_bufferData.width * m_bufferData.height; i++)
 		{
-			m_zBuffer[i] = 1.0f;
-			m_buffer[i] = v;
+			m_zBuffer[oldBuffer][i] = m_zFar;
+			m_buffer[oldBuffer][i] = v;
 		}
 	}
 	else if (m_renderMode == eRenderMode_scanline)
@@ -278,8 +289,8 @@ void Engine::ClearBuffer(const Color *color)
 			int s = m_bufferData.width * y;
 			for (int i = 0; i < m_bufferData.width; i++)
 			{
-				m_zBuffer[i + s] = 1.0f;
-				m_buffer[i + s] = c;
+				m_zBuffer[oldBuffer][i + s] = 1.0f;
+				m_buffer[oldBuffer][i + s] = c;
 			}
 		}
 	}
@@ -290,8 +301,8 @@ void Engine::ClearBuffer(const Color *color)
 			int s = m_bufferData.width * y;
 			for (int i = 0; i < m_bufferData.width; i++)
 			{
-				m_zBuffer[i+s] = -1.0f;
-				m_buffer[i+s] = v;
+				m_zBuffer[oldBuffer][i+s] = -1.0f;
+				m_buffer[oldBuffer][i+s] = v;
 			}
 		}
 	}
@@ -301,6 +312,26 @@ void Engine::ClearBuffer(const Color *color)
 int Engine::StartDrawingScene()
 {
 	OPTICK_EVENT();
+
+	const gainput::InputMap* inputMap = DirectZob::GetInstance()->GetInputManager()->GetMap();
+	if (inputMap->GetBoolIsNew(ZobInputManager::SwitchBuffers))
+	{
+		ToggleZbufferOutput();
+	}
+	if (inputMap->GetBoolIsNew(ZobInputManager::SwitchEqualizeTriangleQueues))
+	{
+		sEqualizeTriangleQueues = !sEqualizeTriangleQueues;
+	}
+	if (inputMap->GetBoolIsNew(ZobInputManager::NextLightMode))
+	{
+		eLightingPrecision i = GetLightingPrecision();
+		i = (eLightingPrecision)(i+1);
+		if (i == __eLightingPrecision_MAX__)
+		{
+			i = (eLightingPrecision)0;
+		}
+		SetLightingPrecision(i);
+	}
 	if (!m_started)
 	{
 		return 0;
@@ -313,25 +344,25 @@ int Engine::StartDrawingScene()
 	}
 	return 0;
 }
+
+void Engine::SwapBuffers()
+{
+	m_currentBuffer = (m_currentBuffer + 1) % 2;
+	m_bufferData.buffer = m_buffer[m_currentBuffer];
+	m_bufferData.zBuffer = m_zBuffer[m_currentBuffer];
+}
+
+
 int Engine::SetDisplayedBuffer()
 {
-	if (m_renderOutput == eRenderOutput_zBuffer)
+	if (m_showZBuffer)
 	{
 		uint c;
 		for (int i = 0; i < m_bufferData.size; i++)
 		{
-			c = (uint)(m_zBuffer[i] * 255.0f);
+			c = (uint)(m_zBuffer[m_currentBuffer][i] * 255.0f);
 			c = (c << 16) + (c << 8) + c;
-			m_buffer[i] = c;
-		}
-	}
-	else if (m_renderOutput == eRenderOutput_oBuffer)
-	{
-		uint c;
-		for (int i = 0; i < m_bufferData.size; i++)
-		{
-			//c = oBufferColors[(uint)(m_oBuffer[i]) % 8];
-			m_buffer[i] = 0; // c;
+			m_buffer[m_currentBuffer][i] = c;
 		}
 	}
 	int r = 0;
@@ -362,7 +393,7 @@ void Engine::StopRasterizers()
 
 float Engine::WaitForRasterizersEnd()
 {
-	OPTICK_EVENT();
+	OPTICK_CATEGORY("WaitForRasterizersEnd", Optick::Category::Wait);
 	float t = 0.0f;
 	for (int i = 0; i < m_nbRasterizers; i++)
 	{
@@ -791,8 +822,7 @@ void Engine::QueueLineInRasters(const Line3D* l, int idx) const
 
 void Engine::QueueTriangleInRasters(const Triangle* t, int idx) const
 {
-	static bool bEqual = true;
-	if (!bEqual)
+	if (!sEqualizeTriangleQueues)
 	{
 		int min = (int)fmaxf(0, fminf(t->pa->y, fminf(t->pb->y, t->pc->y)));
 		int max = (int)fminf(m_bufferData.height, fmaxf(t->pa->y, fmaxf(t->pb->y, t->pc->y)));
