@@ -37,7 +37,6 @@ namespace CLI
 		~EngineWrapper();
 		int				GetBufferWidth();
 		int				GetBufferHeight();
-		System::IntPtr	GetBufferData();
 		void			ShowGrid(bool b) { m_Instance->ShowGrid(b); }
 		void			WireFrame(bool b) { m_Instance->WireFrame(b); }
 		void			ShowNormals(bool b) { m_Instance->ShowNormals(b); }

@@ -99,6 +99,9 @@ public:
 		float zFar;
 		uint* buffer;
 		float* zBuffer;
+		int curBuffer;
+		uint* buffer0;
+		uint* buffer1;
 //		uint* oBuffer;
 	};
 

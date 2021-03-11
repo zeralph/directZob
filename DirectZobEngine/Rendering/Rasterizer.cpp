@@ -320,6 +320,7 @@ inline void Rasterizer::ComputeLightingAtPoint(const ZobVector3* position, const
 
 void Rasterizer::DrawTriangle(const Triangle* t) const
 {
+	OPTICK_EVENT_DYNAMIC("prout")
 	ZobVector2 v1 = ZobVector2((int)t->pa->x, (int)t->pa->y);
 	ZobVector2 v2 = ZobVector2((int)t->pb->x, (int)t->pb->y);
 	ZobVector2 v3 = ZobVector2((int)t->pc->x, (int)t->pc->y);

@@ -76,6 +76,17 @@ public :
 	int						RunAFrame(mfb_window* window, engineCallback = NULL, DirectZob::engineCallback OnQueuing = NULL);
 	int						Run( void func(void) );
 	const uint*				GetBufferData() const { return m_engine->GetBufferData()->buffer; }
+	uint*					GetBufferDataNoConst() 
+	{ 
+		if (m_engine->GetBufferData()->curBuffer == 1)
+		{
+			return m_engine->GetBufferData()->buffer0;
+		}
+		else
+		{
+			return m_engine->GetBufferData()->buffer1;
+		}
+	}
 	std::string				ExePath();
 	double					GetDeltaTime_MS(timespec& start, timespec& end) const;
 	static DirectZob*		GetInstance() { return DirectZob::singleton; }
@@ -131,7 +142,4 @@ private:
 	float m_frameTick;
 	static int s_logIndent;
 	bool m_physicStarted;
-
-	//
-
 };

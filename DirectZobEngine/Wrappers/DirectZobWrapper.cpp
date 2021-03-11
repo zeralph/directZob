@@ -171,6 +171,33 @@ namespace CLI
 		return 0;
 	}
 
+	void DirectZobWrapper::Lock()
+	{
+		if (GetInstance())
+		{
+			GetInstance()->Lock();
+		}
+	}
+
+	void DirectZobWrapper::Unlock()
+	{
+		if (GetInstance())
+		{
+			GetInstance()->Unlock();
+		}
+	}
+
+	System::IntPtr DirectZobWrapper::GetBufferData()
+	{
+		const System::IntPtr ptr;
+		if (GetInstance())
+		{
+			uint* p = GetInstance()->GetBufferDataNoConst();
+			return System::IntPtr(p);
+		}
+		return ptr;
+	}
+
 	int DirectZobWrapper::RunAFrame()
 	{
 		if (GetInstance())

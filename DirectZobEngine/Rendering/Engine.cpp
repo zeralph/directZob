@@ -82,6 +82,8 @@ Engine::Engine(int width, int height, Events* events)
 	m_bufferData.zFar = m_zFar;
 	m_bufferData.buffer = m_buffer[m_currentBuffer];
 	m_bufferData.zBuffer = m_zBuffer[m_currentBuffer];
+	m_bufferData.buffer0 = m_buffer[0];
+	m_bufferData.buffer1 = m_buffer[1];
 	//	m_bufferData.oBuffer = m_oBuffer;
 	m_bufferData.size = width * height;
 	m_nbPixels = 0;
@@ -354,6 +356,7 @@ void Engine::SwapBuffers()
 	m_currentBuffer = (m_currentBuffer + 1) % 2;
 	m_bufferData.buffer = m_buffer[m_currentBuffer];
 	m_bufferData.zBuffer = m_zBuffer[m_currentBuffer];
+	m_bufferData.curBuffer = m_currentBuffer;
 }
 
 

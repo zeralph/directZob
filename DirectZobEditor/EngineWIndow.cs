@@ -319,7 +319,7 @@ namespace DirectZobEditor
             {
                 m_engineBitmap = null;
             }
-            IntPtr p = m_engineWrapper.GetBufferData();
+            IntPtr p = m_directZobWrapper.GetBufferData();
             m_engineBitmap = new System.Drawing.Bitmap(m_width, m_height, 4 * m_width, System.Drawing.Imaging.PixelFormat.Format32bppRgb, p);
         }
 
@@ -397,9 +397,10 @@ namespace DirectZobEditor
         }
         private void AfterUpdateEngineWindowMethod()
         {
-            //lock (EngineRender)
+            m_directZobWrapper.Lock();
             {
-                IntPtr p = m_engineWrapper.GetBufferData();
+                //IntPtr p = m_engineWrapper.GetBufferData();
+                IntPtr p = m_directZobWrapper.GetBufferData();
                 Rectangle rect = new Rectangle(0, 0, m_engineBitmap.Width, m_engineBitmap.Height);
                 System.Drawing.Imaging.BitmapData bmpData =
                     m_engineBitmap.LockBits(rect, System.Drawing.Imaging.ImageLockMode.WriteOnly,
@@ -432,6 +433,7 @@ namespace DirectZobEditor
             {
                 m_mainForm.InformEngineStatus("STOPPED");
             }
+            m_directZobWrapper.Unlock();
         }
         #endregion
         private void UpdateGraphicsParameters()

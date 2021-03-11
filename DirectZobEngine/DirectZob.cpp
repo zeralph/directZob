@@ -217,7 +217,7 @@ int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUp
 		Camera* cam = m_cameraManager->GetCurrentCamera();
 		if (cam)
 		{
-			m_engine->SwapBuffers();
+			
 			bool bPhysicUpdated = false;
 //			cam->UpdateViewProjectionMatrix();
 
@@ -303,10 +303,11 @@ int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUp
 		}
 		m_engine->SetDisplayedBuffer();
 	}
-	g_render_mutex.unlock();
 	SaveTime(&tend);
 	float dt = (float)GetDeltaTime_MS(tstart, tend);
 	WaitToTargetFrameTime(dt);
+	m_engine->SwapBuffers();
+	g_render_mutex.unlock();
 	return state;
 }
 

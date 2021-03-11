@@ -60,10 +60,6 @@ namespace CLI
 	{
 		return m_Instance->GetBufferData()->height;
 	}
-	System::IntPtr EngineWrapper::GetBufferData()
-	{
-		return System::IntPtr(m_Instance->GetBufferData()->buffer);
-	}
 	void EngineWrapper::SetRenderOutput(int r)
 	{
 		if (r >= 0 && r < (int)eRenderOutput::__eRenderOutput_MAX__)

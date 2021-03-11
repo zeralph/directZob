@@ -268,6 +268,7 @@ int main(int argc, char* argv[])
 		int c = (int)(benchCpy / (float)frames);
 		std::cout << "\n\t\tBenchmark:\nRender\tGeom\tCpy\tFrame\tFps\n" << r <<"\t"<<g<<"\t"<<c<<"\t"<<t<<"\t"<<fps<< std::endl;
 	}
+	//OPTICK_SAVE_CAPTURE("capture.opt");
 #ifdef OPTIK_PROFILING
 	OPTICK_SHUTDOWN();
 #endif

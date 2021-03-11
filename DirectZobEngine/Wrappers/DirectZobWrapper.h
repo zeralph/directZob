@@ -32,6 +32,9 @@ namespace CLI
 		int						RunAFrame();
 		int						Run(engineCallback^ cbStart, engineCallback^ cbEnd, engineCallback^ sceneUpdated, engineCallback^ queuing);
 		int						Stop();
+		void					Lock();
+		void					Unlock();
+		System::IntPtr			GetBufferData();
 		cli::array<System::String^>^ GetEventsAndClear();
 		void					Resize(int width, int height);
 		static void test();
