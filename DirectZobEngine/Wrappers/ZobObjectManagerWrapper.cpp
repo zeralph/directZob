@@ -26,15 +26,15 @@ namespace CLI
 		MarshalString(name, n);
 		ZobObject* z = m_Instance->GetZobObject(n);
 		
-		if (z->GetSubType() == ZOBGUID::SubType::subtype_zobLight)
+		if (z->GetSubType() == ZOBGUID::subtype_zobLight)
 		{
 			return gcnew ZobLightWrapper((Light*)z);
 		}
-		else if (z->GetSubType() == ZOBGUID::SubType::subtype_zobCamera)
+		else if (z->GetSubType() == ZOBGUID::ZobSubType::subtype_zobCamera)
 		{
 			return gcnew ZobCameraWrapper((Camera*)z);
 		}
-		else if (z->GetSubType() == ZOBGUID::SubType::subtype_sprite)
+		else if (z->GetSubType() == ZOBGUID::ZobSubType::subtype_sprite)
 		{
 			return gcnew ZobSpriteWrapper((ZobSprite*)z);
 		}
@@ -45,7 +45,7 @@ namespace CLI
 	{
 		uint id = DirectZob::GetInstance()->GetEngine()->GetObjectIdAtCoords(x, y);
 		ZobObject* z = m_Instance->GetZobObjectFromPartialId(id);
-		ZOBGUID::Type t;
+		ZOBGUID::ZobType t;
 		if (type != eObjectTypes::eObjectTypes_all)
 		{
 			switch (type)

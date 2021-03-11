@@ -278,8 +278,8 @@ namespace CLI
 		ZobObject* z = GetInstance();
 		if (z)
 		{
-			ZOBGUID::SubType t = z->GetSubType();
-			return t == ZOBGUID::SubType::subtype_zobLight;
+			ZOBGUID::ZobSubType t = z->GetSubType();
+			return t == ZOBGUID::ZobSubType::subtype_zobLight;
 		}
 		return false;
 	}
@@ -289,7 +289,7 @@ namespace CLI
 		ZobObject* z = GetInstance();
 		if (z)
 		{
-			return z->GetSubType() == ZOBGUID::SubType::subtype_zobCamera;
+			return z->GetSubType() == ZOBGUID::ZobSubType::subtype_zobCamera;
 		}
 		return false;
 	}
@@ -299,7 +299,7 @@ namespace CLI
 		ZobObject* z = GetInstance();
 		if (z)
 		{
-			return z->GetSubType() == ZOBGUID::SubType::subtype_sprite;
+			return z->GetSubType() == ZOBGUID::subtype_sprite;
 		}
 		return false;
 	}
