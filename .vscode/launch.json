@@ -24,12 +24,17 @@
             "cwd": "${workspaceFolder}/",
             "environment": [],
             "externalConsole": false,
+            "additionalSOLibSearchPath":"/home/zeralph/Documents/directZob/;${workspaceFolder};${workspaceFolder}/dependencies/optick/lib/linux",
             "MIMode": "gdb",
             "setupCommands": [
                 {
                     "description": "Enable pretty-printing for gdb",
                     "text": "-enable-pretty-printing",
                     "ignoreFailures": true
+                },
+                {
+                    "description": "Additional libs for gdb",
+                    "text": "set solib-search-path ${workspaceFolder}/dependencies/optick/lib/linux/"
                 }
             ],
             "preLaunchTask": "Linux build debug",

@@ -93,6 +93,7 @@ void SceneLoader::LoadZobObject(TiXmlElement* node, ZobObject* parent, const std
 
 void SceneLoader::UnloadScene()
 {
+	DirectZob::LogInfo("Unloading scene");
 	DirectZob::AddIndent();
 	MeshManager* meshManager = DirectZob::GetInstance()->GetMeshManager();
 	MaterialManager* materialManager = DirectZob::GetInstance()->GetMaterialManager();
@@ -130,8 +131,8 @@ void SceneLoader::LoadScene(std::string& path, std::string& file)
 	CleanPath(m_path);
 	m_file = file;
 	DirectZob::AddIndent();
-	DirectZob::LogInfo("WORKSPACE PATH : %s", path.c_str());
-	DirectZob::LogInfo("loading scene %s", file.c_str());
+	DirectZob::LogWarning("WORKSPACE PATH : %s", path.c_str());
+	DirectZob::LogWarning("loading scene %s", file.c_str());
 	UnloadScene();
 	DirectZob::GetInstance()->GetLightManager()->ReInitGlobalSettings();
 	MeshManager* meshManager = DirectZob::GetInstance()->GetMeshManager();

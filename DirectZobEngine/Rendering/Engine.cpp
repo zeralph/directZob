@@ -150,7 +150,7 @@ Engine::Engine(int width, int height, Events* events)
 		m_rasterizers[i]->Init(m_conditionvariables[i], m_mutexes[i]);
 	}
 	std::string n = "Engine initialized with " + std::to_string(m_nbRasterizers) + " rasterizer(s) for " + std::to_string(m_maxTrianglesQueueSize) + " triangles per image";
-	DirectZob::LogInfo(n.c_str());
+	DirectZob::LogWarning(n.c_str());
 }
 
 uint Engine::GetObjectIdAtCoords(uint x, uint y)
@@ -169,9 +169,11 @@ Engine::~Engine()
 	WaitForRasterizersEnd();
 	for (int i = 0; i < m_nbRasterizers; i++)
 	{
+		//m_mutexes[i]->unlock();
+		//m_conditionvariables[i]->notify_all();
 		delete m_rasterizers[i];
-		delete m_conditionvariables[i];
-		delete m_mutexes[i];
+		//delete m_conditionvariables[i];
+		//delete m_mutexes[i];
 	}
 	free(m_TrianglesQueue);
 	free(m_verticesData);

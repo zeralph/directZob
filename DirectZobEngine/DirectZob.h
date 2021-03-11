@@ -43,6 +43,14 @@ public :
 	}
 #endif
 	
+	enum eDirectZobLogLevel
+	{
+		eDirectZobLogLevel_info=0,
+		eDirectZobLogLevel_warning,
+		eDirectZobLogLevel_error,
+		eDirectZobLogLevel_none
+	};
+
 	typedef void (*engineCallback)(void);
 
 	DirectZob();

@@ -17,7 +17,7 @@
 #define LOG_BUFFER_SIZE 1024
 
 static float TargetMSPerFrame = 16.66666667f;
-
+static DirectZob::eDirectZobLogLevel sLogLevel = DirectZob::eDirectZobLogLevel_warning;
 static char buffer[MAX_PATH];
 static char logBuffer[LOG_BUFFER_SIZE];
 static bool g_isInEditorMode;
@@ -29,7 +29,6 @@ DirectZob *DirectZob::singleton = nullptr;
 
 DirectZob::DirectZob()
 {
-	
 	m_initialized = false;
 	DirectZob::singleton= this; 
 	m_frameTime = 1.0f;
@@ -383,6 +382,10 @@ void DirectZob::PrintObjectList()
 
 void DirectZob::LogInfo(const char* format, ...)
 {
+	if(sLogLevel > eDirectZobLogLevel_info)
+	{
+		return;
+	}
 	va_list args;
 	va_start(args, format);
 	_vsnprintf_s(logBuffer, LOG_BUFFER_SIZE, format, args);
@@ -409,6 +412,10 @@ void DirectZob::LogInfo(const char* format, ...)
 
 void DirectZob::LogError(const char* format, ...)
 {
+	if(sLogLevel > eDirectZobLogLevel_error)
+	{
+		return;
+	}
 	va_list args;
 	va_start(args, format);
 	_vsnprintf_s(logBuffer, LOG_BUFFER_SIZE, format, args);
@@ -429,6 +436,10 @@ void DirectZob::LogError(const char* format, ...)
 }
 void DirectZob::LogWarning(const char* format, ...)
 {
+	if(sLogLevel > eDirectZobLogLevel_warning)
+	{
+		return;
+	}
 	va_list args;
 	va_start(args, format);
 	_vsnprintf_s(logBuffer, LOG_BUFFER_SIZE, format, args);

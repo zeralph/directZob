@@ -257,9 +257,7 @@ int main(int argc, char* argv[])
 		}
 		
 	}
-    printf("Closing\n");
     m_directZob.NewScene();
-    printf("Exiting\n");
 	mfb_close(m_window);
 	if (bBench)
 	{
@@ -274,6 +272,7 @@ int main(int argc, char* argv[])
 	OPTICK_SHUTDOWN();
 #endif
 	m_directZob.Shutdown();
-	return 0;
+	printf("Bye\n");
+	exit(0);
 }
 
