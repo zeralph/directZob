@@ -851,8 +851,8 @@ int Engine::QueueTriangleInRasters(const Triangle* t, int idx) const
 			min /= m_rasterizerHeight;
 			max /= m_rasterizerHeight;
 			min--;
-			min = max(0, min);
-			max = min(max, m_nbRasterizers-1);
+			min = fmax(0, min);
+			max = fmin(max, m_nbRasterizers-1);
 			for (int i = min; i <= max; i++)
 			{
 				m_rasterizers[i]->QueueTriangle(t);
@@ -877,7 +877,7 @@ int Engine::QueueTriangleInRasters(const Triangle* t, int idx) const
 				int i = (idx) / z;
 				assert(i >= 0);
 				//assert(i < m_nbRasterizers);
-				i = min(i, m_nbRasterizers - 1);
+				i = fmin(i, m_nbRasterizers - 1);
 				m_rasterizers[i]->QueueTriangle(t);
 			}
 		}
