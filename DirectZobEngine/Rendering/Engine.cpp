@@ -91,14 +91,17 @@ Engine::Engine(int width, int height, Events* events)
 
 	m_rasterizerHeight = ceil((float)height / (float)m_nbRasterizers);
 	int h0 = 0;
-	int h1 = height;
+	int h1 = m_rasterizerHeight;
+	int nbTrianglesPerRasterize = m_maxTrianglesQueueSize / m_nbRasterizers;
 	for (int i = 0; i < m_nbRasterizers; i++)
 	{
-		Rasterizer* r = new Rasterizer(width, height, 0, height /*+ m_rasterizerHeight*/, &m_bufferData);
+		Rasterizer* r = new Rasterizer(width, height, h0, h1, nbTrianglesPerRasterize, (i+1), &m_bufferData);
 		m_rasterizers[i] = r;
 		m_conditionvariables[i] = new std::condition_variable();
 		m_mutexes[i] = new std::mutex();
 		h0 += m_rasterizerHeight;
+		h1 += m_rasterizerHeight;
+		h1 = min(height, h1);
 	}
 
 	m_LineQueue = (Line3D*)malloc(sizeof(Line3D) * m_maxLineQueueSize);
@@ -142,10 +145,10 @@ Engine::Engine(int width, int height, Events* events)
 		uvIdx += 3;
 	}
 	m_lineQueueSize = 0;
+	m_LastTriangleQueueSize = 0;
 	m_TriangleQueueSize = 0;
 	for (int i = 0; i < m_nbRasterizers; i++)
 	{
-
 		m_rasterizers[i]->Init(m_conditionvariables[i], m_mutexes[i]);
 	}
 	std::string n = "Engine initialized with " + std::to_string(m_nbRasterizers) + " rasterizer(s) for " + std::to_string(m_maxTrianglesQueueSize) + " triangles per image";
@@ -241,9 +244,10 @@ void Engine::Resize(int width, int height)
 	m_rasterizerHeight = ceil( (float)height / (float)m_nbRasterizers);
 	int h0 = 0;
 	m_rasterizers = (Rasterizer**)malloc(sizeof(Rasterizer) * m_nbRasterizers);
+	int nbTrianglesPerRasterizer = m_maxTrianglesQueueSize / m_nbRasterizers;
 	for (int i = 0; i < m_nbRasterizers; i++)
 	{
-		Rasterizer *r = new Rasterizer(width, height, h0, h0 + m_rasterizerHeight, &m_bufferData);
+		Rasterizer *r = new Rasterizer(width, height, h0, h0 + m_rasterizerHeight, nbTrianglesPerRasterizer, (i + 1), &m_bufferData);
 		m_rasterizers[i] = r;
 		//m_TrianglesQueue[i].clear();
 		//m_rasterLineQueues.clear();
@@ -269,7 +273,7 @@ void Engine::ClearBuffer(const Color *color)
 		//memset(m_zBuffer, 0, sizeof(float) * m_bufferData.width * m_bufferData.height);
 		for (int i = 0; i < m_bufferData.width * m_bufferData.height; i++)
 		{
-			m_zBuffer[oldBuffer][i] = m_zFar;
+			m_zBuffer[oldBuffer][i] = m_zFar + 1.0f;
 			m_buffer[oldBuffer][i] = v;
 		}
 	}
@@ -379,10 +383,11 @@ int Engine::SetDisplayedBuffer()
 void Engine::ClearRenderQueues()
 {
 	OPTICK_EVENT();
+	m_LastTriangleQueueSize = m_TriangleQueueSize;
+	m_lineQueueSize = 0;
+	m_TriangleQueueSize = 0;
 	for (int i = 0; i < m_nbRasterizers; i++)
 	{
-		m_lineQueueSize = 0;
-		m_TriangleQueueSize = 0;
 		m_rasterizers[i]->Clear();
 	}
 }
@@ -826,94 +831,113 @@ void Engine::QueueLineInRasters(const Line3D* l, int idx) const
 
 void Engine::QueueTriangleInRasters(const Triangle* t, int idx) const
 {
-	if (!sEqualizeTriangleQueues)
+	//uint j = m_TriangleQueueSize;
+	if (m_TriangleQueueSize < m_maxTrianglesQueueSize)
 	{
-		int min = (int)fmaxf(0, fminf(t->pa->y, fminf(t->pb->y, t->pc->y)));
-		int max = (int)fminf(m_bufferData.height, fmaxf(t->pa->y, fmaxf(t->pb->y, t->pc->y)));
-		int h = m_bufferData.height / m_nbRasterizers;
-		min /= h;
-		max /= h;
-		if (max >= m_nbRasterizers)
+		if (!sEqualizeTriangleQueues)
 		{
-			max = m_nbRasterizers - 1;
+			int min = (int)fmaxf(0, fminf(t->pa->y, fminf(t->pb->y, t->pc->y)));
+			int max = (int)fminf(m_bufferData.height, fmaxf(t->pa->y, fmaxf(t->pb->y, t->pc->y)));
+			min /= m_rasterizerHeight;
+			max /= m_rasterizerHeight;
+			min--;
+			min = max(0, min);
+			max = min(max, m_nbRasterizers-1);
+			for (int i = min; i <= max; i++)
+			{
+				m_rasterizers[i]->QueueTriangle(t);
+			}
 		}
-		for (int i = min; i <= max; i++)
+		else
 		{
-			m_rasterizers[i]->QueueTriangle(t);
+			//does noit work :Z issues. Dead code still here until I found a new idea.
+			static bool zuzu = true;
+			if (zuzu)
+			{
+				int i = (idx) % m_nbRasterizers;
+				assert(i >= 0);
+				assert(i < m_nbRasterizers);
+				m_rasterizers[i]->QueueTriangle(t);
+			}
+			else
+			{
+				int z = m_LastTriangleQueueSize / m_nbRasterizers;
+				z++;
+				assert(z != 0);
+				int i = (idx) / z;
+				assert(i >= 0);
+				//assert(i < m_nbRasterizers);
+				i = min(i, m_nbRasterizers - 1);
+				m_rasterizers[i]->QueueTriangle(t);
+			}
 		}
-	}
-	else
-	{
-		int i = (idx) % m_nbRasterizers;
-		assert(i >= 0);
-		assert(i < m_nbRasterizers);
-		m_rasterizers[i]->QueueTriangle(t);
 	}
 }
 
 void Engine::QueueProjectedTriangle(const Camera* c, const Triangle* t)
 {
-	uint j = m_TriangleQueueSize;
-	if (j < m_maxTrianglesQueueSize)
+	if (m_TriangleQueueSize < m_maxTrianglesQueueSize)
 	{
-		Triangle::CopyTriangle(&m_TrianglesQueue[j], t);
+		Triangle::CopyTriangle(&m_TrianglesQueue[m_TriangleQueueSize], t);
 		//TODO : adjust to frustrums 
-		QueueTriangleInRasters(&m_TrianglesQueue[j], j);
+		QueueTriangleInRasters(&m_TrianglesQueue[m_TriangleQueueSize], m_TriangleQueueSize);
 		m_TriangleQueueSize++;
 	}
 }
 
 void Engine::QueueWorldTriangle(const Camera* c, const Triangle* t)
 {
-	static bool ba = true;
-	static bool bb = true;
-	static bool bc = true;
 	if (m_started)
 	{
-		uint j = m_TriangleQueueSize;
-		if (j < m_maxTrianglesQueueSize)
+		//uint j = m_TriangleQueueSize;
+		if (m_TriangleQueueSize < m_maxTrianglesQueueSize)
 		{
 			if (t->clipMode > Triangle::eClip_0_in)
 			{
-				if (ba && t->clipMode < Triangle::eClip_2_in)
+				if (t->clipMode < Triangle::eClip_2_in)
 				{
 					if (t->clipMode == Triangle::eClip_A_in_BC_out)
 					{
-						int nbNewTriangles = ClipTriangle(c, t);
-						QueueTriangleInRasters(&m_TrianglesQueue[j], j);
-						m_TriangleQueueSize += nbNewTriangles;
-						m_drawnTriangles += nbNewTriangles;
+						Triangle::CopyTriangle(&m_TrianglesQueue[m_TriangleQueueSize], t);
+						ClipTriangle(c, &m_TrianglesQueue[m_TriangleQueueSize]);
+						QueueTriangleInRasters(&m_TrianglesQueue[m_TriangleQueueSize], m_TriangleQueueSize);
+						m_TriangleQueueSize ++;
+						m_drawnTriangles ++;
 					}
 					else if (t->clipMode == Triangle::eClip_B_in_AC_out)
 					{
-						int nbNewTriangles = ClipTriangle(c, t);
-						QueueTriangleInRasters(&m_TrianglesQueue[j], j);
-						m_TriangleQueueSize += nbNewTriangles;
-						m_drawnTriangles += nbNewTriangles;
+						Triangle::CopyTriangle(&m_TrianglesQueue[m_TriangleQueueSize], t);
+						ClipTriangle(c, &m_TrianglesQueue[m_TriangleQueueSize]);
+						QueueTriangleInRasters(&m_TrianglesQueue[m_TriangleQueueSize], m_TriangleQueueSize);
+						m_TriangleQueueSize ++;
+						m_drawnTriangles ++;
 					}
 					else if (t->clipMode == Triangle::eClip_C_in_AB_out)
 					{
-						int nbNewTriangles = ClipTriangle(c, t);
-						QueueTriangleInRasters(&m_TrianglesQueue[j], j);
-						m_TriangleQueueSize+=nbNewTriangles;
-						m_drawnTriangles+= nbNewTriangles;
+						Triangle::CopyTriangle(&m_TrianglesQueue[m_TriangleQueueSize], t);
+						ClipTriangle(c, &m_TrianglesQueue[m_TriangleQueueSize]);
+						QueueTriangleInRasters(&m_TrianglesQueue[m_TriangleQueueSize], m_TriangleQueueSize);
+						m_TriangleQueueSize++;
+						m_drawnTriangles++;
 					}
 						
 				}
-				else if (bb && t->clipMode < Triangle::eClip_3_in)
+				else if (t->clipMode < Triangle::eClip_3_in)
 				{
-					int nbNewTriangles = SubDivideClippedTriangle(c, t);
-					QueueTriangleInRasters(&m_TrianglesQueue[j], j);
-					QueueTriangleInRasters(&m_TrianglesQueue[j+1], j+1);
-					m_TriangleQueueSize += nbNewTriangles;
-					m_drawnTriangles += nbNewTriangles;				
+					SubDivideClippedTriangle(c, t);
+					QueueTriangleInRasters(&m_TrianglesQueue[m_TriangleQueueSize], m_TriangleQueueSize);
+					m_TriangleQueueSize++;
+					m_drawnTriangles++;
+					QueueTriangleInRasters(&m_TrianglesQueue[m_TriangleQueueSize], m_TriangleQueueSize);
+					m_TriangleQueueSize ++;
+					m_drawnTriangles ++;				
 				}
-				else if(bc)
+				else 
 				{
 					//memcpy(&m_TrianglesQueue[i][j], t, sizeof(Triangle));
-					Triangle::CopyTriangle(&m_TrianglesQueue[j], t);
-					RecomputeTriangleProj(c, &m_TrianglesQueue[j]);
-					QueueTriangleInRasters(&m_TrianglesQueue[j], j);
+					Triangle::CopyTriangle(&m_TrianglesQueue[m_TriangleQueueSize], t);
+					RecomputeTriangleProj(c, &m_TrianglesQueue[m_TriangleQueueSize]);
+					QueueTriangleInRasters(&m_TrianglesQueue[m_TriangleQueueSize], m_TriangleQueueSize);
 					m_TriangleQueueSize++;
 					m_drawnTriangles++;
 				}
@@ -922,40 +946,34 @@ void Engine::QueueWorldTriangle(const Camera* c, const Triangle* t)
 	}
 }
 
-uint Engine::ClipTriangle(const Camera* c, const Triangle* t)
+uint Engine::ClipTriangle(const Camera* c, Triangle* t)
 {
-	uint j;
-	j = m_TriangleQueueSize;
-	if (j < m_maxTrianglesQueueSize)
+	Triangle* nt = t;// &m_TrianglesQueue[m_TriangleQueueSize];
+	//Triangle::CopyTriangle(nt, t);
+	float outP2factor = 0.0f;
+	if (t->clipMode == Triangle::eClip_A_in_BC_out)
 	{
-		Triangle* nt = &m_TrianglesQueue[j];
-		Triangle::CopyTriangle(nt, t);
-		float outP2factor = 0.0f;
-		if (t->clipMode == Triangle::eClip_A_in_BC_out)
-		{
-			c->ClipSegmentToFrustrum(nt->va, nt->vb, outP2factor);
-			RecomputeUv(nt->ua, nt->ub, outP2factor);
-			c->ClipSegmentToFrustrum(nt->va, nt->vc, outP2factor);
-			RecomputeUv(nt->ua, nt->uc, outP2factor);
-		}
-		else if (t->clipMode == Triangle::eClip_B_in_AC_out)
-		{
-			c->ClipSegmentToFrustrum(nt->vb, nt->va, outP2factor);
-			RecomputeUv(nt->ub, nt->ua, outP2factor);
-			c->ClipSegmentToFrustrum(nt->vb, nt->vc, outP2factor);
-			RecomputeUv(nt->ub, nt->uc, outP2factor);
-		}
-		else //eClip_C_in_AB_out
-		{
-			c->ClipSegmentToFrustrum(nt->vc, nt->va, outP2factor);
-			RecomputeUv(nt->uc, nt->ua, outP2factor);
-			c->ClipSegmentToFrustrum(nt->vc, nt->vb, outP2factor); 
-			RecomputeUv(nt->uc, nt->ub, outP2factor);
-		}
-		RecomputeTriangleProj(c, nt);
-		return 1;
+		c->ClipSegmentToFrustrum(nt->va, nt->vb, outP2factor);
+		RecomputeUv(nt->ua, nt->ub, outP2factor);
+		c->ClipSegmentToFrustrum(nt->va, nt->vc, outP2factor);
+		RecomputeUv(nt->ua, nt->uc, outP2factor);
 	}
-	return 0;
+	else if (t->clipMode == Triangle::eClip_B_in_AC_out)
+	{
+		c->ClipSegmentToFrustrum(nt->vb, nt->va, outP2factor);
+		RecomputeUv(nt->ub, nt->ua, outP2factor);
+		c->ClipSegmentToFrustrum(nt->vb, nt->vc, outP2factor);
+		RecomputeUv(nt->ub, nt->uc, outP2factor);
+	}
+	else //eClip_C_in_AB_out
+	{
+		c->ClipSegmentToFrustrum(nt->vc, nt->va, outP2factor);
+		RecomputeUv(nt->uc, nt->ua, outP2factor);
+		c->ClipSegmentToFrustrum(nt->vc, nt->vb, outP2factor); 
+		RecomputeUv(nt->uc, nt->ub, outP2factor);
+	}
+	RecomputeTriangleProj(c, nt);
+	return 1;
 }
 
 uint Engine::SubDivideClippedTriangle(const Camera* c, const Triangle* t)
@@ -1287,4 +1305,17 @@ bool Engine::IsInFrustrum(const Camera* c, const Box* aabb) const
 void Engine::UpdateEditorBitmapData()
 {
 	//memcpy(m_editorBuffer, m_buffer[m_currentBuffer], m_bufferData.size * 4);
+}
+
+void Engine::PrintRasterizersInfos()
+{
+	std::string o = "";
+	ZobHUDManager* m = DirectZob::GetInstance()->GetHudManager();
+	ZobVector3 c = ZobVector3(1, 0, 0);
+	float y = 0.05f;
+	for (int i = 0; i < m_nbRasterizers; i++)
+	{
+		m->Print(0.5f, y, 0.02f, 0.02f, &c, " R %i : %i", i, m_rasterizers[i]->GetNbTriangle());
+		y += 0.02f;
+	}
 }

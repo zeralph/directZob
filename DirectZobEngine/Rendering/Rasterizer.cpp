@@ -10,16 +10,43 @@ static float fogDecal = -0.6f;
 
 volatile bool bStartDraw;
 
-Rasterizer::Rasterizer(uint width, uint height, uint startHeight, uint endHeight, BufferData* bufferData)
+static ZobVector3 colors[16] =
+{
+	ZobVector3(1,0,0),
+	ZobVector3(1,1,0),
+	ZobVector3(1,0,1),
+
+	ZobVector3(0,1,0),
+	ZobVector3(0,1,1),
+	ZobVector3(1,1,0),
+	
+	ZobVector3(0,1,1),
+	ZobVector3(1,0,1),
+	ZobVector3(0,1,1),
+
+	ZobVector3(1,1,1),
+	ZobVector3(0,0,0),
+
+	ZobVector3(0.5,0,0),
+	ZobVector3(0,0.5,0),
+	ZobVector3(0,0,0.5),
+	ZobVector3(0.5,0,0.5),
+	ZobVector3(0,0.5,0.5),
+};
+
+Rasterizer::Rasterizer(uint width, uint height, uint startHeight, uint endHeight, uint MaxQueueSize, uint rasterizerNumber, BufferData* bufferData)
 {
 	m_startHeight = startHeight;
 	m_bufferData = bufferData;
 	m_endHeight = endHeight;
 	m_width = width;
 	m_height = height;
+	m_maxTriangleQueueSize = MaxQueueSize;
 	m_lines.clear();
-	m_triangles.clear();
+	m_triangles = (const Triangle**)malloc(sizeof(Triangle*) * m_maxTriangleQueueSize);
+	m_nbTriangles = 0;
 	m_time = 0.0f;
+	m_rasterizerNumber = rasterizerNumber;
 	m_runThread = true;
 }
 
@@ -70,12 +97,18 @@ Rasterizer::~Rasterizer()
 void Rasterizer::Clear()
 {
 	m_lines.clear();
-	m_triangles.clear();
+	m_nbTriangles = 0;
+	//m_triangles.clear();
 }
 
 void Rasterizer::QueueTriangle(const Triangle* t)
 {
-	m_triangles.push_back(t);
+	if (m_nbTriangles < m_maxTriangleQueueSize)
+	{
+		m_triangles[m_nbTriangles] = t;
+		m_nbTriangles++;
+	}
+	//m_triangles.push_back(t);
 }
 
 void Rasterizer::QueueLine(const Line3D* l)
@@ -88,10 +121,14 @@ void Rasterizer::Render()
 	OPTICK_THREAD("render thread");
 	while (m_runThread)
 	{
-		std::unique_lock<std::mutex> g(*m_drawMutex);
-		(*m_startConditionVariable).wait(g, [] { return bStartDraw; });
-		RenderInternal();
-		bStartDraw = false;
+		{
+			std::unique_lock<std::mutex> g(*m_drawMutex);
+			{
+				(*m_startConditionVariable).wait(g, [] { return bStartDraw; });
+				RenderInternal();
+				bStartDraw = false;
+			}
+		}
 	}
 }
 void Rasterizer::RenderInternal()
@@ -111,7 +148,7 @@ void Rasterizer::RenderInternal()
 		m_fogDensity = lm->GetFogDensity();
 		m_fogDistance = lm->GetFogDistance();
 	}
-	for (int i = 0; i < m_triangles.size(); i++)
+	for (int i = 0; i < m_nbTriangles; i++)
 	{
 		const Triangle* t = m_triangles[i];
 		//if (t->draw)
@@ -182,21 +219,19 @@ void Rasterizer::DrawLine(const Line3D* l) const
 	}
 	if (yLonger) 
 	{
-		
-		float z = sz;
 		for (int i = 0; i != longLen; i += incrementVal) 
 		{
 			px = x + (int)((double)i * multDiff);
 			py = y + i;
 			if (px < m_bufferData->width && py < m_bufferData->height)
 			{
-				zRatio = m_bufferData->zNear + (sz - m_bufferData->zNear) / (m_bufferData->zFar - m_bufferData->zNear);
+				zRatio = (sz - m_bufferData->zNear) / (m_bufferData->zFar - m_bufferData->zNear);
 				if (l->noZ)
 				{
-					zRatio = m_bufferData->zNear;
+					zRatio = 0;
 				}
 				k = py * m_bufferData->width + px;
-				if (m_bufferData->zBuffer[k] > zRatio)
+				if (m_bufferData->zBuffer[k] > zRatio )
 				{
 					m_bufferData->buffer[k] = l->c;
 					m_bufferData->zBuffer[k] = zRatio;
@@ -224,7 +259,11 @@ void Rasterizer::DrawLine(const Line3D* l) const
 			k = py * m_bufferData->width + px;
 			if (px < m_bufferData->width && py < m_bufferData->height)
 			{
-				zRatio = m_bufferData->zNear + (sz - m_bufferData->zNear) / (m_bufferData->zFar - m_bufferData->zNear);
+				zRatio = (sz - m_bufferData->zNear) / (m_bufferData->zFar - m_bufferData->zNear);
+				if (l->noZ)
+				{
+					zRatio = 0;
+				}
 				k = py * m_bufferData->width + px;
 				if (m_bufferData->zBuffer[k] > zRatio)
 				{
@@ -505,7 +544,7 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector3* p, const Triangl
 	}
 	
 	float zf = m_bufferData->zBuffer[k];
-	if ( zRatio > 0.0f &&  (zf == 0.0f  || zRatio < zf ))
+	if ( zRatio > 0.0f &&  (zf < 0.0f  || zRatio < zf ))
 	{
 		cl = 1.0f;
 		RenderOptions::eLightMode lighting = t->options->lightMode;
@@ -624,8 +663,17 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector3* p, const Triangl
 		fr = fr * (1.0f - z) + z * m_fogColor->x;
 		fg = fg * (1.0f - z) + z * m_fogColor->y;
 		fb = fb * (1.0f - z) + z * m_fogColor->z;
+
+		static bool gg = false;
+		if (gg)
+		{
+			fr = colors[m_rasterizerNumber].x;
+			fg = colors[m_rasterizerNumber].y;
+			fb = colors[m_rasterizerNumber].z;
+		}
+
 		c = ((int)(fr * 255.0f) << 16) + ((int)(fg * 255.0f) << 8) + (int)(fb * 255.0f);
-		if (zRatio < m_bufferData->zBuffer[k])
+		if (m_bufferData->zBuffer[k] <1.0f || zRatio < m_bufferData->zBuffer[k])
 		{
 			m_bufferData->buffer[k] = c;
 			m_bufferData->zBuffer[k] = zRatio;

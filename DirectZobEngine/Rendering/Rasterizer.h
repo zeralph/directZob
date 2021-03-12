@@ -43,7 +43,7 @@ public:
 		}
 	};
 
-	Rasterizer(uint width, uint height, uint startHeight, uint endHeight, BufferData* bufferData);
+	Rasterizer(uint width, uint height, uint startHeight, uint endHeight, uint MaxQueueSize, uint rasterizerNumber, BufferData* bufferData);
 	~Rasterizer();
 
 	void 					DrawTriangle(const Triangle* t) const;
@@ -58,7 +58,7 @@ public:
 	void					QueueTriangle(const Triangle* t);
 	void					QueueLine(const Line3D* l);
 	inline const Triangle*	GetTriangle(int i) { return m_triangles[i]; }
-	inline int				GetNbTriangle() const { return m_triangles.size(); }
+	inline int				GetNbTriangle() const { return m_nbTriangles; }// m_triangles.size(); }
 	inline int				GetNbLine() const { return m_lines.size(); }
 	inline float			GetRenderTimeMS() const { return m_time;  }
 
@@ -118,7 +118,10 @@ private:
 
 	std::vector<const Light*> m_lights;
 	std::vector<const Line3D*> m_lines;
-	std::vector<const Triangle*> m_triangles;
+	const Triangle** m_triangles;
+	uint m_maxTriangleQueueSize;
+	uint m_nbTriangles;
+	uint m_rasterizerNumber;
 	const ZobVector3* m_ambientColor;
 	float m_ambientIntensity;
 	const ZobVector3* m_fogColor;

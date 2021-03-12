@@ -95,6 +95,7 @@ namespace Core
 		bool											IsInFrustrum(const Camera* c, const Box* aabb) const;
 		void											SwapBuffers();
 		void											UpdateEditorBitmapData();
+		void											PrintRasterizersInfos();
 	private:	
 		inline float									clamp2(float x, float min, float max) const { if (x < min) x = min; if (x > max) x = max; return x; }
 		void											DrawHorizontalLine(const float x1, const float x2, const float y, const uint color);
@@ -102,7 +103,7 @@ namespace Core
 		void											QueuePartialSphere(const Camera* camera, const ZobMatrix4x4* mat, const float radius, const uint c, bool bold, bool noZ, float from, float to);
 		uint											SubDivideClippedTriangle(const Camera* c, const Triangle* t);
 		void											RecomputeTriangleProj(const Camera* c, Triangle* t);
-		uint											ClipTriangle(const Camera* c, const Triangle* t);
+		uint											ClipTriangle(const Camera* c, Triangle* t);
 		void											QueueTriangleInRasters(const Triangle* t, int idx) const;
 		void											QueueLineInRasters(const Line3D* l, int idx) const;
 		inline void										RecomputeUv(const ZobVector2* uva, ZobVector2* uvb, float r) const
@@ -143,6 +144,7 @@ namespace Core
 		long m_lineQueueSize;
 		long m_maxLineQueueSize;
 		
+		long m_LastTriangleQueueSize;
 		
 		uint m_nbRasterizers;
 		float m_zNear;

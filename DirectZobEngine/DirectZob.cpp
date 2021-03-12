@@ -301,6 +301,7 @@ int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUp
 		{
 			mfb_close(window);
 		}
+		m_engine->PrintRasterizersInfos();
 		m_engine->SetDisplayedBuffer();
 	}
 	SaveTime(&tend);
