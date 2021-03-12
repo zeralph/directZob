@@ -98,7 +98,7 @@ public:
 		float zNear;
 		float zFar;
 		uint* buffer;
-		volatile float* zBuffer;
+		float* zBuffer;
 		int curBuffer;
 	};
 

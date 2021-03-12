@@ -12,7 +12,7 @@
     <ZobObject name="newObject_4" guid="3001002" type="mesh">
         <Position x="0" y="0" z="0" />
         <Rotation x="0" y="0" z="0" />
-        <Scale x="0.1" y="0.1" z="0.1" />
+        <Scale x="10" y="10" z="10" />
         <Mesh name="GLX_400.OBJ" file="GLX_400.OBJ" path="/_cars/GLX-400-OBJ/">
             <RenderOptions>
                 <Lighting>Phong</Lighting>

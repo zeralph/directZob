@@ -673,11 +673,8 @@ void Mesh::QueueForDrawing(ZobObject* z, const ZobMatrix4x4& modelMatrix, const 
 				t->ComputeArea();
 				static float sAreaMin = 0.0f;
 				static float sAreaMax = 50000.0f;
-				if (t->options->cullMode == eCullMode_CounterClockwiseFace)
-				{
-					t->area = -t->area;
-				}
-				//if (t->area > sAreaMin)
+
+				//if (t->area < 0)
 				{
 					engine->QueueWorldTriangle(camera, t);
 					static bool bShowNormal = true;

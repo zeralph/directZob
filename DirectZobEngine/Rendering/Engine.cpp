@@ -22,6 +22,9 @@
 
 using namespace Core;
 
+static ZobVector3 red(1, 0, 0);
+static ZobVector3 green(0, 1, 0);
+static ZobVector3 blue(0, 0, 1);
 static bool sEqualizeTriangleQueues = false;
 
 std::condition_variable** m_conditionvariables;
@@ -829,9 +832,16 @@ void Engine::QueueLineInRasters(const Line3D* l, int idx) const
 	m_rasterizers[i]->QueueLine(l);
 }
 
-void Engine::QueueTriangleInRasters(const Triangle* t, int idx) const
+int Engine::QueueTriangleInRasters(const Triangle* t, int idx) const
 {
-	//uint j = m_TriangleQueueSize;
+	if (t->options->cullMode == eCullMode_CounterClockwiseFace && t->area >0 )
+	{
+		return 0;
+	}
+	if (t->options->cullMode == eCullMode_ClockwiseFace && t->area < 0)
+	{
+		return 0;
+	}
 	if (m_TriangleQueueSize < m_maxTrianglesQueueSize)
 	{
 		if (!sEqualizeTriangleQueues)
@@ -872,6 +882,7 @@ void Engine::QueueTriangleInRasters(const Triangle* t, int idx) const
 			}
 		}
 	}
+	return 1;
 }
 
 void Engine::QueueProjectedTriangle(const Camera* c, const Triangle* t)
@@ -880,7 +891,7 @@ void Engine::QueueProjectedTriangle(const Camera* c, const Triangle* t)
 	{
 		Triangle::CopyTriangle(&m_TrianglesQueue[m_TriangleQueueSize], t);
 		//TODO : adjust to frustrums 
-		QueueTriangleInRasters(&m_TrianglesQueue[m_TriangleQueueSize], m_TriangleQueueSize);
+		m_drawnTriangles += QueueTriangleInRasters(&m_TrianglesQueue[m_TriangleQueueSize], m_TriangleQueueSize);
 		m_TriangleQueueSize++;
 	}
 }
@@ -900,46 +911,40 @@ void Engine::QueueWorldTriangle(const Camera* c, const Triangle* t)
 					{
 						Triangle::CopyTriangle(&m_TrianglesQueue[m_TriangleQueueSize], t);
 						ClipTriangle(c, &m_TrianglesQueue[m_TriangleQueueSize]);
-						QueueTriangleInRasters(&m_TrianglesQueue[m_TriangleQueueSize], m_TriangleQueueSize);
+						m_drawnTriangles += QueueTriangleInRasters(&m_TrianglesQueue[m_TriangleQueueSize], m_TriangleQueueSize);
 						m_TriangleQueueSize ++;
-						m_drawnTriangles ++;
 					}
 					else if (t->clipMode == Triangle::eClip_B_in_AC_out)
 					{
 						Triangle::CopyTriangle(&m_TrianglesQueue[m_TriangleQueueSize], t);
 						ClipTriangle(c, &m_TrianglesQueue[m_TriangleQueueSize]);
-						QueueTriangleInRasters(&m_TrianglesQueue[m_TriangleQueueSize], m_TriangleQueueSize);
+						m_drawnTriangles += QueueTriangleInRasters(&m_TrianglesQueue[m_TriangleQueueSize], m_TriangleQueueSize);
 						m_TriangleQueueSize ++;
-						m_drawnTriangles ++;
 					}
 					else if (t->clipMode == Triangle::eClip_C_in_AB_out)
 					{
 						Triangle::CopyTriangle(&m_TrianglesQueue[m_TriangleQueueSize], t);
 						ClipTriangle(c, &m_TrianglesQueue[m_TriangleQueueSize]);
-						QueueTriangleInRasters(&m_TrianglesQueue[m_TriangleQueueSize], m_TriangleQueueSize);
+						m_drawnTriangles += QueueTriangleInRasters(&m_TrianglesQueue[m_TriangleQueueSize], m_TriangleQueueSize);
 						m_TriangleQueueSize++;
-						m_drawnTriangles++;
 					}
 						
 				}
 				else if (t->clipMode < Triangle::eClip_3_in)
 				{
 					SubDivideClippedTriangle(c, t);
-					QueueTriangleInRasters(&m_TrianglesQueue[m_TriangleQueueSize], m_TriangleQueueSize);
+					m_drawnTriangles += QueueTriangleInRasters(&m_TrianglesQueue[m_TriangleQueueSize], m_TriangleQueueSize);
 					m_TriangleQueueSize++;
-					m_drawnTriangles++;
-					QueueTriangleInRasters(&m_TrianglesQueue[m_TriangleQueueSize], m_TriangleQueueSize);
-					m_TriangleQueueSize ++;
-					m_drawnTriangles ++;				
+					m_drawnTriangles += QueueTriangleInRasters(&m_TrianglesQueue[m_TriangleQueueSize], m_TriangleQueueSize);
+					m_TriangleQueueSize ++;			
 				}
 				else 
 				{
 					//memcpy(&m_TrianglesQueue[i][j], t, sizeof(Triangle));
 					Triangle::CopyTriangle(&m_TrianglesQueue[m_TriangleQueueSize], t);
 					RecomputeTriangleProj(c, &m_TrianglesQueue[m_TriangleQueueSize]);
-					QueueTriangleInRasters(&m_TrianglesQueue[m_TriangleQueueSize], m_TriangleQueueSize);
+					m_drawnTriangles += QueueTriangleInRasters(&m_TrianglesQueue[m_TriangleQueueSize], m_TriangleQueueSize);
 					m_TriangleQueueSize++;
-					m_drawnTriangles++;
 				}
 			}
 		}
@@ -951,26 +956,40 @@ uint Engine::ClipTriangle(const Camera* c, Triangle* t)
 	Triangle* nt = t;// &m_TrianglesQueue[m_TriangleQueueSize];
 	//Triangle::CopyTriangle(nt, t);
 	float outP2factor = 0.0f;
+	
 	if (t->clipMode == Triangle::eClip_A_in_BC_out)
 	{
 		c->ClipSegmentToFrustrum(nt->va, nt->vb, outP2factor);
 		RecomputeUv(nt->ua, nt->ub, outP2factor);
+		RecomputeNormal(nt->na, nt->nb, outP2factor);
+		RecomputeColor(nt->ca, nt->cb, outP2factor);
 		c->ClipSegmentToFrustrum(nt->va, nt->vc, outP2factor);
 		RecomputeUv(nt->ua, nt->uc, outP2factor);
+		RecomputeNormal(nt->na, nt->nc, outP2factor);
+		RecomputeColor(nt->ca, nt->cc, outP2factor);
 	}
 	else if (t->clipMode == Triangle::eClip_B_in_AC_out)
 	{
 		c->ClipSegmentToFrustrum(nt->vb, nt->va, outP2factor);
 		RecomputeUv(nt->ub, nt->ua, outP2factor);
+		RecomputeNormal(nt->nb, nt->na, outP2factor);
+		RecomputeColor(nt->cb, nt->ca, outP2factor);
 		c->ClipSegmentToFrustrum(nt->vb, nt->vc, outP2factor);
 		RecomputeUv(nt->ub, nt->uc, outP2factor);
+		RecomputeNormal(nt->nb, nt->nc, outP2factor);
+		RecomputeColor(nt->cb, nt->cc, outP2factor);
 	}
 	else //eClip_C_in_AB_out
 	{
 		c->ClipSegmentToFrustrum(nt->vc, nt->va, outP2factor);
 		RecomputeUv(nt->uc, nt->ua, outP2factor);
+		RecomputeNormal(nt->nc, nt->na, outP2factor);
+		RecomputeColor(nt->cc, nt->ca, outP2factor);
 		c->ClipSegmentToFrustrum(nt->vc, nt->vb, outP2factor); 
 		RecomputeUv(nt->uc, nt->ub, outP2factor);
+		RecomputeNormal(nt->nc, nt->nb, outP2factor);
+		RecomputeColor(nt->cc, nt->cb, outP2factor);
+
 	}
 	RecomputeTriangleProj(c, nt);
 	return 1;
@@ -999,20 +1018,20 @@ uint Engine::SubDivideClippedTriangle(const Camera* c, const Triangle* t)
 	ZobVector2 piUv;
 	if (t->clipMode == Triangle::eClip_AB_in_C_out)
 	{
-		pIn1 = t->va;
-		pIn1Uv = t->ua;
-		pIn1Cv = t->ca;
-		pIn1n = t->na;
+		pIn1 = t->vc;
+		pIn1Uv = t->uc;
+		pIn1Cv = t->cc;
+		pIn1n = t->nc;
 
 		pIn2 = t->vb;
 		pIn2Uv = t->ub;
 		pIn2Cv = t->cb;
 		pIn2n = t->nb;
 
-		pOut1 = t->vc;
-		pOut1Uv = t->uc;
-		pOut1Cv = t->cc;
-		pOut1n = t->nc;
+		pOut1 = t->va;
+		pOut1Uv = t->ua;
+		pOut1Cv = t->ca;
+		pOut1n = t->na;
 	}
 	else if (t->clipMode == Triangle::eClip_AC_in_B_out)
 	{
@@ -1073,20 +1092,20 @@ uint Engine::SubDivideClippedTriangle(const Camera* c, const Triangle* t)
 	{
 		Triangle* nt = &m_TrianglesQueue[j];
 		Triangle::CopyTriangle(nt, t);
-		nt->vc->Copy(&pIn1);
-		nt->cc->Copy(&pIn1Cv);	
-		nt->uc->Copy(&pIn1Uv);
-		nt->nc->Copy(&pIn1n);
+		nt->va->Copy(&pIn1);
+		nt->ca->Copy(&pIn1Cv);	
+		nt->ua->Copy(&pIn1Uv);
+		nt->na->Copy(&pIn1n);
 
 		nt->vb->Copy(&pOut2);
 		nt->cb->Copy(&pOut2Cv);
 		nt->ub->Copy(&pOut2Uv);
 		nt->nb->Copy(&pOut2n);
 
-		nt->va->Copy(&pIn2);
-		nt->ca->Copy(&pIn2Cv);
-		nt->ua->Copy(&pIn2Uv);
-		nt->na->Copy(&pIn2n);
+		nt->vc->Copy(&pIn2);
+		nt->cc->Copy(&pIn2Cv);
+		nt->uc->Copy(&pIn2Uv);
+		nt->nc->Copy(&pIn2n);
 		RecomputeTriangleProj(c, nt);
 		nbDrawn++;
 	}
@@ -1096,20 +1115,20 @@ uint Engine::SubDivideClippedTriangle(const Camera* c, const Triangle* t)
 	{
 		Triangle* nt = &m_TrianglesQueue[j];
 		Triangle::CopyTriangle(nt, t);
-		nt->vc->Copy(&pIn1);
-		nt->cc->Copy(&pIn1Cv);
-		nt->uc->Copy(&pIn1Uv);
-		nt->nc->Copy(&pIn1n);
+		nt->va->Copy(&pIn1);
+		nt->ca->Copy(&pIn1Cv);
+		nt->ua->Copy(&pIn1Uv);
+		nt->na->Copy(&pIn1n);
 
 		nt->vb->Copy(&pOut1);
 		nt->cb->Copy(&pOut1Cv);
 		nt->ub->Copy(&pOut1Uv);
 		nt->nb->Copy(&pOut1n);
 
-		nt->va->Copy(&pOut2);
-		nt->ca->Copy(&pOut2Cv);
-		nt->ua->Copy(&pOut2Uv);
-		nt->na->Copy(&pOut2n);
+		nt->vc->Copy(&pOut2);
+		nt->cc->Copy(&pOut2Cv);
+		nt->uc->Copy(&pOut2Uv);
+		nt->nc->Copy(&pOut2n);
 
 		RecomputeTriangleProj(c, nt);
 		nbDrawn++;
@@ -1152,10 +1171,10 @@ void Engine::RecomputeTriangleProj(const Camera* c, Triangle* t)
 	t->pc->x = (t->pc->x / t->pc->z + 1) * w;
 	t->pc->y = (t->pc->y / t->pc->z + 1) * h;
 	t->ComputeArea();
-	if (t->options->cullMode == eCullMode_CounterClockwiseFace)
-	{
-		t->area = -t->area;
-	}
+	//if (t->options->cullMode == eCullMode_CounterClockwiseFace)
+	//{
+	//	t->area = -t->area;
+	//}
 	//t->material = NULL;
 }
 

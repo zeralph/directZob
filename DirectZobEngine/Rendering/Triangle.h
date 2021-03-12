@@ -68,7 +68,6 @@ public:
 	inline void ComputeArea()
 	{
 		area = (pc->x - pa->x) * (pb->y - pa->y) - (pc->y - pa->y) * (pb->x - pa->x);
-		//area = (vc->x - va->x) * (vb->y - va->y) - (vc->y - va->y) * (vb->x - va->x);
 	}
 
 	static inline void CopyTriangle(Triangle* dst, const Triangle* src)

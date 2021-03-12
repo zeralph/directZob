@@ -104,7 +104,7 @@ namespace Core
 		uint											SubDivideClippedTriangle(const Camera* c, const Triangle* t);
 		void											RecomputeTriangleProj(const Camera* c, Triangle* t);
 		uint											ClipTriangle(const Camera* c, Triangle* t);
-		void											QueueTriangleInRasters(const Triangle* t, int idx) const;
+		int												QueueTriangleInRasters(const Triangle* t, int idx) const;
 		void											QueueLineInRasters(const Line3D* l, int idx) const;
 		inline void										RecomputeUv(const ZobVector2* uva, ZobVector2* uvb, float r) const
 		{
