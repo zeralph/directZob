@@ -5,8 +5,8 @@
         <AmbientIntensity>0.48</AmbientIntensity>
         <FogColor r="0" g="128" b="255" />
         <ClearColor r="0" g="128" b="255" />
-        <FogDensity>1.00</FogDensity>
-        <FogDistance>83.00</FogDistance>
+        <FogDensity>2.00</FogDensity>
+        <FogDistance>100.00</FogDistance>
         <FogType>exp2</FogType>
     </Globals>
     <ZobObject name="car" guid="3001003">
@@ -37,7 +37,7 @@
         </ZobObject>
         <ZobObject name="carMesh" guid="3066531" type="mesh">
             <Position x="0.000285507" y="-0.698991" z="0.000250807" />
-            <Rotation x="-180" y="0.000195336" z="-180" />
+            <Rotation x="180" y="0.000195336" z="180" />
             <Scale x="1" y="1" z="1" />
             <Mesh name="Peugeot_405" file="GLX_400.obj" path="_cars/GLX-400-OBJ/">
                 <RenderOptions>
@@ -50,7 +50,7 @@
         </ZobObject>
         <ZobObject name="rearCamera" guid="3002004" type="camera">
             <Position x="-1.03805e-05" y="1.92052" z="-4.78713" />
-            <Rotation x="15.0562" y="-2.56957e-05" z="-2.23421e-05" />
+            <Rotation x="15.0562" y="-2.56103e-05" z="-2.3192e-05" />
             <Scale x="1" y="1" z="1" />
             <Controller>5</Controller>
             <Fov>70.00</Fov>
@@ -70,8 +70,8 @@
             <Fov>45.00</Fov>
         </ZobObject>
         <ZobObject name="orbitalCamera" guid="3067494" type="camera">
-            <Position x="-2.42997" y="-1.23651" z="-10.6256" />
-            <Rotation x="-3.93493" y="-87.3927" z="-0.000417584" />
+            <Position x="-2.4424" y="-1.23628" z="-10.6201" />
+            <Rotation x="-3.93657" y="-87.3227" z="0.000210198" />
             <Scale x="1" y="1" z="1" />
             <Controller>2</Controller>
             <Fov>45.00</Fov>
@@ -250,7 +250,7 @@
     </ZobObject>
     <ZobObject name="Hill_2" guid="3066511" type="mesh">
         <Position x="-78" y="0" z="105" />
-        <Rotation x="180" y="0" z="180" />
+        <Rotation x="-180" y="0" z="-180" />
         <Scale x="1" y="1" z="1" />
         <Mesh name="hill_1.obj" file="hill_1.obj" path="/">
             <RenderOptions>

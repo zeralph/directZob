@@ -47,6 +47,7 @@
             this.EngineRender.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.EngineRender.TabIndex = 1;
             this.EngineRender.TabStop = false;
+            this.EngineRender.Paint += new System.Windows.Forms.PaintEventHandler(this.EngineRender_Paint);
             this.EngineRender.MouseClick += new System.Windows.Forms.MouseEventHandler(this.EngineRender_MouseClick);
             this.EngineRender.MouseDown += new System.Windows.Forms.MouseEventHandler(this.EngineRender_MouseDown);
             this.EngineRender.MouseHover += new System.EventHandler(this.EngineRender_MouseHover);
@@ -67,6 +68,7 @@
             this.EngineRenderPanel.Name = "EngineRenderPanel";
             this.EngineRenderPanel.Size = new System.Drawing.Size(960, 564);
             this.EngineRenderPanel.TabIndex = 2;
+            this.EngineRenderPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.EngineRenderPanel_Paint);
             // 
             // bCenter
             // 

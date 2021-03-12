@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using CLI;
 using System.Runtime.CompilerServices;
 using System.Numerics;
+using System.IO;
 
 namespace DirectZobEditor
 {
@@ -56,8 +57,8 @@ namespace DirectZobEditor
         public event OnObjectRotatedHandler OnObjectRotated;
         public delegate void OnObjectScaledHandler(object s, ObjectModificationEventArg e);
         public event OnObjectScaledHandler OnObjectScaled;
-        Graphics m_EngineGraphics = null;
-        Bitmap m_engineBitmap = null;
+        int m_bmpDataLength = 0;
+        byte[] m_bmpdata = new byte[0];
         int m_width;
         int m_height;
         int m_lastMouseX = -1;
@@ -89,8 +90,7 @@ namespace DirectZobEditor
             bTY.Visible = false;
             bTZ.Visible = false;
             bCenter.Visible = false;
-
-                  
+            this.DoubleBuffered = true;
         }
 
         public void BindEvents()
@@ -114,7 +114,6 @@ namespace DirectZobEditor
         private void OnClose(object sender, EventArgs e)
         {
             //StopEngine(); 
-            m_EngineGraphics.Dispose();
         }
 
         public void SetModificator(objectModificator m)
@@ -297,30 +296,11 @@ namespace DirectZobEditor
             m_height = m_engineWrapper.GetBufferHeight();
             EngineRender.Width = m_width;
             EngineRender.Height = m_height;
-            if(m_EngineGraphics != null)
-            {
-                m_EngineGraphics = null;
-            }
-            m_EngineGraphics = EngineRender.CreateGraphics();
-            lock (m_engineBitmap)
-            {
-                GenerateEngineBitmap();          
-            }
-            UpdateGraphicsParameters();
         }
 
         public CLI.EngineWrapper GetEngineWrapper()
         {
             return m_engineWrapper;
-        }
-        private void GenerateEngineBitmap()
-        {
-            if(m_engineBitmap != null)
-            {
-                m_engineBitmap = null;
-            }
-            IntPtr p = m_directZobWrapper.GetBufferData();
-            m_engineBitmap = new System.Drawing.Bitmap(m_width, m_height, 4 * m_width, System.Drawing.Imaging.PixelFormat.Format32bppRgb, p);
         }
 
         private void GenerateRenderWindow()
@@ -330,7 +310,6 @@ namespace DirectZobEditor
             m_height = m_engineWrapper.GetBufferHeight();
             EngineRender.Width = m_width;
             EngineRender.Height = m_height;
-            m_EngineGraphics = EngineRender.CreateGraphics();
             m_engineThread = new Thread(RunEngineThread);
             //m_engineThread.IsBackground = true;
             BeforeUpdateEngineWindowDelegate = new BeforeUpdateEngine(BeforeUpdateEngineWindowMethod);
@@ -340,11 +319,6 @@ namespace DirectZobEditor
             onSceneUpdatedCallback = new engineCallback(onEngineSceneUpdated);
             onQueuingCallback = new engineCallback(onQueuingCallbackMethod);
             EngineRender.SizeMode = PictureBoxSizeMode.Zoom;
-            GenerateEngineBitmap();
-            IntPtr hwnd = EngineRender.Handle;
-            m_EngineGraphics = Graphics.FromHwnd(hwnd);
-            m_EngineGraphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-            UpdateGraphicsParameters();
         }
 
         #region engineSynchronisationDelegates
@@ -398,18 +372,7 @@ namespace DirectZobEditor
         private void AfterUpdateEngineWindowMethod()
         {
             m_directZobWrapper.Lock();
-            {
-                //IntPtr p = m_engineWrapper.GetBufferData();
-                IntPtr p = m_directZobWrapper.GetBufferData();
-                Rectangle rect = new Rectangle(0, 0, m_engineBitmap.Width, m_engineBitmap.Height);
-                System.Drawing.Imaging.BitmapData bmpData =
-                    m_engineBitmap.LockBits(rect, System.Drawing.Imaging.ImageLockMode.WriteOnly,
-                    m_engineBitmap.PixelFormat);
-                bmpData.Scan0 = p;
-                m_engineBitmap.UnlockBits(bmpData);
-                UpdateGraphicsParameters();
-                UpdateModificationGizmos();
-            }
+
             m_mainForm.UpdateAfterEngine();
             m_engineRendering = false;
             if(m_newObjectPicked != null)
@@ -434,23 +397,25 @@ namespace DirectZobEditor
                 m_mainForm.InformEngineStatus("STOPPED");
             }
             m_directZobWrapper.Unlock();
+            this.Refresh();
+            this.Invalidate();
         }
         #endregion
-        private void UpdateGraphicsParameters()
+        private void UpdateGraphicsParameters(Bitmap b)
         {
             int w = EngineRender.Width;
             int h = EngineRender.Height;
-            float hFactor = (float)m_engineBitmap.Height / (float)EngineRenderPanel.Height;
-            float wFactor = (float)m_engineBitmap.Width / (float)EngineRenderPanel.Width;
+            float hFactor = (float)b.Height / (float)EngineRenderPanel.Height;
+            float wFactor = (float)b.Width / (float)EngineRenderPanel.Width;
             if (hFactor > wFactor)
             {
                 h = EngineRenderPanel.Height;
-                w = (int)((float)m_engineBitmap.Width / (float)m_engineBitmap.Height * h);
+                w = (int)((float)b.Width / (float)b.Height * h);
             }
             else
             {
                 w = EngineRenderPanel.Width;
-                h = (int)((float)m_engineBitmap.Height / (float)m_engineBitmap.Width * w);
+                h = (int)((float)b.Height / (float)b.Width * w);
             }
             if (EngineRender.Width != w || EngineRender.Height != h)
             {
@@ -460,7 +425,6 @@ namespace DirectZobEditor
                 int y = (EngineRenderPanel.Height - h) / 2;
                 EngineRender.Location = new Point(x, y);
             }
-            m_EngineGraphics.DrawImage(m_engineBitmap, 0, 0, w, h);
         }
         private void RunEngineThread()
         {
@@ -951,5 +915,23 @@ namespace DirectZobEditor
             }
         }
         #endregion
+
+        private void EngineRenderPanel_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void EngineRender_Paint(object sender, PaintEventArgs e)
+        {
+            IntPtr p = m_directZobWrapper.GetBufferDataPointer();
+            if (p != IntPtr.Zero)
+            {
+                Bitmap b = new System.Drawing.Bitmap(m_width, m_height, 4 * m_width, System.Drawing.Imaging.PixelFormat.Format32bppRgb, p);
+                e.Graphics.DrawImage(b, 0, 0, b.Width, b.Height);
+            
+                UpdateGraphicsParameters(b);
+                UpdateModificationGizmos();
+            }
+        }
     }
 }

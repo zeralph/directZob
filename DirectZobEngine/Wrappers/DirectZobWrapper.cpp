@@ -187,15 +187,20 @@ namespace CLI
 		}
 	}
 
-	System::IntPtr DirectZobWrapper::GetBufferData()
+	System::IntPtr DirectZobWrapper::GetBufferDataPointer()
 	{
-		const System::IntPtr ptr;
+		System::IntPtr ptr;
 		if (GetInstance())
 		{
-			uint* p = GetInstance()->GetBufferDataNoConst();
-			return System::IntPtr(p);
+			uint* p = GetInstance()->GetEditorBufferDataNoConst();
+			ptr = (System::IntPtr)p;
 		}
 		return ptr;
+	}
+
+	int DirectZobWrapper::GetBufferDataLength()
+	{
+		return GetInstance()->GetBufferDataLenght();
 	}
 
 	int DirectZobWrapper::RunAFrame()

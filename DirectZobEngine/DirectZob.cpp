@@ -217,7 +217,7 @@ int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUp
 		Camera* cam = m_cameraManager->GetCurrentCamera();
 		if (cam)
 		{
-			
+			m_engine->SwapBuffers();
 			bool bPhysicUpdated = false;
 //			cam->UpdateViewProjectionMatrix();
 
@@ -226,7 +226,6 @@ int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUp
 			m_lightManager->PreUpdate();
 			m_engine->StartDrawingScene();
 			Color c = Color(DirectZob::GetInstance()->GetLightManager()->GetClearColor());
-			m_engine->ClearBuffer(&c);
 			if (OnSceneUpdated)
 			{
 				OnSceneUpdated();
@@ -243,6 +242,7 @@ int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUp
 			cam->UpdateAfter();
 			m_zobObjectManager->UpdateObjects(cam, m_engine, m_frameTime / 1000.0f);			
 			m_hudManager->UpdateObjects(cam, m_engine, m_frameTime / 1000.0f);
+			m_engine->ClearBuffer(&c);
 			m_renderTime = m_engine->WaitForRasterizersEnd();
 			m_physicTime = 0;
 			if (bPhysicUpdated)
@@ -306,7 +306,7 @@ int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUp
 	SaveTime(&tend);
 	float dt = (float)GetDeltaTime_MS(tstart, tend);
 	WaitToTargetFrameTime(dt);
-	m_engine->SwapBuffers();
+	m_engine->UpdateEditorBitmapData();
 	g_render_mutex.unlock();
 	return state;
 }

@@ -320,7 +320,6 @@ inline void Rasterizer::ComputeLightingAtPoint(const ZobVector3* position, const
 
 void Rasterizer::DrawTriangle(const Triangle* t) const
 {
-	OPTICK_EVENT_DYNAMIC("prout")
 	ZobVector2 v1 = ZobVector2((int)t->pa->x, (int)t->pa->y);
 	ZobVector2 v2 = ZobVector2((int)t->pb->x, (int)t->pb->y);
 	ZobVector2 v3 = ZobVector2((int)t->pc->x, (int)t->pc->y);
@@ -626,10 +625,11 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector3* p, const Triangl
 		fg = fg * (1.0f - z) + z * m_fogColor->y;
 		fb = fb * (1.0f - z) + z * m_fogColor->z;
 		c = ((int)(fr * 255.0f) << 16) + ((int)(fg * 255.0f) << 8) + (int)(fb * 255.0f);
-		m_bufferData->buffer[k] = c;
-		//zBufferLock.lock();
-		m_bufferData->zBuffer[k] = zRatio;
-		//zBufferLock.unlock();
+		if (zRatio < m_bufferData->zBuffer[k])
+		{
+			m_bufferData->buffer[k] = c;
+			m_bufferData->zBuffer[k] = zRatio;
+		}
 	}
 }
 

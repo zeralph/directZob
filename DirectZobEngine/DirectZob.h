@@ -75,18 +75,9 @@ public :
 	const float				GetCopyTime() const { return m_copyTime; };
 	int						RunAFrame(mfb_window* window, engineCallback = NULL, DirectZob::engineCallback OnQueuing = NULL);
 	int						Run( void func(void) );
+	int						GetBufferDataLenght() const { return m_engine->GetBufferData()->size; }
 	const uint*				GetBufferData() const { return m_engine->GetBufferData()->buffer; }
-	uint*					GetBufferDataNoConst() 
-	{ 
-		if (m_engine->GetBufferData()->curBuffer == 1)
-		{
-			return m_engine->GetBufferData()->buffer0;
-		}
-		else
-		{
-			return m_engine->GetBufferData()->buffer1;
-		}
-	}
+	uint*					GetEditorBufferDataNoConst() { return m_engine->GetBufferData()->buffer; }
 	std::string				ExePath();
 	double					GetDeltaTime_MS(timespec& start, timespec& end) const;
 	static DirectZob*		GetInstance() { return DirectZob::singleton; }

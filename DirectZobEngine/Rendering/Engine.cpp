@@ -82,9 +82,6 @@ Engine::Engine(int width, int height, Events* events)
 	m_bufferData.zFar = m_zFar;
 	m_bufferData.buffer = m_buffer[m_currentBuffer];
 	m_bufferData.zBuffer = m_zBuffer[m_currentBuffer];
-	m_bufferData.buffer0 = m_buffer[0];
-	m_bufferData.buffer1 = m_buffer[1];
-	//	m_bufferData.oBuffer = m_oBuffer;
 	m_bufferData.size = width * height;
 	m_nbPixels = 0;
 
@@ -266,9 +263,6 @@ void Engine::ClearBuffer(const Color *color)
 {
 	OPTICK_EVENT();
 	int oldBuffer = (m_currentBuffer + 1) % 2;
-	//memset(m_zBuffer, 0, sizeof(float) * m_bufferData.width * m_bufferData.height);
-	//memset(m_buffer, 0, sizeof(uint) * m_bufferData.width * m_bufferData.height);
-	//return;
 	uint v = color->GetRawValue();
 	if (m_renderMode == eRenderMode_fullframe )
 	{
@@ -353,10 +347,13 @@ int Engine::StartDrawingScene()
 
 void Engine::SwapBuffers()
 {
+	
 	m_currentBuffer = (m_currentBuffer + 1) % 2;
 	m_bufferData.buffer = m_buffer[m_currentBuffer];
 	m_bufferData.zBuffer = m_zBuffer[m_currentBuffer];
 	m_bufferData.curBuffer = m_currentBuffer;
+	
+//	m_bufferData.editorBuffer = m_editorBuffer;
 }
 
 
@@ -1285,4 +1282,9 @@ bool Engine::IsInFrustrum(const Camera* c, const Box* aabb) const
 	minaabb.y = fminf(fminf(fminf(fminf(fminf(fminf(fminf(aabb->p0.y, aabb->p1.y), aabb->p2.y), aabb->p3.y), aabb->p4.y), aabb->p5.y), aabb->p6.y), aabb->p7.y);
 	minaabb.z = fminf(fminf(fminf(fminf(fminf(fminf(fminf(aabb->p0.z, aabb->p1.z), aabb->p2.z), aabb->p3.z), aabb->p4.z), aabb->p5.z), aabb->p6.z), aabb->p7.z);
 	return c->AABBIsInFrustrum(&minaabb, &maxaabb);
+}
+
+void Engine::UpdateEditorBitmapData()
+{
+	//memcpy(m_editorBuffer, m_buffer[m_currentBuffer], m_bufferData.size * 4);
 }

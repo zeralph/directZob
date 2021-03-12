@@ -34,7 +34,8 @@ namespace CLI
 		int						Stop();
 		void					Lock();
 		void					Unlock();
-		System::IntPtr			GetBufferData();
+		System::IntPtr			GetBufferDataPointer();
+		int						GetBufferDataLength();
 		cli::array<System::String^>^ GetEventsAndClear();
 		void					Resize(int width, int height);
 		static void test();
@@ -46,6 +47,8 @@ namespace CLI
 		volatile bool			m_run;
 		static engineCallback^  m_sceneUpdatedCb;
 		static engineCallback^	m_queuingCb;
+		cli::array<byte>^		m_bufferData;
+		int						m_buffferDataLength;
 	};
 }
 #endif //_WINDLL
