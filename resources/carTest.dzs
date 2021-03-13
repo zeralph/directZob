@@ -118,13 +118,6 @@
                 <CullMode>Clockwise</CullMode>
             </RenderOptions>
         </Mesh>
-        <Physic>
-            <RigidBody type="0" active="1">
-                <Box halfExtends_x="10.000000" halfExtends_y="10.000000" halfExtends_z="10.000000" layers="0" scale_with_object="1">
-                    <Material bounciness="0.100000" friction_coeff="2.010000" mass_density="0.010000" rolling_resistance="0.010000" />
-                </Box>
-            </RigidBody>
-        </Physic>
     </ZobObject>
     <ZobObject name="road2_p_ground" guid="3066499">
         <Position x="0" y="0" z="0" />

@@ -25,6 +25,7 @@ public:
 		SwitchEqualizeTriangleQueues,
 		NextLightMode,
 		SwitchBuffers,
+		SwitchFPS,
 	};
 
 	ZobInputManager(int width, int height);

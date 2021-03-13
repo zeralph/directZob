@@ -979,7 +979,7 @@ uint Engine::ClipTriangle(const Camera* c, Triangle* t)
 		RecomputeNormal(nt->nb, nt->nc, outP2factor);
 		RecomputeColor(nt->cb, nt->cc, outP2factor);
 	}
-	else //eClip_C_in_AB_out
+	else if (t->clipMode == Triangle::eClip_C_in_AB_out)
 	{
 		c->ClipSegmentToFrustrum(nt->vc, nt->va, outP2factor);
 		RecomputeUv(nt->uc, nt->ua, outP2factor);
@@ -990,6 +990,10 @@ uint Engine::ClipTriangle(const Camera* c, Triangle* t)
 		RecomputeNormal(nt->nc, nt->nb, outP2factor);
 		RecomputeColor(nt->cc, nt->cb, outP2factor);
 
+	}
+	else
+	{
+		//??
 	}
 	RecomputeTriangleProj(c, nt);
 	return 1;
@@ -1171,11 +1175,6 @@ void Engine::RecomputeTriangleProj(const Camera* c, Triangle* t)
 	t->pc->x = (t->pc->x / t->pc->z + 1) * w;
 	t->pc->y = (t->pc->y / t->pc->z + 1) * h;
 	t->ComputeArea();
-	//if (t->options->cullMode == eCullMode_CounterClockwiseFace)
-	//{
-	//	t->area = -t->area;
-	//}
-	//t->material = NULL;
 }
 
 bool Engine::LineLineIntersection(const ZobVector3* a0, const ZobVector3* a1, const ZobVector3* b0, const ZobVector3* b1, ZobVector3& out, float &outFactor) const

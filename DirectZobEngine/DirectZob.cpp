@@ -16,7 +16,9 @@
 #include "../../dependencies/optick/include/optick.h"
 #define LOG_BUFFER_SIZE 1024
 
-static float TargetMSPerFrame = 16.66666667f;
+static const int fpsTargetsN = 5;
+static const float fpsTargets[fpsTargetsN] = { 0, 16.6666667, 33.3333333f, 41.666667f,  50.0f };
+static int sTargetMSPerFrameIdx = 1;
 static DirectZob::eDirectZobLogLevel sLogLevel = DirectZob::eDirectZobLogLevel_warning;
 static char buffer[MAX_PATH];
 static char logBuffer[LOG_BUFFER_SIZE];
@@ -276,7 +278,7 @@ int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUp
 		}
 		m_hudManager->Print(0.01f, 0.01f, 0.0125f, 0.0125f, &color, "Triangles : %i", m_engine->GetNbDrawnTriangles());
 		color = ZobVector3(0, 1, 0);
-		if (m_frameTime <= TargetMSPerFrame)
+		if (m_frameTime <= fpsTargets[sTargetMSPerFrameIdx])
 		{
 			ZobVector3 color = ZobVector3(1, 0, 0);
 		}
@@ -301,6 +303,15 @@ int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUp
 		{
 			mfb_close(window);
 		}
+		if (m_inputManager->GetMap()->GetBoolIsNew(ZobInputManager::SwitchFPS))
+		{
+			sTargetMSPerFrameIdx++;
+			if (sTargetMSPerFrameIdx == fpsTargetsN)
+			{
+				sTargetMSPerFrameIdx = 0;
+			}
+			LogWarning("FPS set to %i", fpsTargets[sTargetMSPerFrameIdx]?(int)(1000.0f / fpsTargets[sTargetMSPerFrameIdx]):0);
+		}
 		m_engine->PrintRasterizersInfos();
 		m_engine->SetDisplayedBuffer();
 	}
@@ -319,11 +330,11 @@ void DirectZob::WaitToTargetFrameTime(float dt)
 	{
 		throw "rput";
 	}
-	float targetDt = TargetMSPerFrame - dt;
+	float targetDt = fpsTargets[sTargetMSPerFrameIdx] - dt;
 	if (targetDt > 0.0f)
 	{
 		SleepMS(targetDt);
-		m_frameTime = TargetMSPerFrame;
+		m_frameTime = fpsTargets[sTargetMSPerFrameIdx];
 	}
 	else
 	{

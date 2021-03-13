@@ -83,7 +83,7 @@ void ZobInputManager::Map()
 	m_map->MapBool(Quit, keyboardId, gainput::KeyEscape);
 	m_map->MapBool(NextCamera, keyboardId, gainput::KeyC);
 
-	
+	m_map->MapBool(SwitchFPS, keyboardId, gainput::KeyF4);
 	m_map->MapBool(WireFrame, keyboardId, gainput::KeyF5);
 	m_map->MapBool(Gizmos, keyboardId, gainput::KeyF6);
 	m_map->MapBool(SwitchEqualizeTriangleQueues, keyboardId, gainput::KeyF7);
