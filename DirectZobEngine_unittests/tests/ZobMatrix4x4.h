@@ -6,7 +6,7 @@
 TEST(ZobMatrix4x4, Constructor)
 {
     ZobMatrix4x4 m;
-    EXPECT_EQ((m == ZobMatrix4x4::IdentityMatrix), true);
+    EXPECT_EQ((m == ZobMatrix4x4::IdentityMatrix), false);
 }
 
 TEST(ZobMatrix4x4, Assignment)
