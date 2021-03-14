@@ -84,7 +84,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>..\dependencies\reactphysics3d\include;..\dependencies\tga;..\dependencies\nanojpeg;..\dependencies\gainput\include;..\dependencies\optick\include;..\dependencies\minifb\include;..\dependencies\fbxsdk\windows\include;..\dependencies\lodepng;..\dependencies\tinyxml;$(SolutionDir)include;$(IncludePath)</IncludePath>
+    <IncludePath>..\dependencies\reactphysics3d\include;..\dependencies\tga;..\dependencies\nanojpeg;..\dependencies\gainput\include;..\dependencies\optick\include;..\dependencies\minifb\include;..\dependencies\fbxsdk\windows\include;..\dependencies\lodepng;..\dependencies\tinyxml;..\dependencies\gtest\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -135,7 +135,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>$(SolutionDir)lib\gtest.lib;$(SolutionDir)lib\gtest_main.lib;..\DirectZobEngine\build\DirectZob\Release\lib\DirectZobEngine.lib;..\DirectZobEngine\build\DirectZob\Release\lib\lodepng.lib;..\DirectZobEngine\build\DirectZob\Release\lib\minifb.lib;..\DirectZobEngine\build\DirectZob\Release\lib\nanojpeg.lib;..\DirectZobEngine\build\DirectZob\Release\lib\tga.lib;..\DirectZobEngine\build\DirectZob\Release\lib\tinyxml.lib;..\dependencies\fbxsdk\windows\lib\vs2017\x64\release\libfbxsdk.lib;..\dependencies\optick\lib\windows\OptickCore.lib;libcmt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\DirectZobEngine\build\DirectZob\Release\lib\DirectZobEngine.lib;..\DirectZobEngine\build\DirectZob\Release\lib\lodepng.lib;..\DirectZobEngine\build\DirectZob\Release\lib\minifb.lib;..\DirectZobEngine\build\DirectZob\Release\lib\nanojpeg.lib;..\DirectZobEngine\build\DirectZob\Release\lib\tga.lib;..\DirectZobEngine\build\DirectZob\Release\lib\tinyxml.lib;..\dependencies\fbxsdk\windows\lib\vs2017\x64\release\libfbxsdk.lib;..\dependencies\optick\lib\windows\OptickCore.lib;..\dependencies\gtest\lib\windows\gtest.lib;libcmt.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
