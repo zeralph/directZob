@@ -50,7 +50,11 @@ steps:
     versionSelector: 'latestPreRelease'
 - task: VSTest@2
   inputs:
-    testSelector: 'testRun'
+    testSelector: 'testAssemblies'
+    testAssemblyVer2: |
+      **\*test*.dll
+      !**\*TestAdapter.dll
+      !**\obj\**
     searchFolder: '$(System.DefaultWorkingDirectory)'
 - task: PublishTestResults@2
   inputs:
