@@ -55,6 +55,7 @@ steps:
       **\*test*.dll
       !**\*TestAdapter.dll
       !**\obj\**
+      **\*.exe
     searchFolder: '$(System.DefaultWorkingDirectory)'
 - task: PublishTestResults@2
   inputs:
