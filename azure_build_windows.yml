@@ -12,6 +12,7 @@ pool:
 variables:
   #solution: './DirectZobEngine/build/**/*.sln'
   solution: './DirectZobEngine/build/DirectZob/DirectZob.sln'
+  testSolution: './DirectZobEngine_unittests/DirectZobEngine_unittests.sln'
   buildPlatform: 'x86|x64|ARM'
   buildConfiguration: 'Release'
   appxPackageDir: '$(build.artifactStagingDirectory)\AppxPackages\\'
@@ -43,6 +44,13 @@ steps:
     solution: '$(solution)'
     configuration: '$(buildConfiguration)'
     msbuildArgs: '/p:AppxBundlePlatforms="$(buildPlatform)" /p:AppxPackageDir="$(appxPackageDir)" /p:AppxBundle=Always /p:UapAppxPackageBuildMode=StoreUpload'
+
+- task: VSBTest@1
+  inputs:
+    solution: '$(testSolution)'
+    configuration: '$(buildConfiguration)'
+    msbuildArgs: '/p:AppxBundlePlatforms="$(buildPlatform)" /p:AppxPackageDir="$(appxPackageDir)" /p:AppxBundle=Always /p:UapAppxPackageBuildMode=StoreUpload'
+
 
 - script: smokeTestWindows.bat
   workingDirectory: .
