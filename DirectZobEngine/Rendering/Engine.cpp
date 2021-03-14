@@ -836,11 +836,11 @@ int Engine::QueueTriangleInRasters(const Triangle* t, int idx) const
 {
 	if (t->options->cullMode == eCullMode_CounterClockwiseFace && t->area >0 )
 	{
-		return 0;
+		//return 0;
 	}
 	if (t->options->cullMode == eCullMode_ClockwiseFace && t->area < 0)
 	{
-		return 0;
+		//return 0;
 	}
 	if (m_TriangleQueueSize < m_maxTrianglesQueueSize)
 	{
@@ -967,6 +967,15 @@ uint Engine::ClipTriangle(const Camera* c, Triangle* t)
 		RecomputeUv(nt->ua, nt->uc, outP2factor);
 		RecomputeNormal(nt->na, nt->nc, outP2factor);
 		RecomputeColor(nt->ca, nt->cc, outP2factor);
+		nt->ca->x = blue.x;
+		nt->ca->y = blue.y;
+		nt->ca->z = blue.z;
+		nt->cb->x = blue.x;
+		nt->cb->y = blue.y;
+		nt->cb->z = blue.z;
+		nt->cc->x = blue.x;
+		nt->cc->y = blue.y;
+		nt->cc->z = blue.z;
 	}
 	else if (t->clipMode == Triangle::eClip_B_in_AC_out)
 	{
@@ -978,6 +987,15 @@ uint Engine::ClipTriangle(const Camera* c, Triangle* t)
 		RecomputeUv(nt->ub, nt->uc, outP2factor);
 		RecomputeNormal(nt->nb, nt->nc, outP2factor);
 		RecomputeColor(nt->cb, nt->cc, outP2factor);
+		nt->ca->x = green.x;
+		nt->ca->y = green.y;
+		nt->ca->z = green.z;
+		nt->cb->x = green.x;
+		nt->cb->y = green.y;
+		nt->cb->z = green.z;
+		nt->cc->x = green.x;
+		nt->cc->y = green.y;
+		nt->cc->z = green.z;
 	}
 	else if (t->clipMode == Triangle::eClip_C_in_AB_out)
 	{
@@ -989,11 +1007,21 @@ uint Engine::ClipTriangle(const Camera* c, Triangle* t)
 		RecomputeUv(nt->uc, nt->ub, outP2factor);
 		RecomputeNormal(nt->nc, nt->nb, outP2factor);
 		RecomputeColor(nt->cc, nt->cb, outP2factor);
-
+		nt->ca->x = red.x;
+		nt->ca->y = red.y;
+		nt->ca->z = red.z;
+		nt->cb->x = red.x;
+		nt->cb->y = red.y;
+		nt->cb->z = red.z;
+		nt->cc->x = red.x;
+		nt->cc->y = red.y;
+		nt->cc->z = red.z;
 	}
 	else
 	{
 		//??
+		int y = 0;
+		y++;
 	}
 	RecomputeTriangleProj(c, nt);
 	return 1;

@@ -47,7 +47,31 @@ public:
 	ZobVector3		  GetX() const { return ZobVector3(m_data[0][0], m_data[1][0], m_data[2][0]); }
 	ZobVector3		  GetY() const { return ZobVector3(m_data[0][1], m_data[1][1], m_data[2][1]); }
 	ZobVector3		  GetZ() const { return ZobVector3(m_data[0][2], m_data[1][2], m_data[2][2]); }
-	//float& operator[](int i) {return &m_data[i][j]; };
+	inline const bool operator== (const ZobMatrix4x4& m) 
+	{ 
+		return (
+			m_data[0][0] == m.m_data[0][0] &&
+			m_data[0][1] == m.m_data[0][1] &&
+			m_data[0][2] == m.m_data[0][2] &&
+			m_data[0][3] == m.m_data[0][3] &&
+			m_data[1][0] == m.m_data[1][0] &&
+			m_data[1][1] == m.m_data[1][1] &&
+			m_data[1][2] == m.m_data[1][2] &&
+			m_data[1][3] == m.m_data[1][3] &&
+			m_data[2][0] == m.m_data[2][0] &&
+			m_data[2][1] == m.m_data[2][1] &&
+			m_data[2][2] == m.m_data[2][2] &&
+			m_data[2][3] == m.m_data[2][3] &&
+			m_data[3][0] == m.m_data[3][0] &&
+			m_data[3][1] == m.m_data[3][1] &&
+			m_data[3][2] == m.m_data[3][2] &&
+			m_data[3][3] == m.m_data[3][3]
+			);
+	}
+	inline float& operator () (int x, int y)
+	{
+		return m_data[x][y];
+	}
 private:
 
 	void SetRotationX(const float r);
