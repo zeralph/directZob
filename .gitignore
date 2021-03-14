@@ -10,6 +10,12 @@
 /FontExport/bin
 /FontExport/obj
 /.vs
+**/.vs
+**/Debug
+**/Release
+**/x64
+**/bin
+**/obj
 /.DS_Store
 .DS_Store
 DirectZobEditor/bin
