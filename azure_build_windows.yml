@@ -52,10 +52,7 @@ steps:
   inputs:
     testSelector: 'testAssemblies'
     testAssemblyVer2: |
-      **\*test*.dll
-      !**\*TestAdapter.dll
-      !**\obj\**
-      **\*.exe
+      **\*_unittests.exe
     searchFolder: '$(System.DefaultWorkingDirectory)'
 - task: PublishTestResults@2
   inputs:
