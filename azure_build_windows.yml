@@ -40,9 +40,13 @@ steps:
   displayName: 'faire des trucs chelous au sln'
 - task: NuGetCommand@2
   inputs:
+    command: 'restore'
     restoreSolution: '$(testSolution)'
+    feedsToUse: 'config'
+    nugetConfigPath: './DirectZobEngine_unittests/packages.config'
 - task: VSBuild@1
   inputs:
+    name: 'build DirectZob engine'
     solution: '$(solution)'
     vsVersion: '15.0'
     msbuildArgs: '/p:AppxBundlePlatforms="$(buildPlatform)" /p:AppxPackageDir="$(appxPackageDir)" /p:AppxBundle=Always /p:UapAppxPackageBuildMode=StoreUpload'
@@ -51,6 +55,7 @@ steps:
     msbuildArchitecture: 'x64'
 - task: VSBuild@1
   inputs:
+    name: 'build DirectZob tests'
     solution: '$(testSolution)'
     vsVersion: '15.0'
     msbuildArgs: '/p:AppxBundlePlatforms="$(buildPlatform)" /p:AppxPackageDir="$(appxPackageDir)" /p:AppxBundle=Always /p:UapAppxPackageBuildMode=StoreUpload'
@@ -59,12 +64,14 @@ steps:
     msbuildArchitecture: 'x64'
 - task: VSTest@2
   inputs:
+    name: 'Pass DirectZob tests'
     testSelector: 'testAssemblies'
     testAssemblyVer2: |
       **\*_unittests.exe
     searchFolder: '$(System.DefaultWorkingDirectory)'
 - task: PublishTestResults@2
   inputs:
+    name: 'Publish DirectZob tests'
     testResultsFormat: 'JUnit'
     testResultsFiles: '**/TEST-*.xml'
     mergeTestResults: true
