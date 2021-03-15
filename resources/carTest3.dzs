@@ -37,7 +37,7 @@
             <Position x="0" y="0.20109" z="-0.01703" />
             <Rotation x="0" y="0" z="0" />
             <Scale x="0.3" y="0.3" z="0.3" />
-            <Mesh name="camaro.obj" file="camaro.obj" path="D:\Git\directZob\resources\" />
+            <Mesh name="camaro.obj" file="camaro.obj" path="/" />
         </ZobObject>
         <ZobObject name="FrontCamera" guid="3067491" type="camera">
             <Position x="0" y="0.286124" z="2.14935" />
@@ -88,18 +88,18 @@
         <Position x="17.4096" y="-0.104829" z="26.628" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="0.5" y="0.5" z="0.5" />
-        <Mesh name="cottage_obj.obj" file="cottage_obj.obj" path="D:\Git\directZob\resources\" />
+        <Mesh name="cottage_obj.obj" file="cottage_obj.obj" path="/" />
     </ZobObject>
     <ZobObject name="road_mesh" guid="3066497" type="mesh">
         <Position x="0" y="0" z="0" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="1" y="1" z="1" />
-        <Mesh name="road.obj" file="road.obj" path="D:\Git\directZob\resources\" />
+        <Mesh name="road.obj" file="road.obj" path="/" />
     </ZobObject>
     <ZobObject name="road_ground_physic" guid="3066498" type="mesh">
         <Position x="0" y="0" z="0" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="1" y="1" z="1" />
-        <Mesh name="road_ground_physic.obj" file="road_ground_physic.obj" path="D:\Git\directZob\resources\" />
+        <Mesh name="road_ground_physic.obj" file="road_ground_physic.obj" path="/" />
     </ZobObject>
 </Scene>

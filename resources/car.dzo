@@ -1,0 +1,69 @@
+<?xml version="1.0" ?>
+<ZobObject name="car" guid="3001003">
+    <Position x="-20.1749" y="-0.413712" z="4.06875" />
+    <Rotation x="-177.685" y="-79.775" z="-179.72" />
+    <Scale x="1" y="1" z="1" />
+    <Behavior type="1" />
+    <Physic>
+        <RigidBody type="1" active="1">
+            <Box halfExtends_x="1.000000" halfExtends_y="0.700000" halfExtends_z="2.500000" layers="4" scale_with_object="1">
+                <Material bounciness="0.000000" friction_coeff="0.000000" mass_density="1000.000000" rolling_resistance="0.000000" />
+            </Box>
+        </RigidBody>
+    </Physic>
+    <ZobObject name="FrontCamera" guid="3067491" type="camera">
+        <Position x="-0.0774962" y="0.0879834" z="1.94431" />
+        <Rotation x="0" y="0" z="0" />
+        <Scale x="1" y="1" z="1" />
+        <Controller>0</Controller>
+        <Fov>70.00</Fov>
+    </ZobObject>
+    <ZobObject name="topCamera" guid="3067495" type="camera">
+        <Position x="0.00013119" y="59.1781" z="-1.00273" />
+        <Rotation x="-89.4191" y="-79.775" z="-179.72" />
+        <Scale x="1" y="1" z="1" />
+        <Controller>0</Controller>
+        <Fov>45.00</Fov>
+    </ZobObject>
+    <ZobObject name="carMesh" guid="3066531" type="mesh">
+        <Position x="0.000285507" y="-0.698991" z="0.000250807" />
+        <Rotation x="180" y="0.000195336" z="180" />
+        <Scale x="1" y="1" z="1" />
+        <Mesh name="Peugeot_405" file="GLX_400.obj" path="_cars/GLX-400-OBJ/">
+            <RenderOptions>
+                <Lighting>FlatPhong</Lighting>
+                <ZBuffer>True</ZBuffer>
+                <Transparency>False</Transparency>
+                <CullMode>Clockwise</CullMode>
+            </RenderOptions>
+        </Mesh>
+    </ZobObject>
+    <ZobObject name="rearCamera" guid="3002004" type="camera">
+        <Position x="-1.3236e-05" y="1.92052" z="-4.78713" />
+        <Rotation x="15.0562" y="-4.81643e-06" z="-2.475e-05" />
+        <Scale x="1" y="1" z="1" />
+        <Controller>5</Controller>
+        <Fov>70.00</Fov>
+    </ZobObject>
+    <ZobObject name="windshieldCamera" guid="3067492" type="camera">
+        <Position x="0.0657781" y="0.632988" z="0.62512" />
+        <Rotation x="0" y="0" z="0" />
+        <Scale x="1" y="1" z="1" />
+        <Controller>0</Controller>
+        <Fov>80.00</Fov>
+    </ZobObject>
+    <ZobObject name="sideCamera" guid="3067493" type="camera">
+        <Position x="-5.88038" y="1.89999" z="6.77647" />
+        <Rotation x="-176.34" y="35.9339" z="-176.794" />
+        <Scale x="1" y="1" z="1" />
+        <Controller>0</Controller>
+        <Fov>45.00</Fov>
+    </ZobObject>
+    <ZobObject name="orbitalCamera" guid="3067494" type="camera">
+        <Position x="-2.48088" y="-1.23557" z="-10.603" />
+        <Rotation x="-3.93891" y="-87.1063" z="-0.000494668" />
+        <Scale x="1" y="1" z="1" />
+        <Controller>2</Controller>
+        <Fov>45.00</Fov>
+    </ZobObject>
+</ZobObject>

@@ -25,6 +25,8 @@ using namespace Core;
 static ZobVector3 red(1, 0, 0);
 static ZobVector3 green(0, 1, 0);
 static ZobVector3 blue(0, 0, 1);
+static ZobVector3 black(0, 0, 0);
+static ZobVector3 yellow(1, 1, 0);
 static bool sEqualizeTriangleQueues = false;
 
 std::condition_variable** m_conditionvariables;
@@ -95,7 +97,7 @@ Engine::Engine(int width, int height, Events* events)
 	m_rasterizerHeight = ceil((float)height / (float)m_nbRasterizers);
 	int h0 = 0;
 	int h1 = m_rasterizerHeight;
-	int nbTrianglesPerRasterize = m_maxTrianglesQueueSize / m_nbRasterizers;
+	int nbTrianglesPerRasterize = m_maxTrianglesQueueSize;// / m_nbRasterizers;
 	for (int i = 0; i < m_nbRasterizers; i++)
 	{
 		Rasterizer* r = new Rasterizer(width, height, h0, h1, nbTrianglesPerRasterize, (i+1), &m_bufferData);
@@ -836,11 +838,11 @@ int Engine::QueueTriangleInRasters(const Triangle* t, int idx) const
 {
 	if (t->options->cullMode == eCullMode_CounterClockwiseFace && t->area >0 )
 	{
-		//return 0;
+		return 0;
 	}
 	if (t->options->cullMode == eCullMode_ClockwiseFace && t->area < 0)
 	{
-		//return 0;
+		return 0;
 	}
 	if (m_TriangleQueueSize < m_maxTrianglesQueueSize)
 	{
@@ -900,7 +902,6 @@ void Engine::QueueWorldTriangle(const Camera* c, const Triangle* t)
 {
 	if (m_started)
 	{
-		//uint j = m_TriangleQueueSize;
 		if (m_TriangleQueueSize < m_maxTrianglesQueueSize)
 		{
 			if (t->clipMode > Triangle::eClip_0_in)
@@ -932,11 +933,7 @@ void Engine::QueueWorldTriangle(const Camera* c, const Triangle* t)
 				}
 				else if (t->clipMode < Triangle::eClip_3_in)
 				{
-					SubDivideClippedTriangle(c, t);
-					m_drawnTriangles += QueueTriangleInRasters(&m_TrianglesQueue[m_TriangleQueueSize], m_TriangleQueueSize);
-					m_TriangleQueueSize++;
-					m_drawnTriangles += QueueTriangleInRasters(&m_TrianglesQueue[m_TriangleQueueSize], m_TriangleQueueSize);
-					m_TriangleQueueSize ++;			
+					SubDivideClippedTriangle(c, t);		
 				}
 				else 
 				{
@@ -966,16 +963,7 @@ uint Engine::ClipTriangle(const Camera* c, Triangle* t)
 		c->ClipSegmentToFrustrum(nt->va, nt->vc, outP2factor);
 		RecomputeUv(nt->ua, nt->uc, outP2factor);
 		RecomputeNormal(nt->na, nt->nc, outP2factor);
-		RecomputeColor(nt->ca, nt->cc, outP2factor);
-		nt->ca->x = blue.x;
-		nt->ca->y = blue.y;
-		nt->ca->z = blue.z;
-		nt->cb->x = blue.x;
-		nt->cb->y = blue.y;
-		nt->cb->z = blue.z;
-		nt->cc->x = blue.x;
-		nt->cc->y = blue.y;
-		nt->cc->z = blue.z;
+		RecomputeColor(nt->ca, nt->cc, outP2factor);	
 	}
 	else if (t->clipMode == Triangle::eClip_B_in_AC_out)
 	{
@@ -987,15 +975,6 @@ uint Engine::ClipTriangle(const Camera* c, Triangle* t)
 		RecomputeUv(nt->ub, nt->uc, outP2factor);
 		RecomputeNormal(nt->nb, nt->nc, outP2factor);
 		RecomputeColor(nt->cb, nt->cc, outP2factor);
-		nt->ca->x = green.x;
-		nt->ca->y = green.y;
-		nt->ca->z = green.z;
-		nt->cb->x = green.x;
-		nt->cb->y = green.y;
-		nt->cb->z = green.z;
-		nt->cc->x = green.x;
-		nt->cc->y = green.y;
-		nt->cc->z = green.z;
 	}
 	else if (t->clipMode == Triangle::eClip_C_in_AB_out)
 	{
@@ -1007,15 +986,6 @@ uint Engine::ClipTriangle(const Camera* c, Triangle* t)
 		RecomputeUv(nt->uc, nt->ub, outP2factor);
 		RecomputeNormal(nt->nc, nt->nb, outP2factor);
 		RecomputeColor(nt->cc, nt->cb, outP2factor);
-		nt->ca->x = red.x;
-		nt->ca->y = red.y;
-		nt->ca->z = red.z;
-		nt->cb->x = red.x;
-		nt->cb->y = red.y;
-		nt->cb->z = red.z;
-		nt->cc->x = red.x;
-		nt->cc->y = red.y;
-		nt->cc->z = red.z;
 	}
 	else
 	{
@@ -1029,7 +999,6 @@ uint Engine::ClipTriangle(const Camera* c, Triangle* t)
 
 uint Engine::SubDivideClippedTriangle(const Camera* c, const Triangle* t)
 {
-	int nbDrawn = 0;
 	ZobVector3 pIn1;
 	ZobVector2 pIn1Uv;
 	ZobVector3 pIn1Cv;
@@ -1050,32 +1019,33 @@ uint Engine::SubDivideClippedTriangle(const Camera* c, const Triangle* t)
 	ZobVector2 piUv;
 	if (t->clipMode == Triangle::eClip_AB_in_C_out)
 	{
-		pIn1 = t->vc;
-		pIn1Uv = t->uc;
-		pIn1Cv = t->cc;
-		pIn1n = t->nc;
+		pIn1 = t->va;
+		pIn1Uv = t->ua;
+		pIn1Cv = t->ca;
+		pIn1n = t->na;
 
 		pIn2 = t->vb;
 		pIn2Uv = t->ub;
 		pIn2Cv = t->cb;
 		pIn2n = t->nb;
 
-		pOut1 = t->va;
-		pOut1Uv = t->ua;
-		pOut1Cv = t->ca;
-		pOut1n = t->na;
+		pOut1 = t->vc;
+		pOut1Uv = t->uc;
+		pOut1Cv = t->cc;
+		pOut1n = t->n;
 	}
 	else if (t->clipMode == Triangle::eClip_AC_in_B_out)
 	{
-		pIn1 = t->va;
-		pIn1Uv = t->ua;
-		pIn1Cv = t->ca;
-		pIn1n = t->na;
+		//return 0;
+		pIn1 = t->vc;
+		pIn1Uv = t->uc;
+		pIn1Cv = t->cc;
+		pIn1n = t->nc;
 
-		pIn2 = t->vc;
-		pIn2Uv = t->uc;
-		pIn2Cv = t->cc;
-		pIn2n = t->nc;
+		pIn2 = t->va;
+		pIn2Uv = t->ua;
+		pIn2Cv = t->ca;
+		pIn2n = t->na;
 
 		pOut1 = t->vb;
 		pOut1Uv = t->ub;
@@ -1084,20 +1054,21 @@ uint Engine::SubDivideClippedTriangle(const Camera* c, const Triangle* t)
 	}
 	else if(Triangle::eClip_BC_in_A_out)
 	{
+		//return 0;
+		pIn1 = t->vb;
+		pIn1Uv = t->ub;
+		pIn1Cv = t->cb;
+		pIn1n = t->nb;
+
+		pIn2 = t->vc;
+		pIn2Uv = t->uc;
+		pIn2Cv = t->cc;
+		pIn2n = t->nc;
+
 		pOut1 = t->va;
 		pOut1Uv = t->ua;
 		pOut1Cv = t->ca;
 		pOut1n = t->na;
-
-		pIn1 = t->vc;
-		pIn1Uv = t->uc;
-		pIn1Cv = t->cc;
-		pIn1n = t->nc;
-
-		pIn2 = t->vb;
-		pIn2Uv = t->ub;
-		pIn2Cv = t->cb;
-		pIn2n = t->nb;
 	}
 	else
 	{
@@ -1117,56 +1088,48 @@ uint Engine::SubDivideClippedTriangle(const Camera* c, const Triangle* t)
 	RecomputeUv(&pIn2Uv, &pOut2Uv, outP2Factor);
 	RecomputeColor(&pIn2Cv, &pOut2Cv, outP2Factor);
 	RecomputeNormal(&pIn2n, &pOut2n, outP2Factor);
-	uint j;
-	
-	j = m_TriangleQueueSize + nbDrawn;
-	if (j < m_maxTrianglesQueueSize)
+
+	if (m_TriangleQueueSize < m_maxTrianglesQueueSize)
 	{
-		Triangle* nt = &m_TrianglesQueue[j];
+		Triangle* nt = &m_TrianglesQueue[m_TriangleQueueSize];
 		Triangle::CopyTriangle(nt, t);
 		nt->va->Copy(&pIn1);
 		nt->ca->Copy(&pIn1Cv);	
 		nt->ua->Copy(&pIn1Uv);
 		nt->na->Copy(&pIn1n);
-
+		nt->vb->Copy(&pIn2);
+		nt->cb->Copy(&pIn2Cv);
+		nt->ub->Copy(&pIn2Uv);
+		nt->nb->Copy(&pIn2n);
+		nt->vc->Copy(&pOut1);
+		nt->cc->Copy(&pOut1Cv);
+		nt->uc->Copy(&pOut1Uv);
+		nt->nc->Copy(&pOut1n);
+		RecomputeTriangleProj(c, nt);
+		m_drawnTriangles += QueueTriangleInRasters(&m_TrianglesQueue[m_TriangleQueueSize], m_TriangleQueueSize);
+		m_TriangleQueueSize++;
+	}
+	if (m_TriangleQueueSize < m_maxTrianglesQueueSize)
+	{
+		Triangle* nt = &m_TrianglesQueue[m_TriangleQueueSize];
+		Triangle::CopyTriangle(nt, t);
+		nt->va->Copy(&pIn2);
+		nt->ca->Copy(&pIn2Cv);
+		nt->ua->Copy(&pIn2Uv);
+		nt->na->Copy(&pIn2n);
 		nt->vb->Copy(&pOut2);
 		nt->cb->Copy(&pOut2Cv);
 		nt->ub->Copy(&pOut2Uv);
 		nt->nb->Copy(&pOut2n);
-
-		nt->vc->Copy(&pIn2);
-		nt->cc->Copy(&pIn2Cv);
-		nt->uc->Copy(&pIn2Uv);
-		nt->nc->Copy(&pIn2n);
+		nt->vc->Copy(&pOut1);
+		nt->cc->Copy(&pOut1Cv);
+		nt->uc->Copy(&pOut1Uv);
+		nt->nc->Copy(&pOut1n);
 		RecomputeTriangleProj(c, nt);
-		nbDrawn++;
+		m_drawnTriangles += QueueTriangleInRasters(&m_TrianglesQueue[m_TriangleQueueSize], m_TriangleQueueSize);
+		m_TriangleQueueSize++;
 	}
-	
-	j = m_TriangleQueueSize + nbDrawn;
-	if (j < m_maxTrianglesQueueSize)
-	{
-		Triangle* nt = &m_TrianglesQueue[j];
-		Triangle::CopyTriangle(nt, t);
-		nt->va->Copy(&pIn1);
-		nt->ca->Copy(&pIn1Cv);
-		nt->ua->Copy(&pIn1Uv);
-		nt->na->Copy(&pIn1n);
-
-		nt->vb->Copy(&pOut1);
-		nt->cb->Copy(&pOut1Cv);
-		nt->ub->Copy(&pOut1Uv);
-		nt->nb->Copy(&pOut1n);
-
-		nt->vc->Copy(&pOut2);
-		nt->cc->Copy(&pOut2Cv);
-		nt->uc->Copy(&pOut2Uv);
-		nt->nc->Copy(&pOut2n);
-
-		RecomputeTriangleProj(c, nt);
-		nbDrawn++;
-	}
-	
-	return nbDrawn;
+	return 2;
 }
 
 void Engine::RecomputeTriangleProj(const Camera* c, Triangle* t)
