@@ -38,25 +38,25 @@ steps:
 - script: python ./strip_emptylines.py ./build\DirectZob\DirectZob.sln
   workingDirectory: ./DirectZobEngine/
   displayName: 'faire des trucs chelous au sln'
-- task: VisualStudioTestPlatformInstaller@1
-  inputs:
-    packageFeedSelector: 'nugetOrg'
-    versionSelector: 'latestPreRelease'
 - task: NuGetCommand@2
   inputs:
-    command: 'restore'
-    restoreSolution: '**/*.sln'
-    feedsToUse: 'select'
+    restoreSolution: '$(testSolution)'
 - task: VSBuild@1
   inputs:
     solution: '$(solution)'
-    configuration: '$(buildConfiguration)'
+    vsVersion: '15.0'
     msbuildArgs: '/p:AppxBundlePlatforms="$(buildPlatform)" /p:AppxPackageDir="$(appxPackageDir)" /p:AppxBundle=Always /p:UapAppxPackageBuildMode=StoreUpload'
+    configuration: '$(buildConfiguration)'
+    restoreNugetPackages: true
+    msbuildArchitecture: 'x64'
 - task: VSBuild@1
   inputs:
     solution: '$(testSolution)'
-    configuration: '$(buildConfiguration)'
+    vsVersion: '15.0'
     msbuildArgs: '/p:AppxBundlePlatforms="$(buildPlatform)" /p:AppxPackageDir="$(appxPackageDir)" /p:AppxBundle=Always /p:UapAppxPackageBuildMode=StoreUpload'
+    configuration: '$(buildConfiguration)'
+    restoreNugetPackages: true
+    msbuildArchitecture: 'x64'
 - task: VSTest@2
   inputs:
     testSelector: 'testAssemblies'
