@@ -64,7 +64,7 @@ steps:
 - task: PublishTestResults@2
   name: 'PublishDirectZobTests'
   inputs:
-    testResultsFormat: 'JUnit'
+    testResultsFormat: 'XUnit'
     testResultsFiles: '**/*_unittests.xml'
     mergeTestResults: true
     failTaskOnFailedTests: true
