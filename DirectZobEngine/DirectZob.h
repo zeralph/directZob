@@ -80,18 +80,19 @@ public :
 	uint*					GetEditorBufferDataNoConst() { return m_engine->GetBufferData()->buffer; }
 	std::string				ExePath();
 	double					GetDeltaTime_MS(timespec& start, timespec& end) const;
-	static DirectZob*		GetInstance() { return DirectZob::singleton; }
-	Engine*					GetEngine() const { return m_engine; }
-	CameraManager*			GetCameraManager() const { return m_cameraManager; }
-	LightManager*			GetLightManager() const { return m_lightManager; }
-	ZobHUDManager*			GetHudManager() const { return m_hudManager; }
-	ZobObjectManager*		GetZobObjectManager() const { return m_zobObjectManager; }
-	MeshManager*			GetMeshManager() const { return m_meshManager; }
-	MaterialManager*		GetMaterialManager() const { return m_materialManager;  }
-	ZobPhysicsEngine*		GetPhysicsEngine() const { return m_physicsEngine; }
-	Events*					GetEventManager() { return m_events; }
-	ZobInputManager*		GetInputManager() { return m_inputManager; }
-	Text2D*					GetTextManager() { return m_text; }
+	inline static DirectZob*GetInstance() { return DirectZob::singleton; }
+	inline Engine*			GetEngine() const { return m_engine; }
+	const inline Engine*	GetEngineConst() const { return m_engine; }
+	inline CameraManager*	GetCameraManager() const { return m_cameraManager; }
+	inline LightManager*	GetLightManager() const { return m_lightManager; }
+	inline ZobHUDManager*	GetHudManager() const { return m_hudManager; }
+	inline ZobObjectManager*GetZobObjectManager() const { return m_zobObjectManager; }
+	inline MeshManager*		GetMeshManager() const { return m_meshManager; }
+	inline MaterialManager*	GetMaterialManager() const { return m_materialManager;  }
+	inline ZobPhysicsEngine*GetPhysicsEngine() const { return m_physicsEngine; }
+	inline Events*			GetEventManager() { return m_events; }
+	inline ZobInputManager*	GetInputManager() { return m_inputManager; }
+	inline Text2D*			GetTextManager() { return m_text; }
 	static const std::string& GetResourcePath();
 	static void				LogInfo(const char* format, ...);
 	static void				LogError(const char* format, ...);

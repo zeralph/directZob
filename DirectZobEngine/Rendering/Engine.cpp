@@ -27,7 +27,6 @@ static ZobVector3 green(0, 1, 0);
 static ZobVector3 blue(0, 0, 1);
 static ZobVector3 black(0, 0, 0);
 static ZobVector3 yellow(1, 1, 0);
-static bool sEqualizeTriangleQueues = false;
 
 std::condition_variable** m_conditionvariables;
 std::mutex** m_mutexes;
@@ -47,6 +46,7 @@ Engine::Engine(int width, int height, Events* events)
 	m_drawCameraGizmos = false;
 	m_showText = true;
 	m_nbRasterizers = std::thread::hardware_concurrency();
+	m_EqualizeTriangleQueues = false;
 	while (height % m_nbRasterizers != 0 && m_nbRasterizers>1)
 	{
 		m_nbRasterizers--;
@@ -329,7 +329,7 @@ int Engine::StartDrawingScene()
 	}
 	if (inputMap->GetBoolIsNew(ZobInputManager::SwitchEqualizeTriangleQueues))
 	{
-		sEqualizeTriangleQueues = !sEqualizeTriangleQueues;
+		m_EqualizeTriangleQueues = !m_EqualizeTriangleQueues;
 	}
 	if (inputMap->GetBoolIsNew(ZobInputManager::NextLightMode))
 	{
@@ -846,7 +846,7 @@ int Engine::QueueTriangleInRasters(const Triangle* t, int idx) const
 	}
 	if (m_TriangleQueueSize < m_maxTrianglesQueueSize)
 	{
-		if (!sEqualizeTriangleQueues)
+		if (!m_EqualizeTriangleQueues)
 		{
 			int min = (int)fmaxf(0, fminf(t->pa->y, fminf(t->pb->y, t->pc->y)));
 			int max = (int)fminf(m_bufferData.height, fmaxf(t->pa->y, fmaxf(t->pb->y, t->pc->y)));
@@ -862,26 +862,10 @@ int Engine::QueueTriangleInRasters(const Triangle* t, int idx) const
 		}
 		else
 		{
-			//does noit work :Z issues. Dead code still here until I found a new idea.
-			static bool zuzu = true;
-			if (zuzu)
-			{
-				int i = (idx) % m_nbRasterizers;
-				assert(i >= 0);
-				assert(i < m_nbRasterizers);
-				m_rasterizers[i]->QueueTriangle(t);
-			}
-			else
-			{
-				int z = m_LastTriangleQueueSize / m_nbRasterizers;
-				z++;
-				assert(z != 0);
-				int i = (idx) / z;
-				assert(i >= 0);
-				//assert(i < m_nbRasterizers);
-				i = fmin(i, m_nbRasterizers - 1);
-				m_rasterizers[i]->QueueTriangle(t);
-			}
+			int i = (idx) % m_nbRasterizers;
+			assert(i >= 0);
+			assert(i < m_nbRasterizers);
+			m_rasterizers[i]->QueueTriangle(t);
 		}
 	}
 	return 1;

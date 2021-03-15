@@ -405,7 +405,7 @@ void Rasterizer::FillBottomFlatTriangle2(ZobVector2* v1, ZobVector2* v2, ZobVect
 	for (int scanlineY = v1->y; scanlineY <= v2->y; scanlineY++)
 	{
 		int k;
-		if (RenderLine(scanlineY) && scanlineY >= m_startHeight && scanlineY < m_endHeight)
+		if (RenderLine(scanlineY))
 		{
 			if (curx1 != curx2)
 			{
@@ -456,7 +456,7 @@ void Rasterizer::FillTopFlatTriangle2(ZobVector2* v1, ZobVector2* v2, ZobVector2
 	float a, b;
 	for (int scanlineY = v3->y; scanlineY > v1->y; scanlineY--)
 	{
-		if (RenderLine(scanlineY) && scanlineY >= m_startHeight && scanlineY < m_endHeight)
+		if (RenderLine(scanlineY))
 		{
 			if (curx1 != curx2)
 			{
@@ -735,4 +735,21 @@ void Rasterizer::sortVerticesAscendingByY(ZobVector2* v1, ZobVector2* v2, ZobVec
 		std::swap(*v2, *v3);
 		std::swap(*uv2, *uv3);
 	}
+}
+
+bool Rasterizer::RenderLine(int line) const
+{
+	bool bRender = (m_renderMode == eRenderMode_fullframe) ||
+		(m_renderMode == eRenderMode_interlaced && line % 2 == m_bEvenFrame) ||
+		(m_renderMode == eRenderMode_scanline && line % 2 == 0);
+	const Engine* e = DirectZob::GetInstance()->GetEngineConst();
+	if (e->EqualizeTriangleQueues())
+	{
+		bRender &= line >= 0 && line < m_height;
+	}
+	else
+	{
+		bRender &= line >= m_startHeight && line < m_endHeight;
+	}
+	return bRender;
 }

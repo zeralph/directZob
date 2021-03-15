@@ -73,13 +73,8 @@ private:
 	void 					sortVerticesAscendingByY(ZobVector2* v1, ZobVector2* v2, ZobVector2* v3, ZobVector2* uv1, ZobVector2* uv2, ZobVector2* uv3) const;
 	inline float 			edgeFunction(const ZobVector3* a, const ZobVector3* b, const ZobVector3* c) const { return (c->x - a->x) * (b->y - a->y) - (c->y - a->y) * (b->x - a->x); }
 	inline float 			clamp2(float x, const float min, const float max) const { if (x < min) return min; if (x > max) return max; return x; }
-	inline const bool 		RenderLine(int line) const 
-	{ 
-		return (m_renderMode == eRenderMode_fullframe) ||
-			(m_renderMode == eRenderMode_interlaced && line % 2 == m_bEvenFrame) ||
-			(m_renderMode == eRenderMode_scanline && line % 2 == 0);
-	}
-	inline const float 	computeAmbient(float ambientIntensity) const
+	bool 					RenderLine(int line) const;
+	inline const float 		computeAmbient(float ambientIntensity) const
 	{
 		return clamp2(ambientIntensity, 0.0f, 1.0f);
 	};
