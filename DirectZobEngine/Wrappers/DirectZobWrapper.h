@@ -38,6 +38,7 @@ namespace CLI
 		int						GetBufferDataLength();
 		cli::array<System::String^>^ GetEventsAndClear();
 		void					Resize(int width, int height);
+		System::String^			GetResourcePath();
 		static void test();
 	private:
 		//array<int>^ m_buffer;

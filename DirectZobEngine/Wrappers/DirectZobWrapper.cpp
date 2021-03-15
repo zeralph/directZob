@@ -239,5 +239,14 @@ namespace CLI
 			}
 		}
 	}
+	System::String^ DirectZobWrapper::GetResourcePath()
+	{
+		if (GetInstance())
+		{
+			std::string s = GetInstance()->GetResourcePath();
+			return gcnew System::String(s.c_str());
+		}
+		return nullptr;
+	}
 }
 #endif //_WINDLL

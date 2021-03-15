@@ -92,6 +92,7 @@ public :
 	Events*					GetEventManager() { return m_events; }
 	ZobInputManager*		GetInputManager() { return m_inputManager; }
 	Text2D*					GetTextManager() { return m_text; }
+	static const std::string& GetResourcePath();
 	static void				LogInfo(const char* format, ...);
 	static void				LogError(const char* format, ...);
 	static void				LogWarning(const char* format, ...);

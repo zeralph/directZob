@@ -393,6 +393,11 @@ void DirectZob::PrintObjectList()
 	}
 }
 
+const std::string& DirectZob::GetResourcePath()
+{ 
+	return SceneLoader::GetResourcePath(); 
+}
+
 void DirectZob::LogInfo(const char* format, ...)
 {
 	if(sLogLevel > eDirectZobLogLevel_info)

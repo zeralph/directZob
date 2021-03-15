@@ -385,7 +385,16 @@ namespace DirectZobEditor
                     //m_meshManagerWrapper.LoadMesh(name, path, file);
                     CLI.ZobObjectWrapper root = m_zobObjectList.GetWrapper().GetRootObject();
                     CLI.ZobObjectWrapper z = m_zobObjectList.GetWrapper().AddZobObject(root);
+                    z.SetName(name);
+                    string workspace = m_directZobWrapper.GetResourcePath();
                     //z.SetMesh(name);
+                    if (!string.IsNullOrEmpty(workspace))
+                    {
+                        Uri r = new Uri(workspace);
+                        r = r.MakeRelativeUri(new Uri(path));
+                        path = r.ToString();
+                    }
+                    //path = System.IO.Path.GetRelativePath(workspace, path);
                     z.LoadMesh(file, file, path);
                     OnSceneUpdateHandler handler = OnSceneUpdated;
                     if (null != handler)
