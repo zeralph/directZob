@@ -57,10 +57,10 @@ steps:
     configuration: '$(buildConfiguration)'
     restoreNugetPackages: true
     msbuildArchitecture: 'x64'
-- task: CmdLine@1
-  displayName: Run Unit Tests (GTest)
-  inputs:
-    script: './DirectZobEngine_unittests/x64/Release/DirectZobEngine_unittests.exe --gtest_output="xml:DirectZobEngine_unittests.xml"'
+
+- script: 'DirectZobEngine_unittests.exe --gtest_output="xml:DirectZobEngine_unittests.xml"'
+  workingDirectory: ./DirectZobEngine_unittests/x64/Release/
+  displayName: 'Run Unit Tests (GTest)'
 - task: PublishTestResults@2
   name: 'PublishDirectZobTests'
   inputs:
