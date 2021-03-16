@@ -158,9 +158,9 @@ int main(int argc, char* argv[])
 	printf("Init Window %ix%i\n", width, height);
 	mfb_set_target_fps(60);
 	m_window = mfb_open_ex("DirectZob", width, height, WF_RESIZABLE);
-	/*
 	mfb_set_active_callback(m_window, active);
 	mfb_set_resize_callback(m_window, resize);
+	/*
 	mfb_set_keyboard_callback(m_window, keyboard);
 	mfb_set_char_input_callback(m_window, char_input);
 	mfb_set_mouse_button_callback(m_window, mouse_btn);

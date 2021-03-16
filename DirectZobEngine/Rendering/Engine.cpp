@@ -46,7 +46,7 @@ Engine::Engine(int width, int height, Events* events)
 	m_drawCameraGizmos = false;
 	m_showText = true;
 	m_nbRasterizers = std::thread::hardware_concurrency();
-	m_EqualizeTriangleQueues = false;
+	m_EqualizeTriangleQueues = true;
 	while (height % m_nbRasterizers != 0 && m_nbRasterizers>1)
 	{
 		m_nbRasterizers--;

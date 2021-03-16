@@ -183,8 +183,8 @@ void Light::drawDirectionalGizmos(const Camera* camera, Core::Engine* engine) co
 void Light::DrawGizmos(const Camera* camera, Core::Engine* engine)
 {
 	ZobObject::DrawGizmos(camera, engine);
-	engine->QueueWorldBox(camera, &m_AABB, 0xFFFFFF, false, false);
-	engine->QueueWorldBox(camera, &m_OBB, 0xDDDDDD, false, false);
+	//engine->QueueWorldBox(camera, &m_AABB, 0xFFFFFF, false, false);
+	//engine->QueueWorldBox(camera, &m_OBB, 0xDDDDDD, false, false);
 	switch (m_lightType)
 	{
 	case eLightType_spot:
