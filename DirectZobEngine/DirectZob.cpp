@@ -16,8 +16,8 @@
 #include "../../dependencies/optick/include/optick.h"
 #define LOG_BUFFER_SIZE 1024
 
-static const int fpsTargetsN = 5;
-static const float fpsTargets[fpsTargetsN] = { 0, 16.6666667, 33.3333333f, 41.666667f,  50.0f };
+static const int fpsTargetsN = 6;
+static const float fpsTargets[fpsTargetsN] = { 0, 16.6666667, 33.3333333f, 41.666667f,  50.0f, 1000.0f };
 static int sTargetMSPerFrameIdx = 1;
 static DirectZob::eDirectZobLogLevel sLogLevel = DirectZob::eDirectZobLogLevel_warning;
 static char buffer[MAX_PATH];

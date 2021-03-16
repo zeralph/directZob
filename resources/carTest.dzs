@@ -49,8 +49,8 @@
             </Mesh>
         </ZobObject>
         <ZobObject name="rearCamera" guid="3002004" type="camera">
-            <Position x="-1.80155e-05" y="1.92052" z="-4.78713" />
-            <Rotation x="15.0562" y="4.68297e-05" z="-2.56757e-05" />
+            <Position x="-2.18209e-05" y="1.92052" z="-4.78713" />
+            <Rotation x="15.0562" y="6.05563e-05" z="-2.55841e-05" />
             <Scale x="1" y="1" z="1" />
             <Controller>5</Controller>
             <Fov>70.00</Fov>
@@ -70,8 +70,8 @@
             <Fov>45.00</Fov>
         </ZobObject>
         <ZobObject name="orbitalCamera" guid="3067494" type="camera">
-            <Position x="-3.05221" y="-1.2249" z="-10.3498" />
-            <Rotation x="-3.97714" y="-83.8576" z="8.77705e-05" />
+            <Position x="-3.2138" y="-1.22187" z="-10.2774" />
+            <Rotation x="-3.98612" y="-82.9276" z="0.000317244" />
             <Scale x="1" y="1" z="1" />
             <Controller>2</Controller>
             <Fov>45.00</Fov>
@@ -320,7 +320,7 @@
         <Rotation x="0" y="0" z="0" />
         <Scale x="1" y="1" z="1" />
         <ZobObject name="Light_5" guid="3068509" type="light">
-            <Position x="-31.6222" y="10" z="-3.56345" />
+            <Position x="-24" y="10" z="9" />
             <Rotation x="90" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
             <Color r="255" g="0" b="255" />
@@ -329,30 +329,30 @@
             <Type>spot</Type>
         </ZobObject>
         <ZobObject name="Light_4" guid="3068508" type="light">
-            <Position x="-27.429" y="10" z="13.8418" />
+            <Position x="-40" y="10" z="3" />
             <Rotation x="90" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
             <Color r="0" g="0" b="255" />
-            <Intensity>0.50</Intensity>
+            <Intensity>2.00</Intensity>
             <FallOffDistance>30.00</FallOffDistance>
             <Type>spot</Type>
         </ZobObject>
         <ZobObject name="Light_3" guid="3068507" type="light">
-            <Position x="-13.8097" y="10" z="0.114154" />
-            <Rotation x="-71.2625" y="-66.1895" z="-171.321" />
+            <Position x="-10" y="10" z="9" />
+            <Rotation x="90" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
             <Color r="0" g="255" b="0" />
-            <Intensity>0.50</Intensity>
-            <FallOffDistance>20.00</FallOffDistance>
+            <Intensity>2.00</Intensity>
+            <FallOffDistance>30.00</FallOffDistance>
             <Type>spot</Type>
         </ZobObject>
         <ZobObject name="Light_2" guid="3068506" type="light">
-            <Position x="5.41638" y="10.0001" z="13.7989" />
-            <Rotation x="-151.948" y="-45.5637" z="-110.832" />
+            <Position x="5" y="10" z="8" />
+            <Rotation x="90" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
             <Color r="255" g="0" b="0" />
-            <Intensity>0.50</Intensity>
-            <FallOffDistance>50.00</FallOffDistance>
+            <Intensity>2.00</Intensity>
+            <FallOffDistance>30.00</FallOffDistance>
             <Type>spot</Type>
         </ZobObject>
     </ZobObject>
@@ -625,5 +625,64 @@
                 <CullMode>Clockwise</CullMode>
             </RenderOptions>
         </Mesh>
+    </ZobObject>
+    <ZobObject name="autres_spots" guid="3066490">
+        <Position x="0" y="0" z="0" />
+        <Rotation x="0" y="0" z="0" />
+        <Scale x="1" y="1" z="1" />
+        <ZobObject name="Light_6" guid="-2143638798" type="light">
+            <Position x="148" y="10" z="67" />
+            <Rotation x="90" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+            <Color r="252" g="212" b="64" />
+            <Intensity>5.00</Intensity>
+            <FallOffDistance>20.00</FallOffDistance>
+            <Type>spot</Type>
+        </ZobObject>
+        <ZobObject name="Light_7" guid="3068491" type="light">
+            <Position x="164" y="10" z="52" />
+            <Rotation x="90" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+            <Color r="252" g="212" b="64" />
+            <Intensity>5.00</Intensity>
+            <FallOffDistance>20.00</FallOffDistance>
+            <Type>spot</Type>
+        </ZobObject>
+        <ZobObject name="Light_8" guid="3068492" type="light">
+            <Position x="148" y="10" z="38" />
+            <Rotation x="90" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+            <Color r="252" g="212" b="64" />
+            <Intensity>5.00</Intensity>
+            <FallOffDistance>20.00</FallOffDistance>
+            <Type>spot</Type>
+        </ZobObject>
+        <ZobObject name="Light_11" guid="3068495" type="light">
+            <Position x="147" y="10" z="16" />
+            <Rotation x="90" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+            <Color r="252" g="212" b="64" />
+            <Intensity>5.00</Intensity>
+            <FallOffDistance>20.00</FallOffDistance>
+            <Type>spot</Type>
+        </ZobObject>
+        <ZobObject name="Light_10" guid="3068494" type="light">
+            <Position x="164" y="10" z="5" />
+            <Rotation x="90" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+            <Color r="252" g="212" b="64" />
+            <Intensity>5.00</Intensity>
+            <FallOffDistance>20.00</FallOffDistance>
+            <Type>spot</Type>
+        </ZobObject>
+        <ZobObject name="Light_9" guid="3068493" type="light">
+            <Position x="165" y="10" z="27" />
+            <Rotation x="90" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+            <Color r="252" g="212" b="64" />
+            <Intensity>5.00</Intensity>
+            <FallOffDistance>20.00</FallOffDistance>
+            <Type>spot</Type>
+        </ZobObject>
     </ZobObject>
 </Scene>

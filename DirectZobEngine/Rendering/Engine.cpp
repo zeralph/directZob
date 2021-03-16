@@ -275,7 +275,6 @@ void Engine::ClearBuffer(const Color *color)
 	uint v = color->GetRawValue();
 	if (m_renderMode == eRenderMode_fullframe )
 	{
-		//memset(m_zBuffer, 0, sizeof(float) * m_bufferData.width * m_bufferData.height);
 		for (int i = 0; i < m_bufferData.width * m_bufferData.height; i++)
 		{
 			m_zBuffer[oldBuffer][i] = m_zFar + 1.0f;

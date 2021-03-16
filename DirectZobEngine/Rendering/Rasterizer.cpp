@@ -8,8 +8,6 @@
 static ZobVector3 sFog = ZobVector3(1.0f, 1.0f, 0.95f);
 static float fogDecal = -0.6f;
 
-volatile bool bStartDraw;
-
 static ZobVector3 colors[16] =
 {
 	ZobVector3(1,0,0),
@@ -48,6 +46,7 @@ Rasterizer::Rasterizer(uint width, uint height, uint startHeight, uint endHeight
 	m_time = 0.0f;
 	m_rasterizerNumber = rasterizerNumber;
 	m_runThread = true;
+	m_bStartDraw = false;
 }
 
 void Rasterizer::Init(std::condition_variable* cv, std::mutex *m)
@@ -57,7 +56,7 @@ void Rasterizer::Init(std::condition_variable* cv, std::mutex *m)
 	//m_drawMutex = drawMutex;
 	m_startConditionVariable = cv;
 	m_drawMutex = m;
-	bStartDraw = false;
+	m_bStartDraw = false;
 	m_thread = std::thread(&Rasterizer::Render, this);
 	m_thread.detach();
 }
@@ -69,7 +68,7 @@ void Rasterizer::Start()
 
 	const Engine* e = DirectZob::GetInstance()->GetEngine();
 	const Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
-	bStartDraw = true;
+	m_bStartDraw = true;
 	m_wireFrame = e->WireFrame();
 	m_renderMode = e->GetRenderMode();
 	m_lightingPrecision = e->GetLightingPrecision();
@@ -124,9 +123,9 @@ void Rasterizer::Render()
 		{
 			std::unique_lock<std::mutex> g(*m_drawMutex);
 			{
-				(*m_startConditionVariable).wait(g, [] { return bStartDraw; });
+				(*m_startConditionVariable).wait(g, [this] { return m_bStartDraw; });
 				RenderInternal();
-				bStartDraw = false;
+				m_bStartDraw = false;
 			}
 		}
 	}

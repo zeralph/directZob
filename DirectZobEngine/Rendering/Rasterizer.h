@@ -141,4 +141,5 @@ private:
 	std::mutex* m_drawMutex;
 	std::condition_variable* m_startConditionVariable;
 	bool m_runThread;
+	volatile bool m_bStartDraw;
 };
