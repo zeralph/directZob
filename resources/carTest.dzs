@@ -41,7 +41,7 @@
             <Scale x="1" y="1" z="1" />
             <Mesh name="Peugeot_405" file="GLX_400.obj" path="_cars/GLX-400-OBJ/">
                 <RenderOptions>
-                    <Lighting>FlatPhong</Lighting>
+                    <Lighting>Phong</Lighting>
                     <ZBuffer>True</ZBuffer>
                     <Transparency>False</Transparency>
                     <CullMode>Clockwise</CullMode>
