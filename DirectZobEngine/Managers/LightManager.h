@@ -15,9 +15,10 @@ public:
 	void						Setup(ZobVector3* fogColor, ZobVector3* ambientColor, ZobVector3* clearColor, float fogDistance, float fogDensity, eFogType fogType, float ambientIntensity);
 	void						ReInitGlobalSettings();
 	void						AddLight(Light* l);
+	void						Update();
 	Light*						CreateLight(Light::eLightType type);
 	Light*						CreateLight(std::string& name, Light::eLightType type, ZobVector3 position, ZobVector3 color, float intensity, float distance, ZobObject* parent);
-	std::vector<const Light*>	GetActiveLights() const;
+	const std::vector<const Light*>*	GetActiveLights() const;
 	Light*						GetLight(const std::string& name) const;
 	const ZobVector3*			GetAmbientColor() const { return &m_ambientColor; };
 	const ZobVector3*			GetFogColor() const { return &m_fogColor; };
@@ -45,6 +46,7 @@ private:
 	std::vector<Light*> m_lights;
 	std::vector<Light*> m_lightsToAdd;
 	std::vector<Light*> m_lightsToRemove;
+	std::vector<const Light*> m_activeLights;
 	int m_lightIndex;
 	ZobVector3 m_ambientColor;
 	ZobVector3 m_clearColor;

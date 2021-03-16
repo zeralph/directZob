@@ -135,11 +135,10 @@ void Rasterizer::RenderInternal()
 	OPTICK_CATEGORY("Rendering", Optick::Category::Rendering);
 	m_tick = clock();
 	//warning : invert lightdir ! https://fr.wikipedia.org/wiki/Ombrage_de_Phong
-	m_lights.clear();
 	LightManager* lm = DirectZob::GetInstance()->GetLightManager();
 	if (lm)
 	{
-		m_lights = lm->GetActiveLights();
+		m_activeLights = lm->GetActiveLights();
 		m_ambientColor = lm->GetAmbientColor();
 		m_ambientIntensity = lm->GetAmbientColorIntensity();
 		m_fogColor = lm->GetFogColor();
@@ -288,7 +287,7 @@ inline void Rasterizer::ComputeLightingAtPoint(const ZobVector3* position, const
 		ZobVector3 lightDir = ZobVector3(0, 0, 0);
 		ZobVector3 lightPos = ZobVector3(0, 0, 0);
 		float lightPower, cl, sl = 0.0f;
-		for (std::vector<const Light*>::const_iterator iter = m_lights.begin(); iter != m_lights.end(); iter++)
+		for (std::vector<const Light*>::const_iterator iter = m_activeLights->begin(); iter != m_activeLights->end(); iter++)
 		{
 			const Light* l = (*iter);
 			if (l->IsActive())

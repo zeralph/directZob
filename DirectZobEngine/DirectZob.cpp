@@ -214,15 +214,11 @@ int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUp
 		m_inputManager->Update(m_frameTime);
 #endif
 		m_cameraManager->UpdateAfter();
-//		Color c = Color(DirectZob::GetInstance()->GetLightManager()->GetClearColor());
-//		m_engine->ClearBuffer(&c);
 		Camera* cam = m_cameraManager->GetCurrentCamera();
 		if (cam)
 		{
 			m_engine->SwapBuffers();
 			bool bPhysicUpdated = false;
-//			cam->UpdateViewProjectionMatrix();
-
 			m_zobObjectManager->PreUpdate();
 			m_hudManager->PreUpdate();
 			m_lightManager->PreUpdate();
@@ -232,7 +228,6 @@ int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUp
 			{
 				OnSceneUpdated();
 			}
-//			cam->UpdateViewProjectionMatrix();
 			if (m_physicStarted)
 			{
 				bPhysicUpdated = true;
@@ -246,6 +241,8 @@ int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUp
 			m_hudManager->UpdateObjects(cam, m_engine, m_frameTime / 1000.0f);
 			m_engine->ClearBuffer(&c);
 			m_renderTime = m_engine->WaitForRasterizersEnd();
+			//ZobLightManager update is made after resterizers' work because it changes the active lights vectors
+			m_lightManager->Update();
 			m_physicTime = 0;
 			if (bPhysicUpdated)
 			{

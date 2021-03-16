@@ -111,7 +111,7 @@ private:
 		return sl;
 	};
 
-	std::vector<const Light*> m_lights;
+	const std::vector<const Light*>* m_activeLights;
 	std::vector<const Line3D*> m_lines;
 	const Triangle** m_triangles;
 	uint m_maxTriangleQueueSize;
