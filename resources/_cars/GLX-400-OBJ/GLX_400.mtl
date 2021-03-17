@@ -1,5 +1,5 @@
 # Blender MTL File: 'None'
-# Material Count: 7
+# Material Count: 8
 
 newmtl BackLight_M
 Ns 9.645958
@@ -13,14 +13,14 @@ illum 1
 map_Kd Light_Back.jpg
 
 newmtl Body_M
-Ns 9.645958
+Ns 680.402102
 Ka 1.000000 1.000000 1.000000
-Kd 0.498400 0.147731 0.078747
-Ks 0.000000 0.000000 0.000000
+Kd 0.498400 0.009269 0.000000
+Ks 1.000000 1.000000 1.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
-illum 1
+illum 3
 
 newmtl Glass_M
 Ns 9.645958
@@ -29,7 +29,7 @@ Kd 0.067884 0.067884 0.067884
 Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.450000
-d 1.000000
+d 0.475177
 illum 1
 
 newmtl HeadLight_M
@@ -42,6 +42,16 @@ Ni 1.450000
 d 1.000000
 illum 1
 map_Kd Front_Light.jpg
+
+newmtl Material.002
+Ns 900.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
 
 newmtl Plastik_M
 Ns 9.645958

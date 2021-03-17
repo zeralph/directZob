@@ -216,6 +216,7 @@ void MaterialManager::LoadOBJMaterials(std::string& path, std::string& file)
 			if (v.size() == 2)
 			{
 				OBJMaterialInfo matInfo;
+				matInfo.transparency = 1.0f;
 				matInfo.texture = "";
 				matInfo.name = v[1];
 				matInfo.file = file.substr(0, file.size() - 4);
@@ -259,6 +260,15 @@ void MaterialManager::LoadOBJMaterials(std::string& path, std::string& file)
 						if (v.size() == 2)
 						{
 							matInfo.specularExponent = (float)atof(v[1].c_str());
+						}
+					}
+					if (line.rfind("d", 0) == 0)
+					{
+						v.clear();
+						SplitEntry(&line, &v, ' ');
+						if (v.size() == 2)
+						{
+							matInfo.transparency = (float)atof(v[1].c_str());
 						}
 					}
 					if (line.rfind("Kd", 0) == 0)

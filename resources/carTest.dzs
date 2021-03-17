@@ -21,20 +21,6 @@
                 </Box>
             </RigidBody>
         </Physic>
-        <ZobObject name="FrontCamera" guid="3067491" type="camera">
-            <Position x="-0.0774962" y="0.0879834" z="1.94431" />
-            <Rotation x="0" y="0" z="0" />
-            <Scale x="1" y="1" z="1" />
-            <Controller>0</Controller>
-            <Fov>70.00</Fov>
-        </ZobObject>
-        <ZobObject name="topCamera" guid="3067495" type="camera">
-            <Position x="0.00013119" y="59.1781" z="-1.00273" />
-            <Rotation x="-89.4191" y="-79.775" z="-179.72" />
-            <Scale x="1" y="1" z="1" />
-            <Controller>0</Controller>
-            <Fov>45.00</Fov>
-        </ZobObject>
         <ZobObject name="carMesh" guid="3066531" type="mesh">
             <Position x="0.000285507" y="-0.698991" z="0.000250807" />
             <Rotation x="180" y="0.000195336" z="180" />
@@ -49,11 +35,25 @@
             </Mesh>
         </ZobObject>
         <ZobObject name="rearCamera" guid="3002004" type="camera">
-            <Position x="-2.18209e-05" y="1.92052" z="-4.78713" />
-            <Rotation x="15.0562" y="6.05563e-05" z="-2.55841e-05" />
+            <Position x="-2.37338e-05" y="1.92052" z="-4.78713" />
+            <Rotation x="15.0562" y="7.10092e-05" z="-2.67863e-05" />
             <Scale x="1" y="1" z="1" />
             <Controller>5</Controller>
             <Fov>70.00</Fov>
+        </ZobObject>
+        <ZobObject name="FrontCamera" guid="3067491" type="camera">
+            <Position x="-0.0774962" y="0.0879834" z="1.94431" />
+            <Rotation x="0" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+            <Controller>0</Controller>
+            <Fov>70.00</Fov>
+        </ZobObject>
+        <ZobObject name="topCamera" guid="3067495" type="camera">
+            <Position x="0.00013119" y="59.1781" z="-1.00273" />
+            <Rotation x="-89.4191" y="-79.775" z="-179.72" />
+            <Scale x="1" y="1" z="1" />
+            <Controller>0</Controller>
+            <Fov>45.00</Fov>
         </ZobObject>
         <ZobObject name="windshieldCamera" guid="3067492" type="camera">
             <Position x="0.0657781" y="0.632988" z="0.62512" />
@@ -70,8 +70,8 @@
             <Fov>45.00</Fov>
         </ZobObject>
         <ZobObject name="orbitalCamera" guid="3067494" type="camera">
-            <Position x="-3.2138" y="-1.22187" z="-10.2774" />
-            <Rotation x="-3.98612" y="-82.9276" z="0.000317244" />
+            <Position x="-3.41366" y="-1.21814" z="-10.189" />
+            <Rotation x="-3.99471" y="-81.7743" z="-0.000122331" />
             <Scale x="1" y="1" z="1" />
             <Controller>2</Controller>
             <Fov>45.00</Fov>
@@ -167,6 +167,58 @@
             <Rotation x="89.9261" y="29.2886" z="100.567" />
             <Scale x="10" y="5" z="10" />
             <Mesh name="Rock_9.fbx" file="Rock_9.fbx" path="/">
+                <RenderOptions>
+                    <Lighting>Phong</Lighting>
+                    <ZBuffer>True</ZBuffer>
+                    <Transparency>False</Transparency>
+                    <CullMode>Clockwise</CullMode>
+                </RenderOptions>
+            </Mesh>
+        </ZobObject>
+        <ZobObject name="Rck-Wtrfll_fbx.fbx" guid="-2143505730" type="mesh">
+            <Position x="-102.76" y="43.435" z="36.805" />
+            <Rotation x="-180" y="0" z="180" />
+            <Scale x="2" y="2" z="1" />
+            <Mesh name="Rck-Wtrfll_fbx.fbx" file="Rck-Wtrfll_fbx.fbx" path="canyon/">
+                <RenderOptions>
+                    <Lighting>Phong</Lighting>
+                    <ZBuffer>True</ZBuffer>
+                    <Transparency>False</Transparency>
+                    <CullMode>Clockwise</CullMode>
+                </RenderOptions>
+            </Mesh>
+        </ZobObject>
+        <ZobObject name="Rock_9.fbx" guid="3066497" type="mesh">
+            <Position x="-2.021" y="20.375" z="17.355" />
+            <Rotation x="90" y="0" z="0" />
+            <Scale x="10" y="10" z="10" />
+            <Mesh name="Rock_9.fbx" file="Rock_9.fbx" path="/">
+                <RenderOptions>
+                    <Lighting>Phong</Lighting>
+                    <ZBuffer>True</ZBuffer>
+                    <Transparency>False</Transparency>
+                    <CullMode>Clockwise</CullMode>
+                </RenderOptions>
+            </Mesh>
+        </ZobObject>
+        <ZobObject name="newObject_56" guid="3066483" type="mesh">
+            <Position x="-0.306095" y="11.6981" z="-21.0747" />
+            <Rotation x="0" y="0" z="-36.1665" />
+            <Scale x="1" y="1" z="1" />
+            <Mesh name="tree_trunk.FBX" file="tree_trunk.FBX" path="/">
+                <RenderOptions>
+                    <Lighting>Phong</Lighting>
+                    <ZBuffer>True</ZBuffer>
+                    <Transparency>False</Transparency>
+                    <CullMode>Clockwise</CullMode>
+                </RenderOptions>
+            </Mesh>
+        </ZobObject>
+        <ZobObject name="mountain_canyon_01.fbx" guid="3066498" type="mesh">
+            <Position x="-130.972" y="-3.78558" z="-113.842" />
+            <Rotation x="-0.00132422" y="49.6846" z="-2.7968" />
+            <Scale x="7" y="7" z="12" />
+            <Mesh name="mountain_canyon_01.fbx" file="mountain_canyon_01.fbx" path="mountain_canyon/">
                 <RenderOptions>
                     <Lighting>Phong</Lighting>
                     <ZBuffer>True</ZBuffer>
@@ -302,19 +354,6 @@
             </RigidBody>
         </Physic>
     </ZobObject>
-    <ZobObject name="newObject_56" guid="3066483" type="mesh">
-        <Position x="-0.306095" y="11.6981" z="80.4653" />
-        <Rotation x="0" y="0" z="-36.1665" />
-        <Scale x="1" y="1" z="1" />
-        <Mesh name="tree_trunk.FBX" file="tree_trunk.FBX" path="/">
-            <RenderOptions>
-                <Lighting>Phong</Lighting>
-                <ZBuffer>True</ZBuffer>
-                <Transparency>False</Transparency>
-                <CullMode>Clockwise</CullMode>
-            </RenderOptions>
-        </Mesh>
-    </ZobObject>
     <ZobObject name="some_lights" guid="3066510">
         <Position x="0" y="0" z="0" />
         <Rotation x="0" y="0" z="0" />
@@ -356,13 +395,13 @@
             <Type>spot</Type>
         </ZobObject>
     </ZobObject>
-    <ZobObject name="Hill_3" guid="3066512" type="mesh">
-        <Position x="-275.055" y="0" z="0" />
+    <ZobObject name="mountain_canyon_01.fbx" guid="3066499" type="mesh">
+        <Position x="-155.175" y="0" z="0" />
         <Rotation x="0" y="0" z="0" />
-        <Scale x="1" y="1" z="1" />
-        <Mesh name="hill_2.obj" file="hill_2.obj" path="/">
+        <Scale x="5" y="15" z="20" />
+        <Mesh name="mountain_canyon_01.fbx" file="mountain_canyon_01.fbx" path="mountain_canyon/">
             <RenderOptions>
-                <Lighting>Gouraud</Lighting>
+                <Lighting>Phong</Lighting>
                 <ZBuffer>True</ZBuffer>
                 <Transparency>False</Transparency>
                 <CullMode>Clockwise</CullMode>
@@ -614,9 +653,9 @@
         </Mesh>
     </ZobObject>
     <ZobObject name="water.obj" guid="3066489" type="mesh">
-        <Position x="-290.596" y="-3.9" z="-9.083" />
+        <Position x="-290.596" y="-3.9" z="-348.879" />
         <Rotation x="0" y="0" z="0" />
-        <Scale x="0.4" y="0.4" z="0.4" />
+        <Scale x="4" y="1" z="4" />
         <Mesh name="water.obj" file="water.obj" path="/">
             <RenderOptions>
                 <Lighting>Phong</Lighting>

@@ -21,6 +21,7 @@ public:
 	inline const ZobVector3*	GetSpecularColor() const { return &m_specularColor; }
 	inline void					SetDiffuseColor(const ZobVector3& c) { m_diffuseColor = c; }
 	inline float				GetSpecularExponent() const { return m_specularExponent; }
+	inline float				GetTransparency() const { return m_transperency; }
 	inline const std::string& 	GetName() const { return m_name; }
 
 private:

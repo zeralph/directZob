@@ -15,6 +15,7 @@ ZobMaterial::ZobMaterial()
 	m_diffuseColor = ZobVector3(1, 1, 1);
 	m_specularColor = ZobVector3(1, 1, 1);
 	m_specularExponent = 0.0f;
+	m_transperency = 1.0f;
 	DirectZob::RemoveIndent();
 }
 
@@ -29,6 +30,7 @@ ZobMaterial::ZobMaterial(const std::string& name, const ZobVector3* ambientColor
 	m_diffuseColor = diffuseColor;
 	m_specularColor = specularColor;
 	m_specularExponent = specularExponent;
+	m_transperency = transparency;
 	DirectZob::RemoveIndent();
 }
 

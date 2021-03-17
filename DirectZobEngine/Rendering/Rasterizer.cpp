@@ -515,20 +515,6 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector3* p, const Triangl
 	float w = (t->pa->w * wa + t->pb->w * wb + t->pc->w * wc);
 
 	z = (t->pa->z * wa + t->pb->z * wb + t->pc->z * wc);
-	//p->z = z;
-	// 
-	//if (p->x <0 || p->x > m_width - 1 || p->y <0 || p->y > m_height - 1)// || z <= (m_bufferData->zNear + 0.01f))
-	//{
-	//	return;
-	//}
-
-	if (t->options->bTransparency)
-	{
-		if (((int)p->x  + ((int)p->y % 2))%2 == 0)
-		{
-			return;
-		}
-	}
 
 	const ZobMaterial* material = t->material;
 	
@@ -542,6 +528,7 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector3* p, const Triangl
 	}
 	
 	float zf = m_bufferData->zBuffer[k];
+	float transparency = (t->options->bTransparency) ? 0.5f: 1.0f;
 	if ( zRatio > 0.0f &&  (zf < 0.0f  || zRatio < zf ))
 	{
 		cl = 1.0f;
@@ -570,6 +557,7 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector3* p, const Triangl
 		a = 1.0f;
 		if (material)
 		{
+			transparency *= material->GetTransparency();
 			const Texture* texture = material->GetDiffuseTexture();
 			if (texture && texture->GetData())
 			{
@@ -661,15 +649,16 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector3* p, const Triangl
 		fr = fr * (1.0f - z) + z * m_fogColor->x;
 		fg = fg * (1.0f - z) + z * m_fogColor->y;
 		fb = fb * (1.0f - z) + z * m_fogColor->z;
-
-		static bool gg = false;
-		if (gg)
+		static int modulo = 2;
+		if (transparency < 1.0f)
 		{
-			fr = colors[m_rasterizerNumber].x;
-			fg = colors[m_rasterizerNumber].y;
-			fb = colors[m_rasterizerNumber].z;
+			int t = (int)(0.25f * p->x + 0.5f * p->y) % modulo * (int)(p->y) % modulo;
+			if(!t)
+			//if (((int)p->x + ((int)p->y % 2)) % 2 == 0)
+			{
+				return;
+			}
 		}
-
 		c = ((int)(fr * 255.0f) << 16) + ((int)(fg * 255.0f) << 8) + (int)(fb * 255.0f);
 		if (m_bufferData->zBuffer[k] <1.0f || zRatio < m_bufferData->zBuffer[k])
 		{
