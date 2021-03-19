@@ -3,10 +3,14 @@
 #define OPTIK_PROFILING 
 #undef None
 #include "../dependencies/optick/include/optick.h"
-
 #include "DirectZob.h"
 #include <fstream>
 
+#ifdef WINDOWS
+#include <Windows.h>
+#include <Dbghelp.h>
+#pragma comment (lib, "dbghelp.lib")
+#endif 
 DirectZob m_directZob;
 static int m_mouseLastX;
 static int m_mouseLastY;
@@ -38,10 +42,55 @@ int UpdateImageToScreen()
 	OPTICK_EVENT()
 	return mfb_update(m_window, (void*)m_directZob.GetBufferData());
 }
+#ifdef WINDOWS
+LONG WINAPI CrashHandler(EXCEPTION_POINTERS* pep)
+{
+	HANDLE hFile = CreateFile("MiniDump.dmp", GENERIC_READ | GENERIC_WRITE,
+		0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 
+	if ((hFile != NULL) && (hFile != INVALID_HANDLE_VALUE))
+	{
+		// Create the minidump 
+
+		MINIDUMP_EXCEPTION_INFORMATION mdei;
+
+		mdei.ThreadId = GetCurrentThreadId();
+		mdei.ExceptionPointers = pep;
+		mdei.ClientPointers = FALSE;
+
+		MINIDUMP_CALLBACK_INFORMATION mci;
+
+		//mci.CallbackRoutine = (MINIDUMP_CALLBACK_ROUTINE)MyMiniDumpCallback;
+		mci.CallbackParam = 0;     // this example does not use the context
+
+		MINIDUMP_TYPE mdt = MiniDumpNormal;
+
+		BOOL rv = MiniDumpWriteDump(GetCurrentProcess(), GetCurrentProcessId(),
+			hFile, mdt, (pep != 0) ? &mdei : 0, 0, &mci);
+
+		if (!rv)
+			printf("MiniDumpWriteDump failed. Error: %u \n", GetLastError());
+		else
+			printf("Minidump created.\n");
+
+		// Close the file 
+
+		CloseHandle(hFile);
+
+	}
+	else
+	{
+		printf("CreateFile failed. Error: %u \n", GetLastError());
+	}
+	return 0;
+}
+#endif
 int main(int argc, char* argv[])
 {
 	printf("Go\n");
+#ifdef WINDOWS
+	::SetUnhandledExceptionFilter(CrashHandler);
+#endif
 	bool bBench = false;
 	bool btest = false;
 	std::string scenePath = "";

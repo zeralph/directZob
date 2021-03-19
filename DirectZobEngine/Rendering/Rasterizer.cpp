@@ -327,18 +327,16 @@ inline void Rasterizer::ComputeLightingAtPoint(const ZobVector3* position, const
 				}
 				if (lightPower > 0.0f)
 				{
-					//Todo : specular intensity setup
-					static int specularIntensity = 50;
-					cl = clamp2(-ZobVector3::Dot(normal, &lightDir), 0.0f, 1.0f);
+					cl = 0.0f;
 					sl = 0.0f;
-					if (t->options->lightMode == RenderOptions::eLightMode_none)
+					if (t->options->lightMode != RenderOptions::eLightMode_none)
 					{
-						cl = 0.0f;
+						cl = clamp2(-ZobVector3::Dot(normal, &lightDir), 0.0f, 1.0f);
 						sl = 0.0f;
-					}
-					else if (t->options->lightMode == RenderOptions::eLightMode_phong || t->options->lightMode == RenderOptions::eLightMode_flatPhong)
-					{
-						sl = computeSpecular(normal, &lightPos, position, t);
+						if (t->options->lightMode == RenderOptions::eLightMode_phong || t->options->lightMode == RenderOptions::eLightMode_flatPhong)
+						{
+							sl = computeSpecular(normal, &lightPos, position, t);
+						}
 					}
 					float a = l->GetColor()->x * lightPower;
 					float b = l->GetColor()->y * lightPower;
@@ -591,9 +589,6 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector3* p, const Triangl
 			sr = material->GetSpecularColor()->x;
 			sg = material->GetSpecularColor()->y;
 			sb = material->GetSpecularColor()->z;
-			sr = 1.0f;
-			sg = 1.0f;
-			sb = 1.0f;
 		}
 		if (lighting != RenderOptions::eLightMode_none)
 		{
@@ -652,9 +647,9 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector3* p, const Triangl
 		static int modulo = 2;
 		if (transparency < 1.0f)
 		{
-			int t = (int)(0.25f * p->x + 0.5f * p->y) % modulo * (int)(p->y) % modulo;
-			if(!t)
-			//if (((int)p->x + ((int)p->y % 2)) % 2 == 0)
+			//int t = (int)(0.25f * p->x + 0.5f * p->y) % modulo * (int)(p->y) % modulo;
+			//if(!t)
+			if (((int)p->x  + (int)p->y) % 2 == 0)
 			{
 				return;
 			}
