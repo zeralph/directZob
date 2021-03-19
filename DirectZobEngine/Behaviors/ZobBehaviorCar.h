@@ -13,11 +13,13 @@ class ZobBehaviorCar : public ZobBehavior
 		void		Init() override;
 		void		PreUpdate() override;
 		void		Update(float dt) override;
+		void		Update_old(float dt);
 		void		DrawGizmos(const Camera* camera, const ZobVector3* position, const ZobVector3* rotation) const override;
 	private:	
 		ZobBehaviorCar(ZobObject* zobObject, TiXmlElement* node);
 		void CheckGroundCollisions();
 		void CheckEnvironmentCollision();
+		void UpdateInputs();
 		float m_motorForce;
 		float m_breakForce;
 		float m_lineaVelocityMS;
@@ -34,4 +36,13 @@ class ZobBehaviorCar : public ZobBehavior
 		ZobVector3 m_lastCollDirection;
 		ZobVector3 m_lastCollNormal;
 		ZobVector3 m_lastCollRebound;
+
+		float m_angle;
+		float m_angularvelocity;
+		float m_steerangle;
+		float m_throttle;
+		float m_brake;
+		float m_inertia;
+		ZobVector3 m_velocityWorld;
+		ZobVector3 m_accelerationWorld;
 };

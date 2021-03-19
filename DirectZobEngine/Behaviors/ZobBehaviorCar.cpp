@@ -9,6 +9,16 @@
 #define MS_TO_KMH(a) a * 3.6f 
 #define KMH_TO_MS(a) a / 3.6f 
 
+#undef SGN
+#define SGN(x)       (((x) >= 0) ? 1 : -1)
+
+#define	DRAG		5.0		 		/* factor for air resistance (drag) 	*/
+#define	RESISTANCE	30.0			/* factor for rolling resistance */
+#define CA_R		-5.20			/* cornering stiffness */
+#define CA_F		-5.0			/* cornering stiffness */
+#define MAX_GRIP	2.0				/* maximum (normalised) friction force, =diameter of friction circle */
+
+
 ZobBehaviorCar::~ZobBehaviorCar()
 {
 
@@ -42,7 +52,14 @@ void ZobBehaviorCar::PreUpdate()
 
 void ZobBehaviorCar::Init()
 {
-
+	m_angle=0;
+	m_angularvelocity=0;
+	m_steerangle=0;
+	m_throttle=0;
+	m_brake=0;
+	m_mass = 1500;
+	m_inertia = 1500;
+	m_velocityWorld = ZobVector3(0, 0, 0);
 }
 
 void ZobBehaviorCar::CheckEnvironmentCollision()
@@ -89,7 +106,248 @@ void ZobBehaviorCar::CheckGroundCollisions()
 	}
 }
 
+void ZobBehaviorCar::UpdateInputs()
+{
+	const gainput::InputMap* inputMap = DirectZob::GetInstance()->GetInputManager()->GetMap();
+	float inputAcc = 0.0f;
+	float inputBrk = 0.0f;
+	float inputDir = 0.0f;
+	inputAcc = inputMap->GetFloat(ZobInputManager::RightShoulder);
+	inputBrk = inputMap->GetFloat(ZobInputManager::LeftShoulder);
+	inputDir = inputMap->GetFloat(ZobInputManager::LeftStickX);
+	if (inputDir < 0)
+	{
+		if (m_steerangle < M_PI / 4.0)
+		{
+			m_steerangle += M_PI / 32.0;
+		}
+	}
+	else if (inputDir > 0)
+	{
+		if (m_steerangle > -M_PI / 4.0)
+		{
+			m_steerangle -= M_PI / 32.0;
+		}
+	}
+	else
+	{
+//		m_steerangle = 0;
+		//back to zero
+	}
+	if (inputAcc && m_throttle < 100)
+	{
+		m_throttle += 10;
+	}
+	if (!inputBrk && !inputAcc && m_throttle >= 10)
+	{
+		m_throttle -= 10;
+	}
+	if (inputBrk)
+	{
+		m_brake = 100;
+		m_throttle = 0;
+	}
+	else
+	{
+		m_brake = 0;
+	}
+	//update current camera
+	if (inputMap->GetBoolIsNew(ZobInputManager::NextCamera))
+	{
+		DirectZob::GetInstance()->GetCameraManager()->SwitchToNextAvailableCamera();
+	}
+}
+
 void ZobBehaviorCar::Update(float dt)
+{
+	CheckGroundCollisions();
+	CheckEnvironmentCollision();
+	UpdateInputs();
+	DirectZob* directZob = DirectZob::GetInstance();
+	if (directZob->IsPhysicPlaying())
+	{
+		double	rot_angle;
+		double	sideslip;
+		double	slipanglefront;
+		double	slipanglerear;
+		double	torque;
+		double	angular_acceleration;
+		double	sn, cs;
+		double	yawspeed;
+		double	weight;
+		int		rear_slip;
+		int		front_slip;
+		ZobVector3 velocity, resistance;
+		ZobVector3 flatf, flatr;
+		ZobVector3 ftraction, force;
+		ZobVector3 acceleration;
+		sn = sin(m_angle);
+		cs = cos(m_angle);
+
+		if (m_steerangle != 0.0f)
+		{
+			int breakme = 1;
+		}
+
+		ZobVector3 worldPos = m_zobObject->GetWorldPosition();
+
+		// SAE convention: x is to the front of the car, y is to the right, z is down
+
+		//	bangz: Velocity of Car. Vlat and Vlong
+		// transform velocity in world reference frame to velocity in car reference frame
+		velocity.x = cs * m_velocityWorld.x + sn * m_velocityWorld.z;
+		velocity.y = m_velocityWorld.y;
+		velocity.z = -sn * m_velocityWorld.x + cs * m_velocityWorld.z;
+
+		// Lateral force on wheels
+		//	
+			// Resulting velocity of the wheels as result of the yaw rate of the car body
+			// v = yawrate * r where r is distance of wheel to CG (approx. half wheel base)
+			// yawrate (ang.velocity) must be in rad/s
+			//
+		yawspeed = 2/*car->cartype->wheelbase*/ * 0.5 * m_angularvelocity;
+
+		//bangz: velocity.z = fVLong_, velocity.x = fVLat_
+		if (velocity.z == 0)		// TODO: fix singularity
+			rot_angle = 0;
+		else
+			rot_angle = atan2(yawspeed, velocity.z);
+
+		// Calculate the side slip angle of the car (a.k.a. beta)
+		if (velocity.x == 0)		// TODO: fix singularity
+			sideslip = 0;
+		else
+			sideslip = atan2(velocity.x, velocity.z);
+
+		// Calculate slip angles for front and rear wheels (a.k.a. alpha)
+		slipanglefront = sideslip + rot_angle - m_steerangle;
+		slipanglerear = sideslip - rot_angle;
+
+		// weight per axle = half car mass times 1G (=9.8m/s^2) 
+		weight = m_mass * 9.8 * 0.5;
+
+		// lateral force on front wheels = (Ca * slip angle) capped to friction circle * load
+		flatf.y = 0;
+		flatf.z = 0;
+		flatf.x = CA_F * slipanglefront;
+		flatf.x = fmin(MAX_GRIP, flatf.x);
+		flatf.x = fmax(-MAX_GRIP, flatf.x);
+		flatf.x *= weight;
+		if (front_slip)
+			flatf.x *= 0.5;
+
+		// lateral force on rear wheels
+		flatr.y = 0;
+		flatr.z = 0;
+		flatr.x = CA_R * slipanglerear;
+		flatr.x = fmin(MAX_GRIP, flatr.x);
+		flatr.x = fmax(-MAX_GRIP, flatr.x);
+		flatr.x *= weight;
+		if (rear_slip)
+			flatr.x *= 0.5;
+
+		// longtitudinal force on rear wheels - very simple traction model
+		ftraction.z = 100 * (m_throttle - m_brake * SGN(velocity.z));
+		ftraction.x = 0;
+		ftraction.y = 0;
+		if (rear_slip)
+			ftraction.z *= 0.5;
+
+		// Forces and torque on body
+
+		// drag and rolling resistance
+		resistance.x = 0;// -(RESISTANCE * velocity.x + DRAG * velocity.x * abs(velocity.x));
+		resistance.y = 0;// -(RESISTANCE * velocity.y + DRAG * velocity.y * abs(velocity.y));
+		resistance.z = 0;// -(RESISTANCE * velocity.z + DRAG * velocity.z * abs(velocity.z));
+
+		// sum forces
+		force.x = ftraction.x + cos(m_steerangle) * flatf.x + flatr.x + resistance.x;
+		force.y = 0;
+		force.z = ftraction.z + sin(m_steerangle) * flatf.z + flatr.z + resistance.z;
+		
+
+		// torque on body from lateral forces
+		torque = /*car->cartype->b*/1 * flatf.x - /*car->cartype->c*/1 * flatr.x;
+
+		// Acceleration
+
+			// Newton F = m.a, therefore a = F/m
+		acceleration.x = force.x / m_mass;
+		acceleration.y = 0; //9.81
+		acceleration.z = force.z / m_mass;
+		
+
+		angular_acceleration = torque / m_inertia;
+
+		// Velocity and position
+
+			// transform acceleration from car reference frame to world reference frame
+		m_accelerationWorld.z = cs * acceleration.z + sn * acceleration.x;
+		m_accelerationWorld.y = 0;
+		m_accelerationWorld.x = -sn * acceleration.z + cs * acceleration.x;
+
+		// velocity is integrated acceleration
+		//
+		m_velocityWorld.x += dt * m_accelerationWorld.x;
+		m_velocityWorld.y += dt * m_accelerationWorld.y;
+		m_velocityWorld.z += dt * m_accelerationWorld.z;
+
+		// position is integrated velocity
+		//
+		ZobVector3 dp = worldPos;
+		worldPos.x += dt * m_velocityWorld.x;
+		worldPos.z += dt * m_velocityWorld.z;
+
+		dp.x = worldPos.x - dp.x;
+		dp.y = 0;// worldPos.x - dp.y;
+		dp.z = worldPos.x - dp.z;
+
+		// Angular velocity and heading
+
+			// integrate angular acceleration to get angular velocity
+			//
+		m_angularvelocity += dt * angular_acceleration;
+
+		// integrate angular velocity to get angular orientation
+		//
+		m_angle += dt * m_angularvelocity;
+
+		m_zobObject->SetWorldPosition(worldPos.x, m_lastGroundPosition.y + m_heightAboveGround, worldPos.z);
+		
+
+		//sn = sinf(m_angle);
+		//cs = cosf(m_angle);fr
+		//ZobVector3 forward = m_zobObject->GetForward();
+		//ZobVector3 up = m_zobObject->GetUp();
+		//ZobVector3 left = m_zobObject->GetLeft();
+
+		DirectZob::GetInstance()->GetEngine()->QueueLine(DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera(), &worldPos, &dp, 0xFF00FF, true, true);
+
+		if (dp.length2() != 0)
+		{
+			ZobVector3 forward = ZobVector3(sn, 0, cs);
+			//forward.Mul(-1);
+			forward.Normalize();
+			ZobVector3 left = ZobVector3::Cross(&forward, &ZobVector3::Vector3Y);
+			left.Normalize();
+			left.Mul(-1.0f);
+			ZobVector3 up = ZobVector3::Cross(&forward, &left);
+			up.Normalize();
+			//left.Mul(-1.0f);
+			m_zobObject->LookAt(&forward, &left, &up, false);
+		}
+		
+
+		
+
+	}
+	Text2D* m_textManager = directZob->GetTextManager();
+	ZobVector3 c = ZobVector3(0.0f, 0.0f, 0.0f);
+	DirectZob::GetInstance()->GetHudManager()->Print(0.1f, 0.9f, 0.025f, 0.025f, &c, "ST %.2f A %.2f AV %.2f\n V %.2f, %.2f, %.2f\n A %.2f, %.2f, %.2f", m_steerangle, m_angle, m_angularvelocity, m_velocityWorld.x, m_velocityWorld.y, m_velocityWorld.z, m_accelerationWorld.x, m_accelerationWorld.y, m_accelerationWorld.z);
+
+}
+
+void ZobBehaviorCar::Update_old(float dt)
 {
 	CheckGroundCollisions();
 	CheckEnvironmentCollision();
@@ -216,12 +474,6 @@ void ZobBehaviorCar::Update(float dt)
 		DirectZob::GetInstance()->GetHudManager()->Print(0.5f, 0.9f, 0.05f, 0.05f, &c, "%.2f kmh", MS_TO_KMH(m_lineaVelocityMS));
 		//m_textManager->Print(10, 60, color, "speed            : %.2f km/h", MS_TO_KMH(m_lineaVelocityMS));
 		m_textManager->Print(10, 75, color, "angle            : %.2f / %.2f", dir, DEG_TO_RAD(dir));
-	}
-
-	//update current camera
-	if (inputMap->GetBoolIsNew(ZobInputManager::NextCamera))
-	{
-		directZob->GetCameraManager()->SwitchToNextAvailableCamera();
 	}
 }
 
