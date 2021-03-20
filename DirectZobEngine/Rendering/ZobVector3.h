@@ -28,6 +28,7 @@ public:
 
 	inline void Normalize() 
 	{
+		/*
 		float f = sqrtLength();
 		if (f != 0.0f)
 		{
@@ -36,14 +37,13 @@ public:
 			z /= f;
 			w = 1.0f;
 		}
-		/*
+		*/
 		float f = length2();
 		f = Q_rsqrt(f);
 		x *= f;
 		y *= f;
 		z *= f;
 		w = 1.0f;
-		*/
 	}
 
 	inline float Q_rsqrt(float number)
