@@ -5,6 +5,7 @@
 #include "../ZobPhysic/ZobPhysicComponent.h"
 #include "../Managers/ZobInputManager.h"
 #include "../Rendering/text2D.h"
+#include "../ZobObjects/ZobObject.h"
 
 #define MS_TO_KMH(a) a * 3.6f 
 #define KMH_TO_MS(a) a / 3.6f 
@@ -47,8 +48,8 @@ void ZobBehaviorCar::Init()
 	//m_zobObject->GetWorldRotation().y;
 	m_speed_ms = 0;
 	m_angle = M_PI / 2.0;
-	float a = DEG_TO_RAD(m_zobObject->GetWorldRotation().y);
-	m_angle -= a;
+	ZobVector3 startRotation = m_zobObject->GetWorldRotation();
+	m_angle -= DEG_TO_RAD(startRotation.y);
 	m_angularvelocity=0;
 	m_steerangle=0;
 	m_throttle=0;
