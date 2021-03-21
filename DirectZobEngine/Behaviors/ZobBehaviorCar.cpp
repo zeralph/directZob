@@ -287,7 +287,8 @@ void ZobBehaviorCar::Update(float dt)
 
 		if (dp.length2() != 0)
 		{
-			ZobVector3 up = ZobVector3::Vector3Y;
+			ZobVector3 up = m_lastGroundNormal;// ZobVector3::Vector3Y;
+			up.Normalize();
 			ZobVector3 forward = ZobVector3(cs, 0, sn);
 			//forward.Mul(-1);
 			forward.Normalize();
