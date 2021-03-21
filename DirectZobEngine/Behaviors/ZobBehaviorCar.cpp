@@ -301,6 +301,8 @@ void ZobBehaviorCar::Update(float dt)
 			sn = sin(m_angle);
 			cs = cos(m_angle);
 			ZobVector3 up = ZobVector3::Vector3Y;
+			up = m_lastGroundNormal;// ZobVector3::Vector3Y;
+			up.Normalize();
 			ZobVector3 forward = ZobVector3(cs, 0, sn);
 			//forward.Mul(-1);
 			forward.Normalize();
