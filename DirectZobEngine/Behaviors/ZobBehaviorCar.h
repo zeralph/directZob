@@ -28,7 +28,6 @@ class ZobBehaviorCar : public ZobBehavior
 		ZobVector3 m_lastCollNormal;
 		ZobVector3 m_lastCollRebound;
 		float m_heightAboveGround;
-		float m_mass;
 		float m_angle;
 		float m_angularvelocity;
 		float m_steerangle;
@@ -39,4 +38,7 @@ class ZobBehaviorCar : public ZobBehavior
 		ZobVector3 m_accelerationWorld;
 		float m_speed_ms;
 		bool m_handBrake;
+
+		float m_mass;
+		float m_maxGrip;	/* maximum (normalised) friction force, =diameter of friction circle */
 };

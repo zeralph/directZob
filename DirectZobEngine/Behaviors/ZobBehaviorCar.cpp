@@ -17,7 +17,7 @@
 #define	RESISTANCE	30.0			/* factor for rolling resistance */
 #define CA_R		-5.20			/* cornering stiffness */
 #define CA_F		-5.0			/* cornering stiffness */
-#define MAX_GRIP	8.0				/* maximum (normalised) friction force, =diameter of friction circle */
+				
 
 
 ZobBehaviorCar::~ZobBehaviorCar()
@@ -55,6 +55,7 @@ void ZobBehaviorCar::Init()
 	m_throttle=0;
 	m_brake=0;
 	m_mass = 1500;
+	m_maxGrip = 10.0f;
 	m_inertia = 1500;
 	m_heightAboveGround = 0.9f;
 	m_handBrake = false;
@@ -131,6 +132,9 @@ void ZobBehaviorCar::Update(float dt)
 	CheckEnvironmentCollision();
 	UpdateInputs();
 	DirectZob* directZob = DirectZob::GetInstance();
+	float sn, cs;
+	double	angular_acceleration;
+	ZobVector3 flatf, flatr;
 	if (directZob->IsPhysicPlaying())
 	{
 		double	rot_angle;
@@ -138,13 +142,11 @@ void ZobBehaviorCar::Update(float dt)
 		double	slipanglefront;
 		double	slipanglerear;
 		double	torque;
-		double	angular_acceleration;
-		double	sn, cs;
 		double	yawspeed;
 		double	weight;
 		int		front_slip=0;
+		float 	motorBreak = 0.0f;
 		ZobVector3 velocity, resistance;
-		ZobVector3 flatf, flatr;
 		ZobVector3 ftraction, force;
 		ZobVector3 acceleration;
 		sn = sin(m_angle);
@@ -165,10 +167,9 @@ void ZobBehaviorCar::Update(float dt)
 		velocity.y = m_velocityWorld.y;
 		velocity.x = -sn * m_velocityWorld.x + cs * m_velocityWorld.z;
 
-		if (m_speed_ms < 5)
+		if (m_speed_ms < 1)
 		{
-			velocity.z = 0;
-			velocity.x = 0;
+			m_steerangle = 0;
 		}
 
 		// Lateral force on wheels
@@ -202,8 +203,8 @@ void ZobBehaviorCar::Update(float dt)
 		flatf.y = 0;
 		flatf.z = 0;
 		flatf.x = CA_F * slipanglefront;
-		flatf.x = fmin(MAX_GRIP, flatf.x);
-		flatf.x = fmax(-MAX_GRIP, flatf.x);
+		flatf.x = fmin(m_maxGrip, flatf.x);
+		flatf.x = fmax(-m_maxGrip, flatf.x);
 		flatf.x *= weight;
 		if (front_slip)
 			flatf.x *= 0.5;
@@ -212,14 +213,18 @@ void ZobBehaviorCar::Update(float dt)
 		flatr.y = 0;
 		flatr.z = 0;
 		flatr.x = CA_R * slipanglerear;
-		flatr.x = fmin(MAX_GRIP, flatr.x);
-		flatr.x = fmax(-MAX_GRIP, flatr.x);
+		flatr.x = fmin(m_maxGrip, flatr.x);
+		flatr.x = fmax(-m_maxGrip, flatr.x);
 		flatr.x *= weight;
 		if (m_handBrake)
 			flatr.x *= 0.5;
 
 		// longtitudinal force on rear wheels - very simple traction model
-		ftraction.z = 100 * (m_throttle - m_brake * SGN(velocity.z));
+		if(m_throttle == 0)
+		{
+			motorBreak = 10.0f; //motor break;
+		}
+		ftraction.z = 100 * (m_throttle - (m_brake + motorBreak)* SGN(velocity.z));
 		ftraction.x = 0;
 		ftraction.y = 0;
 		if (m_handBrake)
@@ -229,7 +234,7 @@ void ZobBehaviorCar::Update(float dt)
 
 		// drag and rolling resistance
 		resistance.x = -(RESISTANCE * velocity.x + DRAG * velocity.x * abs(velocity.x));
-		resistance.y = -(RESISTANCE * velocity.y + DRAG * velocity.y * abs(velocity.y));
+		resistance.y = 0;//-(RESISTANCE * velocity.y + DRAG * velocity.y * abs(velocity.y));
 		resistance.z = -(RESISTANCE * velocity.z + DRAG * velocity.z * abs(velocity.z));
 
 		// sum forces
@@ -263,6 +268,14 @@ void ZobBehaviorCar::Update(float dt)
 		m_velocityWorld.y += dt * m_accelerationWorld.y;
 		m_velocityWorld.z += dt * m_accelerationWorld.z;
 
+		if(m_speed_ms < 1)
+		{
+			if(m_throttle == 0 )
+			{
+				m_velocityWorld.x = 0;
+				m_velocityWorld.z = 0;
+			}
+		}
 		// position is integrated velocity
 		//
 		ZobVector3 dp = worldPos;
@@ -282,16 +295,18 @@ void ZobBehaviorCar::Update(float dt)
 		// integrate angular velocity to get angular orientation
 		//
 		m_angle += dt * m_angularvelocity;
-
 		m_zobObject->SetWorldPosition(worldPos.x, m_lastGroundPosition.y + m_heightAboveGround, worldPos.z);
-
 		if (dp.length2() != 0)
 		{
+			sn = sin(m_angle);
+			cs = cos(m_angle);
 			ZobVector3 up = ZobVector3::Vector3Y;
 			ZobVector3 forward = ZobVector3(cs, 0, sn);
 			//forward.Mul(-1);
 			forward.Normalize();
+			forward.y = 0;
 			ZobVector3 left = ZobVector3::Cross(&forward, &up);
+			left.y = 0;
 			left.Normalize();
 			left.Mul(-1.0f);
 			up = ZobVector3::Cross(&forward, &left);
@@ -302,11 +317,12 @@ void ZobBehaviorCar::Update(float dt)
 		}
 	}
 	ZobHUDManager* h = DirectZob::GetInstance()->GetHudManager();
-	ZobVector3 c = ZobVector3(0.0f, 0.0f, 0.0f);
+	ZobVector3 c = ZobVector3(1.0f, 0.5f, 0.5f);
 	//h->Print(0.1f, 0.9f, 0.025f, 0.025f, &c, "ST %.2f A %.2f AV %.2f\n V %.2f, %.2f, %.2f\n A %.2f, %.2f, %.2f", m_steerangle, m_angle, m_angularvelocity, m_velocityWorld.x, m_velocityWorld.y, m_velocityWorld.z, m_accelerationWorld.x, m_accelerationWorld.y, m_accelerationWorld.z);
 	float kmh = MS_TO_KMH(m_speed_ms);
+	h->Print(0.1f, 0.8f, 0.030f, 0.030f, &c, "fs %.2f rs %.2f Kmh", flatf.x, flatr.x);
 	h->Print(0.8f, 0.9f, 0.030f, 0.030f, &c, "%.0f Kmh", kmh);
-	
+	h->Print(0.1f, 0.9f, 0.030f, 0.030f, &c, "AV %.2f AA %.2f Kmh", m_angularvelocity, angular_acceleration);
 
 }
 
