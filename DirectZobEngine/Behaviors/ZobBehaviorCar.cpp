@@ -76,8 +76,11 @@ void ZobBehaviorCar::CheckEnvironmentCollision()
 				m_lastCollPosition = coll->collisionWorldPosition;
 				m_lastCollDirection = coll->collisionWorldDirection;
 				m_lastCollNormal = coll->collisionWorldNormal;
+				m_lastCollNormal.y = 0;
+				m_lastCollNormal.Normalize();
 				m_hadCollision = true;
 				m_lastCollRebound = m_zobObject->GetWorldPosition() - m_lastCollPosition;
+				m_lastCollRebound.y = 0;
 				m_lastCollRebound.Normalize();
 				ZobVector3 z = ZobVector3::Cross(&m_lastCollRebound, &m_lastCollNormal);
 				z.Normalize();
@@ -140,7 +143,7 @@ void ZobBehaviorCar::CheckGroundCollisions()
 	}
 }
 
-void ZobBehaviorCar::UpdateInputs()
+void ZobBehaviorCar::UpdateInputs(float dt)
 {
 	const gainput::InputMap* inputMap = DirectZob::GetInstance()->GetInputManager()->GetMap();
 	float inputAcc = 0.0f;
@@ -149,7 +152,8 @@ void ZobBehaviorCar::UpdateInputs()
 	inputAcc = inputMap->GetFloat(ZobInputManager::RightShoulder);
 	inputBrk = inputMap->GetFloat(ZobInputManager::LeftShoulder);
 	inputDir = inputMap->GetFloat(ZobInputManager::LeftStickX);
-	m_steerangle = (M_PI / 4.0) * inputDir;
+	float wantedSteerAngle = (M_PI / 4.0) * inputDir;
+	m_steerangle = m_steerangle * dt + wantedSteerAngle * (1.0f - dt);
 	m_throttle = 100.0f * inputAcc;
 	m_brake = 100.0f * inputBrk;
 	m_handBrake = inputMap->GetBool(ZobInputManager::Handbrake);
@@ -164,7 +168,7 @@ void ZobBehaviorCar::Update(float dt)
 {
 	CheckGroundCollisions();
 	CheckEnvironmentCollision();
-	UpdateInputs();
+	UpdateInputs(dt);
 	DirectZob* directZob = DirectZob::GetInstance();
 	float sn, cs;
 	double	angular_acceleration;
@@ -203,7 +207,23 @@ void ZobBehaviorCar::Update(float dt)
 
 		if (m_speed_ms < 1)
 		{
-			m_steerangle = 0;
+			//m_steerangle = 0;
+		}
+
+		// longtitudinal force on rear wheels - very simple traction model
+		if (m_throttle == 0)
+		{
+			motorBreak = 10.0f; //motor break;
+		}
+		ftraction.z = 150 * (m_throttle - (m_brake + motorBreak));// *SGN(velocity.z));
+		ftraction.x = 0;
+		ftraction.y = 0;
+		if (m_handBrake)
+			ftraction.z *= 0.5;
+
+		if (velocity.z < 0)
+		{
+			m_steerangle = -m_steerangle;
 		}
 
 		// Lateral force on wheels
@@ -253,17 +273,6 @@ void ZobBehaviorCar::Update(float dt)
 		if (m_handBrake)
 			flatr.x *= 0.5;
 
-		// longtitudinal force on rear wheels - very simple traction model
-		if(m_throttle == 0)
-		{
-			motorBreak = 10.0f; //motor break;
-		}
-		ftraction.z = 100 * (m_throttle - (m_brake + motorBreak));// *SGN(velocity.z));
-		ftraction.x = 0;
-		ftraction.y = 0;
-		if (m_handBrake)
-			ftraction.z *= 0.5;
-
 		// Forces and torque on body
 
 		// drag and rolling resistance
@@ -307,14 +316,15 @@ void ZobBehaviorCar::Update(float dt)
 		{
 			ZobVector3 z = m_velocityWorld;
 			z.Normalize();
-			float f = 1.0f - ZobVector3::Dot(&z, &m_lastCollRebound);
+			float f = 1.0f - fabs(ZobVector3::Dot(&z, &m_lastCollRebound));
 			z = ZobVector3::Cross(&z, &m_lastCollRebound);
-			m_velocityWorld.z = m_lastCollRebound.z * fmaxf(m_speed_ms, 2.0f);
-			m_velocityWorld.x = m_lastCollRebound.x * fmaxf(m_speed_ms, 2.0f);
+			m_velocityWorld.z = m_lastCollRebound.z * clamp(m_speed_ms, 2.0f, 100.0f);
+			m_velocityWorld.x = m_lastCollRebound.x * clamp(m_speed_ms, 2.0f, 100.0f);
 			m_accelerationWorld.x = 0;
 			m_accelerationWorld.y = 0;
 			m_accelerationWorld.z = 0;
-			angular_acceleration = -z.y / fabsf(z.y) * fabsf(f) * 10.0f * fmaxf(m_speed_ms, 2.0f);
+			m_velocityWorld.Mul(1.0f - f);
+			angular_acceleration = -SGN(z.y) * f * 10.0f *clamp(m_speed_ms, 1.0f, 40.0f);
 		}
 
 		if(m_speed_ms < 1)
@@ -368,7 +378,7 @@ void ZobBehaviorCar::Update(float dt)
 	float kmh = MS_TO_KMH(m_speed_ms);
 	h->Print(ZobHUDManager::eHudUnit_ratio, 0.1f, 0.8f, 3, &c, "fs %.2f rs %.2f Kmh", flatf.x, flatr.x);
 	h->Print(ZobHUDManager::eHudUnit_ratio, 0.8f, 0.9f, 3, &c, "%.0f Kmh", kmh);
-	h->Print(ZobHUDManager::eHudUnit_ratio, 0.1f, 0.9f, 3, &c, "AV %.2f AA %.2f Kmh", m_angularvelocity, angular_acceleration);
+	h->Print(ZobHUDManager::eHudUnit_ratio, 0.1f, 0.9f, 3, &c, "wheels %.2f", m_steerangle);
 }
 
 TiXmlNode* ZobBehaviorCar::SaveUnderNode(TiXmlNode* node)

@@ -18,7 +18,7 @@ class ZobBehaviorCar : public ZobBehavior
 		ZobBehaviorCar(ZobObject* zobObject, TiXmlElement* node);
 		void CheckGroundCollisions();
 		void CheckEnvironmentCollision();
-		void UpdateInputs();
+		void UpdateInputs(float dt);
 
 		ZobVector3 m_lastGroundPosition;
 		ZobVector3 m_lastGroundNormal;
