@@ -14,12 +14,20 @@ class ZobHUDManager
 {
 public:
 
+	enum eHudUnit
+	{
+		eHudUnit_pixels=0,
+		eHudUnit_ratio,
+	};
+
 	struct HUDElement
 	{
 		float x;
 		float y;
 		float w;
 		float h;
+		eHudUnit unit;
+		char c;
 		ZobVector3 color;
 		const ZobMaterial* mat;
 	};
@@ -34,13 +42,13 @@ public:
 	void UpdateBehavior(float dt);
 	void UpdateObjects(const Camera* camera, Core::Engine* engine, float dt);
 	void QueueForDrawing(const Camera* camera, Core::Engine* engine);
-	void Print(float x, float y, float w, float h, const char* fmt, ...);
-	void Print(float x, float y, float w, float h, const ZobVector3* color, const char* fmt, ...);
+	void Print(eHudUnit u, float x, float y, float fontSize, const char* fmt, ...);
+	void Print(eHudUnit u, float x, float y, float fontSize, const ZobVector3* color, const char* fmt, ...);
 
 private:
 	void Init();
 	bool CreateQuad(float xMin, float yMin, float xMax, float yMax, HUDElement* elem);
-	void PrintInternal(float x, float y, float w, float h, const ZobVector3* color, std::string s);
+	void PrintInternal(eHudUnit u, float x, float y, float fontSize, const ZobVector3* color, std::string s);
 	Triangle* m_trianglesBuffer;
 	ZobVector3* m_vertices;
 	ZobVector3* m_projectedVertices;

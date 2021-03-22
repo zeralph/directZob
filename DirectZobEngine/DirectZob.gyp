@@ -358,9 +358,9 @@
                                 'destination':
                                 '<(PRODUCT_DIR)',
                                 'files': [
-                                    '../dependencies/fbxsdk/windows/lib/vs2017/x64/release/libfbxsdk.dll'  # copy fbxsdk
-									'../dependencies/optick/lib/windows/OptickCore.dll',  # copy OptickCore.dll
-									'../dependencies/gainput/lib/windows/gainput.dll'
+                                    #'../dependencies/fbxsdk/windows/lib/vs2017/x64/release/libfbxsdk.dll'  # copy fbxsdk
+									#'../dependencies/optick/lib/windows/OptickCore.dll',  # copy OptickCore.dll
+									#'../dependencies/gainput/lib/windows/gainput.dll'
                                 ],
                             },
                         ],

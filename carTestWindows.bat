@@ -15,3 +15,4 @@ rem .\DirectZobExe.exe --scene .\resources\carTest.dzs --width 800 --height 450
 .\DirectZobExe.exe --scene .\resources\carTest.dzs --width 1320 --height 768
 rem .\DirectZobExe.exe --scene .\resources\carTest.dzs --width 320 --height 240
 rem .\DirectZobExe.exe --scene .\resources\carTest.dzs --width 1920 --height 1080
+rem .\DirectZobExe.exe --scene .\resources\testGround.dzs --width 1320 --height 768

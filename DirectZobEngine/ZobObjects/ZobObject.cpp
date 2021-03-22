@@ -842,14 +842,14 @@ inline ZobVector3 ZobObject::GetLocalRotation() const
 	return v;
 }
 
-inline ZobVector3 ZobObject::GetLocalPosition() const
+ZobVector3 ZobObject::GetLocalPosition() const
 {
 	Vector3 p = m_physicComponent->GetLocalTransform().getPosition();
 	ZobVector3 v = ZobVector3(p.x, p.y, p.z);
 	return v;
 }
 
-inline ZobVector3 ZobObject::GetWorldRotation() const
+ZobVector3 ZobObject::GetWorldRotation() const
 {
 	Quaternion q = m_physicComponent->GetWorldTransform().getOrientation();
 	ZobVector3 v = ZobMatrix4x4::QuaternionToEuler(q.x, q.y, q.z, q.w);

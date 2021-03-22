@@ -78,11 +78,13 @@ void ZobInputManager::Map()
 	m_map->MapFloat(RightStickX, keyboardId, gainput::Key8);
 	m_map->MapFloat(RightStickY, keyboardId, gainput::Key4);
 	m_map->MapFloat(LeftStickY, keyboardId, gainput::Key6);
+	m_map->MapBool(Handbrake, keyboardId, gainput::KeySpace);
 	m_map->MapBool(WireFrame, keyboardId, gainput::KeyW);
 	m_map->MapBool(Gizmos, keyboardId, gainput::KeyD);
 	m_map->MapBool(Quit, keyboardId, gainput::KeyEscape);
 	m_map->MapBool(NextCamera, keyboardId, gainput::KeyC);
-
+	;
+	
 	m_map->MapBool(SwitchFPS, keyboardId, gainput::KeyF4);
 	m_map->MapBool(WireFrame, keyboardId, gainput::KeyF5);
 	m_map->MapBool(Gizmos, keyboardId, gainput::KeyF6);
@@ -106,9 +108,9 @@ void ZobInputManager::Map()
 		m_map->SetDeadZone(gainput::PadButtonRightStickX, m_deadZone);
 		m_map->SetDeadZone(gainput::PadButtonRightStickY, m_deadZone);
 	
-		m_map->MapBool(NextCamera, padId, gainput::PadButtonA);
-		m_map->MapBool(WireFrame, padId, gainput::PadButtonB);
-
+		m_map->MapBool(Handbrake, padId, gainput::PadButtonA);
+		m_map->MapBool(NextCamera, padId, gainput::PadButtonB);
+		m_map->MapBool(WireFrame, padId, gainput::PadButtonL1);
 		m_map->MapBool(Gizmos, padId, gainput::PadButtonX);
 		//m_map->MapBool(buttonY, padId, gainput::PadButtonY);
 	}

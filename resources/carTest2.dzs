@@ -21,6 +21,13 @@
                 </Box>
             </RigidBody>
         </Physic>
+        <ZobObject name="rearCamera" guid="3002004" type="camera">
+            <Position x="-1.03768e-05" y="1.92052" z="-4.78713" />
+            <Rotation x="15.0562" y="-2.54852e-05" z="-2.40366e-05" />
+            <Scale x="1" y="1" z="1" />
+            <Controller>5</Controller>
+            <Fov>70.00</Fov>
+        </ZobObject>
         <ZobObject name="FrontCamera" guid="3067491" type="camera">
             <Position x="-0.0774962" y="0.0879834" z="1.94431" />
             <Rotation x="0" y="0" z="0" />
@@ -37,7 +44,7 @@
         </ZobObject>
         <ZobObject name="carMesh" guid="3066531" type="mesh">
             <Position x="0.000285507" y="-0.698991" z="0.000250807" />
-            <Rotation x="180" y="0.000195336" z="180" />
+            <Rotation x="0" y="180" z="0" />
             <Scale x="1" y="1" z="1" />
             <Mesh name="Peugeot_405" file="GLX_400.obj" path="_cars/GLX-400-OBJ/">
                 <RenderOptions>
@@ -47,14 +54,7 @@
                     <CullMode>Clockwise</CullMode>
                 </RenderOptions>
             </Mesh>
-        </ZobObject>
-        <ZobObject name="rearCamera" guid="3002004" type="camera">
-            <Position x="-1.03768e-05" y="1.92052" z="-4.78713" />
-            <Rotation x="15.0562" y="-2.54852e-05" z="-2.40366e-05" />
-            <Scale x="1" y="1" z="1" />
-            <Controller>5</Controller>
-            <Fov>70.00</Fov>
-        </ZobObject>
+        </ZobObject>		
         <ZobObject name="windshieldCamera" guid="3067492" type="camera">
             <Position x="0.0657781" y="0.632988" z="0.62512" />
             <Rotation x="0" y="0" z="0" />

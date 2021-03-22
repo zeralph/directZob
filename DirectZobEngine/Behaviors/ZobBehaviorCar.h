@@ -18,15 +18,8 @@ class ZobBehaviorCar : public ZobBehavior
 		ZobBehaviorCar(ZobObject* zobObject, TiXmlElement* node);
 		void CheckGroundCollisions();
 		void CheckEnvironmentCollision();
-		float m_motorForce;
-		float m_breakForce;
-		float m_lineaVelocityMS;
-		float m_mass;
-		float m_heightAboveGround;
-		bool m_drifting;	
-		float m_steeringMaxAngle;
-		bool m_bRear;
-		ZobVector3 m_direction;
+		void UpdateInputs();
+
 		ZobVector3 m_lastGroundPosition;
 		ZobVector3 m_lastGroundNormal;
 
@@ -34,4 +27,19 @@ class ZobBehaviorCar : public ZobBehavior
 		ZobVector3 m_lastCollDirection;
 		ZobVector3 m_lastCollNormal;
 		ZobVector3 m_lastCollRebound;
+		bool m_hadCollision;
+		float m_heightAboveGround;
+		float m_angle;
+		float m_angularvelocity;
+		float m_steerangle;
+		float m_throttle;
+		float m_brake;
+		float m_inertia;
+		ZobVector3 m_velocityWorld;
+		ZobVector3 m_accelerationWorld;
+		float m_speed_ms;
+		bool m_handBrake;
+
+		float m_mass;
+		float m_maxGrip;	/* maximum (normalised) friction force, =diameter of friction circle */
 };

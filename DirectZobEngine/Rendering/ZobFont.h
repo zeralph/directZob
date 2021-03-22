@@ -17,7 +17,8 @@ public:
 	ZobFont(const u8* data, int width, int height, int nbCharWidth, int nbCharHeight);
 	ZobFont(const float* data, int width, int height, int nbCharWidth, int nbCharHeight);
 	~ZobFont();
-
+	int GetFontCharWidth() const { return m_charWidth; }
+	int GetFontCharHeight() const { return m_charHeight; }
 	const ZobMaterial* GetChar(char c) const;
 
 private:

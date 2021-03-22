@@ -26,6 +26,7 @@ public:
 		NextLightMode,
 		SwitchBuffers,
 		SwitchFPS,
+		Handbrake,
 	};
 
 	ZobInputManager(int width, int height);
