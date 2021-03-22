@@ -1,0 +1,109 @@
+<?xml version="1.0" ?>
+<Scene>
+    <Globals>
+        <AmbientColor r="102" g="102" b="102" />
+        <AmbientIntensity>0.80</AmbientIntensity>
+        <FogColor r="63" g="149" b="255" />
+        <ClearColor r="63" g="149" b="255" />
+        <FogDensity>2.00</FogDensity>
+        <FogDistance>20.00</FogDistance>
+        <FogType>none</FogType>
+    </Globals>
+    <ZobObject name="testGround.obj" guid="3001002" type="mesh">
+        <Position x="0" y="0" z="0" />
+        <Rotation x="0" y="0" z="0" />
+        <Scale x="1" y="1" z="1" />
+        <Mesh name="testGround.obj" file="testGround.obj" path="/">
+            <RenderOptions>
+                <Lighting>Phong</Lighting>
+                <ZBuffer>True</ZBuffer>
+                <Transparency>False</Transparency>
+                <CullMode>Clockwise</CullMode>
+            </RenderOptions>
+        </Mesh>
+        <Physic>
+            <RigidBody type="0" active="1">
+                <StaticMesh name="testGround.obj" path="" file="testGround.obj" layers="1" scale_with_object="1">
+                    <Material bounciness="0.000000" friction_coeff="0.000000" mass_density="0.000000" rolling_resistance="0.000000" />
+                </StaticMesh>
+            </RigidBody>
+        </Physic>
+    </ZobObject>
+    <ZobObject name="Light_1" guid="3048796" type="light">
+        <Position x="0" y="10" z="0" />
+        <Rotation x="45" y="45" z="45" />
+        <Scale x="1" y="1" z="1" />
+        <Color r="252" g="212" b="64" />
+        <Intensity>5.00</Intensity>
+        <FallOffDistance>100.00</FallOffDistance>
+        <Type>directional</Type>
+    </ZobObject>
+    <ZobObject name="car" guid="3001003">
+        <Position x="0" y="0" z="0" />
+        <Rotation x="0" y="0" z="0" />
+        <Scale x="1" y="1" z="1" />
+        <Behavior type="1" />
+        <Physic>
+            <RigidBody type="1" active="1">
+                <Box halfExtends_x="1.000000" halfExtends_y="0.700000" halfExtends_z="2.500000" layers="4" scale_with_object="1">
+                    <Material bounciness="0.000000" friction_coeff="0.000000" mass_density="1000.000000" rolling_resistance="0.000000" />
+                </Box>
+            </RigidBody>
+        </Physic>
+        <ZobObject name="carMesh" guid="3066531" type="mesh">
+            <Position x="0.000285507" y="-0.698991" z="0.000250807" />
+            <Rotation x="180" y="0.000195336" z="180" />
+            <Scale x="1" y="1" z="1" />
+            <Mesh name="Peugeot_405" file="GLX_400.obj" path="_cars/GLX-400-OBJ/">
+                <RenderOptions>
+                    <Lighting>Phong</Lighting>
+                    <ZBuffer>True</ZBuffer>
+                    <Transparency>False</Transparency>
+                    <CullMode>Clockwise</CullMode>
+                </RenderOptions>
+            </Mesh>
+        </ZobObject>
+        <ZobObject name="rearCamera" guid="3002004" type="camera">
+            <Position x="-2.37338e-05" y="1.92052" z="-4.78713" />
+            <Rotation x="5.87855e-38" y="-3.23049e-38" z="3.18648e-37" />
+            <Scale x="1" y="1" z="1" />
+            <Controller>5</Controller>
+            <Fov>70.00</Fov>
+        </ZobObject>
+        <ZobObject name="FrontCamera" guid="3067491" type="camera">
+            <Position x="-0.0774962" y="0.0879834" z="1.94431" />
+            <Rotation x="0" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+            <Controller>0</Controller>
+            <Fov>70.00</Fov>
+        </ZobObject>
+        <ZobObject name="topCamera" guid="3067495" type="camera">
+            <Position x="0.00013119" y="59.1781" z="-1.00273" />
+            <Rotation x="-89.4191" y="-79.775" z="-179.72" />
+            <Scale x="1" y="1" z="1" />
+            <Controller>0</Controller>
+            <Fov>45.00</Fov>
+        </ZobObject>
+        <ZobObject name="windshieldCamera" guid="3067492" type="camera">
+            <Position x="0.0657781" y="0.632988" z="0.62512" />
+            <Rotation x="0" y="0" z="0" />
+            <Scale x="1" y="1" z="1" />
+            <Controller>0</Controller>
+            <Fov>80.00</Fov>
+        </ZobObject>
+        <ZobObject name="sideCamera" guid="3067493" type="camera">
+            <Position x="-5.88038" y="1.89999" z="6.77647" />
+            <Rotation x="-176.34" y="35.9339" z="-176.794" />
+            <Scale x="1" y="1" z="1" />
+            <Controller>0</Controller>
+            <Fov>45.00</Fov>
+        </ZobObject>
+        <ZobObject name="orbitalCamera" guid="3067494" type="camera">
+            <Position x="-3.42939" y="-1.21758" z="-10.1805" />
+            <Rotation x="-6.46644" y="18.6166" z="-8.50237e-05" />
+            <Scale x="1" y="1" z="1" />
+            <Controller>2</Controller>
+            <Fov>45.00</Fov>
+        </ZobObject>
+    </ZobObject>
+</Scene>

@@ -107,20 +107,14 @@ void ZobHUDManager::UpdateObjects(const Camera* camera, Core::Engine* engine, fl
 	for (std::vector<HUDElement>::const_iterator iter = m_hudElements.begin(); iter != m_hudElements.end(); iter++)
 	{
 		HUDElement e = *iter;
-		float w = engine->GetBufferData()->width;
-		float h = engine->GetBufferData()->height;
-		//CreateQuad(e.x * w, e.y * h, e.w * w, e.h * h, e.mat);
-		float xMin = e.x * w;
-		float yMin = e.y * h;
-		float xMax = xMin + e.w * w;
-		float yMax = yMin + e.w * h;
-
-		//xMin = e.x * w;
-		//yMin = e.y * h;
-		//xMax = xMin + 8;
-		//yMax = yMin + 8;
-
-
+		float xMin;
+		float yMin;
+		float xMax;
+		float yMax;
+		xMin = e.x;
+		yMin = e.y;
+		xMax = xMin + e.w;
+		yMax = yMin + e.h;
 		CreateQuad(xMin, yMin, xMax, yMax, &e);
 	}
 }
@@ -200,7 +194,7 @@ bool ZobHUDManager::CreateQuad(float xMin, float yMin, float xMax, float yMax, H
 	return true;
 }
 
-void ZobHUDManager::Print(float x, float y, float w, float h, const ZobVector3* color, const char* fmt, ...)
+void ZobHUDManager::Print(eHudUnit u, float x, float y, float fontSize, const ZobVector3* color, const char* fmt, ...)
 {
 	if (m_font && m_started) //if (m_engine->ShowText() && m_data != NULL)
 	{
@@ -213,11 +207,11 @@ void ZobHUDManager::Print(float x, float y, float w, float h, const ZobVector3* 
 		buf.resize(size);
 		_vsnprintf((char*)buf.data(), size, fmt, vl);
 		va_end(vl);
-		PrintInternal(x, y, w, h, color, buf);
+		PrintInternal(u, x, y, fontSize, color, buf);
 	}
 }
 
-void ZobHUDManager::Print(float x, float y, float w, float h, const char* fmt, ...)
+void ZobHUDManager::Print(eHudUnit u, float x, float y, float fontSize, const char* fmt, ...)
 {
 	if (m_font && m_started) //if (m_engine->ShowText() && m_data != NULL)
 	{
@@ -231,38 +225,49 @@ void ZobHUDManager::Print(float x, float y, float w, float h, const char* fmt, .
 		_vsnprintf((char*)buf.data(), size, fmt, vl);
 		va_end(vl);
 		ZobVector3 color = ZobVector3(0, 0, 0);
-		PrintInternal(x, y, w, h, &color, buf);
+		PrintInternal(u, x, y, fontSize, &color, buf);
 	}
 }
 
-void ZobHUDManager::PrintInternal(float x, float y, float w, float h, const ZobVector3* color, std::string s)
+void ZobHUDManager::PrintInternal(eHudUnit u, float x, float y, float fontSize, const ZobVector3* color, std::string s)
 {
 	if (m_font)
 	{
+		float screenW = DirectZob::GetInstance()->GetEngine()->GetBufferData()->width;
+		float screenH = DirectZob::GetInstance()->GetEngine()->GetBufferData()->height;
 		int horiz = 0;
 		int vert = 0;
 		int size = s.size();
+		if (u == eHudUnit_ratio)
+		{
+			x *= screenW;
+			y *= screenH;
+		}
 		for (size_t i = 0; i < size; i++)
 		{
 			char c = s[i];
+			float w = m_font->GetFontCharHeight() * fontSize;
+			float h = m_font->GetFontCharHeight() * fontSize;
 			if (c != '\0')
 			{
 				if (c != '\n')
 				{
 					HUDElement e;
 					e.color = color;
-					e.x = x + w * horiz;
-					e.y = y + h * vert;
+					e.x = x + horiz;
+					e.y = y + vert;
 					e.w = w;
 					e.h = h;
+					e.unit = u;
+					e.c = c;
 					e.mat = m_font->GetChar(c);
 					m_hudElements.push_back(e);
-					horiz++;
+					horiz+=w;
 				}
 				else
 				{
 					horiz = 0;
-					vert++;
+					vert+=h;
 				}
 			}
 		}
