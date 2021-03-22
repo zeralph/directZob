@@ -12,6 +12,7 @@ public:
 	{
 		eBehavior_none = 0,
 		eBehavior_car,
+		eBehavior_menu,
 	};
 	virtual ~ZobBehavior() {};
 	virtual TiXmlNode*	SaveUnderNode(TiXmlNode* node)=0;

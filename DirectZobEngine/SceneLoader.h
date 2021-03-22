@@ -20,11 +20,13 @@ public:
 	static bool CanFastSave() { return m_path.length() > 0 && m_file.length() > 0; }
 	static void NewScene();
 	static void UnloadScene();
+	static void Update();
 	static const std::string& GetResourcePath() { return m_path; };
 	static void LoadZobObject(std::string& path, std::string& file);
 	static void LoadZobObject(std::string& fullPath, ZobObject* parent = NULL);
 
 private:
+	static void LoadSceneInternal();
 	static void LoadMesh(TiXmlElement* node);
 	static void CleanPath(std::string &path);
 	static void LoadZobObject(TiXmlElement* node, ZobObject* parent, const std::string* factoryPath);
@@ -32,4 +34,7 @@ private:
 	static std::string m_path;
 	static std::string m_file;
 	static std::vector<Mesh*> m_meshes;
+	static std::string m_nextScenePath;
+	static std::string m_nextSceneName;
+	static bool m_loadNextScene;
 };

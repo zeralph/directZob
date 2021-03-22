@@ -3,7 +3,31 @@
 
 std::string SceneLoader::m_path = "";
 std::string SceneLoader::m_file = "";
+std::string SceneLoader::m_nextScenePath = "";
+std::string SceneLoader::m_nextSceneName = "";
 char tmpBuffer[256];
+bool SceneLoader::m_loadNextScene = false;
+
+void SceneLoader::Update()
+{
+	if (m_loadNextScene)
+	{
+		m_loadNextScene = false;
+		m_path = m_nextScenePath;
+		CleanPath(m_path);
+		m_file = m_nextSceneName;
+		LoadSceneInternal();
+		m_nextScenePath = "";
+		m_nextSceneName = "";
+	}
+}
+
+void SceneLoader::LoadScene(std::string& path, std::string& file)
+{
+	m_nextScenePath = path;
+	m_nextSceneName = file;
+	m_loadNextScene = true;
+}
 
 void SceneLoader::LoadMesh(TiXmlElement* node)
 {
@@ -104,7 +128,7 @@ void SceneLoader::UnloadScene()
 	Engine* engine = DirectZob::GetInstance()->GetEngine();
 	engine->Stop();
 	hudManager->Stop();
-	DirectZob::GetInstance()->SleepMS(1000);
+	//DirectZob::GetInstance()->SleepMS(1000);
 	zobObjectManager->UnloadAll();
 	meshManager->UnloadAll();
 	materialManager->UnloadAll();
@@ -125,14 +149,11 @@ void SceneLoader::NewScene()
 	DirectZob::RemoveIndent();
 }
 
-void SceneLoader::LoadScene(std::string& path, std::string& file)
+void SceneLoader::LoadSceneInternal()
 {
-	m_path = path;
-	CleanPath(m_path);
-	m_file = file;
 	DirectZob::AddIndent();
-	DirectZob::LogWarning("WORKSPACE PATH : %s", path.c_str());
-	DirectZob::LogWarning("loading scene %s", file.c_str());
+	DirectZob::LogWarning("WORKSPACE PATH : %s", m_path.c_str());
+	DirectZob::LogWarning("loading scene %s", m_file.c_str());
 	UnloadScene();
 	DirectZob::GetInstance()->GetLightManager()->ReInitGlobalSettings();
 	MeshManager* meshManager = DirectZob::GetInstance()->GetMeshManager();
@@ -141,7 +162,7 @@ void SceneLoader::LoadScene(std::string& path, std::string& file)
 	float x, y, z, fov, znear, zfar;
 	std::string name, texture, fullPath;
 	TiXmlDocument doc("Scene");
-	fullPath = path + file;
+	fullPath = m_path + m_file;
 	doc.ClearError();
 	doc.LoadFile(fullPath.c_str());
 	if (doc.Error())

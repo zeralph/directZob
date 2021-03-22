@@ -162,6 +162,15 @@ void ZobBehaviorCar::UpdateInputs(float dt)
 	{
 		DirectZob::GetInstance()->GetCameraManager()->SwitchToNextAvailableCamera();
 	}
+
+	//TODO : move me elsewhere
+	if (inputMap->GetBoolIsNew(ZobInputManager::Start))
+	{
+		std::string sceneName = "menu.dzs";
+		std::string scenePath = DirectZob::GetInstance()->GetResourcePath();
+		DirectZob::GetInstance()->LoadScene(scenePath, sceneName);
+		return;
+	}
 }
 
 void ZobBehaviorCar::Update(float dt)

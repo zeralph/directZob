@@ -107,7 +107,9 @@
 				'Behaviors/ZobBehaviorFactory.h',
 				'Behaviors/ZobBehavior.h',
 				'Behaviors/ZobBehaviorCar.h',
-				'Behaviors/ZobBehaviorCar.cpp',				
+				'Behaviors/ZobBehaviorCar.cpp',
+				'Behaviors/ZobBehaviorMenu.h',
+				'Behaviors/ZobBehaviorMenu.cpp',				
             ],
             'conditions': [
                 [

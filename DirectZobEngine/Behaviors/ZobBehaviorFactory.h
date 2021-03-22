@@ -3,6 +3,7 @@
 #include "../tinyxml/tinyxml.h"
 #include "ZobBehavior.h"
 #include "ZobBehaviorCar.h"
+#include "ZobBehaviorMenu.h"
 
 class ZobObject;
 class ZobBehaviorFactory 
@@ -21,6 +22,8 @@ public:
 				{
 				case ZobBehavior::eBehavior_car:
 					return new ZobBehaviorCar(zobObject, node);
+				case ZobBehavior::eBehavior_menu:
+					return new ZobBehaviorMenu(zobObject, node);
 				default:
 				case ZobBehavior::eBehavior_none:
 					return NULL;

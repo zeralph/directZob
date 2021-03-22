@@ -1,0 +1,25 @@
+<?xml version="1.0" ?>
+<Scene>
+    <Globals>
+        <AmbientColor r="102" g="102" b="102" />
+        <AmbientIntensity>0.80</AmbientIntensity>
+        <FogColor r="63" g="149" b="255" />
+        <ClearColor r="63" g="149" b="255" />
+        <FogDensity>2.00</FogDensity>
+        <FogDistance>20.00</FogDistance>
+        <FogType>none</FogType>
+    </Globals>
+    <ZobObject name="newObject_4" guid="3001002">
+        <Position x="0" y="0" z="0" />
+        <Rotation x="0" y="0" z="0" />
+        <Scale x="1" y="1" z="1" />
+		<Behavior type="2" />
+    </ZobObject>
+    <ZobObject name="Fixed_camera_1" guid="3002003" type="camera">
+        <Position x="0" y="5" z="0" />
+        <Rotation x="0" y="0" z="0" />
+        <Scale x="1" y="1" z="1" />
+        <Controller>0</Controller>
+        <Fov>45.00</Fov>
+    </ZobObject>
+</Scene>

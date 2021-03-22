@@ -27,6 +27,8 @@ public:
 		SwitchBuffers,
 		SwitchFPS,
 		Handbrake,
+		Start,
+		Select,
 	};
 
 	ZobInputManager(int width, int height);

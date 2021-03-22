@@ -190,6 +190,7 @@ int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUp
 	g_render_mutex.lock();
 	int state=0;
 	m_fps = 1000.0f / m_frameTime;
+	SceneLoader::Update();
 	if(m_initialized && m_engine->Started())
 	{
 #ifdef WINDOWS
@@ -267,11 +268,8 @@ int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUp
 			}
 		}
 		else
-		{
-			if (m_text)
-			{
-				m_hudManager->Print(ZobHUDManager::eHudUnit_ratio, 0.5f, 0.5f, 5, &color, "WARNING : %s", "NO CAMERA");
-			}
+		{	
+			m_hudManager->Print(ZobHUDManager::eHudUnit_ratio, 0.5f, 0.5f, 5, &color, "WARNING : %s", "NO CAMERA");
 		}
 		m_hudManager->Print(ZobHUDManager::eHudUnit_ratio, 0.01f, 0.01f, 1, &color, "Triangles : %i", m_engine->GetNbDrawnTriangles());
 		color = ZobVector3(0, 1, 0);
