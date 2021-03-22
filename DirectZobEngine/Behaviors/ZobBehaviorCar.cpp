@@ -60,10 +60,43 @@ void ZobBehaviorCar::Init()
 	m_heightAboveGround = 0.9f;
 	m_handBrake = false;
 	m_velocityWorld = ZobVector3(0, 0, 0);
+	m_hadCollision = false;
 }
 
 void ZobBehaviorCar::CheckEnvironmentCollision()
 {
+	ZobPhysicComponent* zc = m_zobObject->m_physicComponent;
+	ZobPhysicComponent::collision* coll = zc->GetLastCollision();
+	if (!coll->handled)
+	{
+		if (coll->contactType == ZobPhysicComponent::eContactType::ContactStart)
+		{
+			if ((coll->collisionLayer & ZobPhysicComponent::eLayer_wall))
+			{
+				m_lastCollPosition = coll->collisionWorldPosition;
+				m_lastCollDirection = coll->collisionWorldDirection;
+				m_lastCollNormal = coll->collisionWorldNormal;
+				m_hadCollision = true;
+				m_lastCollRebound = m_zobObject->GetWorldPosition() - m_lastCollPosition;
+				m_lastCollRebound.Normalize();
+				ZobVector3 z = ZobVector3::Cross(&m_lastCollRebound, &m_lastCollNormal);
+				z.Normalize();
+				ZobVector3 q = ZobVector3::Cross(&m_lastCollRebound, &z);
+				m_lastCollRebound = q;
+				m_lastCollRebound.Normalize();
+				//m_lastCollRebound.Mul(coll->penetration);
+			}
+			else if ((coll->collisionLayer & ZobPhysicComponent::eLayer_objects))
+			{
+				//other cars
+			}
+		}
+		else if (coll->contactType == ZobPhysicComponent::eContactType::ContactExit)
+		{
+			m_hadCollision = false;
+		}
+		coll->Reset();
+	}
 }
 
 void ZobBehaviorCar::CheckGroundCollisions()
@@ -185,13 +218,13 @@ void ZobBehaviorCar::Update(float dt)
 		if (velocity.z == 0)		// TODO: fix singularity
 			rot_angle = 0;
 		else
-			rot_angle = atan2(yawspeed, velocity.z);
+			rot_angle = atan2(yawspeed, fabsf(velocity.z));
 
 		// Calculate the side slip angle of the car (a.k.a. beta)
 		if (velocity.x == 0)		// TODO: fix singularity
 			sideslip = 0;
 		else
-			sideslip = atan2(velocity.x, velocity.z);
+			sideslip = atan2(velocity.x, fabsf(velocity.z));
 
 		// Calculate slip angles for front and rear wheels (a.k.a. alpha)
 		slipanglefront = sideslip + rot_angle - m_steerangle;
@@ -249,7 +282,7 @@ void ZobBehaviorCar::Update(float dt)
 
 		// Acceleration
 
-			// Newton F = m.a, therefore a = F/m
+		// Newton F = m.a, therefore a = F/m
 		acceleration.x = force.x / m_mass;
 		acceleration.y = 0; //9.81
 		acceleration.z = force.z / m_mass;
@@ -262,12 +295,27 @@ void ZobBehaviorCar::Update(float dt)
 		m_accelerationWorld.z = cs * acceleration.x + sn * acceleration.z;
 		m_accelerationWorld.y = 0;
 		m_accelerationWorld.x = -sn * acceleration.x + cs * acceleration.z;
-		
+
 		// velocity is integrated acceleration
 		//
 		m_velocityWorld.x += dt * m_accelerationWorld.x;
 		m_velocityWorld.y += dt * m_accelerationWorld.y;
 		m_velocityWorld.z += dt * m_accelerationWorld.z;
+
+		//collision
+		if (m_hadCollision)
+		{
+			ZobVector3 z = m_velocityWorld;
+			z.Normalize();
+			float f = 1.0f - ZobVector3::Dot(&z, &m_lastCollRebound);
+			z = ZobVector3::Cross(&z, &m_lastCollRebound);
+			m_velocityWorld.z = m_lastCollRebound.z * fmaxf(m_speed_ms, 2.0f);
+			m_velocityWorld.x = m_lastCollRebound.x * fmaxf(m_speed_ms, 2.0f);
+			m_accelerationWorld.x = 0;
+			m_accelerationWorld.y = 0;
+			m_accelerationWorld.z = 0;
+			angular_acceleration = -z.y / fabsf(z.y) * fabsf(f) * 10.0f * fmaxf(m_speed_ms, 2.0f);
+		}
 
 		if(m_speed_ms < 1)
 		{
@@ -333,38 +381,30 @@ TiXmlNode* ZobBehaviorCar::SaveUnderNode(TiXmlNode* node)
 
 void ZobBehaviorCar::DrawGizmos(const Camera* camera, const ZobVector3* position, const ZobVector3* rotation) const
 {
+	//return;
 	DirectZob* directZob = DirectZob::GetInstance();
 	if (directZob->IsPhysicPlaying())
 	{
 		Engine* e = DirectZob::GetInstance()->GetEngine();
 		ZobVector3 p = m_zobObject->GetWorldPosition();
 		ZobVector3 v = m_lastGroundNormal;
-		v.Mul(1.0f);
-		v.x += p.x;
-		v.y += p.y;
-		v.z += p.z;
-		e->QueueLine(camera, &p, &v, 0xFFFFFF, true, true);
-		/*
+		
 		p = m_lastCollPosition;
 		v = m_lastCollDirection;
-		v.Mul(10.0f);
 		v = v + p;
 		e->QueueLine(camera, &p, &v, 0x00FFFF, true, true);
 		ZobMatrix4x4 m = ZobMatrix4x4();
 		m.AddTranslation(m_lastCollPosition);
-		e->QueueSphere(camera, &m, 1, 0xFF0000, false, false);
-
-		p = m_lastCollPosition;
-		v = m_lastCollRebound;
-		v = v + p;
-		v.Mul(10.0f);
-		e->QueueLine(camera, &p, &v, 0xFF00FF, true, true);
-
+		e->QueueSphere(camera, &m, 0.1f, 0xFF0000, false, false);
 		p = m_lastCollPosition;
 		v = m_lastCollNormal;
 		v = v + p;
-		v.Mul(10.0f);
 		e->QueueLine(camera, &p, &v, 0xFFFF00, true, true);
-		*/
+
+		p = m_lastCollPosition;
+		v = m_lastCollRebound;
+
+		v = v + p;
+		e->QueueLine(camera, &p, &v, 0xFFFFFF, true, true);
 	}
 }

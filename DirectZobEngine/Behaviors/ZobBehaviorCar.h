@@ -27,6 +27,7 @@ class ZobBehaviorCar : public ZobBehavior
 		ZobVector3 m_lastCollDirection;
 		ZobVector3 m_lastCollNormal;
 		ZobVector3 m_lastCollRebound;
+		bool m_hadCollision;
 		float m_heightAboveGround;
 		float m_angle;
 		float m_angularvelocity;

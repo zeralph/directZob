@@ -39,6 +39,13 @@ public:
 		eLayer_objects=4,
 	};
 
+	enum eContactType
+	{
+		ContactStart,
+		ContactStay,
+		ContactExit
+	};
+
 	struct collision
 	{
 		const ZobPhysicComponent* other;
@@ -46,6 +53,7 @@ public:
 		ZobVector3 collisionWorldNormal;
 		ZobVector3 collisionWorldDirection;
 		ZobPhysicComponent::eLayer collisionLayer;
+		eContactType contactType;
 		float penetration;
 		bool handled;
 		void Reset()
