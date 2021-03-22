@@ -15,6 +15,7 @@ class ZobPhysicsEngine
 public :
 	ZobPhysicsEngine();
 	~ZobPhysicsEngine();
+	void ReInit();
 	void StartUpdatePhysic(float dt);
 	float WaitForUpdatePhysicEnd();
 	RigidBody* CreateRigidBody(const ZobVector3* position, const ZobVector3* orientation);
@@ -28,6 +29,8 @@ public :
 	ZobPhysicComponent* GetZobComponentFromRigidBody(const CollisionBody* rb) const;
 	void DrawGizmos() const;
 private:
+	void Init();
+	void UnInit();
 	void Update(float dt);
 	int GetBodyWorldIndex(const ZobPhysicComponent* b) const;
 	PhysicsCommon m_physicsCommon;

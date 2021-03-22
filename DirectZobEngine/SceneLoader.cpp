@@ -1,5 +1,6 @@
 #include "SceneLoader.h"
 #include "DirectZob.h"
+#include "ZobPhysic/ZobPhysicsEngine.h"
 
 std::string SceneLoader::m_path = "";
 std::string SceneLoader::m_file = "";
@@ -126,6 +127,7 @@ void SceneLoader::UnloadScene()
 	CameraManager* cameraManager = DirectZob::GetInstance()->GetCameraManager();
 	ZobHUDManager* hudManager = DirectZob::GetInstance()->GetHudManager();
 	Engine* engine = DirectZob::GetInstance()->GetEngine();
+	ZobPhysicsEngine* phy = DirectZob::GetInstance()->GetPhysicsEngine();
 	engine->Stop();
 	hudManager->Stop();
 	//DirectZob::GetInstance()->SleepMS(1000);
@@ -134,6 +136,7 @@ void SceneLoader::UnloadScene()
 	materialManager->UnloadAll();
 	lightManager->UnloadAll();
 	cameraManager->UnloadAll();
+//	phy->ReInit(); 
 	DirectZob::RemoveIndent();
 }
 

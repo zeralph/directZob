@@ -10,6 +10,26 @@ static bool sPhysicThreaded = false;
 
 ZobPhysicsEngine::ZobPhysicsEngine()
 {
+    m_contactsListener = NULL;
+    m_world = NULL;
+    UnInit();
+    Init();
+}
+
+ZobPhysicsEngine::~ZobPhysicsEngine()
+{
+    UnInit();
+}
+
+void ZobPhysicsEngine::ReInit()
+{
+    UnInit();
+    Init();
+}
+
+void ZobPhysicsEngine::Init()
+{
+    m_worldSettings.worldName = "World";
     m_world = m_physicsCommon.createPhysicsWorld(m_worldSettings);
     m_world->enableSleeping(false);
     m_contactsListener = new ZobPhysicsContactsListener();
@@ -20,9 +40,18 @@ ZobPhysicsEngine::ZobPhysicsEngine()
     m_world->setIsDebugRenderingEnabled(true);
 }
 
-ZobPhysicsEngine::~ZobPhysicsEngine()
+void ZobPhysicsEngine::UnInit()
 {
-    delete m_contactsListener;
+    if(m_contactsListener)
+    {
+        delete m_contactsListener;
+        m_contactsListener = NULL;
+    }
+    if(m_world)
+    {
+        m_physicsCommon.destroyPhysicsWorld(m_world);
+        m_world = NULL;
+    }
 }
 
 void ZobPhysicsEngine::AddBody(ZobPhysicComponent* c)
@@ -121,7 +150,14 @@ RigidBody* ZobPhysicsEngine::CreateRigidBody(const ZobVector3* position, const Z
 
 void ZobPhysicsEngine::DestroyRigidBody(RigidBody* rb)
 {
-    m_world->destroyRigidBody(rb);
+    //if(m_world->getRigidBody(rb))
+    {
+        m_world->destroyRigidBody(rb);
+    }
+    //else
+    {
+      //  DirectZob::LogError("RIGIDBODY NOT FOUND");
+    }
 }
 
 void ZobPhysicsEngine::DrawGizmos() const

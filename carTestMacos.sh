@@ -1,4 +1,4 @@
 #!/bin/sh
 echo "*** SMOKE TEST ***"
 
-./DirectZobExe --scene ./resources/carTest.dzs --with 640 --height 400
+./DirectZobExe --scene ./resources/menu.dzs --with 640 --height 400
