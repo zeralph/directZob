@@ -9,7 +9,7 @@
 
 ZobHUDManager::ZobHUDManager()
 {
-	m_font = NULL;
+	m_fonts.clear();
 	m_started = false;
 	m_renderOptions.zBuffered = false;
 	m_renderOptions.bTransparency = false;
@@ -57,7 +57,7 @@ ZobHUDManager::~ZobHUDManager()
 	free(m_uvs);
 	free(m_projectedVertices);
 	free(m_normals);
-	delete m_font;
+	DeleteFonts();
 }
 
 //static Texture sTex;
@@ -67,14 +67,36 @@ void ZobHUDManager::Init()
 	std::string p = SceneLoader::GetResourcePath();
 	if (p.length())
 	{
-		p.append("font2.png");
-		m_font = new ZobFont(p, 32, 8);
-		//m_font = new ZobFont("D:\\Git\\directZob\\resources\\font3.png", 16, 14);
+		std::string tex;
+		std::string xml;
+		tex = p;
+		xml = p;
+		tex.append("_fonts/mv_boli_regular_14.png");
+		xml.append("_fonts/mv_boli_regular_14.xml");
+		m_fonts.push_back( new ZobFont(tex, xml));
+		
+		tex = p;
+		xml = p;
+		tex.append("_fonts/mv_boli_regular_32.png");
+		xml.append("_fonts/mv_boli_regular_32.xml");
+		m_fonts.push_back(new ZobFont(tex, xml));
+
+		tex = p;
+		xml = p;
+		tex.append("_fonts/leelawadee_ui_bold_32.png");
+		xml.append("_fonts/leelawadee_ui_bold_32.xml");
+		m_fonts.push_back(new ZobFont(tex, xml));
+
+		tex = p;
+		xml = p;
+		tex.append("_fonts/arial_regular_32.png");
+		xml.append("_fonts/arial_regular_32.xml");
+		m_fonts.push_back(new ZobFont(tex, xml));
 	}
 	else
 	{
-		const u8* data = BaseFont.pixel_data;
-		m_font = new ZobFont(data, BaseFont.width, BaseFont.height, BaseFont.nbCharWidth, BaseFont.nbCharHeight);
+		//const u8* data = BaseFont.pixel_data;
+		//m_font = new ZobFont(data, BaseFont.width, BaseFont.height, BaseFont.nbCharWidth, BaseFont.nbCharHeight);
 	}
 
 }
@@ -82,6 +104,7 @@ void ZobHUDManager::Init()
 void ZobHUDManager::Stop()
 {
 	m_started = false;
+	DeleteFonts();
 	m_hudElements.clear();
 	m_nbDrawnTriangles = 0;
 }
@@ -96,9 +119,18 @@ void ZobHUDManager::PreUpdate()
 {
 }
 
-void ZobHUDManager::UpdateBehavior(float dt)
+void ZobHUDManager::UpdateBehavior(float dt) 
 {
 	
+}
+
+void ZobHUDManager::DeleteFonts()
+{
+	for (std::vector<const ZobFont*>::const_iterator iter = m_fonts.begin(); iter != m_fonts.end(); iter++)
+	{
+		delete (*iter);
+	}
+	m_fonts.clear();
 }
 
 void ZobHUDManager::UpdateObjects(const Camera* camera, Core::Engine* engine, float dt)
@@ -137,23 +169,48 @@ static ZobVector3 scd = ZobVector3(1, 0, 0);
 
 bool ZobHUDManager::CreateQuad(float xMin, float yMin, float xMax, float yMax, HUDElement* elem)
 {
+	float uv_a_x = -1;
+	float uv_a_y = 0;
+
+	float uv_b_x = 0;
+	float uv_b_y = 1;
+
+	float uv_c_x = -1;
+	float uv_c_y = 1;
+
+	float uv_d_x = 0;
+	float uv_d_y = 0;
+	if (elem->glyphe != NULL)
+	{
+		uv_d_x = elem->glyphe->uv_max_x;
+		uv_d_y = -elem->glyphe->uv_max_y;
+
+		uv_b_x = elem->glyphe->uv_max_x;
+		uv_b_y = -elem->glyphe->uv_min_y;
+
+		uv_a_x = elem->glyphe->uv_min_x;
+		uv_a_y = -elem->glyphe->uv_max_y;
+
+		uv_c_x = elem->glyphe->uv_min_x;
+		uv_c_y = -elem->glyphe->uv_min_y;
+	}
 	float z = DirectZob::GetInstance()->GetEngine()->GetBufferData()->zNear + 1.0f;
 	Triangle* t1 = &m_trianglesBuffer[m_nbDrawnTriangles];
 	t1->pc->x = xMin;
 	t1->pc->y = yMin;
 	t1->pc->z = z;
-	t1->uc->x = -1;
-	t1->uc->y = 0;
+	t1->uc->x = uv_c_x;
+	t1->uc->y = uv_c_y;
 	t1->pb->x = xMax;
 	t1->pb->y = yMin;
 	t1->pb->z = z;
-	t1->ub->x = -0;
-	t1->ub->y = 0;
+	t1->ub->x = uv_b_x;
+	t1->ub->y = uv_b_y;
 	t1->pa->x = xMin;
 	t1->pa->y = yMax;
 	t1->pa->z = z;
-	t1->ua->x = -1;
-	t1->ua->y = 1;
+	t1->ua->x = uv_a_x;
+	t1->ua->y = uv_a_y;
 	t1->material = elem->mat;
 	t1->ca->Copy(&elem->color);
 	t1->cb->Copy(&elem->color);
@@ -169,18 +226,18 @@ bool ZobHUDManager::CreateQuad(float xMin, float yMin, float xMax, float yMax, H
 	t2->pc->x = xMax;
 	t2->pc->y = yMin;
 	t2->pc->z = z;
-	t2->uc->x = 0;
-	t2->uc->y = 0;
+	t2->uc->x = uv_b_x;
+	t2->uc->y = uv_b_y;
 	t2->pb->x = xMax;
 	t2->pb->y = yMax;
 	t2->pb->z = z;
-	t2->ub->x = 0;
-	t2->ub->y = 1;
+	t2->ub->x = uv_d_x;
+	t2->ub->y = uv_d_y;
 	t2->pa->x = xMin;
 	t2->pa->y = yMax;
 	t2->pa->z = z;
-	t2->ua->x = -1;
-	t2->ua->y = 1;
+	t2->ua->x = uv_a_x;
+	t2->ua->y = uv_a_y;
 	t2->material = elem->mat;
 	t2->ca->Copy(&elem->color);
 	t2->cb->Copy(&elem->color);
@@ -194,44 +251,31 @@ bool ZobHUDManager::CreateQuad(float xMin, float yMin, float xMax, float yMax, H
 	return true;
 }
 
-void ZobHUDManager::Print(eHudUnit u, float x, float y, float fontSize, const ZobVector3* color, const char* fmt, ...)
+void ZobHUDManager::Print(eHudUnit u, float x, float y, float fontSize, const char* fontName, const ZobVector3* color, const char* fmt, ...)
 {
-	if (m_font && m_started) //if (m_engine->ShowText() && m_data != NULL)
+	if (m_started) //if (m_engine->ShowText() && m_data != NULL)
 	{
-		//size_t size = strlen(fmt) + 1;
-		va_list vl;
-		va_start(vl, fmt);
-		int size = _vscprintf(fmt, vl);
-		std::string buf;
-		buf.reserve(size + 1);
-		buf.resize(size);
-		_vsnprintf((char*)buf.data(), size, fmt, vl);
-		va_end(vl);
-		PrintInternal(u, x, y, fontSize, color, buf);
+		const ZobFont* f = GetFont(fontName);
+		if (f)
+		{
+			//size_t size = strlen(fmt) + 1;
+			va_list vl;
+			va_start(vl, fmt);
+			int size = _vscprintf(fmt, vl);
+			std::string buf;
+			buf.reserve(size + 1);
+			buf.resize(size);
+			_vsnprintf((char*)buf.data(), size, fmt, vl);
+			va_end(vl);
+			PrintInternal(u, x, y, fontSize, f, color, buf);
+		}
 	}
 }
 
-void ZobHUDManager::Print(eHudUnit u, float x, float y, float fontSize, const char* fmt, ...)
-{
-	if (m_font && m_started) //if (m_engine->ShowText() && m_data != NULL)
-	{
-		size_t size = strlen(fmt) + 1;
-		va_list vl;
-		va_start(vl, fmt);
-		//int size = _vscprintf(fmt, vl);
-		std::string buf;
-		buf.reserve(size + 1);
-		buf.resize(size);
-		_vsnprintf((char*)buf.data(), size, fmt, vl);
-		va_end(vl);
-		ZobVector3 color = ZobVector3(0, 0, 0);
-		PrintInternal(u, x, y, fontSize, &color, buf);
-	}
-}
 
-void ZobHUDManager::PrintInternal(eHudUnit u, float x, float y, float fontSize, const ZobVector3* color, std::string s)
+void ZobHUDManager::PrintInternal(eHudUnit u, float x, float y, float fontSize, const ZobFont* font, const ZobVector3* color, std::string s)
 {
-	if (m_font)
+	if (font)
 	{
 		float screenW = DirectZob::GetInstance()->GetEngine()->GetBufferData()->width;
 		float screenH = DirectZob::GetInstance()->GetEngine()->GetBufferData()->height;
@@ -246,30 +290,50 @@ void ZobHUDManager::PrintInternal(eHudUnit u, float x, float y, float fontSize, 
 		for (size_t i = 0; i < size; i++)
 		{
 			char c = s[i];
-			float w = m_font->GetFontCharHeight() * fontSize;
-			float h = m_font->GetFontCharHeight() * fontSize;
 			if (c != '\0')
 			{
 				if (c != '\n')
 				{
+					if (c == ' ')
+					{
+						int u = 0;
+						u++;
+					}
 					HUDElement e;
+					e.scaleX = fontSize;
+					e.scaleY = fontSize;
+					const ZobFont::FontGlyphe* fg = font->GetChar(c);
 					e.color = color;
-					e.x = x + horiz;
-					e.y = y + vert;
-					e.w = w;
-					e.h = h;
+					e.x = x + horiz + fg->offsetX * fontSize;
+					e.y = y + vert + fg->offsetY * fontSize;
+					e.w = fg->w * fontSize;
+					e.h = fg->h * fontSize;
 					e.unit = u;
 					e.c = c;
-					e.mat = m_font->GetChar(c);
+					e.glyphe = font->GetChar(c);
+					assert(e.glyphe);
+					e.mat = e.glyphe->mat;
 					m_hudElements.push_back(e);
-					horiz+=w;
+					horiz+= fg->width * fontSize;
 				}
 				else
 				{
 					horiz = 0;
-					vert+=h;
+					vert+= font->GetHeight() * fontSize;
 				}
 			}
 		}
 	}
+}
+
+const ZobFont* ZobHUDManager::GetFont(const char* fontName) const
+{
+	for (std::vector<const ZobFont*>::const_iterator iter = m_fonts.begin(); iter != m_fonts.end(); iter++)
+	{
+		if (strcmp((*iter)->GetName(), fontName) == 0)
+		{
+			return (*iter);
+		}
+	}
+	return NULL;
 }

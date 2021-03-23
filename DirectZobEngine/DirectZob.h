@@ -59,7 +59,7 @@ public :
 	void					StartPhysic() { m_physicStarted = true; };
 	void					StopPhysic(bool reset);
 	inline bool				IsPhysicPlaying() const { return m_physicStarted; }
-	void					Init(int width, int height, bool bEditorMode);
+	void					Init(mfb_window* window, int width, int height, bool bEditorMode);
 	void					LoadScene(std::string& path, std::string& file);
 	void					LoadZobObject(std::string& path, std::string& file);
 	void					Unload();
@@ -67,13 +67,14 @@ public :
 	void					SaveScene();
 	void					NewScene();
 	bool					CanFastSave();
+	void					Exit();
 	void					Resize(int width, int height);
 	const float				GetFps() const { return m_fps; };
 	const float				GetRenderTime() const { return m_renderTime; };
 	const float				GetGeometryTime() const { return m_geometryTime; };
 	const float				GetFrameTime() const { return m_frameTime; };
 	const float				GetCopyTime() const { return m_copyTime; };
-	int						RunAFrame(mfb_window* window, engineCallback = NULL, DirectZob::engineCallback OnQueuing = NULL);
+	int						RunAFrame(engineCallback = NULL, DirectZob::engineCallback OnQueuing = NULL);
 	int						Run( void func(void) );
 	int						GetBufferDataLenght() const { return m_engine->GetBufferData()->size; }
 	const uint*				GetBufferData() const { return m_engine->GetBufferData()->buffer; }
@@ -110,7 +111,7 @@ private:
 	void					WaitToTargetFrameTime(float dt);
 	
 private:
-	
+	mfb_window* m_window;
 	Events* m_events = NULL;
 	MaterialManager* m_materialManager = NULL;
 	MeshManager* m_meshManager = NULL;

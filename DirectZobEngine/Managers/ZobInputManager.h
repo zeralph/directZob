@@ -29,6 +29,10 @@ public:
 		Handbrake,
 		Start,
 		Select,
+		MenuUp,
+		MenuLeft,
+		MenuRight,
+		MenuDown,
 	};
 
 	ZobInputManager(int width, int height);

@@ -34,6 +34,7 @@ DirectZob::DirectZob()
 	m_initialized = false;
 	DirectZob::singleton= this; 
 	m_frameTime = 1.0f;
+	m_window = NULL;
 }
 
 DirectZob::~DirectZob()
@@ -126,8 +127,9 @@ bool DirectZob::CanFastSave()
 	return SceneLoader::CanFastSave();
 }
 
-void DirectZob::Init(int width, int height, bool bEditorMode)
+void DirectZob::Init(mfb_window* window, int width, int height, bool bEditorMode)
 {
+	m_window = window;
 	g_isInEditorMode = bEditorMode;
 	m_events = new Events();
 	DirectZob::LogInfo("Init engine");
@@ -180,7 +182,7 @@ int DirectZob::RunInternal(void func(void))
 	}
 }
 
-int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUpdated /*=NULL*/, DirectZob::engineCallback OnQueuing /*=NULL*/)
+int DirectZob::RunAFrame(DirectZob::engineCallback OnSceneUpdated /*=NULL*/, DirectZob::engineCallback OnQueuing /*=NULL*/)
 {
 	OPTICK_EVENT();
 	ZobVector3 color = ZobVector3(1, 1, 1);
@@ -195,7 +197,7 @@ int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUp
 	{
 #ifdef WINDOWS
 		HWND hWnd = 0;
-		SWindowData* window_data = (SWindowData*)window;
+		SWindowData* window_data = (SWindowData*)m_window;
 		if (window_data)
 		{
 			SWindowData_Win* window_data_win = (SWindowData_Win*)window_data->specific;
@@ -269,17 +271,17 @@ int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUp
 		}
 		else
 		{	
-			m_hudManager->Print(ZobHUDManager::eHudUnit_ratio, 0.5f, 0.5f, 5, &color, "WARNING : %s", "NO CAMERA");
+			m_hudManager->Print(ZobHUDManager::eHudUnit_ratio, 0.5f, 0.5f, 2, "Arial", &color, "WARNING : %s", "NO CAMERA");
 		}
-		m_hudManager->Print(ZobHUDManager::eHudUnit_ratio, 0.01f, 0.01f, 1, &color, "Triangles : %i", m_engine->GetNbDrawnTriangles());
+		m_hudManager->Print(ZobHUDManager::eHudUnit_ratio, 0.01f, 0.01f, 1, "MV Boli", &color, "Triangles : %i", m_engine->GetNbDrawnTriangles());
 		color = ZobVector3(0, 1, 0);
 		if (m_frameTime <= fpsTargets[sTargetMSPerFrameIdx])
 		{
 			ZobVector3 color = ZobVector3(1, 0, 0);
 		}
-		m_hudManager->Print(ZobHUDManager::eHudUnit_ratio, 0.01f, 0.04f, 1, &color, "render : %03i, geom : %03i, phys : %03i, cpy : %03i, tot : %03i, FPS : %03i", (int)m_renderTime, (int)m_geometryTime, (int)m_physicTime, (int)m_copyTime, (int)m_frameTime, (int)m_fps);
+		m_hudManager->Print(ZobHUDManager::eHudUnit_ratio, 0.01f, 0.04f, 1, "MV Boli", &color, "render : %03i, geom : %03i, phys : %03i, cpy : %03i, tot : %03i, FPS : %03i", (int)m_renderTime, (int)m_geometryTime, (int)m_physicTime, (int)m_copyTime, (int)m_frameTime, (int)m_fps);
 		color = ZobVector3(1, 1, 1);
-		m_hudManager->Print(ZobHUDManager::eHudUnit_ratio, 0.01f, 0.07f, 1, &color, "Controller LX : %.2f, LY  : %.2f, RX : %.2f, RY : %.2f, LT : %.2f, RT : %.2f",
+		m_hudManager->Print(ZobHUDManager::eHudUnit_ratio, 0.01f, 0.07f, 1, "MV Boli", &color, "Controller LX : %.2f, LY  : %.2f, RX : %.2f, RY : %.2f, LT : %.2f, RT : %.2f",
 			m_inputManager->GetMap()->GetFloat(ZobInputManager::LeftStickX), 
 			m_inputManager->GetMap()->GetFloat(ZobInputManager::LeftStickY),
 			m_inputManager->GetMap()->GetFloat(ZobInputManager::RightStickX),
@@ -296,7 +298,7 @@ int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUp
 		}
 		if (m_inputManager->GetMap()->GetBoolIsNew(ZobInputManager::Quit))
 		{
-			mfb_close(window);
+			Exit();
 		}
 		if (m_inputManager->GetMap()->GetBoolIsNew(ZobInputManager::SwitchFPS))
 		{
@@ -316,6 +318,11 @@ int DirectZob::RunAFrame(mfb_window* window, DirectZob::engineCallback OnSceneUp
 	m_engine->UpdateEditorBitmapData();
 	g_render_mutex.unlock();
 	return state;
+}
+
+void DirectZob::Exit()
+{
+	mfb_close(m_window);
 }
 
 void DirectZob::WaitToTargetFrameTime(float dt)

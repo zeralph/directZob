@@ -216,7 +216,7 @@ int main(int argc, char* argv[])
 	mfb_set_mouse_move_callback(m_window, mouse_move);
 	mfb_set_mouse_scroll_callback(m_window, mouse_scroll);
 	*/
-	m_directZob.Init(width, height, false);
+	m_directZob.Init(m_window, width, height, false);
 	m_directZob.LoadScene(m_path, m_file);
 
 	float rot = 0.0f;
@@ -292,7 +292,7 @@ int main(int argc, char* argv[])
 			bTestFrame++;
 //			c->RotateAroundPointAxis(&ZobVector3::Vector3Zero, &ZobVector3::Vector3Y, &ZobVector3::Vector3Y, rot, false);
 		}
-		m_directZob.RunAFrame(m_window);
+		m_directZob.RunAFrame();
 		benchFps += m_directZob.GetFps();
 		benchRender += m_directZob.GetRenderTime();
 		benchGeom += m_directZob.GetGeometryTime();

@@ -7,87 +7,108 @@
 #include <stdio.h>
 #include <string>
 #include <iostream>
+#include "tinyxml.h"
 using namespace Core;
 
-ZobFont::ZobFont(const std::string& file, int nbCharWidth, int nbCharHeight)
+ZobFont::ZobFont(const std::string& textureFile, const std::string& xmlFile)
 {
-	Texture tex;
-	tex.LoadFromFile(file);
-	const float* data = tex.GetData();
-	InitFont(data, tex.GetWidth(), tex.GetHeight(), nbCharWidth, nbCharHeight);
-	//ZobFont(data, m_baseTexture.GetWidth(), m_baseTexture.GetHeight(), nbCharWidth, nbCharHeight);
-}
-
-ZobFont::ZobFont(const u8* data, int width, int height, int nbCharWidth, int nbCharHeight)
-{
-	float* fdata = (float*)malloc(sizeof(float) * width * height * 4);
-	int k = 0;
-	for(int i=0; i<width*height; i++)
+	TiXmlDocument doc("Font");
+	doc.ClearError();
+	doc.LoadFile(xmlFile.c_str());
+	if (doc.Error())
 	{
-		float v = (data[i] == '1') ? 1.0f : 0.0f;
-		fdata[k + 0] = v;
-		fdata[k + 1] = v;
-		fdata[k + 2] = v;
-		fdata[k + 3] = v;
-		k += 4;
+		DirectZob::LogError("[ZobFont] Error loading %s : %s", xmlFile.c_str(), doc.ErrorDesc());
 	}
-	InitFont(fdata, width, height, nbCharWidth, nbCharHeight);
-	free(fdata);
-}
-
-ZobFont::ZobFont(const float* data, int width, int height, int nbCharWidth, int nbCharHeight)
-{
-	InitFont(data, width, height, nbCharWidth, nbCharHeight);
+	else
+	{
+		TiXmlElement* font = doc.FirstChildElement("Font");
+		if (font)
+		{
+			m_name = font->Attribute("family");
+			std::vector<std::string> v;
+			std::string s;
+			std::string::size_type sz;
+			m_height = std::stoi(font->Attribute("height"), &sz);
+			for (TiXmlElement* e = font->FirstChildElement("Char"); e != NULL; e = e->NextSiblingElement("Char"))
+			{
+				FontGlyphe fg;
+				fg.c = e->Attribute("code")[0];
+				fg.charcode = (int)fg.c;
+				fg.width = std::stoi(e->Attribute("width"), &sz);
+				s = e->Attribute("offset");
+				SplitEntry(&s, &v, ' ');
+				fg.offsetX = std::stoi(v[0], &sz);
+				fg.offsetY = std::stoi(v[1], &sz);
+				s = e->Attribute("rect");
+				SplitEntry(&s, &v, ' ');
+				fg.x = std::stoi(v[0], &sz);
+				fg.y = std::stoi(v[1], &sz);
+				fg.w = std::stoi(v[2], &sz);
+				fg.h = std::stoi(v[3], &sz);
+				m_glyphes.push_back(fg);
+			}
+			m_color = ZobVector3(1, 1, 1);
+			std::string matName = "Font_";
+			matName.append(m_name);
+			m_charMaterial = DirectZob::GetInstance()->GetMaterialManager()->LoadMaterial(matName, &m_color, &m_color, &m_color, 0, 1, textureFile);
+			float texW = m_charMaterial->GetDiffuseTexture()->GetWidth();
+			float texH = m_charMaterial->GetDiffuseTexture()->GetHeight();
+			for (std::vector<FontGlyphe>::iterator iter = m_glyphes.begin(); iter != m_glyphes.end(); iter++)
+			{
+				FontGlyphe* fg = &(*iter);
+				fg->mat = m_charMaterial;
+				fg->offsetX;
+				fg->offsetY;
+				fg->uv_min_x = (fg->x) / texW;
+				fg->uv_min_y = (fg->y) / texH;
+				fg->uv_max_x = (fg->x + fg->w) / texW;
+				fg->uv_max_y = (fg->y + fg->h) / texH;
+				assert(fg->uv_min_x <= fg->uv_max_x);
+				assert(fg->uv_min_y <= fg->uv_max_y);
+				assert(fg->uv_max_x <= texW);
+				assert(fg->uv_max_y <= texH);
+			}
+		}
+	}
+	DirectZob::LogInfo("Font %s loaded", m_name);
 }
 
 ZobFont::~ZobFont()
 {
-
+	m_glyphes.clear();
 }
 
-void ZobFont::InitFont(const float* data, int width, int height, int nbCharWidth, int nbCharHeight)
+const ZobFont::FontGlyphe* ZobFont::GetChar(char c) const
 {
-	m_color = ZobVector3(1, 1, 1);
-	m_nbCharWidth = nbCharWidth;
-	m_nbCharHeight = nbCharHeight;
-	m_charMaterials = (const ZobMaterial**)malloc(sizeof(ZobMaterial*) * m_nbCharHeight * m_nbCharWidth);
-	m_charWidth = width / m_nbCharWidth;
-	m_charHeight = height / m_nbCharHeight;
-	for (int c = 0; c < m_nbCharHeight * m_nbCharWidth; c++)
+	for (std::vector<FontGlyphe>::const_iterator iter = m_glyphes.begin(); iter != m_glyphes.end(); iter++)
 	{
-		float* tdata = (float*)malloc(sizeof(float) * m_charHeight * m_charWidth * 4);
-		uint ii = c % m_nbCharWidth * m_charWidth;
-		uint jj = c / m_nbCharWidth * m_charHeight;
-		int k = 0;
-		for (int j = 0; j < m_charHeight; j++)
+		const FontGlyphe* fg = &(*iter);
+		if (fg->c == c)
 		{
-			for (int i = 0; i < m_charWidth; i++)
-			{
-				int idx = ((jj + j) * width + (ii + i)) * 4;
-				tdata[k + 0] = data[idx + 0];
-				tdata[k + 1] = data[idx + 1];
-				tdata[k + 2] = data[idx + 2];
-				tdata[k + 3] = data[idx + 3];
-				k += 4;
-			}
+			return fg;
 		}
-		std::string matName = "FONT";
-		matName += '_';
-		matName += std::to_string(c);
-		Texture* tex = new Texture();
-		tex->LoadFromData(matName, m_charWidth, m_charHeight, tdata);
-		const ZobMaterial* zm = DirectZob::GetInstance()->GetMaterialManager()->LoadMaterial(matName, &m_color, &m_color, &m_color, 0, 1, tex);
-		m_charMaterials[c] = zm;
-	}
-}
-
-const ZobMaterial* ZobFont::GetChar(char c) const
-{
-	int i = (int)c;// -32;
-	if (i > 0 && i < m_nbCharWidth * m_nbCharHeight)
-	{
-		const ZobMaterial* m = m_charMaterials[i];
-		return m;
 	}
 	return NULL;
+}
+
+
+void ZobFont::SplitEntry(const std::string* s, std::vector<std::string>* v, const char delim) const
+{
+	v->clear();
+	std::size_t current, previous = 0;
+	current = s->find(delim);
+	while (current != std::string::npos) {
+		std::string sub = s->substr(previous, current - previous);
+		if (sub.length() > 0 && sub != " ")
+		{
+			v->push_back(sub);
+		}
+		previous = current + 1;
+		current = s->find(delim, previous);
+	}
+	std::string sub = s->substr(previous, current - previous);
+	if (sub.length() > 0 && sub != " ")
+	{
+		v->push_back(sub);
+	}
 }

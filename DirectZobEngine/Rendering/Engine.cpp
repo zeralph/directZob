@@ -1307,7 +1307,7 @@ void Engine::PrintRasterizersInfos()
 	float y = 0.05f;
 	for (int i = 0; i < m_nbRasterizers; i++)
 	{
-		m->Print(ZobHUDManager::eHudUnit_ratio, 0.5f, y, 1.5f, &c, " R %i : %i", i, m_rasterizers[i]->GetNbTriangle());
+		m->Print(ZobHUDManager::eHudUnit_ratio, 0.5f, y, 1.5f, "MV Boli", &c, " R %i : %i", i, m_rasterizers[i]->GetNbTriangle());
 		y += 0.02f;
 	}
 }

@@ -38,7 +38,7 @@ namespace CLI
 	{
 		if (GetInstance())
 		{
-			GetInstance()->Init(width, height, true);
+			GetInstance()->Init(0, width, height, true);
 		}
 	}
 
@@ -155,7 +155,7 @@ namespace CLI
 			}
 			if (GetInstance())
 			{
-				GetInstance()->RunAFrame(0, (DirectZob::engineCallback)DirectZobWrapper::CallSceneUpdatedCallback, (DirectZob::engineCallback)DirectZobWrapper::CallQueuingCallback);
+				GetInstance()->RunAFrame((DirectZob::engineCallback)DirectZobWrapper::CallSceneUpdatedCallback, (DirectZob::engineCallback)DirectZobWrapper::CallQueuingCallback);
 			}
 			if (m_run)
 			{

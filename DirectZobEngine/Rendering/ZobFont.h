@@ -13,20 +13,34 @@ class ZobFont
 {
 public:
 
-	ZobFont(const std::string &file, int nbCharWidth, int nbCharHeight);
-	ZobFont(const u8* data, int width, int height, int nbCharWidth, int nbCharHeight);
-	ZobFont(const float* data, int width, int height, int nbCharWidth, int nbCharHeight);
-	~ZobFont();
-	int GetFontCharWidth() const { return m_charWidth; }
-	int GetFontCharHeight() const { return m_charHeight; }
-	const ZobMaterial* GetChar(char c) const;
+	struct FontGlyphe
+	{
+		const ZobMaterial* mat;
+		char c;
+		int charcode;
+		float width;
+		float offsetX;
+		float offsetY;
+		float x;
+		float y;
+		float w;
+		float h;
+		float uv_min_x;
+		float uv_min_y;
+		float uv_max_x;
+		float uv_max_y;
+	};
 
+	ZobFont(const std::string& textureFile, const std::string& xmlFile);
+	~ZobFont();
+	const FontGlyphe* GetChar(char c) const;
+	inline float GetHeight() const { return m_height; }
+	inline const char* GetName() const { return m_name.c_str(); }
 private:
-	void InitFont(const float* data, int width, int height, int nbCharWidth, int nbCharHeight);
+	void SplitEntry(const std::string* s, std::vector<std::string>* v, const char delim) const;
 	ZobVector3 m_color;
-	const ZobMaterial** m_charMaterials;
-	int m_nbCharWidth;
-	int m_nbCharHeight;
-	int m_charWidth;
-	int m_charHeight;
+	std::string m_name;
+	const ZobMaterial* m_charMaterial;
+	std::vector<FontGlyphe> m_glyphes;
+	float m_height;
 };

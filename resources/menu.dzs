@@ -4,7 +4,7 @@
         <AmbientColor r="102" g="102" b="02" />
         <AmbientIntensity>0.80</AmbientIntensity>
         <FogColor r="63" g="149" b="255" />
-        <ClearColor r="63" g="149" b="25" />
+        <ClearColor r="0" g="0" b="0" />
         <FogDensity>2.00</FogDensity>
         <FogDistance>20.00</FogDistance>
         <FogType>none</FogType>

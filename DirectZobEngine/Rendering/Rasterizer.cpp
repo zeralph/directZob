@@ -561,11 +561,11 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector3* p, const Triangl
 			{
 				su = wa * t->ua->x + wb * t->ub->x + wc * t->uc->x;
 				tu = wa * t->ua->y + wb * t->ub->y + wc * t->uc->y;
-				//tu = 1.0f - tu;
+				tu = 1.0f - tu;
 				su = (su * (float)texture->GetWidth());
 				tu = (tu * (float)texture->GetHeight());
-				su = (int)su % texture->GetWidth();
-				tu = (int)tu % texture->GetHeight();
+				su = (int)floor(su) % texture->GetWidth();
+				tu = (int)floor(tu) % texture->GetHeight();
 
 				c = (int)(((int)tu * (int)texture->GetWidth() + (int)su) * 4);
 				const float* d = texture->GetData();

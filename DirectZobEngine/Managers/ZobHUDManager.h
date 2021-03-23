@@ -26,10 +26,13 @@ public:
 		float y;
 		float w;
 		float h;
+		float scaleX;
+		float scaleY;
 		eHudUnit unit;
 		char c;
 		ZobVector3 color;
 		const ZobMaterial* mat;
+		const ZobFont::FontGlyphe* glyphe;
 	};
 
 	ZobHUDManager();
@@ -42,13 +45,14 @@ public:
 	void UpdateBehavior(float dt);
 	void UpdateObjects(const Camera* camera, Core::Engine* engine, float dt);
 	void QueueForDrawing(const Camera* camera, Core::Engine* engine);
-	void Print(eHudUnit u, float x, float y, float fontSize, const char* fmt, ...);
-	void Print(eHudUnit u, float x, float y, float fontSize, const ZobVector3* color, const char* fmt, ...);
+	void Print(eHudUnit u, float x, float y, float fontSize, const char* fontName, const ZobVector3* color, const char* fmt, ...);
 
 private:
+	void DeleteFonts();
 	void Init();
 	bool CreateQuad(float xMin, float yMin, float xMax, float yMax, HUDElement* elem);
-	void PrintInternal(eHudUnit u, float x, float y, float fontSize, const ZobVector3* color, std::string s);
+	void PrintInternal(eHudUnit u, float x, float y, float fontSize, const ZobFont* font, const ZobVector3* color, std::string s);
+	const ZobFont* GetFont(const char* fontName) const;
 	Triangle* m_trianglesBuffer;
 	ZobVector3* m_vertices;
 	ZobVector3* m_projectedVertices;
@@ -57,7 +61,7 @@ private:
 	ZobVector3* m_colors;
 	int	m_nbDrawnTriangles;
 	DirectZobType::RenderOptions m_renderOptions;
-	ZobFont* m_font;
+	std::vector <const ZobFont*> m_fonts;
 	std::vector<HUDElement> m_hudElements;
 	bool m_started;
 }; 
