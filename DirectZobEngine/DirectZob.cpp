@@ -206,7 +206,7 @@ int DirectZob::RunAFrame(DirectZob::engineCallback OnSceneUpdated /*=NULL*/, Dir
 		m_inputManager->Update(m_frameTime, hWnd);
 #elif LINUX
 		Display* display = NULL;
-		SWindowData* window_data = (SWindowData*)window;
+		SWindowData* window_data = (SWindowData*)m_window;
 		if (window_data)
 		{
 			SWindowData_X11* window_data_x11 = (SWindowData_X11*)window_data->specific;
