@@ -70,7 +70,7 @@ ZobFont::ZobFont(const std::string& textureFile, const std::string& xmlFile)
 			}
 		}
 	}
-	DirectZob::LogInfo("Font %s loaded", m_name);
+	DirectZob::LogInfo("Font %s loaded", m_name.c_str());
 }
 
 ZobFont::~ZobFont()
