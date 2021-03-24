@@ -5,6 +5,7 @@
 #include "../ZobObjects/Light.h"
 #include "../ZobObjects/Camera.h"
 #include "../DirectZob.h"
+
 namespace CLI
 {
 	ZobObjectWrapper::ZobObjectWrapper(ZobObject* zobObject):ManagedObject(zobObject, false)
@@ -17,6 +18,115 @@ namespace CLI
 		m_Instance = NULL;
 	}
 
+	UserControl^ ZobObjectWrapper::FillBehaviorControl()
+	{
+		ZobObject* z = GetInstance();
+		if (z)
+		{
+			ZobBehavior* b = z->GetBehavior();
+			if (b)
+			{
+				const std::vector<ZobBehavior::wrapperData>* v = b->GetWrappedVariables();
+				if (v->size() > 0)
+				{
+					UserControl^ c = gcnew UserControl();
+					c->Dock = DockStyle::Fill;
+					c->BackColor = Drawing::Color::Red;
+					TableLayoutPanel^ panel = gcnew TableLayoutPanel();	
+					panel->ColumnCount = 2;
+					panel->RowCount = v->size();
+					panel->Dock = DockStyle::Fill;
+					panel->BackColor = Drawing::Color::Green;
+					c->Controls->Add(panel);
+					int idx = 1;
+					for (std::vector<ZobBehavior::wrapperData>::const_iterator iter = v->begin(); iter != v->end(); iter++)
+					{
+						ZobBehavior::wrapperData w = (*iter);
+						if (w.type == ZobBehavior::eWrapperType_float)
+						{
+							AddFloatVariable(panel, &w);
+						}
+						else if (w.type == ZobBehavior::eWrapperType_string)
+						{
+							//AddFloatVariable(panel, &w);
+						}
+						else if (w.type == ZobBehavior::eWrapperType_int)
+						{
+							//AddFloatVariable(panel, &w);
+						}
+						else if (w.type == ZobBehavior::eWrapperType_ZobVector2)
+						{
+							//AddFloatVariable(panel, &w);
+						}
+						else if (w.type == ZobBehavior::eWrapperType_ZobVector3)
+						{
+							//AddFloatVariable(panel, &w);
+						}
+						idx++;
+					}
+					return c;
+				}
+			}
+		}
+		return nullptr;
+	}
+
+	void ZobObjectWrapper::AddFloatVariable(TableLayoutPanel^ panel, ZobBehavior::wrapperData* w)
+	{
+		Label^ label = gcnew Label();
+		label->Text = gcnew String(w->name.c_str());
+		label->BackColor = Drawing::Color::Beige;
+		label->Dock = DockStyle::Fill;
+		label->Width = 50;
+		label->Height = 20;
+		TextBox^ txt = gcnew TextBox();
+		txt->Name = gcnew String(w->name.c_str());
+		txt->Width = 50;
+		txt->Height = 20;
+		float* f = (float*)(w->ptr);
+		txt->Text = (*f).ToString();
+		txt->Leave += gcnew EventHandler(this, &ZobObjectWrapper::Handler);
+		panel->Controls->Add(label);
+		panel->Controls->Add(txt);
+	}
+
+	void ZobObjectWrapper::Handler(Object^ sender, EventArgs^ e)
+	{
+		ZobObject* z = GetInstance();
+		if (z)
+		{
+			ZobBehavior* b = z->GetBehavior();
+			if (b)
+			{
+				const std::vector<ZobBehavior::wrapperData>* v = b->GetWrappedVariables();
+				if (v->size() > 0)
+				{
+					TextBox^ t = static_cast<TextBox^>(sender);
+					for (std::vector<ZobBehavior::wrapperData>::const_iterator iter = v->begin(); iter != v->end(); iter++)
+					{
+						ZobBehavior::wrapperData w = (*iter);
+						String^ wName = gcnew String(w.name.c_str());
+						if (wName == t->Name)
+						{
+							try
+							{				
+								float* f = (float*)w.ptr;
+								t->Text = t->Text->Replace(".", ",");
+								float rez = (float)(Convert::ToDouble(t->Text));
+								*f = rez;
+							}
+							catch(...)
+							{ 
+								float* f = (float*)w.ptr;
+								t->Text = (*f).ToString();
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
 	bool ZobObjectWrapper::IsFromFactoryFile()
 	{ 
 		ZobObject* z = GetInstance();
@@ -26,17 +136,17 @@ namespace CLI
 		}
 		return nullptr;
 	}
-	System::String^ ZobObjectWrapper::FactoryFile()
+	String^ ZobObjectWrapper::FactoryFile()
 	{ 
 		ZobObject* z = GetInstance();
 		if (z)
 		{
-			return gcnew System::String(z->FactoryFile().c_str());
+			return gcnew String(z->FactoryFile().c_str());
 		}
 		return nullptr;
 	}
 
-	void ZobObjectWrapper::SaveToFactoryFile(System::String^ file)
+	void ZobObjectWrapper::SaveToFactoryFile(String^ file)
 	{
 		ZobObject* z = GetInstance();
 		if (z)
@@ -47,34 +157,34 @@ namespace CLI
 		}
 	}
 
-	System::String^ ZobObjectWrapper::GetName()
+	String^ ZobObjectWrapper::GetName()
 	{
 		ZobObject* z = GetInstance();
 		if (z)
 		{
-			return gcnew System::String(z->GetName().c_str());
+			return gcnew String(z->GetName().c_str());
 		}
 		return nullptr;
 	}
 
-	System::String^ ZobObjectWrapper::GetFullNodeName()
+	String^ ZobObjectWrapper::GetFullNodeName()
 	{
 		ZobObject* z = GetInstance();
 		if (z)
 		{
 			std::string s;
 			z->GetFullNodeName(s);
-			return gcnew System::String(s.c_str());
+			return gcnew String(s.c_str());
 		}
 		return nullptr;
 	}
 
-	System::String^ ZobObjectWrapper::GetMeshName()
+	String^ ZobObjectWrapper::GetMeshName()
 	{
 		ZobObject* z = GetInstance();
 		if (z)
 		{
-			return gcnew System::String(z->GetMeshName().c_str());
+			return gcnew String(z->GetMeshName().c_str());
 		}
 		return nullptr;
 	}
@@ -90,7 +200,7 @@ namespace CLI
 		return nullptr;
 	}
 
-	void ZobObjectWrapper::SetMesh(System::String^ name)
+	void ZobObjectWrapper::SetMesh(String^ name)
 	{
 		ZobObject* z = GetInstance();
 		if (z)
@@ -101,7 +211,7 @@ namespace CLI
 		}
 	}
 
-	void ZobObjectWrapper::LoadMesh(System::String^ name, System::String^ file, System::String^ path)
+	void ZobObjectWrapper::LoadMesh(String^ name, String^ file, String^ path)
 	{
 		ZobObject* z = GetInstance();
 		if (z)
@@ -125,7 +235,7 @@ namespace CLI
 		}
 	}
 
-	void ZobObjectWrapper::SetName(System::String^ name)
+	void ZobObjectWrapper::SetName(String^ name)
 	{
 		ZobObject* z = GetInstance();
 		if (z)
@@ -314,12 +424,12 @@ namespace CLI
 		return false;
 	}
 
-	System::Collections::Generic::List<ZobObjectWrapper^>^ ZobObjectWrapper::GetChildren()
+	List<ZobObjectWrapper^>^ ZobObjectWrapper::GetChildren()
 	{
 		ZobObject* z = GetInstance();
 		if (z)
 		{
-			System::Collections::Generic::List<ZobObjectWrapper^>^ list = gcnew System::Collections::Generic::List<ZobObjectWrapper^>();
+			List<ZobObjectWrapper^>^ list = gcnew List<ZobObjectWrapper^>();
 			const std::vector<ZobObject*>* v = z->GetChildren();
 			for (std::vector<ZobObject*>::const_iterator iter = v->begin(); iter != v->end(); iter++)
 			{
@@ -359,19 +469,19 @@ namespace CLI
 		return false;
 	}
 
-	void ZobObjectWrapper::GetPhysicComponentInfo(System::String^% type, System::String^% shapeType)
+	void ZobObjectWrapper::GetPhysicComponentInfo(String^% type, String^% shapeType)
 	{
 		if (GetInstance())
 		{
 			std::string cType;
 			std::string cShapeType;
 			GetInstance()->GetPhysicComponentInfo(cType, cShapeType);
-			type = gcnew System::String(cType.c_str());
-			shapeType = gcnew System::String(cShapeType.c_str());
+			type = gcnew String(cType.c_str());
+			shapeType = gcnew String(cShapeType.c_str());
 		};
 	}
 
-	void ZobObjectWrapper::SetPhysicComponentInfo(System::String^ type, System::String^ shapeType)
+	void ZobObjectWrapper::SetPhysicComponentInfo(String^ type, String^ shapeType)
 	{
 		std::string cType;
 		std::string cShapeType;
@@ -384,7 +494,7 @@ namespace CLI
 	}
 
 
-	void ZobObjectWrapper::GetPhysicComponentShapeInfo(float% radius, float% height, float% hx, float% hy, float% hz, System::String^% mesh)
+	void ZobObjectWrapper::GetPhysicComponentShapeInfo(float% radius, float% height, float% hx, float% hy, float% hz, String^% mesh)
 	{
 		if (GetInstance())
 		{
@@ -396,11 +506,11 @@ namespace CLI
 			hx = x;
 			hy = y;
 			hz = z;
-			mesh = gcnew System::String(s.c_str());
+			mesh = gcnew String(s.c_str());
 		}
 	}
 
-	void ZobObjectWrapper::SetPhysicComponentShapeInfo(float radius, float height, float hx, float hy, float hz, System::String^ mesh)
+	void ZobObjectWrapper::SetPhysicComponentShapeInfo(float radius, float height, float hx, float hy, float hz, String^ mesh)
 	{
 		if (GetInstance())
 		{

@@ -90,7 +90,7 @@ public:
 	//temp ?
 	const ZobMatrix4x4*				GetModelMatrix() const { return &m_modelMatrix; };
 	const ZobMatrix4x4*				GetRotationScaleMatrix() const { return &m_rotationScaleMatrix; };
-
+	ZobBehavior*					GetBehavior() { return m_behavior; }
 	//Physic interface, mainly for editor
 	void							GetPhysicComponentInfo(std::string& type, std::string& shapeType) const;
 	void							SetPhysicComponentInfo(std::string& type, std::string& shapeType);

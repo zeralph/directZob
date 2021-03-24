@@ -345,7 +345,9 @@
                             'Wrappers/CameraManagerWrapper.h',
                             'Wrappers/ZobCameraWrapper.h',
                             'Wrappers/ZobSpriteWrapper.h',
-                        ],
+							'Wrappers/ZobBehaviorWrapper.h',
+							'Wrappers/ZobBehaviorWrapper.cpp',
+							],
                         'link_settings': {
                             # links fbxsdk as static
                             'libraries': [

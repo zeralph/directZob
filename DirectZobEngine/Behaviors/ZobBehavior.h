@@ -6,18 +6,30 @@
 #include <string>
 #include<map>
 
-#define START_EXPOSE_PROPERTIES()	public:																			\
-									std::vector<std::string> properties;											\
-									const std::vector<std::string>* GetProperties() const {return &properties;};	
-#define ADD_PROPERTY(type, name)	type name;																		\
-				
-#define GET_VARIABLE_NAME(Variable) (#Variable)
-
 class ZobObject;
 class Camera;
 class ZobBehavior
 {
 public:
+
+	enum eWrapperType
+	{
+		eWrapperType_unset = 0,
+		eWrapperType_int,
+		eWrapperType_float,
+		eWrapperType_string,
+		eWrapperType_ZobVector2,
+		eWrapperType_ZobVector3,
+		eWrapperType_enum,
+		__eWrapperType_MAX__
+	};
+
+	struct wrapperData
+	{
+		eWrapperType type;
+		void* ptr;
+		std::string name;
+	};
 
 	enum eBehaviorType
 	{
@@ -26,54 +38,76 @@ public:
 		eBehavior_menu,
 	};
 	virtual ~ZobBehavior() {};
-	virtual TiXmlNode*	SaveUnderNode(TiXmlNode* node)=0;
-	virtual void		PreUpdate()=0;
-	virtual void		Init()=0;
-	virtual void		Update(float dt) = 0;
-	eBehaviorType		GetBehaviorType() const { return m_type; }
-	virtual const char* GetBehaviorTypeStr()=0;
-	virtual	void		DrawGizmos(const Camera* camera, const ZobVector3* position, const ZobVector3* rotation) const {}
+	virtual TiXmlNode*					SaveUnderNode(TiXmlNode* node)=0;
+	virtual void						PreUpdate()=0;
+	virtual void						Init()=0;
+	virtual void						Update(float dt) = 0;
+	eBehaviorType						GetBehaviorType() const { return m_type; }
+	virtual const char*					GetBehaviorTypeStr()=0;
+	virtual	void						DrawGizmos(const Camera* camera, const ZobVector3* position, const ZobVector3* rotation) const {}
+	const std::vector<wrapperData>*		GetWrappedVariables() const { return &m_wrappedVariables; }
 protected:
 	ZobBehavior(ZobObject* zobObject, TiXmlElement* node) 
 	{ 
-		m_myFloat = 0;
 		m_zobObject = zobObject;  
 		m_type = eBehavior_none; 	
-		SetValueFloat("myFloat", 32.0f);
+		/*
+		m_myFloat = 0;
+		WrapVariable(eWrapperType_float, "float", &m_myFloat);
+		WrapVariable(eWrapperType_int, "int", &m_myInt);
+		WrapVariable(eWrapperType_ZobVector3, "vector", &m_myVector);
+		WrapVariable(eWrapperType_string, "string", &m_myString);
+
+		const wrapperData* w;
+		void* v;
+		float* flt;
+		std::string* str;
+		w = GetVariable("float");
+		v = w->ptr;// = 1.0f;
+		flt = (float*)v;
+		*flt = 4;
+
+		w = GetVariable("string");
+		v = w->ptr;// = 1.0f;
+		str = (std::string*)v;
+		*str = std::string("prout");
+
+		w = GetVariable("string");
+		v = w->ptr;// = 1.0f;
+		str = (std::string*)v;
+		*str = std::string("prout2");
+
+		w = GetVariable("float");
+		v = w->ptr;// = 1.0f;
+		flt = (float*)v;
+		*flt = 8;
+		*/ 
 	};
 	eBehaviorType m_type;
 	ZobObject* m_zobObject;
-	std::map<const char*, float*> m_wrapperMapFloat;
-	std::map<const char*, int*> m_wrapperMapInt;
-	std::map<const char*, ZobVector3*> m_wrapperMapZobVector3;
-	std::map<const char*, std::string*> m_wrapperMapString;
-private:
+	std::vector<wrapperData> m_wrappedVariables;
 
-	void CreateMap()
+protected:
+
+	void WrapVariable(eWrapperType type, const char* name, void* ptr)
 	{
-		m_wrapperMapFloat["myFloat"] = &m_myFloat;
-		m_wrapperMapInt["myInt"] = &m_myInt;
-		m_wrapperMapZobVector3["myVector"] = &m_myVector;
-		m_wrapperMapString["myString"] = &m_myString;
+		wrapperData w;
+		w.type = type;
+		w.name = std::string(name);
+		w.ptr = ptr;
+		m_wrappedVariables.push_back(w);
 	}
-
-	//START_EXPOSE_PROPERTIES()
-	//	ADD_PROPERTY(float, m_prout)
-	void SetValueFloat(const char* variable, float f)
+	/*
+	const wrapperData* GetVariable(const char* variable) const
 	{
-		float* i = m_wrapperMapFloat[variable];
-		*i = f;
+		for (std::vector<wrapperData>::const_iterator iter = m_wrappedVariables.begin(); iter != m_wrappedVariables.end(); iter++)
+		{
+			if (strcmp((*iter).name.c_str(), variable) == 0)
+			{
+				return &(*iter);
+			}
+		}
+		return NULL;
 	}
-	float GetValmueFloat(const char* variable)
-	{
-		return *m_wrapperMapFloat[variable];
-	}
-
-	float m_myFloat;
-	int m_myInt;
-	ZobVector3 m_myVector;
-	std::string m_myString;
-	
-	//std::map<std::string, T*> m{ {"CPU", &m_type}, {"GPU", &a}, {"RAM", &b}, };
-
+	*/
 };
