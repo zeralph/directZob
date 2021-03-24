@@ -72,5 +72,7 @@
         "**/.git/objects/**": true,
         "**/.git/subtree-cache/**": true,
         "**/node_modules/*/**": true
-    }
+    },
+    "workbench.editor.wrapTabs": true,
+    "workbench.editor.tabSizing": "shrink"
 }
