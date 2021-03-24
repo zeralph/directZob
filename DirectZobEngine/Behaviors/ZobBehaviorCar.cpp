@@ -36,6 +36,9 @@ ZobBehaviorCar::ZobBehaviorCar(ZobObject* zobObject, TiXmlElement* node) : ZobBe
 	m_lastCollRebound  = ZobVector3(0, 0, 0);
 	m_lastCollNormal   = ZobVector3(0, 0, 0);
 	Init();
+
+	WrapVariable(eWrapperType_float, "mass", &m_mass);
+	WrapVariable(eWrapperType_float, "max grip", &m_maxGrip);
 }
 
 void ZobBehaviorCar::PreUpdate()
@@ -385,7 +388,7 @@ void ZobBehaviorCar::Update(float dt)
 	ZobVector3 c = ZobVector3(1.0f, 0.0f, 0.0f);
 	//h->Print(0.1f, 0.9f, 0.025f, 0.025f, &c, "ST %.2f A %.2f AV %.2f\n V %.2f, %.2f, %.2f\n A %.2f, %.2f, %.2f", m_steerangle, m_angle, m_angularvelocity, m_velocityWorld.x, m_velocityWorld.y, m_velocityWorld.z, m_accelerationWorld.x, m_accelerationWorld.y, m_accelerationWorld.z);
 	float kmh = MS_TO_KMH(m_speed_ms);
-	h->Print(ZobHUDManager::eHudUnit_ratio, 0.1f, 0.8f, 1, "Leelawadee UI", &c, "fs %.2f rs %.2f Kmh", flatf.x, flatr.x);
+	h->Print(ZobHUDManager::eHudUnit_ratio, 0.1f, 0.8f, 1, "Leelawadee UI", &c, "MASS : %.2f GRIP %.2f", m_mass, m_maxGrip);
 	h->Print(ZobHUDManager::eHudUnit_ratio, 0.8f, 0.9f, 1, "Leelawadee UI", &c, "%.0f Kmh", kmh);
 	h->Print(ZobHUDManager::eHudUnit_ratio, 0.1f, 0.9f, 1, "Leelawadee UI", &c, "wheels %.2f", m_steerangle);
 }

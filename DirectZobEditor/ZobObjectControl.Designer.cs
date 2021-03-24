@@ -46,11 +46,13 @@
             this.zobRotY = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.zobRotZ = new System.Windows.Forms.TextBox();
+            this.behaviorBox = new System.Windows.Forms.GroupBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.behaviorBox);
             this.groupBox1.Controls.Add(this.checkBoxLinkScale);
             this.groupBox1.Controls.Add(this.zobId);
             this.groupBox1.Controls.Add(this.label1);
@@ -72,7 +74,7 @@
             this.groupBox1.Location = new System.Drawing.Point(0, 0);
             this.groupBox1.Margin = new System.Windows.Forms.Padding(0);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(340, 162);
+            this.groupBox1.Size = new System.Drawing.Size(340, 325);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "ZobObject";
@@ -230,13 +232,22 @@
             this.zobRotZ.Text = "100.00";
             this.zobRotZ.Leave += new System.EventHandler(this.valueChanged);
             // 
+            // behaviorBox
+            // 
+            this.behaviorBox.Location = new System.Drawing.Point(20, 158);
+            this.behaviorBox.Name = "behaviorBox";
+            this.behaviorBox.Size = new System.Drawing.Size(306, 156);
+            this.behaviorBox.TabIndex = 46;
+            this.behaviorBox.TabStop = false;
+            this.behaviorBox.Text = "groupBox2";
+            // 
             // ZobObjectControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.groupBox1);
             this.Name = "ZobObjectControl";
-            this.Size = new System.Drawing.Size(340, 162);
+            this.Size = new System.Drawing.Size(340, 325);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
@@ -263,5 +274,6 @@
         private System.Windows.Forms.TextBox zobRotY;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox zobRotZ;
+        private System.Windows.Forms.GroupBox behaviorBox;
     }
 }

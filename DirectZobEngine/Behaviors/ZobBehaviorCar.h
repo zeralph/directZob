@@ -42,4 +42,5 @@ class ZobBehaviorCar : public ZobBehavior
 
 		float m_mass;
 		float m_maxGrip;	/* maximum (normalised) friction force, =diameter of friction circle */
+
 };

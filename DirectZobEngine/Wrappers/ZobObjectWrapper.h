@@ -5,7 +5,18 @@
 #include "ManagedVector3.h"
 #include "ManagedRenderOptions.h"
 
+#using "System.Windows.Forms.dll"
+#using "System.dll"
+#using "System.Drawing.dll"
+
+using namespace System;
+using namespace System::Windows;
+using namespace System::Windows::Forms;
+using namespace System::Collections::Generic;
+using namespace System::Drawing;
+
 namespace CLI {
+
 	public ref class ZobObjectWrapper : ManagedObject<ZobObject>
 	{
 	public:
@@ -13,8 +24,8 @@ namespace CLI {
 		~ZobObjectWrapper() override;
 		bool					IsValid() override;
 		void					SetZobObject(ZobObject* zobObject) { m_Instance = zobObject; }
-		System::String^			GetName();
-		System::String^			GetFullNodeName();
+		String^					GetName();
+		String^					GetFullNodeName();
 		void					SetName(System::String^ name);
 		ManagedVector3^			GetWorldPosition();
 		ManagedVector3^			GetLeft();
@@ -23,12 +34,13 @@ namespace CLI {
 		ManagedVector3^			GetWorldRotation();
 		ManagedVector3^			GetScale();
 		ManagedRenderOptions^	GetRenderOptions();
-		System::Collections::Generic::List<ZobObjectWrapper^>^ GetChildren();
+		UserControl^			FillBehaviorControl();
+		List<ZobObjectWrapper^>^ GetChildren();
 		void					SetWorldTransform(ManagedVector3^ p);
 		void					SetWorldRotation(ManagedVector3^ p);
 		void					SetScale(ManagedVector3^ p);
 		void					LookAt(ManagedVector3^ forward, ManagedVector3^ left, ManagedVector3^ up, bool addToCurrentRotation);
-		System::String^			GetMeshName();
+		String^					GetMeshName();
 		void					SetMesh(System::String^ name);
 		void					LoadMesh(System::String^ name, System::String^ file, System::String^ path);
 		void					CreateSprite();
@@ -41,8 +53,8 @@ namespace CLI {
 		DirectZobType::guid		GetId() { return m_id; }
 		void					SetPhysicComponent(int i);
 		bool					IsFromFactoryFile();
-		System::String^			FactoryFile();
-		void					SaveToFactoryFile(System::String^ file);
+		String^					FactoryFile();
+		void					SaveToFactoryFile(String^ file);
 
 		//Physic
 		void					GetPhysicComponentInfo(System::String^% type, System::String^% shapeType);
@@ -53,7 +65,12 @@ namespace CLI {
 		void					SetPhysicComponentColliderInfo(float bounciness, float frictionCoeff, float massDensity, float RollingResistance);
 		void					SetPhysicComponentScaleWithObject(bool b);
 		void					GetPhysicComponentScaleWithObject(bool% b);
+
+		void					Handler(Object^ sender, System::EventArgs^ e);
 	protected:
+
+		void					AddFloatVariable(TableLayoutPanel^ panel, ZobBehavior::wrapperData* w);
+
 		DirectZobType::guid m_id;
 	};
 }

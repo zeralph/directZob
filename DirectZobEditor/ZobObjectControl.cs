@@ -59,6 +59,12 @@ namespace DirectZobEditor
 
                 SetValues();
                 this.Visible = true;
+                UserControl behaviorControl = m_currentZobObjectWrapper.FillBehaviorControl();
+                if (behaviorControl != null)
+                {
+                    this.behaviorBox.Controls.Add(behaviorControl);
+                    this.Height += behaviorControl.Height; 
+                }
             }
             else
             {
