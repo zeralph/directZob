@@ -13,7 +13,18 @@
         <Position x="-20.1749" y="-0.413712" z="4.06875" />
         <Rotation x="-177.685" y="-79.775" z="-179.72" />
         <Scale x="1" y="1" z="1" />
-        <Behavior type="1" />
+        <Behaviors>
+            <Behavior Type="Car">
+                <Var name="carType" value="truc" />
+                <Var name="Mass" value="1500.000000" />
+                <Var name="Max friction" value="12.000000" />
+                <Var name="Inertia" value="1500.000000" />
+                <Var name="Air resistance" value="5.000000" />
+                <Var name="Rolling resistance" value="30.000000" />
+                <Var name="Front cornering stiffness" value="-5.000000" />
+                <Var name="Rear cornering stiffness" value="-5.200000" />
+            </Behavior>
+        </Behaviors>
         <Physic>
             <RigidBody type="1" active="1">
                 <Box halfExtends_x="1.000000" halfExtends_y="0.300000" halfExtends_z="2.500000" layers="4" scale_with_object="1">
@@ -33,11 +44,13 @@
                     <CullMode>Clockwise</CullMode>
                 </RenderOptions>
             </Mesh>
+            <Behaviors />
         </ZobObject>
         <ZobObject name="rearCamera" guid="3002004" type="camera">
-            <Position x="-2.37338e-05" y="1.92052" z="-4.78713" />
-            <Rotation x="15.0562" y="7.10092e-05" z="-2.67863e-05" />
+            <Position x="-2.56412e-05" y="1.92052" z="-4.78713" />
+            <Rotation x="15.0562" y="7.11078e-05" z="-2.76345e-05" />
             <Scale x="1" y="1" z="1" />
+            <Behaviors />
             <Controller>5</Controller>
             <Fov>70.00</Fov>
         </ZobObject>
@@ -45,6 +58,7 @@
             <Position x="-0.0774962" y="0.0879834" z="1.94431" />
             <Rotation x="0" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
+            <Behaviors />
             <Controller>0</Controller>
             <Fov>70.00</Fov>
         </ZobObject>
@@ -52,6 +66,7 @@
             <Position x="0.00013119" y="59.1781" z="-1.00273" />
             <Rotation x="-89.4191" y="-79.775" z="-179.72" />
             <Scale x="1" y="1" z="1" />
+            <Behaviors />
             <Controller>0</Controller>
             <Fov>45.00</Fov>
         </ZobObject>
@@ -59,6 +74,7 @@
             <Position x="0.0657781" y="0.632988" z="0.62512" />
             <Rotation x="0" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
+            <Behaviors />
             <Controller>0</Controller>
             <Fov>80.00</Fov>
         </ZobObject>
@@ -66,13 +82,15 @@
             <Position x="-5.88038" y="1.89999" z="6.77647" />
             <Rotation x="-176.34" y="35.9339" z="-176.794" />
             <Scale x="1" y="1" z="1" />
+            <Behaviors />
             <Controller>0</Controller>
             <Fov>45.00</Fov>
         </ZobObject>
         <ZobObject name="orbitalCamera" guid="3067494" type="camera">
             <Position x="-3.41366" y="-1.21814" z="-10.189" />
-            <Rotation x="-3.99471" y="-81.7743" z="-0.000122331" />
+            <Rotation x="-3.99498" y="-81.7743" z="0.000196924" />
             <Scale x="1" y="1" z="1" />
+            <Behaviors />
             <Controller>2</Controller>
             <Fov>45.00</Fov>
         </ZobObject>
@@ -81,6 +99,7 @@
         <Position x="0" y="60.0368" z="0" />
         <Rotation x="45" y="0" z="45" />
         <Scale x="1" y="1" z="1" />
+        <Behaviors />
         <Color r="241" g="218" b="164" />
         <Intensity>1.20</Intensity>
         <FallOffDistance>100.00</FallOffDistance>
@@ -98,6 +117,7 @@
                 <CullMode>Clockwise</CullMode>
             </RenderOptions>
         </Mesh>
+        <Behaviors />
         <Physic>
             <RigidBody type="0" active="1">
                 <Box halfExtends_x="10.000000" halfExtends_y="10.000000" halfExtends_z="10.000000" layers="0" scale_with_object="1">
@@ -110,6 +130,7 @@
         <Position x="0" y="0" z="101.54" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="1" y="1" z="1" />
+        <Behaviors />
         <ZobObject name="newObject_53" guid="3066470" type="mesh">
             <Position x="73.8078" y="8.82018" z="9.62192" />
             <Rotation x="-9.82309" y="-15.201" z="2.59947" />
@@ -122,6 +143,7 @@
                     <CullMode>Clockwise</CullMode>
                 </RenderOptions>
             </Mesh>
+            <Behaviors />
         </ZobObject>
         <ZobObject name="rock1" guid="-2143505731" type="mesh">
             <Position x="59.56" y="1.901" z="-6.66789" />
@@ -135,6 +157,7 @@
                     <CullMode>Clockwise</CullMode>
                 </RenderOptions>
             </Mesh>
+            <Behaviors />
         </ZobObject>
         <ZobObject name="newObject_106" guid="3046825" type="mesh">
             <Position x="66.673" y="-13.697" z="24.7481" />
@@ -148,6 +171,7 @@
                     <CullMode>Clockwise</CullMode>
                 </RenderOptions>
             </Mesh>
+            <Behaviors />
         </ZobObject>
         <ZobObject name="newObject_55" guid="3066472" type="mesh">
             <Position x="25.794" y="11.506" z="29.2061" />
@@ -161,6 +185,7 @@
                     <CullMode>Clockwise</CullMode>
                 </RenderOptions>
             </Mesh>
+            <Behaviors />
         </ZobObject>
         <ZobObject name="newObject_56" guid="3066473" type="mesh">
             <Position x="-1.01871" y="-0.399692" z="-22.8266" />
@@ -174,6 +199,7 @@
                     <CullMode>Clockwise</CullMode>
                 </RenderOptions>
             </Mesh>
+            <Behaviors />
         </ZobObject>
         <ZobObject name="Rck-Wtrfll_fbx.fbx" guid="-2143505730" type="mesh">
             <Position x="-102.76" y="43.435" z="36.805" />
@@ -187,6 +213,7 @@
                     <CullMode>Clockwise</CullMode>
                 </RenderOptions>
             </Mesh>
+            <Behaviors />
         </ZobObject>
         <ZobObject name="Rock_9.fbx" guid="3066497" type="mesh">
             <Position x="-2.021" y="20.375" z="17.355" />
@@ -200,6 +227,7 @@
                     <CullMode>Clockwise</CullMode>
                 </RenderOptions>
             </Mesh>
+            <Behaviors />
         </ZobObject>
         <ZobObject name="newObject_56" guid="3066483" type="mesh">
             <Position x="-0.306095" y="11.6981" z="-21.0747" />
@@ -213,6 +241,7 @@
                     <CullMode>Clockwise</CullMode>
                 </RenderOptions>
             </Mesh>
+            <Behaviors />
         </ZobObject>
         <ZobObject name="mountain_canyon_01.fbx" guid="3066498" type="mesh">
             <Position x="-130.972" y="-3.78558" z="-113.842" />
@@ -226,12 +255,14 @@
                     <CullMode>Clockwise</CullMode>
                 </RenderOptions>
             </Mesh>
+            <Behaviors />
         </ZobObject>
     </ZobObject>
     <ZobObject name="road2_p_ground" guid="3066499">
         <Position x="0" y="0" z="0" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="1" y="1" z="1" />
+        <Behaviors />
         <Physic>
             <RigidBody type="0" active="1">
                 <StaticMesh name="road2_p_ground.obj" path="" file="road2_p_ground.obj" layers="1" scale_with_object="1">
@@ -244,6 +275,7 @@
         <Position x="0" y="0" z="0" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="1" y="1" z="1" />
+        <Behaviors />
         <Physic>
             <RigidBody type="0" active="1">
                 <StaticMesh name="road2_p_leftWall.obj" path="" file="road2_p_leftWall.obj" layers="2" scale_with_object="1">
@@ -256,6 +288,7 @@
         <Position x="0" y="0" z="0" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="1" y="1" z="1" />
+        <Behaviors />
         <Physic>
             <RigidBody type="0" active="1">
                 <StaticMesh name="road2_p_rightWall.obj" path="" file="road2_p_rightWall.obj" layers="2" scale_with_object="1">
@@ -268,6 +301,7 @@
         <Position x="91.3799" y="0.954358" z="-110.778" />
         <Rotation x="0" y="53.5839" z="0" />
         <Scale x="1" y="1" z="1" />
+        <Behaviors />
         <ZobObject name="building_1" guid="-2143505736" type="mesh">
             <Position x="-100.674" y="-10" z="-24.8922" />
             <Rotation x="0" y="35" z="0" />
@@ -280,6 +314,7 @@
                     <CullMode>Clockwise</CullMode>
                 </RenderOptions>
             </Mesh>
+            <Behaviors />
         </ZobObject>
         <ZobObject name="building_2" guid="3066502" type="mesh">
             <Position x="-112.242" y="-10" z="-45.478" />
@@ -293,6 +328,7 @@
                     <CullMode>Clockwise</CullMode>
                 </RenderOptions>
             </Mesh>
+            <Behaviors />
         </ZobObject>
         <ZobObject name="building_3" guid="3066503" type="mesh">
             <Position x="-81.5169" y="-10" z="-1.29755" />
@@ -306,6 +342,7 @@
                     <CullMode>Clockwise</CullMode>
                 </RenderOptions>
             </Mesh>
+            <Behaviors />
         </ZobObject>
         <ZobObject name="building_4" guid="3066504" type="mesh">
             <Position x="-57.1602" y="-10" z="25.6691" />
@@ -319,6 +356,7 @@
                     <CullMode>Clockwise</CullMode>
                 </RenderOptions>
             </Mesh>
+            <Behaviors />
         </ZobObject>
         <ZobObject name="skyscraper.FBX" guid="3066486" type="mesh">
             <Position x="-126.659" y="-0.577358" z="37.8595" />
@@ -332,6 +370,7 @@
                     <CullMode>Clockwise</CullMode>
                 </RenderOptions>
             </Mesh>
+            <Behaviors />
         </ZobObject>
     </ZobObject>
     <ZobObject name="free_car_1.obj" guid="3066484" type="mesh">
@@ -346,6 +385,7 @@
                 <CullMode>Clockwise</CullMode>
             </RenderOptions>
         </Mesh>
+        <Behaviors />
         <Physic>
             <RigidBody type="0" active="1">
                 <Box halfExtends_x="1.000000" halfExtends_y="0.500000" halfExtends_z="2.000000" layers="0" scale_with_object="1">
@@ -358,10 +398,12 @@
         <Position x="0" y="0" z="0" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="1" y="1" z="1" />
+        <Behaviors />
         <ZobObject name="Light_5" guid="3068509" type="light">
             <Position x="-24" y="10" z="9" />
             <Rotation x="90" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
+            <Behaviors />
             <Color r="255" g="0" b="255" />
             <Intensity>2.00</Intensity>
             <FallOffDistance>30.00</FallOffDistance>
@@ -371,6 +413,7 @@
             <Position x="-40" y="10" z="3" />
             <Rotation x="90" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
+            <Behaviors />
             <Color r="0" g="0" b="255" />
             <Intensity>2.00</Intensity>
             <FallOffDistance>30.00</FallOffDistance>
@@ -380,6 +423,7 @@
             <Position x="-10" y="10" z="9" />
             <Rotation x="90" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
+            <Behaviors />
             <Color r="0" g="255" b="0" />
             <Intensity>2.00</Intensity>
             <FallOffDistance>30.00</FallOffDistance>
@@ -389,13 +433,14 @@
             <Position x="5" y="10" z="8" />
             <Rotation x="90" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
+            <Behaviors />
             <Color r="255" g="0" b="0" />
             <Intensity>2.00</Intensity>
             <FallOffDistance>30.00</FallOffDistance>
             <Type>spot</Type>
         </ZobObject>
     </ZobObject>
-    <ZobObject name="mountain_canyon_01.fbx" guid="3066499" type="mesh">
+    <ZobObject name="mountain_canyon_01.fbx" guid="-2143505734" type="mesh">
         <Position x="-155.175" y="0" z="0" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="5" y="15" z="20" />
@@ -407,11 +452,13 @@
                 <CullMode>Clockwise</CullMode>
             </RenderOptions>
         </Mesh>
+        <Behaviors />
     </ZobObject>
     <ZobObject name="road_sections" guid="3066513">
         <Position x="0" y="0" z="0" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="1" y="1" z="1" />
+        <Behaviors />
         <ZobObject name="road01" guid="3066514" type="mesh">
             <Position x="0" y="0" z="0" />
             <Rotation x="0" y="0" z="0" />
@@ -424,6 +471,7 @@
                     <CullMode>Clockwise</CullMode>
                 </RenderOptions>
             </Mesh>
+            <Behaviors />
         </ZobObject>
         <ZobObject name="road02" guid="3066515" type="mesh">
             <Position x="0" y="0" z="0" />
@@ -437,6 +485,7 @@
                     <CullMode>Clockwise</CullMode>
                 </RenderOptions>
             </Mesh>
+            <Behaviors />
         </ZobObject>
         <ZobObject name="road03" guid="3066516" type="mesh">
             <Position x="0" y="0" z="0" />
@@ -450,6 +499,7 @@
                     <CullMode>Clockwise</CullMode>
                 </RenderOptions>
             </Mesh>
+            <Behaviors />
         </ZobObject>
         <ZobObject name="road04" guid="3066517" type="mesh">
             <Position x="0" y="0" z="0" />
@@ -463,6 +513,7 @@
                     <CullMode>Clockwise</CullMode>
                 </RenderOptions>
             </Mesh>
+            <Behaviors />
         </ZobObject>
         <ZobObject name="road05" guid="3066518" type="mesh">
             <Position x="0" y="0" z="0" />
@@ -476,6 +527,7 @@
                     <CullMode>Clockwise</CullMode>
                 </RenderOptions>
             </Mesh>
+            <Behaviors />
         </ZobObject>
         <ZobObject name="road06" guid="3066519" type="mesh">
             <Position x="0" y="0" z="0" />
@@ -489,6 +541,7 @@
                     <CullMode>Clockwise</CullMode>
                 </RenderOptions>
             </Mesh>
+            <Behaviors />
         </ZobObject>
         <ZobObject name="road07" guid="3066520" type="mesh">
             <Position x="0" y="0" z="0" />
@@ -502,6 +555,7 @@
                     <CullMode>Clockwise</CullMode>
                 </RenderOptions>
             </Mesh>
+            <Behaviors />
         </ZobObject>
         <ZobObject name="road08" guid="3066521" type="mesh">
             <Position x="0" y="0" z="0" />
@@ -515,6 +569,7 @@
                     <CullMode>Clockwise</CullMode>
                 </RenderOptions>
             </Mesh>
+            <Behaviors />
         </ZobObject>
     </ZobObject>
     <ZobObject name="beach" guid="-2143505756" type="mesh">
@@ -529,6 +584,7 @@
                 <CullMode>Clockwise</CullMode>
             </RenderOptions>
         </Mesh>
+        <Behaviors />
     </ZobObject>
     <ZobObject name="boat" guid="3066522" type="mesh">
         <Position x="0" y="-4.25613" z="8.77317" />
@@ -542,6 +598,7 @@
                 <CullMode>Clockwise</CullMode>
             </RenderOptions>
         </Mesh>
+        <Behaviors />
     </ZobObject>
     <ZobObject name="skybox" guid="3066523" type="mesh">
         <Position x="0" y="0" z="0" />
@@ -555,11 +612,13 @@
                 <CullMode>CounterClockwise</CullMode>
             </RenderOptions>
         </Mesh>
+        <Behaviors />
     </ZobObject>
     <ZobObject name="trees" guid="3066525">
         <Position x="0" y="0" z="0" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="1" y="1" z="1" />
+        <Behaviors />
         <ZobObject name="tree_1" guid="3066524" type="mesh">
             <Position x="135" y="0" z="2" />
             <Rotation x="0" y="-22.9556" z="0" />
@@ -572,6 +631,7 @@
                     <CullMode>Clockwise</CullMode>
                 </RenderOptions>
             </Mesh>
+            <Behaviors />
         </ZobObject>
         <ZobObject name="tree_2" guid="3066526" type="mesh">
             <Position x="142" y="0" z="65" />
@@ -585,6 +645,7 @@
                     <CullMode>Clockwise</CullMode>
                 </RenderOptions>
             </Mesh>
+            <Behaviors />
         </ZobObject>
         <ZobObject name="tree_4" guid="3066527" type="mesh">
             <Position x="143" y="0" z="13" />
@@ -598,6 +659,7 @@
                     <CullMode>Clockwise</CullMode>
                 </RenderOptions>
             </Mesh>
+            <Behaviors />
         </ZobObject>
         <ZobObject name="tree_3" guid="3066528" type="mesh">
             <Position x="139" y="0" z="35" />
@@ -611,6 +673,7 @@
                     <CullMode>Clockwise</CullMode>
                 </RenderOptions>
             </Mesh>
+            <Behaviors />
         </ZobObject>
         <ZobObject name="tree_6" guid="3066529" type="mesh">
             <Position x="144" y="0" z="53" />
@@ -624,6 +687,7 @@
                     <CullMode>Clockwise</CullMode>
                 </RenderOptions>
             </Mesh>
+            <Behaviors />
         </ZobObject>
         <ZobObject name="tree_5" guid="3066530" type="mesh">
             <Position x="133" y="0" z="78" />
@@ -637,6 +701,7 @@
                     <CullMode>Clockwise</CullMode>
                 </RenderOptions>
             </Mesh>
+            <Behaviors />
         </ZobObject>
     </ZobObject>
     <ZobObject name="plane.obj" guid="3066488" type="mesh">
@@ -651,6 +716,7 @@
                 <CullMode>Clockwise</CullMode>
             </RenderOptions>
         </Mesh>
+        <Behaviors />
     </ZobObject>
     <ZobObject name="water.obj" guid="3066489" type="mesh">
         <Position x="-290.596" y="-3.9" z="-348.879" />
@@ -664,15 +730,18 @@
                 <CullMode>Clockwise</CullMode>
             </RenderOptions>
         </Mesh>
+        <Behaviors />
     </ZobObject>
     <ZobObject name="autres_spots" guid="3066490">
         <Position x="0" y="0" z="0" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="1" y="1" z="1" />
+        <Behaviors />
         <ZobObject name="Light_6" guid="-2143638798" type="light">
             <Position x="148" y="10" z="67" />
             <Rotation x="90" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
+            <Behaviors />
             <Color r="252" g="212" b="64" />
             <Intensity>5.00</Intensity>
             <FallOffDistance>20.00</FallOffDistance>
@@ -682,6 +751,7 @@
             <Position x="164" y="10" z="52" />
             <Rotation x="90" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
+            <Behaviors />
             <Color r="252" g="212" b="64" />
             <Intensity>5.00</Intensity>
             <FallOffDistance>20.00</FallOffDistance>
@@ -691,6 +761,7 @@
             <Position x="148" y="10" z="38" />
             <Rotation x="90" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
+            <Behaviors />
             <Color r="252" g="212" b="64" />
             <Intensity>5.00</Intensity>
             <FallOffDistance>20.00</FallOffDistance>
@@ -700,6 +771,7 @@
             <Position x="147" y="10" z="16" />
             <Rotation x="90" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
+            <Behaviors />
             <Color r="252" g="212" b="64" />
             <Intensity>5.00</Intensity>
             <FallOffDistance>20.00</FallOffDistance>
@@ -709,6 +781,7 @@
             <Position x="164" y="10" z="5" />
             <Rotation x="90" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
+            <Behaviors />
             <Color r="252" g="212" b="64" />
             <Intensity>5.00</Intensity>
             <FallOffDistance>20.00</FallOffDistance>
@@ -718,6 +791,7 @@
             <Position x="165" y="10" z="27" />
             <Rotation x="90" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
+            <Behaviors />
             <Color r="252" g="212" b="64" />
             <Intensity>5.00</Intensity>
             <FallOffDistance>20.00</FallOffDistance>

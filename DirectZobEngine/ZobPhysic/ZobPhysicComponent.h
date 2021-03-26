@@ -136,6 +136,7 @@ private:
 	eShapeType m_nextShapeType;
 	Transform m_localTransform;
 	Transform m_worldTransform;
+
 	Vector3 m_scale; 
 	Vector3 m_totalScale;
 	bool m_scaleWithObject;

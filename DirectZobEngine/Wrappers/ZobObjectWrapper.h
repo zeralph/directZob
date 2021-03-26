@@ -17,6 +17,24 @@ using namespace System::Drawing;
 
 namespace CLI {
 
+	public ref class ComboboxItem
+	{
+		public :
+			ComboboxItem(int k, String^ v, const ZobBehavior::wrapperData* w)
+			{
+				Key = k;
+				Value = v;
+				w = w;
+			}
+			String^ ToString() override
+			{
+				return Value;
+			}
+			int Key;
+			String^ Value;
+			const ZobBehavior::wrapperData* w;
+	};
+
 	public ref class ZobObjectWrapper : ManagedObject<ZobObject>
 	{
 	public:
@@ -34,7 +52,7 @@ namespace CLI {
 		ManagedVector3^			GetWorldRotation();
 		ManagedVector3^			GetScale();
 		ManagedRenderOptions^	GetRenderOptions();
-		UserControl^			FillBehaviorControl();
+		UserControl^			FillBehaviorsControl();
 		List<ZobObjectWrapper^>^ GetChildren();
 		void					SetWorldTransform(ManagedVector3^ p);
 		void					SetWorldRotation(ManagedVector3^ p);
@@ -66,12 +84,17 @@ namespace CLI {
 		void					SetPhysicComponentScaleWithObject(bool b);
 		void					GetPhysicComponentScaleWithObject(bool% b);
 
-		void					Handler(Object^ sender, System::EventArgs^ e);
+		void					FloatHandler(Object^ sender, System::EventArgs^ e);
+		void					ListValidationHandler(Object^ sender, System::EventArgs^ e);
+
+	private:
+		GroupBox^				FillBehaviorControl(ZobBehavior* zb);
 	protected:
 
 		void					AddFloatVariable(TableLayoutPanel^ panel, ZobBehavior::wrapperData* w);
-
-		DirectZobType::guid m_id;
+		void					AddEnumVariable(TableLayoutPanel^ panel, ZobBehavior::wrapperData* w);
+		ZobBehavior::wrapperData* GetWrapperDataForVariable(String^ variableName);
+ 		DirectZobType::guid m_id;
 	};
 }
 #endif //_WINDLL 

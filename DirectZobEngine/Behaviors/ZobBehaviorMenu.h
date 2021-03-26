@@ -25,8 +25,6 @@ class ZobBehaviorMenu : public ZobBehavior
 		};
 
 		~ZobBehaviorMenu() override;
-		const char* GetBehaviorTypeStr() override { return "menu"; }
-		TiXmlNode*	SaveUnderNode(TiXmlNode* node) override;
 		void		Init() override;
 		void		PreUpdate() override;
 		void		Update(float dt) override;

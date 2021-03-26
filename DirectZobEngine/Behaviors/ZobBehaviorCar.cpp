@@ -13,12 +13,6 @@
 #undef SGN
 #define SGN(x)       (((x) >= 0) ? 1 : -1)
 
-#define	DRAG		5.0		 		/* factor for air resistance (drag) 	*/
-#define	RESISTANCE	30.0			/* factor for rolling resistance */
-#define CA_R		-5.20			/* cornering stiffness */
-#define CA_F		-5.0			/* cornering stiffness */
-				
-
 
 ZobBehaviorCar::~ZobBehaviorCar()
 {
@@ -27,6 +21,7 @@ ZobBehaviorCar::~ZobBehaviorCar()
 
 ZobBehaviorCar::ZobBehaviorCar(ZobObject* zobObject, TiXmlElement* node) : ZobBehavior(zobObject, node)
 {
+	m_carType = eCarType_pouet;
 	m_type = eBehavior_car;
 	m_lastGroundPosition = ZobVector3(0, 0, 0);
 	m_lastGroundNormal = ZobVector3(0, 1, 0);
@@ -37,8 +32,17 @@ ZobBehaviorCar::ZobBehaviorCar(ZobObject* zobObject, TiXmlElement* node) : ZobBe
 	m_lastCollNormal   = ZobVector3(0, 0, 0);
 	Init();
 
-	WrapVariable(eWrapperType_float, "mass", &m_mass);
-	WrapVariable(eWrapperType_float, "max grip", &m_maxGrip);
+	int p[] = { eCarType_prout , eCarType_pouet, eCarType_truc};
+	const char* s[] = { "prout", "pouet", "truc" };
+	WrapEnum("carType", &m_carType, 3, p, s);
+
+	WrapVariable(eWrapperType_float, "Mass", &m_mass);
+	WrapVariable(eWrapperType_float, "Max friction", &m_maxGrip);
+	WrapVariable(eWrapperType_float, "Inertia", &m_inertia);
+	WrapVariable(eWrapperType_float, "Air resistance", &m_drag);
+	WrapVariable(eWrapperType_float, "Rolling resistance", &m_resistance);
+	WrapVariable(eWrapperType_float, "Front cornering stiffness", &m_ca_f);
+	WrapVariable(eWrapperType_float, "Rear cornering stiffness", &m_ca_r);
 }
 
 void ZobBehaviorCar::PreUpdate()
@@ -60,6 +64,10 @@ void ZobBehaviorCar::Init()
 	m_mass = 1500;
 	m_maxGrip = 10.0f;
 	m_inertia = 1500;
+	m_drag = 5.0;		 		
+	m_resistance = 30.0;	
+	m_ca_r = -5.20;			
+	m_ca_f = -5.0;		
 	m_heightAboveGround = 0.9f;
 	m_handBrake = false;
 	m_velocityWorld = ZobVector3(0, 0, 0);
@@ -268,7 +276,7 @@ void ZobBehaviorCar::Update(float dt)
 		// lateral force on front wheels = (Ca * slip angle) capped to friction circle * load
 		flatf.y = 0;
 		flatf.z = 0;
-		flatf.x = CA_F * slipanglefront;
+		flatf.x = m_ca_f * slipanglefront;
 		flatf.x = fmin(m_maxGrip, flatf.x);
 		flatf.x = fmax(-m_maxGrip, flatf.x);
 		flatf.x *= weight;
@@ -278,7 +286,7 @@ void ZobBehaviorCar::Update(float dt)
 		// lateral force on rear wheels
 		flatr.y = 0;
 		flatr.z = 0;
-		flatr.x = CA_R * slipanglerear;
+		flatr.x = m_ca_r * slipanglerear;
 		flatr.x = fmin(m_maxGrip, flatr.x);
 		flatr.x = fmax(-m_maxGrip, flatr.x);
 		flatr.x *= weight;
@@ -288,9 +296,9 @@ void ZobBehaviorCar::Update(float dt)
 		// Forces and torque on body
 
 		// drag and rolling resistance
-		resistance.x = -(RESISTANCE * velocity.x + DRAG * velocity.x * abs(velocity.x));
+		resistance.x = -(m_resistance * velocity.x + m_drag* velocity.x * abs(velocity.x));
 		resistance.y = 0;//-(RESISTANCE * velocity.y + DRAG * velocity.y * abs(velocity.y));
-		resistance.z = -(RESISTANCE * velocity.z + DRAG * velocity.z * abs(velocity.z));
+		resistance.z = -(m_resistance * velocity.z + m_drag* velocity.z * abs(velocity.z));
 
 		// sum forces
 		force.x = ftraction.x + cos(m_steerangle) * flatf.x + flatr.x + resistance.x;
@@ -391,14 +399,6 @@ void ZobBehaviorCar::Update(float dt)
 	h->Print(ZobHUDManager::eHudUnit_ratio, 0.1f, 0.8f, 1, "Leelawadee UI", &c, "MASS : %.2f GRIP %.2f", m_mass, m_maxGrip);
 	h->Print(ZobHUDManager::eHudUnit_ratio, 0.8f, 0.9f, 1, "Leelawadee UI", &c, "%.0f Kmh", kmh);
 	h->Print(ZobHUDManager::eHudUnit_ratio, 0.1f, 0.9f, 1, "Leelawadee UI", &c, "wheels %.2f", m_steerangle);
-}
-
-TiXmlNode* ZobBehaviorCar::SaveUnderNode(TiXmlNode* node)
-{
-	TiXmlElement m = TiXmlElement("Behavior");
-	m.SetAttribute("type", (int)eBehavior_car);
-	node->InsertEndChild(m);
-	return NULL;
 }
 
 void ZobBehaviorCar::DrawGizmos(const Camera* camera, const ZobVector3* position, const ZobVector3* rotation) const

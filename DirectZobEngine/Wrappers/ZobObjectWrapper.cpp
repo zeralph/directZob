@@ -6,6 +6,8 @@
 #include "../ZobObjects/Camera.h"
 #include "../DirectZob.h"
 
+#define TO_MANAGED_STRING(x) gcnew String(x);
+
 namespace CLI
 {
 	ZobObjectWrapper::ZobObjectWrapper(ZobObject* zobObject):ManagedObject(zobObject, false)
@@ -18,111 +20,225 @@ namespace CLI
 		m_Instance = NULL;
 	}
 
-	UserControl^ ZobObjectWrapper::FillBehaviorControl()
+	UserControl^ ZobObjectWrapper::FillBehaviorsControl()
 	{
 		ZobObject* z = GetInstance();
 		if (z)
 		{
-			ZobBehavior* b = z->GetBehavior();
-			if (b)
+			const std::vector<ZobBehavior*>* behaviors = z->GetBehaviors();
+			if (behaviors->size() > 0)
 			{
-				const std::vector<ZobBehavior::wrapperData>* v = b->GetWrappedVariables();
-				if (v->size() > 0)
+				UserControl^ c = gcnew UserControl();
+				c->Width = 300;
+				c->Height = 0;
+				for (int i = 0; i < behaviors->size(); i++)
 				{
-					UserControl^ c = gcnew UserControl();
-					c->Dock = DockStyle::Fill;
-					c->BackColor = Drawing::Color::Red;
-					TableLayoutPanel^ panel = gcnew TableLayoutPanel();	
-					panel->ColumnCount = 2;
-					panel->RowCount = v->size();
-					panel->Dock = DockStyle::Fill;
-					panel->BackColor = Drawing::Color::Green;
-					c->Controls->Add(panel);
-					int idx = 1;
-					for (std::vector<ZobBehavior::wrapperData>::const_iterator iter = v->begin(); iter != v->end(); iter++)
-					{
-						ZobBehavior::wrapperData w = (*iter);
-						if (w.type == ZobBehavior::eWrapperType_float)
-						{
-							AddFloatVariable(panel, &w);
-						}
-						else if (w.type == ZobBehavior::eWrapperType_string)
-						{
-							//AddFloatVariable(panel, &w);
-						}
-						else if (w.type == ZobBehavior::eWrapperType_int)
-						{
-							//AddFloatVariable(panel, &w);
-						}
-						else if (w.type == ZobBehavior::eWrapperType_ZobVector2)
-						{
-							//AddFloatVariable(panel, &w);
-						}
-						else if (w.type == ZobBehavior::eWrapperType_ZobVector3)
-						{
-							//AddFloatVariable(panel, &w);
-						}
-						idx++;
-					}
-					return c;
+					ZobBehavior* zb = behaviors->at(i);
+					GroupBox^ gb = FillBehaviorControl(zb);
+					c->Controls->Add(gb);
+					gb->Top = c->Height;
+					c->Height = c->Height + gb->Height + 2;
 				}
+				return c;
 			}
+		}
+	}
+
+	GroupBox^ ZobObjectWrapper::FillBehaviorControl(ZobBehavior* zb)
+	{
+		if (zb)
+		{		
+			GroupBox^ gb = gcnew GroupBox();
+			gb->Text = TO_MANAGED_STRING(zb->GetBehaviorTypeStr());
+			gb->Width = 298;
+			gb->Height = 20;
+			const std::vector<ZobBehavior::wrapperData>* v = zb->GetWrappedVariables();
+			if (v->size() > 0)
+			{
+				TableLayoutPanel^ panel = gcnew TableLayoutPanel();	
+				panel->Width = 296;
+				panel->ColumnCount = 1;
+				panel->RowCount = v->size();
+				//panel->Dock = DockStyle::Fill;
+				//panel->BackColor = Drawing::Color::Green;
+				panel->Height = v->size() * 28;
+				TableLayoutColumnStyleCollection^ styles = panel->ColumnStyles;
+				styles->Add(gcnew ColumnStyle(SizeType::Absolute, 300));
+				//styles->Add(gcnew ColumnStyle(SizeType::Absolute, 150));
+				int idx = 1;
+				for (std::vector<ZobBehavior::wrapperData>::const_iterator iter = v->begin(); iter != v->end(); iter++)
+				{
+					ZobBehavior::wrapperData w = (*iter);
+					if (w.type == ZobBehavior::eWrapperType_float)
+					{
+						AddFloatVariable(panel, &w);
+					}
+					else if (w.type == ZobBehavior::eWrapperType_enum)
+					{
+						AddEnumVariable(panel, &w);
+					}
+					else if (w.type == ZobBehavior::eWrapperType_string)
+					{
+						//AddFloatVariable(panel, &w);
+					}
+					else if (w.type == ZobBehavior::eWrapperType_int)
+					{
+						//AddFloatVariable(panel, &w);
+					}
+					else if (w.type == ZobBehavior::eWrapperType_ZobVector2)
+					{
+						//AddFloatVariable(panel, &w);
+					}
+					else if (w.type == ZobBehavior::eWrapperType_ZobVector3)
+					{
+						//AddFloatVariable(panel, &w);
+					}
+					idx++;
+				}
+				gb->Controls->Add(panel);
+				gb->Height = panel->Height + 2;
+				panel->Dock = DockStyle::Fill;	
+			}
+			return gb;
 		}
 		return nullptr;
 	}
 
-	void ZobObjectWrapper::AddFloatVariable(TableLayoutPanel^ panel, ZobBehavior::wrapperData* w)
+	void ZobObjectWrapper::AddEnumVariable(TableLayoutPanel^ panel, ZobBehavior::wrapperData* w)
 	{
+		TableLayoutPanel^ subPanel = gcnew TableLayoutPanel();
+		subPanel->Width = 300;
+		subPanel->Height = 25;
+		subPanel->ColumnCount = 2;
+		subPanel->RowCount = 1;
 		Label^ label = gcnew Label();
-		label->Text = gcnew String(w->name.c_str());
-		label->BackColor = Drawing::Color::Beige;
-		label->Dock = DockStyle::Fill;
-		label->Width = 50;
+		label->Text = TO_MANAGED_STRING(w->name.c_str());
+		label->Width = 140;
 		label->Height = 20;
-		TextBox^ txt = gcnew TextBox();
-		txt->Name = gcnew String(w->name.c_str());
-		txt->Width = 50;
-		txt->Height = 20;
-		float* f = (float*)(w->ptr);
-		txt->Text = (*f).ToString();
-		txt->Leave += gcnew EventHandler(this, &ZobObjectWrapper::Handler);
-		panel->Controls->Add(label);
-		panel->Controls->Add(txt);
+		label->TextAlign = ContentAlignment::BottomRight;
+		ComboBox^ list = gcnew ComboBox();
+		list->Name = TO_MANAGED_STRING(w->name.c_str());
+		list->Width = 140;
+		list->Height = 22;
+		List<ComboboxItem^>^ items = gcnew List<ComboboxItem^>();
+		for (int i = 0; i < w->enumNames.size(); i++)
+		{
+			String^ s = TO_MANAGED_STRING(w->enumNames[i].c_str());
+			int idx = w->enumValues[i];
+			ComboboxItem^ it = gcnew ComboboxItem(idx, s, w);
+			items->Add(it);
+		}
+		list->BindingContext = gcnew BindingContext();
+		list->DataSource = items;
+		int* itemIdx = (int*)(w->ptr);
+		list->SelectedIndex = 0;
+		for (int i = 0; i < list->Items->Count; i++)
+		{
+			ComboboxItem^ it = (ComboboxItem^)list->Items[i];
+			if (it->Key == *itemIdx)
+			{
+				list->SelectedIndex = i;
+				break;
+			}
+		}
+		list->SelectedIndexChanged += gcnew EventHandler(this, &ZobObjectWrapper::ListValidationHandler);
+		subPanel->Controls->Add(label);
+		subPanel->Controls->Add(list);
+		panel->Controls->Add(subPanel);
 	}
 
-	void ZobObjectWrapper::Handler(Object^ sender, EventArgs^ e)
+	void ZobObjectWrapper::AddFloatVariable(TableLayoutPanel^ panel, ZobBehavior::wrapperData* w)
+	{
+		TableLayoutPanel^ subPanel = gcnew TableLayoutPanel();
+		subPanel->Width = 300;
+		subPanel->Height = 23;
+		subPanel->ColumnCount = 2;
+		subPanel->RowCount = 1;
+		Label^ label = gcnew Label();
+		label->Text = TO_MANAGED_STRING(w->name.c_str());
+		//label->Dock = DockStyle::Fill;
+		label->Width = 140;
+		label->Height = 20;
+		label->TextAlign = ContentAlignment::BottomRight;
+		TextBox^ txt = gcnew TextBox();
+		txt->Name = TO_MANAGED_STRING(w->name.c_str());
+		txt->Width = 140;
+		txt->Height = 20;
+		//txt->MaximumSize = Drawing::Size(100, 20);
+		float* f = (float*)(w->ptr);
+		txt->Text = (*f).ToString();
+		txt->Leave += gcnew EventHandler(this, &ZobObjectWrapper::FloatHandler);
+		subPanel->Controls->Add(label);
+		subPanel->Controls->Add(txt);
+		panel->Controls->Add(subPanel);
+	}
+
+	ZobBehavior::wrapperData* ZobObjectWrapper::GetWrapperDataForVariable(String^ variableName)
 	{
 		ZobObject* z = GetInstance();
 		if (z)
 		{
-			ZobBehavior* b = z->GetBehavior();
-			if (b)
+			const std::vector<ZobBehavior*>* behaviors = z->GetBehaviors();
+			if(behaviors)
 			{
-				const std::vector<ZobBehavior::wrapperData>* v = b->GetWrappedVariables();
-				if (v->size() > 0)
+				for (int i = 0; i < behaviors->size(); i++)
 				{
-					TextBox^ t = static_cast<TextBox^>(sender);
-					for (std::vector<ZobBehavior::wrapperData>::const_iterator iter = v->begin(); iter != v->end(); iter++)
+					ZobBehavior* b = behaviors->at(i);
+					if (b)
 					{
-						ZobBehavior::wrapperData w = (*iter);
-						String^ wName = gcnew String(w.name.c_str());
-						if (wName == t->Name)
+						const std::vector<ZobBehavior::wrapperData>* v = b->GetWrappedVariables();
+						if (v->size() > 0)
 						{
-							try
-							{				
-								float* f = (float*)w.ptr;
-								t->Text = t->Text->Replace(".", ",");
-								float rez = (float)(Convert::ToDouble(t->Text));
-								*f = rez;
-							}
-							catch(...)
-							{ 
-								float* f = (float*)w.ptr;
-								t->Text = (*f).ToString();
+							for (std::vector<ZobBehavior::wrapperData>::const_iterator iter = v->begin(); iter != v->end(); iter++)
+							{
+								ZobBehavior::wrapperData w = (*iter);
+								String^ wName = TO_MANAGED_STRING(w.name.c_str());
+								if (wName == variableName)
+								{
+									return &w;
+								}
 							}
 						}
 					}
 				}
+			}
+		}
+		return NULL;
+	}
+
+	void ZobObjectWrapper::ListValidationHandler(Object^ sender, System::EventArgs^ e)
+	{
+		ComboBox^ t = static_cast<ComboBox^>(sender);
+		const ZobBehavior::wrapperData* w = GetWrapperDataForVariable(t->Name);
+		if (w)
+		{
+			ComboboxItem^ it = (ComboboxItem^)t->SelectedItem;
+			if (it)
+			{
+				int* i = (int*)w->ptr;
+				*i = it->Key;
+			}
+		}
+	}
+
+	void ZobObjectWrapper::FloatHandler(Object^ sender, EventArgs^ e)
+	{
+
+		TextBox^ t = static_cast<TextBox^>(sender);
+		ZobBehavior::wrapperData* w = GetWrapperDataForVariable(t->Name);
+		if (w)
+		{
+			try
+			{
+				float* f = (float*)w->ptr;
+				t->Text = t->Text->Replace(".", ",");
+				float rez = (float)(Convert::ToDouble(t->Text));
+				*f = rez;
+			}
+			catch (...)
+			{
+				float* f = (float*)w->ptr;
+				t->Text = (*f).ToString();
 			}
 		}
 	}
@@ -141,7 +257,7 @@ namespace CLI
 		ZobObject* z = GetInstance();
 		if (z)
 		{
-			return gcnew String(z->FactoryFile().c_str());
+			return TO_MANAGED_STRING(z->FactoryFile().c_str());
 		}
 		return nullptr;
 	}
@@ -162,7 +278,7 @@ namespace CLI
 		ZobObject* z = GetInstance();
 		if (z)
 		{
-			return gcnew String(z->GetName().c_str());
+			return TO_MANAGED_STRING(z->GetName().c_str());
 		}
 		return nullptr;
 	}
@@ -174,7 +290,7 @@ namespace CLI
 		{
 			std::string s;
 			z->GetFullNodeName(s);
-			return gcnew String(s.c_str());
+			return TO_MANAGED_STRING(s.c_str());
 		}
 		return nullptr;
 	}
@@ -184,7 +300,7 @@ namespace CLI
 		ZobObject* z = GetInstance();
 		if (z)
 		{
-			return gcnew String(z->GetMeshName().c_str());
+			return TO_MANAGED_STRING(z->GetMeshName().c_str());
 		}
 		return nullptr;
 	}
@@ -476,8 +592,8 @@ namespace CLI
 			std::string cType;
 			std::string cShapeType;
 			GetInstance()->GetPhysicComponentInfo(cType, cShapeType);
-			type = gcnew String(cType.c_str());
-			shapeType = gcnew String(cShapeType.c_str());
+			type = TO_MANAGED_STRING(cType.c_str());
+			shapeType = TO_MANAGED_STRING(cShapeType.c_str());
 		};
 	}
 
@@ -506,7 +622,7 @@ namespace CLI
 			hx = x;
 			hy = y;
 			hz = z;
-			mesh = gcnew String(s.c_str());
+			mesh = TO_MANAGED_STRING(s.c_str());
 		}
 	}
 

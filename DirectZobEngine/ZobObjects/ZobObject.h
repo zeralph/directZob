@@ -90,7 +90,7 @@ public:
 	//temp ?
 	const ZobMatrix4x4*				GetModelMatrix() const { return &m_modelMatrix; };
 	const ZobMatrix4x4*				GetRotationScaleMatrix() const { return &m_rotationScaleMatrix; };
-	ZobBehavior*					GetBehavior() { return m_behavior; }
+	const std::vector<ZobBehavior*>*GetBehaviors() { return &m_behaviors; }
 	//Physic interface, mainly for editor
 	void							GetPhysicComponentInfo(std::string& type, std::string& shapeType) const;
 	void							SetPhysicComponentInfo(std::string& type, std::string& shapeType);
@@ -112,7 +112,7 @@ protected:
 	ZobPhysicComponent* m_physicComponent;
 	Mesh* m_mesh = NULL;
 	std::vector<ZobObject*> m_children;
-	ZobBehavior* m_behavior;
+	std::vector <ZobBehavior*> m_behaviors;
 	ZobMatrix4x4 m_modelMatrix;
 	ZobMatrix4x4 m_rotationScaleMatrix;
 	std::string m_name;

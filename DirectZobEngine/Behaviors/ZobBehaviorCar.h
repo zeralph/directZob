@@ -7,9 +7,15 @@ class ZobBehaviorCar : public ZobBehavior
 {
 	friend class ZobBehaviorFactory;
 	public:
+
+		enum eCarType
+		{
+			eCarType_prout = 0,
+			eCarType_pouet,
+			eCarType_truc,
+		};
+
 		~ZobBehaviorCar() override;
-		const char* GetBehaviorTypeStr() override { return "car"; }
-		TiXmlNode*	SaveUnderNode(TiXmlNode* node) override;
 		void		Init() override;
 		void		PreUpdate() override;
 		void		Update(float dt) override;
@@ -42,5 +48,11 @@ class ZobBehaviorCar : public ZobBehavior
 
 		float m_mass;
 		float m_maxGrip;	/* maximum (normalised) friction force, =diameter of friction circle */
+		float m_drag;		 		/* factor for air resistance (drag) 	*/
+		float m_resistance;			/* factor for rolling resistance */
+		float m_ca_r;			/* cornering stiffness */
+		float m_ca_f;			/* cornering stiffness */
+
+		eCarType m_carType;
 
 };

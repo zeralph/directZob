@@ -15,6 +15,8 @@ ZobBehaviorMenu::~ZobBehaviorMenu()
 
 ZobBehaviorMenu::ZobBehaviorMenu(ZobObject* zobObject, TiXmlElement* node) : ZobBehavior(zobObject, node)
 {
+	m_type = eBehavior_menu; 
+	Init();
 }
 
 void ZobBehaviorMenu::PreUpdate()
@@ -108,11 +110,6 @@ void ZobBehaviorMenu::Update(float dt)
 			}
 		}
 	}
-}
-
-TiXmlNode* ZobBehaviorMenu::SaveUnderNode(TiXmlNode* node)
-{
-	return NULL;
 }
 
 void ZobBehaviorMenu::DrawGizmos(const Camera* camera, const ZobVector3* position, const ZobVector3* rotation) const

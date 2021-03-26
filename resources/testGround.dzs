@@ -42,7 +42,18 @@
         <Position x="0" y="10" z="0" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="1" y="1" z="1" />
-        <Behavior type="1" />
+        <Behaviors>
+            <Behavior Type="Car">
+                <Var name="carType" value="truc" />
+                <Var name="Mass" value="800.000000" />
+                <Var name="Max friction" value="2.000000" />
+                <Var name="Inertia" value="1000.000000" />
+                <Var name="Air resistance" value="5.000000" />
+                <Var name="Rolling resistance" value="30.000000" />
+                <Var name="Front cornering stiffness" value="-5.000000" />
+                <Var name="Rear cornering stiffness" value="-5.200000" />
+            </Behavior>
+        </Behaviors>
         <Physic>
             <RigidBody type="1" active="1">
                 <Box halfExtends_x="1.000000" halfExtends_y="0.700000" halfExtends_z="2.500000" layers="4" scale_with_object="1">

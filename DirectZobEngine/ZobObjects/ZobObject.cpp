@@ -13,7 +13,7 @@ ZobObject::ZobObject(ZobType t, ZobSubType s, const std::string& name, ZobObject
 	DirectZob::LogInfo("ZobObject %s creation", name.c_str());
 	DirectZob::AddIndent();
 	sObjectNumber++;
-	m_behavior = NULL;
+	m_behaviors.clear();
 	m_factoryFile = factoryFile?factoryFile->c_str():"";
 	m_physicComponent = new ZobPhysicComponent(this, NULL);
 	if (name.length() == 0)
@@ -57,7 +57,7 @@ ZobObject::ZobObject(ZobType t, ZobSubType s, const std::string& name, ZobObject
 ZobObject::ZobObject(DirectZobType::guid id, TiXmlElement* node, ZobObject* parent, const std::string* factoryFile /*=NULL*/)
 	:ZOBGUID(id)
 {
-	m_behavior = NULL;
+	m_behaviors.clear();
 	sObjectNumber++;
 	m_factoryFile = factoryFile ? factoryFile->c_str() : "";
 	ZobVector3 position, rotation, scale, orientation = ZobVector3();
@@ -109,7 +109,7 @@ ZobObject::ZobObject(DirectZobType::guid id, TiXmlElement* node, ZobObject* pare
 	if (meshNode)
 	{
 		std::string meshName = meshNode->Attribute("name");
-		std::string meshPath = meshNode->Attribute("path")? meshNode->Attribute("path"):std::string("");
+		std::string meshPath = meshNode->Attribute("path") ? meshNode->Attribute("path") : std::string("");
 		std::string meshFile = meshNode->Attribute("file");
 		if (meshName.length() > 0 && meshFile.length() > 0)
 		{
@@ -119,26 +119,26 @@ ZobObject::ZobObject(DirectZobType::guid id, TiXmlElement* node, ZobObject* pare
 		if (f)
 		{
 			TiXmlElement* n = f->FirstChildElement("Lighting");
-			if(n)
+			if (n)
 			{
-				std::string l  = n->GetText();
-				if(l == "None")
+				std::string l = n->GetText();
+				if (l == "None")
 				{
 					m_renderOptions.lightMode = RenderOptions::eLightMode_none;
 				}
-				else if(l == "Flat")
+				else if (l == "Flat")
 				{
 					m_renderOptions.lightMode = RenderOptions::eLightMode_flat;
 				}
-				else if(l == "FlatPhong")
+				else if (l == "FlatPhong")
 				{
 					m_renderOptions.lightMode = RenderOptions::eLightMode_flatPhong;
 				}
-				else if(l == "Gouraud")
+				else if (l == "Gouraud")
 				{
 					m_renderOptions.lightMode = RenderOptions::eLightMode_gouraud;
 				}
-				else if(l == "Phong")
+				else if (l == "Phong")
 				{
 					m_renderOptions.lightMode = RenderOptions::eLightMode_phong;
 				}
@@ -200,8 +200,15 @@ ZobObject::ZobObject(DirectZobType::guid id, TiXmlElement* node, ZobObject* pare
 		m_parent->AddChildReference(this);
 	}
 	//Behavior
-	TiXmlElement* behaviorNode = node->FirstChildElement("Behavior");
-	m_behavior = ZobBehaviorFactory::CreateBehavior(this, behaviorNode);
+	TiXmlElement* behaviorsNode = node->FirstChildElement("Behaviors");
+	if(behaviorsNode)
+	{
+		for (TiXmlElement* e = behaviorsNode->FirstChildElement("Behavior"); e != NULL; e = e->NextSiblingElement("Behavior"))
+		{
+			ZobBehavior* b = ZobBehaviorFactory::CreateBehavior(this, e);
+			m_behaviors.push_back(b);
+		}
+	}
 	//Init
 	m_physicComponent->Init(&position, &rotation);
 	SetScale(scale.x, scale.y, scale.z);
@@ -215,9 +222,9 @@ ZobObject::~ZobObject()
 	DirectZob::AddIndent();
 
 	DirectZob::GetInstance()->GetZobObjectManager()->AddIdToDeleted(GetId());
-	if (m_behavior)
+	for (int i = 0; i < m_behaviors.size(); i++)
 	{
-		delete m_behavior;
+		delete m_behaviors[i];
 	}
 	delete m_physicComponent;
 	if (m_parent != NULL)
@@ -302,9 +309,9 @@ void ZobObject::UpdateMesh(const Camera* camera, Core::Engine* engine)
 
 void ZobObject::Init()
 {
-	if (m_behavior)
+	for (int i = 0; i < m_behaviors.size(); i++)
 	{
-		m_behavior->Init();
+		//m_behaviors[i]->Init();
 	}
 	for (int i = 0; i < m_children.size(); i++)
 	{
@@ -316,9 +323,9 @@ void ZobObject::Init()
 void ZobObject::PreUpdate()
 {
 	OPTICK_EVENT();
-	if (m_behavior)
+	for (int i = 0; i < m_behaviors.size(); i++)
 	{
-		m_behavior->PreUpdate();
+		m_behaviors[i]->PreUpdate();
 	}
 	for (int i = 0; i < m_children.size(); i++)
 	{
@@ -332,9 +339,9 @@ void ZobObject::PreUpdate()
 void ZobObject::UpdateBehavior(float dt)
 {
 	OPTICK_EVENT();
-	if (m_behavior)
+	for (int i = 0; i < m_behaviors.size(); i++)
 	{
-		m_behavior->Update(dt);
+		m_behaviors[i]->Update(dt);
 	}
 	for (int i = 0; i < m_children.size(); i++)
 	{
@@ -503,9 +510,9 @@ void ZobObject::DrawGizmos(const Camera* camera, Core::Engine* engine)
 	ZobVector3 p = GetWorldPosition();
 	ZobVector3 r = GetWorldRotation();
 	m_physicComponent->DrawGizmos(camera, &p, &r);
-	if (m_behavior)
+	for (int i = 0; i < m_behaviors.size(); i++)
 	{
-		m_behavior->DrawGizmos(camera, &p, &r);
+		m_behaviors[i]->DrawGizmos(camera, &p, &r);
 	}
 }
 
@@ -723,10 +730,12 @@ TiXmlNode* ZobObject::SaveUnderNode(TiXmlNode* node)
 		meshNode.InsertEndChild(renderOptions);
 		objectNode->InsertEndChild(meshNode);
 	}
-	if (m_behavior)
+	TiXmlElement behaviors = TiXmlElement("Behaviors");
+	for (int i = 0; i < m_behaviors.size(); i++)
 	{
-		m_behavior->SaveUnderNode(objectNode);
+		m_behaviors[i]->SaveUnderNode(&behaviors);
 	}
+	objectNode->InsertEndChild(behaviors);
 	m_physicComponent->SaveUnderNode(objectNode);
 	return (TiXmlNode*)objectNode;
 }

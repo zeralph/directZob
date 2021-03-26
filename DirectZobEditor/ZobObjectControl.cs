@@ -20,6 +20,8 @@ namespace DirectZobEditor
         ZobLightControl m_lightControl = null;
         ZobCameraControl m_cameraControl = null;
         ZobMeshControl m_meshControl = null;
+        List<UserControl> m_behaviors = null;
+        int m_defaultHeight;
         public ZobObjectControl(Form1 form, ZobLightControl l, ZobCameraControl c, ZobMeshControl m)
         {
             InitializeComponent();
@@ -32,6 +34,8 @@ namespace DirectZobEditor
             m_cameraControl.Visible = false;
             this.Visible = false;
             m_meshManagerWrapper = new CLI.MeshManagerWrapper();
+            m_behaviors = new List<UserControl>();
+            m_defaultHeight = this.Height;
             ClearValues();
         }
 
@@ -56,15 +60,26 @@ namespace DirectZobEditor
             m_currentZobObjectWrapper = e.newZobObject;
             if (m_currentZobObjectWrapper != null)
             {
-
+                for(int i=0; i< m_behaviors.Count; i++)
+                {
+                    this.ZobObjectLayout.Controls.Remove(m_behaviors[i]);
+                    m_behaviors[i] = null;
+                }
+                m_behaviors.Clear();
+                //this.Height = m_defaultHeight;
                 SetValues();
                 this.Visible = true;
-                UserControl behaviorControl = m_currentZobObjectWrapper.FillBehaviorControl();
+                UserControl behaviorControl = m_currentZobObjectWrapper.FillBehaviorsControl();
                 if (behaviorControl != null)
                 {
-                    this.behaviorBox.Controls.Add(behaviorControl);
-                    this.Height += behaviorControl.Height; 
+                    this.ZobObjectLayout.Controls.Add(behaviorControl);
+                    behaviorControl.Width = this.Width;
+                    //behaviorControl.Location = new Point(0, TransformVars.Height);
+                    //this.Height += behaviorControl.Height;
+                    //behaviorControl.Width = TransformVars.Width;
+                    m_behaviors.Add(behaviorControl);
                 }
+                //groupBoxZobObject.Height = this.ZobObjectLayout.Height;
             }
             else
             {
