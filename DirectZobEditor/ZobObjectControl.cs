@@ -66,7 +66,6 @@ namespace DirectZobEditor
                     m_behaviors[i] = null;
                 }
                 m_behaviors.Clear();
-                //this.Height = m_defaultHeight;
                 SetValues();
                 this.Visible = true;
                 UserControl behaviorControl = m_currentZobObjectWrapper.FillBehaviorsControl();
@@ -74,12 +73,8 @@ namespace DirectZobEditor
                 {
                     this.ZobObjectLayout.Controls.Add(behaviorControl);
                     behaviorControl.Width = this.Width;
-                    //behaviorControl.Location = new Point(0, TransformVars.Height);
-                    //this.Height += behaviorControl.Height;
-                    //behaviorControl.Width = TransformVars.Width;
                     m_behaviors.Add(behaviorControl);
                 }
-                //groupBoxZobObject.Height = this.ZobObjectLayout.Height;
             }
             else
             {

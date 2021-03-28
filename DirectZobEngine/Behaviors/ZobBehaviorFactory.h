@@ -2,8 +2,7 @@
 #include "../Types.h"
 #include "../tinyxml/tinyxml.h"
 #include "ZobBehavior.h"
-#include "ZobBehaviorCar.h"
-#include "ZobBehaviorMenu.h"
+
 
 class ZobObject;
 class ZobBehaviorFactory 

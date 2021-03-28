@@ -111,7 +111,9 @@
 				'Behaviors/ZobBehaviorCar.h',
 				'Behaviors/ZobBehaviorCar.cpp',
 				'Behaviors/ZobBehaviorMenu.h',
-				'Behaviors/ZobBehaviorMenu.cpp',				
+				'Behaviors/ZobBehaviorMenu.cpp',	
+				'Behaviors/ZobBehaviorPhysicShape.h',
+				'Behaviors/ZobBehaviorPhysicShape.cpp',				
             ],
             'conditions': [
                 [

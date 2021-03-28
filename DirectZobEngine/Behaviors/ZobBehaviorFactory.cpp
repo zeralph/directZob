@@ -1,10 +1,14 @@
 #include "ZobBehaviorFactory.h"
+#include "ZobBehaviorCar.h"
+#include "ZobBehaviorMenu.h"
+#include "ZobBehaviorPhysicShape.h"
 
 const char* ZobBehaviorFactory::eBehaviorTypeStr[ZobBehavior::__eBehavior_MAX__] =
 {
 	"None",
 	"Car",
-	"Menu"
+	"Menu",
+	"Physic shape"
 };
 
 ZobBehavior* ZobBehaviorFactory::CreateBehavior(ZobObject* zobObject, TiXmlElement* node)
@@ -27,6 +31,9 @@ ZobBehavior* ZobBehaviorFactory::CreateBehavior(ZobObject* zobObject, TiXmlEleme
 			{
 			case ZobBehavior::eBehavior_car:
 				zb = new ZobBehaviorCar(zobObject, node);
+				break;
+			case ZobBehavior::eBehavior_physicShape:
+				zb = new ZobBehaviorPhysicShape(zobObject, node);
 				break;
 			case ZobBehavior::eBehavior_menu:
 				zb = new ZobBehaviorMenu(zobObject, node);

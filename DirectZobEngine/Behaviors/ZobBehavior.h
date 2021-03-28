@@ -30,6 +30,7 @@ public:
 		eBehavior_none = 0,
 		eBehavior_car,
 		eBehavior_menu,
+		eBehavior_physicShape,
 		__eBehavior_MAX__,
 	};
 
