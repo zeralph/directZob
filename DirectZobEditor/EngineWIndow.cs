@@ -360,6 +360,7 @@ namespace DirectZobEditor
 
         private void onFrameEndCallbackMethod()
         {
+            m_directZobWrapper.EditorUpdate();
             try
             {
                 EngineRender.Invoke(AfterUpdateEngineWindowDelegate);

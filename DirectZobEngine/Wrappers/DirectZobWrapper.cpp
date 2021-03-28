@@ -7,6 +7,7 @@ namespace CLI
 	DirectZobWrapper::DirectZobWrapper():ManagedObject(new DirectZob, true)
 	{
 		m_run = false;
+		m_sceneLoadedCb = nullptr;
 	}
 
 	void DirectZobWrapper::StartPhysic()
@@ -42,15 +43,16 @@ namespace CLI
 		}
 	}
 
-	void DirectZobWrapper::LoadScene(System::String^ path, System::String^ file)
+	void DirectZobWrapper::LoadScene(System::String^ path, System::String^ file, engineCallback^ loaded)
 	{
 		if (GetInstance())
 		{
+			m_sceneLoadedCb = loaded;
 			std::string stdPath;
 			MarshalString(path, stdPath);
 			std::string stdFile;
 			MarshalString(file, stdFile);
-			GetInstance()->LoadScene(stdPath, stdFile); 
+			GetInstance()->LoadScene(stdPath, stdFile, (DirectZob::engineCallback)CallSceneLoadedCallback);
 		}
 	}
 
@@ -126,6 +128,14 @@ namespace CLI
 		};
 	}
 
+	void DirectZobWrapper::CallSceneLoadedCallback()
+	{
+		if (m_sceneLoadedCb != nullptr)
+		{
+			m_sceneLoadedCb();
+		};
+	}
+
 	void DirectZobWrapper::CallQueuingCallback()
 	{
 		if (m_queuingCb != nullptr)
@@ -163,6 +173,14 @@ namespace CLI
 			}
 		}
 		return 0;
+	}
+
+	void DirectZobWrapper::EditorUpdate()
+	{
+		if (GetInstance())
+		{
+			GetInstance()->EditorUpdate();
+		}
 	}
 
 	int DirectZobWrapper::Stop()

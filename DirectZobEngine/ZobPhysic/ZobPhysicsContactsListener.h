@@ -29,6 +29,7 @@ public :
             CollisionCallback::ContactPair contactPair = callbackData.getContactPair(p);
             //if (contactPair.getEventType() == CollisionCallback::ContactPair::EventType::ContactStart)
             {
+/*
                 // For each contact point of the contact pair 
                 ZobPhysicComponent* zobComp1 = phyEng->GetZobComponentFromRigidBody(contactPair.getBody1());
                 ZobPhysicComponent* zobComp2 = phyEng->GetZobComponentFromRigidBody(contactPair.getBody2());
@@ -76,6 +77,7 @@ public :
                     coll.contactType = (ZobPhysicComponent::eContactType)contactPair.getEventType();
                     zobComp2->OnCollide(coll);
                 }
+*/
             }
         }
     }

@@ -42,7 +42,7 @@ namespace CLI {
 			}
 			return NULL;
 		}
-		void MarshalString(System::String^ s, std::string& os) {
+		static void MarshalString(System::String^ s, std::string& os) {
 			using namespace System::Runtime::InteropServices;
 			const char* chars = (const char*)(Marshal::StringToHGlobalAnsi(s)).ToPointer();
 			os = chars;

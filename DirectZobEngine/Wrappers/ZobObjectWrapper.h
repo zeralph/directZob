@@ -69,23 +69,18 @@ namespace CLI {
 		bool					IsCamera();
 		bool					HasMesh();
 		DirectZobType::guid		GetId() { return m_id; }
-		void					SetPhysicComponent(int i);
 		bool					IsFromFactoryFile();
 		String^					FactoryFile();
 		void					SaveToFactoryFile(String^ file);
 
-		//Physic
-		void					GetPhysicComponentInfo(System::String^% type, System::String^% shapeType);
-		void					SetPhysicComponentInfo(System::String^ type, System::String^ shapeType);
-		void					GetPhysicComponentShapeInfo(float% radius, float% height, float% hx, float% hy, float% hz, System::String^% mesh);
-		void					SetPhysicComponentShapeInfo(float radius, float height, float hx, float hy, float hz, System::String^ mesh);
-		void					GetPhysicComponentColliderInfo(float% bounciness, float% frictionCoeff, float% massDensity, float% RollingResistance);
-		void					SetPhysicComponentColliderInfo(float bounciness, float frictionCoeff, float massDensity, float RollingResistance);
-		void					SetPhysicComponentScaleWithObject(bool b);
-		void					GetPhysicComponentScaleWithObject(bool% b);
-
 		void					FloatHandler(Object^ sender, System::EventArgs^ e);
+		void					BoolHandler(Object^ sender, System::EventArgs^ e);
+		void					IntHandler(Object^ sender, System::EventArgs^ e);
 		void					ListValidationHandler(Object^ sender, System::EventArgs^ e);
+
+		bool					IsDynamic();
+		void					SetDynamic();
+		void					SetStatic();
 
 	private:
 		GroupBox^				FillBehaviorControl(ZobBehavior* zb);
@@ -93,6 +88,10 @@ namespace CLI {
 
 		void					AddFloatVariable(TableLayoutPanel^ panel, ZobBehavior::wrapperData* w);
 		void					AddEnumVariable(TableLayoutPanel^ panel, ZobBehavior::wrapperData* w);
+		void					AddBoolVariable(TableLayoutPanel^ panel, ZobBehavior::wrapperData* w);
+		void					AddIntVariable(TableLayoutPanel^ panel, ZobBehavior::wrapperData* w);
+		void					AddZobIdVariable(TableLayoutPanel^ panel, ZobBehavior::wrapperData* w);
+
 		ZobBehavior::wrapperData* GetWrapperDataForVariable(String^ variableName);
  		DirectZobType::guid m_id;
 	};

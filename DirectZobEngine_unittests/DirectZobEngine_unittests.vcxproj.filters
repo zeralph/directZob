@@ -12,6 +12,9 @@
     <ClInclude Include="tests\ZobMatrix4x4.h">
       <Filter>tests</Filter>
     </ClInclude>
+    <ClInclude Include="tests\ZobObject.h">
+      <Filter>tests</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="tests">

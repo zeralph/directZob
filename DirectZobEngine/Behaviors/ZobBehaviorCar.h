@@ -18,10 +18,11 @@ class ZobBehaviorCar : public ZobBehavior
 		~ZobBehaviorCar() override;
 		void		Init() override;
 		void		PreUpdate() override;
+		void		EditorUpdate() override;
 		void		Update(float dt) override;
 		void		DrawGizmos(const Camera* camera, const ZobVector3* position, const ZobVector3* rotation) const override;
 	private:	
-		ZobBehaviorCar(ZobObject* zobObject, TiXmlElement* node);
+		ZobBehaviorCar(ZobObject* zobObject);
 		void CheckGroundCollisions();
 		void CheckEnvironmentCollision();
 		void UpdateInputs(float dt);

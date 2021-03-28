@@ -22,6 +22,7 @@ ZobHUDManager::ZobHUDManager()
 	m_projectedVertices = (ZobVector3*)malloc(sizeof(ZobVector3) * NB_HUD_TRIANGLES * 3);
 	m_normals = (ZobVector3*)malloc(sizeof(ZobVector3) * NB_HUD_TRIANGLES * 3);
 	m_nbDrawnTriangles = 0;
+	m_hudElements.clear();
 	int vi = 0;
 	for (int i = 0; i < NB_HUD_TRIANGLES; i++)
 	{
@@ -253,7 +254,7 @@ bool ZobHUDManager::CreateQuad(float xMin, float yMin, float xMax, float yMax, H
 
 void ZobHUDManager::Print(eHudUnit u, float x, float y, float fontSize, const char* fontName, const ZobVector3* color, const char* fmt, ...)
 {
-	if (m_started) //if (m_engine->ShowText() && m_data != NULL)
+	if (m_started && DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera()) //if (m_engine->ShowText() && m_data != NULL)
 	{
 		const ZobFont* f = GetFont(fontName);
 		if (f)

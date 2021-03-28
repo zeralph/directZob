@@ -21,6 +21,7 @@ public:
 	void QueueForDrawing(const Camera* camera, Core::Engine* engine);
 	void Init();
 	void PreUpdate();
+	void EditorUpdate();
 	void UpdateBehavior(float dt);
 	ZobObject* GetZobObjectFromPartialId(const uint id) const;
 	void AddZobObject(ZobObject* z);

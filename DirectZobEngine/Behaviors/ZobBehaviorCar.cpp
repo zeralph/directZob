@@ -19,7 +19,7 @@ ZobBehaviorCar::~ZobBehaviorCar()
 
 }
 
-ZobBehaviorCar::ZobBehaviorCar(ZobObject* zobObject, TiXmlElement* node) : ZobBehavior(zobObject, node)
+ZobBehaviorCar::ZobBehaviorCar(ZobObject* zobObject) : ZobBehavior(zobObject)
 {
 	m_carType = eCarType_pouet;
 	m_type = eBehavior_car;
@@ -34,15 +34,16 @@ ZobBehaviorCar::ZobBehaviorCar(ZobObject* zobObject, TiXmlElement* node) : ZobBe
 
 	int p[] = { eCarType_prout , eCarType_pouet, eCarType_truc};
 	const char* s[] = { "prout", "pouet", "truc" };
-	WrapEnum("carType", &m_carType, 3, p, s);
+	WrapEnum("carType", &m_carType, 3, p, s, false, true);
 
-	WrapVariable(eWrapperType_float, "Mass", &m_mass);
-	WrapVariable(eWrapperType_float, "Max friction", &m_maxGrip);
-	WrapVariable(eWrapperType_float, "Inertia", &m_inertia);
-	WrapVariable(eWrapperType_float, "Air resistance", &m_drag);
-	WrapVariable(eWrapperType_float, "Rolling resistance", &m_resistance);
-	WrapVariable(eWrapperType_float, "Front cornering stiffness", &m_ca_f);
-	WrapVariable(eWrapperType_float, "Rear cornering stiffness", &m_ca_r);
+	WrapVariable(eWrapperType_bool, "HandBrake", &m_handBrake, false, true);
+	WrapVariable(eWrapperType_float, "Mass", &m_mass, false, true);
+	WrapVariable(eWrapperType_float, "Max friction", &m_maxGrip, false, true);
+	WrapVariable(eWrapperType_float, "Inertia", &m_inertia, false, true);
+	WrapVariable(eWrapperType_float, "Air resistance", &m_drag, false, true);
+	WrapVariable(eWrapperType_float, "Rolling resistance", &m_resistance, false, true);
+	WrapVariable(eWrapperType_float, "Front cornering stiffness", &m_ca_f, false, true);
+	WrapVariable(eWrapperType_float, "Rear cornering stiffness", &m_ca_r, false, true);
 }
 
 void ZobBehaviorCar::PreUpdate()
@@ -129,10 +130,12 @@ void ZobBehaviorCar::CheckGroundCollisions()
 	for (iter = bodies->begin(); iter != bodies->end(); iter++)
 	{
 		RigidBody* rb2 = (*iter)->GetRigicBody();
-		if (((*iter)->GetLayers() & ZobPhysicComponent::eLayer_ground) && rb2 != rb)
+		//TODO phy
+		//		if (((*iter)->GetLayers() & ZobPhysicComponent::eLayer_ground) && rb2 != rb)
 		{
 			if (rb2->raycast(ray, info))
 			{
+				//info.collider->lay
 				m_lastGroundPosition.x = info.worldPoint.x;
 				m_lastGroundPosition.y = info.worldPoint.y;
 				m_lastGroundPosition.z = info.worldPoint.z;
@@ -179,9 +182,13 @@ void ZobBehaviorCar::UpdateInputs(float dt)
 	{
 		std::string sceneName = "menu.dzs";
 		std::string scenePath = DirectZob::GetInstance()->GetResourcePath();
-		DirectZob::GetInstance()->LoadScene(scenePath, sceneName);
+		DirectZob::GetInstance()->LoadScene(scenePath, sceneName, NULL);
 		return;
 	}
+}
+
+void ZobBehaviorCar::EditorUpdate()
+{
 }
 
 void ZobBehaviorCar::Update(float dt)

@@ -112,8 +112,16 @@
 				'Behaviors/ZobBehaviorCar.cpp',
 				'Behaviors/ZobBehaviorMenu.h',
 				'Behaviors/ZobBehaviorMenu.cpp',	
-				'Behaviors/ZobBehaviorPhysicShape.h',
-				'Behaviors/ZobBehaviorPhysicShape.cpp',				
+				'Behaviors/PhysicBehaviors/ZobBehaviorPhysicShape.h',
+				'Behaviors/PhysicBehaviors/ZobBehaviorPhysicShape.cpp',	
+				'Behaviors/PhysicBehaviors/ZobBehaviorPhysicBox.h',
+				'Behaviors/PhysicBehaviors/ZobBehaviorPhysicBox.cpp',	
+				'Behaviors/PhysicBehaviors/ZobBehaviorPhysicCapsule.h',
+				'Behaviors/PhysicBehaviors/ZobBehaviorPhysicCapsule.cpp',	
+				'Behaviors/PhysicBehaviors/ZobBehaviorPhysicSphere.h',
+				'Behaviors/PhysicBehaviors/ZobBehaviorPhysicSphere.cpp',	
+				'Behaviors/PhysicBehaviors/ZobBehaviorPhysicMesh.h',
+				'Behaviors/PhysicBehaviors/ZobBehaviorPhysicMesh.cpp',					
             ],
             'conditions': [
                 [

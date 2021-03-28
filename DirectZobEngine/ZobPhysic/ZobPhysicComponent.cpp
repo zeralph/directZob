@@ -4,48 +4,24 @@
 #include "Rendering/ZobMatrix4x4.h"
 
 
-ZobPhysicComponent::ZobPhysicComponent(ZobObject* z, TiXmlNode* node)
+ZobPhysicComponent::ZobPhysicComponent(ZobObject* z)
 {
 	m_zobObject = z;
-	m_layers = eLayer_none;
 	BodyType rigidBodyType = rp3d::BodyType::STATIC;
-	m_radius = 1.0f;
-	m_height = 2.0f;
-	m_convexMeshName = "";
-	m_halfExtends = ZobVector3(1, 1, 1);
 	bool rigidBodyActive = false;
-	m_type = ePhysicComponentType_static;
-	m_shapeType = eShapeType_none;
-	m_nextShapeType = eShapeType_none;
 	m_scaleWithObject = true;
 	m_collider = NULL;
 	m_bUpdateSize = true;
-	m_concaveMeshVertices = NULL;
-	m_concaveMeshIndices = NULL;
-	m_concaveMeshNbTriangles = 0;
-	m_rigidBody = DirectZob::GetInstance()->GetPhysicsEngine()->CreateRigidBody(&ZobVector3::Vector3Zero, &ZobVector3::Vector3Zero);
-	m_shapeType = eShapeType_uninit;
-	m_nextShapeType = eShapeType_none;
+	m_rigidBody = DirectZob::GetInstance()->GetPhysicsEngine()->CreateRigidBody(&ZobVector3::Vector3Zero, &ZobVector3::Vector3Zero);;
+	m_rigidBody->setType(BodyType::STATIC);
+	m_rigidBody->setIsActive(true);
 	m_collider = NULL;
 	m_lastCollision.Reset();
-	if (node)
-	{
-		TiXmlElement* p = (TiXmlElement*)node;
-		TiXmlElement* b = p->FirstChildElement("RigidBody");
-		m_type = (ePhysicComponentType)atoi(b->Attribute("type"));
-		rigidBodyType = (BodyType)atoi(b->Attribute("type"));
-		rigidBodyActive = atoi(b->Attribute("active")) == 1 ? true : false;
-		ReadColliderNode(b);
-	}
-	m_rigidBody->setType(rigidBodyType);
-	rigidBodyActive = true;
-	m_rigidBody->setIsActive(rigidBodyActive);
 	DirectZob::GetInstance()->GetPhysicsEngine()->AddBody(this);
 }
 
 ZobPhysicComponent::~ZobPhysicComponent()
 {
-	RemoveCollider();
 	DirectZob::GetInstance()->GetPhysicsEngine()->RemoveBody(this);
 	DirectZob::GetInstance()->GetPhysicsEngine()->DestroyRigidBody(m_rigidBody);
 	m_rigidBody = NULL;
@@ -62,87 +38,6 @@ void ZobPhysicComponent::Init(const ZobVector3* position, const ZobVector3* rota
 	m_totalScale = Vector3(1, 1, 1);
 	Update();
 }
-
-TiXmlNode* ZobPhysicComponent::SaveUnderNode(TiXmlNode* node)
-{
-	if (m_collider != NULL)
-	{
-		TiXmlElement p = TiXmlElement("Physic");
-		TiXmlElement b = TiXmlElement("RigidBody");
-		b.SetAttribute("type", std::to_string((int)m_rigidBody->getType()).c_str());
-		b.SetAttribute("active", std::to_string((int)m_rigidBody->isActive()).c_str());
-		WriteColliderNode(&b);
-		p.InsertEndChild(b);
-		node->InsertEndChild(p);
-	}
-	return NULL;
-}
-
-void ZobPhysicComponent::RemoveCollider()
-{
-	if (m_collider)
-	{
-		m_rigidBody->removeCollider(m_collider);
-		m_collider = NULL;
-	}
-}
-
-void ZobPhysicComponent::SetType(ePhysicComponentType t)
-{
-	m_type = t;
-	switch (m_type)
-	{
-	case ePhysicComponentType_static:
-		m_rigidBody->setType(rp3d::BodyType::STATIC);
-		m_rigidBody->setIsActive(true);
-		break;
-	case ePhysicComponentType_dynamic:
-		m_rigidBody->setType(rp3d::BodyType::DYNAMIC);
-		m_rigidBody->setIsActive(true);
-		break;
-	}
-}
-
-void ZobPhysicComponent::SetShapeType(eShapeType t)
-{
-	m_nextShapeType = t;
-}
-
-void ZobPhysicComponent::UpdateShapeType()
-{
-	if(m_nextShapeType != m_shapeType)
-	{ 
-		if (m_shapeType == eShapeType_convexMesh)
-		{
-			free(m_concaveMeshVertices);
-			free(m_concaveMeshIndices);
-			m_concaveMeshVertices = NULL;
-			m_concaveMeshIndices = NULL;
-			m_concaveMeshNbTriangles = 0;
-		}
-		RemoveCollider();
-		m_shapeType = m_nextShapeType;
-		switch(m_shapeType)
-		{
-		case eShapeType_box:
-			AddBoxCollider();
-			break;
-		case eShapeType_capsule:
-			AddCapsuleCollider();
-			break;
-		case eShapeType_convexMesh:
-			AddMeshCollider();
-			break;
-		case eShapeType_sphere:
-			AddSphereCollider();
-			break;
-		default:
-			RemoveCollider();
-			break;
-		}
-	}
-}
-
 
 ZobVector3 ZobPhysicComponent::GetPosition() const
 {
@@ -271,12 +166,11 @@ float ZobPhysicComponent::ClampAngle(float a) const
 
 void ZobPhysicComponent::Update()
 {
-	UpdateShapeType();
-	UpdateColliderSize();
+	assert(m_rigidBody);
 	bool bPhysicRunning = DirectZob::GetInstance()->IsPhysicPlaying();
-	//if (m_rigidBody)
+	if (m_rigidBody)
 	{
-		if(bPhysicRunning && m_type == ePhysicComponentType_dynamic)
+		if(bPhysicRunning && m_rigidBody->getType() == BodyType::DYNAMIC)
 		{
 			m_worldTransform = m_rigidBody->getTransform();
 		}
@@ -307,98 +201,6 @@ ZobMatrix4x4 ZobPhysicComponent::GetRotationMatrix() const
 	return m;
 }
 
-void ZobPhysicComponent::AddBoxCollider()
-{
-	PhysicsCommon* pc = DirectZob::GetInstance()->GetPhysicsEngine()->GetPhysicsCommon();
-	Vector3 h = Vector3(m_halfExtends.x, m_halfExtends.y, m_halfExtends.z);
-	BoxShape* s = pc->createBoxShape(h);
-	m_shapeType = eShapeType::eShapeType_box;
-	AddColliderInternal(s);
-}
-
-void ZobPhysicComponent::AddSphereCollider()
-{
-	PhysicsCommon* pc = DirectZob::GetInstance()->GetPhysicsEngine()->GetPhysicsCommon();
-	SphereShape* s= pc->createSphereShape(m_radius);
-	m_shapeType = eShapeType::eShapeType_sphere;
-	AddColliderInternal(s);
-}
-
-void ZobPhysicComponent::AddCapsuleCollider()
-{
-	PhysicsCommon* pc = DirectZob::GetInstance()->GetPhysicsEngine()->GetPhysicsCommon();
-	CapsuleShape* s = pc->createCapsuleShape(m_radius, m_height);
-	AddColliderInternal(s);
-}
-
-void ZobPhysicComponent::AddMeshCollider()
-{
-	const Mesh* m = DirectZob::GetInstance()->GetMeshManager()->GetOrLoadMesh(m_convexMeshName, m_convexMeshPath, m_convexMeshFile);
-	SetShapeType(eShapeType_convexMesh);
-	if (m)
-	{
-		PhysicsCommon* pc = DirectZob::GetInstance()->GetPhysicsEngine()->GetPhysicsCommon();	
-		const int nbVertices = m->GetNbVertices();
-		const int nbTriangles = m->GetNbTriangles();
-		m_concaveMeshVertices = (float*)malloc(sizeof(float) * nbVertices * 3);
-		m_concaveMeshIndices = (uint*)malloc(sizeof(uint) * nbTriangles * 3);
-		m_concaveMeshNbTriangles = nbTriangles;
-		int idx = 0;
-		for (int i = 0; i < nbVertices; i++)
-		{
-			m_concaveMeshVertices[idx] = m->GetVertices()[i].x;
-			idx++;
-			m_concaveMeshVertices[idx] = m->GetVertices()[i].y;
-			idx++;
-			m_concaveMeshVertices[idx] = m->GetVertices()[i].z;
-			idx++;
-		}
-		assert(idx == nbVertices * 3);
-		idx = 0;
-		//for (std::vector<Triangle>::const_iterator iter = m->GetTriangles().begin(); iter != m->GetTriangles().end(); iter++)
-		for(int i=0; i<nbTriangles; i++)
-		{
-			const Triangle* t = &m->GetTriangles()->at(i);
-			m_concaveMeshIndices[idx] = (uint)t->verticeAIndex;
-			idx++;
-			m_concaveMeshIndices[idx] = (uint)t->verticeBIndex;
-			idx++;
-			m_concaveMeshIndices[idx] = (uint)t->verticeCIndex;
-			idx++;
-		}
-		assert(idx == nbTriangles * 3);
-		TriangleVertexArray* triangleArray =
-			new TriangleVertexArray(nbVertices,  m_concaveMeshVertices, 3 * sizeof(float), 
-									nbTriangles, m_concaveMeshIndices,  3 * sizeof(uint),
-									TriangleVertexArray::VertexDataType::VERTEX_FLOAT_TYPE,
-									TriangleVertexArray::IndexDataType::INDEX_INTEGER_TYPE);
-
-		TriangleMesh* triangleMesh = pc->createTriangleMesh();
-		triangleMesh->addSubpart(triangleArray);
-		ConcaveMeshShape* concaveMesh = pc->createConcaveMeshShape(triangleMesh);
-		AddColliderInternal(concaveMesh);
-	}
-	else
-	{
-		RemoveCollider();
-	}
-}
-
-void ZobPhysicComponent::AddColliderInternal(CollisionShape* c)
-{
-	RemoveCollider();
-	Transform t = Transform::identity();
-	//t = m_rigidBody->getTransform();
-	m_collider = m_rigidBody->addCollider(c, t);
-	
-	reactphysics3d::Material& material = m_collider->getMaterial();
-	material.setBounciness(0.1);
-	material.setFrictionCoefficient(2.01);
-	material.setMassDensity(0.01);
-	material.setRollingResistance(0.01);
-
-}
-
 void ZobPhysicComponent::SaveTransform()
 {
 
@@ -422,57 +224,6 @@ void ZobPhysicComponent::ResetPhysic()
 
 void ZobPhysicComponent::DrawGizmos(const Camera* camera, const ZobVector3* position, const ZobVector3* rotation)
 {
-	return;
-	if (m_shapeType != eShapeType_none)
-	{
-		ZobMatrix4x4 mat;
-		ZobVector3 dir;
-		mat.SetPosition(position);
-		mat.SetRotation(rotation);
-		uint c = 0x00FF00;
-		bool bold = true;
-		Engine* e = DirectZob::GetInstance()->GetEngine();
-		float h = m_height;
-		float r = m_radius;
-		ZobVector3 he = ZobVector3(m_halfExtends);
-		if (m_scaleWithObject)
-		{
-			he.x *= m_totalScale.x;
-			he.y *= m_totalScale.y;
-			he.z *= m_totalScale.z;
-			h *= m_totalScale.y;
-			r *= fmax(m_totalScale.x, m_totalScale.z);
-		}
-		switch (m_shapeType)
-		{
-		case eShapeType::eShapeType_sphere:
-			e->QueueSphere(camera, &mat, r, c, bold, false);
-			break;
-		case eShapeType::eShapeType_box:
-			//TODO ERROR : ajouter le pivot !
-			e->QueueBox(camera, &mat, &he, position, c, bold, false);
-			break;
-		case eShapeType::eShapeType_capsule:
-			dir = mat.GetY();
-			e->QueueCapsule(camera, &mat, r, h, &dir, c, bold, false);
-			break;
-		case eShapeType::eShapeType_convexMesh:
-			for (int i=0; i< m_concaveMeshNbTriangles; i+=3)
-			{
-				int i1 = m_concaveMeshIndices[i] * 3;
-				int i2 = m_concaveMeshIndices[i+1] * 3;
-				int i3 = m_concaveMeshIndices[i+2] * 3;
-				ZobVector3 v0 = ZobVector3(m_concaveMeshVertices[i1], m_concaveMeshVertices[i1 + 1], m_concaveMeshVertices[i1 + 2]);
-				ZobVector3 v1 = ZobVector3(m_concaveMeshVertices[i2], m_concaveMeshVertices[i2 + 1], m_concaveMeshVertices[i2 + 2]);
-				ZobVector3 v2 = ZobVector3(m_concaveMeshVertices[i3], m_concaveMeshVertices[i3 + 1], m_concaveMeshVertices[i3 + 2]);
-				e->QueueLine(camera, &v0, &v1, c, bold, false);
-				e->QueueLine(camera, &v1, &v2, c, bold, false);
-				e->QueueLine(camera, &v2, &v0, c, bold, false);
-			}
-		default:
-			break;
-		}
-	}
 }
 
 Quaternion ZobPhysicComponent::QuaternionFromAxisAngle(Vector3* axis, float angle)
@@ -484,187 +235,6 @@ Quaternion ZobPhysicComponent::QuaternionFromAxisAngle(Vector3* axis, float angl
 	q.z = axis->z * s;
 	q.w = cosf(angle / 2.0f);
 	return q;
-}
-
-bool ZobPhysicComponent::SetRadius(float f)
-{
-	m_radius = f;
-	m_bUpdateSize = true;
-	return true;
-}
-
-bool ZobPhysicComponent::SetHalfextends(float x, float y, float z)
-{
-	m_halfExtends.x = x;
-	m_halfExtends.y = y;
-	m_halfExtends.z = z;
-	m_bUpdateSize = true;
-	return true;
-}
-
-bool ZobPhysicComponent::SetHeight(float h)
-{
-	m_height = h;
-	m_bUpdateSize = true;
-	return true;
-}
-
-bool ZobPhysicComponent::UpdateColliderSize()
-{
-	if (m_bUpdateSize && m_collider)
-	{
-		m_bUpdateSize = false;
-		float h = m_height;
-		float r = m_radius;
-		float hx = m_halfExtends.x;
-		float hy = m_halfExtends.y;
-		float hz = m_halfExtends.z;
-		if (m_scaleWithObject)
-		{
-			hx *= m_totalScale.x;
-			hy *= m_totalScale.y;
-			hz *= m_totalScale.z;
-			h *= m_totalScale.y;
-			r *= fmax(m_totalScale.x, m_totalScale.z);
-		}
-		CapsuleShape* c = dynamic_cast<CapsuleShape*>(m_collider->getCollisionShape());
-		if (c)
-		{
-			c->setHeight(h);
-			c->setRadius(r);
-			return true;
-		}
-		BoxShape* b = dynamic_cast<BoxShape*>(m_collider->getCollisionShape());
-		if (b)
-		{
-			Vector3 he = Vector3(hx, hy, hz);
-			b->setHalfExtents(he);
-			return true;
-		}
-		SphereShape* s = dynamic_cast<SphereShape*>(m_collider->getCollisionShape());
-		if (s)
-		{
-			s->setRadius(r);
-			return true;
-		}
-	}
-	return false;
-}
-
-void ZobPhysicComponent::WriteColliderNode(TiXmlNode* node)
-{
-	if (m_collider)
-	{
-		TiXmlElement c = TiXmlElement("error");
-		if (m_shapeType == eShapeType_box)
-		{		
-			c.SetValue("Box");
-			c.SetAttribute("halfExtends_x", std::to_string((float)m_halfExtends.x).c_str());
-			c.SetAttribute("halfExtends_y", std::to_string((float)m_halfExtends.y).c_str());
-			c.SetAttribute("halfExtends_z", std::to_string((float)m_halfExtends.z).c_str());
-		}
-		else if (m_shapeType == eShapeType_capsule)
-		{
-			c.SetValue("Capsule");
-			c.SetAttribute("radius", std::to_string((float)m_radius).c_str());
-			c.SetAttribute("height", std::to_string((float)m_height).c_str());
-		}
-		else if (m_shapeType == eShapeType_sphere)
-		{
-			c.SetValue("Sphere");
-			c.SetAttribute("radius", std::to_string((float)m_radius).c_str());
-		}
-		else if (m_shapeType == eShapeType_convexMesh)
-		{
-			c.SetValue("StaticMesh");
-			c.SetAttribute("name", m_convexMeshName.c_str());	
-			c.SetAttribute("path", m_convexMeshPath.c_str());
-			c.SetAttribute("file", m_convexMeshFile.c_str());
-		}
-		c.SetAttribute("layers", std::to_string((int)m_layers).c_str());
-		c.SetAttribute("scale_with_object", std::to_string((int)m_scaleWithObject).c_str());
-		WriteMaterialNode(&c);
-		node->InsertEndChild(c);
-	}
-}
-
-void ZobPhysicComponent::ReadColliderNode(TiXmlNode* node)
-{
-	m_nextShapeType = eShapeType_none;
-	m_halfExtends.x = 1;
-	m_halfExtends.y = 1;
-	m_halfExtends.z = 1;
-	m_radius = 1;
-	m_height = 1;
-	m_convexMeshName = "";
-	m_convexMeshPath = "";
-	m_convexMeshFile = "";
-	m_scaleWithObject = false;
-	if (node)
-	{
-		TiXmlElement* c;
-		c = (TiXmlElement*)node->FirstChild();
-		if (c)
-		{
-			std::string colliderType = c->Value();
-			if (colliderType == "Box")
-			{
-				m_nextShapeType = eShapeType_box;
-				m_halfExtends.x = (float)atof(c->Attribute("halfExtends_x"));
-				m_halfExtends.y = (float)atof(c->Attribute("halfExtends_y"));
-				m_halfExtends.z = (float)atof(c->Attribute("halfExtends_z"));
-			}
-			else if (colliderType == "Sphere")
-			{
-				m_nextShapeType = eShapeType_sphere;
-				m_radius = (float)atof(c->Attribute("radius"));
-			}
-			else if (colliderType == "Capsule")
-			{
-				m_nextShapeType = eShapeType_capsule;
-				m_radius = (float)atof(c->Attribute("radius"));
-				m_height = (float)atof(c->Attribute("height"));
-			}
-			else if (colliderType == "StaticMesh")
-			{
-				m_nextShapeType = eShapeType_convexMesh;
-				m_convexMeshName = c->Attribute("name") ? c->Attribute("name") : "";
-				m_convexMeshPath = c->Attribute("path") ? c->Attribute("path") : "";
-				m_convexMeshFile = c->Attribute("file") ? c->Attribute("file") : "";
-			}
-			m_scaleWithObject = (bool)(c->Attribute("scale_with_object") ? atoi(c->Attribute("scale_with_object")) : 1);
-			m_layers = (eLayer)(c->Attribute("layers") ? atoi(c->Attribute("layers")) : 0);
-			UpdateShapeType();
-			ReadMaterialNode(c->FirstChild("Material"));
-		}
-	}
-}
-
-void ZobPhysicComponent::WriteMaterialNode(TiXmlNode* node)
-{
-	if (m_collider && node)
-	{
-		reactphysics3d::Material& mat = m_collider->getMaterial();
-		TiXmlElement m = TiXmlElement("Material");
-		m.SetAttribute("bounciness", std::to_string((float)mat.getBounciness()).c_str());
-		m.SetAttribute("friction_coeff", std::to_string((float)mat.getFrictionCoefficient()).c_str());
-		m.SetAttribute("mass_density", std::to_string((float)mat.getMassDensity()).c_str());
-		m.SetAttribute("rolling_resistance", std::to_string((float)mat.getRollingResistance()).c_str());
-		node->InsertEndChild(m);
-	}
-}
-
-void ZobPhysicComponent::ReadMaterialNode(TiXmlNode* node)
-{
-	if (m_collider && node)
-	{
-		TiXmlElement* m = (TiXmlElement*)node;
-		reactphysics3d::Material& mat = m_collider->getMaterial();
-		mat.setBounciness((float)atof(m->Attribute("bounciness")));
-		mat.setFrictionCoefficient((float)atof(m->Attribute("friction_coeff")));
-		mat.setMassDensity((float)atof(m->Attribute("mass_density")));
-		mat.setRollingResistance((float)atof(m->Attribute("rolling_resistance")));
-	}
 }
 
 void ZobPhysicComponent::OnCollide(collision coll)

@@ -26,6 +26,7 @@ public:
 	virtual void					Init();
 	virtual void					PreUpdate();
 	virtual void					Update(float dt);
+	virtual void					EditorUpdate();
 	virtual void					UpdateBehavior(float dt);
 	virtual void					UpdateMesh(const Camera* camera, Core::Engine* engine);
 	virtual void					QueueForDrawing(const Camera* camera, Core::Engine* engine);
@@ -81,7 +82,6 @@ public:
 	const RenderOptions::eLightMode GetLightingMode() const { return m_renderOptions.lightMode; };
 	bool							HasChild(const ZobObject* o);
 	void							CreateSprite();
-	void							SetPhysicComponent(int i);
 	bool							IsFromFactoryFile() {return m_factoryFile.length()>0;}
 	std::string&					FactoryFile() { return m_factoryFile; }
 	void							SaveToFactoryFile(std::string& file);
@@ -91,15 +91,10 @@ public:
 	const ZobMatrix4x4*				GetModelMatrix() const { return &m_modelMatrix; };
 	const ZobMatrix4x4*				GetRotationScaleMatrix() const { return &m_rotationScaleMatrix; };
 	const std::vector<ZobBehavior*>*GetBehaviors() { return &m_behaviors; }
-	//Physic interface, mainly for editor
-	void							GetPhysicComponentInfo(std::string& type, std::string& shapeType) const;
-	void							SetPhysicComponentInfo(std::string& type, std::string& shapeType);
-	void							GetPhysicComponentShapeInfo(float& radius, float& height, float& hx, float& hy, float& hz, std::string&  mesh);
-	void							SetPhysicComponentShapeInfo(float radius, float height, float hx, float hy, float hz, std::string& mesh);
-	void							GetPhysicComponentColliderInfo(float& bounciness, float& frictionCoeff, float& massDensity, float& RollingResistance);
-	void							SetPhysicComponentColliderInfo(float bounciness, float frictionCoeff, float massDensity, float RollingResistance);
-	void							GetPhysicComponentScaleWithObject(bool& b);
-	void							SetPhysicComponentScaleWithObject(bool b);
+	void							AddBehavior(ZobBehavior* b) { m_behaviors.push_back(b); }
+	void							SetDynamic();
+	void							SetStatic();
+	bool							IsDynamic();
 
 private:
 	void							SaveRecusrive(TiXmlNode* node, ZobObject* z);

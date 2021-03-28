@@ -19,7 +19,7 @@
 static const int fpsTargetsN = 6;
 static const float fpsTargets[fpsTargetsN] = { 0, 16.6666667, 33.3333333f, 41.666667f,  50.0f, 1000.0f };
 static int sTargetMSPerFrameIdx = 1;
-static DirectZob::eDirectZobLogLevel sLogLevel = DirectZob::eDirectZobLogLevel_warning;
+static DirectZob::eDirectZobLogLevel sLogLevel = DirectZob::eDirectZobLogLevel_info;
 static char buffer[MAX_PATH];
 static char logBuffer[LOG_BUFFER_SIZE];
 static bool g_isInEditorMode;
@@ -35,6 +35,7 @@ DirectZob::DirectZob()
 	DirectZob::singleton= this; 
 	m_frameTime = 1.0f;
 	m_window = NULL;
+	m_onSceneLoaded = NULL;
 }
 
 DirectZob::~DirectZob()
@@ -61,14 +62,24 @@ std::string DirectZob::ExePath() {
 	return std::string("C:\\_GIT\\directZob\\resources");
 }
 
-void DirectZob::LoadScene(std::string& path, std::string& file)
+void DirectZob::LoadScene(std::string& path, std::string& file, DirectZob::engineCallback OnSceneLoaded)
 {
+	m_onSceneLoaded = OnSceneLoaded;
 	SceneLoader::LoadScene(path, file);
 	if (m_text == NULL)
 	{
 		m_text = new Text2D(m_engine, m_events);
 	}
 }
+
+void DirectZob::OnSceneLoaded()
+{
+	if (m_onSceneLoaded)
+	{
+		m_onSceneLoaded();
+	}
+}
+
 void DirectZob::LoadZobObject(std::string& path, std::string& file)
 {
 	SceneLoader::LoadZobObject(path, file);
@@ -180,6 +191,11 @@ int DirectZob::RunInternal(void func(void))
 		RunAFrame(0);
 		func();
 	}
+}
+
+void DirectZob::EditorUpdate()
+{
+	m_zobObjectManager->EditorUpdate();
 }
 
 int DirectZob::RunAFrame(DirectZob::engineCallback OnSceneUpdated /*=NULL*/, DirectZob::engineCallback OnQueuing /*=NULL*/)

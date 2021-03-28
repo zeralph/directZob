@@ -16,12 +16,13 @@ namespace CLI
 
 		static void					CallSceneUpdatedCallback();
 		static void					CallQueuingCallback();
+		static void					CallSceneLoadedCallback();
 		DirectZobWrapper();
 		void					StartPhysic();
 		void					StopPhysic(bool reset);
 		bool					IsPhysicPlaying();
 		void					Init(int width, int height);
-		void					LoadScene(System::String^ path, System::String^ file);
+		void					LoadScene(System::String^ path, System::String^ file, engineCallback^ loaded);
 		void					LoadZobObject(System::String^ path, System::String^ file);
 		void					NewScene();
 		void					Unload();
@@ -33,6 +34,7 @@ namespace CLI
 		int						Run(engineCallback^ cbStart, engineCallback^ cbEnd, engineCallback^ sceneUpdated, engineCallback^ queuing);
 		int						Stop();
 		void					Lock();
+		void					EditorUpdate();
 		void					Unlock();
 		System::IntPtr			GetBufferDataPointer();
 		int						GetBufferDataLength();
@@ -48,6 +50,7 @@ namespace CLI
 		volatile bool			m_run;
 		static engineCallback^  m_sceneUpdatedCb;
 		static engineCallback^	m_queuingCb;
+		static engineCallback^	m_sceneLoadedCb;
 		cli::array<byte>^		m_bufferData;
 		int						m_buffferDataLength;
 	};

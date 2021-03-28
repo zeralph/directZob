@@ -37,11 +37,14 @@
             this.TreeNodeRightClick = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.addToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.removeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.duplicateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ZoomToStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAsFactoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.duplicateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aDDBEHAVIURToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.physicBoxToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.physicSphereToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -125,9 +128,10 @@
             this.ZoomToStripMenuItem,
             this.saveAsFactoryToolStripMenuItem,
             this.editToolStripMenuItem,
-            this.saveToolStripMenuItem});
+            this.saveToolStripMenuItem,
+            this.aDDBEHAVIURToolStripMenuItem});
             this.TreeNodeRightClick.Name = "contextMenuStrip1";
-            this.TreeNodeRightClick.Size = new System.Drawing.Size(181, 180);
+            this.TreeNodeRightClick.Size = new System.Drawing.Size(181, 202);
             this.TreeNodeRightClick.Closed += new System.Windows.Forms.ToolStripDropDownClosedEventHandler(this.TreeNodeRightClick_Closed);
             this.TreeNodeRightClick.Opening += new System.ComponentModel.CancelEventHandler(this.TreeNodeRightClick_Opening);
             this.TreeNodeRightClick.Opened += new System.EventHandler(this.TreeNodeRightClick_Opened);
@@ -145,6 +149,13 @@
             this.removeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.removeToolStripMenuItem.Text = "Remove";
             this.removeToolStripMenuItem.Click += new System.EventHandler(this.RemoveToolStripMenuItem_Click);
+            // 
+            // duplicateToolStripMenuItem
+            // 
+            this.duplicateToolStripMenuItem.Name = "duplicateToolStripMenuItem";
+            this.duplicateToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.duplicateToolStripMenuItem.Text = "Duplicate";
+            this.duplicateToolStripMenuItem.Click += new System.EventHandler(this.duplicateToolStripMenuItem_Click);
             // 
             // ZoomToStripMenuItem
             // 
@@ -172,12 +183,27 @@
             this.saveToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.saveToolStripMenuItem.Text = "Save";
             // 
-            // duplicateToolStripMenuItem
+            // aDDBEHAVIURToolStripMenuItem
             // 
-            this.duplicateToolStripMenuItem.Name = "duplicateToolStripMenuItem";
-            this.duplicateToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.duplicateToolStripMenuItem.Text = "Duplicate";
-            this.duplicateToolStripMenuItem.Click += new System.EventHandler(this.duplicateToolStripMenuItem_Click);
+            this.aDDBEHAVIURToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.physicBoxToolStripMenuItem,
+            this.physicSphereToolStripMenuItem});
+            this.aDDBEHAVIURToolStripMenuItem.Name = "aDDBEHAVIURToolStripMenuItem";
+            this.aDDBEHAVIURToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.aDDBEHAVIURToolStripMenuItem.Text = "Add behavior";
+            this.aDDBEHAVIURToolStripMenuItem.DropDownOpening += new System.EventHandler(this.AddBehaviorToolStripMenuItem_DropDownOpening);
+            // 
+            // physicBoxToolStripMenuItem
+            // 
+            this.physicBoxToolStripMenuItem.Name = "physicBoxToolStripMenuItem";
+            this.physicBoxToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.physicBoxToolStripMenuItem.Text = "Physic box";
+            // 
+            // physicSphereToolStripMenuItem
+            // 
+            this.physicSphereToolStripMenuItem.Name = "physicSphereToolStripMenuItem";
+            this.physicSphereToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.physicSphereToolStripMenuItem.Text = "Physic sphere";
             // 
             // ZobObjectListControl
             // 
@@ -211,5 +237,8 @@
         private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem duplicateToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem aDDBEHAVIURToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem physicBoxToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem physicSphereToolStripMenuItem;
     }
 }
