@@ -2,11 +2,22 @@
 #include "../Types.h"
 #include "../tinyxml/tinyxml.h"
 #include "ZobBehavior.h"
+#undef min
+#undef max
+#include <reactphysics3d/reactphysics3d.h>
 
 class ZobBehaviorCar : public ZobBehavior
 {
+
 	friend class ZobBehaviorFactory;
 	public:
+
+		class GroundRaycastClass : public reactphysics3d::RaycastCallback {
+		public:
+
+			virtual reactphysics3d::decimal notifyRaycastHit(const reactphysics3d::RaycastInfo& info);
+			ZobBehaviorCar* behavior;
+		};
 
 		enum eCarType
 		{

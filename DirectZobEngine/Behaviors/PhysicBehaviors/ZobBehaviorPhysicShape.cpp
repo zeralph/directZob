@@ -11,12 +11,8 @@ ZobBehaviorPhysicShape::ZobBehaviorPhysicShape(ZobObject* zobObject) : ZobBehavi
 {
 	m_type = eBehavior_none;
 
-
-	int pl[] = { ZobPhysicComponent::eLayer_none, ZobPhysicComponent::eLayer_ground, ZobPhysicComponent::eLayer_wall, ZobPhysicComponent::eLayer_objects };
-	const char* sl[] = { "None", "Ground", "Wall", "Objects" };
-	WrapEnum("Layer", &m_layer, 4, pl, sl, false, true);
-
-	WrapVariable(eWrapperType_string, "test", &m_test, false, true);
+	WrapVariable(eWrapperType_int, "Layers", &m_layers, false, true);
+	WrapVariable(eWrapperType_bool, "Trigger", &m_isTrigger, false, true);
 	WrapVariable(eWrapperType_ZobVector3, "Local position", &m_localPostion, false, true);
 	WrapVariable(eWrapperType_float, "Bounciness",  &m_bounciness, false, true);
 	WrapVariable(eWrapperType_float, "Friction coeff", &m_frictionCoeff, false, true);
@@ -34,12 +30,13 @@ void ZobBehaviorPhysicShape::PreUpdate()
 
 void ZobBehaviorPhysicShape::Init()
 {
+	m_isTrigger = true;
 	m_collider = NULL;
 	m_rollingResistance = 1.0f;
 	m_massDensity = 1.0f;
 	m_frictionCoeff = 1.0f;
 	m_bounciness = 1.0f;
-	m_layer = ZobPhysicComponent::eLayer_none;
+	m_layers = 0;
 }
 
 void ZobBehaviorPhysicShape::EditorUpdate()
@@ -63,6 +60,15 @@ void ZobBehaviorPhysicShape::EditorUpdate()
 		if (material.getRollingResistance() != m_rollingResistance)
 		{
 			material.setRollingResistance(m_rollingResistance);
+		}
+		if (m_collider->getCollisionCategoryBits() != m_layers)
+		{
+			//m_collider->setCollisionCategoryBits(m_layers);
+			//m_collider->setCollideWithMaskBits(0xFFFF);
+		}
+		if (m_collider->getIsTrigger() != m_isTrigger)
+		{
+			m_collider->setIsTrigger(false);
 		}
 		Vector3 v = m_collider->getLocalToBodyTransform().getPosition();
 		if (m_localPostion.x != v.x || m_localPostion.z != v.z || m_localPostion.z != v.z)

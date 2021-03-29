@@ -15,6 +15,7 @@ ZobPhysicComponent::ZobPhysicComponent(ZobObject* z)
 	m_rigidBody = DirectZob::GetInstance()->GetPhysicsEngine()->CreateRigidBody(&ZobVector3::Vector3Zero, &ZobVector3::Vector3Zero);;
 	m_rigidBody->setType(BodyType::STATIC);
 	m_rigidBody->setIsActive(true);
+	m_rigidBody->setIsAllowedToSleep(false);
 	m_collider = NULL;
 	m_lastCollision.Reset();
 	DirectZob::GetInstance()->GetPhysicsEngine()->AddBody(this);
@@ -170,7 +171,8 @@ void ZobPhysicComponent::Update()
 	bool bPhysicRunning = DirectZob::GetInstance()->IsPhysicPlaying();
 	if (m_rigidBody)
 	{
-		if(bPhysicRunning && m_rigidBody->getType() == BodyType::DYNAMIC)
+		m_rigidBody->setIsActive(true);
+		if(false && bPhysicRunning && m_rigidBody->getType() == BodyType::DYNAMIC)
 		{
 			m_worldTransform = m_rigidBody->getTransform();
 		}

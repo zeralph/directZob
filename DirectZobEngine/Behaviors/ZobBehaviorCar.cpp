@@ -114,6 +114,21 @@ void ZobBehaviorCar::CheckEnvironmentCollision()
 	}
 }
 
+reactphysics3d::decimal ZobBehaviorCar::GroundRaycastClass::notifyRaycastHit(const reactphysics3d::RaycastInfo& info) 
+{
+	if (behavior)
+	{
+		behavior->m_lastGroundPosition.x = info.worldPoint.x;
+		behavior->m_lastGroundPosition.y = info.worldPoint.y;
+		behavior->m_lastGroundPosition.z = info.worldPoint.z;
+		float r = 0.9f;
+		behavior->m_lastGroundNormal.x = behavior->m_lastGroundNormal.x * r + (1.0f - r) * info.worldNormal.x;
+		behavior->m_lastGroundNormal.y = behavior->m_lastGroundNormal.y * r + (1.0f - r) * info.worldNormal.y;
+		behavior->m_lastGroundNormal.z = behavior->m_lastGroundNormal.z * r + (1.0f - r) * info.worldNormal.z;
+	}
+	return reactphysics3d::decimal(1.0);
+}
+
 void ZobBehaviorCar::CheckGroundCollisions()
 {
 	DirectZob* directZob = DirectZob::GetInstance();
@@ -124,37 +139,10 @@ void ZobBehaviorCar::CheckGroundCollisions()
 	e.y -= 1000.0f;
 	reactphysics3d::Ray ray(p, e);
 	reactphysics3d::RaycastInfo info;
-	const std::vector<ZobPhysicComponent*>*  bodies = DirectZob::GetInstance()->GetPhysicsEngine()->GetBodies();
-	std::vector<ZobPhysicComponent*>::const_iterator iter;
-	bool bHit = false;
-	for (iter = bodies->begin(); iter != bodies->end(); iter++)
-	{
-		RigidBody* rb2 = (*iter)->GetRigicBody();
-		//TODO phy
-		//		if (((*iter)->GetLayers() & ZobPhysicComponent::eLayer_ground) && rb2 != rb)
-		{
-			if (rb2->raycast(ray, info))
-			{
-				//info.collider->lay
-				m_lastGroundPosition.x = info.worldPoint.x;
-				m_lastGroundPosition.y = info.worldPoint.y;
-				m_lastGroundPosition.z = info.worldPoint.z;
-				float r = 0.9f;
-				m_lastGroundNormal.x = m_lastGroundNormal.x * r + (1.0f - r ) * info.worldNormal.x;
-				m_lastGroundNormal.y = m_lastGroundNormal.y * r + (1.0f - r ) * info.worldNormal.y;
-				m_lastGroundNormal.z = m_lastGroundNormal.z * r + (1.0f - r ) * info.worldNormal.z;
-				//_lastGroundNormal.Mul(-1.0f);
-				bHit = true;
-				//break;
-			}
-		}
-	}
-	if (!bHit)
-	{
-		m_lastGroundNormal = ZobVector3(0, 1, 0);
-		m_lastGroundPosition = m_zobObject->GetWorldPosition();
-		m_lastGroundPosition.y = 0;
-	}
+	ZobBehaviorCar::GroundRaycastClass cb;
+	cb.behavior = this;
+	short categ = ZobPhysicComponent::eLayer_ground;
+	DirectZob::GetInstance()->GetPhysicsEngine()->GetWorld()->raycast(ray, &cb, categ);
 }
 
 void ZobBehaviorCar::UpdateInputs(float dt)

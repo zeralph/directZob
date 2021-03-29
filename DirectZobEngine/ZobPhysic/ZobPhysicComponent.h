@@ -23,10 +23,10 @@ public:
 
 	enum eLayer
 	{
-		eLayer_none = 0,
-		eLayer_ground = 1,
-		eLayer_wall = 2,
-		eLayer_objects = 4,
+		eLayer_none = 0x0000,
+		eLayer_ground = 0x0001,
+		eLayer_wall = 0x0002,
+		eLayer_objects = 0x0004,
 	};
 
 	struct collision
