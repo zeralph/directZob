@@ -22,8 +22,9 @@
             </RenderOptions>
         </Mesh>
         <Behaviors>
-            <Behavior Type="PhysicSphere" Guid="176093677603">
-                <Var name="Layer" value="None" />
+            <Behavior Type="PhysicSphere" Guid="235456208547">
+                <Var name="test" value="nickel !!" />
+                <Var name="Local position" value="8.000000;8.000000;8.000000" />
                 <Var name="Bounciness" value="0.200000" />
                 <Var name="Friction coeff" value="1.000000" />
                 <Var name="Mass density" value="10.000000" />
@@ -33,6 +34,8 @@
             </Behavior>
             <Behavior Type="PhysicCapsule" Guid="176093677603">
                 <Var name="Layer" value="None" />
+                <Var name="test" value="" />
+                <Var name="Local position" value="0.000000;0.000000;0.000000" />
                 <Var name="Bounciness" value="1.000000" />
                 <Var name="Friction coeff" value="1.000000" />
                 <Var name="Mass density" value="1.000000" />
@@ -40,6 +43,16 @@
                 <Var name="Scale with object" value="True" />
                 <Var name="Radius" value="1.000000" />
                 <Var name="Height" value="2.000000" />
+            </Behavior>
+            <Behavior Type="PhysicBox" Guid="176093677603">
+                <Var name="test" value="" />
+                <Var name="Local position" value="0.000000;0.000000;0.000000" />
+                <Var name="Bounciness" value="1.000000" />
+                <Var name="Friction coeff" value="1.000000" />
+                <Var name="Mass density" value="1.000000" />
+                <Var name="Rollling Resistance" value="1.000000" />
+                <Var name="Scale with object" value="True" />
+                <Var name="Height" value="2.000000;4.000000;3.000000" />
             </Behavior>
         </Behaviors>
     </ZobObject>
@@ -65,13 +78,32 @@
         </Mesh>
         <Behaviors>
             <Behavior Type="PhysicSphere" Guid="27204322879364">
-                <Var name="Layer" value="None" />
+                <Var name="test" value="" />
+                <Var name="Local position" value="0.000000;0.000000;0.000000" />
                 <Var name="Bounciness" value="0.500000" />
                 <Var name="Friction coeff" value="1.000000" />
                 <Var name="Mass density" value="1.000000" />
                 <Var name="Rollling Resistance" value="1.000000" />
                 <Var name="Scale with object" value="True" />
                 <Var name="Radius" value="2.000000" />
+            </Behavior>
+        </Behaviors>
+    </ZobObject>
+    <ZobObject name="mesh" guid="3046784" dynamic="False">
+        <Position x="0" y="0" z="0" />
+        <Rotation x="0" y="0" z="0" />
+        <Scale x="1" y="1" z="1" />
+        <Behaviors>
+            <Behavior Type="PhysicMesh" Guid="176093677603">
+                <Var name="Layer" value="None" />
+                <Var name="test" value="" />
+                <Var name="Local position" value="0.000000;0.000000;0.000000" />
+                <Var name="Bounciness" value="1.000000" />
+                <Var name="Friction coeff" value="1.000000" />
+                <Var name="Mass density" value="1.000000" />
+                <Var name="Rollling Resistance" value="1.000000" />
+                <Var name="Scale with object" value="True" />
+                <Var name="Mesh" value="road;/;road2_p_ground.obj" />
             </Behavior>
         </Behaviors>
     </ZobObject>

@@ -24,6 +24,7 @@ public:
 		eWrapperType_enum,
 		eWrapperType_bool,
 		eWrapperType_zobId,
+		eWrapperType_path,
 		__eWrapperType_MAX__
 	};
 
@@ -45,6 +46,9 @@ public:
 		bool bReadOnly;
 		bool bSave;
 		void* ptr;
+		void* ptr_1;
+		void* ptr_2;
+		void* ptr_3;
 		std::string name;
 		std::string internalName;
 		//for enums
@@ -75,4 +79,5 @@ protected:
 	DirectZobType::zobId m_guid;
 	void WrapVariable(eWrapperType type, const char* name, void* ptr, bool bReadOnly, bool bSave);
 	void WrapEnum(const char* name, void* ptr, int nbParams, int* values, const char** names, bool bReadOnly, bool bSave);
+	void WrapPath(const char* name, void* ptrName, void* ptrPath, void* ptrFile, bool bReadOnly, bool bSave);
 };

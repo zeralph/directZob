@@ -58,13 +58,17 @@ namespace CLI
 				TableLayoutPanel^ panel = gcnew TableLayoutPanel();	
 				panel->Width = 296;
 				panel->ColumnCount = 1;
-				panel->RowCount = v->size();
+				panel->RowCount = v->size() + 1;
 				//panel->Dock = DockStyle::Fill;
 				//panel->BackColor = Drawing::Color::Green;
 				panel->Height = v->size() * 35;
 				TableLayoutColumnStyleCollection^ styles = panel->ColumnStyles;
 				styles->Add(gcnew ColumnStyle(SizeType::Absolute, 300));
-				//styles->Add(gcnew ColumnStyle(SizeType::Absolute, 150));
+				//add subpanel for some space
+				TableLayoutPanel^ subPanel = gcnew TableLayoutPanel();
+				subPanel->Width = 300;
+				subPanel->Height = 23;
+				panel->Controls->Add(subPanel);
 				int idx = 1;
 				for (std::vector<ZobBehavior::wrapperData>::const_iterator iter = v->begin(); iter != v->end(); iter++)
 				{
@@ -83,7 +87,7 @@ namespace CLI
 					}
 					else if (w.type == ZobBehavior::eWrapperType_string)
 					{
-						//AddFloatVariable(panel, &w);
+						AddStringVariable(panel, &w);
 					}
 					else if (w.type == ZobBehavior::eWrapperType_int)
 					{
@@ -91,25 +95,71 @@ namespace CLI
 					}
 					else if (w.type == ZobBehavior::eWrapperType_ZobVector2)
 					{
-						//AddFloatVariable(panel, &w);
+						AddZobVector2Variable(panel, &w);
 					}
 					else if (w.type == ZobBehavior::eWrapperType_ZobVector3)
 					{
-						//AddFloatVariable(panel, &w);
+						AddZobVector3Variable(panel, &w);
 					}
 					else if (w.type == ZobBehavior::eWrapperType_zobId)
 					{
 						AddZobIdVariable(panel, &w);
+					}
+					else if (w.type == ZobBehavior::eWrapperType_path)
+					{
+						AddPathVariable(panel, &w);
 					}
 					idx++;
 				}
 				gb->Controls->Add(panel);
 				gb->Height = panel->Height + 2;
 				panel->Dock = DockStyle::Fill;	
+				Button^ btn = gcnew Button();
+				btn->Width = 20;
+				btn->Height = 20;
+				btn->Text = "+";
+				btn->Top = 0;
+				btn->Left = gb->Width - 20;
+				btn->Click += gcnew EventHandler(this, &ZobObjectWrapper::GroupClick);
+				gb->Controls->Add(btn);
 			}
 			return gb;
 		}
 		return nullptr;
+	}
+
+	void ZobObjectWrapper::AddPathVariable(TableLayoutPanel^ panel, ZobBehavior::wrapperData* w)
+	{
+		TableLayoutPanel^ subPanel = gcnew TableLayoutPanel();
+		subPanel->Width = 300;
+		subPanel->Height = 23;
+		subPanel->ColumnCount = 2;
+		subPanel->RowCount = 1;
+		Label^ label = gcnew Label();
+		label->Text = TO_MANAGED_STRING(w->name.c_str());
+		//label->Dock = DockStyle::Fill;
+		label->Width = 140;
+		label->Height = 20;
+		label->TextAlign = ContentAlignment::BottomRight;
+		TextBox^ txt = gcnew TextBox();
+		txt->Name = TO_MANAGED_STRING(w->internalName.c_str());
+		txt->Width = 140;
+		txt->Height = 20;
+		txt->ReadOnly = w->bReadOnly;
+		//txt->MaximumSize = Drawing::Size(100, 20);
+		std::string s;
+		std::string* name = (std::string*)(w->ptr);
+		std::string* path = (std::string*)(w->ptr_1);
+		std::string* file = (std::string*)(w->ptr_2);
+		s = s.append(*name).append(";").append(*file).append(";").append(*path);
+		txt->Text = TO_MANAGED_STRING(s.c_str());
+		if (!w->bReadOnly)
+		{
+			txt->Leave += gcnew EventHandler(this, &ZobObjectWrapper::PathHandler);
+		}
+		subPanel->Controls->Add(label);
+		subPanel->Controls->Add(txt);
+		panel->Controls->Add(subPanel);
 	}
 
 	void ZobObjectWrapper::AddBoolVariable(TableLayoutPanel^ panel, ZobBehavior::wrapperData* w)
@@ -208,6 +258,96 @@ namespace CLI
 		panel->Controls->Add(subPanel);
 	}
 
+	void ZobObjectWrapper::AddZobVector3Variable(TableLayoutPanel^ panel, ZobBehavior::wrapperData* w)
+	{
+		TableLayoutPanel^ subPanel = gcnew TableLayoutPanel();
+		subPanel->Width = 300;
+		subPanel->Height = 23;
+		subPanel->ColumnCount = 2;
+		subPanel->RowCount = 1;
+		Label^ label = gcnew Label();
+		label->Text = TO_MANAGED_STRING(w->name.c_str());
+		//label->Dock = DockStyle::Fill;
+		label->Width = 140;
+		label->Height = 20;
+		label->TextAlign = ContentAlignment::BottomRight;
+		TextBox^ txt = gcnew TextBox();
+		txt->Name = TO_MANAGED_STRING(w->internalName.c_str());
+		txt->Width = 140;
+		txt->Height = 20;
+		txt->ReadOnly = w->bReadOnly;
+		//txt->MaximumSize = Drawing::Size(100, 20);
+		ZobVector3* v = (ZobVector3*)(w->ptr);
+		txt->Text = TO_MANAGED_STRING(v->ToString().c_str());
+		if (!w->bReadOnly)
+		{
+			txt->Leave += gcnew EventHandler(this, &ZobObjectWrapper::ZobVector3Handler);
+		}
+		subPanel->Controls->Add(label);
+		subPanel->Controls->Add(txt);
+		panel->Controls->Add(subPanel);
+	}
+
+	void ZobObjectWrapper::AddZobVector2Variable(TableLayoutPanel^ panel, ZobBehavior::wrapperData* w)
+	{
+		TableLayoutPanel^ subPanel = gcnew TableLayoutPanel();
+		subPanel->Width = 300;
+		subPanel->Height = 23;
+		subPanel->ColumnCount = 2;
+		subPanel->RowCount = 1;
+		Label^ label = gcnew Label();
+		label->Text = TO_MANAGED_STRING(w->name.c_str());
+		//label->Dock = DockStyle::Fill;
+		label->Width = 140;
+		label->Height = 20;
+		label->TextAlign = ContentAlignment::BottomRight;
+		TextBox^ txt = gcnew TextBox();
+		txt->Name = TO_MANAGED_STRING(w->internalName.c_str());
+		txt->Width = 140;
+		txt->Height = 20;
+		txt->ReadOnly = w->bReadOnly;
+		//txt->MaximumSize = Drawing::Size(100, 20);
+		ZobVector2* v = (ZobVector2*)(w->ptr);
+		txt->Text = TO_MANAGED_STRING(v->ToString().c_str());
+		if (!w->bReadOnly)
+		{
+			txt->Leave += gcnew EventHandler(this, &ZobObjectWrapper::ZobVector2Handler);
+		}
+		subPanel->Controls->Add(label);
+		subPanel->Controls->Add(txt);
+		panel->Controls->Add(subPanel);
+	}
+
+	void ZobObjectWrapper::AddStringVariable(TableLayoutPanel^ panel, ZobBehavior::wrapperData* w)
+	{
+		TableLayoutPanel^ subPanel = gcnew TableLayoutPanel();
+		subPanel->Width = 300;
+		subPanel->Height = 23;
+		subPanel->ColumnCount = 2;
+		subPanel->RowCount = 1;
+		Label^ label = gcnew Label();
+		label->Text = TO_MANAGED_STRING(w->name.c_str());
+		//label->Dock = DockStyle::Fill;
+		label->Width = 140;
+		label->Height = 20;
+		label->TextAlign = ContentAlignment::BottomRight;
+		TextBox^ txt = gcnew TextBox();
+		txt->Name = TO_MANAGED_STRING(w->internalName.c_str());
+		txt->Width = 140;
+		txt->Height = 20;
+		txt->ReadOnly = w->bReadOnly;
+		//txt->MaximumSize = Drawing::Size(100, 20);
+		std::string* s = (std::string*)(w->ptr);
+		txt->Text = TO_MANAGED_STRING(s->c_str());
+		if (!w->bReadOnly)
+		{
+			txt->Leave += gcnew EventHandler(this, &ZobObjectWrapper::StringHandler);
+		}
+		subPanel->Controls->Add(label);
+		subPanel->Controls->Add(txt);
+		panel->Controls->Add(subPanel);
+	}
+
 	void ZobObjectWrapper::AddIntVariable(TableLayoutPanel^ panel, ZobBehavior::wrapperData* w)
 	{
 		TableLayoutPanel^ subPanel = gcnew TableLayoutPanel();
@@ -264,7 +404,7 @@ namespace CLI
 		panel->Controls->Add(subPanel);
 	}
 
-	ZobBehavior::wrapperData* ZobObjectWrapper::GetWrapperDataForVariable(String^ variableName)
+	const ZobBehavior::wrapperData* ZobObjectWrapper::GetWrapperDataForVariable(String^ variableName)
 	{
 		ZobObject* z = GetInstance();
 		if (z)
@@ -282,11 +422,11 @@ namespace CLI
 						{
 							for (std::vector<ZobBehavior::wrapperData>::const_iterator iter = v->begin(); iter != v->end(); iter++)
 							{
-								ZobBehavior::wrapperData w = (*iter);
-								String^ wName = TO_MANAGED_STRING(w.internalName.c_str());
+								const ZobBehavior::wrapperData* w = &(*iter);
+								String^ wName = TO_MANAGED_STRING(w->internalName.c_str());
 								if (wName == variableName)
 								{
-									return &w;
+									return w;
 								}
 							}
 						}
@@ -295,6 +435,27 @@ namespace CLI
 			}
 		}
 		return NULL;
+	}
+
+	void ZobObjectWrapper::GroupClick(Object^ sender, EventArgs^ e)
+	{
+		Button^ btn = (Button^)sender;
+		GroupBox^ gb = (GroupBox^)btn->Parent;
+		if (gb->Height != 25)
+		{
+			gb->Height = 25;
+			btn->Text = "+";
+		}
+		else
+		{
+			int h = 0;
+			for (int i = 0; i < gb->Controls->Count; i++)
+			{
+				h += gb->Controls[i]->Height + 2;
+			}
+			gb->Height = h;
+			btn->Text = "-";
+		}
 	}
 
 	void ZobObjectWrapper::ListValidationHandler(Object^ sender, System::EventArgs^ e)
@@ -315,7 +476,7 @@ namespace CLI
 	void ZobObjectWrapper::BoolHandler(Object^ sender, EventArgs^ e)
 	{
 		CheckBox^ cb = static_cast<CheckBox^>(sender);
-		ZobBehavior::wrapperData* w = GetWrapperDataForVariable(cb->Name);
+		const ZobBehavior::wrapperData* w = GetWrapperDataForVariable(cb->Name);
 		if (w)
 		{
 			try
@@ -333,7 +494,7 @@ namespace CLI
 	void ZobObjectWrapper::FloatHandler(Object^ sender, EventArgs^ e)
 	{
 		TextBox^ t = static_cast<TextBox^>(sender);
-		ZobBehavior::wrapperData* w = GetWrapperDataForVariable(t->Name);
+		const ZobBehavior::wrapperData* w = GetWrapperDataForVariable(t->Name);
 		if (w)
 		{
 			try
@@ -354,7 +515,7 @@ namespace CLI
 	void ZobObjectWrapper::IntHandler(Object^ sender, EventArgs^ e)
 	{
 		TextBox^ t = static_cast<TextBox^>(sender);
-		ZobBehavior::wrapperData* w = GetWrapperDataForVariable(t->Name);
+		const ZobBehavior::wrapperData* w = GetWrapperDataForVariable(t->Name);
 		if (w)
 		{
 			try
@@ -367,6 +528,76 @@ namespace CLI
 			{
 				int* i = (int*)w->ptr;
 				t->Text = (*i).ToString();
+			}
+		}
+	}
+
+	void ZobObjectWrapper::StringHandler(Object^ sender, EventArgs^ e)
+	{
+		TextBox^ t = static_cast<TextBox^>(sender);
+		const ZobBehavior::wrapperData* w = GetWrapperDataForVariable(t->Name);
+		if (w)
+		{
+			std::string* internalString = (std::string*)w->ptr;
+			std::string s;
+			MarshalString(t->Text, s);
+			internalString->assign(s);
+		}
+	}
+
+	void ZobObjectWrapper::PathHandler(Object^ sender, EventArgs^ e)
+	{
+		TextBox^ t = static_cast<TextBox^>(sender);
+		const ZobBehavior::wrapperData* w = GetWrapperDataForVariable(t->Name);
+		if (w)
+		{
+			std::string* name = (std::string*)w->ptr;
+			std::string* path = (std::string*)w->ptr_1;
+			std::string* file = (std::string*)w->ptr_2;
+			cli::array<String^>^ a = t->Text->Split(';');
+			std::string s;
+			MarshalString(a[0], s);
+			name->assign(s);
+			MarshalString(a[1], s);
+			path->assign(s);
+			MarshalString(a[2], s);
+			file->assign(s);
+		}
+	}
+
+	void ZobObjectWrapper::ZobVector3Handler(Object^ sender, EventArgs^ e)
+	{
+		TextBox^ t = static_cast<TextBox^>(sender);
+		const ZobBehavior::wrapperData* w = GetWrapperDataForVariable(t->Name);
+		if (w)
+		{
+			ZobVector3 v;
+			std::string s;
+			MarshalString(t->Text, s);
+			if (v.FromString(s))
+			{
+				ZobVector3* vv = (ZobVector3*)w->ptr;
+				vv->x = v.x;
+				vv->y = v.y;
+				vv->z = v.z;
+			}
+		}
+	}
+
+	void ZobObjectWrapper::ZobVector2Handler(Object^ sender, EventArgs^ e)
+	{
+		TextBox^ t = static_cast<TextBox^>(sender);
+		const ZobBehavior::wrapperData* w = GetWrapperDataForVariable(t->Name);
+		if (w)
+		{
+			ZobVector2 v;
+			std::string s;
+			MarshalString(t->Text, s);
+			if (v.FromString(s))
+			{
+				ZobVector2* vv = (ZobVector2*)w->ptr;
+				vv->x = v.x;
+				vv->y = v.y;
 			}
 		}
 	}

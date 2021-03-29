@@ -11,6 +11,7 @@ ZobBehaviorPhysicSphere::ZobBehaviorPhysicSphere(ZobObject* zobObject) : ZobBeha
 {
 	m_type = eBehavior_physicSphere;
 	m_sphereShape = NULL;
+	m_localPostion = ZobVector3(0,0,0);
 	WrapVariable(eWrapperType_float, "Radius", &m_radius, false, true);
 	Init();
 }
@@ -21,8 +22,12 @@ void ZobBehaviorPhysicSphere::Init()
 	ZobBehaviorPhysicShape::Init();
 	PhysicsCommon* pc = DirectZob::GetInstance()->GetPhysicsEngine()->GetPhysicsCommon();
 	m_sphereShape = pc->createSphereShape(m_radius);
-	//m_collider->setLocalToBodyTransform
+	Transform t;
+	t.identity();
+	t.setPosition(Vector3(m_localPostion.x, m_localPostion.y, m_localPostion.z));
 	AddColliderInternal(m_sphereShape);
+	assert(m_collider);
+	m_collider->setLocalToBodyTransform(t);
 }
 
 void ZobBehaviorPhysicSphere::EditorUpdate()

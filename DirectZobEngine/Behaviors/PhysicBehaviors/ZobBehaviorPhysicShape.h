@@ -37,11 +37,13 @@ class ZobBehaviorPhysicShape : public ZobBehavior
 	protected:	
 								ZobBehaviorPhysicShape(ZobObject* zobObject);
 		void					AddColliderInternal(CollisionShape* c);
-		void					RemoveCollider();
+		virtual void			RemoveCollider();
 
 		Collider* m_collider;
 		ZobPhysicComponent::eLayer m_layer;
-		Transform m_localTransform;
+		ZobVector3 m_localPostion;
+		std::string m_test;
+		//ZobVector3 m_localRotation;
 		bool m_bUpdateSize;
 		float m_bounciness;
 		float m_frictionCoeff;

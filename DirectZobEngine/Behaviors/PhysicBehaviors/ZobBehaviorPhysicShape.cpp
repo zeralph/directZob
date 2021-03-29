@@ -16,7 +16,8 @@ ZobBehaviorPhysicShape::ZobBehaviorPhysicShape(ZobObject* zobObject) : ZobBehavi
 	const char* sl[] = { "None", "Ground", "Wall", "Objects" };
 	WrapEnum("Layer", &m_layer, 4, pl, sl, false, true);
 
-
+	WrapVariable(eWrapperType_string, "test", &m_test, false, true);
+	WrapVariable(eWrapperType_ZobVector3, "Local position", &m_localPostion, false, true);
 	WrapVariable(eWrapperType_float, "Bounciness",  &m_bounciness, false, true);
 	WrapVariable(eWrapperType_float, "Friction coeff", &m_frictionCoeff, false, true);
 	WrapVariable(eWrapperType_float, "Mass density", &m_massDensity, false, true);
@@ -62,6 +63,16 @@ void ZobBehaviorPhysicShape::EditorUpdate()
 		if (material.getRollingResistance() != m_rollingResistance)
 		{
 			material.setRollingResistance(m_rollingResistance);
+		}
+		Vector3 v = m_collider->getLocalToBodyTransform().getPosition();
+		if (m_localPostion.x != v.x || m_localPostion.z != v.z || m_localPostion.z != v.z)
+		{
+			Transform t = m_collider->getLocalToBodyTransform();
+			v.x = m_localPostion.x;
+			v.y = m_localPostion.y;
+			v.z = m_localPostion.z;
+			t.setPosition(v);
+			m_collider->setLocalToBodyTransform(t);
 		}
 	}
 }

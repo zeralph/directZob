@@ -19,9 +19,9 @@ ZobBehaviorPhysicCapsule::ZobBehaviorPhysicCapsule(ZobObject* zobObject) : ZobBe
 
 void ZobBehaviorPhysicCapsule::Init()
 {
-	ZobBehaviorPhysicShape::Init();
 	m_radius = 1.0f;
 	m_height = 2.0f;
+	ZobBehaviorPhysicShape::Init();
 	PhysicsCommon* pc = DirectZob::GetInstance()->GetPhysicsEngine()->GetPhysicsCommon();
 	m_capsuleShape = pc->createCapsuleShape(m_radius, m_height);
 	AddColliderInternal(m_capsuleShape);

@@ -42,14 +42,22 @@ TiXmlNode* ZobBehavior::SaveUnderNode(TiXmlNode* node)
 				}
 				case eWrapperType_string:
 				{
+					std::string* s = (std::string*)(w->ptr);
+					o.SetAttribute("value", s->c_str());
 					break;
 				}
 				case eWrapperType_ZobVector2:
 				{
+					ZobVector2* v = (ZobVector2*)(w->ptr);
+					std::string s = v->ToString();
+					o.SetAttribute("value", s.c_str());
 					break;
 				}
 				case eWrapperType_ZobVector3:
 				{
+					ZobVector3* v = (ZobVector3*)(w->ptr);
+					std::string s = v->ToString();
+					o.SetAttribute("value", s.c_str());
 					break;
 				}
 				case eWrapperType_bool:
@@ -73,6 +81,16 @@ TiXmlNode* ZobBehavior::SaveUnderNode(TiXmlNode* node)
 					}
 					break;
 				}
+				case eWrapperType_path:
+				{
+					std::string* name = (std::string*)(w->ptr);
+					std::string* file = (std::string*)(w->ptr_1);
+					std::string* path = (std::string*)(w->ptr_2);
+					std::string s;
+					s = s.append(*name).append(";").append(*file).append(";").append(*path);
+					o.SetAttribute("value", s.c_str());
+					break;
+				}
 				case eWrapperType_zobId:
 				{
 					break;
@@ -88,6 +106,23 @@ TiXmlNode* ZobBehavior::SaveUnderNode(TiXmlNode* node)
 const char* ZobBehavior::GetBehaviorTypeStr()
 {
 	return ZobBehaviorFactory::eBehaviorTypeStr[m_type];
+}
+
+void ZobBehavior::WrapPath(const char* name, void* ptrName, void* ptrPath, void* ptrFile, bool bReadOnly, bool bSave)
+{
+	wrapperData w;
+	std::string s;
+	w.type = eWrapperType_path;
+	w.name = std::string(name);
+	DirectZob::ZobIdToString(m_guid, s);
+	s = s.append("_").append(w.name);
+	w.internalName = s;
+	w.ptr = ptrName;
+	w.ptr_1 = ptrPath;
+	w.ptr_2 = ptrFile;
+	w.bReadOnly = bReadOnly;
+	w.bSave = bSave;
+	m_wrappedVariables.push_back(w);
 }
 
 void ZobBehavior::WrapVariable(eWrapperType type, const char* name, void* ptr, bool bReadOnly, bool bSave)
@@ -126,8 +161,16 @@ void ZobBehavior::WrapEnum(const char* name, void* ptr, int nbParams, int* value
 void ZobBehavior::LoadVariables(TiXmlElement* node)
 {
 	const char* guid = node->Attribute("Guid");
-	std::string s = std::string(guid);
-	DirectZob::ZobIdFromString(s, m_guid);
+	if (guid)
+	{
+		std::string s = guid;
+		DirectZob::ZobIdFromString(s, m_guid);
+	}
+	else
+	{
+		m_guid = DirectZob::GenerateZobId();
+	}
+
 	for (TiXmlElement* e = node->FirstChildElement("Var"); e != NULL; e = e->NextSiblingElement("Var"))
 	{
 		const char* name = e->Attribute("name");
@@ -178,6 +221,60 @@ void ZobBehavior::LoadVariables(TiXmlElement* node)
 							}
 						}
 						break;
+					}
+					else if (w->type == eWrapperType_string)
+					{
+						std::string* s = (std::string*)(w->ptr);
+						s->resize(0);
+						s->assign(val);
+					}
+					else if (w->type == eWrapperType_ZobVector2)
+					{
+						ZobVector2* v = (ZobVector2*)(w->ptr);
+						ZobVector2 p;
+						std::string s = std::string(val);
+						if (p.FromString(s))
+						{
+							v->x = p.x;
+							v->y = p.y;
+						}
+					}
+					else if (w->type == eWrapperType_ZobVector3)
+					{
+						ZobVector3* v = (ZobVector3*)(w->ptr);
+						ZobVector3 p;
+						std::string s = std::string(val);
+						if (p.FromString(s))
+						{
+							v->x = p.x;
+							v->y = p.y;
+							v->z = p.z;
+						}
+					}
+					else if (w->type == eWrapperType_path)
+					{
+						std::string s = std::string(val);
+						std::size_t del1, del2 = 0;
+						del1 = s.find(';');
+						if (del1 != std::string::npos)
+						{
+							del2 = s.find(';', del1 + 1);
+							if (del1 != std::string::npos)
+							{
+								std::string name = s.substr(0, del1);
+								std::string path = s.substr(del1 + 1, del2 -(del1+1));
+								std::string file = s.substr(del2 + 1, s.size() - 1);
+								std::string* sName = (std::string*)(w->ptr);
+								sName->resize(0);
+								sName->assign(name);
+								std::string* sPath = (std::string*)(w->ptr_1);
+								sPath->resize(0);
+								sPath->assign(path);
+								std::string* sFile = (std::string*)(w->ptr_2);
+								sFile->resize(0);
+								sFile->assign(file);
+							}
+						}
 					}
 				}
 			}

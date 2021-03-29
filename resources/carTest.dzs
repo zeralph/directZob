@@ -24,14 +24,17 @@
                 <Var name="Front cornering stiffness" value="-5.000000" />
                 <Var name="Rear cornering stiffness" value="-5.200000" />
             </Behavior>
+			<Behavior Type="PhysicBox" Guid="176093677603">
+                <Var name="test" value="" />
+                <Var name="Local position" value="0.000000;0.000000;0.000000" />
+                <Var name="Bounciness" value="0.000000" />
+                <Var name="Friction coeff" value="0.000000" />
+                <Var name="Mass density" value="1500.000000" />
+                <Var name="Rollling Resistance" value="0.000000" />
+                <Var name="Scale with object" value="True" />
+                <Var name="Height" value="1.000000;0.300000;2.500000" />
+            </Behavior>
         </Behaviors>
-        <Physic>
-            <RigidBody type="1" active="1">
-                <Box halfExtends_x="1.000000" halfExtends_y="0.300000" halfExtends_z="2.500000" layers="4" scale_with_object="1">
-                    <Material bounciness="0.000000" friction_coeff="0.000000" mass_density="1000.000000" rolling_resistance="0.000000" />
-                </Box>
-            </RigidBody>
-        </Physic>
         <ZobObject name="carMesh" guid="3066531" type="mesh">
             <Position x="0.000285507" y="-0.698991" z="0.000250807" />
             <Rotation x="180" y="0.000195336" z="180" />
@@ -118,13 +121,6 @@
             </RenderOptions>
         </Mesh>
         <Behaviors />
-        <Physic>
-            <RigidBody type="0" active="1">
-                <Box halfExtends_x="10.000000" halfExtends_y="10.000000" halfExtends_z="10.000000" layers="0" scale_with_object="1">
-                    <Material bounciness="0.100000" friction_coeff="2.010000" mass_density="0.010000" rolling_resistance="0.010000" />
-                </Box>
-            </RigidBody>
-        </Physic>
     </ZobObject>
     <ZobObject name="rocks" guid="3066471">
         <Position x="0" y="0" z="101.54" />
@@ -262,40 +258,55 @@
         <Position x="0" y="0" z="0" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="1" y="1" z="1" />
-        <Behaviors />
-        <Physic>
-            <RigidBody type="0" active="1">
-                <StaticMesh name="road2_p_ground.obj" path="" file="road2_p_ground.obj" layers="1" scale_with_object="1">
-                    <Material bounciness="0.000000" friction_coeff="0.000000" mass_density="0.000000" rolling_resistance="0.000000" />
-                </StaticMesh>
-            </RigidBody>
-        </Physic>
+        <Behaviors>
+		    <Behavior Type="PhysicMesh" Guid="176093677603">
+                <Var name="Layer" value="None" />
+                <Var name="test" value="" />
+                <Var name="Local position" value="0.000000;0.000000;0.000000" />
+                <Var name="Bounciness" value="0.000000" />
+                <Var name="Friction coeff" value="1.000000" />
+                <Var name="Mass density" value="0.000000" />
+                <Var name="Rollling Resistance" value="0.000000" />
+                <Var name="Scale with object" value="True" />
+                <Var name="Mesh" value="road2_p_ground.obj;/;road2_p_ground.obj" />
+            </Behavior>
+		</Behaviors>
     </ZobObject>
     <ZobObject name="road2_p_leftWall" guid="3066500">
         <Position x="0" y="0" z="0" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="1" y="1" z="1" />
-        <Behaviors />
-        <Physic>
-            <RigidBody type="0" active="1">
-                <StaticMesh name="road2_p_leftWall.obj" path="" file="road2_p_leftWall.obj" layers="2" scale_with_object="1">
-                    <Material bounciness="0.000000" friction_coeff="0.000000" mass_density="0.000000" rolling_resistance="0.000000" />
-                </StaticMesh>
-            </RigidBody>
-        </Physic>
+        <Behaviors>
+		    <Behavior Type="PhysicMesh" Guid="56763452928010">
+                <Var name="Layer" value="None" />
+                <Var name="test" value="" />
+                <Var name="Local position" value="0.000000;0.000000;0.000000" />
+                <Var name="Bounciness" value="0.000000" />
+                <Var name="Friction coeff" value="1.000000" />
+                <Var name="Mass density" value="0.000000" />
+                <Var name="Rollling Resistance" value="0.000000" />
+                <Var name="Scale with object" value="True" />
+                <Var name="Mesh" value="road2_p_leftWall.obj;/;road2_p_leftWall.obj" />
+            </Behavior>
+		</Behaviors>
     </ZobObject>
     <ZobObject name="road2_p_rightWall" guid="3066501">
         <Position x="0" y="0" z="0" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="1" y="1" z="1" />
-        <Behaviors />
-        <Physic>
-            <RigidBody type="0" active="1">
-                <StaticMesh name="road2_p_rightWall.obj" path="" file="road2_p_rightWall.obj" layers="2" scale_with_object="1">
-                    <Material bounciness="0.000000" friction_coeff="0.000000" mass_density="0.000000" rolling_resistance="0.000000" />
-                </StaticMesh>
-            </RigidBody>
-        </Physic>
+        <Behaviors>
+		    <Behavior Type="PhysicMesh" Guid="37592546300264">
+                <Var name="Layer" value="None" />
+                <Var name="test" value="" />
+                <Var name="Local position" value="0.000000;0.000000;0.000000" />
+                <Var name="Bounciness" value="0.000000" />
+                <Var name="Friction coeff" value="1.000000" />
+                <Var name="Mass density" value="0.000000" />
+                <Var name="Rollling Resistance" value="0.000000" />
+                <Var name="Scale with object" value="True" />
+                <Var name="Mesh" value="road2_p_rightWall.obj;/;road2_p_rightWall.obj" />
+            </Behavior>
+		</Behaviors>
     </ZobObject>
     <ZobObject name="buildings" guid="3066485">
         <Position x="91.3799" y="0.954358" z="-110.778" />
@@ -386,13 +397,6 @@
             </RenderOptions>
         </Mesh>
         <Behaviors />
-        <Physic>
-            <RigidBody type="0" active="1">
-                <Box halfExtends_x="1.000000" halfExtends_y="0.500000" halfExtends_z="2.000000" layers="0" scale_with_object="1">
-                    <Material bounciness="0.100000" friction_coeff="2.010000" mass_density="0.010000" rolling_resistance="0.010000" />
-                </Box>
-            </RigidBody>
-        </Physic>
     </ZobObject>
     <ZobObject name="some_lights" guid="3066510">
         <Position x="0" y="0" z="0" />

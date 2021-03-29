@@ -35,6 +35,7 @@ namespace CLI {
 			const ZobBehavior::wrapperData* w;
 	};
 
+
 	public ref class ZobObjectWrapper : ManagedObject<ZobObject>
 	{
 	public:
@@ -76,7 +77,12 @@ namespace CLI {
 		void					FloatHandler(Object^ sender, System::EventArgs^ e);
 		void					BoolHandler(Object^ sender, System::EventArgs^ e);
 		void					IntHandler(Object^ sender, System::EventArgs^ e);
+		void					PathHandler(Object^ sender, System::EventArgs^ e);
+		void					ZobVector2Handler(Object^ sender, System::EventArgs^ e);
+		void					ZobVector3Handler(Object^ sender, System::EventArgs^ e);
+		void					StringHandler(Object^ sender, System::EventArgs^ e);
 		void					ListValidationHandler(Object^ sender, System::EventArgs^ e);
+		void					GroupClick(Object^ sender, System::EventArgs^ e);
 
 		bool					IsDynamic();
 		void					SetDynamic();
@@ -91,8 +97,12 @@ namespace CLI {
 		void					AddBoolVariable(TableLayoutPanel^ panel, ZobBehavior::wrapperData* w);
 		void					AddIntVariable(TableLayoutPanel^ panel, ZobBehavior::wrapperData* w);
 		void					AddZobIdVariable(TableLayoutPanel^ panel, ZobBehavior::wrapperData* w);
+		void					AddZobVector2Variable(TableLayoutPanel^ panel, ZobBehavior::wrapperData* w);
+		void					AddZobVector3Variable(TableLayoutPanel^ panel, ZobBehavior::wrapperData* w);
+		void					AddStringVariable(TableLayoutPanel^ panel, ZobBehavior::wrapperData* w);
+		void					AddPathVariable(TableLayoutPanel^ panel, ZobBehavior::wrapperData* w);
 
-		ZobBehavior::wrapperData* GetWrapperDataForVariable(String^ variableName);
+		const ZobBehavior::wrapperData* GetWrapperDataForVariable(String^ variableName);
  		DirectZobType::guid m_id;
 	};
 }

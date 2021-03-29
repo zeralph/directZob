@@ -65,7 +65,8 @@ ZobObject::ZobObject(DirectZobType::guid id, TiXmlElement* node, ZobObject* pare
 	float x, y, z;
 	TiXmlElement* f;
 	name = node->Attribute("name");
-	bool bIsDynamic = strcmp(node->Attribute("dynamic"), "True") == 0;
+	const char* dynamic = node->Attribute("dynamic");
+	bool bIsDynamic = dynamic?(strcmp(dynamic, "True") == 0):false;
 	DirectZob::LogInfo("ZobObject %s creation", name.c_str());
 	DirectZob::AddIndent();
 	f = node->FirstChildElement("Position");

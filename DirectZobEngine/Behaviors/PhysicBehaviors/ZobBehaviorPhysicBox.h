@@ -22,5 +22,6 @@ class ZobBehaviorPhysicBox : public ZobBehaviorPhysicShape
 	private:	
 								ZobBehaviorPhysicBox(ZobObject* zobObject);
 
+		BoxShape* m_boxShape;
 		ZobVector3 m_halfExtends;
 };

@@ -57,8 +57,6 @@ namespace DirectZobEditor
         public event OnObjectRotatedHandler OnObjectRotated;
         public delegate void OnObjectScaledHandler(object s, ObjectModificationEventArg e);
         public event OnObjectScaledHandler OnObjectScaled;
-        int m_bmpDataLength = 0;
-        byte[] m_bmpdata = new byte[0];
         int m_width;
         int m_height;
         int m_lastMouseX = -1;

@@ -20,8 +20,10 @@ class ZobBehaviorPhysicMesh : public ZobBehaviorPhysicShape
 
 	private:	
 								ZobBehaviorPhysicMesh(ZobObject* zobObject);
+		bool					LoadMeshInternal();
+		void					RemoveCollider() override;
 
-
+		Mesh* m_mesh;
 		float* m_concaveMeshVertices;
 		uint* m_concaveMeshIndices;
 		int m_concaveMeshNbTriangles;
