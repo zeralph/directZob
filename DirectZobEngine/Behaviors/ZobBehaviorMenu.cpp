@@ -16,7 +16,6 @@ ZobBehaviorMenu::~ZobBehaviorMenu()
 ZobBehaviorMenu::ZobBehaviorMenu(ZobObject* zobObject) : ZobBehavior(zobObject)
 {
 	m_type = eBehavior_menu; 
-	Init();
 }
 
 void ZobBehaviorMenu::PreUpdate()

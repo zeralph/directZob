@@ -19,8 +19,13 @@ ZobBehaviorPhysicShape::ZobBehaviorPhysicShape(ZobObject* zobObject) : ZobBehavi
 	WrapVariable(eWrapperType_float, "Mass density", &m_massDensity, false, true);
 	WrapVariable(eWrapperType_float, "Rollling Resistance", &m_rollingResistance, false, true);
 	WrapVariable(eWrapperType_bool, "Scale with object", &m_bUpdateSize, false, true);
-
-	Init();
+	m_isTrigger = false;
+	m_collider = NULL;
+	m_rollingResistance = 1.0f;
+	m_massDensity = 1.0f;
+	m_frictionCoeff = 1.0f;
+	m_bounciness = 1.0f;
+	m_layers = 0;
 }
 
 void ZobBehaviorPhysicShape::PreUpdate()
@@ -30,13 +35,22 @@ void ZobBehaviorPhysicShape::PreUpdate()
 
 void ZobBehaviorPhysicShape::Init()
 {
-	m_isTrigger = true;
-	m_collider = NULL;
-	m_rollingResistance = 1.0f;
-	m_massDensity = 1.0f;
-	m_frictionCoeff = 1.0f;
-	m_bounciness = 1.0f;
-	m_layers = 0;
+	assert(m_collider);
+	reactphysics3d::Material& material = m_collider->getMaterial();
+	material.setBounciness(m_bounciness);
+	material.setFrictionCoefficient(m_frictionCoeff);
+	material.setMassDensity(m_massDensity);
+	material.setRollingResistance(m_rollingResistance);
+	m_collider->setCollisionCategoryBits((short)m_layers);
+	//m_collider->setCollideWithMaskBits(0xFFFF);
+	m_collider->setIsTrigger(false);
+	Vector3 v = m_collider->getLocalToBodyTransform().getPosition();
+	Transform t = m_collider->getLocalToBodyTransform();
+	v.x = m_localPostion.x;
+	v.y = m_localPostion.y;
+	v.z = m_localPostion.z;
+	t.setPosition(v);
+	m_collider->setLocalToBodyTransform(t);
 }
 
 void ZobBehaviorPhysicShape::EditorUpdate()

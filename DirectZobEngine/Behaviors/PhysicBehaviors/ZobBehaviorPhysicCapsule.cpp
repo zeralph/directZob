@@ -13,18 +13,17 @@ ZobBehaviorPhysicCapsule::ZobBehaviorPhysicCapsule(ZobObject* zobObject) : ZobBe
 	m_capsuleShape = NULL;
 	WrapVariable(eWrapperType_float, "Radius", &m_radius, false, true);
 	WrapVariable(eWrapperType_float, "Height", &m_height, false, true);
-	Init();
+	m_radius = 1.0f;
+	m_height = 2.0f;
 }
 
 
 void ZobBehaviorPhysicCapsule::Init()
 {
-	m_radius = 1.0f;
-	m_height = 2.0f;
-	ZobBehaviorPhysicShape::Init();
 	PhysicsCommon* pc = DirectZob::GetInstance()->GetPhysicsEngine()->GetPhysicsCommon();
 	m_capsuleShape = pc->createCapsuleShape(m_radius, m_height);
 	AddColliderInternal(m_capsuleShape);
+	ZobBehaviorPhysicShape::Init();
 }
 
 void ZobBehaviorPhysicCapsule::EditorUpdate()

@@ -40,7 +40,7 @@ class ZobBehaviorPhysicShape : public ZobBehavior
 		virtual void			RemoveCollider();
 
 		Collider* m_collider;
-		short m_layers;
+		int m_layers;
 		bool m_isTrigger;
 		ZobVector3 m_localPostion;
 		std::string m_test;
