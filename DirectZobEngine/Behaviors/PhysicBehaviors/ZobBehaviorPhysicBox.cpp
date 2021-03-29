@@ -12,17 +12,16 @@ ZobBehaviorPhysicBox::ZobBehaviorPhysicBox(ZobObject* zobObject) : ZobBehaviorPh
 	m_halfExtends = ZobVector3(1, 1, 1);
 	m_type = eBehavior_physicBox;
 	WrapVariable(eWrapperType_ZobVector3, "Height", &m_halfExtends, false, true);
-	Init();
+	m_halfExtends = ZobVector3(1, 1, 1);
 }
 
 void ZobBehaviorPhysicBox::Init()
 {
-	ZobBehaviorPhysicShape::Init();
-	m_halfExtends = ZobVector3(1, 1, 1);
 	PhysicsCommon* pc = DirectZob::GetInstance()->GetPhysicsEngine()->GetPhysicsCommon();
 	Vector3 h = Vector3(m_halfExtends.x, m_halfExtends.y, m_halfExtends.z);
 	m_boxShape = pc->createBoxShape(h);
 	AddColliderInternal(m_boxShape);
+	ZobBehaviorPhysicShape::Init();
 }
 
 void ZobBehaviorPhysicBox::EditorUpdate()

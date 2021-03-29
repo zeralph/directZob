@@ -30,7 +30,6 @@ ZobBehaviorCar::ZobBehaviorCar(ZobObject* zobObject) : ZobBehavior(zobObject)
 	m_lastCollDirection= ZobVector3(0, 0, 0);
 	m_lastCollRebound  = ZobVector3(0, 0, 0);
 	m_lastCollNormal   = ZobVector3(0, 0, 0);
-	Init();
 
 	int p[] = { eCarType_prout , eCarType_pouet, eCarType_truc};
 	const char* s[] = { "prout", "pouet", "truc" };
@@ -44,6 +43,14 @@ ZobBehaviorCar::ZobBehaviorCar(ZobObject* zobObject) : ZobBehavior(zobObject)
 	WrapVariable(eWrapperType_float, "Rolling resistance", &m_resistance, false, true);
 	WrapVariable(eWrapperType_float, "Front cornering stiffness", &m_ca_f, false, true);
 	WrapVariable(eWrapperType_float, "Rear cornering stiffness", &m_ca_r, false, true);
+
+	m_mass = 1500;
+	m_maxGrip = 10.0f;
+	m_inertia = 1500;
+	m_drag = 5.0;
+	m_resistance = 30.0;
+	m_ca_r = -5.20;
+	m_ca_f = -5.0;
 }
 
 void ZobBehaviorCar::PreUpdate()
@@ -62,13 +69,6 @@ void ZobBehaviorCar::Init()
 	m_steerangle=0;
 	m_throttle=0;
 	m_brake=0;
-	m_mass = 1500;
-	m_maxGrip = 10.0f;
-	m_inertia = 1500;
-	m_drag = 5.0;		 		
-	m_resistance = 30.0;	
-	m_ca_r = -5.20;			
-	m_ca_f = -5.0;		
 	m_heightAboveGround = 0.9f;
 	m_handBrake = false;
 	m_velocityWorld = ZobVector3(0, 0, 0);

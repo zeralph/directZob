@@ -17,7 +17,6 @@ ZobBehaviorPhysicMesh::ZobBehaviorPhysicMesh(ZobObject* zobObject) : ZobBehavior
 	m_mesh = NULL;
 	WrapPath("Mesh", &m_convexMeshName, &m_convexMeshPath,& m_convexMeshFile, false, true);
 	WrapVariable(eWrapperType_int, "Nb triangles", &m_concaveMeshNbTriangles, true, false);
-	Init();
 }
 
 void ZobBehaviorPhysicMesh::RemoveCollider()
@@ -87,7 +86,6 @@ bool ZobBehaviorPhysicMesh::LoadMeshInternal()
 
 void ZobBehaviorPhysicMesh::Init()
 {
-	ZobBehaviorPhysicShape::Init();
 	if (m_mesh == NULL && m_convexMeshName.size() && m_convexMeshPath.size() && m_convexMeshFile.size())
 	{
 		if (!LoadMeshInternal())
@@ -96,6 +94,7 @@ void ZobBehaviorPhysicMesh::Init()
 			m_convexMeshPath = "";
 			m_convexMeshFile = "";
 		}
+		ZobBehaviorPhysicShape::Init();
 	}
 }
 

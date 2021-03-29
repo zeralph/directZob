@@ -19,8 +19,13 @@ ZobBehaviorPhysicShape::ZobBehaviorPhysicShape(ZobObject* zobObject) : ZobBehavi
 	WrapVariable(eWrapperType_float, "Mass density", &m_massDensity, false, true);
 	WrapVariable(eWrapperType_float, "Rollling Resistance", &m_rollingResistance, false, true);
 	WrapVariable(eWrapperType_bool, "Scale with object", &m_bUpdateSize, false, true);
-
-	Init();
+	m_isTrigger = true;
+	m_collider = NULL;
+	m_rollingResistance = 1.0f;
+	m_massDensity = 1.0f;
+	m_frictionCoeff = 1.0f;
+	m_bounciness = 1.0f;
+	m_layers = 0;
 }
 
 void ZobBehaviorPhysicShape::PreUpdate()
@@ -30,13 +35,22 @@ void ZobBehaviorPhysicShape::PreUpdate()
 
 void ZobBehaviorPhysicShape::Init()
 {
-	m_isTrigger = true;
-	m_collider = NULL;
-	m_rollingResistance = 1.0f;
-	m_massDensity = 1.0f;
-	m_frictionCoeff = 1.0f;
-	m_bounciness = 1.0f;
-	m_layers = 0;
+	assert(m_collider);
+	reactphysics3d::Material& material = m_collider->getMaterial();
+	material.setBounciness(m_bounciness);
+	material.setFrictionCoefficient(m_frictionCoeff);
+	material.setMassDensity(m_massDensity);
+	material.setRollingResistance(m_rollingResistance);
+	m_collider->setCollisionCategoryBits(m_layers);
+	//m_collider->setCollideWithMaskBits(0xFFFF);
+	m_collider->setIsTrigger(false);
+	Transform t = m_collider->getLocalToBodyTransform();
+	Vector3 v;
+	v.x = m_localPostion.x;
+	v.y = m_localPostion.y;
+	v.z = m_localPostion.z;
+	t.setPosition(v);
+	m_collider->setLocalToBodyTransform(t);
 }
 
 void ZobBehaviorPhysicShape::EditorUpdate()
@@ -63,7 +77,7 @@ void ZobBehaviorPhysicShape::EditorUpdate()
 		}
 		if (m_collider->getCollisionCategoryBits() != m_layers)
 		{
-			//m_collider->setCollisionCategoryBits(m_layers);
+			m_collider->setCollisionCategoryBits(m_layers);
 			//m_collider->setCollideWithMaskBits(0xFFFF);
 		}
 		if (m_collider->getIsTrigger() != m_isTrigger)
@@ -97,6 +111,7 @@ void ZobBehaviorPhysicShape::AddColliderInternal(CollisionShape* c)
 	assert(m_collider == NULL);
 	Transform t = Transform::identity();
 	m_collider = m_zobObject->GetPhysicComponentNoConst()->GetRigidBody()->addCollider(c, t);
+	m_collider->setCollisionCategoryBits(m_layers);
 }
 
 void ZobBehaviorPhysicShape::RemoveCollider()

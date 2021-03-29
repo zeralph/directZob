@@ -17,7 +17,38 @@ const char* ZobBehaviorFactory::eBehaviorTypeStr[ZobBehavior::__eBehavior_MAX__]
 	"PhysicMesh"
 };
 
+
 ZobBehavior* ZobBehaviorFactory::CreateBehavior(ZobObject* zobObject, const char* behaviorName)
+{
+	ZobBehavior* zb = NULL;
+	if (zobObject)
+	{
+		ZobBehavior* zb = CreateBehaviorInternal(zobObject, behaviorName);
+		if (zb)
+		{
+			zb->Init();
+		}
+	}
+	return zb;
+}
+
+ZobBehavior* ZobBehaviorFactory::CreateBehavior(ZobObject* zobObject, TiXmlElement* node)
+{
+	ZobBehavior* zb = NULL;
+	if (zobObject && node)
+	{
+		const char* behaviorTypeStr = node->Attribute("Type");
+		ZobBehavior* zb = CreateBehaviorInternal(zobObject, behaviorTypeStr);
+		if (zb)
+		{
+			zb->LoadVariables(node);
+			zb->Init();
+		}
+	}
+	return zb;
+}
+
+ZobBehavior* ZobBehaviorFactory::CreateBehaviorInternal(ZobObject* zobObject, const char* behaviorName)
 {
 	ZobBehavior* zb = NULL;
 	if (zobObject)
@@ -62,21 +93,6 @@ ZobBehavior* ZobBehaviorFactory::CreateBehavior(ZobObject* zobObject, const char
 		if (zb)
 		{
 			zobObject->AddBehavior(zb);
-		}
-	}
-	return zb;
-}
-
-ZobBehavior* ZobBehaviorFactory::CreateBehavior(ZobObject* zobObject, TiXmlElement* node)
-{
-	ZobBehavior* zb = NULL;
-	if (zobObject && node)
-	{
-		const char* behaviorTypeStr = node->Attribute("Type");
-		ZobBehavior* zb = CreateBehavior(zobObject, behaviorTypeStr);
-		if (zb)
-		{
-			zb->LoadVariables(node);
 		}
 	}
 	return zb;
