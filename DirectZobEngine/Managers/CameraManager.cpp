@@ -19,6 +19,7 @@ CameraManager::~CameraManager()
 
 void CameraManager::UnloadAll()
 {
+	m_curCam = NULL;
 	m_cameras.clear();
 }
 

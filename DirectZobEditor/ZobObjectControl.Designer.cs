@@ -48,6 +48,8 @@
             this.zobPosY = new System.Windows.Forms.TextBox();
             this.zobScaleZ = new System.Windows.Forms.TextBox();
             this.zobPosZ = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.bodyType = new System.Windows.Forms.ComboBox();
             this.groupBoxZobObject.SuspendLayout();
             this.ZobObjectLayout.SuspendLayout();
             this.TransformVars.SuspendLayout();
@@ -61,7 +63,7 @@
             this.groupBoxZobObject.Location = new System.Drawing.Point(0, 0);
             this.groupBoxZobObject.Margin = new System.Windows.Forms.Padding(0);
             this.groupBoxZobObject.Name = "groupBoxZobObject";
-            this.groupBoxZobObject.Size = new System.Drawing.Size(340, 180);
+            this.groupBoxZobObject.Size = new System.Drawing.Size(340, 316);
             this.groupBoxZobObject.TabIndex = 0;
             this.groupBoxZobObject.TabStop = false;
             this.groupBoxZobObject.Text = "ZobObject";
@@ -77,13 +79,15 @@
             this.ZobObjectLayout.Location = new System.Drawing.Point(3, 16);
             this.ZobObjectLayout.Name = "ZobObjectLayout";
             this.ZobObjectLayout.RowCount = 2;
-            this.ZobObjectLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 160F));
+            this.ZobObjectLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 210F));
             this.ZobObjectLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.ZobObjectLayout.Size = new System.Drawing.Size(334, 161);
+            this.ZobObjectLayout.Size = new System.Drawing.Size(334, 297);
             this.ZobObjectLayout.TabIndex = 47;
             // 
             // TransformVars
             // 
+            this.TransformVars.Controls.Add(this.bodyType);
+            this.TransformVars.Controls.Add(this.label5);
             this.TransformVars.Controls.Add(this.zobId);
             this.TransformVars.Controls.Add(this.checkBoxLinkScale);
             this.TransformVars.Controls.Add(this.zobRotZ);
@@ -103,7 +107,7 @@
             this.TransformVars.Controls.Add(this.zobPosZ);
             this.TransformVars.Location = new System.Drawing.Point(3, 3);
             this.TransformVars.Name = "TransformVars";
-            this.TransformVars.Size = new System.Drawing.Size(328, 154);
+            this.TransformVars.Size = new System.Drawing.Size(328, 203);
             this.TransformVars.TabIndex = 46;
             this.TransformVars.TabStop = false;
             this.TransformVars.Text = "Values";
@@ -261,6 +265,27 @@
             this.zobPosZ.Text = "100.00";
             this.zobPosZ.Leave += new System.EventHandler(this.valueChanged);
             // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(36, 151);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(31, 13);
+            this.label5.TabIndex = 46;
+            this.label5.Text = "Body";
+            // 
+            // bodyType
+            // 
+            this.bodyType.FormattingEnabled = true;
+            this.bodyType.Items.AddRange(new object[] {
+            "Static",
+            "Dynamic"});
+            this.bodyType.Location = new System.Drawing.Point(73, 148);
+            this.bodyType.Name = "bodyType";
+            this.bodyType.Size = new System.Drawing.Size(174, 21);
+            this.bodyType.TabIndex = 47;
+            this.bodyType.SelectedIndexChanged += new System.EventHandler(this.bodyType_SelectedIndexChanged);
+            // 
             // ZobObjectControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -268,7 +293,7 @@
             this.AutoSize = true;
             this.Controls.Add(this.groupBoxZobObject);
             this.Name = "ZobObjectControl";
-            this.Size = new System.Drawing.Size(340, 180);
+            this.Size = new System.Drawing.Size(340, 316);
             this.groupBoxZobObject.ResumeLayout(false);
             this.groupBoxZobObject.PerformLayout();
             this.ZobObjectLayout.ResumeLayout(false);
@@ -301,5 +326,7 @@
         private System.Windows.Forms.TextBox zobRotZ;
         private System.Windows.Forms.GroupBox TransformVars;
         private System.Windows.Forms.TableLayoutPanel ZobObjectLayout;
+        private System.Windows.Forms.ComboBox bodyType;
+        private System.Windows.Forms.Label label5;
     }
 }

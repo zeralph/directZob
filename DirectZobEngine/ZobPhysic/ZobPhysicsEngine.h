@@ -12,6 +12,8 @@ class ZobPhysicComponent;
 class ZobPhysicsContactsListener;
 class ZobPhysicsEngine
 {
+public:
+
 public :
 	ZobPhysicsEngine();
 	~ZobPhysicsEngine();

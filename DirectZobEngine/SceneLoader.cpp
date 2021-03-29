@@ -9,6 +9,7 @@ std::string SceneLoader::m_nextSceneName = "";
 char tmpBuffer[256];
 bool SceneLoader::m_loadNextScene = false;
 
+
 void SceneLoader::Update()
 {
 	if (m_loadNextScene)
@@ -131,11 +132,11 @@ void SceneLoader::UnloadScene()
 	engine->Stop();
 	hudManager->Stop();
 	//DirectZob::GetInstance()->SleepMS(1000);
+	cameraManager->UnloadAll();
 	zobObjectManager->UnloadAll();
 	meshManager->UnloadAll();
 	materialManager->UnloadAll();
 	lightManager->UnloadAll();
-	cameraManager->UnloadAll();
 //	phy->ReInit(); 
 	DirectZob::RemoveIndent();
 }
@@ -206,9 +207,10 @@ void SceneLoader::LoadSceneInternal()
 			DirectZob::LogError("Scene file has error");
 		}
 	}
-	DirectZob::GetInstance()->GetEngine()->Start();
+	DirectZob::GetInstance()->GetEngine()->Start(); 
 	DirectZob::GetInstance()->GetHudManager()->Start();
 	DirectZob::RemoveIndent();
+	DirectZob::GetInstance()->OnSceneLoaded();
 }
 
 void SceneLoader::SaveScene()

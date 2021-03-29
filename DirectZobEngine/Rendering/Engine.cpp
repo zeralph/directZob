@@ -1148,6 +1148,7 @@ void Engine::RecomputeTriangleProj(const Camera* c, Triangle* t)
 	t->pb->y = (t->pb->y / t->pb->z + 1) * h;
 	t->pc->x = (t->pc->x / t->pc->z + 1) * w;
 	t->pc->y = (t->pc->y / t->pc->z + 1) * h;
+
 	t->ComputeArea();
 }
 

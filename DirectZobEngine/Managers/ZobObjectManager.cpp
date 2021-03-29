@@ -133,6 +133,11 @@ void ZobObjectManager::PreUpdate()
 	m_rootObject->PreUpdate();
 }
 
+void ZobObjectManager::EditorUpdate()
+{
+	m_rootObject->EditorUpdate();
+}
+
 void ZobObjectManager::UpdateBehavior(float dt)
 {
 	OPTICK_EVENT();

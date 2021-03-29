@@ -14,36 +14,19 @@ class ZobPhysicComponent
 {
 public:
 
-	enum ePhysicComponentType
-	{
-		ePhysicComponentType_static= (int)rp3d::BodyType::STATIC,
-		ePhysicComponentType_dynamic = (int)rp3d::BodyType::DYNAMIC,
-	};
-
-	enum eShapeType
-	{
-		eShapeType_uninit=-1,
-		eShapeType_none = 0,
-		eShapeType_sphere,
-		eShapeType_capsule,
-		eShapeType_box,
-		eShapeType_convexMesh,
-		__eShapeType_MAX__
-	};
-
-	enum eLayer
-	{
-		eLayer_none = 0,
-		eLayer_ground = 1,
-		eLayer_wall = 2, 
-		eLayer_objects=4,
-	};
-
 	enum eContactType
 	{
 		ContactStart,
 		ContactStay,
 		ContactExit
+	};
+
+	enum eLayer
+	{
+		eLayer_none = 0x0000,
+		eLayer_ground = 0x0001,
+		eLayer_wall = 0x0002,
+		eLayer_objects = 0x0004,
 	};
 
 	struct collision
@@ -63,14 +46,9 @@ public:
 		};
 	};
 
-	ZobPhysicComponent(ZobObject* z, TiXmlNode* t);
+	ZobPhysicComponent(ZobObject* z);
 	~ZobPhysicComponent();
 	void								Init(const ZobVector3* position, const ZobVector3* rotation);
-	TiXmlNode*							SaveUnderNode(TiXmlNode* node);
-	void								SetType(ePhysicComponentType t);
-	ePhysicComponentType				GetType() const { return m_type; };
-	void								SetShapeType(eShapeType t);
-	eShapeType							GetShapeType() const { return m_shapeType; };
 	void								SetPosition(float x, float y, float z);
 	void								SetOrientation(float x, float y, float z);
 	void								SetQuaternion(float x, float y, float z, float w);
@@ -82,10 +60,6 @@ public:
 	void								SetScale(float x, float y, float z) { m_scale.x = x; m_scale.y = y; m_scale.z=z; }
 	void								LookAt(const ZobVector3* target);
 	void								LookAt(const ZobVector3* forward, const ZobVector3* left, const ZobVector3* up);
-	void								AddBoxCollider();
-	void								AddSphereCollider();
-	void								AddCapsuleCollider();
-	void								AddMeshCollider();
 	void								Update();
 	void								SaveTransform();
 	void								RestoreTransform();
@@ -100,53 +74,28 @@ public:
 	void								SetLocalPosition(Vector3 p) { m_localTransform.setPosition(p); };
 	void								SetLocalOrientation(Quaternion q) { m_localTransform.setOrientation(q); };
 	Quaternion							QuaternionFromAxisAngle(Vector3* axis, float angle);
-	inline const eLayer					GetLayers() const { return m_layers; }
-	bool								SetRadius(float f);
-	bool								SetHalfextends(float x, float y, float z);
-	bool								SetHeight(float h);
-	float								GetRadius() const { return m_radius; }
-	float								GetHeight() const { return m_height; }
-	ZobVector3							GetHalfExtends() const { return m_halfExtends; }
-	std::string							GetMesh() const { return std::string("not set"); }
-	Collider*							GetCollider() { return m_collider; }
 	RigidBody*							GetRigicBody() { return m_rigidBody; }
 	void								SetScaleWithObject(bool b) { m_scaleWithObject = b; m_bUpdateSize = true; }
 	bool								GetScaleWithObject() const { return m_scaleWithObject; }
 	void								OnCollide(collision coll);
 	collision*							GetLastCollision() { return &m_lastCollision; }
+	RigidBody*							GetRigidBody() { return m_rigidBody; }
+	void								SetStatic() { m_rigidBody->setType(BodyType::STATIC);}
+	void								SetDynamic() { m_rigidBody->setType(BodyType::DYNAMIC); }
+	bool								IsDynamic() const { return m_rigidBody->getType() == BodyType::DYNAMIC; }
 private:
-	void								AddColliderInternal(CollisionShape* c);
+
 	float								ClampAngle(float a) const;
-	bool								UpdateColliderSize();
-	void								UpdateShapeType();
-	void								RemoveCollider();
-	void								WriteColliderNode(TiXmlNode* node);
-	void								ReadColliderNode(TiXmlNode* node);
-	void								WriteMaterialNode(TiXmlNode* node);
-	void								ReadMaterialNode(TiXmlNode* node);
-	float*	m_concaveMeshVertices;
-	uint* m_concaveMeshIndices;
-	int m_concaveMeshNbTriangles;
+
 	const ZobObject* m_zobObject;
-	ePhysicComponentType m_type;
 	RigidBody* m_rigidBody;
 	Collider* m_collider;	
 	Transform m_savedTransform;
-	eShapeType m_shapeType;
-	eShapeType m_nextShapeType;
 	Transform m_localTransform;
 	Transform m_worldTransform;
-
-	Vector3 m_scale; 
+	collision m_lastCollision;
+	Vector3 m_scale;
 	Vector3 m_totalScale;
 	bool m_scaleWithObject;
-	float m_radius;
-	ZobVector3 m_halfExtends;
-	std::string m_convexMeshName;
-	std::string m_convexMeshPath;
-	std::string m_convexMeshFile;
-	float m_height;
 	bool m_bUpdateSize;
-	collision m_lastCollision;
-	eLayer m_layers;
 };

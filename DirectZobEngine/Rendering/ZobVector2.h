@@ -1,4 +1,6 @@
 #pragma once
+#include <string>
+
 class ZobVector2
 {
 public:
@@ -29,10 +31,12 @@ public:
 		x *= f;
 		y *= f;
 	}
+	bool ZobVector2::FromString(std::string& s);
+	std::string ToString() { return std::to_string(x).append(";") + std::to_string(y).append(";"); }
 	void Norm();
 	float Dot(const ZobVector2 * v);
-	float lenght();
-	float sqrtLenght();
+	float Lenght();
+	float SqrtLenght();
 
 public:
 	float x;

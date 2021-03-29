@@ -56,11 +56,31 @@ public :
 	DirectZob();
 	~DirectZob();
 
+
+	static DirectZobType::zobId	GenerateZobId()
+							{
+								unsigned long long rand1 = abs(rand());
+								unsigned long long rand2 = abs(rand());
+								rand1 = rand1 << (sizeof(int) * 8);
+								unsigned long long randULL = (rand1 | rand2);
+								return (DirectZobType::zobId)randULL;
+							}
+
+	static void				ZobIdToString(DirectZobType::zobId& id, std::string& result)
+							{
+								result = std::to_string((ull)id);
+							}
+	static void				ZobIdFromString(std::string& id, DirectZobType::zobId& result)
+							{
+								char* pEnd;
+								result = strtoull(id.c_str(), &pEnd, 10);
+							}
+
 	void					StartPhysic() { m_physicStarted = true; };
 	void					StopPhysic(bool reset);
 	inline bool				IsPhysicPlaying() const { return m_physicStarted; }
 	void					Init(mfb_window* window, int width, int height, bool bEditorMode);
-	void					LoadScene(std::string& path, std::string& file);
+	void					LoadScene(std::string& path, std::string& file, DirectZob::engineCallback OnSceneLoaded);
 	void					LoadZobObject(std::string& path, std::string& file);
 	void					Unload();
 	void					SaveScene(std::string& path, std::string& file);
@@ -69,12 +89,14 @@ public :
 	bool					CanFastSave();
 	void					Exit();
 	void					Resize(int width, int height);
+	void					OnSceneLoaded();
 	const float				GetFps() const { return m_fps; };
 	const float				GetRenderTime() const { return m_renderTime; };
 	const float				GetGeometryTime() const { return m_geometryTime; };
 	const float				GetFrameTime() const { return m_frameTime; };
 	const float				GetCopyTime() const { return m_copyTime; };
 	int						RunAFrame(engineCallback = NULL, DirectZob::engineCallback OnQueuing = NULL);
+	void					EditorUpdate();
 	int						Run( void func(void) );
 	int						GetBufferDataLenght() const { return m_engine->GetBufferData()->size; }
 	const uint*				GetBufferData() const { return m_engine->GetBufferData()->buffer; }
@@ -136,4 +158,5 @@ private:
 	float m_frameTick;
 	static int s_logIndent;
 	bool m_physicStarted;
+	DirectZob::engineCallback m_onSceneLoaded;
 };

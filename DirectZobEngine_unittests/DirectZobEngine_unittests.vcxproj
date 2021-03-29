@@ -47,6 +47,7 @@
   <ItemGroup>
     <ClInclude Include="pch.h" />
     <ClInclude Include="tests\ZobMatrix4x4.h" />
+    <ClInclude Include="tests\ZobObject.h" />
     <ClInclude Include="tests\ZobVector3.h" />
   </ItemGroup>
   <ItemGroup>
@@ -129,7 +130,7 @@
       <SubSystem>Console</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <AdditionalDependencies>..\DirectZobEngine\build\DirectZob\Release\lib\DirectZobEngine.lib;..\DirectZobEngine\build\DirectZob\Release\lib\lodepng.lib;..\DirectZobEngine\build\DirectZob\Release\lib\minifb.lib;..\DirectZobEngine\build\DirectZob\Release\lib\nanojpeg.lib;..\DirectZobEngine\build\DirectZob\Release\lib\tga.lib;..\DirectZobEngine\build\DirectZob\Release\lib\tinyxml.lib;..\dependencies\fbxsdk\windows\lib\vs2017\x64\release\libfbxsdk.lib;..\dependencies\optick\lib\windows\OptickCore.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\DirectZobEngine\build\DirectZob\Release\lib\DirectZobEngine.lib;..\DirectZobEngine\build\DirectZob\Release\lib\lodepng.lib;..\DirectZobEngine\build\DirectZob\Release\lib\minifb.lib;..\DirectZobEngine\build\DirectZob\Release\lib\nanojpeg.lib;..\DirectZobEngine\build\DirectZob\Release\lib\tga.lib;..\DirectZobEngine\build\DirectZob\Release\lib\tinyxml.lib;..\dependencies\fbxsdk\windows\lib\vs2017\x64\release\libfbxsdk.lib;..\dependencies\optick\lib\windows\OptickCore.lib;..\dependencies\gainput\lib\windows\gainput.lib;..\dependencies\reactphysics3d\lib\windows\reactphysics3d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

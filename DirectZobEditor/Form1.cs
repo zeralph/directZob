@@ -41,7 +41,7 @@ namespace DirectZobEditor
         public static Form1 m_mainForm = null;
         public static Form1 GetMainForm() { return m_mainForm; }
         public event EventHandler OnNewScene;
-        public event EventHandler OnSceneLoaded;
+        public event EventHandler OnSceneLoadedEventHandler;
         public event EventHandler OnSceneSaved;
 
         public bool m_canBeSafelyClosed = false;
@@ -62,7 +62,7 @@ namespace DirectZobEditor
         private ZobLightControl m_lightControl;
         private ZobCameraControl m_cameraControl;
         private ZobMeshControl m_meshControl;
-        private PhysicControl m_physicsControl;
+        //private PhysicControl m_physicsControl;
         private ZobSpriteControl m_spriteControl;
         private bool m_snap = false;
         private bool m_ctrlPressed = false;
@@ -72,6 +72,10 @@ namespace DirectZobEditor
 
         private string[] m_events;
         private eplayMode m_playMode = eplayMode.ePlayMode_stop;
+
+        public CLI.engineCallback onSceneLoadedCallback;
+        public delegate void OnSceneLoaded();
+        public OnSceneLoaded OnSceneLoadedDelegate;
         public Form1()
         {
             m_mainForm = this;
@@ -85,6 +89,10 @@ namespace DirectZobEditor
             m_cameraManagerWrapper = new CLI.CameraManagerWrapper();
             Application.ApplicationExit += new EventHandler(this.OnApplicationExit);
             this.Load += new EventHandler(this.Onloaded);
+
+            onSceneLoadedCallback = new CLI.engineCallback(onSceneLoadedCallbackMethod);
+            OnSceneLoadedDelegate = new OnSceneLoaded(OnSceneLoadedMethod);
+
             //--
             m_engineWindow = new EngineWindow(this, m_directZobWrapper);
             m_engineControl = new EngineControl(this, m_engineWindow.GetEngineWrapper());
@@ -94,7 +102,7 @@ namespace DirectZobEditor
             m_cameraControl = new ZobCameraControl(this);
             m_meshControl = new ZobMeshControl(this);
             m_spriteControl = new ZobSpriteControl(this);
-            m_physicsControl = new PhysicControl(this);
+            //m_physicsControl = new PhysicControl(this);
             m_zobObjectControl = new ZobObjectControl(this, m_lightControl, m_cameraControl, m_meshControl);
             m_engineWindow.BindEvents();
             m_engineControl.BindEvents();
@@ -104,12 +112,12 @@ namespace DirectZobEditor
             m_cameraControl.BindEvents();
             m_meshControl.BindEvents();
             m_spriteControl.BindEvents();
-            m_physicsControl.BindEvents();
+            //m_physicsControl.BindEvents();
             m_zobObjectControl.BindEvents();
             EngineRendererPanel.Controls.Add(m_engineWindow);
             ZobObjectListPanel.Controls.Add(m_zobObjectList);
             ObjectControlsFlowLayout.Controls.Add(m_zobObjectControl);
-            ObjectControlsFlowLayout.Controls.Add(m_physicsControl);
+            //ObjectControlsFlowLayout.Controls.Add(m_physicsControl);
             ObjectControlsFlowLayout.Controls.Add(m_meshControl);
             ObjectControlsFlowLayout.Controls.Add(m_cameraControl);
             ObjectControlsFlowLayout.Controls.Add(m_lightControl);
@@ -305,18 +313,28 @@ namespace DirectZobEditor
                     {
                         handler(this, EventArgs.Empty);
                     }
-                    m_directZobWrapper.LoadScene(m_path, m_file);
-                    handler = OnSceneLoaded;
-                    if (null != handler)
-                    {
-                        handler(this, EventArgs.Empty);
-                    }
-                    Form1.SceneUpdateEventArg ev = new Form1.SceneUpdateEventArg();
-                    ev.type = Form1.SceneUpdateType.loadScene;
-                    PropagateSceneUpdateEvent(ev);
+                    m_directZobWrapper.LoadScene(m_path, m_file, onSceneLoadedCallback);
                     this.Text = "DirectZob " + m_path + m_file;
                 }
             }
+        }
+
+        private void onSceneLoadedCallbackMethod()
+        {
+            this.Invoke(OnSceneLoadedDelegate);
+
+        }
+
+        private void OnSceneLoadedMethod()
+        {
+            EventHandler handler = OnSceneLoadedEventHandler;
+            if (null != handler)
+            {
+                handler(this, EventArgs.Empty);
+            }
+            Form1.SceneUpdateEventArg ev = new Form1.SceneUpdateEventArg();
+            ev.type = Form1.SceneUpdateType.loadScene;
+            PropagateSceneUpdateEvent(ev);
         }
 
         private void saveSceneAsToolStripMenuItem_Click(object sender, EventArgs e)

@@ -32,7 +32,7 @@ namespace DirectZobEditor
         public void BindEvents()
         {
             m_mainForm.OnNewScene += new EventHandler(OnSceneChanged);
-            m_mainForm.OnSceneLoaded += new EventHandler(OnSceneChanged);
+            m_mainForm.OnSceneLoadedEventHandler += new EventHandler(OnSceneChanged);
             m_mainForm.OnSceneUpdated += new Form1.OnSceneUpdateHandler(OnSceneUpdated);
             m_mainForm.GetEngineWindow().OnBeginFrame += new EventHandler(OnBeginFrame);
         }
@@ -388,6 +388,27 @@ namespace DirectZobEditor
         private void duplicateToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void AddBehaviorToolStripMenuItem_DropDownOpening(object sender, EventArgs e)
+        {
+            ToolStripMenuItem ts = (ToolStripMenuItem)sender;
+            ts.DropDownItems.Clear();
+            List<String> lb = ZobBehaviorWrapper.GetBehaviors();
+            for(int i=0; i<lb.Count; i++)
+            {
+                ts.DropDownItems.Add(lb[i]);
+                ts.DropDownItems[i].Click += AddBehaviorToolStripMenuItem_Click;
+            }
+        }
+
+        private void AddBehaviorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (m_currentSelectedZobObject != null)
+            {
+                ToolStripMenuItem ts = (ToolStripMenuItem)sender;
+                ZobBehaviorWrapper.CreateBehavior(m_currentSelectedZobObject, ts.Text);
+            }
         }
     }
 

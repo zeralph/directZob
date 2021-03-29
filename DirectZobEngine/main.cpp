@@ -217,7 +217,7 @@ int main(int argc, char* argv[])
 	mfb_set_mouse_scroll_callback(m_window, mouse_scroll);
 	*/
 	m_directZob.Init(m_window, width, height, false);
-	m_directZob.LoadScene(m_path, m_file);
+	m_directZob.LoadScene(m_path, m_file, NULL);
 
 	float rot = 0.0f;
 	float to = 0.5f;

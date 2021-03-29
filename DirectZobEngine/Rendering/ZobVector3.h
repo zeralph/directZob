@@ -1,6 +1,6 @@
 #pragma once
 #include <math.h>
-#include <string.h>
+#include <string>
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
 #endif
@@ -86,6 +86,8 @@ public:
 		//float pitch = Math.Atan2(ds.Z, Math.Sqrt((ds.X * ds.X) + (ds.Y * ds.Y)));
 
 	};
+	std::string ToString() { return std::to_string(x).append(";") + std::to_string(y).append(";") + std::to_string(z); }
+	bool FromString(std::string& s);
 	inline void Add(const ZobVector3* v) { x += v->x; y += v->y; z += v->z; }
 	inline void Sub(const ZobVector3* v) { x -= v->x; y -= v->y; z -= v->z; }
 	inline void Div(float f) { x /= f; y /= f; z /= f; }

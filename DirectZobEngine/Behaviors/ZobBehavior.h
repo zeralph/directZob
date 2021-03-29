@@ -22,6 +22,9 @@ public:
 		eWrapperType_ZobVector2,
 		eWrapperType_ZobVector3,
 		eWrapperType_enum,
+		eWrapperType_bool,
+		eWrapperType_zobId,
+		eWrapperType_path,
 		__eWrapperType_MAX__
 	};
 
@@ -30,15 +33,24 @@ public:
 		eBehavior_none = 0,
 		eBehavior_car,
 		eBehavior_menu,
-		eBehavior_physicShape,
+		eBehavior_physicBox,
+		eBehavior_physicSphere,
+		eBehavior_physicCapsule,
+		eBehavior_physicMesh,
 		__eBehavior_MAX__,
 	};
 
 	struct wrapperData
 	{
 		eWrapperType type;
+		bool bReadOnly;
+		bool bSave;
 		void* ptr;
+		void* ptr_1;
+		void* ptr_2;
+		void* ptr_3;
 		std::string name;
+		std::string internalName;
 		//for enums
 		std::vector<int> enumValues;
 		std::vector<std::string> enumNames;
@@ -48,6 +60,7 @@ public:
 	virtual void						PreUpdate()=0;
 	virtual void						Init()=0;
 	virtual void						Update(float dt) = 0;
+	virtual void						EditorUpdate() = 0;
 	virtual	void						DrawGizmos(const Camera* camera, const ZobVector3* position, const ZobVector3* rotation) const {}
 
 	const char*							GetBehaviorTypeStr();
@@ -55,14 +68,16 @@ public:
 	eBehaviorType						GetBehaviorType() const { return m_type; }
 	const std::vector<wrapperData>*		GetWrappedVariables() const { return &m_wrappedVariables; }
 	void								LoadVariables(TiXmlElement* node);
+
 protected:
-	ZobBehavior(ZobObject* zobObject, TiXmlElement* node);
+	ZobBehavior(ZobObject* zobObject);
 	eBehaviorType m_type;
 	ZobObject* m_zobObject;
 	std::vector<wrapperData> m_wrappedVariables;
 
 protected:
-
-	void WrapVariable(eWrapperType type, const char* name, void* ptr);
-	void WrapEnum(const char* name, void* ptr, int nbParams, int* values, const char** names);
+	DirectZobType::zobId m_guid;
+	void WrapVariable(eWrapperType type, const char* name, void* ptr, bool bReadOnly, bool bSave);
+	void WrapEnum(const char* name, void* ptr, int nbParams, int* values, const char** names, bool bReadOnly, bool bSave);
+	void WrapPath(const char* name, void* ptrName, void* ptrPath, void* ptrFile, bool bReadOnly, bool bSave);
 };

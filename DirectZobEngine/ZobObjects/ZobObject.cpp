@@ -15,7 +15,7 @@ ZobObject::ZobObject(ZobType t, ZobSubType s, const std::string& name, ZobObject
 	sObjectNumber++;
 	m_behaviors.clear();
 	m_factoryFile = factoryFile?factoryFile->c_str():"";
-	m_physicComponent = new ZobPhysicComponent(this, NULL);
+	m_physicComponent = new ZobPhysicComponent(this);
 	if (name.length() == 0)
 	{
 		std::string n = "newObject_";
@@ -65,6 +65,8 @@ ZobObject::ZobObject(DirectZobType::guid id, TiXmlElement* node, ZobObject* pare
 	float x, y, z;
 	TiXmlElement* f;
 	name = node->Attribute("name");
+	const char* dynamic = node->Attribute("dynamic");
+	bool bIsDynamic = dynamic?(strcmp(dynamic, "True") == 0):false;
 	DirectZob::LogInfo("ZobObject %s creation", name.c_str());
 	DirectZob::AddIndent();
 	f = node->FirstChildElement("Position");
@@ -188,9 +190,11 @@ ZobObject::ZobObject(DirectZobType::guid id, TiXmlElement* node, ZobObject* pare
 			}
 		}
 	}
-	//Physics
-	f = node->FirstChildElement("Physic");
-	m_physicComponent = new ZobPhysicComponent(this, f);
+	m_physicComponent = new ZobPhysicComponent(this);
+	if (bIsDynamic)
+	{
+		m_physicComponent->SetDynamic();
+	}
 	//parenting
 	m_children.clear();
 	m_newParent = m_parent;
@@ -206,7 +210,6 @@ ZobObject::ZobObject(DirectZobType::guid id, TiXmlElement* node, ZobObject* pare
 		for (TiXmlElement* e = behaviorsNode->FirstChildElement("Behavior"); e != NULL; e = e->NextSiblingElement("Behavior"))
 		{
 			ZobBehavior* b = ZobBehaviorFactory::CreateBehavior(this, e);
-			m_behaviors.push_back(b);
 		}
 	}
 	//Init
@@ -275,6 +278,21 @@ const std::string ZobObject::GetMeshName() const
 	return "";
 }
 
+bool ZobObject::IsDynamic()
+{
+	return m_physicComponent->IsDynamic();
+}
+
+void ZobObject::SetDynamic() 
+{ 
+	m_physicComponent->SetDynamic(); 
+}
+
+void ZobObject::SetStatic() 
+{ 
+	m_physicComponent->SetStatic(); 
+}
+
 const std::string ZobObject::GetMeshPath() const
 {
 	if (m_mesh)
@@ -317,6 +335,19 @@ void ZobObject::Init()
 	{
 		ZobObject* z = m_children[i];
 		z->Init();
+	}
+}
+
+void ZobObject::EditorUpdate()
+{
+	for (int i = 0; i < m_behaviors.size(); i++)
+	{
+		m_behaviors[i]->EditorUpdate();
+	}
+	for (int i = 0; i < m_children.size(); i++)
+	{
+		ZobObject* z = m_children[i];
+		z->EditorUpdate();
 	}
 }
 
@@ -645,6 +676,14 @@ TiXmlNode* ZobObject::SaveUnderNode(TiXmlNode* node)
 	TiXmlElement s = TiXmlElement("Scale");
 	objectNode->SetAttribute("name", GetName().c_str());
 	objectNode->SetAttribute("guid", GetId());
+	if (m_physicComponent->IsDynamic())
+	{
+		objectNode->SetAttribute("dynamic", "True");
+	}
+	else
+	{
+		objectNode->SetAttribute("dynamic", "False");
+	}
 	std::string meshName = GetMeshName();
 	std::string meshFileName = GetMeshFileName();
 	std::string meshPath = GetMeshPath();
@@ -736,7 +775,6 @@ TiXmlNode* ZobObject::SaveUnderNode(TiXmlNode* node)
 		m_behaviors[i]->SaveUnderNode(&behaviors);
 	}
 	objectNode->InsertEndChild(behaviors);
-	m_physicComponent->SaveUnderNode(objectNode);
 	return (TiXmlNode*)objectNode;
 }
 
@@ -875,11 +913,6 @@ ZobVector3 ZobObject::GetWorldPosition() const
 	return v;
 }
 
-void ZobObject::SetPhysicComponent(int i)
-{
-	m_physicComponent->SetType((ZobPhysicComponent::ePhysicComponentType)i);
-}
-
 void ZobObject::SaveTransform()
 {
 	m_physicComponent->SaveTransform();
@@ -905,146 +938,4 @@ void ZobObject::ResetPhysic()
 	{
 		(*iter)->ResetPhysic();
 	}
-}
-
-//- Physic editor interface
-void ZobObject::GetPhysicComponentInfo(std::string& type, std::string& shapeType) const
-{
-	type = "Error";
-	shapeType = "Error";
-	ZobPhysicComponent::ePhysicComponentType t = GetPhysicComponent()->GetType();
-	ZobPhysicComponent::eShapeType st = GetPhysicComponent()->GetShapeType();
-	switch (t)
-	{
-	case ZobPhysicComponent::ePhysicComponentType_dynamic:
-		type = std::string("Dynamic");
-		break;
-	case ZobPhysicComponent::ePhysicComponentType_static:
-		type = std::string("Static");
-		break;
-	default:
-		type = std::string("Error");
-		break;
-	}
-	switch (st)
-	{
-	case ZobPhysicComponent::eShapeType_box:
-		shapeType = std::string("Box");
-		break;
-	case ZobPhysicComponent::eShapeType_capsule:
-		shapeType = std::string("Capsule");
-		break;
-	case ZobPhysicComponent::eShapeType_convexMesh:
-		shapeType = std::string("Mesh");
-		break;
-	case ZobPhysicComponent::eShapeType_sphere:
-		shapeType = std::string("Sphere");
-		break;
-	case ZobPhysicComponent::eShapeType_none:
-		shapeType = std::string("None");
-		break;
-	default:
-		shapeType = std::string("Error");
-		break;
-	}
-}
-
-void ZobObject::SetPhysicComponentInfo(std::string& type, std::string& shapeType)
-{
-	ZobPhysicComponent::ePhysicComponentType t;
-	if (type == "Dynamic")
-	{
-		t = ZobPhysicComponent::ePhysicComponentType_dynamic;
-	}
-	else if (type == "Static")
-	{
-		t = ZobPhysicComponent::ePhysicComponentType_static;
-	}
-	else
-	{
-		t = ZobPhysicComponent::ePhysicComponentType_static;
-	}
-	GetPhysicComponentNoConst()->SetType(t);
-	ZobPhysicComponent::eShapeType st;
-	if (shapeType == "Box")
-	{
-		st = ZobPhysicComponent::eShapeType_box;
-		GetPhysicComponentNoConst()->SetShapeType(st);
-	}
-	else if (shapeType == "Capsule")
-	{
-		st = ZobPhysicComponent::eShapeType_capsule;
-		GetPhysicComponentNoConst()->SetShapeType(st);
-	}
-	else if (shapeType == "Mesh")
-	{
-		st = ZobPhysicComponent::eShapeType_convexMesh;
-		GetPhysicComponentNoConst()->AddMeshCollider();
-	}
-	else if (shapeType == "Sphere")
-	{
-		st = ZobPhysicComponent::eShapeType_sphere;
-		GetPhysicComponentNoConst()->SetShapeType(st);
-	}
-	else
-	{
-		//return error ?
-		GetPhysicComponentNoConst()->SetShapeType(ZobPhysicComponent::eShapeType_none);
-	}
-}
-
-void ZobObject::GetPhysicComponentShapeInfo(float& radius, float& height, float& hx, float& hy, float& hz, std::string& mesh)
-{
-	radius = m_physicComponent->GetRadius();
-	height = m_physicComponent->GetHeight();
-	ZobVector3 halfExtends = m_physicComponent->GetHalfExtends();
-	hx = halfExtends.x;
-	hy = halfExtends.y;
-	hz = halfExtends.z;
-	mesh = m_physicComponent->GetMesh();
-}
-
-void ZobObject::SetPhysicComponentShapeInfo(float radius, float height, float hx, float hy, float hz, std::string& mesh)
-{
-	m_physicComponent->SetRadius(radius);
-	m_physicComponent->SetHeight(height);
-	m_physicComponent->SetHalfextends(hx, hy, hz);
-	//m_physicComponent->mesh
-}
-
-void ZobObject::GetPhysicComponentColliderInfo(float& bounciness, float& frictionCoeff, float& massDensity, float& RollingResistance)
-{
-	Collider* c = m_physicComponent->GetCollider();
-	if (c)
-	{
-		reactphysics3d::Material& material = c->getMaterial();
-		bounciness = material.getBounciness();
-		frictionCoeff =  material.getFrictionCoefficient();
-		massDensity = material.getMassDensity();
-		RollingResistance = material.getRollingResistance();
-	}
-}
-
-void ZobObject::SetPhysicComponentColliderInfo(float bounciness, float frictionCoeff, float massDensity, float RollingResistance)
-{
-	Collider* c = m_physicComponent->GetCollider();
-	if (c)
-	{
-		reactphysics3d::Material& material = c->getMaterial();
-		material.setBounciness(bounciness);
-		material.setFrictionCoefficient(frictionCoeff);
-		material.setMassDensity(massDensity);
-		material.setRollingResistance(RollingResistance);
-		c->setMaterial(material);
-	}
-}
-
-void ZobObject::SetPhysicComponentScaleWithObject(bool b)
-{
-	m_physicComponent->SetScaleWithObject(b);
-}
-
-void ZobObject::GetPhysicComponentScaleWithObject(bool& b)
-{
-	b = m_physicComponent->GetScaleWithObject();
 }

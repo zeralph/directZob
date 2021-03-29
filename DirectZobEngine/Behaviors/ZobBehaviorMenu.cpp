@@ -13,7 +13,7 @@ ZobBehaviorMenu::~ZobBehaviorMenu()
 
 }
 
-ZobBehaviorMenu::ZobBehaviorMenu(ZobObject* zobObject, TiXmlElement* node) : ZobBehavior(zobObject, node)
+ZobBehaviorMenu::ZobBehaviorMenu(ZobObject* zobObject) : ZobBehavior(zobObject)
 {
 	m_type = eBehavior_menu; 
 	Init();
@@ -45,6 +45,11 @@ void ZobBehaviorMenu::Init()
 	m2.name = "Exit";
 	m2.action = eAction_exit;
 	m_menuEntries.push_back(m2);
+}
+
+void ZobBehaviorMenu::EditorUpdate()
+{
+
 }
 
 void ZobBehaviorMenu::Update(float dt)
@@ -96,7 +101,7 @@ void ZobBehaviorMenu::Update(float dt)
 			{
 				std::string sceneName = m.file;
 				std::string scenePath = DirectZob::GetInstance()->GetResourcePath();
-				DirectZob::GetInstance()->LoadScene(scenePath, sceneName);
+				DirectZob::GetInstance()->LoadScene(scenePath, sceneName, NULL);
 				break;
 			}
 			case eAction_exit:

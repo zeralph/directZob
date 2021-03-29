@@ -32,7 +32,7 @@ namespace DirectZobEditor
         public void BindEvents()
         {
             m_mainForm.OnNewScene += new EventHandler(OnSceneChanged);
-            m_mainForm.OnSceneLoaded += new EventHandler(OnSceneChanged);
+            m_mainForm.OnSceneLoadedEventHandler += new EventHandler(OnSceneChanged);
         }
         public void OnSceneChanged(object s, EventArgs e)
         {
