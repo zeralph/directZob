@@ -31,7 +31,7 @@ public:
 		x *= f;
 		y *= f;
 	}
-	bool ZobVector2::FromString(std::string& s);
+	bool FromString(std::string& s);
 	std::string ToString() { return std::to_string(x).append(";") + std::to_string(y).append(";"); }
 	void Norm();
 	float Dot(const ZobVector2 * v);

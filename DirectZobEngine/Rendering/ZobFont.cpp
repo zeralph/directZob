@@ -57,8 +57,6 @@ ZobFont::ZobFont(const std::string& textureFile, const std::string& xmlFile)
 			{
 				FontGlyphe* fg = &(*iter);
 				fg->mat = m_charMaterial;
-				fg->offsetX;
-				fg->offsetY;
 				fg->uv_min_x = (fg->x) / texW;
 				fg->uv_min_y = (fg->y) / texH;
 				fg->uv_max_x = (fg->x + fg->w) / texW;

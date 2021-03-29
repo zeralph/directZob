@@ -19,7 +19,7 @@ public :
     ~ZobPhysicsContactsListener() {};
     // Override the onContact() method 
 
-    virtual void onTrigger(const OverlapCallback::CallbackData& callbackData)
+    virtual void onTrigger(const OverlapCallback::CallbackData& callbackData) override
     {
         ZobPhysicsEngine* phyEng = DirectZob::GetInstance()->GetPhysicsEngine();
         // For each contact pair 
