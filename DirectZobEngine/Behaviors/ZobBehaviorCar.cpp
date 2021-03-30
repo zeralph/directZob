@@ -82,7 +82,7 @@ void ZobBehaviorCar::CheckEnvironmentCollision()
 	ZobPhysicComponent::collision* coll = zc->GetLastCollision();
 	if (!coll->handled)
 	{
-		if (coll->contactType == ZobPhysicComponent::eContactType::ContactStart)
+		//if (coll->contactType == ZobPhysicComponent::eContactType::ContactStart)
 		{
 			if ((coll->collisionLayer & ZobPhysicComponent::eLayer_wall))
 			{
@@ -107,10 +107,10 @@ void ZobBehaviorCar::CheckEnvironmentCollision()
 				//other cars
 			}
 		}
-		else if (coll->contactType == ZobPhysicComponent::eContactType::ContactExit)
-		{
-			m_hadCollision = false;
-		}
+		//else if (coll->contactType == ZobPhysicComponent::eContactType::ContactExit)
+		//{
+		//	m_hadCollision = false;
+		//}
 		coll->Reset();
 	}
 }
@@ -340,7 +340,8 @@ void ZobBehaviorCar::Update(float dt)
 			m_accelerationWorld.y = 0;
 			m_accelerationWorld.z = 0;
 			m_velocityWorld.Mul(1.0f - f);
-			//angular_acceleration = -SGN(z.y) * f * 10.0f *clamp(m_speed_ms, 1.0f, 40.0f);
+			angular_acceleration = -SGN(z.y) * f * 10.0f *clamp(m_speed_ms, 1.0f, 40.0f);
+			m_hadCollision = false;
 		}
 
 		if(m_speed_ms < 1)

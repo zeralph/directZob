@@ -67,7 +67,7 @@ float MapToMinusOne(float const value, void* userData)
 void ZobInputManager::Map()
 {
 	m_deadZone = 0.f;
-	const gainput::InputDevicePad* pad = m_gainputManager->CreateAndGetDevice<gainput::InputDevicePad>(0);
+	const gainput::InputDevicePad* pad = m_gainputManager->CreateAndGetDevice<gainput::InputDevicePad>(0, gainput::InputDevice::DV_RAW);
 	const gainput::DeviceId keyboardId = m_gainputManager->CreateDevice<gainput::InputDeviceKeyboard>(0);
 	const gainput::DeviceId mouseId = m_gainputManager->CreateDevice<gainput::InputDeviceMouse>(0);
 
@@ -100,6 +100,7 @@ void ZobInputManager::Map()
 	m_map->MapBool(SwitchBuffers, keyboardId, gainput::KeyF9);
 	
 #ifndef LINUX	//pad does not work well on Linux yet
+	gainput::InputDevice::DeviceState s = pad->GetState();
 	if(pad && pad->IsAvailable())
 	{
 		const gainput::DeviceId padId = pad->GetDeviceId();

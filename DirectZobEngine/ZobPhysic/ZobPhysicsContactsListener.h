@@ -44,7 +44,7 @@ public :
         {
             // Get the contact pair 
             CollisionCallback::ContactPair contactPair = callbackData.getContactPair(p);
-            //if (contactPair.getEventType() == CollisionCallback::ContactPair::EventType::ContactStart)
+            //if (contactPair.getEventType() != CollisionCallback::ContactPair::EventType::ContactStay)
             {
 
                 // For each contact point of the contact pair 
