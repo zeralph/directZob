@@ -99,8 +99,8 @@ void ZobInputManager::Map()
 	m_map->MapBool(NextLightMode, keyboardId, gainput::KeyF8);
 	m_map->MapBool(SwitchBuffers, keyboardId, gainput::KeyF9);
 	
-
-	if(pad)
+#ifndef LINUX	//pad does not work well on Linux yet
+	if(pad && pad->IsAvailable())
 	{
 		const gainput::DeviceId padId = pad->GetDeviceId();
 		m_map->MapFloat(LeftStickX, padId, gainput::PadButtonLeftStickX);
@@ -127,4 +127,5 @@ void ZobInputManager::Map()
 		m_map->MapBool(MenuDown, padId, gainput::PadButtonDown);
 		//m_map->MapBool(buttonY, padId, gainput::PadButtonY);
 	}
+#endif //LINUX
 }

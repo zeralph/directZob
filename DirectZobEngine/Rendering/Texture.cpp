@@ -43,7 +43,7 @@ void Texture::LoadFromFile(const std::string& textureFile)
 	unsigned width, height;
 	uint8_t error = 0;
 	std::string name = "";
-	if (textureFile.find(".png") != -1)
+	if (textureFile.find(".png") != -1 || textureFile.find(".PNG") != -1)
 	{
 		error = lodepng::decode(image, width, height, textureFile);
 		if (error)
@@ -70,7 +70,7 @@ void Texture::LoadFromFile(const std::string& textureFile)
 			DirectZob::LogInfo("Loaded texture %s", textureFile.c_str());
 		}
 	}
-	else if (textureFile.find(".jpg") != -1 || textureFile.find(".jpeg") != -1)
+	else if (textureFile.find(".jpg") != -1 || textureFile.find(".jpeg") != -1 || textureFile.find(".JPG") != -1 || textureFile.find(".JPEG") != -1)
 	{
 		FILE* f;
 		int err = (int)fopen_s(&f, textureFile.c_str(), "rb");
@@ -125,7 +125,7 @@ void Texture::LoadFromFile(const std::string& textureFile)
 			OnError(error, name.c_str(), textureFile.c_str());
 		}
 	}
-	else if (textureFile.find(".tga") != -1)
+	else if (textureFile.find(".tga") != -1 || textureFile.find(".TGA") != -1)
 	{
 		int w, h, bpp = 0;
 		tga::ImageFormat format = tga::ImageFormat::Undefined;

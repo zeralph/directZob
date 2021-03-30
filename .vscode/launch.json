@@ -4,6 +4,7 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+
         {
             "name": "Linux Debug build and run",
             "type": "cppdbg",
@@ -12,7 +13,7 @@
             "args": [ 
                 "--bench",
                 "--scene",
-                "./resources/carTest.dzs",
+                "./resources/menu.dzs",
                 "--width",
                 "640",
                 "--height",

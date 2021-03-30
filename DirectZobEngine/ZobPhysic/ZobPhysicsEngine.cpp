@@ -166,7 +166,7 @@ void ZobPhysicsEngine::DrawGizmos() const
     const Camera* camera = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
     if (engine && camera && engine->DrawGizmos())
     {
-        DebugRenderer debugRenderer = m_world->getDebugRenderer();
+        reactphysics3d::DebugRenderer debugRenderer = m_world->getDebugRenderer();
         debugRenderer.setIsDebugItemDisplayed(DebugRenderer::DebugItem::CONTACT_POINT, true);
         debugRenderer.setIsDebugItemDisplayed(DebugRenderer::DebugItem::CONTACT_NORMAL, true);
         debugRenderer.setIsDebugItemDisplayed(DebugRenderer::DebugItem::COLLISION_SHAPE, true);
@@ -180,7 +180,7 @@ void ZobPhysicsEngine::DrawGizmos() const
         ZobVector3 v3;
         for (int i = 0; i < nbLines; i++)
         {
-            DebugRenderer::DebugLine l = debugRenderer.getLinesArray()[i];
+            reactphysics3d::DebugRenderer::DebugLine l = debugRenderer.getLinesArray()[i];
             v1.x = l.point1.x;
             v1.y = l.point1.y;
             v1.z = l.point1.z;
@@ -191,7 +191,7 @@ void ZobPhysicsEngine::DrawGizmos() const
         }
         for (int i = 0; i < nbTriangles; i++)
         {
-            DebugRenderer::DebugTriangle t = debugRenderer.getTrianglesArray()[i];
+            reactphysics3d::DebugRenderer::DebugTriangle t = debugRenderer.getTrianglesArray()[i];
             v1.x = t.point1.x;
             v1.y = t.point1.y;
             v1.z = t.point1.z;

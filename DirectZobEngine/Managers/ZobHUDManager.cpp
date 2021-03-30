@@ -72,25 +72,25 @@ void ZobHUDManager::Init()
 		std::string xml;
 		tex = p;
 		xml = p;
-		tex.append("_fonts/mv_boli_regular_14.png");
+		tex.append("_fonts/mv_boli_regular_14.PNG");
 		xml.append("_fonts/mv_boli_regular_14.xml");
 		m_fonts.push_back( new ZobFont(tex, xml));
 		
 		tex = p;
 		xml = p;
-		tex.append("_fonts/mv_boli_regular_32.png");
+		tex.append("_fonts/mv_boli_regular_32.PNG");
 		xml.append("_fonts/mv_boli_regular_32.xml");
 		m_fonts.push_back(new ZobFont(tex, xml));
 
 		tex = p;
 		xml = p;
-		tex.append("_fonts/leelawadee_ui_bold_32.png");
+		tex.append("_fonts/leelawadee_ui_bold_32.PNG");
 		xml.append("_fonts/leelawadee_ui_bold_32.xml");
 		m_fonts.push_back(new ZobFont(tex, xml));
 
 		tex = p;
 		xml = p;
-		tex.append("_fonts/arial_regular_32.png");
+		tex.append("_fonts/arial_regular_32.PNG");
 		xml.append("_fonts/arial_regular_32.xml");
 		m_fonts.push_back(new ZobFont(tex, xml));
 	}

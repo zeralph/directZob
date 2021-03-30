@@ -6,6 +6,7 @@
 #ifdef LINUX
 #include <X11/Xlib.h>
 #endif
+
 class ZobInputManager
 {
 public:

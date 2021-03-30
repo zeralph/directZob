@@ -16,7 +16,7 @@
         <Behaviors>
             <Behavior Type="PhysicBox" Guid="176093677603">
                 <Var name="Layers" value="4" />
-                <Var name="Trigger" value="True" />
+                <Var name="Trigger" value="False" />
                 <Var name="Local position" value="0.000000;0.000000;0.000000" />
                 <Var name="Bounciness" value="0.000000" />
                 <Var name="Friction coeff" value="0.000000" />
@@ -262,7 +262,7 @@
         <Behaviors>
             <Behavior Type="PhysicMesh" Guid="176093677603">
                 <Var name="Layers" value="1" />
-                <Var name="Trigger" value="True" />
+                <Var name="Trigger" value="False" />
                 <Var name="Local position" value="0.000000;0.000000;0.000000" />
                 <Var name="Bounciness" value="0.000000" />
                 <Var name="Friction coeff" value="1.000000" />
@@ -280,7 +280,7 @@
         <Behaviors>
             <Behavior Type="PhysicMesh" Guid="56763452928010">
                 <Var name="Layers" value="2" />
-                <Var name="Trigger" value="True" />
+                <Var name="Trigger" value="False" />
                 <Var name="Local position" value="0.000000;0.000000;0.000000" />
                 <Var name="Bounciness" value="0.000000" />
                 <Var name="Friction coeff" value="1.000000" />
@@ -298,7 +298,7 @@
         <Behaviors>
             <Behavior Type="PhysicMesh" Guid="37592546300264">
                 <Var name="Layers" value="2" />
-                <Var name="Trigger" value="True" />
+                <Var name="Trigger" value="False" />
                 <Var name="Local position" value="0.000000;0.000000;0.000000" />
                 <Var name="Bounciness" value="0.000000" />
                 <Var name="Friction coeff" value="1.000000" />
