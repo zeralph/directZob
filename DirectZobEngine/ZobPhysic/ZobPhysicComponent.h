@@ -74,21 +74,20 @@ public:
 	void								SetLocalPosition(Vector3 p) { m_localTransform.setPosition(p); };
 	void								SetLocalOrientation(Quaternion q) { m_localTransform.setOrientation(q); };
 	Quaternion							QuaternionFromAxisAngle(Vector3* axis, float angle);
-	RigidBody*							GetRigicBody() { return m_rigidBody; }
+	CollisionBody*						GetCollisionBody() { return m_collisionBody; }
 	void								SetScaleWithObject(bool b) { m_scaleWithObject = b; m_bUpdateSize = true; }
 	bool								GetScaleWithObject() const { return m_scaleWithObject; }
 	void								OnCollide(collision coll);
 	collision*							GetLastCollision() { return &m_lastCollision; }
-	RigidBody*							GetRigidBody() { return m_rigidBody; }
-	void								SetStatic() { m_rigidBody->setType(BodyType::STATIC);}
-	void								SetDynamic() { m_rigidBody->setType(BodyType::DYNAMIC); }
-	bool								IsDynamic() const { return m_rigidBody->getType() == BodyType::DYNAMIC; }
+	void								SetBodyType(ZobObject::eBodyType bt);
+	ZobObject::eBodyType				GetBodyType() const { return m_bodyType; }
 private:
 
 	float								ClampAngle(float a) const;
 
+	ZobObject::eBodyType m_bodyType;
 	const ZobObject* m_zobObject;
-	RigidBody* m_rigidBody;
+	CollisionBody* m_collisionBody;
 	Collider* m_collider;	
 	Transform m_savedTransform;
 	Transform m_localTransform;

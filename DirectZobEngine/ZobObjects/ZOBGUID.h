@@ -31,13 +31,13 @@ public :
 	~ZOBGUID();
 	const ZobType GetType()const;
 	const ZobSubType GetSubType()const;
-	DirectZobType::guid GetId();
-	static void Reset() { sCurrentId = 0; m_guidList.clear(); };
+	ulong GetId();
+	static void Reset() {};
 private:
 	bool IsUsed(DirectZobType::guid id);
-	DirectZobType::guid m_id;
+	ulong GenerateId();
+	ulong m_id;
 	ZOBGUID::ZobType m_type;
 	ZOBGUID::ZobSubType m_subType;
-	static std::vector<DirectZobType::guid> m_guidList;
-	static u16 sCurrentId;
+
 };

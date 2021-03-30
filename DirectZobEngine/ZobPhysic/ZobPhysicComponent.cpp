@@ -12,10 +12,10 @@ ZobPhysicComponent::ZobPhysicComponent(ZobObject* z)
 	m_scaleWithObject = true;
 	m_collider = NULL;
 	m_bUpdateSize = true;
-	m_rigidBody = DirectZob::GetInstance()->GetPhysicsEngine()->CreateRigidBody(&ZobVector3::Vector3Zero, &ZobVector3::Vector3Zero);;
-	m_rigidBody->setType(BodyType::STATIC);
-	m_rigidBody->setIsActive(true);
-	m_rigidBody->setIsAllowedToSleep(false);
+	m_collisionBody = DirectZob::GetInstance()->GetPhysicsEngine()->CreateCollisionBody(&ZobVector3::Vector3Zero, &ZobVector3::Vector3Zero);;
+	SetBodyType(ZobObject::eBodyType_static);
+	m_collisionBody->setIsActive(true);
+//	m_rigidBody->setIsAllowedToSleep(false);
 	m_collider = NULL;
 	m_lastCollision.Reset();
 	DirectZob::GetInstance()->GetPhysicsEngine()->AddBody(this);
@@ -24,9 +24,8 @@ ZobPhysicComponent::ZobPhysicComponent(ZobObject* z)
 ZobPhysicComponent::~ZobPhysicComponent()
 {
 	DirectZob::GetInstance()->GetPhysicsEngine()->RemoveBody(this);
-	DirectZob::GetInstance()->GetPhysicsEngine()->DestroyRigidBody(m_rigidBody);
-	m_rigidBody = NULL;
-}
+	DirectZob::GetInstance()->GetPhysicsEngine()->DestroyCollisionBody(m_collisionBody);
+	m_collisionBody = NULL;}
 
 void ZobPhysicComponent::Init(const ZobVector3* position, const ZobVector3* rotation)
 {
@@ -37,6 +36,7 @@ void ZobPhysicComponent::Init(const ZobVector3* position, const ZobVector3* rota
 	m_localTransform.setOrientation(q);
 	m_scale = Vector3(1, 1, 1);
 	m_totalScale = Vector3(1, 1, 1);
+	m_collisionBody->setTransform( m_localTransform * m_worldTransform);
 	Update();
 }
 
@@ -49,9 +49,9 @@ ZobVector3 ZobPhysicComponent::GetPosition() const
 void ZobPhysicComponent::SetPosition(float x, float y, float z)
 {
 	Vector3 v = Vector3(x, y, z);
-	Transform t = Transform(m_rigidBody->getTransform());
+	Transform t = Transform(m_collisionBody->getTransform());
 	t.setPosition(v);
-	m_rigidBody->setTransform(t);
+	m_collisionBody->setTransform(t);
 }
 
 void ZobPhysicComponent::SetQuaternion(const ZobVector3* left, const ZobVector3* up, const ZobVector3* fw)
@@ -111,7 +111,7 @@ void ZobPhysicComponent::LookAt(const ZobVector3* forward, const ZobVector3* lef
 	if (q.isValid())
 	{
 		t.setOrientation(q);
-		m_rigidBody->setTransform(t);
+		m_collisionBody->setTransform(t);
 	}
 }
 void ZobPhysicComponent::SetTotalScale(float x, float y, float z)
@@ -141,7 +141,7 @@ void ZobPhysicComponent::SetOrientation(float x, float y, float z)
 	Quaternion q2 = t.getOrientation();
 	q = q2 * q;
 	t.setOrientation(q);
-	m_rigidBody->setTransform(t);
+	m_collisionBody->setTransform(t);
 }
 
 ZobVector3 ZobPhysicComponent::GetOrientation() const
@@ -167,18 +167,18 @@ float ZobPhysicComponent::ClampAngle(float a) const
 
 void ZobPhysicComponent::Update()
 {
-	assert(m_rigidBody);
+	assert(m_collisionBody);
 	bool bPhysicRunning = DirectZob::GetInstance()->IsPhysicPlaying();
-	if (m_rigidBody)
+	if (m_collisionBody)
 	{
-		m_rigidBody->setIsActive(true);
-		if(false && bPhysicRunning && m_rigidBody->getType() == BodyType::DYNAMIC)
+		m_collisionBody->setIsActive(true);
+		if(m_bodyType == ZobObject::eBodyType_dynamic)
 		{
-			m_worldTransform = m_rigidBody->getTransform();
+			m_worldTransform = m_collisionBody->getTransform();
 		}
 		else
 		{
-			m_rigidBody->setTransform(m_worldTransform);
+			m_collisionBody->setTransform(m_worldTransform);
 		}
 	}
 	m_totalScale = Vector3(1, 1, 1);
@@ -206,21 +206,21 @@ ZobMatrix4x4 ZobPhysicComponent::GetRotationMatrix() const
 void ZobPhysicComponent::SaveTransform()
 {
 
-	m_savedTransform = m_rigidBody->getTransform();
+	m_savedTransform = m_collisionBody->getTransform();
 
 }
 
 void ZobPhysicComponent::RestoreTransform()
 {
-	m_rigidBody->setTransform(m_savedTransform);
+	m_collisionBody->setTransform(m_savedTransform);
 }
 
 void ZobPhysicComponent::ResetPhysic()
 {
-	if(m_rigidBody->isActive())
+	if(m_collisionBody->isActive())
 	{
-		m_rigidBody->setIsActive(false);
-		m_rigidBody->setIsActive(true);
+		m_collisionBody->setIsActive(false);
+		m_collisionBody->setIsActive(true);
 	}
 }
 
@@ -245,5 +245,29 @@ void ZobPhysicComponent::OnCollide(collision coll)
 	{
 		m_lastCollision = coll;
 		m_lastCollision.handled = false;
+	}
+}
+
+void ZobPhysicComponent::SetBodyType(ZobObject::eBodyType bt)
+{
+	m_bodyType = bt;
+	switch(m_bodyType)
+	{
+		case ZobObject::eBodyType_dynamic:
+		case ZobObject::eBodyType_dynamic_manuallyRefreshed:
+		{
+			//m_rigidBody->setType(BodyType::DYNAMIC);
+			break;
+		}
+		case ZobObject::eBodyType_static:
+		{
+			//m_rigidBody->setType(BodyType::STATIC);
+			break;
+		}
+		case ZobObject::eBodyType_kinematic:
+		{
+			//m_rigidBody->setType(BodyType::KINEMATIC);
+			break;
+		}
 	}
 }

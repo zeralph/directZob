@@ -2,6 +2,7 @@
 **/*.pdb
 **/*.orig
 **/*.bak
+**/*.dmp
 /*.dll
 /Debug
 /x64

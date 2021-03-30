@@ -31,6 +31,8 @@
             this.groupBoxZobObject = new System.Windows.Forms.GroupBox();
             this.ZobObjectLayout = new System.Windows.Forms.TableLayoutPanel();
             this.TransformVars = new System.Windows.Forms.GroupBox();
+            this.bodyType = new System.Windows.Forms.ComboBox();
+            this.label5 = new System.Windows.Forms.Label();
             this.zobId = new System.Windows.Forms.TextBox();
             this.checkBoxLinkScale = new System.Windows.Forms.CheckBox();
             this.zobRotZ = new System.Windows.Forms.TextBox();
@@ -48,8 +50,6 @@
             this.zobPosY = new System.Windows.Forms.TextBox();
             this.zobScaleZ = new System.Windows.Forms.TextBox();
             this.zobPosZ = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.bodyType = new System.Windows.Forms.ComboBox();
             this.groupBoxZobObject.SuspendLayout();
             this.ZobObjectLayout.SuspendLayout();
             this.TransformVars.SuspendLayout();
@@ -111,6 +111,29 @@
             this.TransformVars.TabIndex = 46;
             this.TransformVars.TabStop = false;
             this.TransformVars.Text = "Values";
+            // 
+            // bodyType
+            // 
+            this.bodyType.FormattingEnabled = true;
+            this.bodyType.Items.AddRange(new object[] {
+            "Static",
+            "Dynamic",
+            "Kinematic",
+            "Dynamic manual refresh"});
+            this.bodyType.Location = new System.Drawing.Point(73, 148);
+            this.bodyType.Name = "bodyType";
+            this.bodyType.Size = new System.Drawing.Size(174, 21);
+            this.bodyType.TabIndex = 47;
+            this.bodyType.SelectedIndexChanged += new System.EventHandler(this.bodyType_SelectedIndexChanged);
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(36, 151);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(31, 13);
+            this.label5.TabIndex = 46;
+            this.label5.Text = "Body";
             // 
             // zobId
             // 
@@ -264,27 +287,6 @@
             this.zobPosZ.TabIndex = 34;
             this.zobPosZ.Text = "100.00";
             this.zobPosZ.Leave += new System.EventHandler(this.valueChanged);
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(36, 151);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(31, 13);
-            this.label5.TabIndex = 46;
-            this.label5.Text = "Body";
-            // 
-            // bodyType
-            // 
-            this.bodyType.FormattingEnabled = true;
-            this.bodyType.Items.AddRange(new object[] {
-            "Static",
-            "Dynamic"});
-            this.bodyType.Location = new System.Drawing.Point(73, 148);
-            this.bodyType.Name = "bodyType";
-            this.bodyType.Size = new System.Drawing.Size(174, 21);
-            this.bodyType.TabIndex = 47;
-            this.bodyType.SelectedIndexChanged += new System.EventHandler(this.bodyType_SelectedIndexChanged);
             // 
             // ZobObjectControl
             // 

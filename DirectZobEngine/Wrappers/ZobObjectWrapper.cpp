@@ -943,30 +943,23 @@ namespace CLI
 		return false;
 	}
 
-	bool ZobObjectWrapper::IsDynamic()
+	int ZobObjectWrapper::GetBodyType()
 	{
 		if (GetInstance())
 		{
-			return GetInstance()->IsDynamic();
+			return (int)GetInstance()->GetBodyType();
 		}
-		return false;
+		return ZobObject::eBodyType::eBodyType_static;
 	}
 
-	void ZobObjectWrapper::SetDynamic()
+	void ZobObjectWrapper::SetBodyType(int bt)
 	{
 		if (GetInstance())
 		{
-			GetInstance()->SetDynamic();
+			GetInstance()->SetBodyType((ZobObject::eBodyType)bt);
 		}
 	}
 
-	void ZobObjectWrapper::SetStatic()
-	{
-		if (GetInstance())
-		{
-			GetInstance()->SetStatic();
-		}
-	}
 }
 
 #endif //_WINDLL

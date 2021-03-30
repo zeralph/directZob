@@ -27,8 +27,8 @@ public :
         for (int i = 0; i < l; i++)
         {
             OverlapCallback::OverlapPair overlapPair = callbackData.getOverlappingPair(i);
-            ZobPhysicComponent* zobComp1 = phyEng->GetZobComponentFromRigidBody(overlapPair.getBody1());
-            ZobPhysicComponent* zobComp2 = phyEng->GetZobComponentFromRigidBody(overlapPair.getBody2());
+            ZobPhysicComponent* zobComp1 = phyEng->GetZobComponentFromCollisionBody(overlapPair.getBody1());
+            ZobPhysicComponent* zobComp2 = phyEng->GetZobComponentFromCollisionBody(overlapPair.getBody2());
             assert(zobComp1 != NULL);
             assert(zobComp2 != NULL);
         }
@@ -48,8 +48,10 @@ public :
             {
 
                 // For each contact point of the contact pair 
-                ZobPhysicComponent* zobComp1 = phyEng->GetZobComponentFromRigidBody(contactPair.getBody1());
-                ZobPhysicComponent* zobComp2 = phyEng->GetZobComponentFromRigidBody(contactPair.getBody2());
+                CollisionBody* b1 = contactPair.getBody1();
+                CollisionBody* b2 = contactPair.getBody2();
+                ZobPhysicComponent* zobComp1 = phyEng->GetZobComponentFromCollisionBody(b1);
+                ZobPhysicComponent* zobComp2 = phyEng->GetZobComponentFromCollisionBody(b2);
                 assert(zobComp1 != NULL);
                 assert(zobComp2 != NULL);
                 //if (zobComp1->IsDynamic())
@@ -73,7 +75,7 @@ public :
                         coll.collisionWorldDirection.z = v2.z - v1.z;
                         coll.collisionWorldDirection.Normalize();
                         coll.penetration = contactPoint.getPenetrationDepth();
-                        //coll.collisionLayer = zobComp2->GetLayers();
+                        coll.collisionLayer = (ZobPhysicComponent::eLayer)(int)contactPair.getCollider2()->getCollideWithMaskBits();
                         coll.contactType = (ZobPhysicComponent::eContactType)contactPair.getEventType();
                         zobComp1->OnCollide(coll);
                     }
@@ -95,7 +97,7 @@ public :
                         coll.collisionWorldDirection.y = -v.y;
                         coll.collisionWorldDirection.z = -v.z;
                         coll.penetration = contactPoint.getPenetrationDepth();
-                        //coll.collisionLayer = zobComp1->GetLayers();
+                        coll.collisionLayer = (ZobPhysicComponent::eLayer)(int)contactPair.getCollider1()->getCollideWithMaskBits();
                         coll.contactType = (ZobPhysicComponent::eContactType)contactPair.getEventType();
                         zobComp2->OnCollide(coll);
                     }

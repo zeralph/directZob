@@ -84,9 +84,8 @@ namespace CLI {
 		void					ListValidationHandler(Object^ sender, System::EventArgs^ e);
 		void					GroupClick(Object^ sender, System::EventArgs^ e);
 
-		bool					IsDynamic();
-		void					SetDynamic();
-		void					SetStatic();
+		int						GetBodyType();
+		void					SetBodyType(int bt);
 
 	private:
 		GroupBox^				FillBehaviorControl(ZobBehavior* zb);

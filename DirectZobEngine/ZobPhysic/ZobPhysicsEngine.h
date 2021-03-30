@@ -20,15 +20,15 @@ public :
 	void ReInit();
 	void StartUpdatePhysic(float dt);
 	float WaitForUpdatePhysicEnd();
-	RigidBody* CreateRigidBody(const ZobVector3* position, const ZobVector3* orientation);
-	void DestroyRigidBody(RigidBody* rb);
+	CollisionBody* CreateCollisionBody(const ZobVector3* position, const ZobVector3* orientation);
+	void DestroyCollisionBody(CollisionBody* rb);
 	PhysicsCommon* GetPhysicsCommon() { return &m_physicsCommon; }
 	const PhysicsWorld* GetWorld() const { return m_world; }
 	void ResetAccumulator() { m_accumulator = 0; }
 	const std::vector<ZobPhysicComponent*>* GetBodies() const { return &m_worldCollisionBodies; }
 	void AddBody(ZobPhysicComponent* c);
 	void RemoveBody(const ZobPhysicComponent* b);
-	ZobPhysicComponent* GetZobComponentFromRigidBody(const CollisionBody* rb) const;
+	ZobPhysicComponent* GetZobComponentFromCollisionBody(const CollisionBody* rb) const;
 	void DrawGizmos() const;
 private:
 	void Init();

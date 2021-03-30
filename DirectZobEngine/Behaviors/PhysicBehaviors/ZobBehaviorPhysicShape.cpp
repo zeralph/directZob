@@ -14,17 +14,17 @@ ZobBehaviorPhysicShape::ZobBehaviorPhysicShape(ZobObject* zobObject) : ZobBehavi
 	WrapVariable(eWrapperType_int, "Layers", &m_layers, false, true);
 	WrapVariable(eWrapperType_bool, "Trigger", &m_isTrigger, false, true);
 	WrapVariable(eWrapperType_ZobVector3, "Local position", &m_localPostion, false, true);
-	WrapVariable(eWrapperType_float, "Bounciness",  &m_bounciness, false, true);
-	WrapVariable(eWrapperType_float, "Friction coeff", &m_frictionCoeff, false, true);
-	WrapVariable(eWrapperType_float, "Mass density", &m_massDensity, false, true);
-	WrapVariable(eWrapperType_float, "Rollling Resistance", &m_rollingResistance, false, true);
+	//WrapVariable(eWrapperType_float, "Bounciness",  &m_bounciness, false, true);
+	//WrapVariable(eWrapperType_float, "Friction coeff", &m_frictionCoeff, false, true);
+	//WrapVariable(eWrapperType_float, "Mass density", &m_massDensity, false, true);
+	//WrapVariable(eWrapperType_float, "Rollling Resistance", &m_rollingResistance, false, true);
 	WrapVariable(eWrapperType_bool, "Scale with object", &m_bUpdateSize, false, true);
 	m_isTrigger = false;
 	m_collider = NULL;
-	m_rollingResistance = 1.0f;
-	m_massDensity = 1.0f;
-	m_frictionCoeff = 1.0f;
-	m_bounciness = 1.0f;
+	//m_rollingResistance = 1.0f;
+	//m_massDensity = 1.0f;
+	//m_frictionCoeff = 1.0f;
+	//m_bounciness = 1.0f;
 	m_layers = 0;
 }
 
@@ -36,11 +36,11 @@ void ZobBehaviorPhysicShape::PreUpdate()
 void ZobBehaviorPhysicShape::Init()
 {
 	assert(m_collider);
-	reactphysics3d::Material& material = m_collider->getMaterial();
-	material.setBounciness(m_bounciness);
-	material.setFrictionCoefficient(m_frictionCoeff);
-	material.setMassDensity(m_massDensity);
-	material.setRollingResistance(m_rollingResistance);
+	//reactphysics3d::Material& material = m_collider->getMaterial();
+	//material.setBounciness(m_bounciness);
+	//material.setFrictionCoefficient(m_frictionCoeff);
+	//material.setMassDensity(m_massDensity);
+	//material.setRollingResistance(m_rollingResistance);
 	m_collider->setCollisionCategoryBits((short)m_layers);
 	//m_collider->setCollideWithMaskBits(0xFFFF);
 	m_collider->setIsTrigger(false);
@@ -50,7 +50,7 @@ void ZobBehaviorPhysicShape::Init()
 	v.y = m_localPostion.y;
 	v.z = m_localPostion.z;
 	t.setPosition(v);
-	m_collider->setLocalToBodyTransform(t);
+//	m_collider->setLocalToBodyTransform(t);
 }
 
 void ZobBehaviorPhysicShape::EditorUpdate()
@@ -58,23 +58,23 @@ void ZobBehaviorPhysicShape::EditorUpdate()
 	if (m_collider)
 	{
 		reactphysics3d::Material& material = m_collider->getMaterial();
-		if (material.getBounciness() != m_bounciness)
-		{
-			material.setBounciness(m_bounciness);
-		}
+		//if (material.getBounciness() != m_bounciness)
+		//{
+		//	material.setBounciness(m_bounciness);
+		//}
 
-		if (material.getFrictionCoefficient() != m_frictionCoeff)
-		{
-			material.setFrictionCoefficient(m_frictionCoeff);
-		}
-		if (material.getMassDensity() != m_massDensity)
-		{
-			material.setMassDensity(m_massDensity);
-		}
-		if (material.getRollingResistance() != m_rollingResistance)
-		{
-			material.setRollingResistance(m_rollingResistance);
-		}
+		//if (material.getFrictionCoefficient() != m_frictionCoeff)
+		//{
+		//	material.setFrictionCoefficient(m_frictionCoeff);
+		//}
+		//if (material.getMassDensity() != m_massDensity)
+		//{
+		//	material.setMassDensity(m_massDensity);
+		//}
+		//if (material.getRollingResistance() != m_rollingResistance)
+		//{
+		//	material.setRollingResistance(m_rollingResistance);
+		//}
 		if (m_collider->getCollisionCategoryBits() != m_layers)
 		{
 			//m_collider->setCollisionCategoryBits(m_layers);
@@ -110,14 +110,14 @@ void ZobBehaviorPhysicShape::AddColliderInternal(CollisionShape* c)
 {
 	assert(m_collider == NULL);
 	Transform t = Transform::identity();
-	m_collider = m_zobObject->GetPhysicComponentNoConst()->GetRigidBody()->addCollider(c, t);
+	m_collider = m_zobObject->GetPhysicComponentNoConst()->GetCollisionBody()->addCollider(c, t);
 }
 
 void ZobBehaviorPhysicShape::RemoveCollider()
 {
 	if (m_collider)
 	{
-		m_zobObject->GetPhysicComponentNoConst()->GetRigidBody()->removeCollider(m_collider);
+		m_zobObject->GetPhysicComponentNoConst()->GetCollisionBody()->removeCollider(m_collider);
 		m_collider = NULL;
 	}
 }

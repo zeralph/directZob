@@ -9,26 +9,22 @@
         <FogDistance>100.00</FogDistance>
         <FogType>exp2</FogType>
     </Globals>
-    <ZobObject name="car" guid="3001003" dynamic="True">
-        <Position x="-11.4333" y="0.0163537" z="8.75698" />
-        <Rotation x="179.88" y="78.7179" z="-177.444" />
+    <ZobObject name="car" guid="3001003" BodyType="DynamicWithManualRefresh">
+        <Position x="-11.4333" y="0.0134228" z="8.75698" />
+        <Rotation x="0" y="89.9802" z="0" />
         <Scale x="1" y="1" z="1" />
         <Behaviors>
             <Behavior Type="PhysicBox" Guid="176093677603">
                 <Var name="Layers" value="4" />
-                <Var name="Trigger" value="False" />
+                <Var name="Trigger" value="True" />
                 <Var name="Local position" value="0.000000;0.000000;0.000000" />
-                <Var name="Bounciness" value="0.000000" />
-                <Var name="Friction coeff" value="0.000000" />
-                <Var name="Mass density" value="1500.000000" />
-                <Var name="Rollling Resistance" value="0.000000" />
                 <Var name="Scale with object" value="True" />
                 <Var name="Height" value="1.000000;0.300000;2.500000" />
             </Behavior>
             <Behavior Type="Car" Guid="27204322879364">
                 <Var name="HandBrake" value="True" />
-                <Var name="Mass" value="1500.000000" />
-                <Var name="Max friction" value="12.000000" />
+                <Var name="Mass" value="1000.000000" />
+                <Var name="Max friction" value="10.000000" />
                 <Var name="Inertia" value="1500.000000" />
                 <Var name="Air resistance" value="5.000000" />
                 <Var name="Rolling resistance" value="30.000000" />
@@ -36,7 +32,7 @@
                 <Var name="Rear cornering stiffness" value="-5.200000" />
             </Behavior>
         </Behaviors>
-        <ZobObject name="carMesh" guid="3066531" dynamic="False" type="mesh">
+        <ZobObject name="carMesh" guid="3066531" BodyType="Static" type="mesh">
             <Position x="0.000285507" y="-0.698991" z="0.000250807" />
             <Rotation x="180" y="0.000195336" z="180" />
             <Scale x="1" y="1" z="1" />
@@ -50,15 +46,15 @@
             </Mesh>
             <Behaviors />
         </ZobObject>
-        <ZobObject name="rearCamera" guid="3002004" dynamic="False" type="camera">
-            <Position x="-2.66619e-05" y="1.92052" z="-4.78713" />
-            <Rotation x="15.0562" y="7.36807e-05" z="-2.64332e-05" />
+        <ZobObject name="rearCamera" guid="3002004" BodyType="Static" type="camera">
+            <Position x="-2.43187e-05" y="1.92052" z="-4.78713" />
+            <Rotation x="15.0562" y="7.92943e-05" z="-2.65526e-05" />
             <Scale x="1" y="1" z="1" />
             <Behaviors />
             <Controller>5</Controller>
             <Fov>70.00</Fov>
         </ZobObject>
-        <ZobObject name="FrontCamera" guid="3067491" dynamic="False" type="camera">
+        <ZobObject name="FrontCamera" guid="3067491" BodyType="Static" type="camera">
             <Position x="-0.0774962" y="0.0879834" z="1.94431" />
             <Rotation x="0" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
@@ -66,7 +62,7 @@
             <Controller>0</Controller>
             <Fov>70.00</Fov>
         </ZobObject>
-        <ZobObject name="topCamera" guid="3067495" dynamic="False" type="camera">
+        <ZobObject name="topCamera" guid="3067495" BodyType="Static" type="camera">
             <Position x="0.00013119" y="59.1781" z="-1.00273" />
             <Rotation x="-89.4191" y="-79.775" z="-179.72" />
             <Scale x="1" y="1" z="1" />
@@ -74,7 +70,7 @@
             <Controller>0</Controller>
             <Fov>45.00</Fov>
         </ZobObject>
-        <ZobObject name="windshieldCamera" guid="3067492" dynamic="False" type="camera">
+        <ZobObject name="windshieldCamera" guid="3067492" BodyType="Static" type="camera">
             <Position x="0.0657781" y="0.632988" z="0.62512" />
             <Rotation x="0" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
@@ -82,7 +78,7 @@
             <Controller>0</Controller>
             <Fov>80.00</Fov>
         </ZobObject>
-        <ZobObject name="sideCamera" guid="3067493" dynamic="False" type="camera">
+        <ZobObject name="sideCamera" guid="3067493" BodyType="Static" type="camera">
             <Position x="-5.88038" y="1.89999" z="6.77647" />
             <Rotation x="-176.34" y="35.9339" z="-176.794" />
             <Scale x="1" y="1" z="1" />
@@ -90,16 +86,16 @@
             <Controller>0</Controller>
             <Fov>45.00</Fov>
         </ZobObject>
-        <ZobObject name="orbitalCamera" guid="3067494" dynamic="False" type="camera">
-            <Position x="-3.41332" y="-1.21809" z="-10.1885" />
-            <Rotation x="171.202" y="60.0197" z="-180" />
+        <ZobObject name="orbitalCamera" guid="3067494" BodyType="Static" type="camera">
+            <Position x="-3.43611" y="-1.21456" z="-10.1341" />
+            <Rotation x="173.524" y="71.27" z="180" />
             <Scale x="1" y="1" z="1" />
             <Behaviors />
             <Controller>2</Controller>
             <Fov>45.00</Fov>
         </ZobObject>
     </ZobObject>
-    <ZobObject name="sun" guid="3068489" dynamic="False" type="light">
+    <ZobObject name="sun" guid="3068489" BodyType="Static" type="light">
         <Position x="0" y="60.0368" z="0" />
         <Rotation x="45" y="0" z="45" />
         <Scale x="1" y="1" z="1" />
@@ -109,7 +105,7 @@
         <FallOffDistance>100.00</FallOffDistance>
         <Type>directional</Type>
     </ZobObject>
-    <ZobObject name="house" guid="3066496" dynamic="False" type="mesh">
+    <ZobObject name="house" guid="3066496" BodyType="Static" type="mesh">
         <Position x="-281.384" y="-3.67123" z="26.628" />
         <Rotation x="0" y="30.7585" z="0" />
         <Scale x="0.3" y="0.3" z="0.3" />
@@ -123,12 +119,12 @@
         </Mesh>
         <Behaviors />
     </ZobObject>
-    <ZobObject name="rocks" guid="3066471" dynamic="False">
+    <ZobObject name="rocks" guid="3066471" BodyType="Static">
         <Position x="0" y="0" z="101.54" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="1" y="1" z="1" />
         <Behaviors />
-        <ZobObject name="newObject_53" guid="3066470" dynamic="False" type="mesh">
+        <ZobObject name="newObject_53" guid="3066470" BodyType="Static" type="mesh">
             <Position x="73.8078" y="8.82018" z="9.62192" />
             <Rotation x="-9.82309" y="-15.201" z="2.59947" />
             <Scale x="10" y="5" z="10" />
@@ -142,21 +138,7 @@
             </Mesh>
             <Behaviors />
         </ZobObject>
-        <ZobObject name="rock1" guid="-2143505731" dynamic="False" type="mesh">
-            <Position x="59.56" y="1.901" z="-6.66789" />
-            <Rotation x="-93.862" y="0" z="92.505" />
-            <Scale x="10" y="10" z="10" />
-            <Mesh name="Rock_9.fbx" file="Rock_9.fbx" path="/">
-                <RenderOptions>
-                    <Lighting>Phong</Lighting>
-                    <ZBuffer>True</ZBuffer>
-                    <Transparency>False</Transparency>
-                    <CullMode>Clockwise</CullMode>
-                </RenderOptions>
-            </Mesh>
-            <Behaviors />
-        </ZobObject>
-        <ZobObject name="newObject_106" guid="3046825" dynamic="False" type="mesh">
+        <ZobObject name="newObject_106" guid="3046825" BodyType="Static" type="mesh">
             <Position x="66.673" y="-13.697" z="24.7481" />
             <Rotation x="-179.881" y="86.016" z="-179.873" />
             <Scale x="10" y="15" z="10" />
@@ -170,7 +152,7 @@
             </Mesh>
             <Behaviors />
         </ZobObject>
-        <ZobObject name="newObject_55" guid="3066472" dynamic="False" type="mesh">
+        <ZobObject name="newObject_55" guid="3066472" BodyType="Static" type="mesh">
             <Position x="25.794" y="11.506" z="29.2061" />
             <Rotation x="-119.416" y="0" z="0" />
             <Scale x="20" y="10" z="10" />
@@ -184,7 +166,7 @@
             </Mesh>
             <Behaviors />
         </ZobObject>
-        <ZobObject name="newObject_56" guid="3066473" dynamic="False" type="mesh">
+        <ZobObject name="newObject_56" guid="3066473" BodyType="Static" type="mesh">
             <Position x="-1.01871" y="-0.399692" z="-22.8266" />
             <Rotation x="89.9261" y="29.2886" z="100.567" />
             <Scale x="10" y="5" z="10" />
@@ -198,21 +180,7 @@
             </Mesh>
             <Behaviors />
         </ZobObject>
-        <ZobObject name="Rck-Wtrfll_fbx.fbx" guid="-2143505730" dynamic="False" type="mesh">
-            <Position x="-102.76" y="43.435" z="36.805" />
-            <Rotation x="-180" y="0" z="180" />
-            <Scale x="2" y="2" z="1" />
-            <Mesh name="Rck-Wtrfll_fbx.fbx" file="Rck-Wtrfll_fbx.fbx" path="canyon/">
-                <RenderOptions>
-                    <Lighting>Phong</Lighting>
-                    <ZBuffer>True</ZBuffer>
-                    <Transparency>False</Transparency>
-                    <CullMode>Clockwise</CullMode>
-                </RenderOptions>
-            </Mesh>
-            <Behaviors />
-        </ZobObject>
-        <ZobObject name="Rock_9.fbx" guid="3066497" dynamic="False" type="mesh">
+        <ZobObject name="Rock_9.fbx" guid="3066497" BodyType="Static" type="mesh">
             <Position x="-2.021" y="20.375" z="17.355" />
             <Rotation x="90" y="0" z="0" />
             <Scale x="10" y="10" z="10" />
@@ -226,7 +194,7 @@
             </Mesh>
             <Behaviors />
         </ZobObject>
-        <ZobObject name="newObject_56" guid="3066483" dynamic="False" type="mesh">
+        <ZobObject name="newObject_56" guid="3066483" BodyType="Static" type="mesh">
             <Position x="-0.306095" y="11.6981" z="-21.0747" />
             <Rotation x="0" y="0" z="-36.1665" />
             <Scale x="1" y="1" z="1" />
@@ -240,7 +208,7 @@
             </Mesh>
             <Behaviors />
         </ZobObject>
-        <ZobObject name="mountain_canyon_01.fbx" guid="3066498" dynamic="False" type="mesh">
+        <ZobObject name="mountain_canyon_01.fbx" guid="3066498" BodyType="Static" type="mesh">
             <Position x="-130.972" y="-3.78558" z="-113.842" />
             <Rotation x="-0.00132422" y="49.6846" z="-2.7968" />
             <Scale x="7" y="7" z="12" />
@@ -255,80 +223,54 @@
             <Behaviors />
         </ZobObject>
     </ZobObject>
-    <ZobObject name="road2_p_ground" guid="3066499" dynamic="False">
+    <ZobObject name="road2_p_ground" guid="3066499" BodyType="Static">
         <Position x="0" y="0" z="0" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="1" y="1" z="1" />
         <Behaviors>
             <Behavior Type="PhysicMesh" Guid="176093677603">
                 <Var name="Layers" value="1" />
-                <Var name="Trigger" value="False" />
+                <Var name="Trigger" value="True" />
                 <Var name="Local position" value="0.000000;0.000000;0.000000" />
-                <Var name="Bounciness" value="0.000000" />
-                <Var name="Friction coeff" value="1.000000" />
-                <Var name="Mass density" value="0.000000" />
-                <Var name="Rollling Resistance" value="0.000000" />
                 <Var name="Scale with object" value="True" />
                 <Var name="Mesh" value="road2_p_ground.obj;/;road2_p_ground.obj" />
             </Behavior>
         </Behaviors>
     </ZobObject>
-    <ZobObject name="road2_p_leftWall" guid="3066500" dynamic="False">
+    <ZobObject name="road2_p_leftWall" guid="3066500" BodyType="Static">
         <Position x="0" y="0" z="0" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="1" y="1" z="1" />
         <Behaviors>
             <Behavior Type="PhysicMesh" Guid="56763452928010">
                 <Var name="Layers" value="2" />
-                <Var name="Trigger" value="False" />
+                <Var name="Trigger" value="True" />
                 <Var name="Local position" value="0.000000;0.000000;0.000000" />
-                <Var name="Bounciness" value="0.000000" />
-                <Var name="Friction coeff" value="1.000000" />
-                <Var name="Mass density" value="0.000000" />
-                <Var name="Rollling Resistance" value="0.000000" />
                 <Var name="Scale with object" value="True" />
                 <Var name="Mesh" value="road2_p_leftWall.obj;/;road2_p_leftWall.obj" />
             </Behavior>
         </Behaviors>
     </ZobObject>
-    <ZobObject name="road2_p_rightWall" guid="3066501" dynamic="False">
+    <ZobObject name="road2_p_rightWall" guid="3066501" BodyType="Static">
         <Position x="0" y="0" z="0" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="1" y="1" z="1" />
         <Behaviors>
             <Behavior Type="PhysicMesh" Guid="37592546300264">
                 <Var name="Layers" value="2" />
-                <Var name="Trigger" value="False" />
+                <Var name="Trigger" value="True" />
                 <Var name="Local position" value="0.000000;0.000000;0.000000" />
-                <Var name="Bounciness" value="0.000000" />
-                <Var name="Friction coeff" value="1.000000" />
-                <Var name="Mass density" value="0.000000" />
-                <Var name="Rollling Resistance" value="0.000000" />
                 <Var name="Scale with object" value="True" />
                 <Var name="Mesh" value="road2_p_rightWall.obj;/;road2_p_rightWall.obj" />
             </Behavior>
         </Behaviors>
     </ZobObject>
-    <ZobObject name="buildings" guid="3066485" dynamic="False">
+    <ZobObject name="buildings" guid="3066485" BodyType="Static">
         <Position x="91.3799" y="0.954358" z="-110.778" />
         <Rotation x="0" y="53.5839" z="0" />
         <Scale x="1" y="1" z="1" />
         <Behaviors />
-        <ZobObject name="building_1" guid="-2143505736" dynamic="False" type="mesh">
-            <Position x="-100.674" y="-10" z="-24.8922" />
-            <Rotation x="0" y="35" z="0" />
-            <Scale x="1" y="1" z="1" />
-            <Mesh name="building_1.obj" file="building_1.obj" path="/">
-                <RenderOptions>
-                    <Lighting>Phong</Lighting>
-                    <ZBuffer>True</ZBuffer>
-                    <Transparency>False</Transparency>
-                    <CullMode>Clockwise</CullMode>
-                </RenderOptions>
-            </Mesh>
-            <Behaviors />
-        </ZobObject>
-        <ZobObject name="building_2" guid="3066502" dynamic="False" type="mesh">
+        <ZobObject name="building_2" guid="3066502" BodyType="Static" type="mesh">
             <Position x="-112.242" y="-10" z="-45.478" />
             <Rotation x="0" y="35" z="0" />
             <Scale x="1" y="1" z="1" />
@@ -342,7 +284,7 @@
             </Mesh>
             <Behaviors />
         </ZobObject>
-        <ZobObject name="building_3" guid="3066503" dynamic="False" type="mesh">
+        <ZobObject name="building_3" guid="3066503" BodyType="Static" type="mesh">
             <Position x="-81.5169" y="-10" z="-1.29755" />
             <Rotation x="0" y="35" z="0" />
             <Scale x="1" y="1" z="1" />
@@ -356,7 +298,7 @@
             </Mesh>
             <Behaviors />
         </ZobObject>
-        <ZobObject name="building_4" guid="3066504" dynamic="False" type="mesh">
+        <ZobObject name="building_4" guid="3066504" BodyType="Static" type="mesh">
             <Position x="-57.1602" y="-10" z="25.6691" />
             <Rotation x="0" y="35" z="0" />
             <Scale x="1" y="1" z="1" />
@@ -370,7 +312,7 @@
             </Mesh>
             <Behaviors />
         </ZobObject>
-        <ZobObject name="skyscraper.FBX" guid="3066486" dynamic="False" type="mesh">
+        <ZobObject name="skyscraper.FBX" guid="3066486" BodyType="Static" type="mesh">
             <Position x="-126.659" y="-0.577358" z="37.8595" />
             <Rotation x="0" y="53.584" z="0" />
             <Scale x="0.28" y="0.28" z="0.28" />
@@ -385,7 +327,7 @@
             <Behaviors />
         </ZobObject>
     </ZobObject>
-    <ZobObject name="free_car_1.obj" guid="3066484" dynamic="False" type="mesh">
+    <ZobObject name="free_car_1.obj" guid="3066484" BodyType="Static" type="mesh">
         <Position x="-22.8352" y="-1.2721" z="9.33957" />
         <Rotation x="179.947" y="-69.8256" z="-179.963" />
         <Scale x="1" y="1" z="1" />
@@ -399,12 +341,12 @@
         </Mesh>
         <Behaviors />
     </ZobObject>
-    <ZobObject name="some_lights" guid="3066510" dynamic="False">
+    <ZobObject name="some_lights" guid="3066510" BodyType="Static">
         <Position x="0" y="0" z="0" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="1" y="1" z="1" />
         <Behaviors />
-        <ZobObject name="Light_5" guid="3068509" dynamic="False" type="light">
+        <ZobObject name="Light_5" guid="3068509" BodyType="Static" type="light">
             <Position x="-24" y="10" z="9" />
             <Rotation x="90" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
@@ -414,7 +356,7 @@
             <FallOffDistance>30.00</FallOffDistance>
             <Type>spot</Type>
         </ZobObject>
-        <ZobObject name="Light_4" guid="3068508" dynamic="False" type="light">
+        <ZobObject name="Light_4" guid="3068508" BodyType="Static" type="light">
             <Position x="-40" y="10" z="3" />
             <Rotation x="90" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
@@ -424,7 +366,7 @@
             <FallOffDistance>30.00</FallOffDistance>
             <Type>spot</Type>
         </ZobObject>
-        <ZobObject name="Light_3" guid="3068507" dynamic="False" type="light">
+        <ZobObject name="Light_3" guid="3068507" BodyType="Static" type="light">
             <Position x="-10" y="10" z="9" />
             <Rotation x="90" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
@@ -434,7 +376,7 @@
             <FallOffDistance>30.00</FallOffDistance>
             <Type>spot</Type>
         </ZobObject>
-        <ZobObject name="Light_2" guid="3068506" dynamic="False" type="light">
+        <ZobObject name="Light_2" guid="3068506" BodyType="Static" type="light">
             <Position x="5" y="10" z="8" />
             <Rotation x="90" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
@@ -445,26 +387,12 @@
             <Type>spot</Type>
         </ZobObject>
     </ZobObject>
-    <ZobObject name="mountain_canyon_01.fbx" guid="-2143505734" dynamic="False" type="mesh">
-        <Position x="-155.175" y="0" z="0" />
-        <Rotation x="0" y="0" z="0" />
-        <Scale x="5" y="15" z="20" />
-        <Mesh name="mountain_canyon_01.fbx" file="mountain_canyon_01.fbx" path="mountain_canyon/">
-            <RenderOptions>
-                <Lighting>Phong</Lighting>
-                <ZBuffer>True</ZBuffer>
-                <Transparency>False</Transparency>
-                <CullMode>Clockwise</CullMode>
-            </RenderOptions>
-        </Mesh>
-        <Behaviors />
-    </ZobObject>
-    <ZobObject name="road_sections" guid="3066513" dynamic="False">
+    <ZobObject name="road_sections" guid="3066513" BodyType="Static">
         <Position x="0" y="0" z="0" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="1" y="1" z="1" />
         <Behaviors />
-        <ZobObject name="road01" guid="3066514" dynamic="False" type="mesh">
+        <ZobObject name="road01" guid="3066514" BodyType="Static" type="mesh">
             <Position x="0" y="0" z="0" />
             <Rotation x="0" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
@@ -478,7 +406,7 @@
             </Mesh>
             <Behaviors />
         </ZobObject>
-        <ZobObject name="road02" guid="3066515" dynamic="False" type="mesh">
+        <ZobObject name="road02" guid="3066515" BodyType="Static" type="mesh">
             <Position x="0" y="0" z="0" />
             <Rotation x="0" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
@@ -492,7 +420,7 @@
             </Mesh>
             <Behaviors />
         </ZobObject>
-        <ZobObject name="road03" guid="3066516" dynamic="False" type="mesh">
+        <ZobObject name="road03" guid="3066516" BodyType="Static" type="mesh">
             <Position x="0" y="0" z="0" />
             <Rotation x="0" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
@@ -506,7 +434,7 @@
             </Mesh>
             <Behaviors />
         </ZobObject>
-        <ZobObject name="road04" guid="3066517" dynamic="False" type="mesh">
+        <ZobObject name="road04" guid="3066517" BodyType="Static" type="mesh">
             <Position x="0" y="0" z="0" />
             <Rotation x="0" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
@@ -520,7 +448,7 @@
             </Mesh>
             <Behaviors />
         </ZobObject>
-        <ZobObject name="road05" guid="3066518" dynamic="False" type="mesh">
+        <ZobObject name="road05" guid="3066518" BodyType="Static" type="mesh">
             <Position x="0" y="0" z="0" />
             <Rotation x="0" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
@@ -534,7 +462,7 @@
             </Mesh>
             <Behaviors />
         </ZobObject>
-        <ZobObject name="road06" guid="3066519" dynamic="False" type="mesh">
+        <ZobObject name="road06" guid="3066519" BodyType="Static" type="mesh">
             <Position x="0" y="0" z="0" />
             <Rotation x="0" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
@@ -548,7 +476,7 @@
             </Mesh>
             <Behaviors />
         </ZobObject>
-        <ZobObject name="road07" guid="3066520" dynamic="False" type="mesh">
+        <ZobObject name="road07" guid="3066520" BodyType="Static" type="mesh">
             <Position x="0" y="0" z="0" />
             <Rotation x="0" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
@@ -562,7 +490,7 @@
             </Mesh>
             <Behaviors />
         </ZobObject>
-        <ZobObject name="road08" guid="3066521" dynamic="False" type="mesh">
+        <ZobObject name="road08" guid="3066521" BodyType="Static" type="mesh">
             <Position x="0" y="0" z="0" />
             <Rotation x="0" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
@@ -577,21 +505,7 @@
             <Behaviors />
         </ZobObject>
     </ZobObject>
-    <ZobObject name="beach" guid="-2143505756" dynamic="False" type="mesh">
-        <Position x="0" y="0" z="0" />
-        <Rotation x="0" y="0" z="0" />
-        <Scale x="1" y="1" z="1" />
-        <Mesh name="beach.obj" file="beach.obj" path="/">
-            <RenderOptions>
-                <Lighting>Gouraud</Lighting>
-                <ZBuffer>True</ZBuffer>
-                <Transparency>False</Transparency>
-                <CullMode>Clockwise</CullMode>
-            </RenderOptions>
-        </Mesh>
-        <Behaviors />
-    </ZobObject>
-    <ZobObject name="boat" guid="3066522" dynamic="False" type="mesh">
+    <ZobObject name="boat" guid="3066522" BodyType="Static" type="mesh">
         <Position x="0" y="-4.25613" z="8.77317" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="1" y="1" z="1" />
@@ -605,7 +519,7 @@
         </Mesh>
         <Behaviors />
     </ZobObject>
-    <ZobObject name="skybox" guid="3066523" dynamic="False" type="mesh">
+    <ZobObject name="skybox" guid="3066523" BodyType="Static" type="mesh">
         <Position x="0" y="0" z="0" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="1" y="1" z="1" />
@@ -619,12 +533,12 @@
         </Mesh>
         <Behaviors />
     </ZobObject>
-    <ZobObject name="trees" guid="3066525" dynamic="False">
+    <ZobObject name="trees" guid="3066525" BodyType="Static">
         <Position x="0" y="0" z="0" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="1" y="1" z="1" />
         <Behaviors />
-        <ZobObject name="tree_1" guid="3066524" dynamic="False" type="mesh">
+        <ZobObject name="tree_1" guid="3066524" BodyType="Static" type="mesh">
             <Position x="135" y="0" z="2" />
             <Rotation x="0" y="-22.9556" z="0" />
             <Scale x="2" y="2" z="2" />
@@ -638,7 +552,7 @@
             </Mesh>
             <Behaviors />
         </ZobObject>
-        <ZobObject name="tree_2" guid="3066526" dynamic="False" type="mesh">
+        <ZobObject name="tree_2" guid="3066526" BodyType="Static" type="mesh">
             <Position x="142" y="0" z="65" />
             <Rotation x="0" y="0" z="0" />
             <Scale x="2" y="2" z="2" />
@@ -652,7 +566,7 @@
             </Mesh>
             <Behaviors />
         </ZobObject>
-        <ZobObject name="tree_4" guid="3066527" dynamic="False" type="mesh">
+        <ZobObject name="tree_4" guid="3066527" BodyType="Static" type="mesh">
             <Position x="143" y="0" z="13" />
             <Rotation x="0.0206755" y="52.6753" z="0.0102354" />
             <Scale x="2" y="2" z="2" />
@@ -666,7 +580,7 @@
             </Mesh>
             <Behaviors />
         </ZobObject>
-        <ZobObject name="tree_3" guid="3066528" dynamic="False" type="mesh">
+        <ZobObject name="tree_3" guid="3066528" BodyType="Static" type="mesh">
             <Position x="139" y="0" z="35" />
             <Rotation x="0" y="0" z="0" />
             <Scale x="2" y="2" z="2" />
@@ -680,7 +594,7 @@
             </Mesh>
             <Behaviors />
         </ZobObject>
-        <ZobObject name="tree_6" guid="3066529" dynamic="False" type="mesh">
+        <ZobObject name="tree_6" guid="3066529" BodyType="Static" type="mesh">
             <Position x="144" y="0" z="53" />
             <Rotation x="0" y="0" z="0" />
             <Scale x="2" y="2" z="2" />
@@ -694,7 +608,7 @@
             </Mesh>
             <Behaviors />
         </ZobObject>
-        <ZobObject name="tree_5" guid="3066530" dynamic="False" type="mesh">
+        <ZobObject name="tree_5" guid="3066530" BodyType="Static" type="mesh">
             <Position x="133" y="0" z="78" />
             <Rotation x="0" y="-22.2393" z="0" />
             <Scale x="2" y="2" z="2" />
@@ -709,7 +623,7 @@
             <Behaviors />
         </ZobObject>
     </ZobObject>
-    <ZobObject name="plane.obj" guid="3066488" dynamic="False" type="mesh">
+    <ZobObject name="plane.obj" guid="3066488" BodyType="Static" type="mesh">
         <Position x="-37.5265" y="-5" z="-2.60919" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="5" y="5" z="4" />
@@ -723,7 +637,7 @@
         </Mesh>
         <Behaviors />
     </ZobObject>
-    <ZobObject name="water.obj" guid="3066489" dynamic="False" type="mesh">
+    <ZobObject name="water.obj" guid="3066489" BodyType="Static" type="mesh">
         <Position x="-290.596" y="-3.9" z="-348.879" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="4" y="1" z="4" />
@@ -737,22 +651,12 @@
         </Mesh>
         <Behaviors />
     </ZobObject>
-    <ZobObject name="autres_spots" guid="3066490" dynamic="False">
+    <ZobObject name="autres_spots" guid="3066490" BodyType="Static">
         <Position x="0" y="0" z="0" />
         <Rotation x="0" y="0" z="0" />
         <Scale x="1" y="1" z="1" />
         <Behaviors />
-        <ZobObject name="Light_6" guid="-2143638798" dynamic="False" type="light">
-            <Position x="148" y="10" z="67" />
-            <Rotation x="90" y="0" z="0" />
-            <Scale x="1" y="1" z="1" />
-            <Behaviors />
-            <Color r="252" g="212" b="64" />
-            <Intensity>5.00</Intensity>
-            <FallOffDistance>20.00</FallOffDistance>
-            <Type>spot</Type>
-        </ZobObject>
-        <ZobObject name="Light_7" guid="3068491" dynamic="False" type="light">
+        <ZobObject name="Light_7" guid="3068491" BodyType="Static" type="light">
             <Position x="164" y="10" z="52" />
             <Rotation x="90" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
@@ -762,7 +666,7 @@
             <FallOffDistance>20.00</FallOffDistance>
             <Type>spot</Type>
         </ZobObject>
-        <ZobObject name="Light_8" guid="3068492" dynamic="False" type="light">
+        <ZobObject name="Light_8" guid="3068492" BodyType="Static" type="light">
             <Position x="148" y="10" z="38" />
             <Rotation x="90" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
@@ -772,7 +676,7 @@
             <FallOffDistance>20.00</FallOffDistance>
             <Type>spot</Type>
         </ZobObject>
-        <ZobObject name="Light_11" guid="3068495" dynamic="False" type="light">
+        <ZobObject name="Light_11" guid="3068495" BodyType="Static" type="light">
             <Position x="147" y="10" z="16" />
             <Rotation x="90" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
@@ -782,7 +686,7 @@
             <FallOffDistance>20.00</FallOffDistance>
             <Type>spot</Type>
         </ZobObject>
-        <ZobObject name="Light_10" guid="3068494" dynamic="False" type="light">
+        <ZobObject name="Light_10" guid="3068494" BodyType="Static" type="light">
             <Position x="164" y="10" z="5" />
             <Rotation x="90" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
@@ -792,7 +696,7 @@
             <FallOffDistance>20.00</FallOffDistance>
             <Type>spot</Type>
         </ZobObject>
-        <ZobObject name="Light_9" guid="3068493" dynamic="False" type="light">
+        <ZobObject name="Light_9" guid="3068493" BodyType="Static" type="light">
             <Position x="165" y="10" z="27" />
             <Rotation x="90" y="0" z="0" />
             <Scale x="1" y="1" z="1" />
@@ -801,6 +705,34 @@
             <Intensity>5.00</Intensity>
             <FallOffDistance>20.00</FallOffDistance>
             <Type>spot</Type>
+        </ZobObject>
+    </ZobObject>
+    <ZobObject name="Dynamic objects" guid="-1293832699" BodyType="Static">
+        <Position x="0" y="0" z="0" />
+        <Rotation x="0" y="0" z="0" />
+        <Scale x="1" y="1" z="1" />
+        <Behaviors />
+        <ZobObject name="BodyTypeBall" guid="-1293852964" BodyType="Dynamic" type="mesh">
+            <Position x="-2.94139" y="15.3503" z="6.33961" />
+            <Rotation x="0" y="0" z="0" />
+            <Scale x="0.05" y="0.05" z="0.05" />
+            <Mesh name="sphere.obj" file="sphere.obj" path="/">
+                <RenderOptions>
+                    <Lighting>Phong</Lighting>
+                    <ZBuffer>True</ZBuffer>
+                    <Transparency>False</Transparency>
+                    <CullMode>Clockwise</CullMode>
+                </RenderOptions>
+            </Mesh>
+            <Behaviors>
+                <Behavior Type="PhysicSphere" Guid="121345711020756">
+                    <Var name="Layers" value="1" />
+                    <Var name="Trigger" value="True" />
+                    <Var name="Local position" value="0.000000;0.000000;0.000000" />
+                    <Var name="Scale with object" value="True" />
+                    <Var name="Radius" value="1.000000" />
+                </Behavior>
+            </Behaviors>
         </ZobObject>
     </ZobObject>
 </Scene>

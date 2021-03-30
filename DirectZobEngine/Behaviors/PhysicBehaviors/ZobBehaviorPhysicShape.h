@@ -43,11 +43,10 @@ class ZobBehaviorPhysicShape : public ZobBehavior
 		int m_layers;
 		bool m_isTrigger;
 		ZobVector3 m_localPostion;
-		std::string m_test;
-		//ZobVector3 m_localRotation;
 		bool m_bUpdateSize;
-		float m_bounciness;
-		float m_frictionCoeff;
-		float m_massDensity;
-		float m_rollingResistance;
+
+		//float m_bounciness;
+		//float m_frictionCoeff;
+		//float m_massDensity;
+		//float m_rollingResistance;
 };

@@ -44,6 +44,27 @@ ZobBehaviorCar::ZobBehaviorCar(ZobObject* zobObject) : ZobBehavior(zobObject)
 	WrapVariable(eWrapperType_float, "Rolling resistance", &m_resistance, false, true);
 	WrapVariable(eWrapperType_float, "Front cornering stiffness", &m_ca_f, false, true);
 	WrapVariable(eWrapperType_float, "Rear cornering stiffness", &m_ca_r, false, true);
+
+	//m_zobObject->GetWorldRotation().y;
+	m_speed_ms = 0;
+	m_angle = M_PI / 2.0;
+	ZobVector3 startRotation = m_zobObject->GetWorldRotation();
+	m_angle -= DEG_TO_RAD(startRotation.y);
+	m_angularvelocity = 0;
+	m_steerangle = 0;
+	m_throttle = 0;
+	m_brake = 0;
+	m_mass = 1500;
+	m_maxGrip = 10.0f;
+	m_inertia = 1500;
+	m_drag = 5.0;
+	m_resistance = 30.0;
+	m_ca_r = -5.20;
+	m_ca_f = -5.0;
+	m_heightAboveGround = 0.9f;
+	m_handBrake = false;
+	m_velocityWorld = ZobVector3(0, 0, 0);
+	m_hadCollision = false;
 }
 
 void ZobBehaviorCar::PreUpdate()
@@ -53,26 +74,6 @@ void ZobBehaviorCar::PreUpdate()
 
 void ZobBehaviorCar::Init()
 {
-	//m_zobObject->GetWorldRotation().y;
-	m_speed_ms = 0;
-	m_angle = M_PI / 2.0;
-	ZobVector3 startRotation = m_zobObject->GetWorldRotation();
-	m_angle -= DEG_TO_RAD(startRotation.y);
-	m_angularvelocity=0;
-	m_steerangle=0;
-	m_throttle=0;
-	m_brake=0;
-	m_mass = 1500;
-	m_maxGrip = 10.0f;
-	m_inertia = 1500;
-	m_drag = 5.0;		 		
-	m_resistance = 30.0;	
-	m_ca_r = -5.20;			
-	m_ca_f = -5.0;		
-	m_heightAboveGround = 0.9f;
-	m_handBrake = false;
-	m_velocityWorld = ZobVector3(0, 0, 0);
-	m_hadCollision = false;
 }
 
 void ZobBehaviorCar::CheckEnvironmentCollision()
@@ -132,7 +133,7 @@ reactphysics3d::decimal ZobBehaviorCar::GroundRaycastClass::notifyRaycastHit(con
 void ZobBehaviorCar::CheckGroundCollisions()
 {
 	DirectZob* directZob = DirectZob::GetInstance();
-	RigidBody* rb = m_zobObject->m_physicComponent->GetRigicBody();
+	CollisionBody* rb = m_zobObject->m_physicComponent->GetCollisionBody();
 	Vector3 p = Vector3(rb->getTransform().getPosition());
 	Vector3 e = Vector3(rb->getTransform().getPosition());
 	p.y += 1000.0f;
@@ -339,7 +340,7 @@ void ZobBehaviorCar::Update(float dt)
 			m_accelerationWorld.y = 0;
 			m_accelerationWorld.z = 0;
 			m_velocityWorld.Mul(1.0f - f);
-			angular_acceleration = -SGN(z.y) * f * 10.0f *clamp(m_speed_ms, 1.0f, 40.0f);
+			//angular_acceleration = -SGN(z.y) * f * 10.0f *clamp(m_speed_ms, 1.0f, 40.0f);
 		}
 
 		if(m_speed_ms < 1)
@@ -391,7 +392,7 @@ void ZobBehaviorCar::Update(float dt)
 	ZobVector3 c = ZobVector3(1.0f, 0.0f, 0.0f);
 	//h->Print(0.1f, 0.9f, 0.025f, 0.025f, &c, "ST %.2f A %.2f AV %.2f\n V %.2f, %.2f, %.2f\n A %.2f, %.2f, %.2f", m_steerangle, m_angle, m_angularvelocity, m_velocityWorld.x, m_velocityWorld.y, m_velocityWorld.z, m_accelerationWorld.x, m_accelerationWorld.y, m_accelerationWorld.z);
 	float kmh = MS_TO_KMH(m_speed_ms);
-	h->Print(ZobHUDManager::eHudUnit_ratio, 0.1f, 0.8f, 1, "Leelawadee UI", &c, "MASS : %.2f GRIP %.2f", m_mass, m_maxGrip);
+	h->Print(ZobHUDManager::eHudUnit_ratio, 0.1f, 0.8f, 1, "Leelawadee UI", &c, "ANGLE %i", (int)RAD_TO_DEG(m_angle));
 	h->Print(ZobHUDManager::eHudUnit_ratio, 0.8f, 0.9f, 1, "Leelawadee UI", &c, "%.0f Kmh", kmh);
 	h->Print(ZobHUDManager::eHudUnit_ratio, 0.1f, 0.9f, 1, "Leelawadee UI", &c, "wheels %.2f", m_steerangle);
 }

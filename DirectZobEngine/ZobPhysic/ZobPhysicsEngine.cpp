@@ -31,7 +31,7 @@ void ZobPhysicsEngine::Init()
 {
     m_worldSettings.worldName = "World";
     m_world = m_physicsCommon.createPhysicsWorld(m_worldSettings);
-    m_world->enableSleeping(false);
+    m_world->enableSleeping(true);
     m_contactsListener = new ZobPhysicsContactsListener();
     m_world->setEventListener(m_contactsListener);
     m_timeStep = clock();
@@ -69,12 +69,12 @@ void ZobPhysicsEngine::RemoveBody(const ZobPhysicComponent* b)
     m_worldCollisionBodies.erase(m_worldCollisionBodies.begin()+i);
 }
 
-ZobPhysicComponent* ZobPhysicsEngine::GetZobComponentFromRigidBody(const CollisionBody* rb) const
+ZobPhysicComponent* ZobPhysicsEngine::GetZobComponentFromCollisionBody(const CollisionBody* rb) const
 {
     std::vector<ZobPhysicComponent*>::const_iterator iter;
     for (iter = m_worldCollisionBodies.begin(); iter != m_worldCollisionBodies.end(); iter++)
     {
-        RigidBody* t = (*iter)->GetRigicBody();
+        CollisionBody* t = (*iter)->GetCollisionBody();
         if (t == rb)
         {
             return *iter;
@@ -139,25 +139,19 @@ void ZobPhysicsEngine::Update(float dt)
 	m_timeStep = (float)(clock() - m_timeStep) / CLOCKS_PER_SEC;
 }
 
-RigidBody* ZobPhysicsEngine::CreateRigidBody(const ZobVector3* position, const ZobVector3* orientation)
+CollisionBody* ZobPhysicsEngine::CreateCollisionBody(const ZobVector3* position, const ZobVector3* orientation)
 {
     Vector3 p(position->x, position->y, position->z);
     Quaternion o = Quaternion::identity();
     o.fromEulerAngles(orientation->x, orientation->y, orientation->z);
     Transform t(p, o);
-    return m_world->createRigidBody(t);
+    return m_world->createCollisionBody(t);
+    //return m_world->createRigidBody(t);
 }
 
-void ZobPhysicsEngine::DestroyRigidBody(RigidBody* rb)
+void ZobPhysicsEngine::DestroyCollisionBody(CollisionBody* rb)
 {
-    //if(m_world->getRigidBody(rb))
-    {
-        m_world->destroyRigidBody(rb);
-    }
-    //else
-    {
-      //  DirectZob::LogError("RIGIDBODY NOT FOUND");
-    }
+    m_world->destroyCollisionBody(rb);
 }
 
 void ZobPhysicsEngine::DrawGizmos() const

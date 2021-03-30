@@ -65,8 +65,7 @@ ZobObject::ZobObject(DirectZobType::guid id, TiXmlElement* node, ZobObject* pare
 	float x, y, z;
 	TiXmlElement* f;
 	name = node->Attribute("name");
-	const char* dynamic = node->Attribute("dynamic");
-	bool bIsDynamic = dynamic?(strcmp(dynamic, "True") == 0):false;
+	const char* bodyTypeValue = node->Attribute("BodyType");
 	DirectZob::LogInfo("ZobObject %s creation", name.c_str());
 	DirectZob::AddIndent();
 	f = node->FirstChildElement("Position");
@@ -191,9 +190,24 @@ ZobObject::ZobObject(DirectZobType::guid id, TiXmlElement* node, ZobObject* pare
 		}
 	}
 	m_physicComponent = new ZobPhysicComponent(this);
-	if (bIsDynamic)
+	if (bodyTypeValue)
 	{
-		m_physicComponent->SetDynamic();
+		if (strcmp(bodyTypeValue, "Dynamic") == 0)
+		{
+			m_physicComponent->SetBodyType(eBodyType_dynamic);
+		}
+		else if (strcmp(bodyTypeValue, "Static") == 0)
+		{
+			m_physicComponent->SetBodyType(eBodyType_static);
+		}
+		else if (strcmp(bodyTypeValue, "Kinematic") == 0)
+		{
+			m_physicComponent->SetBodyType(eBodyType_kinematic);
+		}
+		else if (strcmp(bodyTypeValue, "DynamicWithManualRefresh") == 0)
+		{
+			m_physicComponent->SetBodyType(eBodyType_dynamic_manuallyRefreshed);
+		}
 	}
 	//parenting
 	m_children.clear();
@@ -278,19 +292,14 @@ const std::string ZobObject::GetMeshName() const
 	return "";
 }
 
-bool ZobObject::IsDynamic()
-{
-	return m_physicComponent->IsDynamic();
+ZobObject::eBodyType ZobObject::GetBodyType()
+{ 
+	return m_physicComponent->GetBodyType(); 
 }
 
-void ZobObject::SetDynamic() 
+void ZobObject::SetBodyType(ZobObject::eBodyType bt)
 { 
-	m_physicComponent->SetDynamic(); 
-}
-
-void ZobObject::SetStatic() 
-{ 
-	m_physicComponent->SetStatic(); 
+	m_physicComponent->SetBodyType(bt);
 }
 
 const std::string ZobObject::GetMeshPath() const
@@ -676,13 +685,29 @@ TiXmlNode* ZobObject::SaveUnderNode(TiXmlNode* node)
 	TiXmlElement s = TiXmlElement("Scale");
 	objectNode->SetAttribute("name", GetName().c_str());
 	objectNode->SetAttribute("guid", GetId());
-	if (m_physicComponent->IsDynamic())
+
+	switch (m_physicComponent->GetBodyType())
 	{
-		objectNode->SetAttribute("dynamic", "True");
-	}
-	else
-	{
-		objectNode->SetAttribute("dynamic", "False");
+		case eBodyType_dynamic:
+		{
+			objectNode->SetAttribute("BodyType", "Dynamic");
+			break;
+		}
+		case eBodyType_static:
+		{
+			objectNode->SetAttribute("BodyType", "Static");
+			break;
+		}
+		case eBodyType_kinematic:
+		{
+			objectNode->SetAttribute("BodyType", "Kinematic");
+			break;
+		}
+		case eBodyType_dynamic_manuallyRefreshed:
+		{
+			objectNode->SetAttribute("BodyType", "DynamicWithManualRefresh");
+			break;
+		}
 	}
 	std::string meshName = GetMeshName();
 	std::string meshFileName = GetMeshFileName();
