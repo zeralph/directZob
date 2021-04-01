@@ -24,6 +24,7 @@ public:
 		eCamera_fps=3,
 		eCamera_follow=4,
 		eCamera_followCar=5,
+		__eCameraType_MAX__=6
 	};
 
 	enum eTargetMode

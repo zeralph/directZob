@@ -6,6 +6,7 @@
 class ZobCameraControllerFollowCar: public ZobCameraController
 {
 public:
+    ZobCameraControllerFollowCar(Camera* c, std::string guid);
     ZobCameraControllerFollowCar(Camera * c);
     ~ZobCameraControllerFollowCar();
 

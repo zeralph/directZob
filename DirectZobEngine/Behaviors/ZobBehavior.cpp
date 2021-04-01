@@ -13,58 +13,57 @@ ZobBehavior::ZobBehavior(ZobObject* zobObject):ZOBGUID(ZOBGUID::type_internal, Z
 TiXmlNode* ZobBehavior::SaveUnderNode(TiXmlNode* node)
 {
 	std::string s;
-	s = ZobGuidToString();
-	TiXmlElement n = TiXmlElement("Behavior");
+	TiXmlElement n = TiXmlElement(XML_ELEMENT_BEHAVIOR);
 	n.SetAttribute(XML_ATTR_TYPE, GetBehaviorTypeStr());
-	n.SetAttribute(XML_ATTR_GUID, s.c_str());
+	n.SetAttribute(XML_ATTR_GUID, ZobGuidToString().c_str());
 	for (std::vector<wrapperData>::const_iterator iter = m_wrappedVariables.begin(); iter != m_wrappedVariables.end(); iter++)
 	{
 		const wrapperData* w = &(*iter);
 		if (w->bSave)
 		{
-			TiXmlElement o = TiXmlElement("Var");
-			o.SetAttribute("name", w->name.c_str());
+			TiXmlElement o = TiXmlElement(XML_ATTR_VAR);
+			o.SetAttribute(XML_ATTR_NAME, w->name.c_str());
 			switch (w->type)
 			{
 				case eWrapperType_int:
 				{
 					int* i = (int*)(w->ptr);
 					std::string s = std::to_string(*i);
-					o.SetAttribute("value", s.c_str());
+					o.SetAttribute(XML_ATTR_VALUE, s.c_str());
 					break;
 				}
 				case eWrapperType_float:
 				{
 					float* i = (float*)(w->ptr);
 					std::string s = std::to_string(*i);
-					o.SetAttribute("value", s.c_str());
+					o.SetAttribute(XML_ATTR_VALUE, s.c_str());
 					break;
 				}
 				case eWrapperType_string:
 				{
 					std::string* s = (std::string*)(w->ptr);
-					o.SetAttribute("value", s->c_str());
+					o.SetAttribute(XML_ATTR_VALUE, s->c_str());
 					break;
 				}
 				case eWrapperType_ZobVector2:
 				{
 					ZobVector2* v = (ZobVector2*)(w->ptr);
 					std::string s = v->ToString();
-					o.SetAttribute("value", s.c_str());
+					o.SetAttribute(XML_ATTR_VALUE, s.c_str());
 					break;
 				}
 				case eWrapperType_ZobVector3:
 				{
 					ZobVector3* v = (ZobVector3*)(w->ptr);
 					std::string s = v->ToString();
-					o.SetAttribute("value", s.c_str());
+					o.SetAttribute(XML_ATTR_VALUE, s.c_str());
 					break;
 				}
 				case eWrapperType_bool:
 				{
 					bool* b = (bool*)(w->ptr);
-					std::string s = b ? std::string("True") : std::string("False");
-					o.SetAttribute("value", s.c_str());
+					std::string s = b ? std::string(XML_VALUE_TRUE) : std::string(XML_VALUE_FALSE);
+					o.SetAttribute(XML_ATTR_VALUE, s.c_str());
 					break;
 				}
 				case eWrapperType_enum:
@@ -75,7 +74,7 @@ TiXmlNode* ZobBehavior::SaveUnderNode(TiXmlNode* node)
 						if (w->enumValues[k] == *i)
 						{
 							std::string s = w->enumNames[k];
-							o.SetAttribute("value", s.c_str());
+							o.SetAttribute(XML_ATTR_VALUE, s.c_str());
 							break;
 						}
 					}
@@ -86,9 +85,9 @@ TiXmlNode* ZobBehavior::SaveUnderNode(TiXmlNode* node)
 					std::string* name = (std::string*)(w->ptr);
 					std::string* file = (std::string*)(w->ptr_1);
 					std::string* path = (std::string*)(w->ptr_2);
-					std::string s;
+					s = "";
 					s = s.append(*name).append(";").append(*file).append(";").append(*path);
-					o.SetAttribute("value", s.c_str());
+					o.SetAttribute(XML_ATTR_VALUE, s.c_str());
 					break;
 				}
 				case eWrapperType_zobId:
@@ -166,10 +165,10 @@ void ZobBehavior::LoadVariables(TiXmlElement* node)
 		std::string s = guid;
 		ZobGuidFromString(s);
 	}
-	for (TiXmlElement* e = node->FirstChildElement("Var"); e != NULL; e = e->NextSiblingElement("Var"))
+	for (TiXmlElement* e = node->FirstChildElement(XML_ATTR_VAR); e != NULL; e = e->NextSiblingElement("Var"))
 	{
-		const char* name = e->Attribute("name");
-		const char* val = e->Attribute("value");
+		const char* name = e->Attribute(XML_ATTR_NAME);
+		const char* val = e->Attribute(XML_ATTR_VALUE);
 		if (name && val)
 		{
 			for (std::vector<wrapperData>::const_iterator iter = m_wrappedVariables.begin(); iter != m_wrappedVariables.end(); iter++)
@@ -200,7 +199,7 @@ void ZobBehavior::LoadVariables(TiXmlElement* node)
 					else if (w->type == eWrapperType_bool)
 					{
 						bool* b = (bool*)w->ptr;
-						*b = (strcmp(val, "True") == 0) ? true : false;
+						*b = (strcmp(val, XML_VALUE_TRUE) == 0) ? true : false;
 						break;
 					}
 					else if (w->type == eWrapperType_enum)

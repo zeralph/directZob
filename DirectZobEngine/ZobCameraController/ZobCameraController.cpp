@@ -1,10 +1,41 @@
 #include "ZobCameraController.h"
 
+const char* ZobCameraController::eCameraTypeStr[Camera::eCameraType::__eCameraType_MAX__] =
+{
+		"Base",
+		"Revolving",
+		"Orbital",
+		"Fps",
+		"Follow",
+		"FollowCar"
+};
 
-ZobCameraController::ZobCameraController(Camera * c)
+Camera::eCameraType ZobCameraController::TypeFromString(const char* typeStr)
+{
+    if (typeStr)
+    {
+        for (int i = 0; i < Camera::eCameraType::__eCameraType_MAX__; i++)
+        {
+            if (strcmp(ZobCameraController::eCameraTypeStr[i], typeStr) == 0)
+            {
+                return (Camera::eCameraType)i;
+            }
+        }
+    }
+    return Camera::eCameraType::eCamera_base;
+}
+
+ZobCameraController::ZobCameraController(Camera* c, std::string guid) :ZOBGUID(guid)
+{
+    m_type = Camera::eCamera_base;
+    m_typeName = eCameraTypeStr[m_type];
+    m_zobCamera = c;
+}
+
+ZobCameraController::ZobCameraController(Camera * c) :ZOBGUID(ZOBGUID::type_internal, ZOBGUID::subtype_cameraController)
 {
 	m_type = Camera::eCamera_base;
-    m_typeName = "baseCamera";
+    m_typeName = eCameraTypeStr[m_type];
     m_zobCamera = c;
 }
 

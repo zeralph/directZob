@@ -9,22 +9,23 @@ public :
 	enum ZobType
 	{
 		type_unknown=1,
-		type_internal,
-		type_editor,
-		type_scene,
-		type_MAX = 15,
+		type_internal=2,
+		type_editor=3,
+		type_scene=4,
+		type_MAX = 5,
 	};
 
 	enum ZobSubType
 	{
 		subtype_unknown=1,
-		subtype_zobOject,
-		subtype_zobCamera,
-		subtype_zobLight,
-		subtype_mesh,
-		subtype_sprite,
-		subtype_behavior,
-		subtype_MAX = 15,
+		subtype_zobOject=2,
+		subtype_zobCamera=3,
+		subtype_zobLight=4,
+		subtype_mesh=5,
+		subtype_sprite=6,
+		subtype_behavior=7,
+		subtype_cameraController = 8,
+		subtype_MAX = 9,
 	};
 
 	ZOBGUID(ZobType t, ZobSubType s);
@@ -42,6 +43,10 @@ public :
 	{
 		char* pEnd;
 		m_id = strtoull(id.c_str(), &pEnd, 10);
+		m_type = (ZobType)(m_id / (1000 * 1000 * 1000));
+		unsigned long long l = (unsigned long long)m_type * 1000 * 1000 * 1000;
+		m_subType = (ZobSubType)((m_id - l)/(1000 * 1000));
+
 	}
 	void ZobGuidRegenerate()
 	{

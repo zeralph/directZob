@@ -2,10 +2,19 @@
 #include "../Managers/ZobInputManager.h"
 #include "../DirectZob.h"
 
+ZobCameraControllerOrbital::ZobCameraControllerOrbital(Camera* c, std::string guid) :ZobCameraController(c, guid)
+{
+	m_type = Camera::eCamera_orbital;
+	m_rotationX = 0.0f;
+	m_rotationY = 0.0f;
+	m_moveX = 0.0f;
+	m_moveY = 0.0f;
+	m_moveZ = 0.0f;
+}
+
 ZobCameraControllerOrbital::ZobCameraControllerOrbital(Camera* c) :ZobCameraController(c)
 {
 	m_type = Camera::eCamera_orbital;
-	m_typeName = "FreeOrbitalCamera";
 	m_rotationX = 0.0f;
 	m_rotationY = 0.0f;
 	m_moveX = 0.0f;

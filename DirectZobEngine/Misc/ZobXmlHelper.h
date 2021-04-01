@@ -15,6 +15,7 @@
 #define XML_ATTR_PATH "Path"
 #define XML_ATTR_FILE "File"
 #define XML_ATTR_VAR "Var"
+#define XML_ATTR_VALUE "value"
 #define XML_ATTR_X "X"
 #define XML_ATTR_Y "Y"
 #define XML_ATTR_Z "Z"

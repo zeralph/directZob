@@ -63,28 +63,30 @@ Camera::Camera(std::string id, TiXmlElement* node, ZobObject* parent)
 	float fov = f ? atof(f->GetText()) : 45.0f; 
 	m_fov = fov;
 	m_active = false;
-	f = node->FirstChildElement("Controller");
-	eCameraType type = f ? (eCameraType)atoi(f->GetText()):Camera::eCamera_base;
+	f = node->FirstChildElement(XML_ELEMENT_CAMERA_CONTROLER);
+	const char* typeStr = f->Attribute(XML_ATTR_NAME);
+	std::string guid = std::string(f->Attribute(XML_ATTR_GUID));
+	eCameraType type = ZobCameraController::TypeFromString(typeStr);
 	switch (type)
 	{
 		case eCamera_fps:
 		{
-			m_zobCameraController = new ZobCameraControllerFPS(this);
+			m_zobCameraController = new ZobCameraControllerFPS(this, guid);
 			break;
 		}
 		case eCamera_orbital:
 		{
-			m_zobCameraController = new ZobCameraControllerOrbital(this);
+			m_zobCameraController = new ZobCameraControllerOrbital(this, guid);
 			break;
 		}
 		case eCamera_base:
 		{
-			m_zobCameraController = new ZobCameraController(this);
+			m_zobCameraController = new ZobCameraController(this, guid);
 			break;
 		}
 		case eCamera_followCar:
 		{
-			m_zobCameraController = new ZobCameraControllerFollowCar(this);
+			m_zobCameraController = new ZobCameraControllerFollowCar(this, guid);
 			break;
 		}
 		default:
@@ -684,9 +686,8 @@ TiXmlNode* Camera::SaveUnderNode(TiXmlNode* node)
 	t.SetValue(tmpBuffer);
 	fov.InsertEndChild(t);
 	TiXmlElement controller = TiXmlElement(XML_ELEMENT_CAMERA_CONTROLER);
-	_snprintf_s(tmpBuffer, 256, "%i", (int)m_zobCameraController->GetType());
-	t.SetValue(tmpBuffer);
-	controller.InsertEndChild(t);
+	controller.SetAttribute(XML_ATTR_NAME, m_zobCameraController->GetTypeName());
+	controller.SetAttribute(XML_ATTR_GUID, m_zobCameraController->ZobGuidToString().c_str());
 	ne->InsertEndChild(controller);
 	ne->InsertEndChild(fov);
 	return n;

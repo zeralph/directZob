@@ -231,7 +231,7 @@ void ZobBehaviorCar::Update(float dt)
 		// longtitudinal force on rear wheels - very simple traction model
 		if (m_throttle == 0)
 		{
-			motorBreak = 10.0f; //motor break;
+//			motorBreak = 10.0f; //motor break;
 		}
 		ftraction.z = 150 * (m_throttle - (m_brake + motorBreak));// *SGN(velocity.z));
 		ftraction.x = 0;

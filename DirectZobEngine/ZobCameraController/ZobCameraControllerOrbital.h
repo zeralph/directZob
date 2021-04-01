@@ -1,9 +1,12 @@
 #pragma once
 #include "ZobCameraController.h"
 #include "ZobObjects/Camera.h"
+#include "string.h"
+
 class ZobCameraControllerOrbital : public ZobCameraController
 {
 public:
+    ZobCameraControllerOrbital(Camera* c, std::string guid);
     ZobCameraControllerOrbital(Camera * c);
     ~ZobCameraControllerOrbital();
 

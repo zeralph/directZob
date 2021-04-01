@@ -2,10 +2,20 @@
 #include "../Managers/ZobInputManager.h"
 #include "../DirectZob.h"
 
+ZobCameraControllerFollowCar::ZobCameraControllerFollowCar(Camera* c, std::string guid) :ZobCameraController(c, guid)
+{
+    m_type = Camera::eCamera_followCar;
+    m_zobCamera = c;
+    m_cumulatedExtraRotation = 0.0f;
+    m_rotationSpeed = 1.0f;
+    m_deltaY = 0.0f;
+    m_accY = 0.0f;
+    m_distanceToCar = ZobVector3(0, 0, 0);
+}
+
 ZobCameraControllerFollowCar::ZobCameraControllerFollowCar(Camera * c) :ZobCameraController(c)
 {
 	m_type = Camera::eCamera_followCar;
-    m_typeName = "CameraFollowCar";
     m_zobCamera = c;
     m_cumulatedExtraRotation = 0.0f;
     m_rotationSpeed = 1.0f;
