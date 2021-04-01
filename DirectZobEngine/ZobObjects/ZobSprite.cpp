@@ -1,6 +1,7 @@
 #include "ZobSprite.h"
 #include "tinyxml.h"
 #include "DirectZob.h"
+#include "Misc/ZobXmlHelper.h"
 
 ZobSprite::ZobSprite(const std::string &name, ZobObject*parent):
 	ZobObject(ZOBGUID::type_scene, ZOBGUID::subtype_sprite, name, parent)
@@ -13,7 +14,7 @@ ZobSprite::ZobSprite(const std::string &name, ZobObject*parent):
 	s->Setmaterial(m_material);
 }
 
-ZobSprite::ZobSprite(ulong id, TiXmlElement* node, ZobObject* parent)
+ZobSprite::ZobSprite(std::string id, TiXmlElement* node, ZobObject* parent)
 	:ZobObject(id, node, parent)
 {
 	m_mesh = DirectZob::GetInstance()->GetMeshManager()->CreateSprite();
@@ -39,7 +40,7 @@ TiXmlNode* ZobSprite::SaveUnderNode(TiXmlNode* node)
 {
 	TiXmlNode* n = ZobObject::SaveUnderNode(node);
 	TiXmlElement* ne = (TiXmlElement*)n;
-	ne->SetAttribute("type", "sprite");
+	ne->SetAttribute(XML_ATTR_TYPE, XML_ATTR_TYPE_SPRITE);
 	if (m_material && m_material->GetDiffuseTexture())
 	{
 		TiXmlText t(m_material->GetDiffuseTexture()->GetPath().c_str());

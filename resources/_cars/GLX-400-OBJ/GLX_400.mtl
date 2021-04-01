@@ -1,5 +1,5 @@
-# Blender MTL File: '405.blend'
-# Material Count: 8
+# Blender MTL File: 'None'
+# Material Count: 7
 
 newmtl BackLight_M
 Ns 9.645958
@@ -72,15 +72,3 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 1
-
-newmtl Wheel_M
-Ns 9.645958
-Ka 1.000000 1.000000 1.000000
-Kd 0.800000 0.800000 0.800000
-Ks 0.000000 0.000000 0.000000
-Ke 0.000000 0.000000 0.000000
-Ni 1.450000
-d 1.000000
-illum 1
-map_Kd Tire.png
-map_d Tire.png

@@ -121,7 +121,8 @@
 				'Behaviors/PhysicBehaviors/ZobBehaviorPhysicSphere.h',
 				'Behaviors/PhysicBehaviors/ZobBehaviorPhysicSphere.cpp',	
 				'Behaviors/PhysicBehaviors/ZobBehaviorPhysicMesh.h',
-				'Behaviors/PhysicBehaviors/ZobBehaviorPhysicMesh.cpp',					
+				'Behaviors/PhysicBehaviors/ZobBehaviorPhysicMesh.cpp',		
+				'Misc/ZobXmlHelper.h',				
             ],
             'conditions': [
                 [

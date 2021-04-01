@@ -101,7 +101,7 @@ void ZobInputManager::Map()
 	
 #ifndef LINUX	//pad does not work well on Linux yet
 	gainput::InputDevice::DeviceState s = pad->GetState();
-	if(pad && pad->IsAvailable())
+	if(pad )//&& pad->IsAvailable())
 	{
 		const gainput::DeviceId padId = pad->GetDeviceId();
 		m_map->MapFloat(LeftStickX, padId, gainput::PadButtonLeftStickX);

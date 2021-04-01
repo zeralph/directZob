@@ -9,18 +9,18 @@
         <FogDistance>20.00</FogDistance>
         <FogType>none</FogType>
     </Globals>
-    <ZobObject name="menu" guid="3001002" type="mesh">
-        <Position x="0" y="0" z="0" />
-        <Rotation x="0" y="0" z="0" />
-        <Scale x="1" y="1" z="1" />
+    <ZobObject Name="menu" Guid="3001002" Type="Mesh">
+        <Position X="0" Y="0" Z="0" />
+        <Rotation X="0" Y="0" Z="0" />
+        <Scale X="1" Y="1" Z="1" />
 		<Behaviors>
             <Behavior Type="Menu" />
         </Behaviors>
     </ZobObject>
-    <ZobObject name="Fixed_camera_1" guid="3002003" type="camera">
-        <Position x="0" y="5" z="0" />
-        <Rotation x="0" y="0" z="0" />
-        <Scale x="1" y="1" z="1" />
+    <ZobObject Name="Fixed_camera_1" Guid="3002003" Type="Camera">
+        <Position X="0" Y="5" Z="0" />
+        <Rotation X="0" Y="0" Z="0" />
+        <Scale X="1" Y="1" Z="1" />
         <Controller>0</Controller>
         <Fov>45.00</Fov>
     </ZobObject>

@@ -13,7 +13,6 @@ ZobPhysicComponent::ZobPhysicComponent(ZobObject* z)
 	m_collider = NULL;
 	m_bUpdateSize = true;
 	m_collisionBody = DirectZob::GetInstance()->GetPhysicsEngine()->CreateCollisionBody(&ZobVector3::Vector3Zero, &ZobVector3::Vector3Zero);;
-	SetBodyType(ZobObject::eBodyType_static);
 	m_collisionBody->setIsActive(true);
 //	m_rigidBody->setIsAllowedToSleep(false);
 	m_collider = NULL;
@@ -172,7 +171,7 @@ void ZobPhysicComponent::Update()
 	if (m_collisionBody)
 	{
 		m_collisionBody->setIsActive(true);
-		if(m_bodyType == ZobObject::eBodyType_dynamic)
+		if(false)//m_bodyType == ZobObject::eBodyType_dynamic)
 		{
 			m_worldTransform = m_collisionBody->getTransform();
 		}
@@ -245,29 +244,5 @@ void ZobPhysicComponent::OnCollide(collision coll)
 	{
 		m_lastCollision = coll;
 		m_lastCollision.handled = false;
-	}
-}
-
-void ZobPhysicComponent::SetBodyType(ZobObject::eBodyType bt)
-{
-	m_bodyType = bt;
-	switch(m_bodyType)
-	{
-		case ZobObject::eBodyType_dynamic:
-		case ZobObject::eBodyType_dynamic_manuallyRefreshed:
-		{
-			//m_rigidBody->setType(BodyType::DYNAMIC);
-			break;
-		}
-		case ZobObject::eBodyType_static:
-		{
-			//m_rigidBody->setType(BodyType::STATIC);
-			break;
-		}
-		case ZobObject::eBodyType_kinematic:
-		{
-			//m_rigidBody->setType(BodyType::KINEMATIC);
-			break;
-		}
 	}
 }

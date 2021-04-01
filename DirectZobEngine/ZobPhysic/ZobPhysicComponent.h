@@ -35,6 +35,7 @@ public:
 		ZobVector3 collisionWorldPosition;
 		ZobVector3 collisionWorldNormal;
 		ZobVector3 collisionWorldDirection;
+		ZobVector3 collisionLocalContactPoint;
 		ZobPhysicComponent::eLayer collisionLayer;
 		eContactType contactType;
 		float penetration;
@@ -79,13 +80,11 @@ public:
 	bool								GetScaleWithObject() const { return m_scaleWithObject; }
 	void								OnCollide(collision coll);
 	collision*							GetLastCollision() { return &m_lastCollision; }
-	void								SetBodyType(ZobObject::eBodyType bt);
-	ZobObject::eBodyType				GetBodyType() const { return m_bodyType; }
+
 private:
 
 	float								ClampAngle(float a) const;
 
-	ZobObject::eBodyType m_bodyType;
 	const ZobObject* m_zobObject;
 	CollisionBody* m_collisionBody;
 	Collider* m_collider;	

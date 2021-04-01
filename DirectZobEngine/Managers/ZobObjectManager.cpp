@@ -74,7 +74,7 @@ ZobObject* ZobObjectManager::GetZobObjectFromPartialId(const uint id) const
 
 ZobObject* ZobObjectManager::GetZobObjectFromPartialId(ZobObject* z, const uint id) const
 {
-	if (z->GetId() == id)
+	if (z->GetIdValue() == id)
 	{
 		return z;
 	}
@@ -210,7 +210,6 @@ void ZobObjectManager::UnloadAll()
 {
 	delete m_rootObject;
 	m_deletedIds.clear();
-	ZOBGUID::Reset();
 	std::string n = "root";
 	m_rootObject = new ZobObject(ZOBGUID::type_internal, ZOBGUID::subtype_zobOject, n, NULL);
 }

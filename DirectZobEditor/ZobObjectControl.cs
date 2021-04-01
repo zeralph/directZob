@@ -119,7 +119,6 @@ namespace DirectZobEditor
                 zobScaleX.Text = String.Format("{0:0.000}", m_currentZobObjectWrapper.GetScale().x);
                 zobScaleY.Text = String.Format("{0:0.000}", m_currentZobObjectWrapper.GetScale().y);
                 zobScaleZ.Text = String.Format("{0:0.000}", m_currentZobObjectWrapper.GetScale().z);
-                bodyType.SelectedIndex = m_currentZobObjectWrapper.GetBodyType();
             }
             else
             {
@@ -289,27 +288,6 @@ namespace DirectZobEditor
             if (zobName.Text.Length > 0)
             {
                 m_currentZobObjectWrapper.SetName(zobName.Text);
-            }
-        }
-
-        private void bodyType_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            ComboBox cb = (ComboBox)sender;
-            if (cb.Items[cb.SelectedIndex].ToString() == "Static")
-            {
-                m_currentZobObjectWrapper.SetBodyType(0);
-            }
-            else if (cb.Items[cb.SelectedIndex].ToString() == "Dynamic")
-            {
-                m_currentZobObjectWrapper.SetBodyType(1);
-            }
-            else if (cb.Items[cb.SelectedIndex].ToString() == "Kinematic")
-            {
-                m_currentZobObjectWrapper.SetBodyType(2);
-            }
-            else if (cb.Items[cb.SelectedIndex].ToString() == "Dynamic manual refresh")
-            {
-                m_currentZobObjectWrapper.SetBodyType(3);
             }
         }
     }

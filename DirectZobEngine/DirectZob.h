@@ -65,17 +65,6 @@ public :
 								unsigned long long randULL = (rand1 | rand2);
 								return (DirectZobType::zobId)randULL;
 							}
-
-	static void				ZobIdToString(DirectZobType::zobId& id, std::string& result)
-							{
-								result = std::to_string((ull)id);
-							}
-	static void				ZobIdFromString(std::string& id, DirectZobType::zobId& result)
-							{
-								char* pEnd;
-								result = strtoull(id.c_str(), &pEnd, 10);
-							}
-
 	void					StartPhysic() { m_physicStarted = true; };
 	void					StopPhysic(bool reset);
 	inline bool				IsPhysicPlaying() const { return m_physicStarted; }
@@ -88,6 +77,7 @@ public :
 	void					NewScene();
 	bool					CanFastSave();
 	void					Exit();
+	void					RegenerateZobIds();
 	void					Resize(int width, int height);
 	void					OnSceneLoaded();
 	const float				GetFps() const { return m_fps; };

@@ -31,8 +31,6 @@
             this.groupBoxZobObject = new System.Windows.Forms.GroupBox();
             this.ZobObjectLayout = new System.Windows.Forms.TableLayoutPanel();
             this.TransformVars = new System.Windows.Forms.GroupBox();
-            this.bodyType = new System.Windows.Forms.ComboBox();
-            this.label5 = new System.Windows.Forms.Label();
             this.zobId = new System.Windows.Forms.TextBox();
             this.checkBoxLinkScale = new System.Windows.Forms.CheckBox();
             this.zobRotZ = new System.Windows.Forms.TextBox();
@@ -86,8 +84,6 @@
             // 
             // TransformVars
             // 
-            this.TransformVars.Controls.Add(this.bodyType);
-            this.TransformVars.Controls.Add(this.label5);
             this.TransformVars.Controls.Add(this.zobId);
             this.TransformVars.Controls.Add(this.checkBoxLinkScale);
             this.TransformVars.Controls.Add(this.zobRotZ);
@@ -111,29 +107,6 @@
             this.TransformVars.TabIndex = 46;
             this.TransformVars.TabStop = false;
             this.TransformVars.Text = "Values";
-            // 
-            // bodyType
-            // 
-            this.bodyType.FormattingEnabled = true;
-            this.bodyType.Items.AddRange(new object[] {
-            "Static",
-            "Dynamic",
-            "Kinematic",
-            "Dynamic manual refresh"});
-            this.bodyType.Location = new System.Drawing.Point(73, 148);
-            this.bodyType.Name = "bodyType";
-            this.bodyType.Size = new System.Drawing.Size(174, 21);
-            this.bodyType.TabIndex = 47;
-            this.bodyType.SelectedIndexChanged += new System.EventHandler(this.bodyType_SelectedIndexChanged);
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(36, 151);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(31, 13);
-            this.label5.TabIndex = 46;
-            this.label5.Text = "Body";
             // 
             // zobId
             // 
@@ -328,7 +301,5 @@
         private System.Windows.Forms.TextBox zobRotZ;
         private System.Windows.Forms.GroupBox TransformVars;
         private System.Windows.Forms.TableLayoutPanel ZobObjectLayout;
-        private System.Windows.Forms.ComboBox bodyType;
-        private System.Windows.Forms.Label label5;
     }
 }

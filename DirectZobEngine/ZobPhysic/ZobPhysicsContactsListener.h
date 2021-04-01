@@ -74,6 +74,9 @@ public :
                         coll.collisionWorldDirection.y = v2.y - v1.y;
                         coll.collisionWorldDirection.z = v2.z - v1.z;
                         coll.collisionWorldDirection.Normalize();
+                        coll.collisionLocalContactPoint.x = contactPoint.getLocalPointOnCollider1().x;
+                        coll.collisionLocalContactPoint.y = contactPoint.getLocalPointOnCollider1().y;
+                        coll.collisionLocalContactPoint.z = contactPoint.getLocalPointOnCollider1().z;
                         coll.penetration = contactPoint.getPenetrationDepth();
                         coll.collisionLayer = (ZobPhysicComponent::eLayer)(int)contactPair.getCollider2()->getCollideWithMaskBits();
                         coll.contactType = (ZobPhysicComponent::eContactType)contactPair.getEventType();
@@ -87,15 +90,22 @@ public :
                     if (contactPair.getNbContactPoints() > 0)
                     {
                         CollisionCallback::ContactPoint contactPoint = contactPair.getContactPoint(0);
-                        Vector3 v = contactPair.getCollider1()->getLocalToWorldTransform() * contactPoint.getLocalPointOnCollider1();
+                        Vector3 v1 = contactPair.getCollider1()->getLocalToWorldTransform() * contactPoint.getLocalPointOnCollider2();
+                        Vector3 v2 = contactPair.getCollider2()->getLocalToWorldTransform() * contactPoint.getLocalPointOnCollider1();
                         Vector3 n = contactPoint.getWorldNormal();
-                        coll.collisionWorldPosition.x = v.x;
-                        coll.collisionWorldPosition.y = v.y;
-                        coll.collisionWorldPosition.z = v.z;
-                        v = contactPoint.getWorldNormal();
-                        coll.collisionWorldDirection.x = -v.x;
-                        coll.collisionWorldDirection.y = -v.y;
-                        coll.collisionWorldDirection.z = -v.z;
+                        coll.collisionWorldPosition.x = v2.x;
+                        coll.collisionWorldPosition.y = v2.y;
+                        coll.collisionWorldPosition.z = v2.z;
+                        coll.collisionWorldNormal.x = n.x;
+                        coll.collisionWorldNormal.y = n.y;
+                        coll.collisionWorldNormal.z = n.z;
+                        coll.collisionWorldDirection.x = v2.x - v1.x;
+                        coll.collisionWorldDirection.y = v2.y - v1.y;
+                        coll.collisionWorldDirection.z = v2.z - v1.z;
+                        coll.collisionWorldDirection.Normalize();
+                        coll.collisionLocalContactPoint.x = contactPoint.getLocalPointOnCollider2().x;
+                        coll.collisionLocalContactPoint.y = contactPoint.getLocalPointOnCollider2().y;
+                        coll.collisionLocalContactPoint.z = contactPoint.getLocalPointOnCollider2().z;
                         coll.penetration = contactPoint.getPenetrationDepth();
                         coll.collisionLayer = (ZobPhysicComponent::eLayer)(int)contactPair.getCollider1()->getCollideWithMaskBits();
                         coll.contactType = (ZobPhysicComponent::eContactType)contactPair.getEventType();

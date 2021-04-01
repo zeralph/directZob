@@ -26,6 +26,7 @@ ZobBehaviorCar::ZobBehaviorCar(ZobObject* zobObject) : ZobBehavior(zobObject)
 	m_lastGroundPosition = ZobVector3(0, 0, 0);
 	m_lastGroundNormal = ZobVector3(0, 1, 0);
 
+	m_lastCollLocalContact = ZobVector3(0, 0, 0);
 	m_lastCollPosition = ZobVector3(0, 0, 0);
 	m_lastCollDirection= ZobVector3(0, 0, 0);
 	m_lastCollRebound  = ZobVector3(0, 0, 0);
@@ -86,6 +87,7 @@ void ZobBehaviorCar::CheckEnvironmentCollision()
 		{
 			if ((coll->collisionLayer & ZobPhysicComponent::eLayer_wall))
 			{
+				m_lastCollLocalContact = coll->collisionLocalContactPoint;
 				m_lastCollPosition = coll->collisionWorldPosition;
 				m_lastCollDirection = coll->collisionWorldDirection;
 				m_lastCollNormal = coll->collisionWorldNormal;
@@ -312,48 +314,59 @@ void ZobBehaviorCar::Update(float dt)
 		acceleration.y = 0; //9.81
 		acceleration.z = force.z / m_mass;
 
-		angular_acceleration = torque / m_inertia;
-
-		// Velocity and position
-
-		// transform acceleration from car reference frame to world reference frame
-		m_accelerationWorld.z = cs * acceleration.x + sn * acceleration.z;
-		m_accelerationWorld.y = 0;
-		m_accelerationWorld.x = -sn * acceleration.x + cs * acceleration.z;
-
-		// velocity is integrated acceleration
-		//
-		m_velocityWorld.x += dt * m_accelerationWorld.x;
-		m_velocityWorld.y += dt * m_accelerationWorld.y;
-		m_velocityWorld.z += dt * m_accelerationWorld.z;
-
-		//collision
 		if (m_hadCollision)
 		{
-			ZobVector3 z = m_velocityWorld;
-			z.Normalize();
-			float f = 1.0f - fabs(ZobVector3::Dot(&z, &m_lastCollRebound));
-			z = ZobVector3::Cross(&z, &m_lastCollRebound);
-			m_velocityWorld.z = m_lastCollRebound.z * clamp(m_speed_ms, 2.0f, 100.0f);
-			m_velocityWorld.x = m_lastCollRebound.x * clamp(m_speed_ms, 2.0f, 100.0f);
+			/*
+			ZobVector3 r = m_zobObject->GetWorldPosition() - m_lastCollPosition;
+			r.Normalize();
+			r.z = cs * r.x + sn * r.z;
+			r.y = r.y;
+			r.x = -sn * r.x + cs * r.z;		
+			float l = m_velocityWorld.sqrtLength();
+			velocity.x = r.x * (2.0f);
+			//velocity.y = 0;
+			//velocity.z = abs(r.z) * SGN(velocity.z) * (l * 0.7f);
+			*/
 			m_accelerationWorld.x = 0;
 			m_accelerationWorld.y = 0;
 			m_accelerationWorld.z = 0;
-			m_velocityWorld.Mul(1.0f - f);
-			angular_acceleration = -SGN(z.y) * f * 10.0f *clamp(m_speed_ms, 1.0f, 40.0f);
-			m_hadCollision = false;
-		}
 
-		if(m_speed_ms < 1)
-		{
-			if(m_throttle == 0 && m_brake == 0)
-			{
-				m_velocityWorld.x = 0;
-				m_velocityWorld.z = 0;
-			}
-			angular_acceleration = 0;
-			m_angularvelocity = 0;
+			float f = SGN(m_lastCollLocalContact.x) * 10.5f;// (m_speed_ms * 0.7f + 1.0f);
+			velocity.x = f;
+			velocity.z *= 0.7f;
+			m_velocityWorld.z = cs * velocity.x + sn * velocity.z;
+			m_velocityWorld.y = 0;
+			m_velocityWorld.x = -sn * velocity.x + cs * velocity.z;
+			m_hadCollision = false;	
 		}
+		else
+		{
+			angular_acceleration = torque / m_inertia;
+
+			// Velocity and position
+
+			// transform acceleration from car reference frame to world reference frame
+			m_accelerationWorld.z = cs * acceleration.x + sn * acceleration.z;
+			m_accelerationWorld.y = 0;
+			m_accelerationWorld.x = -sn * acceleration.x + cs * acceleration.z;
+
+			// velocity is integrated acceleration
+			//
+			m_velocityWorld.x += dt * m_accelerationWorld.x;
+			m_velocityWorld.y += dt * m_accelerationWorld.y;
+			m_velocityWorld.z += dt * m_accelerationWorld.z;
+
+			if (m_speed_ms < 1)
+			{
+				if (m_throttle == 0 && m_brake == 0)
+				{
+					m_velocityWorld.x = 0;
+					m_velocityWorld.z = 0;
+				}
+				angular_acceleration = 0;
+				m_angularvelocity = 0;
+			}
+		}	
 		// position is integrated velocity
 		//
 		ZobVector3 dp = worldPos;
@@ -406,24 +419,13 @@ void ZobBehaviorCar::DrawGizmos(const Camera* camera, const ZobVector3* position
 	{
 		Engine* e = DirectZob::GetInstance()->GetEngine();
 		ZobVector3 p = m_zobObject->GetWorldPosition();
-		ZobVector3 v = m_lastGroundNormal;
+		ZobVector3 v = m_lastCollPosition;
 		
-		p = m_lastCollPosition;
-		v = m_lastCollDirection;
-		v = v + p;
 		e->QueueLine(camera, &p, &v, 0x00FFFF, true, true);
+
 		ZobMatrix4x4 m = ZobMatrix4x4();
 		m.AddTranslation(m_lastCollPosition);
 		e->QueueSphere(camera, &m, 0.1f, 0xFF0000, false, false);
-		p = m_lastCollPosition;
-		v = m_lastCollNormal;
-		v = v + p;
-		e->QueueLine(camera, &p, &v, 0xFFFF00, true, true);
 
-		p = m_lastCollPosition;
-		v = m_lastCollRebound;
-
-		v = v + p;
-		e->QueueLine(camera, &p, &v, 0xFFFFFF, true, true);
 	}
 }

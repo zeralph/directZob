@@ -8,6 +8,7 @@
 #include "ZobCameraController/ZobCameraControllerOrbital.h"
 #include "ZobCameraController/ZobCameraControllerFPS.h"
 #include "ZobCameraController/ZobCameraControllerFollowCar.h"
+#include "Misc/ZobXmlHelper.h"
 
 static std::mutex g_update_camera_mutex;
 static float ee = 0.0f;
@@ -54,11 +55,11 @@ Camera::Camera(ZOBGUID::ZobType zobType, const std::string& name, eCameraType ty
 	//m_nextTranslation = m_translation;
 }
 
-Camera::Camera(ulong id, TiXmlElement* node, ZobObject* parent)
+Camera::Camera(std::string id, TiXmlElement* node, ZobObject* parent)
 	:ZobObject(id, node, parent)
 {
 	m_zobCameraController = new ZobCameraController(this);
-	TiXmlElement * f = node->FirstChildElement("Fov");
+	TiXmlElement * f = node->FirstChildElement(XML_ELEMENT_CAMERA_FOV);
 	float fov = f ? atof(f->GetText()) : 45.0f; 
 	m_fov = fov;
 	m_active = false;
@@ -676,13 +677,13 @@ TiXmlNode* Camera::SaveUnderNode(TiXmlNode* node)
 	char tmpBuffer[256];
 	TiXmlNode* n = ZobObject::SaveUnderNode(node);
 	TiXmlElement* ne = (TiXmlElement*)n;
-	ne->SetAttribute("type", "camera");
+	ne->SetAttribute(XML_ATTR_TYPE, XML_ATTR_TYPE_CAMERA);
 	TiXmlText t("");
-	TiXmlElement fov = TiXmlElement("Fov");
+	TiXmlElement fov = TiXmlElement(XML_ELEMENT_CAMERA_FOV);
 	_snprintf_s(tmpBuffer, 256, "%.2f", GetFov());
 	t.SetValue(tmpBuffer);
 	fov.InsertEndChild(t);
-	TiXmlElement controller = TiXmlElement("Controller");
+	TiXmlElement controller = TiXmlElement(XML_ELEMENT_CAMERA_CONTROLER);
 	_snprintf_s(tmpBuffer, 256, "%i", (int)m_zobCameraController->GetType());
 	t.SetValue(tmpBuffer);
 	controller.InsertEndChild(t);

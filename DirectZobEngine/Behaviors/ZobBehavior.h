@@ -1,6 +1,7 @@
 #pragma once
 #include "../Types.h"
 #include "../tinyxml/tinyxml.h"
+#include "../ZobObjects/ZOBGUID.h"
 #include <map>
 #include <vector>
 #include <string>
@@ -9,7 +10,7 @@
 
 class ZobObject;
 class Camera;
-class ZobBehavior
+class ZobBehavior : public ZOBGUID
 {
 public:
 
@@ -76,7 +77,6 @@ protected:
 	std::vector<wrapperData> m_wrappedVariables;
 
 protected:
-	DirectZobType::zobId m_guid;
 	void WrapVariable(eWrapperType type, const char* name, void* ptr, bool bReadOnly, bool bSave);
 	void WrapEnum(const char* name, void* ptr, int nbParams, int* values, const char** names, bool bReadOnly, bool bSave);
 	void WrapPath(const char* name, void* ptrName, void* ptrPath, void* ptrFile, bool bReadOnly, bool bSave);

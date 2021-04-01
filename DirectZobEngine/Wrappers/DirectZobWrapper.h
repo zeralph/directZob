@@ -28,6 +28,7 @@ namespace CLI
 		void					Unload();
 		bool					CanFastSave();
 		void					SaveScene();
+		void					RegenerateZobIds();
 		void					SaveScene(System::String^ path, System::String^ file);
 		static DirectZob*		GetDirectZobInstance() { return m_directZobInstance; }
 		int						RunAFrame();

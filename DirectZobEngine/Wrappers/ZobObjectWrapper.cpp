@@ -12,7 +12,7 @@ namespace CLI
 {
 	ZobObjectWrapper::ZobObjectWrapper(ZobObject* zobObject):ManagedObject(zobObject, false)
 	{
-		m_id = zobObject->GetId();
+		m_id = zobObject->GetIdValue();
 	}
 
 	ZobObjectWrapper::~ZobObjectWrapper()
@@ -42,6 +42,7 @@ namespace CLI
 				return c;
 			}
 		}
+		return nullptr;
 	}
 
 	GroupBox^ ZobObjectWrapper::FillBehaviorControl(ZobBehavior* zb)
@@ -942,24 +943,6 @@ namespace CLI
 		}
 		return false;
 	}
-
-	int ZobObjectWrapper::GetBodyType()
-	{
-		if (GetInstance())
-		{
-			return (int)GetInstance()->GetBodyType();
-		}
-		return ZobObject::eBodyType::eBodyType_static;
-	}
-
-	void ZobObjectWrapper::SetBodyType(int bt)
-	{
-		if (GetInstance())
-		{
-			GetInstance()->SetBodyType((ZobObject::eBodyType)bt);
-		}
-	}
-
 }
 
 #endif //_WINDLL

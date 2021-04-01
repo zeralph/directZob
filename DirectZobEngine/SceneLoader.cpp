@@ -1,6 +1,7 @@
 #include "SceneLoader.h"
 #include "DirectZob.h"
 #include "ZobPhysic/ZobPhysicsEngine.h"
+#include "Misc/ZobXmlHelper.h"
 
 std::string SceneLoader::m_path = "";
 std::string SceneLoader::m_file = "";
@@ -33,22 +34,26 @@ void SceneLoader::LoadScene(std::string& path, std::string& file)
 
 void SceneLoader::LoadMesh(TiXmlElement* node)
 {
-	std::string name = node->Attribute("name");
-	std::string file = node->Attribute("file");
+	std::string name = node->Attribute(XML_ATTR_NAME);
+	std::string file = node->Attribute(XML_ATTR_FILE);
 	DirectZob::GetInstance()->GetMeshManager()->LoadMesh(name, m_path, file);
 }
 
 void SceneLoader::LoadZobObject(std::string& path, std::string& file)
 {
+	if (m_path.size() == 0)
+	{
+		m_path = path;
+	}
 	std::string fullPath;
-	TiXmlDocument doc("ZobObject");
+	TiXmlDocument doc(XML_ELEMENT_ZOBOBJECT);
 	fullPath = path + file;
 	LoadZobObject(fullPath);
 }
 
 void SceneLoader::LoadZobObject(std::string& fullPath, ZobObject* parent /* = NULL*/)
 {
-	TiXmlDocument doc("ZobObject");
+	TiXmlDocument doc(XML_ELEMENT_ZOBOBJECT);
 	doc.ClearError();
 	doc.LoadFile(fullPath.c_str());
 	if (doc.Error())
@@ -60,38 +65,39 @@ void SceneLoader::LoadZobObject(std::string& fullPath, ZobObject* parent /* = NU
 	else
 	{
 		ZobObjectManager* zobObjectManager = DirectZob::GetInstance()->GetZobObjectManager();
-		TiXmlElement* n = doc.FirstChildElement("ZobObject");
+		TiXmlElement* n = doc.FirstChildElement(XML_ELEMENT_ZOBOBJECT);
 		LoadZobObject(n, parent, &fullPath);
 	}
 }
 
 void SceneLoader::LoadZobObject(TiXmlElement* node, ZobObject* parent, const std::string* factoryPath)
 {	
-	std::string type;
 	ZobObject* zob = NULL;
 	if (parent == nullptr)
 	{
 		ZobObjectManager* zobObjectManager = DirectZob::GetInstance()->GetZobObjectManager();
 		parent = zobObjectManager->GetRootObject();
 	}
-	type = node->Attribute("type")? node->Attribute("type"):"mesh";
-	ulong id = node->Attribute("guid") ? strtoul(node->Attribute("guid"), NULL, 0) : 0;
-	if (type == "mesh")
+	const char* name = node->Attribute(XML_ATTR_NAME);
+	const char* type= node->Attribute(XML_ATTR_TYPE);
+	const char* cid =node->Attribute(XML_ATTR_GUID);
+	std::string id = cid;
+	if (!type || strcmp(type, XML_ATTR_TYPE_MESH) == 0)
 	{
 		zob = new ZobObject(id, node, parent, factoryPath);
 	}
-	else if (type == "camera")
+	else if( strcmp(type, XML_ATTR_TYPE_CAMERA) == 0)
 	{
 		Camera* c = new Camera(id, node, parent);
 		DirectZob::GetInstance()->GetCameraManager()->AddCamera(c);
 		zob = c;
 	}
-	else if (type == "sprite")
+	else if( strcmp(type, XML_ATTR_TYPE_SPRITE) == 0)
 	{
 		ZobSprite* s = new ZobSprite(id, node, parent);
 		zob = s;
 	}
-	else if (type == "light")
+	else if( strcmp(type, XML_ATTR_TYPE_LIGHT) == 0)
 	{
 		Light* l = new Light(id, node, parent);
 		DirectZob::GetInstance()->GetLightManager()->AddLight(l);
@@ -99,12 +105,11 @@ void SceneLoader::LoadZobObject(TiXmlElement* node, ZobObject* parent, const std
 	}
 	else
 	{
-		std::string name = node->Attribute("name");
-		DirectZob::LogError("Error creating ZObjects %s", name.c_str());
+		assert(NULL);
 	}
-	for (TiXmlElement* e = node->FirstChildElement("ZobObject"); e != NULL; e = e->NextSiblingElement("ZobObject"))
+	for (TiXmlElement* e = node->FirstChildElement(XML_ELEMENT_ZOBOBJECT); e != NULL; e = e->NextSiblingElement("ZobObject"))
 	{
-		const char* file = e->Attribute("file");
+		const char* file = e->Attribute(XML_ATTR_FILE);
 		if (file)
 		{
 			std::string f = std::string(file);
@@ -178,7 +183,7 @@ void SceneLoader::LoadSceneInternal()
 	else
 	{
 		DirectZob::LogInfo("loading objects");
-		TiXmlElement* scene = doc.FirstChildElement("Scene");
+		TiXmlElement* scene = doc.FirstChildElement(XML_ELEMENT_SCENE);
 		if (scene)
 		{
 			/*TiXmlElement* textures = root->FirstChildElement("Textures");
@@ -186,10 +191,10 @@ void SceneLoader::LoadSceneInternal()
 			{
 				LoadTexture(e, MaterialManager);
 			}*/
-			DirectZob::GetInstance()->GetLightManager()->LoadFromNode(scene->FirstChildElement("Globals"));
-			for (TiXmlElement* e = scene->FirstChildElement("ZobObject"); e != NULL; e = e->NextSiblingElement("ZobObject"))
+			DirectZob::GetInstance()->GetLightManager()->LoadFromNode(scene->FirstChildElement(XML_ELEMENT_GLOBALS));
+			for (TiXmlElement* e = scene->FirstChildElement(XML_ELEMENT_ZOBOBJECT); e != NULL; e = e->NextSiblingElement(XML_ELEMENT_ZOBOBJECT))
 			{
-				const char* file = e->Attribute("file");
+				const char* file = e->Attribute(XML_ATTR_FILE);
 				if (file)
 				{
 					std::string f = std::string(file);
@@ -230,12 +235,12 @@ void SceneLoader::SaveScene(std::string &path, std::string &file)
 	m_file = file;
 	m_path = path;
 	fullPath = path + file;
-	TiXmlDocument doc("Scene");
+	TiXmlDocument doc(XML_ELEMENT_SCENE);
 	TiXmlDeclaration* decl = new TiXmlDeclaration("1.0", "", "");
 	doc.LinkEndChild(decl);
-	TiXmlElement * root = new TiXmlElement("Scene");
+	TiXmlElement * root = new TiXmlElement(XML_ELEMENT_SCENE);
 	doc.LinkEndChild(root);
-	TiXmlElement globals = TiXmlElement("Globals");
+	TiXmlElement globals = TiXmlElement(XML_ELEMENT_GLOBALS);
 	DirectZob::GetInstance()->GetLightManager()->SaveUnderNode(&globals);
 	root->InsertEndChild(globals);	
 	ZobObject* rootObj = zobObjectManager->GetRootObject();

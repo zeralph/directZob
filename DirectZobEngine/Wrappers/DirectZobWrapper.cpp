@@ -221,6 +221,14 @@ namespace CLI
 		return GetInstance()->GetBufferDataLenght();
 	}
 
+	void DirectZobWrapper::RegenerateZobIds()
+	{
+		if (GetInstance())
+		{
+			GetInstance()->RegenerateZobIds();
+		}
+	}
+
 	int DirectZobWrapper::RunAFrame()
 	{
 		if (GetInstance())

@@ -11,21 +11,15 @@ ZOBGUID::ZOBGUID(ZobType t, ZobSubType s)
 	m_id = (u16)t * 1000 * 1000 * 1000 + (u16)s * 1000 * 1000 + id;
 }
 
-ZOBGUID::ZOBGUID(DirectZobType::guid id)
+ZOBGUID::ZOBGUID(std::string id)
 {
-	m_type = (ZOBGUID::ZobType)(id  / 1000 / 1000 / 1000);
-	m_subType = (ZOBGUID::ZobSubType)((m_type - id) / 1000 / 1000);
-	m_id = id;
+	assert(id.length());
+	ZobGuidFromString(id);
 }
 
 ZOBGUID::~ZOBGUID()
 {
 
-}
-
-bool ZOBGUID::IsUsed(DirectZobType::guid id)
-{
-	return false;
 }
 
 const ZOBGUID::ZobType ZOBGUID::GetType() const
@@ -38,17 +32,27 @@ const ZOBGUID::ZobSubType ZOBGUID::GetSubType() const
 	return m_subType;
 }
 
-ulong ZOBGUID::GetId()
+unsigned long long* ZOBGUID::GetIdAddress()
+{
+	return &m_id;
+}
+
+unsigned long long ZOBGUID::GetIdValue()
 {
 	return m_id;
 }
 
-ulong ZOBGUID::GenerateId()
+unsigned long long ZOBGUID::GenerateId()
 {
-	ulong u = 0;
+	unsigned long long u = 0;
 	for (int i = 0; i < 6; i++)
 	{
-		u += (rand()%10) * pow(10, i);
+		ulong l = (rand() % 10);
+		if (l == 0 && i == 0)
+		{
+			l = 1;
+		}
+		u += l * pow(10, i);
 	}
 	return u;
 }

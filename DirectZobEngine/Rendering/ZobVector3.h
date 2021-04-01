@@ -2,6 +2,8 @@
 #include <math.h>
 #include <string>
 #include <string.h>
+#include "tinyxml.h"
+
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
 #endif
@@ -11,6 +13,7 @@ public:
 	ZobVector3();
 	ZobVector3(float x, float y, float z);
 	ZobVector3(const ZobVector3* v);
+	ZobVector3(const TiXmlElement* node);
 
 	static const ZobVector3 Vector3Zero;
 	static const ZobVector3 Vector3One;
@@ -55,7 +58,7 @@ public:
 
 		return y;
 	}
-
+	void SaveUnderNode(const char* name, TiXmlNode* node);
 	inline float sqrtLength() { return (float)sqrt((double)x * (double)x + (double)y * (double)y + (double)z * (double)z); }
 	inline float length2() { return (float)((double)x * (double)x + (double)y * (double)y + (double)z * (double)z); }
 	static inline float Dot(const ZobVector3* v1, const ZobVector3* v2) { return v1->x * v2->x + v1->y * v2->y + v1->z * v2->z; };

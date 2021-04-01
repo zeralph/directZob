@@ -72,6 +72,12 @@ void DirectZob::LoadScene(std::string& path, std::string& file, DirectZob::engin
 	}
 }
 
+void DirectZob::RegenerateZobIds()
+{
+	m_zobObjectManager->GetRootObject()->RegenerateZobIds();
+}
+
+
 void DirectZob::OnSceneLoaded()
 {
 	if (m_onSceneLoaded)

@@ -733,6 +733,12 @@ namespace DirectZobEditor
                 m_cameraManagerWrapper.SetCurrentCamera(s);
             }
         }
+
+        private void regenerateZobIdsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //make an alert
+            m_directZobWrapper.RegenerateZobIds();
+        }
     }
 
     public class Event

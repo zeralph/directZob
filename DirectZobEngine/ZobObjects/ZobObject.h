@@ -17,16 +17,8 @@ friend class ZobBehavior;
 friend class ZobBehaviorCar;
 public:
 
-	enum eBodyType
-	{
-		eBodyType_static,
-		eBodyType_dynamic,
-		eBodyType_kinematic,
-		eBodyType_dynamic_manuallyRefreshed,
-	};
-
 	ZobObject(ZOBGUID::ZobType t, ZOBGUID::ZobSubType s, const std::string& name, ZobObject* parent = NULL, const std::string* factoryFile =NULL);
-	ZobObject(DirectZobType::guid id, TiXmlElement* node, ZobObject* parent, const std::string* factoryFile = NULL);
+	ZobObject(std::string id, TiXmlElement* node, ZobObject* parent, const std::string* factoryFile = NULL);
 	virtual ~ZobObject();
 
 	//virtuals
@@ -51,7 +43,7 @@ public:
 	void							SaveTransform();
 	void							RestoreTransform();
 	void							ResetPhysic();
-
+	void							RegenerateZobIds();
 	virtual void					DrawGizmos(const Camera* camera, Core::Engine* engine);
 	virtual TiXmlNode*				SaveUnderNode(TiXmlNode* node);
 	//
@@ -100,8 +92,6 @@ public:
 	const ZobMatrix4x4*				GetRotationScaleMatrix() const { return &m_rotationScaleMatrix; };
 	const std::vector<ZobBehavior*>*GetBehaviors() { return &m_behaviors; }
 	void							AddBehavior(ZobBehavior* b) { m_behaviors.push_back(b); }
-	eBodyType						GetBodyType();
-	void							SetBodyType(eBodyType bt);
 
 private:
 	void							SaveRecusrive(TiXmlNode* node, ZobObject* z);

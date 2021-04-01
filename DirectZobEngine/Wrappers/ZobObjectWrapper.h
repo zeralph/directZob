@@ -84,9 +84,6 @@ namespace CLI {
 		void					ListValidationHandler(Object^ sender, System::EventArgs^ e);
 		void					GroupClick(Object^ sender, System::EventArgs^ e);
 
-		int						GetBodyType();
-		void					SetBodyType(int bt);
-
 	private:
 		GroupBox^				FillBehaviorControl(ZobBehavior* zb);
 	protected:
@@ -102,7 +99,7 @@ namespace CLI {
 		void					AddPathVariable(TableLayoutPanel^ panel, ZobBehavior::wrapperData* w);
 
 		const ZobBehavior::wrapperData* GetWrapperDataForVariable(String^ variableName);
- 		DirectZobType::guid m_id;
+ 		unsigned long long m_id;
 	};
 }
 #endif //_WINDLL 

@@ -4,6 +4,7 @@
 #include "Sprite.h"
 #include "ZobPhysic/ZobPhysicComponent.h"
 #include "SceneLoader.h"
+#include "../Misc/ZobXmlHelper.h"
 #include "../../dependencies/optick/include/optick.h"
 
 static int sObjectNumber = 0;
@@ -54,42 +55,24 @@ ZobObject::ZobObject(ZobType t, ZobSubType s, const std::string& name, ZobObject
 	DirectZob::RemoveIndent();
 }
 
-ZobObject::ZobObject(DirectZobType::guid id, TiXmlElement* node, ZobObject* parent, const std::string* factoryFile /*=NULL*/)
+ZobObject::ZobObject(std::string id, TiXmlElement* node, ZobObject* parent, const std::string* factoryFile /*=NULL*/)
 	:ZOBGUID(id)
 {
 	m_behaviors.clear();
 	sObjectNumber++;
 	m_factoryFile = factoryFile ? factoryFile->c_str() : "";
 	ZobVector3 position, rotation, scale, orientation = ZobVector3();
-	std::string name;
+	const char* name;
 	float x, y, z;
 	TiXmlElement* f;
-	name = node->Attribute("name");
-	const char* bodyTypeValue = node->Attribute("BodyType");
-	DirectZob::LogInfo("ZobObject %s creation", name.c_str());
-	DirectZob::AddIndent();
-	f = node->FirstChildElement("Position");
-	x = atof(f->Attribute("x"));
-	y = atof(f->Attribute("y"));
-	z = atof(f->Attribute("z"));
-	position = ZobVector3(x, y, z);
-	f = node->FirstChildElement("Rotation");
-	if (f)
-	{
-		x = atof(f->Attribute("x"));
-		y = atof(f->Attribute("y"));
-		z = atof(f->Attribute("z"));
-		rotation = ZobVector3(x, y, z);
-	}
-	f = node->FirstChildElement("Scale");
-	if (f)
-	{
-		x = atof(f->Attribute("x"));
-		y = atof(f->Attribute("y"));
-		z = atof(f->Attribute("z"));
-		scale = ZobVector3(x, y, z);
-	}
+	name = node->Attribute(XML_ATTR_NAME);
+	assert(name);
 	m_name = name;
+	DirectZob::LogInfo("ZobObject %s creation", name);
+	DirectZob::AddIndent();
+	position = ZobVector3(node->FirstChildElement(XML_ELEMENT_POSITION));
+	rotation = ZobVector3(node->FirstChildElement(XML_ELEMENT_ROTATION));
+	scale = ZobVector3(node->FirstChildElement(XML_ELEMENT_SCALE));
 	DirectZob::LogInfo("Adding new ZobObject %s", m_name.c_str());
 	if (!parent && m_name != "root")
 	{
@@ -106,49 +89,49 @@ ZobObject::ZobObject(DirectZobType::guid id, TiXmlElement* node, ZobObject* pare
 	m_renderOptions.zBuffered = true;
 	m_renderOptions.bTransparency = false;
 	//mesh loading section
-	TiXmlElement* meshNode = node->FirstChildElement("Mesh");
+	TiXmlElement* meshNode = node->FirstChildElement(XML_ATTR_TYPE_MESH);
 	if (meshNode)
 	{
-		std::string meshName = meshNode->Attribute("name");
-		std::string meshPath = meshNode->Attribute("path") ? meshNode->Attribute("path") : std::string("");
-		std::string meshFile = meshNode->Attribute("file");
+		std::string meshName = meshNode->Attribute(XML_ATTR_PATH);
+		std::string meshPath = meshNode->Attribute(XML_ATTR_PATH) ? meshNode->Attribute(XML_ATTR_PATH) : std::string("");
+		std::string meshFile = meshNode->Attribute(XML_ATTR_FILE);
 		if (meshName.length() > 0 && meshFile.length() > 0)
 		{
 			LoadMesh(meshName, meshFile, meshPath);
 		}
-		f = meshNode->FirstChildElement("RenderOptions");
+		f = meshNode->FirstChildElement(XML_ELEMENT_RENDER_OPTIONS);
 		if (f)
 		{
-			TiXmlElement* n = f->FirstChildElement("Lighting");
+			TiXmlElement* n = f->FirstChildElement(XML_ELEMENT_RENDER_OPTIONS_LIGHTING);
 			if (n)
 			{
 				std::string l = n->GetText();
-				if (l == "None")
+				if (l == XML_ELEMENT_RENDER_OPTIONS_LIGHTING_NONE)
 				{
 					m_renderOptions.lightMode = RenderOptions::eLightMode_none;
 				}
-				else if (l == "Flat")
+				else if (l == XML_ELEMENT_RENDER_OPTIONS_LIGHTING_FLAT)
 				{
 					m_renderOptions.lightMode = RenderOptions::eLightMode_flat;
 				}
-				else if (l == "FlatPhong")
+				else if (l == XML_ELEMENT_RENDER_OPTIONS_LIGHTING_FLAT_PHONG)
 				{
 					m_renderOptions.lightMode = RenderOptions::eLightMode_flatPhong;
 				}
-				else if (l == "Gouraud")
+				else if (l == XML_ELEMENT_RENDER_OPTIONS_LIGHTING_GOURAUD)
 				{
 					m_renderOptions.lightMode = RenderOptions::eLightMode_gouraud;
 				}
-				else if (l == "Phong")
+				else if (l == XML_ELEMENT_RENDER_OPTIONS_LIGHTING_PHONG)
 				{
 					m_renderOptions.lightMode = RenderOptions::eLightMode_phong;
 				}
 			}
-			n = f->FirstChildElement("ZBuffer");
+			n = f->FirstChildElement(XML_ELEMENT_RENDER_OPTIONS_ZBUFFER);
 			if (n)
 			{
 				std::string l = n->GetText();
-				if (l == "True")
+				if (l == XML_VALUE_TRUE)
 				{
 					m_renderOptions.zBuffered = true;
 				}
@@ -157,11 +140,11 @@ ZobObject::ZobObject(DirectZobType::guid id, TiXmlElement* node, ZobObject* pare
 					m_renderOptions.zBuffered = false;
 				}
 			}
-			n = f->FirstChildElement("Transparency");
+			n = f->FirstChildElement(XML_ELEMENT_RENDER_OPTIONS_TRANSPARENCY);
 			if (n)
 			{
 				std::string l = n->GetText();
-				if (l == "True")
+				if (l == XML_VALUE_TRUE)
 				{
 					m_renderOptions.bTransparency = true;
 				}
@@ -170,15 +153,15 @@ ZobObject::ZobObject(DirectZobType::guid id, TiXmlElement* node, ZobObject* pare
 					m_renderOptions.bTransparency = false;
 				}
 			}
-			n = f->FirstChildElement("CullMode");
+			n = f->FirstChildElement(XML_ELEMENT_RENDER_OPTIONS_CULLMODE);
 			if (n)
 			{
 				std::string l = n->GetText();
-				if (l == "Clockwise")
+				if (l == XML_ELEMENT_RENDER_OPTIONS_CULLMODE_CLOCKWISE)
 				{
 					m_renderOptions.cullMode = eCullMode_ClockwiseFace;
 				}
-				else if (l == "CounterClockwise")
+				else if (l == XML_ELEMENT_RENDER_OPTIONS_CULLMODE_COUNTERCLOCKWISE)
 				{
 					m_renderOptions.cullMode = eCullMode_CounterClockwiseFace;
 				}
@@ -190,25 +173,6 @@ ZobObject::ZobObject(DirectZobType::guid id, TiXmlElement* node, ZobObject* pare
 		}
 	}
 	m_physicComponent = new ZobPhysicComponent(this);
-	if (bodyTypeValue)
-	{
-		if (strcmp(bodyTypeValue, "Dynamic") == 0)
-		{
-			m_physicComponent->SetBodyType(eBodyType_dynamic);
-		}
-		else if (strcmp(bodyTypeValue, "Static") == 0)
-		{
-			m_physicComponent->SetBodyType(eBodyType_static);
-		}
-		else if (strcmp(bodyTypeValue, "Kinematic") == 0)
-		{
-			m_physicComponent->SetBodyType(eBodyType_kinematic);
-		}
-		else if (strcmp(bodyTypeValue, "DynamicWithManualRefresh") == 0)
-		{
-			m_physicComponent->SetBodyType(eBodyType_dynamic_manuallyRefreshed);
-		}
-	}
 	//parenting
 	m_children.clear();
 	m_newParent = m_parent;
@@ -238,7 +202,7 @@ ZobObject::~ZobObject()
 	DirectZob::LogInfo("delete ZobObject %s", m_name.c_str());
 	DirectZob::AddIndent();
 
-	DirectZob::GetInstance()->GetZobObjectManager()->AddIdToDeleted(GetId());
+	DirectZob::GetInstance()->GetZobObjectManager()->AddIdToDeleted(GetIdValue());
 	for (int i = 0; i < m_behaviors.size(); i++)
 	{
 		delete m_behaviors[i];
@@ -292,16 +256,6 @@ const std::string ZobObject::GetMeshName() const
 	return "";
 }
 
-ZobObject::eBodyType ZobObject::GetBodyType()
-{ 
-	return m_physicComponent->GetBodyType(); 
-}
-
-void ZobObject::SetBodyType(ZobObject::eBodyType bt)
-{ 
-	m_physicComponent->SetBodyType(bt);
-}
-
 const std::string ZobObject::GetMeshPath() const
 {
 	if (m_mesh)
@@ -325,7 +279,7 @@ void ZobObject::UpdateMesh(const Camera* camera, Core::Engine* engine)
 	OPTICK_EVENT();
 	if (m_mesh)
 	{
-		m_mesh->Update(&m_modelMatrix, &m_rotationScaleMatrix, camera, engine, GetId(), &m_renderOptions);
+		m_mesh->Update(&m_modelMatrix, &m_rotationScaleMatrix, camera, engine, GetIdValue(), &m_renderOptions);
 	}
 	for (int i = 0; i < m_children.size(); i++)
 	{
@@ -505,7 +459,7 @@ void ZobObject::QueueForDrawing(const Camera* camera, Core::Engine* engine)
 	}
 	if (m_mesh)
 	{
-		m_mesh->QueueForDrawing(this, m_modelMatrix, m_rotationScaleMatrix, camera, engine, GetId(), &m_renderOptions);
+		m_mesh->QueueForDrawing(this, m_modelMatrix, m_rotationScaleMatrix, camera, engine, GetIdValue(), &m_renderOptions);
 	}
 	for (int i = 0; i < m_children.size(); i++)
 	{
@@ -652,7 +606,7 @@ void ZobObject::SetLightingMode(RenderOptions::eLightMode l)
 
 void ZobObject::SaveToFactoryFile(std::string& file)
 {
-	TiXmlDocument doc("ZobObject");
+	TiXmlDocument doc(XML_ELEMENT_ZOBOBJECT);
 	TiXmlDeclaration* decl = new TiXmlDeclaration("1.0", "", "");
 	doc.LinkEndChild(decl);
 	SaveRecusrive(&doc, this);
@@ -679,122 +633,82 @@ void ZobObject::SaveRecusrive(TiXmlNode* node, ZobObject* z)
 
 TiXmlNode* ZobObject::SaveUnderNode(TiXmlNode* node)
 {
-	TiXmlElement* objectNode = new TiXmlElement("ZobObject");
-	TiXmlElement p = TiXmlElement("Position");
-	TiXmlElement r = TiXmlElement("Rotation");
-	TiXmlElement s = TiXmlElement("Scale");
-	objectNode->SetAttribute("name", GetName().c_str());
-	objectNode->SetAttribute("guid", GetId());
-
-	switch (m_physicComponent->GetBodyType())
-	{
-		case eBodyType_dynamic:
-		{
-			objectNode->SetAttribute("BodyType", "Dynamic");
-			break;
-		}
-		case eBodyType_static:
-		{
-			objectNode->SetAttribute("BodyType", "Static");
-			break;
-		}
-		case eBodyType_kinematic:
-		{
-			objectNode->SetAttribute("BodyType", "Kinematic");
-			break;
-		}
-		case eBodyType_dynamic_manuallyRefreshed:
-		{
-			objectNode->SetAttribute("BodyType", "DynamicWithManualRefresh");
-			break;
-		}
-	}
+	TiXmlElement* objectNode = new TiXmlElement(XML_ELEMENT_ZOBOBJECT);
+	objectNode->SetAttribute(XML_ATTR_NAME, GetName().c_str());
+	std::string guid = ZobGuidToString();
+	objectNode->SetAttribute(XML_ATTR_GUID, guid.c_str());
+	ZobVector3 p = GetLocalPosition();
+	p.SaveUnderNode(XML_ELEMENT_POSITION, objectNode);
+	ZobVector3 r = GetLocalRotation();
+	r.SaveUnderNode(XML_ELEMENT_ROTATION, objectNode);
+	ZobVector3 s = GetScale();
+	s.SaveUnderNode(XML_ELEMENT_SCALE, objectNode);
 	std::string meshName = GetMeshName();
 	std::string meshFileName = GetMeshFileName();
 	std::string meshPath = GetMeshPath();
-	p.SetDoubleAttribute("x", GetLocalPosition().x);
-	p.SetDoubleAttribute("y", GetLocalPosition().y);
-	p.SetDoubleAttribute("z", GetLocalPosition().z);
-	r.SetDoubleAttribute("x", GetLocalRotation().x);
-	r.SetDoubleAttribute("y", GetLocalRotation().y);
-	r.SetDoubleAttribute("z", GetLocalRotation().z);
-	s.SetDoubleAttribute("x", GetScale().x);
-	s.SetDoubleAttribute("y", GetScale().y);
-	s.SetDoubleAttribute("z", GetScale().z);
-	objectNode->InsertEndChild(p);
-	objectNode->InsertEndChild(r);
-	objectNode->InsertEndChild(s);
 	if (meshName.length() > 0 && meshFileName.length() > 0)
 	{
-		TiXmlElement meshNode = TiXmlElement("Mesh");
-		meshNode.SetAttribute("name", meshName.c_str());
-		meshNode.SetAttribute("file", meshFileName.c_str());
-		meshNode.SetAttribute("path", meshPath.c_str());
-		objectNode->SetAttribute("type", "mesh");
-		TiXmlElement renderOptions = TiXmlElement("RenderOptions");
-		TiXmlElement lighting = TiXmlElement("Lighting");
-		TiXmlText t("None");
+		TiXmlElement meshNode = TiXmlElement(XML_ATTR_TYPE_MESH);
+		meshNode.SetAttribute(XML_ATTR_NAME, meshName.c_str());
+		meshNode.SetAttribute(XML_ATTR_FILE, meshFileName.c_str());
+		meshNode.SetAttribute(XML_ATTR_PATH, meshPath.c_str());
+		objectNode->SetAttribute(XML_ATTR_TYPE, XML_ATTR_TYPE_MESH);
+		TiXmlElement renderOptions = TiXmlElement(XML_ELEMENT_RENDER_OPTIONS);
+		TiXmlElement lighting = TiXmlElement(XML_ELEMENT_RENDER_OPTIONS_LIGHTING);
+		TiXmlText t(XML_ELEMENT_RENDER_OPTIONS_LIGHTING_NONE);
 		if (m_renderOptions.lightMode == RenderOptions::eLightMode_flat)
 		{
-			t = "Flat";
-		}
-		else if (m_renderOptions.lightMode == RenderOptions::eLightMode_flat)
-		{
-			t = "Flat";
+			t = XML_ELEMENT_RENDER_OPTIONS_LIGHTING_FLAT;
 		}
 		else if (m_renderOptions.lightMode == RenderOptions::eLightMode_flatPhong)
 		{
-			t = "FlatPhong";
+			t = XML_ELEMENT_RENDER_OPTIONS_LIGHTING_FLAT_PHONG;
 		}
 		else if (m_renderOptions.lightMode == RenderOptions::eLightMode_gouraud)
 		{
-			t = "Gouraud";
+			t = XML_ELEMENT_RENDER_OPTIONS_LIGHTING_GOURAUD;
 		}
 		else if (m_renderOptions.lightMode == RenderOptions::eLightMode_phong)
 		{
-			t = "Phong";
+			t = XML_ELEMENT_RENDER_OPTIONS_LIGHTING_PHONG;
 		}
 		lighting.InsertEndChild(t);
 		renderOptions.InsertEndChild(lighting);
-		TiXmlElement zBuffer = TiXmlElement("ZBuffer");
+		TiXmlElement zBuffer = TiXmlElement(XML_ELEMENT_RENDER_OPTIONS_ZBUFFER);
 		if (m_renderOptions.zBuffered)
 		{
-			t = "True";
+			t = XML_VALUE_TRUE;
 		}
 		else
 		{
-			t = "False";
+			t = XML_VALUE_FALSE;
 		}
 		zBuffer.InsertEndChild(t);
 		renderOptions.InsertEndChild(zBuffer);
-		TiXmlElement transparency = TiXmlElement("Transparency");
+		TiXmlElement transparency = TiXmlElement(XML_ELEMENT_RENDER_OPTIONS_TRANSPARENCY);
 		if (m_renderOptions.bTransparency)
 		{
-			t = "True";
+			t = XML_VALUE_TRUE;
 		}
 		else
 		{
-			t = "False";
+			t = XML_VALUE_FALSE;
 		}
 		transparency.InsertEndChild(t);
 		renderOptions.InsertEndChild(transparency);
 
-		TiXmlElement cullMode = TiXmlElement("CullMode");
-		t = "None";
-		if (m_renderOptions.cullMode == eCullMode_ClockwiseFace)
+		TiXmlElement cullMode = TiXmlElement(XML_ELEMENT_RENDER_OPTIONS_CULLMODE);
+		t = XML_ELEMENT_RENDER_OPTIONS_CULLMODE_CLOCKWISE;
+		if (m_renderOptions.cullMode == eCullMode_CounterClockwiseFace)
 		{
-			t = "Clockwise";
-		}
-		else if (m_renderOptions.cullMode == eCullMode_CounterClockwiseFace)
-		{
-			t = "CounterClockwise";
+			t = XML_ELEMENT_RENDER_OPTIONS_CULLMODE_COUNTERCLOCKWISE;
 		}
 		cullMode.InsertEndChild(t);
 		renderOptions.InsertEndChild(cullMode);
 		meshNode.InsertEndChild(renderOptions);
 		objectNode->InsertEndChild(meshNode);
 	}
-	TiXmlElement behaviors = TiXmlElement("Behaviors");
+	TiXmlElement behaviors = TiXmlElement(XML_ELEMENT_BEHAVIORS);
 	for (int i = 0; i < m_behaviors.size(); i++)
 	{
 		m_behaviors[i]->SaveUnderNode(&behaviors);
@@ -936,6 +850,19 @@ ZobVector3 ZobObject::GetWorldPosition() const
 	Vector3 p = m_physicComponent->GetWorldTransform().getPosition();
 	ZobVector3 v = ZobVector3(p.x, p.y, p.z);
 	return v;
+}
+
+void ZobObject::RegenerateZobIds()
+{
+	ZobGuidRegenerate();
+	for (int i = 0; i < m_behaviors.size(); i++)
+	{
+		m_behaviors[i]->ZobGuidRegenerate();
+	}
+	for (std::vector<ZobObject*>::const_iterator iter = m_children.begin(); iter != m_children.end(); iter++)
+	{
+		(*iter)->RegenerateZobIds();
+	}
 }
 
 void ZobObject::SaveTransform()

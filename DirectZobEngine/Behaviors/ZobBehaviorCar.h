@@ -42,6 +42,7 @@ class ZobBehaviorCar : public ZobBehavior
 		ZobVector3 m_lastGroundNormal;
 
 		ZobVector3 m_lastCollPosition;
+		ZobVector3 m_lastCollLocalContact;
 		ZobVector3 m_lastCollDirection;
 		ZobVector3 m_lastCollNormal;
 		ZobVector3 m_lastCollRebound;

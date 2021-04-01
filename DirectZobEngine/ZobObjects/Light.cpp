@@ -1,6 +1,7 @@
 #include "Light.h"
 #include "tinyxml.h"
 #include "DirectZob.h"
+#include "Misc/ZobXmlHelper.h"
 
 Light::Light(std::string &name, eLightType type, ZobVector3 color, float intensity, float distance, ZobObject*parent):
 	ZobObject(ZOBGUID::type_scene, ZOBGUID::subtype_zobLight, name, parent)
@@ -15,11 +16,11 @@ Light::Light(std::string &name, eLightType type, ZobVector3 color, float intensi
 	NewLightConfiguration();
 }
 
-Light::Light(ulong id, TiXmlElement* node, ZobObject* parent)
+Light::Light(std::string id, TiXmlElement* node, ZobObject* parent)
 	:ZobObject(id, node, parent)
 {
 		float x, y, z;
-		TiXmlElement* f = node->FirstChildElement("Color");
+		TiXmlElement* f = node->FirstChildElement(XML_ELEMENT_LIGHT_COLOR);
 		if (f)
 		{
 			x = atof(f->Attribute("r"));
@@ -27,24 +28,24 @@ Light::Light(ulong id, TiXmlElement* node, ZobObject* parent)
 			z = atof(f->Attribute("b"));
 			m_color = ZobVector3(x/255.0f, y/255.0f, z/255.0f);
 		}
-		f = node->FirstChildElement("Intensity");
+		f = node->FirstChildElement(XML_ELEMENT_LIGHT_INTENSITY);
 		float intensity = f ? atof(f->GetText()) : 1.0f;
-		f = node->FirstChildElement("FallOffDistance");
+		f = node->FirstChildElement(XML_ELEMENT_LIGHT_FALLOFF);
 		float falloff = f ? atof(f->GetText()) : 1.0f;
-		f = node->FirstChildElement("Type");
+		f = node->FirstChildElement(XML_ATTR_TYPE);
 		std::string type  = std::string(f->GetText()?f->GetText() :"");
 		m_lightType = eLightType_point;
 		if (f)
 		{
-			if (type == "point")
+			if (type == XML_ELEMENT_LIGHT_TYPE_POINT)
 			{
 				m_lightType = eLightType_point;
 			}
-			else if(type == "spot")
+			else if(type == XML_ELEMENT_LIGHT_TYPE_SPOT)
 			{
 				m_lightType = eLightType_spot;
 			}
-			else if (type == "directional")
+			else if (type == XML_ELEMENT_LIGHT_TYPE_DIRECTIONAL)
 			{
 				m_lightType = eLightType_directional;
 			}
@@ -204,23 +205,23 @@ TiXmlNode* Light::SaveUnderNode(TiXmlNode* node)
 	char tmpBuffer[256];
 	TiXmlNode* n = ZobObject::SaveUnderNode(node);
 	TiXmlElement* ne = (TiXmlElement*)n;
-	ne->SetAttribute("type", "light");
+	ne->SetAttribute(XML_ATTR_TYPE, XML_ATTR_TYPE_LIGHT);
 	ZobVector3 c = GetColor();
 	int r = (int)(c.x * 255.0f);
 	int g = (int)(c.y * 255.0f);
 	int b = (int)(c.z * 255.0f);
-	TiXmlElement color = TiXmlElement("Color");
+	TiXmlElement color = TiXmlElement(XML_ELEMENT_LIGHT_COLOR);
 	color.SetAttribute("r", r);
 	color.SetAttribute("g", g);
 	color.SetAttribute("b", b);
 	ne->InsertEndChild(color);
 	TiXmlText t("");
-	TiXmlElement intensity = TiXmlElement("Intensity");
+	TiXmlElement intensity = TiXmlElement(XML_ELEMENT_LIGHT_INTENSITY);
 	_snprintf_s(tmpBuffer, 256, "%.2f", GetIntensity());
 	t.SetValue(tmpBuffer);
 	intensity.InsertEndChild(t);
 	ne->InsertEndChild(intensity);
-	TiXmlElement fallOff = TiXmlElement("FallOffDistance");
+	TiXmlElement fallOff = TiXmlElement(XML_ELEMENT_LIGHT_FALLOFF);
 	_snprintf_s(tmpBuffer, 256, "%.2f", GetFallOffDistance());
 	t.SetValue(tmpBuffer);
 	fallOff.InsertEndChild(t);
@@ -228,17 +229,17 @@ TiXmlNode* Light::SaveUnderNode(TiXmlNode* node)
 	switch (m_lightType)
 	{
 	case eLightType_directional:
-		t.SetValue("directional");
+		t.SetValue(XML_ELEMENT_LIGHT_TYPE_DIRECTIONAL);
 		break;
 	case eLightType_spot:
-		t.SetValue("spot");
+		t.SetValue(XML_ELEMENT_LIGHT_TYPE_SPOT);
 		break;
 	case eLightType_point:
 	default:
-		t.SetValue("point");
+		t.SetValue(XML_ELEMENT_LIGHT_TYPE_POINT);
 		break;
 	}
-	TiXmlElement lightType = TiXmlElement("Type");
+	TiXmlElement lightType = TiXmlElement(XML_ATTR_TYPE);
 	lightType.InsertEndChild(t);
 	ne->InsertEndChild(lightType);
 	return n;

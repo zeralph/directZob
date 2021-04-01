@@ -1,22 +1,22 @@
 #include "ZobBehavior.h"
 #include "ZobBehaviorFactory.h"
 #include "../DirectZob.h"
+#include "../Misc/ZobXmlHelper.h"
 
-ZobBehavior::ZobBehavior(ZobObject* zobObject)
+ZobBehavior::ZobBehavior(ZobObject* zobObject):ZOBGUID(ZOBGUID::type_internal, ZOBGUID::subtype_behavior)
 {
-	m_guid = DirectZob::GenerateZobId();
 	m_zobObject = zobObject;
 	m_type = eBehavior_none;
-	WrapVariable(eWrapperType_zobId, "ZobId", &m_guid, true, false);
+	WrapVariable(eWrapperType_zobId, "ZobId", GetIdAddress(), true, false);
 };
 
 TiXmlNode* ZobBehavior::SaveUnderNode(TiXmlNode* node)
 {
 	std::string s;
-	DirectZob::ZobIdToString(m_guid, s);
+	s = ZobGuidToString();
 	TiXmlElement n = TiXmlElement("Behavior");
-	n.SetAttribute("Type", GetBehaviorTypeStr());
-	n.SetAttribute("Guid", s.c_str());
+	n.SetAttribute(XML_ATTR_TYPE, GetBehaviorTypeStr());
+	n.SetAttribute(XML_ATTR_GUID, s.c_str());
 	for (std::vector<wrapperData>::const_iterator iter = m_wrappedVariables.begin(); iter != m_wrappedVariables.end(); iter++)
 	{
 		const wrapperData* w = &(*iter);
@@ -114,7 +114,7 @@ void ZobBehavior::WrapPath(const char* name, void* ptrName, void* ptrPath, void*
 	std::string s;
 	w.type = eWrapperType_path;
 	w.name = std::string(name);
-	DirectZob::ZobIdToString(m_guid, s);
+	s = ZobGuidToString();
 	s = s.append("_").append(w.name);
 	w.internalName = s;
 	w.ptr = ptrName;
@@ -130,7 +130,7 @@ void ZobBehavior::WrapVariable(eWrapperType type, const char* name, void* ptr, b
 	wrapperData w;
 	std::string s;
 	w.name = std::string(name);
-	DirectZob::ZobIdToString(m_guid, s);
+	s = ZobGuidToString();
 	s = s.append("_").append(w.name);
 	w.internalName = s;
 	w.type = type;
@@ -145,7 +145,7 @@ void ZobBehavior::WrapEnum(const char* name, void* ptr, int nbParams, int* value
 	wrapperData w;
 	std::string s;
 	w.name = std::string(name);
-	DirectZob::ZobIdToString(m_guid, s);
+	s = ZobGuidToString();
 	s = s.append("_").append(w.name);
 	w.internalName = s;
 	w.type = eWrapperType_enum;
@@ -160,17 +160,12 @@ void ZobBehavior::WrapEnum(const char* name, void* ptr, int nbParams, int* value
 
 void ZobBehavior::LoadVariables(TiXmlElement* node)
 {
-	const char* guid = node->Attribute("Guid");
+	const char* guid = node->Attribute(XML_ATTR_GUID);
 	if (guid)
 	{
 		std::string s = guid;
-		DirectZob::ZobIdFromString(s, m_guid);
+		ZobGuidFromString(s);
 	}
-	else
-	{
-		m_guid = DirectZob::GenerateZobId();
-	}
-
 	for (TiXmlElement* e = node->FirstChildElement("Var"); e != NULL; e = e->NextSiblingElement("Var"))
 	{
 		const char* name = e->Attribute("name");
