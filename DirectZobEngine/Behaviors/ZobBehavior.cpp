@@ -94,6 +94,10 @@ TiXmlNode* ZobBehavior::SaveUnderNode(TiXmlNode* node)
 				{
 					break;
 				}
+				default:
+				{
+					break;
+				}
 			}
 			n.InsertEndChild(o);
 		}

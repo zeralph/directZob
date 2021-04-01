@@ -55,7 +55,7 @@ public :
 		{
 			m_type = ZobType::type_unknown;
 		}
-		if (m_subType <= 0 || m_type >= ZobSubType::subtype_MAX)
+		if (m_subType <= 0 || m_subType >= ZobSubType::subtype_MAX)
 		{
 			m_subType = ZobSubType::subtype_unknown;
 		}
