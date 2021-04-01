@@ -733,12 +733,34 @@ namespace CLI
 		return nullptr;
 	}
 
+	ManagedVector3^ ZobObjectWrapper::GetLocalPosition()
+	{
+		ZobObject* z = GetInstance();
+		if (z)
+		{
+			ManagedVector3^ v = gcnew CLI::ManagedVector3(z->GetLocalPosition());
+			return v;
+		}
+		return nullptr;
+	}
+
 	ManagedVector3^ ZobObjectWrapper::GetWorldRotation()
 	{
 		ZobObject* z = GetInstance();
 		if (z)
 		{
 			ManagedVector3^ v = gcnew CLI::ManagedVector3(z->GetWorldRotation());
+			return v;
+		}
+		return nullptr;
+	}
+
+	ManagedVector3^ ZobObjectWrapper::GetLocalRotation()
+	{
+		ZobObject* z = GetInstance();
+		if (z)
+		{
+			ManagedVector3^ v = gcnew CLI::ManagedVector3(z->GetLocalRotation());
 			return v;
 		}
 		return nullptr;
@@ -788,13 +810,13 @@ namespace CLI
 		return nullptr;
 	}
 
-	void ZobObjectWrapper::SetWorldTransform(ManagedVector3^ p)
+	void ZobObjectWrapper::SetLocalTransform(ManagedVector3^ p)
 	{
 		ZobObject* z = GetInstance();
 		if (z)
 		{
 			ZobVector3 v = p->ToVector3();
-			z->SetWorldPosition(v.x, v.y, v.z);
+			z->SetLocalPosition(v.x, v.y, v.z);
 		}
 	}
 
@@ -810,13 +832,13 @@ namespace CLI
 		}
 	}
 
-	void ZobObjectWrapper::SetWorldRotation(ManagedVector3^ p)
+	void ZobObjectWrapper::SetLocalRotation(ManagedVector3^ p)
 	{
 		ZobObject* z = GetInstance();
 		if (z)
 		{
 			ZobVector3 v = p->ToVector3();
-			z->SetWorldRotation(v.x, v.y, v.z);
+			z->SetLocalRotation(v.x, v.y, v.z);
 		}
 	}
 

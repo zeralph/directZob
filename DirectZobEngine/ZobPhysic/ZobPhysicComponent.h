@@ -68,11 +68,11 @@ public:
 	void								DrawGizmos(const Camera* camera, const ZobVector3* position, const ZobVector3* rotation);
 	ZobVector3							GetTotalScale() const { return ZobVector3(m_totalScale.x, m_totalScale.y, m_totalScale.z); }
 	void								SetTotalScale(float x, float y, float z);
-	const Transform						GetWorldTransform() const { return Transform(m_worldTransform); };
+	Transform							GetWorldTransform() const;
 	Transform							GetLocalTransform() const { return Transform(m_localTransform); };
-	void								SetWorldTransform(Transform t) { m_worldTransform = t; };
-	void								SetLocalTransform(Transform t) { m_localTransform = t; };
-	void								SetLocalPosition(Vector3 p) { m_localTransform.setPosition(p); };
+	void								SetWorldTransform(Transform t);
+	void								SetLocalTransform(Transform t);
+	//void								SetLocalPosition(Vector3 p) { m_localTransform.setPosition(p); };
 	void								SetLocalOrientation(Quaternion q) { m_localTransform.setOrientation(q); };
 	Quaternion							QuaternionFromAxisAngle(Vector3* axis, float angle);
 	CollisionBody*						GetCollisionBody() { return m_collisionBody; }
@@ -84,13 +84,12 @@ public:
 private:
 
 	float								ClampAngle(float a) const;
-
+	Transform							GetParentWorldTransform() const;
 	const ZobObject* m_zobObject;
 	CollisionBody* m_collisionBody;
 	Collider* m_collider;	
 	Transform m_savedTransform;
 	Transform m_localTransform;
-	Transform m_worldTransform;
 	collision m_lastCollision;
 	Vector3 m_scale;
 	Vector3 m_totalScale;

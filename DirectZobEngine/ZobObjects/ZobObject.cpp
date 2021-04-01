@@ -418,9 +418,9 @@ void ZobObject::Update(float dt)
 	//p.x *= scale.x;
 	//p.y *= scale.y;
 	//p.z *= scale.z;
-	parentTransform.setPosition(p);
-	newTransform = parentTransform * newTransform;
-	m_physicComponent->SetWorldTransform(newTransform);
+	//parentTransform.setPosition(p);
+	//newTransform = parentTransform * newTransform;
+	//m_physicComponent->SetWorldTransform(newTransform);
 	m_physicComponent->Update();
 	m_physicComponent->SetTotalScale(scale.x, scale.y, scale.z);
 	const ZobMatrix4x4* parentMatrix = m_parent?m_parent->GetModelMatrix():&ZobMatrix4x4::IdentityMatrix;
@@ -799,23 +799,56 @@ void ZobObject::SetWorldRotation(float x, float y, float z)
 	m_physicComponent->SetLocalOrientation(q);
 }
 
-void ZobObject::SetWorldPosition(float x, float y, float z)
+void ZobObject::SetLocalRotation(float x, float y, float z)
 {
-	//m_physicComponent->SetPosition(x, y, z);
+	//m_physicComponent->SetOrientation(x, y, z);
+	float dy = DEG_TO_RAD(y);
+	float dz = DEG_TO_RAD(z);
+	float dx = DEG_TO_RAD(x);
+	Quaternion q;
+	ZobVector3 v = ZobMatrix4x4::EulerToQuaternion(dx, dy, dz);
+	q.x = v.x;
+	q.y = v.y;
+	q.z = v.z;
+	q.w = v.w;
 	Transform parentTransform = Transform::identity();
 	if (m_parent)
 	{
 		parentTransform = m_parent->GetPhysicComponent()->GetWorldTransform();
 	}
 	Vector3 position = Vector3(x, y, z);
-//	
+	Transform newTransform = GetPhysicComponent()->GetLocalTransform();
+	newTransform.setOrientation(q);
+	//newTransform = parentTransform.getInverse() * newTransform;
+	m_physicComponent->SetLocalTransform(newTransform);
+}
+
+void ZobObject::SetLocalPosition(float x, float y, float z)
+{
+	Vector3 position = Vector3(x, y, z);
+	Transform t = GetPhysicComponent()->GetLocalTransform();
+	t.setPosition(position);
+	m_physicComponent->SetLocalTransform(t);
+}
+
+void ZobObject::SetWorldPosition(float x, float y, float z)
+{
+	/*
+	Transform parentTransform = Transform::identity();
+	if (m_parent)
+	{
+		parentTransform = m_parent->GetPhysicComponent()->GetWorldTransform();
+	}
+	Vector3 position = Vector3(x, y, z);
 	Transform newTransform = GetPhysicComponent()->GetWorldTransform();
 	newTransform.setPosition(position);
 	newTransform = parentTransform.getInverse() * newTransform;
 	m_physicComponent->SetLocalTransform(newTransform);
-//
-//	position = position - t.getPosition();
-//	m_physicComponent->SetLocalPosition(position);
+	*/
+	Vector3 position = Vector3(x, y, z);
+	Transform newTransform = GetPhysicComponent()->GetWorldTransform();
+	newTransform.setPosition(position);
+	m_physicComponent->SetWorldTransform(newTransform);
 }
 
 inline ZobVector3 ZobObject::GetLocalRotation() const

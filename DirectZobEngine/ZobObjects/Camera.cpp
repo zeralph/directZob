@@ -232,9 +232,9 @@ void Camera::RotateAroundPointAxis(const ZobVector3* point, const ZobVector3* ax
 		t2.setPosition(p + localPos);
 		m_physicComponent->SetLocalTransform(t2);
 
-		Transform parentTransform = m_parent->GetPhysicComponent()->GetWorldTransform();
-		t2 = parentTransform * t2;
-		m_physicComponent->SetWorldTransform(t2);
+		//Transform parentTransform = m_parent->GetPhysicComponent()->GetWorldTransform();
+		//t2 = parentTransform * t2;
+		//m_physicComponent->SetWorldTransform(t2);
 
 		LookAt(point, false);
 	}

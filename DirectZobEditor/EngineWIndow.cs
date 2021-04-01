@@ -860,7 +860,7 @@ namespace DirectZobEditor
                         v.z = (int)v.z;
 
                     }
-                    z.SetWorldTransform(v);
+                    z.SetLocalTransform(v);
                     OnZobObjectMoved(z);
                 }
             }
@@ -889,7 +889,7 @@ namespace DirectZobEditor
             if (null != handler)
             {
                 ObjectModificationEventArg ev = new ObjectModificationEventArg();
-                ev.t = zobObject.GetWorldPosition();
+                ev.t = zobObject.GetLocalPosition();
                 handler(this, ev);
             }
         }

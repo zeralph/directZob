@@ -108,8 +108,8 @@ namespace DirectZobEditor
             {
                 zobId.Text = m_currentZobObjectWrapper.GetId().ToString();
                 zobName.Text = m_currentZobObjectWrapper.GetName();
-                CLI.ManagedVector3 p = m_currentZobObjectWrapper.GetWorldPosition();
-                CLI.ManagedVector3 r = m_currentZobObjectWrapper.GetWorldRotation();
+                CLI.ManagedVector3 p = m_currentZobObjectWrapper.GetLocalPosition();
+                CLI.ManagedVector3 r = m_currentZobObjectWrapper.GetLocalRotation();
                 zobPosX.Text = String.Format("{0:0.000}", p.x);
                 zobPosY.Text = String.Format("{0:0.000}", p.y);
                 zobPosZ.Text = String.Format("{0:0.000}", p.z);
@@ -143,8 +143,8 @@ namespace DirectZobEditor
         {
             if (m_currentZobObjectWrapper != null && m_currentZobObjectWrapper.IsValid())
             {
-                CLI.ManagedVector3 p = m_currentZobObjectWrapper.GetWorldPosition();
-                CLI.ManagedVector3 r = m_currentZobObjectWrapper.GetWorldRotation();
+                CLI.ManagedVector3 p = m_currentZobObjectWrapper.GetLocalPosition();
+                CLI.ManagedVector3 r = m_currentZobObjectWrapper.GetLocalRotation();
                 CLI.ManagedVector3 s = m_currentZobObjectWrapper.GetScale();
 
                 float px = p.x;
@@ -210,8 +210,8 @@ namespace DirectZobEditor
                     s.z = f;
                 }
 
-                m_currentZobObjectWrapper.SetWorldTransform(p);
-                m_currentZobObjectWrapper.SetWorldRotation(r);
+                m_currentZobObjectWrapper.SetLocalTransform(p);
+                m_currentZobObjectWrapper.SetLocalRotation(r);
                 m_currentZobObjectWrapper.SetScale(s);
                 //SetValues();
             }

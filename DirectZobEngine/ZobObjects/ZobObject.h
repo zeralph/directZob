@@ -34,6 +34,8 @@ public:
 	void 							SetScale(float x, float y, float z);
 	void							SetWorldRotation(float x, float y, float z);
 	void							SetWorldPosition(float x, float y, float z);
+	void							SetLocalRotation(float x, float y, float z);
+	void							SetLocalPosition(float x, float y, float z);
 	void							LookAt(const ZobVector3* target, bool addToCurrentRotation);
 	void							LookAt(const ZobVector3* forward, const ZobVector3* left, const ZobVector3* up, bool addToCurrentRotation);
 	ZobVector3						GetLocalRotation() const;
