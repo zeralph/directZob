@@ -278,12 +278,13 @@ void Camera::Move(float dx, float dz, float dy, bool moveTargetVector)
 void Camera::Update(float dt)
 {
 	ZobObject::Update(dt);
-	m_zobCameraController->Update(dt);
+	//m_zobCameraController->Update(dt);
 	UpdateViewProjectionMatrix();
 	if (!DirectZob::GetInstance()->GetEngine()->LockFrustrum())
 	{
 		RecomputeFrustrumPlanes();
-	}	
+	}
+	m_zobCameraController->Update(dt);	
 }
 
 void Camera::PreUpdate()

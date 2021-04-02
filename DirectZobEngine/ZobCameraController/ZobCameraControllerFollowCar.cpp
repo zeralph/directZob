@@ -48,10 +48,12 @@ void ZobCameraControllerFollowCar::Update(float dt)
     Transform newT = m_startTransform;
     newT = parentT * newT;
     parentT = m_zobCamera->m_parent->GetPhysicComponent()->GetWorldTransform();
-    newT = parentT.getInverse() * newT;
-    m_zobCamera->GetPhysicComponentNoConst()->SetLocalTransform(newT);
+    //newT = parentT.getInverse() * newT;
+    //m_zobCamera->GetPhysicComponentNoConst()->SetLocalTransform(newT);
+    m_zobCamera->GetPhysicComponentNoConst()->SetWorldTransform(newT);
     m_deltaY = dt;
     float d = clamp((float)(dt * 10.0f), 0.0f, 1.0f);// 0.1f;
+    //d = 1.0f;
     q = Quaternion::slerp(m_lastOrientation, q, d);
     m_lastOrientation = q;
 }
