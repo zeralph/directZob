@@ -43,6 +43,8 @@ namespace CLI
 
 	ZobObjectWrapper^ ZobObjectManagerWrapper::GetObjectAtCoords(int x, int y, eObjectTypes type)
 	{
+		return nullptr;
+		/*
 		uint id = DirectZob::GetInstance()->GetEngine()->GetObjectIdAtCoords(x, y);
 		ZobObject* z = m_Instance->GetZobObjectFromPartialId(id);
 		ZOBGUID::ZobType t;
@@ -68,6 +70,7 @@ namespace CLI
 			return gcnew ZobObjectWrapper(z);
 		}
 		return nullptr;
+		*/
 	}
 
 	void ZobObjectManagerWrapper::RemoveZobObject(ZobObjectWrapper^ z)

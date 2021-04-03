@@ -94,8 +94,19 @@ TiXmlNode* ZobBehavior::SaveUnderNode(TiXmlNode* node)
 				{
 					break;
 				}
+				case eWrapperType_zobObject:
+				{
+					ZobObject* z = (ZobObject*)(w->ptr);
+					if (z)
+					{
+						s = z->ZobGuidToString();
+						o.SetAttribute(XML_ATTR_VALUE, s.c_str());
+					}
+					break;
+				}
 				default:
 				{
+					assert(false);
 					break;
 				}
 			}
@@ -161,7 +172,118 @@ void ZobBehavior::WrapEnum(const char* name, void* ptr, int nbParams, int* value
 	m_wrappedVariables.push_back(w);
 }
 
-void ZobBehavior::LoadVariables(TiXmlElement* node)
+
+void ZobBehavior::wrapperData::Load()
+{
+	if (type == eWrapperType_string)
+	{
+		std::string* s = (std::string*)ptr;
+		s->resize(0);
+		s->append(strValue);
+	}
+	else if (type == eWrapperType_float)
+	{
+		float* f = (float*)ptr;
+		*f = atof(strValue.c_str());
+	}
+	else if (type == eWrapperType_int)
+	{
+		int* i = (int*)ptr;
+		*i = atoi(strValue.c_str());
+	}
+	else if (type == eWrapperType_bool)
+	{
+		bool* b = (bool*)ptr;
+		*b = (strcmp(strValue.c_str(), "True") == 0) ? true : false;
+	}
+	else if (type == eWrapperType_enum)
+	{
+		for (int k = 0; k < enumNames.size(); k++)
+		{
+			if (strcmp(enumNames[k].c_str(), strValue.c_str()) == 0)
+			{
+				int ival = enumValues[k];
+				int* i = (int*)ptr;
+				*i = ival;
+				break;
+			}
+		}
+	}
+	else if (type == eWrapperType_string)
+	{
+		std::string* s = (std::string*)(ptr);
+		s->resize(0);
+		s->assign(strValue);
+	}
+	else if (type == eWrapperType_ZobVector2)
+	{
+		ZobVector2* v = (ZobVector2*)(ptr);
+		ZobVector2 p;
+		std::string s = std::string(strValue);
+		if (p.FromString(s))
+		{
+			v->x = p.x;
+			v->y = p.y;
+		}
+	}
+	else if (type == eWrapperType_ZobVector3)
+	{
+		ZobVector3* v = (ZobVector3*)(ptr);
+		ZobVector3 p;
+		std::string s = std::string(strValue);
+		if (p.FromString(s))
+		{
+			v->x = p.x;
+			v->y = p.y;
+			v->z = p.z;
+		}
+	}
+	else if (type == eWrapperType_path)
+	{
+		std::string s = std::string(strValue);
+		std::size_t del1, del2 = 0;
+		del1 = s.find(';');
+		if (del1 != std::string::npos)
+		{
+			del2 = s.find(';', del1 + 1);
+			if (del1 != std::string::npos)
+			{
+				std::string name = s.substr(0, del1);
+				std::string path = s.substr(del1 + 1, del2 - (del1 + 1));
+				std::string file = s.substr(del2 + 1, s.size() - 1);
+				std::string* sName = (std::string*)(ptr);
+				sName->resize(0);
+				sName->assign(name);
+				std::string* sPath = (std::string*)(ptr_1);
+				sPath->resize(0);
+				sPath->assign(path);
+				std::string* sFile = (std::string*)(ptr_2);
+				sFile->resize(0);
+				sFile->assign(file);
+			}
+		}
+	}
+	else if (type == eWrapperType_zobObject)
+	{
+		std::string s = std::string(strValue);
+		ZobObject* z = DirectZob::GetInstance()->GetZobObjectManager()->GetZobObjectFromlId(s);
+		if (z)
+		{
+			uintptr_t addr = reinterpret_cast<uintptr_t>(&*z);
+			ZobObject** zPtr = (ZobObject**)ptr;
+			*zPtr = (ZobObject*)addr;
+		}
+	}
+	else if (type == eWrapperType_zobId)
+	{
+
+	}
+	else
+	{
+		assert(false);
+	}
+}
+void ZobBehavior::ReadNode(TiXmlElement* node)
 {
 	const char* guid = node->Attribute(XML_ATTR_GUID);
 	if (guid)
@@ -175,107 +297,26 @@ void ZobBehavior::LoadVariables(TiXmlElement* node)
 		const char* val = e->Attribute(XML_ATTR_VALUE);
 		if (name && val)
 		{
-			for (std::vector<wrapperData>::const_iterator iter = m_wrappedVariables.begin(); iter != m_wrappedVariables.end(); iter++)
+			for (std::vector<wrapperData>::iterator iter = m_wrappedVariables.begin(); iter != m_wrappedVariables.end(); iter++)
 			{
-				const wrapperData* w = &(*iter);
+				wrapperData* w = &(*iter);
 				const char* varName = w->name.c_str();
 				if (strcmp(name, varName) == 0)
 				{
-					if (w->type == eWrapperType_string)
-					{
-						std::string* s = (std::string*)w->ptr;
-						s->resize(0);
-						s->append(val);
-						break;
-					}
-					else if (w->type == eWrapperType_float)
-					{
-						float* f = (float*)w->ptr;
-						*f = atof(val);
-						break;
-					}
-					else if (w->type == eWrapperType_int)
-					{
-						int* i = (int*)w->ptr;
-						*i = atoi(val);
-						break;
-					}
-					else if (w->type == eWrapperType_bool)
-					{
-						bool* b = (bool*)w->ptr;
-						*b = (strcmp(val, XML_VALUE_TRUE) == 0) ? true : false;
-						break;
-					}
-					else if (w->type == eWrapperType_enum)
-					{
-						for (int k = 0; k < w->enumNames.size(); k++)
-						{
-							if (strcmp(w->enumNames[k].c_str(), val) == 0)
-							{
-								int ival = w->enumValues[k];
-								int* i = (int*)w->ptr;
-								*i = ival;
-								break;
-							}
-						}
-						break;
-					}
-					else if (w->type == eWrapperType_string)
-					{
-						std::string* s = (std::string*)(w->ptr);
-						s->resize(0);
-						s->assign(val);
-					}
-					else if (w->type == eWrapperType_ZobVector2)
-					{
-						ZobVector2* v = (ZobVector2*)(w->ptr);
-						ZobVector2 p;
-						std::string s = std::string(val);
-						if (p.FromString(s))
-						{
-							v->x = p.x;
-							v->y = p.y;
-						}
-					}
-					else if (w->type == eWrapperType_ZobVector3)
-					{
-						ZobVector3* v = (ZobVector3*)(w->ptr);
-						ZobVector3 p;
-						std::string s = std::string(val);
-						if (p.FromString(s))
-						{
-							v->x = p.x;
-							v->y = p.y;
-							v->z = p.z;
-						}
-					}
-					else if (w->type == eWrapperType_path)
-					{
-						std::string s = std::string(val);
-						std::size_t del1, del2 = 0;
-						del1 = s.find(';');
-						if (del1 != std::string::npos)
-						{
-							del2 = s.find(';', del1 + 1);
-							if (del1 != std::string::npos)
-							{
-								std::string name = s.substr(0, del1);
-								std::string path = s.substr(del1 + 1, del2 -(del1+1));
-								std::string file = s.substr(del2 + 1, s.size() - 1);
-								std::string* sName = (std::string*)(w->ptr);
-								sName->resize(0);
-								sName->assign(name);
-								std::string* sPath = (std::string*)(w->ptr_1);
-								sPath->resize(0);
-								sPath->assign(path);
-								std::string* sFile = (std::string*)(w->ptr_2);
-								sFile->resize(0);
-								sFile->assign(file);
-							}
-						}
-					}
+					w->strValue.resize(0);
+					w->strValue.append(val);
+					w->Load();
 				}
 			}
 		}
+	}
+}
+
+void ZobBehavior::ReLoadVariables()
+{
+	for (std::vector<wrapperData>::iterator iter = m_wrappedVariables.begin(); iter != m_wrappedVariables.end(); iter++)
+	{
+		wrapperData* w = &(*iter);
+		w->Load();
 	}
 }

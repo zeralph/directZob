@@ -10,18 +10,22 @@
         <FogType>exp2</FogType>
     </Globals>
     <ZobObject Name="car" Guid="2002682056">
-        <Position X="0" Y="1.96545" Z="7.30097" />
-        <Rotation X="1.03439" Y="0.00164426" Z="2.00954" />
+        <Position X="0" Y="0.558" Z="5.924" />
+        <Rotation X="0" Y="0" Z="0" />
         <Scale X="1" Y="1" Z="1" />
         <Behaviors>
             <Behavior Type="PhysicBox" Guid="2007568421">
                 <Var Name="Layers" value="4" />
                 <Var Name="Trigger" value="True" />
-                <Var Name="Local position" value="0.000000;0.000000;0.000000" />
+                <Var Name="Local position" value="0.000000;2.000000;0.000000" />
                 <Var Name="Scale with object" value="True" />
-                <Var Name="Height" value="1.000000;1.000000;1.000000" />
+                <Var Name="Height" value="1.000000;0.500000;2.000000" />
             </Behavior>
             <Behavior Type="Car" Guid="2007160091">
+                <Var Name="Front left wheel" value="2002873694" />
+                <Var Name="Front right wheel" value="2002816606" />
+                <Var Name="Rear left wheel" value="2002531928" />
+                <Var Name="Rear right wheel" value="1009670489" />
                 <Var Name="HandBrake" value="True" />
                 <Var Name="Mass" value="1500.000000" />
                 <Var Name="Max friction" value="10.000000" />
@@ -33,8 +37,8 @@
             </Behavior>
         </Behaviors>
         <ZobObject Name="carMesh" Guid="2002443983" Type="Mesh">
-            <Position X="0.00121151" Y="0.0345236" Z="-0.000593007" />
-            <Rotation X="180" Y="-1.00179e-05" Z="-177.99" />
+            <Position X="0" Y="-0.558" Z="0.197506" />
+            <Rotation X="-180" Y="-5.00896e-06" Z="-180" />
             <Scale X="1" Y="1" Z="1" />
             <Mesh Name="_cars/GLX-400-OBJ/" File="GLX_400.obj" Path="_cars/GLX-400-OBJ/">
                 <RenderOptions>
@@ -103,8 +107,8 @@
             </ZobObject>
         </ZobObject>
         <ZobObject Name="rearCamera" Guid="2003245163" Type="Camera">
-            <Position X="-2.32501e-05" Y="1.92052" Z="-4.78713" />
-            <Rotation X="15.0562" Y="7.59194e-05" Z="-2.91051e-05" />
+            <Position X="-2.3265e-05" Y="1.92052" Z="-4.78713" />
+            <Rotation X="15.0562" Y="7.5895e-05" Z="-2.84629e-05" />
             <Scale X="1" Y="1" Z="1" />
             <Behaviors />
             <Controller Name="FollowCar" Guid="2008245163" />
@@ -135,8 +139,8 @@
             <Fov>45.00</Fov>
         </ZobObject>
         <ZobObject Name="orbitalCamera" Guid="2003170641" Type="Camera">
-            <Position X="-3.44465" Y="-1.20619" Z="-10.0234" />
-            <Rotation X="-6.16306" Y="18.7376" Z="-2.40039e-05" />
+            <Position X="-3.44538" Y="-1.20619" Z="-10.0234" />
+            <Rotation X="-6.49238" Y="18.9696" Z="0.000253011" />
             <Scale X="1" Y="1" Z="1" />
             <Behaviors />
             <Controller Name="Orbital" Guid="2008170641" />

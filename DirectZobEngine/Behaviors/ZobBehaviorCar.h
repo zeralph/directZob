@@ -6,6 +6,7 @@
 #undef max
 #include <reactphysics3d/reactphysics3d.h>
 
+class Zobobject;
 class ZobBehaviorCar : public ZobBehavior
 {
 
@@ -37,10 +38,13 @@ class ZobBehaviorCar : public ZobBehavior
 		void CheckGroundCollisions();
 		void CheckEnvironmentCollision();
 		void UpdateInputs(float dt);
-
+		void UpdateWheels();
+		ZobObject* m_frontLeftWheel;
+		ZobObject* m_frontRightWheel;
+		ZobObject* m_rearLeftWheel;
+		ZobObject* m_rearRightWheel;
 		ZobVector3 m_lastGroundPosition;
 		ZobVector3 m_lastGroundNormal;
-
 		ZobVector3 m_lastCollPosition;
 		ZobVector3 m_lastCollLocalContact;
 		ZobVector3 m_lastCollDirection;
@@ -67,5 +71,7 @@ class ZobBehaviorCar : public ZobBehavior
 		float m_ca_f;			/* cornering stiffness */
 
 		eCarType m_carType;
+
+		float m_wheelRotationAngle;
 
 };

@@ -292,7 +292,7 @@ void ZobObject::Init()
 {
 	for (int i = 0; i < m_behaviors.size(); i++)
 	{
-		//m_behaviors[i]->Init();
+		m_behaviors[i]->Init();
 	}
 	for (int i = 0; i < m_children.size(); i++)
 	{

@@ -86,6 +86,7 @@ bool ZobBehaviorPhysicMesh::LoadMeshInternal()
 
 void ZobBehaviorPhysicMesh::Init()
 {
+	ReLoadVariables();
 	if (m_mesh == NULL && m_convexMeshName.size() && m_convexMeshPath.size() && m_convexMeshFile.size())
 	{
 		if (!LoadMeshInternal())

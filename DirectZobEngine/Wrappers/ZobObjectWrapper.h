@@ -99,6 +99,7 @@ namespace CLI {
 		void					AddZobVector3Variable(TableLayoutPanel^ panel, ZobBehavior::wrapperData* w);
 		void					AddStringVariable(TableLayoutPanel^ panel, ZobBehavior::wrapperData* w);
 		void					AddPathVariable(TableLayoutPanel^ panel, ZobBehavior::wrapperData* w);
+		void					AddZobObjectVariable(TableLayoutPanel^ panel, ZobBehavior::wrapperData* w);
 
 		const ZobBehavior::wrapperData* GetWrapperDataForVariable(String^ variableName);
  		unsigned long long m_id;

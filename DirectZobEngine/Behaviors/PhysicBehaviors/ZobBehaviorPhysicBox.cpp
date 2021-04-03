@@ -17,6 +17,7 @@ ZobBehaviorPhysicBox::ZobBehaviorPhysicBox(ZobObject* zobObject) : ZobBehaviorPh
 
 void ZobBehaviorPhysicBox::Init()
 {
+	ReLoadVariables();
 	PhysicsCommon* pc = DirectZob::GetInstance()->GetPhysicsEngine()->GetPhysicsCommon();
 	Vector3 h = Vector3(m_halfExtends.x, m_halfExtends.y, m_halfExtends.z);
 	m_boxShape = pc->createBoxShape(h);

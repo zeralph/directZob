@@ -18,6 +18,7 @@ ZobBehaviorPhysicSphere::ZobBehaviorPhysicSphere(ZobObject* zobObject) : ZobBeha
 
 void ZobBehaviorPhysicSphere::Init()
 {	
+	ReLoadVariables();
 	PhysicsCommon* pc = DirectZob::GetInstance()->GetPhysicsEngine()->GetPhysicsCommon();
 	m_sphereShape = pc->createSphereShape(m_radius);
 	AddColliderInternal(m_sphereShape);

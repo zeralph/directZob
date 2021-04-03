@@ -25,18 +25,23 @@ ZobBehaviorCar::ZobBehaviorCar(ZobObject* zobObject) : ZobBehavior(zobObject)
 	m_type = eBehavior_car;
 	m_lastGroundPosition = ZobVector3(0, 0, 0);
 	m_lastGroundNormal = ZobVector3(0, 1, 0);
-
+	m_frontLeftWheel = NULL;
+	m_frontRightWheel = NULL;
+	m_rearLeftWheel = NULL;
+	m_rearRightWheel = NULL;
 	m_lastCollLocalContact = ZobVector3(0, 0, 0);
 	m_lastCollPosition = ZobVector3(0, 0, 0);
 	m_lastCollDirection= ZobVector3(0, 0, 0);
 	m_lastCollRebound  = ZobVector3(0, 0, 0);
 	m_lastCollNormal   = ZobVector3(0, 0, 0);
+	m_wheelRotationAngle = 0;
 	Init();
 
-	int p[] = { eCarType_prout , eCarType_pouet, eCarType_truc};
-	const char* s[] = { "prout", "pouet", "truc" };
-	WrapEnum("carType", &m_carType, 3, p, s, false, true);
 
+	WrapVariable(eWrapperType_zobObject, "Front left wheel", &m_frontLeftWheel, false, true);
+	WrapVariable(eWrapperType_zobObject, "Front right wheel", &m_frontRightWheel, false, true);
+	WrapVariable(eWrapperType_zobObject, "Rear left wheel", &m_rearLeftWheel, false, true);
+	WrapVariable(eWrapperType_zobObject, "Rear right wheel", &m_rearRightWheel, false, true);
 	WrapVariable(eWrapperType_bool, "HandBrake", &m_handBrake, false, true);
 	WrapVariable(eWrapperType_float, "Mass", &m_mass, false, true);
 	WrapVariable(eWrapperType_float, "Max friction", &m_maxGrip, false, true);
@@ -75,6 +80,7 @@ void ZobBehaviorCar::PreUpdate()
 
 void ZobBehaviorCar::Init()
 {
+	ReLoadVariables();
 }
 
 void ZobBehaviorCar::CheckEnvironmentCollision()
@@ -130,6 +136,25 @@ reactphysics3d::decimal ZobBehaviorCar::GroundRaycastClass::notifyRaycastHit(con
 		behavior->m_lastGroundNormal.z = behavior->m_lastGroundNormal.z * r + (1.0f - r) * info.worldNormal.z;
 	}
 	return reactphysics3d::decimal(1.0);
+}
+
+void ZobBehaviorCar::UpdateWheels()
+{
+	if (m_rearLeftWheel)
+	{
+		Quaternion q = Quaternion::identity();
+		float f = DEG_TO_RAD(m_wheelRotationAngle) * m_speed_ms;
+		float g = m_steerangle;
+		Vector3 v = Vector3(-f, 0, 0);
+		q = q.fromEulerAngles(v);
+		m_rearLeftWheel->m_physicComponent->SetLocalOrientation(q);
+		m_rearRightWheel->m_physicComponent->SetLocalOrientation(q);
+		v = Vector3(-f, -g, 0);
+		q = q.fromEulerAngles(v);
+		m_frontLeftWheel->m_physicComponent->SetLocalOrientation(q);
+		m_frontRightWheel->m_physicComponent->SetLocalOrientation(q);
+		m_wheelRotationAngle++;
+	}
 }
 
 void ZobBehaviorCar::CheckGroundCollisions()
@@ -387,20 +412,18 @@ void ZobBehaviorCar::Update(float dt)
 		//
 		m_angle += dt * m_angularvelocity;
 		m_zobObject->SetWorldPosition(worldPos.x, m_lastGroundPosition.y + m_heightAboveGround, worldPos.z);
-		//if (dp.length2() != 0)
-		{
-			sn = sin(m_angle);
-			cs = cos(m_angle);
-			ZobVector3 up = ZobVector3::Vector3Y;
-			up = m_lastGroundNormal;// ZobVector3::Vector3Y;
-			up.Normalize();
-			ZobVector3 forward = ZobVector3(cs, 0, sn);
-			forward.Normalize();
-			ZobVector3 left = ZobVector3::Cross(&up, &forward);
-			left.Normalize();
-			forward = ZobVector3::Cross(&left, &up);
-			m_zobObject->LookAt(&forward, &left, &up, false);
-		}
+		sn = sin(m_angle);
+		cs = cos(m_angle);
+		ZobVector3 up = ZobVector3::Vector3Y;
+		up = m_lastGroundNormal;// ZobVector3::Vector3Y;
+		up.Normalize();
+		ZobVector3 forward = ZobVector3(cs, 0, sn);
+		forward.Normalize();
+		ZobVector3 left = ZobVector3::Cross(&up, &forward);
+		left.Normalize();
+		forward = ZobVector3::Cross(&left, &up);
+		m_zobObject->LookAt(&forward, &left, &up, false);
+		UpdateWheels();
 	}
 	ZobHUDManager* h = DirectZob::GetInstance()->GetHudManager();
 	ZobVector3 c = ZobVector3(1.0f, 0.0f, 0.0f);

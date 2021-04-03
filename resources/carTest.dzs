@@ -10,8 +10,8 @@
         <FogType>exp2</FogType>
     </Globals>
     <ZobObject Name="car" Guid="2002682056">
-        <Position X="0" Y="0.558" Z="5.924" />
-        <Rotation X="0" Y="0" Z="0" />
+        <Position X="0" Y="0.558044" Z="5.924" />
+        <Rotation X="1.08722" Y="-0.00604022" Z="2.11099" />
         <Scale X="1" Y="1" Z="1" />
         <Behaviors>
             <Behavior Type="PhysicBox" Guid="2007568421">
@@ -22,11 +22,15 @@
                 <Var Name="Height" value="1.000000;0.500000;2.000000" />
             </Behavior>
             <Behavior Type="Car" Guid="2007160091">
+                <Var Name="Front left wheel" value="2002873694" />
+                <Var Name="Front right wheel" value="2002816606" />
+                <Var Name="Rear left wheel" value="2002531928" />
+                <Var Name="Rear right wheel" value="1009670489" />
                 <Var Name="HandBrake" value="True" />
                 <Var Name="Mass" value="1500.000000" />
                 <Var Name="Max friction" value="10.000000" />
                 <Var Name="Inertia" value="1500.000000" />
-                <Var Name="Air resistance" value="5.000000" />
+                <Var Name="Air resistance" value="6.000000" />
                 <Var Name="Rolling resistance" value="30.000000" />
                 <Var Name="Front cornering stiffness" value="-5.000000" />
                 <Var Name="Rear cornering stiffness" value="-5.200000" />
@@ -103,8 +107,8 @@
             </ZobObject>
         </ZobObject>
         <ZobObject Name="rearCamera" Guid="2003245163" Type="Camera">
-            <Position X="-2.3265e-05" Y="1.92052" Z="-4.78713" />
-            <Rotation X="15.0562" Y="7.5895e-05" Z="-2.84629e-05" />
+            <Position X="-2.32625e-05" Y="1.92052" Z="-4.78713" />
+            <Rotation X="15.0562" Y="7.59061e-05" Z="-2.8445e-05" />
             <Scale X="1" Y="1" Z="1" />
             <Behaviors />
             <Controller Name="FollowCar" Guid="2008245163" />
@@ -135,8 +139,8 @@
             <Fov>45.00</Fov>
         </ZobObject>
         <ZobObject Name="orbitalCamera" Guid="2003170641" Type="Camera">
-            <Position X="-3.44538" Y="-1.20619" Z="-10.0234" />
-            <Rotation X="-6.49249" Y="18.9695" Z="-0.000224572" />
+            <Position X="-3.44494" Y="-1.20623" Z="-10.0233" />
+            <Rotation X="-6.14564" Y="18.7213" Z="-4.24818e-05" />
             <Scale X="1" Y="1" Z="1" />
             <Behaviors />
             <Controller Name="Orbital" Guid="2008170641" />

@@ -26,6 +26,7 @@ public:
 		eWrapperType_bool,
 		eWrapperType_zobId,
 		eWrapperType_path,
+		eWrapperType_zobObject,
 		__eWrapperType_MAX__
 	};
 
@@ -41,8 +42,11 @@ public:
 		__eBehavior_MAX__,
 	};
 
-	struct wrapperData
+	class wrapperData
 	{
+	public:
+		wrapperData(){}
+		~wrapperData(){}
 		eWrapperType type;
 		bool bReadOnly;
 		bool bSave;
@@ -52,9 +56,11 @@ public:
 		void* ptr_3;
 		std::string name;
 		std::string internalName;
+		std::string strValue;
 		//for enums
 		std::vector<int> enumValues;
 		std::vector<std::string> enumNames;
+		void Load();
 	};
 
 	virtual ~ZobBehavior() {};
@@ -68,7 +74,8 @@ public:
 	TiXmlNode*							SaveUnderNode(TiXmlNode* node);
 	eBehaviorType						GetBehaviorType() const { return m_type; }
 	const std::vector<wrapperData>*		GetWrappedVariables() const { return &m_wrappedVariables; }
-	void								LoadVariables(TiXmlElement* node);
+	void								ReadNode(TiXmlElement* node);
+	void								ReLoadVariables();
 
 protected:
 	ZobBehavior(ZobObject* zobObject);

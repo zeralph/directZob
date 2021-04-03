@@ -106,6 +106,10 @@ namespace CLI
 					{
 						AddZobIdVariable(panel, &w);
 					}
+					else if (w.type == ZobBehavior::eWrapperType_zobObject)
+					{
+						AddZobObjectVariable(panel, &w);
+					}
 					else if (w.type == ZobBehavior::eWrapperType_path)
 					{
 						AddPathVariable(panel, &w);
@@ -400,6 +404,40 @@ namespace CLI
 		//txt->MaximumSize = Drawing::Size(100, 20);
 		unsigned long long* i = (unsigned long long*)(w->ptr);
 		txt->Text = (*i).ToString();
+		subPanel->Controls->Add(label);
+		subPanel->Controls->Add(txt);
+		panel->Controls->Add(subPanel);
+	}
+
+	void ZobObjectWrapper::AddZobObjectVariable(TableLayoutPanel^ panel, ZobBehavior::wrapperData* w)
+	{
+		TableLayoutPanel^ subPanel = gcnew TableLayoutPanel();
+		subPanel->Width = 300;
+		subPanel->Height = 23;
+		subPanel->ColumnCount = 2;
+		subPanel->RowCount = 1;
+		Label^ label = gcnew Label();
+		label->Text = TO_MANAGED_STRING(w->name.c_str());
+		//label->Dock = DockStyle::Fill;
+		label->Width = 140;
+		label->Height = 20;
+		label->TextAlign = ContentAlignment::BottomRight;
+		TextBox^ txt = gcnew TextBox();
+		txt->Name = TO_MANAGED_STRING(w->internalName.c_str());
+		txt->Width = 140;
+		txt->Height = 20;
+		txt->ReadOnly = w->bReadOnly;
+		//txt->MaximumSize = Drawing::Size(100, 20);
+		ZobObject** pz = (ZobObject**)(w->ptr);
+		ZobObject* z = (ZobObject*)(*pz);
+		if (z)
+		{
+			txt->Text = TO_MANAGED_STRING(z->GetName().c_str());
+		}
+		else
+		{
+			txt->Text = "";
+		}
 		subPanel->Controls->Add(label);
 		subPanel->Controls->Add(txt);
 		panel->Controls->Add(subPanel);

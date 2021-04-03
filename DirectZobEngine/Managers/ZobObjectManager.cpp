@@ -66,13 +66,20 @@ void ZobObjectManager::RemoveZobObject(ZobObject* z)
 	//delete z;
 }
 
-ZobObject* ZobObjectManager::GetZobObjectFromPartialId(const uint id) const
+ZobObject* ZobObjectManager::GetZobObjectFromlId(const std::string& id) const
 {
-	ZobObject* ret = GetZobObjectFromPartialId(m_rootObject, id);
+	ZOBGUID guid = ZOBGUID(id);
+	ZobObject* ret = GetZobObjectFromId(m_rootObject, guid.GetIdValue());
 	return ret;
 }
 
-ZobObject* ZobObjectManager::GetZobObjectFromPartialId(ZobObject* z, const uint id) const
+ZobObject* ZobObjectManager::GetZobObjectFromlId(const unsigned long long id) const
+{
+	ZobObject* ret = GetZobObjectFromId(m_rootObject, id);
+	return ret;
+}
+
+ZobObject* ZobObjectManager::GetZobObjectFromId(ZobObject* z, const unsigned long long id) const
 {
 	if (z->GetIdValue() == id)
 	{
@@ -82,7 +89,7 @@ ZobObject* ZobObjectManager::GetZobObjectFromPartialId(ZobObject* z, const uint 
 	{
 		for (int i = 0; i < z->GetNbChildren(); i++)
 		{
-			ZobObject* o = GetZobObjectFromPartialId(z->GetChild(i), id);
+			ZobObject* o = GetZobObjectFromId(z->GetChild(i), id);
 			if(o)
 			{
 				return o;

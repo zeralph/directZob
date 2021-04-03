@@ -73,10 +73,6 @@ ZobBehavior* ZobBehaviorFactory::CreateBehavior(ZobObject* zobObject, const char
 	if (zobObject)
 	{
 		ZobBehavior* zb = CreateBehaviorInternal(zobObject, behaviorName);
-		if (zb)
-		{
-			zb->Init();
-		}
 	}
 	return zb;
 }
@@ -90,8 +86,7 @@ ZobBehavior* ZobBehaviorFactory::CreateBehavior(ZobObject* zobObject, TiXmlEleme
 		ZobBehavior* zb = CreateBehaviorInternal(zobObject, behaviorTypeStr);
 		if (zb)
 		{
-			zb->LoadVariables(node);
-			zb->Init();
+			zb->ReadNode(node);
 		}
 	}
 	return zb;

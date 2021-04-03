@@ -23,7 +23,8 @@ public:
 	void PreUpdate();
 	void EditorUpdate();
 	void UpdateBehavior(float dt);
-	ZobObject* GetZobObjectFromPartialId(const uint id) const;
+	ZobObject* GetZobObjectFromlId(const unsigned long long id) const;
+	ZobObject* GetZobObjectFromlId(const std::string& id) const;
 	void AddZobObject(ZobObject* z);
 	ZobObject* GetRootObject() const;
 	ZobObject* GetZobObject(const std::string& name) const;
@@ -44,8 +45,7 @@ public:
 private:
 	void GetZobObjectListInternal(const ZobObject* z, std::string& str);
 	void GetZobObjectListInternal(const ZobObject* z, std::vector<const ZobObject*>& v);
-	ZobObject* LoadEditorMesh(const char* name, const char* meshPath, const char* meshFile, ZobObject* parent);
-	ZobObject* GetZobObjectFromPartialId(ZobObject* z, const uint id) const;
+	ZobObject* GetZobObjectFromId(ZobObject* z, const unsigned long long id) const;
 	ZobObject* m_rootObject = nullptr;
 	clock_t	m_drawTick;
 	float m_time;
