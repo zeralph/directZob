@@ -71,6 +71,7 @@ ZobBehaviorCar::ZobBehaviorCar(ZobObject* zobObject) : ZobBehavior(zobObject)
 	m_handBrake = false;
 	m_velocityWorld = ZobVector3(0, 0, 0);
 	m_hadCollision = false;
+	m_goingRear = false;
 }
 
 void ZobBehaviorCar::PreUpdate()
@@ -138,12 +139,19 @@ reactphysics3d::decimal ZobBehaviorCar::GroundRaycastClass::notifyRaycastHit(con
 	return reactphysics3d::decimal(1.0);
 }
 
-void ZobBehaviorCar::UpdateWheels()
+void ZobBehaviorCar::UpdateWheels(float dt)
 {
 	if (m_rearLeftWheel)
 	{
 		Quaternion q = Quaternion::identity();
-		float f = DEG_TO_RAD(m_wheelRotationAngle) * m_speed_ms;
+		float wheelRadius = 0.3f;
+		float f = dt * m_speed_ms / (2.0f * M_PI * wheelRadius);
+		m_wheelRotationAngle += f * 360.0f;
+		f = DEG_TO_RAD(m_wheelRotationAngle);
+		if (m_goingRear)
+		{
+			f = -f;
+		}
 		float g = m_steerangle;
 		Vector3 v = Vector3(-f, 0, 0);
 		q = q.fromEulerAngles(v);
@@ -153,7 +161,6 @@ void ZobBehaviorCar::UpdateWheels()
 		q = q.fromEulerAngles(v);
 		m_frontLeftWheel->m_physicComponent->SetLocalOrientation(q);
 		m_frontRightWheel->m_physicComponent->SetLocalOrientation(q);
-		m_wheelRotationAngle++;
 	}
 }
 
@@ -261,6 +268,7 @@ void ZobBehaviorCar::Update(float dt)
 		ftraction.z = 150 * (m_throttle - (m_brake + motorBreak));// *SGN(velocity.z));
 		ftraction.x = 0;
 		ftraction.y = 0;
+		
 		if (m_handBrake)
 			ftraction.z *= 0.5;
 
@@ -355,7 +363,6 @@ void ZobBehaviorCar::Update(float dt)
 			m_accelerationWorld.x = 0;
 			m_accelerationWorld.y = 0;
 			m_accelerationWorld.z = 0;
-
 			float f = SGN(m_lastCollLocalContact.x) * 10.5f;// (m_speed_ms * 0.7f + 1.0f);
 			velocity.x = f;
 			velocity.z *= 0.7f;
@@ -394,13 +401,9 @@ void ZobBehaviorCar::Update(float dt)
 		}	
 		// position is integrated velocity
 		//
-		ZobVector3 dp = worldPos;
 		worldPos.x += dt * m_velocityWorld.x;
 		worldPos.z += dt * m_velocityWorld.z;
-
-		dp.x = worldPos.x - dp.x;
-		dp.y = 0;// worldPos.x - dp.y;
-		dp.z = worldPos.z - dp.z;
+		m_goingRear = velocity.z < 0;
 
 		// Angular velocity and heading
 
@@ -423,7 +426,7 @@ void ZobBehaviorCar::Update(float dt)
 		left.Normalize();
 		forward = ZobVector3::Cross(&left, &up);
 		m_zobObject->LookAt(&forward, &left, &up, false);
-		UpdateWheels();
+		UpdateWheels(dt);
 	}
 	ZobHUDManager* h = DirectZob::GetInstance()->GetHudManager();
 	ZobVector3 c = ZobVector3(1.0f, 0.0f, 0.0f);

@@ -38,7 +38,7 @@ class ZobBehaviorCar : public ZobBehavior
 		void CheckGroundCollisions();
 		void CheckEnvironmentCollision();
 		void UpdateInputs(float dt);
-		void UpdateWheels();
+		void UpdateWheels(float dt);
 		ZobObject* m_frontLeftWheel;
 		ZobObject* m_frontRightWheel;
 		ZobObject* m_rearLeftWheel;
@@ -62,7 +62,7 @@ class ZobBehaviorCar : public ZobBehavior
 		ZobVector3 m_accelerationWorld;
 		float m_speed_ms;
 		bool m_handBrake;
-
+		bool m_goingRear;
 		float m_mass;
 		float m_maxGrip;	/* maximum (normalised) friction force, =diameter of friction circle */
 		float m_drag;		 		/* factor for air resistance (drag) 	*/
