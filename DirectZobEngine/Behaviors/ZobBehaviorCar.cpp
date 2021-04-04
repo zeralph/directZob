@@ -50,6 +50,7 @@ ZobBehaviorCar::ZobBehaviorCar(ZobObject* zobObject) : ZobBehavior(zobObject)
 	WrapVariable(eWrapperType_float, "Rolling resistance", &m_resistance, false, true);
 	WrapVariable(eWrapperType_float, "Front cornering stiffness", &m_ca_f, false, true);
 	WrapVariable(eWrapperType_float, "Rear cornering stiffness", &m_ca_r, false, true);
+	WrapVariable(eWrapperType_float, "Steering rotation speed", &m_steeringRotationSpeedRS, false, true);
 
 	//m_zobObject->GetWorldRotation().y;
 	m_speed_ms = 0;
@@ -72,6 +73,8 @@ ZobBehaviorCar::ZobBehaviorCar(ZobObject* zobObject) : ZobBehavior(zobObject)
 	m_velocityWorld = ZobVector3(0, 0, 0);
 	m_hadCollision = false;
 	m_goingRear = false;
+	m_maxSteeringAngle = M_PI / 4.0f;
+	m_steeringRotationSpeedRS = M_PI;
 }
 
 void ZobBehaviorCar::PreUpdate()
@@ -189,8 +192,15 @@ void ZobBehaviorCar::UpdateInputs(float dt)
 	inputAcc = inputMap->GetFloat(ZobInputManager::RightShoulder);
 	inputBrk = inputMap->GetFloat(ZobInputManager::LeftShoulder);
 	inputDir = inputMap->GetFloat(ZobInputManager::LeftStickX);
-	float wantedSteerAngle = (M_PI / 4.0) * inputDir;
-	m_steerangle = m_steerangle * dt + wantedSteerAngle * (1.0f - dt);
+	float wantedSteerAngle = m_maxSteeringAngle * inputDir;
+	float deltaAngle = m_steerangle - wantedSteerAngle;
+	float rotSpeed = m_steeringRotationSpeedRS;
+	if (wantedSteerAngle == 0)
+	{
+		rotSpeed = m_steeringRotationSpeedRS * 2.0f;
+	}
+	m_steerangle = m_steerangle - (deltaAngle * dt * rotSpeed);
+	m_steerangle = clamp(m_steerangle, -m_maxSteeringAngle, m_maxSteeringAngle);
 	m_throttle = 100.0f * inputAcc;
 	m_brake = 100.0f * inputBrk;
 	m_handBrake = inputMap->GetBool(ZobInputManager::Handbrake);

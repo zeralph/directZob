@@ -175,6 +175,10 @@ void ZobBehavior::WrapEnum(const char* name, void* ptr, int nbParams, int* value
 
 void ZobBehavior::wrapperData::Load()
 {
+	if (strValue.size() == 0)
+	{
+		return;
+	}
 	if (type == eWrapperType_string)
 	{
 		std::string* s = (std::string*)ptr;

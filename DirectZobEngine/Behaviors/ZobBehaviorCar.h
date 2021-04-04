@@ -58,6 +58,8 @@ class ZobBehaviorCar : public ZobBehavior
 		float m_throttle;
 		float m_brake;
 		float m_inertia;
+		float m_steeringRotationSpeedRS;
+		float m_maxSteeringAngle;
 		ZobVector3 m_velocityWorld;
 		ZobVector3 m_accelerationWorld;
 		float m_speed_ms;
