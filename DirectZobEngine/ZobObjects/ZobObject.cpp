@@ -50,10 +50,18 @@ ZobObject::ZobObject(ZobType t, ZobSubType s, const std::string& name, ZobObject
 	m_renderOptions.lightMode = RenderOptions::eLightMode_phong;
 	m_renderOptions.zBuffered = true;
 	m_renderOptions.bTransparency = false;
-	ZobVector3 p = ZobVector3::Vector3Zero;
-	m_physicComponent->Init(&p, &p);
-	Update(0);
+	m_physicComponent->GetLocalPositionAddress()->x = 0;
+	m_physicComponent->GetLocalPositionAddress()->y = 0;
+	m_physicComponent->GetLocalPositionAddress()->z = 0;
+	m_physicComponent->GetLocalRotationAddress()->x = 0;
+	m_physicComponent->GetLocalRotationAddress()->y = 0;
+	m_physicComponent->GetLocalRotationAddress()->z = 0;
+	m_physicComponent->GetLocalScaleAddress()->x = 1;
+	m_physicComponent->GetLocalScaleAddress()->y = 1;
+	m_physicComponent->GetLocalScaleAddress()->z = 1;
 	InitVariablesExposer();
+	m_physicComponent->Init();
+	Update(0);
 	DirectZob::RemoveIndent();
 }
 
@@ -64,7 +72,6 @@ ZobObject::ZobObject(std::string id, TiXmlElement* node, ZobObject* parent, cons
 	m_behaviors.clear();
 	sObjectNumber++;
 	m_factoryFile = factoryFile ? factoryFile->c_str() : "";
-	ZobVector3 position, rotation, scale, orientation = ZobVector3();
 	const char* name;
 	float x, y, z;
 	TiXmlElement* f;
@@ -73,9 +80,6 @@ ZobObject::ZobObject(std::string id, TiXmlElement* node, ZobObject* parent, cons
 	m_name = name;
 	DirectZob::LogInfo("ZobObject %s creation", name);
 	DirectZob::AddIndent();
-	position = ZobVector3(node->FirstChildElement(XML_ELEMENT_POSITION));
-	rotation = ZobVector3(node->FirstChildElement(XML_ELEMENT_ROTATION));
-	scale = ZobVector3(node->FirstChildElement(XML_ELEMENT_SCALE));
 	DirectZob::LogInfo("Adding new ZobObject %s", m_name.c_str());
 	if (!parent && m_name != "root")
 	{
@@ -184,6 +188,8 @@ ZobObject::ZobObject(std::string id, TiXmlElement* node, ZobObject* parent, cons
 	{
 		m_parent->AddChildReference(this);
 	}
+	InitVariablesExposer();
+	m_varExposer->ReadNode(node);
 	//Behavior
 	TiXmlElement* behaviorsNode = node->FirstChildElement("Behaviors");
 	if(behaviorsNode)
@@ -193,11 +199,10 @@ ZobObject::ZobObject(std::string id, TiXmlElement* node, ZobObject* parent, cons
 			ZobBehavior* b = ZobBehaviorFactory::CreateBehavior(this, e);
 		}
 	}
+	
 	//Init
-	m_physicComponent->Init(&position, &rotation);
-	SetScale(scale.x, scale.y, scale.z);
+	m_physicComponent->Init();
 	Update(0);
-	InitVariablesExposer();
 	DirectZob::RemoveIndent();
 }
 
@@ -305,6 +310,7 @@ void ZobObject::UpdateMesh(const Camera* camera, Core::Engine* engine)
 void ZobObject::Init()
 {
 	m_varExposer->Load();
+	m_physicComponent->Init();
 	for (int i = 0; i < m_behaviors.size(); i++)
 	{
 		m_behaviors[i]->Init();
@@ -421,14 +427,14 @@ void ZobObject::Update(float dt)
 	{
 		const ZobPhysicComponent* zpc = m_parent->GetPhysicComponent();
 		parentTransform = zpc->GetWorldTransform();
-		parentScale = zpc->GetTotalScale();
+		parentScale = zpc->GetWorldScale();
 	}
 	else
 	{
 		parentTransform = Transform::identity();
 		parentScale = ZobVector3(1, 1, 1);
 	}
-	ZobVector3 scale = parentScale * m_physicComponent->GetScale();
+	ZobVector3 scale = parentScale * m_physicComponent->GetLocalScale();
 	Transform newTransform = m_physicComponent->GetLocalTransform();
 	Vector3 p = parentTransform.getPosition();
 	//p.x *= scale.x;
@@ -438,7 +444,7 @@ void ZobObject::Update(float dt)
 	//newTransform = parentTransform * newTransform;
 	//m_physicComponent->SetWorldTransform(newTransform);
 	m_physicComponent->Update();
-	m_physicComponent->SetTotalScale(scale.x, scale.y, scale.z);
+	m_physicComponent->SetWorldScale(scale.x, scale.y, scale.z);
 	const ZobMatrix4x4* parentMatrix = m_parent?m_parent->GetModelMatrix():&ZobMatrix4x4::IdentityMatrix;
 	const ZobMatrix4x4* parentRSMatrix = m_parent?m_parent->GetRotationScaleMatrix():&ZobMatrix4x4::IdentityMatrix;
 	ZobVector3 t = GetWorldPosition();
@@ -489,7 +495,7 @@ void ZobObject::QueueForDrawing(const Camera* camera, Core::Engine* engine)
 
 ZobVector3 ZobObject::GetScale() const 
 { 
-	return m_physicComponent->GetTotalScale(); 
+	return m_physicComponent->GetWorldScale(); 
 }
 
 void ZobObject::SetScale(float x, float y, float z)
@@ -498,7 +504,7 @@ void ZobObject::SetScale(float x, float y, float z)
 	x /= s.x;
 	y /= s.y;
 	z /= s.z;
-	m_physicComponent->SetScale(x, y, z);
+	m_physicComponent->SetLocalScale(x, y, z);
 }
 
 void ZobObject::DrawGizmos(const Camera* camera, Core::Engine* engine)
@@ -596,6 +602,7 @@ const void ZobObject::GetFullNodeName(std::string& fullname) const
 void ZobObject::SetParent(ZobObject* p)
 {
 	m_newParent = p;
+	SetParentInternal();
 }
 
 bool ZobObject::HasChild(const ZobObject* o)
@@ -653,12 +660,6 @@ TiXmlNode* ZobObject::SaveUnderNode(TiXmlNode* node)
 	objectNode->SetAttribute(XML_ATTR_NAME, GetName().c_str());
 	std::string guid = ZobGuidToString();
 	objectNode->SetAttribute(XML_ATTR_GUID, guid.c_str());
-	ZobVector3 p = GetLocalPosition();
-	p.SaveUnderNode(XML_ELEMENT_POSITION, objectNode);
-	ZobVector3 r = GetLocalRotation();
-	r.SaveUnderNode(XML_ELEMENT_ROTATION, objectNode);
-	ZobVector3 s = GetScale();
-	s.SaveUnderNode(XML_ELEMENT_SCALE, objectNode);
 	std::string meshName = GetMeshName();
 	std::string meshFileName = GetMeshFileName();
 	std::string meshPath = GetMeshPath();
@@ -870,7 +871,7 @@ void ZobObject::SetWorldPosition(float x, float y, float z)
 	m_physicComponent->SetWorldTransform(newTransform);
 }
 
-inline ZobVector3 ZobObject::GetLocalRotation() const
+ZobVector3 ZobObject::GetLocalRotation() const
 {
 	Quaternion q= m_physicComponent->GetLocalTransform().getOrientation();
 	ZobVector3 v = ZobMatrix4x4::QuaternionToEuler(q.x, q.y, q.z, q.w);

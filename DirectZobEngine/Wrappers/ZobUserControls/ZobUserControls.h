@@ -36,6 +36,14 @@ namespace CLI {
 		void OnValueChangedInternal(Object^ sender, EventArgs^ e);
 	};
 
+	public ref class ZobControlTreeNode : public TreeNode
+	{
+	public:
+		ZobControlTreeNode(String^ zobObjectGuid);
+		ZobControlTreeNode^ GetChildNode(String^ guid);
+		String^ m_zobObjectGuid;
+	};
+
 	public ref class ZobControlTreeview : TreeView
 	{
 	public:

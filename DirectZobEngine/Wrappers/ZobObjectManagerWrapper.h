@@ -16,12 +16,6 @@ using namespace System::Drawing;
 
 namespace CLI
 {
-	public ref class ZobObjectManagerTreeNode : public TreeNode
-	{
-	public:
-		String^ m_zobObjectGuid;
-	};
-
 	public ref class ZobObjectManagerWrapper : public ManagedObject<ZobObjectManager>
 	{
 	public:
@@ -33,28 +27,35 @@ namespace CLI
 		};
 
 		ZobObjectManagerWrapper(Panel^ objectTreeviewPanel, Panel^ objectPropertiesPanel);
-		void SaveTransforms();
-		void RestoreTransforms();
-		void Refresh();
-		System::String^ GetZobObjectList();
-		ZobObjectWrapper^ GetZobObject(System::String^ name);
-		ZobObjectWrapper^ GetRootObject();
-		void RemoveZobObject(ZobObjectWrapper^ name);
-		ZobObjectWrapper^ AddZobObject(ZobObjectWrapper^ parent);
-		ZobObjectWrapper^ AddZobSprite(ZobObjectWrapper^ parent);
-		ZobObjectWrapper^ GetObjectAtCoords(int x, int y, eObjectTypes type);
-		ZobObject* GetSelectedObject() {return m_selectedObject;}
-		void CreateEditorGizmos(System::String^ editorResourcesPath);
-		bool Reparent(ZobObjectWrapper^ o, ZobObjectWrapper^ parent);
-		void AddZobObjectsRecursive(ZobObject* z, TreeNodeCollection^ collection);
-		void OnEditorUpdate(Object^ sender, EventArgs^ e);
+		void					SaveTransforms();
+		void					RestoreTransforms();
+		void					Refresh();
+		System::String^			GetZobObjectList();
+		ZobObject*				GetZobObject(System::String^ guid);
+		ZobObjectWrapper^		GetRootObject();
+		void					RemoveZobObject(ZobObjectWrapper^ name);
+		ZobObjectWrapper^		AddZobObject(ZobObjectWrapper^ parent);
+		ZobObjectWrapper^		AddZobSprite(ZobObjectWrapper^ parent);
+		ZobObjectWrapper^		GetObjectAtCoords(int x, int y, eObjectTypes type);
+		ZobObject*				GetSelectedObject() {return m_selectedObject;}
+		void					CreateEditorGizmos(System::String^ editorResourcesPath);
+		bool					Reparent(String^ object, String^ parent);
+		void					AddZobObjectsRecursive(ZobObject* z, TreeNodeCollection^ collection);
+		void					OnEditorUpdate(Object^ sender, EventArgs^ e);
+		TreeView^				GetTreeviw() {return m_treeView;}
 	private:
+	
+		void					CreateTreeview();
+		void					CreateObjectview();
+		void					ReScan(ZobControlTreeNode^ n);
 
-		
-		void CreateTreeview();
-		void CreateObjectview();
-
-		void TreeNodeClick(Object^ sender, TreeViewEventArgs^ e);
+		void					TreeNodeMouseHover(Object^ sender, EventArgs^ e);
+		void					TreeNodeClick(Object^ sender, TreeViewEventArgs^ e);
+		void					ItemDrag(Object^ sender, ItemDragEventArgs^ e);
+		void					DragDrop(Object^ sender, DragEventArgs^ e);
+		void					DragEnter(Object^ sender, DragEventArgs^ e);
+		void					DragOver(Object^ sender, DragEventArgs^ e);
+		void					DragLeave(Object^ sender, EventArgs^ e);
 
 		Panel^ m_objectTreeviewPanel;
 		Panel^ m_objectPropertiesPanel;
@@ -62,6 +63,7 @@ namespace CLI
 		CLI::ZobControlTreeview^ m_treeView;
 		ZobObject* m_selectedObject;
 		ZobObjectWrapper^ m_selectedObjectWrapper;
+		ZobControlTreeNode^ m_draggedNode;
 	};
 }
 #endif //_WINDLL

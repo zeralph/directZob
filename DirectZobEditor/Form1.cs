@@ -85,7 +85,6 @@ namespace DirectZobEditor
             m_directZobWrapper = new CLI.DirectZobWrapper(this.ZobObjectListPanel, this.ObjectControlsFlowLayout);
             m_directZobWrapper.Init(1024, 768);
             m_zobObjectManagerWrapper = m_directZobWrapper.GetZobObjectManagerWrapper();
-
             m_meshManagerWrapper = new CLI.MeshManagerWrapper();
             m_lightManagerWrapper = new CLI.LightManagerWrapper();
             m_cameraManagerWrapper = new CLI.CameraManagerWrapper();
@@ -149,6 +148,7 @@ namespace DirectZobEditor
             m_engineWindow.GetEngineWrapper().ShowText(false);
             physicsToolStripMenuItem.Checked = false;
             m_engineWindow.GetEngineWrapper().DrawPhysicsGizmos(false);
+
         }
 
         public string Getpath()
@@ -744,11 +744,63 @@ namespace DirectZobEditor
             //make an alert
             m_directZobWrapper.RegenerateZobIds();
         }
+
     }
 
     public class Event
     {
         public string data { get; set; }
         public int type { get; set; }
+    };
+
+    public class ZobTreeviewHelper
+    {
+        private TreeView m_treeview;
+        private CLI.ZobObjectManagerWrapper m_mgr;
+        private TreeNode m_dragegdNode = null;
+        public ZobTreeviewHelper(CLI.ZobObjectManagerWrapper mgr)
+        {
+            m_mgr = mgr;
+            m_treeview = m_mgr.GetTreeviw();
+            m_treeview.AllowDrop = true;
+            m_dragegdNode = null;
+            m_treeview.ItemDrag += ItemDrag;
+            m_treeview.DragDrop += DragDrop;
+            m_treeview.DragLeave += DragLeave;
+            m_treeview.DragEnter += DragEnter;
+            m_treeview.DragOver += DragOver;
+        }
+        private void ItemDrag(object sender, ItemDragEventArgs e)
+        {
+            m_dragegdNode = (TreeNode)e.Item;
+            m_treeview.DoDragDrop(m_dragegdNode, DragDropEffects.Move);
+        }
+
+        private void DragDrop(object sender, DragEventArgs e)
+        {
+            Point targetPoint = m_treeview.PointToClient(new Point(e.X, e.Y));
+            TreeNode targetNode = (TreeNode)m_treeview.GetNodeAt(targetPoint);
+            TreeNode draggedNode = m_dragegdNode;
+            m_mgr.Reparent(draggedNode.ToolTipText, targetNode.ToolTipText);
+            //m_treeview.Enabled = false;
+            targetNode.Expand();
+        }
+        private void DragLeave(object sender, EventArgs e)
+        {
+            m_dragegdNode = null;
+        }
+
+        private void DragEnter(object sender, DragEventArgs e)
+        {
+            e.Effect = e.AllowedEffect;
+        }
+
+        private void DragOver(object sender, DragEventArgs e)
+        { 
+            // Retrieve the client coordinates of the mouse position.
+            Point targetPoint = m_treeview.PointToClient(new Point(e.X, e.Y));
+            // Select the node at the mouse position.
+            m_treeview.SelectedNode = m_treeview.GetNodeAt(targetPoint);
+        }
     };
 }

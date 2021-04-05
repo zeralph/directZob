@@ -43,6 +43,25 @@ ZobGroupBox::ZobGroupBox(String^ name, bool collapsable) :GroupBox()
 	b->Click += gcnew EventHandler(this, &ZobGroupBox::OnToggle);
 }
 
+ZobControlTreeNode::ZobControlTreeNode(String^ zobObjectGuid) :TreeNode()
+{
+	m_zobObjectGuid = zobObjectGuid;
+	this->ToolTipText = m_zobObjectGuid;
+}
+
+ZobControlTreeNode^ ZobControlTreeNode::GetChildNode(String^ guid) 
+{
+	for (int i = 0; i < this->Nodes->Count; i++)
+	{
+		ZobControlTreeNode^ n = (ZobControlTreeNode^)Nodes[i];
+		if (n->m_zobObjectGuid == guid)
+		{
+			return n;
+		}
+	}
+	return nullptr;
+}
+
 void ZobGroupBox::OnToggle(Object^ sender, EventArgs^ e)
 {
 	Label^ b = (Label^)sender;

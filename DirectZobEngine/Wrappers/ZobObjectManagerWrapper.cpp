@@ -18,6 +18,7 @@ namespace CLI
 		m_objectTreeviewPanel = objectTreeviewPanel;
 		m_objectPropertiesPanel = objectPropertiesPanel;
 		m_selectedObjectWrapper = nullptr;
+		m_draggedNode = nullptr;
 		CreateTreeview();
 		CreateObjectview();
 		//DirectZobWrapper::OnEditorUpdateEvent += gcnew DirectZobWrapper::OnEditorUpdate(this, &ZobObjectManagerWrapper::OnEditorUpdate);
@@ -47,21 +48,61 @@ namespace CLI
 		m_treeView = gcnew CLI::ZobControlTreeview();
 		m_treeView->Dock = DockStyle::Fill;
 		m_treeView->AfterSelect += gcnew TreeViewEventHandler(this, &ZobObjectManagerWrapper::TreeNodeClick);
+		m_treeView->ItemDrag += gcnew ItemDragEventHandler(this, &ZobObjectManagerWrapper::ItemDrag);
+		m_treeView->DragDrop += gcnew DragEventHandler(this, &ZobObjectManagerWrapper::DragDrop);
+		m_treeView->DragEnter += gcnew DragEventHandler(this, &ZobObjectManagerWrapper::DragEnter);
+		m_treeView->DragOver += gcnew DragEventHandler(this, &ZobObjectManagerWrapper::DragOver);
+		m_treeView->DragLeave += gcnew EventHandler(this, &ZobObjectManagerWrapper::DragLeave);
+		m_treeView->AllowDrop = true;
+		m_treeView->MouseHover += gcnew EventHandler(this, &ZobObjectManagerWrapper::TreeNodeMouseHover);
+		m_treeView->ShowNodeToolTips = true;
 		Refresh();
 		c->Controls->Add(m_treeView);
 		c->Dock = DockStyle::Fill;
 		m_objectTreeviewPanel->Controls->Add(c);
 	}
 
+	void ZobObjectManagerWrapper::ItemDrag(Object^ sender, ItemDragEventArgs^ e)
+	{
+		m_draggedNode = (ZobControlTreeNode^)e->Item;
+		m_treeView->DoDragDrop(m_draggedNode, DragDropEffects::Move);
+	}
+	void ZobObjectManagerWrapper::DragDrop(Object^ sender, DragEventArgs^ e)
+	{
+		Point p = Point(e->X, e->Y);
+		Point targetPoint = m_treeView->PointToClient(p);
+		ZobControlTreeNode^ targetNode = (ZobControlTreeNode^)m_treeView->GetNodeAt(targetPoint);
+		ZobControlTreeNode^ draggedNode = m_draggedNode;
+		Reparent(draggedNode->ToolTipText, targetNode->ToolTipText);
+		ReScan((ZobControlTreeNode^)m_treeView->TopNode);
+		targetNode->Expand();
+	}
+	void ZobObjectManagerWrapper::DragEnter(Object^ sender, DragEventArgs^ e)
+	{
+		e->Effect = e->AllowedEffect;
+	}
+	void ZobObjectManagerWrapper::DragOver(Object^ sender, DragEventArgs^ e)
+	{
+		Point p = Point(e->X, e->Y);
+		Point targetPoint = m_treeView->PointToClient(p);
+		m_treeView->SelectedNode = m_treeView->GetNodeAt(targetPoint);
+	}
+	void ZobObjectManagerWrapper::DragLeave(Object^ sender, EventArgs^ e)
+	{
+		m_draggedNode = nullptr;
+	}
+
+	void ZobObjectManagerWrapper::TreeNodeMouseHover(Object^ sender, EventArgs^ e)
+	{
+	}
+
 	void ZobObjectManagerWrapper::TreeNodeClick(Object^ sender, TreeViewEventArgs^ e)
 	{
 		//TreeView^ tv = (TreeView^)sender;
-		ZobObjectManagerTreeNode^ tn = (ZobObjectManagerTreeNode^)e->Node;// tv->SelectedNode;
+		ZobControlTreeNode^ tn = (ZobControlTreeNode^)e->Node;// tv->SelectedNode;
 		if (tn)
 		{
-			std::string id;
-			MarshalString(tn->m_zobObjectGuid, id);
-			m_selectedObject = DirectZob::GetInstance()->GetZobObjectManager()->GetZobObjectFromlId(id);
+			m_selectedObject = GetZobObject(tn->m_zobObjectGuid);
 			if (m_selectedObject != NULL)
 			{
 				if (m_selectedObjectWrapper != nullptr)
@@ -86,15 +127,52 @@ namespace CLI
 		}
 	}
 
+	void ZobObjectManagerWrapper::ReScan(ZobControlTreeNode^ n)
+	{
+
+		ZobObject* z = GetZobObject(n->m_zobObjectGuid);
+		if (z)
+		{
+			const std::vector<ZobObject*>* v = z->GetChildren();
+			List<String^>^ l = gcnew List<String^>();
+			for (int i = 0; i < v->size(); i++)
+			{
+				ZobObject* child = v->at(i);
+				String^ guid = TO_MANAGED_STRING(child->ZobGuidToString().c_str());
+				l->Add(guid);
+				ZobControlTreeNode^ childNode = n->GetChildNode(guid);
+				if (!childNode)
+				{
+					ZobControlTreeNode^ newNode = gcnew ZobControlTreeNode(guid);
+					newNode->Text = TO_MANAGED_STRING(child->GetName().c_str());
+					n->Nodes->Add(newNode);
+					n->Expand();
+					ReScan(newNode);
+				}
+				else
+				{
+					ReScan(childNode);
+				}
+			}
+			for (int i = n->Nodes->Count-1; i >= 0 ; i--)
+			{
+				ZobControlTreeNode^ oldNode = (ZobControlTreeNode ^)n->Nodes[i];
+				if (!l->Contains(oldNode->m_zobObjectGuid))
+				{
+					n->Nodes[i]->Remove();
+				}
+			}
+		}
+	}
+
 	void ZobObjectManagerWrapper::AddZobObjectsRecursive(ZobObject* z, TreeNodeCollection^ collection)
 	{
 		if (z)
 		{
-			ZobObjectManagerTreeNode^ tn = gcnew ZobObjectManagerTreeNode();
+			String^ guidStr = TO_MANAGED_STRING(z->ZobGuidToString().c_str());
+			ZobControlTreeNode^ tn = gcnew ZobControlTreeNode(guidStr);
 			const char* nameStr = z->GetName().c_str();
 			tn->Text = TO_MANAGED_STRING(nameStr);
-			std::string idStr = z->ZobGuidToString();
-			tn->m_zobObjectGuid = TO_MANAGED_STRING(idStr.c_str());
 			collection->Add(tn);
 			for (int i = 0; i < z->GetChildren()->size(); i++)
 			{
@@ -103,28 +181,11 @@ namespace CLI
 		}
 	}
 
-	ZobObjectWrapper^ ZobObjectManagerWrapper::GetZobObject(System::String^ name)
+	ZobObject* ZobObjectManagerWrapper::GetZobObject(System::String^ guid)
 	{
-		/*
-		std::string n;
-		MarshalString(name, n);
-		ZobObject* z = m_Instance->GetZobObject(n);
-		
-		if (z->GetSubType() == ZOBGUID::subtype_zobLight)
-		{
-			return gcnew ZobLightWrapper((Light*)z);
-		}
-		else if (z->GetSubType() == ZOBGUID::ZobSubType::subtype_zobCamera)
-		{
-			return gcnew ZobCameraWrapper((Camera*)z);
-		}
-		else if (z->GetSubType() == ZOBGUID::ZobSubType::subtype_sprite)
-		{
-			return gcnew ZobSpriteWrapper((ZobSprite*)z);
-		}
-		return gcnew ZobObjectWrapper(z);
-		*/
-		return nullptr;
+		std::string id;
+		MarshalString(guid, id);
+		return DirectZob::GetInstance()->GetZobObjectManager()->GetZobObjectFromlId(id);
 	}
 
 	ZobObjectWrapper^ ZobObjectManagerWrapper::GetObjectAtCoords(int x, int y, eObjectTypes type)
@@ -202,9 +263,22 @@ namespace CLI
 		return nullptr;
 	}
 
-	bool ZobObjectManagerWrapper::Reparent(ZobObjectWrapper^ o, ZobObjectWrapper^ parent)
+	bool ZobObjectManagerWrapper::Reparent(String^ object, String^ parent)
 	{
-		return m_Instance->Reparent((o != nullptr) ? o->GetInstance() : NULL, (parent != nullptr) ? parent->GetInstance() : NULL);
+		if (GetInstance())
+		{
+			std::string id1;
+			MarshalString(object, id1);
+			ZobObject* o = DirectZob::GetInstance()->GetZobObjectManager()->GetZobObjectFromlId(id1);
+			std::string id2;
+			MarshalString(parent, id2);
+			ZobObject* p = DirectZob::GetInstance()->GetZobObjectManager()->GetZobObjectFromlId(id2);
+			if (o && p)
+			{
+				return GetInstance()->Reparent(o, p);
+			}
+		}
+		return false;
 	}
 
 	void ZobObjectManagerWrapper::SaveTransforms()

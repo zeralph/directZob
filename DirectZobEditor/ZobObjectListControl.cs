@@ -18,10 +18,9 @@ namespace DirectZobEditor
         
         public delegate void OnObjectSelectedHandler(object s, ObjectSelectionEventArg e);
         public event OnObjectSelectedHandler OnObjectSelected;
-        private CLI.ZobObjectManagerWrapper m_zobObjectManagerWrapper;
         private Form1 m_mainForm = null;
         private CLI.ZobObjectWrapper m_currentSelectedZobObject = null;
-        private int m_forceUpdateOnNextFrame = 0;
+
         public ZobObjectListControl(Form1 f)
         {
             InitializeComponent();
@@ -45,17 +44,18 @@ namespace DirectZobEditor
 
         public void RestoreTransforms()
         {
-            m_zobObjectManagerWrapper.RestoreTransforms();
+            //m_zobObjectManagerWrapper.RestoreTransforms();
         }
 
         public void SaveTransforms()
         {
-            m_zobObjectManagerWrapper.SaveTransforms();
+            //m_zobObjectManagerWrapper.SaveTransforms();
         }
 
         public CLI.ZobObjectManagerWrapper GetWrapper()
         {
-            return m_zobObjectManagerWrapper;
+            return null;
+            //return m_zobObjectManagerWrapper;
         }
         public void UpdateControl()
         {
@@ -63,7 +63,8 @@ namespace DirectZobEditor
         }
         public CLI.ZobObjectWrapper GetObjectAtCoords(int x, int y, CLI.ZobObjectManagerWrapper.eObjectTypes t)
         {
-            return m_zobObjectManagerWrapper.GetObjectAtCoords(x, y, t);
+            return null;
+            //return m_zobObjectManagerWrapper.GetObjectAtCoords(x, y, t);
         }
 
         public CLI.ZobObjectWrapper SelectObjectAtCoords(int x, int y, CLI.ZobObjectManagerWrapper.eObjectTypes t)
@@ -175,7 +176,7 @@ namespace DirectZobEditor
                 ev.newZobObject = newZobObject;
                 handler(this, ev);
             }
-            m_zobObjectManagerWrapper.Refresh();
+            //m_zobObjectManagerWrapper.Refresh();
         }
 
         private void ZobObjectTree_MouseClick(object sender, MouseEventArgs e)
@@ -242,8 +243,8 @@ namespace DirectZobEditor
         }
         private void OnSceneUpdated(object s, Form1.SceneUpdateEventArg e)
         {
-            m_zobObjectManagerWrapper.Refresh();
-            m_forceUpdateOnNextFrame = 2;
+            //m_zobObjectManagerWrapper.Refresh();
+            //m_forceUpdateOnNextFrame = 2;
             if (e.type == Form1.SceneUpdateType.objectSelected)
             {
                 OnZobObjectSelectionChange(e.zobObject);
@@ -255,7 +256,7 @@ namespace DirectZobEditor
         }
         private void OnSceneChanged(object s, EventArgs e)
         {
-            m_zobObjectManagerWrapper.Refresh();
+            //m_zobObjectManagerWrapper.Refresh();
             /*
             ZobObjectWrapper root = m_zobObjectManagerWrapper.GetRootObject();
             ZobTreeNode rootNode = new ZobTreeNode(root, null);

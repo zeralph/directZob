@@ -9,9 +9,7 @@ ZobPhysicComponent::ZobPhysicComponent(ZobObject* z)
 	m_zobObject = z;
 	BodyType rigidBodyType = rp3d::BodyType::STATIC;
 	bool rigidBodyActive = false;
-	m_scaleWithObject = true;
 	m_collider = NULL;
-	m_bUpdateSize = true;
 	m_collisionBody = DirectZob::GetInstance()->GetPhysicsEngine()->CreateCollisionBody(&ZobVector3::Vector3Zero, &ZobVector3::Vector3Zero);;
 	m_collisionBody->setIsActive(true);
 //	m_rigidBody->setIsAllowedToSleep(false);
@@ -28,17 +26,17 @@ ZobPhysicComponent::~ZobPhysicComponent()
 	DirectZob::GetInstance()->GetPhysicsEngine()->DestroyCollisionBody(m_collisionBody);
 	m_collisionBody = NULL;}
 
-void ZobPhysicComponent::Init(const ZobVector3* position, const ZobVector3* rotation)
+void ZobPhysicComponent::Init()
 {
 	m_localTransform = Transform::identity();
-	m_localTransform.setPosition(Vector3(position->x, position->y, position->z));
-	Quaternion q = Quaternion::fromEulerAngles(DEG_TO_RAD(rotation->x), DEG_TO_RAD(rotation->y), DEG_TO_RAD(rotation->z));
+	m_localTransform.setPosition(Vector3(m_editorLocalPosition.x, m_editorLocalPosition.y, m_editorLocalPosition.z));
+	Quaternion q = Quaternion::fromEulerAngles(DEG_TO_RAD(m_editorLocalRotation.x), DEG_TO_RAD(m_editorLocalRotation.y), DEG_TO_RAD(m_editorLocalRotation.z));
 	m_localTransform.setOrientation(q);
-	m_scale = Vector3(1, 1, 1);
+	m_localScale = Vector3(1, 1, 1);
 	m_totalScale = Vector3(1, 1, 1);
-	m_editorLocalScale.x = m_totalScale.x;
-	m_editorLocalScale.y = m_totalScale.y;
-	m_editorLocalScale.z = m_totalScale.z;
+	m_localScale.x = m_editorLocalScale.x;
+	m_localScale.y = m_editorLocalScale.y;
+	m_localScale.z = m_editorLocalScale.z;
 	SetWorldTransform( GetParentWorldTransform() * m_localTransform);
 	Update();
 }
@@ -78,39 +76,6 @@ Transform ZobPhysicComponent::GetWorldTransform() const
 	return parentTransform;
 };
 
-ZobVector3 ZobPhysicComponent::GetPosition() const
-{
-	const Vector3 v = GetWorldTransform().getPosition();
-	return ZobVector3(v.x, v.y, v.z);
-}
-
-void ZobPhysicComponent::SetPosition(float x, float y, float z)
-{
-	Vector3 v = Vector3(x, y, z);
-	Transform t = GetWorldTransform();
-	t.setPosition(v);
-	SetWorldTransform(t);
-}
-
-void ZobPhysicComponent::SetQuaternion(const ZobVector3* left, const ZobVector3* up, const ZobVector3* fw)
-{
-	reactphysics3d::Matrix3x3 m;
-	m.setAllValues(left->x, up->x, fw->x,
-		left->y, up->y, fw->y,
-		left->z, up->z, fw->z);
-	Quaternion q = Quaternion(m);
-	Transform w = GetWorldTransform();
-	Transform t = Transform(w.getPosition(), q);
-	SetWorldTransform(t);
-}
-
-void ZobPhysicComponent::SetQuaternion(float x, float y, float z, float w)
-{
-	Quaternion q = Quaternion(x, y, z, w);
-	Transform wt = GetWorldTransform();
-	Transform t = Transform(wt.getPosition(), q);
-	SetWorldTransform(t);
-}
 void ZobPhysicComponent::LookAt(const ZobVector3* target)
 {
 	Transform t = GetWorldTransform();
@@ -156,7 +121,7 @@ void ZobPhysicComponent::LookAt(const ZobVector3* forward, const ZobVector3* lef
 		SetWorldTransform(t);
 	}
 }
-void ZobPhysicComponent::SetTotalScale(float x, float y, float z)
+void ZobPhysicComponent::SetWorldScale(float x, float y, float z)
 { 
 	if (m_totalScale.x != x || m_totalScale.y != y || m_totalScale.z != z)
 	{
@@ -166,27 +131,7 @@ void ZobPhysicComponent::SetTotalScale(float x, float y, float z)
 		m_editorLocalScale.x = m_totalScale.x;
 		m_editorLocalScale.y = m_totalScale.y;
 		m_editorLocalScale.z = m_totalScale.z;
-		m_bUpdateSize = true;
 	}
-}
-
-void ZobPhysicComponent::SetLocalOrientation(float x, float y, float z)
-{
-	float rx = DEG_TO_RAD(x);
-	float ry = DEG_TO_RAD(y);
-	float rz = DEG_TO_RAD(z);
-	Transform t = GetWorldTransform();
-	Quaternion q;
-	//q = Quaternion::fromEulerAngles((dx), (dy), (dz));
-	ZobVector3 v = ZobMatrix4x4::EulerToQuaternion(rx, ry, rz);
-	q.x = v.x;
-	q.y = v.y;
-	q.z = v.z;
-	q.w = v.w;
-	Quaternion q2 = t.getOrientation();
-	q = q2 * q;
-	m_localTransform.setOrientation(q);
-	m_editorLocalRotation = GetLocalOrientation();
 }
 
 void ZobPhysicComponent::SetWorldOrientation(float x, float y, float z)

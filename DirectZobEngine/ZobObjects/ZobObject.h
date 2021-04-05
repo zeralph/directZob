@@ -22,8 +22,7 @@ public:
 	ZobObject(std::string id, TiXmlElement* node, ZobObject* parent, const std::string* factoryFile = NULL);
 	virtual ~ZobObject();
 
-	//virtuals
-	//virtual void					Update(const ZobMatrix4x4& parentMatrix, const ZobMatrix4x4& parentRSMatrix);
+	//Mechanics
 	virtual void					Init();
 	virtual void					PreUpdate();
 	virtual void					Update(float dt);
@@ -31,36 +30,34 @@ public:
 	virtual void					UpdateBehavior(float dt);
 	virtual void					UpdateMesh(const Camera* camera, Core::Engine* engine);
 	virtual void					QueueForDrawing(const Camera* camera, Core::Engine* engine);
-	ZobVector3						GetScale() const;
-	void 							SetScale(float x, float y, float z);
-	void							SetWorldRotation(float x, float y, float z);
-	void							SetWorldPosition(float x, float y, float z);
-	void							SetLocalRotation(float x, float y, float z);
-	void							SetLocalPosition(float x, float y, float z);
-	void							LookAt(const ZobVector3* target, bool addToCurrentRotation);
-	void							LookAt(const ZobVector3* forward, const ZobVector3* left, const ZobVector3* up, bool addToCurrentRotation);
-	ZobVector3						GetLocalRotation() const;
-	ZobVector3						GetLocalPosition() const;
-	ZobVector3						GetWorldRotation() const;
-	ZobVector3						GetWorldPosition() const;
+	virtual void					DrawGizmos(const Camera* camera, Core::Engine* engine);
+	virtual							TiXmlNode* SaveUnderNode(TiXmlNode* node);
+	//
 	void							SaveTransform();
 	void							RestoreTransform();
 	void							ResetPhysic();
 	void							RegenerateZobIds();
-	virtual void					DrawGizmos(const Camera* camera, Core::Engine* engine);
-	virtual TiXmlNode*				SaveUnderNode(TiXmlNode* node);
-	//
+	//World
+	ZobVector3						GetWorldPosition() const;
+	void							SetWorldPosition(float x, float y, float z);
+	ZobVector3						GetWorldRotation() const;
+	void							SetWorldRotation(float x, float y, float z);
+	ZobVector3						GetScale() const;
+	void 							SetScale(float x, float y, float z);
+	//Local
+	ZobVector3						GetLocalPosition() const;
+	void							SetLocalPosition(float x, float y, float z);
+	ZobVector3						GetLocalRotation() const;
+	void							SetLocalRotation(float x, float y, float z);	
+	//Parenting
 	const std::vector<ZobObject*>*	GetChildren() const { return &m_children; };
 	ZobObject*						GetParent() const { return m_parent; };
 	void							SetParent(ZobObject* o);
 	ZobObject*						GetChild(const std::string& name);
 	ZobObject*						GetChild(const int i);
 
-	inline const ZobVector3			GetWorldScale() const
-	{
-		return m_modelMatrix.GetScale();
-	};
-
+	void							LookAt(const ZobVector3* target, bool addToCurrentRotation);
+	void							LookAt(const ZobVector3* forward, const ZobVector3* left, const ZobVector3* up, bool addToCurrentRotation);
 	
 	inline const std::string&		GetName() const { return m_name; }
 	inline void						SetName(const std::string &name) { m_name = name; }
