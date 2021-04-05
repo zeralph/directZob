@@ -7,7 +7,8 @@ ZobBehavior::ZobBehavior(ZobObject* zobObject):ZOBGUID(ZOBGUID::type_internal, Z
 {
 	m_zobObject = zobObject;
 	m_type = eBehavior_none;
-	m_varExposer = new ZobVariablesExposer(ZobGuidToString());
+	std::string guid = ZobGuidToString();
+	m_varExposer = new ZobVariablesExposer(guid);
 	m_varExposer->WrapVariable(ZobVariablesExposer::eWrapperType_zobId, "ZobId", GetIdAddress(), true, false);
 };
 

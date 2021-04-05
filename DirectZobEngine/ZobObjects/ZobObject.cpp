@@ -13,7 +13,8 @@ ZobObject::ZobObject(ZobType t, ZobSubType s, const std::string& name, ZobObject
 {
 	DirectZob::LogInfo("ZobObject %s creation", name.c_str());
 	DirectZob::AddIndent();
-	m_varExposer = new ZobVariablesExposer(ZobGuidToString());
+	std::string guid = ZobGuidToString();
+	m_varExposer = new ZobVariablesExposer(guid);
 	sObjectNumber++;
 	m_behaviors.clear();
 	m_factoryFile = factoryFile?factoryFile->c_str():"";
@@ -68,7 +69,8 @@ ZobObject::ZobObject(ZobType t, ZobSubType s, const std::string& name, ZobObject
 ZobObject::ZobObject(std::string id, TiXmlElement* node, ZobObject* parent, const std::string* factoryFile /*=NULL*/)
 	:ZOBGUID(id)
 {
-	m_varExposer = new ZobVariablesExposer(ZobGuidToString());
+	std::string guid = ZobGuidToString();
+	m_varExposer = new ZobVariablesExposer(guid);
 	m_behaviors.clear();
 	sObjectNumber++;
 	m_factoryFile = factoryFile ? factoryFile->c_str() : "";
