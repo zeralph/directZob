@@ -11,7 +11,7 @@ namespace CLI {
 	{
 
 	public:
-		ZobSpriteWrapper(ZobSprite* zobObject);
+		ZobSpriteWrapper(ZobSprite* zobObject, Panel^ panel);
 		void				SetTexture(System::String^ path);
 
 	};

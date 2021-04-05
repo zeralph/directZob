@@ -13,6 +13,7 @@ ZobObject::ZobObject(ZobType t, ZobSubType s, const std::string& name, ZobObject
 {
 	DirectZob::LogInfo("ZobObject %s creation", name.c_str());
 	DirectZob::AddIndent();
+	m_varExposer = new ZobVariablesExposer(ZobGuidToString());
 	sObjectNumber++;
 	m_behaviors.clear();
 	m_factoryFile = factoryFile?factoryFile->c_str():"";
@@ -52,12 +53,14 @@ ZobObject::ZobObject(ZobType t, ZobSubType s, const std::string& name, ZobObject
 	ZobVector3 p = ZobVector3::Vector3Zero;
 	m_physicComponent->Init(&p, &p);
 	Update(0);
+	InitVariablesExposer();
 	DirectZob::RemoveIndent();
 }
 
 ZobObject::ZobObject(std::string id, TiXmlElement* node, ZobObject* parent, const std::string* factoryFile /*=NULL*/)
 	:ZOBGUID(id)
 {
+	m_varExposer = new ZobVariablesExposer(ZobGuidToString());
 	m_behaviors.clear();
 	sObjectNumber++;
 	m_factoryFile = factoryFile ? factoryFile->c_str() : "";
@@ -194,7 +197,17 @@ ZobObject::ZobObject(std::string id, TiXmlElement* node, ZobObject* parent, cons
 	m_physicComponent->Init(&position, &rotation);
 	SetScale(scale.x, scale.y, scale.z);
 	Update(0);
+	InitVariablesExposer();
 	DirectZob::RemoveIndent();
+}
+
+void ZobObject::InitVariablesExposer()
+{
+	m_varExposer->WrapVariable(ZobVariablesExposer::eWrapperType_zobId, "GUID", GetIdAddress(), true, false);
+	m_varExposer->WrapVariable(ZobVariablesExposer::eWrapperType_ZobVector3, "Position", GetPhysicComponentNoConst()->GetLocalPositionAddress(), false, true);
+	m_varExposer->WrapVariable(ZobVariablesExposer::eWrapperType_ZobVector3, "Rotation", GetPhysicComponentNoConst()->GetLocalRotationAddress(), false, true);
+	m_varExposer->WrapVariable(ZobVariablesExposer::eWrapperType_ZobVector3, "Scale", GetPhysicComponentNoConst()->GetLocalScaleAddress(), false, true);
+
 }
 
 ZobObject::~ZobObject()
@@ -219,6 +232,7 @@ ZobObject::~ZobObject()
 		m_children[i] = NULL;
 		delete z;
 	}
+	delete m_varExposer;
 	m_children.clear();
 	DirectZob::RemoveIndent();
 }
@@ -290,6 +304,7 @@ void ZobObject::UpdateMesh(const Camera* camera, Core::Engine* engine)
 
 void ZobObject::Init()
 {
+	m_varExposer->Load();
 	for (int i = 0; i < m_behaviors.size(); i++)
 	{
 		m_behaviors[i]->Init();
@@ -303,6 +318,7 @@ void ZobObject::Init()
 
 void ZobObject::EditorUpdate()
 {
+	m_physicComponent->EditorUpdate();
 	for (int i = 0; i < m_behaviors.size(); i++)
 	{
 		m_behaviors[i]->EditorUpdate();
@@ -646,6 +662,9 @@ TiXmlNode* ZobObject::SaveUnderNode(TiXmlNode* node)
 	std::string meshName = GetMeshName();
 	std::string meshFileName = GetMeshFileName();
 	std::string meshPath = GetMeshPath();
+
+	m_varExposer->SaveUnderNode(objectNode);
+
 	if (meshName.length() > 0 && meshFileName.length() > 0)
 	{
 		TiXmlElement meshNode = TiXmlElement(XML_ATTR_TYPE_MESH);

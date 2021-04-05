@@ -7,7 +7,7 @@ namespace CLI {
 	public ref class ZobCameraWrapper : ZobObjectWrapper
 	{
 	public:
-		ZobCameraWrapper(Camera* zobObject);
+		ZobCameraWrapper(Camera* zobObject, Panel^ panel);
 		float							GetFOV();
 		void							SetFOV(float fov);
 	private:

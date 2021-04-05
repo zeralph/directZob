@@ -18,6 +18,8 @@ ZobPhysicComponent::ZobPhysicComponent(ZobObject* z)
 	m_collider = NULL;
 	m_lastCollision.Reset();
 	DirectZob::GetInstance()->GetPhysicsEngine()->AddBody(this);
+	m_editorLocalPosition = ZobVector3(m_localTransform.getPosition().x, m_localTransform.getPosition().y, m_localTransform.getPosition().z);
+	m_editorLocalRotation = GetLocalOrientation();
 }
 
 ZobPhysicComponent::~ZobPhysicComponent()
@@ -34,6 +36,9 @@ void ZobPhysicComponent::Init(const ZobVector3* position, const ZobVector3* rota
 	m_localTransform.setOrientation(q);
 	m_scale = Vector3(1, 1, 1);
 	m_totalScale = Vector3(1, 1, 1);
+	m_editorLocalScale.x = m_totalScale.x;
+	m_editorLocalScale.y = m_totalScale.y;
+	m_editorLocalScale.z = m_totalScale.z;
 	SetWorldTransform( GetParentWorldTransform() * m_localTransform);
 	Update();
 }
@@ -54,13 +59,16 @@ Transform ZobPhysicComponent::GetParentWorldTransform() const
 void ZobPhysicComponent::SetLocalTransform(Transform t) 
 {
 	m_localTransform = t; 
+	m_editorLocalPosition = ZobVector3(m_localTransform.getPosition().x, m_localTransform.getPosition().y, m_localTransform.getPosition().z);
+	m_editorLocalRotation = GetLocalOrientation();
 };
 
 void ZobPhysicComponent::SetWorldTransform(Transform t)
 { 
 	const Transform t2 = GetParentWorldTransform();
 	m_localTransform = t2.getInverse() * t;
-	//m_localTransform = t2 * t;
+	m_editorLocalPosition = ZobVector3(m_localTransform.getPosition().x, m_localTransform.getPosition().y, m_localTransform.getPosition().z);
+	m_editorLocalRotation = GetLocalOrientation();
 }
 
 Transform ZobPhysicComponent::GetWorldTransform() const 
@@ -146,7 +154,6 @@ void ZobPhysicComponent::LookAt(const ZobVector3* forward, const ZobVector3* lef
 	{
 		t.setOrientation(q);
 		SetWorldTransform(t);
-		//m_collisionBody->setTransform(t);
 	}
 }
 void ZobPhysicComponent::SetTotalScale(float x, float y, float z)
@@ -156,11 +163,33 @@ void ZobPhysicComponent::SetTotalScale(float x, float y, float z)
 		m_totalScale.x = x;
 		m_totalScale.y = y;
 		m_totalScale.z = z;
+		m_editorLocalScale.x = m_totalScale.x;
+		m_editorLocalScale.y = m_totalScale.y;
+		m_editorLocalScale.z = m_totalScale.z;
 		m_bUpdateSize = true;
 	}
 }
 
-void ZobPhysicComponent::SetOrientation(float x, float y, float z)
+void ZobPhysicComponent::SetLocalOrientation(float x, float y, float z)
+{
+	float rx = DEG_TO_RAD(x);
+	float ry = DEG_TO_RAD(y);
+	float rz = DEG_TO_RAD(z);
+	Transform t = GetWorldTransform();
+	Quaternion q;
+	//q = Quaternion::fromEulerAngles((dx), (dy), (dz));
+	ZobVector3 v = ZobMatrix4x4::EulerToQuaternion(rx, ry, rz);
+	q.x = v.x;
+	q.y = v.y;
+	q.z = v.z;
+	q.w = v.w;
+	Quaternion q2 = t.getOrientation();
+	q = q2 * q;
+	m_localTransform.setOrientation(q);
+	m_editorLocalRotation = GetLocalOrientation();
+}
+
+void ZobPhysicComponent::SetWorldOrientation(float x, float y, float z)
 {
 	float rx = DEG_TO_RAD(x);
 	float ry = DEG_TO_RAD(y);
@@ -177,9 +206,24 @@ void ZobPhysicComponent::SetOrientation(float x, float y, float z)
 	q = q2 * q;
 	t.setOrientation(q);
 	SetWorldTransform(t);
+	m_editorLocalRotation = GetLocalOrientation();
 }
 
-ZobVector3 ZobPhysicComponent::GetOrientation() const
+ZobVector3 ZobPhysicComponent::GetLocalOrientation() const
+{
+	Quaternion q = m_localTransform.getOrientation();
+	q.normalize();
+	ZobVector3 z = ZobMatrix4x4::QuaternionToEuler(q.x, q.y, q.z, q.w);
+	float ax = RAD_TO_DEG(z.x);
+	float ay = RAD_TO_DEG(z.y);
+	float az = RAD_TO_DEG(z.z);
+	ax = ClampAngle(ax);
+	ay = ClampAngle(ay);
+	az = ClampAngle(az);
+	return ZobVector3(ax, ay, az);
+}
+
+ZobVector3 ZobPhysicComponent::GetWorldOrientation() const
 {
 	Quaternion q = GetWorldTransform().getOrientation();
 	q.normalize();
@@ -200,6 +244,28 @@ float ZobPhysicComponent::ClampAngle(float a) const
 	return a;
 }
 
+void ZobPhysicComponent::EditorUpdate()
+{
+	Vector3 p = m_localTransform.getPosition();
+	Vector3 v;
+	v.x = m_editorLocalPosition.x;
+	v.y = m_editorLocalPosition.y;
+	v.z = m_editorLocalPosition.z;
+	if (p.x != v.x || p.y != v.y || p.z != v.z)
+	{
+		m_localTransform.setPosition(v);
+	}
+	ZobVector3 z = GetLocalOrientation();
+	v.x = m_editorLocalRotation.x;
+	v.y = m_editorLocalRotation.y;
+	v.z = m_editorLocalRotation.z;
+	if (z.x != v.x || z.y != v.y || z.z != v.z)
+	{
+		Quaternion q = Quaternion::fromEulerAngles(DEG_TO_RAD(v.x), DEG_TO_RAD(v.y), DEG_TO_RAD(v.z));
+		m_localTransform.setOrientation(q);
+	}
+}
+
 void ZobPhysicComponent::Update()
 {
 	assert(m_collisionBody);
@@ -215,6 +281,10 @@ void ZobPhysicComponent::Update()
 		{
 			Transform t = GetWorldTransform();
 			m_collisionBody->setTransform(t);
+			m_editorLocalRotation = GetLocalOrientation();
+			m_editorLocalPosition.x = m_localTransform.getPosition().x;
+			m_editorLocalPosition.y = m_localTransform.getPosition().y;
+			m_editorLocalPosition.z = m_localTransform.getPosition().z;
 		}
 	}
 	m_totalScale = Vector3(1, 1, 1);

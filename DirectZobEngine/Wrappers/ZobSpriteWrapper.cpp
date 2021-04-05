@@ -2,7 +2,7 @@
 #include "ZobSpriteWrapper.h"
 namespace CLI
 {
-	ZobSpriteWrapper::ZobSpriteWrapper(ZobSprite* zobObject):ZobObjectWrapper(zobObject)
+	ZobSpriteWrapper::ZobSpriteWrapper(ZobSprite* zobObject, Panel^ panel):ZobObjectWrapper(zobObject, panel)
 	{
 		//m_isValid = zobObject != NULL && IsSprite();
 	}

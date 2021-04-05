@@ -1,16 +1,27 @@
 #ifdef _WINDLL
+#include "DirectZobWrapper.h"
 #include "ZobObjectManagerWrapper.h"
 #include "../DirectZob.h"
 #include "../ZobObjects/ZobObject.h"
 #include "ZobLightWrapper.h"
 #include "ZobCameraWrapper.h"
 #include "ZobSpriteWrapper.h"
+
+#define TO_MANAGED_STRING(x) gcnew String(x);
+
 namespace CLI
 {
 
-	ZobObjectManagerWrapper::ZobObjectManagerWrapper():ManagedObject(DirectZob::GetInstance()->GetZobObjectManager(), false)
+	ZobObjectManagerWrapper::ZobObjectManagerWrapper(Panel^ objectTreeviewPanel, Panel^ objectPropertiesPanel):ManagedObject(DirectZob::GetInstance()->GetZobObjectManager(), false)
 	{
-
+		m_selectedObject = NULL;
+		m_objectTreeviewPanel = objectTreeviewPanel;
+		m_objectPropertiesPanel = objectPropertiesPanel;
+		m_selectedObjectWrapper = nullptr;
+		CreateTreeview();
+		CreateObjectview();
+		//DirectZobWrapper::OnEditorUpdateEvent += gcnew DirectZobWrapper::OnEditorUpdate(this, &ZobObjectManagerWrapper::OnEditorUpdate);
+		DirectZobWrapper::OnEditorUpdateEvent += gcnew DirectZobWrapper::OnEditorUpdate(m_treeView, &CLI::ZobControlTreeview::UpdateZobControl);
 	}
 
 	System::String^ ZobObjectManagerWrapper::GetZobObjectList()
@@ -20,8 +31,81 @@ namespace CLI
 		return gcnew System::String(s.c_str());
 	}
 
+	void ZobObjectManagerWrapper::OnEditorUpdate(Object^ sender, EventArgs^ e)
+	{
+		m_treeView->Invoke(gcnew Action(m_treeView, &CLI::ZobControlTreeview::UpdateZobControl));
+	}
+
+	void ZobObjectManagerWrapper::CreateObjectview()
+	{
+
+	}
+
+	void ZobObjectManagerWrapper::CreateTreeview()
+	{
+		UserControl^ c = gcnew UserControl();
+		m_treeView = gcnew CLI::ZobControlTreeview();
+		m_treeView->Dock = DockStyle::Fill;
+		m_treeView->AfterSelect += gcnew TreeViewEventHandler(this, &ZobObjectManagerWrapper::TreeNodeClick);
+		Refresh();
+		c->Controls->Add(m_treeView);
+		c->Dock = DockStyle::Fill;
+		m_objectTreeviewPanel->Controls->Add(c);
+	}
+
+	void ZobObjectManagerWrapper::TreeNodeClick(Object^ sender, TreeViewEventArgs^ e)
+	{
+		//TreeView^ tv = (TreeView^)sender;
+		ZobObjectManagerTreeNode^ tn = (ZobObjectManagerTreeNode^)e->Node;// tv->SelectedNode;
+		if (tn)
+		{
+			std::string id;
+			MarshalString(tn->m_zobObjectGuid, id);
+			m_selectedObject = DirectZob::GetInstance()->GetZobObjectManager()->GetZobObjectFromlId(id);
+			if (m_selectedObject != NULL)
+			{
+				if (m_selectedObjectWrapper != nullptr)
+				{
+					delete m_selectedObjectWrapper;
+				}
+				m_selectedObjectWrapper = gcnew ZobObjectWrapper(m_selectedObject, m_objectPropertiesPanel);
+			}
+		}
+		else
+		{
+			m_selectedObject = NULL;
+		}
+	}
+	
+	void ZobObjectManagerWrapper::Refresh()
+	{
+		if (GetInstance())
+		{
+			m_treeView->Nodes->Clear();
+			AddZobObjectsRecursive(GetInstance()->GetRootObject(), m_treeView->Nodes);
+		}
+	}
+
+	void ZobObjectManagerWrapper::AddZobObjectsRecursive(ZobObject* z, TreeNodeCollection^ collection)
+	{
+		if (z)
+		{
+			ZobObjectManagerTreeNode^ tn = gcnew ZobObjectManagerTreeNode();
+			const char* nameStr = z->GetName().c_str();
+			tn->Text = TO_MANAGED_STRING(nameStr);
+			std::string idStr = z->ZobGuidToString();
+			tn->m_zobObjectGuid = TO_MANAGED_STRING(idStr.c_str());
+			collection->Add(tn);
+			for (int i = 0; i < z->GetChildren()->size(); i++)
+			{
+				AddZobObjectsRecursive(z->GetChild(i), tn->Nodes);
+			}
+		}
+	}
+
 	ZobObjectWrapper^ ZobObjectManagerWrapper::GetZobObject(System::String^ name)
 	{
+		/*
 		std::string n;
 		MarshalString(name, n);
 		ZobObject* z = m_Instance->GetZobObject(n);
@@ -39,6 +123,8 @@ namespace CLI
 			return gcnew ZobSpriteWrapper((ZobSprite*)z);
 		}
 		return gcnew ZobObjectWrapper(z);
+		*/
+		return nullptr;
 	}
 
 	ZobObjectWrapper^ ZobObjectManagerWrapper::GetObjectAtCoords(int x, int y, eObjectTypes type)
@@ -80,15 +166,21 @@ namespace CLI
 
 	ZobObjectWrapper^ ZobObjectManagerWrapper::AddZobObject(ZobObjectWrapper^ parent)
 	{
+		/*
 		ZobObject* p = parent->GetInstance();
 		ZobObject* z = m_Instance->CreateZobObject(p);
 		return gcnew ZobObjectWrapper(z);
+		*/
+		return nullptr;
 	}
 
 	ZobObjectWrapper^ ZobObjectManagerWrapper::AddZobSprite(ZobObjectWrapper^ parent)
 	{
+		/*
 		ZobObject* z = m_Instance->CreateZobSprite(parent->GetInstance());
 		return gcnew ZobObjectWrapper(z);
+		*/
+		return nullptr;
 	}
 
 	void ZobObjectManagerWrapper::CreateEditorGizmos(System::String^ editorResourcesPath)
@@ -100,11 +192,13 @@ namespace CLI
 
 	ZobObjectWrapper^ ZobObjectManagerWrapper::GetRootObject()
 	{
+		/*
 		ZobObject* z = m_Instance->GetRootObject();
 		if (z)
 		{
 			return gcnew ZobObjectWrapper(z);
 		}
+		*/
 		return nullptr;
 	}
 

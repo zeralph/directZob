@@ -37,20 +37,20 @@ ZobBehaviorCar::ZobBehaviorCar(ZobObject* zobObject) : ZobBehavior(zobObject)
 	m_wheelRotationAngle = 0;
 	Init();
 
-
-	WrapVariable(eWrapperType_zobObject, "Front left wheel", &m_frontLeftWheel, false, true);
-	WrapVariable(eWrapperType_zobObject, "Front right wheel", &m_frontRightWheel, false, true);
-	WrapVariable(eWrapperType_zobObject, "Rear left wheel", &m_rearLeftWheel, false, true);
-	WrapVariable(eWrapperType_zobObject, "Rear right wheel", &m_rearRightWheel, false, true);
-	WrapVariable(eWrapperType_bool, "HandBrake", &m_handBrake, false, true);
-	WrapVariable(eWrapperType_float, "Mass", &m_mass, false, true);
-	WrapVariable(eWrapperType_float, "Max friction", &m_maxGrip, false, true);
-	WrapVariable(eWrapperType_float, "Inertia", &m_inertia, false, true);
-	WrapVariable(eWrapperType_float, "Air resistance", &m_drag, false, true);
-	WrapVariable(eWrapperType_float, "Rolling resistance", &m_resistance, false, true);
-	WrapVariable(eWrapperType_float, "Front cornering stiffness", &m_ca_f, false, true);
-	WrapVariable(eWrapperType_float, "Rear cornering stiffness", &m_ca_r, false, true);
-	WrapVariable(eWrapperType_float, "Steering rotation speed", &m_steeringRotationSpeedRS, false, true);
+	
+	m_varExposer->WrapVariable(ZobVariablesExposer::eWrapperType_zobObject, "Front left wheel", &m_frontLeftWheel, false, true);
+	m_varExposer->WrapVariable(ZobVariablesExposer::eWrapperType_zobObject, "Front right wheel", &m_frontRightWheel, false, true);
+	m_varExposer->WrapVariable(ZobVariablesExposer::eWrapperType_zobObject, "Rear left wheel", &m_rearLeftWheel, false, true);
+	m_varExposer->WrapVariable(ZobVariablesExposer::eWrapperType_zobObject, "Rear right wheel", &m_rearRightWheel, false, true);
+	m_varExposer->WrapVariable(ZobVariablesExposer::eWrapperType_bool, "HandBrake", &m_handBrake, false, true);
+	m_varExposer->WrapVariable(ZobVariablesExposer::eWrapperType_float, "Mass", &m_mass, false, true);
+	m_varExposer->WrapVariable(ZobVariablesExposer::eWrapperType_float, "Max friction", &m_maxGrip, false, true);
+	m_varExposer->WrapVariable(ZobVariablesExposer::eWrapperType_float, "Inertia", &m_inertia, false, true);
+	m_varExposer->WrapVariable(ZobVariablesExposer::eWrapperType_float, "Air resistance", &m_drag, false, true);
+	m_varExposer->WrapVariable(ZobVariablesExposer::eWrapperType_float, "Rolling resistance", &m_resistance, false, true);
+	m_varExposer->WrapVariable(ZobVariablesExposer::eWrapperType_float, "Front cornering stiffness", &m_ca_f, false, true);
+	m_varExposer->WrapVariable(ZobVariablesExposer::eWrapperType_float, "Rear cornering stiffness", &m_ca_r, false, true);
+	m_varExposer->WrapVariable(ZobVariablesExposer::eWrapperType_float, "Steering rotation speed", &m_steeringRotationSpeedRS, false, true);
 
 	//m_zobObject->GetWorldRotation().y;
 	m_speed_ms = 0;

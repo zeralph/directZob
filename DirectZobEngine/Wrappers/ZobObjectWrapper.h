@@ -4,7 +4,7 @@
 #include "../ZobObjects/ZobObject.h"
 #include "ManagedVector3.h"
 #include "ManagedRenderOptions.h"
-
+#include "ZobUserControls/ZobUserControls.h"
 #using "System.Windows.Forms.dll"
 #using "System.dll"
 #using "System.Drawing.dll"
@@ -20,7 +20,7 @@ namespace CLI {
 	public ref class ComboboxItem
 	{
 		public :
-			ComboboxItem(int k, String^ v, const ZobBehavior::wrapperData* w)
+			ComboboxItem(int k, String^ v, const ZobVariablesExposer::wrapperData* w)
 			{
 				Key = k;
 				Value = v;
@@ -32,14 +32,14 @@ namespace CLI {
 			}
 			int Key;
 			String^ Value;
-			const ZobBehavior::wrapperData* w;
+			const ZobVariablesExposer::wrapperData* w;
 	};
 
 
 	public ref class ZobObjectWrapper : ManagedObject<ZobObject>
 	{
 	public:
-		ZobObjectWrapper(ZobObject* zobObject);
+		ZobObjectWrapper(ZobObject* zobObject, Panel^ panel);
 		~ZobObjectWrapper() override;
 		bool					IsValid() override;
 		void					SetZobObject(ZobObject* zobObject) { m_Instance = zobObject; }
@@ -55,7 +55,6 @@ namespace CLI {
 		ManagedVector3^			GetWorldRotation();
 		ManagedVector3^			GetScale();
 		ManagedRenderOptions^	GetRenderOptions();
-		UserControl^			FillBehaviorsControl();
 		List<ZobObjectWrapper^>^ GetChildren();
 		void					SetLocalTransform(ManagedVector3^ p);
 		void					SetLocalRotation(ManagedVector3^ p);
@@ -75,7 +74,7 @@ namespace CLI {
 		bool					IsFromFactoryFile();
 		String^					FactoryFile();
 		void					SaveToFactoryFile(String^ file);
-
+		void					EditorUpdate();
 		void					FloatHandler(Object^ sender, System::EventArgs^ e);
 		void					BoolHandler(Object^ sender, System::EventArgs^ e);
 		void					IntHandler(Object^ sender, System::EventArgs^ e);
@@ -87,22 +86,30 @@ namespace CLI {
 		void					GroupClick(Object^ sender, System::EventArgs^ e);
 
 	private:
-		GroupBox^				FillBehaviorControl(ZobBehavior* zb);
+		void					CreateObjectview();
+		ZobGroupBox^			FillBehaviorControl(ZobBehavior* zb);
+		ZobGroupBox^			FillObjectControl(ZobObject* z);
+		ZobGroupBox^			FillControlInternal(std::string& name, ZobVariablesExposer* ze);
+		void					CreateObjectBeahaviorsview();
+		Panel^					m_panel;
+		ZobGroupBox^			m_objectPanel;
+		ZobPropertiesContainer^	m_container;
 	protected:
 
-		void					AddFloatVariable(TableLayoutPanel^ panel, ZobBehavior::wrapperData* w);
-		void					AddEnumVariable(TableLayoutPanel^ panel, ZobBehavior::wrapperData* w);
-		void					AddBoolVariable(TableLayoutPanel^ panel, ZobBehavior::wrapperData* w);
-		void					AddIntVariable(TableLayoutPanel^ panel, ZobBehavior::wrapperData* w);
-		void					AddZobIdVariable(TableLayoutPanel^ panel, ZobBehavior::wrapperData* w);
-		void					AddZobVector2Variable(TableLayoutPanel^ panel, ZobBehavior::wrapperData* w);
-		void					AddZobVector3Variable(TableLayoutPanel^ panel, ZobBehavior::wrapperData* w);
-		void					AddStringVariable(TableLayoutPanel^ panel, ZobBehavior::wrapperData* w);
-		void					AddPathVariable(TableLayoutPanel^ panel, ZobBehavior::wrapperData* w);
-		void					AddZobObjectVariable(TableLayoutPanel^ panel, ZobBehavior::wrapperData* w);
+		TableLayoutPanel^		AddFloatVariable(ZobVariablesExposer::wrapperData* w);
+		TableLayoutPanel^		AddEnumVariable(ZobVariablesExposer::wrapperData* w);
+		TableLayoutPanel^		AddBoolVariable(ZobVariablesExposer::wrapperData* w);
+		TableLayoutPanel^		AddIntVariable(ZobVariablesExposer::wrapperData* w);
+		TableLayoutPanel^		AddZobIdVariable(ZobVariablesExposer::wrapperData* w);
+		TableLayoutPanel^		AddZobVector2Variable(ZobVariablesExposer::wrapperData* w);
+		ZobControlVector3^		AddZobVector3Variable(ZobVariablesExposer::wrapperData* w);
+		TableLayoutPanel^		AddStringVariable(ZobVariablesExposer::wrapperData* w);
+		TableLayoutPanel^		AddPathVariable(ZobVariablesExposer::wrapperData* w);
+		TableLayoutPanel^		AddZobObjectVariable(ZobVariablesExposer::wrapperData* w);
 
-		const ZobBehavior::wrapperData* GetWrapperDataForVariable(String^ variableName);
- 		unsigned long long m_id;
+		const ZobVariablesExposer::wrapperData* GetWrapperDataForVariable(String^ variableName);
+ 		unsigned long long		m_id;
+		ZobObject*				m_zobObject;
 	};
 }
 #endif //_WINDLL 

@@ -99,11 +99,13 @@ namespace CLI
 
 	ZobObjectWrapper^ EngineWrapper::GetObjectAt2DCoords(float x, float y)
 	{
+		/*
 		ZobObject* z = m_Instance->GetObjectAt2DCoords(x, y);
 		if(z)
 		{
 			return gcnew ZobObjectWrapper(z);
 		}
+		*/
 		return nullptr;
 	}
 

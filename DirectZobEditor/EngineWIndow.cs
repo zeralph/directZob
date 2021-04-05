@@ -93,7 +93,7 @@ namespace DirectZobEditor
 
         public void BindEvents()
         {
-            m_mainForm.GetZobObjectListControl().OnObjectSelected += new ZobObjectListControl.OnObjectSelectedHandler(OnObjectSelected);
+//            m_mainForm.GetZobObjectListControl().OnObjectSelected += new ZobObjectListControl.OnObjectSelectedHandler(OnObjectSelected);
             m_mainForm.OnNewScene += new EventHandler(OnSceneChanged);
             m_mainForm.Load += new EventHandler(OnMainformLoaded);
             EngineRender.HandleDestroyed += new EventHandler(OnClose);
@@ -131,7 +131,7 @@ namespace DirectZobEditor
 
         public void UpdateModificationGizmos()
         {
-            ZobObjectWrapper z = m_mainForm.GetZobObjectListControl().GetSelectedZobObject();
+            ZobObjectWrapper z = null;// m_mainForm.GetZobObjectListControl().GetSelectedZobObject();
             if (z != null && z.IsValid())
             {
                 int btnSize = 20 / 2;

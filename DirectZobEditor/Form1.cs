@@ -50,11 +50,12 @@ namespace DirectZobEditor
         public event OnSceneUpdateHandler OnSceneUpdated;
 
         private CLI.DirectZobWrapper m_directZobWrapper;
+        private CLI.ZobObjectManagerWrapper m_zobObjectManagerWrapper;
         private CLI.MeshManagerWrapper m_meshManagerWrapper;
         private CLI.LightManagerWrapper m_lightManagerWrapper;
         private CLI.CameraManagerWrapper m_cameraManagerWrapper;
 
-        private ZobObjectListControl m_zobObjectList;
+        //private ZobObjectListControl m_zobObjectList;
         private EngineWindow m_engineWindow;
         private EngineControl m_engineControl;
         private ZobObjectControl m_zobObjectControl;
@@ -81,8 +82,9 @@ namespace DirectZobEditor
             m_mainForm = this;
             InitializeComponent();
             this.KeyPreview = true;
-            m_directZobWrapper = new CLI.DirectZobWrapper();
+            m_directZobWrapper = new CLI.DirectZobWrapper(this.ZobObjectListPanel, this.ObjectControlsFlowLayout);
             m_directZobWrapper.Init(1024, 768);
+            m_zobObjectManagerWrapper = m_directZobWrapper.GetZobObjectManagerWrapper();
 
             m_meshManagerWrapper = new CLI.MeshManagerWrapper();
             m_lightManagerWrapper = new CLI.LightManagerWrapper();
@@ -96,7 +98,7 @@ namespace DirectZobEditor
             //--
             m_engineWindow = new EngineWindow(this, m_directZobWrapper);
             m_engineControl = new EngineControl(this, m_engineWindow.GetEngineWrapper());
-            m_zobObjectList = new ZobObjectListControl(this);
+//            m_zobObjectList = new ZobObjectListControl(this);
             m_sceneControl = new SceneControl(this, m_lightManagerWrapper);
             m_lightControl = new ZobLightControl(this);
             m_cameraControl = new ZobCameraControl(this);
@@ -106,7 +108,7 @@ namespace DirectZobEditor
             m_zobObjectControl = new ZobObjectControl(this, m_lightControl, m_cameraControl, m_meshControl);
             m_engineWindow.BindEvents();
             m_engineControl.BindEvents();
-            m_zobObjectList.BindEvents();
+ //           m_zobObjectList.BindEvents();
             m_sceneControl.BindEvents();
             m_lightControl.BindEvents();
             m_cameraControl.BindEvents();
@@ -115,7 +117,7 @@ namespace DirectZobEditor
             //m_physicsControl.BindEvents();
             m_zobObjectControl.BindEvents();
             EngineRendererPanel.Controls.Add(m_engineWindow);
-            ZobObjectListPanel.Controls.Add(m_zobObjectList);
+            //ZobObjectListPanel.Controls.Add(m_zobObjectList);
             ObjectControlsFlowLayout.Controls.Add(m_zobObjectControl);
             //ObjectControlsFlowLayout.Controls.Add(m_physicsControl);
             ObjectControlsFlowLayout.Controls.Add(m_meshControl);
@@ -161,7 +163,7 @@ namespace DirectZobEditor
         public void UpdateAfterEngine()
         {
             UpdateCameraList();
-            m_zobObjectList.UpdateControl();
+ //           m_zobObjectList.UpdateControl();
 
             m_events = m_directZobWrapper.GetEventsAndClear();
             UpdateEventsLog();
@@ -247,7 +249,7 @@ namespace DirectZobEditor
 
         public ZobObjectListControl GetZobObjectListControl()
         {
-            return m_zobObjectList;
+            return null;// m_zobObjectList;
         }
 
         public CLI.DirectZobWrapper GetDirectZobWrapper()
@@ -327,6 +329,9 @@ namespace DirectZobEditor
 
         private void OnSceneLoadedMethod()
         {
+            m_zobObjectManagerWrapper.Refresh();
+            CLI.CameraManagerWrapper cm = m_mainForm.GetCameraManagerWrapper();
+            cm.CreateEditorCamera();
             EventHandler handler = OnSceneLoadedEventHandler;
             if (null != handler)
             {
@@ -401,8 +406,8 @@ namespace DirectZobEditor
                     string name = file;
                     name.Replace(' ', '_');
                     //m_meshManagerWrapper.LoadMesh(name, path, file);
-                    CLI.ZobObjectWrapper root = m_zobObjectList.GetWrapper().GetRootObject();
-                    CLI.ZobObjectWrapper z = m_zobObjectList.GetWrapper().AddZobObject(root);
+                    CLI.ZobObjectWrapper root = m_zobObjectManagerWrapper.GetRootObject();
+                    CLI.ZobObjectWrapper z = m_zobObjectManagerWrapper.AddZobObject(root);
                     z.SetName(name);
                     string workspace = m_directZobWrapper.GetResourcePath();
                     //z.SetMesh(name);
@@ -521,8 +526,8 @@ namespace DirectZobEditor
 
         private void createSpriteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            CLI.ZobObjectWrapper root = m_zobObjectList.GetWrapper().GetRootObject();
-            CLI.ZobObjectWrapper z = m_zobObjectList.GetWrapper().AddZobSprite(root);
+            CLI.ZobObjectWrapper root = m_zobObjectManagerWrapper.GetRootObject();
+            CLI.ZobObjectWrapper z = m_zobObjectManagerWrapper.AddZobSprite(root);
             Form1.SceneUpdateEventArg ev = new Form1.SceneUpdateEventArg();
             ev.type = Form1.SceneUpdateType.createSprite;
             ev.zobObject = z;
@@ -531,8 +536,8 @@ namespace DirectZobEditor
 
         private void createZobObjectToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            CLI.ZobObjectWrapper root = m_zobObjectList.GetWrapper().GetRootObject();
-            CLI.ZobObjectWrapper z = m_zobObjectList.GetWrapper().AddZobObject(root);
+            CLI.ZobObjectWrapper root = m_zobObjectManagerWrapper.GetRootObject();
+            CLI.ZobObjectWrapper z = m_zobObjectManagerWrapper.AddZobObject(root);
             Form1.SceneUpdateEventArg ev = new Form1.SceneUpdateEventArg();
             ev.type = Form1.SceneUpdateType.objectAdded;
             ev.zobObject = z;
@@ -546,7 +551,7 @@ namespace DirectZobEditor
                 //save objects position
                 if (m_playMode == eplayMode.ePlayMode_stop)
                 {
-                    m_zobObjectList.SaveTransforms();
+ //                   m_zobObjectList.SaveTransforms();
                 }
                 m_playMode = eplayMode.ePlayMode_play;
                 m_directZobWrapper.StartPhysic();
@@ -574,7 +579,7 @@ namespace DirectZobEditor
                 m_directZobWrapper.StopPhysic(true);
                 if (m_playMode != eplayMode.ePlayMode_stop)
                 {
-                    m_zobObjectList.RestoreTransforms();
+ //                   m_zobObjectList.RestoreTransforms();
                 }
                 m_playMode = eplayMode.ePlayMode_stop;
                 Form1.SceneUpdateEventArg ev = new Form1.SceneUpdateEventArg();

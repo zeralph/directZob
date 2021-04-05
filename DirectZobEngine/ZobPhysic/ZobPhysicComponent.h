@@ -51,17 +51,20 @@ public:
 	~ZobPhysicComponent();
 	void								Init(const ZobVector3* position, const ZobVector3* rotation);
 	void								SetPosition(float x, float y, float z);
-	void								SetOrientation(float x, float y, float z);
+	void								SetLocalOrientation(float x, float y, float z);
+	void								SetWorldOrientation(float x, float y, float z);
 	void								SetQuaternion(float x, float y, float z, float w);
 	void								SetQuaternion(const ZobVector3* left, const ZobVector3* up, const ZobVector3* fw);
 	ZobVector3							GetPosition() const ;
-	ZobVector3							GetOrientation() const ;
+	ZobVector3							GetWorldOrientation() const ;
+	ZobVector3							GetLocalOrientation() const;
 	ZobMatrix4x4						GetRotationMatrix() const;
 	ZobVector3							GetScale() const { return ZobVector3(m_scale.x, m_scale.y, m_scale.z); }
 	void								SetScale(float x, float y, float z) { m_scale.x = x; m_scale.y = y; m_scale.z=z; }
 	void								LookAt(const ZobVector3* target);
 	void								LookAt(const ZobVector3* forward, const ZobVector3* left, const ZobVector3* up);
 	void								Update();
+	void								EditorUpdate();
 	void								SaveTransform();
 	void								RestoreTransform();
 	void								ResetPhysic();
@@ -80,7 +83,10 @@ public:
 	bool								GetScaleWithObject() const { return m_scaleWithObject; }
 	void								OnCollide(collision coll);
 	collision*							GetLastCollision() { return &m_lastCollision; }
-
+	ZobVector3*							GetLocalPositionAddress() { return &m_editorLocalPosition; }
+	ZobVector3*							GetLocalRotationAddress() { return &m_editorLocalRotation; }
+	ZobVector3*							GetLocalScaleAddress() { return &m_editorLocalScale; }
+	
 private:
 
 	float								ClampAngle(float a) const;
@@ -93,6 +99,9 @@ private:
 	collision m_lastCollision;
 	Vector3 m_scale;
 	Vector3 m_totalScale;
+	ZobVector3 m_editorLocalPosition;
+	ZobVector3 m_editorLocalRotation;
+	ZobVector3 m_editorLocalScale;
 	bool m_scaleWithObject;
 	bool m_bUpdateSize;
 };

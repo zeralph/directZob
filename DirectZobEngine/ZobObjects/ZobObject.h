@@ -11,6 +11,7 @@
 
 class Mesh;
 class ZobPhysicComponent;
+class m_varExposer;
 class ZobObject:public ZOBGUID
 {
 friend class ZobBehavior;
@@ -94,15 +95,17 @@ public:
 	const ZobMatrix4x4*				GetRotationScaleMatrix() const { return &m_rotationScaleMatrix; };
 	const std::vector<ZobBehavior*>*GetBehaviors() { return &m_behaviors; }
 	void							AddBehavior(ZobBehavior* b) { m_behaviors.push_back(b); }
-
+	ZobVariablesExposer*			GetVariablesExposer() { return m_varExposer; }
 private:
 	void							SaveRecusrive(TiXmlNode* node, ZobObject* z);
 	void							SetParentInternal();
 	void							DeleteInternal();
+	void							InitVariablesExposer();
 protected:
 
 	ZobObject* m_parent;
 	ZobObject* m_newParent;
+	ZobVariablesExposer* m_varExposer;
 	ZobPhysicComponent* m_physicComponent;
 	Mesh* m_mesh = NULL;
 	std::vector<ZobObject*> m_children;

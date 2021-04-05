@@ -11,20 +11,12 @@ ZobBehaviorPhysicShape::ZobBehaviorPhysicShape(ZobObject* zobObject) : ZobBehavi
 {
 	m_type = eBehavior_none;
 
-	WrapVariable(eWrapperType_int, "Layers", &m_layers, false, true);
-	WrapVariable(eWrapperType_bool, "Trigger", &m_isTrigger, false, true);
-	WrapVariable(eWrapperType_ZobVector3, "Local position", &m_localPostion, false, true);
-	//WrapVariable(eWrapperType_float, "Bounciness",  &m_bounciness, false, true);
-	//WrapVariable(eWrapperType_float, "Friction coeff", &m_frictionCoeff, false, true);
-	//WrapVariable(eWrapperType_float, "Mass density", &m_massDensity, false, true);
-	//WrapVariable(eWrapperType_float, "Rollling Resistance", &m_rollingResistance, false, true);
-	WrapVariable(eWrapperType_bool, "Scale with object", &m_bUpdateSize, false, true);
+	m_varExposer->WrapVariable(ZobVariablesExposer::eWrapperType_int, "Layers", &m_layers, false, true);
+	m_varExposer->WrapVariable(ZobVariablesExposer::eWrapperType_bool, "Trigger", &m_isTrigger, false, true);
+	m_varExposer->WrapVariable(ZobVariablesExposer::eWrapperType_ZobVector3, "Local position", &m_localPostion, false, true);
+	m_varExposer->WrapVariable(ZobVariablesExposer::eWrapperType_bool, "Scale with object", &m_bUpdateSize, false, true);
 	m_isTrigger = false;
 	m_collider = NULL;
-	//m_rollingResistance = 1.0f;
-	//m_massDensity = 1.0f;
-	//m_frictionCoeff = 1.0f;
-	//m_bounciness = 1.0f;
 	m_layers = 0;
 }
 
@@ -92,7 +84,11 @@ void ZobBehaviorPhysicShape::EditorUpdate()
 			v.y = m_localPostion.y;
 			v.z = m_localPostion.z;
 			t.setPosition(v);
-			m_collider->setLocalToBodyTransform(t);
+			if (t.isValid())
+			{
+				//crash ici, no se !
+				m_collider->setLocalToBodyTransform(t);
+			}
 		}
 	}
 }

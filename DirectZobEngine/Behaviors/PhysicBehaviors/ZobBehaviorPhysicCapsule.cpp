@@ -11,8 +11,8 @@ ZobBehaviorPhysicCapsule::ZobBehaviorPhysicCapsule(ZobObject* zobObject) : ZobBe
 {
 	m_type = eBehavior_physicCapsule;
 	m_capsuleShape = NULL;
-	WrapVariable(eWrapperType_float, "Radius", &m_radius, false, true);
-	WrapVariable(eWrapperType_float, "Height", &m_height, false, true);
+	m_varExposer->WrapVariable(ZobVariablesExposer::eWrapperType_float, "Radius", &m_radius, false, true);
+	m_varExposer->WrapVariable(ZobVariablesExposer::eWrapperType_float, "Height", &m_height, false, true);
 	m_radius = 1.0f;
 	m_height = 2.0f;
 }

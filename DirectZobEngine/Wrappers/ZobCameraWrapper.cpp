@@ -3,7 +3,7 @@
 #include "../ZobObjects/Camera.h"
 namespace CLI
 {
-	ZobCameraWrapper::ZobCameraWrapper(Camera* zobObject):ZobObjectWrapper(zobObject)
+	ZobCameraWrapper::ZobCameraWrapper(Camera* zobObject, Panel^ panel):ZobObjectWrapper(zobObject, panel)
 	{
 		//m_isValid = zobObject != NULL && IsCamera();
 	}

@@ -1,13 +1,17 @@
 #ifdef _WINDLL
+#include "../DirectZob.h"
 #include "DirectZobWrapper.h"
 #include "../../dependencies/minifb/include/MiniFB_enums.h"
 
 namespace CLI
 {
-	DirectZobWrapper::DirectZobWrapper():ManagedObject(new DirectZob, true)
+	DirectZobWrapper::DirectZobWrapper(Panel^ objectTreeviewPanel, Panel^ objectPropertiesPanel):ManagedObject(new DirectZob, true)
 	{
 		m_run = false;
 		m_sceneLoadedCb = nullptr;
+		m_ZobObjectManagerWrapper = nullptr;
+		m_objectTreeviewPanel = objectTreeviewPanel;
+		m_objectPropertiesPanel = objectPropertiesPanel;
 	}
 
 	void DirectZobWrapper::StartPhysic()
@@ -40,6 +44,7 @@ namespace CLI
 		if (GetInstance())
 		{
 			GetInstance()->Init(0, width, height, true);
+			m_ZobObjectManagerWrapper = gcnew ZobObjectManagerWrapper(m_objectTreeviewPanel, m_objectPropertiesPanel);
 		}
 	}
 
@@ -180,6 +185,7 @@ namespace CLI
 		if (GetInstance())
 		{
 			GetInstance()->EditorUpdate();
+			OnEditorUpdateEvent();
 		}
 	}
 

@@ -122,7 +122,9 @@
 				'Behaviors/PhysicBehaviors/ZobBehaviorPhysicSphere.cpp',	
 				'Behaviors/PhysicBehaviors/ZobBehaviorPhysicMesh.h',
 				'Behaviors/PhysicBehaviors/ZobBehaviorPhysicMesh.cpp',		
-				'Misc/ZobXmlHelper.h',				
+				'Misc/ZobXmlHelper.h',		
+				'Misc/ZobVariablesExposer.h',
+				'Misc/ZobVariablesExposer.cpp',				
             ],
             'conditions': [
                 [
@@ -353,6 +355,7 @@
                             'Wrappers/MeshManagerWrapper.h',
                             'Wrappers/ZobObjectManagerWrapper.h',
                             'Wrappers/ZobObjectWrapper.h',
+                            'Wrappers/ZobObjectWrapper.h',
                             'Wrappers/LightManagerWrapper.h',
                             'Wrappers/ZobLightWrapper.h',
                             'Wrappers/CameraManagerWrapper.h',
@@ -360,6 +363,8 @@
                             'Wrappers/ZobSpriteWrapper.h',
 							'Wrappers/ZobBehaviorWrapper.h',
 							'Wrappers/ZobBehaviorWrapper.cpp',
+							'Wrappers/ZobUserControls/ZobUserControls.h',
+							'Wrappers/ZobUserControls/ZobUserControls.cpp',
 							],
                         'link_settings': {
                             # links fbxsdk as static

@@ -4,7 +4,7 @@
 #include "../ZobObjects/Camera.h"
 namespace CLI
 {
-	ZobLightWrapper::ZobLightWrapper(Light* zobObject):ZobObjectWrapper(zobObject)
+	ZobLightWrapper::ZobLightWrapper(Light* zobObject, Panel^ panel):ZobObjectWrapper(zobObject, panel)
 	{
 		//m_isValid = zobObject != NULL && IsLight();
 	}
