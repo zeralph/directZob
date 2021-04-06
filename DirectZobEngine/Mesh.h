@@ -7,6 +7,7 @@
 #include "Rendering/ZobVector3.h"
 #include "Rendering/ZobVector2.h"
 #include "Types.h"
+#include "ZobObjects/ZOBGUID.h"
 #include "Rendering/Triangle.h"
 #include "ZobObjects/Camera.h"
 #include "Events.h"

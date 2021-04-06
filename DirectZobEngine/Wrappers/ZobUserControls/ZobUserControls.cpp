@@ -176,7 +176,7 @@ void ZobControlVector3::UpdateZobControl()
 void ZobControlVector3::UpdateZobControlInternal()
 {
 	if(!txt_X->Focused)
-		txt_X->Text = String::Format("{0:0.000}",m_zobVector3->x);
+		txt_X->Text = String::Format("{0:0.000}", m_zobVector3->x);
 	if (!txt_Y->Focused)
 		txt_Y->Text = String::Format("{0:0.000}", m_zobVector3->y);
 	if (!txt_Z->Focused)

@@ -299,12 +299,6 @@ void Camera::Init()
 	m_zobCameraController->Init();
 }
 
-void Camera::UpdateBehavior(float dt)
-{
-	ZobObject::UpdateBehavior(dt);
-	//m_zobCameraController->Update(dt);
-}
-
 void Camera::UpdateAfter()
 {
 }

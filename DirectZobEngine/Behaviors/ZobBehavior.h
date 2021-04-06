@@ -22,13 +22,16 @@ public:
 		eBehavior_physicSphere,
 		eBehavior_physicCapsule,
 		eBehavior_physicMesh,
+		eBehavior_mesh,
 		__eBehavior_MAX__,
 	};
 
 	virtual ~ZobBehavior() {};
+	virtual void											Init() = 0;
 	virtual void											PreUpdate()=0;
-	virtual void											Init()=0;
-	virtual void											Update(float dt) = 0;
+	virtual void											UpdateBeforeObject(float dt) = 0;
+	virtual void											UpdateAfterObject(float dt) = 0;
+	virtual void											PostUpdate() = 0;
 	virtual void											EditorUpdate() = 0;
 	virtual	void											DrawGizmos(const Camera* camera, const ZobVector3* position, const ZobVector3* rotation) const {}
 

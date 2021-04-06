@@ -54,7 +54,6 @@ public:
 	//void					Update(const ZobMatrix4x4& parentMatrix, const ZobMatrix4x4& parentRSMatrix) override;
 	void					Update(float dt) override;
 	void					PreUpdate() override;
-	void					UpdateBehavior(float dt) override;
 	void					Init() override;
 	void					UpdateAfter();
 	void					DrawGizmos(const Camera* camera, Core::Engine* engine) override;

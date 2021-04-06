@@ -9,18 +9,20 @@
         <FogDistance>20.00</FogDistance>
         <FogType>none</FogType>
     </Globals>
-    <ZobObject Name="menu" Guid="2002114332">
-        <Position X="0" Y="0" Z="0" />
-        <Rotation X="0" Y="0" Z="0" />
-        <Scale X="1" Y="1" Z="1" />
+    <ZobObject Guid="2002114332">
+        <Var Name="Name" value="Menu" />
+        <Var Name="Position" value="0.000000;0.000000;0.000000" />
+        <Var Name="Rotation" value="0.000000;0.000000;0.000000" />
+        <Var Name="Scale" value="0.000000;0.000000;0.000000" />
         <Behaviors>
             <Behavior Type="Menu" Guid="2007724783" />
         </Behaviors>
     </ZobObject>
-    <ZobObject Name="Fixed_camera_1" Guid="2003891397" Type="Camera">
-        <Position X="0" Y="5" Z="0" />
-        <Rotation X="0" Y="0" Z="0" />
-        <Scale X="1" Y="1" Z="1" />
+    <ZobObject Guid="2003891397" Type="Camera">
+        <Var Name="Name" value="Camera" />
+        <Var Name="Position" value="0.000000;0.000000;0.000000" />
+        <Var Name="Rotation" value="0.000000;0.000000;0.000000" />
+        <Var Name="Scale" value="0.000000;0.000000;0.000000" />
         <Behaviors />
         <Controller Name="Base" Guid="2008273791" />
         <Fov>45.00</Fov>

@@ -25,9 +25,12 @@ public:
 	//Mechanics
 	virtual void					Init();
 	virtual void					PreUpdate();
+	virtual void					UpdatePhysic(float dt);
 	virtual void					Update(float dt);
+	virtual void					PostUpdate();
 	virtual void					EditorUpdate();
-	virtual void					UpdateBehavior(float dt);
+	virtual void					UpdateBehaviorsBeforeObject(float dt);
+	virtual void					UpdateBehaviorsAfterObject(float dt);
 	virtual void					UpdateMesh(const Camera* camera, Core::Engine* engine);
 	virtual void					QueueForDrawing(const Camera* camera, Core::Engine* engine);
 	virtual void					DrawGizmos(const Camera* camera, Core::Engine* engine);
@@ -95,13 +98,11 @@ public:
 	ZobVariablesExposer*			GetVariablesExposer() { return m_varExposer; }
 private:
 	void							SaveRecusrive(TiXmlNode* node, ZobObject* z);
-	void							SetParentInternal();
 	void							DeleteInternal();
 	void							InitVariablesExposer();
 protected:
 
 	ZobObject* m_parent;
-	ZobObject* m_newParent;
 	ZobVariablesExposer* m_varExposer;
 	ZobPhysicComponent* m_physicComponent;
 	Mesh* m_mesh = NULL;

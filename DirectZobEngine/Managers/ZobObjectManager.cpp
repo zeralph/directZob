@@ -140,15 +140,15 @@ void ZobObjectManager::PreUpdate()
 	m_rootObject->PreUpdate();
 }
 
+void ZobObjectManager::PostUpdate()
+{
+	OPTICK_EVENT();
+	m_rootObject->PostUpdate();
+}
+
 void ZobObjectManager::EditorUpdate()
 {
 	m_rootObject->EditorUpdate();
-}
-
-void ZobObjectManager::UpdateBehavior(float dt)
-{
-	OPTICK_EVENT();
-	m_rootObject->UpdateBehavior(dt);
 }
 
 void ZobObjectManager::UpdateObjects(const Camera* camera, Core::Engine* engine, float dt)

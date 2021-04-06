@@ -25,6 +25,11 @@ void ZobBehaviorPhysicShape::PreUpdate()
 
 }
 
+void ZobBehaviorPhysicShape::PostUpdate()
+{
+
+}
+
 void ZobBehaviorPhysicShape::Init()
 {
 	assert(m_collider);
@@ -91,11 +96,6 @@ void ZobBehaviorPhysicShape::EditorUpdate()
 			}
 		}
 	}
-}
-
-void ZobBehaviorPhysicShape::Update(float dt)
-{
-
 }
 
 void ZobBehaviorPhysicShape::DrawGizmos(const Camera* camera, const ZobVector3* position, const ZobVector3* rotation) const

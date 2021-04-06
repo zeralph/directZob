@@ -224,17 +224,17 @@ void ZobBehaviorCar::EditorUpdate()
 {
 }
 
-void ZobBehaviorCar::Update(float dt)
+void ZobBehaviorCar::UpdateBeforeObject(float dt)
 {
-	CheckGroundCollisions();
-	CheckEnvironmentCollision();
-	UpdateInputs(dt);
 	DirectZob* directZob = DirectZob::GetInstance();
 	float sn, cs;
 	double	angular_acceleration;
 	ZobVector3 flatf, flatr;
 	if (directZob->IsPhysicPlaying())
 	{
+		CheckGroundCollisions();
+		CheckEnvironmentCollision();
+		UpdateInputs(dt);
 		double	rot_angle;
 		double	sideslip;
 		double	slipanglefront;

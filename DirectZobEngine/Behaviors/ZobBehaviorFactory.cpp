@@ -1,6 +1,7 @@
 #include "ZobBehaviorFactory.h"
 #include "ZobBehaviorCar.h"
 #include "ZobBehaviorMenu.h"
+#include "ZobBehaviorMesh.h"
 #include "PhysicBehaviors/ZobBehaviorPhysicBox.h"
 #include "PhysicBehaviors/ZobBehaviorPhysicSphere.h"
 #include "PhysicBehaviors/ZobBehaviorPhysicCapsule.h"
@@ -14,7 +15,8 @@ const char* ZobBehaviorFactory::eBehaviorTypeStr[ZobBehavior::__eBehavior_MAX__]
 	"PhysicBox",
 	"PhysicSphere",
 	"PhysicCapsule",
-	"PhysicMesh"
+	"PhysicMesh",
+	"Mesh"
 };
 
 ZobBehavior* ZobBehaviorFactory::CreateBehaviorInternal(ZobObject* zobObject, const char* behaviorName)
@@ -53,9 +55,14 @@ ZobBehavior* ZobBehaviorFactory::CreateBehaviorInternal(ZobObject* zobObject, co
 			case ZobBehavior::eBehavior_menu:
 				zb = new ZobBehaviorMenu(zobObject);
 				break;
-			default:
+			case ZobBehavior::eBehavior_mesh:
+				zb = new ZobBehaviorMesh(zobObject);
+				break;
 			case ZobBehavior::eBehavior_none:
 				zb = NULL;
+				break;
+			default:
+				assert(false);
 				break;
 			}
 		}

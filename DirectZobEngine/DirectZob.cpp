@@ -249,6 +249,7 @@ int DirectZob::RunAFrame(DirectZob::engineCallback OnSceneUpdated /*=NULL*/, Dir
 			m_lightManager->PreUpdate();
 			m_engine->StartDrawingScene();
 			Color c = Color(DirectZob::GetInstance()->GetLightManager()->GetClearColor());
+			float dt = m_frameTime / 1000.0f;
 			if (OnSceneUpdated)
 			{
 				OnSceneUpdated();
@@ -256,14 +257,13 @@ int DirectZob::RunAFrame(DirectZob::engineCallback OnSceneUpdated /*=NULL*/, Dir
 			if (m_physicStarted)
 			{
 				bPhysicUpdated = true;
-				m_zobObjectManager->UpdateBehavior(m_frameTime / 1000.0f);
-				m_hudManager->UpdateBehavior(m_frameTime / 1000.0f);
-				m_physicsEngine->StartUpdatePhysic(m_frameTime/1000.0f);
-				
+				//m_zobObjectManager->UpdatePhysic(dt);
+				m_physicsEngine->StartUpdatePhysic(dt);
+
 			}
 			cam->UpdateAfter();
-			m_zobObjectManager->UpdateObjects(cam, m_engine, m_frameTime / 1000.0f);			
-			m_hudManager->UpdateObjects(cam, m_engine, m_frameTime / 1000.0f);
+			m_zobObjectManager->UpdateObjects(cam, m_engine, dt);			
+			m_hudManager->UpdateObjects(cam, m_engine, dt);
 			m_engine->ClearBuffer(&c);
 			m_renderTime = m_engine->WaitForRasterizersEnd();
 			//ZobLightManager update is made after resterizers' work because it changes the active lights vectors
@@ -281,6 +281,7 @@ int DirectZob::RunAFrame(DirectZob::engineCallback OnSceneUpdated /*=NULL*/, Dir
 				//OnQueuing();
 			}
   			m_zobObjectManager->QueueForDrawing(cam, m_engine);
+			m_zobObjectManager->PostUpdate();
 			m_hudManager->QueueForDrawing(cam, m_engine);
 			if (m_engine->DrawPhysyicsGizmos())
 			{

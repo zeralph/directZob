@@ -51,7 +51,7 @@ void ZobBehaviorMenu::EditorUpdate()
 
 }
 
-void ZobBehaviorMenu::Update(float dt)
+void ZobBehaviorMenu::UpdateBeforeObject(float dt)
 {
 	ZobVector3 color = ZobVector3(255, 0, 0);
 	ZobHUDManager* hud = DirectZob::GetInstance()->GetHudManager();
