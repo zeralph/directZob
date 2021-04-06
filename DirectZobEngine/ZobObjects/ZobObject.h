@@ -31,8 +31,6 @@ public:
 	virtual void					EditorUpdate();
 	virtual void					UpdateBehaviorsBeforeObject(float dt);
 	virtual void					UpdateBehaviorsAfterObject(float dt);
-	virtual void					UpdateMesh(const Camera* camera, Core::Engine* engine);
-	virtual void					QueueForDrawing(const Camera* camera, Core::Engine* engine);
 	virtual void					DrawGizmos(const Camera* camera, Core::Engine* engine);
 	virtual							TiXmlNode* SaveUnderNode(TiXmlNode* node);
 	//
@@ -72,17 +70,14 @@ public:
 	bool							RemoveChildReference(const ZobObject* z);
 	bool							AddChildReference(ZobObject* z);
 	int								GetChildPosition(const ZobObject* z);
-	RenderOptions*					GetRenderOptions() { return &m_renderOptions; };
 	virtual const std::string		GetMeshName() const ;
 	virtual const std::string		GetMeshFileName() const;
 	virtual const std::string		GetMeshPath() const;
 	void							SetMesh(std::string name);
 	void							LoadMesh(std::string name, std::string file, std::string path);
-	void							SetLightingMode(RenderOptions::eLightMode l);
 	const bool						IsMarkedForDeletion() const { return m_markedForDeletion; };
 	inline const Mesh*				GetMesh() const { return m_mesh; }
 	void							MarkForDeletion() { m_markedForDeletion=true; };
-	const RenderOptions::eLightMode GetLightingMode() const { return m_renderOptions.lightMode; };
 	bool							HasChild(const ZobObject* o);
 	void							CreateSprite();
 	bool							IsFromFactoryFile() {return m_factoryFile.length()>0;}
@@ -111,7 +106,6 @@ protected:
 	ZobMatrix4x4 m_modelMatrix;
 	ZobMatrix4x4 m_rotationScaleMatrix;
 	std::string m_name;
-	RenderOptions m_renderOptions;
 	bool m_markedForDeletion;
 	ZobVector3 m_left;
 	ZobVector3 m_forward;

@@ -41,25 +41,11 @@ namespace DirectZobEditor
 
         private ManagedRenderOptions GetObjectRenderOptions()
         {
-            if (m_zobObject != null)
-            {
-                ManagedRenderOptions o = m_zobObject.GetRenderOptions();
-                if (o != null)
-                {
-                    return o;
-                }
-            }
             return null;
         }
 
         private void UpdateValues()
         {
-            int? lightMode = GetObjectRenderOptions()?.GetLightMode();
-            comboLighting.SelectedIndex = (int)lightMode.GetValueOrDefault();
-            bool? zBuffer = GetObjectRenderOptions()?.GetZBuffer();
-            zbuffered.Checked = (bool)zBuffer.GetValueOrDefault();
-            bool? transparency = GetObjectRenderOptions()?.GetTransparency();
-            transparent.Checked = (bool)transparency.GetValueOrDefault();
 
         }
         private void valueChanged(object sender, EventArgs e)
@@ -77,17 +63,17 @@ namespace DirectZobEditor
         private void comboLighting_SelectedIndexChanged(object sender, EventArgs e)
         {
             int i = comboLighting.SelectedIndex;
-            GetObjectRenderOptions()?.SetLightMode(i);
+            //GetObjectRenderOptions()?.SetLightMode(i);
         }
 
         private void zbuffered_CheckedChanged(object sender, EventArgs e)
         {
-            GetObjectRenderOptions()?.SetZBuffer(zbuffered.Checked);
+            //GetObjectRenderOptions()?.SetZBuffer(zbuffered.Checked);
         }
 
         private void transparent_CheckedChanged(object sender, EventArgs e)
         {
-            GetObjectRenderOptions()?.SetTransparency(transparent.Checked);
+            //GetObjectRenderOptions()?.SetTransparency(transparent.Checked);
         }
     }
 }

@@ -507,7 +507,7 @@ namespace CLI
 			try
 			{
 				bool* b = (bool*)w->ptr;
-				cb->Checked = *b;
+				*b = cb->Checked;
 			}
 			catch (...)
 			{
@@ -699,17 +699,6 @@ namespace CLI
 		return nullptr;
 	}
 
-	ManagedRenderOptions^ ZobObjectWrapper::GetRenderOptions()
-	{
-		ZobObject* z = GetInstance();
-		if (z)
-		{
-			ManagedRenderOptions^ r = gcnew CLI::ManagedRenderOptions(z->GetRenderOptions());
-			return r;
-		}
-		return nullptr;
-	}
-
 	void ZobObjectWrapper::SetMesh(String^ name)
 	{
 		ZobObject* z = GetInstance();
@@ -883,26 +872,6 @@ namespace CLI
 		{
 			ZobVector3 v = p->ToVector3();
 			z->SetScale(v.x, v.y, v.z);
-		}
-	}
-
-	int ZobObjectWrapper::GetLightingMode()
-	{
-		ZobObject* z = GetInstance();
-		if (z)
-		{
-			return z->GetLightingMode();
-		}
-		return -1;
-	}
-
-	void ZobObjectWrapper::SetLightingMode(int lightMode)
-	{
-		ZobObject* z = GetInstance();
-		if (z)
-		{
-			RenderOptions::eLightMode l = (RenderOptions::eLightMode)lightMode;
-			z->SetLightingMode(l);
 		}
 	}
 

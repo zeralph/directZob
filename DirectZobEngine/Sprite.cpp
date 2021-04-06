@@ -145,9 +145,9 @@ Sprite::~Sprite()
 	DirectZob::RemoveIndent();
 }
 
-void Sprite::QueueForDrawing(ZobObject* z, const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, RenderOptions* options)
+void Sprite::QueueForDrawing(ZobObject* z, const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const RenderOptions* options)
 {
-	Mesh::QueueForDrawing(z, modelMatrix, rotationMatrix, camera, engine, ownerId, options);
+	Mesh::QueueForDrawing(z, modelMatrix, rotationMatrix, camera, engine, options);
 }
 
 /*

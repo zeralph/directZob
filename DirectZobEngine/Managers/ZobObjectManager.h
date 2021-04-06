@@ -18,7 +18,6 @@ public:
 
 
 	void UpdateObjects(const Camera* camera, Core::Engine* engine, float dt);
-	void QueueForDrawing(const Camera* camera, Core::Engine* engine);
 	void Init();
 	void PreUpdate();
 	void PostUpdate();

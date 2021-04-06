@@ -280,7 +280,6 @@ int DirectZob::RunAFrame(DirectZob::engineCallback OnSceneUpdated /*=NULL*/, Dir
 			{
 				//OnQueuing();
 			}
-  			m_zobObjectManager->QueueForDrawing(cam, m_engine);
 			m_zobObjectManager->PostUpdate();
 			m_hudManager->QueueForDrawing(cam, m_engine);
 			if (m_engine->DrawPhysyicsGizmos())

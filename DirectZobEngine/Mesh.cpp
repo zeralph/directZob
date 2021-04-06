@@ -538,13 +538,13 @@ void Mesh::SplitEntry(const std::string* s, std::vector<std::string>* v, const c
 	}
 }
 
-void Mesh::DrawBoundingBox(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions* options)
+void Mesh::DrawBoundingBox(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine)
 {
 	engine->QueueWorldBox(camera, &m_AABB, 0xFFFFFF, false, false);
 	engine->QueueWorldBox(camera, &m_OBB, 0xDDDDDD, false, false);
 }
 
-void Mesh::Update(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions* options)
+void Mesh::Update(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const RenderOptions* options)
 {
 	engine->ComputeBoundingBoxes(&modelMatrix, &m_minBoundingBox, &m_maxBoundingBox, &m_OBB, &m_AABB);
 
@@ -637,11 +637,11 @@ void Mesh::Update(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationM
 		}
 		for (int i = 0; i < m_subMeshes.size(); i++)
 		{
-			m_subMeshes[i]->Update(modelMatrix, rotationMatrix, camera, engine, ownerId, options);
+			m_subMeshes[i]->Update(modelMatrix, rotationMatrix, camera, engine, options);
 		}
 	}
 }
-void Mesh::QueueForDrawing(ZobObject* z, const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, RenderOptions* options)
+void Mesh::QueueForDrawing(ZobObject* z, const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const RenderOptions* options)
 {
 	if (m_bDrawn)
 	{
@@ -652,7 +652,7 @@ void Mesh::QueueForDrawing(ZobObject* z, const ZobMatrix4x4& modelMatrix, const 
 
 		if (engine->DrawGizmos() && engine->ShowBBoxes() )
 		{
-			DrawBoundingBox(modelMatrix, rotationMatrix, camera, engine, ownerId, options);
+			DrawBoundingBox(modelMatrix, rotationMatrix, camera, engine);
 		}
 		//Update(modelMatrix, rotationMatrix, camera, engine, ownerId, options);
 		BufferData* bData = engine->GetBufferData();
@@ -695,7 +695,7 @@ void Mesh::QueueForDrawing(ZobObject* z, const ZobMatrix4x4& modelMatrix, const 
 		}
 		for (int i = 0; i < m_subMeshes.size(); i++)
 		{
-			m_subMeshes[i]->QueueForDrawing(z, modelMatrix, rotationMatrix, camera,  engine, ownerId, options);
+			m_subMeshes[i]->QueueForDrawing(z, modelMatrix, rotationMatrix, camera,  engine, options);
 		}
 	}
 }

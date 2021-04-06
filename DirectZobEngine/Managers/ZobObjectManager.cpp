@@ -155,15 +155,7 @@ void ZobObjectManager::UpdateObjects(const Camera* camera, Core::Engine* engine,
 {
 	OPTICK_EVENT();
 	m_rootObject->Update(dt);
-	m_rootObject->UpdateMesh(camera, engine);
 	m_time = (float)(clock() - m_drawTick) / CLOCKS_PER_SEC * 1000;
-}
-
-void ZobObjectManager::QueueForDrawing(const Camera* camera, Core::Engine* engine)
-{
-	OPTICK_EVENT();
-	//m_rootObject->UpdateMesh(camera, engine);
-	m_rootObject->QueueForDrawing(camera, engine);
 }
 
 void ZobObjectManager::GetZobObjectList(std::string& s)

@@ -54,7 +54,6 @@ namespace CLI {
 		ManagedVector3^			GetLocalRotation();
 		ManagedVector3^			GetWorldRotation();
 		ManagedVector3^			GetScale();
-		ManagedRenderOptions^	GetRenderOptions();
 		List<ZobObjectWrapper^>^ GetChildren();
 		void					SetLocalTransform(ManagedVector3^ p);
 		void					SetLocalRotation(ManagedVector3^ p);
@@ -64,8 +63,6 @@ namespace CLI {
 		void					SetMesh(System::String^ name);
 		void					LoadMesh(System::String^ name, System::String^ file, System::String^ path);
 		void					CreateSprite();
-		void					SetLightingMode(int lightMode);
-		int						GetLightingMode();
 		bool					IsLight();
 		bool					IsSprite();
 		bool					IsCamera();

@@ -50,7 +50,7 @@ TiXmlNode* ZobSprite::SaveUnderNode(TiXmlNode* node)
 	}
 	return n;
 }
-
+/*
 void ZobSprite::UpdateMesh(const Camera* camera, Core::Engine* engine)
 {
 	if (camera)
@@ -74,7 +74,7 @@ void ZobSprite::UpdateMesh(const Camera* camera, Core::Engine* engine)
 	}
 	ZobObject::UpdateMesh(camera, engine);
 }
-
+*/
 void ZobSprite::Update(float dt)
 {
 	ZobObject::Update(dt);

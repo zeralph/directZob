@@ -63,7 +63,7 @@ public:
 	ZobObject* zobObject;
 	float area;
 	bool draw;
-	DirectZobType::RenderOptions* options;
+	const DirectZobType::RenderOptions* options;
 
 	inline void ComputeArea()
 	{

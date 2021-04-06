@@ -53,9 +53,6 @@ ZobObject::ZobObject(ZobType t, ZobSubType s, const std::string& name, ZobObject
 	{
 		m_parent->AddChildReference(this);
 	}
-	m_renderOptions.lightMode = RenderOptions::eLightMode_phong;
-	m_renderOptions.zBuffered = true;
-	m_renderOptions.bTransparency = false;
 	m_physicComponent->GetLocalPositionAddress()->x = 0;
 	m_physicComponent->GetLocalPositionAddress()->y = 0;
 	m_physicComponent->GetLocalPositionAddress()->z = 0;
@@ -93,9 +90,6 @@ ZobObject::ZobObject(std::string id, TiXmlElement* node, ZobObject* parent, cons
 	}
 	m_markedForDeletion = false;
 	m_mesh = NULL;
-	m_renderOptions.lightMode = RenderOptions::eLightMode_phong;
-	m_renderOptions.zBuffered = true;
-	m_renderOptions.bTransparency = false;
 	m_physicComponent = new ZobPhysicComponent(this);
 	//parenting
 	m_children.clear();
@@ -206,20 +200,6 @@ const std::string ZobObject::GetMeshFileName() const
 		return m_mesh->GetFileName();
 	}
 	return "";
-}
-
-void ZobObject::UpdateMesh(const Camera* camera, Core::Engine* engine)
-{
-	OPTICK_EVENT();
-	if (m_mesh)
-	{
-		m_mesh->Update(&m_modelMatrix, &m_rotationScaleMatrix, camera, engine, GetIdValue(), &m_renderOptions);
-	}
-	for (int i = 0; i < m_children.size(); i++)
-	{
-		ZobObject* z = m_children[i];
-		z->UpdateMesh(camera, engine);
-	}
 }
 
 void ZobObject::Init()
@@ -377,27 +357,6 @@ void ZobObject::Update(float dt)
 	}
 }
 
-void ZobObject::QueueForDrawing(const Camera* camera, Core::Engine* engine)
-{
-	OPTICK_EVENT();
-	if(GetType() == ZOBGUID::type_editor)
-	{
-//		return;
-	}
-	if (m_mesh)
-	{
-		m_mesh->QueueForDrawing(this, m_modelMatrix, m_rotationScaleMatrix, camera, engine, GetIdValue(), &m_renderOptions);
-	}
-	for (int i = 0; i < m_children.size(); i++)
-	{
-		m_children.at(i)->QueueForDrawing(camera, engine);
-	}
-	if(engine->DrawGizmos() && engine->DrawZobObjectGizmos())
-	{
-		DrawGizmos(camera, engine);
-	}
-}
-
 ZobVector3 ZobObject::GetScale() const 
 { 
 	return m_physicComponent->GetWorldScale(); 
@@ -542,11 +501,6 @@ bool ZobObject::HasChild(const ZobObject* o)
 		}
 		return bRet;
 	}
-}
-
-void ZobObject::SetLightingMode(RenderOptions::eLightMode l)
-{
-	m_renderOptions.lightMode = l;
 }
 
 void ZobObject::SaveToFactoryFile(std::string& file)

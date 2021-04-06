@@ -230,7 +230,7 @@ TiXmlNode* ZobVariablesExposer::SaveUnderNode(TiXmlNode* node)
 			case eWrapperType_bool:
 			{
 				bool* b = (bool*)(w->ptr);
-				std::string s = b ? std::string(XML_VALUE_TRUE) : std::string(XML_VALUE_FALSE);
+				std::string s = *b ? std::string(XML_VALUE_TRUE) : std::string(XML_VALUE_FALSE);
 				o.SetAttribute(XML_ATTR_VALUE, s.c_str());
 				break;
 			}
