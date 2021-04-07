@@ -1,9 +1,5 @@
 #include "ZobVariablesExposer.h"
 #include "ZobXmlHelper.h"
-#include "../DirectZobEngine/ZobObjects/ZOBGUID.h"
-#include "../DirectZobEngine/ZobObjects/ZobObject.h"
-#include "../DirectZobEngine/Rendering/ZobVector2.h"
-#include "../DirectZobEngine/Rendering/ZobVector3.h"
 #include "../DirectZobEngine/DirectZob.h"
 
 ZobVariablesExposer::ZobVariablesExposer(std::string &zobGUID)

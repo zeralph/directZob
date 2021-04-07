@@ -1,8 +1,17 @@
 #pragma once
+#include "../Types.h"
 #include <vector>
 #include <string>
 #include "../tinyxml/tinyxml.h"
+//#include "../DirectZobEngine/ZobObjects/ZOBGUID.h"
+//#include "../DirectZobEngine/ZobObjects/ZobObject.h"
+//#include "../DirectZobEngine/Rendering/ZobVector3.h"
+//#include "../DirectZobEngine/Rendering/ZobVector2.h"
 
+class ZOBGUID;
+class ZobVector2;
+class ZobVector3;
+class ZobObject;
 class ZobVariablesExposer
 {
 public:
@@ -83,7 +92,7 @@ public:
 		{
 			type = eWrapperType_bool;
 		}
-		else if (std::is_same<T, zobId>::value)
+		else if (std::is_same<T, DirectZobType::zobId>::value)
 		{
 			type = eWrapperType_zobId;
 		}
