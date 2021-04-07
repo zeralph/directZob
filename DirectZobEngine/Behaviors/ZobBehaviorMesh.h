@@ -14,6 +14,7 @@ class ZobBehaviorMesh : public ZobBehavior
 {
 	friend class ZobBehaviorFactory;
 public:
+
 	~ZobBehaviorMesh() override;
 	void					Init() override;
 	void					PreUpdate() override;

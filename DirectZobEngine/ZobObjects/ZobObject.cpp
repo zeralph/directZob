@@ -11,7 +11,7 @@ static int sObjectNumber = 0;
 ZobObject::ZobObject(ZobType t, ZobSubType s, const std::string& name, ZobObject* parent /*= NULL*/, const std::string* factoryFile /*=NULL*/)
 	:ZOBGUID(t,s)
 {
-	DirectZob::LogInfo("ZobObject %s creation", name.c_str());
+	DirectZob::LogInfo("ZobObject %s creation", name.c_str()); 
 	DirectZob::AddIndent();
 	std::string guid = ZobGuidToString();
 	m_varExposer = new ZobVariablesExposer(guid);
@@ -116,11 +116,11 @@ ZobObject::ZobObject(std::string id, TiXmlElement* node, ZobObject* parent, cons
 
 void ZobObject::InitVariablesExposer()
 {
-	m_varExposer->WrapVariable(ZobVariablesExposer::eWrapperType_zobId, "GUID", GetIdAddress(), true, false);
-	m_varExposer->WrapVariable(ZobVariablesExposer::eWrapperType_string, "Name", &m_name, false, true);
-	m_varExposer->WrapVariable(ZobVariablesExposer::eWrapperType_ZobVector3, "Position", GetPhysicComponentNoConst()->GetLocalPositionAddress(), false, true);
-	m_varExposer->WrapVariable(ZobVariablesExposer::eWrapperType_ZobVector3, "Rotation", GetPhysicComponentNoConst()->GetLocalRotationAddress(), false, true);
-	m_varExposer->WrapVariable(ZobVariablesExposer::eWrapperType_ZobVector3, "Scale", GetPhysicComponentNoConst()->GetLocalScaleAddress(), false, true);
+	m_varExposer->WrapVariable<zobId>("GUID", GetIdAddress(), true, false);
+	m_varExposer->WrapVariable<std::string>("Name", &m_name, false, true);
+	m_varExposer->WrapVariable<ZobVector3>("Position", GetPhysicComponentNoConst()->GetLocalPositionAddress(), false, true);
+	m_varExposer->WrapVariable<ZobVector3>("Rotation", GetPhysicComponentNoConst()->GetLocalRotationAddress(), false, true);
+	m_varExposer->WrapVariable<ZobVector3>("Scale", GetPhysicComponentNoConst()->GetLocalScaleAddress(), false, true);
 
 }
 

@@ -40,12 +40,14 @@
         </Behaviors>
         <ZobObject Guid="2002443983">
             <Var Name="Name" value="carBody" />
-            <Var Name="Position" value="-0.000000;-0.557999;0.197504" />
+            <Var Name="Position" value="-0.000000;-0.557997;0.197504" />
             <Var Name="Rotation" value="-179.999985;-0.000005;-179.999985" />
             <Var Name="Scale" value="1.000000;1.000000;1.000000" />
             <Behaviors>
                 <Behavior Type="Mesh" Guid="2007566531">
                     <Var Name="File" value="Peugeot405;_cars/GLX-400-OBJ/;GLX_400.obj" />
+                    <Var Name="Cull mode" value="Clockwise" />
+                    <Var Name="Lighting" value="Phong" />
                     <Var Name="ZBuffered" value="True" />
                     <Var Name="Transparent" value="False" />
                 </Behavior>
@@ -58,6 +60,8 @@
                 <Behaviors>
                     <Behavior Type="Mesh" Guid="2007566531">
                         <Var Name="File" value="Tire;_cars/Tire/;Tire.obj" />
+                        <Var Name="Cull mode" value="Clockwise" />
+                        <Var Name="Lighting" value="Phong" />
                         <Var Name="ZBuffered" value="True" />
                         <Var Name="Transparent" value="False" />
                     </Behavior>
@@ -71,6 +75,8 @@
                 <Behaviors>
                     <Behavior Type="Mesh" Guid="2007666531">
                         <Var Name="File" value="Tire;_cars/Tire/;Tire.obj" />
+                        <Var Name="Cull mode" value="Clockwise" />
+                        <Var Name="Lighting" value="Phong" />
                         <Var Name="ZBuffered" value="True" />
                         <Var Name="Transparent" value="False" />
                     </Behavior>
@@ -78,12 +84,14 @@
             </ZobObject>
             <ZobObject Guid="2002531928">
                 <Var Name="Name" value="RL_wheel" />
-                <Var Name="Position" value="-0.799996;0.264000;1.260000" />
+                <Var Name="Position" value="-0.799998;0.264000;1.260000" />
                 <Var Name="Rotation" value="0.000000;0.000000;0.000000" />
                 <Var Name="Scale" value="1.000000;1.000000;1.000000" />
                 <Behaviors>
                     <Behavior Type="Mesh" Guid="2007686531">
                         <Var Name="File" value="Tire;_cars/Tire/;Tire.obj" />
+                        <Var Name="Cull mode" value="Clockwise" />
+                        <Var Name="Lighting" value="Phong" />
                         <Var Name="ZBuffered" value="True" />
                         <Var Name="Transparent" value="False" />
                     </Behavior>
@@ -91,12 +99,14 @@
             </ZobObject>
             <ZobObject Guid="1009670489">
                 <Var Name="Name" value="RR_wheel" />
-                <Var Name="Position" value="0.800007;0.264000;1.260000" />
+                <Var Name="Position" value="0.800006;0.264000;1.260000" />
                 <Var Name="Rotation" value="0.000000;0.000000;0.000000" />
                 <Var Name="Scale" value="1.000000;1.000000;1.000000" />
                 <Behaviors>
                     <Behavior Type="Mesh" Guid="2007689531">
                         <Var Name="File" value="Tire;_cars/Tire/;Tire.obj" />
+                        <Var Name="Cull mode" value="Clockwise" />
+                        <Var Name="Lighting" value="Phong" />
                         <Var Name="ZBuffered" value="True" />
                         <Var Name="Transparent" value="False" />
                     </Behavior>
@@ -105,7 +115,7 @@
         </ZobObject>
         <ZobObject Guid="2003245163" Type="Camera">
             <Var Name="Name" value="rearCamera" />
-            <Var Name="Position" value="-0.000024;1.920519;-4.787135" />
+            <Var Name="Position" value="-0.000026;1.920517;-4.787135" />
             <Var Name="Rotation" value="15.056199;0.000076;-0.000029" />
             <Var Name="Scale" value="1.000000;1.000000;1.000000" />
             <Behaviors />
@@ -123,8 +133,8 @@
         </ZobObject>
         <ZobObject Guid="2003756106" Type="Camera">
             <Var Name="Name" value="topCamera" />
-            <Var Name="Position" value="0.000131;59.178116;-1.002730" />
-            <Var Name="Rotation" value="-89.419388;-79.775146;-179.719894" />
+            <Var Name="Position" value="0.000131;59.178101;-1.002730" />
+            <Var Name="Rotation" value="-89.419441;-79.775146;-179.719879" />
             <Var Name="Scale" value="1.000000;1.000000;1.000000" />
             <Behaviors />
             <Controller Name="Base" Guid="2008756106" />
@@ -132,8 +142,8 @@
         </ZobObject>
         <ZobObject Guid="2003002145" Type="Camera">
             <Var Name="Name" value="sideCamera" />
-            <Var Name="Position" value="-5.880383;1.899991;6.776469" />
-            <Var Name="Rotation" value="-176.339981;35.933941;-176.794006" />
+            <Var Name="Position" value="-5.880383;1.899993;6.776469" />
+            <Var Name="Rotation" value="-176.339981;35.933956;-176.794006" />
             <Var Name="Scale" value="1.000000;1.000000;1.000000" />
             <Behaviors />
             <Controller Name="Base" Guid="2008002145" />
@@ -141,8 +151,8 @@
         </ZobObject>
         <ZobObject Guid="2003170641" Type="Camera">
             <Var Name="Name" value="orbitalCamera" />
-            <Var Name="Position" value="-3.444134;-1.205760;-10.023321" />
-            <Var Name="Rotation" value="-6.143158;18.717260;-0.000112" />
+            <Var Name="Position" value="-3.444134;-1.205487;-10.023320" />
+            <Var Name="Rotation" value="-6.141625;18.717340;0.000235" />
             <Var Name="Scale" value="1.000000;1.000000;1.000000" />
             <Behaviors />
             <Controller Name="Orbital" Guid="2008170641" />
@@ -168,6 +178,8 @@
         <Behaviors>
             <Behavior Type="Mesh" Guid="2007666531">
                 <Var Name="File" value="Cottage;/;cottage_obj.obj" />
+                <Var Name="Cull mode" value="Clockwise" />
+                <Var Name="Lighting" value="Phong" />
                 <Var Name="ZBuffered" value="True" />
                 <Var Name="Transparent" value="False" />
             </Behavior>
@@ -187,6 +199,8 @@
             <Behaviors>
                 <Behavior Type="Mesh" Guid="2007239531">
                     <Var Name="File" value="Rock9;/;Rock_9.fbx" />
+                    <Var Name="Cull mode" value="Clockwise" />
+                    <Var Name="Lighting" value="Gouraud" />
                     <Var Name="ZBuffered" value="True" />
                     <Var Name="Transparent" value="False" />
                 </Behavior>
@@ -200,6 +214,8 @@
             <Behaviors>
                 <Behavior Type="Mesh" Guid="2007236531">
                     <Var Name="File" value="Rock9;/;Rock_9.fbx" />
+                    <Var Name="Cull mode" value="Clockwise" />
+                    <Var Name="Lighting" value="Gouraud" />
                     <Var Name="ZBuffered" value="True" />
                     <Var Name="Transparent" value="False" />
                 </Behavior>
@@ -213,6 +229,8 @@
             <Behaviors>
                 <Behavior Type="Mesh" Guid="2007624131">
                     <Var Name="File" value="Rock9;/;Rock_9.fbx" />
+                    <Var Name="Cull mode" value="Clockwise" />
+                    <Var Name="Lighting" value="Gouraud" />
                     <Var Name="ZBuffered" value="True" />
                     <Var Name="Transparent" value="False" />
                 </Behavior>
@@ -226,6 +244,8 @@
             <Behaviors>
                 <Behavior Type="Mesh" Guid="2007666891">
                     <Var Name="File" value="Rock9;/;Rock_9.fbx" />
+                    <Var Name="Cull mode" value="Clockwise" />
+                    <Var Name="Lighting" value="Gouraud" />
                     <Var Name="ZBuffered" value="True" />
                     <Var Name="Transparent" value="False" />
                 </Behavior>
@@ -239,6 +259,8 @@
             <Behaviors>
                 <Behavior Type="Mesh" Guid="2007966531">
                     <Var Name="File" value="Rock9;/;Rock_9.fbx" />
+                    <Var Name="Cull mode" value="Clockwise" />
+                    <Var Name="Lighting" value="Gouraud" />
                     <Var Name="ZBuffered" value="True" />
                     <Var Name="Transparent" value="False" />
                 </Behavior>
@@ -252,6 +274,8 @@
             <Behaviors>
                 <Behavior Type="Mesh" Guid="2007666531">
                     <Var Name="File" value="TreeTrunk;/;tree_trunk.FBX" />
+                    <Var Name="Cull mode" value="Clockwise" />
+                    <Var Name="Lighting" value="Gouraud" />
                     <Var Name="ZBuffered" value="True" />
                     <Var Name="Transparent" value="False" />
                 </Behavior>
@@ -265,6 +289,8 @@
             <Behaviors>
                 <Behavior Type="Mesh" Guid="2007666531">
                     <Var Name="File" value="Canyon;mountain_canyon/;mountain_canyon_01.fbx" />
+                    <Var Name="Cull mode" value="Clockwise" />
+                    <Var Name="Lighting" value="Gouraud" />
                     <Var Name="ZBuffered" value="True" />
                     <Var Name="Transparent" value="False" />
                 </Behavior>
@@ -331,12 +357,14 @@
         </ZobObject>
         <ZobObject Guid="2944421685">
             <Var Name="Name" value="building_3" />
-            <Var Name="Position" value="-81.516960;-10.000001;-1.297543" />
+            <Var Name="Position" value="-81.516983;-10.000001;-1.297539" />
             <Var Name="Rotation" value="0.000000;35.000027;0.000000" />
             <Var Name="Scale" value="1.000000;1.000000;1.000000" />
             <Behaviors>
                 <Behavior Type="Mesh" Guid="2007555531">
                     <Var Name="File" value="building1;/;building_1.obj" />
+                    <Var Name="Cull mode" value="Clockwise" />
+                    <Var Name="Lighting" value="Phong" />
                     <Var Name="ZBuffered" value="True" />
                     <Var Name="Transparent" value="False" />
                 </Behavior>
@@ -344,12 +372,14 @@
         </ZobObject>
         <ZobObject Guid="2002626852">
             <Var Name="Name" value="building_4" />
-            <Var Name="Position" value="-57.160267;-10.000001;25.669121" />
+            <Var Name="Position" value="-57.160271;-10.000001;25.669130" />
             <Var Name="Rotation" value="0.000000;35.000027;0.000000" />
             <Var Name="Scale" value="1.000000;1.000000;1.000000" />
             <Behaviors>
                 <Behavior Type="Mesh" Guid="2007525531">
                     <Var Name="File" value="building1;/;building_1.obj" />
+                    <Var Name="Cull mode" value="Clockwise" />
+                    <Var Name="Lighting" value="Phong" />
                     <Var Name="ZBuffered" value="True" />
                     <Var Name="Transparent" value="False" />
                 </Behavior>
@@ -357,12 +387,14 @@
         </ZobObject>
         <ZobObject Guid="2002642935">
             <Var Name="Name" value="skyscraper.FBX" />
-            <Var Name="Position" value="-126.659050;-0.577358;37.859528" />
+            <Var Name="Position" value="-126.659073;-0.577358;37.859535" />
             <Var Name="Rotation" value="0.000000;53.584061;0.000000" />
             <Var Name="Scale" value="0.280000;0.280000;0.280000" />
             <Behaviors>
                 <Behavior Type="Mesh" Guid="2007554531">
                     <Var Name="File" value="SkySkraper;/;skyscraper.FBX" />
+                    <Var Name="Cull mode" value="Clockwise" />
+                    <Var Name="Lighting" value="Phong" />
                     <Var Name="ZBuffered" value="True" />
                     <Var Name="Transparent" value="False" />
                 </Behavior>
@@ -377,6 +409,8 @@
         <Behaviors>
             <Behavior Type="Mesh" Guid="2007854791">
                 <Var Name="File" value="Free_Car_1_Obj;_cars/Free_Car_1_Obj/;free_car_1.obj" />
+                <Var Name="Cull mode" value="Clockwise" />
+                <Var Name="Lighting" value="Phong" />
                 <Var Name="ZBuffered" value="True" />
                 <Var Name="Transparent" value="False" />
             </Behavior>
@@ -447,6 +481,8 @@
             <Behaviors>
                 <Behavior Type="Mesh" Guid="2007123450">
                     <Var Name="File" value="road_01;/;road_block_01.obj" />
+                    <Var Name="Cull mode" value="Clockwise" />
+                    <Var Name="Lighting" value="Phong" />
                     <Var Name="ZBuffered" value="True" />
                     <Var Name="Transparent" value="False" />
                 </Behavior>
@@ -460,6 +496,8 @@
             <Behaviors>
                 <Behavior Type="Mesh" Guid="2007123451">
                     <Var Name="File" value="road_02;/;road_block_02.obj" />
+                    <Var Name="Cull mode" value="Clockwise" />
+                    <Var Name="Lighting" value="Phong" />
                     <Var Name="ZBuffered" value="True" />
                     <Var Name="Transparent" value="False" />
                 </Behavior>
@@ -474,6 +512,8 @@
         <Behaviors>
             <Behavior Type="Mesh" Guid="2007123452">
                 <Var Name="File" value="road_03;/;road_block_03.obj" />
+                <Var Name="Cull mode" value="Clockwise" />
+                <Var Name="Lighting" value="Phong" />
                 <Var Name="ZBuffered" value="True" />
                 <Var Name="Transparent" value="False" />
             </Behavior>
@@ -487,6 +527,8 @@
         <Behaviors>
             <Behavior Type="Mesh" Guid="2007123453">
                 <Var Name="File" value="road_04;/;road_block_04.obj" />
+                <Var Name="Cull mode" value="Clockwise" />
+                <Var Name="Lighting" value="Phong" />
                 <Var Name="ZBuffered" value="True" />
                 <Var Name="Transparent" value="False" />
             </Behavior>
@@ -500,6 +542,8 @@
         <Behaviors>
             <Behavior Type="Mesh" Guid="2007123454">
                 <Var Name="File" value="road_05;/;road_block_05.obj" />
+                <Var Name="Cull mode" value="Clockwise" />
+                <Var Name="Lighting" value="Phong" />
                 <Var Name="ZBuffered" value="True" />
                 <Var Name="Transparent" value="False" />
             </Behavior>
@@ -513,6 +557,8 @@
         <Behaviors>
             <Behavior Type="Mesh" Guid="2007123455">
                 <Var Name="File" value="road_06;/;road_block_06.obj" />
+                <Var Name="Cull mode" value="Clockwise" />
+                <Var Name="Lighting" value="Phong" />
                 <Var Name="ZBuffered" value="True" />
                 <Var Name="Transparent" value="False" />
             </Behavior>
@@ -526,6 +572,8 @@
         <Behaviors>
             <Behavior Type="Mesh" Guid="2007123456">
                 <Var Name="File" value="road_07;/;road_block_07.obj" />
+                <Var Name="Cull mode" value="Clockwise" />
+                <Var Name="Lighting" value="Phong" />
                 <Var Name="ZBuffered" value="True" />
                 <Var Name="Transparent" value="False" />
             </Behavior>
@@ -539,6 +587,8 @@
         <Behaviors>
             <Behavior Type="Mesh" Guid="2007123457">
                 <Var Name="File" value="road_08;/;road_block_08.obj" />
+                <Var Name="Cull mode" value="Clockwise" />
+                <Var Name="Lighting" value="Phong" />
                 <Var Name="ZBuffered" value="True" />
                 <Var Name="Transparent" value="False" />
             </Behavior>
@@ -552,6 +602,8 @@
         <Behaviors>
             <Behavior Type="Mesh" Guid="2007123465">
                 <Var Name="File" value="boat;/;boat.obj" />
+                <Var Name="Cull mode" value="Counter clockwise" />
+                <Var Name="Lighting" value="Phong" />
                 <Var Name="ZBuffered" value="True" />
                 <Var Name="Transparent" value="False" />
             </Behavior>
@@ -565,6 +617,8 @@
         <Behaviors>
             <Behavior Type="Mesh" Guid="2007123435">
                 <Var Name="File" value="skybox;/;skybox.obj" />
+                <Var Name="Cull mode" value="Counter clockwise" />
+                <Var Name="Lighting" value="Phong" />
                 <Var Name="ZBuffered" value="True" />
                 <Var Name="Transparent" value="False" />
             </Behavior>
@@ -578,6 +632,8 @@
         <Behaviors>
             <Behavior Type="Mesh" Guid="2007123657">
                 <Var Name="File" value="plane;/;plane.obj" />
+                <Var Name="Cull mode" value="Clockwise" />
+                <Var Name="Lighting" value="Phong" />
                 <Var Name="ZBuffered" value="True" />
                 <Var Name="Transparent" value="False" />
             </Behavior>
@@ -591,6 +647,8 @@
         <Behaviors>
             <Behavior Type="Mesh" Guid="2007123477">
                 <Var Name="File" value="water;/;water.obj" />
+                <Var Name="Cull mode" value="Clockwise" />
+                <Var Name="Lighting" value="Phong" />
                 <Var Name="ZBuffered" value="True" />
                 <Var Name="Transparent" value="False" />
             </Behavior>

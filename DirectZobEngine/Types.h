@@ -58,13 +58,7 @@ enum eRenderMode
 	eRenderMode_scanline,
 	__eRenderMode_MAX__
 };
-enum eCullMode
-{
-	eCullMode_None = 0,
-	eCullMode_ClockwiseFace,
-	eCullMode_CounterClockwiseFace,
-	__eCullMode_MAX__,
-};
+
 enum eLightingPrecision
 {
 	eLightingPrecision_noLighting = 0,
@@ -126,6 +120,15 @@ public:
 			eLightMode_flatPhong,
 			__eLightMode_MAX__
 		};
+		
+		enum eCullMode
+		{
+			eCullMode_None = 0,
+			eCullMode_ClockwiseFace,
+			eCullMode_CounterClockwiseFace,
+			__eCullMode_MAX__,
+		};
+
 		bool bTransparency = false;
 		bool zBuffered = true;
 		eLightMode lightMode = eLightMode::eLightMode_phong;
@@ -169,7 +172,7 @@ typedef DirectZobType::u16 u16;
 typedef DirectZobType::uint uint;
 typedef DirectZobType::guid u32;
 typedef DirectZobType::ulong ulong;
-typedef DirectZobType::zobId ull;
+typedef DirectZobType::zobId zobId;
 typedef struct DirectZobType::BufferData BufferData;
 typedef struct DirectZobType::Line3D Line3D;
 typedef struct DirectZobType::RenderOptions RenderOptions;

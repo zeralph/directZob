@@ -835,11 +835,11 @@ void Engine::QueueLineInRasters(const Line3D* l, int idx) const
 
 int Engine::QueueTriangleInRasters(const Triangle* t, int idx) const
 {
-	if (t->options->cullMode == eCullMode_CounterClockwiseFace && t->area >0 )
+	if (t->options->cullMode == RenderOptions::eCullMode_CounterClockwiseFace && t->area >0 )
 	{
 		return 0;
 	}
-	if (t->options->cullMode == eCullMode_ClockwiseFace && t->area < 0)
+	if (t->options->cullMode == RenderOptions::eCullMode_ClockwiseFace && t->area < 0)
 	{
 		return 0;
 	}

@@ -51,9 +51,88 @@ public:
 	TiXmlNode* SaveUnderNode(TiXmlNode* node);
 	void Load();
 	void ReadNode(TiXmlNode* node);
-	void WrapVariable(eWrapperType type, const char* name, void* ptr, bool bReadOnly, bool bSave);
-	void WrapEnum(const char* name, void* ptr, int nbParams, int* values, const char** names, bool bReadOnly, bool bSave);
+	//void WrapVariable(eWrapperType type, const char* name, void* ptr, bool bReadOnly, bool bSave);
 	void WrapPath(const char* name, void* ptrName, void* ptrPath, void* ptrFile, bool bReadOnly, bool bSave);
+
+
+	template<typename T>
+	void WrapVariable(const char* name, T* ptr, bool bReadOnly, bool bSave)
+	{
+		eWrapperType type = eWrapperType::__eWrapperType_MAX__;
+		if (std::is_same<T, int>::value)
+		{
+			type = eWrapperType_int;
+		}
+		else if (std::is_same<T, float>::value)
+		{
+			type = eWrapperType_float;
+		}
+		else if (std::is_same<T, std::string>::value)
+		{
+			type = eWrapperType_string;
+		}
+		else if (std::is_same<T, ZobVector2>::value)
+		{
+			type = eWrapperType_ZobVector2;
+		}
+		else if (std::is_same<T, ZobVector3>::value)
+		{
+			type = eWrapperType_ZobVector3;
+		}
+		else if (std::is_same<T, bool>::value)
+		{
+			type = eWrapperType_bool;
+		}
+		else if (std::is_same<T, zobId>::value)
+		{
+			type = eWrapperType_zobId;
+		}
+		else if (std::is_same<T, ZobObject*>::value)
+		{
+			type = eWrapperType_zobObject;
+		}
+		else
+		{
+			assert(false);
+		}
+
+		assert(type != eWrapperType::__eWrapperType_MAX__);
+		wrapperData w;
+		std::string s;
+		w.name = std::string(name);
+		s = m_zobGUID;
+		s = s.append("_").append(w.name);
+		w.internalName = s;
+		w.type = type;
+		w.ptr = (void*)ptr;
+		w.bReadOnly = bReadOnly;
+		w.bSave = bSave;
+		m_wrappedVariables.push_back(w);
+	}
+
+	template<typename E>
+	void WrapEnum(const char* name, E* ptr, int nbParams, E* enumValues, const char** enumNames, bool bReadOnly, bool bSave)
+	{
+		wrapperData w;
+		std::string s;
+		w.name = std::string(name);
+		s = m_zobGUID;
+		s = s.append("_").append(w.name);
+		w.internalName = s;
+		w.type = eWrapperType_enum;
+		w.ptr = ptr;
+		for (int i = 0; i < nbParams; i++)
+		{
+			int v = (int)enumValues[i];
+			//E val = E[i];
+			//int v = (int)ptr[i];
+			//E e0 = static_cast<std::underlying_type<E>::type>(0);
+			//E e1 = static_cast<std::underlying_type<E>::type>(1);
+			w.enumValues.push_back(v);
+			w.enumNames.push_back(enumNames[i]);
+		}
+		m_wrappedVariables.push_back(w);
+	}
 
 private:
 	std::string m_zobGUID;

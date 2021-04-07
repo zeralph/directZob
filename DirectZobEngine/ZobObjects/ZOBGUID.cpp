@@ -32,19 +32,19 @@ const ZOBGUID::ZobSubType ZOBGUID::GetSubType() const
 	return m_subType;
 }
 
-unsigned long long* ZOBGUID::GetIdAddress()
+DirectZobType::zobId* ZOBGUID::GetIdAddress()
 {
 	return &m_id;
 }
 
-unsigned long long ZOBGUID::GetIdValue()
+DirectZobType::zobId ZOBGUID::GetIdValue()
 {
 	return m_id;
 }
 
-unsigned long long ZOBGUID::GenerateId()
+DirectZobType::zobId ZOBGUID::GenerateId()
 {
-	unsigned long long u = 0;
+	DirectZobType::zobId u = 0;
 	for (int i = 0; i < 6; i++)
 	{
 		ulong l = (rand() % 10);

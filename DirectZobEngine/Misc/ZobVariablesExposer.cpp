@@ -33,40 +33,6 @@ void ZobVariablesExposer::WrapPath(const char* name, void* ptrName, void* ptrPat
 	m_wrappedVariables.push_back(w);
 }
 
-void ZobVariablesExposer::WrapVariable(eWrapperType type, const char* name, void* ptr, bool bReadOnly, bool bSave)
-{
-	wrapperData w;
-	std::string s;
-	w.name = std::string(name);
-	s = m_zobGUID;
-	s = s.append("_").append(w.name);
-	w.internalName = s;
-	w.type = type;
-	w.ptr = ptr;
-	w.bReadOnly = bReadOnly;
-	w.bSave = bSave;
-	m_wrappedVariables.push_back(w);
-}
-
-void ZobVariablesExposer::WrapEnum(const char* name, void* ptr, int nbParams, int* values, const char** names, bool bReadOnly, bool bSave)
-{
-	wrapperData w;
-	std::string s;
-	w.name = std::string(name);
-	s = m_zobGUID;
-	s = s.append("_").append(w.name);
-	w.internalName = s;
-	w.type = eWrapperType_enum;
-	w.ptr = ptr;
-	for (int i = 0; i < nbParams; i++)
-	{
-		w.enumValues.push_back(values[i]);
-		w.enumNames.push_back(names[i]);
-	}
-	m_wrappedVariables.push_back(w);
-}
-
-
 void ZobVariablesExposer::wrapperData::Load()
 {
 	if (strValue.size() == 0)

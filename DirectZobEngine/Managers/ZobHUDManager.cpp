@@ -13,7 +13,7 @@ ZobHUDManager::ZobHUDManager()
 	m_started = false;
 	m_renderOptions.zBuffered = false;
 	m_renderOptions.bTransparency = false;
-	m_renderOptions.cullMode = eCullMode_None;
+	m_renderOptions.cullMode = RenderOptions::eCullMode_None;
 	m_renderOptions.lightMode = DirectZobType::RenderOptions::eLightMode_none;
 	m_trianglesBuffer = (Triangle*)malloc(sizeof(Triangle) * NB_HUD_TRIANGLES);
 	m_vertices = (ZobVector3*)malloc(sizeof(ZobVector3) * NB_HUD_TRIANGLES * 3);

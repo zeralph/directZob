@@ -11,7 +11,7 @@ namespace CLI
 	{
 		m_renderOptions.zBuffered = false;
 		m_renderOptions.bTransparency = true;
-		m_renderOptions.cullMode = eCullMode_None;
+		m_renderOptions.cullMode = RenderOptions::eCullMode_None;
 		m_renderOptions.lightMode = DirectZobType::RenderOptions::eLightMode_none;
 		m_nbTriangles = 0;
 		m_triangleList = (Triangle*)malloc(sizeof(Triangle) * NB_EDITOR_TRIANGLES);
