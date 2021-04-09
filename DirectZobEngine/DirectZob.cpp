@@ -214,7 +214,6 @@ int DirectZob::RunAFrame(DirectZob::engineCallback OnSceneUpdated /*=NULL*/, Dir
 	g_render_mutex.lock();
 	int state=0;
 	m_fps = 1000.0f / m_frameTime;
-	SceneLoader::Update();
 	if(m_initialized && m_engine->Started())
 	{
 #ifdef WINDOWS
@@ -337,7 +336,7 @@ int DirectZob::RunAFrame(DirectZob::engineCallback OnSceneUpdated /*=NULL*/, Dir
 	SaveTime(&tend);
 	float dt = (float)GetDeltaTime_MS(tstart, tend);
 	WaitToTargetFrameTime(dt);
-	m_engine->UpdateEditorBitmapData();
+	SceneLoader::Update();
 	g_render_mutex.unlock();
 	return state;
 }

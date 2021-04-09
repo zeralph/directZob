@@ -61,6 +61,12 @@ void Rasterizer::Init(std::condition_variable* cv, std::mutex *m)
 	m_thread.detach();
 }
 
+void Rasterizer::Resize(int width, int height)
+{
+	m_width = width;
+	m_height = height;
+}
+
 void Rasterizer::Start()
 {
 	//OPTICK_EVENT();

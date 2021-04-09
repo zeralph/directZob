@@ -19,6 +19,10 @@ namespace CLI
 	public ref class ZobObjectManagerWrapper : public ManagedObject<ZobObjectManager>
 	{
 	public:
+
+		delegate void					OnObjectSelected(ZobObjectWrapper^ z);
+		static event OnObjectSelected^	OnObjectSelectedEvent;
+
 		enum class eObjectTypes
 		{
 			eObjectTypes_all = 0,
@@ -37,7 +41,7 @@ namespace CLI
 		ZobObjectWrapper^		AddZobObject(ZobObjectWrapper^ parent);
 		ZobObjectWrapper^		AddZobSprite(ZobObjectWrapper^ parent);
 		ZobObjectWrapper^		GetObjectAtCoords(int x, int y, eObjectTypes type);
-		ZobObject*				GetSelectedObject() {return m_selectedObject;}
+		ZobObjectWrapper^		GetSelectedObject() {return m_selectedObjectWrapper;}
 		void					CreateEditorGizmos(System::String^ editorResourcesPath);
 		bool					Reparent(String^ object, String^ parent);
 		void					AddZobObjectsRecursive(ZobObject* z, TreeNodeCollection^ collection);

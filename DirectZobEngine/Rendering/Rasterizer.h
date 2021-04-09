@@ -61,7 +61,7 @@ public:
 	inline int				GetNbTriangle() const { return m_nbTriangles; }// m_triangles.size(); }
 	inline int				GetNbLine() const { return m_lines.size(); }
 	inline float			GetRenderTimeMS() const { return m_time;  }
-
+	void					Resize(int width, int height);
 private:
 
 	void					RenderInternal();

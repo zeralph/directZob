@@ -110,11 +110,18 @@ namespace CLI
 					delete m_selectedObjectWrapper;
 				}
 				m_selectedObjectWrapper = gcnew ZobObjectWrapper(m_selectedObject, m_objectPropertiesPanel);
+				OnObjectSelectedEvent(m_selectedObjectWrapper);
+			}
+			else
+			{
+				OnObjectSelectedEvent(nullptr);
 			}
 		}
 		else
 		{
 			m_selectedObject = NULL;
+			m_selectedObjectWrapper = nullptr;
+			OnObjectSelectedEvent(nullptr);
 		}
 	}
 	

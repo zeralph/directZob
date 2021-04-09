@@ -96,7 +96,43 @@ public:
 		float* zBuffer;
 		int curBuffer;
 	};
-
+	struct ZobFilePath
+	{
+		std::string name;
+		std::string path;
+		std::string file;
+		void Init()
+		{
+			name = "";
+			path = "";
+			file = "";
+		}
+		bool IsDefined()
+		{
+			return name.size() && path.size() && file.size();
+		}
+		std::string Serialize()
+		{
+			std::string s = name;
+			s = s.append(";").append(path).append(";").append(file);
+			return s;
+		}
+		void Unserialize(std::string s)
+		{
+			std::size_t del1, del2 = 0;
+			del1 = s.find(';');
+			if (del1 != std::string::npos)
+			{
+				del2 = s.find(';', del1 + 1);
+				if (del1 != std::string::npos)
+				{
+					name = s.substr(0, del1);
+					path = s.substr(del1 + 1, del2 - (del1 + 1));
+					file = s.substr(del2 + 1, s.size() - 1);
+				}
+			}
+		}
+	};
 	struct Line3D
 	{
 		float xa;
@@ -173,6 +209,7 @@ typedef DirectZobType::uint uint;
 typedef DirectZobType::guid u32;
 typedef DirectZobType::ulong ulong;
 typedef DirectZobType::zobId zobId;
+typedef struct DirectZobType::ZobFilePath ZobFilePath;
 typedef struct DirectZobType::BufferData BufferData;
 typedef struct DirectZobType::Line3D Line3D;
 typedef struct DirectZobType::RenderOptions RenderOptions;

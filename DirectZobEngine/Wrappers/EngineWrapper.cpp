@@ -7,8 +7,12 @@ namespace CLI
 	static Line m_lines[NB_EDITOR_LINES];
 	static Circle m_circles[NB_EDITOR_CIRCLES];
 
-	EngineWrapper::EngineWrapper():ManagedObject(DirectZob::GetInstance()->GetEngine(), false)
+	EngineWrapper::EngineWrapper(PictureBox^ renderWindow):ManagedObject(DirectZob::GetInstance()->GetEngine(), false)
 	{
+		m_renderWindow = renderWindow;
+		m_renderWindow->AutoSize = true;
+		m_running = true;
+		m_renderWindowGraphics = m_renderWindow->CreateGraphics();
 		m_renderOptions.zBuffered = false;
 		m_renderOptions.bTransparency = true;
 		m_renderOptions.cullMode = RenderOptions::eCullMode_None;
@@ -41,6 +45,7 @@ namespace CLI
 			m_triangleList[i].options = &m_renderOptions;
 			vi += 3;
 		}
+		Init();
 	}
 
 	EngineWrapper::~EngineWrapper()
@@ -99,14 +104,39 @@ namespace CLI
 
 	ZobObjectWrapper^ EngineWrapper::GetObjectAt2DCoords(float x, float y)
 	{
-		/*
-		ZobObject* z = m_Instance->GetObjectAt2DCoords(x, y);
-		if(z)
-		{
-			return gcnew ZobObjectWrapper(z);
-		}
-		*/
 		return nullptr;
+	}
+
+	void EngineWrapper::Update()
+	{
+		if (GetInstance() && m_renderWindow && m_running)
+		{
+			m_renderWindow->Invoke(gcnew Action(this, &CLI::EngineWrapper::UpdateRenderWindowInternal));
+		}
+	}
+
+	void EngineWrapper::UpdateRenderWindowInternal()
+	{
+		BufferData* bData = m_Instance->GetBufferData();
+		IntPtr p = (IntPtr)bData->buffer;
+		int w = bData->width;
+		int h = bData->height;
+		int renderW = m_renderWindow->Width;
+		int renderH = m_renderWindow->Height;
+		if (renderH != h || renderW != w)
+		{
+			m_Instance->Resize(renderW, renderH);
+			m_renderWindowGraphics = m_renderWindow->CreateGraphics();
+			bData = m_Instance->GetBufferData();
+			w = bData->width;
+			h = bData->height;
+			p = (IntPtr)bData->buffer;
+		}
+		Bitmap^ b = gcnew Bitmap(w, h, 4 * w, System::Drawing::Imaging::PixelFormat::Format32bppRgb, p);
+		Drawing::Rectangle srcRect = Drawing::Rectangle(0, 0, w, h);
+		Drawing::Rectangle dstRect = Drawing::Rectangle(0, 0, renderW, renderH);
+		m_renderWindow->SizeMode = PictureBoxSizeMode::StretchImage;
+		m_renderWindowGraphics->DrawImage(b, dstRect, srcRect, Drawing::GraphicsUnit::Pixel);
 	}
 
 	void EngineWrapper::QueueObjectsToRender()
@@ -206,6 +236,11 @@ namespace CLI
 				m_nbLines++;
 			}
 		}
+	}
+
+	void EngineWrapper::Init()
+	{
+
 	}
 }
 #endif //_WINDLL

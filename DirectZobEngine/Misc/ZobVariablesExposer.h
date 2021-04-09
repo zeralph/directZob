@@ -60,9 +60,6 @@ public:
 	TiXmlNode* SaveUnderNode(TiXmlNode* node);
 	void Load();
 	void ReadNode(TiXmlNode* node);
-	//void WrapVariable(eWrapperType type, const char* name, void* ptr, bool bReadOnly, bool bSave);
-	void WrapPath(const char* name, void* ptrName, void* ptrPath, void* ptrFile, bool bReadOnly, bool bSave);
-
 
 	template<typename T>
 	void WrapVariable(const char* name, T* ptr, bool bReadOnly, bool bSave)
@@ -99,6 +96,10 @@ public:
 		else if (std::is_same<T, ZobObject*>::value)
 		{
 			type = eWrapperType_zobObject;
+		}
+		else if (std::is_same<T, DirectZobType::ZobFilePath>::value)
+		{
+			type = eWrapperType_path;
 		}
 		else
 		{

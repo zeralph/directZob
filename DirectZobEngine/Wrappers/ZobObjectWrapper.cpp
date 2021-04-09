@@ -161,10 +161,8 @@ namespace CLI
 		txt->ReadOnly = w->bReadOnly;
 		//txt->MaximumSize = Drawing::Size(100, 20);
 		std::string s;
-		std::string* name = (std::string*)(w->ptr);
-		std::string* path = (std::string*)(w->ptr_1);
-		std::string* file = (std::string*)(w->ptr_2);
-		s = s.append(*name).append(";").append(*file).append(";").append(*path);
+		ZobFilePath* zp = (ZobFilePath*)(w->ptr);
+		s = zp->Serialize();
 		txt->Text = TO_MANAGED_STRING(s.c_str());
 		if (!w->bReadOnly)
 		{

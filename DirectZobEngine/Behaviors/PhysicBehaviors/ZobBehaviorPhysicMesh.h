@@ -27,8 +27,6 @@ class ZobBehaviorPhysicMesh : public ZobBehaviorPhysicShape
 		float* m_concaveMeshVertices;
 		uint* m_concaveMeshIndices;
 		int m_concaveMeshNbTriangles;
-		std::string m_convexMeshName;
-		std::string m_convexMeshPath;
-		std::string m_convexMeshFile;
+		ZobFilePath m_convexMeshPath;
 
 };

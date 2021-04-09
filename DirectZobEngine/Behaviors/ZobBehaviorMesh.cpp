@@ -9,11 +9,10 @@ ZobBehaviorMesh::~ZobBehaviorMesh()
 ZobBehaviorMesh::ZobBehaviorMesh(ZobObject* zobObject) : ZobBehavior(zobObject)
 {
 	m_type = eBehavior_mesh;
-	m_meshName = "";
-	m_meshPath = "";
-	m_meshFile = "";
+	m_meshPath.Init();
 	m_mesh = NULL;
-	m_varExposer->WrapPath("File", &m_meshName, &m_meshPath, &m_meshFile, false, true);
+
+	m_varExposer->WrapVariable<ZobFilePath>("File", &m_meshPath, false, true);
 	
 	RenderOptions::eCullMode cm[3] = { RenderOptions::eCullMode_None, RenderOptions::eCullMode_ClockwiseFace, RenderOptions::eCullMode_CounterClockwiseFace};
 	const char* cmStr[3] = { "None", "Clockwise", "Counter clockwise" };
@@ -33,14 +32,12 @@ ZobBehaviorMesh::ZobBehaviorMesh(ZobObject* zobObject) : ZobBehavior(zobObject)
 void ZobBehaviorMesh::Init()
 {
 	ReLoadVariables();
-	if (m_mesh == NULL && m_meshName.size() && m_meshPath.size() && m_meshFile.size())
+	if (m_mesh == NULL && m_meshPath.IsDefined())
 	{
 		if (!LoadMeshInternal())
 		{
-			DirectZob::LogError("Mesh loading error %s %s %s", m_meshName.c_str(), m_meshPath.c_str(), m_meshFile.c_str());
-			m_meshName = "";
-			m_meshPath = "";
-			m_meshFile = "";
+			DirectZob::LogError("Mesh loading error %s %s %s", m_meshPath.file.c_str(), m_meshPath.path.c_str(), m_meshPath.name.c_str());
+			m_meshPath.Init();
 			m_meshNbTriangles = 0;
 		}
 		else
@@ -84,7 +81,7 @@ void ZobBehaviorMesh::EditorUpdate()
 
 bool ZobBehaviorMesh::LoadMeshInternal()
 {
-	m_mesh = DirectZob::GetInstance()->GetMeshManager()->LoadMesh(m_meshName, m_meshPath, m_meshFile);
+	m_mesh = DirectZob::GetInstance()->GetMeshManager()->LoadMesh(m_meshPath.name, m_meshPath.path, m_meshPath.file);
 	if (m_mesh)
 	{
 	}

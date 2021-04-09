@@ -33,9 +33,6 @@ namespace DirectZobEditor
             Y,
             Z,
         };
-        private CLI.DirectZobWrapper m_directZobWrapper;
-        private CLI.EngineWrapper m_engineWrapper;
-        private Thread m_engineThread;
         private Form1 m_mainForm;
         //engine rendering
         public CLI.engineCallback onFrameStartCallback;
@@ -44,7 +41,6 @@ namespace DirectZobEditor
         public CLI.engineCallback onQueuingCallback;
         public event EventHandler OnBeginFrame;
         public event EventHandler OnEndFrame;
-        public event EventHandler OnEngineStopped;
         public delegate void BeforeUpdateEngine();
         public delegate void AfterUpdateEngine();
         public delegate void UpdateLogWindow();
@@ -57,8 +53,6 @@ namespace DirectZobEditor
         public event OnObjectRotatedHandler OnObjectRotated;
         public delegate void OnObjectScaledHandler(object s, ObjectModificationEventArg e);
         public event OnObjectScaledHandler OnObjectScaled;
-        int m_width;
-        int m_height;
         int m_lastMouseX = -1;
         int m_lastMouseY = -1;
         private bool m_engineRendering = false;
@@ -74,16 +68,13 @@ namespace DirectZobEditor
         private bool m_objectReadyForModification = false;
 
         private ManagedVector3 m_pickObjectPosition = null;
-        private ZobObjectWrapper m_newObjectPicked = null;
+        private ZobObjectWrapper m_selectedObject = null;
 
-        public EngineWindow(Form1 f, CLI.DirectZobWrapper directZobWrapper)
+        public EngineWindow(Form1 f)
         {
             InitializeComponent();
             this.Dock = DockStyle.Fill;
             m_mainForm = f;
-            m_directZobWrapper = directZobWrapper;
-            m_engineWrapper = new CLI.EngineWrapper();
-            GenerateRenderWindow();
             bTX.Visible = false;
             bTY.Visible = false;
             bTZ.Visible = false;
@@ -91,22 +82,28 @@ namespace DirectZobEditor
             this.DoubleBuffered = true;
         }
 
+
+        public PictureBox GetEngineRenderwindow()
+        {
+            return EngineRender;
+        }
+
         public void BindEvents()
         {
-//            m_mainForm.GetZobObjectListControl().OnObjectSelected += new ZobObjectListControl.OnObjectSelectedHandler(OnObjectSelected);
+            CLI.ZobObjectManagerWrapper.OnObjectSelectedEvent += new CLI.ZobObjectManagerWrapper.OnObjectSelected(OnObjectSelected);
             m_mainForm.OnNewScene += new EventHandler(OnSceneChanged);
             m_mainForm.Load += new EventHandler(OnMainformLoaded);
             EngineRender.HandleDestroyed += new EventHandler(OnClose);
         }
 
         private void OnMainformLoaded(object sender, EventArgs e)
-        {
-            m_engineThread.Start();
+        {        
+            //m_engineThread.Start();
         }
 
         public void StopEngine()
         {
-            m_directZobWrapper.Stop();     
+            //m_directZobWrapper.Stop();     
         }
 
         private void OnClose(object sender, EventArgs e)
@@ -131,7 +128,7 @@ namespace DirectZobEditor
 
         public void UpdateModificationGizmos()
         {
-            ZobObjectWrapper z = null;// m_mainForm.GetZobObjectListControl().GetSelectedZobObject();
+            ZobObjectWrapper z = m_selectedObject;
             if (z != null && z.IsValid())
             {
                 int btnSize = 20 / 2;
@@ -164,17 +161,17 @@ namespace DirectZobEditor
                         nZ = pZ.Copy();
                         break;
                 }
-                float d = m_engineWrapper.GetDistanceToCamera(p0) / 10.0f;
+                float d = m_mainForm.GetEngineWrapper().GetDistanceToCamera(p0) / 10.0f;
                 pX.Mul(d);
                 pY.Mul(d);
                 pZ.Mul(d);
                 pX.Add(p0);
                 pY.Add(p0);
                 pZ.Add(p0);
-                m_engineWrapper.GetProjectedCoords(p0);
-                m_engineWrapper.GetProjectedCoords(pX);
-                m_engineWrapper.GetProjectedCoords(pY);
-                m_engineWrapper.GetProjectedCoords(pZ);
+                m_mainForm.GetEngineWrapper().GetProjectedCoords(p0);
+                m_mainForm.GetEngineWrapper().GetProjectedCoords(pX);
+                m_mainForm.GetEngineWrapper().GetProjectedCoords(pY);
+                m_mainForm.GetEngineWrapper().GetProjectedCoords(pZ);
                 p0 = ToScreenCoords(p0);
                 pX = ToScreenCoords(pX);
                 pY = ToScreenCoords(pY);
@@ -222,7 +219,7 @@ namespace DirectZobEditor
                         nZ = pZ.Copy();
                         break;
                 }
-                d = m_engineWrapper.GetDistanceToCamera(p0) / 10.0f;
+                d = m_mainForm.GetEngineWrapper().GetDistanceToCamera(p0) / 10.0f;
                 pX.Mul(d);
                 pY.Mul(d);
                 pZ.Mul(d);
@@ -239,9 +236,9 @@ namespace DirectZobEditor
                         bTY.BackColor = Color.Green;
                         bTZ.Text = "Tz";
                         bTZ.BackColor = Color.Blue;
-                        m_engineWrapper.DrawLine(p0, pX, 0xFF0000, true, true);
-                        m_engineWrapper.DrawLine(p0, pY, 0x00FF00, true, true);
-                        m_engineWrapper.DrawLine(p0, pZ, 0x0000FF, true, true);
+                        m_mainForm.GetEngineWrapper().DrawLine(p0, pX, 0xFF0000, true, true);
+                        m_mainForm.GetEngineWrapper().DrawLine(p0, pY, 0x00FF00, true, true);
+                        m_mainForm.GetEngineWrapper().DrawLine(p0, pZ, 0x0000FF, true, true);
                         break;
                     case objectModificator.rotate_world:
                     case objectModificator.rotate_local:
@@ -251,9 +248,9 @@ namespace DirectZobEditor
                         bTY.BackColor = Color.Blue;
                         bTZ.Text = "Rx";
                         bTZ.BackColor = Color.Red;
-                        m_engineWrapper.DrawCircle(p0, nX, d, 0xFF0000, true, true);
-                        m_engineWrapper.DrawCircle(p0, nY, d, 0x00FF00, true, true);
-                        m_engineWrapper.DrawCircle(p0, nZ, d, 0x0000FF, true, true);
+                        m_mainForm.GetEngineWrapper().DrawCircle(p0, nX, d, 0xFF0000, true, true);
+                        m_mainForm.GetEngineWrapper().DrawCircle(p0, nY, d, 0x00FF00, true, true);
+                        m_mainForm.GetEngineWrapper().DrawCircle(p0, nZ, d, 0x0000FF, true, true);
                         break;
                     case objectModificator.scale:
                         bTX.Text = "Sx";
@@ -262,9 +259,9 @@ namespace DirectZobEditor
                         bTY.BackColor = Color.Green;
                         bTZ.Text = "Sz";
                         bTZ.BackColor = Color.Blue;
-                        m_engineWrapper.DrawLine(p0, pX, 0xFF0000, true, true);
-                        m_engineWrapper.DrawLine(p0, pY, 0x00FF00, true, true);
-                        m_engineWrapper.DrawLine(p0, pZ, 0x0000FF, true, true);
+                        m_mainForm.GetEngineWrapper().DrawLine(p0, pX, 0xFF0000, true, true);
+                        m_mainForm.GetEngineWrapper().DrawLine(p0, pY, 0x00FF00, true, true);
+                        m_mainForm.GetEngineWrapper().DrawLine(p0, pZ, 0x0000FF, true, true);
                         break;
                     default:
                         break;
@@ -286,37 +283,6 @@ namespace DirectZobEditor
             vout.y = (v.y / v.z + 1) * EngineRender.Height / 2;
             vout.z = v.z;
             return vout;
-        }
-
-        public void ResizeRenderWindow()
-        {
-            m_width = m_engineWrapper.GetBufferWidth();
-            m_height = m_engineWrapper.GetBufferHeight();
-            EngineRender.Width = m_width;
-            EngineRender.Height = m_height;
-        }
-
-        public CLI.EngineWrapper GetEngineWrapper()
-        {
-            return m_engineWrapper;
-        }
-
-        private void GenerateRenderWindow()
-        {
-            m_engineThread = null;
-            m_width = m_engineWrapper.GetBufferWidth();
-            m_height = m_engineWrapper.GetBufferHeight();
-            EngineRender.Width = m_width;
-            EngineRender.Height = m_height;
-            m_engineThread = new Thread(RunEngineThread);
-            //m_engineThread.IsBackground = true;
-            BeforeUpdateEngineWindowDelegate = new BeforeUpdateEngine(BeforeUpdateEngineWindowMethod);
-            AfterUpdateEngineWindowDelegate = new AfterUpdateEngine(AfterUpdateEngineWindowMethod);
-            onFrameStartCallback = new engineCallback(onFrameStartCallbackMethod);
-            onFrameEndCallback = new engineCallback(onFrameEndCallbackMethod);
-            onSceneUpdatedCallback = new engineCallback(onEngineSceneUpdated);
-            onQueuingCallback = new engineCallback(onQueuingCallbackMethod);
-            EngineRender.SizeMode = PictureBoxSizeMode.Zoom;
         }
 
         #region engineSynchronisationDelegates
@@ -342,23 +308,15 @@ namespace DirectZobEditor
 
         private void onQueuingCallbackMethod()
         {
-            GetEngineWrapper().QueueObjectsToRender();
+            //GetEngineWrapper().QueueObjectsToRender();
         }
         private void onEngineSceneUpdated()
         {
-            /*
-            if(m_pickObjectPosition != null)
-            {
-                CLI.ZobObjectWrapper z = GetEngineWrapper().GetObjectAt2DCoords(m_pickObjectPosition.x, m_pickObjectPosition.y);
-                m_newObjectPicked = z;
-                m_pickObjectPosition = null;
-            }
-            */
         }
 
         private void onFrameEndCallbackMethod()
         {
-            m_directZobWrapper.EditorUpdate();
+            //m_directZobWrapper.EditorUpdate();
             try
             {
                 EngineRender.Invoke(AfterUpdateEngineWindowDelegate);
@@ -370,34 +328,6 @@ namespace DirectZobEditor
         }
         private void AfterUpdateEngineWindowMethod()
         {
-            m_directZobWrapper.Lock();
-
-            m_mainForm.UpdateAfterEngine();
-            m_engineRendering = false;
-            if(m_newObjectPicked != null)
-            {
-                Form1.SceneUpdateEventArg ev = new Form1.SceneUpdateEventArg();
-                ev.type = Form1.SceneUpdateType.objectSelected;
-                ev.zobObject = m_newObjectPicked;
-                m_mainForm.PropagateSceneUpdateEvent(ev);
-                m_newObjectPicked = null;
-
-            }
-            if (OnEndFrame != null)
-            {
-                OnEndFrame(this, EventArgs.Empty);
-            }
-            if (m_directZobWrapper.IsPhysicPlaying())
-            {
-                m_mainForm.InformEngineStatus("RUNNING");
-            }
-            else
-            {
-                m_mainForm.InformEngineStatus("STOPPED");
-            }
-            m_directZobWrapper.Unlock();
-            this.Refresh();
-            this.Invalidate();
         }
         #endregion
         private void UpdateGraphicsParameters(Bitmap b)
@@ -425,14 +355,6 @@ namespace DirectZobEditor
                 EngineRender.Location = new Point(x, y);
             }
         }
-        private void RunEngineThread()
-        {
-            m_directZobWrapper.Run(onFrameStartCallback, onFrameEndCallback, null, onQueuingCallback);
-            if (OnEngineStopped != null)
-            {
-                OnEngineStopped(this, EventArgs.Empty);
-            }
-        }
 
         private void UpdateCamera()
         {
@@ -452,7 +374,7 @@ namespace DirectZobEditor
                 int dy = m_lastMouseY - Cursor.Position.Y;
                 if (e.Button == MouseButtons.Left && m_mainForm.IsCtrlPressed())
                 {
-                    m_mainForm.GetCameraManagerWrapper().Rotate((float)dx / 2.0f, (float)-dy / 2.0f, 0.0f);
+                    m_mainForm.GetCameraManagerWrapper().Rotate((float)dx, (float)-dy, 0.0f);
                     //m_mainForm.GetCameraControl().GetWrapper().GetCurrentCameraTarget();
                     //m_mainForm.GetCameraControl().GetWrapper().SetLookAt(m_mainForm.GetCameraControl().GetWrapper().GetCurrentCameraTarget());
                 }
@@ -460,23 +382,16 @@ namespace DirectZobEditor
                 {
                     if (m_mainForm.IsCtrlPressed())
                     {
-                        m_mainForm.GetCameraManagerWrapper().Move((float)-dx * 2.0f, 0, (float)-dy * 2.0f);
+                        m_mainForm.GetCameraManagerWrapper().Move((float)-dx , 0, (float)-dy);
                     }
                     else
                     {
-                        m_mainForm.GetCameraManagerWrapper().Move((float)-dx * 2.0f, (float)dy * 2.0f, 0.0f);
+                        m_mainForm.GetCameraManagerWrapper().Move((float)-dx, (float)dy, 0.0f);
                     }
                 }
             }
             m_lastMouseX = Cursor.Position.X;
             m_lastMouseY = Cursor.Position.Y;
-/*
-            ManagedVector3 up = new ManagedVector3(0, 1, 0);
-            ManagedVector3 p0 = new ManagedVector3(0, 0, 0);
-            ManagedVector3 ret = new ManagedVector3(0, 0, 0);
-            FromMouseToWorldOnPlane(p0, up, ref ret);
-            m_engineWrapper.DrawLine(p0, ret, 0xFF0000, true, true);
-*/
         }
 
         bool FromMouseToWorldOnPlane(ManagedVector3 p0, ManagedVector3 pn, ref ManagedVector3 ret)
@@ -524,27 +439,25 @@ namespace DirectZobEditor
             m_objectReadyForModification = false;
         }
 
-        private void OnObjectSelected(object s, ObjectSelectionEventArg e)
+        private void OnObjectSelected(ZobObjectWrapper z)
         {
-            /*
-            CLI.ZobObjectWrapper oldObject = e.previousZobObject;
-            m_selectedObject = e.newZobObject;
-            if (m_selectedObject != null)
+            if(z != null)
             {
-                SetTranslationGizmos(m_selectedObject);
+                m_selectedObject = z;
+                UpdateModificationGizmos();
             }
             else
             {
+                m_selectedObject = null;
                 RemoveTranslationGizmos();
             }
-            */
         }
         
         private void ModifyObject(MouseEventArgs e, axis a)
         {
             if(!m_objectReadyForModification && e.Button == MouseButtons.Left)
             {
-                ZobObjectWrapper z = m_mainForm.GetZobObjectListControl().GetSelectedZobObject();
+                ZobObjectWrapper z = null;// m_mainForm.GetDirectZobWrapper().GetSelectedZobObject();
                 if (z != null)
                 {
                     m_startTranslation = z.GetWorldPosition().Copy();
@@ -591,7 +504,7 @@ namespace DirectZobEditor
                 return;
             }
             ZobCameraWrapper c = m_mainForm.GetCameraManagerWrapper().GetCurrentCamera();
-            ZobObjectWrapper z = m_mainForm.GetZobObjectListControl().GetSelectedZobObject();
+            ZobObjectWrapper z = null;//m_mainForm.GetDirectZobWrapper().GetSelectedZobObject();
             if (c != null && z != null && e.Button == MouseButtons.Left && a != axis.none)
             {
                 Point p;
@@ -646,7 +559,6 @@ namespace DirectZobEditor
                 ManagedVector3 p3 = p0.Copy();
                 p3.Add(up);
                 p3.Mul(2.0f);
-//                m_engineWrapper.////iangle(p0, p1, p2, 0xFF0000);
                 OnZobObjectRotated(z);
             }
         }
@@ -682,7 +594,7 @@ namespace DirectZobEditor
                 ManagedVector3 p3 = p0.Copy();
                 p3.Add(up);
                 p3.Mul(2.0f);
-//                m_engineWrapper.DrawTriangle(p0, p1, p2, 0xFF0000);
+                m_mainForm.GetEngineWrapper().DrawTriangle(p0, p1, p2, 0xFF0000);
                 OnZobObjectRotated(z);
             }
         }
@@ -717,7 +629,7 @@ namespace DirectZobEditor
                 ManagedVector3 p3 = p0.Copy();
                 p3.Add(up);
                 p3.Mul(2.0f);
-                m_engineWrapper.DrawTriangle(p0, p1, p2, 0x00FF00);
+                m_mainForm.GetEngineWrapper().DrawTriangle(p0, p1, p2, 0x00FF00);
                 OnZobObjectRotated(z);
             }
         }
@@ -728,7 +640,7 @@ namespace DirectZobEditor
                 return;
             }
             ZobCameraWrapper c = m_mainForm.GetCameraManagerWrapper().GetCurrentCamera();
-            ZobObjectWrapper z = m_mainForm.GetZobObjectListControl().GetSelectedZobObject();
+            ZobObjectWrapper z = null;// m_mainForm.GetDirectZobWrapper().GetSelectedZobObject();
             if (c != null && z != null && e.Button == MouseButtons.Left)
             {
                 ManagedVector3 p0 = z.GetWorldPosition().Copy();
@@ -759,8 +671,6 @@ namespace DirectZobEditor
                                     z.SetScale(v);
                                     ManagedVector3 v2 = p0.Copy();
                                     v2.x *= v.x;
-                                    m_engineWrapper.GetProjectedCoords(v2);
-                                    //bTX.
                                     OnZobObjectScaled(z);
                                 }
                                 break;
@@ -797,7 +707,7 @@ namespace DirectZobEditor
                 return;
             }
             ZobCameraWrapper c = m_mainForm.GetCameraManagerWrapper().GetCurrentCamera();
-            ZobObjectWrapper z = m_mainForm.GetZobObjectListControl().GetSelectedZobObject();
+            ZobObjectWrapper z = null;// m_mainForm.GetDirectZobWrapper().GetSelectedZobObject();
             if (c != null && z != null && e.Button == MouseButtons.Left)
             {
                 ManagedVector3 p0 = z.GetWorldPosition();
@@ -914,23 +824,5 @@ namespace DirectZobEditor
             }
         }
         #endregion
-
-        private void EngineRenderPanel_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void EngineRender_Paint(object sender, PaintEventArgs e)
-        {
-            IntPtr p = m_directZobWrapper.GetBufferDataPointer();
-            if (p != IntPtr.Zero)
-            {
-                Bitmap b = new System.Drawing.Bitmap(m_width, m_height, 4 * m_width, System.Drawing.Imaging.PixelFormat.Format32bppRgb, p);
-                e.Graphics.DrawImage(b, 0, 0, b.Width, b.Height);
-            
-                UpdateGraphicsParameters(b);
-                UpdateModificationGizmos();
-            }
-        }
     }
 }

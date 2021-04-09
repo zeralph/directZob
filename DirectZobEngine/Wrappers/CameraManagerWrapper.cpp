@@ -5,7 +5,13 @@ namespace CLI
 {
 	CameraManagerWrapper::CameraManagerWrapper():ManagedObject(DirectZob::GetInstance()->GetCameraManager(), false)
 	{
-
+		m_nextRotation.x = 0;
+		m_nextRotation.y = 0;
+		m_nextRotation.z = 0;
+		m_nextMove.x = 0;
+		m_nextMove.y = 0;
+		m_nextMove.z = 0;
+		m_nextZoom = 0;
 	}
 
 	cli::array<System::String^>^ CameraManagerWrapper::GetCameraList()
@@ -56,38 +62,58 @@ namespace CLI
 		return gcnew CLI::ManagedVector3();
 	}
 
-	void CameraManagerWrapper::Rotate(float x, float y, float z)
+	void CameraManagerWrapper::Update(float dt)
 	{
-		//x = 0;
-		DirectZob::GetInstance()->Lock();
+		dt /= 1000.0f;
+		dt *= 100.0f;
+		//dt = 1.0f;
+		//m_nextRotation.x = 10.0f;
 		Camera* c = m_Instance->GetCurrentCamera();
 		if (c)
 		{
-			c->Rotate(x, y, z);
+			if (m_nextRotation.x != 0 || m_nextRotation.y != 0 || m_nextRotation.z != 0)
+			{
+				float x = m_nextRotation.x;
+				float y = m_nextRotation.y;
+				float z = m_nextRotation.z;
+				c->Rotate(x * dt, y * dt, z * dt);
+				m_nextRotation.x = 0;
+				m_nextRotation.y = 0;
+				m_nextRotation.z = 0;
+			}
+			if (m_nextMove.x != 0 || m_nextMove.y != 0 || m_nextMove.z != 0)
+			{
+
+				c->Move(m_nextMove.x * dt, m_nextMove.y * dt, m_nextMove.z * dt, true);
+				m_nextMove.x = 0;
+				m_nextMove.y = 0;
+				m_nextMove.z = 0;
+			}
+			if (m_nextZoom != 0)
+			{
+				c->Zoom(m_nextZoom * dt);
+				m_nextZoom = 0;
+			}
 		}
-		DirectZob::GetInstance()->Unlock();
+	}
+
+	void CameraManagerWrapper::Rotate(float x, float y, float z)
+	{
+		m_nextRotation.x = +x;
+		m_nextRotation.y = +y;
+		m_nextRotation.z = +z;
 	}
 
 	void CameraManagerWrapper::Move(float x, float z, float y)
 	{
-		DirectZob::GetInstance()->Lock();
-		Camera* c = m_Instance->GetCurrentCamera();
-		if (c)
-		{
-			c->Move(x, z, y, true);
-		}
-		DirectZob::GetInstance()->Unlock();
+		m_nextMove.x = +x;
+		m_nextMove.y = +y;
+		m_nextMove.z = +z;
 	}
 
 	void CameraManagerWrapper::Zoom(float z)
 	{
-		DirectZob::GetInstance()->Lock();
-		Camera* c = m_Instance->GetCurrentCamera();
-		if (c)
-		{
-			c->Zoom(z);
-		}
-		DirectZob::GetInstance()->Unlock();
+		m_nextZoom = z;
 	}
 
 	CameraManagerWrapper::Ray^ CameraManagerWrapper::From2DToWorld(float x, float y)

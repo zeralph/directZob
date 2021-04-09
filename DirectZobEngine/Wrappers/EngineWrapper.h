@@ -5,7 +5,15 @@
 #include "../Rendering/Engine.h"
 #include "../DirectZob.h"
 #include "ZobObjectWrapper.h"
-//using namespace System;
+#using "System.Windows.Forms.dll"
+#using "System.dll"
+#using "System.Drawing.dll"
+
+using namespace System;
+using namespace System::Windows;
+using namespace System::Windows::Forms;
+using namespace System::Collections::Generic;
+using namespace System::Drawing;
 
 #define NB_EDITOR_TRIANGLES 1000
 #define NB_EDITOR_LINES 1000
@@ -33,7 +41,7 @@ namespace CLI
 	{
 	public:
 
-		EngineWrapper();
+		EngineWrapper(PictureBox^ renderWindow);
 		~EngineWrapper();
 		int				GetBufferWidth();
 		int				GetBufferHeight();
@@ -58,7 +66,14 @@ namespace CLI
 		void			DrawCircle(ManagedVector3^ p0, ManagedVector3^ up, float r, int color, bool bold, bool noZ);
 		void			DrawTriangle(ManagedVector3^ p0, ManagedVector3^ p1, ManagedVector3^ p2, int color);
 		void			QueueObjectsToRender();
+		void			Update();
+		void			Stop() { m_running = false; }
 	private:
+
+		void			Init();
+		void			UpdateRenderWindowInternal();
+		PictureBox^		m_renderWindow;
+		Graphics^		m_renderWindowGraphics;
 		Triangle*		m_triangleList;
 		ZobVector3*		m_vertices;
 		ZobVector3*		m_projectedVertices;
@@ -67,6 +82,7 @@ namespace CLI
 		int				m_nbTriangles;
 		int				m_nbLines;
 		int				m_nbCircles;
+		bool			m_running;
 	};
 }
 #endif //_WINDLL

@@ -28,9 +28,7 @@ private:
 	bool					LoadMeshInternal();
 	Mesh*					m_mesh;
 	RenderOptions			m_renderOptions;
-	std::string				m_meshName;
-	std::string				m_meshPath;
-	std::string				m_meshFile;
+	ZobFilePath				m_meshPath;
 	int						m_meshNbTriangles;
 
 };

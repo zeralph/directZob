@@ -10,12 +10,10 @@ ZobBehaviorPhysicMesh::~ZobBehaviorPhysicMesh()
 ZobBehaviorPhysicMesh::ZobBehaviorPhysicMesh(ZobObject* zobObject) : ZobBehaviorPhysicShape(zobObject)
 {
 	m_type = eBehavior_physicMesh;
-	m_convexMeshName = "";
-	m_convexMeshPath = "";
-	m_convexMeshFile = "";
+	m_convexMeshPath.Init();
 	m_concaveMeshNbTriangles = 0;
 	m_mesh = NULL;
-	m_varExposer->WrapPath("Mesh", &m_convexMeshName, &m_convexMeshPath,& m_convexMeshFile, false, true);
+	m_varExposer->WrapVariable<ZobFilePath>("Mesh", &m_convexMeshPath, false, true);
 	m_varExposer->WrapVariable<int>("Nb triangles", &m_concaveMeshNbTriangles, true, false);
 }
 
@@ -32,7 +30,7 @@ void ZobBehaviorPhysicMesh::RemoveCollider()
 
 bool ZobBehaviorPhysicMesh::LoadMeshInternal()
 {
-	m_mesh = DirectZob::GetInstance()->GetMeshManager()->GetOrLoadMesh(m_convexMeshName, m_convexMeshPath, m_convexMeshFile);
+	m_mesh = DirectZob::GetInstance()->GetMeshManager()->GetOrLoadMesh(m_convexMeshPath.name, m_convexMeshPath.path, m_convexMeshPath.file);
 	if (m_mesh)
 	{
 		PhysicsCommon* pc = DirectZob::GetInstance()->GetPhysicsEngine()->GetPhysicsCommon();
@@ -87,13 +85,11 @@ bool ZobBehaviorPhysicMesh::LoadMeshInternal()
 void ZobBehaviorPhysicMesh::Init()
 {
 	ReLoadVariables();
-	if (m_mesh == NULL && m_convexMeshName.size() && m_convexMeshPath.size() && m_convexMeshFile.size())
+	if (m_mesh == NULL && m_convexMeshPath.IsDefined())
 	{
 		if (!LoadMeshInternal())
 		{
-			m_convexMeshName = "";
-			m_convexMeshPath = "";
-			m_convexMeshFile = "";
+			m_convexMeshPath.Init();
 		}
 		else
 		{
@@ -107,27 +103,23 @@ void ZobBehaviorPhysicMesh::EditorUpdate()
 	ZobBehaviorPhysicShape::EditorUpdate();
 	if (m_mesh == NULL)
 	{
-		if (m_convexMeshName.size() && m_convexMeshPath.size() && m_convexMeshFile.size())
+		if (m_convexMeshPath.IsDefined())
 		{
 			bool bOK = LoadMeshInternal();
 			if (!bOK)
 			{
-				m_convexMeshName = "";
-				m_convexMeshPath = "";
-				m_convexMeshFile = "";
+				m_convexMeshPath.Init();
 			}
 		}
 	}
 	else
 	{
-		if (m_mesh->GetName() != m_convexMeshName)
+		if (m_mesh->GetName() != m_convexMeshPath.name)
 		{
 			bool bOK = LoadMeshInternal();
 			if (!bOK)
 			{
-				m_convexMeshName = "";
-				m_convexMeshPath = "";
-				m_convexMeshFile = "";
+				m_convexMeshPath.Init();
 			}
 		}
 	}

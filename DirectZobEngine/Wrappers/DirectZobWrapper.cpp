@@ -5,13 +5,16 @@
 
 namespace CLI
 {
-	DirectZobWrapper::DirectZobWrapper(Panel^ objectTreeviewPanel, Panel^ objectPropertiesPanel):ManagedObject(new DirectZob, true)
+	DirectZobWrapper::DirectZobWrapper(Panel^ objectTreeviewPanel, Panel^ objectPropertiesPanel, PictureBox^ renderWindow):ManagedObject(new DirectZob, true)
 	{
 		m_run = false;
 		m_sceneLoadedCb = nullptr;
 		m_ZobObjectManagerWrapper = nullptr;
+		m_ZobEngineWrapper = nullptr;
 		m_objectTreeviewPanel = objectTreeviewPanel;
 		m_objectPropertiesPanel = objectPropertiesPanel;
+		m_renderWindow = renderWindow;
+		m_lastFrameTime = 0;
 	}
 
 	void DirectZobWrapper::StartPhysic()
@@ -45,6 +48,8 @@ namespace CLI
 		{
 			GetInstance()->Init(0, width, height, true);
 			m_ZobObjectManagerWrapper = gcnew ZobObjectManagerWrapper(m_objectTreeviewPanel, m_objectPropertiesPanel);
+			m_ZobCameraManager = gcnew CameraManagerWrapper();
+			m_ZobEngineWrapper = gcnew EngineWrapper(m_renderWindow);
 		}
 	}
 
@@ -59,6 +64,11 @@ namespace CLI
 			MarshalString(file, stdFile);
 			GetInstance()->LoadScene(stdPath, stdFile, (DirectZob::engineCallback)CallSceneLoadedCallback);
 		}
+	}
+
+	void DirectZobWrapper::RegisterObjectCallbacks(engineCallback^ onSelected)
+	{
+		m_objectSelectedCb = onSelected;
 	}
 
 	void DirectZobWrapper::LoadZobObject(System::String^ path, System::String^ file)
@@ -78,6 +88,7 @@ namespace CLI
 		if (GetInstance())
 		{
 			GetInstance()->NewScene();
+			m_ZobCameraManager->CreateEditorCamera();
 		}
 	}
 
@@ -85,6 +96,7 @@ namespace CLI
 	{
 		if (GetInstance() != NULL)
 		{
+			m_ZobEngineWrapper->Stop();
 			GetInstance()->Unload();
 		}
 		m_Instance = NULL;
@@ -120,11 +132,6 @@ namespace CLI
 		}
 	}
 
-	void DirectZobWrapper::test()
-	{
-
-	}
-
 	void DirectZobWrapper::CallSceneUpdatedCallback()
 	{
 		if (m_sceneUpdatedCb != nullptr)
@@ -156,26 +163,15 @@ namespace CLI
 		};
 	}
 
-	int DirectZobWrapper::Run(engineCallback^ cbStart, engineCallback^ cbEnd, engineCallback^ sceneUpdated, engineCallback^ queuing)
+	int DirectZobWrapper::RunAFrame()
 	{
-
-		m_sceneUpdatedCb = sceneUpdated;
-		m_queuingCb = queuing;
-		m_run = true;
-		while(m_run)
-		{
-			if (m_run)
-			{
-				cbStart();
-			}
-			if (GetInstance())
-			{
-				GetInstance()->RunAFrame((DirectZob::engineCallback)DirectZobWrapper::CallSceneUpdatedCallback, (DirectZob::engineCallback)DirectZobWrapper::CallQueuingCallback);
-			}
-			if (m_run)
-			{
-				cbEnd();
-			}
+		if (GetInstance())
+		{	
+			m_ZobCameraManager->Update(m_lastFrameTime);
+			GetInstance()->RunAFrame((DirectZob::engineCallback)DirectZobWrapper::CallSceneUpdatedCallback, (DirectZob::engineCallback)DirectZobWrapper::CallQueuingCallback);
+			m_lastFrameTime = GetInstance()->GetFrameTime();
+			GetInstance()->EditorUpdate();
+			m_ZobEngineWrapper->Update();
 		}
 		return 0;
 	}
@@ -233,15 +229,6 @@ namespace CLI
 		{
 			GetInstance()->RegenerateZobIds();
 		}
-	}
-
-	int DirectZobWrapper::RunAFrame()
-	{
-		if (GetInstance())
-		{
-			return GetInstance()->RunAFrame(0);
-		}
-		return 0;
 	}
 
 	cli::array<System::String^>^ DirectZobWrapper::GetEventsAndClear()

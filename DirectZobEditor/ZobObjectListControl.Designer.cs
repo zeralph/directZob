@@ -82,7 +82,6 @@
             this.BtnForceRefresh.TabIndex = 1;
             this.BtnForceRefresh.Text = "Refresh";
             this.BtnForceRefresh.UseVisualStyleBackColor = true;
-            this.BtnForceRefresh.Click += new System.EventHandler(this.BtnForceRefresh_Click);
             // 
             // TreeNodeRightClick
             // 

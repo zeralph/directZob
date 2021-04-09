@@ -50,15 +50,6 @@ namespace DirectZobEditor
 
         private void engineSetSize_Click(object sender, EventArgs e)
         {
-            string sw = engineWidth.Text;
-            string sh = engineHeight.Text;
-            int w = 0;
-            int h = 0;
-            if(int.TryParse(sw, out w) && int.TryParse(sh, out h))
-            {
-                m_mainForm.GetDirectZobWrapper().Resize(w, h);
-                Form1.GetMainForm().GetEngineWindow().ResizeRenderWindow();
-            }
         }
 
         private void showNormals_CheckedChanged(object sender, EventArgs e)

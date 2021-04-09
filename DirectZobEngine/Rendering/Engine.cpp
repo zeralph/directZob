@@ -40,6 +40,7 @@ Engine::Engine(int width, int height, Events* events)
 	m_showGrid = false;
 	m_drawGizmos = false;
 	m_showBBoxes = false;
+	m_doResize = false;
 	m_drawPhysicsGizmos = false;
 	m_lockFrustrum = false;
 	m_drawZobObjectGizmos = true;
@@ -81,6 +82,8 @@ Engine::Engine(int width, int height, Events* events)
 		m_zBuffer[i] = (float*)malloc(sizeof(float) * width * height);
 	}
 	m_showZBuffer = false;
+	m_nextWidth = width;
+	m_nextHeight = height;
 	m_bufferData.height = height;
 	m_bufferData.width = width;
 	m_bufferData.zNear = m_zNear;
@@ -210,62 +213,56 @@ void Engine::Stop()
 	m_started = false;
 }
 
-void Engine::Resize(int width, int height)
+bool Engine::Resize(int width, int height)
 {
-	bool bStarted = m_started;
-	Stop();
-	DirectZob::GetInstance()->SleepMS(1000);
-	for (int i = 0; i < m_nbRasterizers; i++)
+	if (m_nextWidth != width || m_nextHeight != height)
 	{
-		m_rasterizers[i]->End();
+		m_nextWidth = width;
+		m_nextHeight = height;
+		m_doResize = true;
+		return ResizeInternal();
 	}
-	delete m_buffer;
-	delete m_zBuffer;
+	return false;
+}
 
-	m_buffer = (uint**)malloc(sizeof(uint*) * 2);
-	m_zBuffer = (float**)malloc(sizeof(float*) * 2);
-	for (int i = 0; i < 2; i++)
-	{
-		m_buffer[i] = (uint*)malloc(sizeof(uint) * width * height);
-		m_zBuffer[i] = (float*)malloc(sizeof(float) * width * height);
-	}
 
-	m_bufferData.height = height;
-	m_bufferData.width = width;
-	m_bufferData.buffer = m_buffer[m_currentBuffer];
-	m_bufferData.zBuffer = m_zBuffer[m_currentBuffer];
-
-	m_bufferData.zNear = m_zNear;
-	m_bufferData.zFar = m_zFar;
-	m_bufferData.size = width * height;
-
-	for (int i = 0; i < m_nbRasterizers; i++)
+bool Engine::ResizeInternal()
+{
+	if (m_doResize)
 	{
-		//m_rasterizers->at(i)->End();
-		delete m_rasterizers[i];
-		m_rasterizers[i] = NULL;
+		m_doResize = false;
+		for (int i = 0; i < 2; i++)
+		{
+			free(m_buffer[i]);
+			free(m_zBuffer[i]);
+		}
+		free(m_buffer);
+		free(m_zBuffer);
+		m_buffer = NULL;
+		m_zBuffer = NULL;
+		m_buffer = (uint**)malloc(sizeof(uint*) * 2);
+		m_zBuffer = (float**)malloc(sizeof(float*) * 2);
+		for (int i = 0; i < 2; i++)
+		{
+			m_buffer[i] = (uint*)malloc(sizeof(uint) * m_nextWidth * m_nextHeight);
+			m_zBuffer[i] = (float*)malloc(sizeof(float) * m_nextWidth * m_nextHeight);
+		}
+		Color c = Color(DirectZob::GetInstance()->GetLightManager()->GetClearColor());
+		m_bufferData.height = m_nextHeight;
+		m_bufferData.width = m_nextWidth;
+		m_bufferData.buffer = m_buffer[m_currentBuffer];
+		m_bufferData.zBuffer = m_zBuffer[m_currentBuffer];
+		//m_bufferData.zNear = m_zNear;
+		//m_bufferData.zFar = m_zFar;
+		m_bufferData.size = m_nextWidth * m_nextWidth;
+		ClearBuffer(&c);
+		for (int i = 0; i < m_nbRasterizers; i++)
+		{
+			m_rasterizers[i]->Resize(m_nextWidth, m_nextHeight);
+		}
+		return true;
 	}
-
-	m_rasterizerHeight = ceil( (float)height / (float)m_nbRasterizers);
-	int h0 = 0;
-	m_rasterizers = (Rasterizer**)malloc(sizeof(Rasterizer) * m_nbRasterizers);
-	int nbTrianglesPerRasterizer = m_maxTrianglesQueueSize / m_nbRasterizers;
-	for (int i = 0; i < m_nbRasterizers; i++)
-	{
-		Rasterizer *r = new Rasterizer(width, height, h0, h0 + m_rasterizerHeight, nbTrianglesPerRasterizer, (i + 1), &m_bufferData);
-		m_rasterizers[i] = r;
-		//m_TrianglesQueue[i].clear();
-		//m_rasterLineQueues.clear();
-		h0 += m_rasterizerHeight;
-	}
-	for (int i = 0; i < m_nbRasterizers; i++)
-	{
-		m_rasterizers[i]->Init(m_conditionvariables[i], m_mutexes[i]);
-	}
-	if (bStarted)
-	{
-		Start();
-	}
+	return false;
 }
 
 void Engine::ClearBuffer(const Color *color)
@@ -360,8 +357,6 @@ void Engine::SwapBuffers()
 	m_bufferData.buffer = m_buffer[m_currentBuffer];
 	m_bufferData.zBuffer = m_zBuffer[m_currentBuffer];
 	m_bufferData.curBuffer = m_currentBuffer;
-	
-//	m_bufferData.editorBuffer = m_editorBuffer;
 }
 
 

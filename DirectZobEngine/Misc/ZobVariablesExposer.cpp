@@ -12,23 +12,6 @@ ZobVariablesExposer::~ZobVariablesExposer()
 
 }
 
-void ZobVariablesExposer::WrapPath(const char* name, void* ptrName, void* ptrPath, void* ptrFile, bool bReadOnly, bool bSave)
-{
-	wrapperData w;
-	std::string s;
-	w.type = eWrapperType_path;
-	w.name = std::string(name);
-	s = m_zobGUID;
-	s = s.append("_").append(w.name);
-	w.internalName = s;
-	w.ptr = ptrName;
-	w.ptr_1 = ptrPath;
-	w.ptr_2 = ptrFile;
-	w.bReadOnly = bReadOnly;
-	w.bSave = bSave;
-	m_wrappedVariables.push_back(w);
-}
-
 void ZobVariablesExposer::wrapperData::Load()
 {
 	if (strValue.size() == 0)
@@ -101,27 +84,8 @@ void ZobVariablesExposer::wrapperData::Load()
 	else if (type == eWrapperType_path)
 	{
 		std::string s = std::string(strValue);
-		std::size_t del1, del2 = 0;
-		del1 = s.find(';');
-		if (del1 != std::string::npos)
-		{
-			del2 = s.find(';', del1 + 1);
-			if (del1 != std::string::npos)
-			{
-				std::string name = s.substr(0, del1);
-				std::string path = s.substr(del1 + 1, del2 - (del1 + 1));
-				std::string file = s.substr(del2 + 1, s.size() - 1);
-				std::string* sName = (std::string*)(ptr);
-				sName->resize(0);
-				sName->assign(name);
-				std::string* sPath = (std::string*)(ptr_1);
-				sPath->resize(0);
-				sPath->assign(path);
-				std::string* sFile = (std::string*)(ptr_2);
-				sFile->resize(0);
-				sFile->assign(file);
-			}
-		}
+		ZobFilePath* zb = (ZobFilePath*)(ptr);
+		zb->Unserialize(s);
 	}
 	else if (type == eWrapperType_zobObject)
 	{
@@ -212,11 +176,11 @@ TiXmlNode* ZobVariablesExposer::SaveUnderNode(TiXmlNode* node)
 			}
 			case eWrapperType_path:
 			{
-				std::string* name = (std::string*)(w->ptr);
-				std::string* file = (std::string*)(w->ptr_1);
-				std::string* path = (std::string*)(w->ptr_2);
-				std::string s = "";
-				s = s.append(*name).append(";").append(*file).append(";").append(*path);
+				ZobFilePath zp;
+				zp.name = *(std::string*)(w->ptr);
+				zp.file = *(std::string*)(w->ptr_1);
+				zp.path = *(std::string*)(w->ptr_2);
+				std::string s = zp.Serialize();
 				o.SetAttribute(XML_ATTR_VALUE, s.c_str());
 				break;
 			}

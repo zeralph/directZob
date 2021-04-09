@@ -84,7 +84,7 @@ namespace Core
 		float											WaitForRasterizersEnd();
 		void											StopRasterizers();
 		void											ClearRenderQueues();
-		void											Resize(int width, int height);
+		bool											Resize(int width, int height);
 		bool											GetProjectedCoords(ZobVector3* worldPos);
 		float											GetDistanceToCamera(ZobVector3* worldPos);
 		bool											LinePlaneIntersection(const ZobVector3* planeOrigin, const ZobVector3* planeNormal, const ZobVector3* lineOrigin, const ZobVector3* lineDirection, ZobVector3* ret);
@@ -107,6 +107,7 @@ namespace Core
 		uint											ClipTriangle(const Camera* c, Triangle* t);
 		int												QueueTriangleInRasters(const Triangle* t, int idx) const;
 		void											QueueLineInRasters(const Line3D* l, int idx) const;
+		bool											ResizeInternal();
 		inline void										RecomputeUv(const ZobVector2* uva, ZobVector2* uvb, float r) const
 		{
 			uvb->x = uva->x + (uvb->x - uva->x) * r;
@@ -178,5 +179,8 @@ namespace Core
 										 0xFFFF00, 0x00FFFF, 0xFF00FF,
 										 0xFFFFFF, 0xFF0000, };
 		bool m_EqualizeTriangleQueues;
+		int m_nextWidth;
+		int m_nextHeight;
+		bool m_doResize;
 	};
 }
