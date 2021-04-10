@@ -18,9 +18,10 @@ using namespace System::Drawing;
 #define NB_EDITOR_TRIANGLES 1000
 #define NB_EDITOR_LINES 1000
 #define NB_EDITOR_CIRCLES 1000
+class DirectZobWrapper;
 namespace CLI
 {
-	struct Line
+	public struct Line
 	{
 		ZobVector3 p0;
 		ZobVector3 p1;
@@ -28,7 +29,7 @@ namespace CLI
 		bool bold;
 		bool noZ;
 	};
-	struct Circle
+	public struct Circle
 	{
 		ZobVector3 p;
 		ZobVector3 n;
@@ -37,10 +38,23 @@ namespace CLI
 		bool bold;
 		bool noZ;
 	};
+	public enum objectModificator
+	{
+		translate_world=0,
+		translate_local,
+		rotate_world,
+		rotate_local,
+		scale,
+	};
+	public enum axis
+	{
+		X=0,
+		Y,
+		Z,
+	};
 	public ref class EngineWrapper: public ManagedObject<Core::Engine>
 	{
 	public:
-
 		EngineWrapper(PictureBox^ renderWindow);
 		~EngineWrapper();
 		int				GetBufferWidth();
@@ -59,19 +73,21 @@ namespace CLI
 		void			SetRenderOutput(int r);
 		void			SetRenderMode(int r);
 		void			SetLightingPrecision(int r);
-		bool			GetProjectedCoords(ManagedVector3^ worldSpacePos);
-		float			GetDistanceToCamera(ManagedVector3^ worldPos);
 		ZobObjectWrapper^ GetObjectAt2DCoords(float x, float y);
-		void			DrawLine(ManagedVector3^ p0, ManagedVector3^ p1, int color, bool bold, bool noZ);
-		void			DrawCircle(ManagedVector3^ p0, ManagedVector3^ up, float r, int color, bool bold, bool noZ);
+		void			DrawLine(ZobVector3* p0, ZobVector3* p1, int color, bool bold, bool noZ);
+		void			DrawCircle(ZobVector3* p0, ZobVector3* up, float r, int color, bool bold, bool noZ);
 		void			DrawTriangle(ManagedVector3^ p0, ManagedVector3^ p1, ManagedVector3^ p2, int color);
 		void			QueueObjectsToRender();
-		void			Update();
+		void			Update(float dt);
 		void			Stop() { m_running = false; }
 	private:
-
-		void			Init();
+		ZobVector3		ToScreenCoords(ZobVector3& v);
+		void			InitGizmos();
+		void			UpdateCameraEditor(float dt);
+		void			OnMouseDown(Object^ sender, MouseEventArgs^ e);
 		void			UpdateRenderWindowInternal();
+		void			UpdateModificationGizmos();
+		void			OnObjectSelected(ZobObjectWrapper^ z);
 		PictureBox^		m_renderWindow;
 		Graphics^		m_renderWindowGraphics;
 		Triangle*		m_triangleList;
@@ -83,6 +99,13 @@ namespace CLI
 		int				m_nbLines;
 		int				m_nbCircles;
 		bool			m_running;
+		objectModificator m_objectModificator;
+		Label^			m_bCenter;
+		Label^			m_bTZ;
+		Label^			m_bTY;
+		Label^			m_bTX;
+		Point			m_mouseCoords;
+		ZobObject*		m_selectedObject;
 	};
 }
 #endif //_WINDLL

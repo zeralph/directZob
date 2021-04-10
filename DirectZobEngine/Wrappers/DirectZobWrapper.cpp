@@ -15,6 +15,7 @@ namespace CLI
 		m_objectPropertiesPanel = objectPropertiesPanel;
 		m_renderWindow = renderWindow;
 		m_lastFrameTime = 0;
+		m_singleton = this;
 	}
 
 	void DirectZobWrapper::StartPhysic()
@@ -169,9 +170,10 @@ namespace CLI
 		{	
 			m_ZobCameraManager->Update(m_lastFrameTime);
 			GetInstance()->RunAFrame((DirectZob::engineCallback)DirectZobWrapper::CallSceneUpdatedCallback, (DirectZob::engineCallback)DirectZobWrapper::CallQueuingCallback);
-			m_lastFrameTime = GetInstance()->GetFrameTime();
+			m_lastFrameTime = GetInstance()->GetFrameTime() / 1000.0f;
 			GetInstance()->EditorUpdate();
-			m_ZobEngineWrapper->Update();
+			m_ZobEngineWrapper->Update(m_lastFrameTime);
+			m_ZobEngineWrapper->QueueObjectsToRender();
 		}
 		return 0;
 	}

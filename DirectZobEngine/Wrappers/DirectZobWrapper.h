@@ -24,6 +24,7 @@ namespace CLI
 	{
 	public:
 
+		static DirectZobWrapper^		GetWrapper() { return m_singleton; }
 		delegate void					OnEditorUpdate();
 		static event OnEditorUpdate^	OnEditorUpdateEvent;
 
@@ -82,8 +83,9 @@ namespace CLI
 		Panel^							m_objectPropertiesPanel;
 		PictureBox^						m_renderWindow;
 
-		ZobObjectWrapper^				m_selectedObjectWrapper;
 		float							m_lastFrameTime;
+
+		static DirectZobWrapper^		m_singleton;
 	};
 };
 #endif //_WINDLL

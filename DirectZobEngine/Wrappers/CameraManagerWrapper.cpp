@@ -64,37 +64,6 @@ namespace CLI
 
 	void CameraManagerWrapper::Update(float dt)
 	{
-		dt /= 1000.0f;
-		dt *= 100.0f;
-		//dt = 1.0f;
-		//m_nextRotation.x = 10.0f;
-		Camera* c = m_Instance->GetCurrentCamera();
-		if (c)
-		{
-			if (m_nextRotation.x != 0 || m_nextRotation.y != 0 || m_nextRotation.z != 0)
-			{
-				float x = m_nextRotation.x;
-				float y = m_nextRotation.y;
-				float z = m_nextRotation.z;
-				c->Rotate(x * dt, y * dt, z * dt);
-				m_nextRotation.x = 0;
-				m_nextRotation.y = 0;
-				m_nextRotation.z = 0;
-			}
-			if (m_nextMove.x != 0 || m_nextMove.y != 0 || m_nextMove.z != 0)
-			{
-
-				c->Move(m_nextMove.x * dt, m_nextMove.y * dt, m_nextMove.z * dt, true);
-				m_nextMove.x = 0;
-				m_nextMove.y = 0;
-				m_nextMove.z = 0;
-			}
-			if (m_nextZoom != 0)
-			{
-				c->Zoom(m_nextZoom * dt);
-				m_nextZoom = 0;
-			}
-		}
 	}
 
 	void CameraManagerWrapper::Rotate(float x, float y, float z)

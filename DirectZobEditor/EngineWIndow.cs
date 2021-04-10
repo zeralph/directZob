@@ -126,156 +126,6 @@ namespace DirectZobEditor
         {
         }
 
-        public void UpdateModificationGizmos()
-        {
-            ZobObjectWrapper z = m_selectedObject;
-            if (z != null && z.IsValid())
-            {
-                int btnSize = 20 / 2;
-                ManagedVector3 p0 = z.GetWorldPosition().Copy();
-                ManagedVector3 pX = z.GetLeft().Copy();
-                ManagedVector3 pY = z.GetUp().Copy();
-                ManagedVector3 pZ = z.GetForward().Copy();
-                ManagedVector3 nX = z.GetLeft().Copy();
-                ManagedVector3 nY = z.GetUp().Copy();
-                ManagedVector3 nZ = z.GetForward().Copy();
-                switch (m_objectModificator)
-                {
-                    case objectModificator.translate_world:
-                    case objectModificator.rotate_world:
-                        pX = new ManagedVector3(1, 0, 0);
-                        pY = new ManagedVector3(0, 1, 0);
-                        pZ = new ManagedVector3(0, 0, 1);
-                        nX = pX.Copy();
-                        nY = pY.Copy();
-                        nZ = pZ.Copy();
-                        break;
-                    case objectModificator.translate_local:
-                    case objectModificator.rotate_local:
-                    case objectModificator.scale:
-                        pX = z.GetLeft().Copy();
-                        pY = z.GetUp().Copy();
-                        pZ = z.GetForward().Copy();
-                        nX = pX.Copy();
-                        nY = pY.Copy();
-                        nZ = pZ.Copy();
-                        break;
-                }
-                float d = m_mainForm.GetEngineWrapper().GetDistanceToCamera(p0) / 10.0f;
-                pX.Mul(d);
-                pY.Mul(d);
-                pZ.Mul(d);
-                pX.Add(p0);
-                pY.Add(p0);
-                pZ.Add(p0);
-                m_mainForm.GetEngineWrapper().GetProjectedCoords(p0);
-                m_mainForm.GetEngineWrapper().GetProjectedCoords(pX);
-                m_mainForm.GetEngineWrapper().GetProjectedCoords(pY);
-                m_mainForm.GetEngineWrapper().GetProjectedCoords(pZ);
-                p0 = ToScreenCoords(p0);
-                pX = ToScreenCoords(pX);
-                pY = ToScreenCoords(pY);
-                pZ = ToScreenCoords(pZ);
-                Point pp0 = new Point((int)p0.x, (int)p0.y);
-                Point ppX = new Point((int)pX.x, (int)pX.y);
-                Point ppY = new Point((int)pY.x, (int)pY.y);
-                Point ppZ = new Point((int)pZ.x, (int)pZ.y);
-                pp0.X += EngineRender.Location.X - btnSize;
-                pp0.Y += EngineRender.Location.Y - btnSize;
-                ppX.X += EngineRender.Location.X - btnSize;
-                ppX.Y += EngineRender.Location.Y - btnSize;
-                ppY.X += EngineRender.Location.X - btnSize;
-                ppY.Y += EngineRender.Location.Y - btnSize;
-                ppZ.X += EngineRender.Location.X - btnSize;
-                ppZ.Y += EngineRender.Location.Y - btnSize;
-                bCenter.Location = pp0;
-                bTX.Location = ppX;
-                bTY.Location = ppY;
-                bTZ.Location = ppZ;
-                bCenter.Visible = true;
-                bTY.Visible = true;
-                bTX.Visible = true;
-                bTZ.Visible = true;
-                p0 = z.GetWorldPosition().Copy();
-                switch (m_objectModificator)
-                {
-                    case objectModificator.translate_world:
-                    case objectModificator.rotate_world:
-                        pX = new ManagedVector3(1, 0, 0);
-                        pY = new ManagedVector3(0, 1, 0);
-                        pZ = new ManagedVector3(0, 0, 1);
-                        nX = pX.Copy();
-                        nY = pY.Copy();
-                        nZ = pZ.Copy();
-                        break;
-                    case objectModificator.translate_local:
-                    case objectModificator.rotate_local:
-                    case objectModificator.scale:
-                        pX = z.GetLeft().Copy();
-                        pY = z.GetUp().Copy();
-                        pZ = z.GetForward().Copy();
-                        nX = pX.Copy();
-                        nY = pY.Copy();
-                        nZ = pZ.Copy();
-                        break;
-                }
-                d = m_mainForm.GetEngineWrapper().GetDistanceToCamera(p0) / 10.0f;
-                pX.Mul(d);
-                pY.Mul(d);
-                pZ.Mul(d);
-                pX.Add(p0);
-                pY.Add(p0);
-                pZ.Add(p0);
-                switch (m_objectModificator)
-                {
-                    case objectModificator.translate_world:
-                    case objectModificator.translate_local:
-                        bTX.Text = "Tx";
-                        bTX.BackColor = Color.Red;
-                        bTY.Text = "Ty";
-                        bTY.BackColor = Color.Green;
-                        bTZ.Text = "Tz";
-                        bTZ.BackColor = Color.Blue;
-                        m_mainForm.GetEngineWrapper().DrawLine(p0, pX, 0xFF0000, true, true);
-                        m_mainForm.GetEngineWrapper().DrawLine(p0, pY, 0x00FF00, true, true);
-                        m_mainForm.GetEngineWrapper().DrawLine(p0, pZ, 0x0000FF, true, true);
-                        break;
-                    case objectModificator.rotate_world:
-                    case objectModificator.rotate_local:
-                        bTX.Text = "Ry";
-                        bTX.BackColor = Color.Green;
-                        bTY.Text = "Rz";
-                        bTY.BackColor = Color.Blue;
-                        bTZ.Text = "Rx";
-                        bTZ.BackColor = Color.Red;
-                        m_mainForm.GetEngineWrapper().DrawCircle(p0, nX, d, 0xFF0000, true, true);
-                        m_mainForm.GetEngineWrapper().DrawCircle(p0, nY, d, 0x00FF00, true, true);
-                        m_mainForm.GetEngineWrapper().DrawCircle(p0, nZ, d, 0x0000FF, true, true);
-                        break;
-                    case objectModificator.scale:
-                        bTX.Text = "Sx";
-                        bTX.BackColor = Color.Red;
-                        bTY.Text = "Sy";
-                        bTY.BackColor = Color.Green;
-                        bTZ.Text = "Sz";
-                        bTZ.BackColor = Color.Blue;
-                        m_mainForm.GetEngineWrapper().DrawLine(p0, pX, 0xFF0000, true, true);
-                        m_mainForm.GetEngineWrapper().DrawLine(p0, pY, 0x00FF00, true, true);
-                        m_mainForm.GetEngineWrapper().DrawLine(p0, pZ, 0x0000FF, true, true);
-                        break;
-                    default:
-                        break;
-                }
-            }
-            else
-            {
-                bCenter.Visible = false;
-                bTY.Visible = false;
-                bTX.Visible = false;
-                bTZ.Visible = false;
-            }
-        }
-
         public ManagedVector3 ToScreenCoords(ManagedVector3 v)
         {
             ManagedVector3 vout = new ManagedVector3();
@@ -366,34 +216,6 @@ namespace DirectZobEditor
             m_mainForm.GetCameraManagerWrapper().Zoom(-e.Delta / 50.0f);
         }
 
-        private void EngineRender_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (!m_engineRendering)
-            {
-                int dx = m_lastMouseX - Cursor.Position.X;
-                int dy = m_lastMouseY - Cursor.Position.Y;
-                if (e.Button == MouseButtons.Left && m_mainForm.IsCtrlPressed())
-                {
-                    m_mainForm.GetCameraManagerWrapper().Rotate((float)dx, (float)-dy, 0.0f);
-                    //m_mainForm.GetCameraControl().GetWrapper().GetCurrentCameraTarget();
-                    //m_mainForm.GetCameraControl().GetWrapper().SetLookAt(m_mainForm.GetCameraControl().GetWrapper().GetCurrentCameraTarget());
-                }
-                else if (e.Button == MouseButtons.Middle)
-                {
-                    if (m_mainForm.IsCtrlPressed())
-                    {
-                        m_mainForm.GetCameraManagerWrapper().Move((float)-dx , 0, (float)-dy);
-                    }
-                    else
-                    {
-                        m_mainForm.GetCameraManagerWrapper().Move((float)-dx, (float)dy, 0.0f);
-                    }
-                }
-            }
-            m_lastMouseX = Cursor.Position.X;
-            m_lastMouseY = Cursor.Position.Y;
-        }
-
         bool FromMouseToWorldOnPlane(ManagedVector3 p0, ManagedVector3 pn, ref ManagedVector3 ret)
         {
             Point p = System.Windows.Forms.Control.MousePosition;
@@ -444,7 +266,7 @@ namespace DirectZobEditor
             if(z != null)
             {
                 m_selectedObject = z;
-                UpdateModificationGizmos();
+                //UpdateModificationGizmos();
             }
             else
             {

@@ -1,6 +1,7 @@
 #ifdef _WINDLL
 #include "EngineWrapper.h"
-
+#include "DirectZobWrapper.h"
+#include "ZobObjectManagerWrapper.h"
 namespace CLI
 {
 	static DirectZobType::RenderOptions m_renderOptions;
@@ -10,6 +11,8 @@ namespace CLI
 	EngineWrapper::EngineWrapper(PictureBox^ renderWindow):ManagedObject(DirectZob::GetInstance()->GetEngine(), false)
 	{
 		m_renderWindow = renderWindow;
+		InitGizmos();
+		m_objectModificator = translate_world;
 		m_renderWindow->AutoSize = true;
 		m_running = true;
 		m_renderWindowGraphics = m_renderWindow->CreateGraphics();
@@ -24,14 +27,14 @@ namespace CLI
 		m_projectedVertices = (ZobVector3*)malloc(sizeof(ZobVector3) * NB_EDITOR_TRIANGLES * 3);
 		m_normals = (ZobVector3*)malloc(sizeof(ZobVector3) * NB_EDITOR_TRIANGLES * 3);
 		int vi = 0;
-		for (int i = 0; i < NB_EDITOR_TRIANGLES; i ++)
+		for (int i = 0; i < NB_EDITOR_TRIANGLES; i++)
 		{
 			m_triangleList[i].verticeAIndex = vi;
 			m_triangleList[i].verticeBIndex = vi + 1;
 			m_triangleList[i].verticeCIndex = vi + 2;
 			m_triangleList[i].va = &m_vertices[vi];
-			m_triangleList[i].vb = &m_vertices[vi+1];
-			m_triangleList[i].vc = &m_vertices[vi+2];
+			m_triangleList[i].vb = &m_vertices[vi + 1];
+			m_triangleList[i].vc = &m_vertices[vi + 2];
 			m_triangleList[i].pa = &m_projectedVertices[vi];
 			m_triangleList[i].pb = &m_projectedVertices[vi + 1];
 			m_triangleList[i].pc = &m_projectedVertices[vi + 2];
@@ -45,7 +48,9 @@ namespace CLI
 			m_triangleList[i].options = &m_renderOptions;
 			vi += 3;
 		}
-		Init();
+		m_selectedObject = NULL;
+		ZobObjectManagerWrapper::OnObjectSelectedEvent += gcnew ZobObjectManagerWrapper::OnObjectSelected(this, &EngineWrapper::OnObjectSelected);
+		m_renderWindow->MouseDown += gcnew MouseEventHandler(this, &EngineWrapper::OnMouseDown);
 	}
 
 	EngineWrapper::~EngineWrapper()
@@ -55,6 +60,11 @@ namespace CLI
 		free(m_uvs);
 		free(m_projectedVertices);
 		free(m_normals);
+	}
+
+	void EngineWrapper::OnMouseDown(Object^ sender, MouseEventArgs^ e)
+	{
+
 	}
 
 	int EngineWrapper::GetBufferWidth()
@@ -86,29 +96,49 @@ namespace CLI
 			m_Instance->SetRenderMode((eRenderMode)r);
 		}
 	}
-	bool EngineWrapper::GetProjectedCoords(ManagedVector3^ worldSpacePos)
-	{
-		ZobVector3 v = worldSpacePos->ToVector3();
-		if (m_Instance->GetProjectedCoords(&v))
-		{
-			worldSpacePos->FromVector3(v);
-			return true;
-		}
-		return false;
-	}
-	float EngineWrapper::GetDistanceToCamera(ManagedVector3^ worldSpacePos)
-	{
-		ZobVector3 v = worldSpacePos->ToVector3();
-		return m_Instance->GetDistanceToCamera(&v);
-	} 
 
 	ZobObjectWrapper^ EngineWrapper::GetObjectAt2DCoords(float x, float y)
 	{
 		return nullptr;
 	}
 
-	void EngineWrapper::Update()
+	void EngineWrapper::UpdateCameraEditor(float dt)
 	{
+		if (GetAsyncKeyState(VK_LBUTTON) & 0x8000)
+		{
+			if (GetKeyState(VK_CONTROL) & 0x8000)
+			{
+				float factor = 20.0f;
+				Point p;
+				p.X = Cursor::Position.X - m_mouseCoords.X;
+				p.Y = Cursor::Position.Y - m_mouseCoords.Y;
+				p.X *= dt * factor;
+				p.Y *= dt * factor;
+				Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
+				c->Rotate(-p.X, p.Y, 0);
+			}
+			else
+			{
+				float factor = 40.0f;
+				Point p;
+				p.X = Cursor::Position.X - m_mouseCoords.X;
+				p.Y = Cursor::Position.Y - m_mouseCoords.Y;
+				p.X *= dt * factor;
+				p.Y *= dt * factor;
+				Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
+				c->Move(p.X, -p.Y, 0, false);
+			}
+		}
+		m_mouseCoords = Cursor::Position;
+	}
+
+	void EngineWrapper::Update(float dt)
+	{
+		//if (m_selectedObject == NULL)
+		{
+			UpdateCameraEditor(dt);
+		}
+		//m_renderWindow->Invoke(gcnew Action(this, &CLI::EngineWrapper::UpdateModificationGizmos));
 		if (GetInstance() && m_renderWindow && m_running)
 		{
 			m_renderWindow->Invoke(gcnew Action(this, &CLI::EngineWrapper::UpdateRenderWindowInternal));
@@ -137,6 +167,7 @@ namespace CLI
 		Drawing::Rectangle dstRect = Drawing::Rectangle(0, 0, renderW, renderH);
 		m_renderWindow->SizeMode = PictureBoxSizeMode::StretchImage;
 		m_renderWindowGraphics->DrawImage(b, dstRect, srcRect, Drawing::GraphicsUnit::Pixel);
+		UpdateModificationGizmos();
 	}
 
 	void EngineWrapper::QueueObjectsToRender()
@@ -203,15 +234,15 @@ namespace CLI
 //		m_Instance->QueueTriangle(&t);
 	}
 
-	void EngineWrapper::DrawCircle(ManagedVector3^ p0, ManagedVector3^ up, float r, int color, bool bold, bool noZ)
+	void EngineWrapper::DrawCircle(ZobVector3* p0, ZobVector3* up, float r, int color, bool bold, bool noZ)
 	{
 		Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
 		if (c)
 		{
 			if (m_nbCircles < NB_EDITOR_LINES)
 			{
-				m_circles[m_nbCircles].p = p0->ToVector3();
-				m_circles[m_nbCircles].n = up->ToVector3();
+				m_circles[m_nbCircles].p = p0;
+				m_circles[m_nbCircles].n = up;
 				m_circles[m_nbCircles].r = r;
 				m_circles[m_nbCircles].color = color;
 				m_circles[m_nbCircles].bold = bold;
@@ -221,15 +252,15 @@ namespace CLI
 		}
 	}
 
-	void EngineWrapper::DrawLine(ManagedVector3^ p0, ManagedVector3^ p1, int color, bool bold, bool noZ)
+	void EngineWrapper::DrawLine(ZobVector3* p0, ZobVector3* p1, int color, bool bold, bool noZ)
 	{
 		Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
 		if (c)
 		{
 			if (m_nbLines < NB_EDITOR_LINES)
 			{
-				m_lines[m_nbLines].p0 = p0->ToVector3();
-				m_lines[m_nbLines].p1 = p1->ToVector3();
+				m_lines[m_nbLines].p0 = p0;
+				m_lines[m_nbLines].p1 = p1;
 				m_lines[m_nbLines].color = color;
 				m_lines[m_nbLines].bold = bold;
 				m_lines[m_nbLines].noZ = noZ;
@@ -238,9 +269,208 @@ namespace CLI
 		}
 	}
 
-	void EngineWrapper::Init()
+	void EngineWrapper::InitGizmos()
 	{
+		m_bCenter = gcnew Label();
+		m_bTZ = gcnew Label();
+		m_bTY = gcnew Label();
+		m_bTX = gcnew Label();
 
+		m_bCenter->BackColor = Drawing::Color::Black;
+		m_bCenter->Font = gcnew Drawing::Font("Microsoft YaHei", 12, Drawing::FontStyle::Bold);
+		m_bCenter->ForeColor = Drawing::Color::White;
+		m_bCenter->Size = Drawing::Size(30, 25);
+		m_bCenter->Text = "O";
+
+		m_bTX->BackColor = Drawing::Color::Red;
+		m_bTX->Font = gcnew Drawing::Font("Microsoft YaHei", 12, Drawing::FontStyle::Bold);
+		m_bTX->ForeColor = Drawing::Color::White;
+		m_bTX->Size = Drawing::Size(30, 25);
+		m_bTX->Text = "Y";
+
+		m_bTY->BackColor = Drawing::Color::Green;
+		m_bTY->Font = gcnew Drawing::Font("Microsoft YaHei", 12, Drawing::FontStyle::Bold);
+		m_bTY->ForeColor = Drawing::Color::White;
+		m_bTY->Size = Drawing::Size(30, 25);
+		m_bTY->Text = "X";
+
+		m_bTZ->BackColor = Drawing::Color::Blue;
+		m_bTZ->Font = gcnew Drawing::Font("Microsoft YaHei", 12, Drawing::FontStyle::Bold);
+		m_bTZ->ForeColor = Drawing::Color::White;
+		m_bTZ->Size = Drawing::Size(30, 25);
+		m_bTZ->Text = "Z";
+
+		m_renderWindow->Controls->Add(m_bCenter);
+		m_renderWindow->Controls->Add(m_bTX);
+		m_renderWindow->Controls->Add(m_bTY);
+		m_renderWindow->Controls->Add(m_bTZ);
+	}
+
+	void EngineWrapper::OnObjectSelected(ZobObjectWrapper^ z)
+	{
+		m_selectedObject = NULL;
+		if (z)
+		{
+			m_selectedObject = z->GetInstance();
+		}
+	}
+
+	void EngineWrapper::UpdateModificationGizmos()
+	{
+		if (m_selectedObject != NULL)
+		{
+			int btnSize = 20 / 2;
+			ZobVector3 p0 = m_selectedObject->GetWorldPosition();
+			ZobVector3 pX = m_selectedObject->GetLeft();
+			ZobVector3 pY = m_selectedObject->GetUp();
+			ZobVector3 pZ = m_selectedObject->GetForward();
+			ZobVector3 nX = m_selectedObject->GetLeft();
+			ZobVector3 nY = m_selectedObject->GetUp();
+			ZobVector3 nZ = m_selectedObject->GetForward();
+			switch (m_objectModificator)
+			{
+			case objectModificator::translate_world:
+			case objectModificator::rotate_world:
+				pX = ZobVector3(1, 0, 0);
+				pY = ZobVector3(0, 1, 0);
+				pZ = ZobVector3(0, 0, 1);
+				nX = pX;
+				nY = pY;
+				nZ = pZ;
+				break;
+			case objectModificator::translate_local:
+			case objectModificator::rotate_local:
+			case objectModificator::scale:
+				pX = m_selectedObject->GetLeft();
+				pY = m_selectedObject->GetUp();
+				pZ = m_selectedObject->GetForward();
+				nX = pX;
+				nY = pY;
+				nZ = pZ;
+				break;
+			}
+			float d = m_Instance->GetDistanceToCamera(&p0) / 10.0f;
+			pX.Mul(d);
+			pY.Mul(d);
+			pZ.Mul(d);
+			pX.Add(&p0);
+			pY.Add(&p0);
+			pZ.Add(&p0);
+			m_Instance->GetProjectedCoords(&p0);
+			m_Instance->GetProjectedCoords(&pX);
+			m_Instance->GetProjectedCoords(&pY);
+			m_Instance->GetProjectedCoords(&pZ);
+			p0 = ToScreenCoords(p0);
+			pX = ToScreenCoords(pX);
+			pY = ToScreenCoords(pY);
+			pZ = ToScreenCoords(pZ);
+			Point pp0 = Point((int)p0.x, (int)p0.y);
+			Point ppX = Point((int)pX.x, (int)pX.y);
+			Point ppY = Point((int)pY.x, (int)pY.y);
+			Point ppZ = Point((int)pZ.x, (int)pZ.y);
+			pp0.X += m_renderWindow->Location.X - btnSize;
+			pp0.Y += m_renderWindow->Location.Y - btnSize;
+			ppX.X += m_renderWindow->Location.X - btnSize;
+			ppX.Y += m_renderWindow->Location.Y - btnSize;
+			ppY.X += m_renderWindow->Location.X - btnSize;
+			ppY.Y += m_renderWindow->Location.Y - btnSize;
+			ppZ.X += m_renderWindow->Location.X - btnSize;
+			ppZ.Y += m_renderWindow->Location.Y - btnSize;
+			m_bCenter->Location = pp0;
+			m_bTX->Location = ppX;
+			m_bTY->Location = ppY;
+			m_bTZ->Location = ppZ;
+			m_bCenter->Visible = true;
+			m_bTY->Visible = true;
+			m_bTX->Visible = true;
+			m_bTZ->Visible = true;
+			p0 = m_selectedObject->GetWorldPosition();
+			switch (m_objectModificator)
+			{
+			case objectModificator::translate_world:
+			case objectModificator::rotate_world:
+				pX = ZobVector3(1, 0, 0);
+				pY = ZobVector3(0, 1, 0);
+				pZ = ZobVector3(0, 0, 1);
+				nX = pX;
+				nY = pY;
+				nZ = pZ;
+				break;
+			case objectModificator::translate_local:
+			case objectModificator::rotate_local:
+			case objectModificator::scale:
+				pX = m_selectedObject->GetLeft();
+				pY = m_selectedObject->GetUp();
+				pZ = m_selectedObject->GetForward();
+				nX = pX;
+				nY = pY;
+				nZ = pZ;
+				break;
+			}
+			d = m_Instance->GetDistanceToCamera(&p0) / 10.0f;
+			pX.Mul(d);
+			pY.Mul(d);
+			pZ.Mul(d);
+			pX.Add(&p0);
+			pY.Add(&p0);
+			pZ.Add(&p0);
+			switch (m_objectModificator)
+			{
+			case objectModificator::translate_world:
+			case objectModificator::translate_local:
+				m_bTX->Text = "Tx";
+				m_bTX->BackColor = Drawing::Color::Red;
+				m_bTY->Text = "Ty";
+				m_bTY->BackColor = Drawing::Color::Green;
+				m_bTZ->Text = "Tz";
+				m_bTZ->BackColor = Drawing::Color::Blue;
+				DrawLine(&p0, &pX, 0xFF0000, true, true);
+				DrawLine(&p0, &pY, 0x00FF00, true, true);
+				DrawLine(&p0, &pZ, 0x0000FF, true, true);
+				break;
+			case objectModificator::rotate_world:
+			case objectModificator::rotate_local:
+				m_bTX->Text = "Ry";
+				m_bTX->BackColor = Drawing::Color::Green;
+				m_bTY->Text = "Rz";
+				m_bTY->BackColor = Drawing::Color::Blue;
+				m_bTZ->Text = "Rx";
+				m_bTZ->BackColor = Drawing::Color::Red;
+				DrawCircle(&p0, &nX, d, 0xFF0000, true, true);
+				DrawCircle(&p0, &nY, d, 0x00FF00, true, true);
+				DrawCircle(&p0, &nZ, d, 0x0000FF, true, true);
+				break;
+			case objectModificator::scale:
+				m_bTX->Text = "Sx";
+				m_bTX->BackColor = Drawing::Color::Red;
+				m_bTY->Text = "Sy";
+				m_bTY->BackColor = Drawing::Color::Green;
+				m_bTZ->Text = "Sz";
+				m_bTZ->BackColor = Drawing::Color::Blue;
+				DrawLine(&p0, &pX, 0xFF0000, true, true);
+				DrawLine(&p0, &pY, 0x00FF00, true, true);
+				DrawLine(&p0, &pZ, 0x0000FF, true, true);
+				break;
+			default:
+				break;
+			}
+		}
+		else
+		{
+			m_bCenter->Visible = false;
+			m_bTY->Visible = false;
+			m_bTX->Visible = false;
+			m_bTZ->Visible = false;
+		}
+	}
+
+	ZobVector3 EngineWrapper::ToScreenCoords(ZobVector3 &v)
+	{
+		ZobVector3 vout;
+		vout.x = (v.x / v.z + 1) * m_renderWindow->Width / 2;
+		vout.y = (v.y / v.z + 1) * m_renderWindow->Height / 2;
+		vout.z = v.z;
+		return vout;
 	}
 }
 #endif //_WINDLL

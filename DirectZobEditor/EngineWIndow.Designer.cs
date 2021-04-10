@@ -50,7 +50,6 @@
             this.EngineRender.MouseClick += new System.Windows.Forms.MouseEventHandler(this.EngineRender_MouseClick);
             this.EngineRender.MouseDown += new System.Windows.Forms.MouseEventHandler(this.EngineRender_MouseDown);
             this.EngineRender.MouseHover += new System.EventHandler(this.EngineRender_MouseHover);
-            this.EngineRender.MouseMove += new System.Windows.Forms.MouseEventHandler(this.EngineRender_MouseMove);
             this.EngineRender.MouseUp += new System.Windows.Forms.MouseEventHandler(this.EngineRender_MouseUp);
             this.EngineRender.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.EngineRender_MouseWheel);
             // 
