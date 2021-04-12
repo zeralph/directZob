@@ -349,6 +349,19 @@ void ZobObject::Update(float dt)
 	m_left.Normalize();
 	m_forward.Normalize();
 	m_up.Normalize();
+
+	Quaternion q = m_physicComponent->GetWorldTransform().getOrientation();
+	Vector3 l = q * Vector3(1, 0, 0);
+	Vector3 u = q * Vector3(0, 1, 0);
+	Vector3 f = q * Vector3(0, 0, 1);
+	l.normalize();
+	u.normalize();
+	f.normalize();
+	m_left = ZobVector3(l.x, l.y, l.z);
+	m_forward = ZobVector3(f.x, f.y, f.z);
+	m_up = ZobVector3(u.x, u.y, u.z);
+
+
 	UpdateBehaviorsAfterObject(dt);
 	for (int i = 0; i < m_children.size(); i++)
 	{
@@ -611,7 +624,11 @@ void ZobObject::LookAt(const ZobVector3* forward, const ZobVector3* left, const 
 			q.normalize();
 
 		}
-		m_physicComponent->SetLocalOrientation(q);
+		Vector3 v = m_physicComponent->GetWorldTransform().getPosition();
+		Transform t = Transform(v, q);
+		m_physicComponent->SetWorldTransform(t);
+		m_physicComponent->WorldOrientationToAxis(m_left, m_up, m_forward);
+		//m_physicComponent->SetLocalOrientation(q);
 	}
 }
 

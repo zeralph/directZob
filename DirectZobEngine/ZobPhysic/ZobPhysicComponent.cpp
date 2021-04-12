@@ -211,6 +211,20 @@ void ZobPhysicComponent::EditorUpdate()
 	}
 }
 
+void ZobPhysicComponent::WorldOrientationToAxis(ZobVector3& left, ZobVector3& up, ZobVector3& forward) const
+{
+	Quaternion q = GetWorldTransform().getOrientation();
+	Vector3 l = q * Vector3(1, 0, 0);
+	Vector3 u = q * Vector3(0, 1, 0);
+	Vector3 f = q * Vector3(0, 0, 1);
+	l.normalize();
+	u.normalize();
+	f.normalize();
+	left = ZobVector3(l.x, l.y, l.z);
+	forward = ZobVector3(f.x, f.y, f.z);
+	up = ZobVector3(u.x, u.y, u.z);
+}
+
 void ZobPhysicComponent::Update()
 {
 	assert(m_collisionBody);

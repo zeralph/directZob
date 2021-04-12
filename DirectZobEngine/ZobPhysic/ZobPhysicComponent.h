@@ -83,7 +83,7 @@ public:
 	ZobVector3*							GetLocalPositionAddress() { return &m_editorLocalPosition; }
 	ZobVector3*							GetLocalRotationAddress() { return &m_editorLocalRotation; }
 	ZobVector3*							GetLocalScaleAddress() { return &m_editorLocalScale; }
-	
+	void								WorldOrientationToAxis(ZobVector3& left, ZobVector3& up, ZobVector3& forward) const;
 private:
 
 	float								ClampAngle(float a) const;

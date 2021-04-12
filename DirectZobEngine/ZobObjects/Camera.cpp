@@ -28,7 +28,12 @@ Camera::Camera(ZOBGUID::ZobType zobType, const std::string& name, eCameraType ty
 		}
 		case eCamera_orbital:
 		{
-			m_zobCameraController = new ZobCameraControllerOrbital(this);
+			m_zobCameraController = new ZobCameraControllerOrbital(this, false);
+			break;
+		}
+		case eCamera_orbital_free:
+		{
+			m_zobCameraController = new ZobCameraControllerOrbital(this, true);
 			break;
 		}
 		case eCamera_base:
@@ -76,7 +81,12 @@ Camera::Camera(std::string id, TiXmlElement* node, ZobObject* parent)
 		}
 		case eCamera_orbital:
 		{
-			m_zobCameraController = new ZobCameraControllerOrbital(this, guid);
+			m_zobCameraController = new ZobCameraControllerOrbital(this, false, guid);
+			break;
+		}
+		case eCamera_orbital_free:
+		{
+			m_zobCameraController = new ZobCameraControllerOrbital(this, true, guid);
 			break;
 		}
 		case eCamera_base:
@@ -165,7 +175,7 @@ void Camera::Zoom(float z)
 		if (m_tagetMode == eTarget_Vector)
 		{
 			v = GetWorldPosition();
-			v = v - m_targetVector;
+			v = v - m_targetPosition;
 			
 		}
 		else if (m_tagetMode == eTarget_Object && m_targetObject)
@@ -189,7 +199,7 @@ bool Camera::GetTargetVector(ZobVector3* t)
 	{
 		if (m_tagetMode == eTarget_Vector)
 		{
-			t->Copy(&m_targetVector);
+			t->Copy(&m_targetPosition);
 			return true;
 		}
 		else if (m_tagetMode == eTarget_Object && m_targetObject)
@@ -206,36 +216,59 @@ bool Camera::GetTargetVector(ZobVector3* t)
 		//v = v - GetWorldPosition();
 		//v.Normalize();
 		t->Copy(&v);
-		m_targetVector = ZobVector3(v);
+		m_targetPosition = ZobVector3(v);
 		return true;
 	}
 	return false;
 }
 
+void Camera::RotateOrbital(ZobVector3 *center, float x, float y, float dist)
+{
+	float ax = x * M_PI / 180.0;
+	float ay = y * M_PI / 180.0;
+	Vector3 pax = Vector3(GetUp().x, GetUp().y, GetUp().z);
+	pax = Vector3(0, 1, 0);
+	Quaternion qx = m_physicComponent->QuaternionFromAxisAngle(&pax, ax);
+	qx.normalize();
+	Vector3 pay = Vector3(GetLeft().x, GetLeft().y, GetLeft().z);
+	pay = Vector3(1, 0, 0);
+	Quaternion qy = m_physicComponent->QuaternionFromAxisAngle(&pay, ay);
+	Transform parentWorldT = Transform::identity();
+	Transform thisWorldT = GetPhysicComponent()->GetWorldTransform();
+	Vector3 vdist = Vector3(0, 0, dist);
+	Quaternion q = qx * qy;
+	q.normalize();
+	if (q.isValid() && q.isFinite())
+	{
+		parentWorldT.setPosition(Vector3(center->x, center->y, center->z));
+		parentWorldT.setOrientation(q);
+		thisWorldT.setPosition(vdist);
+		thisWorldT.setOrientation(q.getInverse());
+		thisWorldT = parentWorldT * thisWorldT;
+		m_physicComponent->SetWorldTransform(thisWorldT);
+		LookAt(center, false);
+	}
+}
+
 void Camera::RotateAroundPointAxis(const ZobVector3* point, const ZobVector3* axis, const ZobVector3* lockAxis, float angle, bool recomputeVectors)
 {
 	angle = angle* M_PI / 180.0;
-	Transform t, t2;
 	Vector3 paxis = Vector3(axis->x, axis->y, axis->z);
-	t = Transform::identity();
 	Vector3 p = Vector3(point->x, point->y, point->z);
+	Transform parentWorldT = m_parent->GetPhysicComponent()->GetWorldTransform();
+	Transform thisWorldT = GetPhysicComponent()->GetWorldTransform();
+	Vector3 vdist = parentWorldT.getPosition() - thisWorldT.getPosition();
+	//float dist = vdist.length();
+	//vdist = Vector3(0, 0, dist);
 	Quaternion q = m_physicComponent->QuaternionFromAxisAngle(&paxis, angle);
+	q.normalize();
 	if (q.isValid() && q.isFinite())
 	{
-		q.normalize();
-		t = Transform(Vector3::zero(), q);
-		t2 = Transform::identity();
-		Vector3 localPos = m_physicComponent->GetLocalTransform().getPosition();
-		t2.setPosition(localPos - p);
-		t2 = t * t2;
-		localPos = t2.getPosition();
-		t2.setPosition(p + localPos);
-		m_physicComponent->SetLocalTransform(t2);
-
-		//Transform parentTransform = m_parent->GetPhysicComponent()->GetWorldTransform();
-		//t2 = parentTransform * t2;
-		//m_physicComponent->SetWorldTransform(t2);
-
+		parentWorldT.setOrientation(q);
+		thisWorldT.setPosition(vdist);
+		thisWorldT.setOrientation(Quaternion::identity());
+		thisWorldT = parentWorldT * thisWorldT;
+		m_physicComponent->SetWorldTransform(thisWorldT);
 		LookAt(point, false);
 	}
 }
@@ -277,14 +310,14 @@ void Camera::Move(float dx, float dz, float dy, bool moveTargetVector)
 //void Camera::Update(const ZobMatrix4x4& parentMatrix, const ZobMatrix4x4& parentRSMatrix)
 void Camera::Update(float dt)
 {
+	m_zobCameraController->Update(dt);
 	ZobObject::Update(dt);
-	//m_zobCameraController->Update(dt);
 	UpdateViewProjectionMatrix();
 	if (!DirectZob::GetInstance()->GetEngine()->LockFrustrum())
 	{
 		RecomputeFrustrumPlanes();
 	}
-	m_zobCameraController->Update(dt);	
+	//m_zobCameraController->Update(dt);	
 }
 
 void Camera::PreUpdate()

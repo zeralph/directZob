@@ -67,6 +67,11 @@ void ZobCameraController::Move(float x, float y, float z)
 {
 }
 
+void ZobCameraController::Zoom(float f)
+{
+
+}
+
 void ZobCameraController::DrawGizmos(const Camera* camera, Core::Engine* engine) const
 {
     if (!engine->DrawCameraGizmos())

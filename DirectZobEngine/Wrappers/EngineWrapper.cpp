@@ -104,30 +104,37 @@ namespace CLI
 
 	void EngineWrapper::UpdateCameraEditor(float dt)
 	{
-		if (GetAsyncKeyState(VK_LBUTTON) & 0x8000)
+		if (GetAsyncKeyState(VK_LBUTTON) & 0x8000 && GetKeyState(VK_CONTROL) & 0x8000)
 		{
-			if (GetKeyState(VK_CONTROL) & 0x8000)
-			{
-				float factor = 20.0f;
-				Point p;
-				p.X = Cursor::Position.X - m_mouseCoords.X;
-				p.Y = Cursor::Position.Y - m_mouseCoords.Y;
-				p.X *= dt * factor;
-				p.Y *= dt * factor;
-				Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
-				c->Rotate(-p.X, p.Y, 0);
-			}
-			else
-			{
-				float factor = 40.0f;
-				Point p;
-				p.X = Cursor::Position.X - m_mouseCoords.X;
-				p.Y = Cursor::Position.Y - m_mouseCoords.Y;
-				p.X *= dt * factor;
-				p.Y *= dt * factor;
-				Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
-				c->Move(p.X, -p.Y, 0, false);
-			}
+			float factor = 20.0f;
+			float x = Cursor::Position.X - m_mouseCoords.X;
+			float y = Cursor::Position.Y - m_mouseCoords.Y;
+			x *= dt* factor;
+			y *= dt* factor;
+			Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
+			c->Rotate(-x, y, 0);
+			//c->Rotate(30, 0, 0);
+		}
+		else if (GetAsyncKeyState(VK_MBUTTON) & 0x8000)
+		{
+			float factor = 40.0f;
+			Point p;
+			p.X = Cursor::Position.X - m_mouseCoords.X;
+			p.Y = Cursor::Position.Y - m_mouseCoords.Y;
+			p.X *= dt * factor;
+			p.Y *= dt * factor;
+			Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
+			c->Move(p.X, -p.Y, 0, false);
+		}
+		else if (GetAsyncKeyState(MOUSEEVENTF_WHEEL) & 0x8000)
+		{
+			Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
+			c->Zoom(5.0f);
+		}
+		else if (GetAsyncKeyState(MOUSEEVENTF_HWHEEL) & 0x8000)
+		{
+			Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
+			c->Zoom(-5.0f);
 		}
 		m_mouseCoords = Cursor::Position;
 	}
