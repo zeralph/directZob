@@ -71,8 +71,8 @@ public:
 	void								SetLocalOrientation(Quaternion q) { m_localTransform.setOrientation(q); };
 	ZobVector3							GetLocalScale() const { return ZobVector3(m_localScale.x, m_localScale.y, m_localScale.z); }
 	void								SetLocalScale(float x, float y, float z) { m_localScale.x = x; m_localScale.y = y; m_localScale.z = z; }
-
 	ZobMatrix4x4						GetRotationMatrix() const;
+	ZobMatrix4x4						GetModelMatrix() const;
 	void								LookAt(const ZobVector3* target);
 	void								LookAt(const ZobVector3* forward, const ZobVector3* left, const ZobVector3* up);
 	Quaternion							QuaternionFromAxisAngle(Vector3* axis, float angle);

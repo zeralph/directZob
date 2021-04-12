@@ -249,9 +249,9 @@ void ZobPhysicComponent::Update()
 	m_totalScale = Vector3(1, 1, 1);
 }
 
-ZobMatrix4x4 ZobPhysicComponent::GetRotationMatrix() const
+ZobMatrix4x4 ZobPhysicComponent::GetModelMatrix() const
 {
-	reactphysics3d::decimal* mat = (reactphysics3d::decimal*)malloc(sizeof(decimal) * 16);
+	reactphysics3d::decimal mat[16];// = (reactphysics3d::decimal*)malloc(sizeof(decimal) * 16);
 	GetWorldTransform().getOpenGLMatrix(mat);
 	ZobMatrix4x4 m;
 	int k = 0;
@@ -259,12 +259,34 @@ ZobMatrix4x4 ZobPhysicComponent::GetRotationMatrix() const
 	{
 		for(int j=0; j<4; j++)
 		{
-			m.SetData(i, j, mat[k]);
+			m.SetData(j, i, mat[k]);
 			k++;
 		}
 	}
-	delete mat;
-	m.SetPosition(0, 0, 0);
+	//delete mat;
+	//m.SetPosition(0, 0, 0);
+	m.SetScale(m_totalScale.x, m_totalScale.y, m_totalScale.z);
+	return m;
+}
+
+ZobMatrix4x4 ZobPhysicComponent::GetRotationMatrix() const
+{
+	Transform t = GetLocalTransform();
+	t.setPosition(Vector3(0, 0, 0));
+	reactphysics3d::decimal mat[16];// = (reactphysics3d::decimal*)malloc(sizeof(decimal) * 16);
+	t.getOpenGLMatrix(mat);
+	ZobMatrix4x4 m;
+	int k = 0;
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 0; j < 4; j++)
+		{
+			m.SetData(j, i, mat[k]);
+			k++;
+		}
+	}
+	//delete mat;
+	//m.SetPosition(0, 0, 0);
 	return m;
 }
 

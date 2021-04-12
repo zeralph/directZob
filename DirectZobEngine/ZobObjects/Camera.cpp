@@ -142,15 +142,15 @@ void Camera::DrawGizmos(const Camera* camera, Core::Engine* engine)
 	ZobVector3 v1 = ZobVector3(2, 1, 1);
 	ZobVector3 v2 = ZobVector3(-2, -1, 1);
 	ZobVector3 v3 = ZobVector3(2, -1, 1);
-	m_rotationScaleMatrix.Mul(&v0);
-	m_rotationScaleMatrix.Mul(&v1);
-	m_rotationScaleMatrix.Mul(&v2);
-	m_rotationScaleMatrix.Mul(&v3);
+	m_modelMatrix.Mul(&v0);
+	m_modelMatrix.Mul(&v1);
+	m_modelMatrix.Mul(&v2);
+	m_modelMatrix.Mul(&v3);
 	ZobVector3 p = GetWorldPosition();	//loca ?
-	v0 = v0 + p;
-	v1 = v1 + p;
-	v2 = v2 + p;
-	v3 = v3 + p;
+	v0 = v0;
+	v1 = v1;
+	v2 = v2;
+	v3 = v3;
 	uint c = 0x000000FF;
 	uint c2 = 0x0000FFFF;
 	if (this->GetName() != "EditorCamera")
@@ -168,6 +168,8 @@ void Camera::DrawGizmos(const Camera* camera, Core::Engine* engine)
 
 void Camera::Zoom(float z)
 {
+	m_zobCameraController->Zoom(z);
+	/*
 	//z = z / abs(z);
 	ZobVector3 v = m_forward;
 	if (m_tagetMode != eTarget_none)
@@ -191,6 +193,7 @@ void Camera::Zoom(float z)
 		v = v + GetWorldPosition();
 		SetWorldPosition(v.x, v.y, v.z);
 	}
+	*/
 }
 
 bool Camera::GetTargetVector(ZobVector3* t)

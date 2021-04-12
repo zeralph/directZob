@@ -329,6 +329,7 @@ void ZobObject::Update(float dt)
 	Vector3 p = parentTransform.getPosition();
 	//m_physicComponent->Update();
 	m_physicComponent->SetWorldScale(scale.x, scale.y, scale.z);
+	/*
 	const ZobMatrix4x4* parentMatrix = m_parent?m_parent->GetModelMatrix():&ZobMatrix4x4::IdentityMatrix;
 	const ZobMatrix4x4* parentRSMatrix = m_parent?m_parent->GetRotationScaleMatrix():&ZobMatrix4x4::IdentityMatrix;
 	ZobVector3 t = GetWorldPosition();
@@ -349,7 +350,7 @@ void ZobObject::Update(float dt)
 	m_left.Normalize();
 	m_forward.Normalize();
 	m_up.Normalize();
-
+	*/
 	Quaternion q = m_physicComponent->GetWorldTransform().getOrientation();
 	Vector3 l = q * Vector3(1, 0, 0);
 	Vector3 u = q * Vector3(0, 1, 0);
@@ -360,8 +361,8 @@ void ZobObject::Update(float dt)
 	m_left = ZobVector3(l.x, l.y, l.z);
 	m_forward = ZobVector3(f.x, f.y, f.z);
 	m_up = ZobVector3(u.x, u.y, u.z);
-
-
+	m_modelMatrix = m_physicComponent->GetModelMatrix();
+	m_rotationMatrix = m_physicComponent->GetRotationMatrix();
 	UpdateBehaviorsAfterObject(dt);
 	for (int i = 0; i < m_children.size(); i++)
 	{

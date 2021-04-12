@@ -152,7 +152,7 @@
     <ZobObject Guid="2002337777" Type="Light">
         <Var Name="Name" value="sun" />
         <Var Name="Position" value="0.000000;60.036800;0.000000" />
-        <Var Name="Rotation" value="45.000008;0.000003;45.000008" />
+        <Var Name="Rotation" value="-45.000008;0.000003;45.000008" />
         <Var Name="Scale" value="1.000000;1.000000;1.000000" />
         <Behaviors />
         <Color r="241" g="218" b="164" />

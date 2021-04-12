@@ -12,6 +12,7 @@ namespace CLI
 	{
 		m_renderWindow = renderWindow;
 		InitGizmos();
+		m_mouseInside = false;
 		m_objectModificator = translate_world;
 		m_renderWindow->AutoSize = true;
 		m_running = true;
@@ -50,7 +51,9 @@ namespace CLI
 		}
 		m_selectedObject = NULL;
 		ZobObjectManagerWrapper::OnObjectSelectedEvent += gcnew ZobObjectManagerWrapper::OnObjectSelected(this, &EngineWrapper::OnObjectSelected);
-		m_renderWindow->MouseDown += gcnew MouseEventHandler(this, &EngineWrapper::OnMouseDown);
+		m_renderWindow->MouseHover += gcnew EventHandler(this, &EngineWrapper::OnMouseHover);
+		m_renderWindow->MouseLeave += gcnew EventHandler(this, &EngineWrapper::OnMouseLeave);
+		m_renderWindow->MouseWheel += gcnew MouseEventHandler(this, &EngineWrapper::OnMouseWheel);
 	}
 
 	EngineWrapper::~EngineWrapper()
@@ -60,11 +63,6 @@ namespace CLI
 		free(m_uvs);
 		free(m_projectedVertices);
 		free(m_normals);
-	}
-
-	void EngineWrapper::OnMouseDown(Object^ sender, MouseEventArgs^ e)
-	{
-
 	}
 
 	int EngineWrapper::GetBufferWidth()
@@ -102,8 +100,33 @@ namespace CLI
 		return nullptr;
 	}
 
+	void EngineWrapper::OnMouseHover(Object^ sender, EventArgs^ e)
+	{
+		m_mouseInside = true;
+	}
+
+	void EngineWrapper::OnMouseLeave(Object^ sender, EventArgs^ e)
+	{
+		m_mouseInside = false;
+	}
+
+	void EngineWrapper::OnMouseWheel(Object^ sender, MouseEventArgs^ e)
+	{
+		if (e->Delta)
+		{
+			float z = (float)e->Delta / 10.0f;
+			Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
+			c->Zoom(z);
+		}
+		m_mouseCoords = Cursor::Position;
+	}
+
 	void EngineWrapper::UpdateCameraEditor(float dt)
 	{
+		if (!m_mouseInside)
+		{
+			return;
+		}
 		if (GetAsyncKeyState(VK_LBUTTON) & 0x8000 && GetKeyState(VK_CONTROL) & 0x8000)
 		{
 			float factor = 20.0f;
@@ -115,7 +138,7 @@ namespace CLI
 			c->Rotate(-x, y, 0);
 			//c->Rotate(30, 0, 0);
 		}
-		else if (GetAsyncKeyState(VK_MBUTTON) & 0x8000)
+		else if (GetAsyncKeyState(VK_LBUTTON) & 0x8000)
 		{
 			float factor = 40.0f;
 			Point p;
@@ -125,16 +148,6 @@ namespace CLI
 			p.Y *= dt * factor;
 			Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
 			c->Move(p.X, -p.Y, 0, false);
-		}
-		else if (GetAsyncKeyState(MOUSEEVENTF_WHEEL) & 0x8000)
-		{
-			Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
-			c->Zoom(5.0f);
-		}
-		else if (GetAsyncKeyState(MOUSEEVENTF_HWHEEL) & 0x8000)
-		{
-			Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
-			c->Zoom(-5.0f);
 		}
 		m_mouseCoords = Cursor::Position;
 	}

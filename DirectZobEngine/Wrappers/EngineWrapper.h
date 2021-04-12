@@ -84,7 +84,9 @@ namespace CLI
 		ZobVector3		ToScreenCoords(ZobVector3& v);
 		void			InitGizmos();
 		void			UpdateCameraEditor(float dt);
-		void			OnMouseDown(Object^ sender, MouseEventArgs^ e);
+		void			OnMouseWheel(Object^ sender, MouseEventArgs^ e);
+		void			OnMouseHover(Object ^ sender, EventArgs^ e);
+		void			OnMouseLeave(Object^ sender, EventArgs^ e);
 		void			UpdateRenderWindowInternal();
 		void			UpdateModificationGizmos();
 		void			OnObjectSelected(ZobObjectWrapper^ z);
@@ -106,6 +108,7 @@ namespace CLI
 		Label^			m_bTX;
 		Point			m_mouseCoords;
 		ZobObject*		m_selectedObject;
+		bool			m_mouseInside;
 	};
 }
 #endif //_WINDLL

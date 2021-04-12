@@ -87,7 +87,7 @@ public:
 	ZobPhysicComponent*				GetPhysicComponentNoConst() { return m_physicComponent; };
 	//temp ?
 	const ZobMatrix4x4*				GetModelMatrix() const { return &m_modelMatrix; };
-	const ZobMatrix4x4*				GetRotationScaleMatrix() const { return &m_rotationScaleMatrix; };
+	const ZobMatrix4x4*				GetRotationMatrix() const { return &m_rotationMatrix; };
 	const std::vector<ZobBehavior*>*GetBehaviors() { return &m_behaviors; }
 	void							AddBehavior(ZobBehavior* b) { m_behaviors.push_back(b); }
 	ZobVariablesExposer*			GetVariablesExposer() { return m_varExposer; }
@@ -104,7 +104,7 @@ protected:
 	std::vector<ZobObject*> m_children;
 	std::vector <ZobBehavior*> m_behaviors;
 	ZobMatrix4x4 m_modelMatrix;
-	ZobMatrix4x4 m_rotationScaleMatrix;
+	ZobMatrix4x4 m_rotationMatrix;
 	std::string m_name;
 	bool m_markedForDeletion;
 	ZobVector3 m_left;
