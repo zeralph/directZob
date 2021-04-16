@@ -284,11 +284,14 @@
                             'libraries': [
                                 # relative to xcode project
                                 '../../../dependencies/fbxsdk/macos/lib/clang/release/libfbxsdk.a',
-				'../../../dependencies/gainput/lib/macos/libgainputstatic.a',
+				                '../../../dependencies/gainput/lib/macos/libgainputstatic.a',
                                 '$(SDKROOT)/System/Library/Frameworks/Cocoa.framework',
                                 '$(SDKROOT)/System/Library/Frameworks/Metal.framework',
                                 '$(SDKROOT)/System/Library/Frameworks/GameKit.framework',
-				'$(SDKROOT)/System/Library/Frameworks/IOKit.framework',
+                                '$(SDKROOT)/System/Library/Frameworks/WebKit.framework',
+				                '$(SDKROOT)/System/Library/Frameworks/IOKit.framework',
+                                '$(SDKROOT)/System/Library/Frameworks/StoreKit.framework',
+                                '$(SDKROOT)/System/Library/Frameworks/MetalKit.framework',
                                 '-liconv',
                                 '-lz',
                                 '-lxml2',
