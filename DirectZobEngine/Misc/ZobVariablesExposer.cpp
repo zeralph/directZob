@@ -9,7 +9,22 @@ ZobVariablesExposer::ZobVariablesExposer(std::string &zobGUID)
 
 ZobVariablesExposer::~ZobVariablesExposer()
 {
+}
 
+void ZobVariablesExposer::wrapperData::Init()
+{
+	type = eWrapperType_unset;
+	bReadOnly = true;
+	bSave = false;
+	ptr = NULL;
+	ptr_1 = NULL;
+	ptr_2 = NULL;
+	ptr_3 = NULL;
+	name = "";
+	internalName = "";
+	strValue = "";
+	enumValues.clear();
+	enumNames.clear();
 }
 
 void ZobVariablesExposer::wrapperData::Load()
@@ -177,9 +192,7 @@ TiXmlNode* ZobVariablesExposer::SaveUnderNode(TiXmlNode* node)
 			case eWrapperType_path:
 			{
 				ZobFilePath zp;
-				zp.name = *(std::string*)(w->ptr);
-				zp.file = *(std::string*)(w->ptr_1);
-				zp.path = *(std::string*)(w->ptr_2);
+				zp = *(ZobFilePath*)(w->ptr);
 				std::string s = zp.Serialize();
 				o.SetAttribute(XML_ATTR_VALUE, s.c_str());
 				break;

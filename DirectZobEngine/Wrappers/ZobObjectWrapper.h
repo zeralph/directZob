@@ -5,6 +5,8 @@
 #include "ManagedVector3.h"
 #include "ManagedRenderOptions.h"
 #include "ZobUserControls/ZobUserControls.h"
+#include "../Behaviors/ZobBehavior.h"
+#include "../ZobObjects/ZobObject.h"
 #using "System.Windows.Forms.dll"
 #using "System.dll"
 #using "System.Drawing.dll"
@@ -100,7 +102,7 @@ namespace CLI {
 		TableLayoutPanel^		AddZobIdVariable(ZobVariablesExposer::wrapperData* w);
 		TableLayoutPanel^		AddZobVector2Variable(ZobVariablesExposer::wrapperData* w);
 		ZobControlVector3^		AddZobVector3Variable(ZobVariablesExposer::wrapperData* w);
-		TableLayoutPanel^		AddStringVariable(ZobVariablesExposer::wrapperData* w);
+		//ZobControlString^		AddStringVariable(ZobVariablesExposer::wrapperData* w);
 		TableLayoutPanel^		AddPathVariable(ZobVariablesExposer::wrapperData* w);
 		TableLayoutPanel^		AddZobObjectVariable(ZobVariablesExposer::wrapperData* w);
 

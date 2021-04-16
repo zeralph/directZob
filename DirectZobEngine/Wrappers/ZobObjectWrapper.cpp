@@ -7,6 +7,7 @@
 #include "../ZobObjects/Camera.h"
 #include "../DirectZob.h"
 #include "../Misc/ZobVariablesExposer.h"
+#include "ZobUserControls/ZobUserControls.h"
 
 #define TO_MANAGED_STRING(x) gcnew String(x);
 
@@ -25,6 +26,7 @@ namespace CLI
 
 	ZobObjectWrapper::~ZobObjectWrapper()
 	{
+		m_panel->Controls->Remove(m_container);
 		m_panel->Controls->Remove(m_objectPanel);
 		m_Instance = NULL;
 	}
@@ -109,7 +111,9 @@ namespace CLI
 				}
 				else if (w.type == ZobVariablesExposer::eWrapperType_string)
 				{
-					panel->Controls->Add(AddStringVariable(&w));
+					ZobControlString^ zcs = gcnew ZobControlString(&w);
+					zcs->OnChangeEvent += gcnew ZobControlString::OnChange(this, &ZobObjectWrapper::StringHandler);
+					panel->Controls->Add(zcs);
 				}
 				else if (w.type == ZobVariablesExposer::eWrapperType_int)
 				{
@@ -271,64 +275,26 @@ namespace CLI
 		ZobVector3* v = (ZobVector3*)(w->ptr);
 		ZobControlVector3^ ctrl = gcnew ZobControlVector3(internalName, name, v, false, nullptr);
 		ctrl->OnChangeEvent += gcnew ZobControlVector3::OnChange(this, &ZobObjectWrapper::ZobVector3Handler);
-		DirectZobWrapper::OnEditorUpdateEvent += gcnew DirectZobWrapper::OnEditorUpdate(ctrl, &CLI::ZobControlVector3::UpdateZobControl);
+		DirectZobWrapper::OnNewSceneEvent += gcnew DirectZobWrapper::OnNewScene(ctrl, &CLI::ZobControlVector3::UpdateZobControl);
 		return ctrl;
 	}
 
 	TableLayoutPanel^ ZobObjectWrapper::AddZobVector2Variable(ZobVariablesExposer::wrapperData* w)
 	{
-		TableLayoutPanel^ subPanel = gcnew TableLayoutPanel();
-		subPanel->AutoSize = true;
-		subPanel->ColumnCount = 2;
-		subPanel->RowCount = 1;
-		Label^ label = gcnew Label();
-		label->Text = TO_MANAGED_STRING(w->name.c_str());
-		label->Width = 140;
-		label->Height = 20;
-		label->TextAlign = ContentAlignment::BottomRight;
-		TextBox^ txt = gcnew TextBox();
-		txt->Name = TO_MANAGED_STRING(w->internalName.c_str());
-		txt->Width = 140;
-		txt->Height = 20;
-		txt->ReadOnly = w->bReadOnly;
-		ZobVector2* v = (ZobVector2*)(w->ptr);
-		txt->Text = TO_MANAGED_STRING(v->ToString().c_str());
-		if (!w->bReadOnly)
-		{
-			txt->Leave += gcnew EventHandler(this, &ZobObjectWrapper::ZobVector2Handler);
-		}
-		subPanel->Controls->Add(label);
-		subPanel->Controls->Add(txt);
-		return subPanel;
+		throw gcnew Exception();
 	}
-
-	TableLayoutPanel^ ZobObjectWrapper::AddStringVariable(ZobVariablesExposer::wrapperData* w)
+	/*
+	ZobControlString^ ZobObjectWrapper::AddStringVariable(ZobVariablesExposer::wrapperData* w)
 	{
-		TableLayoutPanel^ subPanel = gcnew TableLayoutPanel();
-		subPanel->AutoSize = true;
-		subPanel->ColumnCount = 2;
-		subPanel->RowCount = 1;
-		Label^ label = gcnew Label();
-		label->Text = TO_MANAGED_STRING(w->name.c_str());
-		label->Width = 140;
-		label->Height = 20;
-		label->TextAlign = ContentAlignment::BottomRight;
-		TextBox^ txt = gcnew TextBox();
-		txt->Name = TO_MANAGED_STRING(w->internalName.c_str());
-		txt->Width = 140;
-		txt->Height = 20;
-		txt->ReadOnly = w->bReadOnly;
+		String^ name = TO_MANAGED_STRING(w->name.c_str());
+		String^ internaleName = TO_MANAGED_STRING(w->internalName.c_str());
 		std::string* s = (std::string*)(w->ptr);
-		txt->Text = TO_MANAGED_STRING(s->c_str());
-		if (!w->bReadOnly)
-		{
-			txt->Leave += gcnew EventHandler(this, &ZobObjectWrapper::StringHandler);
-		}
-		subPanel->Controls->Add(label);
-		subPanel->Controls->Add(txt);
-		return subPanel;
+		String^ val = TO_MANAGED_STRING(s->c_str());
+		bool ro = w->bReadOnly;
+		ZobControlString^ ctrl = gcnew ZobControlString(internaleName, name, val, ro, w);
+		return ctrl;
 	}
-
+	*/
 	TableLayoutPanel^ ZobObjectWrapper::AddIntVariable(ZobVariablesExposer::wrapperData* w)
 	{
 		TableLayoutPanel^ subPanel = gcnew TableLayoutPanel();
@@ -557,13 +523,13 @@ namespace CLI
 
 	void ZobObjectWrapper::StringHandler(Object^ sender, EventArgs^ e)
 	{
-		TextBox^ t = static_cast<TextBox^>(sender);
+		ZobControlString^ t = static_cast<ZobControlString^>(sender);
 		const ZobVariablesExposer::wrapperData* w = GetWrapperDataForVariable(t->Name);
 		if (w)
 		{
 			std::string* internalString = (std::string*)w->ptr;
 			std::string s;
-			MarshalString(t->Text, s);
+			MarshalString(t->txt->Text, s);
 			internalString->assign(s);
 		}
 	}

@@ -57,6 +57,7 @@ Camera::Camera(ZOBGUID::ZobType zobType, const std::string& name, eCameraType ty
 	m_tagetMode = eTarget_none;
 	sRayDbg = ZobVector3(1000, 1000, 1000);
 	sRayDbg2 = ZobVector3(1000, 1000, 1000);
+	m_varExposer->WrapVariable<float>("FOV", &m_fov, false, true);
 	//m_nextTranslation = m_translation;
 }
 
@@ -106,6 +107,7 @@ Camera::Camera(std::string id, TiXmlElement* node, ZobObject* parent)
 		}
 	}
 	m_tagetMode = eTarget_none;
+
 }
 
 Camera::~Camera()

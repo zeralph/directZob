@@ -53,6 +53,7 @@
             this.createSpriteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.createZobObjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.regenerateZobIdsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gizmosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bBoxToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cameraToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -97,7 +98,6 @@
             this.tabEngine = new System.Windows.Forms.TabPage();
             this.panel2 = new System.Windows.Forms.Panel();
             this.EngineControlsFlowLayout = new System.Windows.Forms.FlowLayoutPanel();
-            this.regenerateZobIdsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bottomStatusBar.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FirstPanelSplitter)).BeginInit();
@@ -322,6 +322,13 @@
             this.setupToolStripMenuItem.Name = "setupToolStripMenuItem";
             this.setupToolStripMenuItem.Size = new System.Drawing.Size(49, 20);
             this.setupToolStripMenuItem.Text = "Setup";
+            // 
+            // regenerateZobIdsToolStripMenuItem
+            // 
+            this.regenerateZobIdsToolStripMenuItem.Name = "regenerateZobIdsToolStripMenuItem";
+            this.regenerateZobIdsToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
+            this.regenerateZobIdsToolStripMenuItem.Text = "Regenerate ZobIds";
+            this.regenerateZobIdsToolStripMenuItem.Click += new System.EventHandler(this.regenerateZobIdsToolStripMenuItem_Click);
             // 
             // gizmosToolStripMenuItem
             // 
@@ -816,13 +823,6 @@
             this.EngineControlsFlowLayout.Size = new System.Drawing.Size(354, 701);
             this.EngineControlsFlowLayout.TabIndex = 0;
             this.EngineControlsFlowLayout.WrapContents = false;
-            // 
-            // regenerateZobIdsToolStripMenuItem
-            // 
-            this.regenerateZobIdsToolStripMenuItem.Name = "regenerateZobIdsToolStripMenuItem";
-            this.regenerateZobIdsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.regenerateZobIdsToolStripMenuItem.Text = "Regenerate ZobIds";
-            this.regenerateZobIdsToolStripMenuItem.Click += new System.EventHandler(this.regenerateZobIdsToolStripMenuItem_Click);
             // 
             // Form1
             // 

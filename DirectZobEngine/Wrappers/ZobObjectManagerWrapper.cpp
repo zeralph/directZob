@@ -21,8 +21,8 @@ namespace CLI
 		m_draggedNode = nullptr;
 		CreateTreeview();
 		CreateObjectview();
-		//DirectZobWrapper::OnEditorUpdateEvent += gcnew DirectZobWrapper::OnEditorUpdate(this, &ZobObjectManagerWrapper::OnEditorUpdate);
-		DirectZobWrapper::OnEditorUpdateEvent += gcnew DirectZobWrapper::OnEditorUpdate(m_treeView, &CLI::ZobControlTreeview::UpdateZobControl);
+		DirectZobWrapper::OnNewSceneEvent += gcnew DirectZobWrapper::OnNewScene(this, &ZobObjectManagerWrapper::OnNewScene);
+		//DirectZobWrapper::OnEditorUpdateEvent += gcnew DirectZobWrapper::OnEditorUpdate(m_treeView, &CLI::ZobControlTreeview::UpdateZobControl);
 	}
 
 	System::String^ ZobObjectManagerWrapper::GetZobObjectList()
@@ -32,7 +32,7 @@ namespace CLI
 		return gcnew System::String(s.c_str());
 	}
 
-	void ZobObjectManagerWrapper::OnEditorUpdate(Object^ sender, EventArgs^ e)
+	void ZobObjectManagerWrapper::EditorUpdate()
 	{
 		m_treeView->Invoke(gcnew Action(m_treeView, &CLI::ZobControlTreeview::UpdateZobControl));
 	}
@@ -96,6 +96,16 @@ namespace CLI
 	{
 	}
 
+	void ZobObjectManagerWrapper::OnNewScene()
+	{
+		if (m_selectedObjectWrapper)
+		{
+			delete m_selectedObjectWrapper;
+		}
+		m_selectedObject = NULL;
+		m_treeView->Nodes->Clear();
+	}
+
 	void ZobObjectManagerWrapper::TreeNodeClick(Object^ sender, TreeViewEventArgs^ e)
 	{
 		//TreeView^ tv = (TreeView^)sender;
@@ -130,7 +140,8 @@ namespace CLI
 		if (GetInstance())
 		{
 			m_treeView->Nodes->Clear();
-			AddZobObjectsRecursive(GetInstance()->GetRootObject(), m_treeView->Nodes);
+			ZobObject* root = GetInstance()->GetRootObject();
+			AddZobObjectsRecursive(root, m_treeView->Nodes);
 		}
 	}
 
@@ -232,14 +243,13 @@ namespace CLI
 		m_Instance->RemoveZobObject(z->GetInstance());
 	}
 
-	ZobObjectWrapper^ ZobObjectManagerWrapper::AddZobObject(ZobObjectWrapper^ parent)
+	void ZobObjectManagerWrapper::CreateZobObject()
 	{
-		/*
-		ZobObject* p = parent->GetInstance();
-		ZobObject* z = m_Instance->CreateZobObject(p);
-		return gcnew ZobObjectWrapper(z);
-		*/
-		return nullptr;
+		if (GetInstance())
+		{
+			GetInstance()->CreateZobObject(GetInstance()->GetRootObject());
+			ReScan((ZobControlTreeNode^)m_treeView->TopNode);
+		}
 	}
 
 	ZobObjectWrapper^ ZobObjectManagerWrapper::AddZobSprite(ZobObjectWrapper^ parent)

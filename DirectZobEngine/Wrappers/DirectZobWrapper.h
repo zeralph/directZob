@@ -25,8 +25,8 @@ namespace CLI
 	public:
 
 		static DirectZobWrapper^		GetWrapper() { return m_singleton; }
-		delegate void					OnEditorUpdate();
-		static event OnEditorUpdate^	OnEditorUpdateEvent;
+		delegate void					OnNewScene();
+		static event OnNewScene^		OnNewSceneEvent;
 
 		static void						CallSceneUpdatedCallback();
 		static void						CallQueuingCallback();

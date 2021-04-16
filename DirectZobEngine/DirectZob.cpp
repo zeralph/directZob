@@ -24,7 +24,7 @@ static char buffer[MAX_PATH];
 static char logBuffer[LOG_BUFFER_SIZE];
 static bool g_isInEditorMode;
 static int s_logIndent;
-static std::mutex g_render_mutex;
+//static std::mutex g_render_mutex;
 static std::thread g_editorModeThread;
 int DirectZob::s_logIndent = 0;
 DirectZob *DirectZob::singleton = nullptr;
@@ -93,12 +93,12 @@ void DirectZob::LoadZobObject(std::string& path, std::string& file)
 
 void DirectZob::Lock()
 {
-	g_render_mutex.lock();
+	//g_render_mutex.lock();
 }
 
 void DirectZob::Unlock()
 {
-	g_render_mutex.unlock();
+	//g_render_mutex.unlock();
 }
 
 void DirectZob::SaveScene(std::string& path, std::string& file)
@@ -113,30 +113,30 @@ void DirectZob::SaveScene()
 
 void DirectZob::NewScene()
 {
-	g_render_mutex.lock();
+	//g_render_mutex.lock();
 	m_physicStarted = false;
 	SceneLoader::NewScene();
 	if (m_text == NULL)
 	{
 		m_text = new Text2D(m_engine, m_events);
 	}
-	g_render_mutex.unlock();
+	//g_render_mutex.unlock();
 }
 
 void DirectZob::Resize(int width, int height)
 {
-	g_render_mutex.lock();
+	//g_render_mutex.lock();
 	m_engine->Resize(width, height);
-	g_render_mutex.unlock();
+	//g_render_mutex.unlock();
 }
 
 void DirectZob::Unload()
 {
-	g_render_mutex.lock();
+	//g_render_mutex.lock();
 	SceneLoader::UnloadScene();
 	DirectZob::GetInstance()->GetEngine()->Stop();
 	delete DirectZob::GetInstance();
-	g_render_mutex.unlock();
+	//g_render_mutex.unlock();
 }
 
 bool DirectZob::CanFastSave()
@@ -211,7 +211,7 @@ int DirectZob::RunAFrame(DirectZob::engineCallback OnSceneUpdated /*=NULL*/, Dir
 	timespec tstart;
 	timespec tend;
 	SaveTime(&tstart);
-	g_render_mutex.lock();
+	//g_render_mutex.lock();
 	int state=0;
 	m_fps = 1000.0f / m_frameTime;
 	if(m_initialized && m_engine->Started())
@@ -247,7 +247,7 @@ int DirectZob::RunAFrame(DirectZob::engineCallback OnSceneUpdated /*=NULL*/, Dir
 			m_hudManager->PreUpdate();
 			m_lightManager->PreUpdate();
 			m_engine->StartDrawingScene();
-			Color c = Color(DirectZob::GetInstance()->GetLightManager()->GetClearColor());
+			ZobColor c = ZobColor(DirectZob::GetInstance()->GetLightManager()->GetClearColor());
 			float dt = m_frameTime / 1000.0f;
 			if (OnSceneUpdated)
 			{
@@ -337,7 +337,7 @@ int DirectZob::RunAFrame(DirectZob::engineCallback OnSceneUpdated /*=NULL*/, Dir
 	float dt = (float)GetDeltaTime_MS(tstart, tend);
 	WaitToTargetFrameTime(dt);
 	SceneLoader::Update();
-	g_render_mutex.unlock();
+	//g_render_mutex.unlock();
 	return state;
 }
 

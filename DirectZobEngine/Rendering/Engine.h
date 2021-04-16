@@ -29,7 +29,7 @@ namespace Core
 		void											Start();
 		const inline bool								Started() const { return m_started; }
 		void											Stop();
-		void											ClearBuffer(const Color* color);
+		void											ClearBuffer(const ZobColor* color);
 		void											CopyBuffer(uint* source, uint* dest);
 		void											QueueWorldTriangle(const Camera* c, const Triangle* t);
 		void											QueueProjectedTriangle(const Camera* c, const Triangle* t);
@@ -38,6 +38,7 @@ namespace Core
 		void											ToggleZbufferOutput() { m_showZBuffer = !m_showZBuffer; }
 
 		void											QueueLine(const Camera* camera, const ZobVector3* v1, const ZobVector3* v2, const uint c, bool bold, bool noZ);
+		void											QueueTriangle(const Camera* camera, const ZobVector3* v1, const ZobVector3* v2, const ZobVector3* v3, const uint c, bool transparent, bool noZ);
 		void											QueueEllipse(const Camera* camera, const ZobVector3* center, const ZobVector3* vectorUp, const float r1, const float r2, const uint c, bool bold, bool noZ);
 		void											QueueSphere(const Camera* camera, const ZobMatrix4x4* mat, const float radius, const uint c, bool bold, bool noZ);
 		void											QueueWorldBox(const Camera* camera, const Box* box, const uint c, bool bold, bool noZ);
@@ -139,7 +140,8 @@ namespace Core
 		ZobVector3* m_verticesData;
 		ZobVector2* m_uvData;
 		ZobVector3* m_colorData;
-
+		RenderOptions* m_renderOptions;
+		int m_usedRenderOptions;
 		long m_TriangleQueueSize;
 		long m_maxTrianglesQueueSize;
 

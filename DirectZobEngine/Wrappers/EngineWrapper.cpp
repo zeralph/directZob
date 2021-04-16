@@ -4,7 +4,6 @@
 #include "ZobObjectManagerWrapper.h"
 namespace CLI
 {
-	static DirectZobType::RenderOptions m_renderOptions;
 	static Line m_lines[NB_EDITOR_LINES];
 	static Circle m_circles[NB_EDITOR_CIRCLES];
 
@@ -12,15 +11,11 @@ namespace CLI
 	{
 		m_renderWindow = renderWindow;
 		InitGizmos();
-		m_mouseInside = false;
+		m_mouseInside = true;
 		m_objectModificator = translate_world;
 		m_renderWindow->AutoSize = true;
 		m_running = true;
 		m_renderWindowGraphics = m_renderWindow->CreateGraphics();
-		m_renderOptions.zBuffered = false;
-		m_renderOptions.bTransparency = true;
-		m_renderOptions.cullMode = RenderOptions::eCullMode_None;
-		m_renderOptions.lightMode = DirectZobType::RenderOptions::eLightMode_none;
 		m_nbTriangles = 0;
 		m_triangleList = (Triangle*)malloc(sizeof(Triangle) * NB_EDITOR_TRIANGLES);
 		m_vertices = (ZobVector3*)malloc(sizeof(ZobVector3) * NB_EDITOR_TRIANGLES * 3);
@@ -46,11 +41,13 @@ namespace CLI
 			m_triangleList[i].ub = &m_uvs[vi + 1];
 			m_triangleList[i].uc = &m_uvs[vi + 2];
 			m_triangleList[i].n = &m_normals[i];
-			m_triangleList[i].options = &m_renderOptions;
+			m_triangleList[i].options = NULL;
 			vi += 3;
 		}
 		m_selectedObject = NULL;
 		ZobObjectManagerWrapper::OnObjectSelectedEvent += gcnew ZobObjectManagerWrapper::OnObjectSelected(this, &EngineWrapper::OnObjectSelected);
+		DirectZobWrapper::OnNewSceneEvent += gcnew DirectZobWrapper::OnNewScene(this, &EngineWrapper::OnNewScene);
+		
 		m_renderWindow->MouseHover += gcnew EventHandler(this, &EngineWrapper::OnMouseHover);
 		m_renderWindow->MouseLeave += gcnew EventHandler(this, &EngineWrapper::OnMouseLeave);
 		m_renderWindow->MouseWheel += gcnew MouseEventHandler(this, &EngineWrapper::OnMouseWheel);
@@ -125,7 +122,7 @@ namespace CLI
 	{
 		if (!m_mouseInside)
 		{
-			return;
+		//	return;
 		}
 		if (GetAsyncKeyState(VK_LBUTTON) & 0x8000 && GetKeyState(VK_CONTROL) & 0x8000)
 		{
@@ -236,24 +233,6 @@ namespace CLI
 		m_nbCircles = 0;
 	}
 
-	void EngineWrapper::DrawTriangle(ManagedVector3^ p0, ManagedVector3^ p1, ManagedVector3^ p2, int color)
-	{
-		Triangle t = m_triangleList[m_nbTriangles];
-		ZobVector3 pp0 = p0->ToVector3();
-		ZobVector3 pp1 = p1->ToVector3();
-		ZobVector3 pp2 = p2->ToVector3();
-		t.va->Copy(&pp0);
-		t.vb->Copy(&pp1);
-		t.vc->Copy(&pp2);
-		t.na = &ZobVector3(0, 1, 0);
-		t.nb = &ZobVector3(0, 1, 0);
-		t.nc = &ZobVector3(0, 1, 0);
-//		t.options->colorization.x = 255;// = ZobVector3(color & 0xFF0000 >> 16, color & 0x00FF00 >> 8, color & 0x0000FF);
-		m_nbTriangles++;
-		//t.
-//		m_Instance->QueueTriangle(&t);
-	}
-
 	void EngineWrapper::DrawCircle(ZobVector3* p0, ZobVector3* up, float r, int color, bool bold, bool noZ)
 	{
 		Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
@@ -324,6 +303,12 @@ namespace CLI
 		m_renderWindow->Controls->Add(m_bTX);
 		m_renderWindow->Controls->Add(m_bTY);
 		m_renderWindow->Controls->Add(m_bTZ);
+	}
+
+	void EngineWrapper::OnNewScene()
+	{
+
+		m_selectedObject = NULL;
 	}
 
 	void EngineWrapper::OnObjectSelected(ZobObjectWrapper^ z)

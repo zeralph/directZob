@@ -73,13 +73,13 @@ ZobObject* ZobObjectManager::GetZobObjectFromlId(const std::string& id) const
 	return ret;
 }
 
-ZobObject* ZobObjectManager::GetZobObjectFromlId(const unsigned long long id) const
+ZobObject* ZobObjectManager::GetZobObjectFromlId(const zobId id) const
 {
 	ZobObject* ret = GetZobObjectFromId(m_rootObject, id);
 	return ret;
 }
 
-ZobObject* ZobObjectManager::GetZobObjectFromId(ZobObject* z, const unsigned long long id) const
+ZobObject* ZobObjectManager::GetZobObjectFromId(ZobObject* z, zobId id) const
 {
 	if (z->GetIdValue() == id)
 	{

@@ -38,21 +38,21 @@ namespace CLI
 		ZobObject*				GetZobObject(System::String^ guid);
 		ZobObjectWrapper^		GetRootObject();
 		void					RemoveZobObject(ZobObjectWrapper^ name);
-		ZobObjectWrapper^		AddZobObject(ZobObjectWrapper^ parent);
+		void					CreateZobObject();
 		ZobObjectWrapper^		AddZobSprite(ZobObjectWrapper^ parent);
 		ZobObjectWrapper^		GetObjectAtCoords(int x, int y, eObjectTypes type);
 		ZobObjectWrapper^		GetSelectedObject() {return m_selectedObjectWrapper;}
 		void					CreateEditorGizmos(System::String^ editorResourcesPath);
 		bool					Reparent(String^ object, String^ parent);
 		void					AddZobObjectsRecursive(ZobObject* z, TreeNodeCollection^ collection);
-		void					OnEditorUpdate(Object^ sender, EventArgs^ e);
+		void					EditorUpdate();
 		TreeView^				GetTreeviw() {return m_treeView;}
 	private:
 	
 		void					CreateTreeview();
 		void					CreateObjectview();
 		void					ReScan(ZobControlTreeNode^ n);
-
+		void					OnNewScene();
 		void					TreeNodeMouseHover(Object^ sender, EventArgs^ e);
 		void					TreeNodeClick(Object^ sender, TreeViewEventArgs^ e);
 		void					ItemDrag(Object^ sender, ItemDragEventArgs^ e);

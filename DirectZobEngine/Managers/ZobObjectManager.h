@@ -22,7 +22,7 @@ public:
 	void PreUpdate();
 	void PostUpdate();
 	void EditorUpdate();
-	ZobObject* GetZobObjectFromlId(const unsigned long long id) const;
+	ZobObject* GetZobObjectFromlId(const zobId id) const;
 	ZobObject* GetZobObjectFromlId(const std::string& id) const;
 	void AddZobObject(ZobObject* z);
 	ZobObject* GetRootObject() const;
@@ -44,7 +44,7 @@ public:
 private:
 	void GetZobObjectListInternal(const ZobObject* z, std::string& str);
 	void GetZobObjectListInternal(const ZobObject* z, std::vector<const ZobObject*>& v);
-	ZobObject* GetZobObjectFromId(ZobObject* z, const unsigned long long id) const;
+	ZobObject* GetZobObjectFromId(ZobObject* z, const zobId id) const;
 	ZobObject* m_rootObject = nullptr;
 	clock_t	m_drawTick;
 	float m_time;

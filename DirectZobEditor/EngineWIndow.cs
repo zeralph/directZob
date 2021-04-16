@@ -416,7 +416,7 @@ namespace DirectZobEditor
                 ManagedVector3 p3 = p0.Copy();
                 p3.Add(up);
                 p3.Mul(2.0f);
-                m_mainForm.GetEngineWrapper().DrawTriangle(p0, p1, p2, 0xFF0000);
+                //m_mainForm.GetEngineWrapper().DrawTriangle(p0, p1, p2, 0xFF0000);
                 OnZobObjectRotated(z);
             }
         }
@@ -451,7 +451,7 @@ namespace DirectZobEditor
                 ManagedVector3 p3 = p0.Copy();
                 p3.Add(up);
                 p3.Mul(2.0f);
-                m_mainForm.GetEngineWrapper().DrawTriangle(p0, p1, p2, 0x00FF00);
+                //m_mainForm.GetEngineWrapper().DrawTriangle(p0, p1, p2, 0x00FF00);
                 OnZobObjectRotated(z);
             }
         }

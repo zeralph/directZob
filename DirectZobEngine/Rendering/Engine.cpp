@@ -19,6 +19,7 @@
 #include "../../dependencies/optick/include/optick.h"
 
 #define MAX_TRIANGLES_PER_IMAGE 400000
+#define MAX_RENDER_OPTIONS 1000
 
 using namespace Core;
 
@@ -96,7 +97,7 @@ Engine::Engine(int width, int height, Events* events)
 	m_rasterizers = (Rasterizer**)malloc(sizeof(Rasterizer) * m_nbRasterizers);
 	m_conditionvariables = (std::condition_variable**)malloc(sizeof(std::condition_variable) * m_nbRasterizers);
 	m_mutexes = (std::mutex**)malloc(sizeof(std::mutex) * m_nbRasterizers);
-
+	m_renderOptions = (RenderOptions*)malloc(sizeof(RenderOptions) * MAX_RENDER_OPTIONS);
 	m_rasterizerHeight = ceil((float)height / (float)m_nbRasterizers);
 	int h0 = 0;
 	int h1 = m_rasterizerHeight;
@@ -192,6 +193,7 @@ Engine::~Engine()
 	free(m_rasterizers);
 	free(m_conditionvariables);
 	free(m_mutexes);
+	free(m_renderOptions);
 	m_events = NULL;
 }
 
@@ -247,7 +249,7 @@ bool Engine::ResizeInternal()
 			m_buffer[i] = (uint*)malloc(sizeof(uint) * m_nextWidth * m_nextHeight);
 			m_zBuffer[i] = (float*)malloc(sizeof(float) * m_nextWidth * m_nextHeight);
 		}
-		Color c = Color(DirectZob::GetInstance()->GetLightManager()->GetClearColor());
+		ZobColor c = ZobColor(DirectZob::GetInstance()->GetLightManager()->GetClearColor());
 		m_bufferData.height = m_nextHeight;
 		m_bufferData.width = m_nextWidth;
 		m_bufferData.buffer = m_buffer[m_currentBuffer];
@@ -265,7 +267,7 @@ bool Engine::ResizeInternal()
 	return false;
 }
 
-void Engine::ClearBuffer(const Color *color)
+void Engine::ClearBuffer(const ZobColor *color)
 {
 	OPTICK_EVENT();
 	int oldBuffer = (m_currentBuffer + 1) % 2;
@@ -385,6 +387,7 @@ void Engine::ClearRenderQueues()
 	m_LastTriangleQueueSize = m_TriangleQueueSize;
 	m_lineQueueSize = 0;
 	m_TriangleQueueSize = 0;
+	m_usedRenderOptions = 0;
 	for (int i = 0; i < m_nbRasterizers; i++)
 	{
 		m_rasterizers[i]->Clear();
@@ -749,8 +752,42 @@ void Engine::QueueEllipse(const Camera* camera, const ZobVector3* center, const 
 		m.Mul(&a);
 		a = a + center;
 		QueueLine(camera, &a, &b, c, bold, noZ);
+		QueueTriangle(camera, center, &a, &b, c, true, false);
 	}
+}
 
+void Engine::QueueTriangle(const Camera* camera, const ZobVector3* v1, const ZobVector3* v2, const ZobVector3* v3, const uint c, bool transparent, bool noZ)
+{
+	Triangle* t = &m_TrianglesQueue[m_TriangleQueueSize];
+	t->va->x = v1->x;
+	t->va->y = v1->y;
+	t->va->z = v1->z;
+	t->va->w = 1;
+	t->vb->x = v2->x;
+	t->vb->y = v2->y;
+	t->vb->z = v2->z;
+	t->vb->w = 1;
+	t->vc->x = v3->x;
+	t->vc->y = v3->y;
+	t->vc->z = v3->z;
+	t->vc->w = 1;
+	ZobVector3 color = ZobVector3((c & 0xFF0000) >> 16, (c & 0x00FF00) >> 8, c & 0x0000FF);
+	color.Mul(1.0f / 255.0f);
+	t->ca->Copy(&color);
+	t->cb->Copy(&color);
+	t->cc->Copy(&color);
+	t->material = NULL;
+	t->clipMode = Triangle::eClip_3_in;
+	RenderOptions* r = &m_renderOptions[m_usedRenderOptions];
+	r->bTransparency = transparent;
+	r->cullMode = RenderOptions::eCullMode_None;
+	r->zBuffered = !noZ;
+	r->lightMode = RenderOptions::eLightMode_none;
+	t->options = r;
+	m_usedRenderOptions++;
+	RecomputeTriangleProj(camera, t);
+	m_drawnTriangles += QueueTriangleInRasters(&m_TrianglesQueue[m_TriangleQueueSize], m_TriangleQueueSize);
+	m_TriangleQueueSize++;
 }
 
 void Engine::QueueLine(const Camera* camera, const ZobVector3* v1, const ZobVector3* v2, const uint c, bool bold, bool noZ)

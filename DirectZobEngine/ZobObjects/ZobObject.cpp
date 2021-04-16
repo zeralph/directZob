@@ -147,7 +147,7 @@ ZobObject::~ZobObject()
 		delete z;
 	}
 	delete m_varExposer;
-	m_children.clear();
+	m_children.resize(0);
 	DirectZob::RemoveIndent();
 }
 
@@ -237,6 +237,7 @@ void ZobObject::PreUpdate()
 	for (int i = 0; i < m_behaviors.size(); i++)
 	{
 		m_behaviors[i]->PreUpdate();
+
 	}
 	for (int i = 0; i < m_children.size(); i++)
 	{
@@ -256,7 +257,8 @@ void ZobObject::PostUpdate()
 	for (int i = 0; i < m_children.size(); i++)
 	{
 		ZobObject* z = m_children[i];
-		z->PostUpdate();
+		if(z)
+			z->PostUpdate();
 	}
 }
 
@@ -325,32 +327,7 @@ void ZobObject::Update(float dt)
 		parentScale = ZobVector3(1, 1, 1);
 	}
 	ZobVector3 scale = parentScale * m_physicComponent->GetLocalScale();
-	Transform newTransform = m_physicComponent->GetLocalTransform();
-	Vector3 p = parentTransform.getPosition();
-	//m_physicComponent->Update();
 	m_physicComponent->SetWorldScale(scale.x, scale.y, scale.z);
-	/*
-	const ZobMatrix4x4* parentMatrix = m_parent?m_parent->GetModelMatrix():&ZobMatrix4x4::IdentityMatrix;
-	const ZobMatrix4x4* parentRSMatrix = m_parent?m_parent->GetRotationScaleMatrix():&ZobMatrix4x4::IdentityMatrix;
-	ZobVector3 t = GetWorldPosition();
-	ZobVector3 wpos = GetWorldRotation();	
-	m_modelMatrix.Identity();
-	m_rotationScaleMatrix.Identity();
-	m_rotationScaleMatrix.SetRotation(GetWorldRotation());
-	m_rotationScaleMatrix.SetScale(scale);
-	m_modelMatrix.SetPosition(&t);
-	m_modelMatrix.SetRotation(&wpos);
-	m_modelMatrix.SetScale(scale);
-	m_left = ZobVector3(1, 0, 0);
-	m_forward = ZobVector3(0, 0, 1);
-	m_up = ZobVector3(0, 1, 0);
-	m_rotationScaleMatrix.Mul(&m_left);
-	m_rotationScaleMatrix.Mul(&m_forward);
-	m_rotationScaleMatrix.Mul(&m_up);
-	m_left.Normalize();
-	m_forward.Normalize();
-	m_up.Normalize();
-	*/
 	Quaternion q = m_physicComponent->GetWorldTransform().getOrientation();
 	Vector3 l = q * Vector3(1, 0, 0);
 	Vector3 u = q * Vector3(0, 1, 0);
@@ -427,8 +404,10 @@ bool ZobObject::RemoveChildReference(const ZobObject* z)
 	int i = GetChildPosition(z);
 	if (i >= 0)
 	{
-		std::swap(m_children.at(i), m_children.at(m_children.size() - 1));
+		int size = m_children.size();
+		std::swap(m_children.at(i), m_children.at(size - 1));
 		m_children.pop_back();
+		m_children.resize(size - 1);
 		return true;
 	}
 	return false;

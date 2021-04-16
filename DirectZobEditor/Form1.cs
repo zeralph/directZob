@@ -78,14 +78,31 @@ namespace DirectZobEditor
         public CLI.engineCallback onSceneLoadedCallback;
         public delegate void OnSceneLoaded();
         public OnSceneLoaded OnSceneLoadedDelegate;
+
         public Form1()
         {
+
+            Font f = new Font("Microsoft Tai Le", 8);
+            this.Font = f;
+
             m_mainForm = this;
             m_running = true;
             InitializeComponent();
             this.KeyPreview = true;
             m_engineWindow = new EngineWindow(this);
-            
+     
+            /*
+            Color backColor = (Color)System.Drawing.ColorTranslator.FromHtml("#2D2D30");
+            Color foreColor = (Color)System.Drawing.ColorTranslator.FromHtml("#F0F0F0");
+            this.BackColor = backColor;
+            this.ZobObjectListPanel.BackColor = backColor;
+            this.ObjectControlsFlowLayout.BackColor = backColor;
+            m_engineWindow.GetEngineRenderwindow().BackColor = backColor;
+            menuStrip1.BackColor = backColor;
+            menuStrip1.ForeColor = foreColor;
+            */
+            //tabsControl.TabPages.
+
             m_directZobWrapper = new CLI.DirectZobWrapper(this.ZobObjectListPanel, this.ObjectControlsFlowLayout, m_engineWindow.GetEngineRenderwindow());
             m_directZobWrapper.Init(1024, 768);
             CLI.ZobObjectManagerWrapper.OnObjectSelectedEvent += new CLI.ZobObjectManagerWrapper.OnObjectSelected(OnObjectSelected);
@@ -154,6 +171,7 @@ namespace DirectZobEditor
             //m_engineWindow.GetEngineWrapper().DrawPhysicsGizmos(false);
             m_engineThread = new Thread(RunEngineThread);
             m_engineThread.Start();
+ //           GigaPaint(this);
         }
 
         private void OnObjectSelected(CLI.ZobObjectWrapper z)
@@ -430,7 +448,8 @@ namespace DirectZobEditor
                     name.Replace(' ', '_');
                     //m_meshManagerWrapper.LoadMesh(name, path, file);
                     CLI.ZobObjectWrapper root = m_zobObjectManagerWrapper.GetRootObject();
-                    CLI.ZobObjectWrapper z = m_zobObjectManagerWrapper.AddZobObject(root);
+                    CLI.ZobObjectWrapper z = null;
+                    m_zobObjectManagerWrapper.CreateZobObject();
                     z.SetName(name);
                     string workspace = m_directZobWrapper.GetResourcePath();
                     //z.SetMesh(name);
@@ -547,12 +566,7 @@ namespace DirectZobEditor
 
         private void createZobObjectToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            CLI.ZobObjectWrapper root = m_zobObjectManagerWrapper.GetRootObject();
-            CLI.ZobObjectWrapper z = m_zobObjectManagerWrapper.AddZobObject(root);
-            Form1.SceneUpdateEventArg ev = new Form1.SceneUpdateEventArg();
-            ev.type = Form1.SceneUpdateType.objectAdded;
-            ev.zobObject = z;
-            PropagateSceneUpdateEvent(ev);
+            m_zobObjectManagerWrapper.CreateZobObject();
         }
 
         private void btnPlay_Click(object sender, EventArgs e)
@@ -644,7 +658,7 @@ namespace DirectZobEditor
 
         private void btnTranslateLocal_Click(object sender, EventArgs e)
         {
-            m_engineWindow.SetModificator(EngineWindow.objectModificator.translate_local);
+            m_directZobWrapper.GetEngineWrapper().SetObjectModificator((CLI.objectModificator)1);
             btnRotateLocal.Checked = false;
             btnScale.Checked = false;
             btnTranslateWorld.Checked = false;
@@ -653,7 +667,7 @@ namespace DirectZobEditor
 
         private void btnRotateLocal_Click(object sender, EventArgs e)
         {
-            m_engineWindow.SetModificator(EngineWindow.objectModificator.rotate_local);
+            m_directZobWrapper.GetEngineWrapper().SetObjectModificator((CLI.objectModificator)3);
             btnTranslateLocal.Checked = false;
             btnTranslateWorld.Checked = false;
             btnScale.Checked = false;
@@ -662,7 +676,7 @@ namespace DirectZobEditor
 
         private void btnScale_Click(object sender, EventArgs e)
         {
-            m_engineWindow.SetModificator(EngineWindow.objectModificator.scale);
+            m_directZobWrapper.GetEngineWrapper().SetObjectModificator((CLI.objectModificator)4);
             btnTranslateLocal.Checked = false;
             btnRotateLocal.Checked = false;
             btnTranslateWorld.Checked = false;
@@ -671,7 +685,7 @@ namespace DirectZobEditor
 
         private void btnTranslateWorld_Click(object sender, EventArgs e)
         {
-            m_engineWindow.SetModificator(EngineWindow.objectModificator.translate_world);
+            m_directZobWrapper.GetEngineWrapper().SetObjectModificator((CLI.objectModificator)0);
             btnRotateLocal.Checked = false;
             btnScale.Checked = false;
             btnTranslateLocal.Checked = false;
@@ -680,7 +694,7 @@ namespace DirectZobEditor
 
         private void btnRotateWorld_Click(object sender, EventArgs e)
         {
-            m_engineWindow.SetModificator(EngineWindow.objectModificator.rotate_world);
+            m_directZobWrapper.GetEngineWrapper().SetObjectModificator((CLI.objectModificator)2);
             btnRotateLocal.Checked = false;
             btnScale.Checked = false;
             btnTranslateLocal.Checked = false;
@@ -767,6 +781,67 @@ namespace DirectZobEditor
         {
             //make an alert
             m_directZobWrapper.RegenerateZobIds();
+        }
+
+        private void GigaPaint(object o)
+        {
+            Color backColor = (Color)System.Drawing.ColorTranslator.FromHtml("#2D2D30");
+            Color foreColor = (Color)System.Drawing.ColorTranslator.FromHtml("#F0F0F0");
+            Control c = o as Control;
+            if (c != null)
+            {
+                c.BackColor = backColor;
+                c.ForeColor = foreColor;
+                for (int i = 0; i < c.Controls.Count; i++)
+                {
+                    object o2 = (object)c.Controls[i];
+                    GigaPaint(o2);
+                }
+            }
+            MenuStrip ms = o as MenuStrip;
+            if (ms != null)
+            {
+                ms.BackColor = backColor;
+                ms.ForeColor = foreColor;
+                for (int i = 0; i < ms.Items.Count; i++)
+                {
+                    object o2 = (object)ms.Items[i];
+                    GigaPaint(o2);
+                }
+            }
+            ToolStrip ts = o as ToolStrip;
+            if (ts != null)
+            {
+                ts.BackColor = backColor;
+                ts.ForeColor = foreColor;
+                for (int i = 0; i < ts.Items.Count; i++)
+                {
+                    object o2 = (object)ts.Items[i];
+                    GigaPaint(o2);
+                }
+            }
+            ToolStripMenuItem tsm = o as ToolStripMenuItem;
+            if (tsm != null)
+            {
+                tsm.BackColor = backColor;
+                tsm.ForeColor = foreColor;
+                for (int i = 0; i < tsm.DropDownItems.Count; i++)
+                {
+                    object o2 = (object)tsm.DropDownItems[i];
+                    GigaPaint(o2);
+                }
+            }
+            TabControl tc = o as TabControl;
+            if (tc != null)
+            {
+                tc.BackColor = backColor;
+                tc.ForeColor = foreColor;
+                for (int i = 0; i < tc.TabPages.Count; i++)
+                {
+                    object o2 = (object)tc.TabPages[i];
+                    GigaPaint(o2);
+                }
+            }
         }
 
     }

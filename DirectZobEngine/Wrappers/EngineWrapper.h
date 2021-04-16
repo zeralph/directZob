@@ -41,10 +41,10 @@ namespace CLI
 	public enum objectModificator
 	{
 		translate_world=0,
-		translate_local,
-		rotate_world,
-		rotate_local,
-		scale,
+		translate_local=1,
+		rotate_world=2,
+		rotate_local=3,
+		scale=4,
 	};
 	public enum axis
 	{
@@ -73,10 +73,10 @@ namespace CLI
 		void			SetRenderOutput(int r);
 		void			SetRenderMode(int r);
 		void			SetLightingPrecision(int r);
+		void			SetObjectModificator(objectModificator om) { m_objectModificator = om;}
 		ZobObjectWrapper^ GetObjectAt2DCoords(float x, float y);
 		void			DrawLine(ZobVector3* p0, ZobVector3* p1, int color, bool bold, bool noZ);
 		void			DrawCircle(ZobVector3* p0, ZobVector3* up, float r, int color, bool bold, bool noZ);
-		void			DrawTriangle(ManagedVector3^ p0, ManagedVector3^ p1, ManagedVector3^ p2, int color);
 		void			QueueObjectsToRender();
 		void			Update(float dt);
 		void			Stop() { m_running = false; }
@@ -90,6 +90,7 @@ namespace CLI
 		void			UpdateRenderWindowInternal();
 		void			UpdateModificationGizmos();
 		void			OnObjectSelected(ZobObjectWrapper^ z);
+		void			OnNewScene();
 		PictureBox^		m_renderWindow;
 		Graphics^		m_renderWindowGraphics;
 		Triangle*		m_triangleList;

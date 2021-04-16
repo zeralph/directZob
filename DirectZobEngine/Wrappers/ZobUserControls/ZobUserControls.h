@@ -5,6 +5,7 @@
 #using "System.Windows.Forms.dll"
 #using "System.dll"
 #using "System.Drawing.dll"
+#include "../../Misc/ZobVariablesExposer.h"
 
 using namespace System;
 using namespace System::Windows;
@@ -12,12 +13,26 @@ using namespace System::Windows::Forms;
 using namespace System::Collections::Generic;
 using namespace System::Drawing;
 
+
 namespace CLI {
+
+	public ref class ZobGroupBox : GroupBox
+	{
+	public:
+		ZobGroupBox(String^ name, bool collapsable);
+		void OnToggle(Object^ sender, EventArgs^ e);
+		bool bToggled;
+	};
 
 	public ref class ZobControlString : TableLayoutPanel
 	{
 	public:
-		ZobControlString(String^ name, String^ text, String^ value, bool readOnly, EventArgs^ OnChanged);
+		ZobControlString(ZobVariablesExposer::wrapperData* w);
+		TextBox^ txt;
+		delegate void OnChange(Object^ sender, EventArgs^ e);
+		event OnChange^ OnChangeEvent;
+	private:
+		void OnValueChangedInternal(Object^ sender, EventArgs^ e);
 	};
 
 	public ref class ZobControlVector3 : TableLayoutPanel
@@ -49,14 +64,6 @@ namespace CLI {
 	public:
 		ZobControlTreeview();
 		void UpdateZobControl();
-	};
-
-	public ref class ZobGroupBox : GroupBox
-	{
-	public:
-		ZobGroupBox(String^ name, bool collapsable);
-		void OnToggle(Object^ sender, EventArgs^ e);
-		bool bToggled;
 	};
 
 	public ref class ZobPropertiesContainer : TableLayoutPanel

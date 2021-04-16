@@ -51,6 +51,7 @@ public:
 		std::vector<int> enumValues;
 		std::vector<std::string> enumNames;
 		void Load();
+		void Init();
 	};
 
 	ZobVariablesExposer(std::string& zobGUID);
@@ -108,6 +109,7 @@ public:
 
 		assert(type != eWrapperType::__eWrapperType_MAX__);
 		wrapperData w;
+		w.Init();
 		std::string s;
 		w.name = std::string(name);
 		s = m_zobGUID;
