@@ -12,14 +12,15 @@ static void MarshalString(System::String^ s, std::string& os) {
 	Marshal::FreeHGlobal(System::IntPtr((void*)chars));
 }
 
-ZobControlString::ZobControlString(ZobVariablesExposer::wrapperData* w):TableLayoutPanel()
+ZobControlString::ZobControlString(const ZobVariablesExposer::wrapperData& w):TableLayoutPanel()
 {
-	this->Name = TO_MANAGED_STRING(w->internalName.c_str());
+	_w = &w;
+	this->Name = TO_MANAGED_STRING(w.internalName.c_str());
 	this->AutoSize = true;
 	this->ColumnCount = 2;
 	this->RowCount = 1;
 	Label^ label = gcnew Label();
-	label->Text = TO_MANAGED_STRING(w->name.c_str());
+	label->Text = TO_MANAGED_STRING(w.name.c_str());
 	label->Width = 140;
 	label->Height = _height;
 	label->AutoSize = false;
@@ -28,16 +29,177 @@ ZobControlString::ZobControlString(ZobVariablesExposer::wrapperData* w):TableLay
 	txt->AutoSize = false;
 	txt->Width = 140;
 	txt->Height = _height;
-	txt->ReadOnly = (bool)w->bReadOnly;
-	std::string* s = (std::string*)(w->ptr);
+	txt->ReadOnly = (bool)w.bReadOnly;
+	std::string* s = (std::string*)(w.ptr);
 	txt->Text = TO_MANAGED_STRING(s->c_str());
 	if (!txt->ReadOnly)
 	{
-		txt->Leave += gcnew EventHandler(this, &ZobControlString::OnValueChangedInternal);
+		txt->Leave += gcnew EventHandler(this, &ZobControlString::OnValueChanged);
 	}
 	this->Controls->Add(label);
 	this->Controls->Add(txt);
 }
+
+void ZobControlString::OnValueChanged(Object^ sender, EventArgs^ e)
+{
+	TextBox^ tb = (TextBox^)sender;
+	ZobControlString^ zb = (ZobControlString^)tb->Parent;
+	if (zb->_w)
+	{
+		std::string* internalString = (std::string*)_w->ptr;
+		std::string s;
+		MarshalString(tb->Text, s);
+		internalString->assign(s);
+	}
+}
+
+ZobControlFilePath::ZobControlFilePath(const ZobVariablesExposer::wrapperData& w) :TableLayoutPanel()
+{
+	_w = &w;
+	this->AutoSize = true;
+	this->ColumnCount = 2;
+	this->RowCount = 1;
+	Label^ label = gcnew Label();
+	label->Text = TO_MANAGED_STRING(w.name.c_str());
+	//label->Dock = DockStyle::Fill;
+	label->Width = 140;
+	label->Height = 20;
+	label->TextAlign = ContentAlignment::BottomRight;
+	TextBox^ txt = gcnew TextBox();
+	txt->Name = TO_MANAGED_STRING(w.internalName.c_str());
+	txt->Width = 140;
+	txt->Height = 20;
+	txt->ReadOnly = w.bReadOnly;
+	//txt->MaximumSize = Drawing::Size(100, 20);
+	std::string s;
+	ZobFilePath* zp = (ZobFilePath*)(w.ptr);
+	s = zp->Serialize();
+	txt->Text = TO_MANAGED_STRING(s.c_str());
+	if (!w.bReadOnly)
+	{
+		txt->Leave += gcnew EventHandler(this, &ZobControlFilePath::OnValueChanged);
+	}
+	this->Controls->Add(label);
+	this->Controls->Add(txt);
+}
+
+void ZobControlFilePath::OnValueChanged(Object^ sender, EventArgs^ e)
+{
+	TextBox^ t = static_cast<TextBox^>(sender);
+	if (_w)
+	{
+		std::string s;
+		MarshalString(t->Text, s);
+		ZobFilePath* zp = (ZobFilePath*)_w->ptr;
+		zp->Unserialize(s);
+	}
+}
+
+
+ZobControlVector3::ZobControlVector3(const ZobVariablesExposer::wrapperData& w) :TableLayoutPanel()
+{
+	_w = &w;
+	String^ internalName = TO_MANAGED_STRING(w.internalName.c_str());
+	String^ name = TO_MANAGED_STRING(w.name.c_str());
+	ZobVector3* v = (ZobVector3*)(w.ptr);
+	this->AutoSize = true;
+	this->ColumnCount = 2;
+	this->RowCount = 3;
+	this->Name = name;
+	Label^ labelx = gcnew Label();
+	labelx->Text = "| X";
+	labelx->Width = 140;
+	labelx->Height = _height;
+	labelx->AutoSize = false;
+	labelx->TextAlign = ContentAlignment::BottomRight;
+	txt_X = gcnew TextBox();
+	txt_X->AutoSize = false;
+	txt_X->Name = name;
+	txt_X->Width = 140;
+	txt_X->Height = _height;
+	txt_X->ReadOnly = _w->bReadOnly;
+
+	Label^ labely = gcnew Label();
+	labely->Text = name + " | Y";
+	labely->Width = 140;
+	labely->Height = _height;
+	labely->AutoSize = false;
+	labely->TextAlign = ContentAlignment::BottomRight;
+	txt_Y = gcnew TextBox();
+	txt_Y->AutoSize = false;
+	txt_Y->Name = name;
+	txt_Y->Width = 140;
+	txt_Y->Height = _height;
+	txt_Y->ReadOnly = _w->bReadOnly;
+
+	//txt_Y->Text = v->y.ToString();
+
+	Label^ labelz = gcnew Label();
+	labelz->Text = "| Z";
+	labelz->Width = 140;
+	labelz->Height = _height;
+	labelz->AutoSize = false;
+	labelz->TextAlign = ContentAlignment::BottomRight;
+	txt_Z = gcnew TextBox();
+	txt_Z->Name = name;
+	txt_Z->Width = 140;
+	txt_Z->AutoSize = false;
+	txt_Z->Height = _height;
+	txt_X->AutoSize = false;
+	txt_Z->ReadOnly = _w->bReadOnly;
+
+	UpdateZobControlInternal();
+
+	txt_X->Leave += gcnew EventHandler(this, &ZobControlVector3::OnValueChanged);
+	txt_Y->Leave += gcnew EventHandler(this, &ZobControlVector3::OnValueChanged);
+	txt_Z->Leave += gcnew EventHandler(this, &ZobControlVector3::OnValueChanged);
+
+	this->Controls->Add(labelx);
+	this->Controls->Add(txt_X);
+	this->Controls->Add(labely);
+	this->Controls->Add(txt_Y);
+	this->Controls->Add(labelz);
+	this->Controls->Add(txt_Z);
+
+	DirectZobWrapper::OnEditorUpdateEvent += gcnew DirectZobWrapper::OnEditorUpdate(this, &ZobControlVector3::UpdateZobControl);
+}
+
+void ZobControlVector3::UpdateZobControl()
+{
+	this->Invoke(gcnew Action(this, &CLI::ZobControlVector3::UpdateZobControlInternal));
+}
+
+void ZobControlVector3::UpdateZobControlInternal()
+{
+	ZobVector3* z = (ZobVector3*)_w->ptr;
+	if (!txt_X->Focused)
+		txt_X->Text = String::Format("{0:0.000}", z->x);
+	if (!txt_Y->Focused)
+		txt_Y->Text = String::Format("{0:0.000}", z->y);
+	if (!txt_Z->Focused)
+		txt_Z->Text = String::Format("{0:0.000}", z->z);
+}
+
+void ZobControlVector3::OnValueChanged(Object^ sender, EventArgs^ e)
+{
+	TextBox^ tb = (TextBox^)sender;
+	ZobControlVector3^ zb = (ZobControlVector3^)tb->Parent;
+	ZobVector3 v;
+	std::string sx;
+	MarshalString(zb->txt_X->Text, sx);
+	std::string sy;
+	MarshalString(zb->txt_Y->Text, sy);
+	std::string sz;
+	MarshalString(zb->txt_Z->Text, sz);
+	if (v.FromString(sx, sy, sz))
+	{
+		ZobVector3* vv = (ZobVector3*)_w->ptr;
+		vv->x = v.x;
+		vv->y = v.y;
+		vv->z = v.z;
+	}
+}
+
 
 ZobGroupBox::ZobGroupBox(String^ name, bool collapsable) :GroupBox()
 {
@@ -121,97 +283,5 @@ ZobPropertiesContainer::ZobPropertiesContainer() : TableLayoutPanel()
 	this->ColumnCount = 1;
 	this->AutoSize = true;
 	//this->BackColor = Drawing::Color::Beige;
-}
-
-ZobControlVector3::ZobControlVector3(String^ name, String^ text, ZobVector3* v, bool readOnly, EventArgs^ OnChanged) :TableLayoutPanel()
-{
-	m_zobVector3 = v;
-	this->AutoSize = true;
-	this->ColumnCount = 2;
-	this->RowCount = 3;
-	this->Name = name;
-	Label^ labelx = gcnew Label();
-	labelx->Text = "| X";
-	labelx->Width = 140;
-	labelx->Height = _height;
-	labelx->AutoSize = false;
-	labelx->TextAlign = ContentAlignment::BottomRight;	
-	txt_X = gcnew TextBox();
-	txt_X->AutoSize = false;
-	txt_X->Name = name;
-	txt_X->Width = 140;
-	txt_X->Height = _height;
-	txt_X->ReadOnly = readOnly;
-
-	Label^ labely = gcnew Label();
-	labely->Text = text + " | Y";
-	labely->Width = 140;
-	labely->Height = _height;
-	labely->AutoSize = false;
-	labely->TextAlign = ContentAlignment::BottomRight;
-	txt_Y = gcnew TextBox();
-	txt_Y->AutoSize = false;
-	txt_Y->Name = name;
-	txt_Y->Width = 140;
-	txt_Y->Height = _height;
-	txt_Y->ReadOnly = readOnly;
-
-	//txt_Y->Text = v->y.ToString();
-
-	Label^ labelz = gcnew Label();
-	labelz->Text = "| Z";
-	labelz->Width = 140;
-	labelz->Height = _height;
-	labelz->AutoSize = false;
-	labelz->TextAlign = ContentAlignment::BottomRight;
-	txt_Z = gcnew TextBox();
-	txt_Z->Name = name;
-	txt_Z->Width = 140;
-	txt_Z->AutoSize = false;
-	txt_Z->Height = _height;
-	txt_X->AutoSize = false;
-	txt_Z->ReadOnly = readOnly;
-
-	UpdateZobControlInternal();
-
-	txt_X->Leave += gcnew EventHandler(this, &ZobControlVector3::OnValueChangedInternal);
-	txt_Y->Leave += gcnew EventHandler(this, &ZobControlVector3::OnValueChangedInternal);
-	txt_Z->Leave += gcnew EventHandler(this, &ZobControlVector3::OnValueChangedInternal);
-
-	this->Controls->Add(labelx);
-	this->Controls->Add(txt_X);
-	this->Controls->Add(labely);
-	this->Controls->Add(txt_Y);
-	this->Controls->Add(labelz);
-	this->Controls->Add(txt_Z);
-}
-
-void ZobControlVector3::UpdateZobControl()
-{
-	this->Invoke(gcnew Action(this, &CLI::ZobControlVector3::UpdateZobControlInternal));
-}
-
-void ZobControlVector3::UpdateZobControlInternal()
-{
-	if(!txt_X->Focused)
-		txt_X->Text = String::Format("{0:0.000}", m_zobVector3->x);
-	if (!txt_Y->Focused)
-		txt_Y->Text = String::Format("{0:0.000}", m_zobVector3->y);
-	if (!txt_Z->Focused)
-		txt_Z->Text = String::Format("{0:0.000}", m_zobVector3->z);
-}
-
-void ZobControlVector3::OnValueChangedInternal(Object^ sender, EventArgs^ e)
-{
-	TextBox^ tb = (TextBox^)sender;
-	ZobControlVector3^ zb = (ZobControlVector3^ )tb->Parent;
-	OnChangeEvent(zb, e);
-}
-
-void ZobControlString::OnValueChangedInternal(Object^ sender, EventArgs^ e)
-{
-	TextBox^ tb = (TextBox^)sender;
-	ZobControlString^ zb = (ZobControlString^)tb->Parent;
-	OnChangeEvent(zb, e);
 }
 

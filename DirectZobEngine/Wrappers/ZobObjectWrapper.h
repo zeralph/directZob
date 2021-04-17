@@ -22,11 +22,11 @@ namespace CLI {
 	public ref class ComboboxItem
 	{
 		public :
-			ComboboxItem(int k, String^ v, const ZobVariablesExposer::wrapperData* w)
+			ComboboxItem(int k, String^ v, const ZobVariablesExposer::wrapperData& w)
 			{
 				Key = k;
 				Value = v;
-				w = w;
+				_w = &(w);
 			}
 			String^ ToString() override
 			{
@@ -34,7 +34,7 @@ namespace CLI {
 			}
 			int Key;
 			String^ Value;
-			const ZobVariablesExposer::wrapperData* w;
+			const ZobVariablesExposer::wrapperData* _w;
 	};
 
 
@@ -77,10 +77,7 @@ namespace CLI {
 		void					FloatHandler(Object^ sender, System::EventArgs^ e);
 		void					BoolHandler(Object^ sender, System::EventArgs^ e);
 		void					IntHandler(Object^ sender, System::EventArgs^ e);
-		void					PathHandler(Object^ sender, System::EventArgs^ e);
 		void					ZobVector2Handler(Object^ sender, System::EventArgs^ e);
-		void					ZobVector3Handler(Object^ sender, System::EventArgs^ e);
-		void					StringHandler(Object^ sender, System::EventArgs^ e);
 		void					ListValidationHandler(Object^ sender, System::EventArgs^ e);
 		void					GroupClick(Object^ sender, System::EventArgs^ e);
 
@@ -95,16 +92,13 @@ namespace CLI {
 		ZobPropertiesContainer^	m_container;
 	protected:
 
-		TableLayoutPanel^		AddFloatVariable(ZobVariablesExposer::wrapperData* w);
-		TableLayoutPanel^		AddEnumVariable(ZobVariablesExposer::wrapperData* w);
-		TableLayoutPanel^		AddBoolVariable(ZobVariablesExposer::wrapperData* w);
-		TableLayoutPanel^		AddIntVariable(ZobVariablesExposer::wrapperData* w);
-		TableLayoutPanel^		AddZobIdVariable(ZobVariablesExposer::wrapperData* w);
-		TableLayoutPanel^		AddZobVector2Variable(ZobVariablesExposer::wrapperData* w);
-		ZobControlVector3^		AddZobVector3Variable(ZobVariablesExposer::wrapperData* w);
-		//ZobControlString^		AddStringVariable(ZobVariablesExposer::wrapperData* w);
-		TableLayoutPanel^		AddPathVariable(ZobVariablesExposer::wrapperData* w);
-		TableLayoutPanel^		AddZobObjectVariable(ZobVariablesExposer::wrapperData* w);
+		TableLayoutPanel^		AddFloatVariable(const ZobVariablesExposer::wrapperData& w);
+		TableLayoutPanel^		AddEnumVariable(const ZobVariablesExposer::wrapperData& w);
+		TableLayoutPanel^		AddBoolVariable(const ZobVariablesExposer::wrapperData& w);
+		TableLayoutPanel^		AddIntVariable(const ZobVariablesExposer::wrapperData& w);
+		TableLayoutPanel^		AddZobIdVariable(const ZobVariablesExposer::wrapperData& w);
+		TableLayoutPanel^		AddZobVector2Variable(const ZobVariablesExposer::wrapperData& w);
+		TableLayoutPanel^		AddZobObjectVariable(const ZobVariablesExposer::wrapperData& w);
 
 		const ZobVariablesExposer::wrapperData* GetWrapperDataForVariable(String^ variableName);
  		unsigned long long		m_id;

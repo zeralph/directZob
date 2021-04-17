@@ -186,6 +186,7 @@ namespace CLI
 		{
 			GetInstance()->EditorUpdate();
 			m_ZobObjectManagerWrapper->EditorUpdate();
+			OnEditorUpdateEvent();
 		}
 	}
 

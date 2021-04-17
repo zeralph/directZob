@@ -22,7 +22,7 @@ namespace CLI
 		CreateTreeview();
 		CreateObjectview();
 		DirectZobWrapper::OnNewSceneEvent += gcnew DirectZobWrapper::OnNewScene(this, &ZobObjectManagerWrapper::OnNewScene);
-		//DirectZobWrapper::OnEditorUpdateEvent += gcnew DirectZobWrapper::OnEditorUpdate(m_treeView, &CLI::ZobControlTreeview::UpdateZobControl);
+		DirectZobWrapper::OnEditorUpdateEvent += gcnew DirectZobWrapper::OnEditorUpdate(m_treeView, &CLI::ZobControlTreeview::UpdateZobControl);
 	}
 
 	System::String^ ZobObjectManagerWrapper::GetZobObjectList()
@@ -35,6 +35,10 @@ namespace CLI
 	void ZobObjectManagerWrapper::EditorUpdate()
 	{
 		m_treeView->Invoke(gcnew Action(m_treeView, &CLI::ZobControlTreeview::UpdateZobControl));
+		if (m_selectedObjectWrapper)
+		{
+			m_selectedObjectWrapper->EditorUpdate();
+		}
 	}
 
 	void ZobObjectManagerWrapper::CreateObjectview()
