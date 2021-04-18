@@ -2,6 +2,7 @@
 #pragma once
 #include "../ManagedVector3.h"
 #include "../../DirectZobEngine/Rendering/ZobVector3.h"
+#include "../DirectZobWrapperEvents.h"
 #using "System.Windows.Forms.dll"
 #using "System.dll"
 #using "System.Drawing.dll"
@@ -20,11 +21,13 @@ namespace CLI {
 	{
 		public:
 			ZobControl(const ZobVariablesExposer::wrapperData& w);
+			~ZobControl();
 	protected:
 		virtual void	OnValueChanged(Object^ sender, EventArgs^ e) {}
 		void			UpdateControl();
 		virtual void	UpdateControlInternal() {}
 		const ZobVariablesExposer::wrapperData* _w;
+		DirectZobWrapperEvents::OnEditorUpdate^ _updateEvent;
 	};
 
 	public ref class ZobControlString : ZobControl

@@ -15,12 +15,22 @@ static void MarshalString(System::String^ s, std::string& os) {
 ZobControl::ZobControl(const ZobVariablesExposer::wrapperData& w) :TableLayoutPanel()
 {
 	_w = &w;
-	DirectZobWrapper::OnEditorUpdateEvent += gcnew DirectZobWrapper::OnEditorUpdate(this, &ZobControl::UpdateControl);
+	_updateEvent = gcnew DirectZobWrapperEvents::OnEditorUpdate(this, &ZobControl::UpdateControl);
+	DirectZobWrapperEvents::OnEditorUpdateEvent += _updateEvent;
+}
+
+ZobControl::~ZobControl()
+{
+	DirectZobWrapperEvents::OnEditorUpdateEvent -= _updateEvent;
+	delete _updateEvent;
 }
 
 void ZobControl::UpdateControl() 
 { 
-	this->Invoke(gcnew Action(this, &ZobControl::UpdateControlInternal)); 
+	if (this->IsHandleCreated)
+	{
+		this->Invoke(gcnew Action(this, &ZobControl::UpdateControlInternal));
+	} 
 }
 
 ZobControlString::ZobControlString(const ZobVariablesExposer::wrapperData& w):ZobControl(w)
@@ -169,12 +179,15 @@ ZobControlVector3::ZobControlVector3(const ZobVariablesExposer::wrapperData& w):
 	this->Controls->Add(labelz);
 	this->Controls->Add(txt_Z);
 
-	DirectZobWrapper::OnEditorUpdateEvent += gcnew DirectZobWrapper::OnEditorUpdate(this, &ZobControlVector3::UpdateZobControl);
+	DirectZobWrapperEvents::OnEditorUpdateEvent += gcnew DirectZobWrapperEvents::OnEditorUpdate(this, &ZobControlVector3::UpdateZobControl);
 }
 
 void ZobControlVector3::UpdateZobControl()
 {
-	this->Invoke(gcnew Action(this, &CLI::ZobControlVector3::UpdateZobControlInternal));
+	if(this->IsHandleCreated)
+	{
+		this->Invoke(gcnew Action(this, &CLI::ZobControlVector3::UpdateZobControlInternal));
+	}	
 }
 
 void ZobControlVector3::UpdateZobControlInternal()
@@ -230,7 +243,7 @@ ZobControlFloat::ZobControlFloat(const ZobVariablesExposer::wrapperData& w):ZobC
 	}
 	this->Controls->Add(label);
 	this->Controls->Add(txt);
-	DirectZobWrapper::OnEditorUpdateEvent += gcnew DirectZobWrapper::OnEditorUpdate(this, &ZobControlFloat::UpdateControl);
+	DirectZobWrapperEvents::OnEditorUpdateEvent += gcnew DirectZobWrapperEvents::OnEditorUpdate(this, &ZobControlFloat::UpdateControl);
 }
 
 void ZobControlFloat::UpdateControlInternal()
@@ -309,7 +322,7 @@ ZobControlBool::ZobControlBool(const ZobVariablesExposer::wrapperData& w) :ZobCo
 	}
 	this->Controls->Add(label);
 	this->Controls->Add(_checkBox);
-	DirectZobWrapper::OnEditorUpdateEvent += gcnew DirectZobWrapper::OnEditorUpdate(this, &ZobControlBool::UpdateControl);
+	DirectZobWrapperEvents::OnEditorUpdateEvent += gcnew DirectZobWrapperEvents::OnEditorUpdate(this, &ZobControlBool::UpdateControl);
 }
 
 void ZobControlBool::UpdateControlInternal()

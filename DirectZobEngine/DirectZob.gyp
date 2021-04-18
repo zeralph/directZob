@@ -353,6 +353,7 @@
                             'Wrappers/CameraManagerWrapper.h',
                             'Wrappers/LightManagerWrapper.h',
                             'Wrappers/DirectZobWrapper.h',
+							'Wrappers/DirectZobWrapperEvents.h',
                             'Wrappers/EngineWrapper.h',
                             'Wrappers/ManagedVector3.h',
                             'Wrappers/ManagedObject.h',

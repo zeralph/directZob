@@ -28,6 +28,8 @@ namespace CLI
 	{
 		m_panel->Controls->Remove(m_container);
 		m_panel->Controls->Remove(m_objectPanel);
+		delete m_container;
+		delete m_objectPanel;
 		m_Instance = NULL;
 	}
 

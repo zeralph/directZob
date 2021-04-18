@@ -5,6 +5,7 @@
 #include "ZobObjectManagerWrapper.h"
 #include "CameraManagerWrapper.h"
 #include "EngineWrapper.h"
+#include "DirectZobWrapperEvents.h"
 #include <string> 
 #using "System.Windows.Forms.dll"
 #using "System.dll"
@@ -25,10 +26,10 @@ namespace CLI
 	public:
 
 		static DirectZobWrapper^		GetWrapper() { return m_singleton; }
-		delegate void					OnNewScene();
-		static event OnNewScene^		OnNewSceneEvent;
-		delegate void					OnEditorUpdate();
-		static event OnEditorUpdate^	OnEditorUpdateEvent;
+		//delegate void					OnNewScene();
+		//static event OnNewScene^		OnNewSceneEvent;
+		//delegate void					OnEditorUpdate();
+		//static event OnEditorUpdate^	OnEditorUpdateEvent;
 
 		static void						CallSceneUpdatedCallback();
 		static void						CallQueuingCallback();
@@ -65,7 +66,7 @@ namespace CLI
 		CameraManagerWrapper^			GetZobCameraManagerWrapper() { return m_ZobCameraManager; }
 		
 	private:
-
+		DirectZobWrapperEvents^			m_events;
 		ZobObjectManagerWrapper^		m_ZobObjectManagerWrapper;
 		EngineWrapper^					m_ZobEngineWrapper;
 		CameraManagerWrapper^			m_ZobCameraManager;
