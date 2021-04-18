@@ -16,24 +16,33 @@ using namespace System::Drawing;
 
 namespace CLI {
 
-	public ref class ZobControlString : TableLayoutPanel
+	public ref class ZobControl : TableLayoutPanel
+	{
+		public:
+			ZobControl(const ZobVariablesExposer::wrapperData& w);
+	protected:
+		virtual void	OnValueChanged(Object^ sender, EventArgs^ e) {}
+		void			UpdateControl();
+		virtual void	UpdateControlInternal() {}
+		const ZobVariablesExposer::wrapperData* _w;
+	};
+
+	public ref class ZobControlString : ZobControl
 	{
 	public:
 		ZobControlString(const ZobVariablesExposer::wrapperData& w);
 		TextBox^ txt;
-	private:
-		const ZobVariablesExposer::wrapperData* _w;
-		void OnValueChanged(Object^ sender, EventArgs^ e);
+	protected:
+		void OnValueChanged(Object^ sender, EventArgs^ e) override;
 	};
 
-	public ref class ZobControlFilePath : TableLayoutPanel
+	public ref class ZobControlFilePath : ZobControl
 	{
 	public:
 		ZobControlFilePath(const ZobVariablesExposer::wrapperData& w);
 		TextBox^ txt;
-	private:
-		const ZobVariablesExposer::wrapperData* _w;
-		void OnValueChanged(Object^ sender, EventArgs^ e);
+	protected:
+		void OnValueChanged(Object^ sender, EventArgs^ e) override;
 	};
 
 	public ref class ZobGroupBox : GroupBox
@@ -44,7 +53,7 @@ namespace CLI {
 		bool bToggled;
 	};
 
-	public ref class ZobControlVector3 : TableLayoutPanel
+	public ref class ZobControlVector3 : ZobControl
 	{
 	public:
 		ZobControlVector3(const ZobVariablesExposer::wrapperData& w);
@@ -53,9 +62,56 @@ namespace CLI {
 		TextBox^ txt_X;
 		TextBox^ txt_Y;
 		TextBox^ txt_Z;
-	private:
-		void OnValueChanged(Object^ sender, EventArgs^ e);
-		const ZobVariablesExposer::wrapperData* _w;
+	protected:
+		void OnValueChanged(Object^ sender, EventArgs^ e) override;
+	};
+
+	public ref class ZobControlFloat : ZobControl
+	{
+	public:
+		ZobControlFloat(const ZobVariablesExposer::wrapperData& w);
+		TextBox^ txt;
+	protected:
+		void OnValueChanged(Object^ sender, EventArgs^ e) override;
+		void UpdateControlInternal() override;
+	};
+
+	public ref class ZobControlBool : ZobControl
+	{
+	public:
+		ZobControlBool(const ZobVariablesExposer::wrapperData& w);
+		CheckBox^ _checkBox;
+	protected:
+		void OnValueChanged(Object^ sender, EventArgs^ e) override;
+		void UpdateControlInternal() override;
+	};
+
+	public ref class ZobControlEnum : ZobControl
+	{
+	public:
+		ZobControlEnum(const ZobVariablesExposer::wrapperData& w);
+		ComboBox^ _combo;
+	protected:
+		void OnValueChanged(Object^ sender, EventArgs^ e) override;
+		void UpdateControlInternal() override;
+	};
+
+	public ref class ZobControlZobObject : ZobControl
+	{
+	public:
+		ZobControlZobObject(const ZobVariablesExposer::wrapperData& w);
+		TextBox^ txt;
+	protected:
+		void OnValueChanged(Object^ sender, EventArgs^ e) override;
+		void UpdateControlInternal() override;
+	};
+
+	public ref class ZobControlZobId : ZobControl
+	{
+	public:
+		ZobControlZobId(const ZobVariablesExposer::wrapperData& w);
+		Label^ txt;
+	protected:
 	};
 
 	public ref class ZobControlTreeNode : public TreeNode

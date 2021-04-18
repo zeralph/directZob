@@ -42,7 +42,8 @@ ZobBehaviorCar::ZobBehaviorCar(ZobObject* zobObject) : ZobBehavior(zobObject)
 	m_varExposer->WrapVariable<ZobObject*>("Front right wheel", &m_frontRightWheel, false, true);
 	m_varExposer->WrapVariable<ZobObject*>("Rear left wheel", &m_rearLeftWheel, false, true);
 	m_varExposer->WrapVariable<ZobObject*>("Rear right wheel", &m_rearRightWheel, false, true);
-	m_varExposer->WrapVariable<bool>("HandBrake", &m_handBrake, false, true);
+	m_varExposer->WrapVariable<float>("Speed", &m_speed_ms, true, true);
+	m_varExposer->WrapVariable<bool>("HandBrake", &m_handBrake, true, true);
 	m_varExposer->WrapVariable<float>("Mass", &m_mass, false, true);
 	m_varExposer->WrapVariable<float>("Max friction", &m_maxGrip, false, true);
 	m_varExposer->WrapVariable<float>("Inertia", &m_inertia, false, true);

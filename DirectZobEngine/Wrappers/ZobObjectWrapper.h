@@ -74,11 +74,6 @@ namespace CLI {
 		String^					FactoryFile();
 		void					SaveToFactoryFile(String^ file);
 		void					EditorUpdate();
-		void					FloatHandler(Object^ sender, System::EventArgs^ e);
-		void					BoolHandler(Object^ sender, System::EventArgs^ e);
-		void					IntHandler(Object^ sender, System::EventArgs^ e);
-		void					ZobVector2Handler(Object^ sender, System::EventArgs^ e);
-		void					ListValidationHandler(Object^ sender, System::EventArgs^ e);
 		void					GroupClick(Object^ sender, System::EventArgs^ e);
 
 	private:
@@ -91,14 +86,6 @@ namespace CLI {
 		ZobGroupBox^			m_objectPanel;
 		ZobPropertiesContainer^	m_container;
 	protected:
-
-		TableLayoutPanel^		AddFloatVariable(const ZobVariablesExposer::wrapperData& w);
-		TableLayoutPanel^		AddEnumVariable(const ZobVariablesExposer::wrapperData& w);
-		TableLayoutPanel^		AddBoolVariable(const ZobVariablesExposer::wrapperData& w);
-		TableLayoutPanel^		AddIntVariable(const ZobVariablesExposer::wrapperData& w);
-		TableLayoutPanel^		AddZobIdVariable(const ZobVariablesExposer::wrapperData& w);
-		TableLayoutPanel^		AddZobVector2Variable(const ZobVariablesExposer::wrapperData& w);
-		TableLayoutPanel^		AddZobObjectVariable(const ZobVariablesExposer::wrapperData& w);
 
 		const ZobVariablesExposer::wrapperData* GetWrapperDataForVariable(String^ variableName);
  		unsigned long long		m_id;

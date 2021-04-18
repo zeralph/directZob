@@ -12,9 +12,19 @@ static void MarshalString(System::String^ s, std::string& os) {
 	Marshal::FreeHGlobal(System::IntPtr((void*)chars));
 }
 
-ZobControlString::ZobControlString(const ZobVariablesExposer::wrapperData& w):TableLayoutPanel()
+ZobControl::ZobControl(const ZobVariablesExposer::wrapperData& w) :TableLayoutPanel()
 {
 	_w = &w;
+	DirectZobWrapper::OnEditorUpdateEvent += gcnew DirectZobWrapper::OnEditorUpdate(this, &ZobControl::UpdateControl);
+}
+
+void ZobControl::UpdateControl() 
+{ 
+	this->Invoke(gcnew Action(this, &ZobControl::UpdateControlInternal)); 
+}
+
+ZobControlString::ZobControlString(const ZobVariablesExposer::wrapperData& w):ZobControl(w)
+{
 	this->Name = TO_MANAGED_STRING(w.internalName.c_str());
 	this->AutoSize = true;
 	this->ColumnCount = 2;
@@ -53,9 +63,8 @@ void ZobControlString::OnValueChanged(Object^ sender, EventArgs^ e)
 	}
 }
 
-ZobControlFilePath::ZobControlFilePath(const ZobVariablesExposer::wrapperData& w) :TableLayoutPanel()
+ZobControlFilePath::ZobControlFilePath(const ZobVariablesExposer::wrapperData& w):ZobControl(w)
 {
-	_w = &w;
 	this->AutoSize = true;
 	this->ColumnCount = 2;
 	this->RowCount = 1;
@@ -96,9 +105,8 @@ void ZobControlFilePath::OnValueChanged(Object^ sender, EventArgs^ e)
 }
 
 
-ZobControlVector3::ZobControlVector3(const ZobVariablesExposer::wrapperData& w) :TableLayoutPanel()
+ZobControlVector3::ZobControlVector3(const ZobVariablesExposer::wrapperData& w):ZobControl(w)
 {
-	_w = &w;
 	String^ internalName = TO_MANAGED_STRING(w.internalName.c_str());
 	String^ name = TO_MANAGED_STRING(w.name.c_str());
 	ZobVector3* v = (ZobVector3*)(w.ptr);
@@ -200,6 +208,225 @@ void ZobControlVector3::OnValueChanged(Object^ sender, EventArgs^ e)
 	}
 }
 
+ZobControlFloat::ZobControlFloat(const ZobVariablesExposer::wrapperData& w):ZobControl(w)
+{
+	this->AutoSize = true;
+	this->ColumnCount = 2;
+	this->RowCount = 1;
+	Label^ label = gcnew Label();
+	label->Text = TO_MANAGED_STRING(w.name.c_str());
+	label->Width = 140;
+	label->Height = 20;
+	label->TextAlign = ContentAlignment::BottomRight;
+	txt = gcnew TextBox();
+	txt->Name = TO_MANAGED_STRING(w.internalName.c_str());
+	txt->Width = 140;
+	txt->Height = 20;
+	txt->ReadOnly = w.bReadOnly;
+	UpdateControlInternal();
+	if (!w.bReadOnly)
+	{
+		txt->Leave += gcnew EventHandler(this, &ZobControlFloat::OnValueChanged);
+	}
+	this->Controls->Add(label);
+	this->Controls->Add(txt);
+	DirectZobWrapper::OnEditorUpdateEvent += gcnew DirectZobWrapper::OnEditorUpdate(this, &ZobControlFloat::UpdateControl);
+}
+
+void ZobControlFloat::UpdateControlInternal()
+{
+	if (_w->type == ZobVariablesExposer::eWrapperType_int)
+	{
+		float* f = (float*)(_w->ptr);
+		txt->Text = String::Format("{0:0.000}", *f);
+	}
+	else
+	{
+		int* i = (int*)(_w->ptr);
+		txt->Text = (*i).ToString();
+		txt->Text = String::Format("{0:0.000}", *i);
+	}	
+}
+
+void ZobControlFloat::OnValueChanged(Object^ sender, EventArgs^ e)
+{
+	TextBox^ t = static_cast<TextBox^>(sender);
+	if (_w)
+	{
+		if (_w->type == ZobVariablesExposer::eWrapperType_int)
+		{
+			try
+			{
+				int* f = (int*)_w->ptr;
+				int rez = (int)(Convert::ToInt32(t->Text));
+				*f = rez;
+			}
+			catch (...)
+			{
+				int* f = (int*)_w->ptr;
+				t->Text = (*f).ToString();
+			}
+		}
+		else 
+		{
+			try
+			{
+				float* f = (float*)_w->ptr;
+				t->Text = t->Text->Replace(".", ",");
+				float rez = (float)(Convert::ToDouble(t->Text));
+				*f = rez;
+			}
+			catch (...)
+			{
+				float* f = (float*)_w->ptr;
+				t->Text = (*f).ToString();
+			}
+		}
+	}
+}
+
+ZobControlBool::ZobControlBool(const ZobVariablesExposer::wrapperData& w) :ZobControl(w)
+{
+	this->AutoSize = true;
+	this->ColumnCount = 2;
+	this->RowCount = 1;
+	Label^ label = gcnew Label();
+	label->Text = TO_MANAGED_STRING(w.name.c_str());
+	//label->Dock = DockStyle::Fill;
+	label->Width = 140;
+	label->Height = 20;
+	label->TextAlign = ContentAlignment::BottomRight;
+	_checkBox = gcnew CheckBox();
+	_checkBox->Name = TO_MANAGED_STRING(w.internalName.c_str());
+	bool* b = (bool*)(w.ptr);
+	if (*b)
+		_checkBox->CheckState = CheckState::Checked;
+	else
+		_checkBox->CheckState = CheckState::Unchecked;
+	if (!_w->bReadOnly)
+	{
+		_checkBox->Click += gcnew EventHandler(this, &ZobControlBool::OnValueChanged);
+	}
+	this->Controls->Add(label);
+	this->Controls->Add(_checkBox);
+	DirectZobWrapper::OnEditorUpdateEvent += gcnew DirectZobWrapper::OnEditorUpdate(this, &ZobControlBool::UpdateControl);
+}
+
+void ZobControlBool::UpdateControlInternal()
+{
+	return;
+	bool* b = (bool*)_w->ptr;
+	bool bb = &b;
+	if (bb)
+		_checkBox->CheckState = CheckState::Checked;
+	else
+		_checkBox->CheckState = CheckState::Unchecked;
+}
+
+void ZobControlBool::OnValueChanged(Object^ sender, EventArgs^ e)
+{
+	CheckBox^ cb = static_cast<CheckBox^>(sender);
+	if (_w)
+	{
+			bool* b = (bool*)_w->ptr;
+			*b = (cb->CheckState == CheckState::Checked);
+	}
+}
+
+ZobControlEnum::ZobControlEnum(const ZobVariablesExposer::wrapperData& w) :ZobControl(w)
+{
+	this->AutoSize = true;
+	this->ColumnCount = 2;
+	this->RowCount = 1;
+	Label^ label = gcnew Label();
+	label->Text = TO_MANAGED_STRING(w.name.c_str());
+	label->Width = 140;
+	label->Height = 20;
+	label->TextAlign = ContentAlignment::BottomRight;
+	ComboBox^ list = gcnew ComboBox();
+	list->Name = TO_MANAGED_STRING(w.internalName.c_str());
+	list->Width = 140;
+	list->Height = 22;
+	List<ComboboxItem^>^ items = gcnew List<ComboboxItem^>();
+	for (int i = 0; i < w.enumNames.size(); i++)
+	{
+		String^ s = TO_MANAGED_STRING(w.enumNames[i].c_str());
+		int idx = w.enumValues[i];
+		ComboboxItem^ it = gcnew ComboboxItem(idx, s, w);
+		items->Add(it);
+	}
+	list->BindingContext = gcnew System::Windows::Forms::BindingContext();
+	list->DataSource = items;
+	int* itemIdx = (int*)(w.ptr);
+	list->SelectedIndex = 0;
+	for (int i = 0; i < list->Items->Count; i++)
+	{
+		ComboboxItem^ it = (ComboboxItem^)list->Items[i];
+		if (it->Key == *itemIdx)
+		{
+			list->SelectedIndex = i;
+			break;
+		}
+	}
+	list->SelectedIndexChanged += gcnew EventHandler(this, &ZobControlEnum::OnValueChanged);
+	this->Controls->Add(label);
+	this->Controls->Add(list);
+}
+
+void ZobControlEnum::UpdateControlInternal()
+{
+}
+
+void ZobControlEnum::OnValueChanged(Object^ sender, EventArgs^ e)
+{
+	ComboBox^ t = static_cast<ComboBox^>(sender);
+	if (_w)
+	{
+		ComboboxItem^ it = (ComboboxItem^)t->SelectedItem;
+		if (it)
+		{
+			int* i = (int*)_w->ptr;
+			*i = it->Key;
+		}
+	}
+}
+
+ZobControlZobObject::ZobControlZobObject(const ZobVariablesExposer::wrapperData& w) :ZobControl(w)
+{
+	this->AutoSize = true;
+	this->ColumnCount = 2;
+	this->RowCount = 1;
+	Label^ label = gcnew Label();
+	label->Text = TO_MANAGED_STRING(w.name.c_str());
+	label->Width = 140;
+	label->Height = 20;
+	label->TextAlign = ContentAlignment::BottomRight;
+	txt = gcnew TextBox();
+	txt->Name = TO_MANAGED_STRING(w.internalName.c_str());
+	txt->Width = 140;
+	txt->Height = 20;
+	txt->ReadOnly = w.bReadOnly;
+	ZobObject** pz = (ZobObject**)(w.ptr);
+	ZobObject* z = (ZobObject*)(*pz);
+	if (z)
+	{
+		txt->Text = TO_MANAGED_STRING(z->GetName().c_str());
+	}
+	else
+	{
+		txt->Text = "";
+	}
+	this->Controls->Add(label);
+	this->Controls->Add(txt);
+}
+
+void ZobControlZobObject::UpdateControlInternal()
+{
+}
+
+void ZobControlZobObject::OnValueChanged(Object^ sender, EventArgs^ e)
+{
+}
 
 ZobGroupBox::ZobGroupBox(String^ name, bool collapsable) :GroupBox()
 {
@@ -285,3 +512,24 @@ ZobPropertiesContainer::ZobPropertiesContainer() : TableLayoutPanel()
 	//this->BackColor = Drawing::Color::Beige;
 }
 
+ZobControlZobId::ZobControlZobId(const ZobVariablesExposer::wrapperData& w):ZobControl(w)
+{
+	this->AutoSize = true;
+	this->ColumnCount = 2;
+	this->RowCount = 1;
+	Label^ label = gcnew Label();
+	label->Text = TO_MANAGED_STRING(w.name.c_str());
+	label->Width = 140;
+	label->Height = 20;
+	label->TextAlign = ContentAlignment::BottomRight;
+	txt = gcnew Label();
+	txt->Name = TO_MANAGED_STRING(w.internalName.c_str());
+	txt->Width = 140;
+	txt->Height = 20;
+	txt->TextAlign = ContentAlignment::BottomLeft;
+	//txt->ReadOnly = true;
+	unsigned long long* i = (unsigned long long*)(w.ptr);
+	txt->Text = (*i).ToString();
+	this->Controls->Add(label);
+	this->Controls->Add(txt);
+}

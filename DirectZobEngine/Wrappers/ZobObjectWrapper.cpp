@@ -111,225 +111,37 @@ namespace CLI
 				}
 				else if (w.type == ZobVariablesExposer::eWrapperType_float)
 				{
-					panel->Controls->Add(AddFloatVariable(w));
+					panel->Controls->Add( gcnew ZobControlFloat(w));
 				}
 				else if (w.type == ZobVariablesExposer::eWrapperType_enum)
 				{
-					panel->Controls->Add(AddEnumVariable(w));
+					panel->Controls->Add( gcnew ZobControlEnum(w));
 				}
 				else if (w.type == ZobVariablesExposer::eWrapperType_bool)
 				{
-					panel->Controls->Add(AddBoolVariable(w));
+					panel->Controls->Add(gcnew ZobControlBool(w));
 				}
 				else if (w.type == ZobVariablesExposer::eWrapperType_int)
 				{
-					panel->Controls->Add(AddIntVariable(w));
+					panel->Controls->Add(gcnew ZobControlFloat(w));
 				}
-				else if (w.type == ZobVariablesExposer::eWrapperType_ZobVector2)
-				{
-					panel->Controls->Add(AddZobVector2Variable(w));
-				}
+				//else if (w.type == ZobVariablesExposer::eWrapperType_ZobVector2)
+				//{
+				//	panel->Controls->Add(AddZobVector2Variable(w));
+				//}
 				else if (w.type == ZobVariablesExposer::eWrapperType_zobId)
 				{
-					panel->Controls->Add(AddZobIdVariable(w));
+					panel->Controls->Add(gcnew ZobControlZobId(w));
 				}
 				else if (w.type == ZobVariablesExposer::eWrapperType_zobObject)
 				{
-					panel->Controls->Add(AddZobObjectVariable(w));
+					panel->Controls->Add( gcnew ZobControlZobObject(w) );
 				}
 				idx++;
 			}
 			zobPanel->Controls->Add(panel);
 		}
 		return zobPanel;
-	}
-
-	TableLayoutPanel^ ZobObjectWrapper::AddBoolVariable(const ZobVariablesExposer::wrapperData& w)
-	{
-		TableLayoutPanel^ subPanel = gcnew TableLayoutPanel();
-		subPanel->AutoSize = true;
-		subPanel->ColumnCount = 2;
-		subPanel->RowCount = 1;
-		Label^ label = gcnew Label();
-		label->Text = TO_MANAGED_STRING(w.name.c_str());
-		//label->Dock = DockStyle::Fill;
-		label->Width = 140;
-		label->Height = 20;
-		label->TextAlign = ContentAlignment::BottomRight;
-		CheckBox^ cb = gcnew CheckBox();
-		cb->Name = TO_MANAGED_STRING(w.internalName.c_str());
-		bool* b = (bool*)(w.ptr);
-		cb->Checked= (*b);
-		cb->CheckedChanged += gcnew EventHandler(this, &ZobObjectWrapper::BoolHandler);
-		subPanel->Controls->Add(label);
-		subPanel->Controls->Add(cb);
-		return subPanel;
-	}
-
-	TableLayoutPanel^ ZobObjectWrapper::AddEnumVariable(const ZobVariablesExposer::wrapperData& w)
-	{
-		TableLayoutPanel^ subPanel = gcnew TableLayoutPanel();
-		subPanel->AutoSize = true;
-		subPanel->ColumnCount = 2;
-		subPanel->RowCount = 1;
-		Label^ label = gcnew Label();
-		label->Text = TO_MANAGED_STRING(w.name.c_str());
-		label->Width = 140;
-		label->Height = 20;
-		label->TextAlign = ContentAlignment::BottomRight;
-		ComboBox^ list = gcnew ComboBox();
-		list->Name = TO_MANAGED_STRING(w.internalName.c_str());
-		list->Width = 140;
-		list->Height = 22;
-		List<ComboboxItem^>^ items = gcnew List<ComboboxItem^>();
-		for (int i = 0; i < w.enumNames.size(); i++)
-		{
-			String^ s = TO_MANAGED_STRING(w.enumNames[i].c_str());
-			int idx = w.enumValues[i];
-			ComboboxItem^ it = gcnew ComboboxItem(idx, s, w);
-			items->Add(it);
-		}
-		list->BindingContext = gcnew BindingContext();
-		list->DataSource = items;
-		int* itemIdx = (int*)(w.ptr);
-		list->SelectedIndex = 0;
-		for (int i = 0; i < list->Items->Count; i++)
-		{
-			ComboboxItem^ it = (ComboboxItem^)list->Items[i];
-			if (it->Key == *itemIdx)
-			{
-				list->SelectedIndex = i;
-				break;
-			}
-		}
-		list->SelectedIndexChanged += gcnew EventHandler(this, &ZobObjectWrapper::ListValidationHandler);
-		subPanel->Controls->Add(label);
-		subPanel->Controls->Add(list);
-		return subPanel;
-	}
-
-	TableLayoutPanel^ ZobObjectWrapper::AddFloatVariable(const ZobVariablesExposer::wrapperData& w)
-	{
-		TableLayoutPanel^ subPanel = gcnew TableLayoutPanel();
-		subPanel->AutoSize = true;
-		subPanel->ColumnCount = 2;
-		subPanel->RowCount = 1;
-		Label^ label = gcnew Label();
-		label->Text = TO_MANAGED_STRING(w.name.c_str());
-		label->Width = 140;
-		label->Height = 20;
-		label->TextAlign = ContentAlignment::BottomRight;
-		TextBox^ txt = gcnew TextBox();
-		txt->Name = TO_MANAGED_STRING(w.internalName.c_str());
-		txt->Width = 140;
-		txt->Height = 20;
-		txt->ReadOnly = w.bReadOnly;
-		float* f = (float*)(w.ptr);
-		txt->Text = (*f).ToString();
-		if (!w.bReadOnly)
-		{
-			txt->Leave += gcnew EventHandler(this, &ZobObjectWrapper::FloatHandler);
-		}
-		subPanel->Controls->Add(label);
-		subPanel->Controls->Add(txt);
-		return subPanel;
-	}
-
-	TableLayoutPanel^ ZobObjectWrapper::AddZobVector2Variable(const ZobVariablesExposer::wrapperData& w)
-	{
-		throw gcnew Exception();
-	}
-	/*
-	ZobControlString^ ZobObjectWrapper::AddStringVariable(ZobVariablesExposer::wrapperData* w)
-	{
-		String^ name = TO_MANAGED_STRING(w->name.c_str());
-		String^ internaleName = TO_MANAGED_STRING(w->internalName.c_str());
-		std::string* s = (std::string*)(w->ptr);
-		String^ val = TO_MANAGED_STRING(s->c_str());
-		bool ro = w->bReadOnly;
-		ZobControlString^ ctrl = gcnew ZobControlString(internaleName, name, val, ro, w);
-		return ctrl;
-	}
-	*/
-	TableLayoutPanel^ ZobObjectWrapper::AddIntVariable(const ZobVariablesExposer::wrapperData& w)
-	{
-		TableLayoutPanel^ subPanel = gcnew TableLayoutPanel();
-		subPanel->AutoSize = true;
-		subPanel->ColumnCount = 2;
-		subPanel->RowCount = 1;
-		Label^ label = gcnew Label();
-		label->Text = TO_MANAGED_STRING(w.name.c_str());
-		label->Width = 140;
-		label->Height = 20;
-		label->TextAlign = ContentAlignment::BottomRight;
-		TextBox^ txt = gcnew TextBox();
-		txt->Name = TO_MANAGED_STRING(w.internalName.c_str());
-		txt->Width = 140;
-		txt->Height = 20;
-		txt->ReadOnly = w.bReadOnly;
-		int* i = (int*)(w.ptr);
-		txt->Text = (*i).ToString();
-		if (!w.bReadOnly)
-		{
-			txt->Leave += gcnew EventHandler(this, &ZobObjectWrapper::IntHandler);
-		}
-		subPanel->Controls->Add(label);
-		subPanel->Controls->Add(txt);
-		return subPanel;
-	}
-
-	TableLayoutPanel^ ZobObjectWrapper::AddZobIdVariable(const ZobVariablesExposer::wrapperData& w)
-	{
-		TableLayoutPanel^ subPanel = gcnew TableLayoutPanel();
-		subPanel->AutoSize = true;
-		subPanel->ColumnCount = 2;
-		subPanel->RowCount = 1;
-		Label^ label = gcnew Label();
-		label->Text = TO_MANAGED_STRING(w.name.c_str());
-		label->Width = 140;
-		label->Height = 20;
-		label->TextAlign = ContentAlignment::BottomRight;
-		TextBox^ txt = gcnew TextBox();
-		txt->Name = TO_MANAGED_STRING(w.internalName.c_str());
-		txt->Width = 140;
-		txt->Height = 20;
-		txt->ReadOnly = w.bReadOnly;
-		unsigned long long* i = (unsigned long long*)(w.ptr);
-		txt->Text = (*i).ToString();
-		subPanel->Controls->Add(label);
-		subPanel->Controls->Add(txt);
-		return subPanel;
-	}
-
-	TableLayoutPanel^ ZobObjectWrapper::AddZobObjectVariable(const ZobVariablesExposer::wrapperData& w)
-	{
-		TableLayoutPanel^ subPanel = gcnew TableLayoutPanel();
-		subPanel->AutoSize = true;
-		subPanel->ColumnCount = 2;
-		subPanel->RowCount = 1;
-		Label^ label = gcnew Label();
-		label->Text = TO_MANAGED_STRING(w.name.c_str());
-		label->Width = 140;
-		label->Height = 20;
-		label->TextAlign = ContentAlignment::BottomRight;
-		TextBox^ txt = gcnew TextBox();
-		txt->Name = TO_MANAGED_STRING(w.internalName.c_str());
-		txt->Width = 140;
-		txt->Height = 20;
-		txt->ReadOnly = w.bReadOnly;
-		ZobObject** pz = (ZobObject**)(w.ptr);
-		ZobObject* z = (ZobObject*)(*pz);
-		if (z)
-		{
-			txt->Text = TO_MANAGED_STRING(z->GetName().c_str());
-		}
-		else
-		{
-			txt->Text = "";
-		}
-		subPanel->Controls->Add(label);
-		subPanel->Controls->Add(txt);
-		return subPanel;
 	}
 
 	const ZobVariablesExposer::wrapperData* ZobObjectWrapper::GetWrapperDataForVariable(String^ variableName)
@@ -403,101 +215,9 @@ namespace CLI
 		}
 	}
 
-	void ZobObjectWrapper::ListValidationHandler(Object^ sender, System::EventArgs^ e)
-	{
-		ComboBox^ t = static_cast<ComboBox^>(sender);
-		const ZobVariablesExposer::wrapperData* w = GetWrapperDataForVariable(t->Name);
-		if (w)
-		{
-			ComboboxItem^ it = (ComboboxItem^)t->SelectedItem;
-			if (it)
-			{
-				int* i = (int*)w->ptr;
-				*i = it->Key;
-			}
-		}
-	}
-
-	void ZobObjectWrapper::BoolHandler(Object^ sender, EventArgs^ e)
-	{
-		CheckBox^ cb = static_cast<CheckBox^>(sender);
-		const ZobVariablesExposer::wrapperData* w = GetWrapperDataForVariable(cb->Name);
-		if (w)
-		{
-			try
-			{
-				bool* b = (bool*)w->ptr;
-				*b = cb->Checked;
-			}
-			catch (...)
-			{
-				cb->Checked = false;
-			}
-		}
-	}
-
-	void ZobObjectWrapper::FloatHandler(Object^ sender, EventArgs^ e)
-	{
-		TextBox^ t = static_cast<TextBox^>(sender);
-		const ZobVariablesExposer::wrapperData* w = GetWrapperDataForVariable(t->Name);
-		if (w)
-		{
-			try
-			{
-				float* f = (float*)w->ptr;
-				t->Text = t->Text->Replace(".", ",");
-				float rez = (float)(Convert::ToDouble(t->Text));
-				*f = rez;
-			}
-			catch (...)
-			{
-				float* f = (float*)w->ptr;
-				t->Text = (*f).ToString();
-			}
-		}
-	}
-
-	void ZobObjectWrapper::IntHandler(Object^ sender, EventArgs^ e)
-	{
-		TextBox^ t = static_cast<TextBox^>(sender);
-		const ZobVariablesExposer::wrapperData* w = GetWrapperDataForVariable(t->Name);
-		if (w)
-		{
-			try
-			{
-				int* i = (int*)w->ptr;
-				int rez = (float)(Convert::ToInt32(t->Text));
-				*i = rez;
-			}
-			catch (...)
-			{
-				int* i = (int*)w->ptr;
-				t->Text = (*i).ToString();
-			}
-		}
-	}
-
 	void ZobObjectWrapper::EditorUpdate()
 	{
 
-	}
-
-	void ZobObjectWrapper::ZobVector2Handler(Object^ sender, EventArgs^ e)
-	{
-		TextBox^ t = static_cast<TextBox^>(sender);
-		const ZobVariablesExposer::wrapperData* w = GetWrapperDataForVariable(t->Name);
-		if (w)
-		{
-			ZobVector2 v;
-			std::string s;
-			MarshalString(t->Text, s);
-			if (v.FromString(s))
-			{
-				ZobVector2* vv = (ZobVector2*)w->ptr;
-				vv->x = v.x;
-				vv->y = v.y;
-			}
-		}
 	}
 
 	bool ZobObjectWrapper::IsFromFactoryFile()
