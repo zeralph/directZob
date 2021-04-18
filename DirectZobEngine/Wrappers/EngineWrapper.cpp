@@ -13,7 +13,7 @@ namespace CLI
 		InitGizmos();
 		m_mouseInside = true;
 		m_objectModificator = translate_world;
-		m_renderWindow->AutoSize = true;
+		//m_renderWindow->AutoSize = true;
 		m_running = true;
 		m_renderWindowGraphics = m_renderWindow->CreateGraphics();
 		m_nbTriangles = 0;
@@ -44,9 +44,8 @@ namespace CLI
 			m_triangleList[i].options = NULL;
 			vi += 3;
 		}
-		m_selectedObject = NULL;
 		ZobObjectManagerWrapper::OnObjectSelectedEvent += gcnew ZobObjectManagerWrapper::OnObjectSelected(this, &EngineWrapper::OnObjectSelected);
-		DirectZobWrapper::OnNewSceneEvent += gcnew DirectZobWrapper::OnNewScene(this, &EngineWrapper::OnNewScene);
+		DirectZobWrapperEvents::OnNewSceneEvent += gcnew DirectZobWrapperEvents::OnNewScene(this, &EngineWrapper::OnNewScene);
 		
 		m_renderWindow->MouseHover += gcnew EventHandler(this, &EngineWrapper::OnMouseHover);
 		m_renderWindow->MouseLeave += gcnew EventHandler(this, &EngineWrapper::OnMouseLeave);
@@ -307,165 +306,163 @@ namespace CLI
 
 	void EngineWrapper::OnNewScene()
 	{
-
-		m_selectedObject = NULL;
 	}
 
 	void EngineWrapper::OnObjectSelected(ZobObjectWrapper^ z)
 	{
-		m_selectedObject = NULL;
-		if (z)
-		{
-			m_selectedObject = z->GetInstance();
-		}
 	}
 
 	void EngineWrapper::UpdateModificationGizmos()
 	{
-		if (m_selectedObject != NULL)
+		ZobObjectWrapper^ zw = DirectZobWrapper::GetWrapper()->GetZobObjectManagerWrapper()->GetSelectedObject();
+		if (zw)
 		{
-			int btnSize = 20 / 2;
-			ZobVector3 p0 = m_selectedObject->GetWorldPosition();
-			ZobVector3 pX = m_selectedObject->GetLeft();
-			ZobVector3 pY = m_selectedObject->GetUp();
-			ZobVector3 pZ = m_selectedObject->GetForward();
-			ZobVector3 nX = m_selectedObject->GetLeft();
-			ZobVector3 nY = m_selectedObject->GetUp();
-			ZobVector3 nZ = m_selectedObject->GetForward();
-			switch (m_objectModificator)
+			ZobObject* z = zw->GetInstance();
+			if (z != NULL)
 			{
-			case objectModificator::translate_world:
-			case objectModificator::rotate_world:
-				pX = ZobVector3(1, 0, 0);
-				pY = ZobVector3(0, 1, 0);
-				pZ = ZobVector3(0, 0, 1);
-				nX = pX;
-				nY = pY;
-				nZ = pZ;
-				break;
-			case objectModificator::translate_local:
-			case objectModificator::rotate_local:
-			case objectModificator::scale:
-				pX = m_selectedObject->GetLeft();
-				pY = m_selectedObject->GetUp();
-				pZ = m_selectedObject->GetForward();
-				nX = pX;
-				nY = pY;
-				nZ = pZ;
-				break;
+				int btnSize = 20 / 2;
+				ZobVector3 p0 = z->GetWorldPosition();
+				ZobVector3 pX = z->GetLeft();
+				ZobVector3 pY = z->GetUp();
+				ZobVector3 pZ = z->GetForward();
+				ZobVector3 nX = z->GetLeft();
+				ZobVector3 nY = z->GetUp();
+				ZobVector3 nZ = z->GetForward();
+				switch (m_objectModificator)
+				{
+				case objectModificator::translate_world:
+				case objectModificator::rotate_world:
+					pX = ZobVector3(1, 0, 0);
+					pY = ZobVector3(0, 1, 0);
+					pZ = ZobVector3(0, 0, 1);
+					nX = pX;
+					nY = pY;
+					nZ = pZ;
+					break;
+				case objectModificator::translate_local:
+				case objectModificator::rotate_local:
+				case objectModificator::scale:
+					pX = z->GetLeft();
+					pY = z->GetUp();
+					pZ = z->GetForward();
+					nX = pX;
+					nY = pY;
+					nZ = pZ;
+					break;
+				}
+				float d = m_Instance->GetDistanceToCamera(&p0) / 10.0f;
+				pX.Mul(d);
+				pY.Mul(d);
+				pZ.Mul(d);
+				pX.Add(&p0);
+				pY.Add(&p0);
+				pZ.Add(&p0);
+				m_Instance->GetProjectedCoords(&p0);
+				m_Instance->GetProjectedCoords(&pX);
+				m_Instance->GetProjectedCoords(&pY);
+				m_Instance->GetProjectedCoords(&pZ);
+				p0 = ToScreenCoords(p0);
+				pX = ToScreenCoords(pX);
+				pY = ToScreenCoords(pY);
+				pZ = ToScreenCoords(pZ);
+				Point pp0 = Point((int)p0.x, (int)p0.y);
+				Point ppX = Point((int)pX.x, (int)pX.y);
+				Point ppY = Point((int)pY.x, (int)pY.y);
+				Point ppZ = Point((int)pZ.x, (int)pZ.y);
+				pp0.X += m_renderWindow->Location.X - btnSize;
+				pp0.Y += m_renderWindow->Location.Y - btnSize;
+				ppX.X += m_renderWindow->Location.X - btnSize;
+				ppX.Y += m_renderWindow->Location.Y - btnSize;
+				ppY.X += m_renderWindow->Location.X - btnSize;
+				ppY.Y += m_renderWindow->Location.Y - btnSize;
+				ppZ.X += m_renderWindow->Location.X - btnSize;
+				ppZ.Y += m_renderWindow->Location.Y - btnSize;
+				m_bCenter->Location = pp0;
+				m_bTX->Location = ppX;
+				m_bTY->Location = ppY;
+				m_bTZ->Location = ppZ;
+				m_bCenter->Visible = true;
+				m_bTY->Visible = true;
+				m_bTX->Visible = true;
+				m_bTZ->Visible = true;
+				p0 = z->GetWorldPosition();
+				switch (m_objectModificator)
+				{
+				case objectModificator::translate_world:
+				case objectModificator::rotate_world:
+					pX = ZobVector3(1, 0, 0);
+					pY = ZobVector3(0, 1, 0);
+					pZ = ZobVector3(0, 0, 1);
+					nX = pX;
+					nY = pY;
+					nZ = pZ;
+					break;
+				case objectModificator::translate_local:
+				case objectModificator::rotate_local:
+				case objectModificator::scale:
+					pX = z->GetLeft();
+					pY = z->GetUp();
+					pZ = z->GetForward();
+					nX = pX;
+					nY = pY;
+					nZ = pZ;
+					break;
+				}
+				d = m_Instance->GetDistanceToCamera(&p0) / 10.0f;
+				pX.Mul(d);
+				pY.Mul(d);
+				pZ.Mul(d);
+				pX.Add(&p0);
+				pY.Add(&p0);
+				pZ.Add(&p0);
+				switch (m_objectModificator)
+				{
+				case objectModificator::translate_world:
+				case objectModificator::translate_local:
+					m_bTX->Text = "Tx";
+					m_bTX->BackColor = Drawing::Color::Red;
+					m_bTY->Text = "Ty";
+					m_bTY->BackColor = Drawing::Color::Green;
+					m_bTZ->Text = "Tz";
+					m_bTZ->BackColor = Drawing::Color::Blue;
+					DrawLine(&p0, &pX, 0xFF0000, true, true);
+					DrawLine(&p0, &pY, 0x00FF00, true, true);
+					DrawLine(&p0, &pZ, 0x0000FF, true, true);
+					break;
+				case objectModificator::rotate_world:
+				case objectModificator::rotate_local:
+					m_bTX->Text = "Ry";
+					m_bTX->BackColor = Drawing::Color::Green;
+					m_bTY->Text = "Rz";
+					m_bTY->BackColor = Drawing::Color::Blue;
+					m_bTZ->Text = "Rx";
+					m_bTZ->BackColor = Drawing::Color::Red;
+					DrawCircle(&p0, &nX, d, 0xFF0000, true, true);
+					DrawCircle(&p0, &nY, d, 0x00FF00, true, true);
+					DrawCircle(&p0, &nZ, d, 0x0000FF, true, true);
+					break;
+				case objectModificator::scale:
+					m_bTX->Text = "Sx";
+					m_bTX->BackColor = Drawing::Color::Red;
+					m_bTY->Text = "Sy";
+					m_bTY->BackColor = Drawing::Color::Green;
+					m_bTZ->Text = "Sz";
+					m_bTZ->BackColor = Drawing::Color::Blue;
+					DrawLine(&p0, &pX, 0xFF0000, true, true);
+					DrawLine(&p0, &pY, 0x00FF00, true, true);
+					DrawLine(&p0, &pZ, 0x0000FF, true, true);
+					break;
+				default:
+					break;
+				}
 			}
-			float d = m_Instance->GetDistanceToCamera(&p0) / 10.0f;
-			pX.Mul(d);
-			pY.Mul(d);
-			pZ.Mul(d);
-			pX.Add(&p0);
-			pY.Add(&p0);
-			pZ.Add(&p0);
-			m_Instance->GetProjectedCoords(&p0);
-			m_Instance->GetProjectedCoords(&pX);
-			m_Instance->GetProjectedCoords(&pY);
-			m_Instance->GetProjectedCoords(&pZ);
-			p0 = ToScreenCoords(p0);
-			pX = ToScreenCoords(pX);
-			pY = ToScreenCoords(pY);
-			pZ = ToScreenCoords(pZ);
-			Point pp0 = Point((int)p0.x, (int)p0.y);
-			Point ppX = Point((int)pX.x, (int)pX.y);
-			Point ppY = Point((int)pY.x, (int)pY.y);
-			Point ppZ = Point((int)pZ.x, (int)pZ.y);
-			pp0.X += m_renderWindow->Location.X - btnSize;
-			pp0.Y += m_renderWindow->Location.Y - btnSize;
-			ppX.X += m_renderWindow->Location.X - btnSize;
-			ppX.Y += m_renderWindow->Location.Y - btnSize;
-			ppY.X += m_renderWindow->Location.X - btnSize;
-			ppY.Y += m_renderWindow->Location.Y - btnSize;
-			ppZ.X += m_renderWindow->Location.X - btnSize;
-			ppZ.Y += m_renderWindow->Location.Y - btnSize;
-			m_bCenter->Location = pp0;
-			m_bTX->Location = ppX;
-			m_bTY->Location = ppY;
-			m_bTZ->Location = ppZ;
-			m_bCenter->Visible = true;
-			m_bTY->Visible = true;
-			m_bTX->Visible = true;
-			m_bTZ->Visible = true;
-			p0 = m_selectedObject->GetWorldPosition();
-			switch (m_objectModificator)
+			else
 			{
-			case objectModificator::translate_world:
-			case objectModificator::rotate_world:
-				pX = ZobVector3(1, 0, 0);
-				pY = ZobVector3(0, 1, 0);
-				pZ = ZobVector3(0, 0, 1);
-				nX = pX;
-				nY = pY;
-				nZ = pZ;
-				break;
-			case objectModificator::translate_local:
-			case objectModificator::rotate_local:
-			case objectModificator::scale:
-				pX = m_selectedObject->GetLeft();
-				pY = m_selectedObject->GetUp();
-				pZ = m_selectedObject->GetForward();
-				nX = pX;
-				nY = pY;
-				nZ = pZ;
-				break;
+				m_bCenter->Visible = false;
+				m_bTY->Visible = false;
+				m_bTX->Visible = false;
+				m_bTZ->Visible = false;
 			}
-			d = m_Instance->GetDistanceToCamera(&p0) / 10.0f;
-			pX.Mul(d);
-			pY.Mul(d);
-			pZ.Mul(d);
-			pX.Add(&p0);
-			pY.Add(&p0);
-			pZ.Add(&p0);
-			switch (m_objectModificator)
-			{
-			case objectModificator::translate_world:
-			case objectModificator::translate_local:
-				m_bTX->Text = "Tx";
-				m_bTX->BackColor = Drawing::Color::Red;
-				m_bTY->Text = "Ty";
-				m_bTY->BackColor = Drawing::Color::Green;
-				m_bTZ->Text = "Tz";
-				m_bTZ->BackColor = Drawing::Color::Blue;
-				DrawLine(&p0, &pX, 0xFF0000, true, true);
-				DrawLine(&p0, &pY, 0x00FF00, true, true);
-				DrawLine(&p0, &pZ, 0x0000FF, true, true);
-				break;
-			case objectModificator::rotate_world:
-			case objectModificator::rotate_local:
-				m_bTX->Text = "Ry";
-				m_bTX->BackColor = Drawing::Color::Green;
-				m_bTY->Text = "Rz";
-				m_bTY->BackColor = Drawing::Color::Blue;
-				m_bTZ->Text = "Rx";
-				m_bTZ->BackColor = Drawing::Color::Red;
-				DrawCircle(&p0, &nX, d, 0xFF0000, true, true);
-				DrawCircle(&p0, &nY, d, 0x00FF00, true, true);
-				DrawCircle(&p0, &nZ, d, 0x0000FF, true, true);
-				break;
-			case objectModificator::scale:
-				m_bTX->Text = "Sx";
-				m_bTX->BackColor = Drawing::Color::Red;
-				m_bTY->Text = "Sy";
-				m_bTY->BackColor = Drawing::Color::Green;
-				m_bTZ->Text = "Sz";
-				m_bTZ->BackColor = Drawing::Color::Blue;
-				DrawLine(&p0, &pX, 0xFF0000, true, true);
-				DrawLine(&p0, &pY, 0x00FF00, true, true);
-				DrawLine(&p0, &pZ, 0x0000FF, true, true);
-				break;
-			default:
-				break;
-			}
-		}
-		else
-		{
-			m_bCenter->Visible = false;
-			m_bTY->Visible = false;
-			m_bTX->Visible = false;
-			m_bTZ->Visible = false;
 		}
 	}
 

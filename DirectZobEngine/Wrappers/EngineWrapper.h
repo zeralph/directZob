@@ -108,7 +108,6 @@ namespace CLI
 		Label^			m_bTY;
 		Label^			m_bTX;
 		Point			m_mouseCoords;
-		ZobObject*		m_selectedObject;
 		bool			m_mouseInside;
 	};
 }

@@ -424,7 +424,7 @@
             this.SecondPanelSplitter.Panel2.Controls.Add(this.tabsControl);
             this.SecondPanelSplitter.Panel2MinSize = 350;
             this.SecondPanelSplitter.Size = new System.Drawing.Size(2348, 1420);
-            this.SecondPanelSplitter.SplitterDistance = 1966;
+            this.SecondPanelSplitter.SplitterDistance = 1962;
             this.SecondPanelSplitter.SplitterWidth = 8;
             this.SecondPanelSplitter.TabIndex = 0;
             // 
@@ -444,7 +444,7 @@
             // ThirdPanelSPlitter.Panel2
             // 
             this.ThirdPanelSPlitter.Panel2.Controls.Add(this.tabControl1);
-            this.ThirdPanelSPlitter.Size = new System.Drawing.Size(1966, 1420);
+            this.ThirdPanelSPlitter.Size = new System.Drawing.Size(1962, 1420);
             this.ThirdPanelSPlitter.SplitterDistance = 1135;
             this.ThirdPanelSPlitter.SplitterWidth = 8;
             this.ThirdPanelSPlitter.TabIndex = 0;
@@ -464,7 +464,7 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 38F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 38F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(1964, 1133);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1960, 1133);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // toolStrip1
@@ -493,7 +493,7 @@
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Padding = new System.Windows.Forms.Padding(0, 0, 4, 0);
-            this.toolStrip1.Size = new System.Drawing.Size(1964, 42);
+            this.toolStrip1.Size = new System.Drawing.Size(1960, 42);
             this.toolStrip1.TabIndex = 1;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -679,7 +679,7 @@
             this.EngineRendererPanel.Location = new System.Drawing.Point(6, 54);
             this.EngineRendererPanel.Margin = new System.Windows.Forms.Padding(6);
             this.EngineRendererPanel.Name = "EngineRendererPanel";
-            this.EngineRendererPanel.Size = new System.Drawing.Size(1952, 1150);
+            this.EngineRendererPanel.Size = new System.Drawing.Size(1948, 1150);
             this.EngineRendererPanel.TabIndex = 0;
             // 
             // tabControl1
@@ -691,7 +691,7 @@
             this.tabControl1.Margin = new System.Windows.Forms.Padding(6);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(1964, 275);
+            this.tabControl1.Size = new System.Drawing.Size(1960, 275);
             this.tabControl1.TabIndex = 0;
             // 
             // tabPage1
@@ -701,7 +701,7 @@
             this.tabPage1.Margin = new System.Windows.Forms.Padding(6);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(6);
-            this.tabPage1.Size = new System.Drawing.Size(1948, 228);
+            this.tabPage1.Size = new System.Drawing.Size(1944, 228);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "tabPage1";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -712,8 +712,9 @@
             this.textLog.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textLog.Location = new System.Drawing.Point(6, 6);
             this.textLog.Margin = new System.Windows.Forms.Padding(6);
+            this.textLog.MinimumSize = new System.Drawing.Size(0, 250);
             this.textLog.Name = "textLog";
-            this.textLog.Size = new System.Drawing.Size(1936, 216);
+            this.textLog.Size = new System.Drawing.Size(1932, 250);
             this.textLog.TabIndex = 0;
             this.textLog.Text = "";
             // 
@@ -723,7 +724,7 @@
             this.tabPage2.Margin = new System.Windows.Forms.Padding(6);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(6);
-            this.tabPage2.Size = new System.Drawing.Size(1946, 226);
+            this.tabPage2.Size = new System.Drawing.Size(1942, 228);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "tabPage2";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -738,7 +739,7 @@
             this.tabsControl.Margin = new System.Windows.Forms.Padding(6);
             this.tabsControl.Name = "tabsControl";
             this.tabsControl.SelectedIndex = 0;
-            this.tabsControl.Size = new System.Drawing.Size(372, 1418);
+            this.tabsControl.Size = new System.Drawing.Size(376, 1418);
             this.tabsControl.TabIndex = 0;
             // 
             // tabObject
@@ -749,7 +750,7 @@
             this.tabObject.Margin = new System.Windows.Forms.Padding(6);
             this.tabObject.Name = "tabObject";
             this.tabObject.Padding = new System.Windows.Forms.Padding(6);
-            this.tabObject.Size = new System.Drawing.Size(356, 1371);
+            this.tabObject.Size = new System.Drawing.Size(360, 1371);
             this.tabObject.TabIndex = 0;
             this.tabObject.Text = "Object";
             // 
@@ -787,7 +788,7 @@
             this.tabScene.Margin = new System.Windows.Forms.Padding(6);
             this.tabScene.Name = "tabScene";
             this.tabScene.Padding = new System.Windows.Forms.Padding(6);
-            this.tabScene.Size = new System.Drawing.Size(356, 1361);
+            this.tabScene.Size = new System.Drawing.Size(360, 1369);
             this.tabScene.TabIndex = 1;
             this.tabScene.Text = "Scene";
             // 
@@ -799,7 +800,7 @@
             this.panel1.Margin = new System.Windows.Forms.Padding(6);
             this.panel1.MinimumSize = new System.Drawing.Size(600, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(600, 1349);
+            this.panel1.Size = new System.Drawing.Size(600, 1357);
             this.panel1.TabIndex = 1;
             // 
             // SceneControlsFlowLayout
@@ -812,7 +813,7 @@
             this.SceneControlsFlowLayout.Margin = new System.Windows.Forms.Padding(6);
             this.SceneControlsFlowLayout.MinimumSize = new System.Drawing.Size(600, 0);
             this.SceneControlsFlowLayout.Name = "SceneControlsFlowLayout";
-            this.SceneControlsFlowLayout.Size = new System.Drawing.Size(600, 1349);
+            this.SceneControlsFlowLayout.Size = new System.Drawing.Size(600, 1357);
             this.SceneControlsFlowLayout.TabIndex = 0;
             this.SceneControlsFlowLayout.WrapContents = false;
             // 
@@ -824,7 +825,7 @@
             this.tabEngine.Margin = new System.Windows.Forms.Padding(6);
             this.tabEngine.Name = "tabEngine";
             this.tabEngine.Padding = new System.Windows.Forms.Padding(6);
-            this.tabEngine.Size = new System.Drawing.Size(356, 1361);
+            this.tabEngine.Size = new System.Drawing.Size(360, 1369);
             this.tabEngine.TabIndex = 2;
             this.tabEngine.Text = "Engine";
             // 
@@ -836,7 +837,7 @@
             this.panel2.Margin = new System.Windows.Forms.Padding(6);
             this.panel2.MinimumSize = new System.Drawing.Size(600, 0);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(600, 1349);
+            this.panel2.Size = new System.Drawing.Size(600, 1357);
             this.panel2.TabIndex = 1;
             // 
             // EngineControlsFlowLayout
@@ -849,7 +850,7 @@
             this.EngineControlsFlowLayout.Margin = new System.Windows.Forms.Padding(6);
             this.EngineControlsFlowLayout.MinimumSize = new System.Drawing.Size(600, 0);
             this.EngineControlsFlowLayout.Name = "EngineControlsFlowLayout";
-            this.EngineControlsFlowLayout.Size = new System.Drawing.Size(600, 1349);
+            this.EngineControlsFlowLayout.Size = new System.Drawing.Size(600, 1357);
             this.EngineControlsFlowLayout.TabIndex = 0;
             this.EngineControlsFlowLayout.WrapContents = false;
             // 

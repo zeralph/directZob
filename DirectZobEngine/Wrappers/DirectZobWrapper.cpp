@@ -7,6 +7,7 @@ namespace CLI
 {
 	DirectZobWrapper::DirectZobWrapper(Panel^ objectTreeviewPanel, Panel^ objectPropertiesPanel, PictureBox^ renderWindow):ManagedObject(new DirectZob, true)
 	{
+		m_events = gcnew DirectZobWrapperEvents();
 		m_run = false;
 		m_sceneLoadedCb = nullptr;
 		m_ZobObjectManagerWrapper = nullptr;
@@ -88,7 +89,7 @@ namespace CLI
 	{
 		if (GetInstance())
 		{
-			OnNewSceneEvent();
+			m_events->FireOnNewSceneEvent();
 			GetInstance()->NewScene();
 			m_ZobCameraManager->CreateEditorCamera();
 			m_ZobObjectManagerWrapper->Refresh();
@@ -186,7 +187,7 @@ namespace CLI
 		{
 			GetInstance()->EditorUpdate();
 			m_ZobObjectManagerWrapper->EditorUpdate();
-			OnEditorUpdateEvent();
+			m_events->FireOnEditorUpdateEvent();
 		}
 	}
 
