@@ -44,8 +44,11 @@ namespace CLI {
 	public:
 		ZobControlFilePath(const ZobVariablesExposer::wrapperData& w);
 		TextBox^ txt;
+		Button^ btn;
 	protected:
 		void OnValueChanged(Object^ sender, EventArgs^ e) override;
+		void OnOpen(Object^ sender, EventArgs^ e);
+		void OnOk(Object^ sender, System::ComponentModel::CancelEventArgs^ e);
 	};
 
 	public ref class ZobGroupBox : GroupBox

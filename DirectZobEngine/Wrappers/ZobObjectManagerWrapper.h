@@ -20,6 +20,8 @@ namespace CLI
 	{
 	public:
 
+		delegate void					ZobBehaviorHandler(int i);
+
 		delegate void					OnObjectSelected(ZobObjectWrapper^ z);
 		static event OnObjectSelected^	OnObjectSelectedEvent;
 
@@ -52,6 +54,7 @@ namespace CLI
 		void					CreateTreeview();
 		void					CreateObjectview();
 		void					CreateNodeMenu();
+		void					CreateBehaviorNodeMenu(ToolStripMenuItem^ parent);
 		void					ReScan(ZobControlTreeNode^ n);
 		void					OnNewScene();
 		void					TreeNodeMouseHover(Object^ sender, EventArgs^ e);
@@ -65,7 +68,7 @@ namespace CLI
 		void					AddZobObject(Object^ sender, EventArgs^ e);
 		void					RemoveZobObject(Object^ sender, EventArgs^ e);
 		void					ZoomToZobObject(Object^ sender, EventArgs^ e);
-		void					AddBehavior(Object^ sender, EventArgs^ e);
+		void					AddZobBehavior(Object^ sender, EventArgs^ e);
 
 		Panel^ m_objectTreeviewPanel;
 		Panel^ m_objectPropertiesPanel;

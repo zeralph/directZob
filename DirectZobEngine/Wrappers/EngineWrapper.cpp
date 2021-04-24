@@ -47,9 +47,13 @@ namespace CLI
 		ZobObjectManagerWrapper::OnObjectSelectedEvent += gcnew ZobObjectManagerWrapper::OnObjectSelected(this, &EngineWrapper::OnObjectSelected);
 		DirectZobWrapperEvents::OnNewSceneEvent += gcnew DirectZobWrapperEvents::OnNewScene(this, &EngineWrapper::OnNewScene);
 		
-		m_renderWindow->MouseHover += gcnew EventHandler(this, &EngineWrapper::OnMouseHover);
+		m_renderWindow->MouseEnter += gcnew EventHandler(this, &EngineWrapper::OnMouseHover);
 		m_renderWindow->MouseLeave += gcnew EventHandler(this, &EngineWrapper::OnMouseLeave);
 		m_renderWindow->MouseWheel += gcnew MouseEventHandler(this, &EngineWrapper::OnMouseWheel);
+
+		m_renderWindow->AutoSize = false;
+		m_renderWindow->Width = 800;
+		m_renderWindow->Height = 600;
 	}
 
 	EngineWrapper::~EngineWrapper()
@@ -121,7 +125,7 @@ namespace CLI
 	{
 		if (!m_mouseInside)
 		{
-		//	return;
+			return;
 		}
 		if (GetAsyncKeyState(VK_LBUTTON) & 0x8000 && GetKeyState(VK_CONTROL) & 0x8000)
 		{
@@ -131,7 +135,7 @@ namespace CLI
 			x *= dt* factor;
 			y *= dt* factor;
 			Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
-			c->Rotate(-x, y, 0);
+			c->Rotate(-x, -y, 0);
 			//c->Rotate(30, 0, 0);
 		}
 		else if (GetAsyncKeyState(VK_LBUTTON) & 0x8000)
@@ -473,6 +477,23 @@ namespace CLI
 		vout.y = (v.y / v.z + 1) * m_renderWindow->Height / 2;
 		vout.z = v.z;
 		return vout;
+	}
+
+	bool EngineWrapper::IsCursorInsideWindow()
+	{
+		if (m_renderWindow)
+		{
+			Point p = Cursor::Position;
+			Point w;
+			m_renderWindow->PointToScreen(w);
+			p.X -= w.X;
+			p.Y -= w.Y;
+			if (p.X > 0 && p.X < m_renderWindow->Width && p.Y>0 && p.Y < m_renderWindow->Height)
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 }
 #endif //_WINDLL

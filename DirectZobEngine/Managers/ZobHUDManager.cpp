@@ -93,6 +93,12 @@ void ZobHUDManager::Init()
 		tex.append("_fonts/arial_regular_32.PNG");
 		xml.append("_fonts/arial_regular_32.xml");
 		m_fonts.push_back(new ZobFont(tex, xml));
+
+		tex = p;
+		xml = p;
+		tex.append("_fonts/vcr_osd_mono_regular_14.PNG");
+		xml.append("_fonts/vcr_osd_mono_regular_14.xml");
+		m_fonts.push_back(new ZobFont(tex, xml));
 	}
 	else
 	{

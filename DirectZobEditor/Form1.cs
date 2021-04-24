@@ -844,6 +844,18 @@ namespace DirectZobEditor
             }
         }
 
+        private void EngineRendererPanel_Resize(object sender, EventArgs e)
+        {
+            if (m_engineWindow != null)
+            {
+                PictureBox p = m_engineWindow.GetEngineRenderwindow();
+                if(p != null)
+                {
+                    float r = (float)p.Width / (float)p.Height;
+                    toolStripStatusLabel1.Text = "Size : " + p.Width + "x" + p.Height + " | Ratio : "+r;
+                }
+            }
+        }
     }
 
     public class LogEvent

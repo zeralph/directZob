@@ -45,19 +45,31 @@ namespace CLI
 	void ZobObjectManagerWrapper::CreateNodeMenu()
 	{
 		m_nodeMenu = gcnew ContextMenuStrip();
-		ToolStripItem^ itAdd = gcnew ToolStripMenuItem("Add object");
+		ToolStripMenuItem^ itAdd = gcnew ToolStripMenuItem("Add object");
 		itAdd->Click += gcnew EventHandler(this, &ZobObjectManagerWrapper::AddZobObject);
 		m_nodeMenu->Items->Add(itAdd);
-		ToolStripItem^ itRemove = gcnew ToolStripMenuItem("Remove object");
+		ToolStripMenuItem^ itRemove = gcnew ToolStripMenuItem("Remove object");
 		itRemove->Click += gcnew EventHandler(this, &ZobObjectManagerWrapper::RemoveZobObject);
 		m_nodeMenu->Items->Add(itRemove);
-		ToolStripItem^ itBehavior = gcnew ToolStripMenuItem("Add behavior");
-		itBehavior->Click += gcnew EventHandler(this, &ZobObjectManagerWrapper::AddBehavior);
+		ToolStripMenuItem^ itBehavior = gcnew ToolStripMenuItem("Add behavior");
+		CreateBehaviorNodeMenu(itBehavior);
 		m_nodeMenu->Items->Add(itBehavior);
-		ToolStripItem^ itZoom = gcnew ToolStripMenuItem("Zoom");
+		ToolStripMenuItem^ itZoom = gcnew ToolStripMenuItem("Zoom");
 		itZoom->Click += gcnew EventHandler(this, &ZobObjectManagerWrapper::ZoomToZobObject);
 		m_nodeMenu->Items->Add(itZoom);
 		//m_treeView->ContextMenuStrip = m_nodeMenu;
+	}
+
+	void ZobObjectManagerWrapper::CreateBehaviorNodeMenu(ToolStripMenuItem^ parent)
+	{
+		int l = ZobBehavior::eBehaviorType::__eBehavior_MAX__;
+		for (int i = 0; i < l; i++)
+		{
+			String^ s = gcnew String(ZobBehaviorFactory::eBehaviorTypeStr[i]);
+			ToolStripItem^ it = gcnew ToolStripMenuItem(s);
+			it->Click += gcnew EventHandler(this, &ZobObjectManagerWrapper::AddZobBehavior);
+			parent->DropDownItems->Add(it);
+		}
 	}
 
 	void ZobObjectManagerWrapper::AddZobObject(Object^ sender, EventArgs^ e)
@@ -91,9 +103,22 @@ namespace CLI
 	{
 
 	}
-	void ZobObjectManagerWrapper::AddBehavior(Object^ sender, EventArgs^ e)
+	void ZobObjectManagerWrapper::AddZobBehavior(Object^ sender, EventArgs^ e)
 	{
-
+		if (m_selectedObject)
+		{
+			ToolStripMenuItem^ it = (ToolStripMenuItem^)sender;
+			int l = ZobBehavior::eBehaviorType::__eBehavior_MAX__;
+			for (int i = 0; i < l; i++)
+			{
+				String^ s = gcnew String(ZobBehaviorFactory::eBehaviorTypeStr[i]);
+				if (s == it->Text)
+				{
+					ZobBehaviorFactory::CreateBehavior(m_selectedObject, ZobBehaviorFactory::eBehaviorTypeStr[i]);
+					return;
+				}
+			}
+		}
 	}
 
 	void ZobObjectManagerWrapper::CreateObjectview()

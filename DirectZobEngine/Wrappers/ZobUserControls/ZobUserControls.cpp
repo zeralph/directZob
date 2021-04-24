@@ -76,7 +76,7 @@ void ZobControlString::OnValueChanged(Object^ sender, EventArgs^ e)
 ZobControlFilePath::ZobControlFilePath(const ZobVariablesExposer::wrapperData& w):ZobControl(w)
 {
 	this->AutoSize = true;
-	this->ColumnCount = 2;
+	this->ColumnCount = 3;
 	this->RowCount = 1;
 	Label^ label = gcnew Label();
 	label->Text = TO_MANAGED_STRING(w.name.c_str());
@@ -84,34 +84,56 @@ ZobControlFilePath::ZobControlFilePath(const ZobVariablesExposer::wrapperData& w
 	label->Width = 140;
 	label->Height = 20;
 	label->TextAlign = ContentAlignment::BottomRight;
-	TextBox^ txt = gcnew TextBox();
+	txt = gcnew TextBox();
 	txt->Name = TO_MANAGED_STRING(w.internalName.c_str());
 	txt->Width = 140;
 	txt->Height = 20;
 	txt->ReadOnly = w.bReadOnly;
+	btn = gcnew Button();
+	btn->Width = 20;
+	btn->Text = "...";
 	//txt->MaximumSize = Drawing::Size(100, 20);
 	std::string s;
 	ZobFilePath* zp = (ZobFilePath*)(w.ptr);
-	s = zp->Serialize();
-	txt->Text = TO_MANAGED_STRING(s.c_str());
+	txt->Text = TO_MANAGED_STRING(zp->name.c_str());
+	txt->ReadOnly = true;
 	if (!w.bReadOnly)
 	{
-		txt->Leave += gcnew EventHandler(this, &ZobControlFilePath::OnValueChanged);
+		//txt->Leave += gcnew EventHandler(this, &ZobControlFilePath::OnValueChanged);
+		btn->Click += gcnew EventHandler(this, &ZobControlFilePath::OnOpen);
 	}
 	this->Controls->Add(label);
 	this->Controls->Add(txt);
+	this->Controls->Add(btn);
+}
+
+void ZobControlFilePath::OnOpen(Object^ sender, EventArgs^ e)
+{
+	OpenFileDialog^ f = gcnew OpenFileDialog();
+	f->Filter = "OBJ files (*.obj)|*.obj|FBX files (*.fbx)|*.fbx";
+	f->FileOk += gcnew System::ComponentModel::CancelEventHandler(this, &ZobControlFilePath::OnOk);
+	f->ShowDialog();
+}
+
+void ZobControlFilePath::OnOk(Object^ sender, System::ComponentModel::CancelEventArgs^ e)
+{
+	OpenFileDialog^ f = (OpenFileDialog^)sender;
+	String^ fullPath = f->FileName;
+	System::IO::FileInfo^ fi = gcnew System::IO::FileInfo(fullPath);
+	String^ dir = fi->DirectoryName;
+	String^ file = fi->Name;
+	txt->Text = file;
+	if (_w)
+	{
+		std::string s;
+		MarshalString(file+";"+dir+";"+file, s);
+		ZobFilePath* zp = (ZobFilePath*)_w->ptr;
+		zp->Unserialize(s);
+	}
 }
 
 void ZobControlFilePath::OnValueChanged(Object^ sender, EventArgs^ e)
 {
-	TextBox^ t = static_cast<TextBox^>(sender);
-	if (_w)
-	{
-		std::string s;
-		MarshalString(t->Text, s);
-		ZobFilePath* zp = (ZobFilePath*)_w->ptr;
-		zp->Unserialize(s);
-	}
 }
 
 
@@ -248,7 +270,7 @@ ZobControlFloat::ZobControlFloat(const ZobVariablesExposer::wrapperData& w):ZobC
 
 void ZobControlFloat::UpdateControlInternal()
 {
-	if (_w->type == ZobVariablesExposer::eWrapperType_int)
+	if (_w->type == ZobVariablesExposer::eWrapperType_float)
 	{
 		float* f = (float*)(_w->ptr);
 		txt->Text = String::Format("{0:0.000}", *f);
@@ -256,8 +278,9 @@ void ZobControlFloat::UpdateControlInternal()
 	else
 	{
 		int* i = (int*)(_w->ptr);
-		txt->Text = (*i).ToString();
-		txt->Text = String::Format("{0:0.000}", *i);
+		int ii = (*i);
+		//txt->Text = (*i).ToString();
+		txt->Text = String::Format("{0}", ii);
 	}	
 }
 

@@ -91,6 +91,7 @@ namespace CLI
 		void			UpdateModificationGizmos();
 		void			OnObjectSelected(ZobObjectWrapper^ z);
 		void			OnNewScene();
+		bool			IsCursorInsideWindow();
 		PictureBox^		m_renderWindow;
 		Graphics^		m_renderWindowGraphics;
 		Triangle*		m_triangleList;
