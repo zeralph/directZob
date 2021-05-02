@@ -4,6 +4,7 @@
 #include "Sprite.h"
 #include "ZobPhysic/ZobPhysicComponent.h"
 #include "SceneLoader.h"
+#include "Behaviors/ZobBehaviorMesh.h"
 #include "../Misc/ZobXmlHelper.h"
 #include "../../dependencies/optick/include/optick.h"
 
@@ -151,22 +152,12 @@ ZobObject::~ZobObject()
 	DirectZob::RemoveIndent();
 }
 
-void ZobObject::LoadMesh(std::string name, std::string file, std::string path)
+ZobBehaviorMesh* ZobObject::LoadMesh(ZobFilePath &zfp)
 {
-/*
-	if (!path.length())	//no path, only filename
-	{
-		file = path;
-		path = std::string(SceneLoader::GetResourcePath());
-	}
-	else
-	{
-		file = path.substr(i+1, path.size() - i);
-		path = path.substr(0, i + 1);
-	}
-*/
-	Mesh* m = DirectZob::GetInstance()->GetMeshManager()->LoadMesh(name, path, file);
-	m_mesh = m;
+	ZobBehavior* b = ZobBehaviorFactory::CreateBehavior(this, "Mesh");
+	ZobBehaviorMesh* bm = static_cast<ZobBehaviorMesh*>(b);
+	bm->Set(zfp);
+	return bm;
 }
 
 void ZobObject::SetMesh(std::string name)

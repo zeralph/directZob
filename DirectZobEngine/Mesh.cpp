@@ -29,12 +29,16 @@ Mesh::Mesh(std::string& name)
 	DirectZob::RemoveIndent();
 }
 
-Mesh::Mesh(std::string& name, std::string& path, std::string& file):Mesh(name)
+Mesh::Mesh(std::string& name, std::string& path, std::string& file, bool bAbsolutePath):Mesh(name)
 {
 	DirectZob::AddIndent();
 	m_path = path;
 	m_fileName = file;
-	std::string fullPath = std::string(SceneLoader::GetResourcePath());
+	std::string fullPath = "";
+	if (!bAbsolutePath)
+	{
+		fullPath = std::string(SceneLoader::GetResourcePath());
+	}
 	fullPath.append(path);
 	fullPath.append(file);
 	if (fullPath.length())

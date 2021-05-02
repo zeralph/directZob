@@ -551,6 +551,10 @@ ZobObject* Engine::GetObjectAt2DCoords(float x, float y)
 	{
 		Ray ray = c->From2DToWorld(x, y);
 		int  idx = (int)floor((y + 1.0f) / 2.0f * m_nbRasterizers);
+		if (idx < 0 || idx >= m_nbRasterizers)
+		{
+			return NULL;
+		}
 		Rasterizer* rast = m_rasterizers[idx];
 		ZobVector3 inter;
 		for (int i = 0; i < rast->GetNbTriangle(); i++)

@@ -88,7 +88,7 @@ namespace DirectZobEditor
             m_mainForm = this;
             m_running = true;
             InitializeComponent();
-            this.KeyPreview = true;
+            //this.KeyPreview = true;
             m_engineWindow = new EngineWindow(this);
      
             /*
@@ -116,7 +116,7 @@ namespace DirectZobEditor
             OnSceneLoadedDelegate = new OnSceneLoaded(OnSceneLoadedMethod);
 
             //--
-            
+
             m_engineControl = new EngineControl(this, m_directZobWrapper.GetEngineWrapper());
 //            m_zobObjectList = new ZobObjectListControl(this);
             m_sceneControl = new SceneControl(this, m_lightManagerWrapper);
@@ -136,7 +136,7 @@ namespace DirectZobEditor
             m_spriteControl.BindEvents();
             //m_physicsControl.BindEvents();
             m_zobObjectControl.BindEvents();
-            EngineRendererPanel.Controls.Add(m_engineWindow);
+            
             //ZobObjectListPanel.Controls.Add(m_zobObjectList);
             ObjectControlsFlowLayout.Controls.Add(m_zobObjectControl);
             //ObjectControlsFlowLayout.Controls.Add(m_physicsControl);
@@ -149,6 +149,8 @@ namespace DirectZobEditor
             this.propertiesPanel.MinimumSize = new Size(300, 500);
 
             this.WindowState = FormWindowState.Maximized;
+            EngineRendererPanel.Controls.Add(m_engineWindow);
+            m_engineWindow.MouseMove += EngineRendererPanel_MouseMove;
             m_directZobWrapper.NewScene();
             
             EventHandler handler = OnNewScene;
@@ -449,7 +451,7 @@ namespace DirectZobEditor
                     //m_meshManagerWrapper.LoadMesh(name, path, file);
                     CLI.ZobObjectWrapper root = m_zobObjectManagerWrapper.GetRootObject();
                     CLI.ZobObjectWrapper z = null;
-                    m_zobObjectManagerWrapper.CreateZobObject();
+                    z = m_zobObjectManagerWrapper.CreateZobObject();
                     z.SetName(name);
                     string workspace = m_directZobWrapper.GetResourcePath();
                     //z.SetMesh(name);
@@ -461,6 +463,7 @@ namespace DirectZobEditor
                     }
                     //path = System.IO.Path.GetRelativePath(workspace, path);
                     z.LoadMesh(file, file, path);
+                    m_zobObjectManagerWrapper.ReScan();
                     OnSceneUpdateHandler handler = OnSceneUpdated;
                     if (null != handler)
                     {
@@ -566,7 +569,8 @@ namespace DirectZobEditor
 
         private void createZobObjectToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            m_zobObjectManagerWrapper.CreateZobObject();
+            throw new Exception("deprecated");
+            //m_zobObjectManagerWrapper.CreateZobObject("");
         }
 
         private void btnPlay_Click(object sender, EventArgs e)
@@ -742,25 +746,25 @@ namespace DirectZobEditor
         private void bBoxToolStripMenuItem_Click(object sender, EventArgs e)
         {
             bBoxToolStripMenuItem.Checked = !bBoxToolStripMenuItem.Checked;
-            //m_engineWindow.GetEngineWrapper().ShowBBoxes(bBoxToolStripMenuItem.Checked);
+            m_directZobWrapper.GetEngineWrapper().ShowBBoxes(bBoxToolStripMenuItem.Checked);
         }
 
         private void cameraToolStripMenuItem_Click(object sender, EventArgs e)
         {
             cameraToolStripMenuItem.Checked = !cameraToolStripMenuItem.Checked;
-            //m_engineWindow.GetEngineWrapper().DrawCameraGizmos(cameraToolStripMenuItem.Checked);
+            m_directZobWrapper.GetEngineWrapper().DrawCameraGizmos(cameraToolStripMenuItem.Checked);
         }
 
         private void physicsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             physicsToolStripMenuItem.Checked = !physicsToolStripMenuItem.Checked;
-            //m_engineWindow.GetEngineWrapper().DrawPhysicsGizmos(physicsToolStripMenuItem.Checked);
+            m_directZobWrapper.GetEngineWrapper().DrawPhysicsGizmos(physicsToolStripMenuItem.Checked);
         }
 
         private void textToolStripMenuItem_Click(object sender, EventArgs e)
         {
             textToolStripMenuItem.Checked = !textToolStripMenuItem.Checked;
-            //m_engineWindow.GetEngineWrapper().ShowText(textToolStripMenuItem.Checked);
+            m_directZobWrapper.GetEngineWrapper().ShowText(textToolStripMenuItem.Checked);
         }
 
         private void toolStripSnap_Click(object sender, EventArgs e)
@@ -855,6 +859,17 @@ namespace DirectZobEditor
                     toolStripStatusLabel1.Text = "Size : " + p.Width + "x" + p.Height + " | Ratio : "+r;
                 }
             }
+        }
+
+        private void EngineRendererPanel_MouseMove(object sender, MouseEventArgs e)
+        {
+            string s2 = m_directZobWrapper.GetEngineWrapper().test;
+            toolStripStatusEngineState.Text = "OBJ : " + s2;
+        }
+
+        private void Form1_MouseMove(object sender, MouseEventArgs e)
+        {
+
         }
     }
 

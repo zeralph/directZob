@@ -12,6 +12,7 @@
 class Mesh;
 class ZobPhysicComponent;
 class m_varExposer;
+class ZobBehaviorMesh;
 class ZobObject:public ZOBGUID
 {
 friend class ZobBehavior;
@@ -74,7 +75,7 @@ public:
 	virtual const std::string		GetMeshFileName() const;
 	virtual const std::string		GetMeshPath() const;
 	void							SetMesh(std::string name);
-	void							LoadMesh(std::string name, std::string file, std::string path);
+	ZobBehaviorMesh*				LoadMesh(ZobFilePath& zfp);
 	const bool						IsMarkedForDeletion() const { return m_markedForDeletion; };
 	inline const Mesh*				GetMesh() const { return m_mesh; }
 	void							MarkForDeletion() { m_markedForDeletion=true; };

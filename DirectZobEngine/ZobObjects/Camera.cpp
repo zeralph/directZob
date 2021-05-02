@@ -538,7 +538,8 @@ void Camera::UpdateViewProjectionMatrix(/*const ZobVector3* eyeV*/)
 {
 	BufferData* b = DirectZob::GetInstance()->GetEngine()->GetBufferData();
 	setProjectionMatrix(m_fov, b->width, b->height, b->zNear, b->zFar);
-	SetViewMatrix(&m_left, &m_up, &m_forward, GetWorldPosition());
+	//SetViewMatrix(&m_left, &m_up, &m_forward, GetWorldPosition());
+	ZobMatrix4x4::InvertMatrix4(m_modelMatrix, m_viewRotMatrix);
 }
 
 void Camera::UpdateViewProjectionMatrix(const ZobVector3* eyeV, const ZobVector3* targetV, const ZobVector3* upV)

@@ -7,6 +7,7 @@
 #include "EngineWrapper.h"
 #include "DirectZobWrapperEvents.h"
 #include <string> 
+#include "Editor/ZobObjectsEditor.h"
 #using "System.Windows.Forms.dll"
 #using "System.dll"
 #using "System.Drawing.dll"
@@ -51,7 +52,6 @@ namespace CLI
 		void							SaveScene();
 		void							RegenerateZobIds();
 		void							SaveScene(System::String^ path, System::String^ file);
-		static DirectZob*				GetDirectZobInstance() { return m_directZobInstance; }
 		void							Lock();
 		void							EditorUpdate();
 		void							Unlock();
@@ -66,6 +66,7 @@ namespace CLI
 		CameraManagerWrapper^			GetZobCameraManagerWrapper() { return m_ZobCameraManager; }
 		
 	private:
+		
 		DirectZobWrapperEvents^			m_events;
 		ZobObjectManagerWrapper^		m_ZobObjectManagerWrapper;
 		EngineWrapper^					m_ZobEngineWrapper;
@@ -73,7 +74,7 @@ namespace CLI
 		//array<int>^ m_buffer;
 		//void					CallSceneUpdatedCallback();
 		delegate void			Del();
-		static DirectZob*				m_directZobInstance = NULL;
+
 		volatile bool					m_run;
 		static engineCallback^			m_sceneUpdatedCb;
 		static engineCallback^			m_queuingCb;

@@ -31,6 +31,7 @@ ZobBehaviorMesh::ZobBehaviorMesh(ZobObject* zobObject) : ZobBehavior(zobObject)
 
 void ZobBehaviorMesh::Init()
 {
+	m_meshNbTriangles = 0;
 	ReLoadVariables();
 	if (m_mesh == NULL && m_meshPath.IsDefined())
 	{
@@ -45,6 +46,15 @@ void ZobBehaviorMesh::Init()
 			m_meshNbTriangles = m_mesh->GetNbTriangles();
 		}
 	}
+}
+
+void ZobBehaviorMesh::Set(ZobFilePath zfp) 
+{ 
+	m_meshPath.file = zfp.file; 
+	m_meshPath.name = zfp.name;
+	m_meshPath.path = zfp.path;
+	m_meshPath.bAbsolute = zfp.bAbsolute;
+	LoadMeshInternal();
 }
 
 void ZobBehaviorMesh::PreUpdate()
@@ -97,9 +107,14 @@ void ZobBehaviorMesh::EditorUpdate()
 
 bool ZobBehaviorMesh::LoadMeshInternal()
 {
-	m_mesh = DirectZob::GetInstance()->GetMeshManager()->LoadMesh(m_meshPath.name, m_meshPath.path, m_meshPath.file);
+	m_mesh = DirectZob::GetInstance()->GetMeshManager()->LoadMesh(m_meshPath.name, m_meshPath.path, m_meshPath.file, m_meshPath.bAbsolute);
 	if (m_mesh)
 	{
+		m_meshNbTriangles = m_mesh->GetNbTriangles();
+	}
+	else
+	{
+		m_meshNbTriangles = 0;
 	}
 	return m_mesh != NULL;
 }

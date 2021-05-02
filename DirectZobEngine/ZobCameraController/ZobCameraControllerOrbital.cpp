@@ -105,4 +105,5 @@ void ZobCameraControllerOrbital::Move(float x, float y, float z)
 void ZobCameraControllerOrbital::Zoom(float f)
 {
 	m_dist += f;
+	m_dist = fmaxf(0.25f, m_dist);
 }

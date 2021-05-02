@@ -79,7 +79,7 @@ ZobBehavior* ZobBehaviorFactory::CreateBehavior(ZobObject* zobObject, const char
 	ZobBehavior* zb = NULL;
 	if (zobObject)
 	{
-		ZobBehavior* zb = CreateBehaviorInternal(zobObject, behaviorName);
+		zb = CreateBehaviorInternal(zobObject, behaviorName);
 	}
 	return zb;
 }

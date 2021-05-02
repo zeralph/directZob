@@ -9,6 +9,7 @@ namespace CLI
 
 	EngineWrapper::EngineWrapper(PictureBox^ renderWindow):ManagedObject(DirectZob::GetInstance()->GetEngine(), false)
 	{
+		test = gcnew String("");
 		m_renderWindow = renderWindow;
 		InitGizmos();
 		m_mouseInside = true;
@@ -95,11 +96,6 @@ namespace CLI
 		}
 	}
 
-	ZobObjectWrapper^ EngineWrapper::GetObjectAt2DCoords(float x, float y)
-	{
-		return nullptr;
-	}
-
 	void EngineWrapper::OnMouseHover(Object^ sender, EventArgs^ e)
 	{
 		m_mouseInside = true;
@@ -154,11 +150,7 @@ namespace CLI
 
 	void EngineWrapper::Update(float dt)
 	{
-		//if (m_selectedObject == NULL)
-		{
-			UpdateCameraEditor(dt);
-		}
-		//m_renderWindow->Invoke(gcnew Action(this, &CLI::EngineWrapper::UpdateModificationGizmos));
+		UpdateCameraEditor(dt); 
 		if (GetInstance() && m_renderWindow && m_running)
 		{
 			m_renderWindow->Invoke(gcnew Action(this, &CLI::EngineWrapper::UpdateRenderWindowInternal));
@@ -188,6 +180,30 @@ namespace CLI
 		m_renderWindow->SizeMode = PictureBoxSizeMode::StretchImage;
 		m_renderWindowGraphics->DrawImage(b, dstRect, srcRect, Drawing::GraphicsUnit::Pixel);
 		UpdateModificationGizmos();
+
+		Point location = m_renderWindow->PointToClient(m_mouseCoords);
+		float x = (float)location.X / (float)m_renderWindow->Width;
+		float y = (float)location.Y / (float)m_renderWindow->Height;
+		x = x * 2.0f - 1.0f;
+		y = y * 2.0f - 1.0f;
+		//x = 0;
+		//y = 0;
+		ZobObject* z = DirectZob::GetInstance()->GetEngine()->GetObjectAt2DCoords(x, y);
+		if (z)
+		{
+			String^ t = gcnew String(z->GetName().c_str());
+			if (t != test)
+			{
+				test = t;
+				string outStr;
+				ManagedObject::MarshalString(t, outStr);
+				DirectZob::LogWarning(outStr.c_str());
+			}
+		}
+		else
+		{
+			test = "";
+		}
 	}
 
 	void EngineWrapper::QueueObjectsToRender()

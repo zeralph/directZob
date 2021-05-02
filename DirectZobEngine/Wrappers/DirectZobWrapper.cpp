@@ -93,6 +93,7 @@ namespace CLI
 			GetInstance()->NewScene();
 			m_ZobCameraManager->CreateEditorCamera();
 			m_ZobObjectManagerWrapper->Refresh();
+			m_ZobObjectManagerWrapper->AddEditorGizmos();
 		}
 	}
 
@@ -177,6 +178,7 @@ namespace CLI
 			EditorUpdate();
 			m_ZobEngineWrapper->Update(m_lastFrameTime);
 			m_ZobEngineWrapper->QueueObjectsToRender();
+			
 		}
 		return 0;
 	}

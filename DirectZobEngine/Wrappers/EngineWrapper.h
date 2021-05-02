@@ -74,12 +74,13 @@ namespace CLI
 		void			SetRenderMode(int r);
 		void			SetLightingPrecision(int r);
 		void			SetObjectModificator(objectModificator om) { m_objectModificator = om;}
-		ZobObjectWrapper^ GetObjectAt2DCoords(float x, float y);
 		void			DrawLine(ZobVector3* p0, ZobVector3* p1, int color, bool bold, bool noZ);
 		void			DrawCircle(ZobVector3* p0, ZobVector3* up, float r, int color, bool bold, bool noZ);
 		void			QueueObjectsToRender();
 		void			Update(float dt);
 		void			Stop() { m_running = false; }
+		String^ test;
+
 	private:
 		ZobVector3		ToScreenCoords(ZobVector3& v);
 		void			InitGizmos();

@@ -2,6 +2,7 @@
 #pragma once
 #include "ManagedObject.h"
 #include "../Managers/ZobObjectManager.h"
+#include "Editor/ZobObjectsEditor.h"
 #include "ZobObjectWrapper.h"
 #include <string> 
 #using "System.Windows.Forms.dll"
@@ -40,15 +41,16 @@ namespace CLI
 		ZobObject*				GetZobObject(System::String^ guid);
 		ZobObjectWrapper^		GetRootObject();
 		void					RemoveZobObject(ZobObjectWrapper^ name);
-		void					CreateZobObject();
+		ZobObjectWrapper^		CreateZobObject();
 		ZobObjectWrapper^		AddZobSprite(ZobObjectWrapper^ parent);
 		ZobObjectWrapper^		GetObjectAtCoords(int x, int y, eObjectTypes type);
 		ZobObjectWrapper^		GetSelectedObject() {return m_selectedObjectWrapper;}
-		void					CreateEditorGizmos(System::String^ editorResourcesPath);
 		bool					Reparent(String^ object, String^ parent);
 		void					AddZobObjectsRecursive(ZobObject* z, TreeNodeCollection^ collection);
 		void					EditorUpdate();
+		void					AddEditorGizmos();
 		TreeView^				GetTreeviw() {return m_treeView;}
+		void					ReScan();
 	private:
 	
 		void					CreateTreeview();
@@ -72,7 +74,7 @@ namespace CLI
 
 		Panel^ m_objectTreeviewPanel;
 		Panel^ m_objectPropertiesPanel;
-
+		ZobObjectsEditor* m_editorGizmos;
 		CLI::ZobControlTreeview^ m_treeView;
 		ZobObject* m_selectedObject;
 		ZobObjectWrapper^ m_selectedObjectWrapper;

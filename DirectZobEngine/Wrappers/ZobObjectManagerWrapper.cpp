@@ -22,6 +22,7 @@ namespace CLI
 		CreateTreeview();
 		CreateObjectview();
 		CreateNodeMenu();
+		m_editorGizmos = new ZobObjectsEditor();
 		DirectZobWrapperEvents::OnNewSceneEvent += gcnew DirectZobWrapperEvents::OnNewScene(this, &ZobObjectManagerWrapper::OnNewScene);
 		DirectZobWrapperEvents::OnEditorUpdateEvent += gcnew DirectZobWrapperEvents::OnEditorUpdate(m_treeView, &CLI::ZobControlTreeview::UpdateZobControl);
 	}
@@ -188,6 +189,7 @@ namespace CLI
 		}
 		m_selectedObject = NULL;
 		m_treeView->Nodes->Clear();
+		//m_editorGizmos->AddEditorGizmos();
 	}
 
 	void ZobObjectManagerWrapper::TreeNodeClick(Object^ sender, TreeNodeMouseClickEventArgs^ e)
@@ -243,12 +245,27 @@ namespace CLI
 		}
 	}
 
+	void ZobObjectManagerWrapper::AddEditorGizmos()
+	{
+			m_editorGizmos->AddEditorGizmos();
+	}
+
+	void ZobObjectManagerWrapper::ReScan()
+	{
+		ReScan((ZobControlTreeNode^)m_treeView->TopNode);
+	}
+
 	void ZobObjectManagerWrapper::ReScan(ZobControlTreeNode^ n)
 	{
 
 		ZobObject* z = GetZobObject(n->m_zobObjectGuid);
 		if (z && !z->IsMarkedForDeletion())
 		{
+			if (m_selectedObject == z)
+			{
+				m_treeView->SelectedNode = n;
+				//n->SelectedImageIndex()
+			}
 			const std::vector<ZobObject*>* v = z->GetChildren();
 			List<String^>^ l = gcnew List<String^>();
 			for (int i = 0; i < v->size(); i++)
@@ -344,13 +361,28 @@ namespace CLI
 		m_Instance->RemoveZobObject(z->GetInstance());
 	}
 
-	void ZobObjectManagerWrapper::CreateZobObject()
+	ZobObjectWrapper^ ZobObjectManagerWrapper::CreateZobObject()
 	{
 		if (GetInstance())
 		{
-			GetInstance()->CreateZobObject(GetInstance()->GetRootObject());
-			ReScan((ZobControlTreeNode^)m_treeView->TopNode);
+			ZobObject* z = NULL;
+			if (m_selectedObject)
+			{
+				z = GetInstance()->CreateZobObject(m_selectedObject);
+			}
+			else
+			{
+				z = GetInstance()->CreateZobObject(GetInstance()->GetRootObject());
+			}
+			if(z)
+			{
+				m_selectedObject = z;
+				m_selectedObjectWrapper = gcnew ZobObjectWrapper(z, m_objectPropertiesPanel);
+				ReScan((ZobControlTreeNode^)m_treeView->TopNode);
+				return m_selectedObjectWrapper;
+			}
 		}
+		return nullptr;
 	}
 
 	ZobObjectWrapper^ ZobObjectManagerWrapper::AddZobSprite(ZobObjectWrapper^ parent)
@@ -360,13 +392,6 @@ namespace CLI
 		return gcnew ZobObjectWrapper(z);
 		*/
 		return nullptr;
-	}
-
-	void ZobObjectManagerWrapper::CreateEditorGizmos(System::String^ editorResourcesPath)
-	{
-		std::string n;
-		MarshalString(editorResourcesPath, n);
-		m_Instance->CreateEditorGizmos(n);
 	}
 
 	ZobObjectWrapper^ ZobObjectManagerWrapper::GetRootObject()

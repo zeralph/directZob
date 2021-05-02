@@ -6,7 +6,7 @@
 
 #include "../tinyxml/tinyxml.h"
 #include "ZobBehavior.h"
-#include "../DirectZobEngine/Mesh.h"
+#include "../Mesh.h"
 #include <string>
 #include <vector>
 
@@ -22,7 +22,8 @@ public:
 	void					UpdateBeforeObject(float dt) override {}
 	void					UpdateAfterObject(float dt) override;
 	void					EditorUpdate() override;
-
+	void					Set(ZobFilePath zfp);
+	RenderOptions*			GetRenderOptions() { return &m_renderOptions; }
 private:
 							ZobBehaviorMesh(ZobObject* zobObject);
 	bool					LoadMeshInternal();

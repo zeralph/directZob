@@ -50,6 +50,15 @@ ZobObject* ZobObjectManager::CreateZobObject(ZobObject* parent)
 	return new ZobObject(ZOBGUID::type_scene, ZOBGUID::subtype_zobOject, emptyStr, parent);
 }
 
+ZobObject* ZobObjectManager::CreateEditorZobObject(ZobObject* parent)
+{
+	if (parent == NULL)
+	{
+		parent = m_rootObject;
+	}
+	return new ZobObject(ZOBGUID::type_editor, ZOBGUID::subtype_zobOject, emptyStr, parent);
+}
+
 ZobSprite* ZobObjectManager::CreateZobSprite(ZobObject* parent)
 {
 	if (parent == NULL)
@@ -211,10 +220,6 @@ void ZobObjectManager::UnloadAll()
 	m_deletedIds.clear();
 	std::string n = "root";
 	m_rootObject = new ZobObject(ZOBGUID::type_internal, ZOBGUID::subtype_zobOject, n, NULL);
-}
-
-void ZobObjectManager::CreateEditorGizmos(std::string& editorResourcesPath)
-{
 }
 
 bool ZobObjectManager::Reparent(ZobObject*o, ZobObject* parent)

@@ -643,9 +643,9 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector3* p, const Triangl
 			fg = dg;
 			fb = db;
 		}
-		fr = clamp2(fr, 0.0f, 1.0f);
-		fg = clamp2(fg, 0.0f, 1.0f);
-		fb = clamp2(fb, 0.0f, 1.0f);
+		fr = clamp2(fr, 0.0f, 1.0f) * t->options->color.x;
+		fg = clamp2(fg, 0.0f, 1.0f) * t->options->color.y;
+		fb = clamp2(fb, 0.0f, 1.0f) * t->options->color.z;
 		z = ComputeFog(z);
 		fr = fr * (1.0f - z) + z * m_fogColor->x;
 		fg = fg * (1.0f - z) + z * m_fogColor->y;

@@ -18,6 +18,7 @@ namespace CLI
 		m_zobObject = zobObject;
 		m_id = zobObject->GetIdValue();
 		m_panel = panel;
+		m_panel->Controls->Clear();
 		m_objectPanel = nullptr;
 		m_container = nullptr;
 		CreateObjectview();
@@ -306,7 +307,11 @@ namespace CLI
 			MarshalString(file, f);
 			std::string p;
 			MarshalString(path, p);
-			z->LoadMesh(n, f, p);
+			ZobFilePath zfp;
+			zfp.name = n;
+			zfp.file = f;
+			zfp.path = p;
+			z->LoadMesh(zfp);
 		}
 	}
 

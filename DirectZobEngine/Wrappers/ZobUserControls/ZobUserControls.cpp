@@ -27,7 +27,7 @@ ZobControl::~ZobControl()
 
 void ZobControl::UpdateControl() 
 { 
-	if (this->IsHandleCreated)
+	if (this->IsHandleCreated && !this->IsDisposed)
 	{
 		this->Invoke(gcnew Action(this, &ZobControl::UpdateControlInternal));
 	} 

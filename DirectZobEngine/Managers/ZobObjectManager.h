@@ -31,10 +31,10 @@ public:
 	void GetZobObjectList(std::vector<const ZobObject*> &v);
 	ZobObject* GetRootObject() { return m_rootObject;  }
 	ZobObject* CreateZobObject(ZobObject* parent);
+	ZobObject* CreateEditorZobObject(ZobObject* parent);
 	ZobSprite* CreateZobSprite(ZobObject* parent);
 	void RemoveZobObject(ZobObject* z);
 	void UnloadAll();
-	void CreateEditorGizmos(std::string& editorResourcesPath);
 	bool Reparent(ZobObject* o, ZobObject* parent);
 	void SaveTransforms();
 	void RestoreTransforms();

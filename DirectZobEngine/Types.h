@@ -101,11 +101,13 @@ public:
 		std::string name;
 		std::string path;
 		std::string file;
+		bool bAbsolute;
 		void Init()
 		{
 			name = "";
 			path = "";
 			file = "";
+			bAbsolute = false;
 		}
 		bool IsDefined()
 		{
@@ -167,6 +169,7 @@ public:
 
 		bool bTransparency = false;
 		bool zBuffered = true;
+		ZobVector3 color = ZobVector3(1, 1, 1);
 		eLightMode lightMode = eLightMode::eLightMode_phong;
 		eCullMode cullMode = eCullMode_ClockwiseFace;
 	};
