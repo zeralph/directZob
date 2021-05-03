@@ -317,11 +317,6 @@ void Camera::Update(float dt)
 {
 	m_zobCameraController->Update(dt);
 	ZobObject::Update(dt);
-	UpdateViewProjectionMatrix();
-	if (!DirectZob::GetInstance()->GetEngine()->LockFrustrum())
-	{
-		RecomputeFrustrumPlanes();
-	}
 	//m_zobCameraController->Update(dt);	
 }
 
@@ -337,8 +332,13 @@ void Camera::Init()
 	m_zobCameraController->Init();
 }
 
-void Camera::UpdateAfter()
+void Camera::PostUpdate()
 {
+	UpdateViewProjectionMatrix();
+	if (!DirectZob::GetInstance()->GetEngine()->LockFrustrum())
+	{
+		RecomputeFrustrumPlanes();
+	}
 }
 
 

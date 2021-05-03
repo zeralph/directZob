@@ -56,7 +56,7 @@ public:
 	void					Update(float dt) override;
 	void					PreUpdate() override;
 	void					Init() override;
-	void					UpdateAfter();
+	void					PostUpdate() override;
 	void					DrawGizmos(const Camera* camera, Core::Engine* engine) override;
 	TiXmlNode*				SaveUnderNode(TiXmlNode* node) override;
 	void					UpdateViewProjectionMatrix(/*const ZobVector3* eyeV*/);

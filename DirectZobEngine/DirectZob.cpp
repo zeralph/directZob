@@ -260,7 +260,6 @@ int DirectZob::RunAFrame(DirectZob::engineCallback OnSceneUpdated /*=NULL*/, Dir
 				m_physicsEngine->StartUpdatePhysic(dt);
 
 			}
-			cam->UpdateAfter();
 			m_zobObjectManager->UpdateObjects(cam, m_engine, dt);			
 			m_hudManager->UpdateObjects(cam, m_engine, dt);
 			m_engine->ClearBuffer(&c);
