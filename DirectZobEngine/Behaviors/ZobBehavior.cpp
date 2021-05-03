@@ -7,9 +7,8 @@ ZobBehavior::ZobBehavior(ZobObject* zobObject):ZOBGUID(ZOBGUID::type_internal, Z
 {
 	m_zobObject = zobObject;
 	m_type = eBehavior_none;
-	std::string guid = ZobGuidToString();
-	m_varExposer = new ZobVariablesExposer(guid);
-	m_varExposer->WrapVariable<DirectZobType::zobId>("ZobId", GetIdAddress(), true, false);
+	m_varExposer = new ZobVariablesExposer(GetIdValue());
+	m_varExposer->WrapVariable<DirectZobType::zobId>("ZobId", GetIdAddress(), NULL, true, false);
 };
 
 TiXmlNode* ZobBehavior::SaveUnderNode(TiXmlNode* node)

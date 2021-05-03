@@ -14,8 +14,7 @@ ZobObject::ZobObject(ZobType t, ZobSubType s, const std::string& name, ZobObject
 {
 	DirectZob::LogInfo("ZobObject %s creation", name.c_str()); 
 	DirectZob::AddIndent();
-	std::string guid = ZobGuidToString();
-	m_varExposer = new ZobVariablesExposer(guid);
+	m_varExposer = new ZobVariablesExposer(GetIdValue());
 	sObjectNumber++;
 	m_behaviors.clear();
 	m_factoryFile = factoryFile?factoryFile->c_str():"";
@@ -71,14 +70,13 @@ ZobObject::ZobObject(ZobType t, ZobSubType s, const std::string& name, ZobObject
 ZobObject::ZobObject(std::string id, TiXmlElement* node, ZobObject* parent, const std::string* factoryFile /*=NULL*/)
 	:ZOBGUID(id)
 {
-	std::string guid = ZobGuidToString();
-	m_varExposer = new ZobVariablesExposer(guid);
+	m_varExposer = new ZobVariablesExposer(GetIdValue());
 	m_behaviors.clear();
 	sObjectNumber++;
 	m_factoryFile = factoryFile ? factoryFile->c_str() : "";
 	float x, y, z;
 	TiXmlElement* f;
-	DirectZob::LogInfo("ZobObject %s (%s) creation", guid.c_str(), id.c_str());
+	DirectZob::LogInfo("ZobObject %s creation", id);
 	DirectZob::AddIndent();
 	if (!parent && m_name != "root")
 	{
@@ -117,12 +115,34 @@ ZobObject::ZobObject(std::string id, TiXmlElement* node, ZobObject* parent, cons
 
 void ZobObject::InitVariablesExposer()
 {
-	m_varExposer->WrapVariable<zobId>("GUID", GetIdAddress(), true, false);
-	m_varExposer->WrapVariable<std::string>("Name", &m_name, false, true);
-	m_varExposer->WrapVariable<ZobVector3>("Position", GetPhysicComponentNoConst()->GetLocalPositionAddress(), false, true);
-	m_varExposer->WrapVariable<ZobVector3>("Rotation", GetPhysicComponentNoConst()->GetLocalRotationAddress(), false, true);
-	m_varExposer->WrapVariable<ZobVector3>("Scale", GetPhysicComponentNoConst()->GetLocalScaleAddress(), false, true);
+	m_varExposer->WrapVariable<zobId>("GUID", GetIdAddress(), NULL, true, false);
+	m_varExposer->WrapVariable<std::string>("Name", &m_name, NULL, false, true);
+	m_varExposer->WrapVariable<ZobVector3>("Position", GetPhysicComponentNoConst()->GetLocalPositionAddress(), &ZobObject::ReloadVariables, false, true);
+	m_varExposer->WrapVariable<ZobVector3>("Rotation", GetPhysicComponentNoConst()->GetLocalRotationAddress(), &ZobObject::ReloadVariables, false, true);
+	m_varExposer->WrapVariable<ZobVector3>("Scale", GetPhysicComponentNoConst()->GetLocalScaleAddress(), &ZobObject::ReloadVariables, false, true);
 
+}
+
+void ZobObject::ReloadVariables(zobId id)
+{
+	ZobObjectManager* zm = DirectZob::GetInstance()->GetZobObjectManager();
+	if (zm)
+	{
+		ZobObject* z = zm->GetZobObjectFromlId(id);
+		if (z)
+		{
+			ZobVector3* zp = z->GetPhysicComponentNoConst()->GetLocalPositionAddress();
+			ZobVector3* zr = z->GetPhysicComponentNoConst()->GetLocalRotationAddress();
+			ZobVector3* zs = z->GetPhysicComponentNoConst()->GetLocalScaleAddress();
+			Transform t = z->GetPhysicComponentNoConst()->GetLocalTransform();
+			Vector3 vp = Vector3(zp->x, zp->y, zp->z);
+			t.setPosition(vp);
+			Quaternion q = Quaternion::fromEulerAngles(DEG_TO_RAD(zr->x), DEG_TO_RAD(zr->y), DEG_TO_RAD(zr->z));
+			t.setOrientation(q);
+
+			z->GetPhysicComponentNoConst()->SetLocalTransform(t);
+		}
+	}
 }
 
 ZobObject::~ZobObject()
@@ -455,12 +475,25 @@ void ZobObject::SetParent(ZobObject* p)
 		ZobVector3 pos = GetWorldPosition();
 		ZobVector3 rot = GetWorldRotation();
 		ZobVector3 sca = GetScale();
-		if (GetParent()->RemoveChildReference(this))
+		ZobObject* parent = GetParent();
+		if (parent != p)
 		{
-			if (p->AddChildReference(this))
+			if (parent->RemoveChildReference(this))
 			{
-				SetWorldPosition(pos.x, pos.y, pos.z);
-				SetWorldRotation(rot.x, rot.y, rot.z);
+				if (p->AddChildReference(this))
+				{
+					m_parent = p;
+					SetWorldPosition(pos.x, pos.y, pos.z);
+					SetWorldRotation(rot.x, rot.y, rot.z);
+				}
+				else
+				{
+					throw("fuck");
+				}
+			}
+			else
+			{
+				throw("fuck");
 			}
 		}
 	}

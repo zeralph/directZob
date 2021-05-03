@@ -28,6 +28,7 @@ public :
 		subtype_MAX = 9,
 	};
 
+	ZOBGUID();
 	ZOBGUID(ZobType t, ZobSubType s);
 	ZOBGUID(std::string id);
 	~ZOBGUID();

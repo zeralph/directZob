@@ -191,6 +191,7 @@ float ZobPhysicComponent::ClampAngle(float a) const
 
 void ZobPhysicComponent::EditorUpdate()
 {
+	/*
 	Vector3 p = m_localTransform.getPosition();
 	Vector3 v;
 	v.x = m_editorLocalPosition.x;
@@ -199,16 +200,17 @@ void ZobPhysicComponent::EditorUpdate()
 	if (p.x != v.x || p.y != v.y || p.z != v.z)
 	{
 		m_localTransform.setPosition(v);
+		v.x = m_editorLocalRotation.x;
+		v.y = m_editorLocalRotation.y;
+		v.z = m_editorLocalRotation.z;
 	}
 	ZobVector3 z = GetLocalOrientation();
-	v.x = m_editorLocalRotation.x;
-	v.y = m_editorLocalRotation.y;
-	v.z = m_editorLocalRotation.z;
 	if (z.x != v.x || z.y != v.y || z.z != v.z)
 	{
 		Quaternion q = Quaternion::fromEulerAngles(DEG_TO_RAD(v.x), DEG_TO_RAD(v.y), DEG_TO_RAD(v.z));
 		m_localTransform.setOrientation(q);
 	}
+	*/
 }
 
 void ZobPhysicComponent::WorldOrientationToAxis(ZobVector3& left, ZobVector3& up, ZobVector3& forward) const

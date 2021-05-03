@@ -11,10 +11,10 @@ ZobBehaviorPhysicShape::ZobBehaviorPhysicShape(ZobObject* zobObject) : ZobBehavi
 {
 	m_type = eBehavior_none;
 
-	m_varExposer->WrapVariable<int>("Layers", &m_layers, false, true);
-	m_varExposer->WrapVariable<bool>("Trigger", &m_isTrigger, false, true);
-	m_varExposer->WrapVariable<ZobVector3>("Local position", &m_localPostion, false, true);
-	m_varExposer->WrapVariable<bool>("Scale with object", &m_bUpdateSize, false, true);
+	m_varExposer->WrapVariable<int>("Layers", &m_layers, NULL, false, true);
+	m_varExposer->WrapVariable<bool>("Trigger", &m_isTrigger, NULL, false, true);
+	m_varExposer->WrapVariable<ZobVector3>("Local position", &m_localPostion, NULL, false, true);
+	m_varExposer->WrapVariable<bool>("Scale with object", &m_bUpdateSize, NULL, false, true);
 	m_isTrigger = false;
 	m_collider = NULL;
 	m_layers = 0;

@@ -373,6 +373,7 @@ namespace DirectZobEditor
 
         private void OnSceneLoadedMethod()
         {
+            m_zobObjectManagerWrapper.AddEditorGizmos();
             m_zobObjectManagerWrapper.Refresh();
             m_directZobWrapper.GetZobCameraManagerWrapper().CreateEditorCamera();
             EventHandler handler = OnSceneLoadedEventHandler;
@@ -569,8 +570,8 @@ namespace DirectZobEditor
 
         private void createZobObjectToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            throw new Exception("deprecated");
-            //m_zobObjectManagerWrapper.CreateZobObject("");
+            //throw new Exception("deprecated");
+            m_zobObjectManagerWrapper.CreateZobObject();
         }
 
         private void btnPlay_Click(object sender, EventArgs e)

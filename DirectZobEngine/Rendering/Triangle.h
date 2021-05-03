@@ -70,6 +70,13 @@ public:
 		area = (pc->x - pa->x) * (pb->y - pa->y) - (pc->y - pa->y) * (pb->x - pa->x);
 	}
 
+	inline float sign(const ZobVector3* p1, const ZobVector3* p2, const ZobVector3* p3) const
+	{
+		return (p1->x - p3->x) * (p2->y - p3->y) - (p2->x - p3->x) * (p1->y - p3->y);
+	}
+
+	bool PointInTriangle2D(const ZobVector3* v) const;
+
 	static inline void CopyTriangle(Triangle* dst, const Triangle* src)
 	{
 		//memcpy(dst, src, sizeof(Triangle));

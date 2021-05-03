@@ -6,32 +6,42 @@ namespace CLI
 {
 	ZobObjectsEditor::ZobObjectsEditor()
 	{
-		m_gizmos = NULL;
+		m_gizmosGuid = 0;
 
 	}
 
 	ZobObjectsEditor::~ZobObjectsEditor()
 	{
-		delete m_gizmos;
+	}
+
+	void ZobObjectsEditor::SetParent(ZobObject* z)
+	{
+		ZobObjectManager* zm = DirectZob::GetInstance() ? DirectZob::GetInstance()->GetZobObjectManager() : NULL;
+		if (zm)
+		{
+			ZobObject* g = zm->GetZobObjectFromlId(m_gizmosGuid);
+			if (g)
+			{
+				g->SetParent(z);
+				g->SetLocalPosition(0, 0, 0);
+				g->SetLocalRotation(0, 0, 0);
+			}
+		}
 	}
 
 	void ZobObjectsEditor::AddEditorGizmos()
 	{
-		if (m_gizmos != NULL)
-		{
-			//delete m_gizmos;
-			//m_gizmos = NULL;
-		}
 		ZobObjectManager* zm = DirectZob::GetInstance()?DirectZob::GetInstance()->GetZobObjectManager():NULL;
 		if (zm)
 		{
-			m_gizmos = zm->CreateZobObject(NULL);
-			m_gizmos->SetName("Editor");
-			m_translateX = zm->CreateEditorZobObject(m_gizmos);
+			ZobObject* g = zm->CreateZobObject(NULL);
+			m_gizmosGuid = g->GetIdValue();
+			g->SetName("Editor");
+			m_translateX = zm->CreateEditorZobObject(g);
 			m_translateX->SetName("TX");
-			m_translateY = zm->CreateEditorZobObject(m_gizmos);
+			m_translateY = zm->CreateEditorZobObject(g);
 			m_translateY->SetName("TY");
-			m_translateZ = zm->CreateEditorZobObject(m_gizmos);
+			m_translateZ = zm->CreateEditorZobObject(g);
 			m_translateZ->SetName("TZ");
 			ZobFilePath zfp;
 			zfp.file = "arrow.obj";
@@ -43,10 +53,13 @@ namespace CLI
 			ZobBehaviorMesh* bz = m_translateZ->LoadMesh(zfp);
 			bx->GetRenderOptions()->color = ZobVector3(1, 0, 0);
 			bx->GetRenderOptions()->lightMode = RenderOptions::eLightMode_none;
+			bx->GetRenderOptions()->zBuffered = false;
 			by->GetRenderOptions()->color = ZobVector3(0, 1, 0);
 			by->GetRenderOptions()->lightMode = RenderOptions::eLightMode_none;
+			by->GetRenderOptions()->zBuffered = false;
 			bz->GetRenderOptions()->color = ZobVector3(0, 0, 1);
 			bz->GetRenderOptions()->lightMode = RenderOptions::eLightMode_none;
+			bz->GetRenderOptions()->zBuffered = false;
 			m_translateX->SetWorldRotation(0, 90, 0);
 			m_translateY->SetWorldRotation(-90, 0, 0);
 			//m_translateX->GetMesh()->

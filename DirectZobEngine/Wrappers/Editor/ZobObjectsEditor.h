@@ -17,9 +17,10 @@ namespace CLI
 		ZobObjectsEditor();
 		~ZobObjectsEditor();
 		void AddEditorGizmos();
+		void SetParent(ZobObject* z);
 
 	private:
-		ZobObject* m_gizmos;
+		zobId m_gizmosGuid;
 		ZobObject* m_translateX;
 		ZobObject* m_translateY;
 		ZobObject* m_translateZ;

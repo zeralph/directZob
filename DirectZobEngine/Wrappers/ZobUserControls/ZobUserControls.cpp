@@ -215,12 +215,15 @@ void ZobControlVector3::UpdateZobControl()
 void ZobControlVector3::UpdateZobControlInternal()
 {
 	ZobVector3* z = (ZobVector3*)_w->ptr;
-	if (!txt_X->Focused)
-		txt_X->Text = String::Format("{0:0.000}", z->x);
-	if (!txt_Y->Focused)
-		txt_Y->Text = String::Format("{0:0.000}", z->y);
-	if (!txt_Z->Focused)
-		txt_Z->Text = String::Format("{0:0.000}", z->z);
+	if (z)
+	{
+		if (!txt_X->Focused)
+			txt_X->Text = String::Format("{0:0.000}", z->x);
+		if (!txt_Y->Focused)
+			txt_Y->Text = String::Format("{0:0.000}", z->y);
+		if (!txt_Z->Focused)
+			txt_Z->Text = String::Format("{0:0.000}", z->z);
+	}
 }
 
 void ZobControlVector3::OnValueChanged(Object^ sender, EventArgs^ e)
@@ -240,6 +243,11 @@ void ZobControlVector3::OnValueChanged(Object^ sender, EventArgs^ e)
 		vv->x = v.x;
 		vv->y = v.y;
 		vv->z = v.z;
+		if (_w->callback)
+		{
+			zobId id = _w->id;
+			((ZobVariablesExposer::wrapperCallback)_w->callback)(id);
+		}
 	}
 }
 

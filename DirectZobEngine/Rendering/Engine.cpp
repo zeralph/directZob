@@ -546,6 +546,29 @@ bool Engine::LineTriangleIntersection(const Triangle* t, const ZobVector3* l0, c
 
 ZobObject* Engine::GetObjectAt2DCoords(float x, float y)
 {
+	int  idx = (int)((y / (float)m_bufferData.height) * m_nbRasterizers);
+	if (idx < 0 || idx >= m_nbRasterizers)
+	{
+		return NULL;
+	}
+	ZobObject* z = NULL;
+	float minZ = m_bufferData.zFar;
+	for (idx = 0; idx < m_nbRasterizers; idx++)
+	{
+		Rasterizer* rast = m_rasterizers[idx];
+		ZobVector3 p = ZobVector3(x, y, 0);
+		for (int i = 0; i < rast->GetNbTriangle(); i++)
+		{
+			const Triangle* t = rast->GetTriangle(i);
+			if (t->PointInTriangle2D(&p) && t->zobObject && t->pa->z < minZ)
+			{
+				z = t->zobObject;
+				minZ = t->pa->z;
+			}
+		}
+	}
+	return z;
+	/*
 	Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
 	if (c)
 	{
@@ -567,6 +590,7 @@ ZobObject* Engine::GetObjectAt2DCoords(float x, float y)
 		}
 	}
 	return NULL;
+	*/
 }
 
 void Engine::ClipSegmentToPlane(ZobVector3 &s0, ZobVector3 &s1, ZobVector3 &pp, ZobVector3 &pn)

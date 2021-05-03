@@ -15,7 +15,6 @@
 #include <fbxsdk.h>
 
 class ZobObject;
-
 class Mesh
 {
 public:

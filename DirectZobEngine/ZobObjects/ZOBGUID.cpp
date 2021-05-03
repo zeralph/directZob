@@ -2,6 +2,12 @@
 #include <algorithm>
 #include <DirectZob.h>
 
+ZOBGUID::ZOBGUID()
+{
+	m_type = ZobType::type_unknown;
+	m_subType = ZobSubType::subtype_unknown;
+	m_id = 0;
+}
 
 ZOBGUID::ZOBGUID(ZobType t, ZobSubType s)
 {

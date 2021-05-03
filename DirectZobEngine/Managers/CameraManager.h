@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-class ZobObject;
+//class ZobObject;
 class CameraManager
 {
 public:

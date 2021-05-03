@@ -2,6 +2,7 @@
 #include "EngineWrapper.h"
 #include "DirectZobWrapper.h"
 #include "ZobObjectManagerWrapper.h"
+#include "../ZobObjects/ZobObject.h"
 namespace CLI
 {
 	static Line m_lines[NB_EDITOR_LINES];
@@ -51,7 +52,7 @@ namespace CLI
 		m_renderWindow->MouseEnter += gcnew EventHandler(this, &EngineWrapper::OnMouseHover);
 		m_renderWindow->MouseLeave += gcnew EventHandler(this, &EngineWrapper::OnMouseLeave);
 		m_renderWindow->MouseWheel += gcnew MouseEventHandler(this, &EngineWrapper::OnMouseWheel);
-
+		m_renderWindow->MouseClick += gcnew MouseEventHandler(this, &EngineWrapper::OnMouseClick);
 		m_renderWindow->AutoSize = false;
 		m_renderWindow->Width = 800;
 		m_renderWindow->Height = 600;
@@ -104,6 +105,13 @@ namespace CLI
 	void EngineWrapper::OnMouseLeave(Object^ sender, EventArgs^ e)
 	{
 		m_mouseInside = false;
+	}
+
+	void EngineWrapper::OnMouseClick(Object^ sender, MouseEventArgs^ e)
+	{
+		Point location = m_renderWindow->PointToClient(m_mouseCoords);
+		ZobObject* z = DirectZob::GetInstance()->GetEngine()->GetObjectAt2DCoords(location.X, location.Y);
+		DirectZobWrapper::GetWrapper()->GetZobObjectManagerWrapper()->SelectObject(z);
 	}
 
 	void EngineWrapper::OnMouseWheel(Object^ sender, MouseEventArgs^ e)
@@ -180,30 +188,6 @@ namespace CLI
 		m_renderWindow->SizeMode = PictureBoxSizeMode::StretchImage;
 		m_renderWindowGraphics->DrawImage(b, dstRect, srcRect, Drawing::GraphicsUnit::Pixel);
 		UpdateModificationGizmos();
-
-		Point location = m_renderWindow->PointToClient(m_mouseCoords);
-		float x = (float)location.X / (float)m_renderWindow->Width;
-		float y = (float)location.Y / (float)m_renderWindow->Height;
-		x = x * 2.0f - 1.0f;
-		y = y * 2.0f - 1.0f;
-		//x = 0;
-		//y = 0;
-		ZobObject* z = DirectZob::GetInstance()->GetEngine()->GetObjectAt2DCoords(x, y);
-		if (z)
-		{
-			String^ t = gcnew String(z->GetName().c_str());
-			if (t != test)
-			{
-				test = t;
-				string outStr;
-				ManagedObject::MarshalString(t, outStr);
-				DirectZob::LogWarning(outStr.c_str());
-			}
-		}
-		else
-		{
-			test = "";
-		}
 	}
 
 	void EngineWrapper::QueueObjectsToRender()
@@ -330,6 +314,7 @@ namespace CLI
 
 	void EngineWrapper::OnObjectSelected(ZobObjectWrapper^ z)
 	{
+
 	}
 
 	void EngineWrapper::UpdateModificationGizmos()

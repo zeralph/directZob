@@ -92,6 +92,9 @@ public:
 	const std::vector<ZobBehavior*>*GetBehaviors() { return &m_behaviors; }
 	void							AddBehavior(ZobBehavior* b) { m_behaviors.push_back(b); }
 	ZobVariablesExposer*			GetVariablesExposer() { return m_varExposer; }
+
+	static void						ReloadVariables(zobId id);
+
 private:
 	void							SaveRecusrive(TiXmlNode* node, ZobObject* z);
 	void							DeleteInternal();

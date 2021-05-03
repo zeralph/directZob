@@ -2,9 +2,10 @@
 #include "ZobXmlHelper.h"
 #include "../DirectZobEngine/DirectZob.h"
 
-ZobVariablesExposer::ZobVariablesExposer(std::string &zobGUID)
+ZobVariablesExposer::ZobVariablesExposer(zobId id)
 {
 	m_wrappedVariables.clear();
+	m_zobId = id;
 }
 
 ZobVariablesExposer::~ZobVariablesExposer()
@@ -17,9 +18,7 @@ void ZobVariablesExposer::wrapperData::Init()
 	bReadOnly = true;
 	bSave = false;
 	ptr = NULL;
-	ptr_1 = NULL;
-	ptr_2 = NULL;
-	ptr_3 = NULL;
+	callback = NULL;
 	name = "";
 	internalName = "";
 	strValue = "";

@@ -16,6 +16,8 @@ class ZobVariablesExposer
 {
 public:
 
+	typedef void (*wrapperCallback)(zobId id);
+
 	enum eWrapperType
 	{
 		eWrapperType_unset = 0,
@@ -35,15 +37,14 @@ public:
 	class wrapperData
 	{
 	public:
-		wrapperData() {}
+		wrapperData(zobId id) { id = id; }
 		~wrapperData() {}
+		zobId id;
 		eWrapperType type;
 		bool bReadOnly;
 		bool bSave;
 		void* ptr;
-		void* ptr_1;
-		void* ptr_2;
-		void* ptr_3;
+		wrapperCallback callback;
 		std::string name;
 		std::string internalName;
 		std::string strValue;
@@ -54,7 +55,7 @@ public:
 		void Init();
 	};
 
-	ZobVariablesExposer(std::string& zobGUID);
+	ZobVariablesExposer(zobId id);
 	~ZobVariablesExposer();
 
 	const std::vector<wrapperData>* GetWrappedVariables() const { return &m_wrappedVariables; }
@@ -63,7 +64,7 @@ public:
 	void ReadNode(TiXmlNode* node);
 
 	template<typename T>
-	void WrapVariable(const char* name, T* ptr, bool bReadOnly, bool bSave)
+	void WrapVariable(const char* name, T* ptr, wrapperCallback cb, bool bReadOnly, bool bSave)
 	{
 		eWrapperType type = eWrapperType::__eWrapperType_MAX__;
 		if (std::is_same<T, int>::value)
@@ -108,31 +109,36 @@ public:
 		}
 
 		assert(type != eWrapperType::__eWrapperType_MAX__);
-		wrapperData w;
+		wrapperData w = wrapperData(m_zobId);
 		w.Init();
 		std::string s;
 		w.name = std::string(name);
-		s = m_zobGUID;
+		s = "";
 		s = s.append("_").append(w.name);
+		w.id = m_zobId;
 		w.internalName = s;
 		w.type = type;
 		w.ptr = (void*)ptr;
+		w.callback = cb;
 		w.bReadOnly = bReadOnly;
 		w.bSave = bSave;
 		m_wrappedVariables.push_back(w);
 	}
 
 	template<typename E>
-	void WrapEnum(const char* name, E* ptr, int nbParams, E* enumValues, const char** enumNames, bool bReadOnly, bool bSave)
+	void WrapEnum(const char* name, E* ptr, int nbParams, E* enumValues, const char** enumNames, wrapperCallback cb, bool bReadOnly, bool bSave)
 	{
-		wrapperData w;
+		wrapperData w = wrapperData(m_zobId);
+		w.Init();
 		std::string s;
 		w.name = std::string(name);
-		s = m_zobGUID;
+		s = "";
 		s = s.append("_").append(w.name);
 		w.internalName = s;
+		w.id = m_zobId;
 		w.type = eWrapperType_enum;
 		w.ptr = ptr;
+		w.callback = cb;
 		for (int i = 0; i < nbParams; i++)
 		{
 			int v = (int)enumValues[i];
@@ -146,7 +152,19 @@ public:
 		m_wrappedVariables.push_back(w);
 	}
 
+	template<typename E>
+	E Get()
+	{
+		return w.ptr;
+	}
+
+	template<typename E>
+	void Set(E* t)
+	{
+		*w.ptr = *t;
+	}
+
 private:
-	std::string m_zobGUID;
+	zobId m_zobId;
 	std::vector<wrapperData> m_wrappedVariables;
 };

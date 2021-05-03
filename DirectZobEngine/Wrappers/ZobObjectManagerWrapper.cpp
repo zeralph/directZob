@@ -91,11 +91,7 @@ namespace CLI
 		ZobObject* p = DirectZob::GetInstance()->GetZobObjectManager()->GetZobObjectFromlId(id);
 		if (m_selectedObject == p)
 		{
-			if (m_selectedObjectWrapper)
-			{
-				delete m_selectedObjectWrapper;
-			}
-			m_selectedObject = NULL;
+			SelectObject(NULL);
 		}
 		DirectZob::GetInstance()->GetZobObjectManager()->RemoveZobObject(p);
 		ReScan((ZobControlTreeNode^)m_treeView->TopNode);
@@ -183,11 +179,7 @@ namespace CLI
 
 	void ZobObjectManagerWrapper::OnNewScene()
 	{
-		if (m_selectedObjectWrapper)
-		{
-			delete m_selectedObjectWrapper;
-		}
-		m_selectedObject = NULL;
+		SelectObject(NULL);
 		m_treeView->Nodes->Clear();
 		//m_editorGizmos->AddEditorGizmos();
 	}
@@ -200,20 +192,7 @@ namespace CLI
 			m_treeView->SelectedNode = e->Node;
 			if (e->Button == MouseButtons::Left)
 			{
-				m_selectedObject = GetZobObject(tn->m_zobObjectGuid);
-				if (m_selectedObject != NULL)
-				{
-					if (m_selectedObjectWrapper != nullptr)
-					{
-						delete m_selectedObjectWrapper;
-					}
-					m_selectedObjectWrapper = gcnew ZobObjectWrapper(m_selectedObject, m_objectPropertiesPanel);
-					OnObjectSelectedEvent(m_selectedObjectWrapper);
-				}
-				else
-				{
-					OnObjectSelectedEvent(nullptr);
-				}
+				SelectObject(GetZobObject(tn->m_zobObjectGuid));
 			}
 			else if (e->Button == MouseButtons::Right)
 			{
@@ -229,9 +208,7 @@ namespace CLI
 		}
 		else
 		{
-			m_selectedObject = NULL;
-			m_selectedObjectWrapper = nullptr;
-			OnObjectSelectedEvent(nullptr);
+			SelectObject(NULL);
 		}
 	}
 	
@@ -376,13 +353,37 @@ namespace CLI
 			}
 			if(z)
 			{
-				m_selectedObject = z;
-				m_selectedObjectWrapper = gcnew ZobObjectWrapper(z, m_objectPropertiesPanel);
+				SelectObject(z);
 				ReScan((ZobControlTreeNode^)m_treeView->TopNode);
 				return m_selectedObjectWrapper;
 			}
 		}
 		return nullptr;
+	}
+
+	void ZobObjectManagerWrapper::SelectObject(ZobObject* z)
+	{
+		if (z)
+		{
+			m_selectedObject = z;
+			m_selectedObjectWrapper = gcnew ZobObjectWrapper(z, m_objectPropertiesPanel);
+			m_editorGizmos->SetParent(z);
+			OnObjectSelectedEvent(m_selectedObjectWrapper);
+			ReScan();
+			String^ t = gcnew String(z->GetName().c_str());
+			string outStr;
+			ManagedObject::MarshalString(t, outStr);
+			DirectZob::LogInfo("Selected %s", outStr.c_str());
+		}
+		else
+		{
+			if (m_selectedObjectWrapper)
+			{
+				delete m_selectedObjectWrapper;
+			}
+			m_selectedObject = NULL;			
+			OnObjectSelectedEvent(nullptr);
+		}
 	}
 
 	ZobObjectWrapper^ ZobObjectManagerWrapper::AddZobSprite(ZobObjectWrapper^ parent)

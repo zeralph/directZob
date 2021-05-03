@@ -13,8 +13,8 @@ ZobBehaviorPhysicMesh::ZobBehaviorPhysicMesh(ZobObject* zobObject) : ZobBehavior
 	m_convexMeshPath.Init();
 	m_concaveMeshNbTriangles = 0;
 	m_mesh = NULL;
-	m_varExposer->WrapVariable<ZobFilePath>("Mesh", &m_convexMeshPath, false, true);
-	m_varExposer->WrapVariable<int>("Nb triangles", &m_concaveMeshNbTriangles, true, false);
+	m_varExposer->WrapVariable<ZobFilePath>("Mesh", &m_convexMeshPath, NULL, false, true);
+	m_varExposer->WrapVariable<int>("Nb triangles", &m_concaveMeshNbTriangles, NULL, true, false);
 }
 
 void ZobBehaviorPhysicMesh::RemoveCollider()

@@ -12,7 +12,7 @@ ZobBehaviorPhysicSphere::ZobBehaviorPhysicSphere(ZobObject* zobObject) : ZobBeha
 	m_type = eBehavior_physicSphere;
 	m_sphereShape = NULL;
 	m_localPostion = ZobVector3(0,0,0);
-	m_varExposer->WrapVariable<float>("Radius", &m_radius, false, true);
+	m_varExposer->WrapVariable<float>("Radius", &m_radius, NULL, false, true);
 	m_radius = 1.0f;
 }
 

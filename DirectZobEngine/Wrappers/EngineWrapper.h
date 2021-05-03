@@ -88,6 +88,7 @@ namespace CLI
 		void			OnMouseWheel(Object^ sender, MouseEventArgs^ e);
 		void			OnMouseHover(Object ^ sender, EventArgs^ e);
 		void			OnMouseLeave(Object^ sender, EventArgs^ e);
+		void			OnMouseClick(Object^ sender, MouseEventArgs^ e);
 		void			UpdateRenderWindowInternal();
 		void			UpdateModificationGizmos();
 		void			OnObjectSelected(ZobObjectWrapper^ z);

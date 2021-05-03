@@ -12,21 +12,21 @@ ZobBehaviorMesh::ZobBehaviorMesh(ZobObject* zobObject) : ZobBehavior(zobObject)
 	m_meshPath.Init();
 	m_mesh = NULL;
 
-	m_varExposer->WrapVariable<ZobFilePath>("File", &m_meshPath, false, true);
+	m_varExposer->WrapVariable<ZobFilePath>("File", &m_meshPath, NULL, false, true);
 	
 	RenderOptions::eCullMode cm[3] = { RenderOptions::eCullMode_None, RenderOptions::eCullMode_ClockwiseFace, RenderOptions::eCullMode_CounterClockwiseFace};
 	const char* cmStr[3] = { "None", "Clockwise", "Counter clockwise" };
-	m_varExposer->WrapEnum<RenderOptions::eCullMode>("Cull mode", &m_renderOptions.cullMode, 3, cm, cmStr, false, true);
+	m_varExposer->WrapEnum<RenderOptions::eCullMode>("Cull mode", &m_renderOptions.cullMode, 3, cm, cmStr, NULL, false, true);
 
 	RenderOptions::eLightMode lm[5] = { RenderOptions::eLightMode_none, RenderOptions::eLightMode_flat, RenderOptions::eLightMode_gouraud, RenderOptions::eLightMode_phong , RenderOptions::eLightMode_flatPhong };
 	const char* lmStr[5] = { "None", "Flat", "Gouraud", "Phong", "Flat phong" };
-	m_varExposer->WrapEnum<RenderOptions::eLightMode>("Lighting", &m_renderOptions.lightMode, 5, lm, lmStr, false, true);
+	m_varExposer->WrapEnum<RenderOptions::eLightMode>("Lighting", &m_renderOptions.lightMode, 5, lm, lmStr, NULL, false, true);
 
-	m_varExposer->WrapVariable<bool>("ZBuffered", &m_renderOptions.zBuffered, false, true);
+	m_varExposer->WrapVariable<bool>("ZBuffered", &m_renderOptions.zBuffered, NULL, false, true);
 	
-	m_varExposer->WrapVariable<bool>("Transparent", &m_renderOptions.bTransparency, false, true);
+	m_varExposer->WrapVariable<bool>("Transparent", &m_renderOptions.bTransparency, NULL, false, true);
 	
-	m_varExposer->WrapVariable<int>("Nb triangles", &m_meshNbTriangles, true, false);
+	m_varExposer->WrapVariable<int>("Nb triangles", &m_meshNbTriangles, NULL, true, false);
 }
 
 void ZobBehaviorMesh::Init()
