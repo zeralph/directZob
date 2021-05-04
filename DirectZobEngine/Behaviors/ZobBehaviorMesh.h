@@ -21,6 +21,7 @@ public:
 	void					PostUpdate() override;
 	void					UpdateBeforeObject(float dt) override {}
 	void					UpdateAfterObject(float dt) override;
+	void					QueueForDrawing(const Camera* camera, Engine* engine) override;
 	void					EditorUpdate() override;
 	void					Set(ZobFilePath zfp);
 	RenderOptions*			GetRenderOptions() { return &m_renderOptions; }

@@ -262,6 +262,7 @@ int DirectZob::RunAFrame(DirectZob::engineCallback OnSceneUpdated /*=NULL*/, Dir
 			}
 			m_zobObjectManager->UpdateObjects(cam, m_engine, dt);			
 			m_hudManager->UpdateObjects(cam, m_engine, dt);
+			m_zobObjectManager->PostUpdate();
 			m_engine->ClearBuffer(&c);
 			m_renderTime = m_engine->WaitForRasterizersEnd();
 			//ZobLightManager update is made after resterizers' work because it changes the active lights vectors
@@ -278,7 +279,8 @@ int DirectZob::RunAFrame(DirectZob::engineCallback OnSceneUpdated /*=NULL*/, Dir
 			{
 				//OnQueuing();
 			}
-			m_zobObjectManager->PostUpdate();
+			//m_zobObjectManager->PostUpdate();
+			m_zobObjectManager->QueueForDrawing(cam, m_engine);
 			m_hudManager->QueueForDrawing(cam, m_engine);
 			if (m_engine->DrawPhysyicsGizmos())
 			{

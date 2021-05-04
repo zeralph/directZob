@@ -3,6 +3,7 @@
 #include "../tinyxml/tinyxml.h"
 #include "../ZobObjects/ZOBGUID.h"
 #include "../Misc/ZobVariablesExposer.h"
+#include "../Rendering/Engine.h"
 #include <map>
 #include <vector>
 #include <string>
@@ -33,6 +34,7 @@ public:
 	virtual void											UpdateAfterObject(float dt) = 0;
 	virtual void											PostUpdate() = 0;
 	virtual void											EditorUpdate() = 0;
+	virtual void											QueueForDrawing(const Camera* camera, Engine* engine) {};
 	virtual	void											DrawGizmos(const Camera* camera, const ZobVector3* position, const ZobVector3* rotation) const {}
 
 	const char*												GetBehaviorTypeStr();

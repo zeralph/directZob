@@ -63,10 +63,24 @@ void ZobBehaviorMesh::PreUpdate()
 
 void ZobBehaviorMesh::UpdateAfterObject(float dt)
 {
+
+}
+
+void ZobBehaviorMesh::PostUpdate()
+{
+	/*if (m_mesh)
+	{
+		const ZobMatrix4x4* mm = m_zobObject->GetModelMatrix();
+		const ZobMatrix4x4* rs = m_zobObject->GetRotationMatrix();
+		RenderOptions* ro = &this->m_renderOptions;
+		const Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
+		Engine* e = DirectZob::GetInstance()->GetEngine();
+		m_mesh->QueueForDrawing(m_zobObject, mm, rs, c, e, ro);
+	}*/
 	if (m_mesh)
 	{
 		const ZobMatrix4x4* mm = m_zobObject->GetModelMatrix();
-		const ZobMatrix4x4* rs = m_zobObject->GetRotationMatrix();	
+		const ZobMatrix4x4* rs = m_zobObject->GetRotationMatrix();
 		const RenderOptions* ro = &this->m_renderOptions;
 		const Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
 		Engine* e = DirectZob::GetInstance()->GetEngine();
@@ -74,7 +88,7 @@ void ZobBehaviorMesh::UpdateAfterObject(float dt)
 	}
 }
 
-void ZobBehaviorMesh::PostUpdate()
+void ZobBehaviorMesh::QueueForDrawing(const Camera* camera, Engine* engine)
 {
 	if (m_mesh)
 	{

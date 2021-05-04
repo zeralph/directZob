@@ -125,7 +125,7 @@ void Camera::SetType(eCameraType type)
 	//m_zobCameraController->SetType(type);
 };
 
-void Camera::DrawGizmos(const Camera* camera, Core::Engine* engine)
+void Camera::DrawGizmos(const Camera* camera, Engine* engine)
 {
 	if (!engine->DrawCameraGizmos())
 	{
@@ -312,12 +312,10 @@ void Camera::Move(float dx, float dz, float dy, bool moveTargetVector)
 	m_zobCameraController->Move(dx, dy, dz);
 }
 
-//void Camera::Update(const ZobMatrix4x4& parentMatrix, const ZobMatrix4x4& parentRSMatrix)
-void Camera::Update(float dt)
+void Camera::Init()
 {
-	m_zobCameraController->Update(dt);
-	ZobObject::Update(dt);
-	//m_zobCameraController->Update(dt);	
+	ZobObject::Init();
+	m_zobCameraController->Init();
 }
 
 void Camera::PreUpdate()
@@ -326,19 +324,24 @@ void Camera::PreUpdate()
 	m_zobCameraController->PreUpdate();
 }
 
-void Camera::Init()
+void Camera::Update(float dt)
 {
-	ZobObject::Init();
-	m_zobCameraController->Init();
-}
-
-void Camera::PostUpdate()
-{
+	m_zobCameraController->Update(dt);
+	ZobObject::Update(dt);
 	UpdateViewProjectionMatrix();
 	if (!DirectZob::GetInstance()->GetEngine()->LockFrustrum())
 	{
 		RecomputeFrustrumPlanes();
 	}
+}
+
+void Camera::PostUpdate()
+{
+	//UpdateViewProjectionMatrix();
+	//if (!DirectZob::GetInstance()->GetEngine()->LockFrustrum())
+	//{
+	//	RecomputeFrustrumPlanes();
+	//}
 }
 
 

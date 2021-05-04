@@ -52,7 +52,7 @@ namespace CLI
 		Y,
 		Z,
 	};
-	public ref class EngineWrapper: public ManagedObject<Core::Engine>
+	public ref class EngineWrapper: public ManagedObject<Engine>
 	{
 	public:
 		EngineWrapper(PictureBox^ renderWindow);
@@ -83,14 +83,12 @@ namespace CLI
 
 	private:
 		ZobVector3		ToScreenCoords(ZobVector3& v);
-		void			InitGizmos();
 		void			UpdateCameraEditor(float dt);
 		void			OnMouseWheel(Object^ sender, MouseEventArgs^ e);
 		void			OnMouseHover(Object ^ sender, EventArgs^ e);
 		void			OnMouseLeave(Object^ sender, EventArgs^ e);
 		void			OnMouseClick(Object^ sender, MouseEventArgs^ e);
 		void			UpdateRenderWindowInternal();
-		void			UpdateModificationGizmos();
 		void			OnObjectSelected(ZobObjectWrapper^ z);
 		void			OnNewScene();
 		bool			IsCursorInsideWindow();
@@ -106,10 +104,6 @@ namespace CLI
 		int				m_nbCircles;
 		bool			m_running;
 		objectModificator m_objectModificator;
-		Label^			m_bCenter;
-		Label^			m_bTZ;
-		Label^			m_bTY;
-		Label^			m_bTX;
 		Point			m_mouseCoords;
 		bool			m_mouseInside;
 	};

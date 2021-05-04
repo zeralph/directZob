@@ -156,7 +156,7 @@ void ZobPhysicsEngine::DestroyCollisionBody(CollisionBody* rb)
 
 void ZobPhysicsEngine::DrawGizmos() const
 {
-    Core::Engine* engine = DirectZob::GetInstance()->GetEngine();
+    Engine* engine = DirectZob::GetInstance()->GetEngine();
     const Camera* camera = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
     if (engine && camera && engine->DrawGizmos())
     {

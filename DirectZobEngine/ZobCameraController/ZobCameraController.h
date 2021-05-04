@@ -16,7 +16,7 @@ public:
     virtual void                Rotate(float x, float y, float z);
     virtual void                Move(float x, float y, float z);
     virtual void                Zoom(float f);
-    virtual void                DrawGizmos(const Camera* camera, Core::Engine* engine) const;
+    virtual void                DrawGizmos(const Camera* camera, Engine* engine) const;
     Camera::eCameraType         GetType() const { return m_type; }
     static Camera::eCameraType  TypeFromString(const char* typeStr);
     const char*                 GetTypeName() const { return ZobCameraController::eCameraTypeStr[m_type]; }

@@ -145,17 +145,11 @@ Sprite::~Sprite()
 	DirectZob::RemoveIndent();
 }
 
-void Sprite::QueueForDrawing(ZobObject* z, const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const RenderOptions* options)
+void Sprite::QueueForDrawing(ZobObject* z, const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Engine* engine, const RenderOptions* options)
 {
 	Mesh::QueueForDrawing(z, modelMatrix, rotationMatrix, camera, engine, options);
 }
 
-/*
-void Sprite::Update(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions* options)
-{
-	Mesh::Update(modelMatrix, rotationMatrix, camera, engine, ownerId, options);
-}
-*/
 void Sprite::Setmaterial(const ZobMaterial* m)
 { 
 	m_triangles[0].material = m;  

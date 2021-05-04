@@ -155,12 +155,18 @@ void ZobObjectManager::PostUpdate()
 	m_rootObject->PostUpdate();
 }
 
+void ZobObjectManager::QueueForDrawing(const Camera* camera, Engine* engine)
+{
+	OPTICK_EVENT();
+	m_rootObject->QueueForDrawing(camera, engine);
+}
+
 void ZobObjectManager::EditorUpdate()
 {
 	m_rootObject->EditorUpdate();
 }
 
-void ZobObjectManager::UpdateObjects(const Camera* camera, Core::Engine* engine, float dt)
+void ZobObjectManager::UpdateObjects(const Camera* camera, Engine* engine, float dt)
 {
 	OPTICK_EVENT();
 	m_rootObject->Update(dt);

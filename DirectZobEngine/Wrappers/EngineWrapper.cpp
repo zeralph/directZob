@@ -12,7 +12,6 @@ namespace CLI
 	{
 		test = gcnew String("");
 		m_renderWindow = renderWindow;
-		InitGizmos();
 		m_mouseInside = true;
 		m_objectModificator = translate_world;
 		//m_renderWindow->AutoSize = true;
@@ -187,7 +186,6 @@ namespace CLI
 		Drawing::Rectangle dstRect = Drawing::Rectangle(0, 0, renderW, renderH);
 		m_renderWindow->SizeMode = PictureBoxSizeMode::StretchImage;
 		m_renderWindowGraphics->DrawImage(b, dstRect, srcRect, Drawing::GraphicsUnit::Pixel);
-		UpdateModificationGizmos();
 	}
 
 	void EngineWrapper::QueueObjectsToRender()
@@ -271,43 +269,6 @@ namespace CLI
 		}
 	}
 
-	void EngineWrapper::InitGizmos()
-	{
-		m_bCenter = gcnew Label();
-		m_bTZ = gcnew Label();
-		m_bTY = gcnew Label();
-		m_bTX = gcnew Label();
-
-		m_bCenter->BackColor = Drawing::Color::Black;
-		m_bCenter->Font = gcnew Drawing::Font("Microsoft YaHei", 12, Drawing::FontStyle::Bold);
-		m_bCenter->ForeColor = Drawing::Color::White;
-		m_bCenter->Size = Drawing::Size(30, 25);
-		m_bCenter->Text = "O";
-
-		m_bTX->BackColor = Drawing::Color::Red;
-		m_bTX->Font = gcnew Drawing::Font("Microsoft YaHei", 12, Drawing::FontStyle::Bold);
-		m_bTX->ForeColor = Drawing::Color::White;
-		m_bTX->Size = Drawing::Size(30, 25);
-		m_bTX->Text = "Y";
-
-		m_bTY->BackColor = Drawing::Color::Green;
-		m_bTY->Font = gcnew Drawing::Font("Microsoft YaHei", 12, Drawing::FontStyle::Bold);
-		m_bTY->ForeColor = Drawing::Color::White;
-		m_bTY->Size = Drawing::Size(30, 25);
-		m_bTY->Text = "X";
-
-		m_bTZ->BackColor = Drawing::Color::Blue;
-		m_bTZ->Font = gcnew Drawing::Font("Microsoft YaHei", 12, Drawing::FontStyle::Bold);
-		m_bTZ->ForeColor = Drawing::Color::White;
-		m_bTZ->Size = Drawing::Size(30, 25);
-		m_bTZ->Text = "Z";
-
-		m_renderWindow->Controls->Add(m_bCenter);
-		m_renderWindow->Controls->Add(m_bTX);
-		m_renderWindow->Controls->Add(m_bTY);
-		m_renderWindow->Controls->Add(m_bTZ);
-	}
-
 	void EngineWrapper::OnNewScene()
 	{
 	}
@@ -315,160 +276,6 @@ namespace CLI
 	void EngineWrapper::OnObjectSelected(ZobObjectWrapper^ z)
 	{
 
-	}
-
-	void EngineWrapper::UpdateModificationGizmos()
-	{
-		ZobObjectWrapper^ zw = DirectZobWrapper::GetWrapper()->GetZobObjectManagerWrapper()->GetSelectedObject();
-		if (zw)
-		{
-			ZobObject* z = zw->GetInstance();
-			if (z != NULL)
-			{
-				int btnSize = 20 / 2;
-				ZobVector3 p0 = z->GetWorldPosition();
-				ZobVector3 pX = z->GetLeft();
-				ZobVector3 pY = z->GetUp();
-				ZobVector3 pZ = z->GetForward();
-				ZobVector3 nX = z->GetLeft();
-				ZobVector3 nY = z->GetUp();
-				ZobVector3 nZ = z->GetForward();
-				switch (m_objectModificator)
-				{
-				case objectModificator::translate_world:
-				case objectModificator::rotate_world:
-					pX = ZobVector3(1, 0, 0);
-					pY = ZobVector3(0, 1, 0);
-					pZ = ZobVector3(0, 0, 1);
-					nX = pX;
-					nY = pY;
-					nZ = pZ;
-					break;
-				case objectModificator::translate_local:
-				case objectModificator::rotate_local:
-				case objectModificator::scale:
-					pX = z->GetLeft();
-					pY = z->GetUp();
-					pZ = z->GetForward();
-					nX = pX;
-					nY = pY;
-					nZ = pZ;
-					break;
-				}
-				float d = m_Instance->GetDistanceToCamera(&p0) / 10.0f;
-				pX.Mul(d);
-				pY.Mul(d);
-				pZ.Mul(d);
-				pX.Add(&p0);
-				pY.Add(&p0);
-				pZ.Add(&p0);
-				m_Instance->GetProjectedCoords(&p0);
-				m_Instance->GetProjectedCoords(&pX);
-				m_Instance->GetProjectedCoords(&pY);
-				m_Instance->GetProjectedCoords(&pZ);
-				p0 = ToScreenCoords(p0);
-				pX = ToScreenCoords(pX);
-				pY = ToScreenCoords(pY);
-				pZ = ToScreenCoords(pZ);
-				Point pp0 = Point((int)p0.x, (int)p0.y);
-				Point ppX = Point((int)pX.x, (int)pX.y);
-				Point ppY = Point((int)pY.x, (int)pY.y);
-				Point ppZ = Point((int)pZ.x, (int)pZ.y);
-				pp0.X += m_renderWindow->Location.X - btnSize;
-				pp0.Y += m_renderWindow->Location.Y - btnSize;
-				ppX.X += m_renderWindow->Location.X - btnSize;
-				ppX.Y += m_renderWindow->Location.Y - btnSize;
-				ppY.X += m_renderWindow->Location.X - btnSize;
-				ppY.Y += m_renderWindow->Location.Y - btnSize;
-				ppZ.X += m_renderWindow->Location.X - btnSize;
-				ppZ.Y += m_renderWindow->Location.Y - btnSize;
-				m_bCenter->Location = pp0;
-				m_bTX->Location = ppX;
-				m_bTY->Location = ppY;
-				m_bTZ->Location = ppZ;
-				m_bCenter->Visible = true;
-				m_bTY->Visible = true;
-				m_bTX->Visible = true;
-				m_bTZ->Visible = true;
-				p0 = z->GetWorldPosition();
-				switch (m_objectModificator)
-				{
-				case objectModificator::translate_world:
-				case objectModificator::rotate_world:
-					pX = ZobVector3(1, 0, 0);
-					pY = ZobVector3(0, 1, 0);
-					pZ = ZobVector3(0, 0, 1);
-					nX = pX;
-					nY = pY;
-					nZ = pZ;
-					break;
-				case objectModificator::translate_local:
-				case objectModificator::rotate_local:
-				case objectModificator::scale:
-					pX = z->GetLeft();
-					pY = z->GetUp();
-					pZ = z->GetForward();
-					nX = pX;
-					nY = pY;
-					nZ = pZ;
-					break;
-				}
-				d = m_Instance->GetDistanceToCamera(&p0) / 10.0f;
-				pX.Mul(d);
-				pY.Mul(d);
-				pZ.Mul(d);
-				pX.Add(&p0);
-				pY.Add(&p0);
-				pZ.Add(&p0);
-				switch (m_objectModificator)
-				{
-				case objectModificator::translate_world:
-				case objectModificator::translate_local:
-					m_bTX->Text = "Tx";
-					m_bTX->BackColor = Drawing::Color::Red;
-					m_bTY->Text = "Ty";
-					m_bTY->BackColor = Drawing::Color::Green;
-					m_bTZ->Text = "Tz";
-					m_bTZ->BackColor = Drawing::Color::Blue;
-					DrawLine(&p0, &pX, 0xFF0000, true, true);
-					DrawLine(&p0, &pY, 0x00FF00, true, true);
-					DrawLine(&p0, &pZ, 0x0000FF, true, true);
-					break;
-				case objectModificator::rotate_world:
-				case objectModificator::rotate_local:
-					m_bTX->Text = "Ry";
-					m_bTX->BackColor = Drawing::Color::Green;
-					m_bTY->Text = "Rz";
-					m_bTY->BackColor = Drawing::Color::Blue;
-					m_bTZ->Text = "Rx";
-					m_bTZ->BackColor = Drawing::Color::Red;
-					DrawCircle(&p0, &nX, d, 0xFF0000, true, true);
-					DrawCircle(&p0, &nY, d, 0x00FF00, true, true);
-					DrawCircle(&p0, &nZ, d, 0x0000FF, true, true);
-					break;
-				case objectModificator::scale:
-					m_bTX->Text = "Sx";
-					m_bTX->BackColor = Drawing::Color::Red;
-					m_bTY->Text = "Sy";
-					m_bTY->BackColor = Drawing::Color::Green;
-					m_bTZ->Text = "Sz";
-					m_bTZ->BackColor = Drawing::Color::Blue;
-					DrawLine(&p0, &pX, 0xFF0000, true, true);
-					DrawLine(&p0, &pY, 0x00FF00, true, true);
-					DrawLine(&p0, &pZ, 0x0000FF, true, true);
-					break;
-				default:
-					break;
-				}
-			}
-			else
-			{
-				m_bCenter->Visible = false;
-				m_bTY->Visible = false;
-				m_bTX->Visible = false;
-				m_bTZ->Visible = false;
-			}
-		}
 	}
 
 	ZobVector3 EngineWrapper::ToScreenCoords(ZobVector3 &v)

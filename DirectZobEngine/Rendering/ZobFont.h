@@ -6,9 +6,6 @@
 #include "../Events.h"
 #include "../ZobMaterial.h"
 
-using namespace Core;
-
-
 class ZobFont
 {
 public:

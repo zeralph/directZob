@@ -140,7 +140,7 @@ void ZobHUDManager::DeleteFonts()
 	m_fonts.clear();
 }
 
-void ZobHUDManager::UpdateObjects(const Camera* camera, Core::Engine* engine, float dt)
+void ZobHUDManager::UpdateObjects(const Camera* camera, Engine* engine, float dt)
 {
 	OPTICK_EVENT();
 	for (std::vector<HUDElement>::const_iterator iter = m_hudElements.begin(); iter != m_hudElements.end(); iter++)
@@ -158,7 +158,7 @@ void ZobHUDManager::UpdateObjects(const Camera* camera, Core::Engine* engine, fl
 	}
 }
 
-void ZobHUDManager::QueueForDrawing(const Camera* camera, Core::Engine* engine)
+void ZobHUDManager::QueueForDrawing(const Camera* camera, Engine* engine)
 {
 	OPTICK_EVENT();
 	for (int i = 0; i < m_nbDrawnTriangles; i++)

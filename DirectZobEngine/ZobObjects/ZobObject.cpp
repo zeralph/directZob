@@ -273,6 +273,21 @@ void ZobObject::PostUpdate()
 	}
 }
 
+void ZobObject::QueueForDrawing(const Camera* camera, Engine* engine)
+{
+	OPTICK_EVENT();
+	for (int i = 0; i < m_behaviors.size(); i++)
+	{
+		m_behaviors[i]->QueueForDrawing(camera, engine);
+	}
+	for (int i = 0; i < m_children.size(); i++)
+	{
+		ZobObject* z = m_children[i];
+		if (z)
+			z->QueueForDrawing(camera, engine);
+	}
+}
+
 void ZobObject::UpdateBehaviorsBeforeObject(float dt)
 {
 	OPTICK_EVENT();
@@ -373,7 +388,7 @@ void ZobObject::SetScale(float x, float y, float z)
 	m_physicComponent->SetLocalScale(x, y, z);
 }
 
-void ZobObject::DrawGizmos(const Camera* camera, Core::Engine* engine)
+void ZobObject::DrawGizmos(const Camera* camera, Engine* engine)
 {
 	uint c;
 	ZobVector3 x = m_left;

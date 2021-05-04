@@ -17,11 +17,12 @@ public:
 	//friend void ZobObject::SetParent(ZobObject* o);
 
 
-	void UpdateObjects(const Camera* camera, Core::Engine* engine, float dt);
+	void UpdateObjects(const Camera* camera, Engine* engine, float dt);
 	void Init();
 	void PreUpdate();
 	void PostUpdate();
 	void EditorUpdate();
+	void QueueForDrawing(const Camera* camera, Engine* engine);
 	ZobObject* GetZobObjectFromlId(const zobId id) const;
 	ZobObject* GetZobObjectFromlId(const std::string& id) const;
 	void AddZobObject(ZobObject* z);

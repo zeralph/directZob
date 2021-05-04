@@ -542,13 +542,13 @@ void Mesh::SplitEntry(const std::string* s, std::vector<std::string>* v, const c
 	}
 }
 
-void Mesh::DrawBoundingBox(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine)
+void Mesh::DrawBoundingBox(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Engine* engine)
 {
 	engine->QueueWorldBox(camera, &m_AABB, 0xFFFFFF, false, false);
 	engine->QueueWorldBox(camera, &m_OBB, 0xDDDDDD, false, false);
 }
 
-void Mesh::Update(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const RenderOptions* options)
+void Mesh::Update(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Engine* engine, const RenderOptions* options)
 {
 	engine->ComputeBoundingBoxes(&modelMatrix, &m_minBoundingBox, &m_maxBoundingBox, &m_OBB, &m_AABB);
 
@@ -645,7 +645,7 @@ void Mesh::Update(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationM
 		}
 	}
 }
-void Mesh::QueueForDrawing(ZobObject* z, const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const RenderOptions* options)
+void Mesh::QueueForDrawing(ZobObject* z, const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Engine* engine, const RenderOptions* options)
 {
 	if (m_bDrawn)
 	{

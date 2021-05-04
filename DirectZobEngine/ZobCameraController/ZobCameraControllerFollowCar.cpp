@@ -73,7 +73,7 @@ void ZobCameraControllerFollowCar::Move(float x, float y, float z)
 {
 }
 
-void ZobCameraControllerFollowCar::DrawGizmos(const Camera* camera, Core::Engine* engine) const
+void ZobCameraControllerFollowCar::DrawGizmos(const Camera* camera, Engine* engine) const
 {
     //Text2D* m_textManager = DirectZob::GetInstance()->GetTextManager();
     //m_textManager->Print(50, 200, 4, 0xFFFFFF, "ACC : %.2f, dy : %.2f", m_accY, m_deltaY);

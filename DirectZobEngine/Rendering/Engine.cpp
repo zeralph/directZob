@@ -21,8 +21,6 @@
 #define MAX_TRIANGLES_PER_IMAGE 400000
 #define MAX_RENDER_OPTIONS 1000
 
-using namespace Core;
-
 static ZobVector3 red(1, 0, 0);
 static ZobVector3 green(0, 1, 0);
 static ZobVector3 blue(0, 0, 1);
@@ -343,7 +341,6 @@ int Engine::StartDrawingScene()
 	{
 		return 0;
 	}
-	const ZobVector3 camForward = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera()->GetForward();	
 	for (int i = 0; i < m_nbRasterizers; i++)
 	{
 		m_rasterizers[i]->Start();
