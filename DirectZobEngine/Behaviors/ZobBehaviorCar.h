@@ -29,7 +29,7 @@ class ZobBehaviorCar : public ZobBehavior
 
 		~ZobBehaviorCar() override;
 		void		Init() override;
-		void		PreUpdate() override;
+		void		PreUpdate(float dt) override;
 		void		PostUpdate() override {}
 		void		EditorUpdate() override;
 		void		UpdateBeforeObject(float dt) override;

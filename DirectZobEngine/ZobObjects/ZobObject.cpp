@@ -242,18 +242,18 @@ void ZobObject::EditorUpdate()
 	}
 }
 
-void ZobObject::PreUpdate()
+void ZobObject::PreUpdate(float dt)
 {
 	OPTICK_EVENT();
 	for (int i = 0; i < m_behaviors.size(); i++)
 	{
-		m_behaviors[i]->PreUpdate();
+		m_behaviors[i]->PreUpdate(dt);
 
 	}
 	for (int i = 0; i < m_children.size(); i++)
 	{
 		ZobObject* z = m_children[i];
-		z->PreUpdate();
+		z->PreUpdate(dt);
 	}
 	DeleteInternal();
 }
@@ -288,24 +288,6 @@ void ZobObject::QueueForDrawing(const Camera* camera, Engine* engine)
 	}
 }
 
-void ZobObject::UpdateBehaviorsBeforeObject(float dt)
-{
-	OPTICK_EVENT();
-	for (int i = 0; i < m_behaviors.size(); i++)
-	{
-		m_behaviors[i]->UpdateBeforeObject(dt);
-	}
-}
-
-void ZobObject::UpdateBehaviorsAfterObject(float dt)
-{
-	OPTICK_EVENT();
-	for (int i = 0; i < m_behaviors.size(); i++)
-	{
-		m_behaviors[i]->UpdateAfterObject(dt);
-	}
-}
-
 void ZobObject::DeleteInternal()
 {
 	for (int i = 0; i < m_children.size(); i++)
@@ -316,10 +298,10 @@ void ZobObject::DeleteInternal()
 			RemoveChildReference(z);
 			delete z;
 		}
-		else
-		{
-			z->PreUpdate();
-		}
+//		else
+//		{
+//			z->PreUpdate(0);
+//		}
 	}
 }
 
@@ -337,7 +319,6 @@ void ZobObject::UpdatePhysic(float dt)
 void ZobObject::Update(float dt)
 {
 	OPTICK_EVENT();
-	UpdateBehaviorsBeforeObject(dt);
 	UpdatePhysic(dt);
 	Transform parentTransform;
 	ZobVector3 parentScale;
@@ -366,7 +347,6 @@ void ZobObject::Update(float dt)
 	m_up = ZobVector3(u.x, u.y, u.z);
 	m_modelMatrix = m_physicComponent->GetModelMatrix();
 	m_rotationMatrix = m_physicComponent->GetRotationMatrix();
-	UpdateBehaviorsAfterObject(dt);
 	for (int i = 0; i < m_children.size(); i++)
 	{
 		ZobObject* z = m_children[i];

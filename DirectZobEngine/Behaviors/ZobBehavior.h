@@ -29,7 +29,7 @@ public:
 
 	virtual ~ZobBehavior() {};
 	virtual void											Init() = 0;
-	virtual void											PreUpdate()=0;
+	virtual void											PreUpdate(float dt)=0;
 	virtual void											UpdateBeforeObject(float dt) = 0;
 	virtual void											UpdateAfterObject(float dt) = 0;
 	virtual void											PostUpdate() = 0;

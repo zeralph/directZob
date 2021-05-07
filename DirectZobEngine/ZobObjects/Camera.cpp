@@ -318,10 +318,10 @@ void Camera::Init()
 	m_zobCameraController->Init();
 }
 
-void Camera::PreUpdate()
+void Camera::PreUpdate(float dt)
 {
-	ZobObject::PreUpdate();
-	m_zobCameraController->PreUpdate();
+	ZobObject::PreUpdate(dt);
+	m_zobCameraController->PreUpdate(dt);
 }
 
 void Camera::Update(float dt)

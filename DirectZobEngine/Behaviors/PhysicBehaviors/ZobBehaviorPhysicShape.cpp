@@ -20,7 +20,7 @@ ZobBehaviorPhysicShape::ZobBehaviorPhysicShape(ZobObject* zobObject) : ZobBehavi
 	m_layers = 0;
 }
 
-void ZobBehaviorPhysicShape::PreUpdate()
+void ZobBehaviorPhysicShape::PreUpdate(float dt)
 {
 
 }

@@ -12,7 +12,7 @@ public:
 
     void            Init() override;
     void            Update(float dt) override;
-    void            PreUpdate() override;
+    void            PreUpdate(float dt) override;
     void            Rotate(float x, float y, float z) override;
     void            Move(float x, float y, float z) override;
     void            DrawGizmos(const Camera* camera, Engine* engine) const override;

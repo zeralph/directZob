@@ -25,14 +25,12 @@ public:
 
 	//Mechanics
 	virtual void					Init();
-	virtual void					PreUpdate();
+	virtual void					PreUpdate(float dt);
 	virtual void					UpdatePhysic(float dt);
 	virtual void					Update(float dt);
 	virtual void					PostUpdate();
 	virtual void					EditorUpdate();
 	virtual void					QueueForDrawing(const Camera* camera,Engine* engine);
-	virtual void					UpdateBehaviorsBeforeObject(float dt);
-	virtual void					UpdateBehaviorsAfterObject(float dt);
 	virtual void					DrawGizmos(const Camera* camera, Engine* engine);
 	virtual							TiXmlNode* SaveUnderNode(TiXmlNode* node);
 	//

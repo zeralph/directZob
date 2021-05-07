@@ -17,7 +17,7 @@ public:
 
 	~ZobBehaviorMesh() override;
 	void					Init() override;
-	void					PreUpdate() override;
+	void					PreUpdate(float dt) override;
 	void					PostUpdate() override;
 	void					UpdateBeforeObject(float dt) override {}
 	void					UpdateAfterObject(float dt) override;

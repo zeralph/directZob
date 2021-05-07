@@ -19,7 +19,7 @@ public:
 
 	void UpdateObjects(const Camera* camera, Engine* engine, float dt);
 	void Init();
-	void PreUpdate();
+	void PreUpdate(float dt);
 	void PostUpdate();
 	void EditorUpdate();
 	void QueueForDrawing(const Camera* camera, Engine* engine);

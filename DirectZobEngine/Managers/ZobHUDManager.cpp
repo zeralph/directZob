@@ -122,7 +122,7 @@ void ZobHUDManager::Start()
 	m_started = true;
 }
 
-void ZobHUDManager::PreUpdate()
+void ZobHUDManager::PreUpdate(float dt)
 {
 }
 

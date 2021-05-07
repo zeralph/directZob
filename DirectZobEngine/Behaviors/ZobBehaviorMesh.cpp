@@ -57,7 +57,7 @@ void ZobBehaviorMesh::Set(ZobFilePath zfp)
 	LoadMeshInternal();
 }
 
-void ZobBehaviorMesh::PreUpdate()
+void ZobBehaviorMesh::PreUpdate(float dt)
 {
 }
 

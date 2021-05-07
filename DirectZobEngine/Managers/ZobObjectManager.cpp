@@ -143,10 +143,10 @@ void ZobObjectManager::Init()
 	m_rootObject->Init();
 }
 
-void ZobObjectManager::PreUpdate()
+void ZobObjectManager::PreUpdate(float dt)
 {
 	OPTICK_EVENT();
-	m_rootObject->PreUpdate();
+	m_rootObject->PreUpdate(dt);
 }
 
 void ZobObjectManager::PostUpdate()

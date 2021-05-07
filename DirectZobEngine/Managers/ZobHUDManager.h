@@ -41,7 +41,7 @@ public:
 	void Stop();
 	void Start();
 	
-	void PreUpdate();
+	void PreUpdate(float dt);
 	void UpdateBehavior(float dt);
 	void UpdateObjects(const Camera* camera, Engine* engine, float dt);
 	void QueueForDrawing(const Camera* camera, Engine* engine);

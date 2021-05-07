@@ -47,7 +47,7 @@ ZobCameraControllerOrbital::~ZobCameraControllerOrbital()
     m_zobCamera = NULL;
 }
 
-void ZobCameraControllerOrbital::PreUpdate()
+void ZobCameraControllerOrbital::PreUpdate(float dt)
 {
 	if (m_zobCamera->m_active)
 	{

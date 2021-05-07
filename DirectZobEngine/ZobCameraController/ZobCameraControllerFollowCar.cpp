@@ -58,7 +58,7 @@ void ZobCameraControllerFollowCar::Update(float dt)
     m_lastOrientation = q;
 }
 
-void ZobCameraControllerFollowCar::PreUpdate()
+void ZobCameraControllerFollowCar::PreUpdate(float dt)
 {
     if (m_zobCamera->m_active)
     {

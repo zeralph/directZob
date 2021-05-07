@@ -241,14 +241,14 @@ int DirectZob::RunAFrame(DirectZob::engineCallback OnSceneUpdated /*=NULL*/, Dir
 		Camera* cam = m_cameraManager->GetCurrentCamera();
 		if (cam)
 		{
+			float dt = m_frameTime / 1000.0f;
 			m_engine->SwapBuffers();
 			bool bPhysicUpdated = false;
-			m_zobObjectManager->PreUpdate();
-			m_hudManager->PreUpdate();
-			m_lightManager->PreUpdate();
+			m_zobObjectManager->PreUpdate(dt);
+			m_hudManager->PreUpdate(dt);
+			m_lightManager->PreUpdate(dt);
 			m_engine->StartDrawingScene();
 			ZobColor c = ZobColor(DirectZob::GetInstance()->GetLightManager()->GetClearColor());
-			float dt = m_frameTime / 1000.0f;
 			if (OnSceneUpdated)
 			{
 				OnSceneUpdated();

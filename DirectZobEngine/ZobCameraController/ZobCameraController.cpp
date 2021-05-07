@@ -55,7 +55,7 @@ void ZobCameraController::Init()
 
 }
 
-void ZobCameraController::PreUpdate()
+void ZobCameraController::PreUpdate(float dt)
 {
 }
 

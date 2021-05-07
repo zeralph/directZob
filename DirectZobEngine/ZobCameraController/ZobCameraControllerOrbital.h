@@ -11,7 +11,7 @@ public:
     ~ZobCameraControllerOrbital();
 
     void        Update(float dt) override;
-    void        PreUpdate() override;
+    void        PreUpdate(float dt) override;
     void        Rotate(float x, float y, float z) override;
     void        Move(float x, float y, float z) override;
     void        Zoom(float f) override;

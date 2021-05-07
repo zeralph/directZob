@@ -36,7 +36,7 @@ ZobCameraControllerFPS::~ZobCameraControllerFPS()
     m_zobCamera = NULL;
 }
 
-void ZobCameraControllerFPS::PreUpdate()
+void ZobCameraControllerFPS::PreUpdate(float dt)
 {
 	if (m_zobCamera->m_active)
 	{

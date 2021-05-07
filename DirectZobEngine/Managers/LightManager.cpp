@@ -40,7 +40,7 @@ void LightManager::Setup(ZobVector3* fogColor, ZobVector3* ambientColor, ZobVect
 	m_ambientColorIntensity = ambientIntensity;
 }
 
-void LightManager::PreUpdate()
+void LightManager::PreUpdate(float dt)
 {
 	for (std::vector<Light*>::const_iterator iter = m_lightsToAdd.begin(); iter != m_lightsToAdd.end(); iter++)
 	{
