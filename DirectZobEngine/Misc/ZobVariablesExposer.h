@@ -152,18 +152,6 @@ public:
 		m_wrappedVariables.push_back(w);
 	}
 
-	template<typename E>
-	E Get()
-	{
-		return w.ptr;
-	}
-
-	template<typename E>
-	void Set(E* t)
-	{
-		*w.ptr = *t;
-	}
-
 private:
 	zobId m_zobId;
 	std::vector<wrapperData> m_wrappedVariables;

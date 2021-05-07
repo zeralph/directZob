@@ -76,7 +76,7 @@ ZobObject::ZobObject(std::string id, TiXmlElement* node, ZobObject* parent, cons
 	m_factoryFile = factoryFile ? factoryFile->c_str() : "";
 	float x, y, z;
 	TiXmlElement* f;
-	DirectZob::LogInfo("ZobObject %s creation", id);
+	DirectZob::LogInfo("ZobObject %s creation", id.c_str());
 	DirectZob::AddIndent();
 	if (!parent && m_name != "root")
 	{
