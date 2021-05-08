@@ -186,11 +186,14 @@ const ZobMaterial* MaterialManager::LoadFbxMaterial(const fbxsdk::FbxMesh* mesh,
 }
 
 
-void MaterialManager::LoadOBJMaterials(std::string& path, std::string& file)
+void MaterialManager::LoadOBJMaterials(std::string& path, std::string& file, bool bAbsolutePath)
 {
 	std::string::size_type sz;
-	// Open the file.
-	std::string fullPath = std::string(SceneLoader::GetResourcePath());
+	std::string fullPath = "";
+	if (!bAbsolutePath)
+	{
+		fullPath = std::string(SceneLoader::GetResourcePath());
+	}
 	fullPath.append(path);
 	fullPath.append(file);
 	std::ifstream sfile(fullPath, std::ios::in);

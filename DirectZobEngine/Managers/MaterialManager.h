@@ -21,7 +21,7 @@ public:
 	const ZobMaterial* 		GetMaterial(const std::string& name) const;
 	const int 				GetNbTextures() const { return (int)m_materials.size(); }
 	const ZobMaterial* 		GetMaterial(const int i) const;
-	void 					LoadOBJMaterials(std::string& path, std::string& file);
+	void 					LoadOBJMaterials(std::string& path, std::string& file, bool bAbsolutePath);
 	const ZobMaterial* 		LoadFbxMaterial(const fbxsdk::FbxMesh* mesh, const std::string &path);
 	void 					UnloadAll();
 	ZobMaterial*			CreateMaterial();

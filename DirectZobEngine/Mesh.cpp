@@ -57,7 +57,7 @@ Mesh::Mesh(std::string& name, std::string& path, std::string& file, bool bAbsolu
 			}
 			else if (fullPath.find(".obj") != -1 || fullPath.find(".OBJ") != -1)
 			{
-				LoadOBJ(fullPath);
+				LoadOBJ(fullPath, bAbsolutePath);
 			}
 			else
 			{
@@ -369,7 +369,7 @@ Mesh::~Mesh()
 	DirectZob::RemoveIndent();
 }
 
-void Mesh::LoadOBJ(const std::string& fullPath)
+void Mesh::LoadOBJ(const std::string& fullPath, bool bAbsolutePath)
 {
 	static std::string sMtllib = std::string("mtllib");
 	DirectZob::LogInfo("Load OBJ %s", fullPath.c_str());
@@ -408,7 +408,7 @@ void Mesh::LoadOBJ(const std::string& fullPath)
 			if (v.size() == 2)
 			{
 				mtlFile = v[1];
-				DirectZob::GetInstance()->GetMaterialManager()->LoadOBJMaterials(m_path, v[1]);
+				DirectZob::GetInstance()->GetMaterialManager()->LoadOBJMaterials(m_path, v[1], bAbsolutePath);
 			}
 		}
 	}

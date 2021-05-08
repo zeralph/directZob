@@ -36,6 +36,7 @@ public :
 	const ZobSubType		GetSubType()const;
 	zobId*	GetIdAddress();
 	zobId	GetIdValue();
+	bool	IsEditorObject();
 	std::string				ZobGuidToString()
 	{
 		return std::to_string((ulong)m_id);

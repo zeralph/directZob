@@ -113,6 +113,10 @@ public:
 		{
 			return name.size() && path.size() && file.size();
 		}
+		std::string GetFullPath()
+		{
+
+		}
 		std::string Serialize()
 		{
 			std::string s = name;

@@ -48,6 +48,11 @@ DirectZobType::zobId ZOBGUID::GetIdValue()
 	return m_id;
 }
 
+bool ZOBGUID::IsEditorObject()
+{
+	return m_type == ZobType::type_editor;
+}
+
 DirectZobType::zobId ZOBGUID::GenerateId()
 {
 	DirectZobType::zobId u = 0;

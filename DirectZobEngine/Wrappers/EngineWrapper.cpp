@@ -110,7 +110,21 @@ namespace CLI
 	{
 		Point location = m_renderWindow->PointToClient(m_mouseCoords);
 		ZobObject* z = DirectZob::GetInstance()->GetEngine()->GetObjectAt2DCoords(location.X, location.Y);
-		DirectZobWrapper::GetWrapper()->GetZobObjectManagerWrapper()->SelectObject(z);
+		if (z)
+		{
+			if (z->IsEditorObject())
+			{
+				//DirectZobWrapper::GetWrapper()->GetZobObjectManagerWrapper()->SelectObject(z);
+			}
+			else
+			{
+				DirectZobWrapper::GetWrapper()->GetZobObjectManagerWrapper()->SelectObject(z);
+			}
+		}
+		else
+		{
+			DirectZobWrapper::GetWrapper()->GetZobObjectManagerWrapper()->SelectObject(NULL);
+		}
 	}
 
 	void EngineWrapper::OnMouseWheel(Object^ sender, MouseEventArgs^ e)
