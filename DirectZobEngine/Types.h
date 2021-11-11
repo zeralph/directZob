@@ -115,7 +115,7 @@ public:
 		}
 		std::string GetFullPath()
 		{
-
+			return "";
 		}
 		std::string Serialize()
 		{

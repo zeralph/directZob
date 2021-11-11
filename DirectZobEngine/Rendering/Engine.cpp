@@ -47,6 +47,7 @@ Engine::Engine(int width, int height, Events* events)
 	m_showText = true;
 	m_nbRasterizers = std::thread::hardware_concurrency();
 	m_EqualizeTriangleQueues = true;
+	m_perspCorrection = true;
 	while (height % m_nbRasterizers != 0 && m_nbRasterizers>1)
 	{
 		m_nbRasterizers--;
@@ -327,6 +328,11 @@ int Engine::StartDrawingScene()
 	{
 		m_EqualizeTriangleQueues = !m_EqualizeTriangleQueues;
 	}
+	if (inputMap->GetBoolIsNew(ZobInputManager::switchPerspectiveCorrection))
+	{
+		m_perspCorrection = !m_perspCorrection;
+		EnablePerspectiveCorrection(m_perspCorrection);
+	}
 	if (inputMap->GetBoolIsNew(ZobInputManager::NextLightMode))
 	{
 		eLightingPrecision i = GetLightingPrecision();
@@ -366,7 +372,7 @@ int Engine::SetDisplayedBuffer()
 		uint c;
 		for (int i = 0; i < m_bufferData.size; i++)
 		{
-			c = (uint)(m_zBuffer[m_currentBuffer][i] * 255.0f);
+			c = (uint)((1.0f / m_zBuffer[m_currentBuffer][i]) * 255.0f);
 			c = (c << 16) + (c << 8) + c;
 			m_buffer[m_currentBuffer][i] = c;
 		}
@@ -1367,5 +1373,13 @@ void Engine::PrintRasterizersInfos()
 	{
 		m->Print(ZobHUDManager::eHudUnit_ratio, 0.5f, y, 1.5f, "MV Boli", &c, " R %i : %i", i, m_rasterizers[i]->GetNbTriangle());
 		y += 0.02f;
+	}
+}
+
+void Engine::EnablePerspectiveCorrection(bool enable)
+{
+	for (int i = 0; i < m_nbRasterizers; i++)
+	{
+		m_rasterizers[i]->EnablePerspectiveCorrection(enable);
 	}
 }

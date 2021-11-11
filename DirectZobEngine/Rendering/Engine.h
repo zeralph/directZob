@@ -96,6 +96,7 @@ public:
 	void											UpdateEditorBitmapData();
 	void											PrintRasterizersInfos();
 	inline bool										EqualizeTriangleQueues() const {return m_EqualizeTriangleQueues;}
+	void 											EnablePerspectiveCorrection(bool enable);
 private:	
 	inline float									clamp2(float x, float min, float max) const { if (x < min) x = min; if (x > max) x = max; return x; }
 	void											DrawHorizontalLine(const float x1, const float x2, const float y, const uint color);
@@ -179,6 +180,7 @@ private:
 										0xFFFF00, 0x00FFFF, 0xFF00FF,
 										0xFFFFFF, 0xFF0000, };
 	bool m_EqualizeTriangleQueues;
+	bool m_perspCorrection;
 	int m_nextWidth;
 	int m_nextHeight;
 	bool m_doResize;
