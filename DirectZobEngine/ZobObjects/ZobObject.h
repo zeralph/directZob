@@ -11,6 +11,8 @@
 
 class Mesh;
 class ZobPhysicComponent;
+class m_varExposer;
+class ZobBehaviorMesh;
 class ZobObject:public ZOBGUID
 {
 friend class ZobBehavior;
@@ -21,45 +23,42 @@ public:
 	ZobObject(std::string id, TiXmlElement* node, ZobObject* parent, const std::string* factoryFile = NULL);
 	virtual ~ZobObject();
 
-	//virtuals
-	//virtual void					Update(const ZobMatrix4x4& parentMatrix, const ZobMatrix4x4& parentRSMatrix);
+	//Mechanics
 	virtual void					Init();
-	virtual void					PreUpdate();
+	virtual void					PreUpdate(float dt);
+	virtual void					UpdatePhysic(float dt);
 	virtual void					Update(float dt);
+	virtual void					PostUpdate();
 	virtual void					EditorUpdate();
-	virtual void					UpdateBehavior(float dt);
-	virtual void					UpdateMesh(const Camera* camera, Core::Engine* engine);
-	virtual void					QueueForDrawing(const Camera* camera, Core::Engine* engine);
-	ZobVector3						GetScale() const;
-	void 							SetScale(float x, float y, float z);
-	void							SetWorldRotation(float x, float y, float z);
-	void							SetWorldPosition(float x, float y, float z);
-	void							SetLocalRotation(float x, float y, float z);
-	void							SetLocalPosition(float x, float y, float z);
-	void							LookAt(const ZobVector3* target, bool addToCurrentRotation);
-	void							LookAt(const ZobVector3* forward, const ZobVector3* left, const ZobVector3* up, bool addToCurrentRotation);
-	ZobVector3						GetLocalRotation() const;
-	ZobVector3						GetLocalPosition() const;
-	ZobVector3						GetWorldRotation() const;
-	ZobVector3						GetWorldPosition() const;
+	virtual void					QueueForDrawing(const Camera* camera,Engine* engine);
+	virtual void					DrawGizmos(const Camera* camera, Engine* engine);
+	virtual							TiXmlNode* SaveUnderNode(TiXmlNode* node);
+	//
 	void							SaveTransform();
 	void							RestoreTransform();
 	void							ResetPhysic();
 	void							RegenerateZobIds();
-	virtual void					DrawGizmos(const Camera* camera, Core::Engine* engine);
-	virtual TiXmlNode*				SaveUnderNode(TiXmlNode* node);
-	//
+	//World
+	ZobVector3						GetWorldPosition() const;
+	void							SetWorldPosition(float x, float y, float z);
+	ZobVector3						GetWorldRotation() const;
+	void							SetWorldRotation(float x, float y, float z);
+	ZobVector3						GetScale() const;
+	void 							SetScale(float x, float y, float z);
+	//Local
+	ZobVector3						GetLocalPosition() const;
+	void							SetLocalPosition(float x, float y, float z);
+	ZobVector3						GetLocalRotation() const;
+	void							SetLocalRotation(float x, float y, float z);	
+	//Parenting
 	const std::vector<ZobObject*>*	GetChildren() const { return &m_children; };
 	ZobObject*						GetParent() const { return m_parent; };
 	void							SetParent(ZobObject* o);
 	ZobObject*						GetChild(const std::string& name);
 	ZobObject*						GetChild(const int i);
 
-	inline const ZobVector3			GetWorldScale() const
-	{
-		return m_modelMatrix.GetScale();
-	};
-
+	void							LookAt(const ZobVector3* target, bool addToCurrentRotation);
+	void							LookAt(const ZobVector3* forward, const ZobVector3* left, const ZobVector3* up, bool addToCurrentRotation);
 	
 	inline const std::string&		GetName() const { return m_name; }
 	inline void						SetName(const std::string &name) { m_name = name; }
@@ -71,17 +70,14 @@ public:
 	bool							RemoveChildReference(const ZobObject* z);
 	bool							AddChildReference(ZobObject* z);
 	int								GetChildPosition(const ZobObject* z);
-	RenderOptions*					GetRenderOptions() { return &m_renderOptions; };
 	virtual const std::string		GetMeshName() const ;
 	virtual const std::string		GetMeshFileName() const;
 	virtual const std::string		GetMeshPath() const;
 	void							SetMesh(std::string name);
-	void							LoadMesh(std::string name, std::string file, std::string path);
-	void							SetLightingMode(RenderOptions::eLightMode l);
+	ZobBehaviorMesh*				LoadMesh(ZobFilePath& zfp);
 	const bool						IsMarkedForDeletion() const { return m_markedForDeletion; };
 	inline const Mesh*				GetMesh() const { return m_mesh; }
 	void							MarkForDeletion() { m_markedForDeletion=true; };
-	const RenderOptions::eLightMode GetLightingMode() const { return m_renderOptions.lightMode; };
 	bool							HasChild(const ZobObject* o);
 	void							CreateSprite();
 	bool							IsFromFactoryFile() {return m_factoryFile.length()>0;}
@@ -91,26 +87,28 @@ public:
 	ZobPhysicComponent*				GetPhysicComponentNoConst() { return m_physicComponent; };
 	//temp ?
 	const ZobMatrix4x4*				GetModelMatrix() const { return &m_modelMatrix; };
-	const ZobMatrix4x4*				GetRotationScaleMatrix() const { return &m_rotationScaleMatrix; };
+	const ZobMatrix4x4*				GetRotationMatrix() const { return &m_rotationMatrix; };
 	const std::vector<ZobBehavior*>*GetBehaviors() { return &m_behaviors; }
 	void							AddBehavior(ZobBehavior* b) { m_behaviors.push_back(b); }
+	ZobVariablesExposer*			GetVariablesExposer() { return m_varExposer; }
+
+	static void						ReloadVariables(zobId id);
 
 private:
 	void							SaveRecusrive(TiXmlNode* node, ZobObject* z);
-	void							SetParentInternal();
 	void							DeleteInternal();
+	void							InitVariablesExposer();
 protected:
 
 	ZobObject* m_parent;
-	ZobObject* m_newParent;
+	ZobVariablesExposer* m_varExposer;
 	ZobPhysicComponent* m_physicComponent;
 	Mesh* m_mesh = NULL;
 	std::vector<ZobObject*> m_children;
 	std::vector <ZobBehavior*> m_behaviors;
 	ZobMatrix4x4 m_modelMatrix;
-	ZobMatrix4x4 m_rotationScaleMatrix;
+	ZobMatrix4x4 m_rotationMatrix;
 	std::string m_name;
-	RenderOptions m_renderOptions;
 	bool m_markedForDeletion;
 	ZobVector3 m_left;
 	ZobVector3 m_forward;

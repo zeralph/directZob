@@ -19,8 +19,7 @@
 #include "../../dependencies/optick/include/optick.h"
 
 #define MAX_TRIANGLES_PER_IMAGE 400000
-
-using namespace Core;
+#define MAX_RENDER_OPTIONS 1000
 
 static ZobVector3 red(1, 0, 0);
 static ZobVector3 green(0, 1, 0);
@@ -40,6 +39,7 @@ Engine::Engine(int width, int height, Events* events)
 	m_showGrid = false;
 	m_drawGizmos = false;
 	m_showBBoxes = false;
+	m_doResize = false;
 	m_drawPhysicsGizmos = false;
 	m_lockFrustrum = false;
 	m_drawZobObjectGizmos = true;
@@ -47,6 +47,7 @@ Engine::Engine(int width, int height, Events* events)
 	m_showText = true;
 	m_nbRasterizers = std::thread::hardware_concurrency();
 	m_EqualizeTriangleQueues = true;
+	m_perspCorrection = true;
 	while (height % m_nbRasterizers != 0 && m_nbRasterizers>1)
 	{
 		m_nbRasterizers--;
@@ -81,6 +82,8 @@ Engine::Engine(int width, int height, Events* events)
 		m_zBuffer[i] = (float*)malloc(sizeof(float) * width * height);
 	}
 	m_showZBuffer = false;
+	m_nextWidth = width;
+	m_nextHeight = height;
 	m_bufferData.height = height;
 	m_bufferData.width = width;
 	m_bufferData.zNear = m_zNear;
@@ -93,7 +96,7 @@ Engine::Engine(int width, int height, Events* events)
 	m_rasterizers = (Rasterizer**)malloc(sizeof(Rasterizer) * m_nbRasterizers);
 	m_conditionvariables = (std::condition_variable**)malloc(sizeof(std::condition_variable) * m_nbRasterizers);
 	m_mutexes = (std::mutex**)malloc(sizeof(std::mutex) * m_nbRasterizers);
-
+	m_renderOptions = (RenderOptions*)malloc(sizeof(RenderOptions) * MAX_RENDER_OPTIONS);
 	m_rasterizerHeight = ceil((float)height / (float)m_nbRasterizers);
 	int h0 = 0;
 	int h1 = m_rasterizerHeight;
@@ -189,6 +192,7 @@ Engine::~Engine()
 	free(m_rasterizers);
 	free(m_conditionvariables);
 	free(m_mutexes);
+	free(m_renderOptions);
 	m_events = NULL;
 }
 
@@ -210,65 +214,59 @@ void Engine::Stop()
 	m_started = false;
 }
 
-void Engine::Resize(int width, int height)
+bool Engine::Resize(int width, int height)
 {
-	bool bStarted = m_started;
-	Stop();
-	DirectZob::GetInstance()->SleepMS(1000);
-	for (int i = 0; i < m_nbRasterizers; i++)
+	if (m_nextWidth != width || m_nextHeight != height)
 	{
-		m_rasterizers[i]->End();
+		m_nextWidth = width;
+		m_nextHeight = height;
+		m_doResize = true;
+		return ResizeInternal();
 	}
-	delete m_buffer;
-	delete m_zBuffer;
-
-	m_buffer = (uint**)malloc(sizeof(uint*) * 2);
-	m_zBuffer = (float**)malloc(sizeof(float*) * 2);
-	for (int i = 0; i < 2; i++)
-	{
-		m_buffer[i] = (uint*)malloc(sizeof(uint) * width * height);
-		m_zBuffer[i] = (float*)malloc(sizeof(float) * width * height);
-	}
-
-	m_bufferData.height = height;
-	m_bufferData.width = width;
-	m_bufferData.buffer = m_buffer[m_currentBuffer];
-	m_bufferData.zBuffer = m_zBuffer[m_currentBuffer];
-
-	m_bufferData.zNear = m_zNear;
-	m_bufferData.zFar = m_zFar;
-	m_bufferData.size = width * height;
-
-	for (int i = 0; i < m_nbRasterizers; i++)
-	{
-		//m_rasterizers->at(i)->End();
-		delete m_rasterizers[i];
-		m_rasterizers[i] = NULL;
-	}
-
-	m_rasterizerHeight = ceil( (float)height / (float)m_nbRasterizers);
-	int h0 = 0;
-	m_rasterizers = (Rasterizer**)malloc(sizeof(Rasterizer) * m_nbRasterizers);
-	int nbTrianglesPerRasterizer = m_maxTrianglesQueueSize / m_nbRasterizers;
-	for (int i = 0; i < m_nbRasterizers; i++)
-	{
-		Rasterizer *r = new Rasterizer(width, height, h0, h0 + m_rasterizerHeight, nbTrianglesPerRasterizer, (i + 1), &m_bufferData);
-		m_rasterizers[i] = r;
-		//m_TrianglesQueue[i].clear();
-		//m_rasterLineQueues.clear();
-		h0 += m_rasterizerHeight;
-	}
-	for (int i = 0; i < m_nbRasterizers; i++)
-	{
-		m_rasterizers[i]->Init(m_conditionvariables[i], m_mutexes[i]);
-	}
-	if (bStarted)
-	{
-		Start();
-	}
+	return false;
 }
 
-void Engine::ClearBuffer(const Color *color)
+
+bool Engine::ResizeInternal()
+{
+	if (m_doResize)
+	{
+		m_doResize = false;
+		for (int i = 0; i < 2; i++)
+		{
+			free(m_buffer[i]);
+			free(m_zBuffer[i]);
+		}
+		free(m_buffer);
+		free(m_zBuffer);
+		m_buffer = NULL;
+		m_zBuffer = NULL;
+		m_buffer = (uint**)malloc(sizeof(uint*) * 2);
+		m_zBuffer = (float**)malloc(sizeof(float*) * 2);
+		for (int i = 0; i < 2; i++)
+		{
+			m_buffer[i] = (uint*)malloc(sizeof(uint) * m_nextWidth * m_nextHeight);
+			m_zBuffer[i] = (float*)malloc(sizeof(float) * m_nextWidth * m_nextHeight);
+		}
+		ZobColor c = ZobColor(DirectZob::GetInstance()->GetLightManager()->GetClearColor());
+		m_bufferData.height = m_nextHeight;
+		m_bufferData.width = m_nextWidth;
+		m_bufferData.buffer = m_buffer[m_currentBuffer];
+		m_bufferData.zBuffer = m_zBuffer[m_currentBuffer];
+		//m_bufferData.zNear = m_zNear;
+		//m_bufferData.zFar = m_zFar;
+		m_bufferData.size = m_nextWidth * m_nextWidth;
+		ClearBuffer(&c);
+		for (int i = 0; i < m_nbRasterizers; i++)
+		{
+			m_rasterizers[i]->Resize(m_nextWidth, m_nextHeight);
+		}
+		return true;
+	}
+	return false;
+}
+
+void Engine::ClearBuffer(const ZobColor *color)
 {
 	OPTICK_EVENT();
 	int oldBuffer = (m_currentBuffer + 1) % 2;
@@ -330,6 +328,11 @@ int Engine::StartDrawingScene()
 	{
 		m_EqualizeTriangleQueues = !m_EqualizeTriangleQueues;
 	}
+	if (inputMap->GetBoolIsNew(ZobInputManager::switchPerspectiveCorrection))
+	{
+		m_perspCorrection = !m_perspCorrection;
+		EnablePerspectiveCorrection(m_perspCorrection);
+	}
 	if (inputMap->GetBoolIsNew(ZobInputManager::NextLightMode))
 	{
 		eLightingPrecision i = GetLightingPrecision();
@@ -344,7 +347,6 @@ int Engine::StartDrawingScene()
 	{
 		return 0;
 	}
-	const ZobVector3 camForward = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera()->GetForward();	
 	for (int i = 0; i < m_nbRasterizers; i++)
 	{
 		m_rasterizers[i]->Start();
@@ -360,8 +362,6 @@ void Engine::SwapBuffers()
 	m_bufferData.buffer = m_buffer[m_currentBuffer];
 	m_bufferData.zBuffer = m_zBuffer[m_currentBuffer];
 	m_bufferData.curBuffer = m_currentBuffer;
-	
-//	m_bufferData.editorBuffer = m_editorBuffer;
 }
 
 
@@ -372,7 +372,7 @@ int Engine::SetDisplayedBuffer()
 		uint c;
 		for (int i = 0; i < m_bufferData.size; i++)
 		{
-			c = (uint)(m_zBuffer[m_currentBuffer][i] * 255.0f);
+			c = (uint)((1.0f / m_zBuffer[m_currentBuffer][i]) * 255.0f);
 			c = (c << 16) + (c << 8) + c;
 			m_buffer[m_currentBuffer][i] = c;
 		}
@@ -390,6 +390,7 @@ void Engine::ClearRenderQueues()
 	m_LastTriangleQueueSize = m_TriangleQueueSize;
 	m_lineQueueSize = 0;
 	m_TriangleQueueSize = 0;
+	m_usedRenderOptions = 0;
 	for (int i = 0; i < m_nbRasterizers; i++)
 	{
 		m_rasterizers[i]->Clear();
@@ -548,11 +549,38 @@ bool Engine::LineTriangleIntersection(const Triangle* t, const ZobVector3* l0, c
 
 ZobObject* Engine::GetObjectAt2DCoords(float x, float y)
 {
+	int  idx = (int)((y / (float)m_bufferData.height) * m_nbRasterizers);
+	if (idx < 0 || idx >= m_nbRasterizers)
+	{
+		return NULL;
+	}
+	ZobObject* z = NULL;
+	float minZ = m_bufferData.zFar;
+	for (idx = 0; idx < m_nbRasterizers; idx++)
+	{
+		Rasterizer* rast = m_rasterizers[idx];
+		ZobVector3 p = ZobVector3(x, y, 0);
+		for (int i = 0; i < rast->GetNbTriangle(); i++)
+		{
+			const Triangle* t = rast->GetTriangle(i);
+			if (t->PointInTriangle2D(&p) && t->zobObject && t->pa->z < minZ)
+			{
+				z = t->zobObject;
+				minZ = t->pa->z;
+			}
+		}
+	}
+	return z;
+	/*
 	Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
 	if (c)
 	{
 		Ray ray = c->From2DToWorld(x, y);
 		int  idx = (int)floor((y + 1.0f) / 2.0f * m_nbRasterizers);
+		if (idx < 0 || idx >= m_nbRasterizers)
+		{
+			return NULL;
+		}
 		Rasterizer* rast = m_rasterizers[idx];
 		ZobVector3 inter;
 		for (int i = 0; i < rast->GetNbTriangle(); i++)
@@ -565,6 +593,7 @@ ZobObject* Engine::GetObjectAt2DCoords(float x, float y)
 		}
 	}
 	return NULL;
+	*/
 }
 
 void Engine::ClipSegmentToPlane(ZobVector3 &s0, ZobVector3 &s1, ZobVector3 &pp, ZobVector3 &pn)
@@ -754,8 +783,42 @@ void Engine::QueueEllipse(const Camera* camera, const ZobVector3* center, const 
 		m.Mul(&a);
 		a = a + center;
 		QueueLine(camera, &a, &b, c, bold, noZ);
+		QueueTriangle(camera, center, &a, &b, c, true, false);
 	}
+}
 
+void Engine::QueueTriangle(const Camera* camera, const ZobVector3* v1, const ZobVector3* v2, const ZobVector3* v3, const uint c, bool transparent, bool noZ)
+{
+	Triangle* t = &m_TrianglesQueue[m_TriangleQueueSize];
+	t->va->x = v1->x;
+	t->va->y = v1->y;
+	t->va->z = v1->z;
+	t->va->w = 1;
+	t->vb->x = v2->x;
+	t->vb->y = v2->y;
+	t->vb->z = v2->z;
+	t->vb->w = 1;
+	t->vc->x = v3->x;
+	t->vc->y = v3->y;
+	t->vc->z = v3->z;
+	t->vc->w = 1;
+	ZobVector3 color = ZobVector3((c & 0xFF0000) >> 16, (c & 0x00FF00) >> 8, c & 0x0000FF);
+	color.Mul(1.0f / 255.0f);
+	t->ca->Copy(&color);
+	t->cb->Copy(&color);
+	t->cc->Copy(&color);
+	t->material = NULL;
+	t->clipMode = Triangle::eClip_3_in;
+	RenderOptions* r = &m_renderOptions[m_usedRenderOptions];
+	r->bTransparency = transparent;
+	r->cullMode = RenderOptions::eCullMode_None;
+	r->zBuffered = !noZ;
+	r->lightMode = RenderOptions::eLightMode_none;
+	t->options = r;
+	m_usedRenderOptions++;
+	RecomputeTriangleProj(camera, t);
+	m_drawnTriangles += QueueTriangleInRasters(&m_TrianglesQueue[m_TriangleQueueSize], m_TriangleQueueSize);
+	m_TriangleQueueSize++;
 }
 
 void Engine::QueueLine(const Camera* camera, const ZobVector3* v1, const ZobVector3* v2, const uint c, bool bold, bool noZ)
@@ -835,11 +898,11 @@ void Engine::QueueLineInRasters(const Line3D* l, int idx) const
 
 int Engine::QueueTriangleInRasters(const Triangle* t, int idx) const
 {
-	if (t->options->cullMode == eCullMode_CounterClockwiseFace && t->area >0 )
+	if (t->options->cullMode == RenderOptions::eCullMode_CounterClockwiseFace && t->area >0 )
 	{
 		return 0;
 	}
-	if (t->options->cullMode == eCullMode_ClockwiseFace && t->area < 0)
+	if (t->options->cullMode == RenderOptions::eCullMode_ClockwiseFace && t->area < 0)
 	{
 		return 0;
 	}
@@ -1310,5 +1373,13 @@ void Engine::PrintRasterizersInfos()
 	{
 		m->Print(ZobHUDManager::eHudUnit_ratio, 0.5f, y, 1.5f, "MV Boli", &c, " R %i : %i", i, m_rasterizers[i]->GetNbTriangle());
 		y += 0.02f;
+	}
+}
+
+void Engine::EnablePerspectiveCorrection(bool enable)
+{
+	for (int i = 0; i < m_nbRasterizers; i++)
+	{
+		m_rasterizers[i]->EnablePerspectiveCorrection(enable);
 	}
 }

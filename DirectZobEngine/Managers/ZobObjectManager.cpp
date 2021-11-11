@@ -50,6 +50,15 @@ ZobObject* ZobObjectManager::CreateZobObject(ZobObject* parent)
 	return new ZobObject(ZOBGUID::type_scene, ZOBGUID::subtype_zobOject, emptyStr, parent);
 }
 
+ZobObject* ZobObjectManager::CreateEditorZobObject(ZobObject* parent)
+{
+	if (parent == NULL)
+	{
+		parent = m_rootObject;
+	}
+	return new ZobObject(ZOBGUID::type_editor, ZOBGUID::subtype_zobOject, emptyStr, parent);
+}
+
 ZobSprite* ZobObjectManager::CreateZobSprite(ZobObject* parent)
 {
 	if (parent == NULL)
@@ -73,13 +82,13 @@ ZobObject* ZobObjectManager::GetZobObjectFromlId(const std::string& id) const
 	return ret;
 }
 
-ZobObject* ZobObjectManager::GetZobObjectFromlId(const unsigned long long id) const
+ZobObject* ZobObjectManager::GetZobObjectFromlId(const zobId id) const
 {
 	ZobObject* ret = GetZobObjectFromId(m_rootObject, id);
 	return ret;
 }
 
-ZobObject* ZobObjectManager::GetZobObjectFromId(ZobObject* z, const unsigned long long id) const
+ZobObject* ZobObjectManager::GetZobObjectFromId(ZobObject* z, zobId id) const
 {
 	if (z->GetIdValue() == id)
 	{
@@ -134,10 +143,22 @@ void ZobObjectManager::Init()
 	m_rootObject->Init();
 }
 
-void ZobObjectManager::PreUpdate()
+void ZobObjectManager::PreUpdate(float dt)
 {
 	OPTICK_EVENT();
-	m_rootObject->PreUpdate();
+	m_rootObject->PreUpdate(dt);
+}
+
+void ZobObjectManager::PostUpdate()
+{
+	OPTICK_EVENT();
+	m_rootObject->PostUpdate();
+}
+
+void ZobObjectManager::QueueForDrawing(const Camera* camera, Engine* engine)
+{
+	OPTICK_EVENT();
+	m_rootObject->QueueForDrawing(camera, engine);
 }
 
 void ZobObjectManager::EditorUpdate()
@@ -145,25 +166,11 @@ void ZobObjectManager::EditorUpdate()
 	m_rootObject->EditorUpdate();
 }
 
-void ZobObjectManager::UpdateBehavior(float dt)
-{
-	OPTICK_EVENT();
-	m_rootObject->UpdateBehavior(dt);
-}
-
-void ZobObjectManager::UpdateObjects(const Camera* camera, Core::Engine* engine, float dt)
+void ZobObjectManager::UpdateObjects(const Camera* camera, Engine* engine, float dt)
 {
 	OPTICK_EVENT();
 	m_rootObject->Update(dt);
-	m_rootObject->UpdateMesh(camera, engine);
 	m_time = (float)(clock() - m_drawTick) / CLOCKS_PER_SEC * 1000;
-}
-
-void ZobObjectManager::QueueForDrawing(const Camera* camera, Core::Engine* engine)
-{
-	OPTICK_EVENT();
-	//m_rootObject->UpdateMesh(camera, engine);
-	m_rootObject->QueueForDrawing(camera, engine);
 }
 
 void ZobObjectManager::GetZobObjectList(std::string& s)
@@ -219,10 +226,6 @@ void ZobObjectManager::UnloadAll()
 	m_deletedIds.clear();
 	std::string n = "root";
 	m_rootObject = new ZobObject(ZOBGUID::type_internal, ZOBGUID::subtype_zobOject, n, NULL);
-}
-
-void ZobObjectManager::CreateEditorGizmos(std::string& editorResourcesPath)
-{
 }
 
 bool ZobObjectManager::Reparent(ZobObject*o, ZobObject* parent)

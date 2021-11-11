@@ -41,10 +41,10 @@ public:
 	void Stop();
 	void Start();
 	
-	void PreUpdate();
+	void PreUpdate(float dt);
 	void UpdateBehavior(float dt);
-	void UpdateObjects(const Camera* camera, Core::Engine* engine, float dt);
-	void QueueForDrawing(const Camera* camera, Core::Engine* engine);
+	void UpdateObjects(const Camera* camera, Engine* engine, float dt);
+	void QueueForDrawing(const Camera* camera, Engine* engine);
 	void Print(eHudUnit u, float x, float y, float fontSize, const char* fontName, const ZobVector3* color, const char* fmt, ...);
 
 private:

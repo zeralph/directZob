@@ -41,17 +41,15 @@
             // EngineRender
             // 
             this.EngineRender.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.EngineRender.Location = new System.Drawing.Point(0, 190);
+            this.EngineRender.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.EngineRender.Location = new System.Drawing.Point(0, 0);
             this.EngineRender.Name = "EngineRender";
-            this.EngineRender.Size = new System.Drawing.Size(669, 374);
-            this.EngineRender.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.EngineRender.Size = new System.Drawing.Size(960, 564);
             this.EngineRender.TabIndex = 1;
             this.EngineRender.TabStop = false;
-            this.EngineRender.Paint += new System.Windows.Forms.PaintEventHandler(this.EngineRender_Paint);
             this.EngineRender.MouseClick += new System.Windows.Forms.MouseEventHandler(this.EngineRender_MouseClick);
             this.EngineRender.MouseDown += new System.Windows.Forms.MouseEventHandler(this.EngineRender_MouseDown);
             this.EngineRender.MouseHover += new System.EventHandler(this.EngineRender_MouseHover);
-            this.EngineRender.MouseMove += new System.Windows.Forms.MouseEventHandler(this.EngineRender_MouseMove);
             this.EngineRender.MouseUp += new System.Windows.Forms.MouseEventHandler(this.EngineRender_MouseUp);
             this.EngineRender.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.EngineRender_MouseWheel);
             // 
@@ -68,7 +66,6 @@
             this.EngineRenderPanel.Name = "EngineRenderPanel";
             this.EngineRenderPanel.Size = new System.Drawing.Size(960, 564);
             this.EngineRenderPanel.TabIndex = 2;
-            this.EngineRenderPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.EngineRenderPanel_Paint);
             // 
             // bCenter
             // 

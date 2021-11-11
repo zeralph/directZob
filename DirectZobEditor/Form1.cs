@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 using Newtonsoft.Json;
 
@@ -37,7 +38,7 @@ namespace DirectZobEditor
             public CLI.ZobObjectWrapper zobObject = null;
         }
         #endregion
-
+        private bool m_running = false;
         public static Form1 m_mainForm = null;
         public static Form1 GetMainForm() { return m_mainForm; }
         public event EventHandler OnNewScene;
@@ -50,11 +51,12 @@ namespace DirectZobEditor
         public event OnSceneUpdateHandler OnSceneUpdated;
 
         private CLI.DirectZobWrapper m_directZobWrapper;
+        private CLI.ZobObjectManagerWrapper m_zobObjectManagerWrapper;
         private CLI.MeshManagerWrapper m_meshManagerWrapper;
         private CLI.LightManagerWrapper m_lightManagerWrapper;
-        private CLI.CameraManagerWrapper m_cameraManagerWrapper;
 
-        private ZobObjectListControl m_zobObjectList;
+        private Thread m_engineThread;
+        //private ZobObjectListControl m_zobObjectList;
         private EngineWindow m_engineWindow;
         private EngineControl m_engineControl;
         private ZobObjectControl m_zobObjectControl;
@@ -76,17 +78,37 @@ namespace DirectZobEditor
         public CLI.engineCallback onSceneLoadedCallback;
         public delegate void OnSceneLoaded();
         public OnSceneLoaded OnSceneLoadedDelegate;
+
         public Form1()
         {
-            m_mainForm = this;
-            InitializeComponent();
-            this.KeyPreview = true;
-            m_directZobWrapper = new CLI.DirectZobWrapper();
-            m_directZobWrapper.Init(1024, 768);
 
+            Font f = new Font("Microsoft Tai Le", 8);
+            this.Font = f;
+
+            m_mainForm = this;
+            m_running = true;
+            InitializeComponent();
+            //this.KeyPreview = true;
+            m_engineWindow = new EngineWindow(this);
+     
+            /*
+            Color backColor = (Color)System.Drawing.ColorTranslator.FromHtml("#2D2D30");
+            Color foreColor = (Color)System.Drawing.ColorTranslator.FromHtml("#F0F0F0");
+            this.BackColor = backColor;
+            this.ZobObjectListPanel.BackColor = backColor;
+            this.ObjectControlsFlowLayout.BackColor = backColor;
+            m_engineWindow.GetEngineRenderwindow().BackColor = backColor;
+            menuStrip1.BackColor = backColor;
+            menuStrip1.ForeColor = foreColor;
+            */
+            //tabsControl.TabPages.
+
+            m_directZobWrapper = new CLI.DirectZobWrapper(this.ZobObjectListPanel, this.ObjectControlsFlowLayout, m_engineWindow.GetEngineRenderwindow());
+            m_directZobWrapper.Init(1024, 768);
+            CLI.ZobObjectManagerWrapper.OnObjectSelectedEvent += new CLI.ZobObjectManagerWrapper.OnObjectSelected(OnObjectSelected);
+            m_zobObjectManagerWrapper = m_directZobWrapper.GetZobObjectManagerWrapper();
             m_meshManagerWrapper = new CLI.MeshManagerWrapper();
             m_lightManagerWrapper = new CLI.LightManagerWrapper();
-            m_cameraManagerWrapper = new CLI.CameraManagerWrapper();
             Application.ApplicationExit += new EventHandler(this.OnApplicationExit);
             this.Load += new EventHandler(this.Onloaded);
 
@@ -94,9 +116,9 @@ namespace DirectZobEditor
             OnSceneLoadedDelegate = new OnSceneLoaded(OnSceneLoadedMethod);
 
             //--
-            m_engineWindow = new EngineWindow(this, m_directZobWrapper);
-            m_engineControl = new EngineControl(this, m_engineWindow.GetEngineWrapper());
-            m_zobObjectList = new ZobObjectListControl(this);
+
+            m_engineControl = new EngineControl(this, m_directZobWrapper.GetEngineWrapper());
+//            m_zobObjectList = new ZobObjectListControl(this);
             m_sceneControl = new SceneControl(this, m_lightManagerWrapper);
             m_lightControl = new ZobLightControl(this);
             m_cameraControl = new ZobCameraControl(this);
@@ -106,7 +128,7 @@ namespace DirectZobEditor
             m_zobObjectControl = new ZobObjectControl(this, m_lightControl, m_cameraControl, m_meshControl);
             m_engineWindow.BindEvents();
             m_engineControl.BindEvents();
-            m_zobObjectList.BindEvents();
+ //           m_zobObjectList.BindEvents();
             m_sceneControl.BindEvents();
             m_lightControl.BindEvents();
             m_cameraControl.BindEvents();
@@ -114,8 +136,8 @@ namespace DirectZobEditor
             m_spriteControl.BindEvents();
             //m_physicsControl.BindEvents();
             m_zobObjectControl.BindEvents();
-            EngineRendererPanel.Controls.Add(m_engineWindow);
-            ZobObjectListPanel.Controls.Add(m_zobObjectList);
+            
+            //ZobObjectListPanel.Controls.Add(m_zobObjectList);
             ObjectControlsFlowLayout.Controls.Add(m_zobObjectControl);
             //ObjectControlsFlowLayout.Controls.Add(m_physicsControl);
             ObjectControlsFlowLayout.Controls.Add(m_meshControl);
@@ -125,8 +147,10 @@ namespace DirectZobEditor
             EngineControlsFlowLayout.Controls.Add(m_engineControl);
             SceneControlsFlowLayout.Controls.Add(m_sceneControl);
             this.propertiesPanel.MinimumSize = new Size(300, 500);
-            m_engineWindow.OnEngineStopped += new EventHandler(OnEngineClosed);
+
             this.WindowState = FormWindowState.Maximized;
+            EngineRendererPanel.Controls.Add(m_engineWindow);
+            m_engineWindow.MouseMove += EngineRendererPanel_MouseMove;
             m_directZobWrapper.NewScene();
             
             EventHandler handler = OnNewScene;
@@ -140,13 +164,25 @@ namespace DirectZobEditor
             m_directZobWrapper.StartPhysic();
             */
             bBoxToolStripMenuItem.Checked = false;
-            m_engineWindow.GetEngineWrapper().ShowBBoxes(false);
+            //m_engineWindow.GetEngineWrapper().ShowBBoxes(false);
             cameraToolStripMenuItem.Checked = false;
             //m_engineWindow.GetEngineWrapper().DrawPhysicsGizmos(false);
             textToolStripMenuItem.Checked = false;
-            m_engineWindow.GetEngineWrapper().ShowText(false);
+            //m_engineWindow.GetEngineWrapper().ShowText(false);
             physicsToolStripMenuItem.Checked = false;
-            m_engineWindow.GetEngineWrapper().DrawPhysicsGizmos(false);
+            //m_engineWindow.GetEngineWrapper().DrawPhysicsGizmos(false);
+            m_engineThread = new Thread(RunEngineThread);
+            m_engineThread.Start();
+ //           GigaPaint(this);
+        }
+
+        private void OnObjectSelected(CLI.ZobObjectWrapper z)
+        {
+            if(z != null)
+            {
+
+            }
+            //throw new NotImplementedException();
         }
 
         public string Getpath()
@@ -160,25 +196,38 @@ namespace DirectZobEditor
         }
         public void UpdateAfterEngine()
         {
-            UpdateCameraList();
-            m_zobObjectList.UpdateControl();
-
-            m_events = m_directZobWrapper.GetEventsAndClear();
-            UpdateEventsLog();
-            //textLog.Invoke(UpdateLogWindowDelegate);
-            //EngineRender.Invoke(UpdateEngineWindowDelegate);
-            if (m_directZobWrapper.IsPhysicPlaying())
+            this.Invoke(new Action(()=> 
             {
-                Form1.SceneUpdateEventArg ev = new Form1.SceneUpdateEventArg();
-                ev.type = Form1.SceneUpdateType.updateAfterEngine;
-                PropagateSceneUpdateEvent(ev);
-            }
+                UpdateCameraList();
+                //           m_zobObjectList.UpdateControl();
+
+                m_events = m_directZobWrapper.GetEventsAndClear();
+                UpdateEventsLog();
+                //textLog.Invoke(UpdateLogWindowDelegate);
+                //EngineRender.Invoke(UpdateEngineWindowDelegate);
+                if (m_directZobWrapper.IsPhysicPlaying())
+                {
+                    Form1.SceneUpdateEventArg ev = new Form1.SceneUpdateEventArg();
+                    ev.type = Form1.SceneUpdateType.updateAfterEngine;
+                    PropagateSceneUpdateEvent(ev);
+                }
+            }));
+        }
+
+        public CLI.EngineWrapper GetEngineWrapper()
+        {
+            return m_directZobWrapper.GetEngineWrapper();
+        }
+
+        public CLI.CameraManagerWrapper GetCameraManagerWrapper()
+        {
+            return m_directZobWrapper.GetZobCameraManagerWrapper();
         }
 
         private void UpdateCameraList()
         {
-            string s = m_cameraManagerWrapper.GetCurrentCameraName();
-            string[] c = m_cameraManagerWrapper.GetCameraList();
+            string s = m_directZobWrapper.GetZobCameraManagerWrapper().GetCurrentCameraName();
+            string[] c = m_directZobWrapper.GetZobCameraManagerWrapper().GetCameraList();
             if (toolStripComboBoxCurrentCamera.Items.Count != c.Count())
             {
                 toolStripComboBoxCurrentCamera.Items.Clear();
@@ -198,7 +247,7 @@ namespace DirectZobEditor
             int l = m_events.Count();
             for (int i = 0; i < l; i++)
             {
-                Event json = JsonConvert.DeserializeObject<Event>(m_events[i]);
+                LogEvent json = JsonConvert.DeserializeObject<LogEvent>(m_events[i]);
                 if (json.type == 0)
                 {
                     AppendText(textLog, json.data + "\n", Color.Blue);
@@ -247,7 +296,7 @@ namespace DirectZobEditor
 
         public ZobObjectListControl GetZobObjectListControl()
         {
-            return m_zobObjectList;
+            return null;// m_zobObjectList;
         }
 
         public CLI.DirectZobWrapper GetDirectZobWrapper()
@@ -260,10 +309,6 @@ namespace DirectZobEditor
             return m_meshManagerWrapper;
         }
 
-        public CLI.CameraManagerWrapper GetCameraManagerWrapper()
-        {
-            return m_cameraManagerWrapper;
-        }
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
             if(e.KeyCode == Keys.ControlKey)
@@ -279,6 +324,7 @@ namespace DirectZobEditor
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
             m_directZobWrapper.NewScene();
+            m_directZobWrapper.GetZobCameraManagerWrapper().CreateEditorCamera();
             m_path = "";
             m_file = "";
             EventHandler handler = OnNewScene;
@@ -327,6 +373,9 @@ namespace DirectZobEditor
 
         private void OnSceneLoadedMethod()
         {
+            m_zobObjectManagerWrapper.AddEditorGizmos();
+            m_zobObjectManagerWrapper.Refresh();
+            m_directZobWrapper.GetZobCameraManagerWrapper().CreateEditorCamera();
             EventHandler handler = OnSceneLoadedEventHandler;
             if (null != handler)
             {
@@ -401,8 +450,9 @@ namespace DirectZobEditor
                     string name = file;
                     name.Replace(' ', '_');
                     //m_meshManagerWrapper.LoadMesh(name, path, file);
-                    CLI.ZobObjectWrapper root = m_zobObjectList.GetWrapper().GetRootObject();
-                    CLI.ZobObjectWrapper z = m_zobObjectList.GetWrapper().AddZobObject(root);
+                    CLI.ZobObjectWrapper root = m_zobObjectManagerWrapper.GetRootObject();
+                    CLI.ZobObjectWrapper z = null;
+                    z = m_zobObjectManagerWrapper.CreateZobObject();
                     z.SetName(name);
                     string workspace = m_directZobWrapper.GetResourcePath();
                     //z.SetMesh(name);
@@ -414,6 +464,7 @@ namespace DirectZobEditor
                     }
                     //path = System.IO.Path.GetRelativePath(workspace, path);
                     z.LoadMesh(file, file, path);
+                    m_zobObjectManagerWrapper.ReScan();
                     OnSceneUpdateHandler handler = OnSceneUpdated;
                     if (null != handler)
                     {
@@ -438,7 +489,9 @@ namespace DirectZobEditor
 
         private void ExitToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Application.Exit();
+            m_running = false;
+            //e.Cancel = true; 
+            //Application.Exit();
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -447,26 +500,12 @@ namespace DirectZobEditor
         }
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if(!m_canBeSafelyClosed)
-            {
-                m_engineWindow.StopEngine();
-                m_directZobWrapper.Unload();
-                e.Cancel = true;
-            }
-            else
-            {
-                //goodbye !
-            }
+            m_running = false;
+            e.Cancel = true;
         }
         private void Form1_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             
-        }
-
-        private void OnEngineClosed(object sender, EventArgs e)
-        {
-            m_canBeSafelyClosed = true;
-            Application.Exit();
         }
 
         public void PropagateSceneUpdateEvent(SceneUpdateEventArg e)
@@ -521,8 +560,8 @@ namespace DirectZobEditor
 
         private void createSpriteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            CLI.ZobObjectWrapper root = m_zobObjectList.GetWrapper().GetRootObject();
-            CLI.ZobObjectWrapper z = m_zobObjectList.GetWrapper().AddZobSprite(root);
+            CLI.ZobObjectWrapper root = m_zobObjectManagerWrapper.GetRootObject();
+            CLI.ZobObjectWrapper z = m_zobObjectManagerWrapper.AddZobSprite(root);
             Form1.SceneUpdateEventArg ev = new Form1.SceneUpdateEventArg();
             ev.type = Form1.SceneUpdateType.createSprite;
             ev.zobObject = z;
@@ -531,12 +570,8 @@ namespace DirectZobEditor
 
         private void createZobObjectToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            CLI.ZobObjectWrapper root = m_zobObjectList.GetWrapper().GetRootObject();
-            CLI.ZobObjectWrapper z = m_zobObjectList.GetWrapper().AddZobObject(root);
-            Form1.SceneUpdateEventArg ev = new Form1.SceneUpdateEventArg();
-            ev.type = Form1.SceneUpdateType.objectAdded;
-            ev.zobObject = z;
-            PropagateSceneUpdateEvent(ev);
+            //throw new Exception("deprecated");
+            m_zobObjectManagerWrapper.CreateZobObject();
         }
 
         private void btnPlay_Click(object sender, EventArgs e)
@@ -546,7 +581,7 @@ namespace DirectZobEditor
                 //save objects position
                 if (m_playMode == eplayMode.ePlayMode_stop)
                 {
-                    m_zobObjectList.SaveTransforms();
+ //                   m_zobObjectList.SaveTransforms();
                 }
                 m_playMode = eplayMode.ePlayMode_play;
                 m_directZobWrapper.StartPhysic();
@@ -574,7 +609,7 @@ namespace DirectZobEditor
                 m_directZobWrapper.StopPhysic(true);
                 if (m_playMode != eplayMode.ePlayMode_stop)
                 {
-                    m_zobObjectList.RestoreTransforms();
+ //                   m_zobObjectList.RestoreTransforms();
                 }
                 m_playMode = eplayMode.ePlayMode_stop;
                 Form1.SceneUpdateEventArg ev = new Form1.SceneUpdateEventArg();
@@ -582,7 +617,20 @@ namespace DirectZobEditor
                 PropagateSceneUpdateEvent(ev);
             }
         }
-
+        private void RunEngineThread()
+        {
+            while (m_running)
+            {
+                m_directZobWrapper.RunAFrame();
+                UpdateAfterEngine();
+            }
+            m_mainForm.Invoke(new Action(() =>
+            {
+                m_directZobWrapper.Unload();
+                m_directZobWrapper = null;
+                Environment.Exit(0);
+            }));
+        }
         public void InformEngineStatus(string s)
         {
             toolStripStatusEngineState.Text = s;
@@ -595,27 +643,27 @@ namespace DirectZobEditor
 
         private void btnGrid_Click(object sender, EventArgs e)
         {
-            m_engineWindow.GetEngineWrapper().ShowGrid(btnGrid.Checked);
+            GetEngineWrapper().ShowGrid(btnGrid.Checked);
         }
 
         private void btnWireframe_Click(object sender, EventArgs e)
         {
-            m_engineWindow.GetEngineWrapper().WireFrame(btnWireframe.Checked);
+            GetEngineWrapper().WireFrame(btnWireframe.Checked);
         }
 
         private void btnNormals_Click(object sender, EventArgs e)
         {
-            m_engineWindow.GetEngineWrapper().ShowNormals(btnNormals.Checked);
+            GetEngineWrapper().ShowNormals(btnNormals.Checked);
         }
 
         private void btnGizmos_Click(object sender, EventArgs e)
         {
-            m_engineWindow.GetEngineWrapper().DrawGizmos(btnGizmos.Checked);
+            GetEngineWrapper().DrawGizmos(btnGizmos.Checked);
         }
 
         private void btnTranslateLocal_Click(object sender, EventArgs e)
         {
-            m_engineWindow.SetModificator(EngineWindow.objectModificator.translate_local);
+            m_directZobWrapper.GetEngineWrapper().SetObjectModificator((CLI.objectModificator)1);
             btnRotateLocal.Checked = false;
             btnScale.Checked = false;
             btnTranslateWorld.Checked = false;
@@ -624,7 +672,7 @@ namespace DirectZobEditor
 
         private void btnRotateLocal_Click(object sender, EventArgs e)
         {
-            m_engineWindow.SetModificator(EngineWindow.objectModificator.rotate_local);
+            m_directZobWrapper.GetEngineWrapper().SetObjectModificator((CLI.objectModificator)3);
             btnTranslateLocal.Checked = false;
             btnTranslateWorld.Checked = false;
             btnScale.Checked = false;
@@ -633,7 +681,7 @@ namespace DirectZobEditor
 
         private void btnScale_Click(object sender, EventArgs e)
         {
-            m_engineWindow.SetModificator(EngineWindow.objectModificator.scale);
+            m_directZobWrapper.GetEngineWrapper().SetObjectModificator((CLI.objectModificator)4);
             btnTranslateLocal.Checked = false;
             btnRotateLocal.Checked = false;
             btnTranslateWorld.Checked = false;
@@ -642,7 +690,7 @@ namespace DirectZobEditor
 
         private void btnTranslateWorld_Click(object sender, EventArgs e)
         {
-            m_engineWindow.SetModificator(EngineWindow.objectModificator.translate_world);
+            m_directZobWrapper.GetEngineWrapper().SetObjectModificator((CLI.objectModificator)0);
             btnRotateLocal.Checked = false;
             btnScale.Checked = false;
             btnTranslateLocal.Checked = false;
@@ -651,7 +699,7 @@ namespace DirectZobEditor
 
         private void btnRotateWorld_Click(object sender, EventArgs e)
         {
-            m_engineWindow.SetModificator(EngineWindow.objectModificator.rotate_world);
+            m_directZobWrapper.GetEngineWrapper().SetObjectModificator((CLI.objectModificator)2);
             btnRotateLocal.Checked = false;
             btnScale.Checked = false;
             btnTranslateLocal.Checked = false;
@@ -665,7 +713,7 @@ namespace DirectZobEditor
 
         private void fixedToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            m_cameraManagerWrapper.CreateCamera("Fixed");
+            m_directZobWrapper.GetZobCameraManagerWrapper().CreateCamera("Fixed");
             Form1.SceneUpdateEventArg ev = new Form1.SceneUpdateEventArg();
             ev.type = Form1.SceneUpdateType.createCamera;
             PropagateSceneUpdateEvent(ev);
@@ -673,7 +721,7 @@ namespace DirectZobEditor
 
         private void fPSToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            m_cameraManagerWrapper.CreateCamera("FPS");
+            m_directZobWrapper.GetZobCameraManagerWrapper().CreateCamera("FPS");
             Form1.SceneUpdateEventArg ev = new Form1.SceneUpdateEventArg();
             ev.type = Form1.SceneUpdateType.createCamera;
             PropagateSceneUpdateEvent(ev);
@@ -681,7 +729,7 @@ namespace DirectZobEditor
 
         private void orbitalFreeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            m_cameraManagerWrapper.CreateCamera("Orbital");
+            m_directZobWrapper.GetZobCameraManagerWrapper().CreateCamera("Orbital");
             Form1.SceneUpdateEventArg ev = new Form1.SceneUpdateEventArg();
             ev.type = Form1.SceneUpdateType.createCamera;
             PropagateSceneUpdateEvent(ev);
@@ -689,7 +737,7 @@ namespace DirectZobEditor
 
         private void orbitalToParentToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            m_cameraManagerWrapper.CreateCamera("Orbital");
+            m_directZobWrapper.GetZobCameraManagerWrapper().CreateCamera("Orbital");
             Form1.SceneUpdateEventArg ev = new Form1.SceneUpdateEventArg();
             ev.type = Form1.SceneUpdateType.createCamera;
             PropagateSceneUpdateEvent(ev);
@@ -699,25 +747,25 @@ namespace DirectZobEditor
         private void bBoxToolStripMenuItem_Click(object sender, EventArgs e)
         {
             bBoxToolStripMenuItem.Checked = !bBoxToolStripMenuItem.Checked;
-            m_engineWindow.GetEngineWrapper().ShowBBoxes(bBoxToolStripMenuItem.Checked);
+            m_directZobWrapper.GetEngineWrapper().ShowBBoxes(bBoxToolStripMenuItem.Checked);
         }
 
         private void cameraToolStripMenuItem_Click(object sender, EventArgs e)
         {
             cameraToolStripMenuItem.Checked = !cameraToolStripMenuItem.Checked;
-            m_engineWindow.GetEngineWrapper().DrawCameraGizmos(cameraToolStripMenuItem.Checked);
+            m_directZobWrapper.GetEngineWrapper().DrawCameraGizmos(cameraToolStripMenuItem.Checked);
         }
 
         private void physicsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             physicsToolStripMenuItem.Checked = !physicsToolStripMenuItem.Checked;
-            m_engineWindow.GetEngineWrapper().DrawPhysicsGizmos(physicsToolStripMenuItem.Checked);
+            m_directZobWrapper.GetEngineWrapper().DrawPhysicsGizmos(physicsToolStripMenuItem.Checked);
         }
 
         private void textToolStripMenuItem_Click(object sender, EventArgs e)
         {
             textToolStripMenuItem.Checked = !textToolStripMenuItem.Checked;
-            m_engineWindow.GetEngineWrapper().ShowText(textToolStripMenuItem.Checked);
+            m_directZobWrapper.GetEngineWrapper().ShowText(textToolStripMenuItem.Checked);
         }
 
         private void toolStripSnap_Click(object sender, EventArgs e)
@@ -730,7 +778,7 @@ namespace DirectZobEditor
             string s = (string)toolStripComboBoxCurrentCamera.SelectedItem;
             if (!string.IsNullOrEmpty(s))
             {
-                m_cameraManagerWrapper.SetCurrentCamera(s);
+                m_directZobWrapper.GetZobCameraManagerWrapper().SetCurrentCamera(s);
             }
         }
 
@@ -739,9 +787,94 @@ namespace DirectZobEditor
             //make an alert
             m_directZobWrapper.RegenerateZobIds();
         }
+
+        private void GigaPaint(object o)
+        {
+            Color backColor = (Color)System.Drawing.ColorTranslator.FromHtml("#2D2D30");
+            Color foreColor = (Color)System.Drawing.ColorTranslator.FromHtml("#F0F0F0");
+            Control c = o as Control;
+            if (c != null)
+            {
+                c.BackColor = backColor;
+                c.ForeColor = foreColor;
+                for (int i = 0; i < c.Controls.Count; i++)
+                {
+                    object o2 = (object)c.Controls[i];
+                    GigaPaint(o2);
+                }
+            }
+            MenuStrip ms = o as MenuStrip;
+            if (ms != null)
+            {
+                ms.BackColor = backColor;
+                ms.ForeColor = foreColor;
+                for (int i = 0; i < ms.Items.Count; i++)
+                {
+                    object o2 = (object)ms.Items[i];
+                    GigaPaint(o2);
+                }
+            }
+            ToolStrip ts = o as ToolStrip;
+            if (ts != null)
+            {
+                ts.BackColor = backColor;
+                ts.ForeColor = foreColor;
+                for (int i = 0; i < ts.Items.Count; i++)
+                {
+                    object o2 = (object)ts.Items[i];
+                    GigaPaint(o2);
+                }
+            }
+            ToolStripMenuItem tsm = o as ToolStripMenuItem;
+            if (tsm != null)
+            {
+                tsm.BackColor = backColor;
+                tsm.ForeColor = foreColor;
+                for (int i = 0; i < tsm.DropDownItems.Count; i++)
+                {
+                    object o2 = (object)tsm.DropDownItems[i];
+                    GigaPaint(o2);
+                }
+            }
+            TabControl tc = o as TabControl;
+            if (tc != null)
+            {
+                tc.BackColor = backColor;
+                tc.ForeColor = foreColor;
+                for (int i = 0; i < tc.TabPages.Count; i++)
+                {
+                    object o2 = (object)tc.TabPages[i];
+                    GigaPaint(o2);
+                }
+            }
+        }
+
+        private void EngineRendererPanel_Resize(object sender, EventArgs e)
+        {
+            if (m_engineWindow != null)
+            {
+                PictureBox p = m_engineWindow.GetEngineRenderwindow();
+                if(p != null)
+                {
+                    float r = (float)p.Width / (float)p.Height;
+                    toolStripStatusLabel1.Text = "Size : " + p.Width + "x" + p.Height + " | Ratio : "+r;
+                }
+            }
+        }
+
+        private void EngineRendererPanel_MouseMove(object sender, MouseEventArgs e)
+        {
+            string s2 = m_directZobWrapper.GetEngineWrapper().test;
+            toolStripStatusEngineState.Text = "OBJ : " + s2;
+        }
+
+        private void Form1_MouseMove(object sender, MouseEventArgs e)
+        {
+
+        }
     }
 
-    public class Event
+    public class LogEvent
     {
         public string data { get; set; }
         public int type { get; set; }

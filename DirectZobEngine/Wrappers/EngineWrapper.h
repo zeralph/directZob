@@ -5,14 +5,23 @@
 #include "../Rendering/Engine.h"
 #include "../DirectZob.h"
 #include "ZobObjectWrapper.h"
-//using namespace System;
+#using "System.Windows.Forms.dll"
+#using "System.dll"
+#using "System.Drawing.dll"
+
+using namespace System;
+using namespace System::Windows;
+using namespace System::Windows::Forms;
+using namespace System::Collections::Generic;
+using namespace System::Drawing;
 
 #define NB_EDITOR_TRIANGLES 1000
 #define NB_EDITOR_LINES 1000
 #define NB_EDITOR_CIRCLES 1000
+class DirectZobWrapper;
 namespace CLI
 {
-	struct Line
+	public struct Line
 	{
 		ZobVector3 p0;
 		ZobVector3 p1;
@@ -20,7 +29,7 @@ namespace CLI
 		bool bold;
 		bool noZ;
 	};
-	struct Circle
+	public struct Circle
 	{
 		ZobVector3 p;
 		ZobVector3 n;
@@ -29,11 +38,24 @@ namespace CLI
 		bool bold;
 		bool noZ;
 	};
-	public ref class EngineWrapper: public ManagedObject<Core::Engine>
+	public enum objectModificator
+	{
+		translate_world=0,
+		translate_local=1,
+		rotate_world=2,
+		rotate_local=3,
+		scale=4,
+	};
+	public enum axis
+	{
+		X=0,
+		Y,
+		Z,
+	};
+	public ref class EngineWrapper: public ManagedObject<Engine>
 	{
 	public:
-
-		EngineWrapper();
+		EngineWrapper(PictureBox^ renderWindow);
 		~EngineWrapper();
 		int				GetBufferWidth();
 		int				GetBufferHeight();
@@ -51,14 +73,27 @@ namespace CLI
 		void			SetRenderOutput(int r);
 		void			SetRenderMode(int r);
 		void			SetLightingPrecision(int r);
-		bool			GetProjectedCoords(ManagedVector3^ worldSpacePos);
-		float			GetDistanceToCamera(ManagedVector3^ worldPos);
-		ZobObjectWrapper^ GetObjectAt2DCoords(float x, float y);
-		void			DrawLine(ManagedVector3^ p0, ManagedVector3^ p1, int color, bool bold, bool noZ);
-		void			DrawCircle(ManagedVector3^ p0, ManagedVector3^ up, float r, int color, bool bold, bool noZ);
-		void			DrawTriangle(ManagedVector3^ p0, ManagedVector3^ p1, ManagedVector3^ p2, int color);
+		void			SetObjectModificator(objectModificator om) { m_objectModificator = om;}
+		void			DrawLine(ZobVector3* p0, ZobVector3* p1, int color, bool bold, bool noZ);
+		void			DrawCircle(ZobVector3* p0, ZobVector3* up, float r, int color, bool bold, bool noZ);
 		void			QueueObjectsToRender();
+		void			Update(float dt);
+		void			Stop() { m_running = false; }
+		String^ test;
+
 	private:
+		ZobVector3		ToScreenCoords(ZobVector3& v);
+		void			UpdateCameraEditor(float dt);
+		void			OnMouseWheel(Object^ sender, MouseEventArgs^ e);
+		void			OnMouseHover(Object ^ sender, EventArgs^ e);
+		void			OnMouseLeave(Object^ sender, EventArgs^ e);
+		void			OnMouseClick(Object^ sender, MouseEventArgs^ e);
+		void			UpdateRenderWindowInternal();
+		void			OnObjectSelected(ZobObjectWrapper^ z);
+		void			OnNewScene();
+		bool			IsCursorInsideWindow();
+		PictureBox^		m_renderWindow;
+		Graphics^		m_renderWindowGraphics;
 		Triangle*		m_triangleList;
 		ZobVector3*		m_vertices;
 		ZobVector3*		m_projectedVertices;
@@ -67,6 +102,10 @@ namespace CLI
 		int				m_nbTriangles;
 		int				m_nbLines;
 		int				m_nbCircles;
+		bool			m_running;
+		objectModificator m_objectModificator;
+		Point			m_mouseCoords;
+		bool			m_mouseInside;
 	};
 }
 #endif //_WINDLL

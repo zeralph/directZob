@@ -9,7 +9,7 @@ namespace CLI {
 	{
 
 	public:
-		ZobLightWrapper(Light* zobObject);
+		ZobLightWrapper(Light* zobObject, Panel^ panel);
 		void				SetColor(ManagedVector3^ p);
 		ManagedVector3^		GetColor();
 		float				GetIntensity();

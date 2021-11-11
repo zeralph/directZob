@@ -16,7 +16,7 @@ namespace CLI
 		MarshalString(name, cname);
 		MarshalString(file, cfile);
 		MarshalString(path, cpath);
-		m_Instance->LoadMesh(cname, cpath, cfile);
+		m_Instance->LoadMesh(cname, cpath, cfile, false);
 	}
 	System::String^ MeshManagerWrapper::GetMeshList()
 	{

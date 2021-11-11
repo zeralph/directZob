@@ -58,13 +58,7 @@ enum eRenderMode
 	eRenderMode_scanline,
 	__eRenderMode_MAX__
 };
-enum eCullMode
-{
-	eCullMode_None = 0,
-	eCullMode_ClockwiseFace,
-	eCullMode_CounterClockwiseFace,
-	__eCullMode_MAX__,
-};
+
 enum eLightingPrecision
 {
 	eLightingPrecision_noLighting = 0,
@@ -102,7 +96,49 @@ public:
 		float* zBuffer;
 		int curBuffer;
 	};
-
+	struct ZobFilePath
+	{
+		std::string name;
+		std::string path;
+		std::string file;
+		bool bAbsolute;
+		void Init()
+		{
+			name = "";
+			path = "";
+			file = "";
+			bAbsolute = false;
+		}
+		bool IsDefined()
+		{
+			return name.size() && path.size() && file.size();
+		}
+		std::string GetFullPath()
+		{
+			return "";
+		}
+		std::string Serialize()
+		{
+			std::string s = name;
+			s = s.append(";").append(path).append(";").append(file);
+			return s;
+		}
+		void Unserialize(std::string s)
+		{
+			std::size_t del1, del2 = 0;
+			del1 = s.find(';');
+			if (del1 != std::string::npos)
+			{
+				del2 = s.find(';', del1 + 1);
+				if (del1 != std::string::npos)
+				{
+					name = s.substr(0, del1);
+					path = s.substr(del1 + 1, del2 - (del1 + 1));
+					file = s.substr(del2 + 1, s.size() - 1);
+				}
+			}
+		}
+	};
 	struct Line3D
 	{
 		float xa;
@@ -126,8 +162,18 @@ public:
 			eLightMode_flatPhong,
 			__eLightMode_MAX__
 		};
+		
+		enum eCullMode
+		{
+			eCullMode_None = 0,
+			eCullMode_ClockwiseFace,
+			eCullMode_CounterClockwiseFace,
+			__eCullMode_MAX__,
+		};
+
 		bool bTransparency = false;
 		bool zBuffered = true;
+		ZobVector3 color = ZobVector3(1, 1, 1);
 		eLightMode lightMode = eLightMode::eLightMode_phong;
 		eCullMode cullMode = eCullMode_ClockwiseFace;
 	};
@@ -169,7 +215,8 @@ typedef DirectZobType::u16 u16;
 typedef DirectZobType::uint uint;
 typedef DirectZobType::guid u32;
 typedef DirectZobType::ulong ulong;
-typedef DirectZobType::zobId ull;
+typedef DirectZobType::zobId zobId;
+typedef struct DirectZobType::ZobFilePath ZobFilePath;
 typedef struct DirectZobType::BufferData BufferData;
 typedef struct DirectZobType::Line3D Line3D;
 typedef struct DirectZobType::RenderOptions RenderOptions;

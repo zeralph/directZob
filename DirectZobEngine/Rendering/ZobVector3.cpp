@@ -35,6 +35,14 @@ ZobVector3::ZobVector3(const TiXmlElement* node)
 	z = atof(node->Attribute(XML_ATTR_Z));
 }
 
+bool ZobVector3::FromString(std::string& sx, std::string& sy, std::string& sz)
+{
+	x = atof(sx.c_str());
+	y = atof(sy.c_str());
+	z = atof(sz.c_str());
+	return true;
+}
+
 bool ZobVector3::FromString(std::string &s)
 {
 	std::size_t del1, del2= 0;

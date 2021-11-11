@@ -56,15 +56,10 @@ Camera* CameraManager::CreateEditorCamera()
 	else
 	{
 		std::string name = std::string("EditorCamera");
-		c = DirectZob::GetInstance()->GetCameraManager()->CreateEditorCamera(name, Camera::eCamera_orbital, 45.0f, NULL);
+		c = DirectZob::GetInstance()->GetCameraManager()->CreateEditorCamera(name, Camera::eCamera_orbital_free, 45.0f, NULL);
 		c->SetWorldPosition(-20,20,-20);
-
-		//c->SetPosition(0, 10, -10);
-
 		ZobVector3 v = ZobVector3(0, 0, 0);
 		c->SetTarget(&v);
-		//c->SetRotation(-20, 0, 0);
-		
 		return c;
 	}
 }

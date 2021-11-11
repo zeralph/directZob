@@ -11,7 +11,7 @@ ZobBehaviorPhysicBox::ZobBehaviorPhysicBox(ZobObject* zobObject) : ZobBehaviorPh
 {
 	m_halfExtends = ZobVector3(1, 1, 1);
 	m_type = eBehavior_physicBox;
-	WrapVariable(eWrapperType_ZobVector3, "Height", &m_halfExtends, false, true);
+	m_varExposer->WrapVariable<ZobVector3>("Height", &m_halfExtends, NULL, false, true);
 	m_halfExtends = ZobVector3(1, 1, 1);
 }
 

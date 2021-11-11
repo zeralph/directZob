@@ -12,10 +12,10 @@ public:
 
     void            Init() override;
     void            Update(float dt) override;
-    void            PreUpdate() override;
+    void            PreUpdate(float dt) override;
     void            Rotate(float x, float y, float z) override;
     void            Move(float x, float y, float z) override;
-    void            DrawGizmos(const Camera* camera, Core::Engine* engine) const override;
+    void            DrawGizmos(const Camera* camera, Engine* engine) const override;
     Camera::eCameraType     GetType() const { return m_type; }
     std::string             GetTypeName() const { return m_typeName; }
 private:

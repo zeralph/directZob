@@ -42,8 +42,8 @@ namespace DirectZobEditor
         public void BindEvents()
         {
             m_mainForm.OnNewScene += new EventHandler(OnNewScene);
-            ZobObjectListControl z = m_mainForm.GetZobObjectListControl();
-            z.OnObjectSelected += new ZobObjectListControl.OnObjectSelectedHandler(OnObjectSelected);
+//            ZobObjectListControl z = m_mainForm.GetZobObjectListControl();
+//            z.OnObjectSelected += new ZobObjectListControl.OnObjectSelectedHandler(OnObjectSelected);
             m_mainForm.OnSceneUpdated += new Form1.OnSceneUpdateHandler(OnSceneUpdated);
             m_mainForm.GetEngineWindow().OnObjectMoved+= new EngineWindow.OnObjectMovedHandler(OnObjectMoved);
             m_mainForm.GetEngineWindow().OnObjectRotated+= new EngineWindow.OnObjectRotatedHandler(OnObjectRotated);
@@ -68,6 +68,7 @@ namespace DirectZobEditor
                 m_behaviors.Clear();
                 SetValues();
                 this.Visible = true;
+                /*
                 UserControl behaviorControl = m_currentZobObjectWrapper.FillBehaviorsControl();
                 if (behaviorControl != null)
                 {
@@ -75,6 +76,7 @@ namespace DirectZobEditor
                     behaviorControl.Width = this.Width;
                     m_behaviors.Add(behaviorControl);
                 }
+                */
             }
             else
             {

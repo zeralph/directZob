@@ -24,7 +24,7 @@ static char buffer[MAX_PATH];
 static char logBuffer[LOG_BUFFER_SIZE];
 static bool g_isInEditorMode;
 static int s_logIndent;
-static std::mutex g_render_mutex;
+//static std::mutex g_render_mutex;
 static std::thread g_editorModeThread;
 int DirectZob::s_logIndent = 0;
 DirectZob *DirectZob::singleton = nullptr;
@@ -93,12 +93,12 @@ void DirectZob::LoadZobObject(std::string& path, std::string& file)
 
 void DirectZob::Lock()
 {
-	g_render_mutex.lock();
+	//g_render_mutex.lock();
 }
 
 void DirectZob::Unlock()
 {
-	g_render_mutex.unlock();
+	//g_render_mutex.unlock();
 }
 
 void DirectZob::SaveScene(std::string& path, std::string& file)
@@ -113,30 +113,30 @@ void DirectZob::SaveScene()
 
 void DirectZob::NewScene()
 {
-	g_render_mutex.lock();
+	//g_render_mutex.lock();
 	m_physicStarted = false;
 	SceneLoader::NewScene();
 	if (m_text == NULL)
 	{
 		m_text = new Text2D(m_engine, m_events);
 	}
-	g_render_mutex.unlock();
+	//g_render_mutex.unlock();
 }
 
 void DirectZob::Resize(int width, int height)
 {
-	g_render_mutex.lock();
+	//g_render_mutex.lock();
 	m_engine->Resize(width, height);
-	g_render_mutex.unlock();
+	//g_render_mutex.unlock();
 }
 
 void DirectZob::Unload()
 {
-	g_render_mutex.lock();
+	//g_render_mutex.lock();
 	SceneLoader::UnloadScene();
 	DirectZob::GetInstance()->GetEngine()->Stop();
 	delete DirectZob::GetInstance();
-	g_render_mutex.unlock();
+	//g_render_mutex.unlock();
 }
 
 bool DirectZob::CanFastSave()
@@ -211,10 +211,9 @@ int DirectZob::RunAFrame(DirectZob::engineCallback OnSceneUpdated /*=NULL*/, Dir
 	timespec tstart;
 	timespec tend;
 	SaveTime(&tstart);
-	g_render_mutex.lock();
+	//g_render_mutex.lock();
 	int state=0;
 	m_fps = 1000.0f / m_frameTime;
-	SceneLoader::Update();
 	if(m_initialized && m_engine->Started())
 	{
 #ifdef WINDOWS
@@ -242,13 +241,14 @@ int DirectZob::RunAFrame(DirectZob::engineCallback OnSceneUpdated /*=NULL*/, Dir
 		Camera* cam = m_cameraManager->GetCurrentCamera();
 		if (cam)
 		{
+			float dt = m_frameTime / 1000.0f;
 			m_engine->SwapBuffers();
 			bool bPhysicUpdated = false;
-			m_zobObjectManager->PreUpdate();
-			m_hudManager->PreUpdate();
-			m_lightManager->PreUpdate();
+			m_zobObjectManager->PreUpdate(dt);
+			m_hudManager->PreUpdate(dt);
+			m_lightManager->PreUpdate(dt);
 			m_engine->StartDrawingScene();
-			Color c = Color(DirectZob::GetInstance()->GetLightManager()->GetClearColor());
+			ZobColor c = ZobColor(DirectZob::GetInstance()->GetLightManager()->GetClearColor());
 			if (OnSceneUpdated)
 			{
 				OnSceneUpdated();
@@ -256,14 +256,13 @@ int DirectZob::RunAFrame(DirectZob::engineCallback OnSceneUpdated /*=NULL*/, Dir
 			if (m_physicStarted)
 			{
 				bPhysicUpdated = true;
-				m_zobObjectManager->UpdateBehavior(m_frameTime / 1000.0f);
-				m_hudManager->UpdateBehavior(m_frameTime / 1000.0f);
-				m_physicsEngine->StartUpdatePhysic(m_frameTime/1000.0f);
-				
+				//m_zobObjectManager->UpdatePhysic(dt);
+				m_physicsEngine->StartUpdatePhysic(dt);
+
 			}
-			cam->UpdateAfter();
-			m_zobObjectManager->UpdateObjects(cam, m_engine, m_frameTime / 1000.0f);			
-			m_hudManager->UpdateObjects(cam, m_engine, m_frameTime / 1000.0f);
+			m_zobObjectManager->UpdateObjects(cam, m_engine, dt);			
+			m_hudManager->UpdateObjects(cam, m_engine, dt);
+			m_zobObjectManager->PostUpdate();
 			m_engine->ClearBuffer(&c);
 			m_renderTime = m_engine->WaitForRasterizersEnd();
 			//ZobLightManager update is made after resterizers' work because it changes the active lights vectors
@@ -280,7 +279,8 @@ int DirectZob::RunAFrame(DirectZob::engineCallback OnSceneUpdated /*=NULL*/, Dir
 			{
 				//OnQueuing();
 			}
-  			m_zobObjectManager->QueueForDrawing(cam, m_engine);
+			//m_zobObjectManager->PostUpdate();
+			m_zobObjectManager->QueueForDrawing(cam, m_engine);
 			m_hudManager->QueueForDrawing(cam, m_engine);
 			if (m_engine->DrawPhysyicsGizmos())
 			{
@@ -295,15 +295,15 @@ int DirectZob::RunAFrame(DirectZob::engineCallback OnSceneUpdated /*=NULL*/, Dir
 		{	
 			m_hudManager->Print(ZobHUDManager::eHudUnit_ratio, 0.5f, 0.5f, 2, "Arial", &color, "WARNING : %s", "NO CAMERA");
 		}
-		m_hudManager->Print(ZobHUDManager::eHudUnit_ratio, 0.01f, 0.01f, 1, "MV Boli", &color, "Triangles : %i", m_engine->GetNbDrawnTriangles());
+		m_hudManager->Print(ZobHUDManager::eHudUnit_ratio, 0.01f, 0.01f, 1, "VCR OSD Mono", &color, "Triangles : %i", m_engine->GetNbDrawnTriangles());
 		color = ZobVector3(0, 1, 0);
 		if (m_frameTime <= fpsTargets[sTargetMSPerFrameIdx])
 		{
 			ZobVector3 color = ZobVector3(1, 0, 0);
 		}
-		m_hudManager->Print(ZobHUDManager::eHudUnit_ratio, 0.01f, 0.04f, 1, "MV Boli", &color, "render : %03i, geom : %03i, phys : %03i, cpy : %03i, tot : %03i, FPS : %03i", (int)m_renderTime, (int)m_geometryTime, (int)m_physicTime, (int)m_copyTime, (int)m_frameTime, (int)m_fps);
+		m_hudManager->Print(ZobHUDManager::eHudUnit_ratio, 0.01f, 0.04f, 1, "VCR OSD Mono", &color, "render : %03i, geom : %03i, phys : %03i, cpy : %03i, tot : %03i, FPS : %03i", (int)m_renderTime, (int)m_geometryTime, (int)m_physicTime, (int)m_copyTime, (int)m_frameTime, (int)m_fps);
 		color = ZobVector3(1, 1, 1);
-		m_hudManager->Print(ZobHUDManager::eHudUnit_ratio, 0.01f, 0.07f, 1, "MV Boli", &color, "Controller LX : %.2f, LY  : %.2f, RX : %.2f, RY : %.2f, LT : %.2f, RT : %.2f",
+		m_hudManager->Print(ZobHUDManager::eHudUnit_ratio, 0.01f, 0.07f, 1, "VCR OSD Mono", &color, "Controller LX : %.2f, LY  : %.2f, RX : %.2f, RY : %.2f, LT : %.2f, RT : %.2f",
 			m_inputManager->GetMap()->GetFloat(ZobInputManager::LeftStickX), 
 			m_inputManager->GetMap()->GetFloat(ZobInputManager::LeftStickY),
 			m_inputManager->GetMap()->GetFloat(ZobInputManager::RightStickX),
@@ -337,8 +337,8 @@ int DirectZob::RunAFrame(DirectZob::engineCallback OnSceneUpdated /*=NULL*/, Dir
 	SaveTime(&tend);
 	float dt = (float)GetDeltaTime_MS(tstart, tend);
 	WaitToTargetFrameTime(dt);
-	m_engine->UpdateEditorBitmapData();
-	g_render_mutex.unlock();
+	SceneLoader::Update();
+	//g_render_mutex.unlock();
 	return state;
 }
 

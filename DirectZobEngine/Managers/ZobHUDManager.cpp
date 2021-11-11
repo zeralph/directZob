@@ -13,7 +13,7 @@ ZobHUDManager::ZobHUDManager()
 	m_started = false;
 	m_renderOptions.zBuffered = false;
 	m_renderOptions.bTransparency = false;
-	m_renderOptions.cullMode = eCullMode_None;
+	m_renderOptions.cullMode = RenderOptions::eCullMode_None;
 	m_renderOptions.lightMode = DirectZobType::RenderOptions::eLightMode_none;
 	m_trianglesBuffer = (Triangle*)malloc(sizeof(Triangle) * NB_HUD_TRIANGLES);
 	m_vertices = (ZobVector3*)malloc(sizeof(ZobVector3) * NB_HUD_TRIANGLES * 3);
@@ -93,6 +93,12 @@ void ZobHUDManager::Init()
 		tex.append("_fonts/arial_regular_32.PNG");
 		xml.append("_fonts/arial_regular_32.xml");
 		m_fonts.push_back(new ZobFont(tex, xml));
+
+		tex = p;
+		xml = p;
+		tex.append("_fonts/vcr_osd_mono_regular_14.PNG");
+		xml.append("_fonts/vcr_osd_mono_regular_14.xml");
+		m_fonts.push_back(new ZobFont(tex, xml));
 	}
 	else
 	{
@@ -116,7 +122,7 @@ void ZobHUDManager::Start()
 	m_started = true;
 }
 
-void ZobHUDManager::PreUpdate()
+void ZobHUDManager::PreUpdate(float dt)
 {
 }
 
@@ -134,7 +140,7 @@ void ZobHUDManager::DeleteFonts()
 	m_fonts.clear();
 }
 
-void ZobHUDManager::UpdateObjects(const Camera* camera, Core::Engine* engine, float dt)
+void ZobHUDManager::UpdateObjects(const Camera* camera, Engine* engine, float dt)
 {
 	OPTICK_EVENT();
 	for (std::vector<HUDElement>::const_iterator iter = m_hudElements.begin(); iter != m_hudElements.end(); iter++)
@@ -152,7 +158,7 @@ void ZobHUDManager::UpdateObjects(const Camera* camera, Core::Engine* engine, fl
 	}
 }
 
-void ZobHUDManager::QueueForDrawing(const Camera* camera, Core::Engine* engine)
+void ZobHUDManager::QueueForDrawing(const Camera* camera, Engine* engine)
 {
 	OPTICK_EVENT();
 	for (int i = 0; i < m_nbDrawnTriangles; i++)

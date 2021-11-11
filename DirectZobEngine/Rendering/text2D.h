@@ -5,8 +5,6 @@
 #include "Engine.h"
 #include "../Events.h"
 
-using namespace Core;
-
 class Text2D
 {
 public:

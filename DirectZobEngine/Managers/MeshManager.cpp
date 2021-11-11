@@ -34,7 +34,7 @@ Sprite* MeshManager::CreateSprite()
 	return s;
 }
 
-Mesh* MeshManager::LoadMesh(std::string& name, std::string& path, std::string& file)
+Mesh* MeshManager::LoadMesh(std::string& name, std::string& path, std::string& file, bool bAbsolutePath)
 {
 	std::string p = path;
 	std::replace(p.begin(), p.end(), '\\', '/');
@@ -46,7 +46,7 @@ Mesh* MeshManager::LoadMesh(std::string& name, std::string& path, std::string& f
 	Mesh* outMesh = NULL;
 	//if (GetMesh(name) == NULL)
 	{
-		outMesh = new Mesh(name, p, file);
+		outMesh = new Mesh(name, p, file, bAbsolutePath);
 		m_meshes.push_back(outMesh);
 	}
 	return outMesh;
@@ -73,12 +73,12 @@ Mesh* MeshManager::GetMesh(std::string& name) const
 	return NULL;
 }
 
-Mesh* MeshManager::GetOrLoadMesh(std::string& name, std::string& path, std::string& file)
+Mesh* MeshManager::GetOrLoadMesh(std::string& name, std::string& path, std::string& file, bool bAbsolutePath)
 {
 	Mesh* m = GetMesh(name);
 	if (!m)
 	{
-		m = LoadMesh(name, path, file);
+		m = LoadMesh(name, path, file, bAbsolutePath);
 	}
 	return m;
 }

@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.lockFrustrum = new System.Windows.Forms.CheckBox();
             this.label5 = new System.Windows.Forms.Label();
             this.comboLighting = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
@@ -44,7 +45,6 @@
             this.comboBuffer = new System.Windows.Forms.ComboBox();
             this.wireframe = new System.Windows.Forms.CheckBox();
             this.showGrid = new System.Windows.Forms.CheckBox();
-            this.lockFrustrum = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -74,12 +74,25 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Engine";
             // 
+            // lockFrustrum
+            // 
+            this.lockFrustrum.AutoSize = true;
+            this.lockFrustrum.Location = new System.Drawing.Point(12, 105);
+            this.lockFrustrum.Name = "lockFrustrum";
+            this.lockFrustrum.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.lockFrustrum.Size = new System.Drawing.Size(90, 17);
+            this.lockFrustrum.TabIndex = 15;
+            this.lockFrustrum.Text = "Lock frustrum";
+            this.lockFrustrum.UseVisualStyleBackColor = true;
+            this.lockFrustrum.CheckedChanged += new System.EventHandler(this.lockFrustrum_CheckedChanged);
+            // 
             // label5
             // 
             this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Microsoft Tai Le", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label5.Location = new System.Drawing.Point(161, 23);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(44, 13);
+            this.label5.Size = new System.Drawing.Size(50, 14);
             this.label5.TabIndex = 14;
             this.label5.Text = "Lighting";
             // 
@@ -217,10 +230,11 @@
             // wireframe
             // 
             this.wireframe.AutoSize = true;
+            this.wireframe.Font = new System.Drawing.Font("Microsoft Tai Le", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wireframe.Location = new System.Drawing.Point(24, 19);
             this.wireframe.Name = "wireframe";
             this.wireframe.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.wireframe.Size = new System.Drawing.Size(74, 17);
+            this.wireframe.Size = new System.Drawing.Size(79, 18);
             this.wireframe.TabIndex = 1;
             this.wireframe.Text = "Wireframe";
             this.wireframe.UseVisualStyleBackColor = true;
@@ -237,18 +251,6 @@
             this.showGrid.Text = "Show grid";
             this.showGrid.UseVisualStyleBackColor = true;
             this.showGrid.CheckedChanged += new System.EventHandler(this.ShowGrid_CheckedChanged);
-            // 
-            // lockFrustrum
-            // 
-            this.lockFrustrum.AutoSize = true;
-            this.lockFrustrum.Location = new System.Drawing.Point(12, 105);
-            this.lockFrustrum.Name = "lockFrustrum";
-            this.lockFrustrum.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.lockFrustrum.Size = new System.Drawing.Size(90, 17);
-            this.lockFrustrum.TabIndex = 15;
-            this.lockFrustrum.Text = "Lock frustrum";
-            this.lockFrustrum.UseVisualStyleBackColor = true;
-            this.lockFrustrum.CheckedChanged += new System.EventHandler(this.lockFrustrum_CheckedChanged);
             // 
             // EngineControl
             // 

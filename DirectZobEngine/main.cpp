@@ -32,8 +32,10 @@ void resize(struct mfb_window* window, int width, int height) {
 	uint32_t x = 0;
 	uint32_t y = 0;
 	//m_engine->Stop();
-	//m_engine->Resize(width, height);
-	mfb_set_viewport(window, x, y, width, height);
+	//if (m_directZob.GetEngine()->Resize(width, height))
+	{
+		mfb_set_viewport(window, x, y, width, height);
+	}
 	//m_engine->Start();
 }
 

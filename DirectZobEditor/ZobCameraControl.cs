@@ -22,7 +22,7 @@ namespace DirectZobEditor
         }
         public void BindEvents()
         {
-            m_mainForm.GetZobObjectListControl().OnObjectSelected += new ZobObjectListControl.OnObjectSelectedHandler(OnObjectSelected);
+//            m_mainForm.GetZobObjectListControl().OnObjectSelected += new ZobObjectListControl.OnObjectSelectedHandler(OnObjectSelected);
         }
         private void OnObjectSelected(object s, ObjectSelectionEventArg e)
         {

@@ -3,14 +3,14 @@
 
 #include "../Types.h"
 #include "ZobVector3.h"
-class Color
+class ZobColor
 {
 	public:
-		Color();
-		Color(uint rawValue);
-		Color(const ZobVector3* v);
-		Color(int a, int r, int g, int b);
-		~Color();
+		ZobColor();
+		ZobColor(uint rawValue);
+		ZobColor(const ZobVector3* v);
+		ZobColor(int a, int r, int g, int b);
+		~ZobColor();
 
 		void Set(uint a, uint r, uint g, uint b);
 		void Set(uint rawValue);
@@ -31,15 +31,15 @@ class Color
 		uint m_b;
 
 	public:
-		static const Color Red;
-		static const Color Green;
-		static const Color Blue;
-		static const Color Black;
-		static const Color White;
-		static const Color Yellow;
-		static const Color Magenta;
-		static const Color Cyan;
-		static const Color Grey;
+		static const ZobColor Red;
+		static const ZobColor Green;
+		static const ZobColor Blue;
+		static const ZobColor Black;
+		static const ZobColor White;
+		static const ZobColor Yellow;
+		static const ZobColor Magenta;
+		static const ZobColor Cyan;
+		static const ZobColor Grey;
 };
 
 #endif

@@ -38,7 +38,7 @@ public:
 	const bool					EnableLighting() const  { return m_lightingEnabled; }
 	void						EnableLighting(bool b) { m_lightingEnabled = b; }
 	void						UnloadAll();
-	void						PreUpdate();
+	void						PreUpdate(float dt);
 	void						LoadFromNode(TiXmlElement* node);
 	void						SaveUnderNode(TiXmlElement* node);
 private:

@@ -47,6 +47,7 @@ Rasterizer::Rasterizer(uint width, uint height, uint startHeight, uint endHeight
 	m_rasterizerNumber = rasterizerNumber;
 	m_runThread = true;
 	m_bStartDraw = false;
+	m_perspCorrection = true;
 }
 
 void Rasterizer::Init(std::condition_variable* cv, std::mutex *m)
@@ -59,6 +60,12 @@ void Rasterizer::Init(std::condition_variable* cv, std::mutex *m)
 	m_bStartDraw = false;
 	m_thread = std::thread(&Rasterizer::Render, this);
 	m_thread.detach();
+}
+
+void Rasterizer::Resize(int width, int height)
+{
+	m_width = width;
+	m_height = height;
 }
 
 void Rasterizer::Start()
@@ -368,6 +375,20 @@ void Rasterizer::DrawTriangle(const Triangle* t) const
 		ComputeLightingAtPoint(t->vc, t->nc, t, verticeCLightingData);
 	}
 
+	if(m_perspCorrection)
+	{
+		t->ua->x /= t->pa->z;
+		t->ua->y /= t->pa->z;
+		t->ub->x /= t->pb->z;
+		t->ub->y /= t->pb->z;
+		t->uc->x /= t->pc->z;
+		t->uc->y /= t->pc->z;
+
+		//t->pa->z = 1.0f / t->pa->z;
+		//t->pb->z = 1.0f / t->pb->z;
+		//t->pc->z = 1.0f / t->pc->z;		
+	}
+
 	/* here we know that v1.y <= v2.y <= v3.y */
 	/* check for trivial case of bottom-flat triangle */
 	if (v2.y == v3.y)
@@ -494,7 +515,7 @@ void Rasterizer::FillTopFlatTriangle2(ZobVector2* v1, ZobVector2* v2, ZobVector2
 
 inline const void Rasterizer::FillBufferPixel(const ZobVector3* p, const Triangle* t, const LightingData* lDataA, const LightingData* lDataB, const LightingData* lDataC) const
 {
-	float wa, wb, wc, su, tu, cl, sl, dr, dg, db, sr, sg, sb, a, z, zRatio, fr, fg, fb, lightPower;
+	float wa, wb, wc, su, tu, cl, sl, dr, dg, db, sr, sg, sb, a, z, fr, fg, fb, lightPower;
 	float texPixelData[4];
 	int c, k;
 	ZobVector3 normal, lightDir;
@@ -516,18 +537,9 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector3* p, const Triangl
 
 	const ZobMaterial* material = t->material;
 	
-	if (!t->options->zBuffered)
-	{
-		zRatio = m_bufferData->zNear;
-	}
-	else
-	{
-		zRatio = m_bufferData->zNear + (z - m_bufferData->zNear) / (m_bufferData->zFar - m_bufferData->zNear);
-	}
-	
 	float zf = m_bufferData->zBuffer[k];
 	float transparency = (t->options->bTransparency) ? 0.5f: 1.0f;
-	if ( zRatio > 0.0f &&  (zf < 0.0f  || zRatio < zf ))
+	if(z>0 && z < zf)
 	{
 		cl = 1.0f;
 		RenderOptions::eLightMode lighting = t->options->lightMode;
@@ -561,7 +573,20 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector3* p, const Triangl
 			{
 				su = wa * t->ua->x + wb * t->ub->x + wc * t->uc->x;
 				tu = wa * t->ua->y + wb * t->ub->y + wc * t->uc->y;
-				tu = 1.0f - tu;
+				if(m_perspCorrection)
+				{
+					float zu = 1.0f / (wa * 1.0f / t->pa->z + wb * 1.0f / t->pb->z + wc * 1.0f / t->pc->z); 
+					//t->pa->z = 1.0f / t->pa->z;
+					//t->pb->z = 1.0f / t->pb->z;
+					//t->pc->z = 1.0f / t->pc->z;	
+					su *= zu;
+					tu *= zu;	
+					tu = 1.0f - tu;				
+				}	
+				else
+				{
+					tu = 1.0f - tu;
+				}			
 				su = (su * (float)texture->GetWidth());
 				tu = (tu * (float)texture->GetHeight());
 				su = (int)floor(su) % texture->GetWidth();
@@ -637,13 +662,13 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector3* p, const Triangl
 			fg = dg;
 			fb = db;
 		}
-		fr = clamp2(fr, 0.0f, 1.0f);
-		fg = clamp2(fg, 0.0f, 1.0f);
-		fb = clamp2(fb, 0.0f, 1.0f);
-		z = ComputeFog(z);
-		fr = fr * (1.0f - z) + z * m_fogColor->x;
-		fg = fg * (1.0f - z) + z * m_fogColor->y;
-		fb = fb * (1.0f - z) + z * m_fogColor->z;
+		fr = clamp2(fr, 0.0f, 1.0f) * t->options->color.x;
+		fg = clamp2(fg, 0.0f, 1.0f) * t->options->color.y;
+		fb = clamp2(fb, 0.0f, 1.0f) * t->options->color.z;
+		float fog = ComputeFog(z);
+		fr = fr * (1.0f - fog) + fog * m_fogColor->x;
+		fg = fg * (1.0f - fog) + fog * m_fogColor->y;
+		fb = fb * (1.0f - fog) + fog * m_fogColor->z;
 		static int modulo = 2;
 		if (transparency < 1.0f)
 		{
@@ -655,11 +680,8 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector3* p, const Triangl
 			}
 		}
 		c = ((int)(fr * 255.0f) << 16) + ((int)(fg * 255.0f) << 8) + (int)(fb * 255.0f);
-		if (m_bufferData->zBuffer[k] <1.0f || zRatio < m_bufferData->zBuffer[k])
-		{
-			m_bufferData->buffer[k] = c;
-			m_bufferData->zBuffer[k] = zRatio;
-		}
+		m_bufferData->buffer[k] = c;
+		m_bufferData->zBuffer[k] = z;
 	}
 }
 

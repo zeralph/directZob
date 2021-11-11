@@ -55,7 +55,7 @@ void ZobCameraController::Init()
 
 }
 
-void ZobCameraController::PreUpdate()
+void ZobCameraController::PreUpdate(float dt)
 {
 }
 
@@ -67,7 +67,12 @@ void ZobCameraController::Move(float x, float y, float z)
 {
 }
 
-void ZobCameraController::DrawGizmos(const Camera* camera, Core::Engine* engine) const
+void ZobCameraController::Zoom(float f)
+{
+
+}
+
+void ZobCameraController::DrawGizmos(const Camera* camera, Engine* engine) const
 {
     if (!engine->DrawCameraGizmos())
     {

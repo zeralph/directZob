@@ -19,7 +19,7 @@ public:
 	Light(std::string id, TiXmlElement* node, ZobObject* parent);
 	~Light() override;
 
-	void				DrawGizmos(const Camera* camera, Core::Engine* engine) override;
+	void				DrawGizmos(const Camera* camera, Engine* engine) override;
 	TiXmlNode*			SaveUnderNode(TiXmlNode* node) override;
 	void				Update(float dt) override;
 	const ZobVector3*	GetColor() const { return &m_color; }
@@ -42,10 +42,10 @@ public:
 private:
 
 	void				NewLightConfiguration();
-	void				drawSpotGizmos(const Camera* camera, Core::Engine* engine) const;
-	void				drawPointGizmos(const Camera* camera, Core::Engine* engine) const;
-	void				drawDirectionalGizmos(const Camera* camera, Core::Engine* engine) const;
-	void				ComputeBoundingBoxes(const ZobMatrix4x4& modelMatrix, const Camera* camera, Core::Engine* engine);
+	void				drawSpotGizmos(const Camera* camera, Engine* engine) const;
+	void				drawPointGizmos(const Camera* camera, Engine* engine) const;
+	void				drawDirectionalGizmos(const Camera* camera, Engine* engine) const;
+	void				ComputeBoundingBoxes(const ZobMatrix4x4& modelMatrix, const Camera* camera, Engine* engine);
 
 	ZobVector3 m_color;
 	float m_intensity;

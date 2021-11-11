@@ -36,17 +36,17 @@ ZobCameraControllerFPS::~ZobCameraControllerFPS()
     m_zobCamera = NULL;
 }
 
-void ZobCameraControllerFPS::PreUpdate()
+void ZobCameraControllerFPS::PreUpdate(float dt)
 {
 	if (m_zobCamera->m_active)
 	{
-		const gainput::InputMap* inputMap = DirectZob::GetInstance()->GetInputManager()->GetMap();
-		float rx = inputMap->GetFloat(ZobInputManager::RightStickX) * 2.0f;
-		float ry = inputMap->GetFloat(ZobInputManager::RightStickY) * 2.0f;
-		Rotate(-rx, -ry, 0);
-		float mx = inputMap->GetFloat(ZobInputManager::LeftStickX) / 2.0f;
-		float my = inputMap->GetFloat(ZobInputManager::LeftStickY) / 2.0f;
-		Move(-mx, 0, my);
+		//const gainput::InputMap* inputMap = DirectZob::GetInstance()->GetInputManager()->GetMap();
+		//float rx = inputMap->GetFloat(ZobInputManager::RightStickX) * 2.0f;
+		//float ry = inputMap->GetFloat(ZobInputManager::RightStickY) * 2.0f;
+		//Rotate(-rx, -ry, 0);
+		//float mx = inputMap->GetFloat(ZobInputManager::LeftStickX) / 2.0f;
+		//float my = inputMap->GetFloat(ZobInputManager::LeftStickY) / 2.0f;
+		//Move(-mx, 0, my);
 	}
 }
 

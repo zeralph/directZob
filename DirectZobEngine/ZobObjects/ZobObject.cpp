@@ -4,6 +4,7 @@
 #include "Sprite.h"
 #include "ZobPhysic/ZobPhysicComponent.h"
 #include "SceneLoader.h"
+#include "Behaviors/ZobBehaviorMesh.h"
 #include "../Misc/ZobXmlHelper.h"
 #include "../../dependencies/optick/include/optick.h"
 
@@ -11,8 +12,9 @@ static int sObjectNumber = 0;
 ZobObject::ZobObject(ZobType t, ZobSubType s, const std::string& name, ZobObject* parent /*= NULL*/, const std::string* factoryFile /*=NULL*/)
 	:ZOBGUID(t,s)
 {
-	DirectZob::LogInfo("ZobObject %s creation", name.c_str());
+	DirectZob::LogInfo("ZobObject %s creation", name.c_str()); 
 	DirectZob::AddIndent();
+	m_varExposer = new ZobVariablesExposer(GetIdValue());
 	sObjectNumber++;
 	m_behaviors.clear();
 	m_factoryFile = factoryFile?factoryFile->c_str():"";
@@ -28,52 +30,54 @@ ZobObject::ZobObject(ZobType t, ZobSubType s, const std::string& name, ZobObject
 		m_name = name;
 	}
 	DirectZob::LogInfo("Adding new ZobObject %s", m_name.c_str());
-	if (!parent && m_name != "root")
+	m_children.clear();
+	if(m_name != "root")
 	{
-		m_parent = DirectZob::GetInstance()->GetZobObjectManager()->GetRootObject();
-		//DirectZob::LogError("Cannot add %s because it has no parent", name.c_str());
+		if (!parent)
+		{
+			m_parent = DirectZob::GetInstance()->GetZobObjectManager()->GetRootObject();
+		}
+		else
+		{
+			m_parent = parent;
+		}
+		SetParent(m_parent);
 	}
 	else
 	{
-		m_parent = parent;
+		m_parent = NULL;
 	}
 	m_markedForDeletion = false;
-	m_mesh = NULL;
-	m_children.clear();
-	m_newParent = m_parent;
-	SetParentInternal();
+	m_mesh = NULL;		
 	if (m_parent != NULL)
 	{
 		m_parent->AddChildReference(this);
 	}
-	m_renderOptions.lightMode = RenderOptions::eLightMode_phong;
-	m_renderOptions.zBuffered = true;
-	m_renderOptions.bTransparency = false;
-	ZobVector3 p = ZobVector3::Vector3Zero;
-	m_physicComponent->Init(&p, &p);
-	Update(0);
+	m_physicComponent->GetLocalPositionAddress()->x = 0;
+	m_physicComponent->GetLocalPositionAddress()->y = 0;
+	m_physicComponent->GetLocalPositionAddress()->z = 0;
+	m_physicComponent->GetLocalRotationAddress()->x = 0;
+	m_physicComponent->GetLocalRotationAddress()->y = 0;
+	m_physicComponent->GetLocalRotationAddress()->z = 0;
+	m_physicComponent->GetLocalScaleAddress()->x = 1;
+	m_physicComponent->GetLocalScaleAddress()->y = 1;
+	m_physicComponent->GetLocalScaleAddress()->z = 1;
+	InitVariablesExposer();
+	m_physicComponent->Init();
 	DirectZob::RemoveIndent();
 }
 
 ZobObject::ZobObject(std::string id, TiXmlElement* node, ZobObject* parent, const std::string* factoryFile /*=NULL*/)
 	:ZOBGUID(id)
 {
+	m_varExposer = new ZobVariablesExposer(GetIdValue());
 	m_behaviors.clear();
 	sObjectNumber++;
 	m_factoryFile = factoryFile ? factoryFile->c_str() : "";
-	ZobVector3 position, rotation, scale, orientation = ZobVector3();
-	const char* name;
 	float x, y, z;
 	TiXmlElement* f;
-	name = node->Attribute(XML_ATTR_NAME);
-	assert(name);
-	m_name = name;
-	DirectZob::LogInfo("ZobObject %s creation", name);
+	DirectZob::LogInfo("ZobObject %s creation", id.c_str());
 	DirectZob::AddIndent();
-	position = ZobVector3(node->FirstChildElement(XML_ELEMENT_POSITION));
-	rotation = ZobVector3(node->FirstChildElement(XML_ELEMENT_ROTATION));
-	scale = ZobVector3(node->FirstChildElement(XML_ELEMENT_SCALE));
-	DirectZob::LogInfo("Adding new ZobObject %s", m_name.c_str());
 	if (!parent && m_name != "root")
 	{
 		m_parent = DirectZob::GetInstance()->GetZobObjectManager()->GetRootObject();
@@ -85,102 +89,16 @@ ZobObject::ZobObject(std::string id, TiXmlElement* node, ZobObject* parent, cons
 	}
 	m_markedForDeletion = false;
 	m_mesh = NULL;
-	m_renderOptions.lightMode = RenderOptions::eLightMode_phong;
-	m_renderOptions.zBuffered = true;
-	m_renderOptions.bTransparency = false;
-	//mesh loading section
-	TiXmlElement* meshNode = node->FirstChildElement(XML_ATTR_TYPE_MESH);
-	if (meshNode)
-	{
-		std::string meshName = meshNode->Attribute(XML_ATTR_PATH);
-		std::string meshPath = meshNode->Attribute(XML_ATTR_PATH) ? meshNode->Attribute(XML_ATTR_PATH) : std::string("");
-		std::string meshFile = meshNode->Attribute(XML_ATTR_FILE);
-		if (meshName.length() > 0 && meshFile.length() > 0)
-		{
-			LoadMesh(meshName, meshFile, meshPath);
-		}
-		f = meshNode->FirstChildElement(XML_ELEMENT_RENDER_OPTIONS);
-		if (f)
-		{
-			TiXmlElement* n = f->FirstChildElement(XML_ELEMENT_RENDER_OPTIONS_LIGHTING);
-			if (n)
-			{
-				std::string l = n->GetText();
-				if (l == XML_ELEMENT_RENDER_OPTIONS_LIGHTING_NONE)
-				{
-					m_renderOptions.lightMode = RenderOptions::eLightMode_none;
-				}
-				else if (l == XML_ELEMENT_RENDER_OPTIONS_LIGHTING_FLAT)
-				{
-					m_renderOptions.lightMode = RenderOptions::eLightMode_flat;
-				}
-				else if (l == XML_ELEMENT_RENDER_OPTIONS_LIGHTING_FLAT_PHONG)
-				{
-					m_renderOptions.lightMode = RenderOptions::eLightMode_flatPhong;
-				}
-				else if (l == XML_ELEMENT_RENDER_OPTIONS_LIGHTING_GOURAUD)
-				{
-					m_renderOptions.lightMode = RenderOptions::eLightMode_gouraud;
-				}
-				else if (l == XML_ELEMENT_RENDER_OPTIONS_LIGHTING_PHONG)
-				{
-					m_renderOptions.lightMode = RenderOptions::eLightMode_phong;
-				}
-			}
-			n = f->FirstChildElement(XML_ELEMENT_RENDER_OPTIONS_ZBUFFER);
-			if (n)
-			{
-				std::string l = n->GetText();
-				if (l == XML_VALUE_TRUE)
-				{
-					m_renderOptions.zBuffered = true;
-				}
-				else
-				{
-					m_renderOptions.zBuffered = false;
-				}
-			}
-			n = f->FirstChildElement(XML_ELEMENT_RENDER_OPTIONS_TRANSPARENCY);
-			if (n)
-			{
-				std::string l = n->GetText();
-				if (l == XML_VALUE_TRUE)
-				{
-					m_renderOptions.bTransparency = true;
-				}
-				else
-				{
-					m_renderOptions.bTransparency = false;
-				}
-			}
-			n = f->FirstChildElement(XML_ELEMENT_RENDER_OPTIONS_CULLMODE);
-			if (n)
-			{
-				std::string l = n->GetText();
-				if (l == XML_ELEMENT_RENDER_OPTIONS_CULLMODE_CLOCKWISE)
-				{
-					m_renderOptions.cullMode = eCullMode_ClockwiseFace;
-				}
-				else if (l == XML_ELEMENT_RENDER_OPTIONS_CULLMODE_COUNTERCLOCKWISE)
-				{
-					m_renderOptions.cullMode = eCullMode_CounterClockwiseFace;
-				}
-				else
-				{
-					m_renderOptions.cullMode = eCullMode_None;
-				}
-			}
-		}
-	}
 	m_physicComponent = new ZobPhysicComponent(this);
 	//parenting
 	m_children.clear();
-	m_newParent = m_parent;
-	SetParentInternal();
+	SetParent(m_parent);
 	if (m_parent != NULL)
 	{
 		m_parent->AddChildReference(this);
 	}
+	InitVariablesExposer();
+	m_varExposer->ReadNode(node);
 	//Behavior
 	TiXmlElement* behaviorsNode = node->FirstChildElement("Behaviors");
 	if(behaviorsNode)
@@ -189,12 +107,42 @@ ZobObject::ZobObject(std::string id, TiXmlElement* node, ZobObject* parent, cons
 		{
 			ZobBehavior* b = ZobBehaviorFactory::CreateBehavior(this, e);
 		}
-	}
+	}	
 	//Init
-	m_physicComponent->Init(&position, &rotation);
-	SetScale(scale.x, scale.y, scale.z);
-	Update(0);
+	m_physicComponent->Init();
 	DirectZob::RemoveIndent();
+}
+
+void ZobObject::InitVariablesExposer()
+{
+	m_varExposer->WrapVariable<zobId>("GUID", GetIdAddress(), NULL, true, false);
+	m_varExposer->WrapVariable<std::string>("Name", &m_name, NULL, false, true);
+	m_varExposer->WrapVariable<ZobVector3>("Position", GetPhysicComponentNoConst()->GetLocalPositionAddress(), &ZobObject::ReloadVariables, false, true);
+	m_varExposer->WrapVariable<ZobVector3>("Rotation", GetPhysicComponentNoConst()->GetLocalRotationAddress(), &ZobObject::ReloadVariables, false, true);
+	m_varExposer->WrapVariable<ZobVector3>("Scale", GetPhysicComponentNoConst()->GetLocalScaleAddress(), &ZobObject::ReloadVariables, false, true);
+
+}
+
+void ZobObject::ReloadVariables(zobId id)
+{
+	ZobObjectManager* zm = DirectZob::GetInstance()->GetZobObjectManager();
+	if (zm)
+	{
+		ZobObject* z = zm->GetZobObjectFromlId(id);
+		if (z)
+		{
+			ZobVector3* zp = z->GetPhysicComponentNoConst()->GetLocalPositionAddress();
+			ZobVector3* zr = z->GetPhysicComponentNoConst()->GetLocalRotationAddress();
+			ZobVector3* zs = z->GetPhysicComponentNoConst()->GetLocalScaleAddress();
+			Transform t = z->GetPhysicComponentNoConst()->GetLocalTransform();
+			Vector3 vp = Vector3(zp->x, zp->y, zp->z);
+			t.setPosition(vp);
+			Quaternion q = Quaternion::fromEulerAngles(DEG_TO_RAD(zr->x), DEG_TO_RAD(zr->y), DEG_TO_RAD(zr->z));
+			t.setOrientation(q);
+
+			z->GetPhysicComponentNoConst()->SetLocalTransform(t);
+		}
+	}
 }
 
 ZobObject::~ZobObject()
@@ -219,26 +167,17 @@ ZobObject::~ZobObject()
 		m_children[i] = NULL;
 		delete z;
 	}
-	m_children.clear();
+	delete m_varExposer;
+	m_children.resize(0);
 	DirectZob::RemoveIndent();
 }
 
-void ZobObject::LoadMesh(std::string name, std::string file, std::string path)
+ZobBehaviorMesh* ZobObject::LoadMesh(ZobFilePath &zfp)
 {
-/*
-	if (!path.length())	//no path, only filename
-	{
-		file = path;
-		path = std::string(SceneLoader::GetResourcePath());
-	}
-	else
-	{
-		file = path.substr(i+1, path.size() - i);
-		path = path.substr(0, i + 1);
-	}
-*/
-	Mesh* m = DirectZob::GetInstance()->GetMeshManager()->LoadMesh(name, path, file);
-	m_mesh = m;
+	ZobBehavior* b = ZobBehaviorFactory::CreateBehavior(this, "Mesh");
+	ZobBehaviorMesh* bm = static_cast<ZobBehaviorMesh*>(b);
+	bm->Set(zfp);
+	return bm;
 }
 
 void ZobObject::SetMesh(std::string name)
@@ -274,22 +213,10 @@ const std::string ZobObject::GetMeshFileName() const
 	return "";
 }
 
-void ZobObject::UpdateMesh(const Camera* camera, Core::Engine* engine)
-{
-	OPTICK_EVENT();
-	if (m_mesh)
-	{
-		m_mesh->Update(&m_modelMatrix, &m_rotationScaleMatrix, camera, engine, GetIdValue(), &m_renderOptions);
-	}
-	for (int i = 0; i < m_children.size(); i++)
-	{
-		ZobObject* z = m_children[i];
-		z->UpdateMesh(camera, engine);
-	}
-}
-
 void ZobObject::Init()
 {
+	m_varExposer->Load();
+	m_physicComponent->Init();
 	for (int i = 0; i < m_behaviors.size(); i++)
 	{
 		m_behaviors[i]->Init();
@@ -303,6 +230,7 @@ void ZobObject::Init()
 
 void ZobObject::EditorUpdate()
 {
+	m_physicComponent->EditorUpdate();
 	for (int i = 0; i < m_behaviors.size(); i++)
 	{
 		m_behaviors[i]->EditorUpdate();
@@ -314,67 +242,49 @@ void ZobObject::EditorUpdate()
 	}
 }
 
-void ZobObject::PreUpdate()
+void ZobObject::PreUpdate(float dt)
 {
 	OPTICK_EVENT();
 	for (int i = 0; i < m_behaviors.size(); i++)
 	{
-		m_behaviors[i]->PreUpdate();
+		m_behaviors[i]->PreUpdate(dt);
+
 	}
 	for (int i = 0; i < m_children.size(); i++)
 	{
 		ZobObject* z = m_children[i];
-		z->PreUpdate();
+		z->PreUpdate(dt);
 	}
-	SetParentInternal();
 	DeleteInternal();
 }
 
-void ZobObject::UpdateBehavior(float dt)
+void ZobObject::PostUpdate()
 {
 	OPTICK_EVENT();
 	for (int i = 0; i < m_behaviors.size(); i++)
 	{
-		m_behaviors[i]->Update(dt);
+		m_behaviors[i]->PostUpdate();
 	}
 	for (int i = 0; i < m_children.size(); i++)
 	{
 		ZobObject* z = m_children[i];
-		z->UpdateBehavior(dt);
+		if(z)
+			z->PostUpdate();
 	}
 }
 
-void ZobObject::SetParentInternal()
+void ZobObject::QueueForDrawing(const Camera* camera, Engine* engine)
 {
-	if (m_newParent != NULL)
+	OPTICK_EVENT();
+	for (int i = 0; i < m_behaviors.size(); i++)
 	{
-		if (!HasChild(m_newParent))
-		{
-			DirectZob::LogInfo("Reparented %s \tfrom %s \tto %s", GetName().c_str(), m_parent->GetName().c_str(), m_newParent->GetName().c_str());
-			ZobVector3 pos = GetWorldPosition();
-			ZobVector3 rot = GetWorldRotation();
-			ZobVector3 sca = GetScale();
-			if (GetParent()->RemoveChildReference(this))
-			{
-				if (m_newParent->AddChildReference(this))
-				{
-					m_parent = m_newParent;
-					//remove inherited scale factor
-					//ZobVector3 ps = parent->GetScale();
-					//s.x *= ps.x;
-					//s.y *= ps.y;
-					//s.z *= ps.z;
-					SetWorldPosition(pos.x, pos.y, pos.z);
-					SetWorldRotation(rot.x, rot.y, rot.z);
-					//SetScale(sca.x, sca.y, sca.z);
-				}
-			}
-		}
-		else
-		{
-			DirectZob::LogWarning("Trying to reparent an object with one of its descendants !");
-		}
-		m_newParent = NULL;
+		m_behaviors[i]->QueueForDrawing(camera, engine);
+	}
+	for (int i = 0; i < m_children.size(); i++)
+	{
+		ZobObject* z = m_children[i];
+		if (z)
+			z->QueueForDrawing(camera, engine);
 	}
 }
 
@@ -388,10 +298,20 @@ void ZobObject::DeleteInternal()
 			RemoveChildReference(z);
 			delete z;
 		}
-		else
-		{
-			z->PreUpdate();
-		}
+//		else
+//		{
+//			z->PreUpdate(0);
+//		}
+	}
+}
+
+void ZobObject::UpdatePhysic(float dt)
+{
+	m_physicComponent->Update();
+	for (int i = 0; i < m_children.size(); i++)
+	{
+		ZobObject* z = m_children[i];
+		z->UpdatePhysic(dt);
 	}
 }
 
@@ -399,50 +319,34 @@ void ZobObject::DeleteInternal()
 void ZobObject::Update(float dt)
 {
 	OPTICK_EVENT();
+	UpdatePhysic(dt);
 	Transform parentTransform;
 	ZobVector3 parentScale;
 	if (m_parent)
 	{
 		const ZobPhysicComponent* zpc = m_parent->GetPhysicComponent();
 		parentTransform = zpc->GetWorldTransform();
-		parentScale = zpc->GetTotalScale();
+		parentScale = zpc->GetWorldScale();
 	}
 	else
 	{
 		parentTransform = Transform::identity();
 		parentScale = ZobVector3(1, 1, 1);
 	}
-	ZobVector3 scale = parentScale * m_physicComponent->GetScale();
-	Transform newTransform = m_physicComponent->GetLocalTransform();
-	Vector3 p = parentTransform.getPosition();
-	//p.x *= scale.x;
-	//p.y *= scale.y;
-	//p.z *= scale.z;
-	//parentTransform.setPosition(p);
-	//newTransform = parentTransform * newTransform;
-	//m_physicComponent->SetWorldTransform(newTransform);
-	m_physicComponent->Update();
-	m_physicComponent->SetTotalScale(scale.x, scale.y, scale.z);
-	const ZobMatrix4x4* parentMatrix = m_parent?m_parent->GetModelMatrix():&ZobMatrix4x4::IdentityMatrix;
-	const ZobMatrix4x4* parentRSMatrix = m_parent?m_parent->GetRotationScaleMatrix():&ZobMatrix4x4::IdentityMatrix;
-	ZobVector3 t = GetWorldPosition();
-	ZobVector3 wpos = GetWorldRotation();	
-	m_modelMatrix.Identity();
-	m_rotationScaleMatrix.Identity();
-	m_rotationScaleMatrix.SetRotation(GetWorldRotation());
-	m_rotationScaleMatrix.SetScale(scale);
-	m_modelMatrix.SetPosition(&t);
-	m_modelMatrix.SetRotation(&wpos);
-	m_modelMatrix.SetScale(scale);
-	m_left = ZobVector3(1, 0, 0);
-	m_forward = ZobVector3(0, 0, 1);
-	m_up = ZobVector3(0, 1, 0);
-	m_rotationScaleMatrix.Mul(&m_left);
-	m_rotationScaleMatrix.Mul(&m_forward);
-	m_rotationScaleMatrix.Mul(&m_up);
-	m_left.Normalize();
-	m_forward.Normalize();
-	m_up.Normalize();
+	ZobVector3 scale = parentScale * m_physicComponent->GetLocalScale();
+	m_physicComponent->SetWorldScale(scale.x, scale.y, scale.z);
+	Quaternion q = m_physicComponent->GetWorldTransform().getOrientation();
+	Vector3 l = q * Vector3(1, 0, 0);
+	Vector3 u = q * Vector3(0, 1, 0);
+	Vector3 f = q * Vector3(0, 0, 1);
+	l.normalize();
+	u.normalize();
+	f.normalize();
+	m_left = ZobVector3(l.x, l.y, l.z);
+	m_forward = ZobVector3(f.x, f.y, f.z);
+	m_up = ZobVector3(u.x, u.y, u.z);
+	m_modelMatrix = m_physicComponent->GetModelMatrix();
+	m_rotationMatrix = m_physicComponent->GetRotationMatrix();
 	for (int i = 0; i < m_children.size(); i++)
 	{
 		ZobObject* z = m_children[i];
@@ -450,30 +354,9 @@ void ZobObject::Update(float dt)
 	}
 }
 
-void ZobObject::QueueForDrawing(const Camera* camera, Core::Engine* engine)
-{
-	OPTICK_EVENT();
-	if(GetType() == ZOBGUID::type_editor)
-	{
-//		return;
-	}
-	if (m_mesh)
-	{
-		m_mesh->QueueForDrawing(this, m_modelMatrix, m_rotationScaleMatrix, camera, engine, GetIdValue(), &m_renderOptions);
-	}
-	for (int i = 0; i < m_children.size(); i++)
-	{
-		m_children.at(i)->QueueForDrawing(camera, engine);
-	}
-	if(engine->DrawGizmos() && engine->DrawZobObjectGizmos())
-	{
-		DrawGizmos(camera, engine);
-	}
-}
-
 ZobVector3 ZobObject::GetScale() const 
 { 
-	return m_physicComponent->GetTotalScale(); 
+	return m_physicComponent->GetWorldScale(); 
 }
 
 void ZobObject::SetScale(float x, float y, float z)
@@ -482,10 +365,10 @@ void ZobObject::SetScale(float x, float y, float z)
 	x /= s.x;
 	y /= s.y;
 	z /= s.z;
-	m_physicComponent->SetScale(x, y, z);
+	m_physicComponent->SetLocalScale(x, y, z);
 }
 
-void ZobObject::DrawGizmos(const Camera* camera, Core::Engine* engine)
+void ZobObject::DrawGizmos(const Camera* camera, Engine* engine)
 {
 	uint c;
 	ZobVector3 x = m_left;
@@ -527,8 +410,10 @@ bool ZobObject::RemoveChildReference(const ZobObject* z)
 	int i = GetChildPosition(z);
 	if (i >= 0)
 	{
-		std::swap(m_children.at(i), m_children.at(m_children.size() - 1));
+		int size = m_children.size();
+		std::swap(m_children.at(i), m_children.at(size - 1));
 		m_children.pop_back();
+		m_children.resize(size - 1);
 		return true;
 	}
 	return false;
@@ -579,7 +464,38 @@ const void ZobObject::GetFullNodeName(std::string& fullname) const
 
 void ZobObject::SetParent(ZobObject* p)
 {
-	m_newParent = p;
+	if (!HasChild(p))
+	{
+		DirectZob::LogInfo("Reparented %s from %s to %s", ZobGuidToString().c_str(), m_parent->ZobGuidToString().c_str(), p->ZobGuidToString().c_str());
+		ZobVector3 pos = GetWorldPosition();
+		ZobVector3 rot = GetWorldRotation();
+		ZobVector3 sca = GetScale();
+		ZobObject* parent = GetParent();
+		if (parent != p)
+		{
+			if (parent->RemoveChildReference(this))
+			{
+				if (p->AddChildReference(this))
+				{
+					m_parent = p;
+					SetWorldPosition(pos.x, pos.y, pos.z);
+					SetWorldRotation(rot.x, rot.y, rot.z);
+				}
+				else
+				{
+					throw("fuck");
+				}
+			}
+			else
+			{
+				throw("fuck");
+			}
+		}
+	}
+	else
+	{
+		DirectZob::LogWarning("Trying to reparent an object with one of its descendants !");
+	}
 }
 
 bool ZobObject::HasChild(const ZobObject* o)
@@ -597,11 +513,6 @@ bool ZobObject::HasChild(const ZobObject* o)
 		}
 		return bRet;
 	}
-}
-
-void ZobObject::SetLightingMode(RenderOptions::eLightMode l)
-{
-	m_renderOptions.lightMode = l;
 }
 
 void ZobObject::SaveToFactoryFile(std::string& file)
@@ -634,80 +545,12 @@ void ZobObject::SaveRecusrive(TiXmlNode* node, ZobObject* z)
 TiXmlNode* ZobObject::SaveUnderNode(TiXmlNode* node)
 {
 	TiXmlElement* objectNode = new TiXmlElement(XML_ELEMENT_ZOBOBJECT);
-	objectNode->SetAttribute(XML_ATTR_NAME, GetName().c_str());
 	std::string guid = ZobGuidToString();
 	objectNode->SetAttribute(XML_ATTR_GUID, guid.c_str());
-	ZobVector3 p = GetLocalPosition();
-	p.SaveUnderNode(XML_ELEMENT_POSITION, objectNode);
-	ZobVector3 r = GetLocalRotation();
-	r.SaveUnderNode(XML_ELEMENT_ROTATION, objectNode);
-	ZobVector3 s = GetScale();
-	s.SaveUnderNode(XML_ELEMENT_SCALE, objectNode);
 	std::string meshName = GetMeshName();
 	std::string meshFileName = GetMeshFileName();
 	std::string meshPath = GetMeshPath();
-	if (meshName.length() > 0 && meshFileName.length() > 0)
-	{
-		TiXmlElement meshNode = TiXmlElement(XML_ATTR_TYPE_MESH);
-		meshNode.SetAttribute(XML_ATTR_NAME, meshName.c_str());
-		meshNode.SetAttribute(XML_ATTR_FILE, meshFileName.c_str());
-		meshNode.SetAttribute(XML_ATTR_PATH, meshPath.c_str());
-		objectNode->SetAttribute(XML_ATTR_TYPE, XML_ATTR_TYPE_MESH);
-		TiXmlElement renderOptions = TiXmlElement(XML_ELEMENT_RENDER_OPTIONS);
-		TiXmlElement lighting = TiXmlElement(XML_ELEMENT_RENDER_OPTIONS_LIGHTING);
-		TiXmlText t(XML_ELEMENT_RENDER_OPTIONS_LIGHTING_NONE);
-		if (m_renderOptions.lightMode == RenderOptions::eLightMode_flat)
-		{
-			t = XML_ELEMENT_RENDER_OPTIONS_LIGHTING_FLAT;
-		}
-		else if (m_renderOptions.lightMode == RenderOptions::eLightMode_flatPhong)
-		{
-			t = XML_ELEMENT_RENDER_OPTIONS_LIGHTING_FLAT_PHONG;
-		}
-		else if (m_renderOptions.lightMode == RenderOptions::eLightMode_gouraud)
-		{
-			t = XML_ELEMENT_RENDER_OPTIONS_LIGHTING_GOURAUD;
-		}
-		else if (m_renderOptions.lightMode == RenderOptions::eLightMode_phong)
-		{
-			t = XML_ELEMENT_RENDER_OPTIONS_LIGHTING_PHONG;
-		}
-		lighting.InsertEndChild(t);
-		renderOptions.InsertEndChild(lighting);
-		TiXmlElement zBuffer = TiXmlElement(XML_ELEMENT_RENDER_OPTIONS_ZBUFFER);
-		if (m_renderOptions.zBuffered)
-		{
-			t = XML_VALUE_TRUE;
-		}
-		else
-		{
-			t = XML_VALUE_FALSE;
-		}
-		zBuffer.InsertEndChild(t);
-		renderOptions.InsertEndChild(zBuffer);
-		TiXmlElement transparency = TiXmlElement(XML_ELEMENT_RENDER_OPTIONS_TRANSPARENCY);
-		if (m_renderOptions.bTransparency)
-		{
-			t = XML_VALUE_TRUE;
-		}
-		else
-		{
-			t = XML_VALUE_FALSE;
-		}
-		transparency.InsertEndChild(t);
-		renderOptions.InsertEndChild(transparency);
-
-		TiXmlElement cullMode = TiXmlElement(XML_ELEMENT_RENDER_OPTIONS_CULLMODE);
-		t = XML_ELEMENT_RENDER_OPTIONS_CULLMODE_CLOCKWISE;
-		if (m_renderOptions.cullMode == eCullMode_CounterClockwiseFace)
-		{
-			t = XML_ELEMENT_RENDER_OPTIONS_CULLMODE_COUNTERCLOCKWISE;
-		}
-		cullMode.InsertEndChild(t);
-		renderOptions.InsertEndChild(cullMode);
-		meshNode.InsertEndChild(renderOptions);
-		objectNode->InsertEndChild(meshNode);
-	}
+	m_varExposer->SaveUnderNode(objectNode);
 	TiXmlElement behaviors = TiXmlElement(XML_ELEMENT_BEHAVIORS);
 	for (int i = 0; i < m_behaviors.size(); i++)
 	{
@@ -780,7 +623,11 @@ void ZobObject::LookAt(const ZobVector3* forward, const ZobVector3* left, const 
 			q.normalize();
 
 		}
-		m_physicComponent->SetLocalOrientation(q);
+		Vector3 v = m_physicComponent->GetWorldTransform().getPosition();
+		Transform t = Transform(v, q);
+		m_physicComponent->SetWorldTransform(t);
+		m_physicComponent->WorldOrientationToAxis(m_left, m_up, m_forward);
+		//m_physicComponent->SetLocalOrientation(q);
 	}
 }
 
@@ -851,7 +698,7 @@ void ZobObject::SetWorldPosition(float x, float y, float z)
 	m_physicComponent->SetWorldTransform(newTransform);
 }
 
-inline ZobVector3 ZobObject::GetLocalRotation() const
+ZobVector3 ZobObject::GetLocalRotation() const
 {
 	Quaternion q= m_physicComponent->GetLocalTransform().getOrientation();
 	ZobVector3 v = ZobMatrix4x4::QuaternionToEuler(q.x, q.y, q.z, q.w);

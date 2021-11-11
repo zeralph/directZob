@@ -36,7 +36,7 @@ void SceneLoader::LoadMesh(TiXmlElement* node)
 {
 	std::string name = node->Attribute(XML_ATTR_NAME);
 	std::string file = node->Attribute(XML_ATTR_FILE);
-	DirectZob::GetInstance()->GetMeshManager()->LoadMesh(name, m_path, file);
+	DirectZob::GetInstance()->GetMeshManager()->LoadMesh(name, m_path, file, false);
 }
 
 void SceneLoader::LoadZobObject(std::string& path, std::string& file)

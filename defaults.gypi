@@ -22,7 +22,7 @@
                     ],
                     'xcode_settings': {
                         'CC': 'clang++',
-                        'MACOSX_DEPLOYMENT_TARGET': '10.14',
+                        'MACOSX_DEPLOYMENT_TARGET': '11.1',
                         'CLANG_CXX_LANGUAGE_STANDARD': 'c++11',
                         'CLANG_CXX_LIBRARY': 'libc++',
                         'ARCHS': ['x86_64'],

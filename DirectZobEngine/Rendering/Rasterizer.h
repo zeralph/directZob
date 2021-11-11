@@ -61,7 +61,8 @@ public:
 	inline int				GetNbTriangle() const { return m_nbTriangles; }// m_triangles.size(); }
 	inline int				GetNbLine() const { return m_lines.size(); }
 	inline float			GetRenderTimeMS() const { return m_time;  }
-
+	void					Resize(int width, int height);
+	void 					EnablePerspectiveCorrection(bool enable) {m_perspCorrection = enable;}
 private:
 
 	void					RenderInternal();
@@ -141,5 +142,6 @@ private:
 	std::mutex* m_drawMutex;
 	std::condition_variable* m_startConditionVariable;
 	bool m_runThread;
+	bool m_perspCorrection;
 	volatile bool m_bStartDraw;
 };

@@ -6,19 +6,23 @@
 class ZobCameraControllerOrbital : public ZobCameraController
 {
 public:
-    ZobCameraControllerOrbital(Camera* c, std::string guid);
-    ZobCameraControllerOrbital(Camera * c);
+    ZobCameraControllerOrbital(Camera* c, bool isFree, std::string guid);
+    ZobCameraControllerOrbital(Camera * c, bool isFree);
     ~ZobCameraControllerOrbital();
 
     void        Update(float dt) override;
-    void        PreUpdate() override;
+    void        PreUpdate(float dt) override;
     void        Rotate(float x, float y, float z) override;
     void        Move(float x, float y, float z) override;
+    void        Zoom(float f) override;
 private:
 
-    float m_rotationX;
-    float m_rotationY;
-    float m_moveX;
-    float m_moveY; 
-    float m_moveZ;
+    ZobVector3  m_centerOfRotation;
+    float       m_rotationX;
+    float       m_rotationY;
+    float       m_moveX;
+    float       m_moveY; 
+    float       m_moveZ;
+    float       m_dist;
+    bool        m_isFree;
 };

@@ -2,6 +2,12 @@
 #include <algorithm>
 #include <DirectZob.h>
 
+ZOBGUID::ZOBGUID()
+{
+	m_type = ZobType::type_unknown;
+	m_subType = ZobSubType::subtype_unknown;
+	m_id = 0;
+}
 
 ZOBGUID::ZOBGUID(ZobType t, ZobSubType s)
 {
@@ -32,19 +38,24 @@ const ZOBGUID::ZobSubType ZOBGUID::GetSubType() const
 	return m_subType;
 }
 
-unsigned long long* ZOBGUID::GetIdAddress()
+DirectZobType::zobId* ZOBGUID::GetIdAddress()
 {
 	return &m_id;
 }
 
-unsigned long long ZOBGUID::GetIdValue()
+DirectZobType::zobId ZOBGUID::GetIdValue()
 {
 	return m_id;
 }
 
-unsigned long long ZOBGUID::GenerateId()
+bool ZOBGUID::IsEditorObject()
 {
-	unsigned long long u = 0;
+	return m_type == ZobType::type_editor;
+}
+
+DirectZobType::zobId ZOBGUID::GenerateId()
+{
+	DirectZobType::zobId u = 0;
 	for (int i = 0; i < 6; i++)
 	{
 		ulong l = (rand() % 10);

@@ -8,7 +8,6 @@
 #include <string>
 #include <iostream>
 #include "tinyxml.h"
-using namespace Core;
 
 ZobFont::ZobFont(const std::string& textureFile, const std::string& xmlFile)
 {

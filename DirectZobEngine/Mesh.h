@@ -7,6 +7,7 @@
 #include "Rendering/ZobVector3.h"
 #include "Rendering/ZobVector2.h"
 #include "Types.h"
+#include "ZobObjects/ZOBGUID.h"
 #include "Rendering/Triangle.h"
 #include "ZobObjects/Camera.h"
 #include "Events.h"
@@ -14,19 +15,18 @@
 #include <fbxsdk.h>
 
 class ZobObject;
-
 class Mesh
 {
 public:
 
 										Mesh(std::string& name);
 										Mesh(Mesh* m);
-										Mesh(std::string& name, std::string& path, std::string& file);
+										Mesh(std::string& name, std::string& path, std::string& file, bool bAbsolutePath);
 	virtual								~Mesh();
 
-	virtual void						Update(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions* options);
-	virtual void						QueueForDrawing(ZobObject* z, const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, RenderOptions* options);
-	void								DrawBoundingBox(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions* options);
+	virtual void						Update(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Engine* engine, const RenderOptions* options);
+	virtual void						QueueForDrawing(ZobObject* z, const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Engine* engine, const RenderOptions* options);
+	void								DrawBoundingBox(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Engine* engine);
 
 	const uint							GetNbTriangles() const { return m_nbFaces; }
 	const uint							GetNbVertices() const { return m_nbVertices; }
@@ -41,7 +41,7 @@ protected:
 										Mesh(std::string& parentName, std::string& path, fbxsdk::FbxMesh* mesh);
 	void								SplitEntry(const std::string* s, std::vector<std::string>* v, const char delim) const;
 	void								CreateTriangles(const std::vector<std::string>* line, std::vector<Triangle>* t, size_t& tArrayIdx, const ZobMaterial* tex);
-	void								LoadOBJ(const std::string& fullPath);
+	void								LoadOBJ(const std::string& fullPath, bool bAbsolutePath);
 	void								LoadFbx(const std::string& fullPath);
 	void								FbxMultT(FbxNode* node, FbxVector4 &vector);
 	inline bool							RejectTriangle(const Triangle* t, const float znear, const float zfar, const float width, const float height);

@@ -1,4 +1,5 @@
 #!/bin/sh
-echo "*** SMOKE TEST ***"
-
-./DirectZobExe --scene ./resources/menu.dzs --with 640 --height 400
+echo "*** CAR TEST ***"
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:./dependencies/optick/lib/macos/
+./DirectZobExe --scene ./resources/menu.dzs  --width 960 --height 540
+#--with 640 --height 400

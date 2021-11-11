@@ -41,6 +41,7 @@ namespace CLI
 		ZobCameraWrapper^				GetCurrentCamera();
 		ManagedVector3^ 				GetCurrentCameraPosition();
 		ManagedVector3^ 				GetCurrentCameraTarget();
+		void							Update(float dt);
 		Ray^							From2DToWorld(float x, float y);
 		bool							From2DToWorldOnPlane(float x, float y, ManagedVector3^ p0, ManagedVector3^ pn, ManagedVector3^ ret);
 		void 							SetCurrentCameraPosition(ManagedVector3^ p);
@@ -52,6 +53,10 @@ namespace CLI
 		void 							CreateCamera(System::String^ sType);
 		void 							CreateEditorCamera();
 	private:
+
+		ManagedVector3					m_nextRotation;
+		ManagedVector3					m_nextMove;
+		float							m_nextZoom;
 
 	};
 }

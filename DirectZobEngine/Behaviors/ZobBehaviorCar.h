@@ -29,9 +29,11 @@ class ZobBehaviorCar : public ZobBehavior
 
 		~ZobBehaviorCar() override;
 		void		Init() override;
-		void		PreUpdate() override;
+		void		PreUpdate(float dt) override;
+		void		PostUpdate() override {}
 		void		EditorUpdate() override;
-		void		Update(float dt) override;
+		void		UpdateBeforeObject(float dt) override;
+		void		UpdateAfterObject(float dt) override {}
 		void		DrawGizmos(const Camera* camera, const ZobVector3* position, const ZobVector3* rotation) const override;
 	private:	
 		ZobBehaviorCar(ZobObject* zobObject);

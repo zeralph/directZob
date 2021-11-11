@@ -18,13 +18,14 @@ friend class ZobCameraControllerFollowCar;
 public:
 	enum eCameraType
 	{
-		eCamera_base=0,
-		eCamera_revolving=1,
+		eCamera_base = 0,
+		eCamera_revolving = 1,
 		eCamera_orbital = 2,
-		eCamera_fps=3,
-		eCamera_follow=4,
-		eCamera_followCar=5,
-		__eCameraType_MAX__=6
+		eCamera_fps = 3,
+		eCamera_follow = 4,
+		eCamera_followCar = 5,
+		eCamera_orbital_free = 6,
+		__eCameraType_MAX__= 7
 	};
 
 	enum eTargetMode
@@ -53,11 +54,10 @@ public:
 
 	//void					Update(const ZobMatrix4x4& parentMatrix, const ZobMatrix4x4& parentRSMatrix) override;
 	void					Update(float dt) override;
-	void					PreUpdate() override;
-	void					UpdateBehavior(float dt) override;
+	void					PreUpdate(float dt) override;
 	void					Init() override;
-	void					UpdateAfter();
-	void					DrawGizmos(const Camera* camera, Core::Engine* engine) override;
+	void					PostUpdate() override;
+	void					DrawGizmos(const Camera* camera, Engine* engine) override;
 	TiXmlNode*				SaveUnderNode(TiXmlNode* node) override;
 	void					UpdateViewProjectionMatrix(/*const ZobVector3* eyeV*/);
 	void					UpdateViewProjectionMatrix(const ZobVector3 * eyeV, const ZobVector3* targetV, const ZobVector3* upV);
@@ -68,8 +68,8 @@ public:
 	inline void				SetFov(float fov) { m_fov = fov; };
 
 	void					SetType(eCameraType type);
-	
-	void					SetTarget(const ZobVector3 t) { m_tagetMode = eTarget_Vector; m_targetVector = t; };
+	void					RotateOrbital(ZobVector3* center, float x, float y, float dist);
+	void					SetTarget(const ZobVector3 t) { m_tagetMode = eTarget_Vector; m_targetPosition = t; };
 	void					SetTarget(const ZobObject* z) { m_tagetMode = eTarget_Object; m_targetObject = z; };
 	void					SetNoTarget() { m_tagetMode = eTarget_none; };
 	bool					GetTargetVector(ZobVector3* t);
@@ -111,7 +111,7 @@ private:
 	float m_fov;
 	ZobVector3 m_viewTransaltion;
 	eTargetMode m_tagetMode;
-	ZobVector3 m_targetVector;
+	ZobVector3 m_targetPosition;
 	const ZobObject* m_targetObject;
 	//ZobMatrix4x4 m_invModelMatrix;
 	ZobMatrix4x4 m_invProjectionMatrix;

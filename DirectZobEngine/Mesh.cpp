@@ -29,12 +29,16 @@ Mesh::Mesh(std::string& name)
 	DirectZob::RemoveIndent();
 }
 
-Mesh::Mesh(std::string& name, std::string& path, std::string& file):Mesh(name)
+Mesh::Mesh(std::string& name, std::string& path, std::string& file, bool bAbsolutePath):Mesh(name)
 {
 	DirectZob::AddIndent();
 	m_path = path;
 	m_fileName = file;
-	std::string fullPath = std::string(SceneLoader::GetResourcePath());
+	std::string fullPath = "";
+	if (!bAbsolutePath)
+	{
+		fullPath = std::string(SceneLoader::GetResourcePath());
+	}
 	fullPath.append(path);
 	fullPath.append(file);
 	if (fullPath.length())
@@ -53,7 +57,7 @@ Mesh::Mesh(std::string& name, std::string& path, std::string& file):Mesh(name)
 			}
 			else if (fullPath.find(".obj") != -1 || fullPath.find(".OBJ") != -1)
 			{
-				LoadOBJ(fullPath);
+				LoadOBJ(fullPath, bAbsolutePath);
 			}
 			else
 			{
@@ -365,7 +369,7 @@ Mesh::~Mesh()
 	DirectZob::RemoveIndent();
 }
 
-void Mesh::LoadOBJ(const std::string& fullPath)
+void Mesh::LoadOBJ(const std::string& fullPath, bool bAbsolutePath)
 {
 	static std::string sMtllib = std::string("mtllib");
 	DirectZob::LogInfo("Load OBJ %s", fullPath.c_str());
@@ -404,7 +408,7 @@ void Mesh::LoadOBJ(const std::string& fullPath)
 			if (v.size() == 2)
 			{
 				mtlFile = v[1];
-				DirectZob::GetInstance()->GetMaterialManager()->LoadOBJMaterials(m_path, v[1]);
+				DirectZob::GetInstance()->GetMaterialManager()->LoadOBJMaterials(m_path, v[1], bAbsolutePath);
 			}
 		}
 	}
@@ -538,13 +542,13 @@ void Mesh::SplitEntry(const std::string* s, std::vector<std::string>* v, const c
 	}
 }
 
-void Mesh::DrawBoundingBox(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions* options)
+void Mesh::DrawBoundingBox(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Engine* engine)
 {
 	engine->QueueWorldBox(camera, &m_AABB, 0xFFFFFF, false, false);
 	engine->QueueWorldBox(camera, &m_OBB, 0xDDDDDD, false, false);
 }
 
-void Mesh::Update(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, const RenderOptions* options)
+void Mesh::Update(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Engine* engine, const RenderOptions* options)
 {
 	engine->ComputeBoundingBoxes(&modelMatrix, &m_minBoundingBox, &m_maxBoundingBox, &m_OBB, &m_AABB);
 
@@ -637,11 +641,11 @@ void Mesh::Update(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationM
 		}
 		for (int i = 0; i < m_subMeshes.size(); i++)
 		{
-			m_subMeshes[i]->Update(modelMatrix, rotationMatrix, camera, engine, ownerId, options);
+			m_subMeshes[i]->Update(modelMatrix, rotationMatrix, camera, engine, options);
 		}
 	}
 }
-void Mesh::QueueForDrawing(ZobObject* z, const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Core::Engine* engine, const uint ownerId, RenderOptions* options)
+void Mesh::QueueForDrawing(ZobObject* z, const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Engine* engine, const RenderOptions* options)
 {
 	if (m_bDrawn)
 	{
@@ -652,7 +656,7 @@ void Mesh::QueueForDrawing(ZobObject* z, const ZobMatrix4x4& modelMatrix, const 
 
 		if (engine->DrawGizmos() && engine->ShowBBoxes() )
 		{
-			DrawBoundingBox(modelMatrix, rotationMatrix, camera, engine, ownerId, options);
+			DrawBoundingBox(modelMatrix, rotationMatrix, camera, engine);
 		}
 		//Update(modelMatrix, rotationMatrix, camera, engine, ownerId, options);
 		BufferData* bData = engine->GetBufferData();
@@ -695,7 +699,7 @@ void Mesh::QueueForDrawing(ZobObject* z, const ZobMatrix4x4& modelMatrix, const 
 		}
 		for (int i = 0; i < m_subMeshes.size(); i++)
 		{
-			m_subMeshes[i]->QueueForDrawing(z, modelMatrix, rotationMatrix, camera,  engine, ownerId, options);
+			m_subMeshes[i]->QueueForDrawing(z, modelMatrix, rotationMatrix, camera,  engine, options);
 		}
 	}
 }
