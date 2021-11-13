@@ -35,6 +35,7 @@ public:
 		MenuRight,
 		MenuDown,
 		switchPerspectiveCorrection,
+		switchColorDepth,
 	};
 
 	ZobInputManager(int width, int height);

@@ -82,7 +82,6 @@
             "request": "launch",
             "program": "${workspaceFolder}/DirectZobExe",
             "args": [ 
-                "--bench",
                 "--scene",
                 "./resources/menu.dzs",
                 "--width",

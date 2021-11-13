@@ -48,6 +48,7 @@ Engine::Engine(int width, int height, Events* events)
 	m_nbRasterizers = std::thread::hardware_concurrency();
 	m_EqualizeTriangleQueues = true;
 	m_perspCorrection = true;
+	m_nbBitsPerColorDepth = 0;	//
 	while (height % m_nbRasterizers != 0 && m_nbRasterizers>1)
 	{
 		m_nbRasterizers--;
@@ -332,6 +333,14 @@ int Engine::StartDrawingScene()
 	{
 		m_perspCorrection = !m_perspCorrection;
 		EnablePerspectiveCorrection(m_perspCorrection);
+	}
+	if (inputMap->GetBoolIsNew(ZobInputManager::switchColorDepth))
+	{
+		m_nbBitsPerColorDepth ++;
+		if(m_nbBitsPerColorDepth>40)
+		{
+			m_nbBitsPerColorDepth = 0;
+		}
 	}
 	if (inputMap->GetBoolIsNew(ZobInputManager::NextLightMode))
 	{
@@ -864,8 +873,8 @@ void Engine::QueueLine(const Camera* camera, const ZobVector3* v1, const ZobVect
 				l->noZ = noZ;
 				int min = std::min<int>(a.y, b.y);
 				int max = std::max<int>(a.y, b.y);
-				min = clamp2(min, 0, (int)m_bufferData.height - 1);
-				max = clamp2(max, 0, (int)m_bufferData.height - 1);
+				min = CLAMP(min, 0, (int)m_bufferData.height - 1);
+				max = CLAMP(max, 0, (int)m_bufferData.height - 1);
 				min = min / m_rasterizerHeight;
 				max = max / m_rasterizerHeight;
 				QueueLineInRasters(l, m_lineQueueSize);
@@ -1032,6 +1041,10 @@ uint Engine::ClipTriangle(const Camera* c, Triangle* t)
 		RecomputeUv(nt->uc, nt->ub, outP2factor);
 		RecomputeNormal(nt->nc, nt->nb, outP2factor);
 		RecomputeColor(nt->cc, nt->cb, outP2factor);
+	}
+	else if (t->clipMode == Triangle::eClip_3_out_corner)
+	{
+		DirectZob::LogWarning("here");
 	}
 	else
 	{
@@ -1378,8 +1391,5 @@ void Engine::PrintRasterizersInfos()
 
 void Engine::EnablePerspectiveCorrection(bool enable)
 {
-	for (int i = 0; i < m_nbRasterizers; i++)
-	{
-		m_rasterizers[i]->EnablePerspectiveCorrection(enable);
-	}
+	m_perspCorrection = enable;
 }

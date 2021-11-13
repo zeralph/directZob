@@ -35,9 +35,15 @@
         (*(fp) ) ? 0:errno;\
     })
 #endif //LINUX
-
-
-
+#ifndef MIN
+	#define MIN(a,b)            (((a) < (b)) ? (a) : (b))
+#endif
+#ifndef MAX
+	#define MAX(a,b)            (((a) > (b)) ? (a) : (b))
+#endif
+#ifndef CLAMP
+	#define CLAMP( x, xmin, xmax )    MAX( (xmin), MIN( (xmax), (x) ) )
+#endif
 #ifndef RAD_TO_DEG
 	#define RAD_TO_DEG(x) (x * 180.0f / M_PI)
 #endif

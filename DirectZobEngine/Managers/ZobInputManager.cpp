@@ -99,6 +99,7 @@ void ZobInputManager::Map()
 	m_map->MapBool(NextLightMode, keyboardId, gainput::KeyF8);
 	m_map->MapBool(SwitchBuffers, keyboardId, gainput::KeyF9);
 	m_map->MapBool(switchPerspectiveCorrection, keyboardId, gainput::KeyF10);
+	m_map->MapBool(switchColorDepth, keyboardId, gainput::KeyF3);
 	
 #ifndef LINUX	//pad does not work well on Linux yet
 	gainput::InputDevice::DeviceState s = pad->GetState();

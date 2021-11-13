@@ -21,6 +21,7 @@ class Camera;
 class Engine
 {
 public:
+
 	Engine(int width, int height, Events* events);
 	~Engine();
 
@@ -95,10 +96,12 @@ public:
 	void											SwapBuffers();
 	void											UpdateEditorBitmapData();
 	void											PrintRasterizersInfos();
-	inline bool										EqualizeTriangleQueues() const {return m_EqualizeTriangleQueues;}
+	inline const bool								EqualizeTriangleQueues() const {return m_EqualizeTriangleQueues;}
 	void 											EnablePerspectiveCorrection(bool enable);
+	inline const int								GetNbBitsPerColorDepth() const {return m_nbBitsPerColorDepth;}
+	void											SetNbBitsPerColorDepth(int d) {m_nbBitsPerColorDepth = d;}
+	inline const bool								UsePerspectiveCorrection() const {return m_perspCorrection;}
 private:	
-	inline float									clamp2(float x, float min, float max) const { if (x < min) x = min; if (x > max) x = max; return x; }
 	void											DrawHorizontalLine(const float x1, const float x2, const float y, const uint color);
 	void											ClipSegmentToPlane(ZobVector3 &s0, ZobVector3 &s1, ZobVector3 &pp, ZobVector3 &pn);
 	void											QueuePartialSphere(const Camera* camera, const ZobMatrix4x4* mat, const float radius, const uint c, bool bold, bool noZ, float from, float to);
@@ -184,4 +187,5 @@ private:
 	int m_nextWidth;
 	int m_nextHeight;
 	bool m_doResize;
+	int m_nbBitsPerColorDepth;
 };

@@ -83,7 +83,7 @@ public:
 	bool					From2DToWorldOnPlane(const float x, const float y, const ZobVector3* p0, const ZobVector3* pn, ZobVector3* ret);
 	bool					ClipSegmentToFrustrum(ZobVector3* p1, ZobVector3* p2, float& outP2Factor) const;
 	static bool				ClipSegmentToPlanes(ZobVector3* p1, ZobVector3* p2, const DirectZobType::Plane* planes, float& outP2Factor);
-	bool					PointIsInFrustrum(const ZobVector3* pt) const;
+	Camera::eFrustrumPlanes	PointIsInFrustrum(const ZobVector3* pt) const;
 	bool					AABBIsInFrustrum(const ZobVector3* aabbMin, const ZobVector3* aabbMax) const;
 	inline void				ToViewSpace(ZobVector3* v) const
 	{
