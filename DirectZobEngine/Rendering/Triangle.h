@@ -26,6 +26,7 @@ public:
 		eClip_AC_in_B_out,
 		eClip_BC_in_A_out,
 		eClip_3_in,
+		eClip_3_out_corner,
 	};
 
 	Triangle();

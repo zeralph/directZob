@@ -17,7 +17,6 @@
 #include "../minifb/src/WindowData.h"
 
 #define kUnused(var) (void) var;
-#define CLAMP(n, low, max) n <= low ? low : n >= max ? max : n;
 using namespace std;
 class ZobPhysicsEngine;
 class DirectZob

@@ -295,7 +295,7 @@ int DirectZob::RunAFrame(DirectZob::engineCallback OnSceneUpdated /*=NULL*/, Dir
 		{	
 			m_hudManager->Print(ZobHUDManager::eHudUnit_ratio, 0.5f, 0.5f, 2, "Arial", &color, "WARNING : %s", "NO CAMERA");
 		}
-		m_hudManager->Print(ZobHUDManager::eHudUnit_ratio, 0.01f, 0.01f, 1, "VCR OSD Mono", &color, "Triangles : %i", m_engine->GetNbDrawnTriangles());
+		m_hudManager->Print(ZobHUDManager::eHudUnit_ratio, 0.01f, 0.01f, 1, "VCR OSD Mono", &color, "Triangles : %i color depth : %i", m_engine->GetNbDrawnTriangles(), m_engine->GetNbBitsPerColorDepth());
 		color = ZobVector3(0, 1, 0);
 		if (m_frameTime <= fpsTargets[sTargetMSPerFrameIdx])
 		{

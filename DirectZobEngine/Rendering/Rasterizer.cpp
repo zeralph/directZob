@@ -8,6 +8,24 @@
 static ZobVector3 sFog = ZobVector3(1.0f, 1.0f, 0.95f);
 static float fogDecal = -0.6f;
 
+const int BAYER_PATTERN_16X16[16][16] =   {   //  16x16 Bayer Dithering Matrix.  Color levels: 256
+	{     0, 191,  48, 239,  12, 203,  60, 251,   3, 194,  51, 242,  15, 206,  63, 254  }, 
+	{   127,  64, 175, 112, 139,  76, 187, 124, 130,  67, 178, 115, 142,  79, 190, 127  },
+	{    32, 223,  16, 207,  44, 235,  28, 219,  35, 226,  19, 210,  47, 238,  31, 222  },
+	{   159,  96, 143,  80, 171, 108, 155,  92, 162,  99, 146,  83, 174, 111, 158,  95  },
+	{     8, 199,  56, 247,   4, 195,  52, 243,  11, 202,  59, 250,   7, 198,  55, 246  },
+	{   135,  72, 183, 120, 131,  68, 179, 116, 138,  75, 186, 123, 134,  71, 182, 119  },
+	{    40, 231,  24, 215,  36, 227,  20, 211,  43, 234,  27, 218,  39, 230,  23, 214  },
+	{   167, 104, 151,  88, 163, 100, 147,  84, 170, 107, 154,  91, 166, 103, 150,  87  },
+	{     2, 193,  50, 241,  14, 205,  62, 253,   1, 192,  49, 240,  13, 204,  61, 252  },
+	{   129,  66, 177, 114, 141,  78, 189, 126, 128,  65, 176, 113, 140,  77, 188, 125  },
+	{    34, 225,  18, 209,  46, 237,  30, 221,  33, 224,  17, 208,  45, 236,  29, 220  },
+	{   161,  98, 145,  82, 173, 110, 157,  94, 160,  97, 144,  81, 172, 109, 156,  93  },
+	{    10, 201,  58, 249,   6, 197,  54, 245,   9, 200,  57, 248,   5, 196,  53, 244  },
+	{   137,  74, 185, 122, 133,  70, 181, 118, 136,  73, 184, 121, 132,  69, 180, 117  },
+	{    42, 233,  26, 217,  38, 229,  22, 213,  41, 232,  25, 216,  37, 228,  21, 212  },
+	{   169, 106, 153,  90, 165, 102, 149,  86, 168, 105, 152,  89, 164, 101, 148,  85  }
+};
 static ZobVector3 colors[16] =
 {
 	ZobVector3(1,0,0),
@@ -47,7 +65,7 @@ Rasterizer::Rasterizer(uint width, uint height, uint startHeight, uint endHeight
 	m_rasterizerNumber = rasterizerNumber;
 	m_runThread = true;
 	m_bStartDraw = false;
-	m_perspCorrection = true;
+
 }
 
 void Rasterizer::Init(std::condition_variable* cv, std::mutex *m)
@@ -338,7 +356,7 @@ inline void Rasterizer::ComputeLightingAtPoint(const ZobVector3* position, const
 					sl = 0.0f;
 					if (t->options->lightMode != RenderOptions::eLightMode_none)
 					{
-						cl = clamp2(-ZobVector3::Dot(normal, &lightDir), 0.0f, 1.0f);
+						cl = CLAMP(-ZobVector3::Dot(normal, &lightDir), 0.0f, 1.0f);
 						sl = 0.0f;
 						if (t->options->lightMode == RenderOptions::eLightMode_phong || t->options->lightMode == RenderOptions::eLightMode_flatPhong)
 						{
@@ -374,8 +392,8 @@ void Rasterizer::DrawTriangle(const Triangle* t) const
 		ComputeLightingAtPoint(t->vb, t->nb, t, verticeBLightingData);
 		ComputeLightingAtPoint(t->vc, t->nc, t, verticeCLightingData);
 	}
-
-	if(m_perspCorrection)
+	const Engine* engine = DirectZob::GetInstance()->GetEngineConst();
+	if(engine->UsePerspectiveCorrection())
 	{
 		t->ua->x /= t->pa->z;
 		t->ua->y /= t->pa->z;
@@ -520,7 +538,7 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector3* p, const Triangl
 	int c, k;
 	ZobVector3 normal, lightDir;
 
-
+	const Engine* engine = DirectZob::GetInstance()->GetEngineConst();
 
 	k = p->y * m_width + p->x;
 
@@ -573,7 +591,7 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector3* p, const Triangl
 			{
 				su = wa * t->ua->x + wb * t->ub->x + wc * t->uc->x;
 				tu = wa * t->ua->y + wb * t->ub->y + wc * t->uc->y;
-				if(m_perspCorrection)
+				if(engine->UsePerspectiveCorrection())
 				{
 					float zu = 1.0f / (wa * 1.0f / t->pa->z + wb * 1.0f / t->pb->z + wc * 1.0f / t->pc->z); 
 					//t->pa->z = 1.0f / t->pa->z;
@@ -662,9 +680,9 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector3* p, const Triangl
 			fg = dg;
 			fb = db;
 		}
-		fr = clamp2(fr, 0.0f, 1.0f) * t->options->color.x;
-		fg = clamp2(fg, 0.0f, 1.0f) * t->options->color.y;
-		fb = clamp2(fb, 0.0f, 1.0f) * t->options->color.z;
+		fr = CLAMP(fr, 0.0f, 1.0f) * t->options->color.x;
+		fg = CLAMP(fg, 0.0f, 1.0f) * t->options->color.y;
+		fb = CLAMP(fb, 0.0f, 1.0f) * t->options->color.z;
 		float fog = ComputeFog(z);
 		fr = fr * (1.0f - fog) + fog * m_fogColor->x;
 		fg = fg * (1.0f - fog) + fog * m_fogColor->y;
@@ -679,7 +697,42 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector3* p, const Triangl
 				return;
 			}
 		}
-		c = ((int)(fr * 255.0f) << 16) + ((int)(fg * 255.0f) << 8) + (int)(fb * 255.0f);
+
+		const int ncolors = engine->GetNbBitsPerColorDepth();
+		if(ncolors != 0)
+		{
+			int divider = 256 / ncolors;
+			const int   row = (int)p->y & 15;   //  y % 16
+			const int   col = (int)p->x & 15;   //  x % 16
+
+			const int   t       = BAYER_PATTERN_16X16[col][row];
+			const int   corr    = (t / ncolors);
+
+			const int   blue    = (int)(fb * 255.0f);
+			const int   green   = (int)(fg * 255.0f);
+			const int   red     = (int)(fr * 255.0f);
+
+			int i1  = (blue  + corr) / divider; i1 = CLAMP( i1, 0, ncolors );
+			int i2  = (green + corr) / divider; i2 = CLAMP( i2, 0, ncolors );
+			int i3  = (red   + corr) / divider; i3 = CLAMP( i3, 0, ncolors );
+
+			//  If you want to compress the image, use the values of i1,i2,i3
+			//  they have values in the range 0..ncolors
+			//  So if the ncolors is 4 - you have values: 0,1,2,3 which is encoded in 2 bits
+			//  2 bits for 3 planes == 6 bits per pixel
+
+			fb   = CLAMP( i1 * divider, 0, 255 );  //  blue
+			fg   = CLAMP( i2 * divider, 0, 255 );  //  green
+			fr  = CLAMP( i3 * divider, 0, 255 );  //  red
+		}
+		else
+		{
+			fb = (int)(fb * 255.0f);
+			fg = (int)(fg * 255.0f);
+			fr = (int)(fr * 255.0f);
+		}
+		
+		c = ((int)fr << 16) + ((int)fg << 8) + (int)fb;
 		m_bufferData->buffer[k] = c;
 		m_bufferData->zBuffer[k] = z;
 	}

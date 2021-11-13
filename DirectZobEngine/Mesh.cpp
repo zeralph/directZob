@@ -579,9 +579,13 @@ void Mesh::Update(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationM
 			ZobVector3* vb = &m_verticesTmp[t->verticeBIndex];
 			ZobVector3* vc = &m_verticesTmp[t->verticeCIndex];
 			
-			bool aIn = camera->PointIsInFrustrum(va);
-			bool bIn = camera->PointIsInFrustrum(vb);
-			bool cIn = camera->PointIsInFrustrum(vc);
+			int af = camera->PointIsInFrustrum(va);
+			int bf = camera->PointIsInFrustrum(vb);
+			int cf = camera->PointIsInFrustrum(vc);
+
+			bool aIn = af == Camera::__eFrustrumPlane_MAX__;
+			bool bIn = bf == Camera::__eFrustrumPlane_MAX__;
+			bool cIn = cf == Camera::__eFrustrumPlane_MAX__;
 			if(aIn && bIn && cIn)
 			{
 				t->clipMode = Triangle::eClip_3_in;
@@ -612,7 +616,18 @@ void Mesh::Update(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationM
 			}
 			else
 			{
-				t->clipMode = Triangle::eClip_0_in;
+				if((af != bf || bf != cf || cf != af) &&
+					af <= Camera::eFrustrumPlaneTop && 
+					bf <= Camera::eFrustrumPlaneTop && 
+					cf <= Camera::eFrustrumPlaneTop)
+				{
+					t->clipMode = Triangle::eClip_3_out_corner;
+					t->clipMode = Triangle::eClip_0_in;
+				}
+				else
+				{
+					t->clipMode = Triangle::eClip_0_in;
+				}	
 			}
 		}
 	/*
@@ -660,12 +675,11 @@ void Mesh::QueueForDrawing(ZobObject* z, const ZobMatrix4x4& modelMatrix, const 
 		}
 		//Update(modelMatrix, rotationMatrix, camera, engine, ownerId, options);
 		BufferData* bData = engine->GetBufferData();
-		float znear = bData->zNear;
-		float zfar = bData->zFar;
 		ZobVector3 n;
+		Triangle* t;
 		for (int i = 0; i < m_nbFaces; i++)
 		{
-			Triangle* t = &m_triangles[i];
+			t= &m_triangles[i];
 			t->options = options;
 			t->zobObject = z;
 			//t->ca = 0xFF0000;
@@ -673,27 +687,19 @@ void Mesh::QueueForDrawing(ZobObject* z, const ZobMatrix4x4& modelMatrix, const 
 			//t->cc = 0x0000FF;
 			if(t->draw)
 			{
-				bool bCull = false;
 				t->ComputeArea();
-				static float sAreaMin = 0.0f;
-				static float sAreaMax = 50000.0f;
-
-				//if (t->area < 0)
+				engine->QueueWorldTriangle(camera, t);
+				if (engine->ShowNormals())
 				{
-					engine->QueueWorldTriangle(camera, t);
-					static bool bShowNormal = true;
-					if (engine->ShowNormals())
-					{
-						ZobVector3 v = t->na;
-						v = v + t->va;
-						engine->QueueLine(camera, t->va, &v, 0xFF00FF, false, false);
-						v = t->nb;
-						v = v + t->vb;
-						engine->QueueLine(camera, t->vb, &v, 0xFF00FF, false, false);
-						v = t->nb;
-						v = v + t->vc;
-						engine->QueueLine(camera, t->vc, &v, 0xFF00FF, false, false);
-					}
+					ZobVector3 v = t->na;
+					v = v + t->va;
+					engine->QueueLine(camera, t->va, &v, 0xFF00FF, false, false);
+					v = t->nb;
+					v = v + t->vb;
+					engine->QueueLine(camera, t->vb, &v, 0xFF00FF, false, false);
+					v = t->nb;
+					v = v + t->vc;
+					engine->QueueLine(camera, t->vc, &v, 0xFF00FF, false, false);
 				}
 			}
 		}

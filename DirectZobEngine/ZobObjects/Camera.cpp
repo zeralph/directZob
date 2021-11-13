@@ -398,19 +398,22 @@ void Camera::NormalizePlane(Plane& plane)
 	plane.d = plane.d / mag;
 }
 
-bool Camera::PointIsInFrustrum(const ZobVector3* pt) const
+Camera::eFrustrumPlanes Camera::PointIsInFrustrum(const ZobVector3* pt) const
 {
+	ZobVector3 pv;
+	Plane p;
+	float d; 
 	for (int i = 0; i < __eFrustrumPlane_MAX__; ++i)
 	{
-		Plane p = m_frustrumPlanes[i];
-		ZobVector3 pv = ZobVector3(p.a, p.b, p.c);
-		float d = ZobVector3::Dot(&pv, pt) + p.d;
+		p = m_frustrumPlanes[i];
+		pv = ZobVector3(p.a, p.b, p.c);
+		d = ZobVector3::Dot(&pv, pt) + p.d;
 		if (d < 0)
 		{
-			return false;
+			return (Camera::eFrustrumPlanes)i;
 		}
 	}
-	return true;
+	return __eFrustrumPlane_MAX__;
 }
 
 bool Camera::ClipSegmentToFrustrum(ZobVector3* p1, ZobVector3* p2, float& outP2Factor) const
