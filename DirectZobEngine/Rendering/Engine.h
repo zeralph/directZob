@@ -188,4 +188,6 @@ private:
 	int m_nextHeight;
 	bool m_doResize;
 	int m_nbBitsPerColorDepth;
+	float* m_zBufferClearArray;
+	uint* m_bufferClearArray;
 };

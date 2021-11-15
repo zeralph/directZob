@@ -46,7 +46,7 @@ Engine::Engine(int width, int height, Events* events)
 	m_drawCameraGizmos = false;
 	m_showText = true;
 	m_nbRasterizers = std::thread::hardware_concurrency();
-	m_EqualizeTriangleQueues = true;
+	m_EqualizeTriangleQueues = false;
 	m_perspCorrection = true;
 	m_nbBitsPerColorDepth = 0;	//
 	while (height % m_nbRasterizers != 0 && m_nbRasterizers>1)
@@ -81,6 +81,14 @@ Engine::Engine(int width, int height, Events* events)
 	{
 		m_buffer[i] = (uint*)malloc(sizeof(uint) * width * height);
 		m_zBuffer[i] = (float*)malloc(sizeof(float) * width * height);
+	}
+	m_bufferClearArray = (uint*)malloc(sizeof(uint) * width * height);
+	m_zBufferClearArray = (float*)malloc(sizeof(float) * width * height);
+	uint c = 0;// ZobColor(DirectZob::GetInstance()->GetLightManager()->GetClearColor()).GetRawValue();;
+	for (int i = 0; i < width * height; i++)
+	{
+		m_bufferClearArray[i] = c;
+		m_zBufferClearArray[i] = 100000.0f;
 	}
 	m_showZBuffer = false;
 	m_nextWidth = width;
@@ -274,11 +282,8 @@ void Engine::ClearBuffer(const ZobColor *color)
 	uint v = color->GetRawValue();
 	if (m_renderMode == eRenderMode_fullframe )
 	{
-		for (int i = 0; i < m_bufferData.width * m_bufferData.height; i++)
-		{
-			m_zBuffer[oldBuffer][i] = m_zFar + 1.0f;
-			m_buffer[oldBuffer][i] = v;
-		}
+		memset(m_buffer[oldBuffer], 0, sizeof(uint) * m_bufferData.width * m_bufferData.height);
+		memset(m_zBuffer[oldBuffer], 0, sizeof(float) * m_bufferData.width * m_bufferData.height);
 	}
 	else if (m_renderMode == eRenderMode_scanline)
 	{
@@ -337,7 +342,7 @@ int Engine::StartDrawingScene()
 	if (inputMap->GetBoolIsNew(ZobInputManager::switchColorDepth))
 	{
 		m_nbBitsPerColorDepth ++;
-		if(m_nbBitsPerColorDepth>40)
+		if(m_nbBitsPerColorDepth>8)
 		{
 			m_nbBitsPerColorDepth = 0;
 		}
@@ -917,6 +922,15 @@ int Engine::QueueTriangleInRasters(const Triangle* t, int idx) const
 	}
 	if (m_TriangleQueueSize < m_maxTrianglesQueueSize)
 	{
+		if (UsePerspectiveCorrection())
+		{
+			t->ua->x /= t->pa->z;
+			t->ua->y /= t->pa->z;
+			t->ub->x /= t->pb->z;
+			t->ub->y /= t->pb->z;
+			t->uc->x /= t->pc->z;
+			t->uc->y /= t->pc->z;
+		}
 		if (!m_EqualizeTriangleQueues)
 		{
 			int min = (int)fmaxf(0, fminf(t->pa->y, fminf(t->pb->y, t->pc->y)));
@@ -925,7 +939,9 @@ int Engine::QueueTriangleInRasters(const Triangle* t, int idx) const
 			max /= m_rasterizerHeight;
 			min--;
 			min = fmax(0, min);
+			
 			max = fmin(max, m_nbRasterizers-1);
+			//min = max;
 			for (int i = min; i <= max; i++)
 			{
 				m_rasterizers[i]->QueueTriangle(t);

@@ -331,7 +331,7 @@ int DirectZob::RunAFrame(DirectZob::engineCallback OnSceneUpdated /*=NULL*/, Dir
 			}
 			LogWarning("FPS set to %i", fpsTargets[sTargetMSPerFrameIdx]?(int)(1000.0f / fpsTargets[sTargetMSPerFrameIdx]):0);
 		}
-		//m_engine->PrintRasterizersInfos();
+		m_engine->PrintRasterizersInfos();
 		m_engine->SetDisplayedBuffer();
 	}
 	SaveTime(&tend);

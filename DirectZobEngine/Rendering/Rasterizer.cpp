@@ -171,6 +171,7 @@ void Rasterizer::RenderInternal()
 		m_fogDensity = lm->GetFogDensity();
 		m_fogDistance = lm->GetFogDistance();
 	}
+	OPTICK_PUSH("triangles");
 	for (int i = 0; i < m_nbTriangles; i++)
 	{
 		const Triangle* t = m_triangles[i];
@@ -179,11 +180,14 @@ void Rasterizer::RenderInternal()
 			DrawTriangle(t);
 		}
 	}
+	OPTICK_POP();
+	OPTICK_PUSH("Lines");
 	for (int i = 0; i < m_lines.size(); i++)
 	{
 		const Line3D* l = m_lines.at(i);
 		DrawLine(l);
 	}
+	OPTICK_POP();
 	m_time = (float)(clock() - m_tick) / CLOCKS_PER_SEC * 1000;
 }
 
@@ -248,7 +252,7 @@ void Rasterizer::DrawLine(const Line3D* l) const
 			py = y + i;
 			if (px < m_bufferData->width && py < m_bufferData->height)
 			{
-				zRatio = m_bufferData->zNear + (sz - m_bufferData->zNear) / (m_bufferData->zFar - m_bufferData->zNear);
+				zRatio = sz;// / m_bufferData->zNear + (sz - m_bufferData->zNear) / (m_bufferData->zFar - m_bufferData->zNear);
 				if (l->noZ)
 				{
 					zRatio = 0;
@@ -393,19 +397,6 @@ void Rasterizer::DrawTriangle(const Triangle* t) const
 		ComputeLightingAtPoint(t->vc, t->nc, t, verticeCLightingData);
 	}
 	const Engine* engine = DirectZob::GetInstance()->GetEngineConst();
-	if(engine->UsePerspectiveCorrection())
-	{
-		t->ua->x /= t->pa->z;
-		t->ua->y /= t->pa->z;
-		t->ub->x /= t->pb->z;
-		t->ub->y /= t->pb->z;
-		t->uc->x /= t->pc->z;
-		t->uc->y /= t->pc->z;
-
-		//t->pa->z = 1.0f / t->pa->z;
-		//t->pb->z = 1.0f / t->pb->z;
-		//t->pc->z = 1.0f / t->pc->z;		
-	}
 
 	/* here we know that v1.y <= v2.y <= v3.y */
 	/* check for trivial case of bottom-flat triangle */
@@ -431,7 +422,7 @@ void Rasterizer::DrawTriangle(const Triangle* t) const
 void Rasterizer::FillBottomFlatTriangle2(ZobVector2* v1, ZobVector2* v2, ZobVector2* v3, const Triangle* t, const LightingData* lDataA, const LightingData* lDataB, const LightingData* lDataC) const
 {
 	uint* buffer = m_bufferData->buffer;
-	ZobVector3 p;
+	ZobVector2 p;
 	float invslope1 = (v2->x - v1->x) / (v2->y - v1->y);
 	float invslope2 = (v3->x - v1->x) / (v3->y - v1->y);
 	float curx1 = v1->x;
@@ -455,11 +446,9 @@ void Rasterizer::FillBottomFlatTriangle2(ZobVector2* v1, ZobVector2* v2, ZobVect
 					{
 						p.x = a;
 						p.y = scanlineY;
-						p.z = -1;
 						FillBufferPixel(&p, t, lDataA, lDataB, lDataC);
 						p.x = b - 1;
 						p.y = scanlineY;
-						p.z = -1;
 						FillBufferPixel(&p, t, lDataA, lDataB, lDataC);
 					}
 				}
@@ -469,7 +458,6 @@ void Rasterizer::FillBottomFlatTriangle2(ZobVector2* v1, ZobVector2* v2, ZobVect
 					{
 						p.x = i;
 						p.y = scanlineY;
-						p.z = -1;
 						FillBufferPixel(&p, t, lDataA, lDataB, lDataC);
 					}
 				}
@@ -483,7 +471,7 @@ void Rasterizer::FillBottomFlatTriangle2(ZobVector2* v1, ZobVector2* v2, ZobVect
 void Rasterizer::FillTopFlatTriangle2(ZobVector2* v1, ZobVector2* v2, ZobVector2* v3, const Triangle* t, const LightingData* lDataA, const LightingData* lDataB, const LightingData* lDataC) const
 {
 	uint* buffer = m_bufferData->buffer;
-	ZobVector3 p;
+	ZobVector2 p;
 	float invslope1 = (v3->x - v1->x) / (v3->y - v1->y);
 	float invslope2 = (v3->x - v2->x) / (v3->y - v2->y);
 	float curx1 = v3->x;
@@ -506,11 +494,9 @@ void Rasterizer::FillTopFlatTriangle2(ZobVector2* v1, ZobVector2* v2, ZobVector2
 					{
 						p.x = a;
 						p.y = scanlineY;
-						p.z = -1;
 						FillBufferPixel(&p, t, lDataA, lDataB, lDataC);
 						p.x = b - 1;
 						p.y = scanlineY;
-						p.z = -1;
 						FillBufferPixel(&p, t, lDataA, lDataB, lDataC);
 					}
 				}
@@ -520,7 +506,6 @@ void Rasterizer::FillTopFlatTriangle2(ZobVector2* v1, ZobVector2* v2, ZobVector2
 					{
 						p.x = i;
 						p.y = scanlineY;
-						p.z = -1;
 						FillBufferPixel(&p, t, lDataA, lDataB, lDataC);
 					}
 				}
@@ -531,7 +516,7 @@ void Rasterizer::FillTopFlatTriangle2(ZobVector2* v1, ZobVector2* v2, ZobVector2
 	}
 }
 
-inline const void Rasterizer::FillBufferPixel(const ZobVector3* p, const Triangle* t, const LightingData* lDataA, const LightingData* lDataB, const LightingData* lDataC) const
+inline const void Rasterizer::FillBufferPixel(const ZobVector2* screenCoord, const Triangle* t, const LightingData* lDataA, const LightingData* lDataB, const LightingData* lDataC) const
 {
 	float wa, wb, wc, su, tu, cl, sl, dr, dg, db, sr, sg, sb, a, z, fr, fg, fb, lightPower;
 	float texPixelData[4];
@@ -540,11 +525,11 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector3* p, const Triangl
 
 	const Engine* engine = DirectZob::GetInstance()->GetEngineConst();
 
-	k = p->y * m_width + p->x;
+	k = screenCoord->y * m_width + screenCoord->x;
 
-	wa = edgeFunction(t->pb, t->pc, p);
-	wb = edgeFunction(t->pc, t->pa, p);
-	wc = edgeFunction(t->pa, t->pb, p);
+	wa = edgeFunction(t->pb, t->pc, screenCoord);
+	wb = edgeFunction(t->pc, t->pa, screenCoord);
+	wc = edgeFunction(t->pa, t->pb, screenCoord);
 	wa /= t->area;
 	wb /= t->area;
 	wc /= t->area;
@@ -555,10 +540,11 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector3* p, const Triangl
 
 	const ZobMaterial* material = t->material;
 	
-	float zf = m_bufferData->zBuffer[k];
+	float zf = m_bufferData->zBuffer[k] == 0.0f ? 10000.0f: m_bufferData->zBuffer[k];
 	float transparency = (t->options->bTransparency) ? 0.5f: 1.0f;
 	if(z>0 && z < zf)
 	{
+		//m_bufferData->zBuffer[k] = -1.0f;
 		cl = 1.0f;
 		RenderOptions::eLightMode lighting = t->options->lightMode;
 		if (lighting == RenderOptions::eLightMode_flat || lighting == RenderOptions::eLightMode_flatPhong || lighting == RenderOptions::eLightMode_none)
@@ -692,7 +678,7 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector3* p, const Triangl
 		{
 			//int t = (int)(0.25f * p->x + 0.5f * p->y) % modulo * (int)(p->y) % modulo;
 			//if(!t)
-			if (((int)p->x  + (int)p->y) % 2 == 0)
+			if (((int)screenCoord->x  + (int)screenCoord->y) % 2 == 0)
 			{
 				return;
 			}
@@ -702,8 +688,8 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector3* p, const Triangl
 		if(ncolors != 0)
 		{
 			int divider = 256 / ncolors;
-			const int   row = (int)p->y & 15;   //  y % 16
-			const int   col = (int)p->x & 15;   //  x % 16
+			const int   row = (int)screenCoord->y & 15;   //  y % 16
+			const int   col = (int)screenCoord->x & 15;   //  x % 16
 
 			const int   t       = BAYER_PATTERN_16X16[col][row];
 			const int   corr    = (t / ncolors);
@@ -731,10 +717,12 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector3* p, const Triangl
 			fg = (int)(fg * 255.0f);
 			fr = (int)(fr * 255.0f);
 		}
-		
 		c = ((int)fr << 16) + ((int)fg << 8) + (int)fb;
-		m_bufferData->buffer[k] = c;
-		m_bufferData->zBuffer[k] = z;
+		//if (m_bufferData->zBuffer[k] == z)
+		{
+			m_bufferData->buffer[k] = c;
+			m_bufferData->zBuffer[k] = z;
+		}
 	}
 }
 
@@ -800,13 +788,13 @@ bool Rasterizer::RenderLine(int line) const
 		(m_renderMode == eRenderMode_interlaced && line % 2 == m_bEvenFrame) ||
 		(m_renderMode == eRenderMode_scanline && line % 2 == 0);
 	const Engine* e = DirectZob::GetInstance()->GetEngineConst();
-	if (e->EqualizeTriangleQueues())
+	if ( e->EqualizeTriangleQueues())
 	{
-		bRender &= line >= 0 && line < m_height;
+		bRender &= (line >= 0 && line < m_height);
 	}
 	else
 	{
-		bRender &= line >= m_startHeight && line < m_endHeight;
+		bRender &= (line >= m_startHeight && line < m_endHeight);
 	}
 	return bRender;
 }
