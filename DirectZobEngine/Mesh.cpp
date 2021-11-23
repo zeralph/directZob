@@ -519,6 +519,7 @@ void Mesh::LoadOBJ(const std::string& fullPath, bool bAbsolutePath)
 	memcpy(m_verticesData, m_vertices, sizeof(ZobVector3) * m_nbVertices);
 	memcpy(m_verticesNormalsData, m_verticesNormals, sizeof(ZobVector3) * m_nbNormals);
 	memcpy(m_trianglesNormalsData, m_trianglesNormals, sizeof(ZobVector3) * m_nbFaces);
+
 	DirectZob::RemoveIndent();
 }
 
@@ -527,6 +528,10 @@ void Mesh::SplitEntry(const std::string* s, std::vector<std::string>* v, const c
 	std::size_t current, previous = 0;
 	current = s->find(delim);
 	while (current != std::string::npos) {
+		if (current == previous)
+		{
+			v->push_back("-");
+		}
 		std::string sub = s->substr(previous, current - previous);
 		if (sub.length() > 0 && sub != " ")
 		{
@@ -754,7 +759,7 @@ void Mesh::ParseObjFaceData(const std::string *s, int& v, int& u, int& n, bool &
 	{
 		v = m_nbVertices + v - 1;
 	}
-	if (vec.size() > 1)
+	if (vec.size() > 1 && vec[1] != "-")
 	{
 		u = std::stoi(vec[1], &sz) - 1;
 		hasUv = true;
@@ -763,7 +768,7 @@ void Mesh::ParseObjFaceData(const std::string *s, int& v, int& u, int& n, bool &
 			u = m_nbUvs + u - 1;
 		}
 	}
-	if (vec.size() > 2)
+	if (vec.size() > 2 && vec[2] != "-")
 	{
 		n = std::stoi(vec[2], &sz) - 1;
 		hasNormals = true;
