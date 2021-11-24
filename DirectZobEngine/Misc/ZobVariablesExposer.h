@@ -139,6 +139,7 @@ public:
 		w.type = eWrapperType_enum;
 		w.ptr = ptr;
 		w.callback = cb;
+		w.bSave = bSave;
 		for (int i = 0; i < nbParams; i++)
 		{
 			int v = (int)enumValues[i];
