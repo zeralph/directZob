@@ -36,20 +36,20 @@
             this.comboRender = new System.Windows.Forms.ComboBox();
             this.drawGizmos = new System.Windows.Forms.CheckBox();
             this.showNormals = new System.Windows.Forms.CheckBox();
-            this.label3 = new System.Windows.Forms.Label();
             this.engineSetSize = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.engineHeight = new System.Windows.Forms.TextBox();
             this.engineWidth = new System.Windows.Forms.TextBox();
-            this.comboBuffer = new System.Windows.Forms.ComboBox();
             this.wireframe = new System.Windows.Forms.CheckBox();
             this.showGrid = new System.Windows.Forms.CheckBox();
+            this.zBuffer = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.zBuffer);
             this.groupBox1.Controls.Add(this.lockFrustrum);
             this.groupBox1.Controls.Add(this.label5);
             this.groupBox1.Controls.Add(this.comboLighting);
@@ -57,19 +57,17 @@
             this.groupBox1.Controls.Add(this.comboRender);
             this.groupBox1.Controls.Add(this.drawGizmos);
             this.groupBox1.Controls.Add(this.showNormals);
-            this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.engineSetSize);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.engineHeight);
             this.groupBox1.Controls.Add(this.engineWidth);
-            this.groupBox1.Controls.Add(this.comboBuffer);
             this.groupBox1.Controls.Add(this.wireframe);
             this.groupBox1.Controls.Add(this.showGrid);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox1.Location = new System.Drawing.Point(0, 0);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(340, 205);
+            this.groupBox1.Size = new System.Drawing.Size(340, 305);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Engine";
@@ -77,7 +75,7 @@
             // lockFrustrum
             // 
             this.lockFrustrum.AutoSize = true;
-            this.lockFrustrum.Location = new System.Drawing.Point(12, 105);
+            this.lockFrustrum.Location = new System.Drawing.Point(14, 105);
             this.lockFrustrum.Name = "lockFrustrum";
             this.lockFrustrum.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.lockFrustrum.Size = new System.Drawing.Size(90, 17);
@@ -140,7 +138,7 @@
             this.drawGizmos.AutoSize = true;
             this.drawGizmos.Checked = true;
             this.drawGizmos.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.drawGizmos.Location = new System.Drawing.Point(12, 82);
+            this.drawGizmos.Location = new System.Drawing.Point(18, 82);
             this.drawGizmos.Name = "drawGizmos";
             this.drawGizmos.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.drawGizmos.Size = new System.Drawing.Size(86, 17);
@@ -152,7 +150,7 @@
             // showNormals
             // 
             this.showNormals.AutoSize = true;
-            this.showNormals.Location = new System.Drawing.Point(6, 40);
+            this.showNormals.Location = new System.Drawing.Point(12, 40);
             this.showNormals.Name = "showNormals";
             this.showNormals.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.showNormals.Size = new System.Drawing.Size(92, 17);
@@ -161,18 +159,9 @@
             this.showNormals.UseVisualStyleBackColor = true;
             this.showNormals.CheckedChanged += new System.EventHandler(this.showNormals_CheckedChanged);
             // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(161, 77);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(35, 13);
-            this.label3.TabIndex = 8;
-            this.label3.Text = "Buffer";
-            // 
             // engineSetSize
             // 
-            this.engineSetSize.Location = new System.Drawing.Point(223, 141);
+            this.engineSetSize.Location = new System.Drawing.Point(231, 217);
             this.engineSetSize.Name = "engineSetSize";
             this.engineSetSize.Size = new System.Drawing.Size(40, 23);
             this.engineSetSize.TabIndex = 7;
@@ -183,7 +172,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(153, 146);
+            this.label2.Location = new System.Drawing.Point(161, 222);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(14, 13);
             this.label2.TabIndex = 6;
@@ -192,7 +181,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(39, 145);
+            this.label1.Location = new System.Drawing.Point(47, 221);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(57, 13);
             this.label1.TabIndex = 5;
@@ -200,38 +189,23 @@
             // 
             // engineHeight
             // 
-            this.engineHeight.Location = new System.Drawing.Point(170, 142);
+            this.engineHeight.Location = new System.Drawing.Point(178, 218);
             this.engineHeight.Name = "engineHeight";
             this.engineHeight.Size = new System.Drawing.Size(46, 20);
             this.engineHeight.TabIndex = 4;
             // 
             // engineWidth
             // 
-            this.engineWidth.Location = new System.Drawing.Point(102, 142);
+            this.engineWidth.Location = new System.Drawing.Point(110, 218);
             this.engineWidth.Name = "engineWidth";
             this.engineWidth.Size = new System.Drawing.Size(46, 20);
             this.engineWidth.TabIndex = 3;
-            // 
-            // comboBuffer
-            // 
-            this.comboBuffer.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBuffer.FormattingEnabled = true;
-            this.comboBuffer.Items.AddRange(new object[] {
-            "Render",
-            "ZBuffer",
-            "OBuffer"});
-            this.comboBuffer.Location = new System.Drawing.Point(208, 73);
-            this.comboBuffer.Name = "comboBuffer";
-            this.comboBuffer.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.comboBuffer.Size = new System.Drawing.Size(117, 21);
-            this.comboBuffer.TabIndex = 2;
-            this.comboBuffer.SelectedIndexChanged += new System.EventHandler(this.ComboBox1_SelectedIndexChanged);
             // 
             // wireframe
             // 
             this.wireframe.AutoSize = true;
             this.wireframe.Font = new System.Drawing.Font("Microsoft Tai Le", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.wireframe.Location = new System.Drawing.Point(24, 19);
+            this.wireframe.Location = new System.Drawing.Point(25, 19);
             this.wireframe.Name = "wireframe";
             this.wireframe.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.wireframe.Size = new System.Drawing.Size(79, 18);
@@ -243,7 +217,7 @@
             // showGrid
             // 
             this.showGrid.AutoSize = true;
-            this.showGrid.Location = new System.Drawing.Point(25, 61);
+            this.showGrid.Location = new System.Drawing.Point(31, 61);
             this.showGrid.Name = "showGrid";
             this.showGrid.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.showGrid.Size = new System.Drawing.Size(73, 17);
@@ -252,13 +226,25 @@
             this.showGrid.UseVisualStyleBackColor = true;
             this.showGrid.CheckedChanged += new System.EventHandler(this.ShowGrid_CheckedChanged);
             // 
+            // zBuffer
+            // 
+            this.zBuffer.AutoSize = true;
+            this.zBuffer.Location = new System.Drawing.Point(45, 128);
+            this.zBuffer.Name = "zBuffer";
+            this.zBuffer.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.zBuffer.Size = new System.Drawing.Size(59, 17);
+            this.zBuffer.TabIndex = 16;
+            this.zBuffer.Text = "zBuffer";
+            this.zBuffer.UseVisualStyleBackColor = true;
+            this.zBuffer.CheckedChanged += new System.EventHandler(this.zBuffer_CheckedChanged);
+            // 
             // EngineControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.groupBox1);
             this.Name = "EngineControl";
-            this.Size = new System.Drawing.Size(340, 205);
+            this.Size = new System.Drawing.Size(340, 305);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
@@ -270,19 +256,18 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.CheckBox wireframe;
         private System.Windows.Forms.CheckBox showGrid;
-        private System.Windows.Forms.ComboBox comboBuffer;
         private System.Windows.Forms.Button engineSetSize;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox engineHeight;
         private System.Windows.Forms.TextBox engineWidth;
         private System.Windows.Forms.CheckBox showNormals;
-        private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.ComboBox comboLighting;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.ComboBox comboRender;
         private System.Windows.Forms.CheckBox drawGizmos;
         private System.Windows.Forms.CheckBox lockFrustrum;
+        private System.Windows.Forms.CheckBox zBuffer;
     }
 }

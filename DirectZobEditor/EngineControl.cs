@@ -22,7 +22,7 @@ namespace DirectZobEditor
             showGrid.Checked = true;
             wireframe.Checked = false;
             showNormals.Checked = false;
-            comboBuffer.SelectedIndex = 0;
+            zBuffer.Checked = false;
             comboRender.SelectedIndex = 0;
             comboLighting.SelectedIndex = 1;
             m_engineWrapper.ShowGrid(showGrid.Checked);
@@ -85,6 +85,11 @@ namespace DirectZobEditor
             bLock = !bLock;
             lockFrustrum.Checked = bLock;
             m_engineWrapper.LockFrustrum(bLock);
+        }
+
+        private void zBuffer_CheckedChanged(object sender, EventArgs e)
+        {
+            m_engineWrapper.ToggleZbufferOutput(true);
         }
     }
 }

@@ -62,6 +62,7 @@ namespace CLI
 		void			ShowGrid(bool b) { m_Instance->ShowGrid(b); }
 		void			WireFrame(bool b) { m_Instance->WireFrame(b); }
 		void			ShowNormals(bool b) { m_Instance->ShowNormals(b); }
+		void			ToggleZbufferOutput(bool b) { m_Instance->ToggleZbufferOutput(); }
 		void			DrawGizmos(bool b) { m_Instance->DrawGizmos(b); }
 		void			DrawPhysicsGizmos(bool b) { m_Instance->DrawPhysyicsGizmos(b); }
 		void			ShowBBoxes(bool b) { m_Instance->ShowBBoxes(b); }

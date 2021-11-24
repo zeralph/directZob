@@ -256,7 +256,7 @@ void Rasterizer::DrawLine(const Line3D* l) const
 			py = y + i;
 			if (px < m_bufferData->width && py < m_bufferData->height)
 			{
-				zRatio = sz;// / m_bufferData->zNear + (sz - m_bufferData->zNear) / (m_bufferData->zFar - m_bufferData->zNear);
+				zRatio =  (sz);// / m_bufferData->zNear + (sz - m_bufferData->zNear) / (m_bufferData->zFar - m_bufferData->zNear);
 				if (l->noZ)
 				{
 					zRatio = 0;
@@ -288,7 +288,7 @@ void Rasterizer::DrawLine(const Line3D* l) const
 			k = py * m_bufferData->width + px;
 			if (px < m_bufferData->width && py < m_bufferData->height)
 			{
-				zRatio = m_bufferData->zNear + (sz - m_bufferData->zNear) / (m_bufferData->zFar - m_bufferData->zNear);
+				zRatio = sz;// m_bufferData->zNear + (sz - m_bufferData->zNear) / (m_bufferData->zFar - m_bufferData->zNear);
 				if (l->noZ)
 				{
 					zRatio = 0;
