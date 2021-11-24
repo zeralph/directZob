@@ -68,6 +68,7 @@ steps:
     testResultsFiles: '**/*_unittests.xml'
     mergeTestResults: true
     failTaskOnFailedTests: true
+    testRunTitle: 'GTest Results'
 
 - script: smokeTestWindows.bat
   workingDirectory: .
