@@ -13,12 +13,12 @@
 
 namespace CLI
 {
-	ZobObjectWrapper::ZobObjectWrapper(ZobObject* zobObject, Panel^ panel):ManagedObject(zobObject, false)
+	ZobObjectWrapper::ZobObjectWrapper(ZobObject* zobObject, Panel^ parentPanel):ManagedObject(zobObject, false)
 	{
 		m_zobObject = zobObject;
 		m_id = zobObject->GetIdValue();
-		m_panel = panel;
-		m_panel->Controls->Clear();
+		m_parentPanel = parentPanel;
+		m_parentPanel->Controls->Clear();
 		m_objectPanel = nullptr;
 		m_container = nullptr;
 		CreateObjectview();
@@ -27,8 +27,8 @@ namespace CLI
 
 	ZobObjectWrapper::~ZobObjectWrapper()
 	{
-		m_panel->Controls->Remove(m_container);
-		m_panel->Controls->Remove(m_objectPanel);
+		m_parentPanel->Controls->Remove(m_container);
+		m_parentPanel->Controls->Remove(m_objectPanel);
 		delete m_container;
 		delete m_objectPanel;
 		m_Instance = NULL;
@@ -45,7 +45,7 @@ namespace CLI
 		ZobGroupBox^ objectgb = FillObjectControl(m_zobObject);
 		m_container->Controls->Add(objectgb);
 		m_objectPanel->Controls->Add(m_container);
-		m_panel->Controls->Add(m_objectPanel);
+		m_parentPanel->Controls->Add(m_objectPanel);
 	}
 
 	void ZobObjectWrapper::CreateObjectBeahaviorsview()

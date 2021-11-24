@@ -19,7 +19,6 @@
 static const int fpsTargetsN = 6;
 static const float fpsTargets[fpsTargetsN] = { 0, 16.6666667, 33.3333333f, 41.666667f,  50.0f, 1000.0f };
 static int sTargetMSPerFrameIdx = 1;
-static DirectZob::eDirectZobLogLevel sLogLevel = DirectZob::eDirectZobLogLevel_info;
 static char buffer[MAX_PATH];
 static char logBuffer[LOG_BUFFER_SIZE];
 static bool g_isInEditorMode;
@@ -28,6 +27,7 @@ static int s_logIndent;
 static std::thread g_editorModeThread;
 int DirectZob::s_logIndent = 0;
 DirectZob *DirectZob::singleton = nullptr;
+DirectZob::eDirectZobLogLevel DirectZob::sLogLevel = DirectZob::eDirectZobLogLevel_info;
 
 DirectZob::DirectZob()
 {

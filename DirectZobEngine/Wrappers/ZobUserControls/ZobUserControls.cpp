@@ -146,6 +146,7 @@ ZobControlVector3::ZobControlVector3(const ZobVariablesExposer::wrapperData& w):
 	this->ColumnCount = 2;
 	this->RowCount = 3;
 	this->Name = name;
+
 	Label^ labelx = gcnew Label();
 	labelx->Text = "| X";
 	labelx->Width = 140;
@@ -477,6 +478,7 @@ ZobGroupBox::ZobGroupBox(String^ name, bool collapsable) :GroupBox()
 	bToggled = false;
 	this->Text = name;
 	this->AutoSize = true;
+	this->Dock = DockStyle::Fill;
 	Label^ b = gcnew Label();
 	b->Text = "-";
 	b->Width = 10;

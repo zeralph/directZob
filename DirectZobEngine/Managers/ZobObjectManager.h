@@ -42,6 +42,7 @@ public:
 	void ResetPhysic();
 	void AddIdToDeleted(ulong id) { m_deletedIds.push_back(id); }
 	bool IsDeleted(ulong id);
+
 private:
 	void GetZobObjectListInternal(const ZobObject* z, std::string& str);
 	void GetZobObjectListInternal(const ZobObject* z, std::vector<const ZobObject*>& v);

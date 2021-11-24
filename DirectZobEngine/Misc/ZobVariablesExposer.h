@@ -37,8 +37,8 @@ public:
 	class wrapperData
 	{
 	public:
-		wrapperData(zobId id) { id = id; }
-		~wrapperData() {}
+		wrapperData(zobId id) { id = id; ptr = NULL; }
+		~wrapperData() { ptr = NULL; }
 		zobId id;
 		eWrapperType type;
 		bool bReadOnly;

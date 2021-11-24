@@ -154,9 +154,12 @@ namespace CLI
 		Point targetPoint = m_treeView->PointToClient(p);
 		ZobControlTreeNode^ targetNode = (ZobControlTreeNode^)m_treeView->GetNodeAt(targetPoint);
 		ZobControlTreeNode^ draggedNode = m_draggedNode;
-		Reparent(draggedNode->ToolTipText, targetNode->ToolTipText);
-		ReScan((ZobControlTreeNode^)m_treeView->TopNode);
-		targetNode->Expand();
+		if (draggedNode && targetNode)
+		{
+			Reparent(draggedNode->ToolTipText, targetNode->ToolTipText);
+			ReScan((ZobControlTreeNode^)m_treeView->TopNode);
+			targetNode->Expand();
+		}
 	}
 	void ZobObjectManagerWrapper::DragEnter(Object^ sender, DragEventArgs^ e)
 	{

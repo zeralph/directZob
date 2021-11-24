@@ -6,6 +6,7 @@ ZobVariablesExposer::ZobVariablesExposer(zobId id)
 {
 	m_wrappedVariables.clear();
 	m_zobId = id;
+
 }
 
 ZobVariablesExposer::~ZobVariablesExposer()

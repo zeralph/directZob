@@ -24,7 +24,7 @@ public:
 	static const std::string& GetResourcePath() { return m_path; };
 	static void LoadZobObject(std::string& path, std::string& file);
 	static void LoadZobObject(std::string& fullPath, ZobObject* parent = NULL);
-
+	static const int GetNbZobObjectsInScene() { return m_nbZobObjectLoaded; }
 private:
 	static void LoadSceneInternal();
 	static void LoadMesh(TiXmlElement* node);
@@ -37,4 +37,5 @@ private:
 	static std::string m_nextScenePath;
 	static std::string m_nextSceneName;
 	static bool m_loadNextScene;
+	static int m_nbZobObjectLoaded;
 };

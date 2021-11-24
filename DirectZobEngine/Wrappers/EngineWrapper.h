@@ -79,6 +79,7 @@ namespace CLI
 		void			QueueObjectsToRender();
 		void			Update(float dt);
 		void			Stop() { m_running = false; }
+		void			Resize(int w, int h);
 		String^ test;
 
 	private:

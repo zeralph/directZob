@@ -106,6 +106,11 @@ namespace CLI
 		m_mouseInside = false;
 	}
 
+	void EngineWrapper::Resize(int w, int h)
+	{
+		DirectZob::GetInstance()->GetEngine()->Resize(w, h);
+	}
+
 	void EngineWrapper::OnMouseClick(Object^ sender, MouseEventArgs^ e)
 	{
 		Point location = m_renderWindow->PointToClient(m_mouseCoords);

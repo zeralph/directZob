@@ -91,14 +91,13 @@
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabsControl = new System.Windows.Forms.TabControl();
             this.tabObject = new System.Windows.Forms.TabPage();
-            this.propertiesPanel = new System.Windows.Forms.Panel();
-            this.ObjectControlsFlowLayout = new System.Windows.Forms.FlowLayoutPanel();
             this.tabScene = new System.Windows.Forms.TabPage();
             this.panel1 = new System.Windows.Forms.Panel();
             this.SceneControlsFlowLayout = new System.Windows.Forms.FlowLayoutPanel();
             this.tabEngine = new System.Windows.Forms.TabPage();
             this.panel2 = new System.Windows.Forms.Panel();
             this.EngineControlsFlowLayout = new System.Windows.Forms.FlowLayoutPanel();
+            this.propertiesPanel = new System.Windows.Forms.TableLayoutPanel();
             this.bottomStatusBar.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FirstPanelSplitter)).BeginInit();
@@ -119,7 +118,6 @@
             this.tabPage1.SuspendLayout();
             this.tabsControl.SuspendLayout();
             this.tabObject.SuspendLayout();
-            this.propertiesPanel.SuspendLayout();
             this.tabScene.SuspendLayout();
             this.panel1.SuspendLayout();
             this.tabEngine.SuspendLayout();
@@ -704,7 +702,7 @@
             this.tabPage1.Controls.Add(this.textLog);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage1.Size = new System.Drawing.Size(818, 74);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "tabPage1";
@@ -724,8 +722,8 @@
             // 
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
-            this.tabPage2.Size = new System.Drawing.Size(1121, 139);
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(818, 74);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "tabPage2";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -748,35 +746,10 @@
             this.tabObject.Controls.Add(this.propertiesPanel);
             this.tabObject.Location = new System.Drawing.Point(4, 22);
             this.tabObject.Name = "tabObject";
-            this.tabObject.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tabObject.Padding = new System.Windows.Forms.Padding(3);
             this.tabObject.Size = new System.Drawing.Size(396, 478);
             this.tabObject.TabIndex = 0;
             this.tabObject.Text = "Object";
-            // 
-            // propertiesPanel
-            // 
-            this.propertiesPanel.Controls.Add(this.ObjectControlsFlowLayout);
-            this.propertiesPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.propertiesPanel.Location = new System.Drawing.Point(3, 3);
-            this.propertiesPanel.MinimumSize = new System.Drawing.Size(300, 0);
-            this.propertiesPanel.Name = "propertiesPanel";
-            this.propertiesPanel.Size = new System.Drawing.Size(390, 472);
-            this.propertiesPanel.TabIndex = 0;
-            // 
-            // ObjectControlsFlowLayout
-            // 
-            this.ObjectControlsFlowLayout.AutoScroll = true;
-            this.ObjectControlsFlowLayout.BackColor = System.Drawing.SystemColors.Control;
-            this.ObjectControlsFlowLayout.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ObjectControlsFlowLayout.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.ObjectControlsFlowLayout.Location = new System.Drawing.Point(0, 0);
-            this.ObjectControlsFlowLayout.MaximumSize = new System.Drawing.Size(300, 0);
-            this.ObjectControlsFlowLayout.MinimumSize = new System.Drawing.Size(300, 0);
-            this.ObjectControlsFlowLayout.Name = "ObjectControlsFlowLayout";
-            this.ObjectControlsFlowLayout.Size = new System.Drawing.Size(300, 472);
-            this.ObjectControlsFlowLayout.TabIndex = 0;
-            this.ObjectControlsFlowLayout.WrapContents = false;
-            this.ObjectControlsFlowLayout.Resize += new System.EventHandler(this.EngineControlsFlowLayout_Resize);
             // 
             // tabScene
             // 
@@ -784,8 +757,8 @@
             this.tabScene.Controls.Add(this.panel1);
             this.tabScene.Location = new System.Drawing.Point(4, 22);
             this.tabScene.Name = "tabScene";
-            this.tabScene.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
-            this.tabScene.Size = new System.Drawing.Size(194, 806);
+            this.tabScene.Padding = new System.Windows.Forms.Padding(3);
+            this.tabScene.Size = new System.Drawing.Size(396, 478);
             this.tabScene.TabIndex = 1;
             this.tabScene.Text = "Scene";
             // 
@@ -796,7 +769,7 @@
             this.panel1.Location = new System.Drawing.Point(3, 3);
             this.panel1.MinimumSize = new System.Drawing.Size(300, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(300, 800);
+            this.panel1.Size = new System.Drawing.Size(390, 472);
             this.panel1.TabIndex = 1;
             // 
             // SceneControlsFlowLayout
@@ -808,7 +781,7 @@
             this.SceneControlsFlowLayout.Location = new System.Drawing.Point(0, 0);
             this.SceneControlsFlowLayout.MinimumSize = new System.Drawing.Size(300, 0);
             this.SceneControlsFlowLayout.Name = "SceneControlsFlowLayout";
-            this.SceneControlsFlowLayout.Size = new System.Drawing.Size(300, 800);
+            this.SceneControlsFlowLayout.Size = new System.Drawing.Size(390, 472);
             this.SceneControlsFlowLayout.TabIndex = 0;
             this.SceneControlsFlowLayout.WrapContents = false;
             // 
@@ -818,8 +791,8 @@
             this.tabEngine.Controls.Add(this.panel2);
             this.tabEngine.Location = new System.Drawing.Point(4, 22);
             this.tabEngine.Name = "tabEngine";
-            this.tabEngine.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
-            this.tabEngine.Size = new System.Drawing.Size(194, 806);
+            this.tabEngine.Padding = new System.Windows.Forms.Padding(3);
+            this.tabEngine.Size = new System.Drawing.Size(396, 478);
             this.tabEngine.TabIndex = 2;
             this.tabEngine.Text = "Engine";
             // 
@@ -830,7 +803,7 @@
             this.panel2.Location = new System.Drawing.Point(3, 3);
             this.panel2.MinimumSize = new System.Drawing.Size(300, 0);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(300, 800);
+            this.panel2.Size = new System.Drawing.Size(390, 472);
             this.panel2.TabIndex = 1;
             // 
             // EngineControlsFlowLayout
@@ -842,9 +815,23 @@
             this.EngineControlsFlowLayout.Location = new System.Drawing.Point(0, 0);
             this.EngineControlsFlowLayout.MinimumSize = new System.Drawing.Size(300, 0);
             this.EngineControlsFlowLayout.Name = "EngineControlsFlowLayout";
-            this.EngineControlsFlowLayout.Size = new System.Drawing.Size(300, 800);
+            this.EngineControlsFlowLayout.Size = new System.Drawing.Size(390, 472);
             this.EngineControlsFlowLayout.TabIndex = 0;
             this.EngineControlsFlowLayout.WrapContents = false;
+            // 
+            // propertiesPanel
+            // 
+            this.propertiesPanel.AutoScroll = true;
+            this.propertiesPanel.ColumnCount = 1;
+            this.propertiesPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.propertiesPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.propertiesPanel.Location = new System.Drawing.Point(3, 3);
+            this.propertiesPanel.Name = "propertiesPanel";
+            this.propertiesPanel.RowCount = 1;
+            this.propertiesPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.propertiesPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.propertiesPanel.Size = new System.Drawing.Size(390, 472);
+            this.propertiesPanel.TabIndex = 1;
             // 
             // Form1
             // 
@@ -887,7 +874,6 @@
             this.tabPage1.ResumeLayout(false);
             this.tabsControl.ResumeLayout(false);
             this.tabObject.ResumeLayout(false);
-            this.propertiesPanel.ResumeLayout(false);
             this.tabScene.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.tabEngine.ResumeLayout(false);
@@ -908,7 +894,6 @@
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.RichTextBox textLog;
-        private System.Windows.Forms.Panel propertiesPanel;
         private System.Windows.Forms.Panel ZobObjectListPanel;
         private System.Windows.Forms.Panel EngineRendererPanel;
         private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
@@ -921,7 +906,6 @@
         private System.Windows.Forms.ToolStripMenuItem loadMeshToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem createLightToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem createCameraToolStripMenuItem;
-        private System.Windows.Forms.FlowLayoutPanel ObjectControlsFlowLayout;
         private System.Windows.Forms.ToolStripMenuItem spotToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem pointToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem directionalToolStripMenuItem;
@@ -968,6 +952,7 @@
         private System.Windows.Forms.ToolStripComboBox toolStripComboBoxCurrentCamera;
         private System.Windows.Forms.ToolStripMenuItem regenerateZobIdsToolStripMenuItem;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+        private System.Windows.Forms.TableLayoutPanel propertiesPanel;
     }
 }
 

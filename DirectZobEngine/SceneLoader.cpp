@@ -7,6 +7,7 @@ std::string SceneLoader::m_path = "";
 std::string SceneLoader::m_file = "";
 std::string SceneLoader::m_nextScenePath = "";
 std::string SceneLoader::m_nextSceneName = "";
+int SceneLoader::m_nbZobObjectLoaded = 0;
 char tmpBuffer[256];
 bool SceneLoader::m_loadNextScene = false;
 
@@ -27,6 +28,7 @@ void SceneLoader::Update()
 
 void SceneLoader::LoadScene(std::string& path, std::string& file)
 {
+	m_nbZobObjectLoaded = 0;
 	m_nextScenePath = path;
 	m_nextSceneName = file;
 	m_loadNextScene = true;
@@ -72,6 +74,7 @@ void SceneLoader::LoadZobObject(std::string& fullPath, ZobObject* parent /* = NU
 
 void SceneLoader::LoadZobObject(TiXmlElement* node, ZobObject* parent, const std::string* factoryPath)
 {	
+	m_nbZobObjectLoaded++;
 	ZobObject* zob = NULL;
 	if (parent == nullptr)
 	{

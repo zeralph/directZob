@@ -405,7 +405,7 @@ void Mesh::LoadOBJ(const std::string& fullPath, bool bAbsolutePath)
 		{
 			vector<string> v;
 			SplitEntry(&line, &v, ' ');
-			if (v.size() == 2)
+			if (DirectZob::GetInstance() && v.size() == 2)
 			{
 				mtlFile = v[1];
 				DirectZob::GetInstance()->GetMaterialManager()->LoadOBJMaterials(m_path, v[1], bAbsolutePath);
@@ -498,7 +498,7 @@ void Mesh::LoadOBJ(const std::string& fullPath, bool bAbsolutePath)
 		{
 			vector<string> v;
 			SplitEntry(&line, &v, ' ');
-			if (v.size() == 2)
+			if (DirectZob::GetInstance() && v.size() == 2)
 			{
 				std::string matName = mtlFile;
 				matName = matName.substr(0, matName.size() - 4);

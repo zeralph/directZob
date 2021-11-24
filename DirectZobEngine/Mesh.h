@@ -30,6 +30,8 @@ public:
 
 	const uint							GetNbTriangles() const { return m_nbFaces; }
 	const uint							GetNbVertices() const { return m_nbVertices; }
+	const uint							GetNbUvs() const { return m_nbUvs; }
+	const uint							GetNbNormals() const { return m_nbNormals; }
 	const ZobVector3*					GetVertices() const { return m_vertices; }
 	const std::vector<Triangle>*		GetTriangles() const { return &m_triangles; }
 	const uint*							GetIndices() const { return m_indices; }
@@ -37,6 +39,8 @@ public:
 	const std::string&					GetPath() const { return m_path; }
 	const std::string&					GetFileName() const { return m_fileName; }
 	inline bool							IsDrawn() const { return m_bDrawn; }
+	const int							GetNbSubMeshes() const { return m_subMeshes.size(); }
+	const Mesh*							GetSubMesh(int idx) const { return (m_subMeshes.size()>idx)?m_subMeshes.at(idx):NULL; }
 protected:
 										Mesh(std::string& parentName, std::string& path, fbxsdk::FbxMesh* mesh);
 	void								SplitEntry(const std::string* s, std::vector<std::string>* v, const char delim) const;

@@ -15,6 +15,15 @@
     <ClInclude Include="tests\ZobObject.h">
       <Filter>tests</Filter>
     </ClInclude>
+    <ClInclude Include="tests\Mesh.h">
+      <Filter>tests</Filter>
+    </ClInclude>
+    <ClInclude Include="tests\SceneLoader.h">
+      <Filter>tests</Filter>
+    </ClInclude>
+    <ClInclude Include="tests\Utils.h">
+      <Filter>tests</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="tests">

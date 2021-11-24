@@ -90,7 +90,7 @@ namespace DirectZobEditor
             InitializeComponent();
             //this.KeyPreview = true;
             m_engineWindow = new EngineWindow(this);
-     
+
             /*
             Color backColor = (Color)System.Drawing.ColorTranslator.FromHtml("#2D2D30");
             Color foreColor = (Color)System.Drawing.ColorTranslator.FromHtml("#F0F0F0");
@@ -102,9 +102,9 @@ namespace DirectZobEditor
             menuStrip1.ForeColor = foreColor;
             */
             //tabsControl.TabPages.
-
-            m_directZobWrapper = new CLI.DirectZobWrapper(this.ZobObjectListPanel, this.ObjectControlsFlowLayout, m_engineWindow.GetEngineRenderwindow());
-            m_directZobWrapper.Init(1024, 768);
+            PictureBox p = m_engineWindow.GetEngineRenderwindow();
+            m_directZobWrapper = new CLI.DirectZobWrapper(this.ZobObjectListPanel, this.propertiesPanel, m_engineWindow.GetEngineRenderwindow());
+            m_directZobWrapper.Init(p.Width, p.Height);
             CLI.ZobObjectManagerWrapper.OnObjectSelectedEvent += new CLI.ZobObjectManagerWrapper.OnObjectSelected(OnObjectSelected);
             m_zobObjectManagerWrapper = m_directZobWrapper.GetZobObjectManagerWrapper();
             m_meshManagerWrapper = new CLI.MeshManagerWrapper();
@@ -138,12 +138,12 @@ namespace DirectZobEditor
             m_zobObjectControl.BindEvents();
             
             //ZobObjectListPanel.Controls.Add(m_zobObjectList);
-            ObjectControlsFlowLayout.Controls.Add(m_zobObjectControl);
+            propertiesPanel.Controls.Add(m_zobObjectControl);
             //ObjectControlsFlowLayout.Controls.Add(m_physicsControl);
-            ObjectControlsFlowLayout.Controls.Add(m_meshControl);
-            ObjectControlsFlowLayout.Controls.Add(m_cameraControl);
-            ObjectControlsFlowLayout.Controls.Add(m_lightControl);
-            ObjectControlsFlowLayout.Controls.Add(m_spriteControl);
+            propertiesPanel.Controls.Add(m_meshControl);
+            propertiesPanel.Controls.Add(m_cameraControl);
+            propertiesPanel.Controls.Add(m_lightControl);
+            propertiesPanel.Controls.Add(m_spriteControl);
             EngineControlsFlowLayout.Controls.Add(m_engineControl);
             SceneControlsFlowLayout.Controls.Add(m_sceneControl);
             this.propertiesPanel.MinimumSize = new Size(300, 500);
@@ -858,6 +858,7 @@ namespace DirectZobEditor
                 {
                     float r = (float)p.Width / (float)p.Height;
                     toolStripStatusLabel1.Text = "Size : " + p.Width + "x" + p.Height + " | Ratio : "+r;
+                    m_directZobWrapper.GetEngineWrapper().Resize(p.Width, p.Height);
                 }
             }
         }

@@ -113,6 +113,7 @@ public :
 	static void				LogWarning(const char* format, ...);
 	static void				AddIndent() { s_logIndent++; }
 	static void				RemoveIndent() { s_logIndent--; if (s_logIndent < 0) { s_logIndent = 0; } }
+	static void				SetLogLevel(DirectZob::eDirectZobLogLevel l) { sLogLevel = l; }
 	void					Lock();
 	void					Unlock();
 	float					GetLastDt() const { return m_frameTime / 1000.0f; }
@@ -148,6 +149,7 @@ private:
 	float m_physicTime;
 	float m_frameTick;
 	static int s_logIndent;
+	static DirectZob::eDirectZobLogLevel sLogLevel;
 	bool m_physicStarted;
 	DirectZob::engineCallback m_onSceneLoaded;
 };
