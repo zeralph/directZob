@@ -64,10 +64,10 @@ steps:
 - task: PublishTestResults@2
   name: 'PublishDirectZobTests'
   inputs:
-    testResultsFormat: XUnit
+    testResultsFormat: 'JUnit'
     #testResultsFormat: VSTest
     testResultsFiles: '**/*_unittests.xml'
-    mergeTestResults: true
+    #mergeTestResults: true
     failTaskOnFailedTests: true
     testRunTitle: 'GTest Results'
 
