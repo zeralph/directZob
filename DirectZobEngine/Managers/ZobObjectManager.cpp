@@ -19,8 +19,6 @@ ZobObjectManager::ZobObjectManager()
 
 ZobObjectManager::~ZobObjectManager()
 {
-	int i = 1;
-	m_rootObject->GetNbChildren
 }
 
 bool ZobObjectManager::IsDeleted(ulong id)
