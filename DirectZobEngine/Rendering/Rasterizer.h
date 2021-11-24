@@ -81,6 +81,7 @@ private:
 	inline float 			edgeFunction(const ZobVector3* a, const ZobVector3* b, const ZobVector2* c) const { return (c->x - a->x) * (b->y - a->y) - (c->y - a->y) * (b->x - a->x); }
 	inline float 			clamp2(float x, const float min, const float max) const { if (x < min) return min; if (x > max) return max; return x; }
 	bool 					RenderLine(int line) const;
+	void					WriteInBuffer(int k, int c, float z) const;
 	inline const float 		computeAmbient(float ambientIntensity) const
 	{
 		return clamp2(ambientIntensity, 0.0f, 1.0f);

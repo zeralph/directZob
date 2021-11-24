@@ -230,7 +230,7 @@ bool Engine::Resize(int width, int height)
 		m_nextWidth = width;
 		m_nextHeight = height;
 		m_doResize = true;
-		return ResizeInternal();
+		//return ResizeInternal();
 	}
 	return false;
 }
@@ -264,8 +264,9 @@ bool Engine::ResizeInternal()
 		m_bufferData.zBuffer = m_zBuffer[m_currentBuffer];
 		//m_bufferData.zNear = m_zNear;
 		//m_bufferData.zFar = m_zFar;
-		m_bufferData.size = m_nextWidth * m_nextWidth;
+		m_bufferData.size = m_nextWidth * m_nextHeight;
 		ClearBuffer(&c);
+		m_rasterizerHeight = ceil((float)m_nextHeight / (float)m_nbRasterizers);
 		for (int i = 0; i < m_nbRasterizers; i++)
 		{
 			m_rasterizers[i]->Resize(m_nextWidth, m_nextHeight);
@@ -324,7 +325,7 @@ void Engine::ClearBuffer(const ZobColor *color)
 int Engine::StartDrawingScene()
 {
 	OPTICK_EVENT();
-
+	ResizeInternal();
 	const gainput::InputMap* inputMap = DirectZob::GetInstance()->GetInputManager()->GetMap();
 	if (inputMap->GetBoolIsNew(ZobInputManager::SwitchBuffers))
 	{

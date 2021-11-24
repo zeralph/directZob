@@ -84,6 +84,10 @@ void Rasterizer::Resize(int width, int height)
 {
 	m_width = width;
 	m_height = height;
+	const Engine* e = DirectZob::GetInstance()->GetEngine();
+	int h = e->GetRasterizerHeight();
+	m_startHeight = (m_rasterizerNumber-1) * h;
+	m_endHeight = fminf(m_startHeight + h, height);
 }
 
 void Rasterizer::Start()
@@ -260,12 +264,10 @@ void Rasterizer::DrawLine(const Line3D* l) const
 				k = py * m_bufferData->width + px;
 				if (m_bufferData->zBuffer[k] > zRatio )
 				{
-					m_bufferData->buffer[k] = l->c;
-					m_bufferData->zBuffer[k] = zRatio;
+					WriteInBuffer(k, l->c, zRatio);
 					if (l->bold)
 					{
-						m_bufferData->buffer[k + 1] = l->c;
-						m_bufferData->zBuffer[k + 1] = zRatio;
+						WriteInBuffer(k, l->c, zRatio);
 					}
 				}
 			}
@@ -294,8 +296,7 @@ void Rasterizer::DrawLine(const Line3D* l) const
 				k = py * m_bufferData->width + px;
 				if (m_bufferData->zBuffer[k] > zRatio)
 				{
-					m_bufferData->buffer[k] = l->c;
-					m_bufferData->zBuffer[k] = zRatio;
+					WriteInBuffer(k, l->c, zRatio);
 				}
 			}
 			sz += dz;
@@ -718,11 +719,16 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector2* screenCoord, con
 			fr = (int)(fr * 255.0f);
 		}
 		c = ((int)fr << 16) + ((int)fg << 8) + (int)fb;
-		//if (m_bufferData->zBuffer[k] == z)
-		{
-			m_bufferData->buffer[k] = c;
-			m_bufferData->zBuffer[k] = z;
-		}
+		WriteInBuffer(k, c, z);
+	}
+}
+
+void Rasterizer::WriteInBuffer(int k, int c, float z) const
+{
+	//if (k < m_bufferData->width * m_bufferData->height)
+	{
+		m_bufferData->buffer[k] = c;
+		m_bufferData->zBuffer[k] = z;
 	}
 }
 

@@ -49,7 +49,8 @@ public:
 	inline ulong									GetCurrentFrame() const { return m_currentFrame; }
 	inline const uint								GetNbDrawnTriangles() const { return m_drawnTriangles; }
 	const Rasterizer*								GetRasterizer(int idx) const { return m_rasterizers[idx]; }
-	int												GetNbRasterizer() const { return m_nbRasterizers; }
+	const int										GetNbRasterizer() const { return m_nbRasterizers; }
+	const int										GetRasterizerHeight() const { return m_rasterizerHeight; }
 	inline BufferData*								GetBufferData() { return &m_bufferData; }
 	inline const float								GetZNear() const { return m_zNear; }
 	inline const float								GetZFar() const { return m_zFar; }
