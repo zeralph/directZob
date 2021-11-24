@@ -1,5 +1,6 @@
 #include "ZobVariablesExposer.h"
 #include "ZobXmlHelper.h"
+#include "ZobUtils.h"
 #include "../DirectZobEngine/DirectZob.h"
 
 ZobVariablesExposer::ZobVariablesExposer(zobId id)
@@ -144,7 +145,9 @@ TiXmlNode* ZobVariablesExposer::SaveUnderNode(TiXmlNode* node)
 			case eWrapperType_float:
 			{
 				float* i = (float*)(w->ptr);
-				std::string s = std::to_string(*i);
+				std::string s = ZobUtils::floatToString(*i, 3);
+
+				//std::string s = std::to_string(*i);
 				o.SetAttribute(XML_ATTR_VALUE, s.c_str());
 				break;
 			}

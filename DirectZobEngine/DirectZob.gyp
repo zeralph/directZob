@@ -126,7 +126,8 @@
 				'Behaviors/PhysicBehaviors/ZobBehaviorPhysicMesh.cpp',		
 				'Misc/ZobXmlHelper.h',		
 				'Misc/ZobVariablesExposer.h',
-				'Misc/ZobVariablesExposer.cpp',				
+				'Misc/ZobVariablesExposer.cpp',	
+				'Misc/ZobUtils.h',					
             ],
             'conditions': [
                 [

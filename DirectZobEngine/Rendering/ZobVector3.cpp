@@ -27,14 +27,6 @@ ZobVector3::ZobVector3(const ZobVector3* v)
 	w = v-> w;
 }
 
-ZobVector3::ZobVector3(const TiXmlElement* node)
-{
-	assert(node);
-	x = atof(node->Attribute(XML_ATTR_X));
-	y = atof(node->Attribute(XML_ATTR_Y));
-	z = atof(node->Attribute(XML_ATTR_Z));
-}
-
 bool ZobVector3::FromString(std::string& sx, std::string& sy, std::string& sz)
 {
 	x = atof(sx.c_str());
@@ -59,15 +51,6 @@ bool ZobVector3::FromString(std::string &s)
 		}
 	}
 	return false;
-}
-
-void ZobVector3::SaveUnderNode(const char* name, TiXmlNode* node)
-{
-	TiXmlElement p = TiXmlElement(name);
-	p.SetDoubleAttribute(XML_ATTR_X, x);
-	p.SetDoubleAttribute(XML_ATTR_Y, y);
-	p.SetDoubleAttribute(XML_ATTR_Z, z);
-	node->InsertEndChild(p);
 }
 
 const ZobVector3 ZobVector3::Vector3Zero = ZobVector3(0.0f, 0.0f, 0.0f);

@@ -84,6 +84,11 @@ void SceneLoader::LoadZobObject(TiXmlElement* node, ZobObject* parent, const std
 	const char* name = node->Attribute(XML_ATTR_NAME);
 	const char* type= node->Attribute(XML_ATTR_TYPE);
 	const char* cid =node->Attribute(XML_ATTR_GUID);
+	if (!cid)
+	{
+		DirectZob::LogError("Cannot create ZobObject ", name);
+		return;
+	}
 	std::string id = cid;
 	if (!type || strcmp(type, XML_ATTR_TYPE_MESH) == 0)
 	{

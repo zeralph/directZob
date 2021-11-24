@@ -91,6 +91,10 @@ public:
 	typedef unsigned short int u16;
 	typedef unsigned int guid;
 	typedef unsigned long long zobId;
+	static std::string floatToString(float f, int precision)
+	{
+		return std::to_string(f).substr(0, std::to_string(f).find(".") + precision + 1);
+	};
 	struct BufferData
 	{
 		uint width;

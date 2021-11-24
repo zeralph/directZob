@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include "../Misc/ZobUtils.h"
 
 class ZobVector2
 {
@@ -32,7 +33,11 @@ public:
 		y *= f;
 	}
 	bool FromString(std::string& s);
-	std::string ToString() { return std::to_string(x).append(";") + std::to_string(y).append(";"); }
+	std::string ToString() 
+	{ 
+		return ZobUtils::floatToString(x, 3).append(";").append(ZobUtils::floatToString(y, 3));
+		//return std::to_string(x).append(";") + std::to_string(y).append(";"); 
+	}
 	void Norm();
 	float Dot(const ZobVector2 * v);
 	float Lenght();
@@ -42,6 +47,8 @@ public:
 	float x;
 	float y;
 	float w;
+private:
+
 };
 
 static ZobVector2 operator+ (const ZobVector2& v1, const ZobVector2& v2) { return ZobVector2(v1.x + v2.x, v1.y + v2.y); }

@@ -2,7 +2,7 @@
 #include <math.h>
 #include <string>
 #include <string.h>
-#include "tinyxml.h"
+#include "../Misc/ZobUtils.h"
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
@@ -13,7 +13,6 @@ public:
 	ZobVector3();
 	ZobVector3(float x, float y, float z);
 	ZobVector3(const ZobVector3* v);
-	ZobVector3(const TiXmlElement* node);
 
 	static const ZobVector3 Vector3Zero;
 	static const ZobVector3 Vector3One;
@@ -58,7 +57,6 @@ public:
 
 		return y;
 	}
-	void SaveUnderNode(const char* name, TiXmlNode* node);
 	inline float sqrtLength() { return (float)sqrt((double)x * (double)x + (double)y * (double)y + (double)z * (double)z); }
 	inline float length2() { return (float)((double)x * (double)x + (double)y * (double)y + (double)z * (double)z); }
 	static inline float Dot(const ZobVector3* v1, const ZobVector3* v2) { return v1->x * v2->x + v1->y * v2->y + v1->z * v2->z; };
@@ -90,7 +88,11 @@ public:
 		//float pitch = Math.Atan2(ds.Z, Math.Sqrt((ds.X * ds.X) + (ds.Y * ds.Y)));
 
 	};
-	std::string ToString() { return std::to_string(x).append(";") + std::to_string(y).append(";") + std::to_string(z); }
+	std::string ToString() 
+	{ 
+		return ZobUtils::floatToString(x, 3).append(";").append(ZobUtils::floatToString(y, 3)).append(";").append(ZobUtils::floatToString(z, 3));
+		//return std::to_string(x).append(";") + std::to_string(y).append(";") + std::to_string(z); 
+	}
 	bool FromString(std::string& s);
 	bool FromString(std::string& sx, std::string& sy, std::string& sz);
 	inline void Add(const ZobVector3* v) { x += v->x; y += v->y; z += v->z; }
