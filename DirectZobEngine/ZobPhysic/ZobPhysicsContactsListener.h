@@ -78,7 +78,7 @@ public :
                         coll.collisionLocalContactPoint.y = contactPoint.getLocalPointOnCollider1().y;
                         coll.collisionLocalContactPoint.z = contactPoint.getLocalPointOnCollider1().z;
                         coll.penetration = contactPoint.getPenetrationDepth();
-                        coll.collisionLayer = (ZobPhysicComponent::eLayer)(int)contactPair.getCollider2()->getCollideWithMaskBits();
+                        coll.collisionLayer = (ZobPhysicComponent::eLayer)(int)contactPair.getCollider2()->getCollisionCategoryBits();
                         coll.contactType = (ZobPhysicComponent::eContactType)contactPair.getEventType();
                         zobComp1->OnCollide(coll);
                     }
@@ -107,7 +107,7 @@ public :
                         coll.collisionLocalContactPoint.y = contactPoint.getLocalPointOnCollider2().y;
                         coll.collisionLocalContactPoint.z = contactPoint.getLocalPointOnCollider2().z;
                         coll.penetration = contactPoint.getPenetrationDepth();
-                        coll.collisionLayer = (ZobPhysicComponent::eLayer)(int)contactPair.getCollider1()->getCollideWithMaskBits();
+                        coll.collisionLayer = (ZobPhysicComponent::eLayer)(int)contactPair.getCollider1()->getCollisionCategoryBits();
                         coll.contactType = (ZobPhysicComponent::eContactType)contactPair.getEventType();
                         zobComp2->OnCollide(coll);
                     }
