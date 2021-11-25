@@ -24,6 +24,9 @@
     <ClInclude Include="tests\Utils.h">
       <Filter>tests</Filter>
     </ClInclude>
+    <ClInclude Include="tests\ZOBGUID.h">
+      <Filter>tests</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="tests">

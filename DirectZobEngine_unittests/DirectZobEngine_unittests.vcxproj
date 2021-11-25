@@ -49,6 +49,7 @@
     <ClInclude Include="tests\Mesh.h" />
     <ClInclude Include="tests\SceneLoader.h" />
     <ClInclude Include="tests\Utils.h" />
+    <ClInclude Include="tests\ZOBGUID.h" />
     <ClInclude Include="tests\ZobMatrix4x4.h" />
     <ClInclude Include="tests\ZobObject.h" />
     <ClInclude Include="tests\ZobVector3.h" />

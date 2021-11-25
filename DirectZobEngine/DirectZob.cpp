@@ -316,7 +316,9 @@ int DirectZob::RunAFrame(DirectZob::engineCallback OnSceneUpdated /*=NULL*/, Dir
 		}
 		if (m_inputManager->GetMap()->GetBoolIsNew(ZobInputManager::Gizmos))
 		{
-			m_engine->DrawGizmos(!m_engine->DrawGizmos());
+			bool b = !m_engine->DrawPhysyicsGizmos();
+			m_engine->DrawGizmos(b);
+			m_engine->DrawPhysyicsGizmos(b);
 		}
 		if (m_inputManager->GetMap()->GetBoolIsNew(ZobInputManager::Quit))
 		{

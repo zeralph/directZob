@@ -53,11 +53,11 @@ public :
 	void ZobGuidRegenerate()
 	{
 		ulong id = GenerateId();
-		if (m_type <= 0 || m_type >= ZobType::type_MAX)
+		if (m_type < ZobType::type_unknown || m_type >= ZobType::type_MAX)
 		{
 			m_type = ZobType::type_unknown;
 		}
-		if (m_subType <= 0 || m_subType >= ZobSubType::subtype_MAX)
+		if (m_subType < ZobSubType::subtype_unknown || m_subType >= ZobSubType::subtype_MAX)
 		{
 			m_subType = ZobSubType::subtype_unknown;
 		}
