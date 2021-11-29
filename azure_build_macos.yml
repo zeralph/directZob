@@ -17,7 +17,7 @@ steps:
 - script: python -m pip install git+https://chromium.googlesource.com/external/gyp
   displayName: 'Install gyp'
 
-- script: ./buildMacosMetal.sh Release
+- script: ./buildMacos.sh Debug
   displayName: 'make'
 
 - script: ./smokeTestMacos.sh
