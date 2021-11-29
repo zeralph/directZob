@@ -219,6 +219,7 @@ void ZobControlVector3::UpdateZobControlInternal()
 {
 	if (_w && _w->ptr)
 	{
+		std::string n =_w->name;
 		ZobVector3* z = (ZobVector3*)_w->ptr;
 		if (z)
 		{

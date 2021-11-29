@@ -82,6 +82,9 @@ public:
 	ZobVector3*							GetLocalPositionAddress() { return &m_editorLocalPosition; }
 	ZobVector3*							GetLocalRotationAddress() { return &m_editorLocalRotation; }
 	ZobVector3*							GetLocalScaleAddress() { return &m_editorLocalScale; }
+	ZobVector3*							GetWorldPositionAddress() { return &m_editorWorldPosition; }
+	ZobVector3*							GetWorldRotationAddress() { return &m_editorWorldRotation; }
+	ZobVector3*							GetWorldScaleAddress() { return &m_editorWorldScale; }
 	void								WorldOrientationToAxis(ZobVector3& left, ZobVector3& up, ZobVector3& forward) const;
 private:
 
@@ -99,4 +102,9 @@ private:
 	ZobVector3							m_editorLocalRotation;
 	ZobVector3							m_editorLocalScale;
 	bool								m_scaleWithObject;
+
+	//editor purpose only
+	ZobVector3							m_editorWorldPosition;
+	ZobVector3							m_editorWorldRotation;
+	ZobVector3							m_editorWorldScale;
 };

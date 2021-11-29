@@ -107,3 +107,30 @@ TEST(ZobObject, chain_rotate)
 	delete(z2);
 	delete(z1);
 }
+
+TEST(ZobObject, chain_all)
+{
+	ZobObject* z1 = new ZobObject(ZOBGUID::ZobType::type_scene, ZOBGUID::ZobSubType::subtype_mesh, "zob_object_1");
+	ZobObject* z2 = new ZobObject(ZOBGUID::ZobType::type_scene, ZOBGUID::ZobSubType::subtype_mesh, "zob_object_2");
+	ZobObject* z3 = new ZobObject(ZOBGUID::ZobType::type_scene, ZOBGUID::ZobSubType::subtype_mesh, "zob_object_2");
+	z2->SetParent(z1);
+	z3->SetParent(z2);
+	z1->SetLocalPosition(-3.f, 2.f, -2.f);
+	z1->SetLocalRotation(34.f, 66.f, 21.f);
+	z1->SetLocalScale(1.8f, 2.f, 3.f);
+	z2->SetLocalPosition(2.f, 4.f, -2.f);
+	z2->SetLocalRotation(34.f, -8.f, -21.f);
+	z2->SetLocalScale(0.2f, 0.2f, 0.4f);
+	z3->SetLocalPosition(-6.f, -6.f, -5.f);
+	z3->SetLocalRotation(8.f, 5.f, 7.f);
+	z3->SetLocalScale(2.f, 2.f, 5.f);
+	ZobVector3 v = z3->GetWorldPosition();
+	EXPECT_EQ(v, ZobVector3(-11.5383844f, 14.8799629f, -6.68275261f));
+	v = z3->GetWorldRotation();
+	EXPECT_EQ(v, ZobVector3(43.886f, 62.586f, -11.887f));
+	EXPECT_EQ(z3->GetWorldScale(), ZobVector3(0.720, 0.8, 6));
+
+	delete(z3);
+	delete(z2);
+	delete(z1);
+}

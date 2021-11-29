@@ -262,6 +262,17 @@ void ZobPhysicComponent::Update()
 			m_editorLocalPosition.x = m_localTransform.getPosition().x;
 			m_editorLocalPosition.y = m_localTransform.getPosition().y;
 			m_editorLocalPosition.z = m_localTransform.getPosition().z;
+			//editor world variables update
+			m_editorWorldPosition.x = t.getPosition().x;
+			m_editorWorldPosition.y = t.getPosition().y;
+			m_editorWorldPosition.z = t.getPosition().z;
+			ZobVector3 a = GetWorldOrientation();
+			m_editorWorldRotation.x = a.x;
+			m_editorWorldRotation.y = a.y;
+			m_editorWorldRotation.z = a.z;
+			m_editorWorldScale.x = GetWorldScale().x;
+			m_editorWorldScale.y = GetWorldScale().y;
+			m_editorWorldScale.z = GetWorldScale().z;
 		}
 	}
 	//m_totalScale = Vector3(1, 1, 1);

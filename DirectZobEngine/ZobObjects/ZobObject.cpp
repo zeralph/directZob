@@ -120,6 +120,10 @@ void ZobObject::InitVariablesExposer()
 	m_varExposer->WrapVariable<ZobVector3>("Position", GetPhysicComponentNoConst()->GetLocalPositionAddress(), &ZobObject::ReloadVariables, false, true);
 	m_varExposer->WrapVariable<ZobVector3>("Rotation", GetPhysicComponentNoConst()->GetLocalRotationAddress(), &ZobObject::ReloadVariables, false, true);
 	m_varExposer->WrapVariable<ZobVector3>("Scale", GetPhysicComponentNoConst()->GetLocalScaleAddress(), &ZobObject::ReloadVariables, false, true);
+	//
+	m_varExposer->WrapVariable<ZobVector3>("WPosition", GetPhysicComponentNoConst()->GetWorldPositionAddress(), NULL, true, false);
+	m_varExposer->WrapVariable<ZobVector3>("WRotation", GetPhysicComponentNoConst()->GetWorldRotationAddress(), NULL, true, false);
+	m_varExposer->WrapVariable<ZobVector3>("WScale", GetPhysicComponentNoConst()->GetWorldScaleAddress(), NULL, true, false);
 
 }
 
@@ -731,6 +735,13 @@ ZobVector3 ZobObject::GetWorldRotation() const
 ZobVector3 ZobObject::GetWorldPosition() const
 {
 	Vector3 p = m_physicComponent->GetWorldTransform().getPosition();
+	ZobVector3 v = ZobVector3(p.x, p.y, p.z);
+	return v;
+}
+
+ZobVector3 ZobObject::GetWorldScale() const
+{
+	Vector3 p = m_physicComponent->GetWorldScale();
 	ZobVector3 v = ZobVector3(p.x, p.y, p.z);
 	return v;
 }
