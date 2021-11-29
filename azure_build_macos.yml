@@ -17,9 +17,19 @@ steps:
 - script: python -m pip install git+https://chromium.googlesource.com/external/gyp
   displayName: 'Install gyp'
 
-- script: ./buildMacos.sh Debug
+- script: ./buildMacos.sh Release
   displayName: 'make'
 
 - script: ./smokeTestMacos.sh
   workingDirectory: .
   displayName: 'Smoke Test'
+
+- task: PublishTestResults@2
+  name: 'PublishDirectZobTests'
+  inputs:
+    testResultsFormat: 'JUnit'
+    #testResultsFormat: VSTest
+    testResultsFiles: '**/*_unittests.xml'
+    #mergeTestResults: true
+    failTaskOnFailedTests: true
+    testRunTitle: 'GTest Results'
