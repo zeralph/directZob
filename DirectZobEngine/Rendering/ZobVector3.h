@@ -115,6 +115,11 @@ public:
 	float w;
 };
 
+static inline bool EpsilonEQ(float a, float b)
+{
+	float epsilon = 0.001f;
+	return fabs(a - b) <= ((fabs(a) > fabs(b) ? fabs(b) : fabs(a)) * epsilon);
+}
 static inline ZobVector3 operator+ (const ZobVector3& v1, const ZobVector3& v2) { return ZobVector3(v1.x + v2.x, v1.y + v2.y, v1.z + v2.z); }
 static inline ZobVector3 operator- (const ZobVector3& v1, const ZobVector3& v2) { return ZobVector3(v1.x - v2.x, v1.y - v2.y, v1.z - v2.z); }
 static inline ZobVector3 operator* (const ZobVector3& v, const float f) { return ZobVector3(v.x *f, v.y *f, v.z *f); }
@@ -123,3 +128,6 @@ static inline ZobVector3 operator/ (const ZobVector3& v, const float f) { return
 static inline bool operator!= (const ZobVector3& v1, const ZobVector3& v2) { return (v1.x != v2.x || v1.y != v2.y || v2.z != v1.z || v1.w != v2.w); }
 static inline bool operator!= (const ZobVector3* v1, const ZobVector3& v2) { return (v1->x != v2.x || v1->y != v2.y || v2.z != v1->z || v1->w != v2.w); }
 static inline bool operator!= (const ZobVector3& v1, const ZobVector3* v2) { return (v2->x != v1.x || v2->y != v1.y || v1.z != v2->z || v2->w != v1.w); }
+static inline bool operator== (const ZobVector3 v1, const ZobVector3 v2) { return (EpsilonEQ(v2.x, v1.x) && EpsilonEQ(v2.y, v1.y) && EpsilonEQ(v1.z, v2.z) && EpsilonEQ(v2.w, v1.w)); }
+
+
