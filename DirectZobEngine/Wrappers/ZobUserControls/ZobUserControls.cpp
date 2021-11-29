@@ -21,8 +21,10 @@ ZobControl::ZobControl(const ZobVariablesExposer::wrapperData& w) :TableLayoutPa
 
 ZobControl::~ZobControl()
 {
+	_w = NULL;
 	DirectZobWrapperEvents::OnEditorUpdateEvent -= _updateEvent;
 	delete _updateEvent;
+	_updateEvent = nullptr;
 }
 
 void ZobControl::UpdateControl() 
@@ -207,7 +209,7 @@ ZobControlVector3::ZobControlVector3(const ZobVariablesExposer::wrapperData& w):
 
 void ZobControlVector3::UpdateZobControl()
 {
-	if(this->IsHandleCreated)
+	if(this->IsHandleCreated && this->IsAccessible)
 	{
 		this->Invoke(gcnew Action(this, &CLI::ZobControlVector3::UpdateZobControlInternal));
 	}	
@@ -215,15 +217,18 @@ void ZobControlVector3::UpdateZobControl()
 
 void ZobControlVector3::UpdateZobControlInternal()
 {
-	ZobVector3* z = (ZobVector3*)_w->ptr;
-	if (z)
+	if (_w && _w->ptr)
 	{
-		if (!txt_X->Focused)
-			txt_X->Text = String::Format("{0:0.000}", z->x);
-		if (!txt_Y->Focused)
-			txt_Y->Text = String::Format("{0:0.000}", z->y);
-		if (!txt_Z->Focused)
-			txt_Z->Text = String::Format("{0:0.000}", z->z);
+		ZobVector3* z = (ZobVector3*)_w->ptr;
+		if (z)
+		{
+			if (!txt_X->Focused)
+				txt_X->Text = String::Format("{0:0.000}", z->x);
+			if (!txt_Y->Focused)
+				txt_Y->Text = String::Format("{0:0.000}", z->y);
+			if (!txt_Z->Focused)
+				txt_Z->Text = String::Format("{0:0.000}", z->z);
+		}
 	}
 }
 
@@ -491,10 +496,11 @@ ZobGroupBox::ZobGroupBox(String^ name, bool collapsable) :GroupBox()
 	b->Click += gcnew EventHandler(this, &ZobGroupBox::OnToggle);
 }
 
-ZobControlTreeNode::ZobControlTreeNode(String^ zobObjectGuid) :TreeNode()
+ZobControlTreeNode::ZobControlTreeNode(String^ zobObjectGuid, bool isEditable) :TreeNode()
 {
 	m_zobObjectGuid = zobObjectGuid;
 	this->ToolTipText = m_zobObjectGuid;
+	m_isEditable = isEditable;
 }
 
 ZobControlTreeNode^ ZobControlTreeNode::GetChildNode(String^ guid) 

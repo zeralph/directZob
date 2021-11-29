@@ -259,10 +259,10 @@ void Rasterizer::DrawLine(const Line3D* l) const
 				zRatio =  (sz);// / m_bufferData->zNear + (sz - m_bufferData->zNear) / (m_bufferData->zFar - m_bufferData->zNear);
 				if (l->noZ)
 				{
-					zRatio = 0;
+					zRatio = m_bufferData->zNear;
 				}
 				k = py * m_bufferData->width + px;
-				if (m_bufferData->zBuffer[k] > zRatio )
+				if (m_bufferData->zBuffer[k] == 0 || m_bufferData->zBuffer[k] > zRatio )
 				{
 					WriteInBuffer(k, l->c, zRatio);
 					if (l->bold)
@@ -291,10 +291,10 @@ void Rasterizer::DrawLine(const Line3D* l) const
 				zRatio = sz;// m_bufferData->zNear + (sz - m_bufferData->zNear) / (m_bufferData->zFar - m_bufferData->zNear);
 				if (l->noZ)
 				{
-					zRatio = 0;
+					zRatio = zRatio = m_bufferData->zNear;;
 				}
 				k = py * m_bufferData->width + px;
-				if (m_bufferData->zBuffer[k] > zRatio)
+				if (m_bufferData->zBuffer[k]==0 || m_bufferData->zBuffer[k] > zRatio)
 				{
 					WriteInBuffer(k, l->c, zRatio);
 				}
@@ -537,7 +537,7 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector2* screenCoord, con
 	
 	float w = (t->pa->w * wa + t->pb->w * wb + t->pc->w * wc);
 
-	z = (t->pa->z * wa + t->pb->z * wb + t->pc->z * wc);
+	z = t->options->zBuffered?(t->pa->z * wa + t->pb->z * wb + t->pc->z * wc):m_bufferData->zNear;
 
 	const ZobMaterial* material = t->material;
 	

@@ -48,6 +48,7 @@ protected:
 	eBehaviorType m_type;
 	ZobObject* m_zobObject;
 	ZobVariablesExposer* m_varExposer;
+	
 protected:
 
 };

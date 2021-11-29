@@ -25,6 +25,7 @@ namespace CLI
 		m_editorGizmos = new ZobObjectsEditor();
 		DirectZobWrapperEvents::OnNewSceneEvent += gcnew DirectZobWrapperEvents::OnNewScene(this, &ZobObjectManagerWrapper::OnNewScene);
 		DirectZobWrapperEvents::OnEditorUpdateEvent += gcnew DirectZobWrapperEvents::OnEditorUpdate(m_treeView, &CLI::ZobControlTreeview::UpdateZobControl);
+		m_bShowAllNodes = false;
 	}
 
 	System::String^ ZobObjectManagerWrapper::GetZobObjectList()
@@ -80,7 +81,7 @@ namespace CLI
 		MarshalString(guid, id);
 		ZobObject* p = DirectZob::GetInstance()->GetZobObjectManager()->GetZobObjectFromlId(id);
 		DirectZob::GetInstance()->GetZobObjectManager()->CreateZobObject(p);
-		ReScan((ZobControlTreeNode^)m_treeView->TopNode);
+		ReScan((ZobControlTreeNode^)m_treeView->TopNode, m_bShowAllNodes);
 	}
 
 	void ZobObjectManagerWrapper::RemoveZobObject(Object^ sender, EventArgs^ e)
@@ -91,10 +92,10 @@ namespace CLI
 		ZobObject* p = DirectZob::GetInstance()->GetZobObjectManager()->GetZobObjectFromlId(id);
 		if (m_selectedObject == p)
 		{
-			SelectObject(NULL);
+			SelectObject(p->GetParent());
 		}
 		DirectZob::GetInstance()->GetZobObjectManager()->RemoveZobObject(p);
-		ReScan((ZobControlTreeNode^)m_treeView->TopNode);
+		ReScan((ZobControlTreeNode^)m_treeView->TopNode, m_bShowAllNodes);
 	}
 	void ZobObjectManagerWrapper::ZoomToZobObject(Object^ sender, EventArgs^ e)
 	{
@@ -112,6 +113,7 @@ namespace CLI
 				if (s == it->Text)
 				{
 					ZobBehaviorFactory::CreateBehavior(m_selectedObject, ZobBehaviorFactory::eBehaviorTypeStr[i]);
+					m_selectedObjectWrapper->Refresh();
 					return;
 				}
 			}
@@ -136,6 +138,7 @@ namespace CLI
 		m_treeView->DragLeave += gcnew EventHandler(this, &ZobObjectManagerWrapper::DragLeave);
 		m_treeView->AllowDrop = true;
 		m_treeView->MouseHover += gcnew EventHandler(this, &ZobObjectManagerWrapper::TreeNodeMouseHover);
+		m_treeView->BeforeSelect += gcnew TreeViewCancelEventHandler(this, &ZobObjectManagerWrapper::TreeNodeBeforeSelect);
 		m_treeView->ShowNodeToolTips = true;
 		Refresh();
 		c->Controls->Add(m_treeView);
@@ -157,7 +160,7 @@ namespace CLI
 		if (draggedNode && targetNode)
 		{
 			Reparent(draggedNode->ToolTipText, targetNode->ToolTipText);
-			ReScan((ZobControlTreeNode^)m_treeView->TopNode);
+			ReScan((ZobControlTreeNode^)m_treeView->TopNode, m_bShowAllNodes);
 			targetNode->Expand();
 		}
 	}
@@ -171,9 +174,22 @@ namespace CLI
 		Point targetPoint = m_treeView->PointToClient(p);
 		m_treeView->SelectedNode = m_treeView->GetNodeAt(targetPoint);
 	}
+
 	void ZobObjectManagerWrapper::DragLeave(Object^ sender, EventArgs^ e)
 	{
 		m_draggedNode = nullptr;
+	}
+
+	void ZobObjectManagerWrapper::TreeNodeBeforeSelect(Object^ sender, TreeViewCancelEventArgs^ e)
+	{
+		if (e->Node)
+		{
+			ZobControlTreeNode^ z = (ZobControlTreeNode^)e->Node;
+			if (z && !z->IsEditable())
+			{
+				e->Cancel = true;
+			}
+		}
 	}
 
 	void ZobObjectManagerWrapper::TreeNodeMouseHover(Object^ sender, EventArgs^ e)
@@ -192,21 +208,24 @@ namespace CLI
 		ZobControlTreeNode^ tn = (ZobControlTreeNode^)e->Node;
 		if (tn)
 		{
-			m_treeView->SelectedNode = e->Node;
-			if (e->Button == MouseButtons::Left)
+			if (tn->IsEditable())
 			{
-				SelectObject(GetZobObject(tn->m_zobObjectGuid));
-			}
-			else if (e->Button == MouseButtons::Right)
-			{
-				int x = tn->Bounds.X + tn->Bounds.Width;
-				int y = tn->Bounds.Y + tn->Bounds.Height;
-				Point point = Point(x, y);
-				Point absPoint = m_treeView->PointToScreen(point);
-				m_nodeMenu->Top = absPoint.Y;
-				//m_nodeMenu->Location = absPoint;
-				m_nodeMenu->Show();
-				m_nodeMenu->Location = absPoint;
+				m_treeView->SelectedNode = e->Node;
+				if (e->Button == MouseButtons::Left)
+				{
+					SelectObject(GetZobObject(tn->m_zobObjectGuid));
+				}
+				else if (e->Button == MouseButtons::Right)
+				{
+					int x = tn->Bounds.X + tn->Bounds.Width;
+					int y = tn->Bounds.Y + tn->Bounds.Height;
+					Point point = Point(x, y);
+					Point absPoint = m_treeView->PointToScreen(point);
+					m_nodeMenu->Top = absPoint.Y;
+					//m_nodeMenu->Location = absPoint;
+					m_nodeMenu->Show();
+					m_nodeMenu->Location = absPoint;
+				}
 			}
 		}
 		else
@@ -232,10 +251,11 @@ namespace CLI
 
 	void ZobObjectManagerWrapper::ReScan()
 	{
-		ReScan((ZobControlTreeNode^)m_treeView->TopNode);
+		bool showAllNodes = false;
+		ReScan((ZobControlTreeNode^)m_treeView->TopNode, showAllNodes);
 	}
 
-	void ZobObjectManagerWrapper::ReScan(ZobControlTreeNode^ n)
+	void ZobObjectManagerWrapper::ReScan(ZobControlTreeNode^ n, bool showAllNodes)
 	{
 
 		ZobObject* z = GetZobObject(n->m_zobObjectGuid);
@@ -254,19 +274,24 @@ namespace CLI
 				if (!child->IsMarkedForDeletion())
 				{
 					String^ guid = TO_MANAGED_STRING(child->ZobGuidToString().c_str());
-					l->Add(guid);
-					ZobControlTreeNode^ childNode = n->GetChildNode(guid);
-					if (!childNode)
+					bool isEditable = child->GetType() == ZOBGUID::type_scene;
+					if (isEditable || showAllNodes)
 					{
-						ZobControlTreeNode^ newNode = gcnew ZobControlTreeNode(guid);
-						newNode->Text = TO_MANAGED_STRING(child->GetName().c_str());
-						n->Nodes->Add(newNode);
-						n->Expand();
-						ReScan(newNode);
-					}
-					else
-					{
-						ReScan(childNode);
+						l->Add(guid);
+						ZobControlTreeNode^ childNode = n->GetChildNode(guid);
+						if (!childNode)
+						{
+							ZobControlTreeNode^ newNode = gcnew ZobControlTreeNode(guid, isEditable);
+							newNode->Text = TO_MANAGED_STRING(child->GetName().c_str());
+							n->Nodes->Add(newNode);
+							n->Expand();
+							ReScan(newNode, m_bShowAllNodes);
+						}
+						else
+						{
+							childNode->Text = TO_MANAGED_STRING(child->GetName().c_str());
+							ReScan(childNode, m_bShowAllNodes);
+						}
 					}
 				}
 			}
@@ -286,7 +311,8 @@ namespace CLI
 		if (z)
 		{
 			String^ guidStr = TO_MANAGED_STRING(z->ZobGuidToString().c_str());
-			ZobControlTreeNode^ tn = gcnew ZobControlTreeNode(guidStr);
+			bool isEditable = z->GetType() == ZOBGUID::type_scene;
+			ZobControlTreeNode^ tn = gcnew ZobControlTreeNode(guidStr, isEditable);
 			const char* nameStr = z->GetName().c_str();
 			tn->Text = TO_MANAGED_STRING(nameStr);
 			collection->Add(tn);
@@ -357,7 +383,7 @@ namespace CLI
 			if(z)
 			{
 				SelectObject(z);
-				ReScan((ZobControlTreeNode^)m_treeView->TopNode);
+				ReScan((ZobControlTreeNode^)m_treeView->TopNode, m_bShowAllNodes);
 				return m_selectedObjectWrapper;
 			}
 		}

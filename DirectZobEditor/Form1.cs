@@ -473,6 +473,7 @@ namespace DirectZobEditor
                         ev.zobObject = z;
                         handler(this, ev);
                     }
+                    //z.GetMeshName()
                 }
             }
         }

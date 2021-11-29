@@ -25,6 +25,7 @@ public:
 	void					EditorUpdate() override;
 	void					Set(ZobFilePath zfp);
 	RenderOptions*			GetRenderOptions() { return &m_renderOptions; }
+	const Mesh*				GetMesh() const { return m_mesh; }
 private:
 							ZobBehaviorMesh(ZobObject* zobObject);
 	bool					LoadMeshInternal();

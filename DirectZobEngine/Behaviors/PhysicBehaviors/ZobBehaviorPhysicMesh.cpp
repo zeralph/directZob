@@ -100,26 +100,29 @@ void ZobBehaviorPhysicMesh::Init()
 
 void ZobBehaviorPhysicMesh::EditorUpdate()
 {
-	ZobBehaviorPhysicShape::EditorUpdate();
-	if (m_mesh == NULL)
+	if (m_isInit)
 	{
-		if (m_convexMeshPath.IsDefined())
+		ZobBehaviorPhysicShape::EditorUpdate();
+		if (m_mesh == NULL)
 		{
-			bool bOK = LoadMeshInternal();
-			if (!bOK)
+			if (m_convexMeshPath.IsDefined())
 			{
-				m_convexMeshPath.Init();
+				bool bOK = LoadMeshInternal();
+				if (!bOK)
+				{
+					m_convexMeshPath.Init();
+				}
 			}
 		}
-	}
-	else
-	{
-		if (m_mesh->GetName() != m_convexMeshPath.name)
+		else
 		{
-			bool bOK = LoadMeshInternal();
-			if (!bOK)
+			if (m_mesh->GetName() != m_convexMeshPath.name)
 			{
-				m_convexMeshPath.Init();
+				bool bOK = LoadMeshInternal();
+				if (!bOK)
+				{
+					m_convexMeshPath.Init();
+				}
 			}
 		}
 	}

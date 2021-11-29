@@ -62,8 +62,7 @@ public:
 	void								SetWorldTransform(Transform t);
 	ZobVector3							GetWorldOrientation() const;
 	void								SetWorldOrientation(float x, float y, float z);
-	ZobVector3							GetWorldScale() const { return ZobVector3(m_totalScale.x, m_totalScale.y, m_totalScale.z); }
-	void								SetWorldScale(float x, float y, float z);
+	Vector3								GetWorldScale() const;
 	//Local
 	Transform							GetLocalTransform() const { return Transform(m_localTransform); };
 	void								SetLocalTransform(Transform t);
@@ -88,6 +87,7 @@ private:
 
 	float								ClampAngle(float a) const;
 	Transform							GetParentWorldTransform() const;
+	Vector3								GetParentWorldScale() const;
 	const ZobObject*					m_zobObject;
 	CollisionBody*						m_collisionBody;
 	Collider*							m_collider;	
@@ -95,7 +95,6 @@ private:
 	Transform							m_localTransform;
 	collision							m_lastCollision;
 	Vector3								m_localScale;
-	Vector3								m_totalScale;
 	ZobVector3							m_editorLocalPosition;
 	ZobVector3							m_editorLocalRotation;
 	ZobVector3							m_editorLocalScale;

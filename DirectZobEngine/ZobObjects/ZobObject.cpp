@@ -139,7 +139,7 @@ void ZobObject::ReloadVariables(zobId id)
 			t.setPosition(vp);
 			Quaternion q = Quaternion::fromEulerAngles(DEG_TO_RAD(zr->x), DEG_TO_RAD(zr->y), DEG_TO_RAD(zr->z));
 			t.setOrientation(q);
-
+			z->GetPhysicComponentNoConst()->SetLocalScale(zs->x, zs->y, zs->z);
 			z->GetPhysicComponentNoConst()->SetLocalTransform(t);
 		}
 	}
@@ -168,6 +168,7 @@ ZobObject::~ZobObject()
 		delete z;
 	}
 	delete m_varExposer;
+	m_varExposer = NULL;
 	m_children.resize(0);
 	DirectZob::RemoveIndent();
 }
@@ -238,7 +239,10 @@ void ZobObject::EditorUpdate()
 	for (int i = 0; i < m_children.size(); i++)
 	{
 		ZobObject* z = m_children[i];
-		z->EditorUpdate();
+		if (z)
+		{
+			z->EditorUpdate();
+		}
 	}
 }
 
@@ -321,20 +325,20 @@ void ZobObject::Update(float dt)
 	OPTICK_EVENT();
 	UpdatePhysic(dt);
 	Transform parentTransform;
-	ZobVector3 parentScale;
+	//ZobVector3 parentScale;
 	if (m_parent)
 	{
 		const ZobPhysicComponent* zpc = m_parent->GetPhysicComponent();
 		parentTransform = zpc->GetWorldTransform();
-		parentScale = zpc->GetWorldScale();
+		//parentScale = zpc->GetWorldScale();
 	}
 	else
 	{
 		parentTransform = Transform::identity();
-		parentScale = ZobVector3(1, 1, 1);
+		//parentScale = ZobVector3(1, 1, 1);
 	}
-	ZobVector3 scale = parentScale * m_physicComponent->GetLocalScale();
-	m_physicComponent->SetWorldScale(scale.x, scale.y, scale.z);
+	//ZobVector3 scale = parentScale * m_physicComponent->GetLocalScale();
+	//m_physicComponent->SetWorldScale(scale.x, scale.y, scale.z);
 	Quaternion q = m_physicComponent->GetWorldTransform().getOrientation();
 	Vector3 l = q * Vector3(1, 0, 0);
 	Vector3 u = q * Vector3(0, 1, 0);
@@ -354,17 +358,17 @@ void ZobObject::Update(float dt)
 	}
 }
 
-ZobVector3 ZobObject::GetScale() const 
+ZobVector3 ZobObject::GetLocalScale() const 
 { 
-	return m_physicComponent->GetWorldScale(); 
+	return m_physicComponent->GetLocalScale();
 }
 
-void ZobObject::SetScale(float x, float y, float z)
+void ZobObject::SetLocalScale(float x, float y, float z)
 { 
-	ZobVector3 s = m_parent->GetScale();
-	x /= s.x;
-	y /= s.y;
-	z /= s.z;
+	//ZobVector3 s = m_parent->GetScale();
+	//x /= s.x;
+	//y /= s.y;
+	//z /= s.z;
 	m_physicComponent->SetLocalScale(x, y, z);
 }
 
@@ -469,7 +473,6 @@ void ZobObject::SetParent(ZobObject* p)
 		DirectZob::LogInfo("Reparented %s from %s to %s", ZobGuidToString().c_str(), m_parent->ZobGuidToString().c_str(), p->ZobGuidToString().c_str());
 		ZobVector3 pos = GetWorldPosition();
 		ZobVector3 rot = GetWorldRotation();
-		ZobVector3 sca = GetScale();
 		ZobObject* parent = GetParent();
 		if (parent != p)
 		{

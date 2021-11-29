@@ -29,13 +29,16 @@ void ZobBehaviorPhysicCapsule::Init()
 
 void ZobBehaviorPhysicCapsule::EditorUpdate()
 {
-	ZobBehaviorPhysicShape::EditorUpdate();
-	if (m_capsuleShape->getRadius() != m_radius)
+	if (m_isInit)
 	{
-		m_capsuleShape->setRadius(m_radius);
-	}
-	if (m_capsuleShape->getHeight() != m_height)
-	{
-		m_capsuleShape->setHeight(m_height);
+		ZobBehaviorPhysicShape::EditorUpdate();
+		if (m_capsuleShape->getRadius() != m_radius)
+		{
+			m_capsuleShape->setRadius(m_radius);
+		}
+		if (m_capsuleShape->getHeight() != m_height)
+		{
+			m_capsuleShape->setHeight(m_height);
+		}
 	}
 }

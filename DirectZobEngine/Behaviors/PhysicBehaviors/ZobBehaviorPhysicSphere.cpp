@@ -27,9 +27,12 @@ void ZobBehaviorPhysicSphere::Init()
 
 void ZobBehaviorPhysicSphere::EditorUpdate()
 {
-	ZobBehaviorPhysicShape::EditorUpdate();
-	if (m_sphereShape->getRadius() != m_radius)
+	if (m_isInit)
 	{
-		m_sphereShape->setRadius(m_radius);
+		ZobBehaviorPhysicShape::EditorUpdate();
+		if (m_sphereShape->getRadius() != m_radius)
+		{
+			m_sphereShape->setRadius(m_radius);
+		}
 	}
 }

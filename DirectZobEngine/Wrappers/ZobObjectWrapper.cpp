@@ -22,7 +22,7 @@ namespace CLI
 		m_objectPanel = nullptr;
 		m_container = nullptr;
 		CreateObjectview();
-		CreateObjectBeahaviorsview();
+		CreateObjectBeahaviorsView();
 	}
 
 	ZobObjectWrapper::~ZobObjectWrapper()
@@ -36,6 +36,14 @@ namespace CLI
 
 	void ZobObjectWrapper::CreateObjectview()
 	{
+		if (m_container)
+		{
+			delete m_container;
+		}
+		if (m_objectPanel)
+		{
+			delete m_objectPanel;
+		}
 		String^ mStr;
 		ZobControlString^ s;
 		m_objectPanel = gcnew ZobGroupBox("Object", false);
@@ -48,7 +56,7 @@ namespace CLI
 		m_parentPanel->Controls->Add(m_objectPanel);
 	}
 
-	void ZobObjectWrapper::CreateObjectBeahaviorsview()
+	void ZobObjectWrapper::CreateObjectBeahaviorsView()
 	{
 		ZobObject* z = GetInstance();
 		if (z)
@@ -218,9 +226,14 @@ namespace CLI
 		}
 	}
 
+	void ZobObjectWrapper::Refresh()
+	{
+		CreateObjectview();
+		CreateObjectBeahaviorsView();
+	}
+
 	void ZobObjectWrapper::EditorUpdate()
 	{
-
 	}
 
 	bool ZobObjectWrapper::IsFromFactoryFile()
@@ -412,12 +425,22 @@ namespace CLI
 		return nullptr;
 	}
 
-	ManagedVector3^ ZobObjectWrapper::GetScale()
+	void ZobObjectWrapper::SetLocalScale(ManagedVector3^ p)
 	{
 		ZobObject* z = GetInstance();
 		if (z)
 		{
-			ManagedVector3^ v = gcnew CLI::ManagedVector3(z->GetScale());
+			ZobVector3 v = p->ToVector3();
+			z->SetLocalScale(v.x, v.y, v.z);
+		}
+	}
+
+	ManagedVector3^ ZobObjectWrapper::GetLocalScale()
+	{
+		ZobObject* z = GetInstance();
+		if (z)
+		{
+			ManagedVector3^ v = gcnew CLI::ManagedVector3(z->GetLocalScale());
 			return v;
 		}
 		return nullptr;
@@ -452,16 +475,6 @@ namespace CLI
 		{
 			ZobVector3 v = p->ToVector3();
 			z->SetLocalRotation(v.x, v.y, v.z);
-		}
-	}
-
-	void ZobObjectWrapper::SetScale(ManagedVector3^ p)
-	{
-		ZobObject* z = GetInstance();
-		if (z)
-		{
-			ZobVector3 v = p->ToVector3();
-			z->SetScale(v.x, v.y, v.z);
 		}
 	}
 

@@ -43,8 +43,8 @@ public:
 	void							SetWorldPosition(float x, float y, float z);
 	ZobVector3						GetWorldRotation() const;
 	void							SetWorldRotation(float x, float y, float z);
-	ZobVector3						GetScale() const;
-	void 							SetScale(float x, float y, float z);
+	ZobVector3						GetLocalScale() const;
+	void 							SetLocalScale(float x, float y, float z);
 	//Local
 	ZobVector3						GetLocalPosition() const;
 	void							SetLocalPosition(float x, float y, float z);

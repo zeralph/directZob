@@ -55,15 +55,15 @@ namespace CLI {
 		ManagedVector3^			GetUp();
 		ManagedVector3^			GetLocalRotation();
 		ManagedVector3^			GetWorldRotation();
-		ManagedVector3^			GetScale();
+		ManagedVector3^			GetLocalScale();
 		List<ZobObjectWrapper^>^ GetChildren();
 		void					SetLocalTransform(ManagedVector3^ p);
 		void					SetLocalRotation(ManagedVector3^ p);
-		void					SetScale(ManagedVector3^ p);
+		void					SetLocalScale(ManagedVector3^ p);
 		void					LookAt(ManagedVector3^ forward, ManagedVector3^ left, ManagedVector3^ up, bool addToCurrentRotation);
 		String^					GetMeshName();
 		void					SetMesh(System::String^ name);
-		void					LoadMesh(System::String^ name, System::String^ file, System::String^ path);
+		void				LoadMesh(System::String^ name, System::String^ file, System::String^ path);
 		void					CreateSprite();
 		bool					IsLight();
 		bool					IsSprite();
@@ -75,13 +75,13 @@ namespace CLI {
 		void					SaveToFactoryFile(String^ file);
 		void					EditorUpdate();
 		void					GroupClick(Object^ sender, System::EventArgs^ e);
-
+		void					Refresh();
 	private:
 		void					CreateObjectview();
 		ZobGroupBox^			FillBehaviorControl(ZobBehavior* zb);
 		ZobGroupBox^			FillObjectControl(ZobObject* z);
 		ZobGroupBox^			FillControlInternal(std::string& name, ZobVariablesExposer* ze);
-		void					CreateObjectBeahaviorsview();
+		void					CreateObjectBeahaviorsView();
 		Panel^					m_parentPanel;
 		ZobGroupBox^			m_objectPanel;
 		ZobPropertiesContainer^	m_container;

@@ -44,7 +44,7 @@ namespace CLI
 			std::fputs(gArrow.c_str(), tmpf);
 			std::rewind(tmpf);
 			//tmpf-
-			ZobObject* g = zm->CreateZobObject(NULL);
+			ZobObject* g = zm->CreateEditorZobObject(NULL);
 			m_gizmosGuid = g->GetIdValue();
 			g->SetName("Editor");
 			m_translateX = zm->CreateEditorZobObject(g);

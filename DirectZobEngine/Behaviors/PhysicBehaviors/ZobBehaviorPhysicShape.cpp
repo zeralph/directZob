@@ -10,7 +10,7 @@ ZobBehaviorPhysicShape::~ZobBehaviorPhysicShape()
 ZobBehaviorPhysicShape::ZobBehaviorPhysicShape(ZobObject* zobObject) : ZobBehavior(zobObject)
 {
 	m_type = eBehavior_none;
-
+	m_isInit = false;;
 	m_varExposer->WrapVariable<int>("Layers", &m_layers, NULL, false, true);
 	m_varExposer->WrapVariable<bool>("Trigger", &m_isTrigger, NULL, false, true);
 	m_varExposer->WrapVariable<ZobVector3>("Local position", &m_localPostion, NULL, false, true);
@@ -48,11 +48,12 @@ void ZobBehaviorPhysicShape::Init()
 	v.z = m_localPostion.z;
 	t.setPosition(v);
 //	m_collider->setLocalToBodyTransform(t);
+	m_isInit = true;
 }
 
 void ZobBehaviorPhysicShape::EditorUpdate()
 {
-	if (m_collider)
+	if (m_isInit && m_collider)
 	{
 		reactphysics3d::Material& material = m_collider->getMaterial();
 		//if (material.getBounciness() != m_bounciness)

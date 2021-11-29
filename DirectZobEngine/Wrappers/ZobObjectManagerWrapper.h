@@ -58,7 +58,7 @@ namespace CLI
 		void					CreateObjectview();
 		void					CreateNodeMenu();
 		void					CreateBehaviorNodeMenu(ToolStripMenuItem^ parent);
-		void					ReScan(ZobControlTreeNode^ n);
+		void					ReScan(ZobControlTreeNode^ n, bool showAllNodes);
 		void					OnNewScene();
 		void					TreeNodeMouseHover(Object^ sender, EventArgs^ e);
 		void					TreeNodeClick(Object^ sender, TreeNodeMouseClickEventArgs^ e);
@@ -67,7 +67,7 @@ namespace CLI
 		void					DragEnter(Object^ sender, DragEventArgs^ e);
 		void					DragOver(Object^ sender, DragEventArgs^ e);
 		void					DragLeave(Object^ sender, EventArgs^ e);
-
+		void					TreeNodeBeforeSelect(Object^ sender, TreeViewCancelEventArgs^ e);
 		void					AddZobObject(Object^ sender, EventArgs^ e);
 		void					RemoveZobObject(Object^ sender, EventArgs^ e);
 		void					ZoomToZobObject(Object^ sender, EventArgs^ e);
@@ -81,6 +81,7 @@ namespace CLI
 		ZobObjectWrapper^ m_selectedObjectWrapper;
 		ZobControlTreeNode^ m_draggedNode;
 		ContextMenuStrip^ m_nodeMenu;
+		bool m_bShowAllNodes;
 	};
 }
 #endif //_WINDLL

@@ -287,7 +287,7 @@ namespace DirectZobEditor
                     m_startLeft = z.GetLeft().Copy();
                     m_startUp = z.GetUp().Copy();
                     m_startForward = z.GetForward().Copy();
-                    m_startScaleValue = z.GetScale().Copy();
+                    m_startScaleValue = z.GetLocalScale().Copy();
                     m_objectReadyForModification = true;
                 }
             }
@@ -490,7 +490,7 @@ namespace DirectZobEditor
                                     v.x = m_startScaleValue.x * d;
                                     v.y = m_startScaleValue.y * l;
                                     v.z = m_startScaleValue.z * l;
-                                    z.SetScale(v);
+                                    z.SetLocalScale(v);
                                     ManagedVector3 v2 = p0.Copy();
                                     v2.x *= v.x;
                                     OnZobObjectScaled(z);
@@ -502,7 +502,7 @@ namespace DirectZobEditor
                                     v.x = m_startScaleValue.x * l;
                                     v.y = m_startScaleValue.y * d;
                                     v.z = m_startScaleValue.z * l;
-                                    z.SetScale(v);
+                                    z.SetLocalScale(v);
                                     OnZobObjectScaled(z);
                                 }
                                 break;
@@ -512,7 +512,7 @@ namespace DirectZobEditor
                                     v.x = m_startScaleValue.x * l;
                                     v.y = m_startScaleValue.y * l;
                                     v.z = m_startScaleValue.z * d;
-                                    z.SetScale(v);
+                                    z.SetLocalScale(v);
                                     OnZobObjectScaled(z);
                                 }
                                 break;
@@ -631,7 +631,7 @@ namespace DirectZobEditor
             if (null != handler)
             {
                 ObjectModificationEventArg ev = new ObjectModificationEventArg();
-                ev.s = zobObject.GetScale();
+                ev.s = zobObject.GetLocalScale();
                 handler(this, ev);
             }
         }

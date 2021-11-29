@@ -27,13 +27,16 @@ void ZobBehaviorPhysicBox::Init()
 
 void ZobBehaviorPhysicBox::EditorUpdate()
 {
-	ZobBehaviorPhysicShape::EditorUpdate();
-	Vector3 h = m_boxShape->getHalfExtents();
-	if (h.x != m_halfExtends.x || h.y != m_halfExtends.y || h.z != m_halfExtends.z )
+	if (m_isInit)
 	{
-		h.x = m_halfExtends.x;
-		h.y = m_halfExtends.y;
-		h.z = m_halfExtends.z;
-		m_boxShape->setHalfExtents(h);
+		ZobBehaviorPhysicShape::EditorUpdate();
+		Vector3 h = m_boxShape->getHalfExtents();
+		if (h.x != m_halfExtends.x || h.y != m_halfExtends.y || h.z != m_halfExtends.z )
+		{
+			h.x = m_halfExtends.x;
+			h.y = m_halfExtends.y;
+			h.z = m_halfExtends.z;
+			m_boxShape->setHalfExtents(h);
+		}
 	}
 }

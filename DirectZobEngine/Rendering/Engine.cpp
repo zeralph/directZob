@@ -184,32 +184,32 @@ uint Engine::GetObjectIdAtCoords(uint x, uint y)
 
 Engine::~Engine()
 {
-	StopRasterizers();
-	WaitForRasterizersEnd();
-	for (int i = 0; i < m_nbRasterizers; i++)
-	{
-		//m_mutexes[i]->unlock();
-		//m_conditionvariables[i]->notify_all();
-		delete m_rasterizers[i];
-		//delete m_conditionvariables[i];
-		//delete m_mutexes[i];
-	}
-	free(m_TrianglesQueue);
-	free(m_verticesData);
-	free(m_uvData);
-	free(m_colorData);
-	free(m_rasterizers);
-	free(m_conditionvariables);
-	free(m_mutexes);
-	free(m_renderOptions);
-	m_events = NULL;
+StopRasterizers();
+WaitForRasterizersEnd();
+for (int i = 0; i < m_nbRasterizers; i++)
+{
+	//m_mutexes[i]->unlock();
+	//m_conditionvariables[i]->notify_all();
+	delete m_rasterizers[i];
+	//delete m_conditionvariables[i];
+	//delete m_mutexes[i];
+}
+free(m_TrianglesQueue);
+free(m_verticesData);
+free(m_uvData);
+free(m_colorData);
+free(m_rasterizers);
+free(m_conditionvariables);
+free(m_mutexes);
+free(m_renderOptions);
+m_events = NULL;
 }
 
 void Engine::Start()
 {
 	DirectZob::GetInstance()->GetZobObjectManager()->Init();
 	for (int i = 0; i < m_nbRasterizers; i++)
-	m_started = true;
+		m_started = true;
 }
 
 void Engine::Stop()
@@ -257,7 +257,6 @@ bool Engine::ResizeInternal()
 			m_buffer[i] = (uint*)malloc(sizeof(uint) * m_nextWidth * m_nextHeight);
 			m_zBuffer[i] = (float*)malloc(sizeof(float) * m_nextWidth * m_nextHeight);
 		}
-		ZobColor c = ZobColor(DirectZob::GetInstance()->GetLightManager()->GetClearColor());
 		m_bufferData.height = m_nextHeight;
 		m_bufferData.width = m_nextWidth;
 		m_bufferData.buffer = m_buffer[m_currentBuffer];
@@ -265,6 +264,7 @@ bool Engine::ResizeInternal()
 		//m_bufferData.zNear = m_zNear;
 		//m_bufferData.zFar = m_zFar;
 		m_bufferData.size = m_nextWidth * m_nextHeight;
+		ZobColor c = ZobColor(DirectZob::GetInstance()->GetLightManager()->GetClearColor());
 		ClearBuffer(&c);
 		m_rasterizerHeight = ceil((float)m_nextHeight / (float)m_nbRasterizers);
 		for (int i = 0; i < m_nbRasterizers; i++)
@@ -276,14 +276,21 @@ bool Engine::ResizeInternal()
 	return false;
 }
 
-void Engine::ClearBuffer(const ZobColor *color)
+void Engine::ClearBuffer(const ZobColor* color)
 {
 	OPTICK_EVENT();
 	int oldBuffer = (m_currentBuffer + 1) % 2;
 	uint v = color->GetRawValue();
+	//if (v != m_buffer[oldBuffer][0])
+	{
+		for (int i = 0; i < m_bufferData.width * m_bufferData.height; i++)
+		{
+			m_buffer[oldBuffer][i] = v;
+		}
+	}
 	if (m_renderMode == eRenderMode_fullframe )
 	{
-		memset(m_buffer[oldBuffer], 0, sizeof(uint) * m_bufferData.width * m_bufferData.height);
+		//memset(m_buffer[oldBuffer], 0, sizeof(uint) * m_bufferData.width * m_bufferData.height);
 		memset(m_zBuffer[oldBuffer], 0, sizeof(float) * m_bufferData.width * m_bufferData.height);
 	}
 	else if (m_renderMode == eRenderMode_scanline)
@@ -451,13 +458,14 @@ void Engine::DrawGrid(const Camera *camera)
 		a.z = -gridSize + cz;
 		b.z = gridSize + cz;
 		bold = i % 5 == 0;
+		bold = false;
 		if (bold)
 		{
 			QueueLine(camera, &a, &b, 0xFFFFFF, bold, false);
 		}
 		else
 		{
-			QueueLine(camera, &a, &b, 0xCCCCCC, bold, false);
+			QueueLine(camera, &a, &b, 0xAAAAAA, bold, false);
 		}
 	}
 	for (int i = -gridSize; i <= gridSize; i += 1.0f)
@@ -467,13 +475,14 @@ void Engine::DrawGrid(const Camera *camera)
 		a.x = -gridSize + cx;
 		b.x = gridSize + cx;
 		bold = i % 5 == 0;
+		bold = false;
 		if (bold)
 		{
 			QueueLine(camera, &a, &b, 0xFFFFFF, bold, false);
 		}
 		else
 		{
-			QueueLine(camera, &a, &b, 0xCCCCCC, bold, false);
+			QueueLine(camera, &a, &b, 0xAAAAAA, bold, false);
 		}
 	}
 

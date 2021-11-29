@@ -46,7 +46,7 @@ class ZobBehaviorPhysicShape : public ZobBehavior
 		bool m_isTrigger;
 		ZobVector3 m_localPostion;
 		bool m_bUpdateSize;
-
+		bool m_isInit;
 		//float m_bounciness;
 		//float m_frictionCoeff;
 		//float m_massDensity;
