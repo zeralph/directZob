@@ -326,10 +326,11 @@ int main(int argc, char* argv[])
 		testSuite->SetAttribute(XML_TESTSUITE_ATTR_TIME, "");
 		testSuites->LinkEndChild(testSuite);
 		TiXmlElement* testCase = new TiXmlElement(XML_TESTSUITE_ELEMENT_TESTCASE);
-		testSuite->SetAttribute(XML_TESTSUITE_ATTR_NAME, "smoketest");
-		testSuite->SetAttribute(XML_TESTSUITE_ATTR_STATUS, "run");
-		testSuite->SetAttribute(XML_TESTSUITE_ATTR_TIME, "");
-		testSuite->SetAttribute(XML_TESTSUITE_ATTR_CLASSNAME, "directZob");
+		testCase->SetAttribute(XML_TESTSUITE_ATTR_NAME, "smoketest");
+		testCase->SetAttribute(XML_TESTSUITE_ATTR_STATUS, "run");
+		testCase->SetAttribute(XML_TESTSUITE_ATTR_TIME, "");
+		testCase->SetAttribute(XML_TESTSUITE_ATTR_CLASSNAME, "directZob");
+		testSuite->LinkEndChild(testCase);
 		doc.SaveFile("smoketest_unittests.xml");
 	}
 	//OPTICK_SAVE_CAPTURE("capture.opt");

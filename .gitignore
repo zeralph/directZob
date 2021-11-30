@@ -17,6 +17,7 @@
 **/x64
 **/bin
 **/obj
+**/*_unittests.xml
 /.DS_Store
 .DS_Store
 DirectZobEditor/bin
