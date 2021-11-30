@@ -93,13 +93,15 @@ public:
 	void							AddBehavior(ZobBehavior* b) { m_behaviors.push_back(b); }
 	ZobVariablesExposer*			GetVariablesExposer() { return m_varExposer; }
 
-	static void						ReloadVariables(zobId id);
-
+	static void						ReloadVariablesFromLocalData(zobId id);
+	static void						ReloadVariablesFromWorldData(zobId id);
 private:
 	void							SaveRecusrive(TiXmlNode* node, ZobObject* z);
 	void							DeleteInternal();
-	void							InitVariablesExposer();
+	
 protected:
+
+	virtual void					InitVariablesExposer();
 
 	ZobObject* m_parent;
 	ZobVariablesExposer* m_varExposer;

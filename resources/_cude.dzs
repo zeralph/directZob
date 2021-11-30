@@ -16,7 +16,7 @@
         <Var Name="Scale" value="1.800;2.000;3.000" />
         <Behaviors>
             <Behavior Type="Mesh" Guid="2007160091">
-                <Var Name="File" value="cube.obj;D:\Git\directZob\resources\;cube.obj" />
+                <Var Name="File" value="cube.obj;/;cube.obj" />
                 <Var Name="Cull mode" value="Clockwise" />
                 <Var Name="Lighting" value="Phong" />
                 <Var Name="ZBuffered" value="True" />
@@ -30,7 +30,7 @@
             <Var Name="Scale" value="0.200;0.200;0.400" />
             <Behaviors>
                 <Behavior Type="Mesh" Guid="2007816606">
-                    <Var Name="File" value="cube.obj;D:\Git\directZob\resources\;cube.obj" />
+                    <Var Name="File" value="cube.obj;/;cube.obj" />
                     <Var Name="Cull mode" value="Clockwise" />
                     <Var Name="Lighting" value="Phong" />
                     <Var Name="ZBuffered" value="True" />
@@ -44,7 +44,7 @@
                 <Var Name="Scale" value="2.000;2.000;5.000" />
                 <Behaviors>
                     <Behavior Type="Mesh" Guid="2007531928">
-                        <Var Name="File" value="cube.obj;D:\Git\directZob\resources\;cube.obj" />
+                        <Var Name="File" value="cube.obj;/;cube.obj" />
                         <Var Name="Cull mode" value="Clockwise" />
                         <Var Name="Lighting" value="Phong" />
                         <Var Name="ZBuffered" value="True" />

@@ -117,17 +117,38 @@ void ZobObject::InitVariablesExposer()
 {
 	m_varExposer->WrapVariable<zobId>("GUID", GetIdAddress(), NULL, true, false);
 	m_varExposer->WrapVariable<std::string>("Name", &m_name, NULL, false, true);
-	m_varExposer->WrapVariable<ZobVector3>("Position", GetPhysicComponentNoConst()->GetLocalPositionAddress(), &ZobObject::ReloadVariables, false, true);
-	m_varExposer->WrapVariable<ZobVector3>("Rotation", GetPhysicComponentNoConst()->GetLocalRotationAddress(), &ZobObject::ReloadVariables, false, true);
-	m_varExposer->WrapVariable<ZobVector3>("Scale", GetPhysicComponentNoConst()->GetLocalScaleAddress(), &ZobObject::ReloadVariables, false, true);
+	m_varExposer->WrapVariable<ZobVector3>("Position", GetPhysicComponentNoConst()->GetLocalPositionAddress(), &ZobObject::ReloadVariablesFromLocalData, false, true);
+	m_varExposer->WrapVariable<ZobVector3>("Rotation", GetPhysicComponentNoConst()->GetLocalRotationAddress(), &ZobObject::ReloadVariablesFromLocalData, false, true);
+	m_varExposer->WrapVariable<ZobVector3>("Scale", GetPhysicComponentNoConst()->GetLocalScaleAddress(), &ZobObject::ReloadVariablesFromLocalData, false, true);
 	//
-	m_varExposer->WrapVariable<ZobVector3>("WPosition", GetPhysicComponentNoConst()->GetWorldPositionAddress(), NULL, true, false);
-	m_varExposer->WrapVariable<ZobVector3>("WRotation", GetPhysicComponentNoConst()->GetWorldRotationAddress(), NULL, true, false);
-	m_varExposer->WrapVariable<ZobVector3>("WScale", GetPhysicComponentNoConst()->GetWorldScaleAddress(), NULL, true, false);
+	m_varExposer->WrapVariable<ZobVector3>("WPosition", GetPhysicComponentNoConst()->GetWorldPositionAddress(), &ZobObject::ReloadVariablesFromWorldData, false, false);
+	m_varExposer->WrapVariable<ZobVector3>("WRotation", GetPhysicComponentNoConst()->GetWorldRotationAddress(), &ZobObject::ReloadVariablesFromWorldData, false, false);
+	m_varExposer->WrapVariable<ZobVector3>("WScale", GetPhysicComponentNoConst()->GetWorldScaleAddress(), &ZobObject::ReloadVariablesFromWorldData, false, false);
 
 }
 
-void ZobObject::ReloadVariables(zobId id)
+void ZobObject::ReloadVariablesFromWorldData(zobId id)
+{
+	ZobObjectManager* zm = DirectZob::GetInstance()->GetZobObjectManager();
+	if (zm)
+	{
+		ZobObject* z = zm->GetZobObjectFromlId(id);
+		if (z)
+		{
+			ZobVector3* zp = z->GetPhysicComponentNoConst()->GetWorldPositionAddress();
+			ZobVector3* zr = z->GetPhysicComponentNoConst()->GetWorldRotationAddress();
+			ZobVector3* zs = z->GetPhysicComponentNoConst()->GetWorldScaleAddress();
+			Transform t;
+			Vector3 vp = Vector3(zp->x, zp->y, zp->z);
+			t.setPosition(vp);
+			Quaternion q = Quaternion::fromEulerAngles(DEG_TO_RAD(zr->x), DEG_TO_RAD(zr->y), DEG_TO_RAD(zr->z));
+			z->GetPhysicComponentNoConst()->SetWorldTransform(t);
+			z->GetPhysicComponentNoConst()->SetWorldScale(zs->x, zs->y, zs->z);
+		}
+	}
+}
+
+void ZobObject::ReloadVariablesFromLocalData(zobId id)
 {
 	ZobObjectManager* zm = DirectZob::GetInstance()->GetZobObjectManager();
 	if (zm)

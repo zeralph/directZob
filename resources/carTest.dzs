@@ -9,24 +9,24 @@
         <FogDistance>100.00</FogDistance>
         <FogType>exp2</FogType>
     </Globals>
-    <ZobObject Guid="4002682056">
+    <ZobObject Guid="4002129363">
         <Var Name="Name" value="PlayerCar" />
         <Var Name="Position" value="5.000;5.000;5.000" />
         <Var Name="Rotation" value="1.087;-0.006;2.110" />
         <Var Name="Scale" value="1.000;1.000;1.000" />
         <Behaviors>
-            <Behavior Type="PhysicBox" Guid="2007568421">
+            <Behavior Type="PhysicBox" Guid="2007043289">
                 <Var Name="Layers" value="4" />
                 <Var Name="Trigger" value="True" />
                 <Var Name="Local position" value="0.000;2.000;0.000" />
                 <Var Name="Scale with object" value="True" />
                 <Var Name="Height" value="1.000;0.500;2.000" />
             </Behavior>
-            <Behavior Type="Car" Guid="2007160091">
-                <Var Name="Front left wheel" value="4002873694" />
-                <Var Name="Front right wheel" value="4002816606" />
-                <Var Name="Rear left wheel" value="4002531928" />
-                <Var Name="Rear right wheel" value="1009670489" />
+            <Behavior Type="Car" Guid="2007989132">
+                <Var Name="Front left wheel" value="4002410897" />
+                <Var Name="Front right wheel" value="4002410782" />
+                <Var Name="Rear left wheel" value="4002054282" />
+                <Var Name="Rear right wheel" value="4002838095" />
                 <Var Name="HandBrake" value="True" />
                 <Var Name="Mass" value="1500.000" />
                 <Var Name="Max friction" value="10.000" />
@@ -38,13 +38,13 @@
                 <Var Name="Steering rotation speed" value="3.141" />
             </Behavior>
         </Behaviors>
-        <ZobObject Guid="4002443983">
+        <ZobObject Guid="4002153198">
             <Var Name="Name" value="carBody" />
             <Var Name="Position" value="-0.000;-0.557;0.197" />
             <Var Name="Rotation" value="-179.998;-0.000;-179.998" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
             <Behaviors>
-                <Behavior Type="Mesh" Guid="2007566531">
+                <Behavior Type="Mesh" Guid="2007983524">
                     <Var Name="File" value="Peugeot405;_cars/GLX-400-OBJ/;GLX_400.obj" />
                     <Var Name="Cull mode" value="Clockwise" />
                     <Var Name="Lighting" value="Phong" />
@@ -52,13 +52,13 @@
                     <Var Name="Transparent" value="False" />
                 </Behavior>
             </Behaviors>
-            <ZobObject Guid="4002816606">
+            <ZobObject Guid="4002410782">
                 <Var Name="Name" value="FR_wheel" />
-                <Var Name="Position" value="0.799;0.264;-1.299" />
+                <Var Name="Position" value="0.799;0.263;-1.299" />
                 <Var Name="Rotation" value="0.000;0.000;0.000" />
                 <Var Name="Scale" value="1.000;1.000;1.000" />
                 <Behaviors>
-                    <Behavior Type="Mesh" Guid="2007566531">
+                    <Behavior Type="Mesh" Guid="2007953918">
                         <Var Name="File" value="Tire;_cars/Tire/;Tire.obj" />
                         <Var Name="Cull mode" value="Clockwise" />
                         <Var Name="Lighting" value="Phong" />
@@ -67,13 +67,13 @@
                     </Behavior>
                 </Behaviors>
             </ZobObject>
-            <ZobObject Guid="4002873694">
+            <ZobObject Guid="4002410897">
                 <Var Name="Name" value="FL_wheel" />
                 <Var Name="Position" value="-0.800;0.264;-1.299" />
                 <Var Name="Rotation" value="0.000;0.000;0.000" />
                 <Var Name="Scale" value="1.000;1.000;1.000" />
                 <Behaviors>
-                    <Behavior Type="Mesh" Guid="2007666531">
+                    <Behavior Type="Mesh" Guid="2007905557">
                         <Var Name="File" value="Tire;_cars/Tire/;Tire.obj" />
                         <Var Name="Cull mode" value="Clockwise" />
                         <Var Name="Lighting" value="Phong" />
@@ -82,13 +82,13 @@
                     </Behavior>
                 </Behaviors>
             </ZobObject>
-            <ZobObject Guid="4002531928">
+            <ZobObject Guid="4002054282">
                 <Var Name="Name" value="RL_wheel" />
                 <Var Name="Position" value="-0.800;0.263;1.260" />
                 <Var Name="Rotation" value="0.000;0.000;0.000" />
                 <Var Name="Scale" value="1.000;1.000;1.000" />
                 <Behaviors>
-                    <Behavior Type="Mesh" Guid="2007686531">
+                    <Behavior Type="Mesh" Guid="2007115044">
                         <Var Name="File" value="Tire;_cars/Tire/;Tire.obj" />
                         <Var Name="Cull mode" value="Clockwise" />
                         <Var Name="Lighting" value="Phong" />
@@ -97,13 +97,13 @@
                     </Behavior>
                 </Behaviors>
             </ZobObject>
-            <ZobObject Guid="1009670489">
+            <ZobObject Guid="4002838095">
                 <Var Name="Name" value="RR_wheel" />
                 <Var Name="Position" value="0.799;0.263;1.260" />
                 <Var Name="Rotation" value="0.000;0.000;0.000" />
                 <Var Name="Scale" value="1.000;1.000;1.000" />
                 <Behaviors>
-                    <Behavior Type="Mesh" Guid="2007689531">
+                    <Behavior Type="Mesh" Guid="2007839627">
                         <Var Name="File" value="Tire;_cars/Tire/;Tire.obj" />
                         <Var Name="Cull mode" value="Clockwise" />
                         <Var Name="Lighting" value="Phong" />
@@ -113,16 +113,16 @@
                 </Behaviors>
             </ZobObject>
         </ZobObject>
-        <ZobObject Guid="2003245163" Type="Camera">
+        <ZobObject Guid="2003412161" Type="Camera">
             <Var Name="Name" value="rearCamera" />
-            <Var Name="Position" value="-0.000;1.919;-4.787" />
-            <Var Name="Rotation" value="15.056;0.000;0.000" />
+            <Var Name="Position" value="-0.000;1.911;-4.787" />
+            <Var Name="Rotation" value="15.056;-0.000;-0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
             <Behaviors />
             <Controller Name="FollowCar" Guid="2008245163" />
             <Fov>70.00</Fov>
         </ZobObject>
-        <ZobObject Guid="2003273791" Type="Camera">
+        <ZobObject Guid="2003143259" Type="Camera">
             <Var Name="Name" value="FrontCamera" />
             <Var Name="Position" value="-0.000;0.300;2.200" />
             <Var Name="Rotation" value="0.000;0.000;0.000" />
@@ -131,16 +131,16 @@
             <Controller Name="Base" Guid="2008273791" />
             <Fov>70.00</Fov>
         </ZobObject>
-        <ZobObject Guid="2003756106" Type="Camera">
+        <ZobObject Guid="2003861325" Type="Camera">
             <Var Name="Name" value="topCamera" />
-            <Var Name="Position" value="-0.000;59.177;-1.002" />
+            <Var Name="Position" value="0.000;59.173;-1.002" />
             <Var Name="Rotation" value="-89.418;-79.774;-179.719" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
             <Behaviors />
             <Controller Name="Base" Guid="2008756106" />
             <Fov>45.00</Fov>
         </ZobObject>
-        <ZobObject Guid="2004002145" Type="Camera">
+        <ZobObject Guid="2003217728" Type="Camera">
             <Var Name="Name" value="sideCamera" />
             <Var Name="Position" value="-5.880;1.899;6.775" />
             <Var Name="Rotation" value="-176.339;35.933;-176.794" />
@@ -149,7 +149,7 @@
             <Controller Name="Base" Guid="2008002145" />
             <Fov>45.00</Fov>
         </ZobObject>
-        <ZobObject Guid="2003170641" Type="Camera">
+        <ZobObject Guid="2003649406" Type="Camera">
             <Var Name="Name" value="orbitalCamera" />
             <Var Name="Position" value="-18.942;29.375;19.448" />
             <Var Name="Rotation" value="-133.462;45.023;178.977" />
@@ -159,24 +159,26 @@
             <Fov>45.00</Fov>
         </ZobObject>
     </ZobObject>
-    <ZobObject Guid="4002337777" Type="Light">
+    <ZobObject Guid="4004542631">
         <Var Name="Name" value="sun" />
         <Var Name="Position" value="0.000;60.035;0.000" />
         <Var Name="Rotation" value="45.000;0.000;45.000" />
         <Var Name="Scale" value="1.000;1.000;1.000" />
+        <Var Name="Color" value="1.000;1.000;0.600" />
+        <Var Name="Intensity" value="1.000" />
+        <Var Name="Distance" value="100.000" />
+        <Var Name="SpotAngle" value="0.524" />
+        <Var Name="Active" value="True" />
+        <Var Name="Type" value="Directional" />
         <Behaviors />
-        <Color r="241" g="218" b="164" />
-        <Intensity>1.20</Intensity>
-        <FallOffDistance>100.00</FallOffDistance>
-        <Type>Directional</Type>
     </ZobObject>
-    <ZobObject Guid="4002818995">
+    <ZobObject Guid="4002412188">
         <Var Name="Name" value="house" />
         <Var Name="Position" value="-281.384;-3.671;26.628" />
         <Var Name="Rotation" value="0.000;30.758;0.000" />
         <Var Name="Scale" value="0.300;0.300;0.300" />
         <Behaviors>
-            <Behavior Type="Mesh" Guid="2007666531">
+            <Behavior Type="Mesh" Guid="2007254289">
                 <Var Name="File" value="Cottage;/;cottage_obj.obj" />
                 <Var Name="Cull mode" value="Clockwise" />
                 <Var Name="Lighting" value="Phong" />
@@ -185,19 +187,19 @@
             </Behavior>
         </Behaviors>
     </ZobObject>
-    <ZobObject Guid="4002830662">
+    <ZobObject Guid="4002683899">
         <Var Name="Name" value="rocks" />
         <Var Name="Position" value="0.000;0.000;101.540" />
         <Var Name="Rotation" value="0.000;0.000;0.000" />
         <Var Name="Scale" value="1.000;1.000;1.000" />
         <Behaviors />
-        <ZobObject Guid="4002905211">
+        <ZobObject Guid="4002326689">
             <Var Name="Name" value="rock1" />
             <Var Name="Position" value="73.806;8.820;9.621" />
-            <Var Name="Rotation" value="-9.822;-15.201;2.599" />
+            <Var Name="Rotation" value="-9.822;-15.200;2.599" />
             <Var Name="Scale" value="10.000;5.000;10.000" />
             <Behaviors>
-                <Behavior Type="Mesh" Guid="2007239531">
+                <Behavior Type="Mesh" Guid="2007572628">
                     <Var Name="File" value="Rock9;/;Rock_9.fbx" />
                     <Var Name="Cull mode" value="Clockwise" />
                     <Var Name="Lighting" value="Gouraud" />
@@ -206,13 +208,13 @@
                 </Behavior>
             </Behaviors>
         </ZobObject>
-        <ZobObject Guid="4002153874">
+        <ZobObject Guid="4002087287">
             <Var Name="Name" value="rock2" />
-            <Var Name="Position" value="66.671;-13.697;24.748" />
+            <Var Name="Position" value="66.667;-13.697;24.748" />
             <Var Name="Rotation" value="-179.880;86.016;-179.873" />
             <Var Name="Scale" value="10.000;15.000;10.000" />
             <Behaviors>
-                <Behavior Type="Mesh" Guid="2007236531">
+                <Behavior Type="Mesh" Guid="2007829802">
                     <Var Name="File" value="Rock9;/;Rock_9.fbx" />
                     <Var Name="Cull mode" value="Clockwise" />
                     <Var Name="Lighting" value="Gouraud" />
@@ -221,13 +223,13 @@
                 </Behavior>
             </Behaviors>
         </ZobObject>
-        <ZobObject Guid="4002046102">
+        <ZobObject Guid="4002725502">
             <Var Name="Name" value="rock3" />
             <Var Name="Position" value="25.794;11.506;29.206" />
             <Var Name="Rotation" value="-119.415;0.000;0.000" />
             <Var Name="Scale" value="20.000;10.000;10.000" />
             <Behaviors>
-                <Behavior Type="Mesh" Guid="2007624131">
+                <Behavior Type="Mesh" Guid="2007187876">
                     <Var Name="File" value="Rock9;/;Rock_9.fbx" />
                     <Var Name="Cull mode" value="Clockwise" />
                     <Var Name="Lighting" value="Gouraud" />
@@ -236,13 +238,13 @@
                 </Behavior>
             </Behaviors>
         </ZobObject>
-        <ZobObject Guid="4002489816">
+        <ZobObject Guid="4002985906">
             <Var Name="Name" value="rock4" />
             <Var Name="Position" value="-1.018;-0.399;-22.825" />
             <Var Name="Rotation" value="89.926;29.288;100.567" />
             <Var Name="Scale" value="10.000;5.000;10.000" />
             <Behaviors>
-                <Behavior Type="Mesh" Guid="2007666891">
+                <Behavior Type="Mesh" Guid="2007527001">
                     <Var Name="File" value="Rock9;/;Rock_9.fbx" />
                     <Var Name="Cull mode" value="Clockwise" />
                     <Var Name="Lighting" value="Gouraud" />
@@ -251,13 +253,13 @@
                 </Behavior>
             </Behaviors>
         </ZobObject>
-        <ZobObject Guid="4002889341">
+        <ZobObject Guid="4002684125">
             <Var Name="Name" value="rock5" />
             <Var Name="Position" value="-2.021;20.375;17.355" />
             <Var Name="Rotation" value="90.000;0.000;0.000" />
             <Var Name="Scale" value="10.000;10.000;10.000" />
             <Behaviors>
-                <Behavior Type="Mesh" Guid="2007966531">
+                <Behavior Type="Mesh" Guid="2007389864">
                     <Var Name="File" value="Rock9;/;Rock_9.fbx" />
                     <Var Name="Cull mode" value="Clockwise" />
                     <Var Name="Lighting" value="Gouraud" />
@@ -266,13 +268,13 @@
                 </Behavior>
             </Behaviors>
         </ZobObject>
-        <ZobObject Guid="4002387781">
+        <ZobObject Guid="4002855155">
             <Var Name="Name" value="rock6" />
-            <Var Name="Position" value="-0.306;11.698;-21.073" />
+            <Var Name="Position" value="-0.306;11.698;-21.070" />
             <Var Name="Rotation" value="0.000;0.000;-36.166" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
             <Behaviors>
-                <Behavior Type="Mesh" Guid="2007666531">
+                <Behavior Type="Mesh" Guid="2007274504">
                     <Var Name="File" value="TreeTrunk;/;tree_trunk.FBX" />
                     <Var Name="Cull mode" value="Clockwise" />
                     <Var Name="Lighting" value="Gouraud" />
@@ -281,13 +283,13 @@
                 </Behavior>
             </Behaviors>
         </ZobObject>
-        <ZobObject Guid="4002701738">
+        <ZobObject Guid="4002309941">
             <Var Name="Name" value="mountain_canyon_01.fbx" />
             <Var Name="Position" value="-130.972;-3.785;-113.842" />
             <Var Name="Rotation" value="-0.001;49.683;-2.796" />
             <Var Name="Scale" value="7.000;7.000;12.000" />
             <Behaviors>
-                <Behavior Type="Mesh" Guid="2007666531">
+                <Behavior Type="Mesh" Guid="2007670531">
                     <Var Name="File" value="Canyon;mountain_canyon/;mountain_canyon_01.fbx" />
                     <Var Name="Cull mode" value="Clockwise" />
                     <Var Name="Lighting" value="Gouraud" />
@@ -297,13 +299,13 @@
             </Behaviors>
         </ZobObject>
     </ZobObject>
-    <ZobObject Guid="4002156943">
+    <ZobObject Guid="4002446387">
         <Var Name="Name" value="road2_p_ground" />
         <Var Name="Position" value="0.000;0.000;0.000" />
         <Var Name="Rotation" value="0.000;0.000;0.000" />
         <Var Name="Scale" value="1.000;1.000;1.000" />
         <Behaviors>
-            <Behavior Type="PhysicMesh" Guid="2007386991">
+            <Behavior Type="PhysicMesh" Guid="2007475591">
                 <Var Name="Layers" value="1" />
                 <Var Name="Trigger" value="True" />
                 <Var Name="Local position" value="0.000;0.000;0.000" />
@@ -312,13 +314,13 @@
             </Behavior>
         </Behaviors>
     </ZobObject>
-    <ZobObject Guid="1538299484">
+    <ZobObject Guid="4002880437">
         <Var Name="Name" value="road2_p_leftWall" />
         <Var Name="Position" value="0.000;0.000;0.000" />
         <Var Name="Rotation" value="0.000;0.000;0.000" />
         <Var Name="Scale" value="1.000;1.000;1.000" />
         <Behaviors>
-            <Behavior Type="PhysicMesh" Guid="2007733355">
+            <Behavior Type="PhysicMesh" Guid="2007423251">
                 <Var Name="Layers" value="2" />
                 <Var Name="Trigger" value="True" />
                 <Var Name="Local position" value="0.000;0.000;0.000" />
@@ -327,13 +329,13 @@
             </Behavior>
         </Behaviors>
     </ZobObject>
-    <ZobObject Guid="4002880834">
+    <ZobObject Guid="4002092666">
         <Var Name="Name" value="road2_p_rightWall" />
         <Var Name="Position" value="0.000;0.000;0.000" />
         <Var Name="Rotation" value="0.000;0.000;0.000" />
         <Var Name="Scale" value="1.000;1.000;1.000" />
         <Behaviors>
-            <Behavior Type="PhysicMesh" Guid="2007891861">
+            <Behavior Type="PhysicMesh" Guid="2007911394">
                 <Var Name="Layers" value="2" />
                 <Var Name="Trigger" value="True" />
                 <Var Name="Local position" value="0.000;0.000;0.000" />
@@ -342,26 +344,26 @@
             </Behavior>
         </Behaviors>
     </ZobObject>
-    <ZobObject Guid="1538282279">
+    <ZobObject Guid="4002065559">
         <Var Name="Name" value="buildings" />
-        <Var Name="Position" value="91.378;0.954;-110.778" />
+        <Var Name="Position" value="91.375;0.954;-110.778" />
         <Var Name="Rotation" value="0.000;53.583;0.000" />
         <Var Name="Scale" value="1.000;1.000;1.000" />
         <Behaviors />
-        <ZobObject Guid="4002187098">
+        <ZobObject Guid="4002436495">
             <Var Name="Name" value="building_2" />
-            <Var Name="Position" value="-112.241;-10.000;-45.478" />
+            <Var Name="Position" value="-112.228;-10.000;-45.472" />
             <Var Name="Rotation" value="0.000;35.000;0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
             <Behaviors />
         </ZobObject>
-        <ZobObject Guid="2944421685">
+        <ZobObject Guid="4002193509">
             <Var Name="Name" value="building_3" />
-            <Var Name="Position" value="-81.516;-10.000;-1.297" />
+            <Var Name="Position" value="-81.504;-10.000;-1.293" />
             <Var Name="Rotation" value="0.000;35.000;0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
             <Behaviors>
-                <Behavior Type="Mesh" Guid="2007555531">
+                <Behavior Type="Mesh" Guid="2007681882">
                     <Var Name="File" value="building1;/;building_1.obj" />
                     <Var Name="Cull mode" value="Clockwise" />
                     <Var Name="Lighting" value="Phong" />
@@ -370,13 +372,13 @@
                 </Behavior>
             </Behaviors>
         </ZobObject>
-        <ZobObject Guid="4002626852">
+        <ZobObject Guid="4002209421">
             <Var Name="Name" value="building_4" />
-            <Var Name="Position" value="-57.159;-10.000;25.668" />
+            <Var Name="Position" value="-57.147;-10.000;25.663" />
             <Var Name="Rotation" value="0.000;35.000;0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
             <Behaviors>
-                <Behavior Type="Mesh" Guid="2007525531">
+                <Behavior Type="Mesh" Guid="2007444512">
                     <Var Name="File" value="building1;/;building_1.obj" />
                     <Var Name="Cull mode" value="Clockwise" />
                     <Var Name="Lighting" value="Phong" />
@@ -385,13 +387,13 @@
                 </Behavior>
             </Behaviors>
         </ZobObject>
-        <ZobObject Guid="4002642935">
+        <ZobObject Guid="4002124052">
             <Var Name="Name" value="skyscraper.FBX" />
-            <Var Name="Position" value="-126.658;-0.577;37.858" />
+            <Var Name="Position" value="-126.648;-0.577;37.858" />
             <Var Name="Rotation" value="0.000;53.584;0.000" />
             <Var Name="Scale" value="0.280;0.280;0.280" />
             <Behaviors>
-                <Behavior Type="Mesh" Guid="2007554531">
+                <Behavior Type="Mesh" Guid="2007559772">
                     <Var Name="File" value="SkySkraper;/;skyscraper.FBX" />
                     <Var Name="Cull mode" value="Clockwise" />
                     <Var Name="Lighting" value="Phong" />
@@ -401,13 +403,13 @@
             </Behaviors>
         </ZobObject>
     </ZobObject>
-    <ZobObject Guid="1732911281">
+    <ZobObject Guid="4002214304">
         <Var Name="Name" value="free_car_1.obj" />
         <Var Name="Position" value="-22.834;-1.272;9.339" />
         <Var Name="Rotation" value="179.947;-69.824;-179.962" />
         <Var Name="Scale" value="1.000;1.000;1.000" />
         <Behaviors>
-            <Behavior Type="Mesh" Guid="2007854791">
+            <Behavior Type="Mesh" Guid="2007722892">
                 <Var Name="File" value="Free_Car_1_Obj;_cars/Free_Car_1_Obj/;free_car_1.obj" />
                 <Var Name="Cull mode" value="Clockwise" />
                 <Var Name="Lighting" value="Phong" />
@@ -416,70 +418,78 @@
             </Behavior>
         </Behaviors>
     </ZobObject>
-    <ZobObject Guid="4002259267">
+    <ZobObject Guid="4002493858">
         <Var Name="Name" value="some_lights" />
         <Var Name="Position" value="0.000;0.000;0.000" />
         <Var Name="Rotation" value="0.000;0.000;0.000" />
         <Var Name="Scale" value="1.000;1.000;1.000" />
         <Behaviors />
-        <ZobObject Guid="2004819301" Type="Light">
+        <ZobObject Guid="4004658964">
             <Var Name="Name" value="Light_5" />
             <Var Name="Position" value="-24.000;10.000;9.000" />
             <Var Name="Rotation" value="90.000;0.000;0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
+            <Var Name="Color" value="1.000;0.000;1.000" />
+            <Var Name="Intensity" value="2.000" />
+            <Var Name="Distance" value="30.000" />
+            <Var Name="SpotAngle" value="0.523" />
+            <Var Name="Active" value="True" />
+            <Var Name="Type" value="Spot" />
             <Behaviors />
-            <Color r="255" g="0" b="255" />
-            <Intensity>2.00</Intensity>
-            <FallOffDistance>30.00</FallOffDistance>
-            <Type>Spot</Type>
         </ZobObject>
-        <ZobObject Guid="2004523591" Type="Light">
+        <ZobObject Guid="4004272706">
             <Var Name="Name" value="Light_4" />
             <Var Name="Position" value="-40.000;10.000;3.000" />
             <Var Name="Rotation" value="90.000;0.000;0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
+            <Var Name="Color" value="0.000;0.000;1.000" />
+            <Var Name="Intensity" value="2.000" />
+            <Var Name="Distance" value="30.000" />
+            <Var Name="SpotAngle" value="0.523" />
+            <Var Name="Active" value="True" />
+            <Var Name="Type" value="Spot" />
             <Behaviors />
-            <Color r="0" g="0" b="255" />
-            <Intensity>2.00</Intensity>
-            <FallOffDistance>30.00</FallOffDistance>
-            <Type>Spot</Type>
         </ZobObject>
-        <ZobObject Guid="2004776852" Type="Light">
+        <ZobObject Guid="4004231746">
             <Var Name="Name" value="Light_3" />
             <Var Name="Position" value="-10.000;10.000;9.000" />
             <Var Name="Rotation" value="90.000;0.000;0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
+            <Var Name="Color" value="0.000;1.000;0.000" />
+            <Var Name="Intensity" value="2.000" />
+            <Var Name="Distance" value="30.000" />
+            <Var Name="SpotAngle" value="0.523" />
+            <Var Name="Active" value="True" />
+            <Var Name="Type" value="Spot" />
             <Behaviors />
-            <Color r="0" g="255" b="0" />
-            <Intensity>2.00</Intensity>
-            <FallOffDistance>30.00</FallOffDistance>
-            <Type>Spot</Type>
         </ZobObject>
-        <ZobObject Guid="2004914922" Type="Light">
+        <ZobObject Guid="4004238361">
             <Var Name="Name" value="Light_2" />
             <Var Name="Position" value="5.000;10.000;8.000" />
             <Var Name="Rotation" value="90.000;0.000;0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
+            <Var Name="Color" value="1.000;0.000;0.000" />
+            <Var Name="Intensity" value="2.000" />
+            <Var Name="Distance" value="30.000" />
+            <Var Name="SpotAngle" value="0.523" />
+            <Var Name="Active" value="True" />
+            <Var Name="Type" value="Spot" />
             <Behaviors />
-            <Color r="255" g="0" b="0" />
-            <Intensity>2.00</Intensity>
-            <FallOffDistance>30.00</FallOffDistance>
-            <Type>Spot</Type>
         </ZobObject>
     </ZobObject>
-    <ZobObject Guid="4002552896">
+    <ZobObject Guid="4002621068">
         <Var Name="Name" value="road_sections" />
         <Var Name="Position" value="0.000;0.000;0.000" />
         <Var Name="Rotation" value="0.000;0.000;0.000" />
         <Var Name="Scale" value="1.000;1.000;1.000" />
         <Behaviors />
-        <ZobObject Guid="4002052194">
+        <ZobObject Guid="4002976451">
             <Var Name="Name" value="road01" />
             <Var Name="Position" value="0.000;0.000;0.000" />
             <Var Name="Rotation" value="0.000;0.000;0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
             <Behaviors>
-                <Behavior Type="Mesh" Guid="2007123450">
+                <Behavior Type="Mesh" Guid="2007188743">
                     <Var Name="File" value="road_01;/;road_block_01.obj" />
                     <Var Name="Cull mode" value="Clockwise" />
                     <Var Name="Lighting" value="Phong" />
@@ -488,13 +498,13 @@
                 </Behavior>
             </Behaviors>
         </ZobObject>
-        <ZobObject Guid="4002693938">
+        <ZobObject Guid="4002167836">
             <Var Name="Name" value="road02" />
             <Var Name="Position" value="0.000;0.000;0.000" />
             <Var Name="Rotation" value="0.000;0.000;0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
             <Behaviors>
-                <Behavior Type="Mesh" Guid="2007123451">
+                <Behavior Type="Mesh" Guid="2007587327">
                     <Var Name="File" value="road_02;/;road_block_02.obj" />
                     <Var Name="Cull mode" value="Clockwise" />
                     <Var Name="Lighting" value="Phong" />
@@ -503,221 +513,110 @@
                 </Behavior>
             </Behaviors>
         </ZobObject>
-    </ZobObject>
-    <ZobObject Guid="4002693555">
-        <Var Name="Name" value="road02" />
-        <Var Name="Position" value="0.000;0.000;0.000" />
-        <Var Name="Rotation" value="0.000;0.000;0.000" />
-        <Var Name="Scale" value="1.000;1.000;1.000" />
-        <Behaviors>
-            <Behavior Type="Mesh" Guid="2007123452">
-                <Var Name="File" value="road_03;/;road_block_03.obj" />
-                <Var Name="Cull mode" value="Clockwise" />
-                <Var Name="Lighting" value="Phong" />
-                <Var Name="ZBuffered" value="True" />
-                <Var Name="Transparent" value="False" />
-            </Behavior>
-        </Behaviors>
-    </ZobObject>
-    <ZobObject Guid="4002967997">
-        <Var Name="Name" value="road04" />
-        <Var Name="Position" value="0.000;0.000;0.000" />
-        <Var Name="Rotation" value="0.000;0.000;0.000" />
-        <Var Name="Scale" value="1.000;1.000;1.000" />
-        <Behaviors>
-            <Behavior Type="Mesh" Guid="2007123453">
-                <Var Name="File" value="road_04;/;road_block_04.obj" />
-                <Var Name="Cull mode" value="Clockwise" />
-                <Var Name="Lighting" value="Phong" />
-                <Var Name="ZBuffered" value="True" />
-                <Var Name="Transparent" value="False" />
-            </Behavior>
-        </Behaviors>
-    </ZobObject>
-    <ZobObject Guid="4002566753">
-        <Var Name="Name" value="road05" />
-        <Var Name="Position" value="0.000;0.000;0.000" />
-        <Var Name="Rotation" value="0.000;0.000;0.000" />
-        <Var Name="Scale" value="1.000;1.000;1.000" />
-        <Behaviors>
-            <Behavior Type="Mesh" Guid="2007123454">
-                <Var Name="File" value="road_05;/;road_block_05.obj" />
-                <Var Name="Cull mode" value="Clockwise" />
-                <Var Name="Lighting" value="Phong" />
-                <Var Name="ZBuffered" value="True" />
-                <Var Name="Transparent" value="False" />
-            </Behavior>
-        </Behaviors>
-    </ZobObject>
-    <ZobObject Guid="1538144528">
-        <Var Name="Name" value="road06" />
-        <Var Name="Position" value="0.000;0.000;0.000" />
-        <Var Name="Rotation" value="0.000;0.000;0.000" />
-        <Var Name="Scale" value="1.000;1.000;1.000" />
-        <Behaviors>
-            <Behavior Type="Mesh" Guid="2007123455">
-                <Var Name="File" value="road_06;/;road_block_06.obj" />
-                <Var Name="Cull mode" value="Clockwise" />
-                <Var Name="Lighting" value="Phong" />
-                <Var Name="ZBuffered" value="True" />
-                <Var Name="Transparent" value="False" />
-            </Behavior>
-        </Behaviors>
-    </ZobObject>
-    <ZobObject Guid="4002533616">
-        <Var Name="Name" value="road07" />
-        <Var Name="Position" value="0.000;0.000;0.000" />
-        <Var Name="Rotation" value="0.000;0.000;0.000" />
-        <Var Name="Scale" value="1.000;1.000;1.000" />
-        <Behaviors>
-            <Behavior Type="Mesh" Guid="2007123456">
-                <Var Name="File" value="road_07;/;road_block_07.obj" />
-                <Var Name="Cull mode" value="Clockwise" />
-                <Var Name="Lighting" value="Phong" />
-                <Var Name="ZBuffered" value="True" />
-                <Var Name="Transparent" value="False" />
-            </Behavior>
-        </Behaviors>
-    </ZobObject>
-    <ZobObject Guid="4002528235">
-        <Var Name="Name" value="road08" />
-        <Var Name="Position" value="0.000;0.000;0.000" />
-        <Var Name="Rotation" value="0.000;0.000;0.000" />
-        <Var Name="Scale" value="1.000;1.000;1.000" />
-        <Behaviors>
-            <Behavior Type="Mesh" Guid="2007123457">
-                <Var Name="File" value="road_08;/;road_block_08.obj" />
-                <Var Name="Cull mode" value="Clockwise" />
-                <Var Name="Lighting" value="Phong" />
-                <Var Name="ZBuffered" value="True" />
-                <Var Name="Transparent" value="False" />
-            </Behavior>
-        </Behaviors>
-    </ZobObject>
-    <ZobObject Guid="4002268163">
-        <Var Name="Name" value="boat" />
-        <Var Name="Position" value="0.000;-4.256;8.773" />
-        <Var Name="Rotation" value="0.000;0.000;0.000" />
-        <Var Name="Scale" value="1.000;1.000;1.000" />
-        <Behaviors>
-            <Behavior Type="Mesh" Guid="2007123465">
-                <Var Name="File" value="boat;/;boat.obj" />
-                <Var Name="Cull mode" value="Counter clockwise" />
-                <Var Name="Lighting" value="Phong" />
-                <Var Name="ZBuffered" value="True" />
-                <Var Name="Transparent" value="False" />
-            </Behavior>
-        </Behaviors>
-    </ZobObject>
-    <ZobObject Guid="4002192641">
-        <Var Name="Name" value="skybox" />
-        <Var Name="Position" value="0.000;0.000;0.000" />
-        <Var Name="Rotation" value="0.000;0.000;0.000" />
-        <Var Name="Scale" value="1.000;1.000;1.000" />
-        <Behaviors>
-            <Behavior Type="Mesh" Guid="2007123435">
-                <Var Name="File" value="skybox;/;skybox.obj" />
-                <Var Name="Cull mode" value="Counter clockwise" />
-                <Var Name="Lighting" value="None" />
-                <Var Name="ZBuffered" value="True" />
-                <Var Name="Transparent" value="False" />
-            </Behavior>
-        </Behaviors>
-    </ZobObject>
-    <ZobObject Guid="1004025283">
-        <Var Name="Name" value="plane.obj" />
-        <Var Name="Position" value="-37.526;-5.000;-2.609" />
-        <Var Name="Rotation" value="0.000;0.000;0.000" />
-        <Var Name="Scale" value="5.000;5.000;4.000" />
-        <Behaviors>
-            <Behavior Type="Mesh" Guid="2007123657">
-                <Var Name="File" value="plane;/;plane.obj" />
-                <Var Name="Cull mode" value="Clockwise" />
-                <Var Name="Lighting" value="Phong" />
-                <Var Name="ZBuffered" value="True" />
-                <Var Name="Transparent" value="False" />
-            </Behavior>
-        </Behaviors>
-    </ZobObject>
-    <ZobObject Guid="4002579273">
-        <Var Name="Name" value="water.obj" />
-        <Var Name="Position" value="-290.596;-3.900;-348.877" />
-        <Var Name="Rotation" value="0.000;0.000;0.000" />
-        <Var Name="Scale" value="4.000;1.000;4.000" />
-        <Behaviors>
-            <Behavior Type="Mesh" Guid="2007123477">
-                <Var Name="File" value="water;/;water.obj" />
-                <Var Name="Cull mode" value="Clockwise" />
-                <Var Name="Lighting" value="Phong" />
-                <Var Name="ZBuffered" value="True" />
-                <Var Name="Transparent" value="False" />
-            </Behavior>
-        </Behaviors>
-    </ZobObject>
-    <ZobObject Guid="4002112343">
-        <Var Name="Name" value="autres_spots" />
-        <Var Name="Position" value="0.000;0.000;0.000" />
-        <Var Name="Rotation" value="0.000;0.000;0.000" />
-        <Var Name="Scale" value="1.000;1.000;1.000" />
-        <Behaviors />
-        <ZobObject Guid="2004153523" Type="Light">
-            <Var Name="Name" value="Light_7" />
-            <Var Name="Position" value="164.000;10.000;52.000" />
-            <Var Name="Rotation" value="90.000;0.000;0.000" />
+        <ZobObject Guid="4002337858">
+            <Var Name="Name" value="road03" />
+            <Var Name="Position" value="0.000;0.000;0.000" />
+            <Var Name="Rotation" value="0.000;0.000;0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
-            <Behaviors />
-            <Color r="252" g="212" b="64" />
-            <Intensity>5.00</Intensity>
-            <FallOffDistance>20.00</FallOffDistance>
-            <Type>Spot</Type>
+            <Behaviors>
+                <Behavior Type="Mesh" Guid="2007901801">
+                    <Var Name="File" value="road_03;/;road_block_03.obj" />
+                    <Var Name="Cull mode" value="Clockwise" />
+                    <Var Name="Lighting" value="Phong" />
+                    <Var Name="ZBuffered" value="True" />
+                    <Var Name="Transparent" value="False" />
+                </Behavior>
+            </Behaviors>
         </ZobObject>
-        <ZobObject Guid="2004046222" Type="Light">
-            <Var Name="Name" value="Light_8" />
-            <Var Name="Position" value="148.000;10.000;38.000" />
-            <Var Name="Rotation" value="90.000;0.000;0.000" />
+        <ZobObject Guid="4002751942">
+            <Var Name="Name" value="road04" />
+            <Var Name="Position" value="0.000;0.000;0.000" />
+            <Var Name="Rotation" value="0.000;0.000;0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
-            <Behaviors />
-            <Color r="252" g="212" b="64" />
-            <Intensity>5.00</Intensity>
-            <FallOffDistance>20.00</FallOffDistance>
-            <Type>Spot</Type>
+            <Behaviors>
+                <Behavior Type="Mesh" Guid="2007022433">
+                    <Var Name="File" value="road_04;/;road_block_04.obj" />
+                    <Var Name="Cull mode" value="Clockwise" />
+                    <Var Name="Lighting" value="Phong" />
+                    <Var Name="ZBuffered" value="True" />
+                    <Var Name="Transparent" value="False" />
+                </Behavior>
+            </Behaviors>
         </ZobObject>
-        <ZobObject Guid="2004004307" Type="Light">
-            <Var Name="Name" value="Light_10" />
-            <Var Name="Position" value="164.000;10.000;5.000" />
-            <Var Name="Rotation" value="90.000;0.000;0.000" />
+        <ZobObject Guid="4002207721">
+            <Var Name="Name" value="road05" />
+            <Var Name="Position" value="0.000;0.000;0.000" />
+            <Var Name="Rotation" value="0.000;0.000;0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
-            <Behaviors />
-            <Color r="252" g="212" b="64" />
-            <Intensity>5.00</Intensity>
-            <FallOffDistance>20.00</FallOffDistance>
-            <Type>Spot</Type>
+            <Behaviors>
+                <Behavior Type="Mesh" Guid="2007373014">
+                    <Var Name="File" value="road_05;/;road_block_05.obj" />
+                    <Var Name="Cull mode" value="Clockwise" />
+                    <Var Name="Lighting" value="Phong" />
+                    <Var Name="ZBuffered" value="True" />
+                    <Var Name="Transparent" value="False" />
+                </Behavior>
+            </Behaviors>
         </ZobObject>
-        <ZobObject Guid="2004760135" Type="Light">
-            <Var Name="Name" value="Light_9" />
-            <Var Name="Position" value="165.000;10.000;27.000" />
-            <Var Name="Rotation" value="90.000;0.000;0.000" />
+        <ZobObject Guid="4002027959">
+            <Var Name="Name" value="road07" />
+            <Var Name="Position" value="0.000;0.000;0.000" />
+            <Var Name="Rotation" value="0.000;0.000;0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
-            <Behaviors />
-            <Color r="252" g="212" b="64" />
-            <Intensity>5.00</Intensity>
-            <FallOffDistance>20.00</FallOffDistance>
-            <Type>Spot</Type>
+            <Behaviors>
+                <Behavior Type="Mesh" Guid="2007807682">
+                    <Var Name="File" value="road_07;/;road_block_07.obj" />
+                    <Var Name="Cull mode" value="Clockwise" />
+                    <Var Name="Lighting" value="Phong" />
+                    <Var Name="ZBuffered" value="True" />
+                    <Var Name="Transparent" value="False" />
+                </Behavior>
+            </Behaviors>
+        </ZobObject>
+        <ZobObject Guid="4002630381">
+            <Var Name="Name" value="road08" />
+            <Var Name="Position" value="0.000;0.000;0.000" />
+            <Var Name="Rotation" value="0.000;0.000;0.000" />
+            <Var Name="Scale" value="1.000;1.000;1.000" />
+            <Behaviors>
+                <Behavior Type="Mesh" Guid="2007148202">
+                    <Var Name="File" value="road_08;/;road_block_08.obj" />
+                    <Var Name="Cull mode" value="Clockwise" />
+                    <Var Name="Lighting" value="Phong" />
+                    <Var Name="ZBuffered" value="True" />
+                    <Var Name="Transparent" value="False" />
+                </Behavior>
+            </Behaviors>
+        </ZobObject>
+        <ZobObject Guid="4002185738">
+            <Var Name="Name" value="road06" />
+            <Var Name="Position" value="0.000;0.000;0.000" />
+            <Var Name="Rotation" value="0.000;0.000;0.000" />
+            <Var Name="Scale" value="1.000;1.000;1.000" />
+            <Behaviors>
+                <Behavior Type="Mesh" Guid="2007188407">
+                    <Var Name="File" value="road_06;/;road_block_06.obj" />
+                    <Var Name="Cull mode" value="Clockwise" />
+                    <Var Name="Lighting" value="Phong" />
+                    <Var Name="ZBuffered" value="True" />
+                    <Var Name="Transparent" value="False" />
+                </Behavior>
+            </Behaviors>
         </ZobObject>
     </ZobObject>
-    <ZobObject Guid="4002454005">
+    <ZobObject Guid="4002598763">
         <Var Name="Name" value="Dynamic objects" />
         <Var Name="Position" value="0.000;0.000;0.000" />
         <Var Name="Rotation" value="0.000;0.000;0.000" />
         <Var Name="Scale" value="1.000;1.000;1.000" />
         <Behaviors />
-        <ZobObject Guid="4002284659">
+        <ZobObject Guid="4002036655">
             <Var Name="Name" value="BodyTypeBall" />
             <Var Name="Position" value="-2.941;15.350;6.339" />
             <Var Name="Rotation" value="0.000;0.000;0.000" />
             <Var Name="Scale" value="0.050;0.050;0.050" />
             <Behaviors>
-                <Behavior Type="PhysicSphere" Guid="2007413861">
+                <Behavior Type="PhysicSphere" Guid="2007032881">
                     <Var Name="Layers" value="0" />
                     <Var Name="Trigger" value="True" />
                     <Var Name="Local position" value="0.000;0.000;0.000" />
@@ -726,5 +625,124 @@
                 </Behavior>
             </Behaviors>
         </ZobObject>
+    </ZobObject>
+    <ZobObject Guid="4002279056">
+        <Var Name="Name" value="autres_spots" />
+        <Var Name="Position" value="0.000;0.000;0.000" />
+        <Var Name="Rotation" value="0.000;0.000;0.000" />
+        <Var Name="Scale" value="1.000;1.000;1.000" />
+        <Behaviors />
+        <ZobObject Guid="4004449282">
+            <Var Name="Name" value="Light_7" />
+            <Var Name="Position" value="164.000;10.000;52.000" />
+            <Var Name="Rotation" value="90.000;0.000;0.000" />
+            <Var Name="Scale" value="1.000;1.000;1.000" />
+            <Var Name="Color" value="0.988;0.831;0.250" />
+            <Var Name="Intensity" value="5.000" />
+            <Var Name="Distance" value="20.000" />
+            <Var Name="SpotAngle" value="0.523" />
+            <Var Name="Active" value="True" />
+            <Var Name="Type" value="Spot" />
+            <Behaviors />
+        </ZobObject>
+        <ZobObject Guid="4004852728">
+            <Var Name="Name" value="Light_8" />
+            <Var Name="Position" value="148.000;10.000;38.000" />
+            <Var Name="Rotation" value="90.000;0.000;0.000" />
+            <Var Name="Scale" value="1.000;1.000;1.000" />
+            <Var Name="Color" value="0.988;0.831;0.250" />
+            <Var Name="Intensity" value="5.000" />
+            <Var Name="Distance" value="20.000" />
+            <Var Name="SpotAngle" value="0.523" />
+            <Var Name="Active" value="True" />
+            <Var Name="Type" value="Spot" />
+            <Behaviors />
+        </ZobObject>
+        <ZobObject Guid="4004138209">
+            <Var Name="Name" value="Light_9" />
+            <Var Name="Position" value="165.000;10.000;27.000" />
+            <Var Name="Rotation" value="90.000;0.000;0.000" />
+            <Var Name="Scale" value="1.000;1.000;1.000" />
+            <Var Name="Color" value="0.988;0.831;0.250" />
+            <Var Name="Intensity" value="5.000" />
+            <Var Name="Distance" value="20.000" />
+            <Var Name="SpotAngle" value="0.523" />
+            <Var Name="Active" value="True" />
+            <Var Name="Type" value="Spot" />
+            <Behaviors />
+        </ZobObject>
+    </ZobObject>
+    <ZobObject Guid="4002040134">
+        <Var Name="Name" value="water.obj" />
+        <Var Name="Position" value="-290.596;-3.900;-348.877" />
+        <Var Name="Rotation" value="0.000;0.000;0.000" />
+        <Var Name="Scale" value="4.000;1.000;4.000" />
+        <Behaviors>
+            <Behavior Type="Mesh" Guid="2007418097">
+                <Var Name="File" value="water;/;water.obj" />
+                <Var Name="Cull mode" value="Clockwise" />
+                <Var Name="Lighting" value="Phong" />
+                <Var Name="ZBuffered" value="True" />
+                <Var Name="Transparent" value="False" />
+            </Behavior>
+        </Behaviors>
+    </ZobObject>
+    <ZobObject Guid="4002835971">
+        <Var Name="Name" value="plane.obj" />
+        <Var Name="Position" value="-37.526;-5.000;-2.609" />
+        <Var Name="Rotation" value="0.000;0.000;0.000" />
+        <Var Name="Scale" value="5.000;5.000;4.000" />
+        <Behaviors>
+            <Behavior Type="Mesh" Guid="2007401232">
+                <Var Name="File" value="plane;/;plane.obj" />
+                <Var Name="Cull mode" value="Clockwise" />
+                <Var Name="Lighting" value="Phong" />
+                <Var Name="ZBuffered" value="True" />
+                <Var Name="Transparent" value="False" />
+            </Behavior>
+        </Behaviors>
+    </ZobObject>
+    <ZobObject Guid="4002509571">
+        <Var Name="Name" value="boat" />
+        <Var Name="Position" value="0.000;-4.256;8.773" />
+        <Var Name="Rotation" value="0.000;0.000;0.000" />
+        <Var Name="Scale" value="1.000;1.000;1.000" />
+        <Behaviors>
+            <Behavior Type="Mesh" Guid="2007989021">
+                <Var Name="File" value="boat;/;boat.obj" />
+                <Var Name="Cull mode" value="Counter clockwise" />
+                <Var Name="Lighting" value="Phong" />
+                <Var Name="ZBuffered" value="True" />
+                <Var Name="Transparent" value="False" />
+            </Behavior>
+        </Behaviors>
+    </ZobObject>
+    <ZobObject Guid="4002703371">
+        <Var Name="Name" value="skybox" />
+        <Var Name="Position" value="0.000;0.000;0.000" />
+        <Var Name="Rotation" value="0.000;0.000;0.000" />
+        <Var Name="Scale" value="1.000;1.000;1.000" />
+        <Behaviors>
+            <Behavior Type="Mesh" Guid="2007982066">
+                <Var Name="File" value="skybox;/;skybox.obj" />
+                <Var Name="Cull mode" value="Counter clockwise" />
+                <Var Name="Lighting" value="None" />
+                <Var Name="ZBuffered" value="True" />
+                <Var Name="Transparent" value="False" />
+            </Behavior>
+        </Behaviors>
+    </ZobObject>
+    <ZobObject Guid="4004889341">
+        <Var Name="Name" value="Light_10" />
+        <Var Name="Position" value="0.000;50.000;0.000" />
+        <Var Name="Rotation" value="0.000;0.000;0.000" />
+        <Var Name="Scale" value="1.000;1.000;1.000" />
+        <Var Name="Color" value="1.000;0.000;0.000" />
+        <Var Name="Intensity" value="5.000" />
+        <Var Name="Distance" value="100.000" />
+        <Var Name="SpotAngle" value="0.523" />
+        <Var Name="Active" value="True" />
+        <Var Name="Type" value="Spot" />
+        <Behaviors />
     </ZobObject>
 </Scene>

@@ -63,6 +63,7 @@ public:
 	ZobVector3							GetWorldOrientation() const;
 	void								SetWorldOrientation(float x, float y, float z);
 	Vector3								GetWorldScale() const;
+	void								SetWorldScale(float x, float y, float z);
 	//Local
 	Transform							GetLocalTransform() const { return Transform(m_localTransform); };
 	void								SetLocalTransform(Transform t);

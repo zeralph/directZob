@@ -90,22 +90,23 @@ void SceneLoader::LoadZobObject(TiXmlElement* node, ZobObject* parent, const std
 		return;
 	}
 	std::string id = cid;
-	if (!type || strcmp(type, XML_ATTR_TYPE_MESH) == 0)
+	ZOBGUID zid = ZOBGUID(id);
+	if (zid.GetSubType() == ZOBGUID::subtype_zobOject)
 	{
 		zob = new ZobObject(id, node, parent, factoryPath);
 	}
-	else if( strcmp(type, XML_ATTR_TYPE_CAMERA) == 0)
+	else if (zid.GetSubType() == ZOBGUID::subtype_zobCamera)
 	{
 		Camera* c = new Camera(id, node, parent);
 		DirectZob::GetInstance()->GetCameraManager()->AddCamera(c);
 		zob = c;
 	}
-	else if( strcmp(type, XML_ATTR_TYPE_SPRITE) == 0)
+	else if (zid.GetSubType() == ZOBGUID::subtype_sprite)
 	{
 		ZobSprite* s = new ZobSprite(id, node, parent);
 		zob = s;
 	}
-	else if( strcmp(type, XML_ATTR_TYPE_LIGHT) == 0)
+	else if (zid.GetSubType() == ZOBGUID::subtype_zobLight)
 	{
 		Light* l = new Light(id, node, parent);
 		DirectZob::GetInstance()->GetLightManager()->AddLight(l);

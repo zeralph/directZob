@@ -81,6 +81,14 @@ void ZobPhysicComponent::SetWorldTransform(Transform t)
 	m_editorLocalRotation = GetLocalOrientation();
 }
 
+void ZobPhysicComponent::SetWorldScale(float x, float y, float z)
+{
+	Vector3 ps = GetParentWorldScale();
+	m_localScale.x = x / ps.x;
+	m_localScale.y = y / ps.y;
+	m_localScale.z = z / ps.z;
+}
+
 Vector3 ZobPhysicComponent::GetWorldScale() const
 {
 	Vector3 ps = GetParentWorldScale();

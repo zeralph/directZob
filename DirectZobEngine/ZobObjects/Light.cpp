@@ -14,50 +14,19 @@ Light::Light(std::string &name, eLightType type, ZobVector3 color, float intensi
 	m_spotAngleRad = DEG_TO_RAD(30.0f);
 	m_inFrtustrum = false;
 	NewLightConfiguration();
+	InitVariablesExposer();
 }
 
 Light::Light(std::string id, TiXmlElement* node, ZobObject* parent)
 	:ZobObject(id, node, parent)
 {
-		float x, y, z;
-		TiXmlElement* f = node->FirstChildElement(XML_ELEMENT_LIGHT_COLOR);
-		if (f)
-		{
-			x = atof(f->Attribute("r"));
-			y = atof(f->Attribute("g"));
-			z = atof(f->Attribute("b"));
-			m_color = ZobVector3(x/255.0f, y/255.0f, z/255.0f);
-		}
-		f = node->FirstChildElement(XML_ELEMENT_LIGHT_INTENSITY);
-		float intensity = f ? atof(f->GetText()) : 1.0f;
-		f = node->FirstChildElement(XML_ELEMENT_LIGHT_FALLOFF);
-		float falloff = f ? atof(f->GetText()) : 1.0f;
-		f = node->FirstChildElement(XML_ATTR_TYPE);
-		std::string type  = std::string(f->GetText()?f->GetText() :"");
-		m_lightType = eLightType_point;
-		if (f)
-		{
-			if (type == XML_ELEMENT_LIGHT_TYPE_POINT)
-			{
-				m_lightType = eLightType_point;
-			}
-			else if(type == XML_ELEMENT_LIGHT_TYPE_SPOT)
-			{
-				m_lightType = eLightType_spot;
-			}
-			else if (type == XML_ELEMENT_LIGHT_TYPE_DIRECTIONAL)
-			{
-				m_lightType = eLightType_directional;
-			}
-			else
-			{
-				//log a warn ...
-			}
-		}
-		m_distance = falloff;
-		m_intensity = intensity;
-		m_active = true;
-		m_spotAngleRad = DEG_TO_RAD(30.0f);
+		m_distance = 0;
+		m_intensity = 0;
+		m_active = false;
+		m_spotAngleRad = 0;
+		InitVariablesExposer();
+		m_varExposer->ReadNode(node);
+
 }
 
 Light::~Light()
@@ -66,6 +35,19 @@ Light::~Light()
 	DirectZob::AddIndent();
 	DirectZob::GetInstance()->GetLightManager()->RemoveLight(this);
 	DirectZob::RemoveIndent();
+}
+
+void Light::InitVariablesExposer()
+{
+	m_varExposer->WrapVariable<ZobVector3>("Color", &m_color, NULL, false, true);
+	m_varExposer->WrapVariable<float>("Intensity", &m_intensity, NULL, false, true);
+	m_varExposer->WrapVariable<float>("Distance", &m_distance, NULL, false, true);
+	m_varExposer->WrapVariable<float>("SpotAngle", &m_spotAngleRad, NULL, false, true);
+	m_varExposer->WrapVariable<bool>("Active", &m_active, NULL, false, true);
+	m_varExposer->WrapVariable<bool>("InFrustrum", &m_inFrtustrum, NULL, true, false);
+	eLightType types[3] = { eLightType::eLightType_point, eLightType::eLightType_directional, eLightType::eLightType_spot };
+	const char* typeStr[3] = { "Point", "Directional", "Spot"};
+	m_varExposer->WrapEnum<eLightType>("Type", &m_lightType, 3, types, typeStr, NULL, false, true);
 }
 
 void Light::NewLightConfiguration()
@@ -198,49 +180,4 @@ void Light::DrawGizmos(const Camera* camera, Engine* engine)
 		drawPointGizmos(camera, engine);
 		break;
 	}
-}
-
-TiXmlNode* Light::SaveUnderNode(TiXmlNode* node)
-{
-	char tmpBuffer[256];
-	TiXmlNode* n = ZobObject::SaveUnderNode(node);
-	TiXmlElement* ne = (TiXmlElement*)n;
-	ne->SetAttribute(XML_ATTR_TYPE, XML_ATTR_TYPE_LIGHT);
-	ZobVector3 c = GetColor();
-	int r = (int)(c.x * 255.0f);
-	int g = (int)(c.y * 255.0f);
-	int b = (int)(c.z * 255.0f);
-	TiXmlElement color = TiXmlElement(XML_ELEMENT_LIGHT_COLOR);
-	color.SetAttribute("r", r);
-	color.SetAttribute("g", g);
-	color.SetAttribute("b", b);
-	ne->InsertEndChild(color);
-	TiXmlText t("");
-	TiXmlElement intensity = TiXmlElement(XML_ELEMENT_LIGHT_INTENSITY);
-	_snprintf_s(tmpBuffer, 256, "%.2f", GetIntensity());
-	t.SetValue(tmpBuffer);
-	intensity.InsertEndChild(t);
-	ne->InsertEndChild(intensity);
-	TiXmlElement fallOff = TiXmlElement(XML_ELEMENT_LIGHT_FALLOFF);
-	_snprintf_s(tmpBuffer, 256, "%.2f", GetFallOffDistance());
-	t.SetValue(tmpBuffer);
-	fallOff.InsertEndChild(t);
-	ne->InsertEndChild(fallOff);
-	switch (m_lightType)
-	{
-	case eLightType_directional:
-		t.SetValue(XML_ELEMENT_LIGHT_TYPE_DIRECTIONAL);
-		break;
-	case eLightType_spot:
-		t.SetValue(XML_ELEMENT_LIGHT_TYPE_SPOT);
-		break;
-	case eLightType_point:
-	default:
-		t.SetValue(XML_ELEMENT_LIGHT_TYPE_POINT);
-		break;
-	}
-	TiXmlElement lightType = TiXmlElement(XML_ATTR_TYPE);
-	lightType.InsertEndChild(t);
-	ne->InsertEndChild(lightType);
-	return n;
 }

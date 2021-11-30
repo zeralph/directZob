@@ -63,8 +63,7 @@ namespace CLI {
 	{
 	public:
 		ZobControlVector3(const ZobVariablesExposer::wrapperData& w);
-		void UpdateZobControl();
-		void UpdateZobControlInternal();
+		void UpdateControlInternal() override;
 		TextBox^ txt_X;
 		TextBox^ txt_Y;
 		TextBox^ txt_Z;
@@ -87,6 +86,7 @@ namespace CLI {
 	public:
 		ZobControlBool(const ZobVariablesExposer::wrapperData& w);
 		CheckBox^ _checkBox;
+		bool _checked;
 	protected:
 		void OnValueChanged(Object^ sender, EventArgs^ e) override;
 		void UpdateControlInternal() override;

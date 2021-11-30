@@ -20,7 +20,6 @@ public:
 	~Light() override;
 
 	void				DrawGizmos(const Camera* camera, Engine* engine) override;
-	TiXmlNode*			SaveUnderNode(TiXmlNode* node) override;
 	void				Update(float dt) override;
 	const ZobVector3*	GetColor() const { return &m_color; }
 	const float			GetFallOffDistance() const { return m_distance; }
@@ -37,7 +36,8 @@ public:
 	void				SetType(eLightType t) { m_lightType=t; }
 	void				SetActive(bool b) { m_active = b; }
 	
-
+protected:
+	void				InitVariablesExposer() override;
 	
 private:
 
