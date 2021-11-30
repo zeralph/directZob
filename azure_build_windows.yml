@@ -61,6 +61,11 @@ steps:
 - script: 'DirectZobEngine_unittests.exe --gtest_output="xml:DirectZobEngine_unittests.xml"'
   workingDirectory: ./DirectZobEngine_unittests/x64/Release/
   displayName: 'Run Unit Tests (GTest)'
+
+- script: smokeTestWindows.bat
+  workingDirectory: .
+  displayName: 'Smoke Test'
+  
 - task: PublishTestResults@2
   name: 'PublishDirectZobTests'
   inputs:
@@ -71,6 +76,3 @@ steps:
     failTaskOnFailedTests: true
     testRunTitle: 'GTest Results'
 
-- script: smokeTestWindows.bat
-  workingDirectory: .
-  displayName: 'Smoke Test'
