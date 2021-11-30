@@ -125,10 +125,11 @@ TEST(ZobObject, chain_all)
 	z3->SetLocalRotation(8.f, 5.f, 7.f);
 	z3->SetLocalScale(2.f, 2.f, 5.f);
 	ZobVector3 v = z3->GetWorldPosition();
-	EXPECT_EQ(v, ZobVector3(-11.5383844f, 14.8799629f, -6.68275261f));
+	EXPECT_EQ(v, ZobVector3(-11.5383844f, 14.8799629f, -6.68275261f)) << "World position error : " << v.ToString();
 	v = z3->GetWorldRotation();
-	EXPECT_EQ(v, ZobVector3(43.886f, 62.586f, -11.887f));
-	EXPECT_EQ(z3->GetWorldScale(), ZobVector3(0.720, 0.8, 6));
+	EXPECT_EQ(v, ZobVector3(43.886f, 62.586f, -11.887f)) << "World rotation error : " << v.ToString();
+	v = z3->GetWorldScale();
+	EXPECT_EQ(v, ZobVector3(0.720, 0.8, 6)) << "World scale error : " << v.ToString();
 
 	delete(z3);
 	delete(z2);

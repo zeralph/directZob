@@ -3,6 +3,8 @@
 #define OPTIK_PROFILING 
 #undef None
 #include "../dependencies/optick/include/optick.h"
+#include "tinyxml.h"
+#include "Misc/ZobXmlHelper.h"
 #include "DirectZob.h"
 #include <fstream>
 
@@ -93,7 +95,6 @@ int main(int argc, char* argv[])
 #ifdef WINDOWS
 	::SetUnhandledExceptionFilter(CrashHandler);
 #endif
-	bool bBench = false;
 	bool btest = false;
 	std::string scenePath = "";
 	int width = 640;
@@ -130,7 +131,6 @@ int main(int argc, char* argv[])
 		}
 		else if(std::string(argv[i]) == "--bench")
 		{
-			bBench = true;
 		}
 		else if (std::string(argv[i]) == "--width")
 		{
@@ -270,20 +270,6 @@ int main(int argc, char* argv[])
 			m_directZob.StopPhysic(true);
 			DirectZob::GetInstance()->GetZobObjectManager()->RestoreTransforms();
 		}
-		if (bBench)
-		{
-			//if (m_directZob.GetCameraManager()->GetCurrentCamera())
-			//{
-			//	m_directZob.GetCameraManager()->GetCurrentCamera()->SetWorldPosition(camPos.x, camPos.y, camPos.z);
-			//}
-			Light* red = m_directZob.GetLightManager()->GetLight("red");
-			Light* blue = m_directZob.GetLightManager()->GetLight("blue");
-			Light* green = m_directZob.GetLightManager()->GetLight("green");
-
-			if (!bPause)
-			{
-			}
-		}
 		if (!bPause)
 		{
 			rot += 1.0f;
@@ -310,14 +296,41 @@ int main(int argc, char* argv[])
 	}
     m_directZob.NewScene();
 	mfb_close(m_window);
-	if (bBench)
+
+	if (btest)
 	{
 		int fps = (int)(benchFps / (float)frames);
 		int r = (int)(benchRender / (float)frames);
 		int g = (int)(benchGeom / (float)frames);
 		int t = (int)(benchTot / (float)frames);
 		int c = (int)(benchCpy / (float)frames);
-		std::cout << "\n\t\tBenchmark:\nRender\tGeom\tCpy\tFrame\tFps\n" << r <<"\t"<<g<<"\t"<<c<<"\t"<<t<<"\t"<<fps<< std::endl;
+		std::cout << "\n\t\tBenchmark:\nRender\tGeom\tCpy\tFrame\tFps\n" << r << "\t" << g << "\t" << c << "\t" << t << "\t" << fps << std::endl;
+
+		TiXmlDocument doc(XML_ELEMENT_TESTSUITES);
+		TiXmlDeclaration* decl = new TiXmlDeclaration("1.0", "", "");
+		doc.LinkEndChild(decl);
+		TiXmlElement* testSuites = new TiXmlElement(XML_ELEMENT_TESTSUITES);
+		testSuites->SetAttribute(XML_ATTR_TESTS, "1");
+		testSuites->SetAttribute(XML_ATTR_FAILURE, "0");
+		testSuites->SetAttribute(XML_ATTR_DISABLED, "0");
+		testSuites->SetAttribute(XML_ATTR_ERROR, "0");
+		testSuites->SetAttribute(XML_ATTR_TIMESTAMP, "");
+		testSuites->SetAttribute(XML_ATTR_TIME, "");
+		testSuites->SetAttribute(XML_ATTR_NAME, "Smoketest");
+		doc.LinkEndChild(testSuites);
+		TiXmlElement* testSuite = new TiXmlElement(XML_ELEMENT_TESTSUITE);
+		testSuite->SetAttribute(XML_ATTR_TESTS, "1");
+		testSuite->SetAttribute(XML_ATTR_FAILURE, "0");
+		testSuite->SetAttribute(XML_ATTR_DISABLED, "0");
+		testSuite->SetAttribute(XML_ATTR_ERROR, "0");
+		testSuite->SetAttribute(XML_ATTR_TIME, "");
+		testSuites->LinkEndChild(testSuite);
+		TiXmlElement* testCase = new TiXmlElement(XML_ELEMENT_TESTCASE);
+		testSuite->SetAttribute(XML_ATTR_NAME, "smoketest");
+		testSuite->SetAttribute(XML_ATTR_STATUS, "run");
+		testSuite->SetAttribute(XML_ATTR_TIME, "");
+		testSuite->SetAttribute(XML_ATTR_CLASSNAME, "directZob");
+		doc.SaveFile("smoketest_unittest.xml");
 	}
 	//OPTICK_SAVE_CAPTURE("capture.opt");
 #ifdef OPTIK_PROFILING

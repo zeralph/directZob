@@ -57,3 +57,18 @@
 #define XML_ELEMENT_CAMERA "Camera"
 #define XML_ELEMENT_CAMERA_FOV "Fov"
 #define XML_ELEMENT_CAMERA_CONTROLER "Controller"
+
+
+//Test
+#define XML_ELEMENT_TESTSUITES "testsuites"
+#define XML_ELEMENT_TESTSUITE "testsuite"
+#define XML_ELEMENT_TESTCASE "testcase"
+#define XML_ATTR_TESTS "tests"
+#define XML_ATTR_FAILURE "failure"
+#define XML_ATTR_DISABLED "disabled"
+#define XML_ATTR_ERROR "errors"
+#define XML_ATTR_TIMESTAMP "timestamp"
+#define XML_ATTR_TIME "time"
+#define XML_ATTR_NAME "name"
+#define XML_ATTR_STATUS "status"
+#define XML_ATTR_CLASSNAME "classname"
