@@ -330,7 +330,7 @@ int main(int argc, char* argv[])
 		testSuite->SetAttribute(XML_ATTR_STATUS, "run");
 		testSuite->SetAttribute(XML_ATTR_TIME, "");
 		testSuite->SetAttribute(XML_ATTR_CLASSNAME, "directZob");
-		doc.SaveFile("smoketest_unittest.xml");
+		doc.SaveFile("smoketest_unittests.xml");
 	}
 	//OPTICK_SAVE_CAPTURE("capture.opt");
 #ifdef OPTIK_PROFILING
