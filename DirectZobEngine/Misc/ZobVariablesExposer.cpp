@@ -255,5 +255,9 @@ void ZobVariablesExposer::ReadNode(TiXmlNode* node)
 				}
 			}
 		}
+		else
+		{
+			DirectZob::LogWarning("Attributes not found for mesh loading");
+		}
 	}
 }
