@@ -12,7 +12,7 @@ pool:
 steps:
 - task: UsePythonVersion@0
   inputs:
-    versionSpec: '3.10.0'
+    versionSpec: '3.7.12'
 
 - script: python -m pip install git+https://chromium.googlesource.com/external/gyp
   displayName: 'Install gyp'
