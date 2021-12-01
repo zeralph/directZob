@@ -217,6 +217,9 @@ ZobControlVector3::~ZobControlVector3()
 	delete _eventX;
 	delete _eventY;
 	delete _eventZ;
+	delete txt_X;
+	delete txt_Y;
+	delete txt_Z;
 }
 
 void ZobControlVector3::UpdateControlInternal()

@@ -99,7 +99,17 @@ namespace CLI
 	}
 	void ZobObjectManagerWrapper::ZoomToZobObject(Object^ sender, EventArgs^ e)
 	{
-
+		String^ guid = ((ZobControlTreeNode^)m_treeView->SelectedNode)->m_zobObjectGuid;
+		std::string id;
+		MarshalString(guid, id);
+		ZobObject* p = DirectZob::GetInstance()->GetZobObjectManager()->GetZobObjectFromlId(id);
+		Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCamera(std::string("EditorCamera"));
+		if (c)
+		{
+			ZobVector3 pos = p->GetWorldPosition();
+			c->SetTarget(p);
+			//c->SetWorldPosition(p->GetWorldPosition().x, p->GetWorldPosition().y, p->GetWorldPosition().z);
+		}
 	}
 	void ZobObjectManagerWrapper::AddZobBehavior(Object^ sender, EventArgs^ e)
 	{
