@@ -118,6 +118,17 @@ void ZobVariablesExposer::wrapperData::Load()
 	{
 
 	}
+	else if (type == eWrapperType_zobColor)
+	{
+		ZobColor* v = (ZobColor*)(ptr);
+		ZobColor p;
+		std::string s = std::string(strValue);
+		
+		if (p.FromString(s))
+		{
+			v->Set(p.GetAlpha(), p.GetRed(), p.GetGreen(), p.GetBlue());
+		}
+	}
 	else
 	{
 		assert(false);
@@ -212,6 +223,13 @@ TiXmlNode* ZobVariablesExposer::SaveUnderNode(TiXmlNode* node)
 					std::string s = (*z)->ZobGuidToString();
 					o.SetAttribute(XML_ATTR_VALUE, s.c_str());
 				}
+				break;
+			}
+			case eWrapperType_zobColor:
+			{
+				ZobColor* v = (ZobColor*)(w->ptr);
+				std::string s = v->ToString();
+				o.SetAttribute(XML_ATTR_VALUE, s.c_str());
 				break;
 			}
 			default:

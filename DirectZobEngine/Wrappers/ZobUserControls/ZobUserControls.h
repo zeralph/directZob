@@ -34,6 +34,8 @@ namespace CLI {
 	{
 	public:
 		ZobControlString(const ZobVariablesExposer::wrapperData& w);
+		~ZobControlString();
+		EventHandler^ _event;
 		TextBox^ txt;
 	protected:
 		void OnValueChanged(Object^ sender, EventArgs^ e) override;
@@ -43,8 +45,10 @@ namespace CLI {
 	{
 	public:
 		ZobControlFilePath(const ZobVariablesExposer::wrapperData& w);
+		~ZobControlFilePath();
 		TextBox^ txt;
 		Button^ btn;
+		EventHandler^ _event;
 	protected:
 		void OnValueChanged(Object^ sender, EventArgs^ e) override;
 		void OnOpen(Object^ sender, EventArgs^ e);
@@ -55,18 +59,25 @@ namespace CLI {
 	{
 	public:
 		ZobGroupBox(String^ name, bool collapsable);
+		~ZobGroupBox();
 		void OnToggle(Object^ sender, EventArgs^ e);
 		bool bToggled;
+		Label^ _label;
+		EventHandler^ _event;
 	};
 
 	public ref class ZobControlVector3 : ZobControl
 	{
 	public:
 		ZobControlVector3(const ZobVariablesExposer::wrapperData& w);
+		~ZobControlVector3();
 		void UpdateControlInternal() override;
 		TextBox^ txt_X;
 		TextBox^ txt_Y;
 		TextBox^ txt_Z;
+		EventHandler^ _eventX;
+		EventHandler^ _eventY;
+		EventHandler^ _eventZ;
 	protected:
 		void OnValueChanged(Object^ sender, EventArgs^ e) override;
 	};
@@ -75,7 +86,9 @@ namespace CLI {
 	{
 	public:
 		ZobControlFloat(const ZobVariablesExposer::wrapperData& w);
+		~ZobControlFloat();
 		TextBox^ txt;
+		EventHandler^ _event;
 	protected:
 		void OnValueChanged(Object^ sender, EventArgs^ e) override;
 		void UpdateControlInternal() override;
@@ -85,6 +98,8 @@ namespace CLI {
 	{
 	public:
 		ZobControlBool(const ZobVariablesExposer::wrapperData& w);
+		~ZobControlBool();
+		EventHandler^ _event;
 		CheckBox^ _checkBox;
 		bool _checked;
 	protected:
@@ -92,11 +107,34 @@ namespace CLI {
 		void UpdateControlInternal() override;
 	};
 
+	public ref class ZobControlColor : ZobControl
+	{
+	public:
+		ZobControlColor(const ZobVariablesExposer::wrapperData& w);
+		~ZobControlColor();
+		TextBox^ txt_A;
+		TextBox^ txt_R;
+		TextBox^ txt_G;
+		TextBox^ txt_B;
+		EventHandler^ _eventA;
+		EventHandler^ _eventR;
+		EventHandler^ _eventG;
+		EventHandler^ _eventB;
+		Button^ btn;
+	protected:
+		void OnValueChanged(Object^ sender, EventArgs^ e) override;
+		void OnClickColor(Object^ sender, EventArgs^ e);
+		void UpdateControlInternal() override;
+	};
+
 	public ref class ZobControlEnum : ZobControl
 	{
 	public:
 		ZobControlEnum(const ZobVariablesExposer::wrapperData& w);
+		~ZobControlEnum();
 		ComboBox^ _combo;
+		ComboBox^ _list;
+		EventHandler^ _event;
 	protected:
 		void OnValueChanged(Object^ sender, EventArgs^ e) override;
 		void UpdateControlInternal() override;

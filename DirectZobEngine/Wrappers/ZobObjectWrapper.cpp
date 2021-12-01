@@ -148,6 +148,15 @@ namespace CLI
 				{
 					panel->Controls->Add( gcnew ZobControlZobObject(w) );
 				}
+				else if (w.type == ZobVariablesExposer::eWrapperType_zobColor)
+				{
+					panel->Controls->Add(gcnew ZobControlColor(w));
+				}
+				else
+				{
+					assert(NULL);
+				}
+
 				idx++;
 			}
 			zobPanel->Controls->Add(panel);

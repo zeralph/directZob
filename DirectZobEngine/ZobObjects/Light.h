@@ -15,13 +15,13 @@ public:
 
 	};
 
-	Light(std::string& name, eLightType type, ZobVector3 color, float intensity, float distance, ZobObject* parent);
+	Light(std::string& name, eLightType type, ZobColor color, float intensity, float distance, ZobObject* parent);
 	Light(std::string id, TiXmlElement* node, ZobObject* parent);
 	~Light() override;
 
 	void				DrawGizmos(const Camera* camera, Engine* engine) override;
 	void				Update(float dt) override;
-	const ZobVector3*	GetColor() const { return &m_color; }
+	const ZobColor*		GetColor() const { return &m_lightColor; }
 	const float			GetFallOffDistance() const { return m_distance; }
 	const float			GetIntensity() const { return m_intensity; }
 	const float			GetSpotAngleRad() const { return m_spotAngleRad; }
@@ -30,7 +30,7 @@ public:
 	const eLightType	GetType() const { return m_lightType; }
 	inline bool			IsActive() const { return m_active && m_inFrtustrum; }
 
-	void				SetColor(const ZobVector3* v) { m_color = v; }
+	void				SetColor(const ZobColor* v) { m_lightColor = v; }
 	void				SetFallOffDistance(float f) { m_distance = f; }
 	void				SetIntensity(float f ) { m_intensity=f; }
 	void				SetType(eLightType t) { m_lightType=t; }
@@ -47,7 +47,7 @@ private:
 	void				drawDirectionalGizmos(const Camera* camera, Engine* engine) const;
 	void				ComputeBoundingBoxes(const ZobMatrix4x4& modelMatrix, const Camera* camera, Engine* engine);
 
-	ZobVector3 m_color;
+	ZobColor m_lightColor;
 	float m_intensity;
 	float m_distance;
 	float m_spotAngleRad;

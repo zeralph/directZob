@@ -31,6 +31,7 @@ public:
 		eWrapperType_zobId,
 		eWrapperType_path,
 		eWrapperType_zobObject,
+		eWrapperType_zobColor,
 		__eWrapperType_MAX__
 	};
 
@@ -102,6 +103,10 @@ public:
 		else if (std::is_same<T, DirectZobType::ZobFilePath>::value)
 		{
 			type = eWrapperType_path;
+		}
+		else if (std::is_same<T, ZobColor>::value)
+		{
+			type = eWrapperType_zobColor;
 		}
 		else
 		{

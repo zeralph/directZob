@@ -1,0 +1,53 @@
+<?xml version="1.0" ?>
+<Scene>
+    <Globals>
+        <AmbientColor r="102" g="102" b="102" />
+        <AmbientIntensity>0.80</AmbientIntensity>
+        <FogColor r="63" g="149" b="255" />
+        <ClearColor r="63" g="149" b="255" />
+        <FogDensity>2.00</FogDensity>
+        <FogDistance>20.00</FogDistance>
+        <FogType>none</FogType>
+    </Globals>
+    <ZobObject Guid="4002568421">
+        <Var Name="Name" value="skull" />
+        <Var Name="Position" value="0.000;0.000;0.000" />
+        <Var Name="Rotation" value="-90.000;0.000;0.000" />
+        <Var Name="Scale" value="1.000;1.000;1.000" />
+        <Behaviors>
+            <Behavior Type="Mesh" Guid="2007160091">
+                <Var Name="File" value="skull.obj;/;skull.obj" />
+                <Var Name="Cull mode" value="Clockwise" />
+                <Var Name="Lighting" value="Gouraud" />
+                <Var Name="ZBuffered" value="True" />
+                <Var Name="Transparent" value="False" />
+            </Behavior>
+        </Behaviors>
+    </ZobObject>
+    <ZobObject Guid="4004443983">
+        <Var Name="Name" value="Light_1" />
+        <Var Name="Position" value="10.000;50.000;0.000" />
+        <Var Name="Rotation" value="90.000;0.000;0.000" />
+        <Var Name="Scale" value="1.000;1.000;1.000" />
+        <Var Name="Color" value="255;255;128;255" />
+        <Var Name="Intensity" value="5.000" />
+        <Var Name="Distance" value="100.000" />
+        <Var Name="SpotAngle" value="0.524" />
+        <Var Name="Active" value="True" />
+        <Var Name="Type" value="Spot" />
+        <Behaviors />
+    </ZobObject>
+    <ZobObject Guid="4004816606">
+        <Var Name="Name" value="Light_2" />
+        <Var Name="Position" value="-10.000;50.000;0.000" />
+        <Var Name="Rotation" value="90.000;0.000;0.000" />
+        <Var Name="Scale" value="1.000;1.000;1.000" />
+        <Var Name="Color" value="255;255;128;64" />
+        <Var Name="Intensity" value="5.000" />
+        <Var Name="Distance" value="100.000" />
+        <Var Name="SpotAngle" value="0.524" />
+        <Var Name="Active" value="True" />
+        <Var Name="Type" value="Spot" />
+        <Behaviors />
+    </ZobObject>
+</Scene>

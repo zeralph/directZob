@@ -42,7 +42,7 @@ bool ZobVector3::FromString(std::string &s)
 	if (del1 != std::string::npos)
 	{
 		del2 = s.find(';', del1 + 1); 
-		if (del1 != std::string::npos)
+		if (del2 != std::string::npos)
 		{
 			x = atof(s.substr(0, del1).c_str());
 			y = atof(s.substr(del1+1, del2).c_str());

@@ -17,7 +17,7 @@ public:
 	void						AddLight(Light* l);
 	void						Update();
 	Light*						CreateLight(Light::eLightType type);
-	Light*						CreateLight(std::string& name, Light::eLightType type, ZobVector3 position, ZobVector3 color, float intensity, float distance, ZobObject* parent);
+	Light*						CreateLight(std::string& name, Light::eLightType type, ZobVector3 position, ZobColor color, float intensity, float distance, ZobObject* parent);
 	const std::vector<const Light*>*	GetActiveLights() const;
 	Light*						GetLight(const std::string& name) const;
 	const ZobVector3*			GetAmbientColor() const { return &m_ambientColor; };

@@ -16,6 +16,14 @@ ZobColor::ZobColor(const ZobVector3* v)
 	Set(255, (int)(v->x * 255.0f), (int)(v->y * 255.0f), (int)(v->z * 255.0f));
 }
 
+ZobColor::ZobColor(const ZobColor* v)
+{
+	m_a = 255;
+	m_r = v->GetRed();
+	m_g = v->GetGreen();
+	m_b = v->GetBlue();
+}
+
 ZobColor::ZobColor(uint rawValue):
 	m_value(rawValue)
 {

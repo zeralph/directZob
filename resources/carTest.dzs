@@ -115,8 +115,8 @@
         </ZobObject>
         <ZobObject Guid="2003412161" Type="Camera">
             <Var Name="Name" value="rearCamera" />
-            <Var Name="Position" value="-0.000;1.911;-4.787" />
-            <Var Name="Rotation" value="15.056;-0.000;-0.000" />
+            <Var Name="Position" value="-0.000;1.910;-4.787" />
+            <Var Name="Rotation" value="15.056;0.000;0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
             <Behaviors />
             <Controller Name="FollowCar" Guid="2008245163" />
@@ -164,7 +164,7 @@
         <Var Name="Position" value="0.000;60.035;0.000" />
         <Var Name="Rotation" value="45.000;0.000;45.000" />
         <Var Name="Scale" value="1.000;1.000;1.000" />
-        <Var Name="Color" value="1.000;1.000;0.600" />
+        <Var Name="Color" value="255;255;255;128" />
         <Var Name="Intensity" value="1.000" />
         <Var Name="Distance" value="100.000" />
         <Var Name="SpotAngle" value="0.524" />
@@ -352,14 +352,14 @@
         <Behaviors />
         <ZobObject Guid="4002436495">
             <Var Name="Name" value="building_2" />
-            <Var Name="Position" value="-112.228;-10.000;-45.472" />
+            <Var Name="Position" value="-112.225;-10.000;-45.472" />
             <Var Name="Rotation" value="0.000;35.000;0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
             <Behaviors />
         </ZobObject>
         <ZobObject Guid="4002193509">
             <Var Name="Name" value="building_3" />
-            <Var Name="Position" value="-81.504;-10.000;-1.293" />
+            <Var Name="Position" value="-81.501;-10.000;-1.293" />
             <Var Name="Rotation" value="0.000;35.000;0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
             <Behaviors>
@@ -374,7 +374,7 @@
         </ZobObject>
         <ZobObject Guid="4002209421">
             <Var Name="Name" value="building_4" />
-            <Var Name="Position" value="-57.147;-10.000;25.663" />
+            <Var Name="Position" value="-57.144;-10.000;25.663" />
             <Var Name="Rotation" value="0.000;35.000;0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
             <Behaviors>
@@ -429,7 +429,7 @@
             <Var Name="Position" value="-24.000;10.000;9.000" />
             <Var Name="Rotation" value="90.000;0.000;0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
-            <Var Name="Color" value="1.000;0.000;1.000" />
+            <Var Name="Color" value="255;255;0;0" />
             <Var Name="Intensity" value="2.000" />
             <Var Name="Distance" value="30.000" />
             <Var Name="SpotAngle" value="0.523" />
@@ -442,7 +442,7 @@
             <Var Name="Position" value="-40.000;10.000;3.000" />
             <Var Name="Rotation" value="90.000;0.000;0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
-            <Var Name="Color" value="0.000;0.000;1.000" />
+            <Var Name="Color" value="255;0;255;0" />
             <Var Name="Intensity" value="2.000" />
             <Var Name="Distance" value="30.000" />
             <Var Name="SpotAngle" value="0.523" />
@@ -455,7 +455,7 @@
             <Var Name="Position" value="-10.000;10.000;9.000" />
             <Var Name="Rotation" value="90.000;0.000;0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
-            <Var Name="Color" value="0.000;1.000;0.000" />
+            <Var Name="Color" value="255;0;128;255" />
             <Var Name="Intensity" value="2.000" />
             <Var Name="Distance" value="30.000" />
             <Var Name="SpotAngle" value="0.523" />
@@ -468,7 +468,7 @@
             <Var Name="Position" value="5.000;10.000;8.000" />
             <Var Name="Rotation" value="90.000;0.000;0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
-            <Var Name="Color" value="1.000;0.000;0.000" />
+            <Var Name="Color" value="255;0;255;0" />
             <Var Name="Intensity" value="2.000" />
             <Var Name="Distance" value="30.000" />
             <Var Name="SpotAngle" value="0.523" />
@@ -637,7 +637,7 @@
             <Var Name="Position" value="164.000;10.000;52.000" />
             <Var Name="Rotation" value="90.000;0.000;0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
-            <Var Name="Color" value="0.988;0.831;0.250" />
+            <Var Name="Color" value="255;255;255;0" />
             <Var Name="Intensity" value="5.000" />
             <Var Name="Distance" value="20.000" />
             <Var Name="SpotAngle" value="0.523" />
@@ -650,7 +650,7 @@
             <Var Name="Position" value="148.000;10.000;38.000" />
             <Var Name="Rotation" value="90.000;0.000;0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
-            <Var Name="Color" value="0.988;0.831;0.250" />
+            <Var Name="Color" value="255;255;255;0" />
             <Var Name="Intensity" value="5.000" />
             <Var Name="Distance" value="20.000" />
             <Var Name="SpotAngle" value="0.523" />
@@ -663,7 +663,7 @@
             <Var Name="Position" value="165.000;10.000;27.000" />
             <Var Name="Rotation" value="90.000;0.000;0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
-            <Var Name="Color" value="0.988;0.831;0.250" />
+            <Var Name="Color" value="255;255;255;0" />
             <Var Name="Intensity" value="5.000" />
             <Var Name="Distance" value="20.000" />
             <Var Name="SpotAngle" value="0.523" />
@@ -731,18 +731,5 @@
                 <Var Name="Transparent" value="False" />
             </Behavior>
         </Behaviors>
-    </ZobObject>
-    <ZobObject Guid="4004889341">
-        <Var Name="Name" value="Light_10" />
-        <Var Name="Position" value="0.000;50.000;0.000" />
-        <Var Name="Rotation" value="0.000;0.000;0.000" />
-        <Var Name="Scale" value="1.000;1.000;1.000" />
-        <Var Name="Color" value="1.000;0.000;0.000" />
-        <Var Name="Intensity" value="5.000" />
-        <Var Name="Distance" value="100.000" />
-        <Var Name="SpotAngle" value="0.523" />
-        <Var Name="Active" value="True" />
-        <Var Name="Type" value="Spot" />
-        <Behaviors />
     </ZobObject>
 </Scene>

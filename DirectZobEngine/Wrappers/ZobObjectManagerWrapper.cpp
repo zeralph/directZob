@@ -187,7 +187,7 @@ namespace CLI
 			ZobControlTreeNode^ z = (ZobControlTreeNode^)e->Node;
 			if (z)// && !z->IsEditable())
 			{
-				e->Cancel = true;
+				//e->Cancel = true;
 			}
 		}
 	}
@@ -392,6 +392,10 @@ namespace CLI
 
 	void ZobObjectManagerWrapper::SelectObject(ZobObject* z)
 	{
+		if (m_selectedObjectWrapper)
+		{
+			delete m_selectedObjectWrapper;
+		}
 		if (z)
 		{
 			m_selectedObject = z;

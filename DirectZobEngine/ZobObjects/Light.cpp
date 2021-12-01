@@ -3,10 +3,10 @@
 #include "DirectZob.h"
 #include "Misc/ZobXmlHelper.h"
 
-Light::Light(std::string &name, eLightType type, ZobVector3 color, float intensity, float distance, ZobObject*parent):
+Light::Light(std::string &name, eLightType type, ZobColor color, float intensity, float distance, ZobObject*parent):
 	ZobObject(ZOBGUID::type_scene, ZOBGUID::subtype_zobLight, name, parent)
 {
-	m_color = color;
+	m_lightColor = color;
 	m_intensity = intensity;
 	m_distance = distance;
 	m_active = true;
@@ -39,7 +39,7 @@ Light::~Light()
 
 void Light::InitVariablesExposer()
 {
-	m_varExposer->WrapVariable<ZobVector3>("Color", &m_color, NULL, false, true);
+	m_varExposer->WrapVariable<ZobColor>("Color", &m_lightColor, NULL, false, true);
 	m_varExposer->WrapVariable<float>("Intensity", &m_intensity, NULL, false, true);
 	m_varExposer->WrapVariable<float>("Distance", &m_distance, NULL, false, true);
 	m_varExposer->WrapVariable<float>("SpotAngle", &m_spotAngleRad, NULL, false, true);
@@ -106,7 +106,7 @@ void Light::Update(float dt)
 void Light::drawPointGizmos(const Camera* camera, Engine* engine) const
 {
 	ZobVector3 t = GetWorldPosition();
-	uint c = ((int)(m_color.x * 255) << 16) + ((int)(m_color.y * 255) << 8) + (int)(m_color.z * 255);
+	uint c = ((int)(m_lightColor.GetRed()) << 16) + ((int)(m_lightColor.GetGreen()) << 8) + (int)(m_lightColor.GetBlue());
 	engine->QueueEllipse(camera, &t, &m_up, 1.0f, 1.0f, c, true, false);
 	engine->QueueEllipse(camera, &t, &m_left, 1.0f, 1.0f, c, true, false);
 	engine->QueueEllipse(camera, &t, &m_forward, 1.0f, 1.0f, c, true, false);
@@ -115,7 +115,7 @@ void Light::drawPointGizmos(const Camera* camera, Engine* engine) const
 void Light::drawSpotGizmos(const Camera* camera, Engine* engine) const
 {
 	ZobVector3 t = GetWorldPosition();
-	uint c = ((int)(m_color.x * 255) << 16) + ((int)(m_color.y * 255) << 8) + (int)(m_color.z * 255);
+	uint c = ((int)(m_lightColor.GetRed()) << 16) + ((int)(m_lightColor.GetGreen()) << 8) + (int)(m_lightColor.GetBlue());
 	ZobVector3 v1, v2, v;
 	v1 = m_forward;
 	v2 = m_left;
@@ -142,7 +142,7 @@ void Light::drawSpotGizmos(const Camera* camera, Engine* engine) const
 void Light::drawDirectionalGizmos(const Camera* camera, Engine* engine) const
 {
 	ZobVector3 t = GetWorldPosition();
-	uint c = ((int)(m_color.x * 255) << 16) + ((int)(m_color.y * 255) << 8) + (int)(m_color.z * 255);
+	uint c = ((int)(m_lightColor.GetRed()) << 16) + ((int)(m_lightColor.GetGreen()) << 8) + (int)(m_lightColor.GetBlue());
 	ZobVector3 v0 = t + m_forward;
 	ZobVector3 v1 = t - m_forward;
 	v0 = v0 + m_left;

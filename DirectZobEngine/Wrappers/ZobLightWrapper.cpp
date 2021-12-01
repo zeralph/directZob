@@ -14,7 +14,7 @@ namespace CLI
 		Light* l = (Light*)GetInstance();
 		if (l)
 		{
-			ZobVector3 v = p->ToVector3();
+			ZobColor v = ZobColor(255, (int)(p->x * 255), (int)(p->y * 255), (int)(p->z * 255));
 			l->SetColor(&v);
 		}
 	}
@@ -24,8 +24,8 @@ namespace CLI
 		Light* l = (Light*)GetInstance();
 		if (l)
 		{
-			const ZobVector3* v = l->GetColor();
-			return gcnew ManagedVector3(v->x, v->y, v->z);
+			const ZobColor* v = l->GetColor();
+			return gcnew ManagedVector3(v->GetRed(), v->GetGreen(), v->GetBlue());
 		}
 		return gcnew ManagedVector3(0, 0, 0);
 	}

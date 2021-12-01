@@ -368,9 +368,9 @@ inline void Rasterizer::ComputeLightingAtPoint(const ZobVector3* position, const
 							sl = computeSpecular(normal, &lightPos, position, t);
 						}
 					}
-					float a = l->GetColor()->x * lightPower;
-					float b = l->GetColor()->y * lightPower;
-					float c = l->GetColor()->z * lightPower;
+					float a = l->GetColor()->GetRedNormalized() * lightPower;
+					float b = l->GetColor()->GetGreenNormalized() * lightPower;
+					float c = l->GetColor()->GetBlueNormalized() * lightPower;
 					outlData.LightingDiffuseR += cl * a;
 					outlData.LightingDiffuseG += cl * b;
 					outlData.LightingDiffuseB += cl * c;
