@@ -3,7 +3,7 @@
 #include <vector>
 #include <string>
 #include "../tinyxml/tinyxml.h"
-#include "Rendering/Color.h"
+#include "../Rendering/Color.h"
 //#include "../DirectZobEngine/ZobObjects/ZOBGUID.h"
 //#include "../DirectZobEngine/ZobObjects/ZobObject.h"
 //#include "../DirectZobEngine/Rendering/ZobVector3.h"
