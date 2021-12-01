@@ -118,7 +118,7 @@ namespace DirectZobEditor
         private void trackBarFogIntensity_Scroll(object sender, EventArgs e)
         {
             TrackBar t = (TrackBar)sender;
-            float f = t.Value;
+            float f = t.Value / 100.0f;
             textFogIntensity.Text = f.ToString();
             m_LightManagerWrapper.SetFogIntensity(f);
         }

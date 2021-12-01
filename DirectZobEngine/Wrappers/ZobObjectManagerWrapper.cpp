@@ -107,8 +107,7 @@ namespace CLI
 		if (c)
 		{
 			ZobVector3 pos = p->GetWorldPosition();
-			c->SetTarget(p);
-			//c->SetWorldPosition(p->GetWorldPosition().x, p->GetWorldPosition().y, p->GetWorldPosition().z);
+			c->SetTarget(&pos);
 		}
 	}
 	void ZobObjectManagerWrapper::AddZobBehavior(Object^ sender, EventArgs^ e)

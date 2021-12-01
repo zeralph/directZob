@@ -47,6 +47,11 @@ ZobCameraControllerOrbital::~ZobCameraControllerOrbital()
     m_zobCamera = NULL;
 }
 
+void ZobCameraControllerOrbital::SetTarget(const ZobVector3* t)
+{
+	m_centerOfRotation = t;
+}
+
 void ZobCameraControllerOrbital::PreUpdate(float dt)
 {
 	if (m_zobCamera->m_active)

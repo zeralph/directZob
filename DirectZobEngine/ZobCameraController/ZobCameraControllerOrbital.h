@@ -14,6 +14,7 @@ public:
     void        PreUpdate(float dt) override;
     void        Rotate(float x, float y, float z) override;
     void        Move(float x, float y, float z) override;
+    void        SetTarget(const ZobVector3* t) override;
     void        Zoom(float f) override;
 private:
 

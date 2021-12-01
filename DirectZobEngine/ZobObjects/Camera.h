@@ -28,15 +28,6 @@ public:
 		__eCameraType_MAX__= 7
 	};
 
-	enum eTargetMode
-	{
-		eTarget_none=0,
-		eTarget_Vector,
-		eTarget_Object,
-		eTarget_FPS,
-		__eTarget_MAX__
-	};
-
 	enum eFrustrumPlanes
 	{
 		eFrustrumPlaneLeft=0,
@@ -66,13 +57,10 @@ public:
 	inline const ZobMatrix4x4* GetProjectionMatrix() const { return &m_projMatrix; };
 	inline float			GetFov() const { return m_fov; };
 	inline void				SetFov(float fov) { m_fov = fov; };
-
+	void					Move(float x, float y, float z);
 	void					SetType(eCameraType type);
 	void					RotateOrbital(ZobVector3* center, float x, float y, float dist);
-	void					SetTarget(const ZobVector3 t) { m_tagetMode = eTarget_Vector; m_targetPosition = t; };
-	void					SetTarget(const ZobObject* z) { m_tagetMode = eTarget_Object; m_targetObject = z; };
-	void					SetNoTarget() { m_tagetMode = eTarget_none; };
-	bool					GetTargetVector(ZobVector3* t);
+	void					SetTarget(const ZobVector3* t);
 	void					RotateAroundPointAxis(const ZobVector3* point, const ZobVector3* axis, const ZobVector3* lockAxis, float angle, bool recomputeVectors);
 	void					Move(float dx, float dz, float dy, bool moveTargetVector);
 	void					Zoom(float z);
@@ -110,7 +98,6 @@ private:
 	ZobMatrix4x4 m_projMatrix;
 	float m_fov;
 	ZobVector3 m_viewTransaltion;
-	eTargetMode m_tagetMode;
 	ZobVector3 m_targetPosition;
 	const ZobObject* m_targetObject;
 	//ZobMatrix4x4 m_invModelMatrix;

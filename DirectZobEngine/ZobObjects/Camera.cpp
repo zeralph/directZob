@@ -54,7 +54,6 @@ Camera::Camera(ZOBGUID::ZobType zobType, const std::string& name, eCameraType ty
 	}
 	m_fov = fov;
 	m_active = false;
-	m_tagetMode = eTarget_none;
 	sRayDbg = ZobVector3(1000, 1000, 1000);
 	sRayDbg2 = ZobVector3(1000, 1000, 1000);
 	m_varExposer->WrapVariable<float>("FOV", &m_fov, NULL, false, true);
@@ -106,8 +105,6 @@ Camera::Camera(std::string id, TiXmlElement* node, ZobObject* parent)
 			break;
 		}
 	}
-	m_tagetMode = eTarget_none;
-
 }
 
 Camera::~Camera()
@@ -171,60 +168,6 @@ void Camera::DrawGizmos(const Camera* camera, Engine* engine)
 void Camera::Zoom(float z)
 {
 	m_zobCameraController->Zoom(z);
-	/*
-	//z = z / abs(z);
-	ZobVector3 v = m_forward;
-	if (m_tagetMode != eTarget_none)
-	{
-		if (m_tagetMode == eTarget_Vector)
-		{
-			v = GetWorldPosition();
-			v = v - m_targetPosition;
-			
-		}
-		else if (m_tagetMode == eTarget_Object && m_targetObject)
-		{
-			v = GetWorldPosition();
-			v = v - m_targetObject->GetWorldPosition();
-		}
-	}
-	if (v.sqrtLength() > abs(z) || z < 0.0f)
-	{
-		v.Normalize();
-		v = v * (-z);
-		v = v + GetWorldPosition();
-		SetWorldPosition(v.x, v.y, v.z);
-	}
-	*/
-}
-
-bool Camera::GetTargetVector(ZobVector3* t)
-{
-	if (m_tagetMode != eTarget_none)
-	{
-		if (m_tagetMode == eTarget_Vector)
-		{
-			t->Copy(&m_targetPosition);
-			return true;
-		}
-		else if (m_tagetMode == eTarget_Object && m_targetObject)
-		{
-			const ZobVector3 merde = m_targetObject->GetWorldPosition();
-			ZobVector3 v = ZobVector3(merde);
-			t->Copy(&v);
-			return true;
-		}
-	}
-	else
-	{
-		ZobVector3 v = ZobVector3(m_parent->GetWorldPosition());
-		//v = v - GetWorldPosition();
-		//v.Normalize();
-		t->Copy(&v);
-		m_targetPosition = ZobVector3(v);
-		return true;
-	}
-	return false;
 }
 
 void Camera::RotateOrbital(ZobVector3 *center, float x, float y, float dist)
@@ -312,6 +255,11 @@ void Camera::Move(float dx, float dz, float dy, bool moveTargetVector)
 	m_zobCameraController->Move(dx, dy, dz);
 }
 
+void Camera::SetTarget(const ZobVector3* t)
+{
+	m_zobCameraController->SetTarget(t);
+}
+
 void Camera::Init()
 {
 	ZobObject::Init();
@@ -322,6 +270,11 @@ void Camera::PreUpdate(float dt)
 {
 	ZobObject::PreUpdate(dt);
 	m_zobCameraController->PreUpdate(dt);
+}
+
+void Camera::Move(float x, float y, float z)
+{
+	m_zobCameraController->Move(x, y, z);
 }
 
 void Camera::Update(float dt)

@@ -55,6 +55,11 @@ void ZobCameraController::Init()
 
 }
 
+void ZobCameraController::SetTarget(const ZobVector3* t)
+{
+
+}
+
 void ZobCameraController::PreUpdate(float dt)
 {
 }
