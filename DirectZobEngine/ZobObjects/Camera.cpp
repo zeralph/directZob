@@ -19,7 +19,37 @@ static ZobVector3 sRayDbg2;
 Camera::Camera(ZOBGUID::ZobType zobType, const std::string& name, eCameraType type, float fov, BufferData* bufferData, ZobObject* parent)
 	:ZobObject(zobType, ZOBGUID::ZobSubType::subtype_zobCamera, name, parent)
 {
-	switch (type)
+	m_zobCameraController = NULL;
+	ChangeCameraController(type);
+	m_controlerType = type;
+	m_nextControlerType = type;
+	m_fov = fov;
+	m_active = false;
+	sRayDbg = ZobVector3(1000, 1000, 1000);
+	sRayDbg2 = ZobVector3(1000, 1000, 1000);
+	WrapVariables();
+	//m_nextTranslation = m_translation;
+}
+
+Camera::Camera(std::string id, TiXmlElement* node, ZobObject* parent)
+	:ZobObject(id, node, parent)
+{
+	m_zobCameraController = NULL;
+	m_controlerType = Camera::eCamera_unset;
+	m_nextControlerType = Camera::eCamera_unset;
+	WrapVariables();
+	m_varExposer->ReadNode(node);
+	//ChangeCameraController(m_nextControlerType);
+}
+
+void Camera::ChangeCameraController(eCameraType newType)
+{
+	if (m_zobCameraController)
+	{
+		delete m_zobCameraController;
+		m_zobCameraController = NULL;
+	}
+	switch (newType)
 	{
 		case eCamera_fps:
 		{
@@ -49,62 +79,11 @@ Camera::Camera(ZOBGUID::ZobType zobType, const std::string& name, eCameraType ty
 		default:
 		{
 			DirectZob::LogError("Error creating camera");
+			m_zobCameraController = new ZobCameraController(this);
 			break;
 		}
 	}
-	m_fov = fov;
-	m_active = false;
-	sRayDbg = ZobVector3(1000, 1000, 1000);
-	sRayDbg2 = ZobVector3(1000, 1000, 1000);
-	m_varExposer->WrapVariable<float>("FOV", &m_fov, NULL, false, true);
-	//m_nextTranslation = m_translation;
-}
-
-Camera::Camera(std::string id, TiXmlElement* node, ZobObject* parent)
-	:ZobObject(id, node, parent)
-{
-	m_zobCameraController = new ZobCameraController(this);
-	TiXmlElement * f = node->FirstChildElement(XML_ELEMENT_CAMERA_FOV);
-	float fov = f ? atof(f->GetText()) : 45.0f; 
-	m_fov = fov;
-	m_active = false;
-	f = node->FirstChildElement(XML_ELEMENT_CAMERA_CONTROLER);
-	const char* typeStr = f->Attribute(XML_ATTR_NAME);
-	std::string guid = std::string(f->Attribute(XML_ATTR_GUID));
-	eCameraType type = ZobCameraController::TypeFromString(typeStr);
-	switch (type)
-	{
-		case eCamera_fps:
-		{
-			m_zobCameraController = new ZobCameraControllerFPS(this, guid);
-			break;
-		}
-		case eCamera_orbital:
-		{
-			m_zobCameraController = new ZobCameraControllerOrbital(this, false, guid);
-			break;
-		}
-		case eCamera_orbital_free:
-		{
-			m_zobCameraController = new ZobCameraControllerOrbital(this, true, guid);
-			break;
-		}
-		case eCamera_base:
-		{
-			m_zobCameraController = new ZobCameraController(this, guid);
-			break;
-		}
-		case eCamera_followCar:
-		{
-			m_zobCameraController = new ZobCameraControllerFollowCar(this, guid);
-			break;
-		}
-		default:
-		{
-			DirectZob::LogError("Error creating camera");
-			break;
-		}
-	}
+	m_zobCameraController->Init();
 }
 
 Camera::~Camera()
@@ -117,10 +96,20 @@ Camera::~Camera()
 	DirectZob::RemoveIndent();
 }
 
-void Camera::SetType(eCameraType type) 
+void Camera::WrapVariables()
 {
-	//m_zobCameraController->SetType(type);
-};
+
+	m_varExposer->WrapVariable<float>("FOV", &m_fov, NULL, false, true);
+	eCameraType ct[7] = { eCameraType::eCamera_base,
+		eCameraType::eCamera_revolving,
+		eCameraType::eCamera_orbital,
+		eCameraType::eCamera_fps,
+		eCameraType::eCamera_follow,
+		eCameraType::eCamera_followCar,
+		eCameraType::eCamera_orbital_free, };
+	const char* ctStr[7] = { "base", "Revolving", "Orbital", "FPS", "Follow", "FollowCar", "Orbital Free"};
+	m_varExposer->WrapEnum<eCameraType>("Camera controller", &m_nextControlerType, 7, ct, ctStr, NULL, false, true);
+}
 
 void Camera::DrawGizmos(const Camera* camera, Engine* engine)
 {
@@ -263,6 +252,7 @@ void Camera::SetTarget(const ZobVector3* t)
 void Camera::Init()
 {
 	ZobObject::Init();
+	ChangeCameraController(m_nextControlerType);
 	m_zobCameraController->Init();
 }
 
@@ -279,6 +269,11 @@ void Camera::Move(float x, float y, float z)
 
 void Camera::Update(float dt)
 {
+	if (m_nextControlerType != m_controlerType)
+	{
+		ChangeCameraController(m_nextControlerType);
+		m_controlerType= m_nextControlerType;
+	}
 	m_zobCameraController->Update(dt);
 	ZobObject::Update(dt);
 	UpdateViewProjectionMatrix();
@@ -669,19 +664,8 @@ void Camera::Rotate(float x, float y, float z)
 
 TiXmlNode* Camera::SaveUnderNode(TiXmlNode* node)
 {
-	char tmpBuffer[256];
+	
 	TiXmlNode* n = ZobObject::SaveUnderNode(node);
-	TiXmlElement* ne = (TiXmlElement*)n;
-	ne->SetAttribute(XML_ATTR_TYPE, XML_ATTR_TYPE_CAMERA);
-	TiXmlText t("");
-	TiXmlElement fov = TiXmlElement(XML_ELEMENT_CAMERA_FOV);
-	_snprintf_s(tmpBuffer, 256, "%.2f", GetFov());
-	t.SetValue(tmpBuffer);
-	fov.InsertEndChild(t);
-	TiXmlElement controller = TiXmlElement(XML_ELEMENT_CAMERA_CONTROLER);
-	controller.SetAttribute(XML_ATTR_NAME, m_zobCameraController->GetTypeName());
-	controller.SetAttribute(XML_ATTR_GUID, m_zobCameraController->ZobGuidToString().c_str());
-	ne->InsertEndChild(controller);
-	ne->InsertEndChild(fov);
+	m_varExposer->SaveUnderNode(n);
 	return n;
 }

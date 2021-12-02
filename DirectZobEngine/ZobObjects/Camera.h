@@ -18,14 +18,15 @@ friend class ZobCameraControllerFollowCar;
 public:
 	enum eCameraType
 	{
-		eCamera_base = 0,
-		eCamera_revolving = 1,
-		eCamera_orbital = 2,
-		eCamera_fps = 3,
-		eCamera_follow = 4,
-		eCamera_followCar = 5,
-		eCamera_orbital_free = 6,
-		__eCameraType_MAX__= 7
+		eCamera_unset = 0,
+		eCamera_base = 1,
+		eCamera_revolving = 2,
+		eCamera_orbital = 3,
+		eCamera_fps = 4,
+		eCamera_follow = 5,
+		eCamera_followCar = 6,
+		eCamera_orbital_free = 7,
+		__eCameraType_MAX__= 8
 	};
 
 	enum eFrustrumPlanes
@@ -58,7 +59,6 @@ public:
 	inline float			GetFov() const { return m_fov; };
 	inline void				SetFov(float fov) { m_fov = fov; };
 	void					Move(float x, float y, float z);
-	void					SetType(eCameraType type);
 	void					RotateOrbital(ZobVector3* center, float x, float y, float dist);
 	void					SetTarget(const ZobVector3* t);
 	void					RotateAroundPointAxis(const ZobVector3* point, const ZobVector3* axis, const ZobVector3* lockAxis, float angle, bool recomputeVectors);
@@ -73,6 +73,7 @@ public:
 	static bool				ClipSegmentToPlanes(ZobVector3* p1, ZobVector3* p2, const DirectZobType::Plane* planes, float& outP2Factor);
 	Camera::eFrustrumPlanes	PointIsInFrustrum(const ZobVector3* pt) const;
 	bool					AABBIsInFrustrum(const ZobVector3* aabbMin, const ZobVector3* aabbMax) const;
+	void					ChangeCameraController(eCameraType newType);
 	inline void				ToViewSpace(ZobVector3* v) const
 	{
 		m_viewRotMatrix.Mul(v);
@@ -93,19 +94,17 @@ private:
 	void					RecomputeFLUVectors(const ZobVector3* forwardV, const ZobVector3* upV);
 	void					RecomputeFrustrumPlanes();
 	void					NormalizePlane(Plane& plane);
-
+	void					WrapVariables();
 	ZobMatrix4x4 m_viewRotMatrix;
 	ZobMatrix4x4 m_projMatrix;
 	float m_fov;
 	ZobVector3 m_viewTransaltion;
-	ZobVector3 m_targetPosition;
-	const ZobObject* m_targetObject;
-	//ZobMatrix4x4 m_invModelMatrix;
 	ZobMatrix4x4 m_invProjectionMatrix;
 	ZobMatrix4x4 m_invViewMatrix;
-	//ZobVector3 m_nextTranslation;
 	Plane m_frustrumPlanes[6];
 	ZobCameraController* m_zobCameraController;
+	eCameraType m_controlerType;
+	eCameraType m_nextControlerType;
 	float m_active;
 };
 
