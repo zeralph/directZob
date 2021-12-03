@@ -196,9 +196,6 @@ Engine::Engine(int width, int height, Events* events)
 	m_varExposer->WrapVariable<bool>("Draw object gizmos", &m_drawZobObjectGizmos, NULL, false, false);
 	m_varExposer->WrapVariable<bool>("Show bounding boxes", &m_showBBoxes, NULL, false, false);
 	m_varExposer->WrapVariable<bool>("Show text", &m_showText, NULL, false, false);
-	//m_varExposer->WrapVariable<volatile bool>("Z near", &m_lockFrustrum, NULL, false, true);
-	//eRenderMode m_render
-	//eLightingPrecision 
 	m_varExposer->WrapVariable<bool>("Equalize triangle queues", &m_EqualizeTriangleQueues, NULL, false, true);
 	m_varExposer->WrapVariable<bool>("Perspective Correction", &m_perspCorrection, NULL, false, true);
 	m_varExposer->WrapVariable<int>("Rastyerizer height", &m_rasterizerHeight, NULL, true, false);

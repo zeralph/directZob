@@ -5,6 +5,7 @@
 using namespace CLI;
 static ContentAlignment _alignment = ContentAlignment::MiddleLeft;
 static int _height = 15;
+static int _labelWidth = 100;
 static void MarshalString(System::String^ s, std::string& os) {
 	using namespace System::Runtime::InteropServices;
 	const char* chars = (const char*)(Marshal::StringToHGlobalAnsi(s)).ToPointer();
@@ -133,7 +134,7 @@ ZobControlString::ZobControlString(const ZobVariablesExposer::wrapperData& w):Zo
 	this->RowCount = 1;
 	Label^ label = gcnew Label();
 	label->Text = TO_MANAGED_STRING(w.name.c_str());
-	label->Width = 100;
+	label->Width = _labelWidth;
 	label->Height = _height;
 	label->AutoSize = false;
 	label->TextAlign = _alignment;
@@ -265,7 +266,7 @@ ZobControlVector3::ZobControlVector3(const ZobVariablesExposer::wrapperData& w):
 	_label->Height = _height;
 	_label->AutoSize = false;
 	_label->TextAlign = _alignment;
-	_label->Width = 100;
+	_label->Width = _labelWidth;
 	_txt_X = gcnew TextBox();
 	_txt_X->AutoSize = false;
 	_txt_X->Name = name;
@@ -371,7 +372,7 @@ ZobControlFloat::ZobControlFloat(const ZobVariablesExposer::wrapperData& w):ZobC
 	this->RowCount = 1;
 	_label = gcnew Label();
 	_label->Text = TO_MANAGED_STRING(w.name.c_str());
-	_label->Width = 100;
+	_label->Width = _labelWidth;
 	_label->Height = _height;
 	_label->TextAlign = _alignment;
 	_txt = gcnew TextBox();
@@ -462,7 +463,7 @@ ZobControlBool::ZobControlBool(const ZobVariablesExposer::wrapperData& w) :ZobCo
 	_label->Text = TO_MANAGED_STRING(w.name.c_str());
 	//label->Dock = DockStyle::Fill;
 	_label->AutoSize = false;
-	_label->Width = 100;
+	_label->Width = _labelWidth;
 	_label->Height = _height;
 	_label->TextAlign = _alignment;
 	_checkBox = gcnew CheckBox();
@@ -524,7 +525,7 @@ ZobControlEnum::ZobControlEnum(const ZobVariablesExposer::wrapperData& w) :ZobCo
 	_label = gcnew Label();
 	_label->Text = TO_MANAGED_STRING(w.name.c_str());
 	_label->AutoSize = false;
-	_label->Width = 100;
+	_label->Width = _labelWidth;
 	_label->Height = _height;
 	_label->TextAlign = _alignment;
 	_list = gcnew ComboBox();
@@ -594,7 +595,7 @@ ZobControlZobObject::ZobControlZobObject(const ZobVariablesExposer::wrapperData&
 	this->RowCount = 1;
 	_label = gcnew Label();
 	_label->Text = TO_MANAGED_STRING(w.name.c_str());
-	_label->Width = 100;
+	_label->Width = _labelWidth;
 	_label->Height = _height;
 	_label->TextAlign = _alignment;
 	_txt = gcnew TextBox();
@@ -639,15 +640,15 @@ ZobGroupBox::ZobGroupBox(String^ name, bool collapsable) :GroupBox()
 	this->Text = name;
 	this->AutoSize = true;
 	this->Dock = DockStyle::Fill;
-	_label = gcnew Label();
+	_label = gcnew Button();
 	_label->Text = "-";
-	_label->Width = 10;
-	_label->Height = 10;
+	_label->Width = 15;
+	_label->Height = 15;
 	_label->Top = this->Top;
 	_label->Left = this->Left;
 	_label->BackColor = Drawing::Color::WhiteSmoke;
-	_label->BorderStyle = BorderStyle::FixedSingle;
-	this->Controls->Add(_label);
+	//_label->BorderStyle = BorderStyle::FixedSingle;
+	//this->Controls->Add(_label);
 	_event = gcnew EventHandler(this, &ZobGroupBox::OnToggle);
 	_label->Click += _event;
 }
@@ -705,7 +706,7 @@ ZobControlTreeNode^ ZobControlTreeNode::GetChildNode(String^ guid)
 
 void ZobGroupBox::OnToggle(Object^ sender, EventArgs^ e)
 {
-	Label^ b = (Label^)sender;
+	Button^ b = (Button^)sender;
 	ZobGroupBox^ z = (ZobGroupBox^)b->Parent;
 	if (bToggled)
 	{
@@ -763,7 +764,7 @@ ZobControlZobId::ZobControlZobId(const ZobVariablesExposer::wrapperData& w):ZobC
 	this->RowCount = 1;
 	_label = gcnew Label();
 	_label->Text = TO_MANAGED_STRING(w.name.c_str());
-	_label->Width = 100;
+	_label->Width = _labelWidth;
 	_label->Height = _height;
 	_label->TextAlign = _alignment;
 	_txt = gcnew Label();
@@ -795,38 +796,40 @@ ZobControlColor::ZobControlColor(const ZobVariablesExposer::wrapperData& w) :Zob
 	this->RowCount = 1;
 	this->Name = name;
 	int width = 80;
+	int txtW = 30;
+	int btnW = 40;
 	_label = gcnew Label();
 	_label->Text = name;
 	_label->Width = width;
 	_label->Height = _height;
 	_label->AutoSize = false;
 	_label->TextAlign = _alignment;
-	_label->Width = 100;
+	_label->Width = _labelWidth;
 
 	_txt_A = gcnew TextBox();
 	_txt_A->AutoSize = false;
 	_txt_A->Name = name;
-	_txt_A->Width = 40;
+	_txt_A->Width = txtW;
 	_txt_A->Height = _height;
 	_txt_A->ReadOnly = _w->bReadOnly;
 
 	_txt_R = gcnew TextBox();
 	_txt_R->AutoSize = false;
 	_txt_R->Name = name;
-	_txt_R->Width = 40;
+	_txt_R->Width = txtW;
 	_txt_R->Height = _height;
 	_txt_R->ReadOnly = _w->bReadOnly;
 
 	_txt_G = gcnew TextBox();
 	_txt_G->AutoSize = false;
 	_txt_G->Name = name;
-	_txt_G->Width = 40;
+	_txt_G->Width = txtW;
 	_txt_G->Height = _height;
 	_txt_G->ReadOnly = _w->bReadOnly;
 
 	_txt_B = gcnew TextBox();
 	_txt_B->Name = name;
-	_txt_B->Width = 40;
+	_txt_B->Width = txtW;
 	_txt_B->AutoSize = false;
 	_txt_B->Height = _height;
 	_txt_B->AutoSize = false;
@@ -834,7 +837,7 @@ ZobControlColor::ZobControlColor(const ZobVariablesExposer::wrapperData& w) :Zob
 
 	_btn = gcnew Button();
 	_btn->AutoSize = false;
-	_btn->Width = 40;
+	_btn->Width = btnW;
 	_btn->Height = _height;
 	_btn->Text = "...";
 	

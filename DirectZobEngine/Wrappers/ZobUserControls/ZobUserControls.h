@@ -24,7 +24,7 @@ namespace CLI {
 		~ZobGroupBox();
 		void OnToggle(Object^ sender, EventArgs^ e);
 		bool bToggled;
-		Label^ _label;
+		Button^ _label;
 		EventHandler^ _event;
 	};
 

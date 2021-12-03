@@ -51,6 +51,10 @@ void ZobColor::Set(uint a, uint r, uint g, uint b)
 	m_r = r;
 	m_b = b;
 	m_g = g;
+	m_aN = (float)a / 255.0f;
+	m_rN = (float)r / 255.0f;
+	m_gN = (float)g / 255.0f;
+	m_bN = (float)b / 255.0f;
 	m_value = MFB_RGB(r, g, b);
 }
 

@@ -21,11 +21,10 @@ class ZobColor
 		inline const uint GetRed() const { return m_r; }
 		inline const uint GetGreen() const { return m_g; }
 		inline const uint GetBlue() const { return m_b; }
-		inline const uint GetAlphaNormalized() const { return m_a; }
-		inline const float GetRedNormalized() const { return m_r / 255.0f; }
-		inline const float GetGreenNormalized() const { return m_g / 255.0f; }
-		inline const float GetBlueNormalized() const { return m_b / 255.0f; }
-		static inline uint GetAlpha(uint c) { return c & 0xFF000000 >> 24; }
+		inline const float GetAlphaNormalized() const { return m_aN; }
+		inline const float GetRedNormalized() const { return m_rN; }
+		inline const float GetGreenNormalized() const { return m_gN; }
+		inline const float GetBlueNormalized() const { return m_bN; }
 
 		bool FromString(std::string& s)
 		{
@@ -66,6 +65,10 @@ class ZobColor
 		uint m_r;
 		uint m_g;
 		uint m_b;
+		float m_aN;
+		float m_rN;
+		float m_gN;
+		float m_bN;
 
 	public:
 		static const ZobColor Red;

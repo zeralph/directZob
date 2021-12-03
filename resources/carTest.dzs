@@ -11,7 +11,7 @@
         <Var Name="Render mode" value="Fullframe" />
         <Var Name="Lighting mode" value="Vertex" />
         <Var Name="Bits per color" value="5" />
-        <Var Name="Dipthering" value="True" />
+        <Var Name="Dithering" value="True" />
         <Var Name="Z near" value="0.110" />
         <Var Name="Z far" value="1000.000" />
         <Var Name="Equalize triangle queues" value="False" />
@@ -92,7 +92,7 @@
             </ZobObject>
             <ZobObject Guid="4002054282">
                 <Var Name="Name" value="RL_wheel" />
-                <Var Name="Position" value="-0.800;0.260;1.260" />
+                <Var Name="Position" value="-0.800;0.259;1.260" />
                 <Var Name="Rotation" value="0.000;0.000;0.000" />
                 <Var Name="Scale" value="1.000;1.000;1.000" />
                 <Behaviors>
@@ -150,7 +150,7 @@
         </ZobObject>
         <ZobObject Guid="2003217728">
             <Var Name="Name" value="sideCamera" />
-            <Var Name="Position" value="-5.880;1.897;6.774" />
+            <Var Name="Position" value="-5.880;1.897;6.773" />
             <Var Name="Rotation" value="-176.339;35.933;-176.794" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
             <Var Name="FOV" value="45.000" />
@@ -360,14 +360,14 @@
         <Behaviors />
         <ZobObject Guid="4002436495">
             <Var Name="Name" value="building_2" />
-            <Var Name="Position" value="-112.213;-10.000;-45.466" />
+            <Var Name="Position" value="-112.212;-10.000;-45.465" />
             <Var Name="Rotation" value="0.000;35.000;0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
             <Behaviors />
         </ZobObject>
         <ZobObject Guid="4002193509">
             <Var Name="Name" value="building_3" />
-            <Var Name="Position" value="-81.489;-10.000;-1.284" />
+            <Var Name="Position" value="-81.488;-10.000;-1.283" />
             <Var Name="Rotation" value="0.000;35.000;0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
             <Behaviors>
@@ -382,7 +382,7 @@
         </ZobObject>
         <ZobObject Guid="4002209421">
             <Var Name="Name" value="building_4" />
-            <Var Name="Position" value="-57.132;-10.000;25.659" />
+            <Var Name="Position" value="-57.131;-10.000;25.659" />
             <Var Name="Rotation" value="0.000;35.000;0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
             <Behaviors>
