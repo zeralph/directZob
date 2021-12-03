@@ -45,6 +45,11 @@ void ZobVariablesExposer::wrapperData::Load()
 		float* f = (float*)ptr;
 		*f = atof(strValue.c_str());
 	}
+	else if (type == eWrapperType_uint)
+	{
+		uint* i = (uint*)ptr;
+		*i = atoi(strValue.c_str());
+	}
 	else if (type == eWrapperType_int)
 	{
 		int* i = (int*)ptr;

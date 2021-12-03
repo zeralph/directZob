@@ -33,6 +33,7 @@ public:
 		eWrapperType_path,
 		eWrapperType_zobObject,
 		eWrapperType_zobColor,
+		eWrapperType_uint,
 		__eWrapperType_MAX__
 	};
 
@@ -108,6 +109,10 @@ public:
 		else if (std::is_same<T, ZobColor>::value)
 		{
 			type = eWrapperType_zobColor;
+		}
+		else if (std::is_same<T, uint>::value)
+		{
+			type = eWrapperType_uint;
 		}
 		else
 		{

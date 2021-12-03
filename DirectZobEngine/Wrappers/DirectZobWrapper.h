@@ -41,6 +41,7 @@ namespace CLI
 		EngineWrapper^					GetEngineWrapper() { return m_ZobEngineWrapper; }
 		int								RunAFrame();
 		int								Stop();
+		void							CreateLight(int type);
 		void							StartPhysic();
 		void							StopPhysic(bool reset);
 		bool							IsPhysicPlaying();

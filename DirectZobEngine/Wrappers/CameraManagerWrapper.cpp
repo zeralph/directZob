@@ -115,18 +115,6 @@ namespace CLI
 		return false;
 	}
 
-	ZobCameraWrapper^ CameraManagerWrapper::GetCurrentCamera()
-	{
-		/*
-		Camera* c = m_Instance->GetCurrentCamera();
-		if (c)
-		{
-			return gcnew ZobCameraWrapper(c);
-		}
-		*/
-		return nullptr;
-	}
-
 	void CameraManagerWrapper::SetCurrentCameraPosition(ManagedVector3^ p)
 	{
 		DirectZob::GetInstance()->Lock();

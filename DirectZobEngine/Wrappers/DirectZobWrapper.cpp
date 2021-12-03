@@ -57,6 +57,11 @@ namespace CLI
 		}
 	}
 
+	void DirectZobWrapper::CreateLight(int type)
+	{
+		GetInstance()->GetLightManager()->CreateLight((Light::eLightType)type);
+	}
+
 	void DirectZobWrapper::LoadScene(System::String^ path, System::String^ file, engineCallback^ loaded)
 	{
 		if (GetInstance())

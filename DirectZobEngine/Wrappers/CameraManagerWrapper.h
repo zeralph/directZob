@@ -4,7 +4,6 @@
 #include "../Managers/CameraManager.h"
 #include "../DirectZob.h"
 #include "ManagedVector3.h"
-#include "ZobCameraWrapper.h"
 #include <string>
 #include <vector>
 
@@ -38,7 +37,6 @@ namespace CLI
 
 		cli::array<System::String^>^	GetCameraList();
 		System::String^ 				GetCurrentCameraName();
-		ZobCameraWrapper^				GetCurrentCamera();
 		ManagedVector3^ 				GetCurrentCameraPosition();
 		ManagedVector3^ 				GetCurrentCameraTarget();
 		void							Update(float dt);

@@ -71,7 +71,6 @@ namespace CLI
 		bool			LockFrustrum()	{ return m_Instance->LockFrustrum(); }
 		void			DrawCameraGizmos(bool b) { m_Instance->DrawCameraGizmos(b); }
 		bool			DrawCameraGizmos() { return m_Instance->DrawCameraGizmos(); }
-		void			SetRenderOutput(int r);
 		void			SetRenderMode(int r);
 		void			SetLightingPrecision(int r);
 		void			SetObjectModificator(objectModificator om) { m_objectModificator = om;}

@@ -3,7 +3,6 @@
 #include "ManagedObject.h"
 #include "../ZobObjects/ZobObject.h"
 #include "ManagedVector3.h"
-#include "ManagedRenderOptions.h"
 #include "ZobUserControls/ZobUserControls.h"
 #include "../Behaviors/ZobBehavior.h"
 #include "../ZobObjects/ZobObject.h"

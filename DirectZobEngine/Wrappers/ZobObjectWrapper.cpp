@@ -1,8 +1,6 @@
 #ifdef _WINDLL
 #include "DirectZobWrapper.h"
 #include "ZobObjectWrapper.h"
-#include "ZobCameraWrapper.h"
-#include "ZobLightWrapper.h"
 #include "../ZobObjects/Light.h"
 #include "../ZobObjects/Camera.h"
 #include "../DirectZob.h"

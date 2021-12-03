@@ -8,6 +8,13 @@
         <Var Name="Fog color" value="255;255;128;64" />
         <Var Name="Fog distance" value="100.000" />
         <Var Name="Fog density" value="20.000" />
+        <Var Name="Render mode" value="Fullframe" />
+        <Var Name="Lighting mode" value="Vertex" />
+        <Var Name="Bits per color" value="4" />
+        <Var Name="Z near" value="10.000" />
+        <Var Name="Z far" value="1000.000" />
+        <Var Name="Equalize triangle queues" value="False" />
+        <Var Name="Perspective Correction" value="True" />
     </Globals>
     <ZobObject Guid="4002568421">
         <Var Name="Name" value="terrain2.obj" />

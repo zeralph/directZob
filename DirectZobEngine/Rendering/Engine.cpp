@@ -48,7 +48,9 @@ Engine::Engine(int width, int height, Events* events)
 	m_nbRasterizers = std::thread::hardware_concurrency();
 	m_EqualizeTriangleQueues = false;
 	m_perspCorrection = true;
-	m_nbBitsPerColorDepth = 0;	//
+	m_nbBitsPerColorDepth = eBitsPerColor_full;	//
+	m_varExposer = new ZobVariablesExposer(0);
+	m_dipthering = false;
 	while (height % m_nbRasterizers != 0 && m_nbRasterizers>1)
 	{
 		m_nbRasterizers--;
@@ -69,7 +71,6 @@ Engine::Engine(int width, int height, Events* events)
 	//m_nbRasterizers = 4;
 	m_maxTrianglesQueueSize = 200000;// MAX_TRIANGLES_PER_IMAGE / m_nbRasterizers;
 	m_maxLineQueueSize = 200000;
-	m_renderOutput = eRenderOutput_render;
 	m_events = events;
 	m_currentFrame = 0;
 	m_zNear = 0.11f;
@@ -168,6 +169,42 @@ Engine::Engine(int width, int height, Events* events)
 	{
 		m_rasterizers[i]->Init(m_conditionvariables[i], m_mutexes[i]);
 	}
+
+	eRenderMode rm[3] = { eRenderMode::eRenderMode_fullframe, eRenderMode::eRenderMode_interlaced, eRenderMode::eRenderMode_scanline };
+	const char* rmStr[3] = { "Fullframe", "Interlaced", "Scanline" };
+	m_varExposer->WrapEnum<eRenderMode>("Render mode", &m_renderMode, 3, rm, rmStr, NULL, false, true);
+
+	eLightingPrecision lm[3] = { eLightingPrecision::eLightingPrecision_noLighting, eLightingPrecision::eLightingPrecision_vertex, eLightingPrecision::eLightingPrecision_pixel };
+	const char* lmStr[3] = { "No lighting", "Vertex", "Pixel" };
+	m_varExposer->WrapEnum<eLightingPrecision>("Lighting mode", &m_lightingPrecision, 3, lm, lmStr, NULL, false, true);
+
+	eBitsPerColor bp[9] = { eBitsPerColor::eBitsPerColor_full, eBitsPerColor::eBitsPerColor_1, eBitsPerColor::eBitsPerColor_2, eBitsPerColor::eBitsPerColor_3, 
+	eBitsPerColor::eBitsPerColor_4, eBitsPerColor::eBitsPerColor_5, eBitsPerColor::eBitsPerColor_6, eBitsPerColor::eBitsPerColor_7, eBitsPerColor::eBitsPerColor_8,};
+	const char* bpStr[9] = { "Full", "1", "2", "3", "4", "5", "6", "7", "8"};
+	m_varExposer->WrapEnum<eBitsPerColor>("Bits per color", &m_nbBitsPerColorDepth, 9, bp, bpStr, NULL, false, true);
+	m_varExposer->WrapVariable<bool>("Dipthering", &m_dipthering, NULL, false, true);
+	m_varExposer->WrapVariable<float>("Z near", &m_zNear, NULL, false, true);
+	m_varExposer->WrapVariable<float>("Z far", &m_zFar, NULL, false, true);
+
+	m_varExposer->WrapVariable<bool>("Show Z Buffer", &m_showZBuffer, NULL, false, false);
+	m_varExposer->WrapVariable<bool>("Wireframe", &m_wireFrame, NULL, false, false);
+	m_varExposer->WrapVariable<bool>("Show Normals", &m_showNormals, NULL, false, false);
+	m_varExposer->WrapVariable<bool>("Show grid", &m_showGrid, NULL, false, false);
+	m_varExposer->WrapVariable<bool>("Draw gizmos", &m_drawGizmos, NULL, false, false);
+	m_varExposer->WrapVariable<bool>("Draw physics gizmos", &m_drawPhysicsGizmos, NULL, false, false);
+	m_varExposer->WrapVariable<bool>("Draw camera gizmos", &m_drawCameraGizmos, NULL, false, false);
+	m_varExposer->WrapVariable<bool>("Draw object gizmos", &m_drawZobObjectGizmos, NULL, false, false);
+	m_varExposer->WrapVariable<bool>("Show bounding boxes", &m_showBBoxes, NULL, false, false);
+	m_varExposer->WrapVariable<bool>("Show text", &m_showText, NULL, false, false);
+	//m_varExposer->WrapVariable<volatile bool>("Z near", &m_lockFrustrum, NULL, false, true);
+	//eRenderMode m_render
+	//eLightingPrecision 
+	m_varExposer->WrapVariable<bool>("Equalize triangle queues", &m_EqualizeTriangleQueues, NULL, false, true);
+	m_varExposer->WrapVariable<bool>("Perspective Correction", &m_perspCorrection, NULL, false, true);
+	m_varExposer->WrapVariable<int>("Rastyerizer height", &m_rasterizerHeight, NULL, true, false);
+	m_varExposer->WrapVariable<uint>("Number of rasterizers", &m_nbRasterizers, NULL, true, false);
+	m_varExposer->WrapVariable<uint>("Number of drawn triangles", &m_drawnTriangles, NULL, true, false);
+
 	std::string n = "Engine initialized with " + std::to_string(m_nbRasterizers) + " rasterizer(s) for " + std::to_string(m_maxTrianglesQueueSize) + " triangles per image";
 	DirectZob::LogWarning(n.c_str());
 }
@@ -349,10 +386,10 @@ int Engine::StartDrawingScene()
 	}
 	if (inputMap->GetBoolIsNew(ZobInputManager::switchColorDepth))
 	{
-		m_nbBitsPerColorDepth ++;
-		if(m_nbBitsPerColorDepth>8)
+		eBitsPerColor i = (eBitsPerColor)(m_nbBitsPerColorDepth + 1);
+		if (i == __eBitsPerColor_MAX__)
 		{
-			m_nbBitsPerColorDepth = 0;
+			i = (eBitsPerColor)0;
 		}
 	}
 	if (inputMap->GetBoolIsNew(ZobInputManager::NextLightMode))
@@ -1418,4 +1455,17 @@ void Engine::PrintRasterizersInfos()
 void Engine::EnablePerspectiveCorrection(bool enable)
 {
 	m_perspCorrection = enable;
+}
+
+void Engine::LoadFromNode(TiXmlElement* node)
+{
+	if (node)
+	{
+		m_varExposer->ReadNode(node);
+	}
+}
+
+void Engine::SaveUnderNode(TiXmlElement* node)
+{
+	m_varExposer->SaveUnderNode(node);
 }

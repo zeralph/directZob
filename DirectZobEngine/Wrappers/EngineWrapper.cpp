@@ -74,13 +74,6 @@ namespace CLI
 	{
 		return m_Instance->GetBufferData()->height;
 	}
-	void EngineWrapper::SetRenderOutput(int r)
-	{
-		if (r >= 0 && r < (int)eRenderOutput::__eRenderOutput_MAX__)
-		{
-			m_Instance->SetRenderOutput((eRenderOutput)r);
-		}
-	}
 	void EngineWrapper::SetLightingPrecision(int r)
 	{
 		if (r >= 0 && r < (int)eLightingPrecision::__eLightingPrecision_MAX__)

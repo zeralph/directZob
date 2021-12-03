@@ -3,7 +3,6 @@
 #include "ManagedObject.h"
 #include "../ZobObjects/ZobObject.h"
 #include "ManagedVector3.h"
-#include "ManagedRenderOptions.h"
 #include "ZobUserControls/ZobUserControls.h"
 #include "../Behaviors/ZobBehavior.h"
 #include "../ZobObjects/ZobObject.h"
@@ -26,7 +25,8 @@ namespace CLI {
 		~ZobGlobalsWrapper() override;
 	private:
 		void					CreateGlobalView();
-		ZobGroupBox^			FillGlobalsControl();
+		ZobGroupBox^			FillSceneControl();
+		ZobGroupBox^			FillEngineControl();
 		ZobGroupBox^			m_globalsPanel;
 		ZobPropertiesContainer^ m_container;
 		Panel^					m_parentPanel;

@@ -52,8 +52,6 @@ namespace DirectZobEditor
 
         private CLI.DirectZobWrapper m_directZobWrapper;
         private CLI.ZobObjectManagerWrapper m_zobObjectManagerWrapper;
-        private CLI.MeshManagerWrapper m_meshManagerWrapper;
-        private CLI.LightManagerWrapper m_lightManagerWrapper;
 
         private Thread m_engineThread;
         //private ZobObjectListControl m_zobObjectList;
@@ -85,8 +83,6 @@ namespace DirectZobEditor
             m_directZobWrapper.Init(p.Width, p.Height);
             CLI.ZobObjectManagerWrapper.OnObjectSelectedEvent += new CLI.ZobObjectManagerWrapper.OnObjectSelected(OnObjectSelected);
             m_zobObjectManagerWrapper = m_directZobWrapper.GetZobObjectManagerWrapper();
-            m_meshManagerWrapper = new CLI.MeshManagerWrapper();
-            m_lightManagerWrapper = new CLI.LightManagerWrapper();
             Application.ApplicationExit += new EventHandler(this.OnApplicationExit);
             this.Load += new EventHandler(this.Onloaded);
             onSceneLoadedCallback = new CLI.engineCallback(onSceneLoadedCallbackMethod);
@@ -244,11 +240,6 @@ namespace DirectZobEditor
             return m_directZobWrapper;
         }
 
-        public CLI.MeshManagerWrapper GetMeshManagerWrapper()
-        {
-            return m_meshManagerWrapper;
-        }
-
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
             if(e.KeyCode == Keys.ControlKey)
@@ -389,7 +380,6 @@ namespace DirectZobEditor
                     string file = openFileDialog.SafeFileName;
                     string name = file;
                     name.Replace(' ', '_');
-                    //m_meshManagerWrapper.LoadMesh(name, path, file);
                     CLI.ZobObjectWrapper root = m_zobObjectManagerWrapper.GetRootObject();
                     CLI.ZobObjectWrapper z = null;
                     z = m_zobObjectManagerWrapper.CreateZobObject();
@@ -402,7 +392,6 @@ namespace DirectZobEditor
                         r = r.MakeRelativeUri(new Uri(path));
                         path = r.ToString();
                     }
-                    //path = System.IO.Path.GetRelativePath(workspace, path);
                     z.LoadMesh(file, file, path);
                     m_zobObjectManagerWrapper.ReScan();
                     OnSceneUpdateHandler handler = OnSceneUpdated;
@@ -477,7 +466,7 @@ namespace DirectZobEditor
 
         private void spotToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            m_lightManagerWrapper.CreateLight(1);
+            m_directZobWrapper.CreateLight(1);
             Form1.SceneUpdateEventArg ev = new Form1.SceneUpdateEventArg();
             ev.type = Form1.SceneUpdateType.createLight;
             PropagateSceneUpdateEvent(ev);
@@ -485,7 +474,7 @@ namespace DirectZobEditor
 
         private void pointToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            m_lightManagerWrapper.CreateLight(0);
+            m_directZobWrapper.CreateLight(0);
             Form1.SceneUpdateEventArg ev = new Form1.SceneUpdateEventArg();
             ev.type = Form1.SceneUpdateType.createLight;
             PropagateSceneUpdateEvent(ev);
@@ -493,7 +482,7 @@ namespace DirectZobEditor
 
         private void directionalToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            m_lightManagerWrapper.CreateLight(2);
+            m_directZobWrapper.CreateLight(2);
             Form1.SceneUpdateEventArg ev = new Form1.SceneUpdateEventArg();
             ev.type = Form1.SceneUpdateType.createLight;
             PropagateSceneUpdateEvent(ev);

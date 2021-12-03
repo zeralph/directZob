@@ -8,6 +8,14 @@
         <Var Name="Fog color" value="255;63;149;255" />
         <Var Name="Fog distance" value="20.000" />
         <Var Name="Fog density" value="3.000" />
+        <Var Name="Render mode" value="Fullframe" />
+        <Var Name="Lighting mode" value="Vertex" />
+        <Var Name="Bits per color" value="5" />
+        <Var Name="Dipthering" value="True" />
+        <Var Name="Z near" value="0.110" />
+        <Var Name="Z far" value="1000.000" />
+        <Var Name="Equalize triangle queues" value="False" />
+        <Var Name="Perspective Correction" value="True" />
     </Globals>
     <ZobObject Guid="4002129363">
         <Var Name="Name" value="PlayerCar" />
@@ -84,7 +92,7 @@
             </ZobObject>
             <ZobObject Guid="4002054282">
                 <Var Name="Name" value="RL_wheel" />
-                <Var Name="Position" value="-0.800;0.262;1.260" />
+                <Var Name="Position" value="-0.800;0.260;1.260" />
                 <Var Name="Rotation" value="0.000;0.000;0.000" />
                 <Var Name="Scale" value="1.000;1.000;1.000" />
                 <Behaviors>
@@ -99,7 +107,7 @@
             </ZobObject>
             <ZobObject Guid="4002838095">
                 <Var Name="Name" value="RR_wheel" />
-                <Var Name="Position" value="0.799;0.262;1.260" />
+                <Var Name="Position" value="0.799;0.261;1.260" />
                 <Var Name="Rotation" value="0.000;0.000;0.000" />
                 <Var Name="Scale" value="1.000;1.000;1.000" />
                 <Behaviors>
@@ -133,7 +141,7 @@
         </ZobObject>
         <ZobObject Guid="2003861325">
             <Var Name="Name" value="topCamera" />
-            <Var Name="Position" value="-0.000;59.172;-1.002" />
+            <Var Name="Position" value="-0.000;59.171;-1.002" />
             <Var Name="Rotation" value="-89.418;-79.774;-179.719" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
             <Var Name="FOV" value="45.000" />
@@ -142,7 +150,7 @@
         </ZobObject>
         <ZobObject Guid="2003217728">
             <Var Name="Name" value="sideCamera" />
-            <Var Name="Position" value="-5.880;1.898;6.775" />
+            <Var Name="Position" value="-5.880;1.897;6.774" />
             <Var Name="Rotation" value="-176.339;35.933;-176.794" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
             <Var Name="FOV" value="45.000" />
@@ -352,14 +360,14 @@
         <Behaviors />
         <ZobObject Guid="4002436495">
             <Var Name="Name" value="building_2" />
-            <Var Name="Position" value="-112.215;-10.000;-45.468" />
+            <Var Name="Position" value="-112.213;-10.000;-45.466" />
             <Var Name="Rotation" value="0.000;35.000;0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
             <Behaviors />
         </ZobObject>
         <ZobObject Guid="4002193509">
             <Var Name="Name" value="building_3" />
-            <Var Name="Position" value="-81.491;-10.000;-1.285" />
+            <Var Name="Position" value="-81.489;-10.000;-1.284" />
             <Var Name="Rotation" value="0.000;35.000;0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
             <Behaviors>
@@ -374,7 +382,7 @@
         </ZobObject>
         <ZobObject Guid="4002209421">
             <Var Name="Name" value="building_4" />
-            <Var Name="Position" value="-57.134;-10.000;25.659" />
+            <Var Name="Position" value="-57.132;-10.000;25.659" />
             <Var Name="Rotation" value="0.000;35.000;0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
             <Behaviors>

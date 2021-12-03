@@ -3,9 +3,6 @@
 #include "ZobObjectManagerWrapper.h"
 #include "../DirectZob.h"
 #include "../ZobObjects/ZobObject.h"
-#include "ZobLightWrapper.h"
-#include "ZobCameraWrapper.h"
-#include "ZobSpriteWrapper.h"
 
 #define TO_MANAGED_STRING(x) gcnew String(x);
 

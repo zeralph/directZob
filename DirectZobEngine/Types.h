@@ -50,13 +50,6 @@
 #ifndef DEG_TO_RAD
 	#define DEG_TO_RAD(x) (x * M_PI / 180.0f)
 #endif
-enum eRenderOutput
-{
-	eRenderOutput_render = 0,
-	eRenderOutput_zBuffer,
-	eRenderOutput_oBuffer,
-	__eRenderOutput_MAX__
-};
 enum eRenderMode
 {
 	eRenderMode_fullframe = 0,
@@ -80,7 +73,19 @@ enum eFogType
 	eFogType_Exp2,
 	__eFogType_MAX__
 };
-
+enum eBitsPerColor
+{
+	eBitsPerColor_full = 0,
+	eBitsPerColor_1 = 1,
+	eBitsPerColor_2 = 2,
+	eBitsPerColor_3 = 3,
+	eBitsPerColor_4 = 4,
+	eBitsPerColor_5 = 5,
+	eBitsPerColor_6 = 6,
+	eBitsPerColor_7 = 7,
+	eBitsPerColor_8 = 8,
+	__eBitsPerColor_MAX__
+};
 class  DirectZobType
 {
 public:

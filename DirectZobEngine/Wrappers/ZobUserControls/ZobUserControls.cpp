@@ -91,6 +91,10 @@ ZobGroupBox^ ZobControl::CreateWrappedVariablesView(std::string& name, ZobVariab
 			{
 				panel->Controls->Add(gcnew ZobControlColor(w));
 			}
+			else if (w.type == ZobVariablesExposer::eWrapperType_uint)
+			{
+				panel->Controls->Add(gcnew ZobControlFloat(w));
+			}
 			else
 			{
 				assert(NULL);

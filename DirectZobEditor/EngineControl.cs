@@ -59,7 +59,7 @@ namespace DirectZobEditor
         private void ComboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             ComboBox c = (ComboBox)sender;
-            m_engineWrapper.SetRenderOutput(c.SelectedIndex);
+            //m_engineWrapper.SetRenderOutput(c.SelectedIndex);
         }
 
         private void comboRender_SelectedIndexChanged(object sender, EventArgs e)

@@ -331,9 +331,8 @@ namespace DirectZobEditor
             {
                 return;
             }
-            ZobCameraWrapper c = m_mainForm.GetCameraManagerWrapper().GetCurrentCamera();
             ZobObjectWrapper z = null;//m_mainForm.GetDirectZobWrapper().GetSelectedZobObject();
-            if (c != null && z != null && e.Button == MouseButtons.Left && a != axis.none)
+            if (/*c != null && */z != null && e.Button == MouseButtons.Left && a != axis.none)
             {
                 Point p;
                 switch (a)
@@ -467,12 +466,11 @@ namespace DirectZobEditor
             {
                 return;
             }
-            ZobCameraWrapper c = m_mainForm.GetCameraManagerWrapper().GetCurrentCamera();
             ZobObjectWrapper z = null;// m_mainForm.GetDirectZobWrapper().GetSelectedZobObject();
-            if (c != null && z != null && e.Button == MouseButtons.Left)
+            if (/*c != null &&*/ z != null && e.Button == MouseButtons.Left)
             {
                 ManagedVector3 p0 = z.GetWorldPosition().Copy();
-                ManagedVector3 pn = c.GetForward().Copy();
+                ManagedVector3 pn = new ManagedVector3(0, 0, 0); //c.GetForward().Copy();
                 ManagedVector3 v = new ManagedVector3(0, 0, 0);
                 bool b = FromMouseToWorldOnPlane(p0, pn, ref v);
                 if (b)
@@ -534,12 +532,11 @@ namespace DirectZobEditor
             {
                 return;
             }
-            ZobCameraWrapper c = m_mainForm.GetCameraManagerWrapper().GetCurrentCamera();
             ZobObjectWrapper z = null;// m_mainForm.GetDirectZobWrapper().GetSelectedZobObject();
-            if (c != null && z != null && e.Button == MouseButtons.Left)
+            if (/*c != null && */z != null && e.Button == MouseButtons.Left)
             {
                 ManagedVector3 p0 = z.GetWorldPosition();
-                ManagedVector3 pn = c.GetForward();
+                ManagedVector3 pn = new ManagedVector3(0, 0, 0); //c.GetForward();
                 ManagedVector3 v = new ManagedVector3(0, 0, 0);
                 bool b = FromMouseToWorldOnPlane(p0, pn, ref v);
                 if(b)
@@ -549,7 +546,7 @@ namespace DirectZobEditor
                         ManagedVector3 k = new ManagedVector3((v.x - p0.x), (v.y - p0.y), (v.z - p0.z));
                         ManagedVector3 k2 = new ManagedVector3(k);
                         k2.Normalize();
-                        v = c.GetForward();
+                        //v = c.GetForward();
                         switch (a)
                         {
                             case axis.X:

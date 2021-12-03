@@ -685,20 +685,21 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector2* screenCoord, con
 			}
 		}
 
-		const int ncolors = engine->GetNbBitsPerColorDepth();
+		const int ncolors = (int)engine->GetNbBitsPerColorDepth();
 		if(ncolors != 0)
 		{
 			int divider = 256 / ncolors;
-			const int   row = (int)screenCoord->y & 15;   //  y % 16
-			const int   col = (int)screenCoord->x & 15;   //  x % 16
-
-			const int   t       = BAYER_PATTERN_16X16[col][row];
-			const int   corr    = (t / ncolors);
-
-			const int   blue    = (int)(fb * 255.0f);
-			const int   green   = (int)(fg * 255.0f);
-			const int   red     = (int)(fr * 255.0f);
-
+			int corr = 1;
+			if (engine->UseDipthering())
+			{
+				const int   row = (int)screenCoord->y & 15;   //  y % 16
+				const int   col = (int)screenCoord->x & 15;   //  x % 16
+				const int   t       = BAYER_PATTERN_16X16[col][row];
+				corr    = (t / ncolors);
+			}
+			const int   blue = (int)(fb * 255.0f);
+			const int   green = (int)(fg * 255.0f);
+			const int   red = (int)(fr * 255.0f);
 			int i1  = (blue  + corr) / divider; i1 = CLAMP( i1, 0, ncolors );
 			int i2  = (green + corr) / divider; i2 = CLAMP( i2, 0, ncolors );
 			int i3  = (red   + corr) / divider; i3 = CLAMP( i3, 0, ncolors );

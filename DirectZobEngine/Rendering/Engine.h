@@ -13,8 +13,8 @@
 #include "ZobVector2.h"
 #include "ZobVector3.h"
 #include "../ZobMaterial.h"
-//#include "Camera.h"
 #include "../Events.h"
+#include "Misc/ZobVariablesExposer.h"
 
 class Rasterizer;
 class Camera;
@@ -77,8 +77,6 @@ public:
 	inline bool										LockFrustrum() const { return m_lockFrustrum;  }
 	inline void										SetRenderMode(eRenderMode b) { m_renderMode = b; }
 	inline const eRenderMode						GetRenderMode() const { return m_renderMode; }
-	inline void										SetRenderOutput(eRenderOutput r) { m_renderOutput = r; }
-	inline const eRenderOutput						GetRenderOutput() const { return m_renderOutput; }
 	inline const eLightingPrecision					GetLightingPrecision() const  { return m_lightingPrecision ; }
 	void											SetLightingPrecision(eLightingPrecision l) { m_lightingPrecision = l; }
 	uint											GetObjectIdAtCoords(uint x, uint y);
@@ -99,9 +97,12 @@ public:
 	void											PrintRasterizersInfos();
 	inline const bool								EqualizeTriangleQueues() const {return m_EqualizeTriangleQueues;}
 	void 											EnablePerspectiveCorrection(bool enable);
-	inline const int								GetNbBitsPerColorDepth() const {return m_nbBitsPerColorDepth;}
-	void											SetNbBitsPerColorDepth(int d) {m_nbBitsPerColorDepth = d;}
+	inline const eBitsPerColor						GetNbBitsPerColorDepth() const {return m_nbBitsPerColorDepth;}
 	inline const bool								UsePerspectiveCorrection() const {return m_perspCorrection;}
+	void											SaveUnderNode(TiXmlElement* node);
+	void											LoadFromNode(TiXmlElement* node);
+	inline const bool								UseDipthering() const { return m_dipthering; }
+	ZobVariablesExposer*							GetVariablesExposer() { return m_varExposer; }
 private:	
 	void											DrawHorizontalLine(const float x1, const float x2, const float y, const uint color);
 	void											ClipSegmentToPlane(ZobVector3 &s0, ZobVector3 &s1, ZobVector3 &pp, ZobVector3 &pn);
@@ -133,39 +134,40 @@ private:
 		cb->y = ca->y + (cb->y - ca->y) * r;
 		cb->z = ca->z + (cb->z - ca->z) * r;
 	}
-		
+
+	uint** m_buffer;
+	float** m_zBuffer;
 	Rasterizer** m_rasterizers;
-
 	Events* m_events;
-
+	float* m_zBufferClearArray;
+	uint* m_bufferClearArray;
 	Line3D* m_LineQueue;
 	Triangle* m_TrianglesQueue;
 	ZobVector3* m_verticesData;
 	ZobVector2* m_uvData;
 	ZobVector3* m_colorData;
 	RenderOptions* m_renderOptions;
+	ZobVariablesExposer* m_varExposer;
 	int m_usedRenderOptions;
 	long m_TriangleQueueSize;
 	long m_maxTrianglesQueueSize;
-
 	long m_lineQueueSize;
-	long m_maxLineQueueSize;
-		
-	long m_LastTriangleQueueSize;
-		
-	uint m_nbRasterizers;
-	float m_zNear;
-	float m_zFar;
+	long m_maxLineQueueSize;	
+	long m_LastTriangleQueueSize;	
 	ulong m_currentFrame;
-	uint** m_buffer;
-	float** m_zBuffer;
 	int m_currentBuffer;
-//		uint* m_oBuffer;
 	BufferData m_bufferData;
-	bool m_showZBuffer;
-	uint m_drawnTriangles;
 	ulong m_nbPixels;
 	volatile bool m_started;
+	int m_nextWidth;
+	int m_nextHeight;
+	bool m_doResize;
+
+	eRenderMode m_renderMode = eRenderMode_fullframe;
+	eLightingPrecision m_lightingPrecision = eLightingPrecision_vertex;
+	float m_zNear;
+	float m_zFar;
+	bool m_showZBuffer;
 	bool m_wireFrame;
 	int m_rasterizerHeight;
 	bool m_showNormals;
@@ -177,18 +179,10 @@ private:
 	bool m_showBBoxes;
 	bool m_showText;
 	volatile bool m_lockFrustrum;
-	eRenderOutput m_renderOutput;
-	eRenderMode m_renderMode = eRenderMode_fullframe;
-	eLightingPrecision m_lightingPrecision = eLightingPrecision_vertex;
-	const uint oBufferColors[8] = { 0x000000, 0x00FF00, 0x0000FF,
-										0xFFFF00, 0x00FFFF, 0xFF00FF,
-										0xFFFFFF, 0xFF0000, };
 	bool m_EqualizeTriangleQueues;
 	bool m_perspCorrection;
-	int m_nextWidth;
-	int m_nextHeight;
-	bool m_doResize;
-	int m_nbBitsPerColorDepth;
-	float* m_zBufferClearArray;
-	uint* m_bufferClearArray;
+	eBitsPerColor m_nbBitsPerColorDepth;
+	bool m_dipthering;
+	uint m_nbRasterizers;
+	uint m_drawnTriangles;
 };

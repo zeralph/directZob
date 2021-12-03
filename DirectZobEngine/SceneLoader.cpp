@@ -201,6 +201,7 @@ void SceneLoader::LoadSceneInternal()
 				LoadTexture(e, MaterialManager);
 			}*/
 			DirectZob::GetInstance()->GetLightManager()->LoadFromNode(scene->FirstChildElement(XML_ELEMENT_GLOBALS));
+			DirectZob::GetInstance()->GetEngine()->LoadFromNode(scene->FirstChildElement(XML_ELEMENT_GLOBALS));
 			for (TiXmlElement* e = scene->FirstChildElement(XML_ELEMENT_ZOBOBJECT); e != NULL; e = e->NextSiblingElement(XML_ELEMENT_ZOBOBJECT))
 			{
 				const char* file = e->Attribute(XML_ATTR_FILE);
@@ -251,6 +252,7 @@ void SceneLoader::SaveScene(std::string &path, std::string &file)
 	doc.LinkEndChild(root);
 	TiXmlElement globals = TiXmlElement(XML_ELEMENT_GLOBALS);
 	DirectZob::GetInstance()->GetLightManager()->SaveUnderNode(&globals);
+	DirectZob::GetInstance()->GetEngine()->SaveUnderNode(&globals);
 	root->InsertEndChild(globals);	
 	ZobObject* rootObj = zobObjectManager->GetRootObject();
 	bool bok = true;
