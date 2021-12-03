@@ -74,27 +74,12 @@ namespace DirectZobEditor
 
         public Form1()
         {
-
             Font f = new Font("Microsoft Tai Le", 8);
             this.Font = f;
-
             m_mainForm = this;
             m_running = true;
             InitializeComponent();
-            //this.KeyPreview = true;
             m_engineWindow = new EngineWindow(this);
-
-            /*
-            Color backColor = (Color)System.Drawing.ColorTranslator.FromHtml("#2D2D30");
-            Color foreColor = (Color)System.Drawing.ColorTranslator.FromHtml("#F0F0F0");
-            this.BackColor = backColor;
-            this.ZobObjectListPanel.BackColor = backColor;
-            this.ObjectControlsFlowLayout.BackColor = backColor;
-            m_engineWindow.GetEngineRenderwindow().BackColor = backColor;
-            menuStrip1.BackColor = backColor;
-            menuStrip1.ForeColor = foreColor;
-            */
-            //tabsControl.TabPages.
             PictureBox p = m_engineWindow.GetEngineRenderwindow();
             m_directZobWrapper = new CLI.DirectZobWrapper(this.ZobObjectListPanel, this.propertiesPanel, m_engineWindow.GetEngineRenderwindow());
             m_directZobWrapper.Init(p.Width, p.Height);
@@ -104,12 +89,10 @@ namespace DirectZobEditor
             m_lightManagerWrapper = new CLI.LightManagerWrapper();
             Application.ApplicationExit += new EventHandler(this.OnApplicationExit);
             this.Load += new EventHandler(this.Onloaded);
-
             onSceneLoadedCallback = new CLI.engineCallback(onSceneLoadedCallbackMethod);
             OnSceneLoadedDelegate = new OnSceneLoaded(OnSceneLoadedMethod);
 
-            //--
-
+            /*ce truc va virer*/
             m_engineControl = new EngineControl(this, m_directZobWrapper.GetEngineWrapper());
             m_engineWindow.BindEvents();
             m_engineControl.BindEvents();

@@ -15,7 +15,7 @@ using System.IO;
 
 namespace DirectZobEditor
 {
-
+    /*
     public class ObjectSelectionEventArg : EventArgs
     {
         public CLI.ZobObjectWrapper previousZobObject;
@@ -27,7 +27,7 @@ namespace DirectZobEditor
         public ManagedVector3 r;
         public ManagedVector3 s;
     }
-
+    */
     public partial class EngineWindow : UserControl
     {
         public enum objectModificator
@@ -92,10 +92,6 @@ namespace DirectZobEditor
             InitializeComponent();
             this.Dock = DockStyle.Fill;
             m_mainForm = f;
-            bTX.Visible = false;
-            bTY.Visible = false;
-            bTZ.Visible = false;
-            bCenter.Visible = false;
             this.DoubleBuffered = true;
         }
 
@@ -131,12 +127,6 @@ namespace DirectZobEditor
         public void SetModificator(objectModificator m)
         {
             m_objectModificator = m;
-        }
-        public void RemoveTranslationGizmos()
-        {
-            bTY.Visible = false;
-            bTX.Visible = false;
-            bTZ.Visible = false;
         }
 
         public void OnSceneChanged(object s, EventArgs e)
@@ -201,24 +191,24 @@ namespace DirectZobEditor
         {
             int w = EngineRender.Width;
             int h = EngineRender.Height;
-            float hFactor = (float)b.Height / (float)EngineRenderPanel.Height;
-            float wFactor = (float)b.Width / (float)EngineRenderPanel.Width;
+            float hFactor = (float)b.Height / (float)EngineRender.Height;
+            float wFactor = (float)b.Width / (float)EngineRender.Width;
             if (hFactor > wFactor)
             {
-                h = EngineRenderPanel.Height;
+                h = EngineRender.Height;
                 w = (int)((float)b.Width / (float)b.Height * h);
             }
             else
             {
-                w = EngineRenderPanel.Width;
+                w = EngineRender.Width;
                 h = (int)((float)b.Height / (float)b.Width * w);
             }
             if (EngineRender.Width != w || EngineRender.Height != h)
             {
                 EngineRender.Width = w;
                 EngineRender.Height = h;
-                int x = (EngineRenderPanel.Width - w) / 2;
-                int y = (EngineRenderPanel.Height - h) / 2;
+                int x = (EngineRender.Width - w) / 2;
+                int y = (EngineRender.Height - h) / 2;
                 EngineRender.Location = new Point(x, y);
             }
         }
@@ -288,7 +278,6 @@ namespace DirectZobEditor
             else
             {
                 m_selectedObject = null;
-                RemoveTranslationGizmos();
             }
         }
         
@@ -350,17 +339,17 @@ namespace DirectZobEditor
                 switch (a)
                 {
                     case axis.X:
-                        p = bTX.PointToScreen(new Point(e.X, e.Y));
-                        RotateObjectAroundX(z, p.X, p.Y, inWorld);
+                        //p = bTX.PointToScreen(new Point(e.X, e.Y));
+                        //RotateObjectAroundX(z, p.X, p.Y, inWorld);
                         break;
                     case axis.Y:
-                        p = bTY.PointToScreen(new Point(e.X, e.Y));
-                        RotateObjectAroundY(z, p.X, p.Y, inWorld);
+                        //p = bTY.PointToScreen(new Point(e.X, e.Y));
+                        //RotateObjectAroundY(z, p.X, p.Y, inWorld);
                         //pn =z.GetForward().Copy();
                         break;
                     case axis.Z:
-                        p = bTZ.PointToScreen(new Point(e.X, e.Y));
-                        RotateObjectAroundZ(z, p.X, p.Y, inWorld);
+                        //p = bTZ.PointToScreen(new Point(e.X, e.Y));
+                        //RotateObjectAroundZ(z, p.X, p.Y, inWorld);
                         //pn = z.GetLeft().Copy();
                         break;
                 }

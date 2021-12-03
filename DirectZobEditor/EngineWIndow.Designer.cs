@@ -29,13 +29,7 @@
         private void InitializeComponent()
         {
             this.EngineRender = new System.Windows.Forms.PictureBox();
-            this.EngineRenderPanel = new System.Windows.Forms.Panel();
-            this.bCenter = new System.Windows.Forms.Label();
-            this.bTZ = new System.Windows.Forms.Label();
-            this.bTY = new System.Windows.Forms.Label();
-            this.bTX = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.EngineRender)).BeginInit();
-            this.EngineRenderPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // EngineRender
@@ -53,91 +47,19 @@
             this.EngineRender.MouseUp += new System.Windows.Forms.MouseEventHandler(this.EngineRender_MouseUp);
             this.EngineRender.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.EngineRender_MouseWheel);
             // 
-            // EngineRenderPanel
-            // 
-            this.EngineRenderPanel.BackColor = System.Drawing.SystemColors.ButtonShadow;
-            this.EngineRenderPanel.Controls.Add(this.bCenter);
-            this.EngineRenderPanel.Controls.Add(this.bTZ);
-            this.EngineRenderPanel.Controls.Add(this.bTY);
-            this.EngineRenderPanel.Controls.Add(this.bTX);
-            this.EngineRenderPanel.Controls.Add(this.EngineRender);
-            this.EngineRenderPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.EngineRenderPanel.Location = new System.Drawing.Point(0, 0);
-            this.EngineRenderPanel.Name = "EngineRenderPanel";
-            this.EngineRenderPanel.Size = new System.Drawing.Size(960, 564);
-            this.EngineRenderPanel.TabIndex = 2;
-            // 
-            // bCenter
-            // 
-            this.bCenter.BackColor = System.Drawing.Color.Black;
-            this.bCenter.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold);
-            this.bCenter.ForeColor = System.Drawing.Color.White;
-            this.bCenter.Location = new System.Drawing.Point(734, 325);
-            this.bCenter.Name = "bCenter";
-            this.bCenter.Size = new System.Drawing.Size(30, 25);
-            this.bCenter.TabIndex = 9;
-            this.bCenter.Text = "O";
-            this.bCenter.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.bCenter.MouseMove += new System.Windows.Forms.MouseEventHandler(this.bCenter_MouseMove);
-            // 
-            // bTZ
-            // 
-            this.bTZ.BackColor = System.Drawing.Color.Blue;
-            this.bTZ.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold);
-            this.bTZ.ForeColor = System.Drawing.Color.White;
-            this.bTZ.Location = new System.Drawing.Point(734, 404);
-            this.bTZ.Name = "bTZ";
-            this.bTZ.Size = new System.Drawing.Size(30, 25);
-            this.bTZ.TabIndex = 8;
-            this.bTZ.Text = "Z";
-            this.bTZ.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.bTZ.MouseMove += new System.Windows.Forms.MouseEventHandler(this.bTZ_MouseMove);
-            // 
-            // bTY
-            // 
-            this.bTY.BackColor = System.Drawing.Color.Green;
-            this.bTY.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold);
-            this.bTY.ForeColor = System.Drawing.Color.White;
-            this.bTY.Location = new System.Drawing.Point(734, 283);
-            this.bTY.Name = "bTY";
-            this.bTY.Size = new System.Drawing.Size(30, 25);
-            this.bTY.TabIndex = 7;
-            this.bTY.Text = "Y";
-            this.bTY.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.bTY.MouseMove += new System.Windows.Forms.MouseEventHandler(this.bTY_MouseMove);
-            // 
-            // bTX
-            // 
-            this.bTX.BackColor = System.Drawing.Color.Red;
-            this.bTX.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold);
-            this.bTX.ForeColor = System.Drawing.Color.White;
-            this.bTX.Location = new System.Drawing.Point(734, 365);
-            this.bTX.Name = "bTX";
-            this.bTX.Size = new System.Drawing.Size(30, 25);
-            this.bTX.TabIndex = 6;
-            this.bTX.Text = "X";
-            this.bTX.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.bTX.MouseMove += new System.Windows.Forms.MouseEventHandler(this.bTX_MouseMove);
-            // 
             // EngineWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.EngineRenderPanel);
+            this.Controls.Add(this.EngineRender);
             this.Name = "EngineWindow";
             this.Size = new System.Drawing.Size(960, 564);
             ((System.ComponentModel.ISupportInitialize)(this.EngineRender)).EndInit();
-            this.EngineRenderPanel.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
 
         #endregion
         private System.Windows.Forms.PictureBox EngineRender;
-        private System.Windows.Forms.Panel EngineRenderPanel;
-        private System.Windows.Forms.Label bTX;
-        private System.Windows.Forms.Label bTZ;
-        private System.Windows.Forms.Label bTY;
-        private System.Windows.Forms.Label bCenter;
     }
 }
