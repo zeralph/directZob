@@ -15,6 +15,19 @@ using System.IO;
 
 namespace DirectZobEditor
 {
+
+    public class ObjectSelectionEventArg : EventArgs
+    {
+        public CLI.ZobObjectWrapper previousZobObject;
+        public CLI.ZobObjectWrapper newZobObject;
+    }
+    public class ObjectModificationEventArg : EventArgs
+    {
+        public ManagedVector3 t;
+        public ManagedVector3 r;
+        public ManagedVector3 s;
+    }
+
     public partial class EngineWindow : UserControl
     {
         public enum objectModificator
@@ -47,12 +60,16 @@ namespace DirectZobEditor
         public BeforeUpdateEngine BeforeUpdateEngineWindowDelegate;
         public AfterUpdateEngine AfterUpdateEngineWindowDelegate;
         //object move, rotate and scale
+
+        /*
         public delegate void OnObjectMovedHandler(object s, ObjectModificationEventArg e);
         public event OnObjectMovedHandler OnObjectMoved;
         public delegate void OnObjectRotatedHandler(object s, ObjectModificationEventArg e);
         public event OnObjectRotatedHandler OnObjectRotated;
         public delegate void OnObjectScaledHandler(object s, ObjectModificationEventArg e);
         public event OnObjectScaledHandler OnObjectScaled;
+        */
+
         int m_lastMouseX = -1;
         int m_lastMouseY = -1;
         private bool m_engineRendering = false;
@@ -617,26 +634,29 @@ namespace DirectZobEditor
         #region object handlers for move, scale and rotate
         private void OnZobObjectMoved(CLI.ZobObjectWrapper zobObject)
         {
+            /*
             OnObjectMovedHandler handler = OnObjectMoved;
             if (null != handler)
             {
                 ObjectModificationEventArg ev = new ObjectModificationEventArg();
                 ev.t = zobObject.GetLocalPosition();
                 handler(this, ev);
-            }
+            }*/
         }
         private void OnZobObjectScaled(CLI.ZobObjectWrapper zobObject)
         {
+            /*
             OnObjectScaledHandler handler = OnObjectScaled;
             if (null != handler)
             {
                 ObjectModificationEventArg ev = new ObjectModificationEventArg();
                 ev.s = zobObject.GetLocalScale();
                 handler(this, ev);
-            }
+            }*/
         }
         private void OnZobObjectRotated(CLI.ZobObjectWrapper zobObject)
         {
+            /*
             OnObjectRotatedHandler handler = OnObjectRotated;
             if (null != handler)
             {
@@ -644,6 +664,7 @@ namespace DirectZobEditor
                 ev.r = zobObject.GetWorldRotation();
                 handler(this, ev);
             }
+            */
         }
         #endregion
     }

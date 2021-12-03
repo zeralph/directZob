@@ -59,13 +59,6 @@ namespace DirectZobEditor
         //private ZobObjectListControl m_zobObjectList;
         private EngineWindow m_engineWindow;
         private EngineControl m_engineControl;
-        private ZobObjectControl m_zobObjectControl;
-        private SceneControl m_sceneControl;
-        private ZobLightControl m_lightControl;
-        private ZobCameraControl m_cameraControl;
-        private ZobMeshControl m_meshControl;
-        //private PhysicControl m_physicsControl;
-        private ZobSpriteControl m_spriteControl;
         private bool m_snap = false;
         private bool m_ctrlPressed = false;
 
@@ -118,34 +111,8 @@ namespace DirectZobEditor
             //--
 
             m_engineControl = new EngineControl(this, m_directZobWrapper.GetEngineWrapper());
-//            m_zobObjectList = new ZobObjectListControl(this);
-            m_sceneControl = new SceneControl(this, m_lightManagerWrapper);
-            m_lightControl = new ZobLightControl(this);
-            m_cameraControl = new ZobCameraControl(this);
-            m_meshControl = new ZobMeshControl(this);
-            m_spriteControl = new ZobSpriteControl(this);
-            //m_physicsControl = new PhysicControl(this);
-            m_zobObjectControl = new ZobObjectControl(this, m_lightControl, m_cameraControl, m_meshControl);
             m_engineWindow.BindEvents();
             m_engineControl.BindEvents();
- //           m_zobObjectList.BindEvents();
-            m_sceneControl.BindEvents();
-            m_lightControl.BindEvents();
-            m_cameraControl.BindEvents();
-            m_meshControl.BindEvents();
-            m_spriteControl.BindEvents();
-            //m_physicsControl.BindEvents();
-            m_zobObjectControl.BindEvents();
-            
-            //ZobObjectListPanel.Controls.Add(m_zobObjectList);
-            propertiesPanel.Controls.Add(m_zobObjectControl);
-            //ObjectControlsFlowLayout.Controls.Add(m_physicsControl);
-            propertiesPanel.Controls.Add(m_meshControl);
-            propertiesPanel.Controls.Add(m_cameraControl);
-            propertiesPanel.Controls.Add(m_lightControl);
-            propertiesPanel.Controls.Add(m_spriteControl);
-            EngineControlsFlowLayout.Controls.Add(m_engineControl);
-            SceneControlsFlowLayout.Controls.Add(m_sceneControl);
             this.propertiesPanel.MinimumSize = new Size(300, 500);
 
             this.WindowState = FormWindowState.Maximized;
@@ -287,16 +254,6 @@ namespace DirectZobEditor
         public EngineWindow GetEngineWindow()
         {
             return m_engineWindow;
-        }
-
-        public ZobObjectControl GetZobObjectControl()
-        {
-            return m_zobObjectControl;
-        }
-
-        public ZobObjectListControl GetZobObjectListControl()
-        {
-            return null;// m_zobObjectList;
         }
 
         public CLI.DirectZobWrapper GetDirectZobWrapper()
