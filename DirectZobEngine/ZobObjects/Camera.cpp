@@ -666,6 +666,6 @@ TiXmlNode* Camera::SaveUnderNode(TiXmlNode* node)
 {
 	
 	TiXmlNode* n = ZobObject::SaveUnderNode(node);
-	m_varExposer->SaveUnderNode(n);
+	//m_varExposer->SaveUnderNode(n);
 	return n;
 }

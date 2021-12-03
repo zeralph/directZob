@@ -113,24 +113,16 @@
                 </Behaviors>
             </ZobObject>
         </ZobObject>
-        <ZobObject Guid="2003412161" Type="Camera">
+        <ZobObject Guid="2003412161">
             <Var Name="Name" value="rearCamera" />
             <Var Name="Position" value="-0.000;1.910;-4.787" />
-            <Var Name="Rotation" value="15.056;0.000;0.000" />
+            <Var Name="Rotation" value="15.056;-0.000;-0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
             <Var Name="FOV" value="70.000" />
             <Var Name="Camera controller" value="FollowCar" />
             <Behaviors />
-            <Var Name="Name" value="rearCamera" />
-            <Var Name="Position" value="-0.000;1.910;-4.787" />
-            <Var Name="Rotation" value="15.056;0.000;0.000" />
-            <Var Name="Scale" value="1.000;1.000;1.000" />
-            <Var Name="FOV" value="70.000" />
-            <Var Name="Camera controller" value="FollowCar" />
-            <Controller Name="FollowCar" Guid="2008724783" />
-            <Fov>70.00</Fov>
         </ZobObject>
-        <ZobObject Guid="2003143259" Type="Camera">
+        <ZobObject Guid="2003143259">
             <Var Name="Name" value="FrontCamera" />
             <Var Name="Position" value="-0.000;0.300;2.200" />
             <Var Name="Rotation" value="0.000;0.000;0.000" />
@@ -138,16 +130,8 @@
             <Var Name="FOV" value="70.000" />
             <Var Name="Camera controller" value="base" />
             <Behaviors />
-            <Var Name="Name" value="FrontCamera" />
-            <Var Name="Position" value="-0.000;0.300;2.200" />
-            <Var Name="Rotation" value="0.000;0.000;0.000" />
-            <Var Name="Scale" value="1.000;1.000;1.000" />
-            <Var Name="FOV" value="70.000" />
-            <Var Name="Camera controller" value="base" />
-            <Controller Name="Base" Guid="2008891397" />
-            <Fov>70.00</Fov>
         </ZobObject>
-        <ZobObject Guid="2003861325" Type="Camera">
+        <ZobObject Guid="2003861325">
             <Var Name="Name" value="topCamera" />
             <Var Name="Position" value="0.000;59.173;-1.002" />
             <Var Name="Rotation" value="-89.418;-79.774;-179.719" />
@@ -155,16 +139,8 @@
             <Var Name="FOV" value="45.000" />
             <Var Name="Camera controller" value="base" />
             <Behaviors />
-            <Var Name="Name" value="topCamera" />
-            <Var Name="Position" value="0.000;59.173;-1.002" />
-            <Var Name="Rotation" value="-89.418;-79.774;-179.719" />
-            <Var Name="Scale" value="1.000;1.000;1.000" />
-            <Var Name="FOV" value="45.000" />
-            <Var Name="Camera controller" value="base" />
-            <Controller Name="Base" Guid="2008682056" />
-            <Fov>45.00</Fov>
         </ZobObject>
-        <ZobObject Guid="2003217728" Type="Camera">
+        <ZobObject Guid="2003217728">
             <Var Name="Name" value="sideCamera" />
             <Var Name="Position" value="-5.880;1.899;6.775" />
             <Var Name="Rotation" value="-176.339;35.933;-176.794" />
@@ -172,16 +148,8 @@
             <Var Name="FOV" value="45.000" />
             <Var Name="Camera controller" value="base" />
             <Behaviors />
-            <Var Name="Name" value="sideCamera" />
-            <Var Name="Position" value="-5.880;1.899;6.775" />
-            <Var Name="Rotation" value="-176.339;35.933;-176.794" />
-            <Var Name="Scale" value="1.000;1.000;1.000" />
-            <Var Name="FOV" value="45.000" />
-            <Var Name="Camera controller" value="base" />
-            <Controller Name="Base" Guid="2008568421" />
-            <Fov>45.00</Fov>
         </ZobObject>
-        <ZobObject Guid="2003649406" Type="Camera">
+        <ZobObject Guid="2003649406">
             <Var Name="Name" value="orbitalCamera" />
             <Var Name="Position" value="-18.942;29.375;19.448" />
             <Var Name="Rotation" value="-133.462;45.023;178.977" />
@@ -189,14 +157,6 @@
             <Var Name="FOV" value="45.000" />
             <Var Name="Camera controller" value="Orbital" />
             <Behaviors />
-            <Var Name="Name" value="orbitalCamera" />
-            <Var Name="Position" value="-18.942;29.375;19.448" />
-            <Var Name="Rotation" value="-133.462;45.023;178.977" />
-            <Var Name="Scale" value="1.000;1.000;1.000" />
-            <Var Name="FOV" value="45.000" />
-            <Var Name="Camera controller" value="Orbital" />
-            <Controller Name="Orbital" Guid="2008160091" />
-            <Fov>45.00</Fov>
         </ZobObject>
     </ZobObject>
     <ZobObject Guid="4004542631">
@@ -392,14 +352,14 @@
         <Behaviors />
         <ZobObject Guid="4002436495">
             <Var Name="Name" value="building_2" />
-            <Var Name="Position" value="-112.219;-10.000;-45.469" />
+            <Var Name="Position" value="-112.217;-10.000;-45.469" />
             <Var Name="Rotation" value="0.000;35.000;0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
             <Behaviors />
         </ZobObject>
         <ZobObject Guid="4002193509">
             <Var Name="Name" value="building_3" />
-            <Var Name="Position" value="-81.495;-10.000;-1.289" />
+            <Var Name="Position" value="-81.493;-10.000;-1.287" />
             <Var Name="Rotation" value="0.000;35.000;0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
             <Behaviors>
@@ -414,7 +374,7 @@
         </ZobObject>
         <ZobObject Guid="4002209421">
             <Var Name="Name" value="building_4" />
-            <Var Name="Position" value="-57.138;-10.000;25.660" />
+            <Var Name="Position" value="-57.136;-10.000;25.660" />
             <Var Name="Rotation" value="0.000;35.000;0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
             <Behaviors>

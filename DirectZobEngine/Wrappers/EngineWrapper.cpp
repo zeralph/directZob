@@ -51,7 +51,7 @@ namespace CLI
 		m_renderWindow->MouseEnter += gcnew EventHandler(this, &EngineWrapper::OnMouseHover);
 		m_renderWindow->MouseLeave += gcnew EventHandler(this, &EngineWrapper::OnMouseLeave);
 		m_renderWindow->MouseWheel += gcnew MouseEventHandler(this, &EngineWrapper::OnMouseWheel);
-		m_renderWindow->MouseClick += gcnew MouseEventHandler(this, &EngineWrapper::OnMouseClick);
+		m_renderWindow->MouseDoubleClick+= gcnew MouseEventHandler(this, &EngineWrapper::OnMouseClick);
 		m_renderWindow->AutoSize = false;
 		m_renderWindow->Width = 800;
 		m_renderWindow->Height = 600;
