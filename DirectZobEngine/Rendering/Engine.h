@@ -14,7 +14,7 @@
 #include "ZobVector3.h"
 #include "../ZobMaterial.h"
 #include "../Events.h"
-#include "Misc/ZobVariablesExposer.h"
+#include "../Misc/ZobVariablesExposer.h"
 
 class Rasterizer;
 class Camera;
