@@ -50,7 +50,7 @@ Engine::Engine(int width, int height, Events* events)
 	m_perspCorrection = true;
 	m_nbBitsPerColorDepth = eBitsPerColor_full;	//
 	m_varExposer = new ZobVariablesExposer(0);
-	m_dipthering = false;
+	m_dithering = false;
 	while (height % m_nbRasterizers != 0 && m_nbRasterizers>1)
 	{
 		m_nbRasterizers--;
@@ -182,7 +182,7 @@ Engine::Engine(int width, int height, Events* events)
 	eBitsPerColor::eBitsPerColor_4, eBitsPerColor::eBitsPerColor_5, eBitsPerColor::eBitsPerColor_6, eBitsPerColor::eBitsPerColor_7, eBitsPerColor::eBitsPerColor_8,};
 	const char* bpStr[9] = { "Full", "1", "2", "3", "4", "5", "6", "7", "8"};
 	m_varExposer->WrapEnum<eBitsPerColor>("Bits per color", &m_nbBitsPerColorDepth, 9, bp, bpStr, NULL, false, true);
-	m_varExposer->WrapVariable<bool>("Dipthering", &m_dipthering, NULL, false, true);
+	m_varExposer->WrapVariable<bool>("Dithering", &m_dithering, NULL, false, true);
 	m_varExposer->WrapVariable<float>("Z near", &m_zNear, NULL, false, true);
 	m_varExposer->WrapVariable<float>("Z far", &m_zFar, NULL, false, true);
 
@@ -204,7 +204,7 @@ Engine::Engine(int width, int height, Events* events)
 	m_varExposer->WrapVariable<int>("Rastyerizer height", &m_rasterizerHeight, NULL, true, false);
 	m_varExposer->WrapVariable<uint>("Number of rasterizers", &m_nbRasterizers, NULL, true, false);
 	m_varExposer->WrapVariable<uint>("Number of drawn triangles", &m_drawnTriangles, NULL, true, false);
-
+	m_varExposer->Load();
 	std::string n = "Engine initialized with " + std::to_string(m_nbRasterizers) + " rasterizer(s) for " + std::to_string(m_maxTrianglesQueueSize) + " triangles per image";
 	DirectZob::LogWarning(n.c_str());
 }
@@ -245,6 +245,7 @@ m_events = NULL;
 void Engine::Start()
 {
 	DirectZob::GetInstance()->GetZobObjectManager()->Init();
+	m_varExposer->Load();
 	for (int i = 0; i < m_nbRasterizers; i++)
 		m_started = true;
 }

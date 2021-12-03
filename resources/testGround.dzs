@@ -8,6 +8,14 @@
         <Var Name="Fog color" value="255;255;255;0" />
         <Var Name="Fog distance" value="20.000" />
         <Var Name="Fog density" value="2.000" />
+        <Var Name="Render mode" value="Fullframe" />
+        <Var Name="Lighting mode" value="Vertex" />
+        <Var Name="Bits per color" value="Full" />
+        <Var Name="Dipthering" value="False" />
+        <Var Name="Z near" value="10.000" />
+        <Var Name="Z far" value="1000.000" />
+        <Var Name="Equalize triangle queues" value="False" />
+        <Var Name="Perspective Correction" value="True" />
     </Globals>
     <ZobObject Guid="4002568421">
         <Var Name="Name" value="skybox.obj" />
@@ -112,7 +120,7 @@
             </ZobObject>
             <ZobObject Guid="4002054282">
                 <Var Name="Name" value="RL_wheel" />
-                <Var Name="Position" value="-0.800;0.261;1.260" />
+                <Var Name="Position" value="-0.800;0.260;1.260" />
                 <Var Name="Rotation" value="0.000;0.000;0.000" />
                 <Var Name="Scale" value="1.000;1.000;1.000" />
                 <Behaviors>
@@ -144,7 +152,7 @@
         <ZobObject Guid="2003412161">
             <Var Name="Name" value="rearCamera" />
             <Var Name="Position" value="-0.000;1.910;-4.787" />
-            <Var Name="Rotation" value="15.056;-0.000;-0.000" />
+            <Var Name="Rotation" value="15.056;0.000;0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
             <Var Name="FOV" value="70.000" />
             <Var Name="Camera controller" value="FollowCar" />
@@ -170,7 +178,7 @@
         </ZobObject>
         <ZobObject Guid="2003217728">
             <Var Name="Name" value="sideCamera" />
-            <Var Name="Position" value="-5.880;1.897;6.775" />
+            <Var Name="Position" value="-5.880;1.897;6.774" />
             <Var Name="Rotation" value="-176.339;35.933;-176.794" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
             <Var Name="FOV" value="45.000" />

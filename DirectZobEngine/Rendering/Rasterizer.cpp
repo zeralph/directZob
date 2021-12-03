@@ -689,8 +689,8 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector2* screenCoord, con
 		if(ncolors != 0)
 		{
 			int divider = 256 / ncolors;
-			int corr = 1;
-			if (engine->UseDipthering())
+			int corr = divider;
+			if (engine->UseDithering())
 			{
 				const int   row = (int)screenCoord->y & 15;   //  y % 16
 				const int   col = (int)screenCoord->x & 15;   //  x % 16

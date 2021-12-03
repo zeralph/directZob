@@ -101,7 +101,7 @@ public:
 	inline const bool								UsePerspectiveCorrection() const {return m_perspCorrection;}
 	void											SaveUnderNode(TiXmlElement* node);
 	void											LoadFromNode(TiXmlElement* node);
-	inline const bool								UseDipthering() const { return m_dipthering; }
+	inline const bool								UseDithering() const { return m_dithering; }
 	ZobVariablesExposer*							GetVariablesExposer() { return m_varExposer; }
 private:	
 	void											DrawHorizontalLine(const float x1, const float x2, const float y, const uint color);
@@ -182,7 +182,7 @@ private:
 	bool m_EqualizeTriangleQueues;
 	bool m_perspCorrection;
 	eBitsPerColor m_nbBitsPerColorDepth;
-	bool m_dipthering;
+	bool m_dithering;
 	uint m_nbRasterizers;
 	uint m_drawnTriangles;
 };

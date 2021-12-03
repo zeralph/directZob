@@ -1,16 +1,17 @@
 <?xml version="1.0" ?>
 <Scene>
     <Globals>
-        <Var Name="Ambient color" value="255;102;102;102" />
-        <Var Name="Clear color" value="255;255;255;0" />
+        <Var Name="Ambient color" value="255;251;221;132" />
+        <Var Name="Clear color" value="255;137;205;245" />
         <Var Name="Ambient color intensity" value="0.500" />
         <Var Name="Fog type" value="Exp2" />
-        <Var Name="Fog color" value="255;255;128;64" />
-        <Var Name="Fog distance" value="100.000" />
-        <Var Name="Fog density" value="20.000" />
+        <Var Name="Fog color" value="255;134;197;249" />
+        <Var Name="Fog distance" value="300.000" />
+        <Var Name="Fog density" value="5.000" />
         <Var Name="Render mode" value="Fullframe" />
         <Var Name="Lighting mode" value="Vertex" />
-        <Var Name="Bits per color" value="4" />
+        <Var Name="Bits per color" value="Full" />
+        <Var Name="Dipthering" value="False" />
         <Var Name="Z near" value="10.000" />
         <Var Name="Z far" value="1000.000" />
         <Var Name="Equalize triangle queues" value="False" />
@@ -20,7 +21,7 @@
         <Var Name="Name" value="terrain2.obj" />
         <Var Name="Position" value="0.000;0.000;0.000" />
         <Var Name="Rotation" value="0.000;0.000;0.000" />
-        <Var Name="Scale" value="1.000;1.000;1.000" />
+        <Var Name="Scale" value="4.000;4.000;4.000" />
         <Behaviors>
             <Behavior Type="Mesh" Guid="2007160091">
                 <Var Name="File" value="terrain2.obj;/;terrain2.obj" />
@@ -57,6 +58,15 @@
         <Var Name="SpotAngle" value="0.523" />
         <Var Name="Active" value="True" />
         <Var Name="Type" value="Directional" />
+        <Behaviors />
+    </ZobObject>
+    <ZobObject Guid="4003507061">
+        <Var Name="Name" value="FPS_camera_1" />
+        <Var Name="Position" value="5.000;5.000;18.000" />
+        <Var Name="Rotation" value="0.000;0.000;0.000" />
+        <Var Name="Scale" value="1.000;1.000;1.000" />
+        <Var Name="FOV" value="45.000" />
+        <Var Name="Camera controller" value="FPS" />
         <Behaviors />
     </ZobObject>
 </Scene>
