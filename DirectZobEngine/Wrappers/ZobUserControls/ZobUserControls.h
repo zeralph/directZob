@@ -36,7 +36,7 @@ namespace CLI {
 		ZobControlString(const ZobVariablesExposer::wrapperData& w);
 		~ZobControlString();
 		EventHandler^ _event;
-		TextBox^ txt;
+		TextBox^ _txt;
 	protected:
 		void OnValueChanged(Object^ sender, EventArgs^ e) override;
 	};
@@ -46,8 +46,9 @@ namespace CLI {
 	public:
 		ZobControlFilePath(const ZobVariablesExposer::wrapperData& w);
 		~ZobControlFilePath();
-		TextBox^ txt;
-		Button^ btn;
+		TextBox^ _txt;
+		Label^ _label;
+		Button^ _btn;
 		EventHandler^ _event;
 	protected:
 		void OnValueChanged(Object^ sender, EventArgs^ e) override;
@@ -72,9 +73,10 @@ namespace CLI {
 		ZobControlVector3(const ZobVariablesExposer::wrapperData& w);
 		~ZobControlVector3();
 		void UpdateControlInternal() override;
-		TextBox^ txt_X;
-		TextBox^ txt_Y;
-		TextBox^ txt_Z;
+		TextBox^ _txt_X;
+		TextBox^ _txt_Y;
+		TextBox^ _txt_Z;
+		Label^ _label;
 		EventHandler^ _eventX;
 		EventHandler^ _eventY;
 		EventHandler^ _eventZ;
@@ -87,7 +89,8 @@ namespace CLI {
 	public:
 		ZobControlFloat(const ZobVariablesExposer::wrapperData& w);
 		~ZobControlFloat();
-		TextBox^ txt;
+		TextBox^ _txt;
+		Label^ _label;
 		EventHandler^ _event;
 	protected:
 		void OnValueChanged(Object^ sender, EventArgs^ e) override;
@@ -100,6 +103,7 @@ namespace CLI {
 		ZobControlBool(const ZobVariablesExposer::wrapperData& w);
 		~ZobControlBool();
 		EventHandler^ _event;
+		Label^ _label;
 		CheckBox^ _checkBox;
 		bool _checked;
 	protected:
@@ -112,15 +116,16 @@ namespace CLI {
 	public:
 		ZobControlColor(const ZobVariablesExposer::wrapperData& w);
 		~ZobControlColor();
-		TextBox^ txt_A;
-		TextBox^ txt_R;
-		TextBox^ txt_G;
-		TextBox^ txt_B;
+		TextBox^ _txt_A;
+		TextBox^ _txt_R;
+		TextBox^ _txt_G;
+		TextBox^ _txt_B;
+		Label^ _label;
 		EventHandler^ _eventA;
 		EventHandler^ _eventR;
 		EventHandler^ _eventG;
 		EventHandler^ _eventB;
-		Button^ btn;
+		Button^ _btn;
 	protected:
 		void OnValueChanged(Object^ sender, EventArgs^ e) override;
 		void OnClickColor(Object^ sender, EventArgs^ e);
@@ -132,7 +137,7 @@ namespace CLI {
 	public:
 		ZobControlEnum(const ZobVariablesExposer::wrapperData& w);
 		~ZobControlEnum();
-		ComboBox^ _combo;
+		Label^ _label;
 		ComboBox^ _list;
 		EventHandler^ _event;
 	protected:
@@ -144,7 +149,9 @@ namespace CLI {
 	{
 	public:
 		ZobControlZobObject(const ZobVariablesExposer::wrapperData& w);
-		TextBox^ txt;
+		~ZobControlZobObject();
+		Label^ _label;
+		TextBox^ _txt;
 	protected:
 		void OnValueChanged(Object^ sender, EventArgs^ e) override;
 		void UpdateControlInternal() override;
@@ -154,7 +161,9 @@ namespace CLI {
 	{
 	public:
 		ZobControlZobId(const ZobVariablesExposer::wrapperData& w);
-		Label^ txt;
+		~ZobControlZobId();
+		Label^ _label;
+		Label^ _txt;
 	protected:
 	};
 
@@ -162,6 +171,7 @@ namespace CLI {
 	{
 	public:
 		ZobControlTreeNode(String^ zobObjectGuid, bool isEditable);
+		~ZobControlTreeNode();
 		ZobControlTreeNode^ GetChildNode(String^ guid);
 		bool IsEditable() { return m_isEditable; }
 		String^ m_zobObjectGuid;
@@ -185,6 +195,8 @@ namespace CLI {
 	{
 	public:
 		ZobPropertiesLayout(String^ name);
+		~ZobPropertiesLayout();
+		Label^ _label;
 	};
 };
 #endif //_WINDLL
