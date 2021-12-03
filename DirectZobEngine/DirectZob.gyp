@@ -374,6 +374,8 @@
 							'Wrappers/ZobUserControls/ZobUserControls.cpp',
 							'Wrappers/Editor/ZobObjectsEditor.h',
 							'Wrappers/Editor/ZobObjectsEditor.cpp',
+							'Wrappers/ZobGlobalsWrapper.h',
+							'Wrappers/ZobGlobalsWrapper.cpp',
 							],
                         'link_settings': {
                             # links fbxsdk as static

@@ -5,6 +5,7 @@
 #include "ZobVector3.h"
 #include "ZobMaterial.h"
 #include "ZobMatrix4x4.h"
+#include "Rendering/Color.h"
 #include "Triangle.h"
 #include <thread> 
 #include <mutex>
@@ -125,9 +126,9 @@ private:
 	uint m_maxTriangleQueueSize;
 	uint m_nbTriangles;
 	uint m_rasterizerNumber;
-	const ZobVector3* m_ambientColor;
+	const ZobColor* m_ambientColor;
 	float m_ambientIntensity;
-	const ZobVector3* m_fogColor;
+	const ZobColor* m_fogColor;
 	float m_fogDistance;
 	float m_fogDensity;
 	eFogType m_fogType;

@@ -3,6 +3,19 @@
 
 LightManager::LightManager()
 {
+	m_varExposer = new ZobVariablesExposer(0);
+	m_varExposer->WrapVariable<ZobColor>("Ambient color", &m_ambientColor, NULL, false, true);
+	m_varExposer->WrapVariable<ZobColor>("Clear color", &m_clearColor, NULL, false, true);
+	m_varExposer->WrapVariable<float>("Ambient color intensity", &m_ambientColorIntensity, NULL, false, true);
+
+
+	eFogType ft[4] = { eFogType::eFogType_NoFog, eFogType::eFogType_Linear, eFogType::eFogType_Exp, eFogType::eFogType_Exp2 };
+	const char* ftStr[4] = { "None", "Linear", "Exp", "Exp2"};
+	m_varExposer->WrapEnum<eFogType>("Fog type", &m_fogType, 4, ft, ftStr, NULL, false, true);
+	m_varExposer->WrapVariable<ZobColor>("Fog color", &m_fogColor, NULL, false, true);
+	m_varExposer->WrapVariable<float>("Fog distance", &m_fogDistance, NULL, false, true);
+	m_varExposer->WrapVariable<float>("Fog density", &m_fogDensity, NULL, false, true);
+	
 	ReInitGlobalSettings();
 }
 
@@ -12,13 +25,14 @@ LightManager::~LightManager()
 	{
 		delete (m_lights[i]);
 	}
+	delete m_varExposer;
 }
 
 void LightManager::ReInitGlobalSettings()
 {
-	m_fogColor = ZobVector3(63.0f / 255.0f, 149.0f / 255.0f, 255.0f / 255.0f);
-	m_clearColor = ZobVector3(63.0f / 255.0f, 149.0f / 255.0f, 255.0f / 255.0f);
-	m_ambientColor = ZobVector3(0.4f, 0.4f, 0.4f);
+	m_fogColor = ZobColor(255, 63, 149, 255);
+	m_clearColor = ZobColor(255, 63, 149, 255);
+	m_ambientColor = ZobColor(255, 102, 102, 102);
 	m_ambientColorIntensity = 0.8f;
 	m_fogDistance = 20.0f;
 	m_lights.clear();
@@ -29,7 +43,7 @@ void LightManager::ReInitGlobalSettings()
 	m_lightIndex = 1;
 }
 
-void LightManager::Setup(ZobVector3* fogColor, ZobVector3* ambientColor, ZobVector3* clearColor, float fogDistance, float fogDensity, eFogType fogType, float ambientIntensity)
+void LightManager::Setup(ZobColor* fogColor, ZobColor* ambientColor, ZobColor* clearColor, float fogDistance, float fogDensity, eFogType fogType, float ambientIntensity)
 {
 	m_fogColor = fogColor;
 	m_ambientColor = ambientColor;
@@ -143,145 +157,11 @@ void LightManager::LoadFromNode(TiXmlElement* node)
 {
 	if (node)
 	{
-		TiXmlElement* e;
-		ZobVector3 ambient = GetAmbientColor();
-		e = node->FirstChildElement("AmbientColor");
-		if (e)
-		{
-			float x = atof(e->Attribute("r"));
-			float y = atof(e->Attribute("g"));
-			float z = atof(e->Attribute("b"));
-			ambient = ZobVector3(x, y, z);
-		}
-		e = node->FirstChildElement("AmbientIntensity");
-		float ambientIntensity = GetAmbientColorIntensity();
-		if (e)
-		{
-			ambientIntensity = atof(e->GetText());
-		}
-		ZobVector3 fog = GetFogColor();
-		e = node->FirstChildElement("FogColor");
-		if (e)
-		{
-			float x = atof(e->Attribute("r"));
-			float y = atof(e->Attribute("g"));
-			float z = atof(e->Attribute("b"));
-			fog = ZobVector3(x, y, z);
-		}
-		e = node->FirstChildElement("ClearColor");
-		ZobVector3 clear = GetClearColor();
-		if (e)
-		{
-			float x = atof(e->Attribute("r"));
-			float y = atof(e->Attribute("g"));
-			float z = atof(e->Attribute("b"));
-			clear = ZobVector3(x, y, z);
-		}
-		e = node->FirstChildElement("FogDensity");
-		float fogDensity = GetFogDensity();
-		if (e)
-		{
-			fogDensity = atof(e->GetText());
-		}
-		e = node->FirstChildElement("FogDistance");
-		float FogDistance = GetFogDistance();
-		if (e)
-		{
-			FogDistance = atof(e->GetText());
-		}
-		e = node->FirstChildElement("FogType");
-		eFogType fogType = GetFogType();
-		if (e)
-		{
-			std::string type = std::string(e->GetText() ? e->GetText():"");
-			if (type == "linear")
-			{
-				fogType = eFogType::eFogType_Linear;
-			}
-			else if (type == "exp")
-			{
-				fogType = eFogType::eFogType_Exp;
-			}
-			else if (type == "exp2")
-			{
-				fogType = eFogType::eFogType_Exp2;
-			}
-			else
-			{
-				fogType = eFogType::eFogType_NoFog;
-			}
-		}
-		fog /= 255.0f;
-		ambient /= 255.0f;
-		clear /= 255.0f;
-		Setup(&fog, &ambient, &clear, FogDistance, fogDensity, fogType, ambientIntensity);
-		/*
-		int x = 320;
-		int y = 240;
-		DirectZob::GetInstance()->GetEngine()->Resize(x, y);
-		*/
+		m_varExposer->ReadNode(node);
 	}
 }
 
 void LightManager::SaveUnderNode(TiXmlElement* node)
 {
-	char tmpBuffer[256];
-	ZobVector3 ambient = GetAmbientColor();
-	ambient = Vector2Color(&ambient);
-	TiXmlText t("");
-	TiXmlElement e = TiXmlElement("AmbientColor");
-	e.SetAttribute("r", ambient.x);
-	e.SetAttribute("g", ambient.y);
-	e.SetAttribute("b", ambient.z);
-	node->InsertEndChild(e);
-	e = TiXmlElement("AmbientIntensity");
-	_snprintf_s(tmpBuffer, 256, "%.2f", GetAmbientColorIntensity());
-	t.SetValue(tmpBuffer);
-	e.InsertEndChild(t);
-	node->InsertEndChild(e);
-	e = TiXmlElement("FogDistance");
-	ZobVector3 fogColor = GetFogColor();
-	fogColor = Vector2Color(&fogColor);
-	e = TiXmlElement("FogColor");
-	e.SetAttribute("r", fogColor.x);
-	e.SetAttribute("g", fogColor.y);
-	e.SetAttribute("b", fogColor.z);
-	node->InsertEndChild(e);
-	ZobVector3 clearColor = GetClearColor();
-	clearColor = Vector2Color(&clearColor);
-	e = TiXmlElement("ClearColor");
-	e.SetAttribute("r", clearColor.x);
-	e.SetAttribute("g", clearColor.y);
-	e.SetAttribute("b", clearColor.z);
-	node->InsertEndChild(e);
-	e = TiXmlElement("FogDensity");
-	_snprintf_s(tmpBuffer, 256, "%.2f", GetFogDensity());
-	t.SetValue(tmpBuffer);
-	e.InsertEndChild(t);
-	node->InsertEndChild(e);
-	e = TiXmlElement("FogDistance");
-	_snprintf_s(tmpBuffer, 256, "%.2f", GetFogDistance());
-	t.SetValue(tmpBuffer);
-	e.InsertEndChild(t);
-	node->InsertEndChild(e);
-	e = TiXmlElement("FogType");
-	t.SetValue("");
-	switch (GetFogType())
-	{
-	case eFogType_Exp:
-		t.SetValue("exp");
-		break;
-	case eFogType_Exp2:
-		t.SetValue("exp2");
-		break;
-	case eFogType_Linear:
-		t.SetValue("linear");
-		break;
-	case eFogType_NoFog:
-	default:
-		t.SetValue("none");
-		break;
-	}
-	e.InsertEndChild(t);
-	node->InsertEndChild(e);
+	m_varExposer->SaveUnderNode(node);
 }

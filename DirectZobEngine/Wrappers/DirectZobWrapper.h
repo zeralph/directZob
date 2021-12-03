@@ -3,6 +3,7 @@
 #include "ManagedObject.h"
 #include "../DirectZob.h"
 #include "ZobObjectManagerWrapper.h"
+#include "ZobGlobalsWrapper.h"
 #include "CameraManagerWrapper.h"
 #include "EngineWrapper.h"
 #include "DirectZobWrapperEvents.h"
@@ -35,7 +36,7 @@ namespace CLI
 		static void						CallSceneUpdatedCallback();
 		static void						CallQueuingCallback();
 		static void						CallSceneLoadedCallback();
-										DirectZobWrapper(Panel^ objectTreeviewPanel, Panel^ objectPropertiesPanel, PictureBox^ renderWindow);
+										DirectZobWrapper(Panel^ objectTreeviewPanel, Panel^ objectPropertiesPanel, Panel^ globalPropertiesPanel, PictureBox^ renderWindow);
 		void							RegisterObjectCallbacks(engineCallback^ onSelected);
 		EngineWrapper^					GetEngineWrapper() { return m_ZobEngineWrapper; }
 		int								RunAFrame();
@@ -63,12 +64,14 @@ namespace CLI
 
 
 		ZobObjectManagerWrapper^		GetZobObjectManagerWrapper() { return m_ZobObjectManagerWrapper; }
+		ZobGlobalsWrapper^				GetZobGlobalsWrapper() { return m_ZobGlobalsWrapper; }
 		CameraManagerWrapper^			GetZobCameraManagerWrapper() { return m_ZobCameraManager; }
 		
 	private:
 		
 		DirectZobWrapperEvents^			m_events;
 		ZobObjectManagerWrapper^		m_ZobObjectManagerWrapper;
+		ZobGlobalsWrapper^				m_ZobGlobalsWrapper;
 		EngineWrapper^					m_ZobEngineWrapper;
 		CameraManagerWrapper^			m_ZobCameraManager;
 		//array<int>^ m_buffer;
@@ -85,6 +88,7 @@ namespace CLI
 
 		Panel^							m_objectTreeviewPanel;
 		Panel^							m_objectPropertiesPanel;
+		Panel^							m_globalPropertiesPanel;
 		PictureBox^						m_renderWindow;
 
 		float							m_lastFrameTime;

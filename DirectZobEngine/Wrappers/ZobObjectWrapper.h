@@ -63,7 +63,7 @@ namespace CLI {
 		void					LookAt(ManagedVector3^ forward, ManagedVector3^ left, ManagedVector3^ up, bool addToCurrentRotation);
 		String^					GetMeshName();
 		void					SetMesh(System::String^ name);
-		void				LoadMesh(System::String^ name, System::String^ file, System::String^ path);
+		void					LoadMesh(System::String^ name, System::String^ file, System::String^ path);
 		void					CreateSprite();
 		bool					IsLight();
 		bool					IsSprite();
@@ -86,8 +86,6 @@ namespace CLI {
 		ZobGroupBox^			m_objectPanel;
 		ZobPropertiesContainer^	m_container;
 	protected:
-
-		const ZobVariablesExposer::wrapperData* GetWrapperDataForVariable(String^ variableName);
  		unsigned long long		m_id;
 		ZobObject*				m_zobObject;
 	};

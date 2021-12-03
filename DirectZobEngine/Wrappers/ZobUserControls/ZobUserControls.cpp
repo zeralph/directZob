@@ -35,6 +35,92 @@ void ZobControl::UpdateControl()
 	} 
 }
 
+ZobGroupBox^ ZobControl::CreateWrappedVariablesView(std::string& name, ZobVariablesExposer* ze)
+{
+	String^ panelName = TO_MANAGED_STRING(name.c_str());
+	ZobGroupBox^ zobPanel = gcnew ZobGroupBox(panelName, true);
+	const std::vector<ZobVariablesExposer::wrapperData>* v = ze->GetWrappedVariables();
+	if (v->size() > 0)
+	{
+		ZobPropertiesContainer^ panel = gcnew ZobPropertiesContainer();
+		int idx = 1;
+		for (std::vector<ZobVariablesExposer::wrapperData>::const_iterator iter = v->begin(); iter != v->end(); iter++)
+		{
+			const ZobVariablesExposer::wrapperData& w = (*iter);
+			if (w.type == ZobVariablesExposer::eWrapperType_path)
+			{
+				panel->Controls->Add(gcnew ZobControlFilePath(w));
+			}
+			else if (w.type == ZobVariablesExposer::eWrapperType_string)
+			{
+				panel->Controls->Add(gcnew ZobControlString(w));
+			}
+			else if (w.type == ZobVariablesExposer::eWrapperType_ZobVector3)
+			{
+				panel->Controls->Add(gcnew ZobControlVector3(w));
+			}
+			else if (w.type == ZobVariablesExposer::eWrapperType_float)
+			{
+				panel->Controls->Add(gcnew ZobControlFloat(w));
+			}
+			else if (w.type == ZobVariablesExposer::eWrapperType_enum)
+			{
+				panel->Controls->Add(gcnew ZobControlEnum(w));
+			}
+			else if (w.type == ZobVariablesExposer::eWrapperType_bool)
+			{
+				panel->Controls->Add(gcnew ZobControlBool(w));
+			}
+			else if (w.type == ZobVariablesExposer::eWrapperType_int)
+			{
+				panel->Controls->Add(gcnew ZobControlFloat(w));
+			}
+			//else if (w.type == ZobVariablesExposer::eWrapperType_ZobVector2)
+			//{
+			//	panel->Controls->Add(AddZobVector2Variable(w));
+			//}
+			else if (w.type == ZobVariablesExposer::eWrapperType_zobId)
+			{
+				panel->Controls->Add(gcnew ZobControlZobId(w));
+			}
+			else if (w.type == ZobVariablesExposer::eWrapperType_zobObject)
+			{
+				panel->Controls->Add(gcnew ZobControlZobObject(w));
+			}
+			else if (w.type == ZobVariablesExposer::eWrapperType_zobColor)
+			{
+				panel->Controls->Add(gcnew ZobControlColor(w));
+			}
+			else
+			{
+				assert(NULL);
+			}
+
+			idx++;
+		}
+		zobPanel->Controls->Add(panel);
+	}
+	return zobPanel;
+}
+
+const ZobVariablesExposer::wrapperData* ZobControl::GetDataFromWrapperVariable(String^ variableName, ZobVariablesExposer* ze)
+{
+	const std::vector<ZobVariablesExposer::wrapperData>* v = ze->GetWrappedVariables();
+	if (v->size() > 0)
+	{
+		for (std::vector<ZobVariablesExposer::wrapperData>::const_iterator iter = v->begin(); iter != v->end(); iter++)
+		{
+			const ZobVariablesExposer::wrapperData* w = &(*iter);
+			String^ wName = TO_MANAGED_STRING(w->internalName.c_str());
+			if (wName == variableName)
+			{
+				return w;
+			}
+		}
+	}
+	return NULL;
+}
+
 ZobControlString::ZobControlString(const ZobVariablesExposer::wrapperData& w):ZobControl(w)
 {
 	this->Name = TO_MANAGED_STRING(w.internalName.c_str());

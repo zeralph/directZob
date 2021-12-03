@@ -1,9 +1,9 @@
 <?xml version="1.0" ?>
 <Scene>
     <Globals>
+        <Var Name="Fog color" value="255;0;0;0" />
         <AmbientColor r="192" g="192" b="192" />
         <AmbientIntensity>0.48</AmbientIntensity>
-        <FogColor r="0" g="128" b="255" />
         <ClearColor r="0" g="128" b="255" />
         <FogDensity>0.00</FogDensity>
         <FogDistance>88.00</FogDistance>
@@ -11,7 +11,7 @@
     </Globals>
     <ZobObject Guid="4002129363">
         <Var Name="Name" value="PlayerCar" />
-        <Var Name="Position" value="5.000;5.000;5.000" />
+        <Var Name="Position" value="5.000;15.000;5.000" />
         <Var Name="Rotation" value="1.087;-0.006;2.110" />
         <Var Name="Scale" value="1.000;1.000;1.000" />
         <Behaviors>
@@ -116,7 +116,7 @@
         <ZobObject Guid="2003412161">
             <Var Name="Name" value="rearCamera" />
             <Var Name="Position" value="-0.000;1.910;-4.787" />
-            <Var Name="Rotation" value="15.056;-0.000;-0.000" />
+            <Var Name="Rotation" value="15.056;-0.000;0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
             <Var Name="FOV" value="70.000" />
             <Var Name="Camera controller" value="FollowCar" />
@@ -352,14 +352,14 @@
         <Behaviors />
         <ZobObject Guid="4002436495">
             <Var Name="Name" value="building_2" />
-            <Var Name="Position" value="-112.217;-10.000;-45.469" />
+            <Var Name="Position" value="-112.216;-10.000;-45.469" />
             <Var Name="Rotation" value="0.000;35.000;0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
             <Behaviors />
         </ZobObject>
         <ZobObject Guid="4002193509">
             <Var Name="Name" value="building_3" />
-            <Var Name="Position" value="-81.493;-10.000;-1.287" />
+            <Var Name="Position" value="-81.492;-10.000;-1.286" />
             <Var Name="Rotation" value="0.000;35.000;0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
             <Behaviors>
@@ -374,7 +374,7 @@
         </ZobObject>
         <ZobObject Guid="4002209421">
             <Var Name="Name" value="building_4" />
-            <Var Name="Position" value="-57.136;-10.000;25.660" />
+            <Var Name="Position" value="-57.135;-10.000;25.660" />
             <Var Name="Rotation" value="0.000;35.000;0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
             <Behaviors>

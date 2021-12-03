@@ -17,11 +17,24 @@ using namespace System::Drawing;
 
 namespace CLI {
 
+	public ref class ZobGroupBox : GroupBox
+	{
+	public:
+		ZobGroupBox(String^ name, bool collapsable);
+		~ZobGroupBox();
+		void OnToggle(Object^ sender, EventArgs^ e);
+		bool bToggled;
+		Label^ _label;
+		EventHandler^ _event;
+	};
+
 	public ref class ZobControl : TableLayoutPanel
 	{
 		public:
 			ZobControl(const ZobVariablesExposer::wrapperData& w);
 			~ZobControl();
+			static ZobGroupBox^ CreateWrappedVariablesView(std::string& name, ZobVariablesExposer* ze);
+			static const ZobVariablesExposer::wrapperData* GetDataFromWrapperVariable(String^ variableName, ZobVariablesExposer* ze);
 	protected:
 		virtual void	OnValueChanged(Object^ sender, EventArgs^ e) {}
 		void			UpdateControl();
@@ -54,17 +67,6 @@ namespace CLI {
 		void OnValueChanged(Object^ sender, EventArgs^ e) override;
 		void OnOpen(Object^ sender, EventArgs^ e);
 		void OnOk(Object^ sender, System::ComponentModel::CancelEventArgs^ e);
-	};
-
-	public ref class ZobGroupBox : GroupBox
-	{
-	public:
-		ZobGroupBox(String^ name, bool collapsable);
-		~ZobGroupBox();
-		void OnToggle(Object^ sender, EventArgs^ e);
-		bool bToggled;
-		Label^ _label;
-		EventHandler^ _event;
 	};
 
 	public ref class ZobControlVector3 : ZobControl

@@ -91,13 +91,13 @@
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabsControl = new System.Windows.Forms.TabControl();
             this.tabObject = new System.Windows.Forms.TabPage();
+            this.propertiesPanel = new System.Windows.Forms.TableLayoutPanel();
             this.tabScene = new System.Windows.Forms.TabPage();
-            this.panel1 = new System.Windows.Forms.Panel();
+            this.globalPropertiesPanel = new System.Windows.Forms.Panel();
             this.SceneControlsFlowLayout = new System.Windows.Forms.FlowLayoutPanel();
             this.tabEngine = new System.Windows.Forms.TabPage();
             this.panel2 = new System.Windows.Forms.Panel();
             this.EngineControlsFlowLayout = new System.Windows.Forms.FlowLayoutPanel();
-            this.propertiesPanel = new System.Windows.Forms.TableLayoutPanel();
             this.bottomStatusBar.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FirstPanelSplitter)).BeginInit();
@@ -119,7 +119,7 @@
             this.tabsControl.SuspendLayout();
             this.tabObject.SuspendLayout();
             this.tabScene.SuspendLayout();
-            this.panel1.SuspendLayout();
+            this.globalPropertiesPanel.SuspendLayout();
             this.tabEngine.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
@@ -751,10 +751,24 @@
             this.tabObject.TabIndex = 0;
             this.tabObject.Text = "Object";
             // 
+            // propertiesPanel
+            // 
+            this.propertiesPanel.AutoScroll = true;
+            this.propertiesPanel.ColumnCount = 1;
+            this.propertiesPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.propertiesPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.propertiesPanel.Location = new System.Drawing.Point(3, 3);
+            this.propertiesPanel.Name = "propertiesPanel";
+            this.propertiesPanel.RowCount = 1;
+            this.propertiesPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.propertiesPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 472F));
+            this.propertiesPanel.Size = new System.Drawing.Size(390, 472);
+            this.propertiesPanel.TabIndex = 1;
+            // 
             // tabScene
             // 
             this.tabScene.BackColor = System.Drawing.SystemColors.Control;
-            this.tabScene.Controls.Add(this.panel1);
+            this.tabScene.Controls.Add(this.globalPropertiesPanel);
             this.tabScene.Location = new System.Drawing.Point(4, 22);
             this.tabScene.Name = "tabScene";
             this.tabScene.Padding = new System.Windows.Forms.Padding(3);
@@ -762,15 +776,15 @@
             this.tabScene.TabIndex = 1;
             this.tabScene.Text = "Scene";
             // 
-            // panel1
+            // globalPropertiesPanel
             // 
-            this.panel1.Controls.Add(this.SceneControlsFlowLayout);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(3, 3);
-            this.panel1.MinimumSize = new System.Drawing.Size(300, 0);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(390, 472);
-            this.panel1.TabIndex = 1;
+            this.globalPropertiesPanel.Controls.Add(this.SceneControlsFlowLayout);
+            this.globalPropertiesPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.globalPropertiesPanel.Location = new System.Drawing.Point(3, 3);
+            this.globalPropertiesPanel.MinimumSize = new System.Drawing.Size(300, 0);
+            this.globalPropertiesPanel.Name = "globalPropertiesPanel";
+            this.globalPropertiesPanel.Size = new System.Drawing.Size(390, 472);
+            this.globalPropertiesPanel.TabIndex = 1;
             // 
             // SceneControlsFlowLayout
             // 
@@ -819,20 +833,6 @@
             this.EngineControlsFlowLayout.TabIndex = 0;
             this.EngineControlsFlowLayout.WrapContents = false;
             // 
-            // propertiesPanel
-            // 
-            this.propertiesPanel.AutoScroll = true;
-            this.propertiesPanel.ColumnCount = 1;
-            this.propertiesPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.propertiesPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.propertiesPanel.Location = new System.Drawing.Point(3, 3);
-            this.propertiesPanel.Name = "propertiesPanel";
-            this.propertiesPanel.RowCount = 1;
-            this.propertiesPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.propertiesPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.propertiesPanel.Size = new System.Drawing.Size(390, 472);
-            this.propertiesPanel.TabIndex = 1;
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -875,7 +875,7 @@
             this.tabsControl.ResumeLayout(false);
             this.tabObject.ResumeLayout(false);
             this.tabScene.ResumeLayout(false);
-            this.panel1.ResumeLayout(false);
+            this.globalPropertiesPanel.ResumeLayout(false);
             this.tabEngine.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -933,7 +933,7 @@
         private System.Windows.Forms.TabPage tabObject;
         private System.Windows.Forms.TabPage tabScene;
         private System.Windows.Forms.TabPage tabEngine;
-        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel globalPropertiesPanel;
         private System.Windows.Forms.FlowLayoutPanel SceneControlsFlowLayout;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.FlowLayoutPanel EngineControlsFlowLayout;

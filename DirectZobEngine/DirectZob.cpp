@@ -248,7 +248,7 @@ int DirectZob::RunAFrame(DirectZob::engineCallback OnSceneUpdated /*=NULL*/, Dir
 			m_hudManager->PreUpdate(dt);
 			m_lightManager->PreUpdate(dt);
 			m_engine->StartDrawingScene();
-			ZobColor c = ZobColor(DirectZob::GetInstance()->GetLightManager()->GetClearColor());
+			ZobColor c = DirectZob::GetInstance()->GetLightManager()->GetClearColor();
 			if (OnSceneUpdated)
 			{
 				OnSceneUpdated();

@@ -12,7 +12,7 @@ public:
 	LightManager();
 	~LightManager();
 
-	void						Setup(ZobVector3* fogColor, ZobVector3* ambientColor, ZobVector3* clearColor, float fogDistance, float fogDensity, eFogType fogType, float ambientIntensity);
+	void						Setup(ZobColor* fogColor, ZobColor* ambientColor, ZobColor* clearColor, float fogDistance, float fogDensity, eFogType fogType, float ambientIntensity);
 	void						ReInitGlobalSettings();
 	void						AddLight(Light* l);
 	void						Update();
@@ -20,12 +20,12 @@ public:
 	Light*						CreateLight(std::string& name, Light::eLightType type, ZobVector3 position, ZobColor color, float intensity, float distance, ZobObject* parent);
 	const std::vector<const Light*>*	GetActiveLights() const;
 	Light*						GetLight(const std::string& name) const;
-	const ZobVector3*			GetAmbientColor() const { return &m_ambientColor; };
-	const ZobVector3*			GetFogColor() const { return &m_fogColor; };
-	const ZobVector3*			GetClearColor() const { return &m_clearColor; };
-	void						SetAmbientColor(ZobVector3* c) { m_ambientColor = c; };
-	void						SetFogColor(ZobVector3* c) { m_fogColor = c; };
-	void						SetClearColor(ZobVector3* c) { m_clearColor = c; };
+	const ZobColor*				GetAmbientColor() const { return &m_ambientColor; };
+	const ZobColor*				GetFogColor() const { return &m_fogColor; };
+	const ZobColor*				GetClearColor() const { return &m_clearColor; };
+	void						SetAmbientColor(ZobColor* c) { m_ambientColor = c; };
+	void						SetFogColor(ZobColor* c) { m_fogColor = c; };
+	void						SetClearColor(ZobColor* c) { m_clearColor = c; };
 	void						SetFogDistance(float f) { m_fogDistance = f; };
 	void						SetAmbientColorIntensity(float f) { m_ambientColorIntensity = f; };
 	void						SetFogDensity(float f) { m_fogDensity = f; }
@@ -41,18 +41,20 @@ public:
 	void						PreUpdate(float dt);
 	void						LoadFromNode(TiXmlElement* node);
 	void						SaveUnderNode(TiXmlElement* node);
+	ZobVariablesExposer*		GetVariablesExposer() { return m_varExposer; }
 private:
-	eFogType m_fogType;
 	std::vector<Light*> m_lights;
 	std::vector<Light*> m_lightsToAdd;
 	std::vector<Light*> m_lightsToRemove;
 	std::vector<const Light*> m_activeLights;
 	int m_lightIndex;
-	ZobVector3 m_ambientColor;
-	ZobVector3 m_clearColor;
+	ZobColor m_fogColor;
+	ZobColor m_ambientColor;
+	ZobColor m_clearColor;
 	float m_ambientColorIntensity;
-	ZobVector3 m_fogColor;
+	eFogType m_fogType;
 	float m_fogDistance;
 	float m_fogDensity;
 	bool m_lightingEnabled = true;
+	ZobVariablesExposer* m_varExposer;
 };

@@ -623,9 +623,9 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector2* screenCoord, con
 		if (lighting != RenderOptions::eLightMode_none)
 		{
 			//lighting ambient
-			fr = dr * (m_ambientColor->x * m_ambientIntensity);
-			fg = dg * (m_ambientColor->y * m_ambientIntensity);
-			fb = db * (m_ambientColor->z * m_ambientIntensity);
+			fr = dr * (m_ambientColor->GetRedNormalized() * m_ambientIntensity);
+			fg = dg * (m_ambientColor->GetGreenNormalized() * m_ambientIntensity);
+			fb = db * (m_ambientColor->GetBlueNormalized() * m_ambientIntensity);
 
 			if (m_lightingPrecision == eLightingPrecision_vertex)
 			{
@@ -671,9 +671,9 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector2* screenCoord, con
 		fg = CLAMP(fg, 0.0f, 1.0f) * t->options->color.y;
 		fb = CLAMP(fb, 0.0f, 1.0f) * t->options->color.z;
 		float fog = ComputeFog(z);
-		fr = fr * (1.0f - fog) + fog * m_fogColor->x;
-		fg = fg * (1.0f - fog) + fog * m_fogColor->y;
-		fb = fb * (1.0f - fog) + fog * m_fogColor->z;
+		fr = fr * (1.0f - fog) + fog * m_fogColor->GetRedNormalized();
+		fg = fg * (1.0f - fog) + fog * m_fogColor->GetGreenNormalized();
+		fb = fb * (1.0f - fog) + fog * m_fogColor->GetBlueNormalized();
 		static int modulo = 2;
 		if (transparency < 1.0f)
 		{

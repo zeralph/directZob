@@ -81,7 +81,7 @@ namespace DirectZobEditor
             InitializeComponent();
             m_engineWindow = new EngineWindow(this);
             PictureBox p = m_engineWindow.GetEngineRenderwindow();
-            m_directZobWrapper = new CLI.DirectZobWrapper(this.ZobObjectListPanel, this.propertiesPanel, m_engineWindow.GetEngineRenderwindow());
+            m_directZobWrapper = new CLI.DirectZobWrapper(this.ZobObjectListPanel, this.propertiesPanel, this.globalPropertiesPanel, m_engineWindow.GetEngineRenderwindow());
             m_directZobWrapper.Init(p.Width, p.Height);
             CLI.ZobObjectManagerWrapper.OnObjectSelectedEvent += new CLI.ZobObjectManagerWrapper.OnObjectSelected(OnObjectSelected);
             m_zobObjectManagerWrapper = m_directZobWrapper.GetZobObjectManagerWrapper();
