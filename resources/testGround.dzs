@@ -1,13 +1,13 @@
 <?xml version="1.0" ?>
 <Scene>
     <Globals>
-        <AmbientColor r="102" g="102" b="102" />
-        <AmbientIntensity>0.80</AmbientIntensity>
-        <FogColor r="63" g="149" b="255" />
-        <ClearColor r="63" g="149" b="255" />
-        <FogDensity>2.00</FogDensity>
-        <FogDistance>20.00</FogDistance>
-        <FogType>none</FogType>
+        <Var Name="Ambient color" value="255;102;102;102" />
+        <Var Name="Clear color" value="255;255;255;0" />
+        <Var Name="Ambient color intensity" value="0.800" />
+        <Var Name="Fog type" value="Exp2" />
+        <Var Name="Fog color" value="255;255;255;0" />
+        <Var Name="Fog distance" value="20.000" />
+        <Var Name="Fog density" value="2.000" />
     </Globals>
     <ZobObject Guid="4002568421">
         <Var Name="Name" value="skybox.obj" />
@@ -37,24 +37,24 @@
         <Var Name="Type" value="Directional" />
         <Behaviors />
     </ZobObject>
-    <ZobObject Guid="4002682056">
+    <ZobObject Guid="4002129363">
         <Var Name="Name" value="PlayerCar" />
-        <Var Name="Position" value="5.000;5.000;5.000" />
+        <Var Name="Position" value="5.000;15.000;5.000" />
         <Var Name="Rotation" value="1.087;-0.006;2.110" />
         <Var Name="Scale" value="1.000;1.000;1.000" />
         <Behaviors>
-            <Behavior Type="PhysicBox" Guid="2007568421">
+            <Behavior Type="PhysicBox" Guid="2007043289">
                 <Var Name="Layers" value="4" />
                 <Var Name="Trigger" value="True" />
                 <Var Name="Local position" value="0.000;2.000;0.000" />
                 <Var Name="Scale with object" value="True" />
                 <Var Name="Height" value="1.000;0.500;2.000" />
             </Behavior>
-            <Behavior Type="Car" Guid="2007160091">
-                <Var Name="Front left wheel" value="4002873694" />
-                <Var Name="Front right wheel" value="4002816606" />
-                <Var Name="Rear left wheel" value="4002531928" />
-                <Var Name="Rear right wheel" value="4002670489" />
+            <Behavior Type="Car" Guid="2007989132">
+                <Var Name="Front left wheel" value="4002410897" />
+                <Var Name="Front right wheel" value="4002410782" />
+                <Var Name="Rear left wheel" value="4002054282" />
+                <Var Name="Rear right wheel" value="4002838095" />
                 <Var Name="HandBrake" value="True" />
                 <Var Name="Mass" value="1500.000" />
                 <Var Name="Max friction" value="10.000" />
@@ -66,13 +66,13 @@
                 <Var Name="Steering rotation speed" value="3.141" />
             </Behavior>
         </Behaviors>
-        <ZobObject Guid="4002443983">
+        <ZobObject Guid="4002153198">
             <Var Name="Name" value="carBody" />
-            <Var Name="Position" value="-0.000;-0.557;0.197" />
+            <Var Name="Position" value="0.000;-0.557;0.197" />
             <Var Name="Rotation" value="-179.998;-0.000;-179.998" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
             <Behaviors>
-                <Behavior Type="Mesh" Guid="2007566531">
+                <Behavior Type="Mesh" Guid="2007983524">
                     <Var Name="File" value="Peugeot405;_cars/GLX-400-OBJ/;GLX_400.obj" />
                     <Var Name="Cull mode" value="Clockwise" />
                     <Var Name="Lighting" value="Phong" />
@@ -80,13 +80,13 @@
                     <Var Name="Transparent" value="False" />
                 </Behavior>
             </Behaviors>
-            <ZobObject Guid="4002816606">
+            <ZobObject Guid="4002410782">
                 <Var Name="Name" value="FR_wheel" />
-                <Var Name="Position" value="0.799;0.264;-1.299" />
+                <Var Name="Position" value="0.799;0.263;-1.299" />
                 <Var Name="Rotation" value="0.000;0.000;0.000" />
                 <Var Name="Scale" value="1.000;1.000;1.000" />
                 <Behaviors>
-                    <Behavior Type="Mesh" Guid="2007566531">
+                    <Behavior Type="Mesh" Guid="2007953918">
                         <Var Name="File" value="Tire;_cars/Tire/;Tire.obj" />
                         <Var Name="Cull mode" value="Clockwise" />
                         <Var Name="Lighting" value="Phong" />
@@ -95,13 +95,13 @@
                     </Behavior>
                 </Behaviors>
             </ZobObject>
-            <ZobObject Guid="4002873694">
+            <ZobObject Guid="4002410897">
                 <Var Name="Name" value="FL_wheel" />
                 <Var Name="Position" value="-0.800;0.264;-1.299" />
                 <Var Name="Rotation" value="0.000;0.000;0.000" />
                 <Var Name="Scale" value="1.000;1.000;1.000" />
                 <Behaviors>
-                    <Behavior Type="Mesh" Guid="2007666531">
+                    <Behavior Type="Mesh" Guid="2007905557">
                         <Var Name="File" value="Tire;_cars/Tire/;Tire.obj" />
                         <Var Name="Cull mode" value="Clockwise" />
                         <Var Name="Lighting" value="Phong" />
@@ -110,13 +110,13 @@
                     </Behavior>
                 </Behaviors>
             </ZobObject>
-            <ZobObject Guid="4002531928">
+            <ZobObject Guid="4002054282">
                 <Var Name="Name" value="RL_wheel" />
-                <Var Name="Position" value="-0.800;0.263;1.260" />
+                <Var Name="Position" value="-0.800;0.261;1.260" />
                 <Var Name="Rotation" value="0.000;0.000;0.000" />
                 <Var Name="Scale" value="1.000;1.000;1.000" />
                 <Behaviors>
-                    <Behavior Type="Mesh" Guid="2007686531">
+                    <Behavior Type="Mesh" Guid="2007115044">
                         <Var Name="File" value="Tire;_cars/Tire/;Tire.obj" />
                         <Var Name="Cull mode" value="Clockwise" />
                         <Var Name="Lighting" value="Phong" />
@@ -125,13 +125,13 @@
                     </Behavior>
                 </Behaviors>
             </ZobObject>
-            <ZobObject Guid="4002670489">
+            <ZobObject Guid="4002838095">
                 <Var Name="Name" value="RR_wheel" />
-                <Var Name="Position" value="0.799;0.263;1.260" />
+                <Var Name="Position" value="0.799;0.261;1.260" />
                 <Var Name="Rotation" value="0.000;0.000;0.000" />
                 <Var Name="Scale" value="1.000;1.000;1.000" />
                 <Behaviors>
-                    <Behavior Type="Mesh" Guid="2007689531">
+                    <Behavior Type="Mesh" Guid="2007839627">
                         <Var Name="File" value="Tire;_cars/Tire/;Tire.obj" />
                         <Var Name="Cull mode" value="Clockwise" />
                         <Var Name="Lighting" value="Phong" />
@@ -141,50 +141,50 @@
                 </Behaviors>
             </ZobObject>
         </ZobObject>
-        <ZobObject Guid="2003245163" Type="Camera">
+        <ZobObject Guid="2003412161">
             <Var Name="Name" value="rearCamera" />
-            <Var Name="Position" value="-0.000;1.920;-4.787" />
-            <Var Name="Rotation" value="15.056;0.000;-0.000" />
+            <Var Name="Position" value="-0.000;1.910;-4.787" />
+            <Var Name="Rotation" value="15.056;-0.000;-0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
+            <Var Name="FOV" value="70.000" />
+            <Var Name="Camera controller" value="FollowCar" />
             <Behaviors />
-            <Controller Name="FollowCar" Guid="2008245163" />
-            <Fov>70.00</Fov>
         </ZobObject>
-        <ZobObject Guid="2003273791" Type="Camera">
+        <ZobObject Guid="2003143259">
             <Var Name="Name" value="FrontCamera" />
             <Var Name="Position" value="-0.000;0.300;2.200" />
             <Var Name="Rotation" value="0.000;0.000;0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
+            <Var Name="FOV" value="70.000" />
+            <Var Name="Camera controller" value="base" />
             <Behaviors />
-            <Controller Name="Base" Guid="2008273791" />
-            <Fov>70.00</Fov>
         </ZobObject>
-        <ZobObject Guid="2003756106" Type="Camera">
+        <ZobObject Guid="2003861325">
             <Var Name="Name" value="topCamera" />
-            <Var Name="Position" value="-0.000;59.177;-1.002" />
+            <Var Name="Position" value="-0.000;59.171;-1.002" />
             <Var Name="Rotation" value="-89.418;-79.774;-179.719" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
+            <Var Name="FOV" value="45.000" />
+            <Var Name="Camera controller" value="base" />
             <Behaviors />
-            <Controller Name="Base" Guid="2008756106" />
-            <Fov>45.00</Fov>
         </ZobObject>
-        <ZobObject Guid="2003002145" Type="Camera">
+        <ZobObject Guid="2003217728">
             <Var Name="Name" value="sideCamera" />
-            <Var Name="Position" value="-5.880;1.899;6.775" />
+            <Var Name="Position" value="-5.880;1.897;6.775" />
             <Var Name="Rotation" value="-176.339;35.933;-176.794" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
+            <Var Name="FOV" value="45.000" />
+            <Var Name="Camera controller" value="base" />
             <Behaviors />
-            <Controller Name="Base" Guid="2008002145" />
-            <Fov>45.00</Fov>
         </ZobObject>
-        <ZobObject Guid="2003170641" Type="Camera">
+        <ZobObject Guid="2003649406">
             <Var Name="Name" value="orbitalCamera" />
             <Var Name="Position" value="-18.942;29.375;19.448" />
             <Var Name="Rotation" value="-133.462;45.023;178.977" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
+            <Var Name="FOV" value="45.000" />
+            <Var Name="Camera controller" value="Orbital" />
             <Behaviors />
-            <Controller Name="Orbital" Guid="2008170641" />
-            <Fov>45.00</Fov>
         </ZobObject>
     </ZobObject>
     <ZobObject Guid="4002816606">

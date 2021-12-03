@@ -84,6 +84,7 @@ namespace CLI {
 		void					CreateObjectBeahaviorsView();
 		Panel^					m_parentPanel;
 		ZobGroupBox^			m_objectPanel;
+		ZobGroupBox^			m_objectGroupBox;
 		ZobPropertiesContainer^	m_container;
 	protected:
  		unsigned long long		m_id;

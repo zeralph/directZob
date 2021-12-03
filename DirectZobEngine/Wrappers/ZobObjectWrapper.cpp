@@ -29,6 +29,7 @@ namespace CLI
 	{
 		m_parentPanel->Controls->Remove(m_container);
 		m_parentPanel->Controls->Remove(m_objectPanel);
+		delete m_objectGroupBox;
 		delete m_container;
 		delete m_objectPanel;
 		m_Instance = NULL;
@@ -44,14 +45,17 @@ namespace CLI
 		{
 			delete m_objectPanel;
 		}
+		if (m_objectGroupBox)
+		{
+			delete m_objectGroupBox;
+		}
 		String^ mStr;
 		ZobControlString^ s;
 		m_objectPanel = gcnew ZobGroupBox("Object", false);
 		m_container = gcnew ZobPropertiesContainer();
-		ZobGroupBox^ properties = gcnew ZobGroupBox("Properties", false);
 		ZobPropertiesContainer^ container = gcnew ZobPropertiesContainer();
-		ZobGroupBox^ objectgb = FillObjectControl(m_zobObject);
-		m_container->Controls->Add(objectgb);
+		m_objectGroupBox = FillObjectControl(m_zobObject);
+		m_container->Controls->Add(m_objectGroupBox);
 		m_objectPanel->Controls->Add(m_container);
 		m_parentPanel->Controls->Add(m_objectPanel);
 	}
