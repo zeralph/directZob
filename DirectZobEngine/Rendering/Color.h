@@ -38,10 +38,11 @@ class ZobColor
 					del3 = s.find(';', del2 + 1);
 					if (del3 != std::string::npos)
 					{
-						m_a = atof(s.substr(0, del1).c_str());
-						m_r = atof(s.substr(del1 + 1, del2).c_str());
-						m_g = atof(s.substr(del2 + 1, del3).c_str());
-						m_b = atof(s.substr(del3 + 1, s.size() - 1).c_str());
+						int a = atoi(s.substr(0, del1).c_str());
+						int r = atoi(s.substr(del1 + 1, del2).c_str());
+						int g = atoi(s.substr(del2 + 1, del3).c_str());
+						int b = atoi(s.substr(del3 + 1, s.size() - 1).c_str());
+						Set(a, r, g, b);
 						return true;
 					}
 				}

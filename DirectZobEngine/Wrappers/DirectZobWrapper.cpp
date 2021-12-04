@@ -62,6 +62,35 @@ namespace CLI
 		GetInstance()->GetLightManager()->CreateLight((Light::eLightType)type);
 	}
 
+	void DirectZobWrapper::CreateEditorCamera()
+	{
+		GetInstance()->GetCameraManager()->CreateEditorCamera();
+	}
+
+	void DirectZobWrapper::CreateCamera(System::String^ sType)
+	{
+		Camera::eCameraType type = Camera::eCamera_base;
+		std::string sTypeC;
+		MarshalString(sType, sTypeC);
+		if (sTypeC == "Fixed")
+		{
+			type = Camera::eCamera_base;
+		}
+		else if (sTypeC == "Follow")
+		{
+			type = Camera::eCamera_follow;
+		}
+		else if (sTypeC == "FPS")
+		{
+			type = Camera::eCamera_fps;
+		}
+		else if (sTypeC == "Orbital")
+		{
+			type = Camera::eCamera_orbital;
+		}
+		GetInstance()->GetCameraManager()->CreateCamera(type, NULL);
+	}
+
 	void DirectZobWrapper::LoadScene(System::String^ path, System::String^ file, engineCallback^ loaded)
 	{
 		if (GetInstance())

@@ -42,6 +42,8 @@ namespace CLI
 		int								RunAFrame();
 		int								Stop();
 		void							CreateLight(int type);
+		void							CreateEditorCamera();
+		void							CreateCamera(System::String^ sTSype);
 		void							StartPhysic();
 		void							StopPhysic(bool reset);
 		bool							IsPhysicPlaying();

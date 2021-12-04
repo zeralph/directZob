@@ -255,7 +255,7 @@ namespace DirectZobEditor
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
             m_directZobWrapper.NewScene();
-            m_directZobWrapper.GetZobCameraManagerWrapper().CreateEditorCamera();
+            m_directZobWrapper.CreateEditorCamera();
             m_path = "";
             m_file = "";
             EventHandler handler = OnNewScene;
@@ -651,7 +651,7 @@ namespace DirectZobEditor
 
         private void fPSToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            m_directZobWrapper.GetZobCameraManagerWrapper().CreateCamera("FPS");
+            m_directZobWrapper.CreateCamera("FPS");
             Form1.SceneUpdateEventArg ev = new Form1.SceneUpdateEventArg();
             ev.type = Form1.SceneUpdateType.createCamera;
             PropagateSceneUpdateEvent(ev);
@@ -659,7 +659,7 @@ namespace DirectZobEditor
 
         private void orbitalFreeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            m_directZobWrapper.GetZobCameraManagerWrapper().CreateCamera("Orbital");
+            m_directZobWrapper.CreateCamera("Orbital");
             Form1.SceneUpdateEventArg ev = new Form1.SceneUpdateEventArg();
             ev.type = Form1.SceneUpdateType.createCamera;
             PropagateSceneUpdateEvent(ev);
@@ -667,7 +667,7 @@ namespace DirectZobEditor
 
         private void orbitalToParentToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            m_directZobWrapper.GetZobCameraManagerWrapper().CreateCamera("Orbital");
+            m_directZobWrapper.CreateCamera("Orbital");
             Form1.SceneUpdateEventArg ev = new Form1.SceneUpdateEventArg();
             ev.type = Form1.SceneUpdateType.createCamera;
             PropagateSceneUpdateEvent(ev);
