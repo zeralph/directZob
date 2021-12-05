@@ -167,8 +167,8 @@ void ZobBehaviorCar::PreUpdate(float dt)
 		else
 			sideslip = atan2(velocityX, fabsf(velocityZ));
 
-		assert(!_isnan(rot_angle));
-		assert(!_isnan(sideslip));
+		assert(!ISNAN(rot_angle));
+		assert(!ISNAN(sideslip));
 		// Calculate slip angles for front and rear wheels (a.k.a. alpha)
 		slipanglefront = sideslip + rot_angle - m_steerangle;
 		slipanglerear = sideslip - rot_angle;
