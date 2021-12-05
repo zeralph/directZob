@@ -17,7 +17,7 @@
 	#endif
 #elif MACOS
 	#ifndef ISNAN
-		#define ISNAN(x) __isnan(x)
+		#define ISNAN(x) isnan(x)
 	#endif
 #endif
 class ZobVector3
