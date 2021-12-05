@@ -1,3 +1,4 @@
+#ifdef _WINDLL
 #include "ZobObjectsEditor.h"
 #include "../DirectZobWrapper.h"
 #include "../ZobObjectManagerWrapper.h"
@@ -340,3 +341,4 @@ f 23/40/61 28/38/61 29/79/61\n\
 f 23/40/62 29/79/62 30/41/62\n\
 f 24/42/63 30/41/63 31/43/63";
 }
+#endif //_WINDLL

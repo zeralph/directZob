@@ -34,6 +34,7 @@ ZobBehaviorCar::ZobBehaviorCar(ZobObject* zobObject) : ZobBehavior(zobObject)
 	m_lastCollDirection= ZobVector3(0, 0, 0);
 	m_lastCollRebound  = ZobVector3(0, 0, 0);
 	m_lastCollNormal   = ZobVector3(0, 0, 0);
+
 	m_wheelRotationAngle = 0;
 	Init();
 
@@ -72,6 +73,7 @@ ZobBehaviorCar::ZobBehaviorCar(ZobObject* zobObject) : ZobBehavior(zobObject)
 	m_heightAboveGround = 0.9f;
 	m_handBrake = false;
 	m_velocityWorld = ZobVector3(0, 0, 0);
+	m_accelerationWorld = ZobVector3(0, 0, 0);
 	m_hadCollision = false;
 	m_goingRear = false;
 	m_maxSteeringAngle = M_PI / 4.0f;
@@ -81,44 +83,48 @@ ZobBehaviorCar::ZobBehaviorCar(ZobObject* zobObject) : ZobBehavior(zobObject)
 void ZobBehaviorCar::PreUpdate(float dt)
 {
 	DirectZob* directZob = DirectZob::GetInstance();
-	float sn, cs;
-	double	angular_acceleration;
-	ZobVector3 flatf, flatr;
 	if (directZob->IsPhysicPlaying())
 	{
 		CheckGroundCollisions();
 		CheckEnvironmentCollision();
 		UpdateInputs(dt);
-		double	rot_angle;
-		double	sideslip;
-		double	slipanglefront;
-		double	slipanglerear;
-		double	torque;
-		double	yawspeed;
-		double	weight;
+		double	rot_angle = 0.0;
+		double	sideslip = 0.0;
+		double	slipanglefront = 0.0;
+		double	slipanglerear = 0.0;
+		double	torque = 0.0;
+		double	yawspeed = 0.0;
+		double	weight = 0.0;
+		float sn = 0.0f;
+		float cs = 0.0f;
+		double	angular_acceleration = 0.0;
+		ZobVector3 flatf = ZobVector3(0, 0, 0);
+		ZobVector3 flatr = ZobVector3(0, 0, 0);
 		int		front_slip = 0;
 		float 	motorBreak = 0.0f;
-		ZobVector3 velocity, resistance;
-		ZobVector3 ftraction, force;
-		ZobVector3 acceleration;
+		ZobVector3 resistance = ZobVector3(0, 0, 0);
+		ZobVector3 ftraction = ZobVector3(0, 0, 0);
+		ZobVector3 force = ZobVector3(0, 0, 0);
+		ZobVector3 acceleration = ZobVector3(0, 0, 0);
 		sn = sin(m_angle);
 		cs = cos(m_angle);
-
+		float velocityX = 0.f;
+		float velocityY = 0.f;
+		float velocityZ = 0.f;
 		if (m_steerangle != 0.0f)
 		{
 			int breakme = 1;
 		}
-
+		assert(!m_velocityWorld.isNaN());
 		ZobVector3 worldPos = m_zobObject->GetWorldPosition();
 		m_speed_ms = m_velocityWorld.sqrtLength();
 		// SAE convention: x is to the front of the car, y is to the right, z is down
 
 		//	bangz: Velocity of Car. Vlat and Vlong
 		// transform velocity in world reference frame to velocity in car reference frame
-		velocity.z = cs * m_velocityWorld.x + sn * m_velocityWorld.z;
-		velocity.y = m_velocityWorld.y;
-		velocity.x = -sn * m_velocityWorld.x + cs * m_velocityWorld.z;
-
+		velocityZ = cs * m_velocityWorld.x + sn * m_velocityWorld.z;
+		velocityY = m_velocityWorld.y;
+		velocityX = -sn * m_velocityWorld.x + cs * m_velocityWorld.z;
 		if (m_speed_ms < 1)
 		{
 			//m_steerangle = 0;
@@ -136,7 +142,7 @@ void ZobBehaviorCar::PreUpdate(float dt)
 		if (m_handBrake)
 			ftraction.z *= 0.5;
 
-		if (velocity.z < 0)
+		if (velocityZ < 0)
 		{
 			m_steerangle = -m_steerangle;
 		}
@@ -150,17 +156,19 @@ void ZobBehaviorCar::PreUpdate(float dt)
 		yawspeed = 2/*car->cartype->wheelbase*/ * 0.5 * m_angularvelocity;
 
 		//bangz: velocity.z = fVLong_, velocity.x = fVLat_
-		if (velocity.z == 0)		// TODO: fix singularity
+		if (velocityZ == 0)		// TODO: fix singularity
 			rot_angle = 0;
 		else
-			rot_angle = atan2(yawspeed, fabsf(velocity.z));
+			rot_angle = atan2(yawspeed, fabsf(velocityZ));
 
 		// Calculate the side slip angle of the car (a.k.a. beta)
-		if (velocity.x == 0)		// TODO: fix singularity
+		if (velocityX == 0)		// TODO: fix singularity
 			sideslip = 0;
 		else
-			sideslip = atan2(velocity.x, fabsf(velocity.z));
+			sideslip = atan2(velocityX, fabsf(velocityZ));
 
+		assert(!_isnan(rot_angle));
+		assert(!_isnan(sideslip));
 		// Calculate slip angles for front and rear wheels (a.k.a. alpha)
 		slipanglefront = sideslip + rot_angle - m_steerangle;
 		slipanglerear = sideslip - rot_angle;
@@ -191,9 +199,9 @@ void ZobBehaviorCar::PreUpdate(float dt)
 		// Forces and torque on body
 
 		// drag and rolling resistance
-		resistance.x = -(m_resistance * velocity.x + m_drag * velocity.x * abs(velocity.x));
+		resistance.x = -(m_resistance * velocityX + m_drag * velocityX * abs(velocityX));
 		resistance.y = 0;//-(RESISTANCE * velocity.y + DRAG * velocity.y * abs(velocity.y));
-		resistance.z = -(m_resistance * velocity.z + m_drag * velocity.z * abs(velocity.z));
+		resistance.z = -(m_resistance * velocityZ + m_drag * velocityZ * abs(velocityZ));
 
 		// sum forces
 		force.x = ftraction.x + cos(m_steerangle) * flatf.x + flatr.x + resistance.x;
@@ -228,11 +236,11 @@ void ZobBehaviorCar::PreUpdate(float dt)
 			m_accelerationWorld.y = 0;
 			m_accelerationWorld.z = 0;
 			float f = SGN(m_lastCollLocalContact.x) * 10.5f;// (m_speed_ms * 0.7f + 1.0f);
-			velocity.x = f;
-			velocity.z *= 0.7f;
-			m_velocityWorld.z = cs * velocity.x + sn * velocity.z;
+			velocityX = f;
+			velocityZ *= 0.7f;
+			m_velocityWorld.z = cs * velocityX + sn * velocityZ;
 			m_velocityWorld.y = 0;
-			m_velocityWorld.x = -sn * velocity.x + cs * velocity.z;
+			m_velocityWorld.x = -sn * velocityX + cs * velocityZ;
 			m_hadCollision = false;
 		}
 		else
@@ -267,7 +275,7 @@ void ZobBehaviorCar::PreUpdate(float dt)
 		//
 		worldPos.x += dt * m_velocityWorld.x;
 		worldPos.z += dt * m_velocityWorld.z;
-		m_goingRear = velocity.z < 0;
+		m_goingRear = velocityZ < 0;
 
 		// Angular velocity and heading
 
@@ -278,6 +286,7 @@ void ZobBehaviorCar::PreUpdate(float dt)
 		// integrate angular velocity to get angular orientation
 		//
 		m_angle += dt * m_angularvelocity;
+		assert(!_isnan(worldPos.x));
 		m_zobObject->SetWorldPosition(worldPos.x, m_lastGroundPosition.y + m_heightAboveGround, worldPos.z);
 		sn = sin(m_angle);
 		cs = cos(m_angle);

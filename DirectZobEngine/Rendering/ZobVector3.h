@@ -41,6 +41,11 @@ public:
 		}
 	}
 
+	inline bool isNaN() const 
+	{
+		return _isnan(x) || _isnan(y) || _isnan(z) || _isnan(w);
+	}
+
 	inline float Q_rsqrt(float number)
 	{
 		long i;

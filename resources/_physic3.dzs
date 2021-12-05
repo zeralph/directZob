@@ -17,19 +17,26 @@
         <Var Name="Equalize triangle queues" value="False" />
         <Var Name="Perspective Correction" value="True" />
     </Globals>
-    <ZobObject Guid="4002421685">
-        <Var Name="Name" value="newObject_29" />
+    <ZobObject Guid="4002568421">
+        <Var Name="Name" value="newObject_8" />
         <Var Name="Position" value="0.000;0.000;0.000" />
         <Var Name="Rotation" value="0.000;0.000;0.000" />
         <Var Name="Scale" value="1.000;1.000;1.000" />
-        <Behaviors>
-            <Behavior Type="PhysicSphere" Guid="2007626852">
-                <Var Name="Layers" value="0" />
-                <Var Name="Trigger" value="False" />
-                <Var Name="Local position" value="0.000;0.000;0.000" />
-                <Var Name="Scale with object" value="False" />
-                <Var Name="Radius" value="1.000" />
-            </Behavior>
-        </Behaviors>
+        <Behaviors />
+        <ZobObject Guid="4002160091">
+            <Var Name="Name" value="11.fbx" />
+            <Var Name="Position" value="0.000;0.000;0.000" />
+            <Var Name="Rotation" value="0.000;0.000;0.000" />
+            <Var Name="Scale" value="1.000;1.000;1.000" />
+            <Behaviors>
+                <Behavior Type="Mesh" Guid="2007443983">
+                    <Var Name="File" value="11.fbx;/;11.fbx" />
+                    <Var Name="Cull mode" value="Clockwise" />
+                    <Var Name="Lighting" value="Phong" />
+                    <Var Name="ZBuffered" value="True" />
+                    <Var Name="Transparent" value="False" />
+                </Behavior>
+            </Behaviors>
+        </ZobObject>
     </ZobObject>
 </Scene>

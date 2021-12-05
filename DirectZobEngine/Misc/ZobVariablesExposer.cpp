@@ -211,7 +211,18 @@ TiXmlNode* ZobVariablesExposer::SaveUnderNode(TiXmlNode* node)
 			case eWrapperType_path:
 			{
 				ZobFilePath zp;
+				std::string rsp = DirectZob::GetInstance()->GetResourcePath();
 				zp = *(ZobFilePath*)(w->ptr);
+
+				size_t pos = zp.path.find(rsp);
+				if (pos != std::string::npos)
+				{
+					zp.path.erase(pos, rsp.length());
+				}
+				if (zp.path.length() == 0)
+				{
+					zp.path = std::string("/");
+				}
 				std::string s = zp.Serialize();
 				o.SetAttribute(XML_ATTR_VALUE, s.c_str());
 				break;
