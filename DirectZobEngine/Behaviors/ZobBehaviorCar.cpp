@@ -6,6 +6,7 @@
 #include "../Managers/ZobInputManager.h"
 #include "../Rendering/text2D.h"
 #include "../ZobObjects/ZobObject.h"
+#include <math.h>
 
 #define MS_TO_KMH(a) a * 3.6f 
 #define KMH_TO_MS(a) a / 3.6f 
@@ -167,8 +168,8 @@ void ZobBehaviorCar::PreUpdate(float dt)
 		else
 			sideslip = atan2(velocityX, fabsf(velocityZ));
 
-		assert(!ISNAN(rot_angle));
-		assert(!ISNAN(sideslip));
+		assert(!isnan(rot_angle));
+		assert(!isnan(sideslip));
 		// Calculate slip angles for front and rear wheels (a.k.a. alpha)
 		slipanglefront = sideslip + rot_angle - m_steerangle;
 		slipanglerear = sideslip - rot_angle;
@@ -286,7 +287,7 @@ void ZobBehaviorCar::PreUpdate(float dt)
 		// integrate angular velocity to get angular orientation
 		//
 		m_angle += dt * m_angularvelocity;
-		assert(!ISNAN(worldPos.x));
+		assert(!isnan(worldPos.x));
 		m_zobObject->SetWorldPosition(worldPos.x, m_lastGroundPosition.y + m_heightAboveGround, worldPos.z);
 		sn = sin(m_angle);
 		cs = cos(m_angle);

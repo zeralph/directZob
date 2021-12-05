@@ -3,22 +3,10 @@
 #include <string>
 #include <string.h>
 #include "../Misc/ZobUtils.h"
+#include <math.h>
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
-#endif
-#ifdef LINUX
-	#ifndef ISNAN
-		#define ISNAN(x) __isnan(x)
-	#endif
-#elif WINDOWS
-	#ifndef ISNAN
-		#define ISNAN(x) _isnan(x)
-	#endif
-#elif MACOS
-	#ifndef ISNAN
-		#define ISNAN(x) isnan(x)
-	#endif
 #endif
 class ZobVector3
 {
@@ -56,7 +44,7 @@ public:
 
 	inline bool isNaN() const 
 	{
-		return ISNAN(x) || ISNAN(y) || ISNAN(z) || ISNAN(w);
+		return isnan(x) || isnan(y) || isnan(z) || isnan(w);
 	}
 
 	inline float Q_rsqrt(float number)
