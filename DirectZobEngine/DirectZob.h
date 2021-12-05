@@ -35,11 +35,17 @@ public :
 		spec->tv_nsec = wintime % 10000000i64 * 100;      //nano-seconds
 		return 0;
 	}
+	#ifndef ISNAN
+		#define ISNAN(x) _isnan(x)
+	#endif
 #elif LINUX || MACOS
 	int SaveTime(struct timespec* spec)
 	{
 		return clock_gettime(CLOCK_REALTIME, spec);
 	}
+	#ifndef ISNAN
+		#define ISNAN(x) __isnan(x)
+	#endif
 #endif
 	
 	enum eDirectZobLogLevel

@@ -7,6 +7,19 @@
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
 #endif
+#ifdef LINUX
+	#ifndef ISNAN
+		#define ISNAN(x) __isnan(x)
+	#endif
+#elif WINDOWS
+	#ifndef ISNAN
+		#define ISNAN(x) _isnan(x)
+	#endif
+#elif MACOS
+	#ifndef ISNAN
+		#define ISNAN(x) __isnan(x)
+	#endif
+#endif
 class ZobVector3
 {
 public:
@@ -43,7 +56,7 @@ public:
 
 	inline bool isNaN() const 
 	{
-		return _isnan(x) || _isnan(y) || _isnan(z) || _isnan(w);
+		return ISNAN(x) || ISNAN(y) || ISNAN(z) || ISNAN(w);
 	}
 
 	inline float Q_rsqrt(float number)
