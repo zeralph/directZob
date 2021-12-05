@@ -150,7 +150,7 @@
                         },
                         'link_settings': {
                             'libraries': [
-                                '../../../dependencies/reactphysics3d/lib/windows/reactphysics3d.lib',
+                                '../../../dependencies/reactphysics3d/lib/windows/Debug/reactphysics3d.lib',
 								'../../../dependencies/optick/lib/windows/OptickCore.lib',
 								'../../../dependencies/gainput/lib/windows/gainput.lib',
                             ],

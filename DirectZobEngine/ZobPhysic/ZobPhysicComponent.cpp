@@ -2,7 +2,7 @@
 #include "ZobPhysicsEngine.h"
 #include "DirectZob.h"
 #include "Rendering/ZobMatrix4x4.h"
-
+#include <cfloat>
 
 ZobPhysicComponent::ZobPhysicComponent(ZobObject* z)
 {
@@ -68,6 +68,7 @@ Transform ZobPhysicComponent::GetParentWorldTransform() const
 
 void ZobPhysicComponent::SetLocalTransform(Transform t) 
 {
+	assert(!_isnan(t.getPosition().x) && !_isnan(t.getPosition().y) && !_isnan(t.getPosition().z));
 	m_localTransform = t; 
 	m_editorLocalPosition = ZobVector3(m_localTransform.getPosition().x, m_localTransform.getPosition().y, m_localTransform.getPosition().z);
 	m_editorLocalRotation = GetLocalOrientation();
@@ -77,6 +78,7 @@ void ZobPhysicComponent::SetWorldTransform(Transform t)
 { 
 	const Transform t2 = GetParentWorldTransform();
 	m_localTransform = t2.getInverse() * t;
+	assert(!_isnan(m_localTransform.getPosition().x) && !_isnan(m_localTransform.getPosition().y) && !_isnan(m_localTransform.getPosition().z));
 	m_editorLocalPosition = ZobVector3(m_localTransform.getPosition().x, m_localTransform.getPosition().y, m_localTransform.getPosition().z);
 	m_editorLocalRotation = GetLocalOrientation();
 }
@@ -104,6 +106,7 @@ Transform ZobPhysicComponent::GetWorldTransform() const
 	Transform t = m_localTransform;
 	Vector3 v = t.getPosition();
 	Vector3 s = GetParentWorldScale();
+	assert(!_isnan(v.x) && !_isnan(v.y) && !_isnan(v.z));
 	v.x *= s.x;
 	v.y *= s.y;
 	v.z *= s.z;

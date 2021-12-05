@@ -129,12 +129,14 @@ void ZobPhysicsEngine::Update(float dt)
     m_accumulator += dt;
     // While there is enough accumulated time to take 
     // one or several physics steps 
+    int cnt = 0;
     while (m_accumulator >= timeStep)
     {
         // Update the Dynamics world with a constant time step 
         m_world->update(timeStep);
         // Decrease the accumulated time 
         m_accumulator -= timeStep;
+        cnt++;
     }
 	m_timeStep = (float)(clock() - m_timeStep) / CLOCKS_PER_SEC;
 }
