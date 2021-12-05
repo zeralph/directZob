@@ -286,7 +286,7 @@ void ZobBehaviorCar::PreUpdate(float dt)
 		// integrate angular velocity to get angular orientation
 		//
 		m_angle += dt * m_angularvelocity;
-		assert(!_isnan(worldPos.x));
+		assert(!ISNAN(worldPos.x));
 		m_zobObject->SetWorldPosition(worldPos.x, m_lastGroundPosition.y + m_heightAboveGround, worldPos.z);
 		sn = sin(m_angle);
 		cs = cos(m_angle);
