@@ -13,8 +13,6 @@ public:
 	ZobSprite(std::string id, TiXmlElement* node, ZobObject* parent);
 	~ZobSprite() override;
 
-	const std::string	GetMeshName() const override { return std::string(""); };
-
 	void				DrawGizmos(const Camera* camera, Engine* engine) override;
 	TiXmlNode*			SaveUnderNode(TiXmlNode* node) override;
 	void				Update(float dt) override;

@@ -15,6 +15,7 @@
 #include "Rasterizer.h"
 #include "../ZobObjects/Camera.h"
 #include <mutex>
+#include "Behaviors/ZobBehaviorMesh.h"
 #undef None
 #include "../../dependencies/optick/include/optick.h"
 
@@ -1417,6 +1418,114 @@ void Engine::ComputeBoundingBoxes(const ZobMatrix4x4* modelMatrix, const ZobVect
 	aabb->p5 = v5;
 	aabb->p6 = v6;
 	aabb->p7 = v7;
+}
+
+BoudingBox2D Engine::Get2DBoundingBox(const ZobObject* z) const
+{
+	bool bOk = false;
+	float minX = 1000;
+	float minY = 1000;
+	float maxX = -1000;
+	float maxY = -1000;
+	if (z)
+	{
+		const Box* b = NULL;
+		const std::vector<ZobBehavior*>* behaviors = z->GetBehaviors();
+		if (behaviors->size() > 0)
+		{
+			for (int i = 0; i < behaviors->size(); i++)
+			{
+				const ZobBehavior* zb = behaviors->at(i);
+				if (zb->GetSubType() == ZobBehavior::eBehavior_mesh)
+				{
+					const ZobBehaviorMesh* zbm = (const ZobBehaviorMesh*)zb;
+					const Mesh* m = zbm->GetMesh();
+					b = m->GetOBB();
+				}
+			}
+		}
+		Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
+		if (c && b)
+		{
+			ZobVector3 v;
+			v = b->p0;
+			c->ProjectPointFromWorld(&v);
+			minX = fminf(minX, v.x);
+			maxX = fmaxf(maxX, v.x);
+			minY = fminf(minY, v.y);
+			maxY = fmaxf(maxY, v.y);
+
+			v = b->p1;
+			c->ProjectPointFromWorld(&v);
+			minX = fminf(minX, v.x);
+			maxX = fmaxf(maxX, v.x);
+			minY = fminf(minY, v.y);
+			maxY = fmaxf(maxY, v.y);
+
+			v = b->p2;
+			c->ProjectPointFromWorld(&v);
+			minX = fminf(minX, v.x);
+			maxX = fmaxf(maxX, v.x);
+			minY = fminf(minY, v.y);
+			maxY = fmaxf(maxY, v.y);
+
+			v = b->p3;
+			c->ProjectPointFromWorld(&v);
+			minX = fminf(minX, v.x);
+			maxX = fmaxf(maxX, v.x);
+			minY = fminf(minY, v.y);
+			maxY = fmaxf(maxY, v.y);
+
+			v = b->p4;
+			c->ProjectPointFromWorld(&v);
+			minX = fminf(minX, v.x);
+			maxX = fmaxf(maxX, v.x);
+			minY = fminf(minY, v.y);
+			maxY = fmaxf(maxY, v.y);
+
+			v = b->p5;
+			c->ProjectPointFromWorld(&v);
+			minX = fminf(minX, v.x);
+			maxX = fmaxf(maxX, v.x);
+			minY = fminf(minY, v.y);
+			maxY = fmaxf(maxY, v.y);
+
+			v = b->p6;
+			c->ProjectPointFromWorld(&v);
+			minX = fminf(minX, v.x);
+			maxX = fmaxf(maxX, v.x);
+			minY = fminf(minY, v.y);
+			maxY = fmaxf(maxY, v.y);
+
+			v = b->p7;
+			c->ProjectPointFromWorld(&v);
+			minX = fminf(minX, v.x);
+			maxX = fmaxf(maxX, v.x);
+			minY = fminf(minY, v.y);
+			maxY = fmaxf(maxY, v.y);
+			bOk = true;
+		}
+	}
+	BoudingBox2D b2d;
+	if (bOk)
+	{
+		b2d._minX = minX;
+		b2d._minY = minY;
+		b2d._maxX = maxX;
+		b2d._maxY = maxY;
+		b2d._minX = (b2d._minX + 1) * m_bufferData.width / 2.0f;
+		b2d._maxX = (b2d._maxX + 1) * m_bufferData.height / 2.0f;
+		b2d._minY = (b2d._minY + 1) * m_bufferData.width / 2.0f;
+		b2d._maxY = (b2d._maxY + 1) * m_bufferData.height / 2.0f;
+	}
+	else
+	{
+		b2d._minX = 0;
+		b2d._minY = 0;
+		b2d._maxX = 0;
+		b2d._maxY = 0;
+	}
+	return b2d;
 }
 
 bool Engine::IsInFrustrum(const Camera* c, const Box* aabb) const

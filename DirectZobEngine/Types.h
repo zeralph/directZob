@@ -166,6 +166,13 @@ public:
 		bool bold = false;
 		bool noZ = false;
 	};
+	struct BoudingBox2D
+	{
+		float _minX;
+		float _minY;
+		float _maxX;
+		float _maxY;
+	};
 	struct RenderOptions
 	{
 		enum eLightMode
@@ -234,6 +241,7 @@ typedef DirectZobType::zobId zobId;
 typedef struct DirectZobType::ZobFilePath ZobFilePath;
 typedef struct DirectZobType::BufferData BufferData;
 typedef struct DirectZobType::Line3D Line3D;
+typedef struct DirectZobType::BoudingBox2D BoudingBox2D;
 typedef struct DirectZobType::RenderOptions RenderOptions;
 typedef class DirectZobType::Ray Ray;
 typedef class DirectZobType::Plane Plane;

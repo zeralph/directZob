@@ -13,7 +13,7 @@ namespace CLI
 		test = gcnew String("");
 		m_renderWindow = renderWindow;
 		m_mouseInside = true;
-		m_objectModificator = translate_world;
+		m_objectModificator = none;
 		//m_renderWindow->AutoSize = true;
 		m_running = true;
 		m_renderWindowGraphics = m_renderWindow->CreateGraphics();
@@ -23,6 +23,7 @@ namespace CLI
 		m_uvs = (ZobVector2*)malloc(sizeof(ZobVector2) * NB_EDITOR_TRIANGLES * 3);
 		m_projectedVertices = (ZobVector3*)malloc(sizeof(ZobVector3) * NB_EDITOR_TRIANGLES * 3);
 		m_normals = (ZobVector3*)malloc(sizeof(ZobVector3) * NB_EDITOR_TRIANGLES * 3);
+		m_currentModifiedObject = NULL;
 		int vi = 0;
 		for (int i = 0; i < NB_EDITOR_TRIANGLES; i++)
 		{
@@ -52,6 +53,9 @@ namespace CLI
 		m_renderWindow->MouseLeave += gcnew EventHandler(this, &EngineWrapper::OnMouseLeave);
 		m_renderWindow->MouseWheel += gcnew MouseEventHandler(this, &EngineWrapper::OnMouseWheel);
 		m_renderWindow->MouseDoubleClick+= gcnew MouseEventHandler(this, &EngineWrapper::OnMouseClick);
+		m_renderWindow->MouseDown+= gcnew MouseEventHandler(this, &EngineWrapper::OnMouseDown);
+		m_renderWindow->MouseUp += gcnew MouseEventHandler(this, &EngineWrapper::OnMouseUp);
+		m_renderWindow->MouseMove += gcnew MouseEventHandler(this, &EngineWrapper::OnMouseMove);
 		m_renderWindow->AutoSize = false;
 		m_renderWindow->Width = 800;
 		m_renderWindow->Height = 600;
@@ -104,6 +108,72 @@ namespace CLI
 		DirectZob::GetInstance()->GetEngine()->Resize(w, h);
 	}
 
+	void EngineWrapper::OnMouseDown(Object^ sender, MouseEventArgs^ e)
+	{
+		if (m_currentModifiedObject == NULL)
+		{
+			Point location = m_renderWindow->PointToClient(m_mouseCoords);
+			ZobObject* z = DirectZob::GetInstance()->GetEngine()->GetObjectAt2DCoords(location.X, location.Y);
+			if (z)
+			{
+				if (z->IsEditorObject())
+				{
+					ZobObject* pz = z->GetParent();
+					m_currentObjectModificator = z;
+					if (pz && pz->GetName() == EDITOR_OBJECT)
+					{
+						std:string s = z->GetName();
+						if (s == EDITOR_ARROW_X)
+						{
+							m_objectModificator = translate_local_x;
+						}
+						else if (s == EDITOR_ARROW_Y)
+						{
+							m_objectModificator = translate_local_y;
+						}
+						else if (s == EDITOR_ARROW_Z)
+						{
+							m_objectModificator = translate_local_z;
+						}
+						m_currentModifiedObject = z->GetParent()->GetParent();
+					}
+				}
+			}
+		}
+	}
+
+	void EngineWrapper::OnMouseMove(Object^ sender, MouseEventArgs^ e)
+	{
+		if (m_currentModifiedObject && m_currentObjectModificator && e->Button == MouseButtons::Left)
+		{
+			float dx = m_mouseLastCoords.X - m_mouseCoords.X;
+			float dy = m_mouseLastCoords.Y - m_mouseCoords.Y;
+			DirectZobType::BoudingBox2D b2d = DirectZob::GetInstance()->GetEngine()->Get2DBoundingBox(m_currentObjectModificator);
+			float d = 0;
+			ZobVector3 p = m_currentModifiedObject->GetLocalPosition();
+			if (m_objectModificator == translate_world_x)
+			{
+				p.x -= d / 10.0f;
+			}
+			else if (m_objectModificator == translate_world_y)
+			{
+				p.y -= d / 10.0f;
+			}
+			else if (m_objectModificator == translate_world_z)
+			{
+				p.z -= d / 10.0f;
+			}
+			m_currentModifiedObject->SetLocalPosition(p.x, p.y, p.z);
+		}
+	}
+
+	void EngineWrapper::OnMouseUp(Object^ sender, MouseEventArgs^ e)
+	{
+		m_objectModificator = none;
+		m_currentModifiedObject = NULL;
+		m_currentObjectModificator = NULL;
+	}
+
 	void EngineWrapper::OnMouseClick(Object^ sender, MouseEventArgs^ e)
 	{
 		Point location = m_renderWindow->PointToClient(m_mouseCoords);
@@ -133,7 +203,7 @@ namespace CLI
 			Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
 			c->Zoom(z);
 		}
-		m_mouseCoords = Cursor::Position;
+		//m_mouseCoords = Cursor::Position;
 	}
 
 	void EngineWrapper::UpdateCameraEditor(float dt)
@@ -153,7 +223,7 @@ namespace CLI
 			c->Rotate(-x, -y, 0);
 			//c->Rotate(30, 0, 0);
 		}
-		else if (GetAsyncKeyState(VK_LBUTTON) & 0x8000)
+		else if (m_currentModifiedObject == NULL && GetAsyncKeyState(VK_LBUTTON) & 0x8000)
 		{
 			float factor = 40.0f;
 			Point p;
@@ -164,6 +234,7 @@ namespace CLI
 			Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
 			c->Move(p.X, -p.Y, 0, false);
 		}
+		m_mouseLastCoords = m_mouseCoords;
 		m_mouseCoords = Cursor::Position;
 	}
 

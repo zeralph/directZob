@@ -6,23 +6,23 @@
 ZobSprite::ZobSprite(const std::string &name, ZobObject*parent):
 	ZobObject(ZOBGUID::type_scene, ZOBGUID::subtype_sprite, name, parent)
 {
-	m_mesh = DirectZob::GetInstance()->GetMeshManager()->CreateSprite();
+	//m_mesh = DirectZob::GetInstance()->GetMeshManager()->CreateSprite();
 	m_material = DirectZob::GetInstance()->GetMaterialManager()->CreateMaterial();
 	ZobVector3 c = ZobVector3(1, 0, 0);
 	m_material->SetDiffuseColor(c);
-	Sprite* s = (Sprite*)m_mesh;
-	s->Setmaterial(m_material);
+	//Sprite* s = (Sprite*)m_mesh;
+	//s->Setmaterial(m_material);
 }
 
 ZobSprite::ZobSprite(std::string id, TiXmlElement* node, ZobObject* parent)
 	:ZobObject(id, node, parent)
 {
-	m_mesh = DirectZob::GetInstance()->GetMeshManager()->CreateSprite();
+	//m_mesh = DirectZob::GetInstance()->GetMeshManager()->CreateSprite();
 	m_material = DirectZob::GetInstance()->GetMaterialManager()->CreateMaterial();
 	ZobVector3 c = ZobVector3(1, 0, 0);
 	m_material->SetDiffuseColor(c);
-	Sprite* s = (Sprite*)m_mesh;
-	s->Setmaterial(m_material);
+	//Sprite* s = (Sprite*)m_mesh;
+	//s->Setmaterial(m_material);
 	TiXmlElement* f = node->FirstChildElement("Texture");
 	if (f && f->GetText())
 	{

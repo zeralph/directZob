@@ -40,11 +40,22 @@ namespace CLI
 	};
 	public enum objectModificator
 	{
-		translate_world=0,
-		translate_local=1,
-		rotate_world=2,
-		rotate_local=3,
-		scale=4,
+		none = 0,
+		translate_world_x = 1,
+		translate_world_y = 2,
+		translate_world_z = 3,
+		translate_local_x = 4,
+		translate_local_y = 5,
+		translate_local_z = 6,
+		rotate_world_x = 7,
+		rotate_world_y = 8,
+		rotate_world_z = 9,
+		rotate_local_x = 10,
+		rotate_local_y = 11,
+		rotate_local_z = 12,
+		scale_x = 13,
+		scale_y = 14,
+		scale_z = 15,
 	};
 	public enum axis
 	{
@@ -89,6 +100,9 @@ namespace CLI
 		void			OnMouseHover(Object ^ sender, EventArgs^ e);
 		void			OnMouseLeave(Object^ sender, EventArgs^ e);
 		void			OnMouseClick(Object^ sender, MouseEventArgs^ e);
+		void			OnMouseDown(Object^ sender, MouseEventArgs^ e);
+		void			OnMouseUp(Object^ sender, MouseEventArgs^ e);
+		void			OnMouseMove(Object^ sender, MouseEventArgs^ e);
 		void			UpdateRenderWindowInternal();
 		void			OnObjectSelected(ZobObjectWrapper^ z);
 		void			OnNewScene();
@@ -106,7 +120,14 @@ namespace CLI
 		bool			m_running;
 		objectModificator m_objectModificator;
 		Point			m_mouseCoords;
+		Point			m_mouseLastCoords;
 		bool			m_mouseInside;
+
+		//mouse move stuff
+		ZobObject*		m_currentModifiedObject;
+		ZobObject*		m_currentObjectModificator;
+		float			m_lastMouseX;
+		float			m_lastMouseY;
 	};
 }
 #endif //_WINDLL

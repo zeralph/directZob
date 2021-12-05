@@ -48,7 +48,6 @@ ZobObject::ZobObject(ZobType t, ZobSubType s, const std::string& name, ZobObject
 		m_parent = NULL;
 	}
 	m_markedForDeletion = false;
-	m_mesh = NULL;		
 	if (m_parent != NULL)
 	{
 		m_parent->AddChildReference(this);
@@ -88,7 +87,6 @@ ZobObject::ZobObject(std::string id, TiXmlElement* node, ZobObject* parent, cons
 		m_parent = parent;
 	}
 	m_markedForDeletion = false;
-	m_mesh = NULL;
 	m_physicComponent = new ZobPhysicComponent(this);
 	//parenting
 	m_children.clear();
@@ -204,39 +202,6 @@ ZobBehaviorMesh* ZobObject::LoadMesh(ZobFilePath &zfp)
 	ZobBehaviorMesh* bm = static_cast<ZobBehaviorMesh*>(b);
 	bm->Set(zfp);
 	return bm;
-}
-
-void ZobObject::SetMesh(std::string name)
-{
-	Mesh* m = DirectZob::GetInstance()->GetMeshManager()->GetMesh(name);
-	m_mesh = m;
-}
-
-const std::string ZobObject::GetMeshName() const
-{
-	if (m_mesh)
-	{
-		return m_mesh->GetName();
-	}
-	return "";
-}
-
-const std::string ZobObject::GetMeshPath() const
-{
-	if (m_mesh)
-	{
-		return m_mesh->GetPath();
-	}
-	return "";
-}
-
-const std::string ZobObject::GetMeshFileName() const
-{
-	if (m_mesh)
-	{
-		return m_mesh->GetFileName();
-	}
-	return "";
 }
 
 void ZobObject::Init()
@@ -575,9 +540,6 @@ TiXmlNode* ZobObject::SaveUnderNode(TiXmlNode* node)
 	TiXmlElement* objectNode = new TiXmlElement(XML_ELEMENT_ZOBOBJECT);
 	std::string guid = ZobGuidToString();
 	objectNode->SetAttribute(XML_ATTR_GUID, guid.c_str());
-	std::string meshName = GetMeshName();
-	std::string meshFileName = GetMeshFileName();
-	std::string meshPath = GetMeshPath();
 	m_varExposer->SaveUnderNode(objectNode);
 	TiXmlElement behaviors = TiXmlElement(XML_ELEMENT_BEHAVIORS);
 	for (int i = 0; i < m_behaviors.size(); i++)
@@ -590,8 +552,9 @@ TiXmlNode* ZobObject::SaveUnderNode(TiXmlNode* node)
 
 void ZobObject::CreateSprite()
 {
-	Sprite* s = DirectZob::GetInstance()->GetMeshManager()->CreateSprite();
-	m_mesh = s;
+	assert(0);
+	//Sprite* s = DirectZob::GetInstance()->GetMeshManager()->CreateSprite();
+	//m_mesh = s;
 }
 /*
 void ZobObject::SetQuaternion(const ZobVector3* left, const ZobVector3* up, const ZobVector3* fw)

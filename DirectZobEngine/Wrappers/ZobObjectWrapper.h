@@ -60,14 +60,11 @@ namespace CLI {
 		void					SetLocalRotation(ManagedVector3^ p);
 		void					SetLocalScale(ManagedVector3^ p);
 		void					LookAt(ManagedVector3^ forward, ManagedVector3^ left, ManagedVector3^ up, bool addToCurrentRotation);
-		String^					GetMeshName();
-		void					SetMesh(System::String^ name);
 		void					LoadMesh(System::String^ name, System::String^ file, System::String^ path);
 		void					CreateSprite();
 		bool					IsLight();
 		bool					IsSprite();
 		bool					IsCamera();
-		bool					HasMesh();
 		DirectZobType::guid		GetId() { return m_id; }
 		bool					IsFromFactoryFile();
 		String^					FactoryFile();

@@ -6,6 +6,11 @@
 #include <string>
 #include <vector>
 
+#define EDITOR_OBJECT "Editor_object"
+#define EDITOR_ARROW_X "Editor_arrow_x"
+#define EDITOR_ARROW_Y "Editor_arrow_y"
+#define EDITOR_ARROW_Z "Editor_arrow_z"
+
 using namespace System;
 using namespace System::Collections::Generic;
 

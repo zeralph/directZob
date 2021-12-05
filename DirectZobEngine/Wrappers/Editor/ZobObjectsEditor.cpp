@@ -47,13 +47,13 @@ namespace CLI
 			//tmpf-
 			ZobObject* g = zm->CreateEditorZobObject(NULL);
 			m_gizmosGuid = g->GetIdValue();
-			g->SetName("Editor");
+			g->SetName(EDITOR_OBJECT);
 			m_translateX = zm->CreateEditorZobObject(g);
-			m_translateX->SetName("TX");
+			m_translateX->SetName(EDITOR_ARROW_X);
 			m_translateY = zm->CreateEditorZobObject(g);
-			m_translateY->SetName("TY");
+			m_translateY->SetName(EDITOR_ARROW_Y);
 			m_translateZ = zm->CreateEditorZobObject(g);
-			m_translateZ->SetName("TZ");
+			m_translateZ->SetName(EDITOR_ARROW_Z);
 			ZobFilePath zfp;
 			zfp.file = "arrow.obj";
 			zfp.path = lpTempPathBuffer;// "D:\n\\n\Git\n\\n\directZob\n\\n\resources\n\\n\_editor";

@@ -408,7 +408,7 @@ void DirectZob::PrintObjectList()
 	{
 		const ZobObject* z = v.at(i);
 		int c = 0xFF0000FF;
-		if (z->GetMesh())
+		/*if (z->GetMesh())
 		{
 			c = 0xFFFF0000;
 			if (z->GetMesh()->IsDrawn())
@@ -416,6 +416,7 @@ void DirectZob::PrintObjectList()
 				c = 0xFF00FF00;
 			}
 		}
+		*/
 		m_text->Print(txtW, (i*10), c, z->GetName().c_str());
 	}
 }

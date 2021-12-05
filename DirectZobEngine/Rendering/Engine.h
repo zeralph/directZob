@@ -103,6 +103,7 @@ public:
 	void											LoadFromNode(TiXmlElement* node);
 	inline const bool								UseDithering() const { return m_dithering; }
 	ZobVariablesExposer*							GetVariablesExposer() { return m_varExposer; }
+	BoudingBox2D									Get2DBoundingBox(const ZobObject* z) const;
 private:	
 	void											DrawHorizontalLine(const float x1, const float x2, const float y, const uint color);
 	void											ClipSegmentToPlane(ZobVector3 &s0, ZobVector3 &s1, ZobVector3 &pp, ZobVector3 &pn);

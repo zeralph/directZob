@@ -186,27 +186,6 @@ namespace CLI
 		return nullptr;
 	}
 
-	String^ ZobObjectWrapper::GetMeshName()
-	{
-		ZobObject* z = GetInstance();
-		if (z)
-		{
-			return TO_MANAGED_STRING(z->GetMeshName().c_str());
-		}
-		return nullptr;
-	}
-
-	void ZobObjectWrapper::SetMesh(String^ name)
-	{
-		ZobObject* z = GetInstance();
-		if (z)
-		{
-			std::string n;
-			MarshalString(name, n);
-			z->SetMesh(n);
-		}
-	}
-
 	void ZobObjectWrapper::LoadMesh(String^ name, String^ file, String^ path)
 	{
 		ZobObject* z = GetInstance();
@@ -403,16 +382,6 @@ namespace CLI
 		if (z)
 		{
 			return z->GetSubType() == ZOBGUID::subtype_sprite;
-		}
-		return false;
-	}
-
-	bool ZobObjectWrapper::HasMesh()
-	{
-		ZobObject* z = GetInstance();
-		if (z->GetMesh())
-		{
-			return true;
 		}
 		return false;
 	}

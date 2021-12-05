@@ -71,13 +71,8 @@ public:
 	bool							RemoveChildReference(const ZobObject* z);
 	bool							AddChildReference(ZobObject* z);
 	int								GetChildPosition(const ZobObject* z);
-	virtual const std::string		GetMeshName() const ;
-	virtual const std::string		GetMeshFileName() const;
-	virtual const std::string		GetMeshPath() const;
-	void							SetMesh(std::string name);
 	ZobBehaviorMesh*				LoadMesh(ZobFilePath& zfp);
 	const bool						IsMarkedForDeletion() const { return m_markedForDeletion; };
-	inline const Mesh*				GetMesh() const { return m_mesh; }
 	void							MarkForDeletion() { m_markedForDeletion=true; };
 	bool							HasChild(const ZobObject* o);
 	void							CreateSprite();
@@ -89,7 +84,7 @@ public:
 	//temp ?
 	const ZobMatrix4x4*				GetModelMatrix() const { return &m_modelMatrix; };
 	const ZobMatrix4x4*				GetRotationMatrix() const { return &m_rotationMatrix; };
-	const std::vector<ZobBehavior*>*GetBehaviors() { return &m_behaviors; }
+	const std::vector<ZobBehavior*>*GetBehaviors() const { return &m_behaviors; }
 	void							AddBehavior(ZobBehavior* b) { m_behaviors.push_back(b); }
 	ZobVariablesExposer*			GetVariablesExposer() { return m_varExposer; }
 
@@ -106,7 +101,6 @@ protected:
 	ZobObject* m_parent;
 	ZobVariablesExposer* m_varExposer;
 	ZobPhysicComponent* m_physicComponent;
-	Mesh* m_mesh = NULL;
 	std::vector<ZobObject*> m_children;
 	std::vector <ZobBehavior*> m_behaviors;
 	ZobMatrix4x4 m_modelMatrix;

@@ -41,6 +41,8 @@ public:
 	inline bool							IsDrawn() const { return m_bDrawn; }
 	const int							GetNbSubMeshes() const { return m_subMeshes.size(); }
 	const Mesh*							GetSubMesh(int idx) const { return (m_subMeshes.size()>idx)?m_subMeshes.at(idx):NULL; }
+	const Box*							GetOBB() const { return &m_OBB; }
+	const Box*							GetAABB() const { return &m_AABB; }
 protected:
 										Mesh(std::string& parentName, std::string& path, fbxsdk::FbxMesh* mesh);
 	void								SplitEntry(const std::string* s, std::vector<std::string>* v, const char delim) const;
