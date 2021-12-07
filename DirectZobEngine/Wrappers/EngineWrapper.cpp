@@ -3,6 +3,7 @@
 #include "DirectZobWrapper.h"
 #include "ZobObjectManagerWrapper.h"
 #include "../ZobObjects/ZobObject.h"
+#include "../Misc/ZobGeometryHelper.h"
 namespace CLI
 {
 	static Line m_lines[NB_EDITOR_LINES];
@@ -24,6 +25,12 @@ namespace CLI
 		m_projectedVertices = (ZobVector3*)malloc(sizeof(ZobVector3) * NB_EDITOR_TRIANGLES * 3);
 		m_normals = (ZobVector3*)malloc(sizeof(ZobVector3) * NB_EDITOR_TRIANGLES * 3);
 		m_currentModifiedObject = NULL;
+		m_lastMouseX = 0;
+		m_lastMouseY = 0;
+		m_moveObject = false;
+		m_currentModifiedStartX = 0.0f;
+		m_currentModifiedStartY = 0.0f;
+		m_currentModifiedStartZ = 0.0f;
 		int vi = 0;
 		for (int i = 0; i < NB_EDITOR_TRIANGLES; i++)
 		{
@@ -113,7 +120,7 @@ namespace CLI
 		if (m_currentModifiedObject == NULL)
 		{
 			Point location = m_renderWindow->PointToClient(m_mouseCoords);
-			ZobObject* z = DirectZob::GetInstance()->GetEngine()->GetObjectAt2DCoords(location.X, location.Y);
+			ZobObject* z = DirectZob::GetInstance()->GetEngine()->GetObjectAt2DCoords(location.X, location.Y, true);
 			if (z)
 			{
 				if (z->IsEditorObject())
@@ -136,6 +143,10 @@ namespace CLI
 							m_objectModificator = translate_local_z;
 						}
 						m_currentModifiedObject = z->GetParent()->GetParent();
+						m_currentModifiedStartX = m_currentModifiedObject->GetWorldPosition().x;
+						m_currentModifiedStartY = m_currentModifiedObject->GetWorldPosition().y;
+						m_currentModifiedStartZ = m_currentModifiedObject->GetWorldPosition().z;
+						DirectZob::LogInfo("Selected %s at %f %f %f", m_currentModifiedObject->GetName(), m_currentModifiedStartX, m_currentModifiedStartY, m_currentModifiedStartZ);
 					}
 				}
 			}
@@ -144,26 +155,70 @@ namespace CLI
 
 	void EngineWrapper::OnMouseMove(Object^ sender, MouseEventArgs^ e)
 	{
-		if (m_currentModifiedObject && m_currentObjectModificator && e->Button == MouseButtons::Left)
+		Point p = System::Windows::Forms::Control::MousePosition;
+		p = m_renderWindow->PointToClient(p);
+		m_lastMouseX = p.X;
+		m_lastMouseY = p.Y;
+		if (e && e->Button == MouseButtons::Left)
 		{
-			float dx = m_mouseLastCoords.X - m_mouseCoords.X;
-			float dy = m_mouseLastCoords.Y - m_mouseCoords.Y;
-			DirectZobType::BoudingBox2D b2d = DirectZob::GetInstance()->GetEngine()->Get2DBoundingBox(m_currentObjectModificator);
-			float d = 0;
-			ZobVector3 p = m_currentModifiedObject->GetLocalPosition();
-			if (m_objectModificator == translate_world_x)
+			m_moveObject = true;
+		}
+	}
+
+	void EngineWrapper::UpdateMoveObject()
+	{
+		if (m_currentModifiedObject && m_currentObjectModificator && m_moveObject)
+		{
+			m_moveObject = false;
+			Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
+			ZobVector3 planePos = ZobVector3(m_currentModifiedStartX, m_currentModifiedStartY, m_currentModifiedStartZ);
+			ZobVector3 planeNormal = ZobVector3(0, 0, 0);
+			ZobVector3 direction = ZobVector3(0, 0, 0);
+			if (m_objectModificator == objectModificator::translate_local_x)
 			{
-				p.x -= d / 10.0f;
+				planeNormal = m_currentModifiedObject->GetUp();
+				direction = m_currentModifiedObject->GetLeft();
 			}
-			else if (m_objectModificator == translate_world_y)
+			else if (m_objectModificator == objectModificator::translate_local_y)
 			{
-				p.y -= d / 10.0f;
+				planeNormal = m_currentModifiedObject->GetForward();
+				direction = m_currentModifiedObject->GetUp();
 			}
-			else if (m_objectModificator == translate_world_z)
+			else if (m_objectModificator == objectModificator::translate_local_z)
 			{
-				p.z -= d / 10.0f;
+				planeNormal = m_currentModifiedObject->GetLeft();
+				direction = m_currentModifiedObject->GetForward();
 			}
-			m_currentModifiedObject->SetLocalPosition(p.x, p.y, p.z);
+			BufferData* bData = m_Instance->GetBufferData();
+			float fx = (float)m_lastMouseX;
+			float fy = (float)m_lastMouseY;
+			fx /= (float)bData->width;
+			fy /= (float)bData->height;
+			fx = fx * 2.0f - 1.0f;
+			fy = fy * 2.0f - 1.0f;
+			ZobVector3 ret = c->From2DToWorldOnPlane(fx, fy, &planePos, &planeNormal);
+			ZobVector3 s = ZobVector3(m_currentModifiedStartX, m_currentModifiedStartY, m_currentModifiedStartZ);
+			ret = ZobGeometryHelper::ProjectPointOnLine(&s, &direction, &ret);
+/*
+			ret.x = ret.x - m_currentModifiedStartX;
+			ret.y = ret.y - m_currentModifiedStartY;
+			ret.z = ret.z - m_currentModifiedStartZ;
+			//ret.Normalize();
+			float d = ZobVector3::Dot(&ret, &direction);
+			ret = direction * d;
+			ret.x = m_currentModifiedStartX + (ret.x);
+			ret.y = m_currentModifiedStartY + (ret.y);
+			ret.z = m_currentModifiedStartZ + (ret.z);
+*/			
+			
+			//ZobVector3 delta = ret - m_startPosition;
+			//delta = delta * direction + m_currentModifiedObject->GetWorldPosition();
+			//ret = m_currentModifiedObject->GetWorldPosition() + delta;
+			m_currentModifiedObject->SetWorldPosition(ret.x, ret.y, ret.z);
+			//ZobMatrix4x4 m = ZobMatrix4x4();
+			//m.AddTranslation(ret);
+			//m_Instance->QueueSphere(c, &m, 0.9f, 0xFFFF00, false, true);
+			m_Instance->QueueLine(c, &planePos, &ret, 0xFFFF00, false, true);
 		}
 	}
 
@@ -177,7 +232,7 @@ namespace CLI
 	void EngineWrapper::OnMouseClick(Object^ sender, MouseEventArgs^ e)
 	{
 		Point location = m_renderWindow->PointToClient(m_mouseCoords);
-		ZobObject* z = DirectZob::GetInstance()->GetEngine()->GetObjectAt2DCoords(location.X, location.Y);
+		ZobObject* z = DirectZob::GetInstance()->GetEngine()->GetObjectAt2DCoords(location.X, location.Y, false);
 		if (z)
 		{
 			if (z->IsEditorObject())
@@ -199,7 +254,7 @@ namespace CLI
 	{
 		if (e->Delta)
 		{
-			float z = (float)e->Delta / 10.0f;
+			float z = (float)e->Delta / 20.0f;
 			Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
 			c->Zoom(z);
 		}
@@ -241,6 +296,20 @@ namespace CLI
 	void EngineWrapper::Update(float dt)
 	{
 		UpdateCameraEditor(dt); 
+		UpdateMoveObject();
+
+		//update gizmos
+		ZobObject* z = DirectZob::GetInstance()->GetEngine()->GetObjectAt2DCoords(m_lastMouseX, m_lastMouseY, true);
+		if (z)
+		{
+			DirectZobWrapper::GetWrapper()->GetZobObjectManagerWrapper()->GetEditorGizmos()->Select(z);
+			DirectZob::LogInfo("On editor object %s", z->GetName());
+		}
+		else
+		{
+			DirectZobWrapper::GetWrapper()->GetZobObjectManagerWrapper()->GetEditorGizmos()->UnSelect();
+		}
+
 		if (GetInstance() && m_renderWindow && m_running)
 		{
 			m_renderWindow->Invoke(gcnew Action(this, &CLI::EngineWrapper::UpdateRenderWindowInternal));
@@ -273,6 +342,7 @@ namespace CLI
 
 	void EngineWrapper::QueueObjectsToRender()
 	{
+		//OnMouseMove(nullptr, nullptr);
 		Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
 		BufferData* bData = m_Instance->GetBufferData();
 		float w = (float)bData->width / 2.0f;

@@ -20,6 +20,7 @@ class Rasterizer;
 class Camera;
 class Engine
 {
+
 public:
 
 	Engine(int width, int height, Events* events);
@@ -86,10 +87,7 @@ public:
 	bool											Resize(int width, int height);
 	bool											GetProjectedCoords(ZobVector3* worldPos);
 	float											GetDistanceToCamera(ZobVector3* worldPos);
-	bool											LinePlaneIntersection(const ZobVector3* planeOrigin, const ZobVector3* planeNormal, const ZobVector3* lineOrigin, const ZobVector3* lineDirection, ZobVector3* ret);
-	bool											LineTriangleIntersection(const Triangle* t, const ZobVector3* l0, const ZobVector3* lv, ZobVector3& intersectionPt);
-	bool											LineLineIntersection(const ZobVector3* s0, const ZobVector3* s1, const ZobVector3* e0, const ZobVector3* e1, ZobVector3 &out, float& outFactor) const;
-	ZobObject*										GetObjectAt2DCoords(float x, float y);
+	ZobObject*										GetObjectAt2DCoords(float x, float y, bool editorObjectsOnly);
 	void											ComputeBoundingBoxes(const ZobMatrix4x4* modelMatrix, const ZobVector3* minBounding, const ZobVector3* maxBounding, Box* obb, Box* aabb) const;
 	bool											IsInFrustrum(const Camera* c, const Box* aabb) const;
 	void											SwapBuffers();
@@ -106,7 +104,6 @@ public:
 	BoudingBox2D									Get2DBoundingBox(const ZobObject* z) const;
 private:	
 	void											DrawHorizontalLine(const float x1, const float x2, const float y, const uint color);
-	void											ClipSegmentToPlane(ZobVector3 &s0, ZobVector3 &s1, ZobVector3 &pp, ZobVector3 &pn);
 	void											QueuePartialSphere(const Camera* camera, const ZobMatrix4x4* mat, const float radius, const uint c, bool bold, bool noZ, float from, float to);
 	uint											SubDivideClippedTriangle(const Camera* c, const Triangle* t);
 	void											RecomputeTriangleProj(const Camera* c, Triangle* t);
@@ -147,7 +144,7 @@ private:
 	ZobVector3* m_verticesData;
 	ZobVector2* m_uvData;
 	ZobVector3* m_colorData;
-	RenderOptions* m_renderOptions;
+	Triangle::RenderOptions* m_renderOptions;
 	ZobVariablesExposer* m_varExposer;
 	int m_usedRenderOptions;
 	long m_TriangleQueueSize;

@@ -3,7 +3,7 @@
 #include "ZobVector3.h"
 #include "../ZobMaterial.h"
 #include "../Types.h"
-
+#include "Color.h"
 class ZobObject;
 
 //FLAGS :
@@ -12,6 +12,33 @@ class ZobObject;
 //
 class Triangle
 {
+public:
+	struct RenderOptions
+	{
+		enum eLightMode
+		{
+			eLightMode_none = 0,
+			eLightMode_flat,
+			eLightMode_gouraud,
+			eLightMode_phong,
+			eLightMode_flatPhong,
+			__eLightMode_MAX__
+		};
+
+		enum eCullMode
+		{
+			eCullMode_None = 0,
+			eCullMode_ClockwiseFace,
+			eCullMode_CounterClockwiseFace,
+			__eCullMode_MAX__,
+		};
+
+		bool bTransparency = false;
+		bool zBuffered = true;
+		ZobColor color = ZobColor::White;
+		eLightMode lightMode = eLightMode::eLightMode_phong;
+		eCullMode cullMode = eCullMode_ClockwiseFace;
+	};
 public:
 
 	enum eClip
@@ -64,7 +91,7 @@ public:
 	ZobObject* zobObject;
 	float area;
 	bool draw;
-	const DirectZobType::RenderOptions* options;
+	const Triangle::RenderOptions* options;
 
 	inline void ComputeArea()
 	{

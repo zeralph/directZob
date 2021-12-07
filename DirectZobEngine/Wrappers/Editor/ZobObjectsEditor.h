@@ -23,12 +23,18 @@ namespace CLI
 		~ZobObjectsEditor();
 		void AddEditorGizmos();
 		void SetParent(ZobObject* z);
-
+		void Select(ZobObject* z);
+		void UnSelect();
 	private:
 		zobId m_gizmosGuid;
+		ZobObject* m_editorRoot;
 		ZobObject* m_translateX;
 		ZobObject* m_translateY;
 		ZobObject* m_translateZ;
+		ZobBehaviorMesh* m_behaviorTranslateX;
+		ZobBehaviorMesh* m_behaviorTranslateY;
+		ZobBehaviorMesh* m_behaviorTranslateZ;
+		ZobObject* m_currentSelectedGizmo;
 		static string gArrow;
 	};
 }

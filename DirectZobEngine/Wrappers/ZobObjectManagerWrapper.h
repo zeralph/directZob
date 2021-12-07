@@ -52,6 +52,7 @@ namespace CLI
 		TreeView^				GetTreeviw() {return m_treeView;}
 		void					ReScan();
 		void					SelectObject(ZobObject* z);
+		ZobObjectsEditor*		GetEditorGizmos() { return m_editorGizmos; }
 	private:
 	
 		void					CreateTreeview();

@@ -10,11 +10,12 @@ namespace CLI
 	ZobObjectsEditor::ZobObjectsEditor()
 	{
 		m_gizmosGuid = 0;
-
+		m_currentSelectedGizmo = NULL;
 	}
 
 	ZobObjectsEditor::~ZobObjectsEditor()
 	{
+		
 	}
 
 	void ZobObjectsEditor::SetParent(ZobObject* z)
@@ -45,36 +46,62 @@ namespace CLI
 			std::fputs(gArrow.c_str(), tmpf);
 			std::rewind(tmpf);
 			//tmpf-
-			ZobObject* g = zm->CreateEditorZobObject(NULL);
-			m_gizmosGuid = g->GetIdValue();
-			g->SetName(EDITOR_OBJECT);
-			m_translateX = zm->CreateEditorZobObject(g);
+			ZobObject* m_editorRoot = zm->CreateEditorZobObject(NULL);
+			m_gizmosGuid = m_editorRoot->GetIdValue();
+			m_editorRoot->SetName(EDITOR_OBJECT);
+			m_translateX = zm->CreateEditorZobObject(m_editorRoot);
 			m_translateX->SetName(EDITOR_ARROW_X);
-			m_translateY = zm->CreateEditorZobObject(g);
+			m_translateY = zm->CreateEditorZobObject(m_editorRoot);
 			m_translateY->SetName(EDITOR_ARROW_Y);
-			m_translateZ = zm->CreateEditorZobObject(g);
+			m_translateZ = zm->CreateEditorZobObject(m_editorRoot);
 			m_translateZ->SetName(EDITOR_ARROW_Z);
 			ZobFilePath zfp;
 			zfp.file = "arrow.obj";
 			zfp.path = lpTempPathBuffer;// "D:\n\\n\Git\n\\n\directZob\n\\n\resources\n\\n\_editor";
 			zfp.name = "arrow.obj";
 			zfp.bAbsolute = true;
-			ZobBehaviorMesh* bx = m_translateX->LoadMesh(zfp);
-			ZobBehaviorMesh* by = m_translateY->LoadMesh(zfp);
-			ZobBehaviorMesh* bz = m_translateZ->LoadMesh(zfp);
-			bx->GetRenderOptions()->color = ZobVector3(1, 0, 0);
-			bx->GetRenderOptions()->lightMode = RenderOptions::eLightMode_none;
-			bx->GetRenderOptions()->zBuffered = false;
-			by->GetRenderOptions()->color = ZobVector3(0, 1, 0);
-			by->GetRenderOptions()->lightMode = RenderOptions::eLightMode_none;
-			by->GetRenderOptions()->zBuffered = false;
-			bz->GetRenderOptions()->color = ZobVector3(0, 0, 1);
-			bz->GetRenderOptions()->lightMode = RenderOptions::eLightMode_none;
-			bz->GetRenderOptions()->zBuffered = false;
-			m_translateX->SetWorldRotation(0, 90, 0);
-			m_translateY->SetWorldRotation(-90, 0, 0);
-			//m_translateX->GetMesh()->
+			m_behaviorTranslateX = m_translateX->LoadMesh(zfp);
+			m_behaviorTranslateY = m_translateY->LoadMesh(zfp);
+			m_behaviorTranslateZ = m_translateZ->LoadMesh(zfp);
+
+			m_behaviorTranslateX->GetRenderOptions()->color = ZobColor::Red;
+			m_behaviorTranslateX->GetRenderOptions()->lightMode = Triangle::RenderOptions::eLightMode_none;
+			m_behaviorTranslateX->GetRenderOptions()->zBuffered = false;
+			m_behaviorTranslateY->GetRenderOptions()->color = ZobColor::Green;
+			m_behaviorTranslateY->GetRenderOptions()->lightMode = Triangle::RenderOptions::eLightMode_none;
+			m_behaviorTranslateY->GetRenderOptions()->zBuffered = false;
+			m_behaviorTranslateZ->GetRenderOptions()->color = ZobColor::Blue;
+			m_behaviorTranslateZ->GetRenderOptions()->lightMode = Triangle::RenderOptions::eLightMode_none;
+			m_behaviorTranslateZ->GetRenderOptions()->zBuffered = false;
+			m_translateX->SetLocalRotation(0, 90, 0);
+			m_translateY->SetLocalRotation(-90, 0, 0);
 		}
+	}
+
+	void ZobObjectsEditor::Select(ZobObject* z)
+	{
+		if (z == m_translateX)
+		{
+			m_currentSelectedGizmo = z;
+			m_behaviorTranslateX->GetRenderOptions()->color = ZobColor::Yellow;
+		}
+		else if (z == m_translateY)
+		{
+			m_currentSelectedGizmo = z;
+			m_behaviorTranslateY->GetRenderOptions()->color = ZobColor::Yellow;
+		}
+		else if (z == m_translateZ)
+		{
+			m_currentSelectedGizmo = z;
+			m_behaviorTranslateZ->GetRenderOptions()->color = ZobColor::Yellow;
+		}
+	}
+
+	void ZobObjectsEditor::UnSelect()
+	{
+		m_behaviorTranslateX->GetRenderOptions()->color = ZobColor::Red;
+		m_behaviorTranslateY->GetRenderOptions()->color = ZobColor::Green;
+		m_behaviorTranslateZ->GetRenderOptions()->color = ZobColor::Blue;
 	}
 
 	string ZobObjectsEditor::gArrow =

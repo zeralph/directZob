@@ -173,32 +173,6 @@ public:
 		float _maxX;
 		float _maxY;
 	};
-	struct RenderOptions
-	{
-		enum eLightMode
-		{
-			eLightMode_none = 0,
-			eLightMode_flat,
-			eLightMode_gouraud,
-			eLightMode_phong,
-			eLightMode_flatPhong,
-			__eLightMode_MAX__
-		};
-		
-		enum eCullMode
-		{
-			eCullMode_None = 0,
-			eCullMode_ClockwiseFace,
-			eCullMode_CounterClockwiseFace,
-			__eCullMode_MAX__,
-		};
-
-		bool bTransparency = false;
-		bool zBuffered = true;
-		ZobVector3 color = ZobVector3(1, 1, 1);
-		eLightMode lightMode = eLightMode::eLightMode_phong;
-		eCullMode cullMode = eCullMode_ClockwiseFace;
-	};
 	class Ray
 	{
 	public:
@@ -242,7 +216,7 @@ typedef struct DirectZobType::ZobFilePath ZobFilePath;
 typedef struct DirectZobType::BufferData BufferData;
 typedef struct DirectZobType::Line3D Line3D;
 typedef struct DirectZobType::BoudingBox2D BoudingBox2D;
-typedef struct DirectZobType::RenderOptions RenderOptions;
+//typedef struct DirectZobType::RenderOptions RenderOptions;
 typedef class DirectZobType::Ray Ray;
 typedef class DirectZobType::Plane Plane;
 typedef class DirectZobType::Box Box;

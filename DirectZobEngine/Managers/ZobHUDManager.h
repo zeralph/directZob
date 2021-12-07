@@ -60,7 +60,7 @@ private:
 	ZobVector2* m_uvs;
 	ZobVector3* m_colors;
 	int	m_nbDrawnTriangles;
-	DirectZobType::RenderOptions m_renderOptions;
+	Triangle::RenderOptions m_renderOptions;
 	std::vector <const ZobFont*> m_fonts;
 	std::vector<HUDElement> m_hudElements;
 	bool m_started;

@@ -32,12 +32,27 @@ public:
 
 	inline void Normalize() 
 	{
-		float f = 1.0f / sqrtLength();
+		float f = sqrtLength();
+		if (f != 0)
+		{
+			f = 1.0f / f;
+		}
 		if (f != 0.0f)
 		{
 			x *= f;
 			y *= f;
 			z *= f;
+			w = 1.0f;
+		}
+	}
+
+	inline void NormalizeW()
+	{
+		if (w != 0.0f)
+		{
+			x /= w;
+			y /= w;
+			z /= w;
 			w = 1.0f;
 		}
 	}

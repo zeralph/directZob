@@ -359,11 +359,11 @@ inline void Rasterizer::ComputeLightingAtPoint(const ZobVector3* position, const
 				{
 					cl = 0.0f;
 					sl = 0.0f;
-					if (t->options->lightMode != RenderOptions::eLightMode_none)
+					if (t->options->lightMode != Triangle::RenderOptions::eLightMode_none)
 					{
 						cl = CLAMP(-ZobVector3::Dot(normal, &lightDir), 0.0f, 1.0f);
 						sl = 0.0f;
-						if (t->options->lightMode == RenderOptions::eLightMode_phong || t->options->lightMode == RenderOptions::eLightMode_flatPhong)
+						if (t->options->lightMode == Triangle::RenderOptions::eLightMode_phong || t->options->lightMode == Triangle::RenderOptions::eLightMode_flatPhong)
 						{
 							sl = computeSpecular(normal, &lightPos, position, t);
 						}
@@ -547,8 +547,8 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector2* screenCoord, con
 	{
 		//m_bufferData->zBuffer[k] = -1.0f;
 		cl = 1.0f;
-		RenderOptions::eLightMode lighting = t->options->lightMode;
-		if (lighting == RenderOptions::eLightMode_flat || lighting == RenderOptions::eLightMode_flatPhong || lighting == RenderOptions::eLightMode_none)
+		Triangle::RenderOptions::eLightMode lighting = t->options->lightMode;
+		if (lighting == Triangle::RenderOptions::eLightMode_flat || lighting == Triangle::RenderOptions::eLightMode_flatPhong || lighting == Triangle::RenderOptions::eLightMode_none)
 		{
 			normal = ZobVector3((t->na->x + t->nb->x +t->nc->x),
 				(t->na->y + t->nb->y + t->nc->y),
@@ -620,7 +620,7 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector2* screenCoord, con
 			sg = material->GetSpecularColor()->y;
 			sb = material->GetSpecularColor()->z;
 		}
-		if (lighting != RenderOptions::eLightMode_none)
+		if (lighting != Triangle::RenderOptions::eLightMode_none)
 		{
 			//lighting ambient
 			fr = dr * (m_ambientColor->GetRedNormalized() * m_ambientIntensity);
@@ -633,7 +633,7 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector2* screenCoord, con
 				float w0t = wa;
 				float w1t = wb;
 				float w2t = wc;
-				if (lighting == RenderOptions::eLightMode_flat || lighting == RenderOptions::eLightMode_flatPhong)
+				if (lighting == Triangle::RenderOptions::eLightMode_flat || lighting == Triangle::RenderOptions::eLightMode_flatPhong)
 				{
 					w0t = 1.0f / 3.0f;
 					w1t = 1.0f / 3.0f;
@@ -667,9 +667,9 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector2* screenCoord, con
 			fg = dg;
 			fb = db;
 		}
-		fr = CLAMP(fr, 0.0f, 1.0f) * t->options->color.x;
-		fg = CLAMP(fg, 0.0f, 1.0f) * t->options->color.y;
-		fb = CLAMP(fb, 0.0f, 1.0f) * t->options->color.z;
+		fr = CLAMP(fr, 0.0f, 1.0f) * t->options->color.GetRedNormalized();
+		fg = CLAMP(fg, 0.0f, 1.0f) * t->options->color.GetGreenNormalized();
+		fb = CLAMP(fb, 0.0f, 1.0f) * t->options->color.GetBlueNormalized();
 		float fog = ComputeFog(z);
 		fr = fr * (1.0f - fog) + fog * m_fogColor->GetRedNormalized();
 		fg = fg * (1.0f - fog) + fog * m_fogColor->GetGreenNormalized();

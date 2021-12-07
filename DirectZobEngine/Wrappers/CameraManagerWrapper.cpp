@@ -104,7 +104,7 @@ namespace CLI
 			ZobVector3 cp0 = p0->ToVector3();
 			ZobVector3 cpn = pn->ToVector3();
 			ZobVector3 cret = ZobVector3(0,0,0);
-			if (c->From2DToWorldOnPlane(x, y, &cp0, &cpn, &cret))
+			//if (c->From2DToWorldOnPlane(x, y, &cp0, &cpn, &cret))
 			{
 				ret->x = cret.x;
 				ret->y = cret.y;

@@ -107,6 +107,7 @@ namespace CLI
 		void			OnObjectSelected(ZobObjectWrapper^ z);
 		void			OnNewScene();
 		bool			IsCursorInsideWindow();
+		void			UpdateMoveObject();
 		PictureBox^		m_renderWindow;
 		Graphics^		m_renderWindowGraphics;
 		Triangle*		m_triangleList;
@@ -126,8 +127,12 @@ namespace CLI
 		//mouse move stuff
 		ZobObject*		m_currentModifiedObject;
 		ZobObject*		m_currentObjectModificator;
+		float			m_currentModifiedStartX;
+		float			m_currentModifiedStartY;
+		float			m_currentModifiedStartZ;
 		float			m_lastMouseX;
 		float			m_lastMouseY;
+		bool			m_moveObject;
 	};
 }
 #endif //_WINDLL

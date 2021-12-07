@@ -127,7 +127,9 @@
 				'Misc/ZobXmlHelper.h',		
 				'Misc/ZobVariablesExposer.h',
 				'Misc/ZobVariablesExposer.cpp',	
-				'Misc/ZobUtils.h',					
+				'Misc/ZobUtils.h',				
+				'Misc/ZobGeometryHelper.h',
+				'Misc/ZobGeometryHelper.cpp',				
             ],
             'conditions': [
                 [

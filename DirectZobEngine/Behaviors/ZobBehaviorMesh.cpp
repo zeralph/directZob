@@ -14,13 +14,13 @@ ZobBehaviorMesh::ZobBehaviorMesh(ZobObject* zobObject) : ZobBehavior(zobObject)
 
 	m_varExposer->WrapVariable<ZobFilePath>("File", &m_meshPath, NULL, false, true);
 	
-	RenderOptions::eCullMode cm[3] = { RenderOptions::eCullMode_None, RenderOptions::eCullMode_ClockwiseFace, RenderOptions::eCullMode_CounterClockwiseFace};
+	Triangle::RenderOptions::eCullMode cm[3] = { Triangle::RenderOptions::eCullMode_None, Triangle::RenderOptions::eCullMode_ClockwiseFace, Triangle::RenderOptions::eCullMode_CounterClockwiseFace};
 	const char* cmStr[3] = { "None", "Clockwise", "Counter clockwise" };
-	m_varExposer->WrapEnum<RenderOptions::eCullMode>("Cull mode", &m_renderOptions.cullMode, 3, cm, cmStr, NULL, false, true);
+	m_varExposer->WrapEnum<Triangle::RenderOptions::eCullMode>("Cull mode", &m_renderOptions.cullMode, 3, cm, cmStr, NULL, false, true);
 
-	RenderOptions::eLightMode lm[5] = { RenderOptions::eLightMode_none, RenderOptions::eLightMode_flat, RenderOptions::eLightMode_gouraud, RenderOptions::eLightMode_phong , RenderOptions::eLightMode_flatPhong };
+	Triangle::RenderOptions::eLightMode lm[5] = { Triangle::RenderOptions::eLightMode_none, Triangle::RenderOptions::eLightMode_flat, Triangle::RenderOptions::eLightMode_gouraud, Triangle::RenderOptions::eLightMode_phong , Triangle::RenderOptions::eLightMode_flatPhong };
 	const char* lmStr[5] = { "None", "Flat", "Gouraud", "Phong", "Flat phong" };
-	m_varExposer->WrapEnum<RenderOptions::eLightMode>("Lighting", &m_renderOptions.lightMode, 5, lm, lmStr, NULL, false, true);
+	m_varExposer->WrapEnum<Triangle::RenderOptions::eLightMode>("Lighting", &m_renderOptions.lightMode, 5, lm, lmStr, NULL, false, true);
 
 	m_varExposer->WrapVariable<bool>("ZBuffered", &m_renderOptions.zBuffered, NULL, false, true);
 	
@@ -81,7 +81,7 @@ void ZobBehaviorMesh::PostUpdate()
 	{
 		const ZobMatrix4x4* mm = m_zobObject->GetModelMatrix();
 		const ZobMatrix4x4* rs = m_zobObject->GetRotationMatrix();
-		const RenderOptions* ro = &this->m_renderOptions;
+		const Triangle::RenderOptions* ro = &this->m_renderOptions;
 		const Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
 		Engine* e = DirectZob::GetInstance()->GetEngine();
 		m_mesh->Update(mm, rs, c, e, ro);
@@ -94,7 +94,7 @@ void ZobBehaviorMesh::QueueForDrawing(const Camera* camera, Engine* engine)
 	{
 		const ZobMatrix4x4* mm = m_zobObject->GetModelMatrix();
 		const ZobMatrix4x4* rs = m_zobObject->GetRotationMatrix();
-		RenderOptions* ro = &this->m_renderOptions;
+		Triangle::RenderOptions* ro = &this->m_renderOptions;
 		const Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
 		Engine* e = DirectZob::GetInstance()->GetEngine();
 		m_mesh->QueueForDrawing(m_zobObject, mm, rs, c, e, ro);

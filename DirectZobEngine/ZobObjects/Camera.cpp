@@ -8,6 +8,7 @@
 #include "ZobCameraController/ZobCameraControllerOrbital.h"
 #include "ZobCameraController/ZobCameraControllerFPS.h"
 #include "ZobCameraController/ZobCameraControllerFollowCar.h"
+#include "Misc/ZobGeometryHelper.h"
 #include "Misc/ZobXmlHelper.h"
 
 static std::mutex g_update_camera_mutex;
@@ -620,41 +621,39 @@ void Camera::setProjectionMatrix(const float angleOfView, const float width, con
 	m_invProjectionMatrix.SetData(3, 2, 1.0f / d);
 	m_invProjectionMatrix.SetData(3, 3, -c / (d*e) );
 
-//	ZobMatrix4x4::InvertMatrix4(m_projMatrix, m_invProjectionMatrix);
+	ZobMatrix4x4::InvertMatrix4(GetViewMatrix(), m_invViewMatrix);
 }
 
 // x in [-1,1], y in [-1,1}
-DirectZobType::Ray Camera::From2DToWorld(float x, float y)
+DirectZobType::Ray Camera::From2DToWorld(float x, float y) const
 {
 	DirectZobType::Ray r;
-	if(fabsf(x)<=1.0f && fabsf(y)<=1.0f)
+	//if(fabsf(x)<=1.0f && fabsf(y)<=1.0f)
 	{
 		BufferData* b = DirectZob::GetInstance()->GetEngine()->GetBufferData();
-		ZobVector3 v = ZobVector3(x, y, b->zNear);
+		static float pouet = 0.f;
+		ZobVector3 v = ZobVector3(x, y, pouet);
 		static bool mytest = true;
 		m_invProjectionMatrix.Mul(&v);
 		m_invViewMatrix.Mul(&v);
-		r.p = this->GetWorldPosition();
 		v.x /= v.w;
 		v.y /= v.w;
 		v.z /= v.w;
 		v.w = 1.0f;
-		v = v - r.p;
+		r.p = v;
+		v = v - this->GetWorldPosition();
 		v.Normalize();
 		r.n = v;
 	}
 	return r;
 }
 
-bool Camera::From2DToWorldOnPlane(const float x, const float y, const ZobVector3* p0, const ZobVector3* pn, ZobVector3* ret)
+ZobVector3 Camera::From2DToWorldOnPlane(const float x, const float y, const ZobVector3* p0, const ZobVector3* pn) const
 {
+	ZobVector3 ret = ZobVector3(0, 0, 0);
 	DirectZobType::Ray r = From2DToWorld(x, y);
-	ZobVector3 l0 = this->GetWorldPosition();
-	if (DirectZob::GetInstance()->GetEngine()->LinePlaneIntersection(p0, pn, &r.p, &r.n, ret))
-	{
-		return true;
-	}
-	return false;
+	ret = ZobGeometryHelper::LinePlaneIntersection(p0, pn, &r.p, &r.n);
+	return ret;
 }
 
 void Camera::Rotate(float x, float y, float z)

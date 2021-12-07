@@ -56,7 +56,7 @@ Sprite::Sprite(std::string& name):Mesh(name)
 	m_uvs[3] = ZobVector2(1, 0);
 
 	m_triangleOptions.zBuffered = false;
-	m_triangleOptions.lightMode = RenderOptions::eLightMode_none;
+	m_triangleOptions.lightMode = Triangle::RenderOptions::eLightMode_none;
 
 	Triangle t1;
 	t1.va = &m_vertices[0];
@@ -145,7 +145,7 @@ Sprite::~Sprite()
 	DirectZob::RemoveIndent();
 }
 
-void Sprite::QueueForDrawing(ZobObject* z, const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Engine* engine, const RenderOptions* options)
+void Sprite::QueueForDrawing(ZobObject* z, const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Engine* engine, const Triangle::RenderOptions* options)
 {
 	Mesh::QueueForDrawing(z, modelMatrix, rotationMatrix, camera, engine, options);
 }
