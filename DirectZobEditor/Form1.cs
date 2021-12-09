@@ -96,7 +96,6 @@ namespace DirectZobEditor
 
             this.WindowState = FormWindowState.Maximized;
             EngineRendererPanel.Controls.Add(m_engineWindow);
-            m_engineWindow.MouseMove += EngineRendererPanel_MouseMove;
             m_directZobWrapper.NewScene();
             
             EventHandler handler = OnNewScene;
@@ -593,7 +592,7 @@ namespace DirectZobEditor
 
         private void btnTranslateLocal_Click(object sender, EventArgs e)
         {
-            m_directZobWrapper.GetEngineWrapper().SetObjectModificator((CLI.objectModificator)1);
+            m_directZobWrapper.GetEngineWrapper().SetObjectModificator((CLI.ZobObjectsEditor.eGizmoModificatorType)1, (CLI.ZobObjectsEditor.eGizmoModificatorSpace)1);
             btnRotateLocal.Checked = false;
             btnScale.Checked = false;
             btnTranslateWorld.Checked = false;
@@ -602,7 +601,7 @@ namespace DirectZobEditor
 
         private void btnRotateLocal_Click(object sender, EventArgs e)
         {
-            m_directZobWrapper.GetEngineWrapper().SetObjectModificator((CLI.objectModificator)3);
+            m_directZobWrapper.GetEngineWrapper().SetObjectModificator((CLI.ZobObjectsEditor.eGizmoModificatorType)2, (CLI.ZobObjectsEditor.eGizmoModificatorSpace)1);
             btnTranslateLocal.Checked = false;
             btnTranslateWorld.Checked = false;
             btnScale.Checked = false;
@@ -611,7 +610,7 @@ namespace DirectZobEditor
 
         private void btnScale_Click(object sender, EventArgs e)
         {
-            m_directZobWrapper.GetEngineWrapper().SetObjectModificator((CLI.objectModificator)4);
+            m_directZobWrapper.GetEngineWrapper().SetObjectModificator((CLI.ZobObjectsEditor.eGizmoModificatorType)3, (CLI.ZobObjectsEditor.eGizmoModificatorSpace)1);
             btnTranslateLocal.Checked = false;
             btnRotateLocal.Checked = false;
             btnTranslateWorld.Checked = false;
@@ -620,7 +619,7 @@ namespace DirectZobEditor
 
         private void btnTranslateWorld_Click(object sender, EventArgs e)
         {
-            m_directZobWrapper.GetEngineWrapper().SetObjectModificator((CLI.objectModificator)0);
+            m_directZobWrapper.GetEngineWrapper().SetObjectModificator((CLI.ZobObjectsEditor.eGizmoModificatorType)1, (CLI.ZobObjectsEditor.eGizmoModificatorSpace)2);
             btnRotateLocal.Checked = false;
             btnScale.Checked = false;
             btnTranslateLocal.Checked = false;
@@ -629,7 +628,7 @@ namespace DirectZobEditor
 
         private void btnRotateWorld_Click(object sender, EventArgs e)
         {
-            m_directZobWrapper.GetEngineWrapper().SetObjectModificator((CLI.objectModificator)2);
+            m_directZobWrapper.GetEngineWrapper().SetObjectModificator((CLI.ZobObjectsEditor.eGizmoModificatorType)2, (CLI.ZobObjectsEditor.eGizmoModificatorSpace)2);
             btnRotateLocal.Checked = false;
             btnScale.Checked = false;
             btnTranslateLocal.Checked = false;
@@ -791,17 +790,6 @@ namespace DirectZobEditor
                     m_directZobWrapper.GetEngineWrapper().Resize(p.Width, p.Height);
                 }
             }
-        }
-
-        private void EngineRendererPanel_MouseMove(object sender, MouseEventArgs e)
-        {
-            string s2 = m_directZobWrapper.GetEngineWrapper().test;
-            toolStripStatusEngineState.Text = "OBJ : " + s2;
-        }
-
-        private void Form1_MouseMove(object sender, MouseEventArgs e)
-        {
-
         }
     }
 

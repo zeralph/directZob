@@ -24,13 +24,14 @@ public:
 	void					QueueForDrawing(const Camera* camera, Engine* engine) override;
 	void					EditorUpdate() override;
 	void					Set(ZobFilePath zfp);
+	void					SetVisible(bool v) { m_mesh->SetVisible(v); }
 	Triangle::RenderOptions*			GetRenderOptions() { return &m_renderOptions; }
 	const Mesh*				GetMesh() const { return m_mesh; }
 private:
 							ZobBehaviorMesh(ZobObject* zobObject);
 	bool					LoadMeshInternal();
 	Mesh*					m_mesh;
-	Triangle::RenderOptions			m_renderOptions;
+	Triangle::RenderOptions m_renderOptions;
 	ZobFilePath				m_meshPath;
 	int						m_meshNbTriangles;
 

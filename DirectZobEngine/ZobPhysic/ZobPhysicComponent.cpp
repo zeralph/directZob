@@ -174,8 +174,8 @@ void ZobPhysicComponent::SetWorldOrientation(float x, float y, float z)
 	q.y = v.y;
 	q.z = v.z;
 	q.w = v.w;
-	Quaternion q2 = t.getOrientation();
-	q = q2 * q;
+	//Quaternion q2 = t.getOrientation();
+	//q = q2 * q;
 	t.setOrientation(q);
 	SetWorldTransform(t);
 	m_editorLocalRotation = GetLocalOrientation();

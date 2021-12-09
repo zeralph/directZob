@@ -191,9 +191,9 @@ namespace CLI
 		if (e->Node)
 		{
 			ZobControlTreeNode^ z = (ZobControlTreeNode^)e->Node;
-			if (z)// && !z->IsEditable())
+			if (z && !z->IsEditable())
 			{
-				//e->Cancel = true;
+				e->Cancel = true;
 			}
 		}
 	}
@@ -214,7 +214,7 @@ namespace CLI
 		ZobControlTreeNode^ tn = (ZobControlTreeNode^)e->Node;
 		if (tn)
 		{
-			//if (tn->IsEditable())
+			if (tn->IsEditable())
 			{
 				m_treeView->SelectedNode = e->Node;
 				if (e->Button == MouseButtons::Left)

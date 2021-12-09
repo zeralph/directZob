@@ -683,7 +683,6 @@
             this.EngineRendererPanel.Name = "EngineRendererPanel";
             this.EngineRendererPanel.Size = new System.Drawing.Size(820, 635);
             this.EngineRendererPanel.TabIndex = 0;
-            this.EngineRendererPanel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.EngineRendererPanel_MouseMove);
             this.EngineRendererPanel.Resize += new System.EventHandler(this.EngineRendererPanel_Resize);
             // 
             // tabControl1
@@ -849,7 +848,6 @@
             this.Load += new System.EventHandler(this.Form1_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyUp);
-            this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseMove);
             this.bottomStatusBar.ResumeLayout(false);
             this.bottomStatusBar.PerformLayout();
             this.menuStrip1.ResumeLayout(false);

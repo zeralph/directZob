@@ -11,11 +11,8 @@ namespace CLI
 
 	EngineWrapper::EngineWrapper(PictureBox^ renderWindow):ManagedObject(DirectZob::GetInstance()->GetEngine(), false)
 	{
-		test = gcnew String("");
 		m_renderWindow = renderWindow;
 		m_mouseInside = true;
-		m_objectModificator = none;
-		//m_renderWindow->AutoSize = true;
 		m_running = true;
 		m_renderWindowGraphics = m_renderWindow->CreateGraphics();
 		m_nbTriangles = 0;
@@ -24,13 +21,12 @@ namespace CLI
 		m_uvs = (ZobVector2*)malloc(sizeof(ZobVector2) * NB_EDITOR_TRIANGLES * 3);
 		m_projectedVertices = (ZobVector3*)malloc(sizeof(ZobVector3) * NB_EDITOR_TRIANGLES * 3);
 		m_normals = (ZobVector3*)malloc(sizeof(ZobVector3) * NB_EDITOR_TRIANGLES * 3);
-		m_currentModifiedObject = NULL;
+		m_modificatorData = DirectZobWrapper::GetWrapper()->GetZobObjectManagerWrapper()->GetEditorGizmos()->GetModificatorData();
+		m_modificatorData->Reset();
+		m_modificatorData->m_objectModificatorType = ZobObjectsEditor::eGizmoModificatorType::eGizmo_translate;
+		m_modificatorData->m_objectModificatorSpace = ZobObjectsEditor::eGizmoModificatorSpace::space_local;
 		m_lastMouseX = 0;
 		m_lastMouseY = 0;
-		m_moveObject = false;
-		m_currentModifiedStartX = 0.0f;
-		m_currentModifiedStartY = 0.0f;
-		m_currentModifiedStartZ = 0.0f;
 		int vi = 0;
 		for (int i = 0; i < NB_EDITOR_TRIANGLES; i++)
 		{
@@ -117,36 +113,36 @@ namespace CLI
 
 	void EngineWrapper::OnMouseDown(Object^ sender, MouseEventArgs^ e)
 	{
-		if (m_currentModifiedObject == NULL)
+		if (e && e->Button == MouseButtons::Left)
 		{
-			Point location = m_renderWindow->PointToClient(m_mouseCoords);
-			ZobObject* z = DirectZob::GetInstance()->GetEngine()->GetObjectAt2DCoords(location.X, location.Y, true);
-			if (z)
+			if (!m_modificatorData->m_moveObject && DirectZobWrapper::GetWrapper()->GetZobObjectManagerWrapper()->GetSelectedObject())
 			{
-				if (z->IsEditorObject())
+				m_modificatorData->m_moveObject = true;
+				Point location = m_renderWindow->PointToClient(m_mouseCoords);
+				ZobObject* z = DirectZob::GetInstance()->GetEngine()->GetObjectAt2DCoords(location.X, location.Y, true);
+				if (z)
 				{
-					ZobObject* pz = z->GetParent();
-					m_currentObjectModificator = z;
-					if (pz && pz->GetName() == EDITOR_OBJECT)
+					if (z->IsEditorObject())
 					{
-						std:string s = z->GetName();
-						if (s == EDITOR_ARROW_X)
+						ZobObject* pz = z->GetParent();
+						m_modificatorData->m_currentObjectModificator = z;
+						if (pz && pz->GetName() == EDITOR_OBJECT)
 						{
-							m_objectModificator = translate_local_x;
+							std:string s = z->GetName();
+							if (s == EDITOR_ARROW_X || s == EDITOR_ROTATE_X)
+							{
+								m_modificatorData->m_objectModificatorAxis = ZobObjectsEditor::eGizmoModificatorAxis::axis_x;
+							}
+							else if (s == EDITOR_ARROW_Y || s == EDITOR_ROTATE_Y)
+							{
+								m_modificatorData->m_objectModificatorAxis = ZobObjectsEditor::eGizmoModificatorAxis::axis_y;
+							}
+							else if (s == EDITOR_ARROW_Z || s == EDITOR_ROTATE_Z)
+							{
+								m_modificatorData->m_objectModificatorAxis = ZobObjectsEditor::eGizmoModificatorAxis::axis_z;
+							}
+							SetupObjectModificator(DirectZobWrapper::GetWrapper()->GetZobObjectManagerWrapper()->GetSelectedObject());
 						}
-						else if (s == EDITOR_ARROW_Y)
-						{
-							m_objectModificator = translate_local_y;
-						}
-						else if (s == EDITOR_ARROW_Z)
-						{
-							m_objectModificator = translate_local_z;
-						}
-						m_currentModifiedObject = z->GetParent()->GetParent();
-						m_currentModifiedStartX = m_currentModifiedObject->GetWorldPosition().x;
-						m_currentModifiedStartY = m_currentModifiedObject->GetWorldPosition().y;
-						m_currentModifiedStartZ = m_currentModifiedObject->GetWorldPosition().z;
-						DirectZob::LogInfo("Selected %s at %f %f %f", m_currentModifiedObject->GetName(), m_currentModifiedStartX, m_currentModifiedStartY, m_currentModifiedStartZ);
 					}
 				}
 			}
@@ -159,74 +155,140 @@ namespace CLI
 		p = m_renderWindow->PointToClient(p);
 		m_lastMouseX = p.X;
 		m_lastMouseY = p.Y;
-		if (e && e->Button == MouseButtons::Left)
+	}
+
+	void EngineWrapper::SetupObjectModificator(ZobObject* curObj)
+	{
+		Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
+		if (curObj && m_modificatorData->m_currentObjectModificator && m_modificatorData->m_moveObject)
 		{
-			m_moveObject = true;
+			m_modificatorData->m_currentModifiedObject = curObj;
+			m_modificatorData->m_objectPosition = curObj->GetWorldPosition();
+			if (m_modificatorData->m_objectModificatorType == ZobObjectsEditor::eGizmoModificatorType::eGizmo_translate)
+			{
+				if (m_modificatorData->m_objectModificatorAxis == ZobObjectsEditor::eGizmoModificatorAxis::axis_x)
+				{
+					if (m_modificatorData->m_objectModificatorSpace == ZobObjectsEditor::eGizmoModificatorSpace::space_local)
+					{
+						m_modificatorData->m_planeNormal = curObj->GetUp();
+						m_modificatorData->m_objectDirection = curObj->GetLeft();
+					}
+					else
+					{
+						m_modificatorData->m_planeNormal = ZobVector3::Vector3Y;
+						m_modificatorData->m_objectDirection = ZobVector3::Vector3X;
+					}
+				}
+				else if (m_modificatorData->m_objectModificatorAxis == ZobObjectsEditor::eGizmoModificatorAxis::axis_y)
+				{
+					if (m_modificatorData->m_objectModificatorSpace == ZobObjectsEditor::eGizmoModificatorSpace::space_world)
+					{
+						m_modificatorData->m_planeNormal = curObj->GetLeft();
+						m_modificatorData->m_objectDirection = curObj->GetUp();
+					}
+					else
+					{
+						m_modificatorData->m_planeNormal = ZobVector3::Vector3Z;
+						m_modificatorData->m_objectDirection = ZobVector3::Vector3Y;
+					}
+				}
+				else if (m_modificatorData->m_objectModificatorAxis == ZobObjectsEditor::eGizmoModificatorAxis::axis_z)
+				{
+					if (m_modificatorData->m_objectModificatorSpace == ZobObjectsEditor::eGizmoModificatorSpace::space_local)
+					{
+						m_modificatorData->m_planeNormal = curObj->GetLeft();
+						m_modificatorData->m_objectDirection = curObj->GetForward();
+					}
+					else
+					{
+						m_modificatorData->m_planeNormal = ZobVector3::Vector3X;
+						m_modificatorData->m_objectDirection = ZobVector3::Vector3Z;
+					}
+				}
+			}
+			else if (m_modificatorData->m_objectModificatorType == ZobObjectsEditor::eGizmoModificatorType::eGizmo_rotate)
+			{
+				if (m_modificatorData->m_objectModificatorAxis == ZobObjectsEditor::eGizmoModificatorAxis::axis_x)
+				{
+					if (m_modificatorData->m_objectModificatorSpace == ZobObjectsEditor::eGizmoModificatorSpace::space_local)
+					{
+						m_modificatorData->m_planeNormal = curObj->GetLeft();
+					}
+					else
+					{
+						m_modificatorData->m_planeNormal = ZobVector3::Vector3X;
+					}
+				}
+				else if (m_modificatorData->m_objectModificatorAxis == ZobObjectsEditor::eGizmoModificatorAxis::axis_y)
+				{
+					if (m_modificatorData->m_objectModificatorSpace == ZobObjectsEditor::eGizmoModificatorSpace::space_world)
+					{
+						m_modificatorData->m_planeNormal = curObj->GetUp();
+					}
+					else
+					{
+						m_modificatorData->m_planeNormal = ZobVector3::Vector3Y;
+					}
+				}
+				else if (m_modificatorData->m_objectModificatorAxis == ZobObjectsEditor::eGizmoModificatorAxis::axis_z)
+				{
+					if (m_modificatorData->m_objectModificatorSpace == ZobObjectsEditor::eGizmoModificatorSpace::space_local)
+					{
+						m_modificatorData->m_planeNormal = curObj->GetForward();
+					}
+					else
+					{
+						m_modificatorData->m_planeNormal = ZobVector3::Vector3Z;
+					}
+				}
+			}
 		}
 	}
 
 	void EngineWrapper::UpdateMoveObject()
 	{
-		if (m_currentModifiedObject && m_currentObjectModificator && m_moveObject)
+		ZobObject* curObj = DirectZobWrapper::GetWrapper()->GetZobObjectManagerWrapper()->GetSelectedObject();
+		Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
+		
+		if (curObj && m_modificatorData->m_currentObjectModificator && m_modificatorData->m_moveObject)
 		{
-			m_moveObject = false;
-			Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
-			ZobVector3 planePos = ZobVector3(m_currentModifiedStartX, m_currentModifiedStartY, m_currentModifiedStartZ);
-			ZobVector3 planeNormal = ZobVector3(0, 0, 0);
-			ZobVector3 direction = ZobVector3(0, 0, 0);
-			if (m_objectModificator == objectModificator::translate_local_x)
+			if (m_modificatorData->m_objectModificatorType == ZobObjectsEditor::eGizmoModificatorType::eGizmo_translate)
 			{
-				planeNormal = m_currentModifiedObject->GetUp();
-				direction = m_currentModifiedObject->GetLeft();
+				BufferData* bData = m_Instance->GetBufferData();
+				float fx = (float)m_lastMouseX;
+				float fy = (float)m_lastMouseY;
+				fx /= (float)bData->width;
+				fy /= (float)bData->height;
+				fx = fx * 2.0f - 1.0f;
+				fy = fy * 2.0f - 1.0f;
+				ZobVector3 ret = c->From2DToWorldOnPlane(fx, fy, &m_modificatorData->m_planePosition, &m_modificatorData->m_planeNormal);
+				ret = ZobGeometryHelper::ProjectPointOnLine(&m_modificatorData->m_objectPosition, &m_modificatorData->m_objectDirection, &ret);
+				curObj->SetWorldPosition(ret.x, ret.y, ret.z);
+				m_Instance->QueueLine(c, &m_modificatorData->m_objectPosition, &ret, 0xFFFF00, false, true);
 			}
-			else if (m_objectModificator == objectModificator::translate_local_y)
+			else if (m_modificatorData->m_objectModificatorType == ZobObjectsEditor::eGizmoModificatorType::eGizmo_rotate)
 			{
-				planeNormal = m_currentModifiedObject->GetForward();
-				direction = m_currentModifiedObject->GetUp();
+				BufferData* bData = m_Instance->GetBufferData();
+				float fx = (float)m_lastMouseX;
+				float fy = (float)m_lastMouseY;
+				fx /= (float)bData->width;
+				fy /= (float)bData->height;
+				fx = fx * 2.0f - 1.0f;
+				fy = fy * 2.0f - 1.0f;
+				/*
+				ZobVector3 ret = c->From2DToWorldOnPlane(fx, fy, &planePos, &planeNormal);
+				ZobVector3 s = ZobVector3(m_modificatorData->m_currentModifiedStartX, m_modificatorData->m_currentModifiedStartY, m_modificatorData->m_currentModifiedStartZ);
+				ret = ZobGeometryHelper::ProjectPointOnLine(&s, &direction, &ret);
+				curObj->SetWorldPosition(ret.x, ret.y, ret.z);
+				*/
 			}
-			else if (m_objectModificator == objectModificator::translate_local_z)
-			{
-				planeNormal = m_currentModifiedObject->GetLeft();
-				direction = m_currentModifiedObject->GetForward();
-			}
-			BufferData* bData = m_Instance->GetBufferData();
-			float fx = (float)m_lastMouseX;
-			float fy = (float)m_lastMouseY;
-			fx /= (float)bData->width;
-			fy /= (float)bData->height;
-			fx = fx * 2.0f - 1.0f;
-			fy = fy * 2.0f - 1.0f;
-			ZobVector3 ret = c->From2DToWorldOnPlane(fx, fy, &planePos, &planeNormal);
-			ZobVector3 s = ZobVector3(m_currentModifiedStartX, m_currentModifiedStartY, m_currentModifiedStartZ);
-			ret = ZobGeometryHelper::ProjectPointOnLine(&s, &direction, &ret);
-/*
-			ret.x = ret.x - m_currentModifiedStartX;
-			ret.y = ret.y - m_currentModifiedStartY;
-			ret.z = ret.z - m_currentModifiedStartZ;
-			//ret.Normalize();
-			float d = ZobVector3::Dot(&ret, &direction);
-			ret = direction * d;
-			ret.x = m_currentModifiedStartX + (ret.x);
-			ret.y = m_currentModifiedStartY + (ret.y);
-			ret.z = m_currentModifiedStartZ + (ret.z);
-*/			
-			
-			//ZobVector3 delta = ret - m_startPosition;
-			//delta = delta * direction + m_currentModifiedObject->GetWorldPosition();
-			//ret = m_currentModifiedObject->GetWorldPosition() + delta;
-			m_currentModifiedObject->SetWorldPosition(ret.x, ret.y, ret.z);
-			//ZobMatrix4x4 m = ZobMatrix4x4();
-			//m.AddTranslation(ret);
-			//m_Instance->QueueSphere(c, &m, 0.9f, 0xFFFF00, false, true);
-			m_Instance->QueueLine(c, &planePos, &ret, 0xFFFF00, false, true);
 		}
 	}
 
 	void EngineWrapper::OnMouseUp(Object^ sender, MouseEventArgs^ e)
 	{
-		m_objectModificator = none;
-		m_currentModifiedObject = NULL;
-		m_currentObjectModificator = NULL;
+		m_modificatorData->m_moveObject = false;
+		//m_modificatorData->Reset();
 	}
 
 	void EngineWrapper::OnMouseClick(Object^ sender, MouseEventArgs^ e)
@@ -254,7 +316,7 @@ namespace CLI
 	{
 		if (e->Delta)
 		{
-			float z = (float)e->Delta / 20.0f;
+			float z = (float)e->Delta / 40.0f;
 			Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
 			c->Zoom(z);
 		}
@@ -267,6 +329,7 @@ namespace CLI
 		{
 			return;
 		}
+		ZobObject* curObj = DirectZobWrapper::GetWrapper()->GetZobObjectManagerWrapper()->GetSelectedObject();
 		if (GetAsyncKeyState(VK_LBUTTON) & 0x8000 && GetKeyState(VK_CONTROL) & 0x8000)
 		{
 			float factor = 20.0f;
@@ -276,9 +339,10 @@ namespace CLI
 			y *= dt* factor;
 			Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
 			c->Rotate(-x, -y, 0);
+			m_modificatorData->Reset();
 			//c->Rotate(30, 0, 0);
 		}
-		else if (m_currentModifiedObject == NULL && GetAsyncKeyState(VK_LBUTTON) & 0x8000)
+		else if (curObj == NULL && GetAsyncKeyState(VK_LBUTTON) & 0x8000)
 		{
 			float factor = 40.0f;
 			Point p;
@@ -288,6 +352,7 @@ namespace CLI
 			p.Y *= dt * factor;
 			Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
 			c->Move(p.X, -p.Y, 0, false);
+			m_modificatorData->Reset();
 		}
 		m_mouseLastCoords = m_mouseCoords;
 		m_mouseCoords = Cursor::Position;
@@ -295,6 +360,24 @@ namespace CLI
 
 	void EngineWrapper::Update(float dt)
 	{
+		ZobObject* curObj = DirectZobWrapper::GetWrapper()->GetZobObjectManagerWrapper()->GetSelectedObject();
+		if (curObj)
+		{
+			DirectZobWrapper::GetWrapper()->GetZobObjectManagerWrapper()->GetEditorGizmos()->Show(m_modificatorData->m_objectModificatorType);
+			if (m_modificatorData->m_objectModificatorSpace == ZobObjectsEditor::eGizmoModificatorSpace::space_local)
+			{
+				DirectZobWrapper::GetWrapper()->GetZobObjectManagerWrapper()->GetEditorGizmos()->SetLocal();
+			}
+			else
+			{
+				DirectZobWrapper::GetWrapper()->GetZobObjectManagerWrapper()->GetEditorGizmos()->SetWorld();
+			}
+		}
+		else
+		{
+			DirectZobWrapper::GetWrapper()->GetZobObjectManagerWrapper()->GetEditorGizmos()->Hide();
+			m_modificatorData->Reset();
+		}
 		UpdateCameraEditor(dt); 
 		UpdateMoveObject();
 

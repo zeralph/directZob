@@ -16,6 +16,7 @@ Mesh::Mesh(std::string& name)
 	m_nbFaces = 0;
 	m_hasNormals = false;
 	m_bDrawn = false;
+	m_visible = true;
 	m_indices = NULL;
 	m_vertices = NULL;
 	m_projectedVertices = NULL;
@@ -35,6 +36,7 @@ Mesh::Mesh(std::string& name, std::string& path, std::string& file, bool bAbsolu
 	m_path = path;
 	m_fileName = file;
 	std::string fullPath = "";
+	m_visible = true;
 	if (!bAbsolutePath)
 	{
 		fullPath = std::string(SceneLoader::GetResourcePath());
@@ -85,7 +87,7 @@ Mesh::Mesh(std::string &parentName, std::string& path, fbxsdk::FbxMesh* mesh)
 		m_name = parentName+"."+mesh->GetName();
 		DirectZob::LogInfo("Mesh %s Creation", m_name.c_str());
 		DirectZob::AddIndent();
-
+		m_visible = true;
 		m_nbVertices += mesh->GetPolygonVertexCount();
 		m_nbFaces = 0;
 		
@@ -667,7 +669,7 @@ void Mesh::Update(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationM
 }
 void Mesh::QueueForDrawing(ZobObject* z, const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Engine* engine, const Triangle::RenderOptions* options)
 {
-	if (m_bDrawn)
+	if (m_visible && m_bDrawn)
 	{
 		memcpy(m_vertices, m_verticesTmp, sizeof(ZobVector3) * m_nbVertices);
 		memcpy(m_verticesNormals, m_verticesNormalsTmp, sizeof(ZobVector3) * m_nbNormals);

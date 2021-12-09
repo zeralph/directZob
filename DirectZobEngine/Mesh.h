@@ -43,6 +43,7 @@ public:
 	const Mesh*							GetSubMesh(int idx) const { return (m_subMeshes.size()>idx)?m_subMeshes.at(idx):NULL; }
 	const Box*							GetOBB() const { return &m_OBB; }
 	const Box*							GetAABB() const { return &m_AABB; }
+	void								SetVisible(bool v) { m_visible = v; }
 protected:
 										Mesh(std::string& parentName, std::string& path, fbxsdk::FbxMesh* mesh);
 	void								SplitEntry(const std::string* s, std::vector<std::string>* v, const char delim) const;
@@ -58,6 +59,7 @@ protected:
 	uint m_nbNormals = 0;
 	uint m_nbFaces = 0;
 	bool m_bDrawn;
+	bool m_visible;
 	bool m_hasNormals;
 	std::string m_name;
 	std::string m_fileName;

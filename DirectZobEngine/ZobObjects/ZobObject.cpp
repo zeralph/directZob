@@ -140,6 +140,7 @@ void ZobObject::ReloadVariablesFromWorldData(zobId id)
 			Vector3 vp = Vector3(zp->x, zp->y, zp->z);
 			t.setPosition(vp);
 			Quaternion q = Quaternion::fromEulerAngles(DEG_TO_RAD(zr->x), DEG_TO_RAD(zr->y), DEG_TO_RAD(zr->z));
+			t.setOrientation(q);
 			z->GetPhysicComponentNoConst()->SetWorldTransform(t);
 			z->GetPhysicComponentNoConst()->SetWorldScale(zs->x, zs->y, zs->z);
 		}
@@ -624,7 +625,7 @@ void ZobObject::LookAt(const ZobVector3* forward, const ZobVector3* left, const 
 
 void ZobObject::SetWorldRotation(float x, float y, float z)
 {
-	//m_physicComponent->SetOrientation(x, y, z);
+	/*
 	float dy = DEG_TO_RAD(y);
 	float dz = DEG_TO_RAD(z);
 	float dx = DEG_TO_RAD(x);
@@ -634,7 +635,8 @@ void ZobObject::SetWorldRotation(float x, float y, float z)
 	q.y = v.y;
 	q.z = v.z;
 	q.w = v.w;
-	m_physicComponent->SetLocalOrientation(q);
+	*/
+	m_physicComponent->SetWorldOrientation(x, y, z);
 }
 
 void ZobObject::SetLocalRotation(float x, float y, float z)

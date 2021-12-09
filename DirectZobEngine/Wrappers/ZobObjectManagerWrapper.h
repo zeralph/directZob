@@ -44,7 +44,6 @@ namespace CLI
 		ZobObjectWrapper^		CreateZobObject();
 		ZobObjectWrapper^		AddZobSprite(ZobObjectWrapper^ parent);
 		ZobObjectWrapper^		GetObjectAtCoords(int x, int y, eObjectTypes type);
-		ZobObjectWrapper^		GetSelectedObject() {return m_selectedObjectWrapper;}
 		bool					Reparent(String^ object, String^ parent);
 		void					AddZobObjectsRecursive(ZobObject* z, TreeNodeCollection^ collection);
 		void					EditorUpdate();
@@ -52,6 +51,7 @@ namespace CLI
 		TreeView^				GetTreeviw() {return m_treeView;}
 		void					ReScan();
 		void					SelectObject(ZobObject* z);
+		ZobObject*				GetSelectedObject() {return m_selectedObject;}
 		ZobObjectsEditor*		GetEditorGizmos() { return m_editorGizmos; }
 	private:
 	
