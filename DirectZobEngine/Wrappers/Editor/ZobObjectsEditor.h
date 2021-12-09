@@ -62,6 +62,7 @@ namespace CLI
 			ZobVector3				m_planeNormal;
 			ZobVector3				m_objectDirection;
 			ZobVector3				m_objectPosition;
+			ZobVector3				m_deltaStart;
 			bool					m_moveObject;
 			void	Reset()
 			{
@@ -69,6 +70,18 @@ namespace CLI
 				//m_objectModificator = objectModificator::translate_local;
 				m_objectModificatorAxis = eGizmoModificatorAxis::axis_none;
 				m_moveObject = false;
+				m_currentObjectModificator = NULL;
+				m_currentModifiedObject = NULL;
+				//m_objectModificatorType = ZobVector3(0, 0, 0);
+				//m_objectModificatorAxis = ZobVector3(0, 0, 0);
+				//m_objectModificatorSpace = ZobVector3(0, 0, 0);
+				m_startPosition = ZobVector3(0, 0, 0);
+				m_startOrientation = ZobVector3(0, 0, 0);
+				m_planePosition = ZobVector3(0, 0, 0);
+				m_planeNormal = ZobVector3(0, 0, 0);
+				m_objectDirection = ZobVector3(0, 0, 0);
+				m_objectPosition = ZobVector3(0,0,0);
+				m_deltaStart = ZobVector3(0, 0, 0);
 			}
 		};
 		ZobObjectsEditor();
@@ -79,6 +92,7 @@ namespace CLI
 		void				UnSelect();
 		void				SetWorld();
 		void				SetLocal();
+		void				Scale(float s);
 		void				Show(eGizmoModificatorType type);
 		void				Hide();
 		ModificatorData*	GetModificatorData() {return &m_modificatorData;}

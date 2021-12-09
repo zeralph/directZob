@@ -173,6 +173,13 @@ namespace CLI
 		m_editorRoot->SetLocalRotation(0, 0, 0);
 	}
 
+	void ZobObjectsEditor::Scale(float s)
+	{
+		m_translateX->SetLocalScale(s, s, s);
+		m_translateY->SetLocalScale(s, s, s);
+		m_translateZ->SetLocalScale(s, s, s);
+	}
+
 	void ZobObjectsEditor::Show(eGizmoModificatorType type)
 	{
 		Hide();
@@ -206,6 +213,7 @@ namespace CLI
 		m_behaviorRotateX->SetVisible(false);
 		m_behaviorRotateY->SetVisible(false);
 		m_behaviorRotateZ->SetVisible(false);
+		m_editorRoot->SetLocalScale(1, 1, 1);
 	}
 
 

@@ -543,7 +543,7 @@ ZobObject* Engine::GetObjectAt2DCoords(float x, float y, bool editorObjectsOnly)
 		for (int i = 0; i < rast->GetNbTriangle(); i++)
 		{
 			const Triangle* t = rast->GetTriangle(i);
-			if (!editorObjectsOnly || t->zobObject->IsEditorObject())
+			if (!editorObjectsOnly || (t && t->zobObject && t->zobObject->IsEditorObject()))
 			{
 				if (t->PointInTriangle2D(&p) && t->zobObject && t->pa->z < minZ)
 				{
