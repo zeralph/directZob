@@ -354,12 +354,13 @@ ZobVector3 ZobObject::GetLocalScale() const
 	return m_physicComponent->GetLocalScale();
 }
 
+void ZobObject::SetWorldScale(float x, float y, float z)
+{
+	m_physicComponent->SetWorldScale(x, y, z);
+}
+
 void ZobObject::SetLocalScale(float x, float y, float z)
 { 
-	//ZobVector3 s = m_parent->GetScale();
-	//x /= s.x;
-	//y /= s.y;
-	//z /= s.z;
 	m_physicComponent->SetLocalScale(x, y, z);
 }
 

@@ -175,9 +175,9 @@ namespace CLI
 
 	void ZobObjectsEditor::Scale(float s)
 	{
-		m_translateX->SetLocalScale(s, s, s);
-		m_translateY->SetLocalScale(s, s, s);
-		m_translateZ->SetLocalScale(s, s, s);
+		m_translateX->SetWorldScale(s, s, s);
+		m_translateY->SetWorldScale(s, s, s);
+		m_translateZ->SetWorldScale(s, s, s);
 	}
 
 	void ZobObjectsEditor::Show(eGizmoModificatorType type)

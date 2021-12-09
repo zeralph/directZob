@@ -18,21 +18,24 @@ ZobControl::ZobControl(const ZobVariablesExposer::wrapperData& w) :TableLayoutPa
 	_w = &w;
 	_updateEvent = gcnew DirectZobWrapperEvents::OnEditorUpdate(this, &ZobControl::UpdateControl);
 	DirectZobWrapperEvents::OnEditorUpdateEvent += _updateEvent;
+	_update = gcnew Action(this, &ZobControl::UpdateControlInternal);
 }
 
 ZobControl::~ZobControl()
 {
-	_w = NULL;
+	delete _update;
+	_update = nullptr;
 	DirectZobWrapperEvents::OnEditorUpdateEvent -= _updateEvent;
 	delete _updateEvent;
 	_updateEvent = nullptr;
+	_w = NULL;
 }
 
 void ZobControl::UpdateControl() 
 { 
-	if (this->IsHandleCreated && !this->IsDisposed && !this->Disposing)
+	if (_update && this->IsHandleCreated && !this->IsDisposed && !this->Disposing)
 	{
-		this->Invoke(gcnew Action(this, &ZobControl::UpdateControlInternal));
+		this->Invoke(_update);
 	} 
 }
 
@@ -132,12 +135,12 @@ ZobControlString::ZobControlString(const ZobVariablesExposer::wrapperData& w):Zo
 	this->AutoSize = true;
 	this->ColumnCount = 2;
 	this->RowCount = 1;
-	Label^ label = gcnew Label();
-	label->Text = TO_MANAGED_STRING(w.name.c_str());
-	label->Width = _labelWidth;
-	label->Height = _height;
-	label->AutoSize = false;
-	label->TextAlign = _alignment;
+	_label = gcnew Label();
+	_label->Text = TO_MANAGED_STRING(w.name.c_str());
+	_label->Width = _labelWidth;
+	_label->Height = _height;
+	_label->AutoSize = false;
+	_label->TextAlign = _alignment;
 	_txt = gcnew TextBox();
 	_txt->AutoSize = false;
 	_txt->Width = 140;
@@ -150,12 +153,13 @@ ZobControlString::ZobControlString(const ZobVariablesExposer::wrapperData& w):Zo
 		_event = gcnew EventHandler(this, &ZobControlString::OnValueChanged);;
 		_txt->Leave += _event;
 	}
-	this->Controls->Add(label, 0, 0);
+	this->Controls->Add(_label, 0, 0);
 	this->Controls->Add(_txt, 1, 0);
 }
 ZobControlString::~ZobControlString()
 {
 	_txt->Leave -= _event;
+	delete _label;
 	delete _event;
 	delete _txt;
 }

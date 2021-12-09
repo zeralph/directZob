@@ -387,9 +387,9 @@ namespace DirectZobEditor
                     //z.SetMesh(name);
                     if (!string.IsNullOrEmpty(workspace))
                     {
-                        Uri r = new Uri(workspace);
-                        r = r.MakeRelativeUri(new Uri(path));
-                        path = r.ToString();
+                        //Uri r = new Uri(workspace);
+                        //r = r.MakeRelativeUri(new Uri(path));
+                        //path = r.ToString();
                     }
                     z.LoadMesh(file, file, path);
                     m_zobObjectManagerWrapper.ReScan();

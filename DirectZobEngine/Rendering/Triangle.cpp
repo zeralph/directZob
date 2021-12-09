@@ -27,6 +27,7 @@ Triangle::Triangle()
 
 	draw = false;
 	options = NULL;
+	zobObject = NULL;
 }
 
 
@@ -47,6 +48,7 @@ Triangle::~Triangle()
 	ub = NULL;
 	uc = NULL;
 	options = NULL;
+	zobObject = NULL;
 }
 
 bool Triangle::PointInTriangle2D(const ZobVector3* v) const

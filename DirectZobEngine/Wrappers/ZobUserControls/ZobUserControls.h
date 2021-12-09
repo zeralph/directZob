@@ -41,6 +41,7 @@ namespace CLI {
 		virtual void	UpdateControlInternal() {}
 		const ZobVariablesExposer::wrapperData* _w;
 		DirectZobWrapperEvents::OnEditorUpdate^ _updateEvent;
+		Action^ _update;
 	};
 
 	public ref class ZobControlString : ZobControl
@@ -49,6 +50,7 @@ namespace CLI {
 		ZobControlString(const ZobVariablesExposer::wrapperData& w);
 		~ZobControlString();
 		EventHandler^ _event;
+		Label^ _label;
 		TextBox^ _txt;
 	protected:
 		void OnValueChanged(Object^ sender, EventArgs^ e) override;
