@@ -31,7 +31,7 @@ namespace CLI
 			{
 				g->SetParent(z);
 				g->SetLocalPosition(0, 0, 0);
-				g->SetLocalRotation(0, 0, 0);
+				g->SetLocalRotation(0, 0, 0, false);
 			}
 		}
 	}
@@ -100,8 +100,8 @@ namespace CLI
 			m_behaviorTranslateZ->GetRenderOptions()->color = ZobColor::Blue;
 			m_behaviorTranslateZ->GetRenderOptions()->lightMode = Triangle::RenderOptions::eLightMode_none;
 			m_behaviorTranslateZ->GetRenderOptions()->zBuffered = false;
-			m_translateX->SetLocalRotation(0, 90, 0);
-			m_translateY->SetLocalRotation(-90, 0, 0);
+			m_translateX->SetLocalRotation(0, 90, 0, false);
+			m_translateY->SetLocalRotation(-90, 0, 0, false);
 
 			m_behaviorRotateX->GetRenderOptions()->color = ZobColor::Red;
 			m_behaviorRotateX->GetRenderOptions()->lightMode = Triangle::RenderOptions::eLightMode_none;
@@ -112,9 +112,9 @@ namespace CLI
 			m_behaviorRotateZ->GetRenderOptions()->color = ZobColor::Blue;
 			m_behaviorRotateZ->GetRenderOptions()->lightMode = Triangle::RenderOptions::eLightMode_none;
 			m_behaviorRotateZ->GetRenderOptions()->zBuffered = false;
-			m_rotateX->SetLocalRotation(0, 0, 90);
-			m_rotateY->SetLocalRotation(0, 0, 0);
-			m_rotateZ->SetLocalRotation(90, 0, 0);
+			m_rotateX->SetLocalRotation(0, 0, 90, false);
+			m_rotateY->SetLocalRotation(0, 0, 0, false);
+			m_rotateZ->SetLocalRotation(90, 0, 0, false);
 		}
 	}
 
@@ -170,7 +170,7 @@ namespace CLI
 
 	void ZobObjectsEditor::SetLocal()
 	{
-		m_editorRoot->SetLocalRotation(0, 0, 0);
+		m_editorRoot->SetLocalRotation(0, 0, 0, false);
 	}
 
 	void ZobObjectsEditor::Scale(float s)
@@ -178,6 +178,9 @@ namespace CLI
 		m_translateX->SetWorldScale(s, s, s);
 		m_translateY->SetWorldScale(s, s, s);
 		m_translateZ->SetWorldScale(s, s, s);
+		m_rotateX->SetWorldScale(s, s, s);
+		m_rotateY->SetWorldScale(s, s, s);
+		m_rotateZ->SetWorldScale(s, s, s);
 	}
 
 	void ZobObjectsEditor::Show(eGizmoModificatorType type)

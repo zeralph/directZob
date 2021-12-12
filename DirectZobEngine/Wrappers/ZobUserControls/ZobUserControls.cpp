@@ -33,7 +33,7 @@ ZobControl::~ZobControl()
 
 void ZobControl::UpdateControl() 
 { 
-	if (_update && this->IsHandleCreated && !this->IsDisposed && !this->Disposing)
+	if (_update != nullptr && this->IsHandleCreated && !this->IsDisposed && !this->Disposing)
 	{
 		this->Invoke(_update);
 	} 

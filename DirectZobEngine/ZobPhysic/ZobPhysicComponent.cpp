@@ -72,6 +72,10 @@ void ZobPhysicComponent::SetLocalTransform(Transform t)
 	m_localTransform = t; 
 	m_editorLocalPosition = ZobVector3(m_localTransform.getPosition().x, m_localTransform.getPosition().y, m_localTransform.getPosition().z);
 	m_editorLocalRotation = GetLocalOrientation();
+	m_editorWorldPosition.x = t.getPosition().x;
+	m_editorWorldPosition.y = t.getPosition().y;
+	m_editorWorldPosition.z = t.getPosition().z;
+	m_editorWorldRotation = GetWorldOrientation();
 };
 
 void ZobPhysicComponent::SetWorldTransform(Transform t)
@@ -356,6 +360,17 @@ void ZobPhysicComponent::DrawGizmos(const Camera* camera, const ZobVector3* posi
 {
 }
 
+void ZobPhysicComponent::GetLocalAxisAngleRotation(ZobVector3& axis, float& angle)
+{
+	Quaternion q = m_localTransform.getOrientation();
+	Vector3 a;
+	float f;
+	q.getRotationAngleAxis(f, a);
+	axis.x = a.x;
+	axis.y = a.y;
+	axis.z = a.z;
+	angle = f;
+}
 Quaternion ZobPhysicComponent::QuaternionFromAxisAngle(Vector3* axis, float angle)
 {
 	float s = sinf(angle / 2.0f);

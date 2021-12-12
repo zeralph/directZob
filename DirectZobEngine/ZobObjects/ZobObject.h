@@ -51,7 +51,9 @@ public:
 	ZobVector3						GetLocalPosition() const;
 	void							SetLocalPosition(float x, float y, float z);
 	ZobVector3						GetLocalRotation() const;
-	void							SetLocalRotation(float x, float y, float z);	
+	void							SetLocalRotation(float x, float y, float z, bool add);
+	void							SetLocalOrientation(const ZobVector3* axis, float angle, bool add);
+	void							GetLocalAxisAngleRotation(ZobVector3& axis, float& angle);
 	//Parenting
 	const std::vector<ZobObject*>*	GetChildren() const { return &m_children; };
 	ZobObject*						GetParent() const { return m_parent; };

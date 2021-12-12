@@ -63,6 +63,9 @@ namespace CLI
 			ZobVector3				m_objectDirection;
 			ZobVector3				m_objectPosition;
 			ZobVector3				m_deltaStart;
+			ZobVector3				m_startAxisRotationVector;
+			ZobColor				m_color;
+			float					m_startAngleRotation;
 			bool					m_moveObject;
 			void	Reset()
 			{

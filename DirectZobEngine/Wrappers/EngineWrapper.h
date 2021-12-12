@@ -88,6 +88,7 @@ namespace CLI
 		void								OnObjectSelected(ZobObjectWrapper^ z);
 		void								OnNewScene();
 		bool								IsCursorInsideWindow();
+		void								UpdateMousePosition();
 		void								UpdateMoveObject();
 		PictureBox^							m_renderWindow;
 		Graphics^							m_renderWindowGraphics;

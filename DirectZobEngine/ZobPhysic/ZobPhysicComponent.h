@@ -68,14 +68,23 @@ public:
 	Transform							GetLocalTransform() const { return Transform(m_localTransform); };
 	void								SetLocalTransform(Transform t);
 	ZobVector3							GetLocalOrientation() const;
-	void								SetLocalOrientation(Quaternion q) { m_localTransform.setOrientation(q); };
+	void								GetLocalAxisAngleRotation(ZobVector3& axis, float& angle);
+	void								SetLocalOrientation(Quaternion q, bool add) 
+										{ 
+											Quaternion qn = m_localTransform.getOrientation();
+											if (add)
+											{
+												q = qn * q;
+											}
+											m_localTransform.setOrientation(q); 
+										};
 	ZobVector3							GetLocalScale() const { return ZobVector3(m_localScale.x, m_localScale.y, m_localScale.z); }
 	void								SetLocalScale(float x, float y, float z) { m_localScale.x = x; m_localScale.y = y; m_localScale.z = z; }
 	ZobMatrix4x4						GetRotationMatrix() const;
 	ZobMatrix4x4						GetModelMatrix() const;
 	void								LookAt(const ZobVector3* target);
 	void								LookAt(const ZobVector3* forward, const ZobVector3* left, const ZobVector3* up);
-	Quaternion							QuaternionFromAxisAngle(Vector3* axis, float angle);
+	static Quaternion					QuaternionFromAxisAngle(Vector3* axis, float angle);
 	CollisionBody*						GetCollisionBody() { return m_collisionBody; }
 	void								OnCollide(collision coll);
 	//Serialization & editor

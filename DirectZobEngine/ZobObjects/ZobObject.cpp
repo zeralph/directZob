@@ -640,7 +640,19 @@ void ZobObject::SetWorldRotation(float x, float y, float z)
 	m_physicComponent->SetWorldOrientation(x, y, z);
 }
 
-void ZobObject::SetLocalRotation(float x, float y, float z)
+void ZobObject::SetLocalOrientation(const ZobVector3* axis, float angle, bool add)
+{
+	Vector3 a = Vector3(axis->x, axis->y, axis->z);
+	Quaternion q = ZobPhysicComponent::QuaternionFromAxisAngle(&a, angle);
+	m_physicComponent->SetLocalOrientation(q, add);
+}
+
+void ZobObject::GetLocalAxisAngleRotation(ZobVector3& axis, float& angle)
+{
+	m_physicComponent->GetLocalAxisAngleRotation(axis, angle);
+}
+
+void ZobObject::SetLocalRotation(float x, float y, float z, bool add)
 {
 	//m_physicComponent->SetOrientation(x, y, z);
 	float dy = DEG_TO_RAD(y);
@@ -653,12 +665,13 @@ void ZobObject::SetLocalRotation(float x, float y, float z)
 	q.z = v.z;
 	q.w = v.w;
 	Transform parentTransform = Transform::identity();
-	if (m_parent)
-	{
-		parentTransform = m_parent->GetPhysicComponent()->GetWorldTransform();
-	}
 	Vector3 position = Vector3(x, y, z);
 	Transform newTransform = GetPhysicComponent()->GetLocalTransform();
+	if (add)
+	{
+		Quaternion curO = GetPhysicComponent()->GetLocalTransform().getOrientation();
+		q = curO * q;
+	}
 	newTransform.setOrientation(q);
 	//newTransform = parentTransform.getInverse() * newTransform;
 	m_physicComponent->SetLocalTransform(newTransform);

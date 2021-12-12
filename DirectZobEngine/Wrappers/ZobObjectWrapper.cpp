@@ -351,7 +351,7 @@ namespace CLI
 		if (z)
 		{
 			ZobVector3 v = p->ToVector3();
-			z->SetLocalRotation(v.x, v.y, v.z);
+			z->SetLocalRotation(v.x, v.y, v.z, false);
 		}
 	}
 

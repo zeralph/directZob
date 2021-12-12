@@ -166,11 +166,11 @@ void Camera::RotateOrbital(ZobVector3 *center, float x, float y, float dist)
 	float ay = y * M_PI / 180.0;
 	Vector3 pax = Vector3(GetUp().x, GetUp().y, GetUp().z);
 	pax = Vector3(0, 1, 0);
-	Quaternion qx = m_physicComponent->QuaternionFromAxisAngle(&pax, ax);
+	Quaternion qx = ZobPhysicComponent::QuaternionFromAxisAngle(&pax, ax);
 	qx.normalize();
 	Vector3 pay = Vector3(GetLeft().x, GetLeft().y, GetLeft().z);
 	pay = Vector3(1, 0, 0);
-	Quaternion qy = m_physicComponent->QuaternionFromAxisAngle(&pay, ay);
+	Quaternion qy = ZobPhysicComponent::QuaternionFromAxisAngle(&pay, ay);
 	Transform parentWorldT = Transform::identity();
 	Transform thisWorldT = GetPhysicComponent()->GetWorldTransform();
 	Vector3 vdist = Vector3(0, 0, dist);
@@ -198,7 +198,7 @@ void Camera::RotateAroundPointAxis(const ZobVector3* point, const ZobVector3* ax
 	Vector3 vdist = parentWorldT.getPosition() - thisWorldT.getPosition();
 	//float dist = vdist.length();
 	//vdist = Vector3(0, 0, dist);
-	Quaternion q = m_physicComponent->QuaternionFromAxisAngle(&paxis, angle);
+	Quaternion q = ZobPhysicComponent::QuaternionFromAxisAngle(&paxis, angle);
 	q.normalize();
 	if (q.isValid() && q.isFinite())
 	{
