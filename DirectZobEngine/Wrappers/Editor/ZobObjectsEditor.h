@@ -66,6 +66,7 @@ namespace CLI
 			ZobVector3				m_startAxisRotationVector;
 			ZobColor				m_color;
 			float					m_startAngleRotation;
+			float					m_snap;
 			bool					m_moveObject;
 			void	Reset()
 			{
@@ -75,9 +76,6 @@ namespace CLI
 				m_moveObject = false;
 				m_currentObjectModificator = NULL;
 				m_currentModifiedObject = NULL;
-				//m_objectModificatorType = ZobVector3(0, 0, 0);
-				//m_objectModificatorAxis = ZobVector3(0, 0, 0);
-				//m_objectModificatorSpace = ZobVector3(0, 0, 0);
 				m_startPosition = ZobVector3(0, 0, 0);
 				m_startOrientation = ZobVector3(0, 0, 0);
 				m_planePosition = ZobVector3(0, 0, 0);
@@ -85,6 +83,7 @@ namespace CLI
 				m_objectDirection = ZobVector3(0, 0, 0);
 				m_objectPosition = ZobVector3(0,0,0);
 				m_deltaStart = ZobVector3(0, 0, 0);
+				m_color = ZobColor::White;
 			}
 		};
 		ZobObjectsEditor();

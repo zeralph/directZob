@@ -25,7 +25,21 @@ class ZobColor
 		inline const float GetRedNormalized() const { return m_rN; }
 		inline const float GetGreenNormalized() const { return m_gN; }
 		inline const float GetBlueNormalized() const { return m_bN; }
-
+		inline void Copy(const ZobColor* c)
+		{
+			memcpy(this, c, sizeof(ZobColor));
+			/*
+			m_value = c->m_value;
+			m_a = c->m_a;
+			m_r = c->m_r;
+			m_g = c->m_g;
+			m_b = c->m_b;
+			m_aN = c->m_aN;
+			m_rN = c->m_rN;
+			m_gN = c->m_gN;
+			m_bN = c->m_bN;
+			*/
+		}
 		bool FromString(std::string& s)
 		{
 			std::size_t del1, del2, del3 = 0;
@@ -81,6 +95,7 @@ class ZobColor
 		static const ZobColor Magenta;
 		static const ZobColor Cyan;
 		static const ZobColor Grey;
+		static const ZobColor LightGrey;
 };
 
 #endif

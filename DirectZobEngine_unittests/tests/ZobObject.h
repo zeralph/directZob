@@ -98,9 +98,9 @@ TEST(ZobObject, chain_rotate)
 	z2->SetLocalPosition(1, 1, 1);
 	z3->SetLocalPosition(1, 1, 1);
 
-	z1->SetLocalRotation(0, 30, 0);
-	z2->SetLocalRotation(0, 30, 0);
-	z3->SetLocalRotation(0, -60, 0);
+	z1->SetLocalRotation(0, 30, 0, false);
+	z2->SetLocalRotation(0, 30, 0, false);
+	z3->SetLocalRotation(0, -60, 0, false);
 	EXPECT_EQ(z3->GetWorldRotation(), ZobVector3(0, 0, 0));
 
 	delete(z3);
@@ -116,13 +116,13 @@ TEST(ZobObject, chain_all)
 	z2->SetParent(z1);
 	z3->SetParent(z2);
 	z1->SetLocalPosition(-3.f, 2.f, -2.f);
-	z1->SetLocalRotation(34.f, 66.f, 21.f);
+	z1->SetLocalRotation(34.f, 66.f, 21.f, false);
 	z1->SetLocalScale(1.8f, 2.f, 3.f);
 	z2->SetLocalPosition(2.f, 4.f, -2.f);
-	z2->SetLocalRotation(34.f, -8.f, -21.f);
+	z2->SetLocalRotation(34.f, -8.f, -21.f, false);
 	z2->SetLocalScale(0.2f, 0.2f, 0.4f);
 	z3->SetLocalPosition(-6.f, -6.f, -5.f);
-	z3->SetLocalRotation(8.f, 5.f, 7.f);
+	z3->SetLocalRotation(8.f, 5.f, 7.f, false);
 	z3->SetLocalScale(2.f, 2.f, 5.f);
 	ZobVector3 v = z3->GetWorldPosition();
 	EXPECT_EQ(v, ZobVector3(-11.5383844f, 14.8799629f, -6.68275261f)) << "World position error : " << v.ToString();

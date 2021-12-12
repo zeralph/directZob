@@ -563,9 +563,9 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector2* screenCoord, con
 			//normal.Mul(-1.0f);
 		}
 		//Start with vertex color
-		dr = (wa * t->ca->x + wb * t->cb->x + wc * t->cc->x);
-		dg = (wa * t->ca->y + wb * t->cb->y + wc * t->cc->y);
-		db = (wa * t->ca->z + wb * t->cb->z + wc * t->cc->z);
+		dr = (wa * t->ca->GetRedNormalized() + wb * t->cb->GetRedNormalized() + wc * t->cc->GetRedNormalized());
+		dg = (wa * t->ca->GetGreenNormalized() + wb * t->cb->GetGreenNormalized() + wc * t->cc->GetGreenNormalized());
+		db = (wa * t->ca->GetBlueNormalized() + wb * t->cb->GetBlueNormalized() + wc * t->cc->GetBlueNormalized());
 		sr = 0.0f;
 		sg = 0.0f;
 		sb = 0.0f;

@@ -174,6 +174,7 @@ void ZobPhysicsEngine::DrawGizmos() const
         ZobVector3 v1;
         ZobVector3 v2;
         ZobVector3 v3;
+        ZobColor zc;
         for (int i = 0; i < nbLines; i++)
         {
             reactphysics3d::DebugRenderer::DebugLine l = debugRenderer.getLinesArray()[i];
@@ -183,7 +184,8 @@ void ZobPhysicsEngine::DrawGizmos() const
             v2.x = l.point2.x;
             v2.y = l.point2.y;
             v2.z = l.point2.z;
-            engine->QueueLine(camera, &v1, &v2, l.color1, false, false);
+            zc = ZobColor(l.color1);
+            engine->QueueLine(camera, &v1, &v2, &zc, false, false);
         }
         for (int i = 0; i < nbTriangles; i++)
         {
@@ -197,9 +199,10 @@ void ZobPhysicsEngine::DrawGizmos() const
             v3.x = t.point3.x;
             v3.y = t.point3.y;
             v3.z = t.point3.z;
-            engine->QueueLine(camera, &v1, &v2, t.color1, false, false);
-            engine->QueueLine(camera, &v2, &v3, t.color1, false, false);
-            engine->QueueLine(camera, &v3, &v1, t.color1, false, false);
+            zc = ZobColor(t.color1);
+            engine->QueueLine(camera, &v1, &v2, &zc, false, false);
+            engine->QueueLine(camera, &v2, &v3, &zc, false, false);
+            engine->QueueLine(camera, &v3, &v1, &zc, false, false);
         }
     }
 }

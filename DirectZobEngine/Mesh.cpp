@@ -95,7 +95,7 @@ Mesh::Mesh(std::string &parentName, std::string& path, fbxsdk::FbxMesh* mesh)
 		m_verticesData = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
 		m_verticesTmp = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
 
-		m_colors = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
+		m_colors = (ZobColor*)malloc(sizeof(ZobColor) * m_nbVertices);
 
 		m_projectedVertices = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
 		m_projectedVerticesTmp = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
@@ -134,10 +134,10 @@ Mesh::Mesh(std::string &parentName, std::string& path, fbxsdk::FbxMesh* mesh)
 					float ccr = (((vIdx + 0) % 3) == 0) ? 1 : 0;
 					float ccg = (((vIdx + 1) % 3) == 0) ? 1 : 0;
 					float ccb = (((vIdx + 2) % 3) == 0) ? 1 : 0;
-					ccr = 1;
-					ccb = 1;
-					ccg = 1;
-					m_colors[vIdx] = ZobVector3(ccr, ccb, ccg);
+					ccr = 255;
+					ccb = 255;
+					ccg = 255;
+					m_colors[vIdx] = ZobColor(255, ccr, ccb, ccg);
 					m_minBoundingBox.x = min(m_minBoundingBox.x, (float)v[0]);
 					m_minBoundingBox.y = min(m_minBoundingBox.y, (float)v[1]);
 					m_minBoundingBox.z = min(m_minBoundingBox.z, (float)v[2]);
@@ -426,7 +426,7 @@ void Mesh::LoadOBJ(const std::string& fullPath, bool bAbsolutePath)
 	}
 	m_indices = (uint*)malloc(sizeof(int) * 3 * m_nbFaces);
 	m_vertices = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
-	m_colors = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
+	m_colors = (ZobColor*)malloc(sizeof(ZobColor) * m_nbVertices);
 	m_verticesData = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
 	m_verticesTmp = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
 	m_projectedVertices = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
@@ -483,10 +483,10 @@ void Mesh::LoadOBJ(const std::string& fullPath, bool bAbsolutePath)
 				float ccr = (((curVertice + 0) % 3) == 0) ? 1 : 0;
 				float ccg = (((curVertice + 1) % 3) == 0) ? 1 : 0;
 				float ccb = (((curVertice+ 2) % 3) == 0) ? 1 : 0;
-				ccr = 1;
-				ccb = 1;
-				ccg = 1;
-				m_colors[curVertice] = ZobVector3(ccr, ccg, ccb);
+				ccr = 255;
+				ccb = 255;
+				ccg = 255;
+				m_colors[curVertice] = ZobColor(255, ccr, ccg, ccb);
 				m_minBoundingBox.x = min(v.x, m_minBoundingBox.x);
 				m_minBoundingBox.y = min(v.y, m_minBoundingBox.y);
 				m_minBoundingBox.z = min(v.z, m_minBoundingBox.z);
@@ -551,8 +551,8 @@ void Mesh::SplitEntry(const std::string* s, std::vector<std::string>* v, const c
 
 void Mesh::DrawBoundingBox(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Engine* engine)
 {
-	engine->QueueWorldBox(camera, &m_AABB, 0xFFFFFF, false, false);
-	engine->QueueWorldBox(camera, &m_OBB, 0xDDDDDD, false, false);
+	engine->QueueWorldBox(camera, &m_AABB, &ZobColor::White, false, false);
+	engine->QueueWorldBox(camera, &m_OBB, &ZobColor::Grey, false, false);
 }
 
 void Mesh::Update(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Engine* engine, const Triangle::RenderOptions* options)
@@ -700,13 +700,13 @@ void Mesh::QueueForDrawing(ZobObject* z, const ZobMatrix4x4& modelMatrix, const 
 				{
 					ZobVector3 v = t->na;
 					v = v + t->va;
-					engine->QueueLine(camera, t->va, &v, 0xFF00FF, false, false);
+					engine->QueueLine(camera, t->va, &v, &ZobColor::Magenta, false, false);
 					v = t->nb;
 					v = v + t->vb;
-					engine->QueueLine(camera, t->vb, &v, 0xFF00FF, false, false);
+					engine->QueueLine(camera, t->vb, &v, &ZobColor::Magenta, false, false);
 					v = t->nb;
 					v = v + t->vc;
-					engine->QueueLine(camera, t->vc, &v, 0xFF00FF, false, false);
+					engine->QueueLine(camera, t->vc, &v, &ZobColor::Magenta, false, false);
 				}
 			}
 		}

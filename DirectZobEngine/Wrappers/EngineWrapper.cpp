@@ -275,18 +275,18 @@ namespace CLI
 				fy = fy * 2.0f - 1.0f;
 				ZobVector3 ret = c->From2DToWorldOnPlane(fx, fy, &m_modificatorData->m_planePosition, &m_modificatorData->m_planeNormal);
 				m_modificatorData->m_deltaStart = ret;
-				if (m_modificatorData->m_objectModificatorAxis == ZobObjectsEditor::eGizmoModificatorAxis::axis_x)
-				{
-					m_modificatorData->m_color = ZobColor::Red;
-				}
-				else if (m_modificatorData->m_objectModificatorAxis == ZobObjectsEditor::eGizmoModificatorAxis::axis_y)
-				{
-					m_modificatorData->m_color = ZobColor::Green;
-				}
-				else if (m_modificatorData->m_objectModificatorAxis == ZobObjectsEditor::eGizmoModificatorAxis::axis_z)
-				{
-					m_modificatorData->m_color = ZobColor::Blue;
-				}
+			}
+			if (m_modificatorData->m_objectModificatorAxis == ZobObjectsEditor::eGizmoModificatorAxis::axis_x)
+			{
+				m_modificatorData->m_color = ZobColor::Red;
+			}
+			else if (m_modificatorData->m_objectModificatorAxis == ZobObjectsEditor::eGizmoModificatorAxis::axis_y)
+			{
+				m_modificatorData->m_color = ZobColor::Green;
+			}
+			else if (m_modificatorData->m_objectModificatorAxis == ZobObjectsEditor::eGizmoModificatorAxis::axis_z)
+			{
+				m_modificatorData->m_color = ZobColor::Blue;
 			}
 		}
 	}
@@ -310,6 +310,16 @@ namespace CLI
 				ZobVector3 ret = c->From2DToWorldOnPlane(fx, fy, &m_modificatorData->m_planePosition, &m_modificatorData->m_planeNormal);
 				ret = ZobGeometryHelper::ProjectPointOnLine(&m_modificatorData->m_objectPosition, &m_modificatorData->m_objectDirection, &ret);
 				ret = ret - m_modificatorData->m_deltaStart;
+				if (m_modificatorData->m_snap != 0)
+				{
+					ret.x = (int)(ret.x / m_modificatorData->m_snap) * m_modificatorData->m_snap;
+					ret.y = (int)(ret.y / m_modificatorData->m_snap) * m_modificatorData->m_snap;
+					ret.z = (int)(ret.z / m_modificatorData->m_snap) * m_modificatorData->m_snap;
+				}
+				if (ret.isNaN())
+				{
+					return;
+				}
 				curObj->SetWorldPosition(ret.x, ret.y, ret.z);
 			}
 			else if (m_modificatorData->m_objectModificatorType == ZobObjectsEditor::eGizmoModificatorType::eGizmo_rotate)
@@ -324,8 +334,8 @@ namespace CLI
 				
 				ZobVector3 ret = c->From2DToWorldOnPlane(fx, fy, &m_modificatorData->m_planePosition, &m_modificatorData->m_planeNormal);
 				ZobVector3 st = m_modificatorData->m_deltaStart;
-				m_Instance->QueueLine(c, &m_modificatorData->m_objectPosition, &st, 0xFFFF00, false, true);
-				m_Instance->QueueLine(c, &m_modificatorData->m_objectPosition, &ret, 0xFFFF00, false, true);
+				m_Instance->QueueLine(c, &m_modificatorData->m_objectPosition, &st, &ZobColor::Yellow, false, true);
+				m_Instance->QueueLine(c, &m_modificatorData->m_objectPosition, &ret, &ZobColor::Yellow, false, true);
 				ZobVector3 a = st - m_modificatorData->m_objectPosition;
 				ZobVector3 b = ret - m_modificatorData->m_objectPosition;
 				a.Normalize();
@@ -344,6 +354,11 @@ namespace CLI
 				if (d <= 1.0f)
 				{
 					d = acosf(d) * s;
+					if (m_modificatorData->m_snap != 0)
+					{
+						float rad = DEG_TO_RAD(m_modificatorData->m_snap);
+						d = (int)(d / rad) * rad;
+					}
 					if (m_modificatorData->m_objectModificatorAxis == ZobObjectsEditor::eGizmoModificatorAxis::axis_x)
 					{
 						curObj->SetLocalOrientation(&m_modificatorData->m_startAxisRotationVector, m_modificatorData->m_startAngleRotation, 0);
@@ -362,14 +377,24 @@ namespace CLI
 				}
 			}
 		}
+		ZobVector3 va;
+		ZobVector3 vb;
+		if (m_modificatorData->m_objectModificatorType == ZobObjectsEditor::eGizmoModificatorType::eGizmo_translate)
+		{
+			va = m_modificatorData->m_objectDirection;
+			vb = m_modificatorData->m_objectDirection;
+		}
+		else if (m_modificatorData->m_objectModificatorType == ZobObjectsEditor::eGizmoModificatorType::eGizmo_rotate)
+		{
+			va = m_modificatorData->m_planeNormal;
+			vb = m_modificatorData->m_planeNormal;
+		}
 		float f = 500.0f;
-		ZobVector3 va = m_modificatorData->m_planeNormal;
 		va.Mul(-f);
 		va.Add(&m_modificatorData->m_objectPosition);
-		ZobVector3 vb = m_modificatorData->m_planeNormal;
 		vb.Mul(f);
 		vb.Add(&m_modificatorData->m_objectPosition);
-		m_Instance->QueueLine(c, &va, &vb, 0xFFFFFF, false, true);
+		m_Instance->QueueLine(c, &va, &vb, &m_modificatorData->m_color, false, true);
 	}
 
 	void EngineWrapper::OnMouseUp(Object^ sender, MouseEventArgs^ e)
@@ -551,12 +576,12 @@ namespace CLI
 		m_nbTriangles = 0;
 		for (int i = 0; i < m_nbLines; i++)
 		{
-			m_Instance->QueueLine(c, &m_lines[i].p0, &m_lines[i].p1, m_lines[i].color, m_lines[i].bold, m_lines[i].noZ);
+			m_Instance->QueueLine(c, &m_lines[i].p0, &m_lines[i].p1, &m_lines[i].color, m_lines[i].bold, m_lines[i].noZ);
 		}
 		m_nbLines = 0;
 		for (int i = 0; i < m_nbCircles; i++)
 		{
-			m_Instance->QueueEllipse(c, &m_circles[i].p, &m_circles[i].n, m_circles[i].r, m_circles[i].r, m_circles[i].color, m_circles[i].bold, m_circles[i].noZ);
+			m_Instance->QueueEllipse(c, &m_circles[i].p, &m_circles[i].n, m_circles[i].r, m_circles[i].r, &m_circles[i].color, m_circles[i].bold, m_circles[i].noZ);
 		}
 		m_nbCircles = 0;
 	}

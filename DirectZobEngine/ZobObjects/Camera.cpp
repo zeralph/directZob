@@ -140,18 +140,16 @@ void Camera::DrawGizmos(const Camera* camera, Engine* engine)
 	v1 = v1;
 	v2 = v2;
 	v3 = v3;
-	uint c = 0x000000FF;
-	uint c2 = 0x0000FFFF;
 	if (this->GetName() != "EditorCamera")
 	{
-		engine->QueueLine(camera, &v0, &v1, c,  true, false);
-		engine->QueueLine(camera, &v1, &v3, c,  true, false);
-		engine->QueueLine(camera, &v2, &v3, c2, true, false);
-		engine->QueueLine(camera, &v2, &v0, c,  true, false);
-		engine->QueueLine(camera, &p, &v1, c,   true, false);
-		engine->QueueLine(camera, &p, &v2, c,   true, false);
-		engine->QueueLine(camera, &p, &v3, c,   true, false);
-		engine->QueueLine(camera, &p, &v0, c,   true, false);
+		engine->QueueLine(camera, &v0, &v1,&ZobColor::Black,  true, false);
+		engine->QueueLine(camera, &v1, &v3,&ZobColor::Black,  true, false);
+		engine->QueueLine(camera, &v2, &v3,&ZobColor::Black, true, false);
+		engine->QueueLine(camera, &v2, &v0,&ZobColor::Black,  true, false);
+		engine->QueueLine(camera, &p, &v1, &ZobColor::Black,   true, false);
+		engine->QueueLine(camera, &p, &v2, &ZobColor::Black,   true, false);
+		engine->QueueLine(camera, &p, &v3, &ZobColor::Black,   true, false);
+		engine->QueueLine(camera, &p, &v0, &ZobColor::Black,   true, false);
 	}
 }
 

@@ -37,14 +37,14 @@ public:
 
 	void											ToggleZbufferOutput() { m_showZBuffer = !m_showZBuffer; }
 
-	void											QueueLine(const Camera* camera, const ZobVector3* v1, const ZobVector3* v2, const uint c, bool bold, bool noZ);
-	void											QueueTriangle(const Camera* camera, const ZobVector3* v1, const ZobVector3* v2, const ZobVector3* v3, const uint c, bool transparent, bool noZ);
-	void											QueueEllipse(const Camera* camera, const ZobVector3* center, const ZobVector3* vectorUp, const float r1, const float r2, const uint c, bool bold, bool noZ);
-	void											QueueSphere(const Camera* camera, const ZobMatrix4x4* mat, const float radius, const uint c, bool bold, bool noZ);
-	void											QueueWorldBox(const Camera* camera, const Box* box, const uint c, bool bold, bool noZ);
-	void											QueueBox(const Camera* camera, const ZobMatrix4x4* mat, const ZobVector3* halfExtends, const ZobVector3* pivot, const uint c, bool bold, bool noZ);
-	void											QueueCapsule(const Camera* camera, const ZobMatrix4x4* mat, float radius, float height, const ZobVector3* dir, const uint c, bool bold, bool noZ);
-	void											QueueMesh(const Camera* camera, const ZobMatrix4x4* mat, ZobVector3* points, int width, int height, const uint c, bool bold);
+	void											QueueLine(const Camera* camera, const ZobVector3* v1, const ZobVector3* v2, const ZobColor* c, bool bold, bool noZ);
+	void											QueueTriangle(const Camera* camera, const ZobVector3* v1, const ZobVector3* v2, const ZobVector3* v3, const ZobColor* c, bool transparent, bool noZ);
+	void											QueueEllipse(const Camera* camera, const ZobVector3* center, const ZobVector3* vectorUp, const float r1, const float r2, const ZobColor* c, bool bold, bool noZ);
+	void											QueueSphere(const Camera* camera, const ZobMatrix4x4* mat, const float radius, const ZobColor* c, bool bold, bool noZ);
+	void											QueueWorldBox(const Camera* camera, const Box* box, const ZobColor* c, bool bold, bool noZ);
+	void											QueueBox(const Camera* camera, const ZobMatrix4x4* mat, const ZobVector3* halfExtends, const ZobVector3* pivot, const ZobColor* c, bool bold, bool noZ);
+	void											QueueCapsule(const Camera* camera, const ZobMatrix4x4* mat, float radius, float height, const ZobVector3* dir, const ZobColor* c, bool bold, bool noZ);
+	void											QueueMesh(const Camera* camera, const ZobMatrix4x4* mat, ZobVector3* points, int width, int height, const ZobColor* c, bool bold);
 	int												StartDrawingScene();
 	int												SetDisplayedBuffer();
 	inline ulong									GetCurrentFrame() const { return m_currentFrame; }
@@ -104,7 +104,7 @@ public:
 	BoudingBox2D									Get2DBoundingBox(const ZobObject* z) const;
 private:	
 	void											DrawHorizontalLine(const float x1, const float x2, const float y, const uint color);
-	void											QueuePartialSphere(const Camera* camera, const ZobMatrix4x4* mat, const float radius, const uint c, bool bold, bool noZ, float from, float to);
+	void											QueuePartialSphere(const Camera* camera, const ZobMatrix4x4* mat, const float radius, const ZobColor* c, bool bold, bool noZ, float from, float to);
 	uint											SubDivideClippedTriangle(const Camera* c, const Triangle* t);
 	void											RecomputeTriangleProj(const Camera* c, Triangle* t);
 	uint											ClipTriangle(const Camera* c, Triangle* t);
@@ -126,11 +126,13 @@ private:
 			nb->z = na->z + (nb->z - na->z) * r;
 		}
 	}
-	inline void										RecomputeColor(const ZobVector3* ca, ZobVector3* cb, float r) const
+	inline void										RecomputeColor(const ZobColor* ca, ZobColor* cb, float d) const
 	{
-		cb->x = ca->x + (cb->x - ca->x) * r;
-		cb->y = ca->y + (cb->y - ca->y) * r;
-		cb->z = ca->z + (cb->z - ca->z) * r;
+		uint a = 255;
+		uint r  = ca->GetRed() + (cb->GetRed() - ca->GetRed()) * d;
+		uint g = ca->GetGreen() + (cb->GetGreen() - ca->GetGreen()) * d;
+		uint b = ca->GetBlue() + (cb->GetBlue() - ca->GetBlue()) * d;
+		cb->Set(a, r, g, b);
 	}
 
 	uint** m_buffer;
@@ -143,7 +145,7 @@ private:
 	Triangle* m_TrianglesQueue;
 	ZobVector3* m_verticesData;
 	ZobVector2* m_uvData;
-	ZobVector3* m_colorData;
+	ZobColor* m_colorData;
 	Triangle::RenderOptions* m_renderOptions;
 	ZobVariablesExposer* m_varExposer;
 	int m_usedRenderOptions;

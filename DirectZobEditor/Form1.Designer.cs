@@ -81,7 +81,11 @@
             this.btnTranslateWorld = new System.Windows.Forms.ToolStripButton();
             this.btnRotateWorld = new System.Windows.Forms.ToolStripButton();
             this.btnScale = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSnap = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSnap = new System.Windows.Forms.ToolStripDropDownButton();
+            this.noneToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripComboBoxCurrentCamera = new System.Windows.Forms.ToolStripComboBox();
             this.EngineRendererPanel = new System.Windows.Forms.Panel();
@@ -656,14 +660,42 @@
             // 
             // toolStripSnap
             // 
-            this.toolStripSnap.CheckOnClick = true;
             this.toolStripSnap.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripSnap.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.noneToolStripMenuItem,
+            this.toolStripMenuItem2,
+            this.toolStripMenuItem3,
+            this.toolStripMenuItem4});
             this.toolStripSnap.Image = ((System.Drawing.Image)(resources.GetObject("toolStripSnap.Image")));
             this.toolStripSnap.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripSnap.Name = "toolStripSnap";
-            this.toolStripSnap.Size = new System.Drawing.Size(37, 22);
+            this.toolStripSnap.Size = new System.Drawing.Size(46, 22);
             this.toolStripSnap.Text = "Snap";
-            this.toolStripSnap.Click += new System.EventHandler(this.toolStripSnap_Click);
+            this.toolStripSnap.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.toolStripSnap_DropDownItemClicked);
+            // 
+            // noneToolStripMenuItem
+            // 
+            this.noneToolStripMenuItem.Name = "noneToolStripMenuItem";
+            this.noneToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.noneToolStripMenuItem.Text = "none";
+            // 
+            // toolStripMenuItem2
+            // 
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItem2.Text = "1";
+            // 
+            // toolStripMenuItem3
+            // 
+            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItem3.Text = "0.5";
+            // 
+            // toolStripMenuItem4
+            // 
+            this.toolStripMenuItem4.Name = "toolStripMenuItem4";
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItem4.Text = "0.1";
             // 
             // toolStripSeparator4
             // 
@@ -944,13 +976,17 @@
         private System.Windows.Forms.ToolStripMenuItem cameraToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem physicsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem textToolStripMenuItem;
-        private System.Windows.Forms.ToolStripButton toolStripSnap;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusEngineState;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripComboBox toolStripComboBoxCurrentCamera;
         private System.Windows.Forms.ToolStripMenuItem regenerateZobIdsToolStripMenuItem;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.TableLayoutPanel propertiesPanel;
+        private System.Windows.Forms.ToolStripDropDownButton toolStripSnap;
+        private System.Windows.Forms.ToolStripMenuItem noneToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem3;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem4;
     }
 }
 

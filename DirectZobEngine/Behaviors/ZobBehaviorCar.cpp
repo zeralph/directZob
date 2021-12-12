@@ -467,11 +467,11 @@ void ZobBehaviorCar::DrawGizmos(const Camera* camera, const ZobVector3* position
 		ZobVector3 p = m_zobObject->GetWorldPosition();
 		ZobVector3 v = m_lastCollPosition;
 		
-		e->QueueLine(camera, &p, &v, 0x00FFFF, true, true);
+		e->QueueLine(camera, &p, &v, &ZobColor::Yellow, true, true);
 
 		ZobMatrix4x4 m = ZobMatrix4x4();
 		m.AddTranslation(m_lastCollPosition);
-		e->QueueSphere(camera, &m, 0.1f, 0xFF0000, false, false);
+		e->QueueSphere(camera, &m, 0.1f, &ZobColor::Magenta, false, false);
 
 	}
 }

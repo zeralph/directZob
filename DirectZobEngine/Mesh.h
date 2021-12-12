@@ -86,7 +86,7 @@ protected:
 	ZobVector3* m_trianglesNormalsTmp = NULL;
 
 	ZobVector2* m_uvs = NULL;
-	ZobVector3* m_colors = NULL;
+	ZobColor* m_colors = NULL;
 	
 	std::vector<Triangle> m_triangles;
 	Box m_OBB;

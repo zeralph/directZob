@@ -106,16 +106,14 @@ void Light::Update(float dt)
 void Light::drawPointGizmos(const Camera* camera, Engine* engine) const
 {
 	ZobVector3 t = GetWorldPosition();
-	uint c = ((int)(m_lightColor.GetRed()) << 16) + ((int)(m_lightColor.GetGreen()) << 8) + (int)(m_lightColor.GetBlue());
-	engine->QueueEllipse(camera, &t, &m_up, 1.0f, 1.0f, c, true, false);
-	engine->QueueEllipse(camera, &t, &m_left, 1.0f, 1.0f, c, true, false);
-	engine->QueueEllipse(camera, &t, &m_forward, 1.0f, 1.0f, c, true, false);
+	engine->QueueEllipse(camera, &t, &m_up, 1.0f, 1.0f, &m_lightColor, true, false);
+	engine->QueueEllipse(camera, &t, &m_left, 1.0f, 1.0f, &m_lightColor, true, false);
+	engine->QueueEllipse(camera, &t, &m_forward, 1.0f, 1.0f, &m_lightColor, true, false);
 }
 
 void Light::drawSpotGizmos(const Camera* camera, Engine* engine) const
 {
 	ZobVector3 t = GetWorldPosition();
-	uint c = ((int)(m_lightColor.GetRed()) << 16) + ((int)(m_lightColor.GetGreen()) << 8) + (int)(m_lightColor.GetBlue());
 	ZobVector3 v1, v2, v;
 	v1 = m_forward;
 	v2 = m_left;
@@ -124,43 +122,42 @@ void Light::drawSpotGizmos(const Camera* camera, Engine* engine) const
 	float r = RAD_TO_DEG(m_spotAngleRad) / 2.0f;
 	r = DEG_TO_RAD(r);
 	r = tan(r) * m_distance;
-	engine->QueueEllipse(camera, &v1, &m_forward, r, r, c, true, false);
+	engine->QueueEllipse(camera, &v1, &m_forward, r, r, &m_lightColor, true, false);
 	v2 = m_left;
 	v = v1 + (v2 * r);
-	engine->QueueLine(camera, &t, &v, c, true, false);
+	engine->QueueLine(camera, &t, &v, &m_lightColor, true, false);
 	v2 = m_left;
 	v = v1 - (v2 * r);
-	engine->QueueLine(camera, &t, &v, c, true, false);
+	engine->QueueLine(camera, &t, &v, &m_lightColor, true, false);
 	v2 = m_up;
 	v = v1 + (v2 * r);
-	engine->QueueLine(camera, &t, &v, c, true, false);
+	engine->QueueLine(camera, &t, &v, &m_lightColor, true, false);
 	v2 = m_up;
 	v = v1 - (v2 * r);
-	engine->QueueLine(camera, &t, &v, c, true, false);
+	engine->QueueLine(camera, &t, &v, &m_lightColor, true, false);
 }
 
 void Light::drawDirectionalGizmos(const Camera* camera, Engine* engine) const
 {
 	ZobVector3 t = GetWorldPosition();
-	uint c = ((int)(m_lightColor.GetRed()) << 16) + ((int)(m_lightColor.GetGreen()) << 8) + (int)(m_lightColor.GetBlue());
 	ZobVector3 v0 = t + m_forward;
 	ZobVector3 v1 = t - m_forward;
 	v0 = v0 + m_left;
 	v1 = v1 + m_left;
-	engine->QueueLine(camera, &v0, &v1, c, true, false);
+	engine->QueueLine(camera, &v0, &v1, &m_lightColor, true, false);
 	v0 = v0 + m_up;
 	v1 = v1 + m_up;
-	engine->QueueLine(camera, &v0, &v1, c, true, false);
+	engine->QueueLine(camera, &v0, &v1, &m_lightColor, true, false);
 	v0 = t + m_forward;
 	v1 = t - m_forward;
 	v0 = v0 - m_left;
 	v1 = v1 - m_left;
-	engine->QueueLine(camera, &v0, &v1, c, true, false);
+	engine->QueueLine(camera, &v0, &v1, &m_lightColor, true, false);
 	v0 = v0 - m_up;
 	v1 = v1 - m_up;
-	engine->QueueLine(camera, &v0, &v1, c, true, false);
+	engine->QueueLine(camera, &v0, &v1, &m_lightColor, true, false);
 	v1 = t - m_forward;
-	engine->QueueEllipse(camera, &v1, &m_forward, 1.0f, 1.0f, c, true, false);
+	engine->QueueEllipse(camera, &v1, &m_forward, 1.0f, 1.0f, &m_lightColor, true, false);
 }
 
 void Light::DrawGizmos(const Camera* camera, Engine* engine)

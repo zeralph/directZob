@@ -30,7 +30,7 @@ public:
 		float scaleY;
 		eHudUnit unit;
 		char c;
-		ZobVector3 color;
+		ZobColor color;
 		const ZobMaterial* mat;
 		const ZobFont::FontGlyphe* glyphe;
 	};
@@ -58,7 +58,7 @@ private:
 	ZobVector3* m_projectedVertices;
 	ZobVector3* m_normals;
 	ZobVector2* m_uvs;
-	ZobVector3* m_colors;
+	ZobColor* m_colors;
 	int	m_nbDrawnTriangles;
 	Triangle::RenderOptions m_renderOptions;
 	std::vector <const ZobFont*> m_fonts;

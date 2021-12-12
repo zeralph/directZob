@@ -697,11 +697,6 @@ namespace DirectZobEditor
             m_directZobWrapper.GetEngineWrapper().ShowText(textToolStripMenuItem.Checked);
         }
 
-        private void toolStripSnap_Click(object sender, EventArgs e)
-        {
-            m_snap = toolStripSnap.Checked;
-        }
-
         private void toolStripComboBoxCurrentCamera_SelectedIndexChanged(object sender, EventArgs e)
         {
             string s = (string)toolStripComboBoxCurrentCamera.SelectedItem;
@@ -790,6 +785,38 @@ namespace DirectZobEditor
                     m_directZobWrapper.GetEngineWrapper().Resize(p.Width, p.Height);
                 }
             }
+        }
+
+        private void toolStripSnap_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            string s =  e.ClickedItem.Text;
+            float f = 0.0f;
+            switch(s)
+            {
+                case "0.1":
+                    {
+                        f = 0.1f;
+                        break;
+                    }
+                case "0.5":
+                    {
+                        f = 0.5f;
+                        break;
+                    }
+                case "1":
+                    {
+                        f = 1.0f;
+                        break;
+                    }
+                default:
+                case "None":
+                    {
+                        f = 0.0f;
+                        break;
+                    }
+            }
+            toolStripSnap.Text = "Snap (" + s + ")";
+            m_directZobWrapper.GetEngineWrapper().SetSnap(f);
         }
     }
 

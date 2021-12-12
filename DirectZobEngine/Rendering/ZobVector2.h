@@ -21,7 +21,7 @@ public:
 
 	bool operator== (const ZobVector2& v2) { return x == v2.x && y == v2.y && w == v2.w; }
 	
-	inline void Copy(ZobVector2* v)
+	inline void Copy(const ZobVector2* v)
 	{
 		x = v->x;
 		y = v->y;

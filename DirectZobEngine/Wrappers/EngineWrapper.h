@@ -26,7 +26,7 @@ namespace CLI
 	{
 		ZobVector3 p0;
 		ZobVector3 p1;
-		int color;
+		ZobColor color;
 		bool bold;
 		bool noZ;
 	};
@@ -34,8 +34,8 @@ namespace CLI
 	{
 		ZobVector3 p;
 		ZobVector3 n;
+		ZobColor color;
 		float r;
-		int color;
 		bool bold;
 		bool noZ;
 	};
@@ -72,6 +72,7 @@ namespace CLI
 		void								Update(float dt);
 		void								Stop() { m_running = false; }
 		void								Resize(int w, int h);
+		void								SetSnap(float d) { m_modificatorData->m_snap = d; }
 
 	private:
 		ZobVector3							ToScreenCoords(ZobVector3& v);

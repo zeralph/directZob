@@ -67,9 +67,9 @@ public:
 	ZobVector3* pb;
 	ZobVector3* pc;
 
-	ZobVector3* ca;
-	ZobVector3* cb;
-	ZobVector3* cc;
+	ZobColor* ca;
+	ZobColor* cb;
+	ZobColor* cc;
 
 	ZobVector3* na;
 	ZobVector3* nb;

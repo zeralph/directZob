@@ -127,7 +127,7 @@ Engine::Engine(int width, int height, Events* events)
 	m_TrianglesQueue = (Triangle*)malloc(sizeof(Triangle) * m_maxTrianglesQueueSize);
 	m_verticesData = (ZobVector3*)malloc(sizeof(ZobVector3) * m_maxTrianglesQueueSize * 10); // vertices plus normals plus ...
 	m_uvData = (ZobVector2*)malloc(sizeof(ZobVector2) * m_maxTrianglesQueueSize * 3);
-	m_colorData = (ZobVector3*)malloc(sizeof(ZobVector3) * m_maxTrianglesQueueSize * 3);
+	m_colorData = (ZobColor*)malloc(sizeof(ZobColor) * m_maxTrianglesQueueSize * 3);
 	ulong tot = sizeof(Triangle);
 	tot = sizeof(Line3D)* m_maxLineQueueSize + sizeof(Triangle) * m_maxTrianglesQueueSize + sizeof(ZobVector3) * m_maxTrianglesQueueSize * 10 + sizeof(ZobVector2) * m_maxTrianglesQueueSize * 3;
 	tot /= 1024*1024;
@@ -485,6 +485,7 @@ void Engine::DrawGrid(const Camera *camera)
 	bool bold;
 	float cx = 0; // (int)(camera->GetWorldPosition().x);
 	float cz = 0; // (int)(camera->GetWorldPosition().z);
+
 	for (int i = -gridSize; i <= gridSize; i += 1.0f)
 	{
 		a.x = i + cx;
@@ -497,11 +498,11 @@ void Engine::DrawGrid(const Camera *camera)
 		bold = false;
 		if (bold)
 		{
-			QueueLine(camera, &a, &b, 0xFFFFFF, bold, false);
+			QueueLine(camera, &a, &b, &ZobColor::White, bold, false);
 		}
 		else
 		{
-			QueueLine(camera, &a, &b, 0xAAAAAA, bold, false);
+			QueueLine(camera, &a, &b, &ZobColor::LightGrey, bold, false);
 		}
 	}
 	for (int i = -gridSize; i <= gridSize; i += 1.0f)
@@ -514,17 +515,17 @@ void Engine::DrawGrid(const Camera *camera)
 		bold = false;
 		if (bold)
 		{
-			QueueLine(camera, &a, &b, 0xFFFFFF, bold, false);
+			QueueLine(camera, &a, &b, &ZobColor::White, bold, false);
 		}
 		else
 		{
-			QueueLine(camera, &a, &b, 0xAAAAAA, bold, false);
+			QueueLine(camera, &a, &b, &ZobColor::LightGrey, bold, false);
 		}
 	}
 
-	QueueLine(camera, &ZobVector3::Vector3Zero, &ZobVector3::Vector3X, 0xFF0000, true, false);
-	QueueLine(camera, &ZobVector3::Vector3Zero, &ZobVector3::Vector3Y, 0x00FF00, true, false);
-	QueueLine(camera, &ZobVector3::Vector3Zero, &ZobVector3::Vector3Z, 0x0000FF, true, false);
+	QueueLine(camera, &ZobVector3::Vector3Zero, &ZobVector3::Vector3X, &ZobColor::Red, true, false);
+	QueueLine(camera, &ZobVector3::Vector3Zero, &ZobVector3::Vector3Y, &ZobColor::Green, true, false);
+	QueueLine(camera, &ZobVector3::Vector3Zero, &ZobVector3::Vector3Z, &ZobColor::Blue, true, false);
 }
 
 ZobObject* Engine::GetObjectAt2DCoords(float x, float y, bool editorObjectsOnly)
@@ -579,12 +580,12 @@ ZobObject* Engine::GetObjectAt2DCoords(float x, float y, bool editorObjectsOnly)
 	*/
 }
 
-void Engine::QueueSphere(const Camera* camera, const ZobMatrix4x4* mat, const float radius, const uint c, bool bold, bool noZ)
+void Engine::QueueSphere(const Camera* camera, const ZobMatrix4x4* mat, const float radius, const ZobColor* c, bool bold, bool noZ)
 {
 	QueuePartialSphere(camera, mat, radius, c, bold, noZ, 0, M_PI);
 }
 
-void Engine::QueuePartialSphere(const Camera* camera, const ZobMatrix4x4* mat, const float radius, const uint c, bool bold, bool noZ, float from, float to)
+void Engine::QueuePartialSphere(const Camera* camera, const ZobMatrix4x4* mat, const float radius, const ZobColor* c, bool bold, bool noZ, float from, float to)
 {
 	static const int segs = 10;
 	ZobVector3 v[segs+1][segs+1];
@@ -613,7 +614,7 @@ void Engine::QueuePartialSphere(const Camera* camera, const ZobMatrix4x4* mat, c
 	}
 }
 
-void Engine::QueueCapsule(const Camera* camera, const ZobMatrix4x4* mat, float radius, float height, const ZobVector3* dir, const uint c, bool bold, bool noZ)
+void Engine::QueueCapsule(const Camera* camera, const ZobMatrix4x4* mat, float radius, float height, const ZobVector3* dir, const ZobColor* c, bool bold, bool noZ)
 {
 	ZobMatrix4x4 m1;
 	ZobMatrix4x4 m2;
@@ -643,12 +644,12 @@ void Engine::QueueCapsule(const Camera* camera, const ZobMatrix4x4* mat, float r
 	}
 }
 
-void Engine::QueueMesh(const Camera* camera, const ZobMatrix4x4* mat, ZobVector3* points, int width, int height, const uint c, bool bold)
+void Engine::QueueMesh(const Camera* camera, const ZobMatrix4x4* mat, ZobVector3* points, int width, int height, const ZobColor* c, bool bold)
 {
 
 }
 
-void Engine::QueueWorldBox(const Camera* camera, const Box* box, const uint c, bool bold, bool noZ)
+void Engine::QueueWorldBox(const Camera* camera, const Box* box, const ZobColor* c, bool bold, bool noZ)
 {
 	ZobVector3 p0, p1, p2, p3, p4, p5, p6, p7;
 	p0 = box->p0;
@@ -676,7 +677,7 @@ void Engine::QueueWorldBox(const Camera* camera, const Box* box, const uint c, b
 	QueueLine(camera, &p0, &p4, c, bold, noZ);
 }
 
-void Engine::QueueBox(const Camera* camera, const ZobMatrix4x4* mat, const ZobVector3* halfExtends, const ZobVector3* pivot, const uint c, bool bold, bool noZ)
+void Engine::QueueBox(const Camera* camera, const ZobMatrix4x4* mat, const ZobVector3* halfExtends, const ZobVector3* pivot, const ZobColor* c, bool bold, bool noZ)
 {
 	ZobVector3 v0 = ZobVector3(-halfExtends->x, -halfExtends->y, -halfExtends->z);// +pivot;
 	ZobVector3 v1 = ZobVector3(-halfExtends->x, halfExtends->y, -halfExtends->z);// + pivot;
@@ -712,7 +713,7 @@ void Engine::QueueBox(const Camera* camera, const ZobMatrix4x4* mat, const ZobVe
 	QueueLine(camera, &v0, &v4, c, bold, noZ);
 }									 
 
-void Engine::QueueEllipse(const Camera* camera, const ZobVector3* center, const ZobVector3* vectorUp, const float r1, const float r2, const uint c, bool bold, bool noZ)
+void Engine::QueueEllipse(const Camera* camera, const ZobVector3* center, const ZobVector3* vectorUp, const float r1, const float r2, const ZobColor* c, bool bold, bool noZ)
 {
 	int segs = 20;
 	float r = 0.0f;
@@ -751,7 +752,7 @@ void Engine::QueueEllipse(const Camera* camera, const ZobVector3* center, const 
 	}
 }
 
-void Engine::QueueTriangle(const Camera* camera, const ZobVector3* v1, const ZobVector3* v2, const ZobVector3* v3, const uint c, bool transparent, bool noZ)
+void Engine::QueueTriangle(const Camera* camera, const ZobVector3* v1, const ZobVector3* v2, const ZobVector3* v3, const ZobColor* c, bool transparent, bool noZ)
 {
 	Triangle* t = &m_TrianglesQueue[m_TriangleQueueSize];
 	t->va->x = v1->x;
@@ -766,11 +767,9 @@ void Engine::QueueTriangle(const Camera* camera, const ZobVector3* v1, const Zob
 	t->vc->y = v3->y;
 	t->vc->z = v3->z;
 	t->vc->w = 1;
-	ZobVector3 color = ZobVector3((c & 0xFF0000) >> 16, (c & 0x00FF00) >> 8, c & 0x0000FF);
-	color.Mul(1.0f / 255.0f);
-	t->ca->Copy(&color);
-	t->cb->Copy(&color);
-	t->cc->Copy(&color);
+	t->ca->Copy(c);
+	t->cb->Copy(c);
+	t->cc->Copy(c);
 	t->material = NULL;
 	t->clipMode = Triangle::eClip_3_in;
 	Triangle::RenderOptions* r = &m_renderOptions[m_usedRenderOptions];
@@ -785,7 +784,7 @@ void Engine::QueueTriangle(const Camera* camera, const ZobVector3* v1, const Zob
 	m_TriangleQueueSize++;
 }
 
-void Engine::QueueLine(const Camera* camera, const ZobVector3* v1, const ZobVector3* v2, const uint c, bool bold, bool noZ)
+void Engine::QueueLine(const Camera* camera, const ZobVector3* v1, const ZobVector3* v2, const ZobColor* c, bool bold, bool noZ)
 {
 	if (m_started)
 	{
@@ -825,7 +824,7 @@ void Engine::QueueLine(const Camera* camera, const ZobVector3* v1, const ZobVect
 				l->yb = b.y;
 				l->za = za;
 				l->zb = zb;
-				l->c = c;
+				l->c = c->GetRawValue();
 				l->bold = bold;
 				l->noZ = noZ;
 				int min = std::min<int>(a.y, b.y);
@@ -1028,19 +1027,19 @@ uint Engine::SubDivideClippedTriangle(const Camera* c, const Triangle* t)
 {
 	ZobVector3 pIn1;
 	ZobVector2 pIn1Uv;
-	ZobVector3 pIn1Cv;
+	ZobColor pIn1Cv;
 	ZobVector3 pIn1n;
 	ZobVector3 pIn2;
 	ZobVector2 pIn2Uv;
-	ZobVector3 pIn2Cv;
+	ZobColor pIn2Cv;
 	ZobVector3 pIn2n;
 	ZobVector3 pOut1;
 	ZobVector2 pOut1Uv;
-	ZobVector3 pOut1Cv;
+	ZobColor pOut1Cv;
 	ZobVector3 pOut1n;
 	ZobVector3 pOut2;
 	ZobVector2 pOut2Uv;
-	ZobVector3 pOut2Cv;
+	ZobColor pOut2Cv;
 	ZobVector3 pOut2n;
 	ZobVector3 pi;
 	ZobVector2 piUv;
