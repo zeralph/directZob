@@ -82,6 +82,12 @@ void ZobPhysicComponent::SetWorldTransform(Transform t)
 { 
 	const Transform t2 = GetParentWorldTransform();
 	m_localTransform = t2.getInverse() * t;
+	Vector3 p = m_localTransform.getPosition();
+	Vector3 ps = GetParentWorldScale();
+	p.x /= ps.x;
+	p.y /= ps.y;
+	p.z /= ps.z;
+	m_localTransform.setPosition(p);
 	assert(m_localTransform.getPosition().isFinite());
 	m_editorLocalPosition = ZobVector3(m_localTransform.getPosition().x, m_localTransform.getPosition().y, m_localTransform.getPosition().z);
 	m_editorLocalRotation = GetLocalOrientation();
