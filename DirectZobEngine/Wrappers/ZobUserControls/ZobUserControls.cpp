@@ -21,9 +21,15 @@ ZobControl::ZobControl(const ZobVariablesExposer::wrapperData& w) :TableLayoutPa
 	_update = gcnew Action(this, &ZobControl::UpdateControlInternal);
 }
 
+
+
 ZobControl::~ZobControl()
 {
 	delete _update;
+	for (int i = 0; i < this->Controls->Count; i++)
+	{
+		delete(this->Controls[i]);
+	}
 	_update = nullptr;
 	DirectZobWrapperEvents::OnEditorUpdateEvent -= _updateEvent;
 	delete _updateEvent;
@@ -660,6 +666,10 @@ ZobGroupBox::ZobGroupBox(String^ name, bool collapsable) :GroupBox()
 ZobGroupBox::~ZobGroupBox()
 {
 	_label->Click -= _event;
+	for (int i = 0; i < this->Controls->Count; i++)
+	{
+		delete(this->Controls[i]);
+	}
 	delete _event;
 	delete _label;
 }

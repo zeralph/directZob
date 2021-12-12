@@ -103,22 +103,13 @@ namespace DirectZobEditor
             {
                 handler(this, EventArgs.Empty);
             }
-            /*
-            m_directZobWrapper.LoadScene("D:\\Git\\directZob\\resources\\", "carTest.dzs");
-            m_engineWindow.GetEngineWrapper().ShowGrid(false);
-            m_directZobWrapper.StartPhysic();
-            */
             bBoxToolStripMenuItem.Checked = false;
-            //m_engineWindow.GetEngineWrapper().ShowBBoxes(false);
             cameraToolStripMenuItem.Checked = false;
-            //m_engineWindow.GetEngineWrapper().DrawPhysicsGizmos(false);
             textToolStripMenuItem.Checked = false;
-            //m_engineWindow.GetEngineWrapper().ShowText(false);
             physicsToolStripMenuItem.Checked = false;
-            //m_engineWindow.GetEngineWrapper().DrawPhysicsGizmos(false);
             m_engineThread = new Thread(RunEngineThread);
             m_engineThread.Start();
- //           GigaPaint(this);
+            SetSnap("None");
         }
 
         private void OnObjectSelected(CLI.ZobObjectWrapper z)
@@ -787,11 +778,10 @@ namespace DirectZobEditor
             }
         }
 
-        private void toolStripSnap_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        private void SetSnap(string s)
         {
-            string s =  e.ClickedItem.Text;
             float f = 0.0f;
-            switch(s)
+            switch (s)
             {
                 case "0.1":
                     {
@@ -817,6 +807,12 @@ namespace DirectZobEditor
             }
             toolStripSnap.Text = "Snap (" + s + ")";
             m_directZobWrapper.GetEngineWrapper().SetSnap(f);
+        }
+
+        private void toolStripSnap_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            string s =  e.ClickedItem.Text;
+            SetSnap(s);
         }
     }
 
