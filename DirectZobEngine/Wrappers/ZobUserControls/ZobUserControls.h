@@ -39,6 +39,7 @@ namespace CLI {
 		virtual void	OnValueChanged(Object^ sender, EventArgs^ e) {}
 		void			UpdateControl();
 		virtual void	UpdateControlInternal() {}
+		bool			IsControlOk();
 		const ZobVariablesExposer::wrapperData* _w;
 		DirectZobWrapperEvents::OnEditorUpdate^ _updateEvent;
 		Action^ _update;

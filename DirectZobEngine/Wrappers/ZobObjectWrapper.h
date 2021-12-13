@@ -61,9 +61,9 @@ namespace CLI {
 		void					SetLocalScale(ManagedVector3^ p);
 		void					LookAt(ManagedVector3^ forward, ManagedVector3^ left, ManagedVector3^ up, bool addToCurrentRotation);
 		void					LoadMesh(System::String^ name, System::String^ file, System::String^ path);
+		void					LoadSprite(System::String^ name, System::String^ file, System::String^ path);
 		void					CreateSprite();
 		bool					IsLight();
-		bool					IsSprite();
 		bool					IsCamera();
 		DirectZobType::guid		GetId() { return m_id; }
 		bool					IsFromFactoryFile();

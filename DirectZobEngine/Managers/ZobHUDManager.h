@@ -6,7 +6,6 @@
 #include "../ZobObjects/Camera.h"
 #include "../Rendering/Engine.h"
 #include "../ZobObjects/Light.h"
-#include "../ZobObjects/ZobSprite.h"
 #include "../Rendering/ZobFont.h"
 #include "../ZobMaterial.h"
 

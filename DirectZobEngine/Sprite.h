@@ -5,12 +5,12 @@
 #include <vector>
 #include "Mesh.h"
 
-class Sprite : public Mesh
+class ZobSprite : public Mesh
 {
 public:
 
-	Sprite(std::string& name);
-	~Sprite();
+	ZobSprite(std::string& name);
+	~ZobSprite();
 	void QueueForDrawing(ZobObject* z, const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Engine* engine, const Triangle::RenderOptions* options) override;
 	void Setmaterial(const ZobMaterial* m);
 private:

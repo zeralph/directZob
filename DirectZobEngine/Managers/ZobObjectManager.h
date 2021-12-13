@@ -6,7 +6,6 @@
 #include "../ZobObjects/Camera.h"
 #include "../Rendering/Engine.h"
 #include "../ZobObjects/Light.h"
-#include "../ZobObjects/ZobSprite.h"
 
 class ZobObjectManager
 {
@@ -33,7 +32,6 @@ public:
 	ZobObject* GetRootObject() { return m_rootObject;  }
 	ZobObject* CreateZobObject(ZobObject* parent);
 	ZobObject* CreateEditorZobObject(ZobObject* parent);
-	ZobSprite* CreateZobSprite(ZobObject* parent);
 	void RemoveZobObject(ZobObject* z);
 	void UnloadAll();
 	bool Reparent(ZobObject* o, ZobObject* parent);

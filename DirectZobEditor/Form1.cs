@@ -355,15 +355,50 @@ namespace DirectZobEditor
 
         }
 
+        private void createSpriteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.Filter = "images (*.png;*.jpg;*.jpeg:*.tga)|*.png;*.jpg;*.jpeg:*.tga";
+                openFileDialog.FilterIndex = 1;
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    string path = Path.GetDirectoryName(openFileDialog.FileName) + "\\";
+                    string file = openFileDialog.SafeFileName;
+                    string name = file;
+                    name.Replace(' ', '_');
+                    CLI.ZobObjectWrapper root = m_zobObjectManagerWrapper.GetRootObject();
+                    CLI.ZobObjectWrapper z = null;
+                    z = m_zobObjectManagerWrapper.CreateZobObject();
+                    z.SetName(name);
+                    string workspace = m_directZobWrapper.GetResourcePath();
+                    //z.SetMesh(name);
+                    if (!string.IsNullOrEmpty(workspace))
+                    {
+                        //Uri r = new Uri(workspace);
+                        //r = r.MakeRelativeUri(new Uri(path));
+                        //path = r.ToString();
+                    }
+                    z.LoadSprite(file, file, path);
+                    m_zobObjectManagerWrapper.ReScan();
+                    OnSceneUpdateHandler handler = OnSceneUpdated;
+                    if (null != handler)
+                    {
+                        SceneUpdateEventArg ev = new SceneUpdateEventArg();
+                        ev.type = SceneUpdateType.objectAdded;
+                        ev.zobObject = z;
+                        handler(this, ev);
+                    }
+                }
+            }
+        }
+
         private void LoadMeshToolStripMenuItem_Click(object sender, EventArgs e)
         {
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
-//                openFileDialog.InitialDirectory = m_path;
                 openFileDialog.Filter = "all meshes (*.obj;*.fbx)|*.obj;*.fbx|obj files (*.obj)|*.obj|fbx files (*.fbx)|*.fbx";
                 openFileDialog.FilterIndex = 1;
-  //              openFileDialog.RestoreDirectory = true;
-                //openFileDialog.AutoUpgradeEnabled = false;
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     string path = Path.GetDirectoryName(openFileDialog.FileName) + "\\";
@@ -392,7 +427,6 @@ namespace DirectZobEditor
                         ev.zobObject = z;
                         handler(this, ev);
                     }
-                    //z.GetMeshName()
                 }
             }
         }
@@ -475,16 +509,6 @@ namespace DirectZobEditor
             m_directZobWrapper.CreateLight(2);
             Form1.SceneUpdateEventArg ev = new Form1.SceneUpdateEventArg();
             ev.type = Form1.SceneUpdateType.createLight;
-            PropagateSceneUpdateEvent(ev);
-        }
-
-        private void createSpriteToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            CLI.ZobObjectWrapper root = m_zobObjectManagerWrapper.GetRootObject();
-            CLI.ZobObjectWrapper z = m_zobObjectManagerWrapper.AddZobSprite(root);
-            Form1.SceneUpdateEventArg ev = new Form1.SceneUpdateEventArg();
-            ev.type = Form1.SceneUpdateType.createSprite;
-            ev.zobObject = z;
             PropagateSceneUpdateEvent(ev);
         }
 

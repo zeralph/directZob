@@ -24,6 +24,7 @@ public:
 		eBehavior_physicCapsule,
 		eBehavior_physicMesh,
 		eBehavior_mesh,
+		eBehavior_sprite,
 		__eBehavior_MAX__,
 	};
 

@@ -13,6 +13,7 @@ class Mesh;
 class ZobPhysicComponent;
 class m_varExposer;
 class ZobBehaviorMesh;
+class ZobBehaviorSprite;
 class ZobObject:public ZOBGUID
 {
 friend class ZobBehavior;
@@ -75,6 +76,7 @@ public:
 	bool							AddChildReference(ZobObject* z);
 	int								GetChildPosition(const ZobObject* z);
 	ZobBehaviorMesh*				LoadMesh(ZobFilePath& zfp);
+	ZobBehaviorSprite*				LoadSprite(ZobFilePath& zfp);
 	const bool						IsMarkedForDeletion() const { return m_markedForDeletion; };
 	void							MarkForDeletion() { m_markedForDeletion=true; };
 	bool							HasChild(const ZobObject* o);

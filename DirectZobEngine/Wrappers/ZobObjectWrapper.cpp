@@ -186,6 +186,26 @@ namespace CLI
 		return nullptr;
 	}
 
+
+	void ZobObjectWrapper::LoadSprite(String^ name, String^ file, String^ path)
+	{
+		ZobObject* z = GetInstance();
+		if (z)
+		{
+			std::string n;
+			MarshalString(name, n);
+			std::string f;
+			MarshalString(file, f);
+			std::string p;
+			MarshalString(path, p);
+			ZobFilePath zfp;
+			zfp.name = n;
+			zfp.file = f;
+			zfp.path = p;
+			z->LoadSprite(zfp);
+		}
+	}
+
 	void ZobObjectWrapper::LoadMesh(String^ name, String^ file, String^ path)
 	{
 		ZobObject* z = GetInstance();
@@ -372,16 +392,6 @@ namespace CLI
 		if (z)
 		{
 			return z->GetSubType() == ZOBGUID::ZobSubType::subtype_zobCamera;
-		}
-		return false;
-	}
-
-	bool ZobObjectWrapper::IsSprite()
-	{
-		ZobObject* z = GetInstance();
-		if (z)
-		{
-			return z->GetSubType() == ZOBGUID::subtype_sprite;
 		}
 		return false;
 	}

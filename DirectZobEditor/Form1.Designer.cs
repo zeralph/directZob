@@ -42,6 +42,7 @@
             this.assetsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadTextureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadMeshToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.LoadSpriteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.createLightToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.spotToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pointToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -51,7 +52,6 @@
             this.fPSToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.orbitalFreeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.orbitalToParentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.createSpriteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.createZobObjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.regenerateZobIdsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -222,9 +222,9 @@
             this.assetsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.loadTextureToolStripMenuItem,
             this.loadMeshToolStripMenuItem,
+            this.LoadSpriteToolStripMenuItem,
             this.createLightToolStripMenuItem,
             this.createCameraToolStripMenuItem,
-            this.createSpriteToolStripMenuItem,
             this.createZobObjectToolStripMenuItem});
             this.assetsToolStripMenuItem.Name = "assetsToolStripMenuItem";
             this.assetsToolStripMenuItem.Size = new System.Drawing.Size(52, 22);
@@ -233,16 +233,23 @@
             // loadTextureToolStripMenuItem
             // 
             this.loadTextureToolStripMenuItem.Name = "loadTextureToolStripMenuItem";
-            this.loadTextureToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.loadTextureToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.loadTextureToolStripMenuItem.Text = "Load Texture ...";
             this.loadTextureToolStripMenuItem.Click += new System.EventHandler(this.LoadTextureToolStripMenuItem_Click);
             // 
             // loadMeshToolStripMenuItem
             // 
             this.loadMeshToolStripMenuItem.Name = "loadMeshToolStripMenuItem";
-            this.loadMeshToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.loadMeshToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.loadMeshToolStripMenuItem.Text = "Load Mesh ...";
             this.loadMeshToolStripMenuItem.Click += new System.EventHandler(this.LoadMeshToolStripMenuItem_Click);
+            // 
+            // LoadSpriteToolStripMenuItem
+            // 
+            this.LoadSpriteToolStripMenuItem.Name = "LoadSpriteToolStripMenuItem";
+            this.LoadSpriteToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.LoadSpriteToolStripMenuItem.Text = "Load Sprite ...";
+            this.LoadSpriteToolStripMenuItem.Click += new System.EventHandler(this.createSpriteToolStripMenuItem_Click);
             // 
             // createLightToolStripMenuItem
             // 
@@ -251,7 +258,7 @@
             this.pointToolStripMenuItem,
             this.directionalToolStripMenuItem});
             this.createLightToolStripMenuItem.Name = "createLightToolStripMenuItem";
-            this.createLightToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.createLightToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.createLightToolStripMenuItem.Text = "Create Light ";
             // 
             // spotToolStripMenuItem
@@ -283,7 +290,7 @@
             this.orbitalFreeToolStripMenuItem,
             this.orbitalToParentToolStripMenuItem});
             this.createCameraToolStripMenuItem.Name = "createCameraToolStripMenuItem";
-            this.createCameraToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.createCameraToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.createCameraToolStripMenuItem.Text = "Create Camera";
             this.createCameraToolStripMenuItem.Click += new System.EventHandler(this.createCameraToolStripMenuItem_Click);
             // 
@@ -315,17 +322,10 @@
             this.orbitalToParentToolStripMenuItem.Text = "Orbital to parent";
             this.orbitalToParentToolStripMenuItem.Click += new System.EventHandler(this.orbitalToParentToolStripMenuItem_Click);
             // 
-            // createSpriteToolStripMenuItem
-            // 
-            this.createSpriteToolStripMenuItem.Name = "createSpriteToolStripMenuItem";
-            this.createSpriteToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
-            this.createSpriteToolStripMenuItem.Text = "Create Sprite";
-            this.createSpriteToolStripMenuItem.Click += new System.EventHandler(this.createSpriteToolStripMenuItem_Click);
-            // 
             // createZobObjectToolStripMenuItem
             // 
             this.createZobObjectToolStripMenuItem.Name = "createZobObjectToolStripMenuItem";
-            this.createZobObjectToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.createZobObjectToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.createZobObjectToolStripMenuItem.Text = "Create ZobObject";
             this.createZobObjectToolStripMenuItem.Click += new System.EventHandler(this.createZobObjectToolStripMenuItem_Click);
             // 
@@ -340,7 +340,7 @@
             // regenerateZobIdsToolStripMenuItem
             // 
             this.regenerateZobIdsToolStripMenuItem.Name = "regenerateZobIdsToolStripMenuItem";
-            this.regenerateZobIdsToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
+            this.regenerateZobIdsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.regenerateZobIdsToolStripMenuItem.Text = "Regenerate ZobIds";
             this.regenerateZobIdsToolStripMenuItem.Click += new System.EventHandler(this.regenerateZobIdsToolStripMenuItem_Click);
             // 
@@ -676,25 +676,25 @@
             // noneToolStripMenuItem
             // 
             this.noneToolStripMenuItem.Name = "noneToolStripMenuItem";
-            this.noneToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.noneToolStripMenuItem.Size = new System.Drawing.Size(101, 22);
             this.noneToolStripMenuItem.Text = "none";
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(101, 22);
             this.toolStripMenuItem2.Text = "1";
             // 
             // toolStripMenuItem3
             // 
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(101, 22);
             this.toolStripMenuItem3.Text = "0.5";
             // 
             // toolStripMenuItem4
             // 
             this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-            this.toolStripMenuItem4.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(101, 22);
             this.toolStripMenuItem4.Text = "0.1";
             // 
             // toolStripSeparator4
@@ -939,7 +939,7 @@
         private System.Windows.Forms.ToolStripMenuItem spotToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem pointToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem directionalToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem createSpriteToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem LoadSpriteToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem createZobObjectToolStripMenuItem;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.ToolStrip toolStrip1;

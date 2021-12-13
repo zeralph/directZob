@@ -59,15 +59,6 @@ ZobObject* ZobObjectManager::CreateEditorZobObject(ZobObject* parent)
 	return new ZobObject(ZOBGUID::type_editor, ZOBGUID::subtype_zobOject, emptyStr, parent);
 }
 
-ZobSprite* ZobObjectManager::CreateZobSprite(ZobObject* parent)
-{
-	if (parent == NULL)
-	{
-		parent = m_rootObject;
-	}
-	return new ZobSprite(emptyStr, parent);
-}
-
 void ZobObjectManager::RemoveZobObject(ZobObject* z)
 {
 	z->MarkForDeletion();

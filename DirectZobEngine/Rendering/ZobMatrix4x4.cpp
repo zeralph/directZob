@@ -67,9 +67,14 @@ void ZobMatrix4x4::CopyFrom(const ZobMatrix4x4* m)
 
 void ZobMatrix4x4::AddScale(const ZobVector3& v)
 {
-	m_data[0][0] *= v.x;
-	m_data[1][1] *= v.y;
-	m_data[2][2] *= v.z;
+	//m_data[0][0] *= v.x;
+	//m_data[1][1] *= v.y;
+	//m_data[2][2] *= v.z;
+	tmp.Identity();
+	tmp.m_data[0][0] = v.x;
+	tmp.m_data[1][1] = v.y;
+	tmp.m_data[2][2] = v.z;
+	Mul(&tmp);
 }
 
 void ZobMatrix4x4::SetScale(const ZobVector3& v)

@@ -400,7 +400,8 @@ namespace CLI
 	{
 		if (m_selectedObjectWrapper)
 		{
-			delete m_selectedObjectWrapper;
+			delete m_selectedObjectWrapper; 
+			m_selectedObjectWrapper = nullptr;
 		}
 		if (z)
 		{

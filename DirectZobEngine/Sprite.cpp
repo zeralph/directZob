@@ -5,7 +5,7 @@ using namespace std;
 
 std::string emptyStr = std::string("");
 
-Sprite::Sprite(std::string& name):Mesh(name)
+ZobSprite::ZobSprite(std::string& name):Mesh(name)
 {
 	DirectZob::LogInfo("Sprite %s Creation", m_name.c_str());
 	DirectZob::AddIndent();
@@ -31,16 +31,24 @@ Sprite::Sprite(std::string& name):Mesh(name)
 	m_trianglesNormals = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbFaces);
 	m_trianglesNormalsData = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbFaces);
 	m_trianglesNormalsTmp = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbFaces);
+	m_colors = (ZobColor*)malloc(sizeof(ZobColor) * m_nbVertices);
 
 	m_vertices[0] = ZobVector3(-0.5f, 0.5f, 0.0f);
 	m_vertices[1] = ZobVector3(0.5f, 0.5f, 0.0f);
 	m_vertices[2] = ZobVector3(0.5f, -0.5f, 0.0f);
 	m_vertices[3] = ZobVector3(-0.5f, -0.5f, 0.0f);
-
+/*
 	m_vertices[0] = ZobVector3(-0.1f, 0.1f, 0.0f);
 	m_vertices[1] = ZobVector3(0.1f, 0.1f, 0.0f);
 	m_vertices[2] = ZobVector3(0.1f, -0.1f, 0.0f);
 	m_vertices[3] = ZobVector3(-0.1f, -0.1f, 0.0f);
+*/
+
+	m_colors[0] = ZobColor(255, 255, 255, 255);
+	m_colors[1] = ZobColor(255, 255, 255, 255);
+	m_colors[2] = ZobColor(255, 255, 255, 255);
+	m_colors[3] = ZobColor(255, 255, 255, 255);
+
 
 	m_verticesNormals[0] = ZobVector3(0, 0, -1);
 	m_verticesNormals[1] = ZobVector3(0, 0, -1);
@@ -50,13 +58,14 @@ Sprite::Sprite(std::string& name):Mesh(name)
 	m_trianglesNormals[0] = ZobVector3(0, 0, -1);
 	m_trianglesNormals[1] = ZobVector3(0, 0, -1);
 
-	m_uvs[0] = ZobVector2(0, 0);
+	m_uvs[2] = ZobVector2(0, 0);
 	m_uvs[1] = ZobVector2(0, 1);
-	m_uvs[2] = ZobVector2(1, 1);
+	m_uvs[0] = ZobVector2(1, 1);
 	m_uvs[3] = ZobVector2(1, 0);
 
 	m_triangleOptions.zBuffered = false;
 	m_triangleOptions.lightMode = Triangle::RenderOptions::eLightMode_none;
+	m_triangleOptions.cullMode = Triangle::RenderOptions::eCullMode_CounterClockwiseFace;
 
 	Triangle t1;
 	t1.va = &m_vertices[0];
@@ -74,6 +83,9 @@ Sprite::Sprite(std::string& name):Mesh(name)
 	t1.ua = &m_uvs[0];
 	t1.ub = &m_uvs[1];
 	t1.uc = &m_uvs[2];
+	t1.ca = &m_colors[0];
+	t1.cb = &m_colors[1];
+	t1.cc = &m_colors[2];
 	t1.n = &m_verticesNormals[0];
 	t1.material = NULL;
 	t1.options = &m_triangleOptions;
@@ -97,6 +109,9 @@ Sprite::Sprite(std::string& name):Mesh(name)
 	t2.ua = &m_uvs[0];
 	t2.ub = &m_uvs[2];
 	t2.uc = &m_uvs[3];
+	t2.ca = &m_colors[0];
+	t2.cb = &m_colors[2];
+	t2.cc = &m_colors[3];
 	t2.n = &m_verticesNormals[0];
 	t2.material = NULL;
 	t2.options = &m_triangleOptions;
@@ -112,7 +127,7 @@ Sprite::Sprite(std::string& name):Mesh(name)
 	DirectZob::RemoveIndent();
 }
 
-Sprite::~Sprite()
+ZobSprite::~ZobSprite()
 {
 	DirectZob::LogInfo("Delete sprite %s", m_name.c_str());
 	DirectZob::AddIndent();
@@ -145,12 +160,12 @@ Sprite::~Sprite()
 	DirectZob::RemoveIndent();
 }
 
-void Sprite::QueueForDrawing(ZobObject* z, const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Engine* engine, const Triangle::RenderOptions* options)
+void ZobSprite::QueueForDrawing(ZobObject* z, const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Engine* engine, const Triangle::RenderOptions* options)
 {
 	Mesh::QueueForDrawing(z, modelMatrix, rotationMatrix, camera, engine, options);
 }
 
-void Sprite::Setmaterial(const ZobMaterial* m)
+void ZobSprite::Setmaterial(const ZobMaterial* m)
 { 
 	m_triangles[0].material = m;  
 	m_triangles[1].material = m; 

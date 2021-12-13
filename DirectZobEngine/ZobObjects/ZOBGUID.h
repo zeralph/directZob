@@ -22,7 +22,6 @@ public :
 		subtype_zobCamera=3,
 		subtype_zobLight=4,
 		subtype_mesh=5,
-		subtype_sprite=6,
 		subtype_behavior=7,
 		subtype_cameraController = 8,
 		subtype_MAX = 9,

@@ -130,7 +130,8 @@ public:
 		}
 		std::string GetFullPath()
 		{
-			return "";
+			std::string s = path + name;
+			return s;
 		}
 		std::string Serialize()
 		{

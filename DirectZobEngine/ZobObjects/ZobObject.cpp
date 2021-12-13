@@ -5,6 +5,7 @@
 #include "ZobPhysic/ZobPhysicComponent.h"
 #include "SceneLoader.h"
 #include "Behaviors/ZobBehaviorMesh.h"
+#include "Behaviors/ZobBehaviorSprite.h"
 #include "../Misc/ZobXmlHelper.h"
 #include "../../dependencies/optick/include/optick.h"
 
@@ -201,6 +202,14 @@ ZobBehaviorMesh* ZobObject::LoadMesh(ZobFilePath &zfp)
 {
 	ZobBehavior* b = ZobBehaviorFactory::CreateBehavior(this, "Mesh");
 	ZobBehaviorMesh* bm = static_cast<ZobBehaviorMesh*>(b);
+	bm->Set(zfp);
+	return bm;
+}
+
+ZobBehaviorSprite* ZobObject::LoadSprite(ZobFilePath& zfp)
+{
+	ZobBehavior* b = ZobBehaviorFactory::CreateBehavior(this, "Sprite");
+	ZobBehaviorSprite* bm = static_cast<ZobBehaviorSprite*>(b);
 	bm->Set(zfp);
 	return bm;
 }

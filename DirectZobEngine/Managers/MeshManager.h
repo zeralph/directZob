@@ -20,7 +20,7 @@ public:
 	const Mesh* GetMesh(const int i) const;
 	void UnloadAll(); 
 	FbxManager* GetFbxManager() { return m_lSdkManager; }
-	Sprite* CreateSprite();
+	ZobSprite* CreateSprite();
 private:
 	std::vector<Mesh*> m_meshes;
 	FbxManager* m_lSdkManager = NULL;

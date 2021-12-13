@@ -37,12 +37,24 @@ ZobControl::~ZobControl()
 	_w = NULL;
 }
 
+bool ZobControl::IsControlOk()
+{
+	return this && this->IsHandleCreated && !this->IsDisposed && !this->Disposing;
+}
+
 void ZobControl::UpdateControl() 
 { 
-	if (_update != nullptr && this->IsHandleCreated && !this->IsDisposed && !this->Disposing)
+	try
 	{
-		this->Invoke(_update);
-	} 
+		if (IsControlOk())
+		{
+			this->Invoke(_update);
+		}
+	}
+	catch (System::ObjectDisposedException^ e)
+	{
+		DirectZob::LogWarning("ERROR : %s", e->ToString());
+	}
 }
 
 ZobGroupBox^ ZobControl::CreateWrappedVariablesView(std::string& name, ZobVariablesExposer* ze)
@@ -330,6 +342,10 @@ ZobControlVector3::~ZobControlVector3()
 
 void ZobControlVector3::UpdateControlInternal()
 {
+	if (!IsControlOk())
+	{
+		return;
+	}
 	if (this->Focused || this->Disposing || this->IsDisposed)
 		return;
 	if (_w && _w->ptr)
@@ -411,6 +427,10 @@ ZobControlFloat::~ZobControlFloat()
 
 void ZobControlFloat::UpdateControlInternal()
 {
+	if (!IsControlOk())
+	{
+		return;
+	}
 	if (_txt->Focused)
 		return;
 	if (_w->type == ZobVariablesExposer::eWrapperType_float)
@@ -506,6 +526,10 @@ ZobControlBool::~ZobControlBool()
 
 void ZobControlBool::UpdateControlInternal()
 {
+	if (!IsControlOk())
+	{
+		return;
+	}
 	//if (this->Focused)
 	//	return;
 	bool* b = (bool*)_w->ptr;
@@ -580,6 +604,10 @@ ZobControlEnum::~ZobControlEnum()
 
 void ZobControlEnum::UpdateControlInternal()
 {
+	if (!IsControlOk())
+	{
+		return;
+	}
 	if (this->Focused)
 		return;
 }
@@ -636,6 +664,10 @@ ZobControlZobObject::~ZobControlZobObject()
 
 void ZobControlZobObject::UpdateControlInternal()
 {
+	if (!IsControlOk())
+	{
+		return;
+	}
 	if (this->Focused)
 		return;
 }
@@ -918,6 +950,10 @@ void ZobControlColor::OnClickColor(Object^ sender, EventArgs^ e)
 
 void ZobControlColor::UpdateControlInternal()
 {
+	if (!IsControlOk())
+	{
+		return;
+	}
 	if (this->Focused || this->Disposing || this->IsDisposed)
 		return;
 	if (_w && _w->ptr)

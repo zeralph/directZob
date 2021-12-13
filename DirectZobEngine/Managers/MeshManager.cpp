@@ -24,12 +24,12 @@ MeshManager::~MeshManager()
 	m_meshes.clear();
 }
 
-Sprite* MeshManager::CreateSprite()
+ZobSprite* MeshManager::CreateSprite()
 {
 	std::string n = std::string("Sprite_");
 	n.append(std::to_string(spriteIdx));
 	spriteIdx++;
-	Sprite* s = new Sprite(n);
+	ZobSprite* s = new ZobSprite(n);
 	m_meshes.push_back(s);
 	return s;
 }

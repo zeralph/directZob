@@ -101,11 +101,6 @@ void SceneLoader::LoadZobObject(TiXmlElement* node, ZobObject* parent, const std
 		DirectZob::GetInstance()->GetCameraManager()->AddCamera(c);
 		zob = c;
 	}
-	else if (zid.GetSubType() == ZOBGUID::subtype_sprite)
-	{
-		ZobSprite* s = new ZobSprite(id, node, parent);
-		zob = s;
-	}
 	else if (zid.GetSubType() == ZOBGUID::subtype_zobLight)
 	{
 		Light* l = new Light(id, node, parent);
