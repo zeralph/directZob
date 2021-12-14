@@ -56,6 +56,9 @@ namespace CLI
 		ToolStripMenuItem^ itZoom = gcnew ToolStripMenuItem("Zoom");
 		itZoom->Click += gcnew EventHandler(this, &ZobObjectManagerWrapper::ZoomToZobObject);
 		m_nodeMenu->Items->Add(itZoom);
+		ToolStripMenuItem^ itDuplicate = gcnew ToolStripMenuItem("Duplicate");
+		itDuplicate->Click += gcnew EventHandler(this, &ZobObjectManagerWrapper::DuplicateZobObject);
+		m_nodeMenu->Items->Add(itDuplicate);
 		//m_treeView->ContextMenuStrip = m_nodeMenu;
 	}
 
@@ -93,6 +96,13 @@ namespace CLI
 		}
 		DirectZob::GetInstance()->GetZobObjectManager()->RemoveZobObject(p);
 		ReScan((ZobControlTreeNode^)m_treeView->TopNode, m_bShowAllNodes);
+	}
+	void ZobObjectManagerWrapper::DuplicateZobObject(Object^ sender, EventArgs^ e)
+	{
+		if (m_selectedObjectWrapper)
+		{
+			m_selectedObjectWrapper->Duplicate();
+		}
 	}
 	void ZobObjectManagerWrapper::ZoomToZobObject(Object^ sender, EventArgs^ e)
 	{

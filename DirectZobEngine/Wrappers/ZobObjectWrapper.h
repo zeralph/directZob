@@ -59,7 +59,9 @@ namespace CLI {
 		void					EditorUpdate();
 		void					GroupClick(Object^ sender, System::EventArgs^ e);
 		void					Refresh();
+		bool					Duplicate();
 	private:
+		ZobObject*				DuplicateInternal(ZobObject* src, ZobObject* parent);
 		void					CreateObjectview();
 		ZobGroupBox^			FillBehaviorControl(ZobBehavior* zb);
 		ZobGroupBox^			FillObjectControl(ZobObject* z);
@@ -69,6 +71,7 @@ namespace CLI {
 		ZobGroupBox^			m_objectPanel;
 		ZobGroupBox^			m_objectGroupBox;
 		ZobPropertiesContainer^	m_container;
+		bool					m_duplicate;
 	protected:
  		unsigned long long		m_id;
 		ZobObject*				m_zobObject;

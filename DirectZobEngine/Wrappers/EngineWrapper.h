@@ -1,7 +1,6 @@
 #ifdef _WINDLL
 #pragma once
 #include "ManagedObject.h"
-#include "ManagedVector3.h"
 #include "../Rendering/Engine.h"
 #include "../DirectZob.h"
 #include "ZobObjectWrapper.h"

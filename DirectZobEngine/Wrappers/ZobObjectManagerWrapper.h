@@ -72,6 +72,7 @@ namespace CLI
 		void					RemoveZobObject(Object^ sender, EventArgs^ e);
 		void					ZoomToZobObject(Object^ sender, EventArgs^ e);
 		void					AddZobBehavior(Object^ sender, EventArgs^ e);
+		void					DuplicateZobObject(Object^ sender, EventArgs^ e);
 
 		Panel^ m_objectTreeviewPanel;
 		Panel^ m_objectPropertiesPanel;

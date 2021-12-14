@@ -30,11 +30,11 @@ public:
 	void										GetZobObjectList(std::string &s) const;
 	ZobObject*									GetRootObject() { return m_rootObject;  }
 	ZobObject*									CreateZobObject(ZobObject* parent);
-	ZobObject*									CreateEditorZobObject(ZobObject* parent);
 	void										RemoveZobObject(ZobObject* z);
 	void										UnloadAll();
 	bool										Reparent(ZobObject* o, ZobObject* parent);
 	void										SaveTransforms();
+	ZobObject*									CreateEditorZobObject(ZobObject* parent);
 	void										RestoreTransforms();
 	void										ResetPhysic();
 	void										AddIdToDeleted(ulong id) { m_deletedIds.push_back(id); }

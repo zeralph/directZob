@@ -50,6 +50,13 @@ ZobObject* ZobObjectManager::CreateZobObject(ZobObject* parent)
 	return new ZobObject(ZOBGUID::type_scene, ZOBGUID::subtype_zobOject, emptyStr, parent);
 }
 
+void ZobObjectManager::RemoveZobObject(ZobObject* z)
+{
+	z->MarkForDeletion();
+	//todo : delay deletion
+	//delete z;
+}
+
 ZobObject* ZobObjectManager::CreateEditorZobObject(ZobObject* parent)
 {
 	if (parent == NULL)
@@ -57,13 +64,6 @@ ZobObject* ZobObjectManager::CreateEditorZobObject(ZobObject* parent)
 		parent = m_rootObject;
 	}
 	return new ZobObject(ZOBGUID::type_editor, ZOBGUID::subtype_zobOject, emptyStr, parent);
-}
-
-void ZobObjectManager::RemoveZobObject(ZobObject* z)
-{
-	z->MarkForDeletion();
-	//todo : delay deletion
-	//delete z;
 }
 
 ZobObject* ZobObjectManager::GetZobObjectFromlId(const std::string& id) const

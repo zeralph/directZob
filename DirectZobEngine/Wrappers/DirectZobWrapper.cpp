@@ -129,6 +129,7 @@ namespace CLI
 			DirectZob::GetInstance()->GetCameraManager()->CreateEditorCamera();
 			m_ZobObjectManagerWrapper->Refresh();
 			m_ZobObjectManagerWrapper->AddEditorGizmos();
+			DirectZob::GetInstance()->GetEngine()->ShowGrid(true);
 		}
 	}
 

@@ -66,7 +66,7 @@ public:
 	void								LookAt(const ZobVector3* forward, const ZobVector3* left, const ZobVector3* up, bool addToCurrentRotation);
 	
 	inline const std::string&			GetName() const { return m_name; }
-	inline void							SetName(const std::string &name) { m_name = name; }
+	inline void							SetName(const std::string &name) { m_name = std::string(name); }
 	inline ZobVector3					GetForward() const { return &m_forward; }
 	inline ZobVector3					GetLeft() const { return &m_left; }
 	inline ZobVector3					GetUp() const { return &m_up; }
