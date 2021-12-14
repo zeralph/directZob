@@ -43,7 +43,6 @@ namespace CLI
 		void					RemoveZobObject(ZobObjectWrapper^ name);
 		ZobObjectWrapper^		CreateZobObject();
 		ZobObjectWrapper^		AddZobSprite(ZobObjectWrapper^ parent);
-		ZobObjectWrapper^		GetObjectAtCoords(int x, int y, eObjectTypes type);
 		bool					Reparent(String^ object, String^ parent);
 		void					AddZobObjectsRecursive(ZobObject* z, TreeNodeCollection^ collection);
 		void					EditorUpdate();

@@ -2,7 +2,6 @@
 #pragma once
 #include "ManagedObject.h"
 #include "../ZobObjects/ZobObject.h"
-#include "ManagedVector3.h"
 #include "ZobUserControls/ZobUserControls.h"
 #include "../Behaviors/ZobBehavior.h"
 #include "../ZobObjects/ZobObject.h"
@@ -47,19 +46,7 @@ namespace CLI {
 		String^					GetName();
 		String^					GetFullNodeName();
 		void					SetName(System::String^ name);
-		ManagedVector3^			GetLocalPosition();
-		ManagedVector3^			GetWorldPosition();
-		ManagedVector3^			GetLeft();
-		ManagedVector3^			GetForward();
-		ManagedVector3^			GetUp();
-		ManagedVector3^			GetLocalRotation();
-		ManagedVector3^			GetWorldRotation();
-		ManagedVector3^			GetLocalScale();
 		List<ZobObjectWrapper^>^ GetChildren();
-		void					SetLocalTransform(ManagedVector3^ p);
-		void					SetLocalRotation(ManagedVector3^ p);
-		void					SetLocalScale(ManagedVector3^ p);
-		void					LookAt(ManagedVector3^ forward, ManagedVector3^ left, ManagedVector3^ up, bool addToCurrentRotation);
 		void					LoadMesh(System::String^ name, System::String^ file, System::String^ path);
 		void					LoadSprite(System::String^ name, System::String^ file, System::String^ path);
 		void					CreateSprite();

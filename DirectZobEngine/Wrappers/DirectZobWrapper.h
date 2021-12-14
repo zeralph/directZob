@@ -4,7 +4,6 @@
 #include "../DirectZob.h"
 #include "ZobObjectManagerWrapper.h"
 #include "ZobGlobalsWrapper.h"
-#include "CameraManagerWrapper.h"
 #include "EngineWrapper.h"
 #include "DirectZobWrapperEvents.h"
 #include <string> 
@@ -64,11 +63,12 @@ namespace CLI
 		cli::array<System::String^>^	GetEventsAndClear();
 		void							Resize(int width, int height);
 		System::String^					GetResourcePath();
-
+		cli::array<System::String^>^	GetCameraList();
+		System::String^					GetCurrentCameraName();
+		void 							SetCurrentCamera(System::String^ name);
 
 		ZobObjectManagerWrapper^		GetZobObjectManagerWrapper() { return m_ZobObjectManagerWrapper; }
 		ZobGlobalsWrapper^				GetZobGlobalsWrapper() { return m_ZobGlobalsWrapper; }
-		CameraManagerWrapper^			GetZobCameraManagerWrapper() { return m_ZobCameraManager; }
 		
 	private:
 		
@@ -76,7 +76,6 @@ namespace CLI
 		ZobObjectManagerWrapper^		m_ZobObjectManagerWrapper;
 		ZobGlobalsWrapper^				m_ZobGlobalsWrapper;
 		EngineWrapper^					m_ZobEngineWrapper;
-		CameraManagerWrapper^			m_ZobCameraManager;
 		//array<int>^ m_buffer;
 		//void					CallSceneUpdatedCallback();
 		delegate void			Del();

@@ -87,7 +87,6 @@ namespace DirectZobEditor
             onSceneLoadedCallback = new CLI.engineCallback(onSceneLoadedCallbackMethod);
             OnSceneLoadedDelegate = new OnSceneLoaded(OnSceneLoadedMethod);
 
-            m_engineWindow.BindEvents();
             this.propertiesPanel.MinimumSize = new Size(300, 500);
 
             this.WindowState = FormWindowState.Maximized;
@@ -151,15 +150,10 @@ namespace DirectZobEditor
             return m_directZobWrapper.GetEngineWrapper();
         }
 
-        public CLI.CameraManagerWrapper GetCameraManagerWrapper()
-        {
-            return m_directZobWrapper.GetZobCameraManagerWrapper();
-        }
-
         private void UpdateCameraList()
         {
-            string s = m_directZobWrapper.GetZobCameraManagerWrapper().GetCurrentCameraName();
-            string[] c = m_directZobWrapper.GetZobCameraManagerWrapper().GetCameraList();
+            string s = m_directZobWrapper.GetCurrentCameraName();
+            string[] c = m_directZobWrapper.GetCameraList();
             if (toolStripComboBoxCurrentCamera.Items.Count != c.Count())
             {
                 toolStripComboBoxCurrentCamera.Items.Clear();
@@ -292,7 +286,7 @@ namespace DirectZobEditor
         {
             m_zobObjectManagerWrapper.AddEditorGizmos();
             m_zobObjectManagerWrapper.Refresh();
-            m_directZobWrapper.GetZobCameraManagerWrapper().CreateEditorCamera();
+            m_directZobWrapper.CreateEditorCamera();
             EventHandler handler = OnSceneLoadedEventHandler;
             if (null != handler)
             {
@@ -653,7 +647,7 @@ namespace DirectZobEditor
 
         private void fixedToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            m_directZobWrapper.GetZobCameraManagerWrapper().CreateCamera("Fixed");
+            m_directZobWrapper.CreateCamera("Fixed");
             Form1.SceneUpdateEventArg ev = new Form1.SceneUpdateEventArg();
             ev.type = Form1.SceneUpdateType.createCamera;
             PropagateSceneUpdateEvent(ev);
@@ -713,7 +707,7 @@ namespace DirectZobEditor
             string s = (string)toolStripComboBoxCurrentCamera.SelectedItem;
             if (!string.IsNullOrEmpty(s))
             {
-                m_directZobWrapper.GetZobCameraManagerWrapper().SetCurrentCamera(s);
+                m_directZobWrapper.SetCurrentCamera(s);
             }
         }
 

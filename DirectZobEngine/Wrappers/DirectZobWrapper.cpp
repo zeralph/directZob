@@ -52,7 +52,6 @@ namespace CLI
 			GetInstance()->Init(0, width, height, true);
 			m_ZobObjectManagerWrapper = gcnew ZobObjectManagerWrapper(m_objectTreeviewPanel, m_objectPropertiesPanel);
 			m_ZobGlobalsWrapper = gcnew ZobGlobalsWrapper(m_globalPropertiesPanel);
-			m_ZobCameraManager = gcnew CameraManagerWrapper();
 			m_ZobEngineWrapper = gcnew EngineWrapper(m_renderWindow);
 		}
 	}
@@ -127,7 +126,7 @@ namespace CLI
 		{
 			m_events->FireOnNewSceneEvent();
 			GetInstance()->NewScene();
-			m_ZobCameraManager->CreateEditorCamera();
+			DirectZob::GetInstance()->GetCameraManager()->CreateEditorCamera();
 			m_ZobObjectManagerWrapper->Refresh();
 			m_ZobObjectManagerWrapper->AddEditorGizmos();
 		}
@@ -208,7 +207,6 @@ namespace CLI
 	{
 		if (GetInstance())
 		{	
-			m_ZobCameraManager->Update(m_lastFrameTime);
 			GetInstance()->RunAFrame((DirectZob::engineCallback)DirectZobWrapper::CallSceneUpdatedCallback, (DirectZob::engineCallback)DirectZobWrapper::CallQueuingCallback);
 			m_lastFrameTime = GetInstance()->GetFrameTime() / 1000.0f;
 			EditorUpdate();
@@ -308,6 +306,35 @@ namespace CLI
 		{
 			std::string s = GetInstance()->GetResourcePath();
 			return gcnew System::String(s.c_str());
+		}
+		return nullptr;
+	}
+
+	cli::array<System::String^>^ DirectZobWrapper::GetCameraList()
+	{
+		const std::vector<std::string> data = DirectZob::GetInstance()->GetCameraManager()->GetCameraList();
+		int l = (int)data.size();
+		cli::array<System::String^>^ arr = gcnew cli::array<System::String^>(l);
+		for (int i = 0; i < l; i++)
+		{
+			arr[i] = gcnew System::String(data.at(i).c_str());
+		}
+		return arr;
+	}
+
+	void DirectZobWrapper::SetCurrentCamera(System::String^ name)
+	{
+		std::string stdName;
+		MarshalString(name, stdName);
+		DirectZob::GetInstance()->GetCameraManager()->SetNextCamera(stdName);
+	}
+
+	System::String^ DirectZobWrapper::GetCurrentCameraName()
+	{
+		Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
+		if (c)
+		{
+			return gcnew System::String(c->GetName().c_str());
 		}
 		return nullptr;
 	}

@@ -336,38 +336,6 @@ namespace CLI
 		return DirectZob::GetInstance()->GetZobObjectManager()->GetZobObjectFromlId(id);
 	}
 
-	ZobObjectWrapper^ ZobObjectManagerWrapper::GetObjectAtCoords(int x, int y, eObjectTypes type)
-	{
-		return nullptr;
-		/*
-		uint id = DirectZob::GetInstance()->GetEngine()->GetObjectIdAtCoords(x, y);
-		ZobObject* z = m_Instance->GetZobObjectFromPartialId(id);
-		ZOBGUID::ZobType t;
-		if (type != eObjectTypes::eObjectTypes_all)
-		{
-			switch (type)
-			{
-			default:
-			case eObjectTypes::eObjectTypes_scene:
-				t = ZOBGUID::type_scene;
-				break;
-			case eObjectTypes::eObjectTypes_editor:
-				t = ZOBGUID::type_editor;
-				break;
-			}
-			while (z != NULL && z->GetType() != t)
-			{
-				z = z->GetParent();
-			}
-		}
-		if (z)
-		{
-			return gcnew ZobObjectWrapper(z);
-		}
-		return nullptr;
-		*/
-	}
-
 	void ZobObjectManagerWrapper::RemoveZobObject(ZobObjectWrapper^ z)
 	{
 		m_Instance->RemoveZobObject(z->GetInstance());

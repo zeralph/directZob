@@ -129,5 +129,6 @@ const ZobBehavior* ZobBehaviorFactory::GetBehaviorFromZobIdInternal(const zobId 
 				return zb;
 			}
 		}
+		return NULL;
 	}
 }

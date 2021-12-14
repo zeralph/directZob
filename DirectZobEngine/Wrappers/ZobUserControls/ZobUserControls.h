@@ -1,6 +1,5 @@
 #ifdef _WINDLL
 #pragma once
-#include "../ManagedVector3.h"
 #include "../../DirectZobEngine/Rendering/ZobVector3.h"
 #include "../DirectZobWrapperEvents.h"
 #using "System.Windows.Forms.dll"
