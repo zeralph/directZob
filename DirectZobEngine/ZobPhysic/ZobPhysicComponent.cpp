@@ -15,6 +15,7 @@ ZobPhysicComponent::ZobPhysicComponent(ZobObject* z)
 //	m_rigidBody->setIsAllowedToSleep(false);
 	m_collider = NULL;
 	m_lastCollision.Reset();
+	m_localTransform.setToIdentity();
 	DirectZob::GetInstance()->GetPhysicsEngine()->AddBody(this);
 	m_editorLocalPosition = ZobVector3(m_localTransform.getPosition().x, m_localTransform.getPosition().y, m_localTransform.getPosition().z);
 	m_editorLocalRotation = GetLocalOrientation();
@@ -31,6 +32,7 @@ void ZobPhysicComponent::Init()
 	m_localTransform = Transform::identity();
 	m_localTransform.setPosition(Vector3(m_editorLocalPosition.x, m_editorLocalPosition.y, m_editorLocalPosition.z));
 	Quaternion q = Quaternion::fromEulerAngles(DEG_TO_RAD(m_editorLocalRotation.x), DEG_TO_RAD(m_editorLocalRotation.y), DEG_TO_RAD(m_editorLocalRotation.z));
+	assert(q.isFinite());
 	m_localTransform.setOrientation(q);
 	m_localScale = Vector3(1, 1, 1);
 	m_localScale.x = m_editorLocalScale.x;
@@ -194,7 +196,8 @@ void ZobPhysicComponent::SetWorldOrientation(float x, float y, float z)
 ZobVector3 ZobPhysicComponent::GetLocalOrientation() const
 {
 	Quaternion q = m_localTransform.getOrientation();
-	q.normalize();
+	//assert(q.isFinite());
+	//q.normalize();
 	ZobVector3 z = ZobMatrix4x4::QuaternionToEuler(q.x, q.y, q.z, q.w);
 	float ax = RAD_TO_DEG(z.x);
 	float ay = RAD_TO_DEG(z.y);
@@ -208,7 +211,7 @@ ZobVector3 ZobPhysicComponent::GetLocalOrientation() const
 ZobVector3 ZobPhysicComponent::GetWorldOrientation() const
 {
 	Quaternion q = GetWorldTransform().getOrientation();
-	q.normalize();
+	//q.normalize();
 	ZobVector3 z = ZobMatrix4x4::QuaternionToEuler(q.x, q.y, q.z, q.w);
 	float ax = RAD_TO_DEG(z.x);
 	float ay = RAD_TO_DEG(z.y);

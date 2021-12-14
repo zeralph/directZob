@@ -19,7 +19,6 @@ namespace CLI
 		m_parentPanel->Controls->Clear();
 		m_objectPanel = nullptr;
 		m_container = nullptr;
-		m_duplicate = false;
 		CreateObjectview();
 		CreateObjectBeahaviorsView();
 	}
@@ -133,19 +132,6 @@ namespace CLI
 
 	void ZobObjectWrapper::EditorUpdate()
 	{
-		if (m_duplicate && m_Instance)
-		{
-			ZobObject* parent = m_Instance->GetParent();
-			DirectZob::LogInfo("Duplicateing %s under %s", m_Instance->GetName(), parent->GetName());
-			ZobObject* newObject = DuplicateInternal(m_Instance, parent);
-			std::string newName = m_Instance->GetName() + "_Copy";
-			newObject->SetName(newName);
-			ZobVector3 p = newObject->GetWorldPosition();
-			p.x += 5;
-			p.z += 5;
-			newObject->SetWorldPosition(p.x, p.y, p.z);
-		}
-		m_duplicate = false;
 	}
 
 	bool ZobObjectWrapper::IsFromFactoryFile()
@@ -337,14 +323,29 @@ namespace CLI
 
 	bool ZobObjectWrapper::Duplicate()
 	{
-		m_duplicate = true;
-		return false;
+		ZobObject* parent = m_Instance->GetParent();
+		DirectZob::LogInfo("Duplicating %s under %s", m_Instance->GetName(), parent->GetName());
+		DirectZob::eDirectZobLogLevel level = DirectZob::GetLogLevel();
+		DirectZob::SetLogLevel(DirectZob::eDirectZobLogLevel_warning);
+		int nbObjs = 0;
+		ZobObject* newObject = DuplicateInternal(m_Instance, parent, nbObjs);
+		std::string newName = std::string(m_Instance->GetName().c_str());
+		newName.append("_Copy");
+		newObject->SetName(newName);
+		ZobVector3 p = newObject->GetWorldPosition();
+		p.x += 5;
+		p.z += 5;
+		newObject->SetWorldPosition(p.x, p.y, p.z);
+		DirectZob::SetLogLevel(level);
+		DirectZob::LogInfo("Duplicated as %s (and %i objects)", newObject->GetName().c_str(), nbObjs);
+		return true;
 	}
 
-	ZobObject* ZobObjectWrapper::DuplicateInternal(ZobObject* src, ZobObject* parent)
+	ZobObject* ZobObjectWrapper::DuplicateInternal(ZobObject* src, ZobObject* parent, int &nbObjs)
 	{
 		if (src && !src->IsEditorObject())
 		{
+			DirectZob::LogWarning("duplicating object %i : %s", nbObjs, src->GetName());
 			TiXmlElement* n = (TiXmlElement*)src->SaveUnderNode(n);
 			ZOBGUID id = ZOBGUID(src->GetType(), src->GetSubType());
 			ZobObject* newObject = new ZobObject(id.ZobGuidToString(), n, parent, NULL);
@@ -355,9 +356,10 @@ namespace CLI
 			newObject->SetWorldPosition(p.x, p.y, p.z);
 			delete n;
 			const std::vector<ZobObject*>* c = src->GetChildren();
+			nbObjs++;
 			for (int i = 0; i < c->size(); i++)
 			{
-				DuplicateInternal(c->at(i), newObject);
+				DuplicateInternal(c->at(i), newObject, nbObjs);
 			}
 			return newObject;
 		}

@@ -58,6 +58,7 @@ namespace CLI
 		void					CreateObjectview();
 		void					CreateNodeMenu();
 		void					CreateBehaviorNodeMenu(ToolStripMenuItem^ parent);
+		void					ReScanInternal();
 		void					ReScan(ZobControlTreeNode^ n, bool showAllNodes);
 		void					OnNewScene();
 		void					TreeNodeMouseHover(Object^ sender, EventArgs^ e);
@@ -83,6 +84,7 @@ namespace CLI
 		ZobControlTreeNode^ m_draggedNode;
 		ContextMenuStrip^ m_nodeMenu;
 		bool m_bShowAllNodes;
+		bool					m_duplicate;
 	};
 }
 #endif //_WINDLL

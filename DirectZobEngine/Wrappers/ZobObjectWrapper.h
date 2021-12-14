@@ -61,7 +61,7 @@ namespace CLI {
 		void					Refresh();
 		bool					Duplicate();
 	private:
-		ZobObject*				DuplicateInternal(ZobObject* src, ZobObject* parent);
+		ZobObject*				DuplicateInternal(ZobObject* src, ZobObject* parent, int &nbObjs);
 		void					CreateObjectview();
 		ZobGroupBox^			FillBehaviorControl(ZobBehavior* zb);
 		ZobGroupBox^			FillObjectControl(ZobObject* z);
@@ -71,7 +71,7 @@ namespace CLI {
 		ZobGroupBox^			m_objectPanel;
 		ZobGroupBox^			m_objectGroupBox;
 		ZobPropertiesContainer^	m_container;
-		bool					m_duplicate;
+		
 	protected:
  		unsigned long long		m_id;
 		ZobObject*				m_zobObject;

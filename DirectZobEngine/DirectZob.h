@@ -119,6 +119,7 @@ public :
 	static void				AddIndent() { s_logIndent++; }
 	static void				RemoveIndent() { s_logIndent--; if (s_logIndent < 0) { s_logIndent = 0; } }
 	static void				SetLogLevel(DirectZob::eDirectZobLogLevel l) { sLogLevel = l; }
+	static eDirectZobLogLevel				GetLogLevel() { return sLogLevel; }
 	void					Lock();
 	void					Unlock();
 	float					GetLastDt() const { return m_frameTime / 1000.0f; }

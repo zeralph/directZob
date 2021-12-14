@@ -23,6 +23,7 @@ namespace CLI
 		DirectZobWrapperEvents::OnNewSceneEvent += gcnew DirectZobWrapperEvents::OnNewScene(this, &ZobObjectManagerWrapper::OnNewScene);
 		DirectZobWrapperEvents::OnEditorUpdateEvent += gcnew DirectZobWrapperEvents::OnEditorUpdate(m_treeView, &CLI::ZobControlTreeview::UpdateZobControl);
 		m_bShowAllNodes = false;
+		m_duplicate = false;
 	}
 
 	System::String^ ZobObjectManagerWrapper::GetZobObjectList()
@@ -39,6 +40,12 @@ namespace CLI
 		{
 			m_selectedObjectWrapper->EditorUpdate();
 		}
+		if (m_duplicate && m_selectedObjectWrapper)
+		{
+			m_selectedObjectWrapper->Duplicate();
+			ReScan();
+		}
+		m_duplicate = false;
 	}
 
 	void ZobObjectManagerWrapper::CreateNodeMenu()
@@ -99,10 +106,7 @@ namespace CLI
 	}
 	void ZobObjectManagerWrapper::DuplicateZobObject(Object^ sender, EventArgs^ e)
 	{
-		if (m_selectedObjectWrapper)
-		{
-			m_selectedObjectWrapper->Duplicate();
-		}
+		m_duplicate = true;
 	}
 	void ZobObjectManagerWrapper::ZoomToZobObject(Object^ sender, EventArgs^ e)
 	{
@@ -266,9 +270,15 @@ namespace CLI
 	}
 
 	void ZobObjectManagerWrapper::ReScan()
+	{	
+		m_treeView->Invoke(gcnew Action(this, &CLI::ZobObjectManagerWrapper::ReScanInternal));
+	}
+
+	void ZobObjectManagerWrapper::ReScanInternal()
 	{
+		ZobControlTreeNode^ t = (ZobControlTreeNode^)m_treeView->TopNode;
 		bool showAllNodes = false;
-		ReScan((ZobControlTreeNode^)m_treeView->TopNode, showAllNodes);
+		ReScan(t, showAllNodes);
 	}
 
 	void ZobObjectManagerWrapper::ReScan(ZobControlTreeNode^ n, bool showAllNodes)
