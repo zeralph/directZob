@@ -46,7 +46,7 @@ ZobFont::ZobFont(const std::string& textureFile, const std::string& xmlFile)
 				fg.h = std::stoi(v[3], &sz);
 				m_glyphes.push_back(fg);
 			}
-			m_color = ZobVector3(1, 1, 1);
+			m_color = &ZobColor::White;
 			std::string matName = "Font_";
 			matName.append(m_name);
 			m_charMaterial = DirectZob::GetInstance()->GetMaterialManager()->LoadMaterial(matName, &m_color, &m_color, &m_color, 0, 1, textureFile);

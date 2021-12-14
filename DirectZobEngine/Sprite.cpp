@@ -91,6 +91,7 @@ ZobSprite::ZobSprite(std::string& name):Mesh(name)
 	t1.options = &m_triangleOptions;
 	t1.clipMode = Triangle::eClip_3_in;
 	t1.area = -100;
+	t1.zobObject = NULL;
 	m_triangles.push_back(t1);
 
 	Triangle t2;
@@ -117,6 +118,7 @@ ZobSprite::ZobSprite(std::string& name):Mesh(name)
 	t2.options = &m_triangleOptions;
 	t2.clipMode = Triangle::eClip_3_in;
 	t2.area = 100;
+	t2.zobObject = NULL;
 	m_triangles.push_back(t2);
 
 	memcpy(m_verticesData, m_vertices, sizeof(ZobVector3) * m_nbVertices);

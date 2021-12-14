@@ -1,6 +1,6 @@
 #include "ZobBehaviorSprite.h"
 #include "../DirectZob.h"
-
+#include "ZobBehaviorFactory.h"
 ZobBehaviorSprite::~ZobBehaviorSprite()
 {
 
@@ -11,9 +11,25 @@ ZobBehaviorSprite::ZobBehaviorSprite(ZobObject* zobObject) : ZobBehavior(zobObje
 	m_type = eBehavior_sprite;
 	m_texturePath.Init();
 	m_sprite = NULL;
-	m_renderOptions.zBuffered = true;
-	//m_renderOptions.lightMode = Triangle::RenderOptions::eLightMode_none;
-	//m_renderOptions.cullMode = Triangle::RenderOptions::eCullMode_CounterClockwiseFace;
+	m_material = NULL;
+	m_zobObject = zobObject;
+	m_ambientColor = &ZobColor::White;
+	m_diffuseColor = &ZobColor::White;
+	m_specularColor = &ZobColor::White;
+	m_varExposer->WrapVariable<ZobFilePath>("File", &m_texturePath, &ZobBehaviorSprite::ReloadMaterial, false, true);
+	//m_varExposer->WrapVariable<ZobColor>("Ambient color", &m_ambientColor, &ZobBehaviorSprite::ReloadMaterial, false, true);
+	//m_varExposer->WrapVariable<ZobColor>("diffuse color", &m_diffuseColor, &ZobBehaviorSprite::ReloadMaterial, false, true);
+	//m_varExposer->WrapVariable<ZobColor>("specular color", &m_specularColor, &ZobBehaviorSprite::ReloadMaterial, false, true);
+
+	Triangle::RenderOptions::eCullMode cm[3] = { Triangle::RenderOptions::eCullMode_None, Triangle::RenderOptions::eCullMode_ClockwiseFace, Triangle::RenderOptions::eCullMode_CounterClockwiseFace };
+	const char* cmStr[3] = { "None", "Clockwise", "Counter clockwise" };
+	m_varExposer->WrapEnum<Triangle::RenderOptions::eCullMode>("Cull mode", &m_renderOptions.cullMode, 3, cm, cmStr, NULL, false, true);
+
+	Triangle::RenderOptions::eLightMode lm[5] = { Triangle::RenderOptions::eLightMode_none, Triangle::RenderOptions::eLightMode_flat, Triangle::RenderOptions::eLightMode_gouraud, Triangle::RenderOptions::eLightMode_phong , Triangle::RenderOptions::eLightMode_flatPhong };
+	const char* lmStr[5] = { "None", "Flat", "Gouraud", "Phong", "Flat phong" };
+	m_varExposer->WrapEnum<Triangle::RenderOptions::eLightMode>("Lighting", &m_renderOptions.lightMode, 5, lm, lmStr, NULL, false, true);
+
+	m_varExposer->WrapVariable<bool>("ZBuffered", &m_renderOptions.zBuffered, NULL, false, true);
 }
 
 void ZobBehaviorSprite::Init()
@@ -29,6 +45,20 @@ void ZobBehaviorSprite::Init()
 	}
 }
 
+void ZobBehaviorSprite::ReloadMaterial(zobId id)
+{
+	const ZobBehavior* zb = ZobBehaviorFactory::GetBehaviorFromZobId(id);
+	ZobObjectManager* zm = DirectZob::GetInstance()->GetZobObjectManager();
+	if (zm)
+	{
+		ZobObject* z = zm->GetZobObjectFromlId(id);
+		if (z)
+		{
+			DirectZob::LogInfo("pouet");
+		}
+	}
+}
+
 void ZobBehaviorSprite::Set(ZobFilePath zfp) 
 { 
 	m_texturePath.file = zfp.file;
@@ -40,6 +70,7 @@ void ZobBehaviorSprite::Set(ZobFilePath zfp)
 
 void ZobBehaviorSprite::PreUpdate(float dt)
 {
+	//m_material->
 }
 
 void ZobBehaviorSprite::UpdateAfterObject(float dt)
@@ -147,10 +178,10 @@ bool ZobBehaviorSprite::LoadMeshInternal()
 	m_sprite = new ZobSprite(s);
 	if (m_sprite)
 	{
-		ZobVector3 color = ZobVector3(1, 1, 1);
+		ZobColor color = &ZobColor::White;
 		std::string f = m_texturePath.GetFullPath();
-		const ZobMaterial * mat = DirectZob::GetInstance()->GetMaterialManager()->LoadMaterial(m_texturePath.name, &color, &color, &color, 0, 1, f);
-		m_sprite->Setmaterial(mat);
+		m_material = DirectZob::GetInstance()->GetMaterialManager()->LoadMaterial(m_texturePath.name, &m_ambientColor, &m_diffuseColor, &m_specularColor, 0, 1, f);
+		m_sprite->Setmaterial(m_material);
 	}
 	return m_sprite != NULL;
 }

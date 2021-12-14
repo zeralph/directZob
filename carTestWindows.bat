@@ -11,5 +11,5 @@ XCOPY .\build\DirectZob\%target%\libfbxsdk.dll .. /Y
 XCOPY .\build\DirectZob\%target%\gainput.dll .. /Y
 XCOPY .\build\DirectZob\%target%\OptickCore.dll .. /Y
 popd
-.\DirectZobExe.exe --scene .\resources\menu.dzs --width 960 --height 540
+.\DirectZobExe.exe --scene .\resources\menu.dzs --width 800 --height 400
 rem .\DirectZobExe.exe --scene .\resources\menu.dzs --width 320 --height 180

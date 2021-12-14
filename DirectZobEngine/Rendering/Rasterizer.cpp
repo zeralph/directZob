@@ -572,7 +572,7 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector2* screenCoord, con
 		a = 1.0f;
 		if (material)
 		{
-			transparency *= material->GetTransparency();
+			//transparency *= material->GetTransparency();
 			const Texture* texture = material->GetDiffuseTexture();
 			if (texture && texture->GetData())
 			{
@@ -611,14 +611,14 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector2* screenCoord, con
 			}
 			else
 			{
-				dr *= material->GetDiffuseColor()->x;
-				dg *= material->GetDiffuseColor()->y;
-				db *= material->GetDiffuseColor()->z;
+				dr *= material->GetDiffuseColor()->GetRedNormalized();
+				dg *= material->GetDiffuseColor()->GetGreenNormalized();
+				db *= material->GetDiffuseColor()->GetBlueNormalized();
 				a = 1.0f;
 			}
-			sr = material->GetSpecularColor()->x;
-			sg = material->GetSpecularColor()->y;
-			sb = material->GetSpecularColor()->z;
+			sr = material->GetSpecularColor()->GetRedNormalized();
+			sg = material->GetSpecularColor()->GetGreenNormalized();
+			sb = material->GetSpecularColor()->GetBlueNormalized();
 		}
 		if (lighting != Triangle::RenderOptions::eLightMode_none)
 		{

@@ -11,15 +11,14 @@ ZobMaterial::ZobMaterial()
 	//DirectZob::LogInfo("Material %s creation", m_name.c_str());
 	DirectZob::AddIndent();
 	m_diffuseTexture = NULL;
-	m_ambientColor = ZobVector3(1, 1, 1);
-	m_diffuseColor = ZobVector3(1, 1, 1);
-	m_specularColor = ZobVector3(1, 1, 1);
+	m_ambientColor = ZobColor(255, 255, 255, 255);
+	m_diffuseColor = ZobColor(255, 255, 255, 255);
+	m_specularColor = ZobColor(255, 255, 255, 255);
 	m_specularExponent = 0.0f;
-	m_transperency = 1.0f;
 	DirectZob::RemoveIndent();
 }
 
-ZobMaterial::ZobMaterial(const std::string& name, const ZobVector3* ambientColor, const ZobVector3* diffuseColor, const ZobVector3* specularColor, float specularExponent, float transparency, const Texture* texture)
+ZobMaterial::ZobMaterial(const std::string& name, const ZobColor* ambientColor, const ZobColor* diffuseColor, const ZobColor* specularColor, float specularExponent, float transparency, const Texture* texture)
 {
 	sMaterialNumber++;
 	//DirectZob::LogInfo("Material %s creation", name.c_str());
@@ -30,7 +29,6 @@ ZobMaterial::ZobMaterial(const std::string& name, const ZobVector3* ambientColor
 	m_diffuseColor = diffuseColor;
 	m_specularColor = specularColor;
 	m_specularExponent = specularExponent;
-	m_transperency = transparency;
 	DirectZob::RemoveIndent();
 }
 
@@ -40,7 +38,7 @@ ZobMaterial::~ZobMaterial()
 	DirectZob::AddIndent();
 	m_diffuseTexture = NULL;
 	m_name = std::string("");
-	m_ambientColor = ZobVector3(0, 0, 0);
-	m_diffuseColor = ZobVector3(0,0,0);
+	m_ambientColor = ZobColor(255, 255, 255, 255);
+	m_diffuseColor = ZobColor(255, 255, 255, 255);
 	DirectZob::RemoveIndent();
 }

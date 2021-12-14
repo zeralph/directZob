@@ -245,7 +245,7 @@ ZobControlFilePath::~ZobControlFilePath()
 void ZobControlFilePath::OnOpen(Object^ sender, EventArgs^ e)
 {
 	OpenFileDialog^ f = gcnew OpenFileDialog();
-	f->Filter = "OBJ files (*.obj)|*.obj|FBX files (*.fbx)|*.fbx";
+	f->Filter = "All files (*.*)|*.*|OBJ files (*.obj)|*.obj|FBX files (*.fbx)|*.fbx";
 	f->FileOk += gcnew System::ComponentModel::CancelEventHandler(this, &ZobControlFilePath::OnOk);
 	f->ShowDialog();
 }

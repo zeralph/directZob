@@ -1,0 +1,34 @@
+<?xml version="1.0" ?>
+<Scene>
+    <Globals>
+        <Var Name="Ambient color" value="255;102;102;102" />
+        <Var Name="Clear color" value="255;63;149;255" />
+        <Var Name="Ambient color intensity" value="0.800" />
+        <Var Name="Fog type" value="None" />
+        <Var Name="Fog color" value="255;63;149;255" />
+        <Var Name="Fog distance" value="20.000" />
+        <Var Name="Fog density" value="2.000" />
+        <Var Name="Render mode" value="Fullframe" />
+        <Var Name="Lighting mode" value="Vertex" />
+        <Var Name="Bits per color" value="Full" />
+        <Var Name="Dithering" value="False" />
+        <Var Name="Z near" value="0.110" />
+        <Var Name="Z far" value="1000.000" />
+        <Var Name="Equalize triangle queues" value="False" />
+        <Var Name="Perspective Correction" value="True" />
+    </Globals>
+    <ZobObject Guid="4002670489">
+        <Var Name="Name" value="tree.png" />
+        <Var Name="Position" value="0.000;0.000;0.000" />
+        <Var Name="Rotation" value="0.000;0.000;0.000" />
+        <Var Name="Scale" value="5.000;5.000;1.000" />
+        <Behaviors>
+            <Behavior Type="Sprite" Guid="2007245163">
+                <Var Name="File" value="tree.png;D:/Git/directZob/resources/;tree.png" />
+                <Var Name="Ambient color" value="255;255;0;0" />
+                <Var Name="diffuse color" value="255;0;0;0" />
+                <Var Name="specular color" value="255;0;0;255" />
+            </Behavior>
+        </Behaviors>
+    </ZobObject>
+</Scene>

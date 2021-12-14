@@ -791,3 +791,15 @@ void ZobObject::ResetPhysic()
 		(*iter)->ResetPhysic();
 	}
 }
+
+const ZobBehavior* ZobObject::GetBehaviorById(zobId zid) const
+{
+	for (std::vector<ZobBehavior*>::const_iterator iter = m_behaviors.begin(); iter != m_behaviors.end(); iter++)
+	{
+		if ((*iter)->GetIdValue() == zid)
+		{
+			return (*iter);
+		}
+	}
+	return NULL;
+}

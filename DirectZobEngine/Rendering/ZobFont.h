@@ -35,7 +35,7 @@ public:
 	inline const char* GetName() const { return m_name.c_str(); }
 private:
 	void SplitEntry(const std::string* s, std::vector<std::string>* v, const char delim) const;
-	ZobVector3 m_color;
+	ZobColor m_color;
 	std::string m_name;
 	const ZobMaterial* m_charMaterial;
 	std::vector<FontGlyphe> m_glyphes;

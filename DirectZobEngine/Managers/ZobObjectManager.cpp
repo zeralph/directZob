@@ -164,19 +164,19 @@ void ZobObjectManager::UpdateObjects(const Camera* camera, Engine* engine, float
 	m_time = (float)(clock() - m_drawTick) / CLOCKS_PER_SEC * 1000;
 }
 
-void ZobObjectManager::GetZobObjectList(std::string& s)
+void ZobObjectManager::GetZobObjectList(std::string& s) const
 {
 	GetZobObjectListInternal(m_rootObject, s);
 	s.append("");
 }
 
- void ZobObjectManager::GetZobObjectList(std::vector<const ZobObject*>& v)
+ void ZobObjectManager::GetZobObjectList(std::vector<const ZobObject*>& v) const
 {
 	v.clear();
 	GetZobObjectListInternal(m_rootObject, v);
 }
 
-void ZobObjectManager::GetZobObjectListInternal(const ZobObject* z, std::vector<const ZobObject*>& v)
+void ZobObjectManager::GetZobObjectListInternal(const ZobObject* z, std::vector<const ZobObject*>& v) const
 {
 	if (z->GetType() != ZOBGUID::type_editor && !z->IsMarkedForDeletion())
 	{
@@ -189,7 +189,7 @@ void ZobObjectManager::GetZobObjectListInternal(const ZobObject* z, std::vector<
 	}
 }
 
-void ZobObjectManager::GetZobObjectListInternal(const ZobObject* z, std::string& str)
+void ZobObjectManager::GetZobObjectListInternal(const ZobObject* z, std::string& str) const
 {
 	if (z->GetType() != ZOBGUID::type_editor && !z->IsMarkedForDeletion())
 	{
