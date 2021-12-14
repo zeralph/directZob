@@ -71,12 +71,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EngineControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="EngineControl.Designer.cs">
-      <DependentUpon>EngineControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="EngineWindow.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -91,9 +85,6 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="EngineControl.resx">
-      <DependentUpon>EngineControl.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="EngineWindow.resx">
       <DependentUpon>EngineWindow.cs</DependentUpon>
     </EmbeddedResource>

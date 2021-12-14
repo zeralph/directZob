@@ -56,7 +56,6 @@ namespace DirectZobEditor
         private Thread m_engineThread;
         //private ZobObjectListControl m_zobObjectList;
         private EngineWindow m_engineWindow;
-        private EngineControl m_engineControl;
         private bool m_snap = false;
         private bool m_ctrlPressed = false;
 
@@ -88,10 +87,7 @@ namespace DirectZobEditor
             onSceneLoadedCallback = new CLI.engineCallback(onSceneLoadedCallbackMethod);
             OnSceneLoadedDelegate = new OnSceneLoaded(OnSceneLoadedMethod);
 
-            /*ce truc va virer*/
-            m_engineControl = new EngineControl(this, m_directZobWrapper.GetEngineWrapper());
             m_engineWindow.BindEvents();
-            m_engineControl.BindEvents();
             this.propertiesPanel.MinimumSize = new Size(300, 500);
 
             this.WindowState = FormWindowState.Maximized;
