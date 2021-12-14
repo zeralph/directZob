@@ -1318,7 +1318,7 @@ BoudingBox2D Engine::Get2DBoundingBox(const ZobObject* z) const
 			for (int i = 0; i < behaviors->size(); i++)
 			{
 				const ZobBehavior* zb = behaviors->at(i);
-				if (zb->GetSubType() == ZobBehavior::eBehavior_mesh)
+				if (zb->GetBehaviorType() == ZobBehavior::eBehavior_mesh)
 				{
 					const ZobBehaviorMesh* zbm = (const ZobBehaviorMesh*)zb;
 					const Mesh* m = zbm->GetMesh();
