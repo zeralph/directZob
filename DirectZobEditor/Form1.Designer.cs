@@ -102,6 +102,8 @@
             this.tabEngine = new System.Windows.Forms.TabPage();
             this.panel2 = new System.Windows.Forms.Panel();
             this.EngineControlsFlowLayout = new System.Windows.Forms.FlowLayoutPanel();
+            this.windowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.materialsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bottomStatusBar.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FirstPanelSplitter)).BeginInit();
@@ -160,7 +162,8 @@
             this.fileToolStripMenuItem,
             this.assetsToolStripMenuItem,
             this.setupToolStripMenuItem,
-            this.gizmosToolStripMenuItem});
+            this.gizmosToolStripMenuItem,
+            this.windowToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Padding = new System.Windows.Forms.Padding(3, 1, 0, 1);
@@ -229,6 +232,7 @@
             this.assetsToolStripMenuItem.Name = "assetsToolStripMenuItem";
             this.assetsToolStripMenuItem.Size = new System.Drawing.Size(52, 22);
             this.assetsToolStripMenuItem.Text = "Assets";
+            this.assetsToolStripMenuItem.Click += new System.EventHandler(this.assetsToolStripMenuItem_Click);
             // 
             // loadTextureToolStripMenuItem
             // 
@@ -864,6 +868,21 @@
             this.EngineControlsFlowLayout.TabIndex = 0;
             this.EngineControlsFlowLayout.WrapContents = false;
             // 
+            // windowToolStripMenuItem
+            // 
+            this.windowToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.materialsToolStripMenuItem});
+            this.windowToolStripMenuItem.Name = "windowToolStripMenuItem";
+            this.windowToolStripMenuItem.Size = new System.Drawing.Size(63, 22);
+            this.windowToolStripMenuItem.Text = "Window";
+            // 
+            // materialsToolStripMenuItem
+            // 
+            this.materialsToolStripMenuItem.Name = "materialsToolStripMenuItem";
+            this.materialsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.materialsToolStripMenuItem.Text = "Materials ...";
+            this.materialsToolStripMenuItem.Click += new System.EventHandler(this.materialsToolStripMenuItem_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -987,6 +1006,8 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem3;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem4;
+        private System.Windows.Forms.ToolStripMenuItem windowToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem materialsToolStripMenuItem;
     }
 }
 

@@ -828,6 +828,17 @@ namespace DirectZobEditor
             string s =  e.ClickedItem.Text;
             SetSnap(s);
         }
+
+        private void assetsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void materialsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MaterialsForm f = new MaterialsForm();
+            f.Show();
+        }
     }
 
     public class LogEvent

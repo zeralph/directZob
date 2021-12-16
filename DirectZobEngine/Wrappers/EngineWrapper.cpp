@@ -627,7 +627,6 @@ namespace CLI
 
 	void EngineWrapper::OnObjectSelected(ZobObjectWrapper^ z)
 	{
-
 	}
 
 	ZobVector3 EngineWrapper::ToScreenCoords(ZobVector3 &v)
