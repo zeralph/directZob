@@ -8,11 +8,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace DirectZobEditor
+namespace DirectZobEditor.MaterialsForm
 {
-    public partial class MaterialsForm : Form
+    public partial class Material : UserControl
     {
-        public MaterialsForm()
+        public Material()
         {
             InitializeComponent();
         }

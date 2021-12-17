@@ -33,6 +33,15 @@ namespace CLI
 		m_Instance = NULL;
 	}
 
+	void ZobObjectWrapper::Detach()
+	{
+		m_parentPanel->Controls->Remove(m_container);
+		m_parentPanel->Controls->Remove(m_objectPanel);
+		m_container = nullptr;
+		m_objectPanel = nullptr;
+		m_parentPanel = nullptr;
+	}
+
 	void ZobObjectWrapper::CreateObjectview()
 	{
 		if (m_container)
@@ -202,7 +211,7 @@ namespace CLI
 			zfp.name = n;
 			zfp.file = f;
 			zfp.path = p;
-			z->LoadSprite(zfp);
+			z->LoadSprite(zfp, false);
 		}
 	}
 
@@ -221,7 +230,7 @@ namespace CLI
 			zfp.name = n;
 			zfp.file = f;
 			zfp.path = p;
-			z->LoadMesh(zfp);
+			z->LoadMesh(zfp, false);
 		}
 	}
 

@@ -146,6 +146,12 @@ void ZobObjectManager::PostUpdate()
 	m_rootObject->PostUpdate();
 }
 
+void ZobObjectManager::DrawGizmos(const Camera* camera, Engine* engine)
+{
+	OPTICK_EVENT();
+	m_rootObject->DrawGizmos(camera, engine);
+}
+
 void ZobObjectManager::QueueForDrawing(const Camera* camera, Engine* engine)
 {
 	OPTICK_EVENT();

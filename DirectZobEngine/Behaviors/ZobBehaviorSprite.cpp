@@ -6,7 +6,7 @@ ZobBehaviorSprite::~ZobBehaviorSprite()
 
 }
 
-ZobBehaviorSprite::ZobBehaviorSprite(ZobObject* zobObject) : ZobBehavior(zobObject)
+ZobBehaviorSprite::ZobBehaviorSprite(ZobObject* zobObject, bool bEditorZobBehavior) : ZobBehavior(zobObject, bEditorZobBehavior)
 {
 	m_type = eBehavior_sprite;
 	m_texturePath.Init();
@@ -121,7 +121,8 @@ void ZobBehaviorSprite::PostUpdate()
 		ZobVector3 u = c->GetUp();
 		ZobVector3 f = c->GetForward();
 		rotScale.FromVectors(l, u, f);
-		rotScale.AddScale(mm->GetScale());
+		ZobVector3 s = mm->GetScale();
+		rotScale.AddScale(s);
 		rotScale.AddTranslation(mm->GetTranslation());
 		const Triangle::RenderOptions* ro = &this->m_renderOptions;
 		const Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();

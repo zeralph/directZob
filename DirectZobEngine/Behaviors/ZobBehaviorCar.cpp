@@ -20,7 +20,7 @@ ZobBehaviorCar::~ZobBehaviorCar()
 
 }
 
-ZobBehaviorCar::ZobBehaviorCar(ZobObject* zobObject) : ZobBehavior(zobObject)
+ZobBehaviorCar::ZobBehaviorCar(ZobObject* zobObject) : ZobBehavior(zobObject, false)
 {
 	m_carType = eCarType_pouet;
 	m_type = eBehavior_car;

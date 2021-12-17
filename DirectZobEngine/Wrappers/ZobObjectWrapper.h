@@ -52,6 +52,7 @@ namespace CLI {
 		void					CreateSprite();
 		bool					IsLight();
 		bool					IsCamera();
+		void					Detach();
 		DirectZobType::guid		GetId() { return m_id; }
 		bool					IsFromFactoryFile();
 		String^					FactoryFile();

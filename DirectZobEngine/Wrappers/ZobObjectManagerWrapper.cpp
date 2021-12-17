@@ -132,7 +132,7 @@ namespace CLI
 				String^ s = gcnew String(ZobBehaviorFactory::eBehaviorTypeStr[i]);
 				if (s == it->Text)
 				{
-					ZobBehaviorFactory::CreateBehavior(m_selectedObject, ZobBehaviorFactory::eBehaviorTypeStr[i]);
+					ZobBehaviorFactory::CreateBehavior(m_selectedObject, ZobBehaviorFactory::eBehaviorTypeStr[i], false);
 					m_selectedObjectWrapper->Refresh();
 					return;
 				}
@@ -205,7 +205,7 @@ namespace CLI
 		if (e->Node)
 		{
 			ZobControlTreeNode^ z = (ZobControlTreeNode^)e->Node;
-			if (z && !z->IsEditable())
+			if (z && !z->IsSelectable())
 			{
 				e->Cancel = true;
 			}
@@ -228,7 +228,7 @@ namespace CLI
 		ZobControlTreeNode^ tn = (ZobControlTreeNode^)e->Node;
 		if (tn)
 		{
-			if (tn->IsEditable())
+			if (tn->IsSelectable())
 			{
 				m_treeView->SelectedNode = e->Node;
 				if (e->Button == MouseButtons::Left)
@@ -237,14 +237,17 @@ namespace CLI
 				}
 				else if (e->Button == MouseButtons::Right)
 				{
-					int x = tn->Bounds.X + tn->Bounds.Width;
-					int y = tn->Bounds.Y + tn->Bounds.Height;
-					Point point = Point(x, y);
-					Point absPoint = m_treeView->PointToScreen(point);
-					m_nodeMenu->Top = absPoint.Y;
-					//m_nodeMenu->Location = absPoint;
-					m_nodeMenu->Show();
-					m_nodeMenu->Location = absPoint;
+					if (SelectObject(GetZobObject(tn->m_zobObjectGuid)))
+					{
+						int x = tn->Bounds.X + tn->Bounds.Width;
+						int y = tn->Bounds.Y + tn->Bounds.Height;
+						Point point = Point(x, y);
+						Point absPoint = m_treeView->PointToScreen(point);
+						m_nodeMenu->Top = absPoint.Y;
+						//m_nodeMenu->Location = absPoint;
+						m_nodeMenu->Show();
+						m_nodeMenu->Location = absPoint;
+					}
 				}
 			}
 		}
@@ -283,7 +286,10 @@ namespace CLI
 
 	void ZobObjectManagerWrapper::ReScan(ZobControlTreeNode^ n, bool showAllNodes)
 	{
-
+		if (!n->IsSelectable())
+		{
+			return;
+		}
 		ZobObject* z = GetZobObject(n->m_zobObjectGuid);
 		if (z && !z->IsMarkedForDeletion())
 		{
@@ -300,14 +306,14 @@ namespace CLI
 				if (!child->IsMarkedForDeletion())
 				{
 					String^ guid = TO_MANAGED_STRING(child->ZobGuidToString().c_str());
-					bool isEditable = child->GetType() == ZOBGUID::type_scene;
-					//if (isEditable || showAllNodes)
+					bool isEditor = child->GetType() == ZOBGUID::type_editor;
+					if (!isEditor)
 					{
 						l->Add(guid);
 						ZobControlTreeNode^ childNode = n->GetChildNode(guid);
 						if (!childNode)
 						{
-							ZobControlTreeNode^ newNode = gcnew ZobControlTreeNode(guid, isEditable);
+							ZobControlTreeNode^ newNode = gcnew ZobControlTreeNode(guid);
 							newNode->Text = TO_MANAGED_STRING(child->GetName().c_str());
 							n->Nodes->Add(newNode);
 							n->Expand();
@@ -337,14 +343,17 @@ namespace CLI
 		if (z)
 		{
 			String^ guidStr = TO_MANAGED_STRING(z->ZobGuidToString().c_str());
-			bool isEditable = z->GetType() == ZOBGUID::type_scene;
-			ZobControlTreeNode^ tn = gcnew ZobControlTreeNode(guidStr, isEditable);
-			const char* nameStr = z->GetName().c_str();
-			tn->Text = TO_MANAGED_STRING(nameStr);
-			collection->Add(tn);
-			for (int i = 0; i < z->GetChildren()->size(); i++)
+			bool isEditor = z->GetType() == ZOBGUID::type_editor;
+			if (!isEditor)
 			{
-				AddZobObjectsRecursive(z->GetChild(i), tn->Nodes);
+				ZobControlTreeNode^ tn = gcnew ZobControlTreeNode(guidStr);
+				const char* nameStr = z->GetName().c_str();
+				tn->Text = TO_MANAGED_STRING(nameStr);
+				collection->Add(tn);
+				for (int i = 0; i < z->GetChildren()->size(); i++)
+				{
+					AddZobObjectsRecursive(z->GetChild(i), tn->Nodes);
+				}
 			}
 		}
 	}
@@ -384,11 +393,13 @@ namespace CLI
 		return nullptr;
 	}
 
-	void ZobObjectManagerWrapper::SelectObject(ZobObject* z)
+	bool ZobObjectManagerWrapper::SelectObject(ZobObject* z)
 	{
 		if (m_selectedObjectWrapper)
 		{
+			m_selectedObjectWrapper->Detach();
 			delete m_selectedObjectWrapper; 
+			m_selectedObject = NULL;
 			m_selectedObjectWrapper = nullptr;
 		}
 		if (z)
@@ -402,6 +413,7 @@ namespace CLI
 			string outStr;
 			ManagedObject::MarshalString(t, outStr);
 			DirectZob::LogInfo("Selected %s", outStr.c_str());
+			return true;
 		}
 		else
 		{
@@ -411,6 +423,7 @@ namespace CLI
 			}
 			m_selectedObject = NULL;			
 			OnObjectSelectedEvent(nullptr);
+			return false;
 		}
 	}
 

@@ -75,8 +75,8 @@ public:
 	bool								RemoveChildReference(const ZobObject* z);
 	bool								AddChildReference(ZobObject* z);
 	int									GetChildPosition(const ZobObject* z);
-	ZobBehaviorMesh*					LoadMesh(ZobFilePath& zfp);
-	ZobBehaviorSprite*					LoadSprite(ZobFilePath& zfp);
+	ZobBehaviorMesh*					LoadMesh(ZobFilePath& zfp, bool bEditorZobBehavior);
+	ZobBehaviorSprite*					LoadSprite(ZobFilePath& zfp, bool bEditorZobBehavior);
 	const bool							IsMarkedForDeletion() const { return m_markedForDeletion; };
 	void								MarkForDeletion() { m_markedForDeletion=true; };
 	bool								HasChild(const ZobObject* o);

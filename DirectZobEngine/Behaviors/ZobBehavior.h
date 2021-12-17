@@ -25,6 +25,7 @@ public:
 		eBehavior_physicMesh,
 		eBehavior_mesh,
 		eBehavior_sprite,
+		eBehavior_light,
 		__eBehavior_MAX__,
 	};
 
@@ -45,7 +46,7 @@ public:
 	void													ReLoadVariables();
 	ZobVariablesExposer*									GetVariablesExposer() { return m_varExposer; }
 protected:
-	ZobBehavior(ZobObject* zobObject);
+	ZobBehavior(ZobObject* zobObject, bool bEditorZobBehavior);
 	eBehaviorType m_type;
 	ZobObject* m_zobObject;
 	ZobVariablesExposer* m_varExposer;

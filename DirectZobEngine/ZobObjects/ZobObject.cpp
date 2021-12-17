@@ -198,17 +198,17 @@ ZobObject::~ZobObject()
 	DirectZob::RemoveIndent();
 }
 
-ZobBehaviorMesh* ZobObject::LoadMesh(ZobFilePath &zfp)
+ZobBehaviorMesh* ZobObject::LoadMesh(ZobFilePath &zfp, bool bEditorZobBehavior)
 {
-	ZobBehavior* b = ZobBehaviorFactory::CreateBehavior(this, "Mesh");
+	ZobBehavior* b = ZobBehaviorFactory::CreateBehavior(this, "Mesh", bEditorZobBehavior);
 	ZobBehaviorMesh* bm = static_cast<ZobBehaviorMesh*>(b);
 	bm->Set(zfp);
 	return bm;
 }
 
-ZobBehaviorSprite* ZobObject::LoadSprite(ZobFilePath& zfp)
+ZobBehaviorSprite* ZobObject::LoadSprite(ZobFilePath& zfp, bool bEditorZobBehavior)
 {
-	ZobBehavior* b = ZobBehaviorFactory::CreateBehavior(this, "Sprite");
+	ZobBehavior* b = ZobBehaviorFactory::CreateBehavior(this, "Sprite", bEditorZobBehavior);
 	ZobBehaviorSprite* bm = static_cast<ZobBehaviorSprite*>(b);
 	bm->Set(zfp);
 	return bm;
@@ -393,6 +393,11 @@ void ZobObject::DrawGizmos(const Camera* camera, Engine* engine)
 	{
 		m_behaviors[i]->DrawGizmos(camera, &p, &r);
 	}
+	for (int i = 0; i < m_children.size(); i++)
+	{
+		ZobObject* z = m_children[i];
+		z->DrawGizmos(camera, engine);
+	}
 }
 
 int ZobObject::GetChildPosition(const ZobObject* z)
@@ -468,7 +473,10 @@ void ZobObject::SetParent(ZobObject* p)
 {
 	if (!HasChild(p))
 	{
-		DirectZob::LogInfo("Reparented %s from %s to %s", ZobGuidToString().c_str(), m_parent->ZobGuidToString().c_str(), p->ZobGuidToString().c_str());
+		if (!p->IsEditorObject())
+		{
+			DirectZob::LogInfo("Reparented %s from %s to %s", ZobGuidToString().c_str(), m_parent->ZobGuidToString().c_str(), p->ZobGuidToString().c_str());
+		}
 		ZobVector3 pos = GetWorldPosition();
 		ZobVector3 rot = GetWorldRotation();
 		ZobObject* parent = GetParent();
@@ -527,6 +535,7 @@ void ZobObject::SaveToFactoryFile(std::string& file)
 	{
 		DirectZob::LogError("Error saving zobObject : ", doc.ErrorDesc());
 	}
+	delete decl;
 }
 
 void ZobObject::SaveRecusrive(TiXmlNode* node, ZobObject* z)
@@ -677,6 +686,11 @@ void ZobObject::SetLocalRotation(float x, float y, float z, bool add)
 	{
 		Quaternion curO = GetPhysicComponent()->GetLocalTransform().getOrientation();
 		q = curO * q;
+	}
+	if (!q.isValid())
+	{
+		int t = 0;
+		t++;
 	}
 	newTransform.setOrientation(q);
 	//newTransform = parentTransform.getInverse() * newTransform;

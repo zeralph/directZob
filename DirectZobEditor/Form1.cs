@@ -174,18 +174,21 @@ namespace DirectZobEditor
             for (int i = 0; i < l; i++)
             {
                 LogEvent json = JsonConvert.DeserializeObject<LogEvent>(m_events[i]);
-                if (json.type == 0)
+                if (json != null)
                 {
-                    AppendText(textLog, json.data + "\n", Color.Blue);
-                }
-                else if (json.type == 1)
-                {
-                    AppendText(textLog, json.data + "\n", Color.Orange);
-                }
-                else if (json.type == 2)
-                {
-                    AppendText(textLog, json.data + "\n", Color.Red);
-                    MessageBox.Show(json.data, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    if (json.type == 0)
+                    {
+                        AppendText(textLog, json.data + "\n", Color.Blue);
+                    }
+                    else if (json.type == 1)
+                    {
+                        AppendText(textLog, json.data + "\n", Color.Orange);
+                    }
+                    else if (json.type == 2)
+                    {
+                        AppendText(textLog, json.data + "\n", Color.Red);
+                        MessageBox.Show(json.data, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
             }
             if (l > 0)
@@ -836,7 +839,7 @@ namespace DirectZobEditor
 
         private void materialsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MaterialsForm f = new MaterialsForm();
+            MaterialsForm.MaterialsForm f = new MaterialsForm.MaterialsForm(m_directZobWrapper);
             f.Show();
         }
     }

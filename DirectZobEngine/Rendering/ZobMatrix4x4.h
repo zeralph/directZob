@@ -36,7 +36,13 @@ public:
 	void SetPosition(const ZobVector3& v);
 	void AddTranslation(const ZobVector3& v);
 	ZobVector3 GetRotation() const;
-	ZobVector3 GetScale() const { return ZobVector3(m_data[0][0], m_data[1][1], m_data[2][2]); }
+	ZobVector3 GetScale() const 
+	{
+		ZobVector3 x = ZobVector3(m_data[0][0], m_data[1][0], m_data[2][0]);
+		ZobVector3 y = ZobVector3(m_data[0][1], m_data[1][1], m_data[2][1]);
+		ZobVector3 z = ZobVector3(m_data[0][2], m_data[1][2], m_data[2][2]);
+		return ZobVector3(x.sqrtLength(), y.sqrtLength(), z.sqrtLength());
+	}
 	ZobVector3 GetTranslation() const { return ZobVector3(m_data[0][3], m_data[1][3], m_data[2][3]); }
 	inline float GetValue(const int i, const int j) const { return m_data[i][j]; }
 	inline float GetValueI(const int i, const int j) const { return m_data[j][i]; }

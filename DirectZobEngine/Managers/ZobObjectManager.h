@@ -34,6 +34,7 @@ public:
 	void										UnloadAll();
 	bool										Reparent(ZobObject* o, ZobObject* parent);
 	void										SaveTransforms();
+	void										DrawGizmos(const Camera* camera, Engine* engine);
 	ZobObject*									CreateEditorZobObject(ZobObject* parent);
 	void										RestoreTransforms();
 	void										ResetPhysic();

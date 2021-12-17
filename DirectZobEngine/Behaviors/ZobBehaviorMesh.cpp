@@ -6,7 +6,7 @@ ZobBehaviorMesh::~ZobBehaviorMesh()
 
 }
 
-ZobBehaviorMesh::ZobBehaviorMesh(ZobObject* zobObject) : ZobBehavior(zobObject)
+ZobBehaviorMesh::ZobBehaviorMesh(ZobObject* zobObject, bool bEditorZobBehavior) : ZobBehavior(zobObject, bEditorZobBehavior)
 {
 	m_type = eBehavior_mesh;
 	m_meshPath.Init();

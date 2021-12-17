@@ -265,7 +265,13 @@ namespace CLI
 					}
 				}
 				curObj->GetLocalAxisAngleRotation(m_modificatorData->m_startAxisRotationVector, m_modificatorData->m_startAngleRotation);
-				
+				if (isnan(m_modificatorData->m_startAngleRotation))
+				{
+					int t = 0;
+					t++;
+				}
+				assert(!m_modificatorData->m_startAxisRotationVector.isNaN());
+				assert(!isnan(m_modificatorData->m_startAngleRotation));
 				BufferData* bData = m_Instance->GetBufferData();
 				float fx = (float)m_lastMouseX;
 				float fy = (float)m_lastMouseY;
@@ -275,6 +281,7 @@ namespace CLI
 				fy = fy * 2.0f - 1.0f;
 				ZobVector3 ret = c->From2DToWorldOnPlane(fx, fy, &m_modificatorData->m_planePosition, &m_modificatorData->m_planeNormal);
 				m_modificatorData->m_deltaStart = ret;
+				assert(!ret.isNaN());
 			}
 			if (m_modificatorData->m_objectModificatorAxis == ZobObjectsEditor::eGizmoModificatorAxis::axis_x)
 			{
@@ -359,6 +366,8 @@ namespace CLI
 						float rad = DEG_TO_RAD(m_modificatorData->m_snap);
 						d = (int)(d / rad) * rad;
 					}
+					assert(!m_modificatorData->m_startAxisRotationVector.isNaN());
+					assert(!isnan(d));
 					if (m_modificatorData->m_objectModificatorAxis == ZobObjectsEditor::eGizmoModificatorAxis::axis_x)
 					{
 						curObj->SetLocalOrientation(&m_modificatorData->m_startAxisRotationVector, m_modificatorData->m_startAngleRotation, 0);

@@ -79,17 +79,17 @@ namespace CLI
 			zfp.path = lpTempPathBuffer;// "D:\n\\n\Git\n\\n\directZob\n\\n\resources\n\\n\_editor";
 			zfp.name = "arrow.obj";
 			zfp.bAbsolute = true;
-			m_behaviorTranslateX = m_translateX->LoadMesh(zfp);
-			m_behaviorTranslateY = m_translateY->LoadMesh(zfp);
-			m_behaviorTranslateZ = m_translateZ->LoadMesh(zfp);
+			m_behaviorTranslateX = m_translateX->LoadMesh(zfp, true);
+			m_behaviorTranslateY = m_translateY->LoadMesh(zfp, true);
+			m_behaviorTranslateZ = m_translateZ->LoadMesh(zfp, true);
 
 			zfp.file = "rotate.obj";
 			zfp.path = lpTempPathBuffer;// "D:\n\\n\Git\n\\n\directZob\n\\n\resources\n\\n\_editor";
 			zfp.name = "rotate.obj";
 			zfp.bAbsolute = true;
-			m_behaviorRotateX = m_rotateX->LoadMesh(zfp);
-			m_behaviorRotateY = m_rotateY->LoadMesh(zfp);
-			m_behaviorRotateZ = m_rotateZ->LoadMesh(zfp);
+			m_behaviorRotateX = m_rotateX->LoadMesh(zfp, true);
+			m_behaviorRotateY = m_rotateY->LoadMesh(zfp, true);
+			m_behaviorRotateZ = m_rotateZ->LoadMesh(zfp, true);
 
 			m_behaviorTranslateX->GetRenderOptions()->color = ZobColor::Red;
 			m_behaviorTranslateX->GetRenderOptions()->lightMode = Triangle::RenderOptions::eLightMode_none;

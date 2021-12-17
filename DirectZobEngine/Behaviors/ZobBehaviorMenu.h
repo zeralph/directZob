@@ -33,7 +33,7 @@ class ZobBehaviorMenu : public ZobBehavior
 		void		EditorUpdate() override;
 		void		DrawGizmos(const Camera* camera, const ZobVector3* position, const ZobVector3* rotation) const override;
 	private:	
-		ZobBehaviorMenu(ZobObject* zobObject);
+		ZobBehaviorMenu(ZobObject* zobObject, bool bEditorZobBehavior);
 		float m_time;
 		std::vector<MenuEntry> m_menuEntries;
 		int m_menuIndex;

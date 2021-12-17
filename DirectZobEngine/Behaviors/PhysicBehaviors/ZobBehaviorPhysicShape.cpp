@@ -7,7 +7,7 @@ ZobBehaviorPhysicShape::~ZobBehaviorPhysicShape()
 
 }
 
-ZobBehaviorPhysicShape::ZobBehaviorPhysicShape(ZobObject* zobObject) : ZobBehavior(zobObject)
+ZobBehaviorPhysicShape::ZobBehaviorPhysicShape(ZobObject* zobObject) : ZobBehavior(zobObject, false)
 {
 	m_type = eBehavior_none;
 	m_isInit = false;;

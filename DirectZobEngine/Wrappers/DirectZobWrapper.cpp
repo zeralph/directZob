@@ -124,6 +124,7 @@ namespace CLI
 	{
 		if (GetInstance())
 		{
+			m_ZobObjectManagerWrapper->SelectObject(NULL);
 			m_events->FireOnNewSceneEvent();
 			GetInstance()->NewScene();
 			DirectZob::GetInstance()->GetCameraManager()->CreateEditorCamera();

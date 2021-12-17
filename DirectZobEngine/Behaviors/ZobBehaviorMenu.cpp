@@ -13,7 +13,7 @@ ZobBehaviorMenu::~ZobBehaviorMenu()
 
 }
 
-ZobBehaviorMenu::ZobBehaviorMenu(ZobObject* zobObject) : ZobBehavior(zobObject)
+ZobBehaviorMenu::ZobBehaviorMenu(ZobObject* zobObject, bool bEditorZobBehavior) : ZobBehavior(zobObject, bEditorZobBehavior)
 {
 	m_type = eBehavior_menu; 
 }

@@ -267,6 +267,7 @@ void SceneLoader::SaveScene(std::string &path, std::string &file)
 	{
 		DirectZob::LogInfo("Scene saved");
 	}
+	delete root;
 }
 
 bool SceneLoader::SaveZobObjectRecusrive(TiXmlNode* node, ZobObject* z)

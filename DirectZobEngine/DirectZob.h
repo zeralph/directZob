@@ -113,6 +113,7 @@ public :
 	inline ZobInputManager*	GetInputManager() { return m_inputManager; }
 	inline Text2D*			GetTextManager() { return m_text; }
 	static const std::string& GetResourcePath();
+	static bool				IsEditorMode() { return g_isInEditorMode;}
 	static void				LogInfo(const char* format, ...);
 	static void				LogError(const char* format, ...);
 	static void				LogWarning(const char* format, ...);
@@ -146,6 +147,7 @@ private:
 	bool m_isRendering = false;
 	static bool g_bShowGrid;
 	static bool g_bShowMeshes;
+	static bool g_isInEditorMode;
 	bool m_initialized = false;
 	float m_renderTime;
 	float m_geometryTime;

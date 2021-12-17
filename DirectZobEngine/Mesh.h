@@ -32,7 +32,7 @@ public:
 	const uint							GetNbVertices() const { return m_nbVertices; }
 	const uint							GetNbUvs() const { return m_nbUvs; }
 	const uint							GetNbNormals() const { return m_nbNormals; }
-	const ZobVector3*					GetVertices() const { return m_vertices; }
+	const ZobVector3*					GetVertices() const { return m_triangleVertices; }
 	const std::vector<Triangle>*		GetTriangles() const { return &m_triangles; }
 	const uint*							GetIndices() const { return m_indices; }
 	const std::string&					GetName() const { return m_name; }
@@ -70,14 +70,14 @@ protected:
 
 	uint* m_indices = NULL;
 
-	ZobVector3* m_vertices = NULL;
+	ZobVector3* m_triangleVertices = NULL;
 	ZobVector3* m_verticesTmp = NULL;
 	ZobVector3* m_verticesData = NULL;
 
-	ZobVector3* m_projectedVertices = NULL;
+	ZobVector3* m_triangleProjectedVertices = NULL;
 	ZobVector3* m_projectedVerticesTmp = NULL;
 
-	ZobVector3* m_verticesNormals = NULL;
+	ZobVector3* m_triangleVerticesNormals = NULL;
 	ZobVector3* m_verticesNormalsData = NULL;
 	ZobVector3* m_verticesNormalsTmp = NULL;
 
@@ -85,8 +85,8 @@ protected:
 	ZobVector3* m_trianglesNormalsData = NULL;
 	ZobVector3* m_trianglesNormalsTmp = NULL;
 
-	ZobVector2* m_uvs = NULL;
-	ZobColor* m_colors = NULL;
+	ZobVector2* m_triangleUvs = NULL;
+	ZobColor* m_triangleColors = NULL;
 	
 	std::vector<Triangle> m_triangles;
 	Box m_OBB;

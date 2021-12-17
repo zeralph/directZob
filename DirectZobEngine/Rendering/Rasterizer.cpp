@@ -60,6 +60,7 @@ Rasterizer::Rasterizer(uint width, uint height, uint startHeight, uint endHeight
 	m_maxTriangleQueueSize = MaxQueueSize;
 	m_lines.clear();
 	m_triangles = (const Triangle**)malloc(sizeof(Triangle*) * m_maxTriangleQueueSize);
+	memset(m_triangles, 0, sizeof(Triangle*) * m_maxTriangleQueueSize);
 	m_nbTriangles = 0;
 	m_time = 0.0f;
 	m_rasterizerNumber = rasterizerNumber;

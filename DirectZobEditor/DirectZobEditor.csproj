@@ -83,10 +83,16 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="MaterialsForm.cs">
+    <Compile Include="MaterialsForm\Material.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MaterialsForm\Material.Designer.cs">
+      <DependentUpon>Material.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MaterialsForm\MaterialsForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MaterialsForm.Designer.cs">
+    <Compile Include="MaterialsForm\MaterialsForm.Designer.cs">
       <DependentUpon>MaterialsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
@@ -96,6 +102,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MaterialsForm\Material.resx">
+      <DependentUpon>Material.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MaterialsForm\MaterialsForm.resx">
+      <DependentUpon>MaterialsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

@@ -21,7 +21,7 @@ static const float fpsTargets[fpsTargetsN] = { 0, 16.6666667, 33.3333333f, 41.66
 static int sTargetMSPerFrameIdx = 1;
 static char buffer[MAX_PATH];
 static char logBuffer[LOG_BUFFER_SIZE];
-static bool g_isInEditorMode;
+bool DirectZob::g_isInEditorMode = false;
 static int s_logIndent;
 //static std::mutex g_render_mutex;
 static std::thread g_editorModeThread;
@@ -290,6 +290,10 @@ int DirectZob::RunAFrame(DirectZob::engineCallback OnSceneUpdated /*=NULL*/, Dir
 			if (m_engine->ShowGrid())
 			{
 				m_engine->DrawGrid(cam);
+			}
+			if (m_engine->DrawGizmos())
+			{
+				m_zobObjectManager->DrawGizmos(cam, m_engine);
 			}
 		}
 		else

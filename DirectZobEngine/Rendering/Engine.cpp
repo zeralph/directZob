@@ -748,7 +748,7 @@ void Engine::QueueEllipse(const Camera* camera, const ZobVector3* center, const 
 		m.Mul(&a);
 		a = a + center;
 		QueueLine(camera, &a, &b, c, bold, noZ);
-		QueueTriangle(camera, center, &a, &b, c, true, false);
+		//QueueTriangle(camera, center, &a, &b, c, true, false);
 	}
 }
 

@@ -3,6 +3,7 @@
 #include "ZobBehaviorMenu.h"
 #include "ZobBehaviorMesh.h"
 #include "ZobBehaviorSprite.h"
+#include "ZobBehaviorLight.h"
 #include "PhysicBehaviors/ZobBehaviorPhysicBox.h"
 #include "PhysicBehaviors/ZobBehaviorPhysicSphere.h"
 #include "PhysicBehaviors/ZobBehaviorPhysicCapsule.h"
@@ -19,10 +20,11 @@ const char* ZobBehaviorFactory::eBehaviorTypeStr[ZobBehavior::__eBehavior_MAX__]
 	"PhysicCapsule",
 	"PhysicMesh",
 	"Mesh",
-	"Sprite"
+	"Sprite",
+	"Light"
 };
 
-ZobBehavior* ZobBehaviorFactory::CreateBehaviorInternal(ZobObject* zobObject, const char* behaviorName)
+ZobBehavior* ZobBehaviorFactory::CreateBehaviorInternal(ZobObject* zobObject, const char* behaviorName, bool bEditorZobBehavior)
 {
 	ZobBehavior* zb = NULL;
 	if (zobObject)
@@ -56,13 +58,16 @@ ZobBehavior* ZobBehaviorFactory::CreateBehaviorInternal(ZobObject* zobObject, co
 				zb = new ZobBehaviorPhysicMesh(zobObject);
 				break;
 			case ZobBehavior::eBehavior_menu:
-				zb = new ZobBehaviorMenu(zobObject);
+				zb = new ZobBehaviorMenu(zobObject, bEditorZobBehavior);
 				break;
 			case ZobBehavior::eBehavior_mesh:
-				zb = new ZobBehaviorMesh(zobObject);
+				zb = new ZobBehaviorMesh(zobObject, bEditorZobBehavior);
 				break;
 			case ZobBehavior::eBehavior_sprite:
-				zb = new ZobBehaviorSprite(zobObject);
+				zb = new ZobBehaviorSprite(zobObject, bEditorZobBehavior);
+				break;
+			case ZobBehavior::eBehavior_light:
+				zb = new ZobBehaviorLight(zobObject, bEditorZobBehavior);
 				break;
 			case ZobBehavior::eBehavior_none:
 				zb = NULL;
@@ -80,12 +85,12 @@ ZobBehavior* ZobBehaviorFactory::CreateBehaviorInternal(ZobObject* zobObject, co
 	return zb;
 }
 
-ZobBehavior* ZobBehaviorFactory::CreateBehavior(ZobObject* zobObject, const char* behaviorName)
+ZobBehavior* ZobBehaviorFactory::CreateBehavior(ZobObject* zobObject, const char* behaviorName, bool bEditorZobBehavior)
 {
 	ZobBehavior* zb = NULL;
 	if (zobObject)
 	{
-		zb = CreateBehaviorInternal(zobObject, behaviorName);
+		zb = CreateBehaviorInternal(zobObject, behaviorName, bEditorZobBehavior);
 	}
 	return zb;
 }
@@ -96,7 +101,7 @@ ZobBehavior* ZobBehaviorFactory::CreateBehavior(ZobObject* zobObject, TiXmlEleme
 	if (zobObject && node)
 	{
 		const char* behaviorTypeStr = node->Attribute("Type");
-		ZobBehavior* zb = CreateBehaviorInternal(zobObject, behaviorTypeStr);
+		ZobBehavior* zb = CreateBehaviorInternal(zobObject, behaviorTypeStr, false);
 		if (zb)
 		{
 			zb->ReadNode(node);

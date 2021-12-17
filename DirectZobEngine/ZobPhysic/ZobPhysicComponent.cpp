@@ -372,6 +372,7 @@ void ZobPhysicComponent::DrawGizmos(const Camera* camera, const ZobVector3* posi
 void ZobPhysicComponent::GetLocalAxisAngleRotation(ZobVector3& axis, float& angle)
 {
 	Quaternion q = m_localTransform.getOrientation();
+	q.normalize();
 	Vector3 a;
 	float f;
 	q.getRotationAngleAxis(f, a);

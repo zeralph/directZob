@@ -28,7 +28,7 @@ public:
 	Triangle::RenderOptions*			GetRenderOptions() { return &m_renderOptions; }
 	const Mesh*				GetMesh() const { return m_mesh; }
 private:
-							ZobBehaviorMesh(ZobObject* zobObject);
+							ZobBehaviorMesh(ZobObject* zobObject, bool bEditorZobBehavior);
 	bool					LoadMeshInternal();
 	Mesh*					m_mesh;
 	Triangle::RenderOptions m_renderOptions;

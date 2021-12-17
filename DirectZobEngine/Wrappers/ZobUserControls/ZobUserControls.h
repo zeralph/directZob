@@ -174,12 +174,14 @@ namespace CLI {
 	public ref class ZobControlTreeNode : public TreeNode
 	{
 	public:
-		ZobControlTreeNode(String^ zobObjectGuid, bool isEditable);
+		ZobControlTreeNode(String^ zobObjectGuid);
 		~ZobControlTreeNode();
 		ZobControlTreeNode^ GetChildNode(String^ guid);
-		bool IsEditable() { return m_isEditable; }
+		bool IsSelectable() { return m_isSelectable; }
+		bool IsReadOnly() { return m_isReadOnly; }
 		String^ m_zobObjectGuid;
-		bool m_isEditable;
+		bool m_isSelectable;
+		bool m_isReadOnly;
 	};
 
 	public ref class ZobControlTreeview : TreeView

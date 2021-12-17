@@ -2,6 +2,7 @@
 #include "tinyxml.h"
 #include "DirectZob.h"
 #include "Misc/ZobXmlHelper.h"
+#include "Behaviors/ZobBehaviorSprite.h" 
 
 Light::Light(std::string &name, eLightType type, ZobColor color, float intensity, float distance, ZobObject*parent):
 	ZobObject(ZOBGUID::type_scene, ZOBGUID::subtype_zobLight, name, parent)
@@ -15,6 +16,15 @@ Light::Light(std::string &name, eLightType type, ZobColor color, float intensity
 	m_inFrtustrum = false;
 	NewLightConfiguration();
 	InitVariablesExposer();
+	if (DirectZob::IsEditorMode())
+	{
+		ZobBehaviorSprite* b = (ZobBehaviorSprite*)ZobBehaviorFactory::CreateBehavior(this, "Sprite", true);
+		ZobFilePath zfp;
+		zfp.name = "light";
+		zfp.path = "D://Git//directZob//resources//";
+		zfp.file = "light.png";
+		b->Set(zfp);
+	}
 }
 
 Light::Light(std::string id, TiXmlElement* node, ZobObject* parent)
@@ -26,7 +36,15 @@ Light::Light(std::string id, TiXmlElement* node, ZobObject* parent)
 		m_spotAngleRad = 0;
 		InitVariablesExposer();
 		m_varExposer->ReadNode(node);
-
+		if (DirectZob::IsEditorMode())
+		{
+			ZobBehaviorSprite* b = (ZobBehaviorSprite*)ZobBehaviorFactory::CreateBehavior(this, "Sprite", true);
+			ZobFilePath zfp;
+			zfp.name = "light";
+			zfp.path = "D://Git//directZob//resources//";
+			zfp.file = "light.png";
+			b->Set(zfp);
+		}
 }
 
 Light::~Light()

@@ -3,7 +3,7 @@
 #include "../DirectZob.h"
 #include "../Misc/ZobXmlHelper.h"
 
-ZobBehavior::ZobBehavior(ZobObject* zobObject):ZOBGUID(ZOBGUID::type_internal, ZOBGUID::subtype_behavior)
+ZobBehavior::ZobBehavior(ZobObject* zobObject, bool bEditorZobBehavior):ZOBGUID((bEditorZobBehavior? ZOBGUID::type_editor:ZOBGUID::type_internal), ZOBGUID::subtype_behavior)
 {
 	m_zobObject = zobObject;
 	m_type = eBehavior_none;
@@ -13,6 +13,10 @@ ZobBehavior::ZobBehavior(ZobObject* zobObject):ZOBGUID(ZOBGUID::type_internal, Z
 
 TiXmlNode* ZobBehavior::SaveUnderNode(TiXmlNode* node)
 {
+	if (this->GetType() == ZOBGUID::type_editor)
+	{
+		return node;
+	}
 	std::string s;
 	TiXmlElement n = TiXmlElement(XML_ELEMENT_BEHAVIOR);
 	n.SetAttribute(XML_ATTR_TYPE, GetBehaviorTypeStr());
@@ -29,6 +33,7 @@ const char* ZobBehavior::GetBehaviorTypeStr()
 
 void ZobBehavior::ReadNode(TiXmlElement* node)
 {
+	assert(this->GetType() != ZOBGUID::type_editor);
 	const char* guid = node->Attribute(XML_ATTR_GUID);
 	if (guid)
 	{

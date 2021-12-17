@@ -29,7 +29,7 @@ public:
 	const ZobSprite*			GetMesh() const { return m_sprite; }
 	static void					ReloadMaterial(zobId id);
 private:
-								ZobBehaviorSprite(ZobObject* zobObject);
+								ZobBehaviorSprite(ZobObject* zobObject, bool bEditorZobBehavior);
 	bool						LoadMeshInternal();
 	
 	ZobSprite*					m_sprite;

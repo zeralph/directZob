@@ -11,9 +11,9 @@ public:
 
 	static const char* eBehaviorTypeStr[ZobBehavior::__eBehavior_MAX__];
 	static ZobBehavior* CreateBehavior(ZobObject* zobObject, TiXmlElement* node);
-	static ZobBehavior* CreateBehavior(ZobObject* zobObject, const char* behaviorName);
+	static ZobBehavior* CreateBehavior(ZobObject* zobObject, const char* behaviorName, bool bEditorZobBehavior);
 	static const ZobBehavior* GetBehaviorFromZobId(const zobId id);
 private:
-	static ZobBehavior* CreateBehaviorInternal(ZobObject* zobObject, const char* behaviorName);
+	static ZobBehavior* CreateBehaviorInternal(ZobObject* zobObject, const char* behaviorName, bool bEditorZobBehavior);
 	static const ZobBehavior* GetBehaviorFromZobIdInternal(const zobId id, const ZobObject* z);
 };

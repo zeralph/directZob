@@ -25,14 +25,14 @@ ZobControl::ZobControl(const ZobVariablesExposer::wrapperData& w) :TableLayoutPa
 
 ZobControl::~ZobControl()
 {
-	delete _update;
+	//delete _update;
 	for (int i = 0; i < this->Controls->Count; i++)
 	{
-		delete(this->Controls[i]);
+		//delete(this->Controls[i]);
 	}
 	_update = nullptr;
 	DirectZobWrapperEvents::OnEditorUpdateEvent -= _updateEvent;
-	delete _updateEvent;
+	//delete _updateEvent;
 	_updateEvent = nullptr;
 	_w = NULL;
 }
@@ -177,9 +177,9 @@ ZobControlString::ZobControlString(const ZobVariablesExposer::wrapperData& w):Zo
 ZobControlString::~ZobControlString()
 {
 	_txt->Leave -= _event;
-	delete _label;
-	delete _event;
-	delete _txt;
+	//delete _label;
+	//delete _event;
+	//delete _txt;
 }
 
 void ZobControlString::OnValueChanged(Object^ sender, EventArgs^ e)
@@ -236,10 +236,10 @@ ZobControlFilePath::ZobControlFilePath(const ZobVariablesExposer::wrapperData& w
 ZobControlFilePath::~ZobControlFilePath()
 {
 	_btn->Click -= _event;
-	delete _btn;
-	delete _label;
-	delete _txt;
-	delete _event;
+	//delete _btn;
+	//delete _label;
+	//delete _txt;
+	//delete _event;
 }
 
 void ZobControlFilePath::OnOpen(Object^ sender, EventArgs^ e)
@@ -331,13 +331,13 @@ ZobControlVector3::~ZobControlVector3()
 	_txt_X->Leave -= _eventX;
 	_txt_Y->Leave -= _eventY;
 	_txt_Z->Leave -= _eventZ;
-	delete _eventX;
-	delete _eventY;
-	delete _eventZ;
-	delete _txt_X;
-	delete _txt_Y;
-	delete _txt_Z;
-	delete _label;
+	//delete _eventX;
+	//delete _eventY;
+	//delete _eventZ;
+	//delete _txt_X;
+	//delete _txt_Y;
+	//delete _txt_Z;
+	//delete _label;
 }
 
 void ZobControlVector3::UpdateControlInternal()
@@ -354,11 +354,11 @@ void ZobControlVector3::UpdateControlInternal()
 		if (z)
 		{
 			if (!_txt_X->Focused)
-				_txt_X->Text = String::Format("{0:0.000}", z->x);
+				_txt_X->Text = String::Format("{0:0.000}", z?z->x:0);
 			if (!_txt_Y->Focused)
-				_txt_Y->Text = String::Format("{0:0.000}", z->y);
+				_txt_Y->Text = String::Format("{0:0.000}", z ? z->y:0);
 			if (!_txt_Z->Focused)
-				_txt_Z->Text = String::Format("{0:0.000}", z->z);
+				_txt_Z->Text = String::Format("{0:0.000}", z ? z->z:0);
 		}
 	}
 }
@@ -421,8 +421,8 @@ ZobControlFloat::ZobControlFloat(const ZobVariablesExposer::wrapperData& w):ZobC
 ZobControlFloat::~ZobControlFloat()
 {
 	_txt->Leave -= _event;
-	delete _event;
-	delete _label;
+	//delete _event;
+	////delete _label;
 }
 
 void ZobControlFloat::UpdateControlInternal()
@@ -436,7 +436,7 @@ void ZobControlFloat::UpdateControlInternal()
 	if (_w->type == ZobVariablesExposer::eWrapperType_float)
 	{
 		float* f = (float*)(_w->ptr);
-		_txt->Text = String::Format("{0:0.000}", *f);
+		_txt->Text = String::Format("{0:0.000}", *f?*f:0);
 	}
 	else
 	{
@@ -519,9 +519,9 @@ ZobControlBool::ZobControlBool(const ZobVariablesExposer::wrapperData& w) :ZobCo
 ZobControlBool::~ZobControlBool()
 {
 	_checkBox->Click -= _event;
-	delete _label;
-	delete _checkBox;
-	delete _event;
+	//delete _label;
+	//delete _checkBox;
+	//delete _event;
 }
 
 void ZobControlBool::UpdateControlInternal()
@@ -597,9 +597,9 @@ ZobControlEnum::ZobControlEnum(const ZobVariablesExposer::wrapperData& w) :ZobCo
 ZobControlEnum::~ZobControlEnum()
 {
 	_list->SelectedIndexChanged -= _event;
-	delete _event;
-	delete _label;
-	delete _list;
+	//delete _event;
+	//delete _label;
+	//delete _list;
 }
 
 void ZobControlEnum::UpdateControlInternal()
@@ -658,8 +658,8 @@ ZobControlZobObject::ZobControlZobObject(const ZobVariablesExposer::wrapperData&
 
 ZobControlZobObject::~ZobControlZobObject()
 {
-	delete _txt;
-	delete _label;
+	//delete _txt;
+	//delete _label;
 }
 
 void ZobControlZobObject::UpdateControlInternal()
@@ -700,20 +700,21 @@ ZobGroupBox::~ZobGroupBox()
 	_label->Click -= _event;
 	for (int i = 0; i < this->Controls->Count; i++)
 	{
-		delete(this->Controls[i]);
+		//delete(this->Controls[i]);
 	}
-	delete _event;
-	delete _label;
+	//delete _event;
+	//delete _label;
 }
 
-ZobControlTreeNode::ZobControlTreeNode(String^ zobObjectGuid, bool isEditable) :TreeNode()
+ZobControlTreeNode::ZobControlTreeNode(String^ zobObjectGuid) :TreeNode()
 {
 	std::string s;
 	m_zobObjectGuid = zobObjectGuid;
 	MarshalString(zobObjectGuid, s);
 	ZOBGUID z = ZOBGUID(s);
 	this->ToolTipText = m_zobObjectGuid;
-	m_isEditable = isEditable;
+	m_isSelectable = z.GetType() == ZOBGUID::type_internal || z.GetType() == ZOBGUID::type_scene;
+	m_isReadOnly = z.GetType() == ZOBGUID::type_internal || z.GetType() == ZOBGUID::type_editor;
 	if (z.GetType() != ZOBGUID::type_scene && z.GetType() != ZOBGUID::type_internal)
 	{
 		this->ForeColor = Color::Red;
@@ -792,7 +793,7 @@ ZobPropertiesLayout::ZobPropertiesLayout(String^ name):TableLayoutPanel()
 
 ZobPropertiesLayout::~ZobPropertiesLayout()
 {
-	delete _label;
+	//delete _label;
 }
 
 ZobPropertiesContainer::ZobPropertiesContainer() : TableLayoutPanel()
@@ -828,8 +829,8 @@ ZobControlZobId::ZobControlZobId(const ZobVariablesExposer::wrapperData& w):ZobC
 
 ZobControlZobId::~ZobControlZobId()
 {
-	delete _label;
-	delete _txt;
+	//delete _label;
+	//delete _txt;
 }
 
 ZobControlColor::ZobControlColor(const ZobVariablesExposer::wrapperData& w) :ZobControl(w)
@@ -914,16 +915,16 @@ ZobControlColor::~ZobControlColor()
 	_txt_R->Leave -= _eventR;
 	_txt_G->Leave -= _eventG;
 	_txt_B->Leave -= _eventB;
-	delete _label;
-	delete _btn;
-	delete _eventA;
-	delete _eventR;
-	delete _eventG;
-	delete _eventB;
-	delete _txt_A;
-	delete _txt_R;
-	delete _txt_G;
-	delete _txt_B;
+	//delete _label;
+	//delete _btn;
+	//delete _eventA;
+	//delete _eventR;
+	//delete _eventG;
+	//delete _eventB;
+	//delete _txt_A;
+	//delete _txt_R;
+	//delete _txt_G;
+	//delete _txt_B;
 }
 
 void ZobControlColor::OnClickColor(Object^ sender, EventArgs^ e)
@@ -943,7 +944,7 @@ void ZobControlColor::OnClickColor(Object^ sender, EventArgs^ e)
 			int g = (int)(c.G);
 			int b = (int)(c.B);
 			vv->Set(a, r, g, b);
-			delete d;
+			//delete d;
 		}
 	}
 }
@@ -959,10 +960,10 @@ void ZobControlColor::UpdateControlInternal()
 	if (_w && _w->ptr)
 	{
 		ZobColor* z = (ZobColor*)_w->ptr;
-		int a = z->GetAlpha();
-		int r = z->GetRed();
-		int g = z->GetGreen();
-		int b = z->GetBlue();
+		int a = z?z->GetAlpha():0;
+		int r = z?z->GetRed():0;
+		int g = z?z->GetGreen():0;
+		int b = z?z->GetBlue():0;
 		if (z)
 		{
 			if (!_txt_A->Focused)
