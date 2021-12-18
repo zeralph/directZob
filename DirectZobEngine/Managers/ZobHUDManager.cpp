@@ -47,6 +47,7 @@ ZobHUDManager::ZobHUDManager()
 		m_trianglesBuffer[i].n = &m_normals[i];
 		m_trianglesBuffer[i].options = &m_renderOptions;
 		m_trianglesBuffer[i].material = NULL;
+		m_trianglesBuffer[i].zobObject = NULL;
 		vi += 3;
 	}
 }

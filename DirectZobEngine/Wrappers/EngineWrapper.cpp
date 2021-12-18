@@ -414,6 +414,8 @@ namespace CLI
 
 	void EngineWrapper::OnMouseClick(Object^ sender, MouseEventArgs^ e)
 	{
+		if (!m_running)
+			return;
 		Point location = m_renderWindow->PointToClient(m_mouseCoords);
 		ZobObject* z = DirectZob::GetInstance()->GetEngine()->GetObjectAt2DCoords(location.X, location.Y, false);
 		if (z)

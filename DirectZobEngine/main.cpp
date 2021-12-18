@@ -294,7 +294,7 @@ int main(int argc, char* argv[])
 		}
 		
 	}
-    m_directZob.NewScene();
+    m_directZob.NewScene("");
 	mfb_close(m_window);
 
 	if (btest)

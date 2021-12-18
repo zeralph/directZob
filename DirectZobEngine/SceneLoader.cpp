@@ -152,11 +152,11 @@ void SceneLoader::UnloadScene()
 	DirectZob::RemoveIndent();
 }
 
-void SceneLoader::NewScene()
+void SceneLoader::NewScene(std::string workspace)
 {
 	DirectZob::AddIndent();
 	UnloadScene();
-	m_path = "D://Git//directZob//resources//";
+	m_path = workspace;
 	m_file = "";
 	DirectZob::GetInstance()->GetHudManager()->Start();
 	DirectZob::GetInstance()->GetLightManager()->ReInitGlobalSettings();

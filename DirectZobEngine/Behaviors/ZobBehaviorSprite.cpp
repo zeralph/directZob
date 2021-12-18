@@ -60,6 +60,12 @@ void ZobBehaviorSprite::ReloadMaterial(zobId id)
 	}
 }
 
+void ZobBehaviorSprite::SetForEditor()
+{
+	m_renderOptions.zBuffered = false;
+	m_renderOptions.lightMode = Triangle::RenderOptions::eLightMode_none;
+}
+
 void ZobBehaviorSprite::Set(ZobFilePath zfp) 
 { 
 	m_texturePath = zfp;

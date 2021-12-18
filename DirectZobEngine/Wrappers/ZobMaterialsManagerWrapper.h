@@ -23,6 +23,8 @@ namespace CLI
 		ZobMaterialWrapper(ZobMaterial* zm);
 		~ZobMaterialWrapper(){}
 		String^ name;
+		Bitmap^ texture;
+		cli::array<Byte>^ _b;
 	};
 
 	public ref class ZobMaterialsManagerWrapper : public ManagedObject<MaterialManager>

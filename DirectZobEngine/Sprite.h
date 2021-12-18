@@ -13,6 +13,7 @@ public:
 	~ZobSprite();
 	void QueueForDrawing(ZobObject* z, const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Engine* engine, const Triangle::RenderOptions* options) override;
 	void Setmaterial(const ZobMaterial* m);
+
 private:
 
 	ZobMatrix4x4 m_modelMatrixOverriden;

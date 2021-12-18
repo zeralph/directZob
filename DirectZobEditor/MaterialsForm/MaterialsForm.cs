@@ -27,7 +27,7 @@ namespace DirectZobEditor.MaterialsForm
             for (int i = 0; i < nbMat; i++)
             {
                 CLI.ZobMaterialWrapper mat = manager.GetMaterial(i);
-                Material ctrl = new Material(mat.name);
+                Material ctrl = new Material(mat);
                 MaterialsTableLayout.Controls.Add(ctrl);
                 MaterialsTableLayout.Controls[i].Height = ctrl.Height + 2;
                 ctrl.Width = MaterialsTableLayout.Controls[i].Width;

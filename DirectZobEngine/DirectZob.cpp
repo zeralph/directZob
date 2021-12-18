@@ -111,11 +111,11 @@ void DirectZob::SaveScene()
 	SceneLoader::SaveScene();
 }
 
-void DirectZob::NewScene()
+void DirectZob::NewScene(std::string workspace)
 {
 	//g_render_mutex.lock();
 	m_physicStarted = false;
-	SceneLoader::NewScene();
+	SceneLoader::NewScene(workspace);
 	if (m_text == NULL)
 	{
 		m_text = new Text2D(m_engine, m_events);

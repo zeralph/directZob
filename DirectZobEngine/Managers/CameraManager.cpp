@@ -51,6 +51,7 @@ Camera* CameraManager::CreateEditorCamera()
 	Camera* c = GetCamera(s);
 	if (c)
 	{
+		SetNextCamera(s);
 		return c;
 	}
 	else
@@ -102,7 +103,7 @@ Camera* CameraManager::CreateCamera(Camera::eCameraType type, ZobObject* parent)
 	return c;
 }
 
-void CameraManager::SetNextCamera(std::string& name)
+void CameraManager::SetNextCamera(const std::string& name)
 {
 	for (int i = 0; i < m_cameras.size(); i++)
 	{

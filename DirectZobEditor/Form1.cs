@@ -10,6 +10,7 @@ namespace DirectZobEditor
 {
     public partial class Form1 : Form
     {
+        private string workspace = "D://Git//directZob//resources//";
         enum eplayMode
         {
             ePlayMode_play=0,
@@ -93,8 +94,7 @@ namespace DirectZobEditor
 
             this.WindowState = FormWindowState.Maximized;
             EngineRendererPanel.Controls.Add(m_engineWindow);
-            m_directZobWrapper.NewScene();
-            
+            m_directZobWrapper.NewScene(workspace);
             EventHandler handler = OnNewScene;
             if (null != handler)
             {
@@ -249,7 +249,7 @@ namespace DirectZobEditor
 
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            m_directZobWrapper.NewScene();
+            m_directZobWrapper.NewScene(workspace);
             m_directZobWrapper.CreateEditorCamera();
             m_path = "";
             m_file = "";
@@ -279,7 +279,7 @@ namespace DirectZobEditor
                 {
                     m_path = Path.GetDirectoryName(openFileDialog.FileName) +"\\";
                     m_file = openFileDialog.SafeFileName;
-                    m_directZobWrapper.NewScene();
+                    m_directZobWrapper.NewScene(m_path);
                     EventHandler handler = OnNewScene;
                     if (null != handler)
                     {

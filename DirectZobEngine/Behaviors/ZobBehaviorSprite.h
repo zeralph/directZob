@@ -29,6 +29,7 @@ public:
 	Triangle::RenderOptions*	GetRenderOptions() { return &m_renderOptions; }
 	const ZobSprite*			GetMesh() const { return m_sprite; }
 	static void					ReloadMaterial(zobId id);
+	void						SetForEditor();
 private:
 								ZobBehaviorSprite(ZobObject* zobObject, bool bEditorZobBehavior);
 	bool						LoadMeshInternal();
