@@ -9,10 +9,11 @@
 #include <iostream>
 #include "tinyxml.h"
 
-ZobFont::ZobFont(const std::string& textureFile, const std::string& xmlFile)
+ZobFont::ZobFont(ZobFilePath zfpTexture, ZobFilePath zfpXml)
 {
 	TiXmlDocument doc("Font");
 	doc.ClearError();
+	std::string xmlFile = zfpXml.GetFullPath();
 	doc.LoadFile(xmlFile.c_str());
 	if (doc.Error())
 	{
@@ -49,7 +50,7 @@ ZobFont::ZobFont(const std::string& textureFile, const std::string& xmlFile)
 			m_color = &ZobColor::White;
 			std::string matName = "Font_";
 			matName.append(m_name);
-			m_charMaterial = DirectZob::GetInstance()->GetMaterialManager()->LoadMaterial(matName, &m_color, &m_color, &m_color, 0, 1, textureFile);
+			m_charMaterial = DirectZob::GetInstance()->GetMaterialManager()->LoadMaterial(matName, &m_color, &m_color, &m_color, 0, 1, zfpTexture);
 			float texW = m_charMaterial->GetDiffuseTexture()->GetWidth();
 			float texH = m_charMaterial->GetDiffuseTexture()->GetHeight();
 			for (std::vector<FontGlyphe>::iterator iter = m_glyphes.begin(); iter != m_glyphes.end(); iter++)

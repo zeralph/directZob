@@ -105,6 +105,7 @@ ZobBehavior* ZobBehaviorFactory::CreateBehavior(ZobObject* zobObject, TiXmlEleme
 		if (zb)
 		{
 			zb->ReadNode(node);
+			//zb->Init(); NOT HERE
 		}
 	}
 	return zb;

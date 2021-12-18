@@ -1,6 +1,7 @@
 #include "ZobBehaviorSprite.h"
 #include "../DirectZob.h"
 #include "ZobBehaviorFactory.h"
+
 ZobBehaviorSprite::~ZobBehaviorSprite()
 {
 
@@ -9,7 +10,7 @@ ZobBehaviorSprite::~ZobBehaviorSprite()
 ZobBehaviorSprite::ZobBehaviorSprite(ZobObject* zobObject, bool bEditorZobBehavior) : ZobBehavior(zobObject, bEditorZobBehavior)
 {
 	m_type = eBehavior_sprite;
-	m_texturePath.Init();
+	m_texturePath.Reset();
 	m_sprite = NULL;
 	m_material = NULL;
 	m_zobObject = zobObject;
@@ -39,8 +40,8 @@ void ZobBehaviorSprite::Init()
 	{
 		if (!LoadMeshInternal())
 		{
-			DirectZob::LogError("Mesh loading error %s %s %s", m_texturePath.file.c_str(), m_texturePath.path.c_str(), m_texturePath.name.c_str());
-			m_texturePath.Init();
+			DirectZob::LogError("Error loading sprite %s texture at %s", m_texturePath.GetName().c_str(), m_texturePath.GetFullPath().c_str());
+			m_texturePath.Reset();
 		}
 	}
 }
@@ -61,11 +62,8 @@ void ZobBehaviorSprite::ReloadMaterial(zobId id)
 
 void ZobBehaviorSprite::Set(ZobFilePath zfp) 
 { 
-	m_texturePath.file = zfp.file;
-	m_texturePath.name = zfp.name;
-	m_texturePath.path = zfp.path;
-	m_texturePath.bAbsolute = zfp.bAbsolute;
-	LoadMeshInternal();
+	m_texturePath = zfp;
+	Init();
 }
 
 void ZobBehaviorSprite::PreUpdate(float dt)
@@ -166,7 +164,7 @@ void ZobBehaviorSprite::EditorUpdate()
 	}
 	else
 	{
-		if (m_sprite->GetName() != m_texturePath.name)
+		if (m_sprite->GetName() != m_texturePath.GetName())
 		{
 			LoadMeshInternal();
 		}
@@ -175,13 +173,12 @@ void ZobBehaviorSprite::EditorUpdate()
 
 bool ZobBehaviorSprite::LoadMeshInternal()
 {
-	std::string s = std::string(m_texturePath.name);
+	std::string s = std::string(m_texturePath.GetName());
 	m_sprite = new ZobSprite(s);
 	if (m_sprite)
 	{
 		ZobColor color = &ZobColor::White;
-		std::string f = m_texturePath.GetFullPath();
-		m_material = DirectZob::GetInstance()->GetMaterialManager()->LoadMaterial(m_texturePath.name, &m_ambientColor, &m_diffuseColor, &m_specularColor, 0, 1, f);
+ 		m_material = DirectZob::GetInstance()->GetMaterialManager()->LoadMaterial(m_texturePath.GetName(), &m_ambientColor, &m_diffuseColor, &m_specularColor, 0, 1, m_texturePath);
 		m_sprite->Setmaterial(m_material);
 	}
 	return m_sprite != NULL;

@@ -10,7 +10,7 @@ ZobBehaviorPhysicMesh::~ZobBehaviorPhysicMesh()
 ZobBehaviorPhysicMesh::ZobBehaviorPhysicMesh(ZobObject* zobObject) : ZobBehaviorPhysicShape(zobObject)
 {
 	m_type = eBehavior_physicMesh;
-	m_convexMeshPath.Init();
+	m_convexMeshPath.Reset();
 	m_concaveMeshNbTriangles = 0;
 	m_mesh = NULL;
 	m_varExposer->WrapVariable<ZobFilePath>("Mesh", &m_convexMeshPath, NULL, false, true);
@@ -30,7 +30,7 @@ void ZobBehaviorPhysicMesh::RemoveCollider()
 
 bool ZobBehaviorPhysicMesh::LoadMeshInternal()
 {
-	m_mesh = DirectZob::GetInstance()->GetMeshManager()->GetOrLoadMesh(m_convexMeshPath.name, m_convexMeshPath.path, m_convexMeshPath.file, m_convexMeshPath.bAbsolute);
+	m_mesh = DirectZob::GetInstance()->GetMeshManager()->GetOrLoadMesh(m_convexMeshPath);
 	if (m_mesh)
 	{
 		PhysicsCommon* pc = DirectZob::GetInstance()->GetPhysicsEngine()->GetPhysicsCommon();
@@ -89,7 +89,7 @@ void ZobBehaviorPhysicMesh::Init()
 	{
 		if (!LoadMeshInternal())
 		{
-			m_convexMeshPath.Init();
+			m_convexMeshPath.Reset();
 		}
 		else
 		{
@@ -110,18 +110,18 @@ void ZobBehaviorPhysicMesh::EditorUpdate()
 				bool bOK = LoadMeshInternal();
 				if (!bOK)
 				{
-					m_convexMeshPath.Init();
+					m_convexMeshPath.Reset();
 				}
 			}
 		}
 		else
 		{
-			if (m_mesh->GetName() != m_convexMeshPath.name)
+			if (m_mesh->GetName() != m_convexMeshPath.GetName())
 			{
 				bool bOK = LoadMeshInternal();
 				if (!bOK)
 				{
-					m_convexMeshPath.Init();
+					m_convexMeshPath.Reset();
 				}
 			}
 		}

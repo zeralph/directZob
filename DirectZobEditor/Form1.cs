@@ -86,7 +86,9 @@ namespace DirectZobEditor
             this.Load += new EventHandler(this.Onloaded);
             onSceneLoadedCallback = new CLI.engineCallback(onSceneLoadedCallbackMethod);
             OnSceneLoadedDelegate = new OnSceneLoaded(OnSceneLoadedMethod);
-
+            //CLI.DirectZobWrapperEvents.OnNewSceneEvent += DirectZobWrapperEvents_OnNewSceneEvent;
+            OnSceneSaved += Form1_OnSceneSaved;
+            OnNewScene += Form1_OnNewScene;
             this.propertiesPanel.MinimumSize = new Size(300, 500);
 
             this.WindowState = FormWindowState.Maximized;
@@ -105,6 +107,16 @@ namespace DirectZobEditor
             m_engineThread = new Thread(RunEngineThread);
             m_engineThread.Start();
             SetSnap("None");
+        }
+
+        private void Form1_OnNewScene(object sender, EventArgs e)
+        {
+            toolStripStatusScanePath.Text = GetDirectZobWrapper().GetResourcePath();
+        }
+
+        private void Form1_OnSceneSaved(object sender, EventArgs e)
+        {
+            toolStripStatusScanePath.Text = GetDirectZobWrapper().GetResourcePath();
         }
 
         private void OnObjectSelected(CLI.ZobObjectWrapper z)
@@ -282,7 +294,7 @@ namespace DirectZobEditor
         private void onSceneLoadedCallbackMethod()
         {
             this.Invoke(OnSceneLoadedDelegate);
-
+            toolStripStatusScanePath.Text = GetDirectZobWrapper().GetResourcePath();
         }
 
         private void OnSceneLoadedMethod()
@@ -341,6 +353,7 @@ namespace DirectZobEditor
             {
                 handler(this, EventArgs.Empty);
             }
+            toolStripStatusScanePath.Text = GetDirectZobWrapper().GetResourcePath();
         }
 
         private void LoadTextureToolStripMenuItem_Click(object sender, EventArgs e)

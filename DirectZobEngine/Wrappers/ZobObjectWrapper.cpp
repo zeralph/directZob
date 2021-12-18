@@ -207,10 +207,7 @@ namespace CLI
 			MarshalString(file, f);
 			std::string p;
 			MarshalString(path, p);
-			ZobFilePath zfp;
-			zfp.name = n;
-			zfp.file = f;
-			zfp.path = p;
+			ZobFilePath zfp = ZobFilePath(n, p, f, true);
 			z->LoadSprite(zfp, false);
 		}
 	}
@@ -226,10 +223,7 @@ namespace CLI
 			MarshalString(file, f);
 			std::string p;
 			MarshalString(path, p);
-			ZobFilePath zfp;
-			zfp.name = n;
-			zfp.file = f;
-			zfp.path = p;
+			ZobFilePath zfp = ZobFilePath(n, p, f, true);
 			z->LoadMesh(zfp, false);
 		}
 	}
@@ -273,44 +267,6 @@ namespace CLI
 			return z->GetSubType() == ZOBGUID::ZobSubType::subtype_zobCamera;
 		}
 		return false;
-	}
-
-	List<ZobObjectWrapper^>^ ZobObjectWrapper::GetChildren()
-	{
-		/*
-		ZobObject* zo = GetInstance();
-		try
-		{
-			if (zo)
-			{
-				List<ZobObjectWrapper^>^ list = gcnew List<ZobObjectWrapper^>();
-				const std::vector<ZobObject*>* v = zo->GetChildren();
-				for (std::vector<ZobObject*>::const_iterator iter = v->begin(); iter != v->end(); iter++)
-				{
-					ZobObject* z=*iter;
-					if (dynamic_cast<Light*>(z))
-					{
-						list->Add(gcnew ZobLightWrapper(dynamic_cast<Light*>(z)));
-					}
-					else if (dynamic_cast<Camera*>(z))
-					{
-						list->Add(gcnew ZobCameraWrapper(dynamic_cast<Camera*>(z)));
-					}
-					else
-					{
-						list->Add(gcnew ZobObjectWrapper(z));
-					}
-				}
-				return list;
-			}
-		}
-		catch (...)
-		{
-			m_Instance = NULL;
-			return nullptr;
-		}
-		*/
-		return nullptr;
 	}
 
 	bool ZobObjectWrapper::IsValid()

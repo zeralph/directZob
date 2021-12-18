@@ -74,22 +74,15 @@ namespace CLI
 			m_rotateZ = zm->CreateEditorZobObject(m_editorRoot);
 			m_rotateZ->SetName(EDITOR_ROTATE_Z);
 
-			ZobFilePath zfp;
-			zfp.file = "arrow.obj";
-			zfp.path = lpTempPathBuffer;// "D:\n\\n\Git\n\\n\directZob\n\\n\resources\n\\n\_editor";
-			zfp.name = "arrow.obj";
-			zfp.bAbsolute = true;
-			m_behaviorTranslateX = m_translateX->LoadMesh(zfp, true);
-			m_behaviorTranslateY = m_translateY->LoadMesh(zfp, true);
-			m_behaviorTranslateZ = m_translateZ->LoadMesh(zfp, true);
+			ZobFilePath zfpT = ZobFilePath("arrow.obj", lpTempPathBuffer, "arrow.obj", true);
+			m_behaviorTranslateX = m_translateX->LoadMesh(zfpT, true);
+			m_behaviorTranslateY = m_translateY->LoadMesh(zfpT, true);
+			m_behaviorTranslateZ = m_translateZ->LoadMesh(zfpT, true);
 
-			zfp.file = "rotate.obj";
-			zfp.path = lpTempPathBuffer;// "D:\n\\n\Git\n\\n\directZob\n\\n\resources\n\\n\_editor";
-			zfp.name = "rotate.obj";
-			zfp.bAbsolute = true;
-			m_behaviorRotateX = m_rotateX->LoadMesh(zfp, true);
-			m_behaviorRotateY = m_rotateY->LoadMesh(zfp, true);
-			m_behaviorRotateZ = m_rotateZ->LoadMesh(zfp, true);
+			ZobFilePath zfpR = ZobFilePath("rotate.obj", lpTempPathBuffer, "rotate.obj", true);
+			m_behaviorRotateX = m_rotateX->LoadMesh(zfpR, true);
+			m_behaviorRotateY = m_rotateY->LoadMesh(zfpR, true);
+			m_behaviorRotateZ = m_rotateZ->LoadMesh(zfpR, true);
 
 			m_behaviorTranslateX->GetRenderOptions()->color = ZobColor::Red;
 			m_behaviorTranslateX->GetRenderOptions()->lightMode = Triangle::RenderOptions::eLightMode_none;

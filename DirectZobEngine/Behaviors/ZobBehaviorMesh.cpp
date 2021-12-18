@@ -9,7 +9,7 @@ ZobBehaviorMesh::~ZobBehaviorMesh()
 ZobBehaviorMesh::ZobBehaviorMesh(ZobObject* zobObject, bool bEditorZobBehavior) : ZobBehavior(zobObject, bEditorZobBehavior)
 {
 	m_type = eBehavior_mesh;
-	m_meshPath.Init();
+	m_meshPath.Reset();
 	m_mesh = NULL;
 
 	m_varExposer->WrapVariable<ZobFilePath>("File", &m_meshPath, NULL, false, true);
@@ -27,34 +27,34 @@ ZobBehaviorMesh::ZobBehaviorMesh(ZobObject* zobObject, bool bEditorZobBehavior) 
 	m_varExposer->WrapVariable<bool>("Transparent", &m_renderOptions.bTransparency, NULL, false, true);
 	
 	m_varExposer->WrapVariable<int>("Nb triangles", &m_meshNbTriangles, NULL, true, false);
+	m_varExposer->WrapVariable<uint>("Size", &m_meshSize, NULL, true, false);
 }
 
 void ZobBehaviorMesh::Init()
 {
 	m_meshNbTriangles = 0;
+	m_meshSize = 0;
 	ReLoadVariables();
 	if (m_mesh == NULL && m_meshPath.IsDefined())
 	{
 		if (!LoadMeshInternal())
 		{
-			DirectZob::LogError("Mesh loading error %s %s %s", m_meshPath.file.c_str(), m_meshPath.path.c_str(), m_meshPath.name.c_str());
-			m_meshPath.Init();
+			DirectZob::LogError("rror loading mesh %s at %s", m_meshPath.GetName().c_str(), m_meshPath.GetFullPath().c_str());
+			m_meshPath.Reset();
 			m_meshNbTriangles = 0;
 		}
 		else
 		{
 			m_meshNbTriangles = m_mesh->GetNbTriangles();
+			m_meshSize = m_mesh->GetSize();
 		}
 	}
 }
 
 void ZobBehaviorMesh::Set(ZobFilePath zfp) 
 { 
-	m_meshPath.file = zfp.file; 
-	m_meshPath.name = zfp.name;
-	m_meshPath.path = zfp.path;
-	m_meshPath.bAbsolute = zfp.bAbsolute;
-	LoadMeshInternal();
+	m_meshPath = zfp;
+	Init();
 }
 
 void ZobBehaviorMesh::PreUpdate(float dt)
@@ -107,12 +107,12 @@ void ZobBehaviorMesh::EditorUpdate()
 	{
 		if (m_meshPath.IsDefined())
 		{
-			LoadMeshInternal();
+			Init();
 		}
 	}
 	else
 	{
-		if (m_mesh->GetName() != m_meshPath.name)
+		if (m_mesh->GetName() != m_meshPath.GetName())
 		{
 			LoadMeshInternal();
 		}
@@ -121,7 +121,7 @@ void ZobBehaviorMesh::EditorUpdate()
 
 bool ZobBehaviorMesh::LoadMeshInternal()
 {
-	m_mesh = DirectZob::GetInstance()->GetMeshManager()->LoadMesh(m_meshPath.name, m_meshPath.path, m_meshPath.file, m_meshPath.bAbsolute);
+	m_mesh = DirectZob::GetInstance()->GetMeshManager()->LoadMesh(m_meshPath);
 	if (m_mesh)
 	{
 		m_meshNbTriangles = m_mesh->GetNbTriangles();

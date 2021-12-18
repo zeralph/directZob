@@ -8,7 +8,8 @@
 #include "ZOBGUID.h"
 #include "tinyxml.h"
 #include "../Behaviors/ZobBehaviorFactory.h"
-
+#include "Misc/ZobFilePath.h"
+#include "Misc/ZobFilePath.h"
 class Mesh;
 class ZobPhysicComponent;
 class m_varExposer;

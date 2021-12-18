@@ -220,7 +220,7 @@ ZobControlFilePath::ZobControlFilePath(const ZobVariablesExposer::wrapperData& w
 	//txt->MaximumSize = Drawing::Size(100, 20);
 	std::string s;
 	ZobFilePath* zp = (ZobFilePath*)(w.ptr);
-	_txt->Text = TO_MANAGED_STRING(zp->name.c_str());
+	_txt->Text = TO_MANAGED_STRING(zp->GetName().c_str());
 	_txt->ReadOnly = true;
 	if (!w.bReadOnly)
 	{
@@ -263,6 +263,7 @@ void ZobControlFilePath::OnOk(Object^ sender, System::ComponentModel::CancelEven
 		std::string s;
 		MarshalString(file+";"+dir+";"+file, s);
 		ZobFilePath* zp = (ZobFilePath*)_w->ptr;
+
 		zp->Unserialize(s);
 	}
 }

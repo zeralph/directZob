@@ -18,7 +18,7 @@ ZobSprite::ZobSprite(std::string& name):Mesh(name)
 	m_minBoundingBox = ZobVector3(-0.5f, -0.5f, 0.0f);
 	m_maxBoundingBox = ZobVector3(0.5f, 0.5f, 0.0f);
 	m_indices = NULL;
-	m_triangleVertices = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
+	m_meshVertices = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
 	m_verticesData = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
 	m_verticesTmp = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
 	m_triangleProjectedVertices = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
@@ -33,10 +33,10 @@ ZobSprite::ZobSprite(std::string& name):Mesh(name)
 	m_trianglesNormalsTmp = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbFaces);
 	m_triangleColors = (ZobColor*)malloc(sizeof(ZobColor) * m_nbVertices);
 
-	m_triangleVertices[0] = ZobVector3(-0.5f, 0.5f, 0.0f);
-	m_triangleVertices[1] = ZobVector3(0.5f, 0.5f, 0.0f);
-	m_triangleVertices[2] = ZobVector3(0.5f, -0.5f, 0.0f);
-	m_triangleVertices[3] = ZobVector3(-0.5f, -0.5f, 0.0f);
+	m_meshVertices[0] = ZobVector3(-0.5f, 0.5f, 0.0f);
+	m_meshVertices[1] = ZobVector3(0.5f, 0.5f, 0.0f);
+	m_meshVertices[2] = ZobVector3(0.5f, -0.5f, 0.0f);
+	m_meshVertices[3] = ZobVector3(-0.5f, -0.5f, 0.0f);
 /*
 	m_vertices[0] = ZobVector3(-0.1f, 0.1f, 0.0f);
 	m_vertices[1] = ZobVector3(0.1f, 0.1f, 0.0f);
@@ -68,9 +68,9 @@ ZobSprite::ZobSprite(std::string& name):Mesh(name)
 	m_triangleOptions.cullMode = Triangle::RenderOptions::eCullMode_CounterClockwiseFace;
 
 	Triangle t1;
-	t1.va = &m_triangleVertices[0];
-	t1.vb = &m_triangleVertices[1];
-	t1.vc = &m_triangleVertices[2];
+	t1.va = &m_meshVertices[0];
+	t1.vb = &m_meshVertices[1];
+	t1.vc = &m_meshVertices[2];
 	t1.verticeAIndex = 0;
 	t1.verticeBIndex = 1;
 	t1.verticeCIndex = 2;
@@ -95,9 +95,9 @@ ZobSprite::ZobSprite(std::string& name):Mesh(name)
 	m_triangles.push_back(t1);
 
 	Triangle t2;
-	t2.va = &m_triangleVertices[0];
-	t2.vb = &m_triangleVertices[2];
-	t2.vc = &m_triangleVertices[3];
+	t2.va = &m_meshVertices[0];
+	t2.vb = &m_meshVertices[2];
+	t2.vc = &m_meshVertices[3];
 	t2.verticeAIndex = 0;
 	t2.verticeBIndex = 2;
 	t2.verticeCIndex = 3;
@@ -121,7 +121,7 @@ ZobSprite::ZobSprite(std::string& name):Mesh(name)
 	t2.zobObject = NULL;
 	m_triangles.push_back(t2);
 
-	memcpy(m_verticesData, m_triangleVertices, sizeof(ZobVector3) * m_nbVertices);
+	memcpy(m_verticesData, m_meshVertices, sizeof(ZobVector3) * m_nbVertices);
 	memcpy(m_verticesNormalsData, m_triangleVerticesNormals, sizeof(ZobVector3) * m_nbNormals);
 	memcpy(m_verticesNormalsTmp, m_triangleVerticesNormals, sizeof(ZobVector3) * m_nbNormals);
 	memcpy(m_trianglesNormalsData, m_trianglesNormals, sizeof(ZobVector3) * m_nbFaces);
@@ -134,7 +134,7 @@ ZobSprite::~ZobSprite()
 	DirectZob::LogInfo("Delete sprite %s", m_name.c_str());
 	DirectZob::AddIndent();
 	free(m_indices);
-	free(m_triangleVertices);
+	free(m_meshVertices);
 	free(m_verticesData);
 	free(m_verticesTmp);
 	free(m_triangleVerticesNormals);
@@ -147,7 +147,7 @@ ZobSprite::~ZobSprite()
 	free(m_projectedVerticesTmp);
 	free(m_triangleUvs);
 	m_indices = NULL;
-	m_triangleVertices = NULL;
+	m_meshVertices = NULL;
 	m_verticesData = NULL;
 	m_verticesTmp = NULL;
 	m_triangleVerticesNormals = NULL;

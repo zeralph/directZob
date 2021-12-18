@@ -34,15 +34,14 @@ namespace DirectZobEditor.MaterialsForm
             // 
             // MaterialsTableLayout
             // 
+            this.MaterialsTableLayout.AutoScroll = true;
             this.MaterialsTableLayout.ColumnCount = 1;
-            this.MaterialsTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.MaterialsTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.MaterialsTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.MaterialsTableLayout.Dock = System.Windows.Forms.DockStyle.Fill;
             this.MaterialsTableLayout.Location = new System.Drawing.Point(0, 0);
             this.MaterialsTableLayout.Name = "MaterialsTableLayout";
-            this.MaterialsTableLayout.RowCount = 2;
-            this.MaterialsTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.MaterialsTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.MaterialsTableLayout.RowCount = 1;
+            this.MaterialsTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.MaterialsTableLayout.Size = new System.Drawing.Size(800, 450);
             this.MaterialsTableLayout.TabIndex = 0;
             // 

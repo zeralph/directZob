@@ -17,26 +17,19 @@
         <Var Name="Equalize triangle queues" value="False" />
         <Var Name="Perspective Correction" value="True" />
     </Globals>
-    <ZobObject Guid="4002568421">
-        <Var Name="Name" value="newObject_8" />
+    <ZobObject Guid="4002245163">
+        <Var Name="Name" value="11.fbx" />
         <Var Name="Position" value="0.000;0.000;0.000" />
         <Var Name="Rotation" value="0.000;0.000;0.000" />
         <Var Name="Scale" value="1.000;1.000;1.000" />
-        <Behaviors />
-        <ZobObject Guid="4002160091">
-            <Var Name="Name" value="11.fbx" />
-            <Var Name="Position" value="0.000;0.000;0.000" />
-            <Var Name="Rotation" value="0.000;0.000;0.000" />
-            <Var Name="Scale" value="1.000;1.000;1.000" />
-            <Behaviors>
-                <Behavior Type="Mesh" Guid="2007443983">
-                    <Var Name="File" value="11.fbx;/;11.fbx" />
-                    <Var Name="Cull mode" value="Clockwise" />
-                    <Var Name="Lighting" value="Phong" />
-                    <Var Name="ZBuffered" value="True" />
-                    <Var Name="Transparent" value="False" />
-                </Behavior>
-            </Behaviors>
-        </ZobObject>
+        <Behaviors>
+            <Behavior Type="Mesh" Guid="2007273791">
+                <Var Name="File" value="11.fbx;/;11.fbx" />
+                <Var Name="Cull mode" value="Clockwise" />
+                <Var Name="Lighting" value="Phong" />
+                <Var Name="ZBuffered" value="True" />
+                <Var Name="Transparent" value="False" />
+            </Behavior>
+        </Behaviors>
     </ZobObject>
 </Scene>

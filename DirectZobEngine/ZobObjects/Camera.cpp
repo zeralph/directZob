@@ -33,10 +33,7 @@ Camera::Camera(ZOBGUID::ZobType zobType, const std::string& name, eCameraType ty
 	if (DirectZob::IsEditorMode())
 	{
 		ZobBehaviorSprite* b = (ZobBehaviorSprite*)ZobBehaviorFactory::CreateBehavior(this, "Sprite", true);
-		ZobFilePath zfp;
-		zfp.name = "camera";
-		zfp.path = "D://Git//directZob//resources//";
-		zfp.file = "camera.png";
+		ZobFilePath zfp = ZobFilePath("camera", "D://Git//directZob//resources//", "camera.png", true);
 		b->Set(zfp);
 	}
 	//m_nextTranslation = m_translation;
@@ -53,10 +50,7 @@ Camera::Camera(std::string id, TiXmlElement* node, ZobObject* parent)
 	if (DirectZob::IsEditorMode())
 	{
 		ZobBehaviorSprite* b = (ZobBehaviorSprite*)ZobBehaviorFactory::CreateBehavior(this, "Sprite", true);
-		ZobFilePath zfp;
-		zfp.name = "camera";
-		zfp.path = "D://Git//directZob//resources//";
-		zfp.file = "camera.png";
+		ZobFilePath zfp = ZobFilePath("camera", "D://Git//directZob//resources//", "camera.png", true);
 		b->Set(zfp);
 	}
 	//ChangeCameraController(m_nextControlerType);

@@ -34,19 +34,13 @@ ZobSprite* MeshManager::CreateSprite()
 	return s;
 }
 
-Mesh* MeshManager::LoadMesh(std::string& name, std::string& path, std::string& file, bool bAbsolutePath)
+Mesh* MeshManager::LoadMesh(ZobFilePath zfp)
 {
-	std::string p = path;
-	std::replace(p.begin(), p.end(), '\\', '/');
-	if (p[p.length() - 1] != '/')
-	{
-		p.append("/");
-	}
-    DirectZob::LogInfo("Loading mesh %s%s", p.c_str(), file.c_str());
+    DirectZob::LogInfo("Loading mesh %s & at %s", zfp.GetName().c_str(), zfp.GetFullPath().c_str());
 	Mesh* outMesh = NULL;
 	//if (GetMesh(name) == NULL)
 	{
-		outMesh = new Mesh(name, p, file, bAbsolutePath);
+		outMesh = new Mesh(zfp);
 		m_meshes.push_back(outMesh);
 	}
 	return outMesh;
@@ -61,7 +55,7 @@ const Mesh* MeshManager::GetMesh(const int i) const
 	return NULL;
 }
 
-Mesh* MeshManager::GetMesh(std::string& name) const
+Mesh* MeshManager::GetMesh(const std::string& name) const
 {
 	for (std::vector<Mesh*>::const_iterator iter = m_meshes.begin(); iter != m_meshes.end(); iter++)
 	{
@@ -73,12 +67,12 @@ Mesh* MeshManager::GetMesh(std::string& name) const
 	return NULL;
 }
 
-Mesh* MeshManager::GetOrLoadMesh(std::string& name, std::string& path, std::string& file, bool bAbsolutePath)
+Mesh* MeshManager::GetOrLoadMesh(ZobFilePath zfp)
 {
-	Mesh* m = GetMesh(name);
+	Mesh* m = GetMesh(zfp.GetName());
 	if (!m)
 	{
-		m = LoadMesh(name, path, file, bAbsolutePath);
+		m = LoadMesh(zfp);
 	}
 	return m;
 }

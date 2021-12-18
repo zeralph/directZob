@@ -19,9 +19,9 @@ class Mesh
 {
 public:
 
-										Mesh(std::string& name);
+										Mesh(const std::string& name);
 										Mesh(Mesh* m);
-										Mesh(std::string& name, std::string& path, std::string& file, bool bAbsolutePath);
+										Mesh(ZobFilePath zfp);
 	virtual								~Mesh();
 
 	virtual void						Update(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Engine* engine, const Triangle::RenderOptions* options);
@@ -32,7 +32,7 @@ public:
 	const uint							GetNbVertices() const { return m_nbVertices; }
 	const uint							GetNbUvs() const { return m_nbUvs; }
 	const uint							GetNbNormals() const { return m_nbNormals; }
-	const ZobVector3*					GetVertices() const { return m_triangleVertices; }
+	const ZobVector3*					GetVertices() const { return m_meshVertices; }
 	const std::vector<Triangle>*		GetTriangles() const { return &m_triangles; }
 	const uint*							GetIndices() const { return m_indices; }
 	const std::string&					GetName() const { return m_name; }
@@ -44,15 +44,17 @@ public:
 	const Box*							GetOBB() const { return &m_OBB; }
 	const Box*							GetAABB() const { return &m_AABB; }
 	void								SetVisible(bool v) { m_visible = v; }
+	const long							GetSize() const { return m_size; }
 protected:
-										Mesh(std::string& parentName, std::string& path, fbxsdk::FbxMesh* mesh);
+										Mesh(std::string& parentName, ZobFilePath zfp, fbxsdk::FbxMesh* mesh);
 	void								SplitEntry(const std::string* s, std::vector<std::string>* v, const char delim) const;
 	void								CreateTriangles(const std::vector<std::string>* line, std::vector<Triangle>* t, size_t& tArrayIdx, const ZobMaterial* tex);
-	void								LoadOBJ(const std::string& fullPath, bool bAbsolutePath);
-	void								LoadFbx(const std::string& fullPath);
+	void								LoadOBJ(ZobFilePath zfp);
+	void								LoadFbx(ZobFilePath zfp);
 	void								FbxMultT(FbxNode* node, FbxVector4 &vector);
 	inline bool							RejectTriangle(const Triangle* t, const float znear, const float zfar, const float width, const float height);
 	void								ParseObjFaceData(const std::string* s, int &v, int &u, int &n, bool& hasUv, bool& hasNormals) const;
+	const long							ComputeSize() const;
 	std::vector<Mesh*> m_subMeshes;
 	uint m_nbVertices = 0;
 	uint m_nbUvs = 0;
@@ -70,7 +72,7 @@ protected:
 
 	uint* m_indices = NULL;
 
-	ZobVector3* m_triangleVertices = NULL;
+	ZobVector3* m_meshVertices = NULL;
 	ZobVector3* m_verticesTmp = NULL;
 	ZobVector3* m_verticesData = NULL;
 
@@ -91,5 +93,6 @@ protected:
 	std::vector<Triangle> m_triangles;
 	Box m_OBB;
 	Box m_AABB;
+	long m_size;
 };
 

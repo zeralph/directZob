@@ -60,6 +60,8 @@
             this.cameraToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.physicsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.textToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.windowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.materialsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.FirstPanelSplitter = new System.Windows.Forms.SplitContainer();
             this.ZobObjectListPanel = new System.Windows.Forms.Panel();
             this.ViewAndLogsAndObjectControl = new System.Windows.Forms.SplitContainer();
@@ -102,8 +104,7 @@
             this.tabEngine = new System.Windows.Forms.TabPage();
             this.panel2 = new System.Windows.Forms.Panel();
             this.EngineControlsFlowLayout = new System.Windows.Forms.FlowLayoutPanel();
-            this.windowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.materialsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripStatusScanePath = new System.Windows.Forms.ToolStripStatusLabel();
             this.bottomStatusBar.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FirstPanelSplitter)).BeginInit();
@@ -135,7 +136,8 @@
             this.bottomStatusBar.ImageScalingSize = new System.Drawing.Size(32, 32);
             this.bottomStatusBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusEngineState,
-            this.toolStripStatusLabel1});
+            this.toolStripStatusLabel1,
+            this.toolStripStatusScanePath});
             this.bottomStatusBar.Location = new System.Drawing.Point(0, 530);
             this.bottomStatusBar.Name = "bottomStatusBar";
             this.bottomStatusBar.Size = new System.Drawing.Size(1442, 22);
@@ -237,21 +239,21 @@
             // loadTextureToolStripMenuItem
             // 
             this.loadTextureToolStripMenuItem.Name = "loadTextureToolStripMenuItem";
-            this.loadTextureToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.loadTextureToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
             this.loadTextureToolStripMenuItem.Text = "Load Texture ...";
             this.loadTextureToolStripMenuItem.Click += new System.EventHandler(this.LoadTextureToolStripMenuItem_Click);
             // 
             // loadMeshToolStripMenuItem
             // 
             this.loadMeshToolStripMenuItem.Name = "loadMeshToolStripMenuItem";
-            this.loadMeshToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.loadMeshToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
             this.loadMeshToolStripMenuItem.Text = "Load Mesh ...";
             this.loadMeshToolStripMenuItem.Click += new System.EventHandler(this.LoadMeshToolStripMenuItem_Click);
             // 
             // LoadSpriteToolStripMenuItem
             // 
             this.LoadSpriteToolStripMenuItem.Name = "LoadSpriteToolStripMenuItem";
-            this.LoadSpriteToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.LoadSpriteToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
             this.LoadSpriteToolStripMenuItem.Text = "Load Sprite ...";
             this.LoadSpriteToolStripMenuItem.Click += new System.EventHandler(this.createSpriteToolStripMenuItem_Click);
             // 
@@ -262,7 +264,7 @@
             this.pointToolStripMenuItem,
             this.directionalToolStripMenuItem});
             this.createLightToolStripMenuItem.Name = "createLightToolStripMenuItem";
-            this.createLightToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.createLightToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
             this.createLightToolStripMenuItem.Text = "Create Light ";
             // 
             // spotToolStripMenuItem
@@ -294,7 +296,7 @@
             this.orbitalFreeToolStripMenuItem,
             this.orbitalToParentToolStripMenuItem});
             this.createCameraToolStripMenuItem.Name = "createCameraToolStripMenuItem";
-            this.createCameraToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.createCameraToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
             this.createCameraToolStripMenuItem.Text = "Create Camera";
             this.createCameraToolStripMenuItem.Click += new System.EventHandler(this.createCameraToolStripMenuItem_Click);
             // 
@@ -329,7 +331,7 @@
             // createZobObjectToolStripMenuItem
             // 
             this.createZobObjectToolStripMenuItem.Name = "createZobObjectToolStripMenuItem";
-            this.createZobObjectToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.createZobObjectToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
             this.createZobObjectToolStripMenuItem.Text = "Create ZobObject";
             this.createZobObjectToolStripMenuItem.Click += new System.EventHandler(this.createZobObjectToolStripMenuItem_Click);
             // 
@@ -344,7 +346,7 @@
             // regenerateZobIdsToolStripMenuItem
             // 
             this.regenerateZobIdsToolStripMenuItem.Name = "regenerateZobIdsToolStripMenuItem";
-            this.regenerateZobIdsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.regenerateZobIdsToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
             this.regenerateZobIdsToolStripMenuItem.Text = "Regenerate ZobIds";
             this.regenerateZobIdsToolStripMenuItem.Click += new System.EventHandler(this.regenerateZobIdsToolStripMenuItem_Click);
             // 
@@ -386,6 +388,21 @@
             this.textToolStripMenuItem.Size = new System.Drawing.Size(115, 22);
             this.textToolStripMenuItem.Text = "Text";
             this.textToolStripMenuItem.Click += new System.EventHandler(this.textToolStripMenuItem_Click);
+            // 
+            // windowToolStripMenuItem
+            // 
+            this.windowToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.materialsToolStripMenuItem});
+            this.windowToolStripMenuItem.Name = "windowToolStripMenuItem";
+            this.windowToolStripMenuItem.Size = new System.Drawing.Size(63, 22);
+            this.windowToolStripMenuItem.Text = "Window";
+            // 
+            // materialsToolStripMenuItem
+            // 
+            this.materialsToolStripMenuItem.Name = "materialsToolStripMenuItem";
+            this.materialsToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
+            this.materialsToolStripMenuItem.Text = "Materials ...";
+            this.materialsToolStripMenuItem.Click += new System.EventHandler(this.materialsToolStripMenuItem_Click);
             // 
             // FirstPanelSplitter
             // 
@@ -868,20 +885,11 @@
             this.EngineControlsFlowLayout.TabIndex = 0;
             this.EngineControlsFlowLayout.WrapContents = false;
             // 
-            // windowToolStripMenuItem
+            // toolStripStatusScanePath
             // 
-            this.windowToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.materialsToolStripMenuItem});
-            this.windowToolStripMenuItem.Name = "windowToolStripMenuItem";
-            this.windowToolStripMenuItem.Size = new System.Drawing.Size(63, 22);
-            this.windowToolStripMenuItem.Text = "Window";
-            // 
-            // materialsToolStripMenuItem
-            // 
-            this.materialsToolStripMenuItem.Name = "materialsToolStripMenuItem";
-            this.materialsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.materialsToolStripMenuItem.Text = "Materials ...";
-            this.materialsToolStripMenuItem.Click += new System.EventHandler(this.materialsToolStripMenuItem_Click);
+            this.toolStripStatusScanePath.Name = "toolStripStatusScanePath";
+            this.toolStripStatusScanePath.Size = new System.Drawing.Size(118, 17);
+            this.toolStripStatusScanePath.Text = "toolStripStatusLabel2";
             // 
             // Form1
             // 
@@ -1008,6 +1016,7 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem4;
         private System.Windows.Forms.ToolStripMenuItem windowToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem materialsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusScanePath;
     }
 }
 

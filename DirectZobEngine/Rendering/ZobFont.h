@@ -5,6 +5,7 @@
 #include "Engine.h"
 #include "../Events.h"
 #include "../ZobMaterial.h"
+#include "Misc/ZobFilePath.h"
 
 class ZobFont
 {
@@ -28,7 +29,7 @@ public:
 		float uv_max_y;
 	};
 
-	ZobFont(const std::string& textureFile, const std::string& xmlFile);
+	ZobFont(ZobFilePath zfpTexture, ZobFilePath zfpXml);
 	~ZobFont();
 	const FontGlyphe* GetChar(char c) const;
 	inline float GetHeight() const { return m_height; }

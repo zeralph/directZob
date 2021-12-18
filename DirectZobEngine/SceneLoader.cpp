@@ -3,7 +3,8 @@
 #include "ZobPhysic/ZobPhysicsEngine.h"
 #include "Misc/ZobXmlHelper.h"
 
-std::string SceneLoader::m_path = "";
+//TODO !
+std::string SceneLoader::m_path = "D://Git//directZob//resources//";
 std::string SceneLoader::m_file = "";
 std::string SceneLoader::m_nextScenePath = "";
 std::string SceneLoader::m_nextSceneName = "";
@@ -38,7 +39,8 @@ void SceneLoader::LoadMesh(TiXmlElement* node)
 {
 	std::string name = node->Attribute(XML_ATTR_NAME);
 	std::string file = node->Attribute(XML_ATTR_FILE);
-	DirectZob::GetInstance()->GetMeshManager()->LoadMesh(name, m_path, file, false);
+	ZobFilePath zfp = ZobFilePath(name, m_path, file, false);
+	DirectZob::GetInstance()->GetMeshManager()->LoadMesh(zfp);
 }
 
 void SceneLoader::LoadZobObject(std::string& path, std::string& file)
@@ -154,7 +156,7 @@ void SceneLoader::NewScene()
 {
 	DirectZob::AddIndent();
 	UnloadScene();
-	m_path = "";
+	m_path = "D://Git//directZob//resources//";
 	m_file = "";
 	DirectZob::GetInstance()->GetHudManager()->Start();
 	DirectZob::GetInstance()->GetLightManager()->ReInitGlobalSettings();
@@ -267,7 +269,7 @@ void SceneLoader::SaveScene(std::string &path, std::string &file)
 	{
 		DirectZob::LogInfo("Scene saved");
 	}
-	delete root;
+	//delete root;
 }
 
 bool SceneLoader::SaveZobObjectRecusrive(TiXmlNode* node, ZobObject* z)

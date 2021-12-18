@@ -54,13 +54,15 @@ const ZobMaterial* MaterialManager::LoadMaterial(const std::string& name, const 
 }
 
 const ZobMaterial* MaterialManager::LoadMaterial(const std::string& name, const ZobColor* ambientColor, const ZobColor* diffuseColor, const ZobColor* specularColor,
-												float specularExponent, float transparency, const std::string &textureFile)
+												float specularExponent, float transparency, ZobFilePath zfp)
 {
+	//assert(zfp.IsDefined());
 	if (GetMaterial(name) == NULL)
 	{
 		const Texture* texture = NULL;
-		if (textureFile.length() > 0)
+		if (zfp.IsDefined())
 		{
+			std::string textureFile = zfp.GetFullPath();
 			for (std::vector<Texture*>::const_iterator iter = m_textures.begin(); iter != m_textures.end(); iter++)
 			{
 				if ((*iter)->GetPath() == textureFile)
@@ -69,7 +71,7 @@ const ZobMaterial* MaterialManager::LoadMaterial(const std::string& name, const 
 					break;
 				}
 			}
-			if(texture == NULL)
+			if (texture == NULL)
 			{
 				texture = LoadTexture(textureFile);
 			}
@@ -85,7 +87,7 @@ const ZobMaterial* MaterialManager::LoadMaterial(const std::string& name, const 
 	}
 }
 
-const ZobMaterial* MaterialManager::LoadFbxMaterial(const fbxsdk::FbxMesh* mesh, const std::string& path)
+const ZobMaterial* MaterialManager::LoadFbxMaterial(const fbxsdk::FbxMesh* mesh, ZobFilePath zfp)
 {
 	const ZobMaterial* finalMaterial = NULL;
 	MaterialManager* materialMgr = DirectZob::GetInstance()->GetMaterialManager();
@@ -161,6 +163,7 @@ const ZobMaterial* MaterialManager::LoadFbxMaterial(const fbxsdk::FbxMesh* mesh,
 						specularExponent = (float)prop.Get<FbxDouble>();
 					}
 					std::string texFullPath = "";
+					ZobFilePath zfpMaterial;
 					if (texture_name2)
 					{
 						std::string t = std::string(texture_name2);
@@ -169,15 +172,10 @@ const ZobMaterial* MaterialManager::LoadFbxMaterial(const fbxsdk::FbxMesh* mesh,
 						{
 							t = t.substr(i+1);
 						}
-						texFullPath = path + std::string(t);
+						zfpMaterial = ZobFilePath(t, zfp.GetFullPathWithoutFile(), t, zfp.IsAbsolute());
 					}
-					std::string p = "";
-					if (texFullPath.length())
-					{
-						p = SceneLoader::GetResourcePath();
-						p.append(texFullPath);
-					}	
-					finalMaterial = LoadMaterial(matName, &ambient, &diffuse, &specular, specularExponent, transparency, p);
+						
+					finalMaterial = LoadMaterial(matName, &ambient, &diffuse, &specular, specularExponent, transparency, zfpMaterial);
 				}
 			}
 		}
@@ -186,16 +184,10 @@ const ZobMaterial* MaterialManager::LoadFbxMaterial(const fbxsdk::FbxMesh* mesh,
 }
 
 
-void MaterialManager::LoadOBJMaterials(std::string& path, std::string& file, bool bAbsolutePath)
+void MaterialManager::LoadOBJMaterials(ZobFilePath zfp)
 {
 	std::string::size_type sz;
-	std::string fullPath = "";
-	if (!bAbsolutePath)
-	{
-		fullPath = std::string(SceneLoader::GetResourcePath());
-	}
-	fullPath.append(path);
-	fullPath.append(file);
+	std::string fullPath = zfp.GetFullPath();
 	std::ifstream sfile(fullPath, std::ios::in);
 	std::string line;
 	std::vector<OBJMaterialInfo> materials;
@@ -222,7 +214,8 @@ void MaterialManager::LoadOBJMaterials(std::string& path, std::string& file, boo
 				matInfo.transparency = 1.0f;
 				matInfo.texture = "";
 				matInfo.name = v[1];
-				matInfo.file = file.substr(0, file.size() - 4);
+				matInfo.file = zfp.GetName();
+				matInfo.file = matInfo.file.substr(0, matInfo.file.size() - 4);
 				while(getline(sfile, line))
 				{
 					if (line.rfind("map_Kd", 0) == 0)
@@ -298,8 +291,7 @@ void MaterialManager::LoadOBJMaterials(std::string& path, std::string& file, boo
 			}
 		}
 	}
-	std::string matPath = std::string(SceneLoader::GetResourcePath());
-	matPath.append(path);
+
 	for (int i = 0; i < materials.size(); i++)
 	{
 		std::string n = materials.at(i).file;
@@ -307,18 +299,27 @@ void MaterialManager::LoadOBJMaterials(std::string& path, std::string& file, boo
 		n.append(materials.at(i).name);
 		if (materials.at(i).texture.length() > 0)
 		{
-			std::string p = matPath;
-			p.append(materials.at(i).texture);
-			LoadMaterial(n, &materials.at(i).ambient, &materials.at(i).diffuse, &materials.at(i).specular, materials.at(i).specularExponent, materials.at(i).transparency, p);
+			ZobFilePath zfpMaterial = ZobFilePath(materials.at(i).texture, zfp.GetPath(), materials.at(i).texture, zfp.IsAbsolute());
+			LoadMaterial(n, &materials.at(i).ambient, &materials.at(i).diffuse, &materials.at(i).specular, materials.at(i).specularExponent, materials.at(i).transparency, zfpMaterial);
 		}
 		else
 		{
-			LoadMaterial(n, &materials.at(i).ambient, &materials.at(i).diffuse, &materials.at(i).specular, materials.at(i).specularExponent, materials.at(i).transparency, "");
+			ZobFilePath zfpMaterial;
+			LoadMaterial(n, &materials.at(i).ambient, &materials.at(i).diffuse, &materials.at(i).specular, materials.at(i).specularExponent, materials.at(i).transparency, zfpMaterial);
 		}
 	}
 }
 
 const ZobMaterial* MaterialManager::GetMaterial(const int i) const
+{
+	if (i >= 0 && i < m_materials.size())
+	{
+		return m_materials[i];
+	}
+	return NULL;
+}
+
+ZobMaterial* MaterialManager::GetMaterialNoConst(const int i) const
 {
 	if (i >= 0 && i < m_materials.size())
 	{

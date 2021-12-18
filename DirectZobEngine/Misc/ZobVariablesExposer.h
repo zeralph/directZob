@@ -4,6 +4,8 @@
 #include <string>
 #include "../tinyxml/tinyxml.h"
 #include "../Rendering/Color.h"
+#include "ZobFilePath.h"
+
 //#include "../DirectZobEngine/ZobObjects/ZOBGUID.h"
 //#include "../DirectZobEngine/ZobObjects/ZobObject.h"
 //#include "../DirectZobEngine/Rendering/ZobVector3.h"
@@ -18,7 +20,6 @@ class ZobVariablesExposer
 public:
 
 	typedef void (*wrapperCallback)(zobId id);
-
 	enum eWrapperType
 	{
 		eWrapperType_unset = 0,
@@ -102,7 +103,7 @@ public:
 		{
 			type = eWrapperType_zobObject;
 		}
-		else if (std::is_same<T, DirectZobType::ZobFilePath>::value)
+		else if (std::is_same<T, ZobFilePath>::value)
 		{
 			type = eWrapperType_path;
 		}

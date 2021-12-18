@@ -213,7 +213,7 @@ TiXmlNode* ZobVariablesExposer::SaveUnderNode(TiXmlNode* node)
 				ZobFilePath zp;
 				std::string rsp = DirectZob::GetInstance()->GetResourcePath();
 				zp = *(ZobFilePath*)(w->ptr);
-
+				/*
 				size_t pos = zp.path.find(rsp);
 				if (pos != std::string::npos)
 				{
@@ -223,6 +223,7 @@ TiXmlNode* ZobVariablesExposer::SaveUnderNode(TiXmlNode* node)
 				{
 					zp.path = std::string("/");
 				}
+				*/
 				std::string s = zp.Serialize();
 				o.SetAttribute(XML_ATTR_VALUE, s.c_str());
 				break;

@@ -46,7 +46,6 @@ namespace CLI {
 		String^					GetName();
 		String^					GetFullNodeName();
 		void					SetName(System::String^ name);
-		List<ZobObjectWrapper^>^ GetChildren();
 		void					LoadMesh(System::String^ name, System::String^ file, System::String^ path);
 		void					LoadSprite(System::String^ name, System::String^ file, System::String^ path);
 		void					CreateSprite();

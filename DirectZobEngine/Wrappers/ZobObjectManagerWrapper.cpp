@@ -397,7 +397,7 @@ namespace CLI
 	{
 		if (m_selectedObjectWrapper)
 		{
-			m_selectedObjectWrapper->Detach();
+			//m_selectedObjectWrapper->Detach();
 			delete m_selectedObjectWrapper; 
 			m_selectedObject = NULL;
 			m_selectedObjectWrapper = nullptr;

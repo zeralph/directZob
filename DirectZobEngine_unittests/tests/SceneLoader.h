@@ -9,13 +9,13 @@ TEST(SceneLoader, LoadScene)
 	std::string name = "carTest.dzs";
 	std::string path = MyUtils::GetPath() + "resources\\";
 	SceneLoader::LoadScene(path, name);
-	SceneLoader::Update();
+	SceneLoader::Update(); 
 	EXPECT_EQ(SceneLoader::GetNbZobObjectsInScene(), 58);
-	EXPECT_EQ(DirectZob::GetInstance()->GetMaterialManager()->GetNbTextures(), 42);
+	EXPECT_EQ(DirectZob::GetInstance()->GetMaterialManager()->GetNbMaterials(), 42);
 	SceneLoader::UnloadScene();
-	EXPECT_EQ(DirectZob::GetInstance()->GetMaterialManager()->GetNbTextures(), 0);
+	EXPECT_EQ(DirectZob::GetInstance()->GetMaterialManager()->GetNbMaterials(), 0);
 	SceneLoader::LoadScene(path, name);
 	SceneLoader::Update();
-	EXPECT_EQ(DirectZob::GetInstance()->GetMaterialManager()->GetNbTextures(), 42);
+	EXPECT_EQ(DirectZob::GetInstance()->GetMaterialManager()->GetNbMaterials(), 42);
 	EXPECT_EQ(SceneLoader::GetNbZobObjectsInScene(), 58);
 }

@@ -12,9 +12,16 @@ namespace DirectZobEditor.MaterialsForm
 {
     public partial class Material : UserControl
     {
-        public Material()
+        public Material(string name)
         {
             InitializeComponent();
+            LabelMaterial.Text = name;
+            //pictureBox1.
+        }
+
+        public void SetName(string name)
+        {
+            
         }
     }
 }

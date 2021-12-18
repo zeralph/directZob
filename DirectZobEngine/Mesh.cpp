@@ -5,7 +5,7 @@
 using namespace std;
 static ZobVector2 vec2zero = ZobVector2(0,0);
 static std::string emptyStr = std::string("");
-Mesh::Mesh(std::string& name)
+Mesh::Mesh(const std::string& name)
 {	
 	DirectZob::LogInfo("Mesh %s Creation", m_name.c_str());
 	DirectZob::AddIndent();
@@ -18,7 +18,7 @@ Mesh::Mesh(std::string& name)
 	m_bDrawn = false;
 	m_visible = true;
 	m_indices = NULL;
-	m_triangleVertices = NULL;
+	m_meshVertices = NULL;
 	m_triangleProjectedVertices = NULL;
 	m_triangleVerticesNormals = NULL;
 	m_trianglesNormals = NULL;
@@ -27,50 +27,43 @@ Mesh::Mesh(std::string& name)
 	m_name = name;
 	m_fileName = emptyStr;
 	m_path = emptyStr;
+	m_size = 0;
 	DirectZob::RemoveIndent();
 }
 
-Mesh::Mesh(std::string& name, std::string& path, std::string& file, bool bAbsolutePath):Mesh(name)
+Mesh::Mesh(ZobFilePath zfp):Mesh(zfp.GetName())
 {
 	DirectZob::AddIndent();
-	m_path = path;
-	m_fileName = file;
-	std::string fullPath = "";
-	m_visible = true;
-	if (!bAbsolutePath)
-	{
-		fullPath = std::string(SceneLoader::GetResourcePath());
-	}
-	fullPath.append(path);
-	fullPath.append(file);
+	std::string fullPath = zfp.GetFullPath();
 	if (fullPath.length())
 	{ 
 		std::ifstream f(fullPath.c_str());
 		if (!f.good())
 		{
 			//throw errorB
-			DirectZob::LogError("Cannot load %s, path not found", name.c_str());	
+			DirectZob::LogError("Cannot load %s, path '%s'not found", zfp.GetName().c_str(), fullPath);	
 		}
 		else
 		{
 			if (fullPath.find(".fbx") != -1 || fullPath.find(".FBX") != -1)
 			{
-				LoadFbx(fullPath);
+				LoadFbx(zfp);
 			}
 			else if (fullPath.find(".obj") != -1 || fullPath.find(".OBJ") != -1)
 			{
-				LoadOBJ(fullPath, bAbsolutePath);
+				LoadOBJ(zfp);
 			}
 			else
 			{
-				DirectZob::LogError("Mesh %s : bad filename extension. Loading ignored", name.c_str());
+				DirectZob::LogError("Mesh %s : bad filename extension. Loading ignored", zfp.GetName().c_str());
 			}
 		}
 	}
 	else
 	{
-		DirectZob::LogError("Cannot load %s, path empty", name.c_str());	
+		DirectZob::LogError("Cannot load %s, path empty", zfp.GetName().c_str());
 	}
+	m_size = ComputeSize();
 	DirectZob::RemoveIndent();
 }
 
@@ -79,11 +72,11 @@ Mesh::Mesh(Mesh* m)
 
 }
 
-Mesh::Mesh(std::string &parentName, std::string& path, fbxsdk::FbxMesh* mesh)
+Mesh::Mesh(std::string &parentName, ZobFilePath zfp, fbxsdk::FbxMesh* mesh)
 {
 	if (mesh)
 	{
-		m_path = path;
+		m_path = zfp.GetFullPathWithoutFile();
 		m_name = parentName+"."+mesh->GetName();
 		DirectZob::LogInfo("Mesh %s Creation", m_name.c_str());
 		DirectZob::AddIndent();
@@ -91,7 +84,7 @@ Mesh::Mesh(std::string &parentName, std::string& path, fbxsdk::FbxMesh* mesh)
 		m_nbVertices += mesh->GetPolygonVertexCount();
 		m_nbFaces = 0;
 		
-		m_triangleVertices = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
+		m_meshVertices = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
 		m_verticesData = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
 		m_verticesTmp = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
 
@@ -128,9 +121,8 @@ Mesh::Mesh(std::string &parentName, std::string& path, fbxsdk::FbxMesh* mesh)
 					FbxVector4 v = mesh->GetControlPointAt(ctrlIdx);
 					FbxGeometryElementVertexColor* c = mesh->GetElementVertexColor(ctrlIdx);
 					// TODO : get vertex color
-					//c->get
 					FbxMultT(mesh->GetNode(), v);
-					m_triangleVertices[vIdx] = ZobVector3(v[0], v[1], v[2]);
+					m_meshVertices[vIdx] = ZobVector3(v[0], v[1], v[2]);
 					float ccr = (((vIdx + 0) % 3) == 0) ? 1 : 0;
 					float ccg = (((vIdx + 1) % 3) == 0) ? 1 : 0;
 					float ccb = (((vIdx + 2) % 3) == 0) ? 1 : 0;
@@ -180,14 +172,14 @@ Mesh::Mesh(std::string &parentName, std::string& path, fbxsdk::FbxMesh* mesh)
 					vIdx++;
 				}
 
-				const ZobMaterial* material = DirectZob::GetInstance()->GetMaterialManager()->LoadFbxMaterial(mesh, m_path);
+				const ZobMaterial* material = DirectZob::GetInstance()->GetMaterialManager()->LoadFbxMaterial(mesh, zfp);
 				Triangle t;
 				t.verticeAIndex = startIdx;
 				t.verticeBIndex = startIdx + 1;
 				t.verticeCIndex = startIdx + 2;
-				t.va = &m_triangleVertices[startIdx];
-				t.vb = &m_triangleVertices[startIdx + 1];
-				t.vc = &m_triangleVertices[startIdx + 2];
+				t.va = &m_meshVertices[startIdx];
+				t.vb = &m_meshVertices[startIdx + 1];
+				t.vc = &m_meshVertices[startIdx + 2];
 				t.pa = &m_triangleProjectedVertices[startIdx];
 				t.pb = &m_triangleProjectedVertices[startIdx + 1];
 				t.pc = &m_triangleProjectedVertices[startIdx + 2];
@@ -209,9 +201,9 @@ Mesh::Mesh(std::string &parentName, std::string& path, fbxsdk::FbxMesh* mesh)
 					t.verticeAIndex = startIdx + 3;
 					t.verticeBIndex = startIdx + 0;
 					t.verticeCIndex = startIdx + 2;
-					t.va = &m_triangleVertices[startIdx + 3];
-					t.vb = &m_triangleVertices[startIdx + 0];
-					t.vc = &m_triangleVertices[startIdx + 2];
+					t.va = &m_meshVertices[startIdx + 3];
+					t.vb = &m_meshVertices[startIdx + 0];
+					t.vc = &m_meshVertices[startIdx + 2];
 					t.pa = &m_triangleProjectedVertices[startIdx + 3];
 					t.pb = &m_triangleProjectedVertices[startIdx + 0];
 					t.pc = &m_triangleProjectedVertices[startIdx + 2];
@@ -249,8 +241,8 @@ Mesh::Mesh(std::string &parentName, std::string& path, fbxsdk::FbxMesh* mesh)
 			m_indices[i * 3 + 1] = t->verticeBIndex;
 			m_indices[i * 3 + 2] = t->verticeCIndex;
 		}
-		memcpy(m_verticesData, m_triangleVertices, sizeof(ZobVector3) * m_nbVertices);
-		memcpy(m_verticesTmp, m_triangleVertices, sizeof(ZobVector3)* m_nbVertices);
+		memcpy(m_verticesData, m_meshVertices, sizeof(ZobVector3) * m_nbVertices);
+		memcpy(m_verticesTmp, m_meshVertices, sizeof(ZobVector3)* m_nbVertices);
 		memcpy(m_verticesNormalsData, m_triangleVerticesNormals, sizeof(ZobVector3) * m_nbNormals);
 		memcpy(m_verticesNormalsTmp, m_triangleVerticesNormals, sizeof(ZobVector3)* m_nbNormals);
 		memcpy(m_trianglesNormalsData, m_trianglesNormals, sizeof(ZobVector3) * m_nbFaces);
@@ -259,8 +251,9 @@ Mesh::Mesh(std::string &parentName, std::string& path, fbxsdk::FbxMesh* mesh)
 	DirectZob::RemoveIndent();
 }
 
-void Mesh::LoadFbx(const std::string& fullPath)
+void Mesh::LoadFbx(ZobFilePath zfp)
 {
+	std::string fullPath = zfp.GetFullPath();
 	DirectZob::LogInfo("Load FBX %s", fullPath.c_str());
 	DirectZob::AddIndent();
 	FbxManager* fbxManag = DirectZob::GetInstance()->GetMeshManager()->GetFbxManager();
@@ -295,7 +288,7 @@ void Mesh::LoadFbx(const std::string& fullPath)
 		for (int i = 0; i < gc; i++)
 		{
 			FbxMesh* mesh = (FbxMesh*)lScene->GetGeometry(i);
-			Mesh* m = new Mesh(m_name, m_path, mesh);
+			Mesh* m = new Mesh(m_name, zfp, mesh);
 			m_subMeshes.push_back(m);
 			m_minBoundingBox.x = fminf(m_minBoundingBox.x, m->m_minBoundingBox.x);
 			m_minBoundingBox.y = fminf(m_minBoundingBox.y, m->m_minBoundingBox.y);
@@ -341,7 +334,7 @@ Mesh::~Mesh()
 	m_triangles.clear();
 	free(m_indices);
 	free(m_triangleColors);
-	free(m_triangleVertices);
+	free(m_meshVertices);
 	free(m_verticesData);
 	free(m_verticesTmp);
 	free(m_triangleVerticesNormals);
@@ -355,7 +348,7 @@ Mesh::~Mesh()
 	free(m_triangleUvs);
 	m_indices = NULL;
 	m_triangleColors = NULL;
-	m_triangleVertices = NULL;
+	m_meshVertices = NULL;
 	m_verticesData = NULL;
 	m_verticesTmp = NULL;
 	m_triangleVerticesNormals = NULL;
@@ -371,9 +364,24 @@ Mesh::~Mesh()
 	DirectZob::RemoveIndent();
 }
 
-void Mesh::LoadOBJ(const std::string& fullPath, bool bAbsolutePath)
+const long Mesh::ComputeSize() const
+{
+	long s;
+	s = 6 * sizeof(ZobVector3) * m_nbVertices;
+	s += 3 * sizeof(ZobVector3) * m_nbNormals;
+	s += sizeof(ZobVector2) * m_nbUvs;
+	s += m_triangles.size() * sizeof(Triangle);
+	for (int i = 0; i < m_subMeshes.size(); i++)
+	{
+		s += m_subMeshes[i]->ComputeSize();
+	}
+	return s;
+}
+
+void Mesh::LoadOBJ(ZobFilePath zfp)
 {
 	static std::string sMtllib = std::string("mtllib");
+	std::string fullPath = zfp.GetFullPath();
 	DirectZob::LogInfo("Load OBJ %s", fullPath.c_str());
 	DirectZob::AddIndent();
 	std::string::size_type sz;
@@ -410,7 +418,8 @@ void Mesh::LoadOBJ(const std::string& fullPath, bool bAbsolutePath)
 			if (DirectZob::GetInstance() && v.size() == 2)
 			{
 				mtlFile = v[1];
-				DirectZob::GetInstance()->GetMaterialManager()->LoadOBJMaterials(m_path, v[1], bAbsolutePath);
+				ZobFilePath zfpMaterial = ZobFilePath(mtlFile, zfp.GetPath(), mtlFile, zfp.IsAbsolute());
+				DirectZob::GetInstance()->GetMaterialManager()->LoadOBJMaterials(zfpMaterial);
 			}
 		}
 	}
@@ -425,7 +434,7 @@ void Mesh::LoadOBJ(const std::string& fullPath, bool bAbsolutePath)
 		m_nbNormals = 1;
 	}
 	m_indices = (uint*)malloc(sizeof(int) * 3 * m_nbFaces);
-	m_triangleVertices = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
+	m_meshVertices = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
 	m_triangleColors = (ZobColor*)malloc(sizeof(ZobColor) * m_nbVertices);
 	m_verticesData = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
 	m_verticesTmp = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
@@ -478,7 +487,7 @@ void Mesh::LoadOBJ(const std::string& fullPath, bool bAbsolutePath)
 				std::vector<string> vec;
 				SplitEntry(&line, &vec, ' ');
 				ZobVector3 v = ZobVector3(std::stof(vec[1], &sz), ::stof(vec[2], &sz), ::stof(vec[3], &sz));
-				m_triangleVertices[curVertice] = v;
+				m_meshVertices[curVertice] = v;
 
 				float ccr = (((curVertice + 0) % 3) == 0) ? 1 : 0;
 				float ccg = (((curVertice + 1) % 3) == 0) ? 1 : 0;
@@ -518,7 +527,7 @@ void Mesh::LoadOBJ(const std::string& fullPath, bool bAbsolutePath)
 			CreateTriangles(&v, &m_triangles, curface, tex);
 		}
 	}
-	memcpy(m_verticesData, m_triangleVertices, sizeof(ZobVector3) * m_nbVertices);
+	memcpy(m_verticesData, m_meshVertices, sizeof(ZobVector3) * m_nbVertices);
 	memcpy(m_verticesNormalsData, m_triangleVerticesNormals, sizeof(ZobVector3) * m_nbNormals);
 	memcpy(m_trianglesNormalsData, m_trianglesNormals, sizeof(ZobVector3) * m_nbFaces);
 
@@ -568,7 +577,7 @@ void Mesh::Update(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationM
 		float w = (float)bData->width / 2.0f;
 		float h = (float)bData->height / 2.0f;	
 
-		memcpy(m_triangleVertices, m_verticesData, sizeof(ZobVector3) * m_nbVertices);
+		memcpy(m_meshVertices, m_verticesData, sizeof(ZobVector3) * m_nbVertices);
 		memcpy(m_verticesTmp, m_verticesData, sizeof(ZobVector3) * m_nbVertices);
 		memcpy(m_verticesNormalsTmp, m_verticesNormalsData, sizeof(ZobVector3) * m_nbNormals);
 		memcpy(m_trianglesNormalsTmp, m_trianglesNormalsData, sizeof(ZobVector3) * m_nbFaces);
@@ -671,7 +680,7 @@ void Mesh::QueueForDrawing(ZobObject* z, const ZobMatrix4x4& modelMatrix, const 
 {
 	if (m_visible && m_bDrawn)
 	{
-		memcpy(m_triangleVertices, m_verticesTmp, sizeof(ZobVector3) * m_nbVertices);
+		memcpy(m_meshVertices, m_verticesTmp, sizeof(ZobVector3) * m_nbVertices);
 		memcpy(m_triangleVerticesNormals, m_verticesNormalsTmp, sizeof(ZobVector3) * m_nbNormals);
 		memcpy(m_trianglesNormals, m_trianglesNormalsTmp, sizeof(ZobVector3) * m_nbFaces);
 		memcpy(m_triangleProjectedVertices, m_projectedVerticesTmp, sizeof(ZobVector3) * m_nbVertices);
@@ -808,7 +817,7 @@ void Mesh::CreateTriangles(const std::vector<std::string>* line, std::vector<Tri
 		bool bHasNormals;
 		ParseObjFaceData(&line->at(a), v, u, n, bHasUv, bHasNormals);
 		t.verticeAIndex = v;
-		t.va = &m_triangleVertices[v];
+		t.va = &m_meshVertices[v];
 		t.ca  = &m_triangleColors[v];
 		t.pa = &m_triangleProjectedVertices[v];
 		if (bHasUv)
@@ -826,7 +835,7 @@ void Mesh::CreateTriangles(const std::vector<std::string>* line, std::vector<Tri
 
 		ParseObjFaceData(&line->at(b), v, u, n, bHasUv, bHasNormals);
 		t.verticeBIndex = v;
-		t.vb = &m_triangleVertices[v];
+		t.vb = &m_meshVertices[v];
 		t.cb  = &m_triangleColors[v];
 		t.pb = &m_triangleProjectedVertices[v];
 		if (bHasUv)
@@ -844,7 +853,7 @@ void Mesh::CreateTriangles(const std::vector<std::string>* line, std::vector<Tri
 
 		ParseObjFaceData(&line->at(c), v, u, n, bHasUv, bHasNormals);
 		t.verticeCIndex = v;
-		t.vc = &m_triangleVertices[v];
+		t.vc = &m_meshVertices[v];
 		t.cc  = &m_triangleColors[v];
 		t.pc = &m_triangleProjectedVertices[v];
 		if (bHasUv)

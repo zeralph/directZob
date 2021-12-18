@@ -129,7 +129,9 @@
 				'Misc/ZobXmlHelper.h',		
 				'Misc/ZobVariablesExposer.h',
 				'Misc/ZobVariablesExposer.cpp',	
-				'Misc/ZobUtils.h',				
+				'Misc/ZobUtils.h',	
+				'Misc/ZobFilePath.h',
+				'Misc/ZobFilePath.cpp',				
 				'Misc/ZobGeometryHelper.h',
 				'Misc/ZobGeometryHelper.cpp',				
             ],
@@ -360,6 +362,8 @@
 							'Wrappers/Editor/ZobObjectsEditor.cpp',
 							'Wrappers/ZobGlobalsWrapper.h',
 							'Wrappers/ZobGlobalsWrapper.cpp',
+							'Wrappers/ZobMaterialsManagerWrapper.h',
+							'Wrappers/ZobMaterialsManagerWrapper.cpp',
 							],
                         'link_settings': {
                             # links fbxsdk as static

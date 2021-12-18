@@ -65,47 +65,37 @@ ZobHUDManager::~ZobHUDManager()
 static const ZobMaterial* sMat;
 void ZobHUDManager::Init()
 {
-	std::string p = SceneLoader::GetResourcePath();
-	if (p.length())
-	{
-		std::string tex;
-		std::string xml;
-		tex = p;
-		xml = p;
-		tex.append("_fonts/mv_boli_regular_14.PNG");
-		xml.append("_fonts/mv_boli_regular_14.xml");
-		m_fonts.push_back( new ZobFont(tex, xml));
+
+	ZobFilePath zfpTexture;
+	ZobFilePath zfpXml;
+
+	zfpTexture = ZobFilePath("mv_boli_regular_14", "_fonts", "mv_boli_regular_14.PNG", false);
+	zfpXml = ZobFilePath("mv_boli_regular_14", "_fonts", "mv_boli_regular_14.xml", false);
+	m_fonts.push_back( new ZobFont(zfpTexture, zfpXml));
 		
-		tex = p;
-		xml = p;
-		tex.append("_fonts/mv_boli_regular_32.PNG");
-		xml.append("_fonts/mv_boli_regular_32.xml");
-		m_fonts.push_back(new ZobFont(tex, xml));
+	zfpTexture.Reset();
+	zfpXml.Reset();
+	zfpTexture = ZobFilePath("mv_boli_regular_32", "_fonts", "mv_boli_regular_32.PNG", false);
+	zfpXml = ZobFilePath("mv_boli_regular_32", "_fonts", "mv_boli_regular_32.xml", false);
+	m_fonts.push_back(new ZobFont(zfpTexture, zfpXml));
 
-		tex = p;
-		xml = p;
-		tex.append("_fonts/leelawadee_ui_bold_32.PNG");
-		xml.append("_fonts/leelawadee_ui_bold_32.xml");
-		m_fonts.push_back(new ZobFont(tex, xml));
+	zfpTexture.Reset();
+	zfpXml.Reset();
+	zfpTexture = ZobFilePath("leelawadee_ui_bold_32", "_fonts", "leelawadee_ui_bold_32.PNG", false);
+	zfpXml = ZobFilePath("leelawadee_ui_bold_32", "_fonts", "leelawadee_ui_bold_32.xml", false);
+	m_fonts.push_back(new ZobFont(zfpTexture, zfpXml));
 
-		tex = p;
-		xml = p;
-		tex.append("_fonts/arial_regular_32.PNG");
-		xml.append("_fonts/arial_regular_32.xml");
-		m_fonts.push_back(new ZobFont(tex, xml));
+	zfpTexture.Reset();
+	zfpXml.Reset();
+	zfpTexture = ZobFilePath("arial_regular_32", "_fonts", "arial_regular_32.PNG", false);
+	zfpXml = ZobFilePath("arial_regular_32", "_fonts", "arial_regular_32.xml", false);
+	m_fonts.push_back(new ZobFont(zfpTexture, zfpXml));
 
-		tex = p;
-		xml = p;
-		tex.append("_fonts/vcr_osd_mono_regular_14.PNG");
-		xml.append("_fonts/vcr_osd_mono_regular_14.xml");
-		m_fonts.push_back(new ZobFont(tex, xml));
-	}
-	else
-	{
-		//const u8* data = BaseFont.pixel_data;
-		//m_font = new ZobFont(data, BaseFont.width, BaseFont.height, BaseFont.nbCharWidth, BaseFont.nbCharHeight);
-	}
-
+	zfpTexture.Reset();
+	zfpXml.Reset();
+	zfpTexture = ZobFilePath("vcr_osd_mono_regular_14", "_fonts", "vcr_osd_mono_regular_14.PNG", false);
+	zfpXml = ZobFilePath("vcr_osd_mono_regular_14", "_fonts", "vcr_osd_mono_regular_14.xml", false);
+	m_fonts.push_back(new ZobFont(zfpTexture, zfpXml));
 }
 
 void ZobHUDManager::Stop()

@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 #include "../Rendering/Texture.h"
+#include "Misc/ZobFilePath.h"
 
 class MaterialManager
 {
@@ -15,14 +16,15 @@ public:
 	~MaterialManager();
 
 	const ZobMaterial* 			LoadMaterial(const std::string& name, const ZobColor* ambientColor, const ZobColor* diffuseColor, const ZobColor* specularColor,
-											float specularExponent, float transparency, const std::string &textureFile);
+											float specularExponent, float transparency, ZobFilePath zfp);
 	const ZobMaterial*			LoadMaterial(const std::string& name, const ZobColor* ambientColor, const ZobColor* diffuseColor, const ZobColor* specularColor,
 											float specularExponent, float transparency, Texture* texture);
 	const ZobMaterial* 			GetMaterial(const std::string& name) const;
-	const int 					GetNbTextures() const { return (int)m_materials.size(); }
+	const int 					GetNbMaterials() const { return (int)m_materials.size(); }
 	const ZobMaterial* 			GetMaterial(const int i) const;
-	void 						LoadOBJMaterials(std::string& path, std::string& file, bool bAbsolutePath);
-	const ZobMaterial* 			LoadFbxMaterial(const fbxsdk::FbxMesh* mesh, const std::string &path);
+	ZobMaterial*				GetMaterialNoConst(const int i) const;
+	void 						LoadOBJMaterials(ZobFilePath zfp);
+	const ZobMaterial* 			LoadFbxMaterial(const fbxsdk::FbxMesh* mesh, ZobFilePath zfp);
 	void 						UnloadAll();
 	ZobMaterial*				CreateMaterial();
 	const Texture*				GetTexture(const std::string name);
