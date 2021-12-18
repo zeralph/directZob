@@ -14,7 +14,7 @@ namespace CLI
 	{
 		m_renderWindow = renderWindow;
 		m_mouseInside = true;
-		m_running = true;
+		m_running = false;
 		m_renderWindowGraphics = m_renderWindow->CreateGraphics();
 		m_nbTriangles = 0;
 		m_triangleList = (Triangle*)malloc(sizeof(Triangle) * NB_EDITOR_TRIANGLES);
@@ -481,6 +481,8 @@ namespace CLI
 
 	void EngineWrapper::Update(float dt)
 	{
+		if (!m_running)
+			return;
 		m_renderWindow->Invoke(gcnew Action(this, &CLI::EngineWrapper::UpdateMousePosition));
 		ZobObject* curObj = DirectZobWrapper::GetWrapper()->GetZobObjectManagerWrapper()->GetSelectedObject();
 		if (curObj)

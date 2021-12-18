@@ -70,6 +70,7 @@ namespace CLI
 		void								QueueObjectsToRender();
 		void								Update(float dt);
 		void								Stop() { m_running = false; }
+		void								Start() { m_running = true; }
 		void								Resize(int w, int h);
 		void								SetSnap(float d) { m_modificatorData->m_snap = d; }
 

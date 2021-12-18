@@ -125,12 +125,14 @@ namespace CLI
 		if (GetInstance())
 		{
 			m_ZobObjectManagerWrapper->SelectObject(NULL);
+			Unload();
 			m_events->FireOnNewSceneEvent();
 			GetInstance()->NewScene();
 			DirectZob::GetInstance()->GetCameraManager()->CreateEditorCamera();
 			m_ZobObjectManagerWrapper->Refresh();
 			m_ZobObjectManagerWrapper->AddEditorGizmos();
 			DirectZob::GetInstance()->GetEngine()->ShowGrid(true);
+			m_ZobEngineWrapper->Start();
 		}
 	}
 
@@ -141,7 +143,7 @@ namespace CLI
 			m_ZobEngineWrapper->Stop();
 			GetInstance()->Unload();
 		}
-		m_Instance = NULL;
+		//m_Instance = NULL;
 	}
 
 

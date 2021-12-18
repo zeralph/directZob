@@ -120,6 +120,7 @@ void DirectZob::NewScene()
 	{
 		m_text = new Text2D(m_engine, m_events);
 	}
+	DirectZob::GetInstance()->GetEngine()->Start();
 	//g_render_mutex.unlock();
 }
 
@@ -133,9 +134,10 @@ void DirectZob::Resize(int width, int height)
 void DirectZob::Unload()
 {
 	//g_render_mutex.lock();
-	SceneLoader::UnloadScene();
 	DirectZob::GetInstance()->GetEngine()->Stop();
-	delete DirectZob::GetInstance();
+	SceneLoader::UnloadScene();
+	
+	//delete DirectZob::GetInstance();
 	//g_render_mutex.unlock();
 }
 
