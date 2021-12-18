@@ -5,7 +5,7 @@
 #include "Engine.h"
 #include "../Events.h"
 #include "../ZobMaterial.h"
-#include "Misc/ZobFilePath.h"
+#include "../Misc/ZobFilePath.h"
 
 class ZobFont
 {

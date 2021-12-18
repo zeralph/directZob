@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 #include "../Rendering/Texture.h"
-#include "Misc/ZobFilePath.h"
+#include "../Misc/ZobFilePath.h"
 
 class MaterialManager
 {
