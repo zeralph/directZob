@@ -36,7 +36,7 @@ ZobSprite* MeshManager::CreateSprite()
 
 Mesh* MeshManager::LoadMesh(ZobFilePath zfp)
 {
-    DirectZob::LogInfo("Loading mesh %s & at %s", zfp.GetName().c_str(), zfp.GetFullPath().c_str());
+    DirectZob::LogInfo("Loading mesh '%s' at '%s'", zfp.GetName().c_str(), zfp.GetFullPath().c_str());
 	Mesh* outMesh = NULL;
 	//if (GetMesh(name) == NULL)
 	{

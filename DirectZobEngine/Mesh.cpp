@@ -41,7 +41,7 @@ Mesh::Mesh(ZobFilePath zfp):Mesh(zfp.GetName())
 		if (!f.good())
 		{
 			//throw errorB
-			DirectZob::LogError("Cannot load %s, path '%s'not found", zfp.GetName().c_str(), fullPath);	
+			DirectZob::LogError("Cannot load %s, path '%s' not found", zfp.GetName().c_str(), fullPath.c_str());	
 		}
 		else
 		{
