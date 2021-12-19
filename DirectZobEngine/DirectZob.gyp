@@ -133,7 +133,9 @@
 				'Misc/ZobFilePath.h',
 				'Misc/ZobFilePath.cpp',				
 				'Misc/ZobGeometryHelper.h',
-				'Misc/ZobGeometryHelper.cpp',				
+				'Misc/ZobGeometryHelper.cpp',	
+                'Embed/DefaultFontData.h',
+                'Embed/DefaultFontImage.h',				
             ],
             'conditions': [
                 [

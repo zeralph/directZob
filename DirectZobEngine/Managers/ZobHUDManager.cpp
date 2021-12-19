@@ -1,11 +1,17 @@
 #include <thread>
+#include <iostream>
+#include <filesystem>
 #include "ZobHUDManager.h"
 #include "DirectZob.h"
 #include "../SceneLoader.h"
 #include <BaseFont.h>
+#include <string>
+#include "Embed/defaultFontData.h"
+#include "Embed/defaultFontImage.h"
 #undef None
 #include "../../dependencies/optick/include/optick.h"
 #define NB_HUD_TRIANGLES 2000
+#define DEFAULT_FONT "Arial"
 
 ZobHUDManager::ZobHUDManager()
 {
@@ -65,10 +71,29 @@ ZobHUDManager::~ZobHUDManager()
 static const ZobMaterial* sMat;
 void ZobHUDManager::Init()
 {
+	std::string dir = ZobUtils::GetTempDirectory();
+
+	std::string defaultFontDataFile = dir;
+	defaultFontDataFile.append("defaultFont.xml");
+	std::FILE* tmpf1 = fopen(defaultFontDataFile.c_str(), "w");
+	//std::fwrite(defaultFontData, sizeof(int), defaultFontImage_length, tmpf1);
+	std::fputws(defaultFontData, tmpf1);
+	std::rewind(tmpf1);
+
+	string defaultFontImageFile = dir;
+	defaultFontImageFile.append("defaultFont.png");
+	std::FILE* tmpf2 = fopen(defaultFontImageFile.c_str(), "wb");
+	std::fwrite(defaultFontImage, sizeof(unsigned char), defaultFontImage_length, tmpf2);
+	std::rewind(tmpf2);
 
 	ZobFilePath zfpTexture;
 	ZobFilePath zfpXml;
 
+	zfpTexture = ZobFilePath(DEFAULT_FONT, dir, "defaultFont.png", true);
+	zfpXml = ZobFilePath(DEFAULT_FONT, dir, "defaultFont.xml", true);
+	m_fonts.push_back( new ZobFont(zfpTexture, zfpXml));
+
+/*
 	zfpTexture = ZobFilePath("mv_boli_regular_14", "_fonts", "mv_boli_regular_14.PNG", false);
 	zfpXml = ZobFilePath("mv_boli_regular_14", "_fonts", "mv_boli_regular_14.xml", false);
 	m_fonts.push_back( new ZobFont(zfpTexture, zfpXml));
@@ -96,6 +121,7 @@ void ZobHUDManager::Init()
 	zfpTexture = ZobFilePath("vcr_osd_mono_regular_14", "_fonts", "vcr_osd_mono_regular_14.PNG", false);
 	zfpXml = ZobFilePath("vcr_osd_mono_regular_14", "_fonts", "vcr_osd_mono_regular_14.xml", false);
 	m_fonts.push_back(new ZobFont(zfpTexture, zfpXml));
+*/
 }
 
 void ZobHUDManager::Stop()
@@ -332,5 +358,6 @@ const ZobFont* ZobHUDManager::GetFont(const char* fontName) const
 			return (*iter);
 		}
 	}
-	return NULL;
+	return GetFont(DEFAULT_FONT);
+	//return NULL;
 }

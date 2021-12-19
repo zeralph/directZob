@@ -130,6 +130,7 @@
                                 '-Ofast', 
                                 '-march=native', 
                                 '-ffast-math',
+                                '-Wnarrowing',
                             ],
                         }
                     ],

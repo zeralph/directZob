@@ -65,7 +65,15 @@
         "unordered_map": "cpp",
         "utility": "cpp",
         "cinttypes": "cpp",
-        "hashtable": "cpp"
+        "hashtable": "cpp",
+        "bit": "cpp",
+        "codecvt": "cpp",
+        "deque": "cpp",
+        "set": "cpp",
+        "memory_resource": "cpp",
+        "numeric": "cpp",
+        "optional": "cpp",
+        "random": "cpp"
     },
     "files.watcherExclude": 
     {
