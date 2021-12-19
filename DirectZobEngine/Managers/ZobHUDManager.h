@@ -51,7 +51,7 @@ private:
 	void Init();
 	bool CreateQuad(float xMin, float yMin, float xMax, float yMax, HUDElement* elem);
 	void PrintInternal(eHudUnit u, float x, float y, float fontSize, const ZobFont* font, const ZobVector3* color, std::string s);
-	const ZobFont* GetFont(const char* fontName) const;
+	const ZobFont* GetFont(const std::string& fontName) const;
 	Triangle* m_trianglesBuffer;
 	ZobVector3* m_vertices;
 	ZobVector3* m_projectedVertices;

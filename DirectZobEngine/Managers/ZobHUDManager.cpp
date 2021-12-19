@@ -80,12 +80,14 @@ void ZobHUDManager::Init()
 	//std::fwrite(defaultFontData, sizeof(int), defaultFontImage_length, tmpf1);
 	std::fputws(defaultFontData, tmpf1);
 	std::rewind(tmpf1);
+	std::fclose(tmpf1);
 
 	string defaultFontImageFile = dir;
 	defaultFontImageFile.append("defaultFont.png");
 	std::FILE* tmpf2 = fopen(defaultFontImageFile.c_str(), "wb");
 	std::fwrite(defaultFontImage, sizeof(unsigned char), defaultFontImage_length, tmpf2);
 	std::rewind(tmpf2);
+	std::fclose(tmpf2);
 
 	ZobFilePath zfpTexture;
 	ZobFilePath zfpXml;
@@ -299,7 +301,7 @@ void ZobHUDManager::Print(eHudUnit u, float x, float y, float fontSize, const ch
 
 void ZobHUDManager::PrintInternal(eHudUnit u, float x, float y, float fontSize, const ZobFont* font, const ZobVector3* color, std::string s)
 {
-	if (font)
+	if (font && font->IsLoaded())
 	{
 		float screenW = DirectZob::GetInstance()->GetEngine()->GetBufferData()->width;
 		float screenH = DirectZob::GetInstance()->GetEngine()->GetBufferData()->height;
@@ -350,15 +352,18 @@ void ZobHUDManager::PrintInternal(eHudUnit u, float x, float y, float fontSize, 
 	}
 }
 
-const ZobFont* ZobHUDManager::GetFont(const char* fontName) const
+const ZobFont* ZobHUDManager::GetFont(const std::string& fontName) const
 {
 	for (std::vector<const ZobFont*>::const_iterator iter = m_fonts.begin(); iter != m_fonts.end(); iter++)
 	{
-		if (strcmp((*iter)->GetName(), fontName) == 0)
+		if ((*iter)->GetName() == fontName)
 		{
 			return (*iter);
 		}
 	}
-	return GetFont(DEFAULT_FONT);
-	//return NULL;
+	if (m_fonts.size() > 0)
+	{
+		return m_fonts[0];
+	}
+	return NULL;
 }

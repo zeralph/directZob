@@ -41,15 +41,14 @@ namespace CLI
 		ZobObjectManager* zm = DirectZob::GetInstance()?DirectZob::GetInstance()->GetZobObjectManager():NULL;
 		if (zm)
 		{
-			char lpTempPathBuffer[MAX_PATH];
-			GetTempPath(MAX_PATH, lpTempPathBuffer);
-			string arrowFile = string(lpTempPathBuffer);
+			string tmp = ZobUtils::GetTempDirectory();
+			string arrowFile = tmp;
 			arrowFile.append("arrow.obj");
 			std::FILE* tmpf = fopen(arrowFile.c_str(), "w");
 			std::fputs(gArrow.c_str(), tmpf);
 			std::rewind(tmpf);
 
-			string rotateFile = string(lpTempPathBuffer);
+			string rotateFile = tmp;
 			rotateFile.append("rotate.obj");
 			tmpf = fopen(rotateFile.c_str(), "w");
 			std::fputs(gCircle.c_str(), tmpf);
@@ -74,12 +73,12 @@ namespace CLI
 			m_rotateZ = zm->CreateEditorZobObject(m_editorRoot);
 			m_rotateZ->SetName(EDITOR_ROTATE_Z);
 
-			ZobFilePath zfpT = ZobFilePath("arrow.obj", lpTempPathBuffer, "arrow.obj", true);
+			ZobFilePath zfpT = ZobFilePath("arrow.obj", tmp, "arrow.obj", true);
 			m_behaviorTranslateX = m_translateX->LoadMesh(zfpT, true);
 			m_behaviorTranslateY = m_translateY->LoadMesh(zfpT, true);
 			m_behaviorTranslateZ = m_translateZ->LoadMesh(zfpT, true);
 
-			ZobFilePath zfpR = ZobFilePath("rotate.obj", lpTempPathBuffer, "rotate.obj", true);
+			ZobFilePath zfpR = ZobFilePath("rotate.obj", tmp, "rotate.obj", true);
 			m_behaviorRotateX = m_rotateX->LoadMesh(zfpR, true);
 			m_behaviorRotateY = m_rotateY->LoadMesh(zfpR, true);
 			m_behaviorRotateZ = m_rotateZ->LoadMesh(zfpR, true);

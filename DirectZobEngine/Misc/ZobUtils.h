@@ -1,6 +1,12 @@
 #pragma once
 #include <string>
-
+#include <vector>
+#include <filesystem>
+#include <iostream>
+#ifdef WINDOWS
+#include <windows.h>
+#include <algorithm>
+#endif
 class ZobUtils
 {
 public:
@@ -14,9 +20,12 @@ public:
 #ifdef LINUX
 		return std::string("//tmp//");
 #elif WINDOWS
+		//std::filesystem::temp_directory_path()
 		char lpTempPathBuffer[MAX_PATH];
-		GetTempPath(MAX_PATH, lpTempPathBuffer); 
-		return std::string(lpTempPathBuffer);
+		GetTempPath(MAX_PATH, lpTempPathBuffer);
+		std::string s = std::string(lpTempPathBuffer);
+		std::replace(s.begin(), s.end(), '\\', '/');
+		return s;
 #elif MACOS
 		return std::string(NSTemporaryDirectory();
 #endif		

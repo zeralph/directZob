@@ -31,14 +31,16 @@ public:
 
 	ZobFont(ZobFilePath zfpTexture, ZobFilePath zfpXml);
 	~ZobFont();
-	const FontGlyphe* GetChar(char c) const;
-	inline float GetHeight() const { return m_height; }
-	inline const char* GetName() const { return m_name.c_str(); }
+	const FontGlyphe*	GetChar(char c) const;
+	inline float		GetHeight() const { return m_height; }
+	inline const char*	GetName() const { return m_name.c_str(); }
+	inline const bool   IsLoaded() const { return m_loaded; }
 private:
-	void SplitEntry(const std::string* s, std::vector<std::string>* v, const char delim) const;
+	void				SplitEntry(const std::string* s, std::vector<std::string>* v, const char delim) const;
 	ZobColor m_color;
 	std::string m_name;
 	const ZobMaterial* m_charMaterial;
 	std::vector<FontGlyphe> m_glyphes;
 	float m_height;
+	bool m_loaded;
 };

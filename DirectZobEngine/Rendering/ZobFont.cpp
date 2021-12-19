@@ -11,6 +11,7 @@
 
 ZobFont::ZobFont(ZobFilePath zfpTexture, ZobFilePath zfpXml)
 {
+	m_loaded = false;
 	TiXmlDocument doc("Font");
 	doc.ClearError();
 	std::string xmlFile = zfpXml.GetFullPath();
@@ -66,6 +67,7 @@ ZobFont::ZobFont(ZobFilePath zfpTexture, ZobFilePath zfpXml)
 				assert(fg->uv_max_x <= texW);
 				assert(fg->uv_max_y <= texH);
 			}
+			m_loaded = true;
 		}
 	}
 	DirectZob::LogInfo("Font %s loaded", m_name.c_str());
