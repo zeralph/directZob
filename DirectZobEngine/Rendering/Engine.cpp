@@ -477,57 +477,6 @@ float Engine::WaitForRasterizersEnd()
 	return t;
 }
 
-void Engine::DrawGrid(const Camera *camera)
-{
-	int gridSize = 50;
-	ZobVector3 a;
-	ZobVector3 b;
-	bool bold;
-	float cx = 0; // (int)(camera->GetWorldPosition().x);
-	float cz = 0; // (int)(camera->GetWorldPosition().z);
-
-	for (int i = -gridSize; i <= gridSize; i += 1.0f)
-	{
-		a.x = i + cx;
-		b.x = i + cx;
-		a.y = 0.0f;
-		b.y = 0.0f;
-		a.z = -gridSize + cz;
-		b.z = gridSize + cz;
-		bold = i % 5 == 0;
-		bold = false;
-		if (bold)
-		{
-			QueueLine(camera, &a, &b, &ZobColor::White, bold, false);
-		}
-		else
-		{
-			QueueLine(camera, &a, &b, &ZobColor::LightGrey, bold, false);
-		}
-	}
-	for (int i = -gridSize; i <= gridSize; i += 1.0f)
-	{
-		a.z = b.z = i +cz;
-		a.y = b.y = 0.0f;
-		a.x = -gridSize + cx;
-		b.x = gridSize + cx;
-		bold = i % 5 == 0;
-		bold = false;
-		if (bold)
-		{
-			QueueLine(camera, &a, &b, &ZobColor::White, bold, false);
-		}
-		else
-		{
-			QueueLine(camera, &a, &b, &ZobColor::LightGrey, bold, false);
-		}
-	}
-
-	QueueLine(camera, &ZobVector3::Vector3Zero, &ZobVector3::Vector3X, &ZobColor::Red, true, false);
-	QueueLine(camera, &ZobVector3::Vector3Zero, &ZobVector3::Vector3Y, &ZobColor::Green, true, false);
-	QueueLine(camera, &ZobVector3::Vector3Zero, &ZobVector3::Vector3Z, &ZobColor::Blue, true, false);
-}
-
 ZobObject* Engine::GetObjectAt2DCoords(float x, float y, bool editorObjectsOnly)
 {
 	int  idx = (int)((y / (float)m_bufferData.height) * m_nbRasterizers);

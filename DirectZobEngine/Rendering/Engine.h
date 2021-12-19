@@ -33,7 +33,6 @@ public:
 	void											CopyBuffer(uint* source, uint* dest);
 	void											QueueWorldTriangle(const Camera* c, const Triangle* t);
 	void											QueueProjectedTriangle(const Camera* c, const Triangle* t);
-	void											DrawGrid(const Camera* camera);
 
 	void											ToggleZbufferOutput() { m_showZBuffer = !m_showZBuffer; }
 

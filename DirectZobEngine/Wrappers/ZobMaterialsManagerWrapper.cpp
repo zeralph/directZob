@@ -15,22 +15,22 @@ namespace CLI
 			int w = zm->GetDiffuseTexture()->GetWidth();
 			int h = zm->GetDiffuseTexture()->GetWidth();
 			int l = w * h * 4;
-			_b = gcnew cli::array<Byte>(l);
+			cli::array<Byte>^ b = gcnew cli::array<Byte>(l);
 			for (int i = 0; i < l; i+=4)
 			{
 				if (d[i + 3] != 0)
 				{
-					_b[i + 3] = (int)(d[i + 3] * 255.0f);
-					_b[i+2] = (int)(d[i] * 255.0f);
-					_b[i+1] = (int)(d[i+1] * 255.0f);
-					_b[i+0] = (int)(d[i+2] * 255.0f);
+					b[i + 3] = (int)(d[i + 3] * 255.0f);
+					b[i+2] = (int)(d[i] * 255.0f);
+					b[i+1] = (int)(d[i+1] * 255.0f);
+					b[i+0] = (int)(d[i+2] * 255.0f);
 				}
 				else
 				{
-					_b[i + 3] = 255;
-					_b[i + 2] = 255;
-					_b[i + 1] = 0;
-					_b[i + 0] = 255;
+					b[i + 3] = 255;
+					b[i + 2] = 255;
+					b[i + 1] = 0;
+					b[i + 0] = 255;
 				}
 				
 			}
@@ -38,7 +38,7 @@ namespace CLI
 			Drawing::Rectangle rect = Drawing::Rectangle(0, 0, w, h);
 			Imaging::BitmapData^ bmpData = texture->LockBits(rect, Imaging::ImageLockMode::ReadWrite, texture->PixelFormat);
 			IntPtr ptr = bmpData->Scan0;
-			System::Runtime::InteropServices::Marshal::Copy(_b, 0, ptr, l);
+			System::Runtime::InteropServices::Marshal::Copy(b, 0, ptr, l);
 			texture->UnlockBits(bmpData);
 		}
 	}

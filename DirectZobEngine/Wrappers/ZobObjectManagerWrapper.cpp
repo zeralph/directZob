@@ -35,6 +35,8 @@ namespace CLI
 
 	void ZobObjectManagerWrapper::EditorUpdate()
 	{
+		if (!m_treeView->IsHandleCreated)
+			return;
 		m_treeView->Invoke(gcnew Action(m_treeView, &CLI::ZobControlTreeview::UpdateZobControl));
 		if (m_selectedObjectWrapper)
 		{

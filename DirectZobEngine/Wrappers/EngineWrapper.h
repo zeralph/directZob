@@ -91,6 +91,7 @@ namespace CLI
 		bool								IsCursorInsideWindow();
 		void								UpdateMousePosition();
 		void								UpdateMoveObject();
+		void								UpdateGrid();
 		PictureBox^							m_renderWindow;
 		Graphics^							m_renderWindowGraphics;
 		Triangle*							m_triangleList;

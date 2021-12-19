@@ -289,10 +289,6 @@ int DirectZob::RunAFrame(DirectZob::engineCallback OnSceneUpdated /*=NULL*/, Dir
 			{
 				m_physicsEngine->DrawGizmos();
 			}
-			if (m_engine->ShowGrid())
-			{
-				m_engine->DrawGrid(cam);
-			}
 			if (m_engine->DrawGizmos())
 			{
 				m_zobObjectManager->DrawGizmos(cam, m_engine);
