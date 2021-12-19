@@ -27,7 +27,9 @@ public:
 		std::replace(s.begin(), s.end(), '\\', '/');
 		return s;
 #elif MACOS
-		return std::string(NSTemporaryDirectory();
+		//char* t = tmpnam(NULL);
+		//return std::string(t);
+		return std::string("//var//tmp//");
 #endif		
 	}
 };

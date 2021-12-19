@@ -68,7 +68,7 @@ bool ZobGeometryHelper::LineTriangleIntersection(const Triangle* t, const ZobVec
 
 	return true;                       // I is in T
 }
-
+/*
 ZobVector3 ZobGeometryHelper::LinePlaneIntersection(const ZobVector3* planeOrigin, const ZobVector3* planeNormal, const ZobVector3* lineOrigin, const ZobVector3* lineDirection)
 {
 	ZobVector3 ret;
@@ -82,7 +82,7 @@ ZobVector3 ZobGeometryHelper::LinePlaneIntersection(const ZobVector3* planeOrigi
 	}
 	return ret;
 }
-/*
+*/
 ZobVector3 ZobGeometryHelper::LinePlaneIntersection(const ZobVector3* planeOrigin, const ZobVector3* planeNormal, const ZobVector3* lineOrigin, const ZobVector3* lineDirection) 
 {
 	ZobVector3 ret = ZobVector3(0, 0, 0);
@@ -99,7 +99,7 @@ ZobVector3 ZobGeometryHelper::LinePlaneIntersection(const ZobVector3* planeOrigi
 	ret.z = lineDirection->z * t + lineOrigin->z;
 	return ret;
 }
-*/
+
 bool ZobGeometryHelper::LineLineIntersection(const ZobVector3* a0, const ZobVector3* a1, const ZobVector3* b0, const ZobVector3* b1, ZobVector3& out, float& outFactor)
 {
 	ZobVector3 da = ZobVector3(a1->x - a0->x, a1->y - a0->y, a1->z - a0->z);
