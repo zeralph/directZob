@@ -561,7 +561,7 @@ void Mesh::SplitEntry(const std::string* s, std::vector<std::string>* v, const c
 void Mesh::DrawBoundingBox(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Engine* engine)
 {
 	engine->QueueWorldBox(camera, &m_AABB, &ZobColor::White, false, false);
-	engine->QueueWorldBox(camera, &m_OBB, &ZobColor::Grey, false, false);
+	engine->QueueWorldBox(camera, &m_OBB, &ZobColor::Gray, false, false);
 }
 
 void Mesh::Update(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Engine* engine, const Triangle::RenderOptions* options)

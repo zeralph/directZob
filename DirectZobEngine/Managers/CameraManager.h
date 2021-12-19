@@ -20,7 +20,7 @@ public:
 	void							SwitchToNextAvailableCamera();
 	void 							AddCamera(Camera* c);
 	void 							UpdateAfter();
-	void 							SetNextCamera(std::string& name);
+	void 							SetNextCamera(const std::string& name);
 	void 							RemoveCamera(Camera* c);
 	const std::vector<std::string> 	GetCameraList() const;
 	void							UnloadAll();

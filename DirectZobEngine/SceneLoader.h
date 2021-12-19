@@ -14,11 +14,12 @@
 class SceneLoader
 {
 public:
+	static void SetWorkSpace(std::string path) { m_path = path; }
 	static void LoadScene(std::string &path, std::string &file);
 	static void SaveScene(std::string &path, std::string &file);
 	static void SaveScene();
 	static bool CanFastSave() { return m_path.length() > 0 && m_file.length() > 0; }
-	static void NewScene();
+	static void NewScene(std::string workspace);
 	static void UnloadScene();
 	static void Update();
 	static const std::string& GetResourcePath() { return m_path; };

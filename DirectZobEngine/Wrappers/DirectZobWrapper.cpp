@@ -2,6 +2,7 @@
 #include "../DirectZob.h"
 #include "DirectZobWrapper.h"
 #include "../../dependencies/minifb/include/MiniFB_enums.h"
+#include "../SceneLoader.h"
 
 namespace CLI
 {
@@ -63,7 +64,8 @@ namespace CLI
 
 	void DirectZobWrapper::CreateEditorCamera()
 	{
-		GetInstance()->GetCameraManager()->CreateEditorCamera();
+		Camera* c = GetInstance()->GetCameraManager()->CreateEditorCamera();
+		GetInstance()->GetCameraManager()->SetNextCamera(c->GetName());
 	}
 
 	void DirectZobWrapper::CreateCamera(System::String^ sType)
@@ -120,14 +122,16 @@ namespace CLI
 		}
 	}
 
-	void DirectZobWrapper::NewScene()
+	void DirectZobWrapper::NewScene(System::String^ path)
 	{
 		if (GetInstance())
 		{
+			std::string stdPath;
+			MarshalString(path, stdPath);
 			m_ZobObjectManagerWrapper->SelectObject(NULL);
 			Unload();
 			m_events->FireOnNewSceneEvent();
-			GetInstance()->NewScene();
+			GetInstance()->NewScene(stdPath);
 			DirectZob::GetInstance()->GetCameraManager()->CreateEditorCamera();
 			m_ZobObjectManagerWrapper->Refresh();
 			m_ZobObjectManagerWrapper->AddEditorGizmos();

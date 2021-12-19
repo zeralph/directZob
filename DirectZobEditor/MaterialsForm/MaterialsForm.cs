@@ -21,17 +21,21 @@ namespace DirectZobEditor.MaterialsForm
             CLI.ZobMaterialsManagerWrapper manager = new CLI.ZobMaterialsManagerWrapper();
             manager.ParseMaterials();
             int nbMat = manager.GetNbMaterials();
-            MaterialsTableLayout.RowCount = 0;
-            TableLayoutControlCollection c = MaterialsTableLayout.Controls;
-            c.Clear();
             for (int i = 0; i < nbMat; i++)
             {
                 CLI.ZobMaterialWrapper mat = manager.GetMaterial(i);
-                Material ctrl = new Material(mat.name);
+                Material ctrl = new Material(mat);
                 MaterialsTableLayout.Controls.Add(ctrl);
                 MaterialsTableLayout.Controls[i].Height = ctrl.Height + 2;
                 ctrl.Width = MaterialsTableLayout.Controls[i].Width;
             }
+            
+        }
+
+        private void MaterialsTableLayout_Resize(object sender, EventArgs e)
+        {
+            int w = MaterialsTableLayout.Width;
+            //MaterialsTableLayout.ColumnCount = (int)(w / 300);
         }
     }
 }

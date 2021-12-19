@@ -31,7 +31,7 @@ LightManager::~LightManager()
 void LightManager::ReInitGlobalSettings()
 {
 	m_fogColor = ZobColor(255, 63, 149, 255);
-	m_clearColor = ZobColor(255, 63, 149, 255);
+	m_clearColor = ZobColor::Silver;// ZobColor(255, 63, 149, 255);
 	m_ambientColor = ZobColor(255, 102, 102, 102);
 	m_ambientColorIntensity = 0.8f;
 	m_fogDistance = 20.0f;

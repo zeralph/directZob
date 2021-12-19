@@ -49,7 +49,7 @@ namespace CLI
 		void							Init(int width, int height);
 		void							LoadScene(System::String^ path, System::String^ file, engineCallback^ loaded);
 		void							LoadZobObject(System::String^ path, System::String^ file);
-		void							NewScene();
+		void							NewScene(System::String^ workspace);
 		void							Unload();
 		bool							CanFastSave();
 		void							SaveScene();

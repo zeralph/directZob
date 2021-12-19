@@ -35,6 +35,7 @@ Camera::Camera(ZOBGUID::ZobType zobType, const std::string& name, eCameraType ty
 		ZobBehaviorSprite* b = (ZobBehaviorSprite*)ZobBehaviorFactory::CreateBehavior(this, "Sprite", true);
 		ZobFilePath zfp = ZobFilePath("camera", "D://Git//directZob//resources//", "camera.png", true);
 		b->Set(zfp);
+		b->SetForEditor();
 	}
 	//m_nextTranslation = m_translation;
 }
@@ -52,6 +53,7 @@ Camera::Camera(std::string id, TiXmlElement* node, ZobObject* parent)
 		ZobBehaviorSprite* b = (ZobBehaviorSprite*)ZobBehaviorFactory::CreateBehavior(this, "Sprite", true);
 		ZobFilePath zfp = ZobFilePath("camera", "D://Git//directZob//resources//", "camera.png", true);
 		b->Set(zfp);
+		b->SetForEditor();
 	}
 	//ChangeCameraController(m_nextControlerType);
 }

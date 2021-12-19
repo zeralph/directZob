@@ -414,6 +414,8 @@ namespace CLI
 
 	void EngineWrapper::OnMouseClick(Object^ sender, MouseEventArgs^ e)
 	{
+		if (!m_running)
+			return;
 		Point location = m_renderWindow->PointToClient(m_mouseCoords);
 		ZobObject* z = DirectZob::GetInstance()->GetEngine()->GetObjectAt2DCoords(location.X, location.Y, false);
 		if (z)
@@ -508,7 +510,11 @@ namespace CLI
 		}
 		UpdateCameraEditor(dt); 
 		UpdateMoveObject();
+		if (!m_Instance->ShowGrid())
+		{
+			UpdateGrid();
 
+		}
 		//update gizmos
 		ZobObject* z = DirectZob::GetInstance()->GetEngine()->GetObjectAt2DCoords(m_lastMouseX, m_lastMouseY, true);
 		if (z)
@@ -524,6 +530,75 @@ namespace CLI
 		{
 			m_renderWindow->Invoke(gcnew Action(this, &CLI::EngineWrapper::UpdateRenderWindowInternal));
 		}
+	}
+
+	void EngineWrapper::UpdateGrid()
+	{
+		Camera* cam = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
+		ZobVector3 p = cam->GetWorldPosition();
+		ZobVector3 f = cam->GetForward();
+		float d = fabsf(p.y / f.y);
+		p.x += d * f.x;
+		p.y += d * f.y;
+		p.z += d * f.z;
+		f = cam->GetWorldPosition();
+		d = (int)(f.sqrtLength() / 10.0f);
+		int gridSize = 10 + 50 * d;
+		int step = 1;
+		if (d > 10)
+		{
+			step = 5;
+		}
+		if (d > 20)
+		{
+			step = 10;
+		}
+		ZobVector3 a;
+		ZobVector3 b;
+		bool bold;
+		float cx = ((int)p.x / 5) * 5;
+		float cz = ((int)p.z / 5) * 5;
+		for (int i = -gridSize; i <= gridSize; i += step)
+		{
+			a.x = i + cx;
+			b.x = i + cx;
+			a.y = 0.0f;
+			b.y = 0.0f;
+			a.z = -gridSize + cz;
+			b.z = gridSize + cz;
+			bold = (int)a.x % 5 == 0;
+			//bold = false;
+			if (bold)
+			{
+				m_Instance->QueueLine(cam, &a, &b, &ZobColor::Seal, bold, false);
+			}
+			else
+			{
+				m_Instance->QueueLine(cam, &a, &b, &ZobColor::Trout, bold, false);
+			}
+		}
+		for (int i = -gridSize; i <= gridSize; i += step)
+		{
+			a.z = i + cz;
+			b.z = i + cz;
+			a.y = 0.0f;
+			b.y = 0.0f;
+			a.x = -gridSize + cx;
+			b.x = gridSize + cx;
+			bold = (int)a.z % 5 == 0;
+			//bold = false;
+			if (bold)
+			{
+				m_Instance->QueueLine(cam, &a, &b, &ZobColor::Seal, bold, false);
+			}
+			else
+			{
+				m_Instance->QueueLine(cam, &a, &b, &ZobColor::Trout, bold, false);
+			}
+		}
+		m_Instance->QueueLine(cam, &ZobVector3::Vector3Zero, &ZobVector3::Vector3X, &ZobColor::Red, true, false);
+		m_Instance->QueueLine(cam, &ZobVector3::Vector3Zero, &ZobVector3::Vector3Y, &ZobColor::Green, true, false);
+		m_Instance->QueueLine(cam, &ZobVector3::Vector3Zero, &ZobVector3::Vector3Z, &ZobColor::Blue, true, false);
 	}
 
 	void EngineWrapper::UpdateRenderWindowInternal()

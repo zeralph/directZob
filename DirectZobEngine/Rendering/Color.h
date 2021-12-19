@@ -94,8 +94,14 @@ class ZobColor
 		static const ZobColor Yellow;
 		static const ZobColor Magenta;
 		static const ZobColor Cyan;
-		static const ZobColor Grey;
+		static const ZobColor Gray;
 		static const ZobColor LightGrey;
+		static const ZobColor Smoke;
+		static const ZobColor Rhino;
+		static const ZobColor Stone;
+		static const ZobColor Trout;
+		static const ZobColor Seal;
+		static const ZobColor Silver;
 };
 
 #endif

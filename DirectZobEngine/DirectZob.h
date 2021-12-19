@@ -78,7 +78,7 @@ public :
 	void					Unload();
 	void					SaveScene(std::string& path, std::string& file);
 	void					SaveScene();
-	void					NewScene();
+	void					NewScene(std::string workspace);
 	bool					CanFastSave();
 	void					Exit();
 	void					RegenerateZobIds();

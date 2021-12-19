@@ -22,6 +22,7 @@ Light::Light(std::string &name, eLightType type, ZobColor color, float intensity
 		ZobBehaviorSprite* b = (ZobBehaviorSprite*)ZobBehaviorFactory::CreateBehavior(this, "Sprite", true);
 		ZobFilePath zfp = ZobFilePath("light", "D://Git//directZob//resources//", "light.png", true);
 		b->Set(zfp);
+		b->SetForEditor();
 	}
 }
 
@@ -39,6 +40,7 @@ Light::Light(std::string id, TiXmlElement* node, ZobObject* parent)
 			ZobBehaviorSprite* b = (ZobBehaviorSprite*)ZobBehaviorFactory::CreateBehavior(this, "Sprite", true);
 			ZobFilePath zfp = ZobFilePath("light", "D://Git//directZob//resources//", "light.png", true);
 			b->Set(zfp);
+			b->SetForEditor();
 		}
 }
 
