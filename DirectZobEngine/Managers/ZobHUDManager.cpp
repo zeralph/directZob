@@ -277,11 +277,17 @@ bool ZobHUDManager::CreateQuad(float xMin, float yMin, float xMax, float yMax, H
 	return true;
 }
 
-void ZobHUDManager::Print(eHudUnit u, float x, float y, float fontSize, const char* fontName, const ZobVector3* color, const char* fmt, ...)
+void ZobHUDManager::Print(eHudUnit u, float x, float y, float fontSize, const char* fontName, const ZobColor* color, const char* fmt, ...)
 {
 	if (m_started && DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera()) //if (m_engine->ShowText() && m_data != NULL)
 	{
 		const ZobFont* f = GetFont(fontName);
+		if (!f && m_fonts.size() > 0)
+		{
+			f = m_fonts[0];
+			fontSize = 1;
+			//u = eHudUnit::eHudUnit_pixels;
+		}
 		if (f)
 		{
 			//size_t size = strlen(fmt) + 1;
@@ -299,7 +305,7 @@ void ZobHUDManager::Print(eHudUnit u, float x, float y, float fontSize, const ch
 }
 
 
-void ZobHUDManager::PrintInternal(eHudUnit u, float x, float y, float fontSize, const ZobFont* font, const ZobVector3* color, std::string s)
+void ZobHUDManager::PrintInternal(eHudUnit u, float x, float y, float fontSize, const ZobFont* font, const ZobColor* color, std::string s)
 {
 	if (font && font->IsLoaded())
 	{
@@ -360,10 +366,6 @@ const ZobFont* ZobHUDManager::GetFont(const std::string& fontName) const
 		{
 			return (*iter);
 		}
-	}
-	if (m_fonts.size() > 0)
-	{
-		return m_fonts[0];
 	}
 	return NULL;
 }

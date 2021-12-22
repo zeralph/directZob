@@ -44,13 +44,13 @@ public:
 	void UpdateBehavior(float dt);
 	void UpdateObjects(const Camera* camera, Engine* engine, float dt);
 	void QueueForDrawing(const Camera* camera, Engine* engine);
-	void Print(eHudUnit u, float x, float y, float fontSize, const char* fontName, const ZobVector3* color, const char* fmt, ...);
+	void Print(eHudUnit u, float x, float y, float fontSize, const char* fontName, const ZobColor* color, const char* fmt, ...);
 
 private:
 	void DeleteFonts();
 	void Init();
 	bool CreateQuad(float xMin, float yMin, float xMax, float yMax, HUDElement* elem);
-	void PrintInternal(eHudUnit u, float x, float y, float fontSize, const ZobFont* font, const ZobVector3* color, std::string s);
+	void PrintInternal(eHudUnit u, float x, float y, float fontSize, const ZobFont* font, const ZobColor* color, std::string s);
 	const ZobFont* GetFont(const std::string& fontName) const;
 	Triangle* m_trianglesBuffer;
 	ZobVector3* m_vertices;

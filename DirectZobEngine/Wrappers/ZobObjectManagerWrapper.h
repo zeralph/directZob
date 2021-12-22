@@ -33,7 +33,14 @@ namespace CLI
 			eObjectTypes_scene,
 		};
 
-		ZobObjectManagerWrapper(Panel^ objectTreeviewPanel, Panel^ objectPropertiesPanel);
+		enum class eImageObjectType
+		{
+			eImageZobObject = 0,
+			eImageZobLight = 1,
+			eImageZobCamera = 2,
+		};
+
+		ZobObjectManagerWrapper(Panel^ objectTreeviewPanel, Panel^ objectPropertiesPanel, Resources::ResourceManager^ rsMgr);
 		void					SaveTransforms();
 		void					RestoreTransforms();
 		void					Refresh();
@@ -83,6 +90,7 @@ namespace CLI
 		ZobObjectWrapper^ m_selectedObjectWrapper;
 		ZobControlTreeNode^ m_draggedNode;
 		ContextMenuStrip^ m_nodeMenu;
+		Resources::ResourceManager^ m_resourcesManager;
 		bool m_bShowAllNodes;
 		bool					m_duplicate;
 	};

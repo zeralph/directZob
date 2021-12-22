@@ -20,23 +20,21 @@ ZobBehaviorMenu::ZobBehaviorMenu(ZobObject* zobObject, bool bEditorZobBehavior) 
 
 void ZobBehaviorMenu::PreUpdate(float dt)
 {
-	ZobVector3 color = ZobVector3(255, 0, 0);
 	ZobHUDManager* hud = DirectZob::GetInstance()->GetHudManager();
 	const gainput::InputMap* inputMap = DirectZob::GetInstance()->GetInputManager()->GetMap();
 	m_time += dt * 2.0f;
 	float f = 2.0f + (0.5f + sinf(m_time) / 2.0f) * 5.0f;
-	hud->Print(ZobHUDManager::eHudUnit_ratio, 0.25f, 0.25f, f, "Leelawadee UI", &color, "EDGE RACING");
-	color = ZobVector3(1, 1, 0);
+	hud->Print(ZobHUDManager::eHudUnit_ratio, 0.25f, 0.25f, f, "Leelawadee UI", &ZobColor::Red, "EDGE RACING");
 	for (int i = 0; i < m_menuEntries.size(); i++)
 	{
 		float h = 0.5 + i * 0.05f;
 		if (i == m_menuIndex)
 		{
-			hud->Print(ZobHUDManager::eHudUnit_ratio, 0.2f, h, 2, "Arial", &color, "%s %s", "->", m_menuEntries[i].name.c_str());
+			hud->Print(ZobHUDManager::eHudUnit_ratio, 0.2f, h, 2, "Arial", &ZobColor::Red, "%s %s", "->", m_menuEntries[i].name.c_str());
 		}
 		else
 		{
-			hud->Print(ZobHUDManager::eHudUnit_ratio, 0.2f, h, 2, "Arial", &color, "%s %s", "", m_menuEntries[i].name.c_str());
+			hud->Print(ZobHUDManager::eHudUnit_ratio, 0.2f, h, 2, "Arial", &ZobColor::Red, "%s %s", "", m_menuEntries[i].name.c_str());
 		}
 		std::string s = m_menuEntries[i].name;
 

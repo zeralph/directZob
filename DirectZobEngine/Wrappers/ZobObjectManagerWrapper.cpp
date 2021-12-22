@@ -3,14 +3,16 @@
 #include "ZobObjectManagerWrapper.h"
 #include "../DirectZob.h"
 #include "../ZobObjects/ZobObject.h"
+#include "../Behaviors/ZobBehaviorMesh.h"
 
 #define TO_MANAGED_STRING(x) gcnew String(x);
 
 namespace CLI
 {
 
-	ZobObjectManagerWrapper::ZobObjectManagerWrapper(Panel^ objectTreeviewPanel, Panel^ objectPropertiesPanel):ManagedObject(DirectZob::GetInstance()->GetZobObjectManager(), false)
+	ZobObjectManagerWrapper::ZobObjectManagerWrapper(Panel^ objectTreeviewPanel, Panel^ objectPropertiesPanel, Resources::ResourceManager^ rsMgr):ManagedObject(DirectZob::GetInstance()->GetZobObjectManager(), false)
 	{
+		m_resourcesManager = rsMgr;
 		m_selectedObject = NULL;
 		m_objectTreeviewPanel = objectTreeviewPanel;
 		m_objectPropertiesPanel = objectPropertiesPanel;
@@ -162,6 +164,28 @@ namespace CLI
 		m_treeView->MouseHover += gcnew EventHandler(this, &ZobObjectManagerWrapper::TreeNodeMouseHover);
 		m_treeView->BeforeSelect += gcnew TreeViewCancelEventHandler(this, &ZobObjectManagerWrapper::TreeNodeBeforeSelect);
 		m_treeView->ShowNodeToolTips = true;
+		m_treeView->ImageList = gcnew ImageList();
+		
+		Image^ im = (Image^)m_resourcesManager->GetObject("_object");
+		if (im != nullptr)
+		{
+			Bitmap^ bmp = gcnew Bitmap(im);
+			m_treeView->ImageList->Images->Add(bmp);
+		}
+		im = (Image^)m_resourcesManager->GetObject("light1");
+		if (im != nullptr)
+		{
+			Bitmap^ bmp = gcnew Bitmap(im);
+			m_treeView->ImageList->Images->Add(bmp);
+		}
+		im = (Image^)m_resourcesManager->GetObject("camera2");
+		if (im != nullptr)
+		{
+			Bitmap^ bmp = gcnew Bitmap(im);
+			m_treeView->ImageList->Images->Add(bmp);
+		}
+		
+
 		Refresh();
 		c->Controls->Add(m_treeView);
 		c->Dock = DockStyle::Fill;
@@ -301,6 +325,7 @@ namespace CLI
 				//n->SelectedImageIndex()
 			}
 			const std::vector<ZobObject*>* v = z->GetChildren();
+			//const ZobBehaviorMesh* test = z->GetBehavior<ZobBehaviorMesh>();
 			List<String^>^ l = gcnew List<String^>();
 			for (int i = 0; i < v->size(); i++)
 			{

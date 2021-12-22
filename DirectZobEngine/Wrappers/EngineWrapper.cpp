@@ -63,6 +63,10 @@ namespace CLI
 		m_renderWindow->AutoSize = false;
 		m_renderWindow->Width = 800;
 		m_renderWindow->Height = 600;
+
+		m_Instance->DrawGizmos(true);
+		m_Instance->ShowGrid(true);
+
 	}
 
 	EngineWrapper::~EngineWrapper()
@@ -510,7 +514,7 @@ namespace CLI
 		}
 		UpdateCameraEditor(dt); 
 		UpdateMoveObject();
-		if (!m_Instance->ShowGrid())
+		if (m_Instance->ShowGrid())
 		{
 			UpdateGrid();
 

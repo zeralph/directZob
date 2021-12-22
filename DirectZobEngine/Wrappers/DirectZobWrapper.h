@@ -35,7 +35,7 @@ namespace CLI
 		static void						CallSceneUpdatedCallback();
 		static void						CallQueuingCallback();
 		static void						CallSceneLoadedCallback();
-										DirectZobWrapper(Panel^ objectTreeviewPanel, Panel^ objectPropertiesPanel, Panel^ globalPropertiesPanel, PictureBox^ renderWindow);
+										DirectZobWrapper(Panel^ objectTreeviewPanel, Panel^ objectPropertiesPanel, Panel^ globalPropertiesPanel, PictureBox^ renderWindow, Resources::ResourceManager^ rsMgr);
 		void							RegisterObjectCallbacks(engineCallback^ onSelected);
 		EngineWrapper^					GetEngineWrapper() { return m_ZobEngineWrapper; }
 		int								RunAFrame();
@@ -92,6 +92,7 @@ namespace CLI
 		Panel^							m_objectPropertiesPanel;
 		Panel^							m_globalPropertiesPanel;
 		PictureBox^						m_renderWindow;
+		Resources::ResourceManager^		m_resourcesManager;
 
 		float							m_lastFrameTime;
 

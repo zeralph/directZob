@@ -6,7 +6,7 @@
 
 namespace CLI
 {
-	DirectZobWrapper::DirectZobWrapper(Panel^ objectTreeviewPanel, Panel^ objectPropertiesPanel, Panel^ globalPropertiesPanel, PictureBox^ renderWindow):ManagedObject(new DirectZob, true)
+	DirectZobWrapper::DirectZobWrapper(Panel^ objectTreeviewPanel, Panel^ objectPropertiesPanel, Panel^ globalPropertiesPanel, PictureBox^ renderWindow, Resources::ResourceManager^ rsMgr):ManagedObject(new DirectZob, true)
 	{
 		m_events = gcnew DirectZobWrapperEvents();
 		m_run = false;
@@ -19,6 +19,7 @@ namespace CLI
 		m_renderWindow = renderWindow;
 		m_lastFrameTime = 0;
 		m_singleton = this;
+		m_resourcesManager = rsMgr;
 	}
 
 	void DirectZobWrapper::StartPhysic()
@@ -51,7 +52,8 @@ namespace CLI
 		if (GetInstance())
 		{
 			GetInstance()->Init(0, width, height, true);
-			m_ZobObjectManagerWrapper = gcnew ZobObjectManagerWrapper(m_objectTreeviewPanel, m_objectPropertiesPanel);
+
+			m_ZobObjectManagerWrapper = gcnew ZobObjectManagerWrapper(m_objectTreeviewPanel, m_objectPropertiesPanel, m_resourcesManager);
 			m_ZobGlobalsWrapper = gcnew ZobGlobalsWrapper(m_globalPropertiesPanel);
 			m_ZobEngineWrapper = gcnew EngineWrapper(m_renderWindow);
 		}

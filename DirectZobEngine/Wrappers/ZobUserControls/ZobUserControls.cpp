@@ -723,14 +723,17 @@ ZobControlTreeNode::ZobControlTreeNode(String^ zobObjectGuid) :TreeNode()
 	else if (z.GetSubType() == ZOBGUID::subtype_zobCamera)
 	{
 		this->ForeColor = Color::Brown;
+		this->ImageIndex = (int)ZobObjectManagerWrapper::eImageObjectType::eImageZobCamera;
 	}
 	else if (z.GetSubType() == ZOBGUID::subtype_zobLight)
 	{
 		this->ForeColor = Color::Green;
+		this->ImageIndex = (int)ZobObjectManagerWrapper::eImageObjectType::eImageZobLight;
 	}
 	else if (z.GetSubType() == ZOBGUID::subtype_zobOject)
 	{
 		this->ForeColor = Color::Blue;
+		this->ImageIndex = (int)ZobObjectManagerWrapper::eImageObjectType::eImageZobObject;
 	}
 }
 

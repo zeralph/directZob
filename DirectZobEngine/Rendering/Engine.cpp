@@ -1379,15 +1379,28 @@ void Engine::UpdateEditorBitmapData()
 
 void Engine::PrintRasterizersInfos()
 {
+
 	std::string o = "";
-	ZobHUDManager* m = DirectZob::GetInstance()->GetHudManager();
+	ZobHUDManager* hudMgr = DirectZob::GetInstance()->GetHudManager();
+	ZobInputManager* inpMgr = DirectZob::GetInstance()->GetInputManager();
 	ZobVector3 c = ZobVector3(1, 0, 0);
 	float y = 0.05f;
 	for (int i = 0; i < m_nbRasterizers; i++)
 	{
-		m->Print(ZobHUDManager::eHudUnit_ratio, 0.5f, y, 1.5f, "MV Boli", &c, " R %i : %i", i, m_rasterizers[i]->GetNbTriangle());
+		hudMgr->Print(ZobHUDManager::eHudUnit_ratio, 0.5f, y, 1.5f, "MV Boli", &ZobColor::Green, " R %i : %i", i, m_rasterizers[i]->GetNbTriangle());
 		y += 0.02f;
 	}
+	hudMgr->Print(ZobHUDManager::eHudUnit_ratio, 0.01f, 0.01f, 1, "VCR OSD Mono", &ZobColor::Green, "Triangles : %i color depth : %i", GetNbDrawnTriangles(), GetNbBitsPerColorDepth());
+
+//	hudMgr->Print(ZobHUDManager::eHudUnit_ratio, 0.01f, 0.04f, 1, "VCR OSD Mono", &color, "render : %03i, geom : %03i, phys : %03i, cpy : %03i, tot : %03i, FPS : %03i", (int)m_renderTime, (int)m_geometryTime, (int)m_physicTime, (int)m_copyTime, (int)m_frameTime, (int)m_fps);
+
+	hudMgr->Print(ZobHUDManager::eHudUnit_ratio, 0.01f, 0.07f, 1, "VCR OSD Mono", &ZobColor::Red, "Controller LX : %.2f, LY  : %.2f, RX : %.2f, RY : %.2f, LT : %.2f, RT : %.2f",
+		inpMgr->GetMap()->GetFloat(ZobInputManager::LeftStickX),
+		inpMgr->GetMap()->GetFloat(ZobInputManager::LeftStickY),
+		inpMgr->GetMap()->GetFloat(ZobInputManager::RightStickX),
+		inpMgr->GetMap()->GetFloat(ZobInputManager::RightStickY),
+		inpMgr->GetMap()->GetFloat(ZobInputManager::LeftShoulder),
+		inpMgr->GetMap()->GetFloat(ZobInputManager::RightShoulder));
 }
 
 void Engine::EnablePerspectiveCorrection(bool enable)

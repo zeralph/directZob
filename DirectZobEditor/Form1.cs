@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Resources;
 using System.Threading;
 using System.Windows.Forms;
 using Newtonsoft.Json;
@@ -79,7 +80,8 @@ namespace DirectZobEditor
             InitializeComponent();
             m_engineWindow = new EngineWindow(this);
             PictureBox p = m_engineWindow.GetEngineRenderwindow();
-            m_directZobWrapper = new CLI.DirectZobWrapper(this.ZobObjectListPanel, this.propertiesPanel, this.globalPropertiesPanel, m_engineWindow.GetEngineRenderwindow());
+            System.Resources.ResourceManager resources = new ResourceManager("DirectZobEditor.Properties.Resources", typeof(Form1).Assembly);
+            m_directZobWrapper = new CLI.DirectZobWrapper(this.ZobObjectListPanel, this.propertiesPanel, this.globalPropertiesPanel, m_engineWindow.GetEngineRenderwindow(), resources);
             m_directZobWrapper.Init(p.Width, p.Height);
             CLI.ZobObjectManagerWrapper.OnObjectSelectedEvent += new CLI.ZobObjectManagerWrapper.OnObjectSelected(OnObjectSelected);
             m_zobObjectManagerWrapper = m_directZobWrapper.GetZobObjectManagerWrapper();
@@ -107,6 +109,7 @@ namespace DirectZobEditor
             m_engineThread = new Thread(RunEngineThread);
             m_engineThread.Start();
             SetSnap("None");
+
         }
 
         private void Form1_OnNewScene(object sender, EventArgs e)

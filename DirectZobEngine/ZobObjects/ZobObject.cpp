@@ -817,3 +817,17 @@ const ZobBehavior* ZobObject::GetBehaviorById(zobId zid) const
 	}
 	return NULL;
 }
+/*
+template<classteams T>
+T* ZobObject::GetBehavior()
+{
+	for (int i = 0; i < m_behaviors.size(); i++)
+	{
+		if (typeof(_behaviors[i]) == T)
+		{
+			return _behaviors[i];
+		}
+	}
+	return NULL;
+}
+*/

@@ -15,8 +15,15 @@ public:
 		return std::to_string(f).substr(0, std::to_string(f).find(".") + precision + 1);
 	};
 
+	static std::string GetTempFile(std::string extension)
+	{
+		char* t = _tempnam(NULL, "dzob");
+		return std::string(t).append(extension);
+	}
+
 	static std::string GetTempDirectory()
 	{
+		char* t = _tempnam(NULL, "pref");
 #ifdef LINUX
 		return std::string("//tmp//");
 #elif WINDOWS

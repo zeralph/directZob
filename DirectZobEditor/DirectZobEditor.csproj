@@ -110,7 +110,7 @@
       <DependentUpon>MaterialsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -162,6 +162,58 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="icon.ico" />
+    <None Include="Resources\object.png" />
+    <None Include="Resources\physic.png" />
+    <None Include="Resources\bbox.png" />
+    <None Include="Resources\mesh2.png" />
+    <None Include="Resources\mesh.png" />
+    <None Include="Resources\sprite.png" />
+    <None Include="Resources\texture.png" />
+    <None Include="Resources\move_L.png" />
+    <None Include="Resources\move_W.png" />
+    <None Include="Resources\move_W.ico" />
+    <None Include="Resources\wireframe.png" />
+    <None Include="Resources\text.png" />
+    <None Include="Resources\stop.png" />
+    <None Include="Resources\snap.png" />
+    <None Include="Resources\Scale.png" />
+    <None Include="Resources\rotate2.png" />
+    <None Include="Resources\rotate_W.png" />
+    <None Include="Resources\rotate_L.png" />
+    <None Include="Resources\rotate.png" />
+    <None Include="Resources\play.png" />
+    <None Include="Resources\pause.png" />
+    <None Include="Resources\normals2.png" />
+    <None Include="Resources\normals.png" />
+    <None Include="Resources\move.png" />
+    <None Include="Resources\light.png" />
+    <None Include="Resources\grid.png" />
+    <None Include="Resources\gizmo2.png" />
+    <None Include="Resources\gizmo.png" />
+    <None Include="Resources\camera2.png" />
+    <None Include="Resources\camera.png" />
+    <None Include="Resources\wireframe.ico" />
+    <None Include="Resources\text.ico" />
+    <None Include="Resources\stop.ico" />
+    <None Include="Resources\snap.ico" />
+    <None Include="Resources\Scale.ico" />
+    <None Include="Resources\rotate2.ico" />
+    <None Include="Resources\rotate_W.ico" />
+    <None Include="Resources\rotate_L.ico" />
+    <None Include="Resources\rotate.ico" />
+    <None Include="Resources\play.ico" />
+    <None Include="Resources\pause.ico" />
+    <None Include="Resources\normals2.ico" />
+    <None Include="Resources\normals.ico" />
+    <None Include="Resources\move_L.ico" />
+    <None Include="Resources\move.ico" />
+    <None Include="Resources\light.ico" />
+    <None Include="Resources\grid.ico" />
+    <None Include="Resources\gizmo2.ico" />
+    <None Include="Resources\gizmo.ico" />
+    <None Include="Resources\camera2.ico" />
+    <None Include="Resources\camera.ico" />
+    <None Include="Resources\Icon1.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

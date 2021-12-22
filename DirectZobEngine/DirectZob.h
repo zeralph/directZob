@@ -145,7 +145,7 @@ private:
 	Text2D* m_text = NULL;
 	ZobInputManager* m_inputManager = NULL;
 	bool m_isRendering = false;
-	static bool g_bShowGrid;
+	//static bool g_bShowGrid;
 	static bool g_bShowMeshes;
 	static bool g_isInEditorMode;
 	bool m_initialized = false;
