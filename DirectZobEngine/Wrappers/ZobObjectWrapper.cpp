@@ -253,7 +253,7 @@ namespace CLI
 		ZobObject* z = GetInstance();
 		if (z)
 		{
-			ZOBGUID::ZobSubType t = z->GetSubType();
+			ZOBGUID::ZobSubType t = ZOBGUID::GetSubType(z->GetIdValue());
 			return t == ZOBGUID::ZobSubType::subtype_zobLight;
 		}
 		return false;
@@ -264,7 +264,7 @@ namespace CLI
 		ZobObject* z = GetInstance();
 		if (z)
 		{
-			return z->GetSubType() == ZOBGUID::ZobSubType::subtype_zobCamera;
+			return ZOBGUID::GetSubType(z->GetIdValue()) == ZOBGUID::ZobSubType::subtype_zobCamera;
 		}
 		return false;
 	}
@@ -312,8 +312,8 @@ namespace CLI
 		{
 			DirectZob::LogWarning("duplicating object %i : %s", nbObjs, src->GetName());
 			TiXmlElement* n = (TiXmlElement*)src->SaveUnderNode(n);
-			ZOBGUID id = ZOBGUID(src->GetType(), src->GetSubType());
-			ZobObject* newObject = new ZobObject(id.ZobGuidToString(), n, parent, NULL);
+			zobId zid = ZOBGUID::Regenerate(src->GetIdValue());
+			ZobObject* newObject = new ZobObject(zid, n, parent, NULL);
 			newObject->Init();
 			newObject->SetParent(parent);
 			ZobVector3 p = newObject->GetWorldPosition();

@@ -2,15 +2,15 @@
 #include "../Managers/ZobInputManager.h"
 #include "../DirectZob.h"
 
-ZobCameraControllerOrbital::ZobCameraControllerOrbital(Camera* c, bool isFree, std::string guid) :ZobCameraController(c, guid)
+ZobCameraControllerOrbital::ZobCameraControllerOrbital(Camera* c, bool isFree, zobId guid) :ZobCameraController(c, guid)
 {
 	if (isFree)
 	{
-		m_type = Camera::eCamera_orbital_free;
+		m_cameraControllerType = Camera::eCamera_orbital_free;
 	}
 	else
 	{
-		m_type = Camera::eCamera_orbital;
+		m_cameraControllerType = Camera::eCamera_orbital;
 	}
 	m_centerOfRotation = ZobVector3(0, 0, 0);
 	m_isFree = isFree;
@@ -26,11 +26,11 @@ ZobCameraControllerOrbital::ZobCameraControllerOrbital(Camera* c, bool isFree) :
 {
 	if (isFree)
 	{
-		m_type = Camera::eCamera_orbital_free;
+		m_cameraControllerType = Camera::eCamera_orbital_free;
 	}
 	else
 	{
-		m_type = Camera::eCamera_orbital;
+		m_cameraControllerType = Camera::eCamera_orbital;
 	}
 	m_centerOfRotation = ZobVector3(0, 0, 0);
 	m_isFree = isFree;

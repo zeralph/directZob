@@ -48,15 +48,10 @@ void ZobBehaviorSprite::Init()
 
 void ZobBehaviorSprite::ReloadMaterial(zobId id)
 {
-	const ZobBehavior* zb = ZobBehaviorFactory::GetBehaviorFromZobId(id);
-	ZobObjectManager* zm = DirectZob::GetInstance()->GetZobObjectManager();
-	if (zm)
+	ZobBehavior* zb = ZOBGUID::GetEntity<ZobBehavior>(id);
+	if (zb)
 	{
-		ZobObject* z = zm->GetZobObjectFromlId(id);
-		if (z)
-		{
-			DirectZob::LogInfo("pouet");
-		}
+		DirectZob::LogInfo("pouet");
 	}
 }
 

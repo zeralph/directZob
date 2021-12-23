@@ -4,7 +4,7 @@
 #include "Misc/ZobXmlHelper.h"
 
 //TODO !
-std::string SceneLoader::m_path = "D://Git//directZob//resources//";
+std::string SceneLoader::m_path = "D://_Git//directZob//resources//";
 std::string SceneLoader::m_file = "";
 std::string SceneLoader::m_nextScenePath = "";
 std::string SceneLoader::m_nextSceneName = "";
@@ -92,20 +92,20 @@ void SceneLoader::LoadZobObject(TiXmlElement* node, ZobObject* parent, const std
 		return;
 	}
 	std::string id = cid;
-	ZOBGUID zid = ZOBGUID(id);
-	if (zid.GetSubType() == ZOBGUID::subtype_zobOject)
+	zobId zid = ZOBGUID::ZobIdFromString(id);
+	if (ZOBGUID::GetSubType(zid) == ZOBGUID::subtype_zobOject)
 	{
-		zob = new ZobObject(id, node, parent, factoryPath);
+		zob = new ZobObject(zid, node, parent, factoryPath);
 	}
-	else if (zid.GetSubType() == ZOBGUID::subtype_zobCamera)
+	else if (ZOBGUID::GetSubType(zid) == ZOBGUID::subtype_zobCamera)
 	{
-		Camera* c = new Camera(id, node, parent);
+		Camera* c = new Camera(zid, node, parent);
 		DirectZob::GetInstance()->GetCameraManager()->AddCamera(c);
 		zob = c;
 	}
-	else if (zid.GetSubType() == ZOBGUID::subtype_zobLight)
+	else if (ZOBGUID::GetSubType(zid) == ZOBGUID::subtype_zobLight)
 	{
-		Light* l = new Light(id, node, parent);
+		Light* l = new Light(zid, node, parent);
 		DirectZob::GetInstance()->GetLightManager()->AddLight(l);
 		zob = l;
 	}
@@ -142,7 +142,7 @@ void SceneLoader::UnloadScene()
 	ZobPhysicsEngine* phy = DirectZob::GetInstance()->GetPhysicsEngine();
 	engine->Stop();
 	hudManager->Stop();
-	//DirectZob::GetInstance()->SleepMS(1000);
+	ZOBGUID::Init();
 	cameraManager->UnloadAll();
 	zobObjectManager->UnloadAll();
 	meshManager->UnloadAll();
@@ -274,7 +274,7 @@ void SceneLoader::SaveScene(std::string &path, std::string &file)
 
 bool SceneLoader::SaveZobObjectRecusrive(TiXmlNode* node, ZobObject* z)
 {
-	if (z->GetType() == ZOBGUID::type_editor)
+	if (ZOBGUID::GetType(z->GetIdValue()) == ZOBGUID::type_editor)
 	{
 		return true;
 	}

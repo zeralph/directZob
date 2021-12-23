@@ -66,39 +66,6 @@ ZobObject* ZobObjectManager::CreateEditorZobObject(ZobObject* parent)
 	return new ZobObject(ZOBGUID::type_editor, ZOBGUID::subtype_zobOject, emptyStr, parent);
 }
 
-ZobObject* ZobObjectManager::GetZobObjectFromlId(const std::string& id) const
-{
-	ZOBGUID guid = ZOBGUID(id);
-	ZobObject* ret = GetZobObjectFromId(m_rootObject, guid.GetIdValue());
-	return ret;
-}
-
-ZobObject* ZobObjectManager::GetZobObjectFromlId(const zobId id) const
-{
-	ZobObject* ret = GetZobObjectFromId(m_rootObject, id);
-	return ret;
-}
-
-ZobObject* ZobObjectManager::GetZobObjectFromId(ZobObject* z, zobId id) const
-{
-	if (z->GetIdValue() == id)
-	{
-		return z;
-	}
-	else
-	{
-		for (int i = 0; i < z->GetNbChildren(); i++)
-		{
-			ZobObject* o = GetZobObjectFromId(z->GetChild(i), id);
-			if(o)
-			{
-				return o;
-			}
-		}
-	}
-	return NULL;
-}
-
 ZobObject* ZobObjectManager::GetRootObject() const
 {
 	return m_rootObject;
@@ -184,7 +151,7 @@ void ZobObjectManager::GetZobObjectList(std::string& s) const
 
 void ZobObjectManager::GetZobObjectListInternal(const ZobObject* z, std::vector<const ZobObject*>& v) const
 {
-	if (z->GetType() != ZOBGUID::type_editor && !z->IsMarkedForDeletion())
+	if (ZOBGUID::GetType(z->GetIdValue()) != ZOBGUID::type_editor && !z->IsMarkedForDeletion())
 	{
 		v.push_back(z);
 		const std::vector<ZobObject*>* c = z->GetChildren();
@@ -197,7 +164,7 @@ void ZobObjectManager::GetZobObjectListInternal(const ZobObject* z, std::vector<
 
 void ZobObjectManager::GetZobObjectListInternal(const ZobObject* z, std::string& str) const
 {
-	if (z->GetType() != ZOBGUID::type_editor && !z->IsMarkedForDeletion())
+	if (ZOBGUID::GetType(z->GetIdValue()) != ZOBGUID::type_editor && !z->IsMarkedForDeletion())
 	{
 		str.append("{\"name\":\"");
 		str.append(z->GetName());

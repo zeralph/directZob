@@ -90,8 +90,9 @@ namespace CLI
 		String^ guid = ((ZobControlTreeNode^)m_treeView->SelectedNode)->m_zobObjectGuid;
 		std::string id;
 		MarshalString(guid, id);
-		ZobObject* p = DirectZob::GetInstance()->GetZobObjectManager()->GetZobObjectFromlId(id);
-		DirectZob::GetInstance()->GetZobObjectManager()->CreateZobObject(p);
+		zobId zid = ZOBGUID::ZobIdFromString(id);
+		ZobObject* z = ZOBGUID::GetEntity<ZobObject>(zid);
+		DirectZob::GetInstance()->GetZobObjectManager()->CreateZobObject(z);
 		ReScan((ZobControlTreeNode^)m_treeView->TopNode, m_bShowAllNodes);
 	}
 
@@ -100,7 +101,8 @@ namespace CLI
 		String^ guid = ((ZobControlTreeNode^)m_treeView->SelectedNode)->m_zobObjectGuid;
 		std::string id;
 		MarshalString(guid, id);
-		ZobObject* p = DirectZob::GetInstance()->GetZobObjectManager()->GetZobObjectFromlId(id);
+		zobId zid = ZOBGUID::ZobIdFromString(id);
+		ZobObject* p = ZOBGUID::GetEntity<ZobObject>(zid);
 		if (m_selectedObject == p)
 		{
 			SelectObject(p->GetParent());
@@ -117,9 +119,10 @@ namespace CLI
 		String^ guid = ((ZobControlTreeNode^)m_treeView->SelectedNode)->m_zobObjectGuid;
 		std::string id;
 		MarshalString(guid, id);
-		ZobObject* p = DirectZob::GetInstance()->GetZobObjectManager()->GetZobObjectFromlId(id);
+		zobId zid = ZOBGUID::ZobIdFromString(id);
+		ZobObject* p = ZOBGUID::GetEntity<ZobObject>(zid);
 		Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCamera(std::string("EditorCamera"));
-		if (c)
+		if (c && p)
 		{
 			ZobVector3 pos = p->GetWorldPosition();
 			c->SetTarget(&pos);
@@ -333,7 +336,7 @@ namespace CLI
 				if (!child->IsMarkedForDeletion())
 				{
 					String^ guid = TO_MANAGED_STRING(child->ZobGuidToString().c_str());
-					bool isEditor = child->GetType() == ZOBGUID::type_editor;
+					bool isEditor = ZOBGUID::GetType(child->GetIdValue()) == ZOBGUID::type_editor;
 					if (!isEditor)
 					{
 						l->Add(guid);
@@ -370,7 +373,7 @@ namespace CLI
 		if (z)
 		{
 			String^ guidStr = TO_MANAGED_STRING(z->ZobGuidToString().c_str());
-			bool isEditor = z->GetType() == ZOBGUID::type_editor;
+			bool isEditor = ZOBGUID::GetType(z->GetIdValue()) == ZOBGUID::type_editor;
 			if (!isEditor)
 			{
 				ZobControlTreeNode^ tn = gcnew ZobControlTreeNode(guidStr);
@@ -389,7 +392,9 @@ namespace CLI
 	{
 		std::string id;
 		MarshalString(guid, id);
-		return DirectZob::GetInstance()->GetZobObjectManager()->GetZobObjectFromlId(id);
+		zobId zid = ZOBGUID::ZobIdFromString(id);
+		ZobObject* z = ZOBGUID::GetEntity<ZobObject>(zid);
+		return z;
 	}
 
 	void ZobObjectManagerWrapper::RemoveZobObject(ZobObjectWrapper^ z)
@@ -481,10 +486,12 @@ namespace CLI
 		{
 			std::string id1;
 			MarshalString(object, id1);
-			ZobObject* o = DirectZob::GetInstance()->GetZobObjectManager()->GetZobObjectFromlId(id1);
+			zobId zid = ZOBGUID::ZobIdFromString(id1);
+			ZobObject* o = ZOBGUID::GetEntity<ZobObject>(zid);
 			std::string id2;
 			MarshalString(parent, id2);
-			ZobObject* p = DirectZob::GetInstance()->GetZobObjectManager()->GetZobObjectFromlId(id2);
+			zobId zid2 = ZOBGUID::ZobIdFromString(id2);
+			ZobObject* p = ZOBGUID::GetEntity<ZobObject>(zid2);
 			if (o && p)
 			{
 				return GetInstance()->Reparent(o, p);

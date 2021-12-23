@@ -161,6 +161,10 @@
       <Link>gainput.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+	<Content Include="..\dependencies\optick\lib\windows\OptickCore.dll">
+      <Link>OptickCore.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="icon.ico" />
     <None Include="Resources\object.png" />
     <None Include="Resources\physic.png" />

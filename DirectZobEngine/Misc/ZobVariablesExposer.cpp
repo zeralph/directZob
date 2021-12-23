@@ -111,7 +111,8 @@ void ZobVariablesExposer::wrapperData::Load()
 	else if (type == eWrapperType_zobObject)
 	{
 		std::string s = std::string(strValue);
-		ZobObject* z = DirectZob::GetInstance()->GetZobObjectManager()->GetZobObjectFromlId(s);
+		zobId zid = ZOBGUID::ZobIdFromString(s);
+		ZobObject* z = ZOBGUID::GetEntity<ZobObject>(zid);
 		if (z)
 		{
 			uintptr_t addr = reinterpret_cast<uintptr_t>(&*z);

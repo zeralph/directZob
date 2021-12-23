@@ -1,10 +1,19 @@
 #pragma once
 #include "../Types.h"
 #include <vector>
+#include <map>
 
 class ZOBGUID
 {
 public :
+
+	static void Init()
+	{
+		if (ZOBGUID::m_entityMap.size() > 0)
+		{
+			ZOBGUID::m_entityMap.clear();
+		}
+	}
 
 	enum ZobType
 	{
@@ -27,45 +36,46 @@ public :
 		subtype_MAX = 9,
 	};
 
-	ZOBGUID();
-	ZOBGUID(ZobType t, ZobSubType s);
-	ZOBGUID(std::string id);
-	~ZOBGUID();
-	const ZobType			GetType()const;
-	const ZobSubType		GetSubType()const;
+	template<class T>
+	static T* GetEntity(const zobId zid)
+	{
+		std::map<const zobId, ZOBGUID*>::iterator it;
+		it = m_entityMap.find(zid);
+		if (it != m_entityMap.end())
+		{
+			return static_cast<T*>(it->second);
+		}
+		return NULL;
+	}
+
+
+	static ZobType			GetType(const zobId zid);
+	static ZobSubType		GetSubType(const zobId zid);
 	zobId*	GetIdAddress();
-	zobId	GetIdValue();
+	zobId	GetIdValue() const;
 	bool	IsEditorObject();
+	bool	ChangeId(const zobId zid);
 	std::string				ZobGuidToString()
 	{
 		return std::to_string((ulong)m_id);
 	}
-	void ZobGuidFromString(std::string& id)
+	static zobId ZobIdFromString(std::string& id)
 	{
 		char* pEnd;
-		m_id = strtoull(id.c_str(), &pEnd, 10);
-		m_type = (ZobType)(m_id / (1000 * 1000 * 1000));
-		unsigned long long  l = (zobId)m_type * 1000 * 1000 * 1000;
-		m_subType = (ZobSubType)((m_id - l)/(1000 * 1000));
+		return strtoull(id.c_str(), &pEnd, 10);
+	}
+	static zobId Regenerate(const zobId zid);
 
-	}
-	void ZobGuidRegenerate()
-	{
-		ulong id = GenerateId();
-		if (m_type < ZobType::type_unknown || m_type >= ZobType::type_MAX)
-		{
-			m_type = ZobType::type_unknown;
-		}
-		if (m_subType < ZobSubType::subtype_unknown || m_subType >= ZobSubType::subtype_MAX)
-		{
-			m_subType = ZobSubType::subtype_unknown;
-		}
-		m_id = (u16)m_type * 1000 * 1000 * 1000 + (u16)m_subType * 1000 * 1000 + id;
-	}
+protected:
+	ZOBGUID(ZobType t, ZobSubType s);
+	ZOBGUID(const zobId zid);
+	~ZOBGUID();
+	zobId											m_id;
+	ZOBGUID::ZobType								m_type;
+	ZOBGUID::ZobSubType								m_subType;
 private:
-	zobId		GenerateId();
-	zobId		m_id;
-	ZOBGUID::ZobType			m_type;
-	ZOBGUID::ZobSubType			m_subType;
+	static ulong									GenerateId();
+	void											EraseEntry(const zobId zid);
+	static std::map<const zobId, ZOBGUID*>			m_entityMap;
 
 };

@@ -11,6 +11,7 @@
 #include "Misc/ZobGeometryHelper.h"
 #include "Misc/ZobXmlHelper.h"
 #include "Behaviors/ZobBehaviorSprite.h"
+#include "SceneLoader.h"
 
 static std::mutex g_update_camera_mutex;
 static float ee = 0.0f;
@@ -33,14 +34,14 @@ Camera::Camera(ZOBGUID::ZobType zobType, const std::string& name, eCameraType ty
 	if (DirectZob::IsEditorMode())
 	{
 		ZobBehaviorSprite* b = (ZobBehaviorSprite*)ZobBehaviorFactory::CreateBehavior(this, "Sprite", true);
-		ZobFilePath zfp = ZobFilePath("camera", "D://Git//directZob//resources//", "camera.png", true);
+		ZobFilePath zfp = ZobFilePath("camera", SceneLoader::GetResourcePath(), "camera.png", true);
 		b->Set(zfp);
 		b->SetForEditor();
 	}
 	//m_nextTranslation = m_translation;
 }
 
-Camera::Camera(std::string id, TiXmlElement* node, ZobObject* parent)
+Camera::Camera(zobId id, TiXmlElement* node, ZobObject* parent)
 	:ZobObject(id, node, parent)
 {
 	m_zobCameraController = NULL;
@@ -51,7 +52,7 @@ Camera::Camera(std::string id, TiXmlElement* node, ZobObject* parent)
 	if (DirectZob::IsEditorMode())
 	{
 		ZobBehaviorSprite* b = (ZobBehaviorSprite*)ZobBehaviorFactory::CreateBehavior(this, "Sprite", true);
-		ZobFilePath zfp = ZobFilePath("camera", "D://Git//directZob//resources//", "camera.png", true);
+		ZobFilePath zfp = ZobFilePath("camera", SceneLoader::GetResourcePath(), "camera.png", true);
 		b->Set(zfp);
 		b->SetForEditor();
 	}
@@ -133,7 +134,7 @@ void Camera::DrawGizmos(const Camera* camera, Engine* engine)
 	{
 		//return;
 	}
-	if (GetType() == ZOBGUID::type_editor)
+	if (ZOBGUID::GetType(this->GetIdValue()) == ZOBGUID::type_editor)
 	{
 		//		return;
 	}

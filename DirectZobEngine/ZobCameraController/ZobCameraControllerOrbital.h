@@ -6,7 +6,7 @@
 class ZobCameraControllerOrbital : public ZobCameraController
 {
 public:
-    ZobCameraControllerOrbital(Camera* c, bool isFree, std::string guid);
+    ZobCameraControllerOrbital(Camera* c, bool isFree, zobId guid);
     ZobCameraControllerOrbital(Camera * c, bool isFree);
     ~ZobCameraControllerOrbital();
 

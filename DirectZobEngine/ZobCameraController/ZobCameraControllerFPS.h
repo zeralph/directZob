@@ -5,7 +5,7 @@ class ZobCameraControllerFPS : public ZobCameraController
 {
 public:
     ZobCameraControllerFPS(Camera* c);
-    ZobCameraControllerFPS(Camera * c, std::string guid);
+    ZobCameraControllerFPS(Camera * c, zobId guid);
     ~ZobCameraControllerFPS();
 
     void        Update(float dt) override;

@@ -6,7 +6,7 @@
 class ZobCameraControllerFollowCar: public ZobCameraController
 {
 public:
-    ZobCameraControllerFollowCar(Camera* c, std::string guid);
+    ZobCameraControllerFollowCar(Camera* c, zobId guid);
     ZobCameraControllerFollowCar(Camera * c);
     ~ZobCameraControllerFollowCar();
 
@@ -16,7 +16,7 @@ public:
     void            Rotate(float x, float y, float z) override;
     void            Move(float x, float y, float z) override;
     void            DrawGizmos(const Camera* camera, Engine* engine) const override;
-    Camera::eCameraType     GetType() const { return m_type; }
+    Camera::eCameraType     GetType() const { return m_cameraControllerType; }
     std::string             GetTypeName() const { return m_typeName; }
 private:
 

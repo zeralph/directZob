@@ -96,7 +96,7 @@ void ZobHUDManager::Init()
 	zfpXml = ZobFilePath(DEFAULT_FONT, dir, "defaultFont.xml", true);
 	m_fonts.push_back( new ZobFont(zfpTexture, zfpXml));
 
-/*
+
 	zfpTexture = ZobFilePath("mv_boli_regular_14", "_fonts", "mv_boli_regular_14.PNG", false);
 	zfpXml = ZobFilePath("mv_boli_regular_14", "_fonts", "mv_boli_regular_14.xml", false);
 	m_fonts.push_back( new ZobFont(zfpTexture, zfpXml));
@@ -124,7 +124,7 @@ void ZobHUDManager::Init()
 	zfpTexture = ZobFilePath("vcr_osd_mono_regular_14", "_fonts", "vcr_osd_mono_regular_14.PNG", false);
 	zfpXml = ZobFilePath("vcr_osd_mono_regular_14", "_fonts", "vcr_osd_mono_regular_14.xml", false);
 	m_fonts.push_back(new ZobFont(zfpTexture, zfpXml));
-*/
+
 }
 
 void ZobHUDManager::Stop()

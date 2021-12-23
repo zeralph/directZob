@@ -5,7 +5,7 @@ class ZobCameraController : public ZOBGUID
 {
 public:
     ZobCameraController(Camera* c);
-    ZobCameraController(Camera* c, std::string guid);
+    ZobCameraController(Camera* c, zobId guid);
     ~ZobCameraController();
 
 
@@ -18,13 +18,13 @@ public:
     virtual void                Zoom(float f);
     virtual void                DrawGizmos(const Camera* camera, Engine* engine) const;
     virtual void                SetTarget(const ZobVector3* t);
-    Camera::eCameraType         GetType() const { return m_type; }
+    Camera::eCameraType         GetType() const { return m_cameraControllerType; }
     static Camera::eCameraType  TypeFromString(const char* typeStr);
-    const char*                 GetTypeName() const { return ZobCameraController::eCameraTypeStr[m_type]; }
+    const char*                 GetTypeName() const { return ZobCameraController::eCameraTypeStr[m_cameraControllerType]; }
 private:
 
 protected:
     Camera* m_zobCamera;
-    Camera::eCameraType m_type;
+    Camera::eCameraType m_cameraControllerType;
     std::string m_typeName;
 };

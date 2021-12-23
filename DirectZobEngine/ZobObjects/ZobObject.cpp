@@ -67,7 +67,7 @@ ZobObject::ZobObject(ZobType t, ZobSubType s, const std::string& name, ZobObject
 	DirectZob::RemoveIndent();
 }
 
-ZobObject::ZobObject(std::string id, TiXmlElement* node, ZobObject* parent, const std::string* factoryFile /*=NULL*/)
+ZobObject::ZobObject(zobId id, TiXmlElement* node, ZobObject* parent, const std::string* factoryFile /*=NULL*/)
 	:ZOBGUID(id)
 {
 	m_varExposer = new ZobVariablesExposer(GetIdValue());
@@ -76,7 +76,7 @@ ZobObject::ZobObject(std::string id, TiXmlElement* node, ZobObject* parent, cons
 	m_factoryFile = factoryFile ? factoryFile->c_str() : "";
 	float x, y, z;
 	TiXmlElement* f;
-	DirectZob::LogInfo("ZobObject %s creation", id.c_str());
+	DirectZob::LogInfo("ZobObject %i creation", id);
 	DirectZob::AddIndent();
 	if (!parent && m_name != "root")
 	{
@@ -128,45 +128,36 @@ void ZobObject::InitVariablesExposer()
 
 void ZobObject::ReloadVariablesFromWorldData(zobId id)
 {
-	ZobObjectManager* zm = DirectZob::GetInstance()->GetZobObjectManager();
-	if (zm)
+	ZobObject* z = ZOBGUID::GetEntity<ZobObject>(id);
+	if (z)
 	{
-		ZobObject* z = zm->GetZobObjectFromlId(id);
-		if (z)
-		{
-			ZobVector3* zp = z->GetPhysicComponentNoConst()->GetWorldPositionAddress();
-			ZobVector3* zr = z->GetPhysicComponentNoConst()->GetWorldRotationAddress();
-			ZobVector3* zs = z->GetPhysicComponentNoConst()->GetWorldScaleAddress();
-			Transform t;
-			Vector3 vp = Vector3(zp->x, zp->y, zp->z);
-			t.setPosition(vp);
-			Quaternion q = Quaternion::fromEulerAngles(DEG_TO_RAD(zr->x), DEG_TO_RAD(zr->y), DEG_TO_RAD(zr->z));
-			t.setOrientation(q);
-			z->GetPhysicComponentNoConst()->SetWorldTransform(t);
-			z->GetPhysicComponentNoConst()->SetWorldScale(zs->x, zs->y, zs->z);
-		}
+		ZobVector3* zp = z->GetPhysicComponentNoConst()->GetWorldPositionAddress();
+		ZobVector3* zr = z->GetPhysicComponentNoConst()->GetWorldRotationAddress();
+		ZobVector3* zs = z->GetPhysicComponentNoConst()->GetWorldScaleAddress();
+		Transform t;
+		Vector3 vp = Vector3(zp->x, zp->y, zp->z);
+		t.setPosition(vp);
+		Quaternion q = Quaternion::fromEulerAngles(DEG_TO_RAD(zr->x), DEG_TO_RAD(zr->y), DEG_TO_RAD(zr->z));
+		t.setOrientation(q);
+		z->GetPhysicComponentNoConst()->SetWorldTransform(t);
+		z->GetPhysicComponentNoConst()->SetWorldScale(zs->x, zs->y, zs->z);
 	}
 }
 
 void ZobObject::ReloadVariablesFromLocalData(zobId id)
 {
-	ZobObjectManager* zm = DirectZob::GetInstance()->GetZobObjectManager();
-	if (zm)
+	ZobObject* z = ZOBGUID::GetEntity<ZobObject>(id);
 	{
-		ZobObject* z = zm->GetZobObjectFromlId(id);
-		if (z)
-		{
-			ZobVector3* zp = z->GetPhysicComponentNoConst()->GetLocalPositionAddress();
-			ZobVector3* zr = z->GetPhysicComponentNoConst()->GetLocalRotationAddress();
-			ZobVector3* zs = z->GetPhysicComponentNoConst()->GetLocalScaleAddress();
-			Transform t = z->GetPhysicComponentNoConst()->GetLocalTransform();
-			Vector3 vp = Vector3(zp->x, zp->y, zp->z);
-			t.setPosition(vp);
-			Quaternion q = Quaternion::fromEulerAngles(DEG_TO_RAD(zr->x), DEG_TO_RAD(zr->y), DEG_TO_RAD(zr->z));
-			t.setOrientation(q);
-			z->GetPhysicComponentNoConst()->SetLocalScale(zs->x, zs->y, zs->z);
-			z->GetPhysicComponentNoConst()->SetLocalTransform(t);
-		}
+		ZobVector3* zp = z->GetPhysicComponentNoConst()->GetLocalPositionAddress();
+		ZobVector3* zr = z->GetPhysicComponentNoConst()->GetLocalRotationAddress();
+		ZobVector3* zs = z->GetPhysicComponentNoConst()->GetLocalScaleAddress();
+		Transform t = z->GetPhysicComponentNoConst()->GetLocalTransform();
+		Vector3 vp = Vector3(zp->x, zp->y, zp->z);
+		t.setPosition(vp);
+		Quaternion q = Quaternion::fromEulerAngles(DEG_TO_RAD(zr->x), DEG_TO_RAD(zr->y), DEG_TO_RAD(zr->z));
+		t.setOrientation(q);
+		z->GetPhysicComponentNoConst()->SetLocalScale(zs->x, zs->y, zs->z);
+		z->GetPhysicComponentNoConst()->SetLocalTransform(t);
 	}
 }
 
@@ -540,7 +531,7 @@ void ZobObject::SaveToFactoryFile(std::string& file)
 
 void ZobObject::SaveRecusrive(TiXmlNode* node, ZobObject* z)
 {
-	if (z->GetType() == ZOBGUID::type_editor)
+	if (ZOBGUID::GetType(z->GetIdValue()) == ZOBGUID::type_editor)
 	{
 		return;
 	}
@@ -768,6 +759,7 @@ ZobVector3 ZobObject::GetWorldScale() const
 
 void ZobObject::RegenerateZobIds()
 {
+	/*
 	ZobGuidRegenerate();
 	for (int i = 0; i < m_behaviors.size(); i++)
 	{
@@ -777,6 +769,8 @@ void ZobObject::RegenerateZobIds()
 	{
 		(*iter)->RegenerateZobIds();
 	}
+	*/
+	assert(0);
 }
 
 void ZobObject::SaveTransform()

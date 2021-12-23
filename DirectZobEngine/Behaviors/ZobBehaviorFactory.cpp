@@ -110,31 +110,3 @@ ZobBehavior* ZobBehaviorFactory::CreateBehavior(ZobObject* zobObject, TiXmlEleme
 	}
 	return zb;
 }
-
-const ZobBehavior* ZobBehaviorFactory::GetBehaviorFromZobId(const zobId id)
-{
-	ZobObject* z = DirectZob::GetInstance()->GetZobObjectManager()->GetRootObject();
-	return GetBehaviorFromZobIdInternal(id, z);
-}
-
-const ZobBehavior* ZobBehaviorFactory::GetBehaviorFromZobIdInternal(const zobId id, const ZobObject* z)
-{
-	const ZobBehavior* zb = z->GetBehaviorById(id);
-	if (zb)
-	{
-		return zb;
-	}
-	else
-	{
-		const std::vector<ZobObject*>* c = z->GetChildren();
-		for (int i = 0; i < c->size(); i++)
-		{
-			zb = GetBehaviorFromZobIdInternal(id, c->at(i));
-			if (zb != NULL)
-			{
-				return zb;
-			}
-		}
-		return NULL;
-	}
-}

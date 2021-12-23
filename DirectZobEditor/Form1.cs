@@ -11,7 +11,7 @@ namespace DirectZobEditor
 {
     public partial class Form1 : Form
     {
-        private string workspace = "D://Git//directZob//resources//";
+        private string workspace = "D://_Git//directZob//resources//";
         enum eplayMode
         {
             ePlayMode_play=0,

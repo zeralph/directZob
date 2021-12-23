@@ -22,7 +22,7 @@ friend class ZobBehaviorCar;
 public:
 
 	ZobObject(ZOBGUID::ZobType t, ZOBGUID::ZobSubType s, const std::string& name, ZobObject* parent = NULL, const std::string* factoryFile =NULL);
-	ZobObject(std::string id, TiXmlElement* node, ZobObject* parent, const std::string* factoryFile = NULL);
+	ZobObject(zobId id, TiXmlElement* node, ZobObject* parent, const std::string* factoryFile = NULL);
 	virtual ~ZobObject();
 
 	//Mechanics
@@ -96,8 +96,6 @@ public:
 	//behaviors
 	const std::vector<ZobBehavior*>*	GetBehaviors() const { return &m_behaviors; }
 	const ZobBehavior*					GetBehaviorById(zobId zid) const;
-	//template<class T>
-	//bool								HasBehavior();
 	
 	static void							ReloadVariablesFromLocalData(zobId id);
 	static void							ReloadVariablesFromWorldData(zobId id);

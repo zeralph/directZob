@@ -22,8 +22,6 @@ public:
 	void										PostUpdate();
 	void										EditorUpdate();
 	void										QueueForDrawing(const Camera* camera, Engine* engine);
-	ZobObject*									GetZobObjectFromlId(const zobId id) const;
-	ZobObject*									GetZobObjectFromlId(const std::string& id) const;
 	void										AddZobObject(ZobObject* z);
 	ZobObject*									GetRootObject() const;
 	ZobObject*									GetZobObject(const std::string& name) const;
@@ -45,7 +43,6 @@ public:
 private:
 	void										GetZobObjectListInternal(const ZobObject* z, std::string& str) const;
 	void										GetZobObjectListInternal(const ZobObject* z, std::vector<const ZobObject*>& v) const;
-	ZobObject*									GetZobObjectFromId(ZobObject* z, const zobId id) const;
 	ZobObject*									m_rootObject = NULL;
 	clock_t										m_drawTick;
 	float										m_time;

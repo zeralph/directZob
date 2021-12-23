@@ -13,7 +13,7 @@ ZobBehavior::ZobBehavior(ZobObject* zobObject, bool bEditorZobBehavior):ZOBGUID(
 
 TiXmlNode* ZobBehavior::SaveUnderNode(TiXmlNode* node)
 {
-	if (this->GetType() == ZOBGUID::type_editor)
+	if (ZOBGUID::GetType(m_id) == ZOBGUID::type_editor)
 	{
 		return node;
 	}
@@ -33,12 +33,13 @@ const char* ZobBehavior::GetBehaviorTypeStr()
 
 void ZobBehavior::ReadNode(TiXmlElement* node)
 {
-	assert(this->GetType() != ZOBGUID::type_editor);
+	assert(ZOBGUID::GetType(this->GetIdValue()) != ZOBGUID::type_editor);
 	const char* guid = node->Attribute(XML_ATTR_GUID);
 	if (guid)
 	{
 		std::string s = guid;
-		ZobGuidFromString(s);
+		zobId zid = ZOBGUID::ZobIdFromString(s);
+		ChangeId(zid);
 	}
 	m_varExposer->ReadNode(node);
 }

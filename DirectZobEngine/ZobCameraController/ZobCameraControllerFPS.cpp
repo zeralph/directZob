@@ -3,9 +3,9 @@
 #include "../Managers/ZobInputManager.h"
 #include "../DirectZob.h"
 
-ZobCameraControllerFPS::ZobCameraControllerFPS(Camera* c, std::string guid) :ZobCameraController(c, guid)
+ZobCameraControllerFPS::ZobCameraControllerFPS(Camera* c, zobId guid) :ZobCameraController(c, guid)
 {
-	m_type = Camera::eCamera_fps;
+	m_cameraControllerType = Camera::eCamera_fps;
 	m_deltaPitch = 0.0f;
 	m_deltaYaw = 0.0f;
 	m_deltaRoll = 0.0f;
@@ -19,7 +19,7 @@ ZobCameraControllerFPS::ZobCameraControllerFPS(Camera* c, std::string guid) :Zob
 
 ZobCameraControllerFPS::ZobCameraControllerFPS(Camera* c) :ZobCameraController(c)
 {
-	m_type = Camera::eCamera_fps;
+	m_cameraControllerType = Camera::eCamera_fps;
 	m_deltaPitch = 0.0f;
 	m_deltaYaw = 0.0f;
 	m_deltaRoll = 0.0f;

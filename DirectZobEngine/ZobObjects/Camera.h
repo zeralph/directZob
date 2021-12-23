@@ -41,7 +41,7 @@ public:
 	};
 
 	Camera(ZOBGUID::ZobType zobType, const std::string& name, eCameraType type, float fov, BufferData* bufferData, ZobObject* parent);
-	Camera(std::string id, TiXmlElement* node, ZobObject* parent);
+	Camera(zobId id, TiXmlElement* node, ZobObject* parent);
 	~Camera() override;
 
 	//void					Update(const ZobMatrix4x4& parentMatrix, const ZobMatrix4x4& parentRSMatrix) override;

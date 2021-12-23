@@ -1,7 +1,7 @@
 #include "../../dependencies/gtest/include/gtest/gtest.h"
 #include "../../DirectZobEngine/ZobObjects/ZOBGUID.h"
 
-
+/*
 TEST(ZOBGUID, Constructor)
 {
 	ZOBGUID g = ZOBGUID();
@@ -42,3 +42,4 @@ TEST(ZOBGUID, Regenerate)
 	EXPECT_EQ(g.GetType(), ZOBGUID::type_scene);
 	EXPECT_EQ(g.GetSubType(), ZOBGUID::subtype_zobOject);
 }
+*/

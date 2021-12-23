@@ -15,5 +15,4 @@ public:
 	static const ZobBehavior* GetBehaviorFromZobId(const zobId id);
 private:
 	static ZobBehavior* CreateBehaviorInternal(ZobObject* zobObject, const char* behaviorName, bool bEditorZobBehavior);
-	static const ZobBehavior* GetBehaviorFromZobIdInternal(const zobId id, const ZobObject* z);
 };

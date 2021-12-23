@@ -16,7 +16,7 @@ public:
 	};
 
 	Light(std::string& name, eLightType type, ZobColor color, float intensity, float distance, ZobObject* parent);
-	Light(std::string id, TiXmlElement* node, ZobObject* parent);
+	Light(zobId id, TiXmlElement* node, ZobObject* parent);
 	~Light() override;
 
 	void				DrawGizmos(const Camera* camera, Engine* engine) override;

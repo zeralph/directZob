@@ -753,7 +753,7 @@
             <Var Name="Scale" value="10.000;15.000;10.000" />
             <Behaviors>
                 <Behavior Type="Sprite" Guid="2007552896">
-                    <Var Name="File" value="tree.png;D:\Git\directZob\resources\;tree.png;1" />
+                    <Var Name="File" value="tree.png;/;tree.png;0" />
                     <Var Name="Cull mode" value="Clockwise" />
                     <Var Name="Lighting" value="Phong" />
                     <Var Name="ZBuffered" value="True" />
@@ -767,7 +767,7 @@
             <Var Name="Scale" value="10.000;15.000;10.000" />
             <Behaviors>
                 <Behavior Type="Sprite" Guid="2007693938">
-                    <Var Name="File" value="tree.png;D:\Git\directZob\resources\;tree.png;1" />
+                    <Var Name="File" value="tree.png;/;tree.png;0" />
                     <Var Name="Cull mode" value="Clockwise" />
                     <Var Name="Lighting" value="Phong" />
                     <Var Name="ZBuffered" value="True" />
@@ -781,7 +781,7 @@
             <Var Name="Scale" value="10.000;15.000;10.000" />
             <Behaviors>
                 <Behavior Type="Sprite" Guid="2007566753">
-                    <Var Name="File" value="tree.png;D:\Git\directZob\resources\;tree.png;1" />
+                    <Var Name="File" value="tree.png;/;tree.png;0" />
                     <Var Name="Cull mode" value="Clockwise" />
                     <Var Name="Lighting" value="Phong" />
                     <Var Name="ZBuffered" value="True" />
