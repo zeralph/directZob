@@ -1,7 +1,7 @@
 #pragma once
 #include "../Types.h"
 #include "../tinyxml/tinyxml.h"
-#include "../ZobObjects/ZOBGUID.h"
+#include "../ZobObjects/ZobEntity.h"
 #include "../Misc/ZobVariablesExposer.h"
 #include "../Rendering/Engine.h"
 #include <map>
@@ -10,7 +10,7 @@
 
 class ZobObject;
 class Camera;
-class ZobBehavior : public ZOBGUID
+class ZobBehavior : public ZobEntity
 {
 public:
 

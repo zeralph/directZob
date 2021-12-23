@@ -14,7 +14,7 @@ ZobObjectManager::ZobObjectManager()
 {
 	m_deletedIds.clear();
 	std::string n = "root";
-	m_rootObject = new ZobObject(ZOBGUID::type_internal, ZOBGUID::subtype_zobOject, n, NULL);
+	m_rootObject = new ZobObject(ZobEntity::type_internal, ZobEntity::subtype_zobOject, n, NULL);
 }
 
 ZobObjectManager::~ZobObjectManager()
@@ -47,7 +47,7 @@ ZobObject* ZobObjectManager::CreateZobObject(ZobObject* parent)
 	{
 		parent = m_rootObject;
 	}
-	return new ZobObject(ZOBGUID::type_scene, ZOBGUID::subtype_zobOject, emptyStr, parent);
+	return new ZobObject(ZobEntity::type_scene, ZobEntity::subtype_zobOject, emptyStr, parent);
 }
 
 void ZobObjectManager::RemoveZobObject(ZobObject* z)
@@ -63,7 +63,7 @@ ZobObject* ZobObjectManager::CreateEditorZobObject(ZobObject* parent)
 	{
 		parent = m_rootObject;
 	}
-	return new ZobObject(ZOBGUID::type_editor, ZOBGUID::subtype_zobOject, emptyStr, parent);
+	return new ZobObject(ZobEntity::type_editor, ZobEntity::subtype_zobOject, emptyStr, parent);
 }
 
 ZobObject* ZobObjectManager::GetRootObject() const
@@ -151,7 +151,7 @@ void ZobObjectManager::GetZobObjectList(std::string& s) const
 
 void ZobObjectManager::GetZobObjectListInternal(const ZobObject* z, std::vector<const ZobObject*>& v) const
 {
-	if (ZOBGUID::GetType(z->GetIdValue()) != ZOBGUID::type_editor && !z->IsMarkedForDeletion())
+	if (ZobEntity::GetType(z->GetIdValue()) != ZobEntity::type_editor && !z->IsMarkedForDeletion())
 	{
 		v.push_back(z);
 		const std::vector<ZobObject*>* c = z->GetChildren();
@@ -164,7 +164,7 @@ void ZobObjectManager::GetZobObjectListInternal(const ZobObject* z, std::vector<
 
 void ZobObjectManager::GetZobObjectListInternal(const ZobObject* z, std::string& str) const
 {
-	if (ZOBGUID::GetType(z->GetIdValue()) != ZOBGUID::type_editor && !z->IsMarkedForDeletion())
+	if (ZobEntity::GetType(z->GetIdValue()) != ZobEntity::type_editor && !z->IsMarkedForDeletion())
 	{
 		str.append("{\"name\":\"");
 		str.append(z->GetName());
@@ -189,7 +189,7 @@ void ZobObjectManager::UnloadAll()
 	delete m_rootObject;
 	m_deletedIds.clear();
 	std::string n = "root";
-	m_rootObject = new ZobObject(ZOBGUID::type_internal, ZOBGUID::subtype_zobOject, n, NULL);
+	m_rootObject = new ZobObject(ZobEntity::type_internal, ZobEntity::subtype_zobOject, n, NULL);
 }
 
 bool ZobObjectManager::Reparent(ZobObject*o, ZobObject* parent)

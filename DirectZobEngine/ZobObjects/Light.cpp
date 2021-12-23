@@ -7,7 +7,7 @@
 #include "SceneLoader.h"
 
 Light::Light(std::string &name, eLightType type, ZobColor color, float intensity, float distance, ZobObject*parent):
-	ZobObject(ZOBGUID::type_scene, ZOBGUID::subtype_zobLight, name, parent)
+	ZobObject(ZobEntity::type_scene, ZobEntity::subtype_zobLight, name, parent)
 {
 	m_lightColor = color;
 	m_intensity = intensity;

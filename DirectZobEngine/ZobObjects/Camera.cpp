@@ -19,8 +19,8 @@ static float ee = 0.0f;
 static ZobVector3 sRayDbg;
 static ZobVector3 sRayDbg2;
 
-Camera::Camera(ZOBGUID::ZobType zobType, const std::string& name, eCameraType type, float fov, BufferData* bufferData, ZobObject* parent)
-	:ZobObject(zobType, ZOBGUID::ZobSubType::subtype_zobCamera, name, parent)
+Camera::Camera(ZobEntity::ZobType zobType, const std::string& name, eCameraType type, float fov, BufferData* bufferData, ZobObject* parent)
+	:ZobObject(zobType, ZobEntity::ZobSubType::subtype_zobCamera, name, parent)
 {
 	m_zobCameraController = NULL;
 	ChangeCameraController(type);
@@ -134,7 +134,7 @@ void Camera::DrawGizmos(const Camera* camera, Engine* engine)
 	{
 		//return;
 	}
-	if (ZOBGUID::GetType(this->GetIdValue()) == ZOBGUID::type_editor)
+	if (ZobEntity::GetType(this->GetIdValue()) == ZobEntity::type_editor)
 	{
 		//		return;
 	}

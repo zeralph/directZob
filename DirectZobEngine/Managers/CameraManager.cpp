@@ -147,7 +147,7 @@ Camera* CameraManager::CreateEditorCamera(std::string& name, Camera::eCameraType
 {
 	if (GetCamera(name) == NULL)
 	{
-		Camera* c = new Camera(ZOBGUID::ZobType::type_editor, name, type, fov, DirectZob::GetInstance()->GetEngine()->GetBufferData(), parent);
+		Camera* c = new Camera(ZobEntity::ZobType::type_editor, name, type, fov, DirectZob::GetInstance()->GetEngine()->GetBufferData(), parent);
 		AddCamera(c);
 		return c;
 	}
@@ -161,7 +161,7 @@ Camera* CameraManager::CreateCamera(std::string& name, Camera::eCameraType type,
 {
 	if (GetCamera(name) == NULL)
 	{
-		Camera* c = new Camera(ZOBGUID::ZobType::type_scene, name, type, fov, DirectZob::GetInstance()->GetEngine()->GetBufferData(), parent);
+		Camera* c = new Camera(ZobEntity::ZobType::type_scene, name, type, fov, DirectZob::GetInstance()->GetEngine()->GetBufferData(), parent);
 		AddCamera(c);
 		return c;
 	}

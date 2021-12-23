@@ -92,18 +92,18 @@ void SceneLoader::LoadZobObject(TiXmlElement* node, ZobObject* parent, const std
 		return;
 	}
 	std::string id = cid;
-	zobId zid = ZOBGUID::ZobIdFromString(id);
-	if (ZOBGUID::GetSubType(zid) == ZOBGUID::subtype_zobOject)
+	zobId zid = ZobEntity::ZobIdFromString(id);
+	if (ZobEntity::GetSubType(zid) == ZobEntity::subtype_zobOject)
 	{
 		zob = new ZobObject(zid, node, parent, factoryPath);
 	}
-	else if (ZOBGUID::GetSubType(zid) == ZOBGUID::subtype_zobCamera)
+	else if (ZobEntity::GetSubType(zid) == ZobEntity::subtype_zobCamera)
 	{
 		Camera* c = new Camera(zid, node, parent);
 		DirectZob::GetInstance()->GetCameraManager()->AddCamera(c);
 		zob = c;
 	}
-	else if (ZOBGUID::GetSubType(zid) == ZOBGUID::subtype_zobLight)
+	else if (ZobEntity::GetSubType(zid) == ZobEntity::subtype_zobLight)
 	{
 		Light* l = new Light(zid, node, parent);
 		DirectZob::GetInstance()->GetLightManager()->AddLight(l);
@@ -142,7 +142,7 @@ void SceneLoader::UnloadScene()
 	ZobPhysicsEngine* phy = DirectZob::GetInstance()->GetPhysicsEngine();
 	engine->Stop();
 	hudManager->Stop();
-	ZOBGUID::Init();
+	ZobEntity::Init();
 	cameraManager->UnloadAll();
 	zobObjectManager->UnloadAll();
 	meshManager->UnloadAll();
@@ -274,7 +274,7 @@ void SceneLoader::SaveScene(std::string &path, std::string &file)
 
 bool SceneLoader::SaveZobObjectRecusrive(TiXmlNode* node, ZobObject* z)
 {
-	if (ZOBGUID::GetType(z->GetIdValue()) == ZOBGUID::type_editor)
+	if (ZobEntity::GetType(z->GetIdValue()) == ZobEntity::type_editor)
 	{
 		return true;
 	}

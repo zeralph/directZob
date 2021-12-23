@@ -48,7 +48,7 @@ void ZobBehaviorSprite::Init()
 
 void ZobBehaviorSprite::ReloadMaterial(zobId id)
 {
-	ZobBehavior* zb = ZOBGUID::GetEntity<ZobBehavior>(id);
+	ZobBehavior* zb = ZobEntity::GetEntity<ZobBehavior>(id);
 	if (zb)
 	{
 		DirectZob::LogInfo("pouet");

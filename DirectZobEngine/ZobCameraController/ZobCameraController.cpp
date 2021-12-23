@@ -25,7 +25,7 @@ Camera::eCameraType ZobCameraController::TypeFromString(const char* typeStr)
     return Camera::eCameraType::eCamera_base;
 }
 
-ZobCameraController::ZobCameraController(Camera* c, zobId guid) :ZOBGUID(guid)
+ZobCameraController::ZobCameraController(Camera* c, zobId guid) :ZobEntity(guid)
 {
     m_cameraControllerType = Camera::eCamera_base;
     m_typeName = eCameraTypeStr[m_cameraControllerType];
@@ -33,7 +33,7 @@ ZobCameraController::ZobCameraController(Camera* c, zobId guid) :ZOBGUID(guid)
     //c->m_varExposer->WrapVariable<std::string>("pouet Type", &m_typeName, NULL, true, false);
 }
 
-ZobCameraController::ZobCameraController(Camera * c) :ZOBGUID(ZOBGUID::type_internal, ZOBGUID::subtype_cameraController)
+ZobCameraController::ZobCameraController(Camera * c) :ZobEntity(ZobEntity::type_internal, ZobEntity::subtype_cameraController)
 {
 	m_cameraControllerType = Camera::eCamera_base;
     m_typeName = eCameraTypeStr[m_cameraControllerType];

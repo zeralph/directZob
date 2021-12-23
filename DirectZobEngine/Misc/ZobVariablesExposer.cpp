@@ -111,8 +111,8 @@ void ZobVariablesExposer::wrapperData::Load()
 	else if (type == eWrapperType_zobObject)
 	{
 		std::string s = std::string(strValue);
-		zobId zid = ZOBGUID::ZobIdFromString(s);
-		ZobObject* z = ZOBGUID::GetEntity<ZobObject>(zid);
+		zobId zid = ZobEntity::ZobIdFromString(s);
+		ZobObject* z = ZobEntity::GetEntity<ZobObject>(zid);
 		if (z)
 		{
 			uintptr_t addr = reinterpret_cast<uintptr_t>(&*z);
@@ -238,7 +238,7 @@ TiXmlNode* ZobVariablesExposer::SaveUnderNode(TiXmlNode* node)
 				ZobObject** z = reinterpret_cast<ZobObject**>(w->ptr);
 				if (z && *z)
 				{
-					std::string s = (*z)->ZobGuidToString();
+					std::string s = (*z)->ZobIdToString();
 					o.SetAttribute(XML_ATTR_VALUE, s.c_str());
 				}
 				break;

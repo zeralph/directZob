@@ -1,7 +1,7 @@
 #pragma once
 #include "ZobObjects/Camera.h"
-#include "ZobObjects/ZOBGUID.h"
-class ZobCameraController : public ZOBGUID
+#include "ZobObjects/ZobEntity.h"
+class ZobCameraController : public ZobEntity
 {
 public:
     ZobCameraController(Camera* c);

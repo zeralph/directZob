@@ -27,7 +27,7 @@ namespace CLI
 		ZobObjectManager* zm = DirectZob::GetInstance() ? DirectZob::GetInstance()->GetZobObjectManager() : NULL;
 		if (zm)
 		{
-			ZobObject* g = ZOBGUID::GetEntity<ZobObject>(m_gizmosGuid);
+			ZobObject* g = ZobEntity::GetEntity<ZobObject>(m_gizmosGuid);
 			if (g)
 			{
 				g->SetParent(z);

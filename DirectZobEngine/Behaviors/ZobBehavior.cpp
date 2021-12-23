@@ -3,7 +3,7 @@
 #include "../DirectZob.h"
 #include "../Misc/ZobXmlHelper.h"
 
-ZobBehavior::ZobBehavior(ZobObject* zobObject, bool bEditorZobBehavior):ZOBGUID((bEditorZobBehavior? ZOBGUID::type_editor:ZOBGUID::type_internal), ZOBGUID::subtype_behavior)
+ZobBehavior::ZobBehavior(ZobObject* zobObject, bool bEditorZobBehavior):ZobEntity((bEditorZobBehavior? ZobEntity::type_editor:ZobEntity::type_internal), ZobEntity::subtype_behavior)
 {
 	m_zobObject = zobObject;
 	m_type = eBehavior_none;
@@ -13,14 +13,14 @@ ZobBehavior::ZobBehavior(ZobObject* zobObject, bool bEditorZobBehavior):ZOBGUID(
 
 TiXmlNode* ZobBehavior::SaveUnderNode(TiXmlNode* node)
 {
-	if (ZOBGUID::GetType(m_id) == ZOBGUID::type_editor)
+	if (ZobEntity::GetType(m_id) == ZobEntity::type_editor)
 	{
 		return node;
 	}
 	std::string s;
 	TiXmlElement n = TiXmlElement(XML_ELEMENT_BEHAVIOR);
 	n.SetAttribute(XML_ATTR_TYPE, GetBehaviorTypeStr());
-	n.SetAttribute(XML_ATTR_GUID, ZobGuidToString().c_str());
+	n.SetAttribute(XML_ATTR_GUID, ZobIdToString().c_str());
 	m_varExposer->SaveUnderNode(&n);
 	node->InsertEndChild(n);
 	return node;
@@ -33,12 +33,12 @@ const char* ZobBehavior::GetBehaviorTypeStr()
 
 void ZobBehavior::ReadNode(TiXmlElement* node)
 {
-	assert(ZOBGUID::GetType(this->GetIdValue()) != ZOBGUID::type_editor);
+	assert(ZobEntity::GetType(this->GetIdValue()) != ZobEntity::type_editor);
 	const char* guid = node->Attribute(XML_ATTR_GUID);
 	if (guid)
 	{
 		std::string s = guid;
-		zobId zid = ZOBGUID::ZobIdFromString(s);
+		zobId zid = ZobEntity::ZobIdFromString(s);
 		ChangeId(zid);
 	}
 	m_varExposer->ReadNode(node);

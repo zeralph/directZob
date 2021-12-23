@@ -6,12 +6,7 @@
 #include "../Rendering/Color.h"
 #include "ZobFilePath.h"
 
-//#include "../DirectZobEngine/ZobObjects/ZOBGUID.h"
-//#include "../DirectZobEngine/ZobObjects/ZobObject.h"
-//#include "../DirectZobEngine/Rendering/ZobVector3.h"
-//#include "../DirectZobEngine/Rendering/ZobVector2.h"
-
-class ZOBGUID;
+class ZobEntity;
 class ZobVector2;
 class ZobVector3;
 class ZobObject;

@@ -11,7 +11,7 @@
 
 static int sObjectNumber = 0;
 ZobObject::ZobObject(ZobType t, ZobSubType s, const std::string& name, ZobObject* parent /*= NULL*/, const std::string* factoryFile /*=NULL*/)
-	:ZOBGUID(t,s)
+	:ZobEntity(t,s)
 {
 	DirectZob::LogInfo("ZobObject %s creation", name.c_str()); 
 	DirectZob::AddIndent();
@@ -68,7 +68,7 @@ ZobObject::ZobObject(ZobType t, ZobSubType s, const std::string& name, ZobObject
 }
 
 ZobObject::ZobObject(zobId id, TiXmlElement* node, ZobObject* parent, const std::string* factoryFile /*=NULL*/)
-	:ZOBGUID(id)
+	:ZobEntity(id)
 {
 	m_varExposer = new ZobVariablesExposer(GetIdValue());
 	m_behaviors.clear();
@@ -128,7 +128,7 @@ void ZobObject::InitVariablesExposer()
 
 void ZobObject::ReloadVariablesFromWorldData(zobId id)
 {
-	ZobObject* z = ZOBGUID::GetEntity<ZobObject>(id);
+	ZobObject* z = ZobEntity::GetEntity<ZobObject>(id);
 	if (z)
 	{
 		ZobVector3* zp = z->GetPhysicComponentNoConst()->GetWorldPositionAddress();
@@ -146,7 +146,7 @@ void ZobObject::ReloadVariablesFromWorldData(zobId id)
 
 void ZobObject::ReloadVariablesFromLocalData(zobId id)
 {
-	ZobObject* z = ZOBGUID::GetEntity<ZobObject>(id);
+	ZobObject* z = ZobEntity::GetEntity<ZobObject>(id);
 	{
 		ZobVector3* zp = z->GetPhysicComponentNoConst()->GetLocalPositionAddress();
 		ZobVector3* zr = z->GetPhysicComponentNoConst()->GetLocalRotationAddress();
@@ -466,7 +466,7 @@ void ZobObject::SetParent(ZobObject* p)
 	{
 		if (!p->IsEditorObject())
 		{
-			DirectZob::LogInfo("Reparented %s from %s to %s", ZobGuidToString().c_str(), m_parent->ZobGuidToString().c_str(), p->ZobGuidToString().c_str());
+			DirectZob::LogInfo("Reparented %s from %s to %s", ZobIdToString().c_str(), m_parent->ZobIdToString().c_str(), p->ZobIdToString().c_str());
 		}
 		ZobVector3 pos = GetWorldPosition();
 		ZobVector3 rot = GetWorldRotation();
@@ -531,7 +531,7 @@ void ZobObject::SaveToFactoryFile(std::string& file)
 
 void ZobObject::SaveRecusrive(TiXmlNode* node, ZobObject* z)
 {
-	if (ZOBGUID::GetType(z->GetIdValue()) == ZOBGUID::type_editor)
+	if (ZobEntity::GetType(z->GetIdValue()) == ZobEntity::type_editor)
 	{
 		return;
 	}
@@ -546,7 +546,7 @@ void ZobObject::SaveRecusrive(TiXmlNode* node, ZobObject* z)
 TiXmlNode* ZobObject::SaveUnderNode(TiXmlNode* node)
 {
 	TiXmlElement* objectNode = new TiXmlElement(XML_ELEMENT_ZOBOBJECT);
-	std::string guid = ZobGuidToString();
+	std::string guid = ZobIdToString();
 	objectNode->SetAttribute(XML_ATTR_GUID, guid.c_str());
 	m_varExposer->SaveUnderNode(objectNode);
 	TiXmlElement behaviors = TiXmlElement(XML_ELEMENT_BEHAVIORS);
@@ -760,10 +760,10 @@ ZobVector3 ZobObject::GetWorldScale() const
 void ZobObject::RegenerateZobIds()
 {
 	/*
-	ZobGuidRegenerate();
+	ZobEntityRegenerate();
 	for (int i = 0; i < m_behaviors.size(); i++)
 	{
-		m_behaviors[i]->ZobGuidRegenerate();
+		m_behaviors[i]->ZobEntityRegenerate();
 	}
 	for (std::vector<ZobObject*>::const_iterator iter = m_children.begin(); iter != m_children.end(); iter++)
 	{

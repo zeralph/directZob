@@ -1,43 +1,43 @@
-#include "ZOBGUID.h"
+#include "ZobEntity.h"
 #include <algorithm>
 #include <DirectZob.h>
 
-std::map<const zobId, ZOBGUID*> ZOBGUID::m_entityMap;
+std::map<const zobId, ZobEntity*> ZobEntity::m_entityMap;
 
-ZOBGUID::ZOBGUID(ZobType t, ZobSubType s)
+ZobEntity::ZobEntity(ZobType t, ZobSubType s)
 {
 	m_type = t;
 	m_subType = s;
 	ulong id = GenerateId();
 	m_id = (u16)t * 1000 * 1000 * 1000 + (u16)s * 1000 * 1000 + id;
-	ZOBGUID::m_entityMap[m_id] = this;
+	ZobEntity::m_entityMap[m_id] = this;
 }
 
-ZOBGUID::ZOBGUID(const zobId zid)
+ZobEntity::ZobEntity(const zobId zid)
 {
 	m_id = zid;
 	m_type = (ZobType)(m_id / (1000 * 1000 * 1000));
 	unsigned long long  l = (zobId)m_type * 1000 * 1000 * 1000;
 	m_subType = (ZobSubType)((m_id - l) / (1000 * 1000));
-	ZOBGUID::m_entityMap[m_id] = this;
+	ZobEntity::m_entityMap[m_id] = this;
 }
 
-ZOBGUID::~ZOBGUID()
+ZobEntity::~ZobEntity()
 {
 	EraseEntry(m_id);
 }
 
-void ZOBGUID::EraseEntry(const zobId zid)
+void ZobEntity::EraseEntry(const zobId zid)
 {
-	std::map<const zobId, ZOBGUID*>::iterator it;
+	std::map<const zobId, ZobEntity*>::iterator it;
 	it = m_entityMap.find(zid);
 	if (it != m_entityMap.end())
 	{
-		ZOBGUID::m_entityMap.erase(it);
+		ZobEntity::m_entityMap.erase(it);
 	}
 }
 
-bool ZOBGUID::ChangeId(const zobId zid)
+bool ZobEntity::ChangeId(const zobId zid)
 {
 	ZobType t = (ZobType)(zid / (1000 * 1000 * 1000));
 	unsigned long long  l = (zobId)t * 1000 * 1000 * 1000;
@@ -48,15 +48,15 @@ bool ZOBGUID::ChangeId(const zobId zid)
 	m_id = zid;
 	m_type = t;
 	m_subType = st;
-	ZOBGUID::m_entityMap[m_id] = this;
+	ZobEntity::m_entityMap[m_id] = this;
 	return true;
 }
 
 /*
 template<class T>
-T* ZOBGUID::GetEntity(const zobId zid)
+T* ZobEntity::GetEntity(const zobId zid)
 {
-	std::map<const zobId, ZOBGUID*>::iterator it;
+	std::map<const zobId, ZobEntity*>::iterator it;
 	it = m_entityMap.find(zid);
 	if (it != m_entityMap.end())
 	{
@@ -65,43 +65,43 @@ T* ZOBGUID::GetEntity(const zobId zid)
 	return NULL;
 }
 */
-ZOBGUID::ZobType ZOBGUID::GetType(const zobId zid)
+ZobEntity::ZobType ZobEntity::GetType(const zobId zid)
 {
 	return (ZobType)(zid / (1000 * 1000 * 1000));
 }
 
-ZOBGUID::ZobSubType ZOBGUID::GetSubType(const zobId zid)
+ZobEntity::ZobSubType ZobEntity::GetSubType(const zobId zid)
 {
 	ZobType t = (ZobType)(zid / (1000 * 1000 * 1000));
 	unsigned long long  l = (zobId)t * 1000 * 1000 * 1000;
 	return (ZobSubType)((zid - l) / (1000 * 1000));
 }
 
-DirectZobType::zobId* ZOBGUID::GetIdAddress()
+DirectZobType::zobId* ZobEntity::GetIdAddress()
 {
 	return &m_id;
 }
 
-DirectZobType::zobId ZOBGUID::GetIdValue() const
+DirectZobType::zobId ZobEntity::GetIdValue() const
 {
 	return m_id;
 }
 
-bool ZOBGUID::IsEditorObject()
+bool ZobEntity::IsEditorObject()
 {
 	return m_type == ZobType::type_editor;
 }
 
-zobId ZOBGUID::Regenerate(const zobId zid)
+zobId ZobEntity::Regenerate(const zobId zid)
 {
-	ZobType t = ZOBGUID::GetType(zid);
-	ZobSubType st = ZOBGUID::GetSubType(zid);
-	ulong id = ZOBGUID::GenerateId();
+	ZobType t = ZobEntity::GetType(zid);
+	ZobSubType st = ZobEntity::GetSubType(zid);
+	ulong id = ZobEntity::GenerateId();
 	zobId z = (u16)t * 1000 * 1000 * 1000 + (u16)st * 1000 * 1000 + id;
 	return z;
 }
 
-ulong ZOBGUID::GenerateId()
+ulong ZobEntity::GenerateId()
 {
 	DirectZobType::zobId u = 0;
 	for (int i = 0; i < 6; i++)

@@ -3,15 +3,15 @@
 #include <vector>
 #include <map>
 
-class ZOBGUID
+class ZobEntity
 {
 public :
 
 	static void Init()
 	{
-		if (ZOBGUID::m_entityMap.size() > 0)
+		if (ZobEntity::m_entityMap.size() > 0)
 		{
-			ZOBGUID::m_entityMap.clear();
+			ZobEntity::m_entityMap.clear();
 		}
 	}
 
@@ -39,7 +39,7 @@ public :
 	template<class T>
 	static T* GetEntity(const zobId zid)
 	{
-		std::map<const zobId, ZOBGUID*>::iterator it;
+		std::map<const zobId, ZobEntity*>::iterator it;
 		it = m_entityMap.find(zid);
 		if (it != m_entityMap.end())
 		{
@@ -55,7 +55,7 @@ public :
 	zobId	GetIdValue() const;
 	bool	IsEditorObject();
 	bool	ChangeId(const zobId zid);
-	std::string				ZobGuidToString()
+	std::string				ZobIdToString()
 	{
 		return std::to_string((ulong)m_id);
 	}
@@ -67,15 +67,15 @@ public :
 	static zobId Regenerate(const zobId zid);
 
 protected:
-	ZOBGUID(ZobType t, ZobSubType s);
-	ZOBGUID(const zobId zid);
-	~ZOBGUID();
+	ZobEntity(ZobType t, ZobSubType s);
+	ZobEntity(const zobId zid);
+	~ZobEntity();
 	zobId											m_id;
-	ZOBGUID::ZobType								m_type;
-	ZOBGUID::ZobSubType								m_subType;
+	ZobEntity::ZobType								m_type;
+	ZobEntity::ZobSubType								m_subType;
 private:
 	static ulong									GenerateId();
 	void											EraseEntry(const zobId zid);
-	static std::map<const zobId, ZOBGUID*>			m_entityMap;
+	static std::map<const zobId, ZobEntity*>			m_entityMap;
 
 };

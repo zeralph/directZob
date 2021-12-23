@@ -712,27 +712,27 @@ ZobControlTreeNode::ZobControlTreeNode(String^ zobObjectGuid) :TreeNode()
 	std::string s;
 	m_zobObjectGuid = zobObjectGuid;
 	MarshalString(zobObjectGuid, s);
-	zobId zid = ZOBGUID::ZobIdFromString(s);
+	zobId zid = ZobEntity::ZobIdFromString(s);
 	this->ToolTipText = m_zobObjectGuid;
-	ZOBGUID::ZobType t = ZOBGUID::GetType(zid);
-	ZOBGUID::ZobSubType st = ZOBGUID::GetSubType(zid);
-	m_isSelectable = t== ZOBGUID::type_internal || t == ZOBGUID::type_scene;
-	m_isReadOnly = t == ZOBGUID::type_internal || t == ZOBGUID::type_editor;
-	if (t != ZOBGUID::type_scene && t != ZOBGUID::type_internal)
+	ZobEntity::ZobType t = ZobEntity::GetType(zid);
+	ZobEntity::ZobSubType st = ZobEntity::GetSubType(zid);
+	m_isSelectable = t== ZobEntity::type_internal || t == ZobEntity::type_scene;
+	m_isReadOnly = t == ZobEntity::type_internal || t == ZobEntity::type_editor;
+	if (t != ZobEntity::type_scene && t != ZobEntity::type_internal)
 	{
 		this->ForeColor = Color::Red;
 	}
-	else if (st == ZOBGUID::subtype_zobCamera)
+	else if (st == ZobEntity::subtype_zobCamera)
 	{
 		this->ForeColor = Color::Brown;
 		this->ImageIndex = (int)ZobObjectManagerWrapper::eImageObjectType::eImageZobCamera;
 	}
-	else if (st == ZOBGUID::subtype_zobLight)
+	else if (st == ZobEntity::subtype_zobLight)
 	{
 		this->ForeColor = Color::Green;
 		this->ImageIndex = (int)ZobObjectManagerWrapper::eImageObjectType::eImageZobLight;
 	}
-	else if (st == ZOBGUID::subtype_zobOject)
+	else if (st == ZobEntity::subtype_zobOject)
 	{
 		this->ForeColor = Color::Blue;
 		this->ImageIndex = (int)ZobObjectManagerWrapper::eImageObjectType::eImageZobObject;

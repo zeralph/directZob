@@ -5,7 +5,7 @@
 #include <vector>
 #include "../Types.h"
 #include "../Rendering/Engine.h"
-#include "ZOBGUID.h"
+#include "ZobEntity.h"
 #include "tinyxml.h"
 #include "../Behaviors/ZobBehaviorFactory.h"
 #include "../Misc/ZobFilePath.h"
@@ -15,13 +15,13 @@ class ZobPhysicComponent;
 class m_varExposer;
 class ZobBehaviorMesh;
 class ZobBehaviorSprite;
-class ZobObject:public ZOBGUID
+class ZobObject:public ZobEntity
 {
 friend class ZobBehavior;
 friend class ZobBehaviorCar;
 public:
 
-	ZobObject(ZOBGUID::ZobType t, ZOBGUID::ZobSubType s, const std::string& name, ZobObject* parent = NULL, const std::string* factoryFile =NULL);
+	ZobObject(ZobEntity::ZobType t, ZobEntity::ZobSubType s, const std::string& name, ZobObject* parent = NULL, const std::string* factoryFile =NULL);
 	ZobObject(zobId id, TiXmlElement* node, ZobObject* parent, const std::string* factoryFile = NULL);
 	virtual ~ZobObject();
 

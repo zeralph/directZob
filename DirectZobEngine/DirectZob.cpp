@@ -31,7 +31,7 @@ DirectZob::eDirectZobLogLevel DirectZob::sLogLevel = DirectZob::eDirectZobLogLev
 
 DirectZob::DirectZob()
 {
-	ZOBGUID::Init();
+	ZobEntity::Init();
 	m_initialized = false;
 	DirectZob::singleton= this; 
 	m_frameTime = 1.0f;
@@ -116,7 +116,7 @@ void DirectZob::NewScene(std::string workspace)
 {
 	//g_render_mutex.lock();
 	m_physicStarted = false;
-	//ZOBGUID::Init();
+	//ZobEntity::Init();
 	SceneLoader::NewScene(workspace);
 	if (m_text == NULL)
 	{
