@@ -1,5 +1,5 @@
 #include "../../dependencies/gtest/include/gtest/gtest.h"
-#include "../../DirectZobEngine/ZobObjects/ZOBGUID.h"
+#include "../../DirectZobEngine/ZobObjects/ZobEntity.h"
 
 /*
 TEST(ZOBGUID, Constructor)

@@ -7,7 +7,6 @@
 #include "tests/Mesh.h"
 #include "tests/SceneLoader.h"
 
-
 int main(int argc, char** argv)
 {
     DirectZob* d = new DirectZob();

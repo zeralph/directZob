@@ -35,7 +35,7 @@ public:
 #elif WINDOWS
 		//std::filesystem::temp_directory_path()
 		char lpTempPathBuffer[MAX_PATH];
-		GetTempPath(MAX_PATH, lpTempPathBuffer);
+		GetTempPathA(MAX_PATH, lpTempPathBuffer);
 		std::string s = std::string(lpTempPathBuffer);
 		std::replace(s.begin(), s.end(), '\\', '/');
 		return s;
