@@ -742,15 +742,15 @@ ZobControlTreeNode::ZobControlTreeNode(String^ zobObjectGuid) :TreeNode()
 		ZobObject* z = ZobEntity::GetEntity<ZobObject>(zid);
 		if (z)
 		{
-			//if (z && z->GetBehavior<ZobBehaviorSprite>())
-			//{
-			//	this->ImageIndex = (int)ZobObjectManagerWrapper::eImageObjectType::eImageZobSprite;
-			//}
-			//else if (z && z->GetBehavior<ZobBehaviorMesh>())
-			//{
-			//	this->ImageIndex = (int)ZobObjectManagerWrapper::eImageObjectType::eImageZobMesh;
-			//}
-			//else
+			if (z && z->GetBehavior<ZobBehaviorSprite>())
+			{
+				this->ImageIndex = (int)ZobObjectManagerWrapper::eImageObjectType::eImageZobSprite;
+			}
+			else if (z && z->GetBehavior<ZobBehaviorMesh>())
+			{
+				this->ImageIndex = (int)ZobObjectManagerWrapper::eImageObjectType::eImageZobMesh;
+			}
+			else
 			{
 				this->ImageIndex = (int)ZobObjectManagerWrapper::eImageObjectType::eImageZobObject;
 			}

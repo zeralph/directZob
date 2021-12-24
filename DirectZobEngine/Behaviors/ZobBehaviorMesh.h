@@ -6,10 +6,11 @@
 
 #include "../tinyxml/tinyxml.h"
 #include "ZobBehavior.h"
-#include "../Mesh.h"
+
 #include <string>
 #include <vector>
 
+class Mesh;
 class ZobBehaviorMesh : public ZobBehavior
 {
 	friend class ZobBehaviorFactory;
@@ -24,7 +25,7 @@ public:
 	void						QueueForDrawing(const Camera* camera, Engine* engine) override;
 	void						EditorUpdate() override;
 	void						Set(ZobFilePath zfp);
-	void						SetVisible(bool v) { m_mesh->SetVisible(v); }
+	void						SetVisible(bool v);
 	Triangle::RenderOptions*	GetRenderOptions() { return &m_renderOptions; }
 	const Mesh*					GetMesh() const { return m_mesh; }
 private:

@@ -10,11 +10,13 @@
 #include "../Behaviors/ZobBehaviorFactory.h"
 #include "../Misc/ZobFilePath.h"
 
+#include "../Behaviors/ZobBehaviorSprite.h"
+#include "../Behaviors/ZobBehaviorMesh.h"
+
 class Mesh;
 class ZobPhysicComponent;
 class m_varExposer;
 class ZobBehaviorMesh;
-class ZobBehaviorSprite;
 class ZobObject:public ZobEntity
 {
 friend class ZobBehavior;
@@ -95,6 +97,22 @@ public:
 
 	//behaviors
 	const std::vector<ZobBehavior*>*	GetBehaviors() const { return &m_behaviors; }
+	template<class T>
+	T* GetBehavior() const
+	{
+		std::vector<ZobBehavior*>::const_iterator it = m_behaviors.begin();
+		while (it != m_behaviors.end())
+		{
+			bool b = typeid(T) == typeid(**it);
+			if (b)
+			{
+				return static_cast<T*>(*it);
+			}
+			it++;
+		}
+		return NULL;
+	}
+
 
 	static void							ReloadVariablesFromLocalData(zobId id);
 	static void							ReloadVariablesFromWorldData(zobId id);

@@ -279,7 +279,7 @@ int DirectZob::RunAFrame(DirectZob::engineCallback OnSceneUpdated /*=NULL*/, Dir
 			m_engine->ClearRenderQueues();
 			SaveTime( &tend);
 			m_copyTime = GetDeltaTime_MS(tstart, tend);
-			if (OnQueuing)
+			if (OnQueuing) 
 			{
 				//OnQueuing();
 			}
@@ -322,7 +322,13 @@ int DirectZob::RunAFrame(DirectZob::engineCallback OnSceneUpdated /*=NULL*/, Dir
 			}
 			LogWarning("FPS set to %i", fpsTargets[sTargetMSPerFrameIdx]?(int)(1000.0f / fpsTargets[sTargetMSPerFrameIdx]):0);
 		}
-		m_engine->PrintRasterizersInfos();
+		if (m_engine->DrawGizmos())
+		{
+			m_engine->PrintRasterizersInfos();
+			PrintInfos();
+			PrintObjectList();
+		}
+		
 		m_engine->SetDisplayedBuffer();
 	}
 	SaveTime(&tend);
@@ -395,18 +401,37 @@ void DirectZob::PrintObjectList()
 	for (int i = 0; i < v.size(); i++)
 	{
 		const ZobObject* z = v.at(i);
-		int c = 0xFF0000FF;
-		/*if (z->GetMesh())
+		int c = 0xFFFFFFFF; 
+		const ZobBehaviorMesh* m = z->GetBehavior<ZobBehaviorMesh>();
+		const ZobBehaviorSprite* s = z->GetBehavior<ZobBehaviorSprite>();
+		if (m || s)
 		{
 			c = 0xFFFF0000;
-			if (z->GetMesh()->IsDrawn())
-			{
-				c = 0xFF00FF00;
-			}
 		}
-		*/
+		if (m && m->GetMesh()->IsDrawn())
+		{
+			c = 0xFF00FF00;
+		}
+		if (s && s->GetMesh()->IsDrawn())
+		{
+			c = 0xFF00FF00;
+		}
 		m_text->Print(txtW, (i*10), c, z->GetName().c_str());
 	}
+}
+
+void DirectZob::PrintInfos()
+{
+
+	m_text->Print(10, 10, ZobColor::Blue.GetRawValue(), "Triangles : %i color depth : %i", m_engine->GetNbDrawnTriangles(), m_engine->GetNbBitsPerColorDepth());
+	m_text->Print(10, 20, ZobColor::Blue.GetRawValue(), "render : %03i, geom : %03i, phys : %03i, cpy : %03i, tot : %03i, FPS : %03i", (int)m_renderTime, (int)m_geometryTime, (int)m_physicTime, (int)m_copyTime, (int)m_frameTime, (int)m_fps);
+	m_text->Print(10, 30, ZobColor::Blue.GetRawValue(), "Controller LX : %.2f, LY  : %.2f, RX : %.2f, RY : %.2f, LT : %.2f, RT : %.2f",
+		m_inputManager->GetMap()->GetFloat(ZobInputManager::LeftStickX),
+		m_inputManager->GetMap()->GetFloat(ZobInputManager::LeftStickY),
+		m_inputManager->GetMap()->GetFloat(ZobInputManager::RightStickX),
+		m_inputManager->GetMap()->GetFloat(ZobInputManager::RightStickY),
+		m_inputManager->GetMap()->GetFloat(ZobInputManager::LeftShoulder),
+		m_inputManager->GetMap()->GetFloat(ZobInputManager::RightShoulder));
 }
 
 const std::string& DirectZob::GetResourcePath()

@@ -1,6 +1,7 @@
 #include "ZobBehaviorSprite.h"
 #include "../DirectZob.h"
 #include "ZobBehaviorFactory.h"
+#include "../Sprite.h"
 
 ZobBehaviorSprite::~ZobBehaviorSprite()
 {
@@ -53,6 +54,10 @@ void ZobBehaviorSprite::ReloadMaterial(zobId id)
 	{
 		DirectZob::LogInfo("pouet");
 	}
+}
+void ZobBehaviorSprite::SetVisible(bool v)
+{ 
+	m_sprite->SetVisible(v); 
 }
 
 void ZobBehaviorSprite::SetForEditor()

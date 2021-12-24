@@ -6,11 +6,11 @@
 
 #include "../tinyxml/tinyxml.h"
 #include "ZobBehavior.h"
-#include "../Sprite.h"
 #include "../Misc/ZobFilePath.h"
 #include <string>
 #include <vector>
 
+class ZobSprite;
 class ZobBehaviorSprite : public ZobBehavior
 {
 	friend class ZobBehaviorFactory;
@@ -25,7 +25,7 @@ public:
 	void						QueueForDrawing(const Camera* camera, Engine* engine) override;
 	void						EditorUpdate() override;
 	void						Set(ZobFilePath zfp);
-	void						SetVisible(bool v) { m_sprite->SetVisible(v); }
+	void						SetVisible(bool v);
 	Triangle::RenderOptions*	GetRenderOptions() { return &m_renderOptions; }
 	const ZobSprite*			GetMesh() const { return m_sprite; }
 	static void					ReloadMaterial(zobId id);

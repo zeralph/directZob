@@ -1,5 +1,6 @@
 #include "ZobBehaviorMesh.h"
 #include "../DirectZob.h"
+#include "../Mesh.h"
 
 ZobBehaviorMesh::~ZobBehaviorMesh()
 {
@@ -64,6 +65,11 @@ void ZobBehaviorMesh::PreUpdate(float dt)
 void ZobBehaviorMesh::UpdateAfterObject(float dt)
 {
 
+}
+
+void ZobBehaviorMesh::SetVisible(bool v)
+{ 
+	m_mesh->SetVisible(v); 
 }
 
 void ZobBehaviorMesh::PostUpdate()

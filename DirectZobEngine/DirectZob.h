@@ -126,9 +126,11 @@ public :
 	float					GetLastDt() const { return m_frameTime / 1000.0f; }
 	void					SleepMS(float ms);
 	void					Shutdown();
+	Text2D*					GetDebugPrint() const { return m_text; }
 private:
 	int						RunInternal(void func(void));
 	void					PrintObjectList();
+	void					PrintInfos();
 	void					WaitToTargetFrameTime(float dt);
 	
 private:
