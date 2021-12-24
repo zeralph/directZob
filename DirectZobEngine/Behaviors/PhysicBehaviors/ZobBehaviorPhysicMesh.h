@@ -23,10 +23,13 @@ class ZobBehaviorPhysicMesh : public ZobBehaviorPhysicShape
 		bool					LoadMeshInternal();
 		void					RemoveCollider() override;
 
-		Mesh* m_mesh;
-		float* m_concaveMeshVertices;
-		uint* m_concaveMeshIndices;
-		int m_concaveMeshNbTriangles;
-		ZobFilePath m_convexMeshPath;
+		Mesh*									m_mesh;
+		float*									m_concaveMeshVertices;
+		uint*									m_concaveMeshIndices;
+		int										m_concaveMeshNbTriangles;
+		ZobFilePath								m_convexMeshPath;
+		reactphysics3d::TriangleVertexArray*	m_triangleVertexArray;
+		reactphysics3d::TriangleMesh*			m_triangleMesh;
+		reactphysics3d::ConcaveMeshShape*		m_convexMeshShape;
 
 };

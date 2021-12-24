@@ -256,12 +256,16 @@ void ZobControlFilePath::OnOk(Object^ sender, System::ComponentModel::CancelEven
 	String^ fullPath = f->FileName;
 	System::IO::FileInfo^ fi = gcnew System::IO::FileInfo(fullPath);
 	String^ dir = fi->DirectoryName;
+	if (!(dir->EndsWith("//") || dir->EndsWith("\\")))
+	{
+		dir += "//";
+	}
 	String^ file = fi->Name;
 	_txt->Text = file;
 	if (_w)
 	{
 		std::string s;
-		MarshalString(file+";"+dir+";"+file, s);
+		MarshalString(file+";"+dir+";"+file+";1", s);
 		ZobFilePath* zp = (ZobFilePath*)_w->ptr;
 
 		zp->Unserialize(s);
@@ -735,7 +739,22 @@ ZobControlTreeNode::ZobControlTreeNode(String^ zobObjectGuid) :TreeNode()
 	else if (st == ZobEntity::subtype_zobOject)
 	{
 		this->ForeColor = Color::Blue;
-		this->ImageIndex = (int)ZobObjectManagerWrapper::eImageObjectType::eImageZobObject;
+		ZobObject* z = ZobEntity::GetEntity<ZobObject>(zid);
+		if (z)
+		{
+			//if (z && z->GetBehavior<ZobBehaviorSprite>())
+			//{
+			//	this->ImageIndex = (int)ZobObjectManagerWrapper::eImageObjectType::eImageZobSprite;
+			//}
+			//else if (z && z->GetBehavior<ZobBehaviorMesh>())
+			//{
+			//	this->ImageIndex = (int)ZobObjectManagerWrapper::eImageObjectType::eImageZobMesh;
+			//}
+			//else
+			{
+				this->ImageIndex = (int)ZobObjectManagerWrapper::eImageObjectType::eImageZobObject;
+			}
+		}
 	}
 }
 

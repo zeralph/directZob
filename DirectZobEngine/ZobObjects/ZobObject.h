@@ -95,8 +95,7 @@ public:
 
 	//behaviors
 	const std::vector<ZobBehavior*>*	GetBehaviors() const { return &m_behaviors; }
-	const ZobBehavior*					GetBehaviorById(zobId zid) const;
-	
+
 	static void							ReloadVariablesFromLocalData(zobId id);
 	static void							ReloadVariablesFromWorldData(zobId id);
 private:

@@ -25,7 +25,8 @@ ZobPhysicComponent::~ZobPhysicComponent()
 {
 	DirectZob::GetInstance()->GetPhysicsEngine()->RemoveBody(this);
 	DirectZob::GetInstance()->GetPhysicsEngine()->DestroyCollisionBody(m_collisionBody);
-	m_collisionBody = NULL;}
+	m_collisionBody = NULL;
+}
 
 void ZobPhysicComponent::Init()
 {

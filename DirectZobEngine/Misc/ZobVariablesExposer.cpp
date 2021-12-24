@@ -12,6 +12,7 @@ ZobVariablesExposer::ZobVariablesExposer(zobId id)
 
 ZobVariablesExposer::~ZobVariablesExposer()
 {
+	m_wrappedVariables.clear();
 }
 
 void ZobVariablesExposer::wrapperData::Init()

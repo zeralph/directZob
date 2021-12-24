@@ -366,6 +366,10 @@ void ZobObject::SetLocalScale(float x, float y, float z)
 
 void ZobObject::DrawGizmos(const Camera* camera, Engine* engine)
 {
+	if (m_markedForDeletion)
+	{
+		return;
+	}
 	uint c;
 	ZobVector3 x = m_left;
 	ZobVector3 y = m_up;
@@ -799,29 +803,3 @@ void ZobObject::ResetPhysic()
 		(*iter)->ResetPhysic();
 	}
 }
-
-const ZobBehavior* ZobObject::GetBehaviorById(zobId zid) const
-{
-	for (std::vector<ZobBehavior*>::const_iterator iter = m_behaviors.begin(); iter != m_behaviors.end(); iter++)
-	{
-		if ((*iter)->GetIdValue() == zid)
-		{
-			return (*iter);
-		}
-	}
-	return NULL;
-}
-/*
-template<classteams T>
-T* ZobObject::GetBehavior()
-{
-	for (int i = 0; i < m_behaviors.size(); i++)
-	{
-		if (typeof(_behaviors[i]) == T)
-		{
-			return _behaviors[i];
-		}
-	}
-	return NULL;
-}
-*/

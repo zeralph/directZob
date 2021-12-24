@@ -7,7 +7,7 @@
 #include "../tinyxml/tinyxml.h"
 #include "ZobBehavior.h"
 #include "../Sprite.h"
-#include "Misc/ZobFilePath.h"
+#include "../Misc/ZobFilePath.h"
 #include <string>
 #include <vector>
 

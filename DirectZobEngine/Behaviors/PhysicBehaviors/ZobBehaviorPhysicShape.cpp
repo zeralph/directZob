@@ -4,7 +4,7 @@
 
 ZobBehaviorPhysicShape::~ZobBehaviorPhysicShape()
 {
-
+	RemoveCollider();
 }
 
 ZobBehaviorPhysicShape::ZobBehaviorPhysicShape(ZobObject* zobObject) : ZobBehavior(zobObject, false)

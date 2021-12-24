@@ -37,7 +37,12 @@ public:
 	{
 	public:
 		wrapperData(zobId id) { id = id; ptr = NULL; }
-		~wrapperData() { ptr = NULL; }
+		~wrapperData()
+		{
+			ptr = NULL;
+			enumValues.clear();
+			enumNames.clear();
+		}
 		zobId id;
 		eWrapperType type;
 		bool bReadOnly;

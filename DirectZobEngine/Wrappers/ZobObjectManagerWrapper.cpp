@@ -4,6 +4,7 @@
 #include "../DirectZob.h"
 #include "../ZobObjects/ZobObject.h"
 #include "../Behaviors/ZobBehaviorMesh.h"
+#include "../Behaviors/ZobBehaviorSprite.h"
 
 #define TO_MANAGED_STRING(x) gcnew String(x);
 

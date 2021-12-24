@@ -4,7 +4,7 @@
 
 ZobBehaviorPhysicMesh::~ZobBehaviorPhysicMesh()
 {
-
+	RemoveCollider();
 }
 
 ZobBehaviorPhysicMesh::ZobBehaviorPhysicMesh(ZobObject* zobObject) : ZobBehaviorPhysicShape(zobObject)
@@ -20,6 +20,10 @@ ZobBehaviorPhysicMesh::ZobBehaviorPhysicMesh(ZobObject* zobObject) : ZobBehavior
 void ZobBehaviorPhysicMesh::RemoveCollider()
 {
 	ZobBehaviorPhysicShape::RemoveCollider();
+	PhysicsCommon* pc = DirectZob::GetInstance()->GetPhysicsEngine()->GetPhysicsCommon();
+	pc->destroyConcaveMeshShape(m_convexMeshShape);
+	pc->destroyTriangleMesh(m_triangleMesh);
+	delete m_triangleVertexArray;
 	m_mesh = NULL;
 	free(m_concaveMeshVertices);
 	free(m_concaveMeshIndices);
@@ -63,16 +67,16 @@ bool ZobBehaviorPhysicMesh::LoadMeshInternal()
 			idx++;
 		}
 		assert(idx == nbTriangles * 3);
-		TriangleVertexArray* triangleArray =
+		m_triangleVertexArray =
 			new TriangleVertexArray(nbVertices, m_concaveMeshVertices, 3 * sizeof(float),
 				nbTriangles, m_concaveMeshIndices, 3 * sizeof(uint),
 				TriangleVertexArray::VertexDataType::VERTEX_FLOAT_TYPE,
 				TriangleVertexArray::IndexDataType::INDEX_INTEGER_TYPE);
 
-		TriangleMesh* triangleMesh = pc->createTriangleMesh();
-		triangleMesh->addSubpart(triangleArray);
-		ConcaveMeshShape* concaveMesh = pc->createConcaveMeshShape(triangleMesh);
-		AddColliderInternal(concaveMesh);
+		m_triangleMesh = pc->createTriangleMesh();
+		m_triangleMesh->addSubpart(m_triangleVertexArray);
+		m_convexMeshShape = pc->createConcaveMeshShape(m_triangleMesh);
+		AddColliderInternal(m_convexMeshShape);
 		return true;
 	}
 	else

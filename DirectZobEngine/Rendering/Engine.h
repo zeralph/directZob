@@ -65,16 +65,16 @@ public:
 	inline void										LockFrustrum(bool b) { m_lockFrustrum=b; }
 	inline void										DrawCameraGizmos(bool b) { m_drawCameraGizmos = b; }
 	inline void										DrawZobObjectGizmos(bool b) { m_drawZobObjectGizmos = b; }
-	inline bool										WireFrame() const { return m_wireFrame; }
-	inline bool										ShowGrid() const { return m_showGrid; }
-	inline bool										ShowNormals() const { return m_showNormals; }
-	inline bool										DrawGizmos() const { return m_drawGizmos; }
-	inline bool										ShowBBoxes() const { return m_showBBoxes; }
-	inline bool										ShowText() const { return m_showText; }
-	inline bool										DrawPhysyicsGizmos() const { return m_drawPhysicsGizmos; }
-	inline bool										DrawCameraGizmos() const { return m_drawCameraGizmos; }
-	inline bool										DrawZobObjectGizmos() const { return m_drawZobObjectGizmos; }
-	inline bool										LockFrustrum() const { return m_lockFrustrum;  }
+	inline bool										WireFrame() const { return m_started && m_wireFrame; }
+	inline bool										ShowGrid() const { return m_started && m_showGrid; }
+	inline bool										ShowNormals() const { return m_started && m_showNormals; }
+	inline bool										DrawGizmos() const { return m_started && m_drawGizmos; }
+	inline bool										ShowBBoxes() const { return m_started && m_showBBoxes; }
+	inline bool										ShowText() const { return m_started && m_showText; }
+	inline bool										DrawPhysyicsGizmos() const { return m_started && m_drawPhysicsGizmos; }
+	inline bool										DrawCameraGizmos() const { return m_started && m_drawCameraGizmos; }
+	inline bool										DrawZobObjectGizmos() const { return m_started && m_drawZobObjectGizmos; }
+	inline bool										LockFrustrum() const { return m_started && m_lockFrustrum;  }
 	inline void										SetRenderMode(eRenderMode b) { m_renderMode = b; }
 	inline const eRenderMode						GetRenderMode() const { return m_renderMode; }
 	inline const eLightingPrecision					GetLightingPrecision() const  { return m_lightingPrecision ; }
