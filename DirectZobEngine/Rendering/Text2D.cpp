@@ -6,8 +6,6 @@
 #include <string>
 #include <iostream>
 
-static char buffer[MAX_PATH];
-
 Text2D::Text2D(Engine* engine, Events* events)
 {
 	

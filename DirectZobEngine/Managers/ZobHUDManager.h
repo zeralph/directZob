@@ -9,6 +9,8 @@
 #include "../Rendering/ZobFont.h"
 #include "../ZobMaterial.h"
 
+#define HUD_TEXT_BUFFER_SIZE 4096
+
 class ZobHUDManager
 {
 public:
@@ -50,7 +52,7 @@ private:
 	void DeleteFonts();
 	void Init();
 	bool CreateQuad(float xMin, float yMin, float xMax, float yMax, HUDElement* elem);
-	void PrintInternal(eHudUnit u, float x, float y, float fontSize, const ZobFont* font, const ZobColor* color, std::string s);
+	void PrintInternal(eHudUnit u, float x, float y, float fontSize, const ZobFont* font, const ZobColor* color, const char* buf, size_t size);
 	const ZobFont* GetFont(const std::string& fontName) const;
 	Triangle* m_trianglesBuffer;
 	ZobVector3* m_vertices;
@@ -63,4 +65,5 @@ private:
 	std::vector <const ZobFont*> m_fonts;
 	std::vector<HUDElement> m_hudElements;
 	bool m_started;
+	static char m_buffer[HUD_TEXT_BUFFER_SIZE];
 }; 
