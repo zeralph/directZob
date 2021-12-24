@@ -17,13 +17,19 @@ public:
 
 	static std::string GetTempFile(std::string extension)
 	{
+#ifdef LINUX
 		char* t = _tempnam(NULL, "dzob");
+#elif WINDOWS
+		char* t = tempnam(NULL, "dzob");
+#elif MACOS
+		char* t = tempnam(NULL, "dzob");
+#endif	
 		return std::string(t).append(extension);
 	}
 
 	static std::string GetTempDirectory()
 	{
-		char* t = _tempnam(NULL, "pref");
+		//char* t = _tempnam(NULL, "pref");
 #ifdef LINUX
 		return std::string("//tmp//");
 #elif WINDOWS

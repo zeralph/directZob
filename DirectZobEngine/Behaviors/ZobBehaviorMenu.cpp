@@ -30,11 +30,11 @@ void ZobBehaviorMenu::PreUpdate(float dt)
 		float h = 0.5 + i * 0.05f;
 		if (i == m_menuIndex)
 		{
-			hud->Print(ZobHUDManager::eHudUnit_ratio, 0.2f, h, 2, "Arial", &ZobColor::Red, "%s %s", "->", m_menuEntries[i].name.c_str());
+			hud->Print(ZobHUDManager::eHudUnit_ratio, 0.2f, h, 2, "Arial", &ZobColor::Red, "%s %s",  "->", m_menuEntries[i].name.c_str());
 		}
 		else
 		{
-			hud->Print(ZobHUDManager::eHudUnit_ratio, 0.2f, h, 2, "Arial", &ZobColor::Red, "%s %s", "", m_menuEntries[i].name.c_str());
+			hud->Print(ZobHUDManager::eHudUnit_ratio, 0.2f, h, 2, "Arial", &ZobColor::Red, "%s %s", "   ", m_menuEntries[i].name.c_str());
 		}
 		std::string s = m_menuEntries[i].name;
 

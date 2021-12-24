@@ -288,17 +288,27 @@ void ZobHUDManager::Print(eHudUnit u, float x, float y, float fontSize, const ch
 			fontSize = 1;
 			//u = eHudUnit::eHudUnit_pixels;
 		}
-		if (f)
+		if (f && fmt)
 		{
 			//size_t size = strlen(fmt) + 1;
-			va_list vl;
-			va_start(vl, fmt);
-			int size = _vscprintf(fmt, vl);
-			std::string buf;
-			buf.reserve(size + 1);
-			buf.resize(size);
-			_vsnprintf((char*)buf.data(), size, fmt, vl);
-			va_end(vl);
+			va_list argList;
+			va_start(argList, fmt);
+
+
+			size_t charsNeeded = vsnprintf(NULL, 0, fmt, argList);
+        	va_end(argList);
+        	va_start(argList, fmt);
+        	char buf[charsNeeded];
+        	vsprintf(buf, fmt, argList);
+
+        	va_end(argList);
+
+			//int size = _vscprintf(fmt, vl);
+			//std::string buf;
+			//buf.reserve(size + 1);
+			//buf.resize(size);
+			//vsnprintf((char*)buf.data(), size, fmt, vl);
+			//va_end(vl);
 			PrintInternal(u, x, y, fontSize, f, color, buf);
 		}
 	}
