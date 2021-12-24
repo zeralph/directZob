@@ -13,6 +13,8 @@
 #define NB_HUD_TRIANGLES 2000
 #define DEFAULT_FONT "Arial"
 
+char ZobHUDManager::m_buffer[HUD_TEXT_BUFFER_SIZE];
+
 ZobHUDManager::ZobHUDManager()
 {
 	m_fonts.clear();
@@ -288,24 +290,23 @@ void ZobHUDManager::Print(eHudUnit u, float x, float y, float fontSize, const ch
 			fontSize = 1;
 			//u = eHudUnit::eHudUnit_pixels;
 		}
-		if (f)
+		if (f && fmt)
 		{
 			//size_t size = strlen(fmt) + 1;
-			va_list vl;
-			va_start(vl, fmt);
-			int size = _vscprintf(fmt, vl);
-			std::string buf;
-			buf.reserve(size + 1);
-			buf.resize(size);
-			_vsnprintf((char*)buf.data(), size, fmt, vl);
-			va_end(vl);
-			PrintInternal(u, x, y, fontSize, f, color, buf);
+			va_list argList;
+			va_start(argList, fmt);
+			size_t charsNeeded = vsnprintf(NULL, 0, fmt, argList);
+        	va_end(argList);
+        	va_start(argList, fmt);
+        	vsprintf(m_buffer, fmt, argList);
+        	va_end(argList);
+			PrintInternal(u, x, y, fontSize, f, color, m_buffer, charsNeeded);
 		}
 	}
 }
 
 
-void ZobHUDManager::PrintInternal(eHudUnit u, float x, float y, float fontSize, const ZobFont* font, const ZobColor* color, std::string s)
+void ZobHUDManager::PrintInternal(eHudUnit u, float x, float y, float fontSize, const ZobFont* font, const ZobColor* color, const char* buf, size_t size)
 {
 	if (font && font->IsLoaded())
 	{
@@ -313,7 +314,6 @@ void ZobHUDManager::PrintInternal(eHudUnit u, float x, float y, float fontSize, 
 		float screenH = DirectZob::GetInstance()->GetEngine()->GetBufferData()->height;
 		int horiz = 0;
 		int vert = 0;
-		int size = s.size();
 		if (u == eHudUnit_ratio)
 		{
 			x *= screenW;
@@ -321,7 +321,7 @@ void ZobHUDManager::PrintInternal(eHudUnit u, float x, float y, float fontSize, 
 		}
 		for (size_t i = 0; i < size; i++)
 		{
-			char c = s[i];
+			char c = buf[i];
 			if (c != '\0')
 			{
 				if (c != '\n')

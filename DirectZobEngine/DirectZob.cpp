@@ -19,7 +19,6 @@
 static const int fpsTargetsN = 6;
 static const float fpsTargets[fpsTargetsN] = { 0, 16.6666667, 33.3333333f, 41.666667f,  50.0f, 1000.0f };
 static int sTargetMSPerFrameIdx = 1;
-static char buffer[MAX_PATH];
 static char logBuffer[LOG_BUFFER_SIZE];
 bool DirectZob::g_isInEditorMode = false;
 static int s_logIndent;
