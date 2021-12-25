@@ -11,6 +11,8 @@
 
 ZobFont::ZobFont(ZobFilePath zfpTexture, ZobFilePath zfpXml)
 {
+	DirectZob::LogInfo("Loading font at %s / %s", zfpTexture.GetFullPath().c_str(), zfpXml.GetFullPath().c_str());
+	DirectZob::AddIndent();
 	m_loaded = false;
 	TiXmlDocument doc("Font");
 	doc.ClearError();
@@ -26,6 +28,7 @@ ZobFont::ZobFont(ZobFilePath zfpTexture, ZobFilePath zfpXml)
 		if (font)
 		{
 			m_name = font->Attribute("family");
+			DirectZob::LogInfo("Font name : %s", m_name.c_str());
 			std::vector<std::string> v;
 			std::string s;
 			std::string::size_type sz;
@@ -70,6 +73,7 @@ ZobFont::ZobFont(ZobFilePath zfpTexture, ZobFilePath zfpXml)
 			m_loaded = true;
 		}
 	}
+	DirectZob::RemoveIndent();
 	DirectZob::LogInfo("Font %s loaded", m_name.c_str());
 }
 

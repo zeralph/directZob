@@ -223,6 +223,7 @@ void SceneLoader::LoadSceneInternal()
 	DirectZob::GetInstance()->GetHudManager()->Start();
 	DirectZob::RemoveIndent();
 	DirectZob::GetInstance()->OnSceneLoaded();
+	DirectZob::LogInfo("Scene loaded");
 }
 
 void SceneLoader::SaveScene()

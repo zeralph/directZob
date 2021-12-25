@@ -455,8 +455,11 @@ void DirectZob::LogInfo(const char* format, ...)
 	{
 		for (int i = 0; i < s_logIndent-1; i++)
 		{
-			s.append(std::string("|"));
+			s.append(std::string("\t"));
 		}
+	}
+	else
+	{
 		s.append(std::string(">"));
 	}
 	s.append(std::string(logBuffer));
