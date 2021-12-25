@@ -1,30 +1,38 @@
 <?xml version="1.0" ?>
 <Scene>
     <Globals>
-        <AmbientColor r="102" g="102" b="2" />
-        <AmbientIntensity>0.80</AmbientIntensity>
-        <FogColor r="63" g="149" b="255" />
-        <ClearColor r="0" g="0" b="0" />
-        <FogDensity>2.00</FogDensity>
-        <FogDistance>20.00</FogDistance>
-        <FogType>none</FogType>
+        <Var Name="Ambient color" value="255;102;102;102" />
+        <Var Name="Clear color" value="255;192;192;192" />
+        <Var Name="Ambient color intensity" value="0.800" />
+        <Var Name="Fog type" value="None" />
+        <Var Name="Fog color" value="255;63;149;255" />
+        <Var Name="Fog distance" value="20.000" />
+        <Var Name="Fog density" value="2.000" />
+        <Var Name="Render mode" value="Fullframe" />
+        <Var Name="Lighting mode" value="Vertex" />
+        <Var Name="Bits per color" value="Full" />
+        <Var Name="Dithering" value="False" />
+        <Var Name="Z near" value="0.110" />
+        <Var Name="Z far" value="1000.000" />
+        <Var Name="Equalize triangle queues" value="False" />
+        <Var Name="Perspective Correction" value="True" />
     </Globals>
     <ZobObject Guid="2002114332">
         <Var Name="Name" value="Menu" />
-        <Var Name="Position" value="0.000000;0.000000;0.000000" />
-        <Var Name="Rotation" value="0.000000;0.000000;0.000000" />
-        <Var Name="Scale" value="0.000000;0.000000;0.000000" />
+        <Var Name="Position" value="0.000;0.000;0.000" />
+        <Var Name="Rotation" value="0.000;0.000;0.000" />
+        <Var Name="Scale" value="1.000;1.000;1.000" />
         <Behaviors>
             <Behavior Type="Menu" Guid="2007724783" />
         </Behaviors>
     </ZobObject>
-    <ZobObject Guid="2003891397" Type="Camera">
-        <Var Name="Name" value="Camera" />
-        <Var Name="Position" value="0.000000;0.000000;0.000000" />
-        <Var Name="Rotation" value="0.000000;0.000000;0.000000" />
-        <Var Name="Scale" value="0.000000;0.000000;0.000000" />
+    <ZobObject Guid="4003967997">
+        <Var Name="Name" value="Fixed_camera_1" />
+        <Var Name="Position" value="0.000;5.000;0.000" />
+        <Var Name="Rotation" value="0.000;0.000;0.000" />
+        <Var Name="Scale" value="1.000;1.000;1.000" />
+        <Var Name="FOV" value="45.000" />
+        <Var Name="Camera controller" value="base" />
         <Behaviors />
-        <Controller Name="Base" Guid="2008273791" />
-        <Fov>45.00</Fov>
     </ZobObject>
 </Scene>

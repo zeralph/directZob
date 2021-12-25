@@ -17,7 +17,7 @@
 #define LOG_BUFFER_SIZE 1024
 
 static const int fpsTargetsN = 6;
-static const float fpsTargets[fpsTargetsN] = { 0, 16.6666667, 33.3333333f, 41.666667f,  50.0f, 1000.0f };
+static const float fpsTargets[fpsTargetsN] = { 1.0f, 16.6666667, 33.3333333f, 41.666667f,  50.0f, 1000.0f };
 static int sTargetMSPerFrameIdx = 1;
 static char logBuffer[LOG_BUFFER_SIZE];
 bool DirectZob::g_isInEditorMode = false;
@@ -297,7 +297,8 @@ int DirectZob::RunAFrame(DirectZob::engineCallback OnSceneUpdated /*=NULL*/, Dir
 		}
 		else
 		{	
-			m_hudManager->Print(ZobHUDManager::eHudUnit_ratio, 0.5f, 0.5f, 2, "Arial", &ZobColor::Red, "WARNING : %s", "NO CAMERA");
+			m_text->Print(100,100, ZobColor::Red.GetRawValue(), "WARNING : NO CAMERA");
+			DirectZob::LogWarning("!! NO CAMERA TO RENDER SCENE !!");
 		}
 		if (m_inputManager->GetMap()->GetBoolIsNew(ZobInputManager::WireFrame))
 		{
@@ -352,7 +353,7 @@ void DirectZob::WaitToTargetFrameTime(float dt)
 		throw "rput";
 	}
 	float targetDt = fpsTargets[sTargetMSPerFrameIdx] - dt;
-	if (targetDt > 0.0f)
+	if (targetDt > 0.0f && targetDt < 1000.0f)
 	{
 		SleepMS(targetDt);
 		m_frameTime = fpsTargets[sTargetMSPerFrameIdx];
@@ -424,8 +425,9 @@ void DirectZob::PrintInfos()
 {
 
 	m_text->Print(10, 10, ZobColor::Blue.GetRawValue(), "Triangles : %i color depth : %i", m_engine->GetNbDrawnTriangles(), m_engine->GetNbBitsPerColorDepth());
-	m_text->Print(10, 20, ZobColor::Blue.GetRawValue(), "render : %03i, geom : %03i, phys : %03i, cpy : %03i, tot : %03i, FPS : %03i", (int)m_renderTime, (int)m_geometryTime, (int)m_physicTime, (int)m_copyTime, (int)m_frameTime, (int)m_fps);
-	m_text->Print(10, 30, ZobColor::Blue.GetRawValue(), "Controller LX : %.2f, LY  : %.2f, RX : %.2f, RY : %.2f, LT : %.2f, RT : %.2f",
+	m_text->Print(10, 20, ZobColor::Blue.GetRawValue(), "FPS : %03i, TargetFPS : %f", (int)m_fps, fpsTargets[sTargetMSPerFrameIdx]);// (int)(1.0f / fpsTargets[sTargetMSPerFrameIdx]));
+	m_text->Print(10, 30, ZobColor::Blue.GetRawValue(), "render : %03i, geom : %03i, phys : %03i, cpy : %03i, tot : %03i", (int)m_renderTime, (int)m_geometryTime, (int)m_physicTime, (int)m_copyTime, (int)m_frameTime);
+	m_text->Print(10, 40, ZobColor::Blue.GetRawValue(), "Controller LX : %.2f, LY  : %.2f, RX : %.2f, RY : %.2f, LT : %.2f, RT : %.2f",
 		m_inputManager->GetMap()->GetFloat(ZobInputManager::LeftStickX),
 		m_inputManager->GetMap()->GetFloat(ZobInputManager::LeftStickY),
 		m_inputManager->GetMap()->GetFloat(ZobInputManager::RightStickX),
