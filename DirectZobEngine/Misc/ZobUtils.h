@@ -18,7 +18,7 @@ public:
 	static std::string GetTempFile(std::string extension)
 	{
 #ifdef LINUX
-		char* t = _tempnam(NULL, "dzob");
+		char* t = tempnam(NULL, "dzob");
 #elif WINDOWS
 		char* t = tempnam(NULL, "dzob");
 #elif MACOS
