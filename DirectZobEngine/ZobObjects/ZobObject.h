@@ -17,6 +17,7 @@ class Mesh;
 class ZobPhysicComponent;
 class m_varExposer;
 class ZobBehaviorMesh;
+
 class ZobObject:public ZobEntity
 {
 friend class ZobBehavior;

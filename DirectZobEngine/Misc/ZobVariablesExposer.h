@@ -30,6 +30,7 @@ public:
 		eWrapperType_zobObject,
 		eWrapperType_zobColor,
 		eWrapperType_uint,
+		eWrapperType_action,
 		__eWrapperType_MAX__
 	};
 
@@ -66,6 +67,26 @@ public:
 	TiXmlNode* SaveUnderNode(TiXmlNode* node);
 	void Load();
 	void ReadNode(TiXmlNode* node);
+
+	void ChangeId(zobId zid);
+
+	void WrapAction(const char* name, wrapperCallback cb)
+	{
+		wrapperData w = wrapperData(m_zobId);
+		w.Init();
+		std::string s;
+		w.name = std::string(name);
+		s = "";
+		s = s.append("_").append(w.name);
+		w.id = m_zobId;
+		w.internalName = s;
+		w.type = eWrapperType::eWrapperType_action;
+		w.ptr = (void*)NULL;
+		w.callback = cb;
+		w.bReadOnly = true;
+		w.bSave = false;
+		m_wrappedVariables.push_back(w);
+	}
 
 	template<typename T>
 	void WrapVariable(const char* name, T* ptr, wrapperCallback cb, bool bReadOnly, bool bSave)

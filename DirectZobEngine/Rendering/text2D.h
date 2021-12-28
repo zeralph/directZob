@@ -28,4 +28,5 @@ private:
 	uint m_nbCharWidth;
 	uint m_nbCharHeight;
 	ZobMatrix2x2 m_matrix;
+	static char m_buffer[4096];
 };

@@ -130,6 +130,7 @@ public :
 private:
 	int						RunInternal(void func(void));
 	void					PrintObjectList();
+	void					PrintEntityList();
 	void					PrintInfos();
 	void					WaitToTargetFrameTime(float dt);
 	

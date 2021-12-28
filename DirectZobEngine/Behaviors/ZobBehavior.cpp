@@ -40,6 +40,7 @@ void ZobBehavior::ReadNode(TiXmlElement* node)
 		std::string s = guid;
 		zobId zid = ZobEntity::ZobIdFromString(s);
 		ChangeId(zid);
+		m_varExposer->ChangeId(zid);
 	}
 	m_varExposer->ReadNode(node);
 }

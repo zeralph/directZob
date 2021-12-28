@@ -6,6 +6,8 @@
 #include <string>
 #include <iostream>
 
+char Text2D::m_buffer[4096];
+
 Text2D::Text2D(Engine* engine, Events* events)
 {
 	
@@ -47,19 +49,27 @@ void Text2D::Print(uint x, uint y, uint color, const char* fmt, ...)
 {
 	if (m_engine->ShowText() && m_data != NULL)
 	{
+		/*
 		size_t size = strlen(fmt) + 1;
 		va_list vl;
 		va_start(vl, fmt);
-		//int size = _vscprintf(fmt, vl);
 		std::string buf;
 		buf.reserve(size + 1);
 		buf.resize(size);
 		_vsnprintf((char*)buf.data(), size, fmt, vl);
 		va_end(vl);
-		for (size_t i = 0; i < size+1; i++)
+		*/
+		va_list argList;
+		va_start(argList, fmt);
+		size_t charsNeeded = vsnprintf(NULL, 0, fmt, argList);
+		va_end(argList);
+		va_start(argList, fmt);
+		vsprintf(m_buffer, fmt, argList);
+		va_end(argList);
+		for (size_t i = 0; i < charsNeeded; i++)
 		{
 			int xx = x + i * m_charWidth;
-			PrintChar(xx, y, buf[i], color);
+			PrintChar(xx, y, m_buffer[i], color);
 		}
 	}
 }

@@ -115,3 +115,17 @@ ulong ZobEntity::GenerateId()
 	}
 	return u;
 }
+
+std::vector<ZobEntity*> ZobEntity::GetAllEntities()
+{
+	std::vector<ZobEntity*> ret;
+	ret.clear();
+	std::map<const zobId, ZobEntity*>::iterator it;
+	it = m_entityMap.begin();
+	while (it != m_entityMap.end())
+	{
+		ret.push_back(it->second);
+		it++;
+	}
+	return ret;
+}

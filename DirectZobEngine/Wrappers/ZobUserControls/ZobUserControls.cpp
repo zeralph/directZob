@@ -117,6 +117,10 @@ ZobGroupBox^ ZobControl::CreateWrappedVariablesView(std::string& name, ZobVariab
 			{
 				panel->Controls->Add(gcnew ZobControlFloat(w));
 			}
+			else if (w.type == ZobVariablesExposer::eWrapperType_action)
+			{
+				panel->Controls->Add(gcnew ZobControlAction(w));
+			}
 			else
 			{
 				assert(NULL);
@@ -555,6 +559,59 @@ void ZobControlBool::OnValueChanged(Object^ sender, EventArgs^ e)
 		*b = _checked?true:false;
 	}
 }
+
+ZobControlAction::ZobControlAction(const ZobVariablesExposer::wrapperData& w) :ZobControl(w)
+{
+	this->AutoSize = true;
+	this->ColumnCount = 2;
+	this->RowCount = 1;
+	_label = gcnew Label();
+	_label->Text = TO_MANAGED_STRING(w.name.c_str());
+	//label->Dock = DockStyle::Fill;
+	_label->AutoSize = false;
+	_label->Width = _labelWidth;
+	_label->Height = _height;
+	_label->TextAlign = _alignment;
+	_button = gcnew Button();
+	_button->AutoSize = false;
+	_button->Height = _height;
+	_button->Text = TO_MANAGED_STRING(w.internalName.c_str()); 
+	_event = gcnew EventHandler(this, &ZobControlAction::OnValueChanged);
+	_button->Click += _event;
+	this->Controls->Add(_label);
+	this->Controls->Add(_button);
+	DirectZobWrapperEvents::OnEditorUpdateEvent += gcnew DirectZobWrapperEvents::OnEditorUpdate(this, &ZobControlAction::UpdateControl);
+}
+
+ZobControlAction::~ZobControlAction()
+{
+	_button->Click -= _event;
+	//delete _label;
+	//delete _checkBox;
+	//delete _event;
+}
+
+void ZobControlAction::UpdateControlInternal()
+{
+	if (!IsControlOk())
+	{
+		return;
+	}
+}
+
+void ZobControlAction::OnValueChanged(Object^ sender, EventArgs^ e)
+{
+	if (_w->callback)
+	{
+		zobId id = _w->id;
+		((ZobVariablesExposer::wrapperCallback)_w->callback)(id);
+	}
+}
+
+
+
+
+
 
 ZobControlEnum::ZobControlEnum(const ZobVariablesExposer::wrapperData& w) :ZobControl(w)
 {

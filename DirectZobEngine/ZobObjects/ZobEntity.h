@@ -43,11 +43,25 @@ public :
 		it = m_entityMap.find(zid);
 		if (it != m_entityMap.end())
 		{
-			return static_cast<T*>(it->second);
+			ZobEntity* ze = it->second;
+			ZobSubType st = ZobEntity::GetSubType(it->first);
+			if (typeid(T) == typeid(ZobObject) && (st == ZobSubType::subtype_zobCamera || st == ZobSubType::subtype_zobLight || st == ZobSubType::subtype_zobOject))
+			{
+				return static_cast<T*>(ze);
+			}
+			else if (typeid(T) == typeid(ZobBehavior) && (st == ZobSubType::subtype_behavior))
+			{
+				return static_cast<T*>(ze);
+			}
+			//else if (typeid(T) == typeid(ZobCameraController) && (st == ZobSubType::subtype_cameraController))
+			//{
+			//	return static_cast<T*>(ze);
+			//}
 		}
 		return NULL;
 	}
 
+	static std::vector<ZobEntity*> GetAllEntities();
 
 	static ZobType			GetType(const zobId zid);
 	static ZobSubType		GetSubType(const zobId zid);
@@ -72,10 +86,10 @@ protected:
 	~ZobEntity();
 	zobId											m_id;
 	ZobEntity::ZobType								m_type;
-	ZobEntity::ZobSubType								m_subType;
+	ZobEntity::ZobSubType							m_subType;
 private:
 	static ulong									GenerateId();
 	void											EraseEntry(const zobId zid);
-	static std::map<const zobId, ZobEntity*>			m_entityMap;
+	static std::map<const zobId, ZobEntity*>		m_entityMap;
 
 };

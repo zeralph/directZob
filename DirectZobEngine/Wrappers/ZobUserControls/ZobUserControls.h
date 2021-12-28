@@ -115,6 +115,20 @@ namespace CLI {
 		void UpdateControlInternal() override;
 	};
 
+	public ref class ZobControlAction : ZobControl
+	{
+	public:
+		ZobControlAction(const ZobVariablesExposer::wrapperData& w);
+		~ZobControlAction();
+		EventHandler^ _event;
+		Label^ _label;
+		Button^ _button;
+		bool _checked;
+	protected:
+		void OnValueChanged(Object^ sender, EventArgs^ e) override;
+		void UpdateControlInternal() override;
+	};
+
 	public ref class ZobControlColor : ZobControl
 	{
 	public:

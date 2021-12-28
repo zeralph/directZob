@@ -16,6 +16,7 @@ ZobBehaviorMenu::~ZobBehaviorMenu()
 ZobBehaviorMenu::ZobBehaviorMenu(ZobObject* zobObject, bool bEditorZobBehavior) : ZobBehavior(zobObject, bEditorZobBehavior)
 {
 	m_type = eBehavior_menu; 
+	m_varExposer->WrapAction("Add", &ZobBehaviorMenu::AddItem);
 }
 
 void ZobBehaviorMenu::PreUpdate(float dt)
@@ -102,6 +103,7 @@ void ZobBehaviorMenu::Init()
 	m2.name = "Exit";
 	m2.action = eAction_exit;
 	m_menuEntries.push_back(m2);
+	m_varExposer->Load();
 }
 
 void ZobBehaviorMenu::EditorUpdate()
@@ -117,4 +119,14 @@ void ZobBehaviorMenu::UpdateBeforeObject(float dt)
 void ZobBehaviorMenu::DrawGizmos(const Camera* camera, const ZobVector3* position, const ZobVector3* rotation) const
 {
 
+}
+
+void ZobBehaviorMenu::AddItem(zobId zid)
+{
+	ZobBehavior* zb = ZobEntity::GetEntity<ZobBehavior>(zid);
+	if (zb)
+	{
+		int y = 0;
+		y++;
+	}
 }

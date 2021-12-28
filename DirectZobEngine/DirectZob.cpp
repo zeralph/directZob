@@ -328,6 +328,7 @@ int DirectZob::RunAFrame(DirectZob::engineCallback OnSceneUpdated /*=NULL*/, Dir
 			m_engine->PrintRasterizersInfos();
 			PrintInfos();
 			PrintObjectList();
+			PrintEntityList();
 		}
 		
 		m_engine->SetDisplayedBuffer();
@@ -392,6 +393,38 @@ double DirectZob::GetDeltaTime_MS(timespec& start, timespec& end) const
 		f =  (double)(billion - start.tv_nsec + end.tv_nsec) / billion + (double)(end.tv_sec - start.tv_sec - 1 );
 	}
 	return f * 1000.0;
+}
+
+void DirectZob::PrintEntityList()
+{
+	int txtW = 300;
+	int txtH = 100;
+	std::vector<ZobEntity*> v = ZobEntity::GetAllEntities();
+	for (int i = 0; i < v.size(); i++)
+	{
+		const ZobEntity* z = v.at(i);
+		int c = 0xFFFFFFFF;
+		zobId zid = z->GetIdValue();
+		std::string n = "";
+		ZobObject* zo = ZobEntity::GetEntity<ZobObject>(zid);
+		if (zo)
+		{
+			n = "Object";
+		}
+		else
+		{
+			ZobBehavior* zb = ZobEntity::GetEntity<ZobBehavior>(zid);
+			if (zb)
+			{
+				n = "Behavior";
+			}
+			else
+			{
+				n = "Other";
+			}
+		}
+		m_text->Print(txtW, (i * 10)+txtH, c, "%llu - %s", zid, n.c_str());
+	}
 }
 
 void DirectZob::PrintObjectList()

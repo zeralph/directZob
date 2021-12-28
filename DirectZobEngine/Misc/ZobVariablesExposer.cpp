@@ -142,6 +142,15 @@ void ZobVariablesExposer::wrapperData::Load()
 	}
 }
 
+void ZobVariablesExposer::ChangeId(zobId zid)
+{
+	for (std::vector<wrapperData>::iterator iter = m_wrappedVariables.begin(); iter != m_wrappedVariables.end(); iter++)
+	{
+		wrapperData* w = &(*iter);
+		w->id = zid;
+	}
+}
+
 TiXmlNode* ZobVariablesExposer::SaveUnderNode(TiXmlNode* node)
 {
 	for (std::vector<wrapperData>::const_iterator iter = m_wrappedVariables.begin(); iter != m_wrappedVariables.end(); iter++)
