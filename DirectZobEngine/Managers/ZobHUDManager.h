@@ -47,6 +47,7 @@ public:
 	void UpdateObjects(const Camera* camera, Engine* engine, float dt);
 	void QueueForDrawing(const Camera* camera, Engine* engine);
 	void Print(eHudUnit u, float x, float y, float fontSize, const char* fontName, const ZobColor* color, const char* fmt, ...);
+	void Print(eHudUnit u, float x, float y, float w, float h, const ZobMaterial* mat);
 
 private:
 	void DeleteFonts();

@@ -18,7 +18,7 @@ public:
 	{
 		eBehavior_none = 0,
 		eBehavior_car,
-		eBehavior_menu,
+		eBehavior_hudElement,
 		eBehavior_physicBox,
 		eBehavior_physicSphere,
 		eBehavior_physicCapsule,

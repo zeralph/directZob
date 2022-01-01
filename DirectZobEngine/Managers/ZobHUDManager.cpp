@@ -305,6 +305,29 @@ void ZobHUDManager::Print(eHudUnit u, float x, float y, float fontSize, const ch
 	}
 }
 
+void  ZobHUDManager::Print(eHudUnit u, float x, float y, float w, float h, const ZobMaterial* mat)
+{
+	float screenW = DirectZob::GetInstance()->GetEngine()->GetBufferData()->width;
+	float screenH = DirectZob::GetInstance()->GetEngine()->GetBufferData()->height;
+	int horiz = 0;
+	int vert = 0;
+	if (u == eHudUnit_ratio)
+	{
+		x *= screenW;
+		y *= screenH;
+		w *= screenW;
+		h *= screenH;
+	}
+	HUDElement e;
+	e.x = x;
+	e.y = y;
+	e.w = w;
+	e.h = h;
+	e.mat = mat;
+	e.glyphe = NULL;
+	e.color = ZobColor::White;
+	m_hudElements.push_back(e);
+}
 
 void ZobHUDManager::PrintInternal(eHudUnit u, float x, float y, float fontSize, const ZobFont* font, const ZobColor* color, const char* buf, size_t size)
 {

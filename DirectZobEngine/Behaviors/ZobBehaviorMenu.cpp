@@ -15,100 +15,85 @@ ZobBehaviorMenu::~ZobBehaviorMenu()
 
 ZobBehaviorMenu::ZobBehaviorMenu(ZobObject* zobObject, bool bEditorZobBehavior) : ZobBehavior(zobObject, bEditorZobBehavior)
 {
-	m_type = eBehavior_menu; 
-	m_varExposer->WrapAction("Add", &ZobBehaviorMenu::AddItem);
+	m_x = 0;
+	m_y = 0;
+	m_w = 0.5f;
+	m_h = 0.5f;
+	m_fontSize = 10;
+	m_fontName = "Arial";
+	m_text ="";
+	m_image = NULL;
+	m_type = eBehavior_hudElement; 
+	m_unit = ZobHUDManager::eHudUnit_ratio;
+	//m_varExposer->WrapAction("Add", &ZobBehaviorMenu::AddItem);
+	m_varExposer->WrapVariable<float>("X", &m_x, NULL, false, true);
+	m_varExposer->WrapVariable<float>("Y", &m_y, NULL, false, true);
+	m_varExposer->WrapVariable<float>("W", &m_w, NULL, false, true);
+	m_varExposer->WrapVariable<float>("H", &m_h, NULL, false, true);
+	m_varExposer->WrapVariable<float>("Font size", &m_fontSize, NULL, false, true);
+	m_varExposer->WrapVariable<std::string>("Text", &m_text, NULL, false, true);
+	m_varExposer->WrapVariable<ZobColor>("Color", &m_color, NULL, false, true);
+	m_varExposer->WrapVariable<ZobFilePath>("Image", &m_texture, NULL, false, true);
+	m_varExposer->Load();
+	Init();
 }
 
 void ZobBehaviorMenu::PreUpdate(float dt)
 {
 	ZobHUDManager* hud = DirectZob::GetInstance()->GetHudManager();
-	const gainput::InputMap* inputMap = DirectZob::GetInstance()->GetInputManager()->GetMap();
-	m_time += dt * 2.0f;
-	float f = 2.0f + (0.5f + sinf(m_time) / 2.0f) * 5.0f;
-	hud->Print(ZobHUDManager::eHudUnit_ratio, 0.25f, 0.25f, f, "Leelawadee UI", &ZobColor::Red, "EDGE RACING");
-	for (int i = 0; i < m_menuEntries.size(); i++)
+	if (m_text.length() > 0)
 	{
-		float h = 0.5 + i * 0.05f;
-		if (i == m_menuIndex)
-		{
-			hud->Print(ZobHUDManager::eHudUnit_ratio, 0.2f, h, 2, "Arial", &ZobColor::Red, "%s %s",  "->", m_menuEntries[i].name.c_str());
-		}
-		else
-		{
-			hud->Print(ZobHUDManager::eHudUnit_ratio, 0.2f, h, 2, "Arial", &ZobColor::Red, "%s %s", "   ", m_menuEntries[i].name.c_str());
-		}
-		std::string s = m_menuEntries[i].name;
-
+		hud->Print(m_unit, m_x, m_y, m_fontSize, m_fontName, &m_color, m_text.c_str()); 
 	}
-
-	if (inputMap->GetBoolIsNew(ZobInputManager::MenuDown))
+	if (m_image)
 	{
-		m_menuIndex++;
-		if (m_menuIndex >= m_menuEntries.size())
-		{
-			m_menuIndex = m_menuEntries.size() - 1;
-		}
+		hud->Print(m_unit, m_x, m_y, m_w, m_h, m_image);
 	}
-	if (inputMap->GetBoolIsNew(ZobInputManager::MenuUp))
-	{
-		m_menuIndex--;
-		if (m_menuIndex <= 0)
-		{
-			m_menuIndex = 0;
-		}
-	}
-	if (inputMap->GetBoolIsNew(ZobInputManager::Start))
-	{
-		MenuEntry m = m_menuEntries[m_menuIndex];
-		switch (m.action)
-		{
-		case eAction_Load:
-		{
-			std::string sceneName = m.file;
-			std::string scenePath = DirectZob::GetInstance()->GetResourcePath();
-			DirectZob::GetInstance()->LoadScene(scenePath, sceneName, NULL);
-			break;
-		}
-		case eAction_exit:
-		{
-			DirectZob::GetInstance()->Exit();
-			break;
-		}
-		default:
-		{
-			break;
-		}
-		}
-	}
-}
-
-void ZobBehaviorMenu::Init()
-{
-	m_time = 0;
-	m_menuIndex = 0;
-	MenuEntry m0;
-	m0.file = "carTest.dzs";
-	m0.name = "Car Test";
-	m0.action = eAction_Load;
-	m_menuEntries.push_back(m0);
-
-	MenuEntry m1;
-	m1.file = "testGround.dzs";
-	m1.name = "Test Ground";
-	m1.action = eAction_Load;
-	m_menuEntries.push_back(m1);
-
-	MenuEntry m2;
-	m2.file = "";
-	m2.name = "Exit";
-	m2.action = eAction_exit;
-	m_menuEntries.push_back(m2);
-	m_varExposer->Load();
 }
 
 void ZobBehaviorMenu::EditorUpdate()
 {
+	if (!m_image)
+	{
+		if (m_texture.IsDefined())
+		{
+			LoadMaterialInternal();
+		}
+	}
+	else
+	{
+		if (m_texture.GetName() != m_image->GetName())
+		{
+			LoadMaterialInternal();
+		}
+	}
+}
 
+void ZobBehaviorMenu::LoadMaterialInternal()
+{
+	if (m_texture.IsDefined())
+	{
+		if (!m_image || m_texture.GetName() != m_image->GetName())
+		{
+			m_image = DirectZob::GetInstance()->GetMaterialManager()->GetMaterial(m_texture.GetName());
+			if (!m_image)
+			{
+				ZobColor a = ZobColor::White;
+				m_image = DirectZob::GetInstance()->GetMaterialManager()->LoadMaterial(m_texture.GetName(), &a, &a, &a, 0, false, m_texture);
+			}
+		}
+	}
+	else if (m_image)
+	{
+		m_image = NULL;
+	}
+
+}
+
+void ZobBehaviorMenu::Init()
+{
+	m_varExposer->Load();
+	LoadMaterialInternal();
 }
 
 void ZobBehaviorMenu::UpdateBeforeObject(float dt)
@@ -119,14 +104,4 @@ void ZobBehaviorMenu::UpdateBeforeObject(float dt)
 void ZobBehaviorMenu::DrawGizmos(const Camera* camera, const ZobVector3* position, const ZobVector3* rotation) const
 {
 
-}
-
-void ZobBehaviorMenu::AddItem(zobId zid)
-{
-	ZobBehavior* zb = ZobEntity::GetEntity<ZobBehavior>(zid);
-	if (zb)
-	{
-		int y = 0;
-		y++;
-	}
 }

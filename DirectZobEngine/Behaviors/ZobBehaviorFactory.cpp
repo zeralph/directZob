@@ -57,7 +57,7 @@ ZobBehavior* ZobBehaviorFactory::CreateBehaviorInternal(ZobObject* zobObject, co
 			case ZobBehavior::eBehavior_physicMesh:
 				zb = new ZobBehaviorPhysicMesh(zobObject);
 				break;
-			case ZobBehavior::eBehavior_menu:
+			case ZobBehavior::eBehavior_hudElement:
 				zb = new ZobBehaviorMenu(zobObject, bEditorZobBehavior);
 				break;
 			case ZobBehavior::eBehavior_mesh:

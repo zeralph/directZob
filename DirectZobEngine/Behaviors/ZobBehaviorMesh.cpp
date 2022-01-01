@@ -40,7 +40,7 @@ void ZobBehaviorMesh::Init()
 	{
 		if (!LoadMeshInternal())
 		{
-			DirectZob::LogError("rror loading mesh %s at %s", m_meshPath.GetName().c_str(), m_meshPath.GetFullPath().c_str());
+			DirectZob::LogError("Error loading mesh %s at %s", m_meshPath.GetName().c_str(), m_meshPath.GetFullPath().c_str());
 			m_meshPath.Reset();
 			m_meshNbTriangles = 0;
 		}

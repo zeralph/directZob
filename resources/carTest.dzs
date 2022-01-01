@@ -48,7 +48,7 @@
         </Behaviors>
         <ZobObject Guid="4002153198">
             <Var Name="Name" value="carBody" />
-            <Var Name="Position" value="0.000;-0.550;0.189" />
+            <Var Name="Position" value="-0.000;-0.549;0.189" />
             <Var Name="Rotation" value="-179.998;-0.000;-179.998" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
             <Behaviors>
@@ -123,8 +123,8 @@
         </ZobObject>
         <ZobObject Guid="2003412161">
             <Var Name="Name" value="rearCamera" />
-            <Var Name="Position" value="-0.000;1.900;-4.780" />
-            <Var Name="Rotation" value="15.050;0.000;-0.000" />
+            <Var Name="Position" value="0.000;1.899;-4.780" />
+            <Var Name="Rotation" value="15.049;0.000;0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
             <Var Name="FOV" value="70.000" />
             <Var Name="Camera controller" value="FollowCar" />
@@ -132,7 +132,7 @@
         </ZobObject>
         <ZobObject Guid="2003143259">
             <Var Name="Name" value="FrontCamera" />
-            <Var Name="Position" value="-0.000;0.293;2.191" />
+            <Var Name="Position" value="-0.000;0.293;2.190" />
             <Var Name="Rotation" value="0.000;0.000;0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
             <Var Name="FOV" value="70.000" />
@@ -142,7 +142,7 @@
         <ZobObject Guid="2003861325">
             <Var Name="Name" value="topCamera" />
             <Var Name="Position" value="-0.000;59.164;-0.995" />
-            <Var Name="Rotation" value="-89.413;-79.769;-179.714" />
+            <Var Name="Rotation" value="-89.413;-79.768;-179.714" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
             <Var Name="FOV" value="45.000" />
             <Var Name="Camera controller" value="base" />
@@ -150,7 +150,7 @@
         </ZobObject>
         <ZobObject Guid="2003217728">
             <Var Name="Name" value="sideCamera" />
-            <Var Name="Position" value="-5.873;1.889;6.764" />
+            <Var Name="Position" value="-5.873;1.889;6.763" />
             <Var Name="Rotation" value="-176.335;35.929;-176.794" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
             <Var Name="FOV" value="45.000" />
@@ -197,7 +197,7 @@
     </ZobObject>
     <ZobObject Guid="4002683899">
         <Var Name="Name" value="rocks" />
-        <Var Name="Position" value="0.000;0.000;101.531" />
+        <Var Name="Position" value="0.000;0.000;101.530" />
         <Var Name="Rotation" value="0.000;0.000;0.000" />
         <Var Name="Scale" value="1.000;1.000;1.000" />
         <Behaviors />
@@ -218,7 +218,7 @@
         </ZobObject>
         <ZobObject Guid="4002087287">
             <Var Name="Name" value="rock2" />
-            <Var Name="Position" value="66.660;-13.690;24.738" />
+            <Var Name="Position" value="66.660;-13.690;24.737" />
             <Var Name="Rotation" value="-179.876;86.007;-179.871" />
             <Var Name="Scale" value="10.000;15.000;10.000" />
             <Behaviors>
@@ -233,7 +233,7 @@
         </ZobObject>
         <ZobObject Guid="4002725502">
             <Var Name="Name" value="rock3" />
-            <Var Name="Position" value="25.787;11.499;29.197" />
+            <Var Name="Position" value="25.787;11.499;29.196" />
             <Var Name="Rotation" value="-119.413;0.000;0.000" />
             <Var Name="Scale" value="20.000;10.000;10.000" />
             <Behaviors>
@@ -278,7 +278,7 @@
         </ZobObject>
         <ZobObject Guid="4002855155">
             <Var Name="Name" value="rock6" />
-            <Var Name="Position" value="-0.299;11.691;-21.061" />
+            <Var Name="Position" value="-0.299;11.691;-21.060" />
             <Var Name="Rotation" value="0.000;0.000;-36.164" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
             <Behaviors>
@@ -354,7 +354,7 @@
     </ZobObject>
     <ZobObject Guid="4002065559">
         <Var Name="Name" value="buildings" />
-        <Var Name="Position" value="91.366;0.947;-110.771" />
+        <Var Name="Position" value="91.365;0.947;-110.771" />
         <Var Name="Rotation" value="0.000;53.581;0.000" />
         <Var Name="Scale" value="1.000;1.000;1.000" />
         <Behaviors />
@@ -397,8 +397,8 @@
         </ZobObject>
         <ZobObject Guid="4002124052">
             <Var Name="Name" value="skyscraper.FBX" />
-            <Var Name="Position" value="-116.011;-7.797;37.574" />
-            <Var Name="Rotation" value="0.000;89.756;0.000" />
+            <Var Name="Position" value="-116.011;-7.797;37.573" />
+            <Var Name="Rotation" value="0.000;89.757;0.000" />
             <Var Name="Scale" value="0.280;0.280;0.280" />
             <Behaviors>
                 <Behavior Type="Mesh" Guid="2007559772">
@@ -785,6 +785,31 @@
                     <Var Name="Cull mode" value="Clockwise" />
                     <Var Name="Lighting" value="Phong" />
                     <Var Name="ZBuffered" value="True" />
+                </Behavior>
+            </Behaviors>
+        </ZobObject>
+    </ZobObject>
+    <ZobObject Guid="4002077588">
+        <Var Name="Name" value="HUD" />
+        <Var Name="Position" value="0.000;0.000;0.000" />
+        <Var Name="Rotation" value="0.000;0.000;0.000" />
+        <Var Name="Scale" value="1.000;1.000;1.000" />
+        <Behaviors />
+        <ZobObject Guid="4002470398">
+            <Var Name="Name" value="tachometer" />
+            <Var Name="Position" value="0.000;0.000;0.000" />
+            <Var Name="Rotation" value="0.000;0.000;0.000" />
+            <Var Name="Scale" value="1.000;1.000;1.000" />
+            <Behaviors>
+                <Behavior Type="Menu" Guid="2007017387">
+                    <Var Name="X" value="0.750" />
+                    <Var Name="Y" value="0.650" />
+                    <Var Name="W" value="0.220" />
+                    <Var Name="H" value="0.220" />
+                    <Var Name="Font size" value="10.000" />
+                    <Var Name="Text" value="" />
+                    <Var Name="Color" value="0;0;0;0" />
+                    <Var Name="Image" value="tachometer.png;/;tachometer.png;0" />
                 </Behavior>
             </Behaviors>
         </ZobObject>

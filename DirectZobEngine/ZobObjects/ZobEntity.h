@@ -33,7 +33,8 @@ public :
 		subtype_mesh=5,
 		subtype_behavior=7,
 		subtype_cameraController = 8,
-		subtype_MAX = 9,
+		subtype_menuItem = 9,
+		subtype_MAX = 10,
 	};
 
 	template<class T>
@@ -45,18 +46,23 @@ public :
 		{
 			ZobEntity* ze = it->second;
 			ZobSubType st = ZobEntity::GetSubType(it->first);
-			if (typeid(T) == typeid(ZobObject) && (st == ZobSubType::subtype_zobCamera || st == ZobSubType::subtype_zobLight || st == ZobSubType::subtype_zobOject))
+			const char* type = typeid(T).name();
+			if (!strcmp(type, "class ZobObject") && (st == ZobSubType::subtype_zobCamera || st == ZobSubType::subtype_zobLight || st == ZobSubType::subtype_zobOject))
 			{
 				return static_cast<T*>(ze);
 			}
-			else if (typeid(T) == typeid(ZobBehavior) && (st == ZobSubType::subtype_behavior))
+			else if (!strcmp(type, "class ZobBehavior") && (st == ZobSubType::subtype_behavior))
 			{
 				return static_cast<T*>(ze);
 			}
-			//else if (typeid(T) == typeid(ZobCameraController) && (st == ZobSubType::subtype_cameraController))
-			//{
-			//	return static_cast<T*>(ze);
-			//}
+			else if (!strcmp(type, "class ZobCameraController") && (st == ZobSubType::subtype_cameraController))
+			{
+				return static_cast<T*>(ze);
+			}
+			else
+			{
+				return NULL;
+			}
 		}
 		return NULL;
 	}
