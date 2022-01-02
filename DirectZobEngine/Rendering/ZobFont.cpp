@@ -27,7 +27,7 @@ ZobFont::ZobFont(ZobFilePath zfpXml, ZobFilePath zfpTexture)
 		TiXmlElement* font = doc.FirstChildElement("Font");
 		if (font)
 		{
-			m_name = font->Attribute("family") + std::string("_")+ font->Attribute("style") + std::string("_") + font->Attribute("size");
+			m_name = GetFontNameFromXml(zfpXml);
 			DirectZob::LogInfo("Font name : %s", m_name.c_str());
 			std::vector<std::string> v;
 			std::string s;
@@ -93,8 +93,9 @@ std::string ZobFont::GetFontNameFromXml(ZobFilePath zfpXml)
 		TiXmlElement* font = doc.FirstChildElement("Font");
 		if (font)
 		{
-			std::string s = font->Attribute("family") + std::string("_") + font->Attribute("style") + std::string("_") + font->Attribute("size");
-			return s;
+			std::stringstream ss;
+			ss << font->Attribute("family") << "_" << font->Attribute("style") << "_" << font->Attribute("size");
+			return ss.str();
 		}
 	}
 }

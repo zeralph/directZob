@@ -17,6 +17,15 @@
         <Var Name="Equalize triangle queues" value="False" />
         <Var Name="Perspective Correction" value="True" />
     </Globals>
+    <ZobObject Guid="2003412161">
+            <Var Name="Name" value="camera" />
+            <Var Name="Position" value="-0.000;1.898;-4.779" />
+            <Var Name="Rotation" value="15.047;0.000;-0.000" />
+            <Var Name="Scale" value="1.000;1.000;1.000" />
+            <Var Name="FOV" value="70.000" />
+            <Var Name="Camera controller" value="FollowCar" />
+            <Components />
+    </ZobObject>
     <ZobObject Guid="4002144528">
         <Var Name="Name" value="Title" />
         <Var Name="Position" value="0.000;0.000;0.000" />

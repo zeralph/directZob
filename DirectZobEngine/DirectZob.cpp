@@ -401,39 +401,42 @@ void DirectZob::PrintEntityList()
 	int txtW = 300;
 	int txtH = 100;
 	std::vector<ZobEntity*> v = ZobEntity::GetAllEntities();
+	int obj =0;
+	int comp = 0;
+	int camc = 0;
+	int unkn = 0;
 	for (int i = 0; i < v.size(); i++)
 	{
 		const ZobEntity* z = v.at(i);
-		int c = 0xFFFFFFFF;
 		zobId zid = z->GetIdValue();
-		std::string n = "";
 		ZobObject* zo = ZobEntity::GetEntity<ZobObject>(zid);
 		if (zo)
 		{
-			n = "Object";
+			obj ++;
 		}
 		else
 		{
 			ZobComponent* zb = ZobEntity::GetEntity<ZobComponent>(zid);
 			if (zb)
 			{
-				n = "Component";
+				comp ++;
 			}
 			else
 			{
 				ZobCameraController* zc = ZobEntity::GetEntity<ZobCameraController>(zid);
 				if (zc)
 				{
-					n = "Camera controller";
+					camc++;
 				}
 				else
 				{
-					n = "Other";
+					unkn ++;
 				}
 			}
 		}
-		m_text->Print(txtW, (i * 10)+txtH, c, "%llu - %s", zid, n.c_str());
 	}
+	int c = 0xFFFFFFFF;
+	m_text->Print(txtW, txtH, c, "%i obj %i comp %i camc %i unkn", obj, comp, camc, unkn);
 }
 
 void DirectZob::PrintObjectList()

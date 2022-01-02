@@ -808,7 +808,7 @@
                     <Var Name="W" value="0.200" />
                     <Var Name="H" value="0.200" />
                     <Var Name="Z" value="0.000" />
-                    <Var Name="Image" value="tachometer.png;D:/Git/directZob/resources/;tachometer.png;1" />
+                    <Var Name="Image" value="tachometer.png;/;tachometer.png;0" />
                 </Component>
             </Components>
         </ZobObject>
