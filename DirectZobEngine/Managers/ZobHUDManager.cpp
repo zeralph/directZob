@@ -197,16 +197,16 @@ static ZobVector3 scd = ZobVector3(1, 0, 0);
 
 bool ZobHUDManager::CreateQuad(float xMin, float yMin, float xMax, float yMax, HUDElement* elem)
 {
-	float uv_a_x = -1;
+	float uv_a_x = 0;
 	float uv_a_y = 0;
 
-	float uv_b_x = 0;
+	float uv_b_x = 1;
 	float uv_b_y = 1;
 
-	float uv_c_x = -1;
+	float uv_c_x = 0;
 	float uv_c_y = 1;
 
-	float uv_d_x = 0;
+	float uv_d_x = 1;
 	float uv_d_y = 0;
 	if (elem->glyphe != NULL)
 	{

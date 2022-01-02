@@ -18,20 +18,20 @@
         <Var Name="Perspective Correction" value="True" />
     </Globals>
     <ZobObject Guid="4002273791">
-        <Var Name="Name" value="newObject_12" />
-        <Var Name="Position" value="0.000;7.107;0.000" />
+        <Var Name="Name" value="bkg" />
+        <Var Name="Position" value="0.000;7.106;0.000" />
         <Var Name="Rotation" value="0.000;0.000;0.000" />
         <Var Name="Scale" value="1.000;1.000;1.000" />
         <Behaviors>
             <Behavior Type="Menu" Guid="2007756106">
-                <Var Name="X" value="0.801" />
-                <Var Name="Y" value="0.600" />
-                <Var Name="W" value="0.200" />
-                <Var Name="H" value="0.250" />
+                <Var Name="X" value="0.000" />
+                <Var Name="Y" value="0.000" />
+                <Var Name="W" value="1.000" />
+                <Var Name="H" value="1.000" />
                 <Var Name="Font size" value="3.000" />
                 <Var Name="Text" value="" />
                 <Var Name="Color" value="255;82;139;18" />
-                <Var Name="Image" value="tachometer.png;D:\Git\directZob\resources//;tachometer.png;1" />
+                <Var Name="Image" value="bkg.png;D:\Git\directZob\resources//;bkg.png;1" />
             </Behavior>
         </Behaviors>
     </ZobObject>

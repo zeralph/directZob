@@ -7,6 +7,7 @@
 #include "SceneLoader.h"
 #include "ZobPhysic/ZobPhysicsEngine.h"
 #include "Rendering/Rasterizer.h"
+#include "ZobCameraController/ZobCameraController.h"
 #ifdef WINDOWS
 #include "../minifb/src/windows/WindowData_Win.h"
 #elif LINUX
@@ -420,7 +421,15 @@ void DirectZob::PrintEntityList()
 			}
 			else
 			{
-				n = "Other";
+				ZobCameraController* zc = ZobEntity::GetEntity<ZobCameraController>(zid);
+				if (zc)
+				{
+					n = "Camera controller";
+				}
+				else
+				{
+					n = "Other";
+				}
 			}
 		}
 		m_text->Print(txtW, (i * 10)+txtH, c, "%llu - %s", zid, n.c_str());

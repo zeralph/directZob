@@ -45,6 +45,7 @@ public :
 		if (it != m_entityMap.end())
 		{
 			ZobEntity* ze = it->second;
+			/*
 			ZobSubType st = ZobEntity::GetSubType(it->first);
 			const char* type = typeid(T).name();
 			if (!strcmp(type, "class ZobObject") && (st == ZobSubType::subtype_zobCamera || st == ZobSubType::subtype_zobLight || st == ZobSubType::subtype_zobOject))
@@ -63,6 +64,8 @@ public :
 			{
 				return NULL;
 			}
+			*/
+			return dynamic_cast<T*>(ze);
 		}
 		return NULL;
 	}
@@ -90,6 +93,7 @@ protected:
 	ZobEntity(ZobType t, ZobSubType s);
 	ZobEntity(const zobId zid);
 	~ZobEntity();
+	virtual void dummyFunction() {}
 	zobId											m_id;
 	ZobEntity::ZobType								m_type;
 	ZobEntity::ZobSubType							m_subType;
