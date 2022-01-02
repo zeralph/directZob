@@ -14,6 +14,11 @@ ZobFont::ZobFont(ZobFilePath zfpXml, ZobFilePath zfpTexture)
 	DirectZob::LogInfo("Loading font at %s / %s", zfpTexture.GetFullPath().c_str(), zfpXml.GetFullPath().c_str());
 	DirectZob::AddIndent();
 	m_loaded = false;
+	m_color = ZobColor::White;
+	m_name = "";
+	m_charMaterial = NULL;
+	m_glyphes.resize(0);
+	m_height = 0;
 	TiXmlDocument doc("Font");
 	doc.ClearError();
 	std::string xmlFile = zfpXml.GetFullPath();
@@ -98,6 +103,7 @@ std::string ZobFont::GetFontNameFromXml(ZobFilePath zfpXml)
 			return ss.str();
 		}
 	}
+	return "";
 }
 
 const ZobFont::FontGlyphe* ZobFont::GetChar(char c) const
