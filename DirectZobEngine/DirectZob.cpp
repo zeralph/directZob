@@ -451,7 +451,7 @@ void DirectZob::PrintObjectList()
 		{
 			c = 0xFFFF0000;
 		}
-		if (m && m->GetMesh()->IsDrawn())
+		if (m && m->GetMesh() && m->GetMesh()->IsDrawn())
 		{
 			c = 0xFF00FF00;
 		}

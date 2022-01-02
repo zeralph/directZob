@@ -3,6 +3,7 @@
 
 ZobFilePath::ZobFilePath()
 {
+	m_fileType = eFileType_all;
 	Reset();
 }
 
@@ -75,6 +76,18 @@ std::string ZobFilePath::GetFullPathWithoutFile()
 std::string ZobFilePath::Serialize()
 {
 	std::string s = m_name;
+	std::string rsc = SceneLoader::GetResourcePath();
+	std::size_t i = m_path.find(rsc);
+	if (!m_bAbsolute && i == 0)
+	{
+		m_bAbsolute = false;
+		i = rsc.length();
+		m_path = m_path.substr(i, m_path.length()-i-1);
+		if (m_path.length() == 0)
+		{
+			m_path = std::string("/");
+		}
+	}
 	s = s.append(";").append(m_path).append(";").append(m_file).append(";").append(m_bAbsolute?"1":"0");
 	return s;
 }

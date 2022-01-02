@@ -1,12 +1,12 @@
 #pragma once
-#include "../Types.h"
-#include "../tinyxml/tinyxml.h"
-#include "ZobComponent.h"
-#include "../Managers/ZobHUDManager.h"
+#include "../../Types.h"
+#include "../../tinyxml/tinyxml.h"
+#include "../ZobComponent.h"
+#include "../../Managers/ZobHUDManager.h"
 #include <string>
 #include <vector>
 
-class ZobComponentMenu : public ZobComponent
+class ZobComponentText : public ZobComponent
 {
 	friend class ZobComponentFactory;
 	public:
@@ -25,7 +25,7 @@ class ZobComponentMenu : public ZobComponent
 			eMenuAction action;
 		};
 
-		~ZobComponentMenu() override;
+		~ZobComponentText() override;
 		void					Init() override;
 		void					PreUpdate(float dt) override;
 		void					UpdateAfterObject(float dt) override {}
@@ -34,8 +34,8 @@ class ZobComponentMenu : public ZobComponent
 		void					EditorUpdate() override;
 		void					DrawGizmos(const Camera* camera, const ZobVector3* position, const ZobVector3* rotation) const override;
 	private:	
-		ZobComponentMenu(ZobObject* zobObject, bool bEditorZobComponent);
-		void					LoadMaterialInternal();
+		ZobComponentText(ZobObject* zobObject, bool bEditorZobComponent);
+		void					LoadFontInternal();
 		ZobHUDManager::eHudUnit m_unit;
 		float m_x;
 		float m_y;
@@ -44,9 +44,10 @@ class ZobComponentMenu : public ZobComponent
 		float m_fontSize;
 		const char* m_fontName;
 		ZobColor m_color;
-		ZobFilePath m_texture;
-		const ZobMaterial* m_image;
+		ZobFilePath m_fontXml;
+		ZobFilePath m_fontImage;
+		const ZobFont* m_font;
+		float m_z;
+		bool m_visible;
 		std::string m_text;
-		std::vector<MenuEntry>	m_menuEntries;
-		int						m_menuIndex;
 };

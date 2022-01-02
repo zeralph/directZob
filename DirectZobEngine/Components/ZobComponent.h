@@ -18,7 +18,8 @@ public:
 	{
 		eComponent_none = 0,
 		eComponent_car,
-		eComponent_hudElement,
+		eComponent_hudText,
+		eComponent_hudImage,
 		eComponent_physicBox,
 		eComponent_physicSphere,
 		eComponent_physicCapsule,

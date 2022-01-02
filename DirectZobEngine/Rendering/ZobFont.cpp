@@ -9,7 +9,7 @@
 #include <iostream>
 #include "tinyxml.h"
 
-ZobFont::ZobFont(ZobFilePath zfpTexture, ZobFilePath zfpXml)
+ZobFont::ZobFont(ZobFilePath zfpXml, ZobFilePath zfpTexture)
 {
 	DirectZob::LogInfo("Loading font at %s / %s", zfpTexture.GetFullPath().c_str(), zfpXml.GetFullPath().c_str());
 	DirectZob::AddIndent();
@@ -27,7 +27,7 @@ ZobFont::ZobFont(ZobFilePath zfpTexture, ZobFilePath zfpXml)
 		TiXmlElement* font = doc.FirstChildElement("Font");
 		if (font)
 		{
-			m_name = font->Attribute("family");
+			m_name = font->Attribute("family") + std::string("_")+ font->Attribute("style") + std::string("_") + font->Attribute("size");
 			DirectZob::LogInfo("Font name : %s", m_name.c_str());
 			std::vector<std::string> v;
 			std::string s;
@@ -80,6 +80,23 @@ ZobFont::ZobFont(ZobFilePath zfpTexture, ZobFilePath zfpXml)
 ZobFont::~ZobFont()
 {
 	m_glyphes.clear();
+}
+
+std::string ZobFont::GetFontNameFromXml(ZobFilePath zfpXml)
+{
+	TiXmlDocument doc("Font");
+	doc.ClearError();
+	std::string xmlFile = zfpXml.GetFullPath();
+	doc.LoadFile(xmlFile.c_str());
+	if (!doc.Error())
+	{
+		TiXmlElement* font = doc.FirstChildElement("Font");
+		if (font)
+		{
+			std::string s = font->Attribute("family") + std::string("_") + font->Attribute("style") + std::string("_") + font->Attribute("size");
+			return s;
+		}
+	}
 }
 
 const ZobFont::FontGlyphe* ZobFont::GetChar(char c) const

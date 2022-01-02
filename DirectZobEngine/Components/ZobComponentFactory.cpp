@@ -1,6 +1,7 @@
 #include "ZobComponentFactory.h"
 #include "ZobComponentCar.h"
-#include "ZobComponentMenu.h"
+#include "HudComponents/ZobComponentText.h"
+#include "HudComponents/ZobComponentImage.h"
 #include "ZobComponentMesh.h"
 #include "ZobComponentSprite.h"
 #include "ZobComponentLight.h"
@@ -14,7 +15,8 @@ const char* ZobComponentFactory::eComponentTypeStr[ZobComponent::__eComponent_MA
 {
 	"None",
 	"Car",
-	"Menu",
+	"Text",
+	"Image",
 	"PhysicBox",
 	"PhysicSphere",
 	"PhysicCapsule",
@@ -57,8 +59,11 @@ ZobComponent* ZobComponentFactory::CreateComponentInternal(ZobObject* zobObject,
 			case ZobComponent::eComponent_physicMesh:
 				zb = new ZobComponentPhysicMesh(zobObject);
 				break;
-			case ZobComponent::eComponent_hudElement:
-				zb = new ZobComponentMenu(zobObject, bEditorZobComponent);
+			case ZobComponent::eComponent_hudText:
+				zb = new ZobComponentText(zobObject, bEditorZobComponent);
+				break;
+			case ZobComponent::eComponent_hudImage:
+				zb = new ZobComponentImage(zobObject, bEditorZobComponent);
 				break;
 			case ZobComponent::eComponent_mesh:
 				zb = new ZobComponentMesh(zobObject, bEditorZobComponent);

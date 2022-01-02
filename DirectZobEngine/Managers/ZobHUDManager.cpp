@@ -96,37 +96,60 @@ void ZobHUDManager::Init()
 
 	zfpTexture = ZobFilePath(DEFAULT_FONT, dir, "defaultFont.png", true);
 	zfpXml = ZobFilePath(DEFAULT_FONT, dir, "defaultFont.xml", true);
-	m_fonts.push_back( new ZobFont(zfpTexture, zfpXml));
+	CreateOrGetZobFont(zfpXml, zfpTexture);
 
 
 	zfpTexture = ZobFilePath("mv_boli_regular_14", "_fonts", "mv_boli_regular_14.PNG", false);
 	zfpXml = ZobFilePath("mv_boli_regular_14", "_fonts", "mv_boli_regular_14.xml", false);
-	m_fonts.push_back( new ZobFont(zfpTexture, zfpXml));
-		
+	CreateOrGetZobFont(zfpXml, zfpTexture);
+
 	zfpTexture.Reset();
 	zfpXml.Reset();
 	zfpTexture = ZobFilePath("mv_boli_regular_32", "_fonts", "mv_boli_regular_32.PNG", false);
 	zfpXml = ZobFilePath("mv_boli_regular_32", "_fonts", "mv_boli_regular_32.xml", false);
-	m_fonts.push_back(new ZobFont(zfpTexture, zfpXml));
+	CreateOrGetZobFont(zfpXml, zfpTexture);
 
 	zfpTexture.Reset();
 	zfpXml.Reset();
 	zfpTexture = ZobFilePath("leelawadee_ui_bold_32", "_fonts", "leelawadee_ui_bold_32.PNG", false);
 	zfpXml = ZobFilePath("leelawadee_ui_bold_32", "_fonts", "leelawadee_ui_bold_32.xml", false);
-	m_fonts.push_back(new ZobFont(zfpTexture, zfpXml));
+	CreateOrGetZobFont(zfpXml, zfpTexture);
 
 	zfpTexture.Reset();
 	zfpXml.Reset();
 	zfpTexture = ZobFilePath("arial_regular_32", "_fonts", "arial_regular_32.PNG", false);
 	zfpXml = ZobFilePath("arial_regular_32", "_fonts", "arial_regular_32.xml", false);
-	m_fonts.push_back(new ZobFont(zfpTexture, zfpXml));
+	CreateOrGetZobFont(zfpXml, zfpTexture);
 
 	zfpTexture.Reset();
 	zfpXml.Reset();
 	zfpTexture = ZobFilePath("vcr_osd_mono_regular_14", "_fonts", "vcr_osd_mono_regular_14.PNG", false);
 	zfpXml = ZobFilePath("vcr_osd_mono_regular_14", "_fonts", "vcr_osd_mono_regular_14.xml", false);
-	m_fonts.push_back(new ZobFont(zfpTexture, zfpXml));
+	CreateOrGetZobFont(zfpXml, zfpTexture);
 
+	zfpTexture.Reset();
+	zfpXml.Reset();
+	zfpTexture = ZobFilePath("mv_boli_regular_32", "_fonts", "mv_boli_regular_32.PNG", false);
+	zfpXml = ZobFilePath("mv_boli_regular_32", "_fonts", "mv_boli_regular_32.xml", false);
+	CreateOrGetZobFont(zfpXml, zfpTexture);
+}
+
+const ZobFont* ZobHUDManager::CreateOrGetZobFont(ZobFilePath zfpXml, ZobFilePath zfpTexture)
+{
+	std::string fontName = ZobFont::GetFontNameFromXml(zfpXml);
+	std::vector<const ZobFont*>::const_iterator iter = m_fonts.begin();
+	while (iter != m_fonts.end())
+	{
+		std::string s = (*iter)->GetName();
+		if (s == fontName)
+		{
+			return (*iter);
+		}
+		iter++;
+	}
+	ZobFont* f = new ZobFont(zfpXml, zfpTexture);
+	m_fonts.push_back(f);
+	return f;
 }
 
 void ZobHUDManager::Stop()
@@ -164,6 +187,10 @@ void ZobHUDManager::DeleteFonts()
 void ZobHUDManager::UpdateObjects(const Camera* camera, Engine* engine, float dt)
 {
 	OPTICK_EVENT();
+	struct {
+		bool operator()(HUDElement &a, HUDElement &b) const { return a.z < b.z; }
+	} customLess;
+	std::sort(m_hudElements.begin(), m_hudElements.end(), customLess);
 	for (std::vector<HUDElement>::const_iterator iter = m_hudElements.begin(); iter != m_hudElements.end(); iter++)
 	{
 		HUDElement e = *iter;
@@ -222,7 +249,7 @@ bool ZobHUDManager::CreateQuad(float xMin, float yMin, float xMax, float yMax, H
 		uv_c_x = elem->glyphe->uv_min_x;
 		uv_c_y = -elem->glyphe->uv_min_y;
 	}
-	float z = DirectZob::GetInstance()->GetEngine()->GetBufferData()->zNear + 1.0f;
+	float z = DirectZob::GetInstance()->GetEngine()->GetBufferData()->zNear + 0.001f;
 	Triangle* t1 = &m_trianglesBuffer[m_nbDrawnTriangles];
 	t1->pc->x = xMin;
 	t1->pc->y = yMin;
@@ -279,18 +306,17 @@ bool ZobHUDManager::CreateQuad(float xMin, float yMin, float xMax, float yMax, H
 	return true;
 }
 
-void ZobHUDManager::Print(eHudUnit u, float x, float y, float fontSize, const char* fontName, const ZobColor* color, const char* fmt, ...)
+void ZobHUDManager::Print(eHudUnit u, float x, float y, float z, float fontSize, const ZobFont* font, const ZobColor* color, const char* fmt, ...)
 {
 	if (m_started && DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera()) //if (m_engine->ShowText() && m_data != NULL)
 	{
-		const ZobFont* f = GetFont(fontName);
-		if (!f && m_fonts.size() > 0)
+		if (!font && m_fonts.size() > 0)
 		{
-			f = m_fonts[0];
+			font = m_fonts[0];
 			fontSize = 1;
 			//u = eHudUnit::eHudUnit_pixels;
 		}
-		if (f && fmt)
+		if (font && fmt)
 		{
 			//size_t size = strlen(fmt) + 1;
 			va_list argList;
@@ -300,12 +326,12 @@ void ZobHUDManager::Print(eHudUnit u, float x, float y, float fontSize, const ch
         	va_start(argList, fmt);
         	vsprintf(m_buffer, fmt, argList);
         	va_end(argList);
-			PrintInternal(u, x, y, fontSize, f, color, m_buffer, charsNeeded);
+			PrintInternal(u, x, y, z, fontSize, font, color, m_buffer, charsNeeded);
 		}
 	}
 }
 
-void  ZobHUDManager::Print(eHudUnit u, float x, float y, float w, float h, const ZobMaterial* mat)
+void  ZobHUDManager::Print(eHudUnit u, float x, float y, float w, float h, float z, const ZobMaterial* mat)
 {
 	float screenW = DirectZob::GetInstance()->GetEngine()->GetBufferData()->width;
 	float screenH = DirectZob::GetInstance()->GetEngine()->GetBufferData()->height;
@@ -323,13 +349,14 @@ void  ZobHUDManager::Print(eHudUnit u, float x, float y, float w, float h, const
 	e.y = y;
 	e.w = w;
 	e.h = h;
+	e.z = z;
 	e.mat = mat;
 	e.glyphe = NULL;
 	e.color = ZobColor::White;
 	m_hudElements.push_back(e);
 }
 
-void ZobHUDManager::PrintInternal(eHudUnit u, float x, float y, float fontSize, const ZobFont* font, const ZobColor* color, const char* buf, size_t size)
+void ZobHUDManager::PrintInternal(eHudUnit u, float x, float y, float z, float fontSize, const ZobFont* font, const ZobColor* color, const char* buf, size_t size)
 {
 	if (font && font->IsLoaded())
 	{
@@ -349,27 +376,29 @@ void ZobHUDManager::PrintInternal(eHudUnit u, float x, float y, float fontSize, 
 			{
 				if (c != '\n')
 				{
-					if (c == ' ')
+					if (c != '\r')
 					{
-						int u = 0;
-						u++;
+						HUDElement e;
+						e.scaleX = fontSize;
+						e.scaleY = fontSize;
+						e.z = z;
+						const ZobFont::FontGlyphe* fg = font->GetChar(c);
+						if (fg)
+						{
+							e.color = color;
+							e.x = x + horiz + fg->offsetX * fontSize;
+							e.y = y + vert + fg->offsetY * fontSize;
+							e.w = fg->w * fontSize;
+							e.h = fg->h * fontSize;
+							e.unit = u;
+							e.c = c;
+							e.glyphe = font->GetChar(c);
+							assert(e.glyphe);
+							e.mat = e.glyphe->mat;
+							m_hudElements.push_back(e);
+							horiz+= fg->width * fontSize;
+						}
 					}
-					HUDElement e;
-					e.scaleX = fontSize;
-					e.scaleY = fontSize;
-					const ZobFont::FontGlyphe* fg = font->GetChar(c);
-					e.color = color;
-					e.x = x + horiz + fg->offsetX * fontSize;
-					e.y = y + vert + fg->offsetY * fontSize;
-					e.w = fg->w * fontSize;
-					e.h = fg->h * fontSize;
-					e.unit = u;
-					e.c = c;
-					e.glyphe = font->GetChar(c);
-					assert(e.glyphe);
-					e.mat = e.glyphe->mat;
-					m_hudElements.push_back(e);
-					horiz+= fg->width * fontSize;
 				}
 				else
 				{

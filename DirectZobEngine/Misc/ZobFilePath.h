@@ -5,6 +5,15 @@ class ZobFilePath
 {
 
 public:
+	enum eFileType
+	{
+		eFileType_all=0,
+		eFileType_mesh=1,
+		eFileType_texture=2,
+		eFileType_xml=3,
+		__eFileType_ALL__
+	};
+
 	ZobFilePath();
 	ZobFilePath(std::string name, std::string path, std::string file, bool bAbsolute);
 	~ZobFilePath();
@@ -14,6 +23,8 @@ public:
 	std::string					Serialize();
 	void						Unserialize(std::string s);
 	void						Reset();
+	eFileType					GetFileType() const { return m_fileType; }
+	void						SetFileType(eFileType t) { m_fileType = t; }
 	inline const std::string	GetName() const { return m_name; }
 	inline const std::string	GetFile() const { return m_file; }
 	inline const std::string	GetPath() const { return m_path; }
@@ -23,4 +34,5 @@ private:
 	std::string					m_path;
 	std::string					m_file;
 	bool						m_bAbsolute;
+	eFileType					m_fileType;
 };

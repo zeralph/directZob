@@ -16,6 +16,29 @@ using namespace System::Drawing;
 
 namespace CLI {
 
+	
+
+	public ref class ZobTextBox : TextBox
+	{
+	public:
+		ZobTextBox();
+		~ZobTextBox();
+	};
+
+	public ref class ZobButton : Button
+	{
+	public:
+		ZobButton();
+		~ZobButton();
+	};
+
+	public ref class ZobLabel : Label
+	{
+	public:
+		ZobLabel();
+		~ZobLabel();
+	};
+
 	public ref class ZobGroupBox : GroupBox
 	{
 	public:
@@ -23,7 +46,7 @@ namespace CLI {
 		~ZobGroupBox();
 		void OnToggle(Object^ sender, EventArgs^ e);
 		bool bToggled;
-		Button^ _label;
+		ZobButton^ _label;
 		EventHandler^ _event;
 	};
 
@@ -50,8 +73,8 @@ namespace CLI {
 		ZobControlString(const ZobVariablesExposer::wrapperData& w);
 		~ZobControlString();
 		EventHandler^ _event;
-		Label^ _label;
-		TextBox^ _txt;
+		ZobLabel^ _label;
+		ZobTextBox^ _txt;
 	protected:
 		void OnValueChanged(Object^ sender, EventArgs^ e) override;
 	};
@@ -61,13 +84,16 @@ namespace CLI {
 	public:
 		ZobControlFilePath(const ZobVariablesExposer::wrapperData& w);
 		~ZobControlFilePath();
-		TextBox^ _txt;
-		Label^ _label;
-		Button^ _btn;
-		EventHandler^ _event;
+		ZobTextBox^ _txt;
+		ZobLabel^ _label;
+		ZobButton^ _btn;
+		ZobButton^ _rst;
+		EventHandler^ _eventSet;
+		EventHandler^ _eventRst;
 	protected:
 		void OnValueChanged(Object^ sender, EventArgs^ e) override;
 		void OnOpen(Object^ sender, EventArgs^ e);
+		void OnReset(Object^ sender, EventArgs^ e);
 		void OnOk(Object^ sender, System::ComponentModel::CancelEventArgs^ e);
 	};
 
@@ -77,10 +103,10 @@ namespace CLI {
 		ZobControlVector3(const ZobVariablesExposer::wrapperData& w);
 		~ZobControlVector3();
 		void UpdateControlInternal() override;
-		TextBox^ _txt_X;
-		TextBox^ _txt_Y;
-		TextBox^ _txt_Z;
-		Label^ _label;
+		ZobTextBox^ _txt_X;
+		ZobTextBox^ _txt_Y;
+		ZobTextBox^ _txt_Z;
+		ZobLabel^ _label;
 		EventHandler^ _eventX;
 		EventHandler^ _eventY;
 		EventHandler^ _eventZ;
@@ -93,8 +119,8 @@ namespace CLI {
 	public:
 		ZobControlFloat(const ZobVariablesExposer::wrapperData& w);
 		~ZobControlFloat();
-		TextBox^ _txt;
-		Label^ _label;
+		ZobTextBox^ _txt;
+		ZobLabel^ _label;
 		EventHandler^ _event;
 	protected:
 		void OnValueChanged(Object^ sender, EventArgs^ e) override;
@@ -107,7 +133,7 @@ namespace CLI {
 		ZobControlBool(const ZobVariablesExposer::wrapperData& w);
 		~ZobControlBool();
 		EventHandler^ _event;
-		Label^ _label;
+		ZobLabel^ _label;
 		CheckBox^ _checkBox;
 		bool _checked;
 	protected:
@@ -121,8 +147,8 @@ namespace CLI {
 		ZobControlAction(const ZobVariablesExposer::wrapperData& w);
 		~ZobControlAction();
 		EventHandler^ _event;
-		Label^ _label;
-		Button^ _button;
+		ZobLabel^ _label;
+		ZobButton^ _button;
 		bool _checked;
 	protected:
 		void OnValueChanged(Object^ sender, EventArgs^ e) override;
@@ -134,16 +160,16 @@ namespace CLI {
 	public:
 		ZobControlColor(const ZobVariablesExposer::wrapperData& w);
 		~ZobControlColor();
-		TextBox^ _txt_A;
-		TextBox^ _txt_R;
-		TextBox^ _txt_G;
-		TextBox^ _txt_B;
-		Label^ _label;
+		ZobTextBox^ _txt_A;
+		ZobTextBox^ _txt_R;
+		ZobTextBox^ _txt_G;
+		ZobTextBox^ _txt_B;
+		ZobLabel^ _label;
 		EventHandler^ _eventA;
 		EventHandler^ _eventR;
 		EventHandler^ _eventG;
 		EventHandler^ _eventB;
-		Button^ _btn;
+		ZobButton^ _btn;
 	protected:
 		void OnValueChanged(Object^ sender, EventArgs^ e) override;
 		void OnClickColor(Object^ sender, EventArgs^ e);
@@ -155,7 +181,7 @@ namespace CLI {
 	public:
 		ZobControlEnum(const ZobVariablesExposer::wrapperData& w);
 		~ZobControlEnum();
-		Label^ _label;
+		ZobLabel^ _label;
 		ComboBox^ _list;
 		EventHandler^ _event;
 	protected:
@@ -168,8 +194,8 @@ namespace CLI {
 	public:
 		ZobControlZobObject(const ZobVariablesExposer::wrapperData& w);
 		~ZobControlZobObject();
-		Label^ _label;
-		TextBox^ _txt;
+		ZobLabel^ _label;
+		ZobTextBox^ _txt;
 	protected:
 		void OnValueChanged(Object^ sender, EventArgs^ e) override;
 		void UpdateControlInternal() override;
@@ -180,8 +206,8 @@ namespace CLI {
 	public:
 		ZobControlZobId(const ZobVariablesExposer::wrapperData& w);
 		~ZobControlZobId();
-		Label^ _label;
-		Label^ _txt;
+		ZobLabel^ _label;
+		ZobLabel^ _txt;
 	protected:
 	};
 
@@ -216,7 +242,7 @@ namespace CLI {
 	public:
 		ZobPropertiesLayout(String^ name);
 		~ZobPropertiesLayout();
-		Label^ _label;
+		ZobLabel^ _label;
 	};
 };
 #endif //_WINDLL

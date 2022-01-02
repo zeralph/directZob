@@ -17,22 +17,121 @@
         <Var Name="Equalize triangle queues" value="False" />
         <Var Name="Perspective Correction" value="True" />
     </Globals>
-    <ZobObject Guid="2002114332">
+    <ZobObject Guid="4002144528">
         <Var Name="Name" value="Menu" />
         <Var Name="Position" value="0.000;0.000;0.000" />
         <Var Name="Rotation" value="0.000;0.000;0.000" />
         <Var Name="Scale" value="1.000;1.000;1.000" />
-        <Behaviors>
-            <Behavior Type="Menu" Guid="2007724783" />
-        </Behaviors>
-    </ZobObject>
-    <ZobObject Guid="4003967997">
-        <Var Name="Name" value="Fixed_camera_1" />
-        <Var Name="Position" value="0.000;5.000;0.000" />
-        <Var Name="Rotation" value="0.000;0.000;0.000" />
-        <Var Name="Scale" value="1.000;1.000;1.000" />
-        <Var Name="FOV" value="45.000" />
-        <Var Name="Camera controller" value="base" />
-        <Behaviors />
+        <Components />
+        <ZobObject Guid="4002255341">
+            <Var Name="Name" value="title" />
+            <Var Name="Position" value="0.000;7.105;0.000" />
+            <Var Name="Rotation" value="0.000;0.000;0.000" />
+            <Var Name="Scale" value="1.000;1.000;1.000" />
+            <Components>
+                <Component Type="Menu" Guid="2007592986">
+                    <Var Name="Visible" value="True" />
+                    <Var Name="X" value="0.220" />
+                    <Var Name="Y" value="0.030" />
+                    <Var Name="W" value="0.400" />
+                    <Var Name="H" value="0.500" />
+                    <Var Name="Z" value="10.000" />
+                    <Var Name="Font size" value="6.000" />
+                    <Var Name="Text" value=" EDGE&#x0D;&#x0A;RACING" />
+                    <Var Name="Color" value="255;255;255;128" />
+                    <Var Name="Image" value=";;;0" />
+                    <Var Name="Font Xml" value="vcr_osd_mono_regular_32.xml;_fonts/;vcr_osd_mono_regular_32.xml;0" />
+                    <Var Name="Font Image" value="vcr_osd_mono_regular_32.PNG;_fonts/;vcr_osd_mono_regular_32.PNG;0" />
+                </Component>
+            </Components>
+        </ZobObject>
+        <ZobObject Guid="4002967997">
+            <Var Name="Name" value="level_1" />
+            <Var Name="Position" value="0.000;7.105;0.000" />
+            <Var Name="Rotation" value="0.000;0.000;0.000" />
+            <Var Name="Scale" value="1.000;1.000;1.000" />
+            <Components>
+                <Component Type="Menu" Guid="2007566753">
+                    <Var Name="Visible" value="True" />
+                    <Var Name="X" value="0.350" />
+                    <Var Name="Y" value="0.550" />
+                    <Var Name="W" value="0.600" />
+                    <Var Name="H" value="0.500" />
+                    <Var Name="Z" value="0.000" />
+                    <Var Name="Font size" value="4.000" />
+                    <Var Name="Text" value="Car test" />
+                    <Var Name="Color" value="255;255;255;0" />
+                    <Var Name="Image" value=";;;0" />
+                    <Var Name="Font Xml" value="vcr_osd_mono_regular_14.xml;_fonts/;vcr_osd_mono_regular_14.xml;0" />
+                    <Var Name="Font Image" value="vcr_osd_mono_regular_14.PNG;_fonts/;vcr_osd_mono_regular_14.PNG;0" />
+                </Component>
+            </Components>
+        </ZobObject>
+        <ZobObject Guid="4002273791">
+            <Var Name="Name" value="bkg" />
+            <Var Name="Position" value="0.000;7.105;0.000" />
+            <Var Name="Rotation" value="0.000;0.000;0.000" />
+            <Var Name="Scale" value="1.000;1.000;1.000" />
+            <Components>
+                <Component Type="Menu" Guid="2007363284">
+                    <Var Name="Visible" value="True" />
+                    <Var Name="X" value="0.000" />
+                    <Var Name="Y" value="0.000" />
+                    <Var Name="W" value="1.000" />
+                    <Var Name="H" value="1.000" />
+                    <Var Name="Z" value="100.000" />
+                    <Var Name="Font size" value="5.000" />
+                    <Var Name="Text" value="" />
+                    <Var Name="Color" value="255;255;255;255" />
+                    <Var Name="Image" value="bkg.png;D:\Git\directZob\resources//;bkg.png;1" />
+                    <Var Name="Font Xml" value=";;;0" />
+                    <Var Name="Font Image" value=";;;0" />
+                </Component>
+            </Components>
+        </ZobObject>
+        <ZobObject Guid="4002077588">
+            <Var Name="Name" value="level_2" />
+            <Var Name="Position" value="0.000;0.000;0.000" />
+            <Var Name="Rotation" value="0.000;0.000;0.000" />
+            <Var Name="Scale" value="1.000;1.000;1.000" />
+            <Components>
+                <Component Type="Menu" Guid="2007470398">
+                    <Var Name="Visible" value="True" />
+                    <Var Name="X" value="0.300" />
+                    <Var Name="Y" value="0.650" />
+                    <Var Name="W" value="0.500" />
+                    <Var Name="H" value="0.500" />
+                    <Var Name="Z" value="0.000" />
+                    <Var Name="Font size" value="4.000" />
+                    <Var Name="Text" value="Ground test" />
+                    <Var Name="Color" value="255;255;255;0" />
+                    <Var Name="Image" value=";;;0" />
+                    <Var Name="Font Xml" value="vcr_osd_mono_regular_14.xml;_fonts/;vcr_osd_mono_regular_14.xml;0" />
+                    <Var Name="Font Image" value="vcr_osd_mono_regular_14.PNG;_fonts/;vcr_osd_mono_regular_14.PNG;0" />
+                </Component>
+            </Components>
+        </ZobObject>
+        <ZobObject Guid="4002017387">
+            <Var Name="Name" value="exit" />
+            <Var Name="Position" value="0.000;0.000;0.000" />
+            <Var Name="Rotation" value="0.000;0.000;0.000" />
+            <Var Name="Scale" value="1.000;1.000;1.000" />
+            <Components>
+                <Component Type="Menu" Guid="2007054381">
+                    <Var Name="Visible" value="True" />
+                    <Var Name="X" value="0.420" />
+                    <Var Name="Y" value="0.750" />
+                    <Var Name="W" value="0.500" />
+                    <Var Name="H" value="0.500" />
+                    <Var Name="Z" value="0.000" />
+                    <Var Name="Font size" value="4.000" />
+                    <Var Name="Text" value="Exit" />
+                    <Var Name="Color" value="255;255;255;0" />
+                    <Var Name="Image" value=";;;0" />
+                    <Var Name="Font Xml" value="vcr_osd_mono_regular_14.xml;_fonts/;vcr_osd_mono_regular_14.xml;0" />
+                    <Var Name="Font Image" value="vcr_osd_mono_regular_14.PNG;_fonts/;vcr_osd_mono_regular_14.PNG;0" />
+                </Component>
+            </Components>
+        </ZobObject>
     </ZobObject>
 </Scene>
