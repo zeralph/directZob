@@ -3,7 +3,7 @@
 #include "ManagedObject.h"
 #include "../ZobObjects/ZobObject.h"
 #include "ZobUserControls/ZobUserControls.h"
-#include "../Behaviors/ZobBehavior.h"
+#include "../Components/ZobComponent.h"
 #include "../ZobObjects/ZobObject.h"
 #using "System.Windows.Forms.dll"
 #using "System.dll"

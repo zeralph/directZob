@@ -1,14 +1,14 @@
 #pragma once
 #include "../Types.h"
 #include "../tinyxml/tinyxml.h"
-#include "ZobBehavior.h"
+#include "ZobComponent.h"
 #include "../Managers/ZobHUDManager.h"
 #include <string>
 #include <vector>
 
-class ZobBehaviorMenu : public ZobBehavior
+class ZobComponentMenu : public ZobComponent
 {
-	friend class ZobBehaviorFactory;
+	friend class ZobComponentFactory;
 	public:
 
 		enum eMenuAction
@@ -25,7 +25,7 @@ class ZobBehaviorMenu : public ZobBehavior
 			eMenuAction action;
 		};
 
-		~ZobBehaviorMenu() override;
+		~ZobComponentMenu() override;
 		void					Init() override;
 		void					PreUpdate(float dt) override;
 		void					UpdateAfterObject(float dt) override {}
@@ -34,7 +34,7 @@ class ZobBehaviorMenu : public ZobBehavior
 		void					EditorUpdate() override;
 		void					DrawGizmos(const Camera* camera, const ZobVector3* position, const ZobVector3* rotation) const override;
 	private:	
-		ZobBehaviorMenu(ZobObject* zobObject, bool bEditorZobBehavior);
+		ZobComponentMenu(ZobObject* zobObject, bool bEditorZobComponent);
 		void					LoadMaterialInternal();
 		ZobHUDManager::eHudUnit m_unit;
 		float m_x;

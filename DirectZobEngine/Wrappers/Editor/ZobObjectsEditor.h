@@ -104,15 +104,15 @@ namespace CLI
 		ZobObject*			m_translateX;
 		ZobObject*			m_translateY;
 		ZobObject*			m_translateZ;
-		ZobBehaviorMesh*	m_behaviorTranslateX;
-		ZobBehaviorMesh*	m_behaviorTranslateY; 
-		ZobBehaviorMesh*	m_behaviorTranslateZ;
+		ZobComponentMesh*	m_behaviorTranslateX;
+		ZobComponentMesh*	m_behaviorTranslateY; 
+		ZobComponentMesh*	m_behaviorTranslateZ;
 		ZobObject*			m_rotateX;
 		ZobObject*			m_rotateY;
 		ZobObject*			m_rotateZ;
-		ZobBehaviorMesh*	m_behaviorRotateX;
-		ZobBehaviorMesh*	m_behaviorRotateY;
-		ZobBehaviorMesh*	m_behaviorRotateZ;
+		ZobComponentMesh*	m_behaviorRotateX;
+		ZobComponentMesh*	m_behaviorRotateY;
+		ZobComponentMesh*	m_behaviorRotateZ;
 		ZobObject*			m_currentSelectedGizmo;
 		ModificatorData		m_modificatorData;
 

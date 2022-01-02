@@ -5,22 +5,22 @@
 #undef None
 
 #include "../tinyxml/tinyxml.h"
-#include "ZobBehaviorPhysicShape.h"
+#include "ZobComponentPhysicShape.h"
 #include <reactphysics3d/reactphysics3d.h>
 #include <string>
 #include <vector>
 
 
-class ZobBehaviorPhysicSphere : public ZobBehaviorPhysicShape
+class ZobComponentPhysicSphere : public ZobComponentPhysicShape
 {
-	friend class ZobBehaviorFactory;
+	friend class ZobComponentFactory;
 	public:
 
-								~ZobBehaviorPhysicSphere() override;
+								~ZobComponentPhysicSphere() override;
 		void					Init() override;
 		void					EditorUpdate() override;
 	private:	
-								ZobBehaviorPhysicSphere(ZobObject* zobObject);
+								ZobComponentPhysicSphere(ZobObject* zobObject);
 
 		float m_radius;
 		SphereShape* m_sphereShape;

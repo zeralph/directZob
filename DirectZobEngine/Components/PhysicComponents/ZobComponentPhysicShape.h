@@ -6,15 +6,15 @@
 
 #include "../../Types.h"
 #include "../tinyxml/tinyxml.h"
-#include "../ZobBehavior.h"
+#include "../ZobComponent.h"
 #include "../../ZobPhysic/ZobPhysicComponent.h"
 #include <reactphysics3d/reactphysics3d.h>
 #include <string>
 #include <vector>
 
-class ZobBehaviorPhysicShape : public ZobBehavior
+class ZobComponentPhysicShape : public ZobComponent
 {
-	friend class ZobBehaviorFactory;
+	friend class ZobComponentFactory;
 	public:
 
 		enum eShapeType
@@ -27,7 +27,7 @@ class ZobBehaviorPhysicShape : public ZobBehavior
 			__eShapeType_MAX__
 		};
 
-								~ZobBehaviorPhysicShape() override;
+								~ZobComponentPhysicShape() override;
 		void					Init() override;
 		void					PreUpdate(float dt) override;
 		void					UpdateBeforeObject(float dt) override {}
@@ -37,7 +37,7 @@ class ZobBehaviorPhysicShape : public ZobBehavior
 		void					DrawGizmos(const Camera* camera, const ZobVector3* position, const ZobVector3* rotation) const override;
 
 	protected:	
-								ZobBehaviorPhysicShape(ZobObject* zobObject);
+								ZobComponentPhysicShape(ZobObject* zobObject);
 		void					AddColliderInternal(CollisionShape* c);
 		virtual void			RemoveCollider();
 

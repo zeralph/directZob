@@ -2,7 +2,7 @@
 #include "ZobObjectsEditor.h"
 #include "../DirectZobWrapper.h"
 #include "../ZobObjectManagerWrapper.h"
-#include "../../DirectZobEngine//Behaviors/ZobBehaviorMesh.h"
+#include "../../DirectZobEngine/Components/ZobComponentMesh.h"
 #include "../../DirectZobEngine/Misc/ZobUtils.h"
 #include <iostream>
 #include <filesystem>

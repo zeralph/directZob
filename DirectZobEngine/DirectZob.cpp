@@ -414,10 +414,10 @@ void DirectZob::PrintEntityList()
 		}
 		else
 		{
-			ZobBehavior* zb = ZobEntity::GetEntity<ZobBehavior>(zid);
+			ZobComponent* zb = ZobEntity::GetEntity<ZobComponent>(zid);
 			if (zb)
 			{
-				n = "Behavior";
+				n = "Component";
 			}
 			else
 			{
@@ -445,8 +445,8 @@ void DirectZob::PrintObjectList()
 	{
 		const ZobObject* z = v.at(i);
 		int c = 0xFFFFFFFF; 
-		const ZobBehaviorMesh* m = z->GetBehavior<ZobBehaviorMesh>();
-		const ZobBehaviorSprite* s = z->GetBehavior<ZobBehaviorSprite>();
+		const ZobComponentMesh* m = z->GetComponent<ZobComponentMesh>();
+		const ZobComponentSprite* s = z->GetComponent<ZobComponentSprite>();
 		if (m || s)
 		{
 			c = 0xFFFF0000;

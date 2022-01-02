@@ -30,8 +30,8 @@
 #define XML_ELEMENT_ROTATION "Rotation"
 #define XML_ELEMENT_SCALE "Scale"
 #define XML_ELEMENT_MESH "Mesh"
-#define XML_ELEMENT_BEHAVIORS "Behaviors"
-#define XML_ELEMENT_BEHAVIOR "Behavior"
+#define XML_ELEMENT_ComponentS "Components"
+#define XML_ELEMENT_Component "Component"
 
 #define XML_ELEMENT_RENDER_OPTIONS "RenderOptions"
 #define XML_ELEMENT_RENDER_OPTIONS_LIGHTING "Lighting"

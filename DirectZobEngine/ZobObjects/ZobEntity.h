@@ -31,7 +31,7 @@ public :
 		subtype_zobCamera=3,
 		subtype_zobLight=4,
 		subtype_mesh=5,
-		subtype_behavior=7,
+		subtype_Component=7,
 		subtype_cameraController = 8,
 		subtype_menuItem = 9,
 		subtype_MAX = 10,
@@ -52,7 +52,7 @@ public :
 			{
 				return static_cast<T*>(ze);
 			}
-			else if (!strcmp(type, "class ZobBehavior") && (st == ZobSubType::subtype_behavior))
+			else if (!strcmp(type, "class ZobComponent") && (st == ZobSubType::subtype_Component))
 			{
 				return static_cast<T*>(ze);
 			}

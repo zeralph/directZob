@@ -1,15 +1,15 @@
-#include "ZobBehaviorMesh.h"
+#include "ZobComponentMesh.h"
 #include "../DirectZob.h"
 #include "../Mesh.h"
 
-ZobBehaviorMesh::~ZobBehaviorMesh()
+ZobComponentMesh::~ZobComponentMesh()
 {
 
 }
 
-ZobBehaviorMesh::ZobBehaviorMesh(ZobObject* zobObject, bool bEditorZobBehavior) : ZobBehavior(zobObject, bEditorZobBehavior)
+ZobComponentMesh::ZobComponentMesh(ZobObject* zobObject, bool bEditorZobComponent) : ZobComponent(zobObject, bEditorZobComponent)
 {
-	m_type = eBehavior_mesh;
+	m_type = eComponent_mesh;
 	m_meshPath.Reset();
 	m_mesh = NULL;
 
@@ -31,7 +31,7 @@ ZobBehaviorMesh::ZobBehaviorMesh(ZobObject* zobObject, bool bEditorZobBehavior) 
 	m_varExposer->WrapVariable<uint>("Size", &m_meshSize, NULL, true, false);
 }
 
-void ZobBehaviorMesh::Init()
+void ZobComponentMesh::Init()
 {
 	m_meshNbTriangles = 0;
 	m_meshSize = 0;
@@ -52,27 +52,27 @@ void ZobBehaviorMesh::Init()
 	}
 }
 
-void ZobBehaviorMesh::Set(ZobFilePath zfp) 
+void ZobComponentMesh::Set(ZobFilePath zfp) 
 { 
 	m_meshPath = zfp;
 	Init();
 }
 
-void ZobBehaviorMesh::PreUpdate(float dt)
+void ZobComponentMesh::PreUpdate(float dt)
 {
 }
 
-void ZobBehaviorMesh::UpdateAfterObject(float dt)
+void ZobComponentMesh::UpdateAfterObject(float dt)
 {
 
 }
 
-void ZobBehaviorMesh::SetVisible(bool v)
+void ZobComponentMesh::SetVisible(bool v)
 { 
 	m_mesh->SetVisible(v); 
 }
 
-void ZobBehaviorMesh::PostUpdate()
+void ZobComponentMesh::PostUpdate()
 {
 	/*if (m_mesh)
 	{
@@ -94,7 +94,7 @@ void ZobBehaviorMesh::PostUpdate()
 	}
 }
 
-void ZobBehaviorMesh::QueueForDrawing(const Camera* camera, Engine* engine)
+void ZobComponentMesh::QueueForDrawing(const Camera* camera, Engine* engine)
 {
 	if (m_mesh)
 	{
@@ -107,7 +107,7 @@ void ZobBehaviorMesh::QueueForDrawing(const Camera* camera, Engine* engine)
 	}
 }
 
-void ZobBehaviorMesh::EditorUpdate()
+void ZobComponentMesh::EditorUpdate()
 {
 	if (!m_mesh)
 	{
@@ -125,7 +125,7 @@ void ZobBehaviorMesh::EditorUpdate()
 	}
 }
 
-bool ZobBehaviorMesh::LoadMeshInternal()
+bool ZobComponentMesh::LoadMeshInternal()
 {
 	m_mesh = DirectZob::GetInstance()->GetMeshManager()->LoadMesh(m_meshPath);
 	if (m_mesh)

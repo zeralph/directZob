@@ -1,35 +1,35 @@
-#include "ZobBehaviorPhysicSphere.h"
+#include "ZobComponentPhysicSphere.h"
 #include "../../DirectZob.h"
 #include "../../ZobPhysic/ZobPhysicsEngine.h"
 
-ZobBehaviorPhysicSphere::~ZobBehaviorPhysicSphere()
+ZobComponentPhysicSphere::~ZobComponentPhysicSphere()
 {
 
 }
 
-ZobBehaviorPhysicSphere::ZobBehaviorPhysicSphere(ZobObject* zobObject) : ZobBehaviorPhysicShape(zobObject)
+ZobComponentPhysicSphere::ZobComponentPhysicSphere(ZobObject* zobObject) : ZobComponentPhysicShape(zobObject)
 {
-	m_type = eBehavior_physicSphere;
+	m_type = eComponent_physicSphere;
 	m_sphereShape = NULL;
 	m_localPostion = ZobVector3(0,0,0);
 	m_varExposer->WrapVariable<float>("Radius", &m_radius, NULL, false, true);
 	m_radius = 1.0f;
 }
 
-void ZobBehaviorPhysicSphere::Init()
+void ZobComponentPhysicSphere::Init()
 {	
 	ReLoadVariables();
 	PhysicsCommon* pc = DirectZob::GetInstance()->GetPhysicsEngine()->GetPhysicsCommon();
 	m_sphereShape = pc->createSphereShape(m_radius);
 	AddColliderInternal(m_sphereShape);
-	ZobBehaviorPhysicShape::Init();
+	ZobComponentPhysicShape::Init();
 }
 
-void ZobBehaviorPhysicSphere::EditorUpdate()
+void ZobComponentPhysicSphere::EditorUpdate()
 {
 	if (m_isInit)
 	{
-		ZobBehaviorPhysicShape::EditorUpdate();
+		ZobComponentPhysicShape::EditorUpdate();
 		if (m_sphereShape->getRadius() != m_radius)
 		{
 			m_sphereShape->setRadius(m_radius);

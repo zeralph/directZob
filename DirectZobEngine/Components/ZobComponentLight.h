@@ -5,16 +5,16 @@
 #undef None
 
 #include "../tinyxml/tinyxml.h"
-#include "ZobBehavior.h"
+#include "ZobComponent.h"
 #include <string>
 #include <vector>
 
-class ZobBehaviorLight : public ZobBehavior
+class ZobComponentLight : public ZobComponent
 {
-	friend class ZobBehaviorFactory;
+	friend class ZobComponentFactory;
 public:
 
-	~ZobBehaviorLight() override;
+	~ZobComponentLight() override;
 	void					Init() override;
 	void					PreUpdate(float dt) override;
 	void					PostUpdate() override;
@@ -24,7 +24,7 @@ public:
 	void					EditorUpdate() override;
 
 private:
-	ZobBehaviorLight(ZobObject* zobObject, bool bEditorZobBehavior);
+	ZobComponentLight(ZobObject* zobObject, bool bEditorZobComponent);
 
 	ZobColor m_lightColor;
 	float m_intensity;

@@ -10,12 +10,12 @@ TEST(SceneLoader, LoadScene)
 	std::string path = MyUtils::GetPath() + "resources\\";
 	SceneLoader::LoadScene(path, name);
 	SceneLoader::Update(); 
-	EXPECT_EQ(SceneLoader::GetNbZobObjectsInScene(), 58);
-	EXPECT_EQ(DirectZob::GetInstance()->GetMaterialManager()->GetNbMaterials(), 43);
+	EXPECT_EQ(SceneLoader::GetNbZobObjectsInScene(), 60);
+	EXPECT_EQ(DirectZob::GetInstance()->GetMaterialManager()->GetNbMaterials(), 44);
 	SceneLoader::UnloadScene();
 	EXPECT_EQ(DirectZob::GetInstance()->GetMaterialManager()->GetNbMaterials(), 0);
 	SceneLoader::LoadScene(path, name);
 	SceneLoader::Update();
-	EXPECT_EQ(DirectZob::GetInstance()->GetMaterialManager()->GetNbMaterials(), 43);
-	EXPECT_EQ(SceneLoader::GetNbZobObjectsInScene(), 58);
+	EXPECT_EQ(DirectZob::GetInstance()->GetMaterialManager()->GetNbMaterials(), 44);
+	EXPECT_EQ(SceneLoader::GetNbZobObjectsInScene(), 60);
 }

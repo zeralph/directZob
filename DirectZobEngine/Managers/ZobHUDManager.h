@@ -43,7 +43,7 @@ public:
 	void Start();
 	
 	void PreUpdate(float dt);
-	void UpdateBehavior(float dt);
+	void UpdateComponent(float dt);
 	void UpdateObjects(const Camera* camera, Engine* engine, float dt);
 	void QueueForDrawing(const Camera* camera, Engine* engine);
 	void Print(eHudUnit u, float x, float y, float fontSize, const char* fontName, const ZobColor* color, const char* fmt, ...);

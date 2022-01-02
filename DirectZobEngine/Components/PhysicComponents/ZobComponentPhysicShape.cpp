@@ -1,15 +1,15 @@
-#include "ZobBehaviorPhysicShape.h"
+#include "ZobComponentPhysicShape.h"
 #include "../../DirectZob.h"
 #include "../../ZobPhysic/ZobPhysicsEngine.h"
 
-ZobBehaviorPhysicShape::~ZobBehaviorPhysicShape()
+ZobComponentPhysicShape::~ZobComponentPhysicShape()
 {
 	RemoveCollider();
 }
 
-ZobBehaviorPhysicShape::ZobBehaviorPhysicShape(ZobObject* zobObject) : ZobBehavior(zobObject, false)
+ZobComponentPhysicShape::ZobComponentPhysicShape(ZobObject* zobObject) : ZobComponent(zobObject, false)
 {
-	m_type = eBehavior_none;
+	m_type = eComponent_none;
 	m_isInit = false;;
 	m_varExposer->WrapVariable<int>("Layers", &m_layers, NULL, false, true);
 	m_varExposer->WrapVariable<bool>("Trigger", &m_isTrigger, NULL, false, true);
@@ -20,17 +20,17 @@ ZobBehaviorPhysicShape::ZobBehaviorPhysicShape(ZobObject* zobObject) : ZobBehavi
 	m_layers = 0;
 }
 
-void ZobBehaviorPhysicShape::PreUpdate(float dt)
+void ZobComponentPhysicShape::PreUpdate(float dt)
 {
 
 }
 
-void ZobBehaviorPhysicShape::PostUpdate()
+void ZobComponentPhysicShape::PostUpdate()
 {
 
 }
 
-void ZobBehaviorPhysicShape::Init()
+void ZobComponentPhysicShape::Init()
 {
 	assert(m_collider);
 	//reactphysics3d::Material& material = m_collider->getMaterial();
@@ -51,7 +51,7 @@ void ZobBehaviorPhysicShape::Init()
 	m_isInit = true;
 }
 
-void ZobBehaviorPhysicShape::EditorUpdate()
+void ZobComponentPhysicShape::EditorUpdate()
 {
 	if (m_isInit && m_collider)
 	{
@@ -99,18 +99,18 @@ void ZobBehaviorPhysicShape::EditorUpdate()
 	}
 }
 
-void ZobBehaviorPhysicShape::DrawGizmos(const Camera* camera, const ZobVector3* position, const ZobVector3* rotation) const
+void ZobComponentPhysicShape::DrawGizmos(const Camera* camera, const ZobVector3* position, const ZobVector3* rotation) const
 {
 }
 
-void ZobBehaviorPhysicShape::AddColliderInternal(CollisionShape* c)
+void ZobComponentPhysicShape::AddColliderInternal(CollisionShape* c)
 {
 	assert(m_collider == NULL);
 	Transform t = Transform::identity();
 	m_collider = m_zobObject->GetPhysicComponentNoConst()->GetCollisionBody()->addCollider(c, t);
 }
 
-void ZobBehaviorPhysicShape::RemoveCollider()
+void ZobComponentPhysicShape::RemoveCollider()
 {
 	if (m_collider)
 	{

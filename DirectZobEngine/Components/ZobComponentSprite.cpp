@@ -1,16 +1,16 @@
-#include "ZobBehaviorSprite.h"
+#include "ZobComponentSprite.h"
 #include "../DirectZob.h"
-#include "ZobBehaviorFactory.h"
+#include "ZobComponentFactory.h"
 #include "../Sprite.h"
 
-ZobBehaviorSprite::~ZobBehaviorSprite()
+ZobComponentSprite::~ZobComponentSprite()
 {
 
 }
 
-ZobBehaviorSprite::ZobBehaviorSprite(ZobObject* zobObject, bool bEditorZobBehavior) : ZobBehavior(zobObject, bEditorZobBehavior)
+ZobComponentSprite::ZobComponentSprite(ZobObject* zobObject, bool bEditorZobComponent) : ZobComponent(zobObject, bEditorZobComponent)
 {
-	m_type = eBehavior_sprite;
+	m_type = eComponent_sprite;
 	m_texturePath.Reset();
 	m_sprite = NULL;
 	m_material = NULL;
@@ -18,10 +18,10 @@ ZobBehaviorSprite::ZobBehaviorSprite(ZobObject* zobObject, bool bEditorZobBehavi
 	m_ambientColor = &ZobColor::White;
 	m_diffuseColor = &ZobColor::White;
 	m_specularColor = &ZobColor::White;
-	m_varExposer->WrapVariable<ZobFilePath>("File", &m_texturePath, &ZobBehaviorSprite::ReloadMaterial, false, true);
-	//m_varExposer->WrapVariable<ZobColor>("Ambient color", &m_ambientColor, &ZobBehaviorSprite::ReloadMaterial, false, true);
-	//m_varExposer->WrapVariable<ZobColor>("diffuse color", &m_diffuseColor, &ZobBehaviorSprite::ReloadMaterial, false, true);
-	//m_varExposer->WrapVariable<ZobColor>("specular color", &m_specularColor, &ZobBehaviorSprite::ReloadMaterial, false, true);
+	m_varExposer->WrapVariable<ZobFilePath>("File", &m_texturePath, &ZobComponentSprite::ReloadMaterial, false, true);
+	//m_varExposer->WrapVariable<ZobColor>("Ambient color", &m_ambientColor, &ZobComponentSprite::ReloadMaterial, false, true);
+	//m_varExposer->WrapVariable<ZobColor>("diffuse color", &m_diffuseColor, &ZobComponentSprite::ReloadMaterial, false, true);
+	//m_varExposer->WrapVariable<ZobColor>("specular color", &m_specularColor, &ZobComponentSprite::ReloadMaterial, false, true);
 
 	Triangle::RenderOptions::eCullMode cm[3] = { Triangle::RenderOptions::eCullMode_None, Triangle::RenderOptions::eCullMode_ClockwiseFace, Triangle::RenderOptions::eCullMode_CounterClockwiseFace };
 	const char* cmStr[3] = { "None", "Clockwise", "Counter clockwise" };
@@ -34,7 +34,7 @@ ZobBehaviorSprite::ZobBehaviorSprite(ZobObject* zobObject, bool bEditorZobBehavi
 	m_varExposer->WrapVariable<bool>("ZBuffered", &m_renderOptions.zBuffered, NULL, false, true);
 }
 
-void ZobBehaviorSprite::Init()
+void ZobComponentSprite::Init()
 {
 	ReLoadVariables();
 	if (m_sprite == NULL && m_texturePath.IsDefined())
@@ -47,37 +47,37 @@ void ZobBehaviorSprite::Init()
 	}
 }
 
-void ZobBehaviorSprite::ReloadMaterial(zobId id)
+void ZobComponentSprite::ReloadMaterial(zobId id)
 {
-	ZobBehavior* zb = ZobEntity::GetEntity<ZobBehavior>(id);
+	ZobComponent* zb = ZobEntity::GetEntity<ZobComponent>(id);
 	if (zb)
 	{
 		DirectZob::LogInfo("pouet");
 	}
 }
-void ZobBehaviorSprite::SetVisible(bool v)
+void ZobComponentSprite::SetVisible(bool v)
 { 
 	m_sprite->SetVisible(v); 
 }
 
-void ZobBehaviorSprite::SetForEditor()
+void ZobComponentSprite::SetForEditor()
 {
 	m_renderOptions.zBuffered = false;
 	m_renderOptions.lightMode = Triangle::RenderOptions::eLightMode_none;
 }
 
-void ZobBehaviorSprite::Set(ZobFilePath zfp) 
+void ZobComponentSprite::Set(ZobFilePath zfp) 
 { 
 	m_texturePath = zfp;
 	Init();
 }
 
-void ZobBehaviorSprite::PreUpdate(float dt)
+void ZobComponentSprite::PreUpdate(float dt)
 {
 	//m_material->
 }
 
-void ZobBehaviorSprite::UpdateAfterObject(float dt)
+void ZobComponentSprite::UpdateAfterObject(float dt)
 {
 	/*
 	const Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
@@ -103,7 +103,7 @@ void ZobBehaviorSprite::UpdateAfterObject(float dt)
 	*/
 }
 
-void ZobBehaviorSprite::PostUpdate()
+void ZobComponentSprite::PostUpdate()
 {
 	/*if (m_sprite)
 	{
@@ -136,7 +136,7 @@ void ZobBehaviorSprite::PostUpdate()
 	}
 }
 
-void ZobBehaviorSprite::QueueForDrawing(const Camera* camera, Engine* engine)
+void ZobComponentSprite::QueueForDrawing(const Camera* camera, Engine* engine)
 {
 	const Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
 	if (m_sprite && c)
@@ -159,7 +159,7 @@ void ZobBehaviorSprite::QueueForDrawing(const Camera* camera, Engine* engine)
 	}
 }
 
-void ZobBehaviorSprite::EditorUpdate()
+void ZobComponentSprite::EditorUpdate()
 {
 	if (!m_sprite)
 	{
@@ -177,7 +177,7 @@ void ZobBehaviorSprite::EditorUpdate()
 	}
 }
 
-bool ZobBehaviorSprite::LoadMeshInternal()
+bool ZobComponentSprite::LoadMeshInternal()
 {
 	std::string s = std::string(m_texturePath.GetName());
 	m_sprite = new ZobSprite(s);

@@ -799,11 +799,11 @@ ZobControlTreeNode::ZobControlTreeNode(String^ zobObjectGuid) :TreeNode()
 		ZobObject* z = ZobEntity::GetEntity<ZobObject>(zid);
 		if (z)
 		{
-			if (z && z->GetBehavior<ZobBehaviorSprite>())
+			if (z && z->GetComponent<ZobComponentSprite>())
 			{
 				this->ImageIndex = (int)ZobObjectManagerWrapper::eImageObjectType::eImageZobSprite;
 			}
-			else if (z && z->GetBehavior<ZobBehaviorMesh>())
+			else if (z && z->GetComponent<ZobComponentMesh>())
 			{
 				this->ImageIndex = (int)ZobObjectManagerWrapper::eImageObjectType::eImageZobMesh;
 			}

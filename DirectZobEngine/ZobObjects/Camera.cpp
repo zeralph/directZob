@@ -10,7 +10,7 @@
 #include "ZobCameraController/ZobCameraControllerFollowCar.h"
 #include "Misc/ZobGeometryHelper.h"
 #include "Misc/ZobXmlHelper.h"
-#include "Behaviors/ZobBehaviorSprite.h"
+#include "Components/ZobComponentSprite.h"
 #include "SceneLoader.h"
 
 static std::mutex g_update_camera_mutex;
@@ -33,7 +33,7 @@ Camera::Camera(ZobEntity::ZobType zobType, const std::string& name, eCameraType 
 	WrapVariables();
 	if (DirectZob::IsEditorMode())
 	{
-		ZobBehaviorSprite* b = (ZobBehaviorSprite*)ZobBehaviorFactory::CreateBehavior(this, "Sprite", true);
+		ZobComponentSprite* b = (ZobComponentSprite*)ZobComponentFactory::CreateComponent(this, "Sprite", true);
 		ZobFilePath zfp = ZobFilePath("camera", SceneLoader::GetResourcePath(), "camera.png", true);
 		b->Set(zfp);
 		b->SetForEditor();
@@ -51,7 +51,7 @@ Camera::Camera(zobId id, TiXmlElement* node, ZobObject* parent)
 	m_varExposer->ReadNode(node);
 	if (DirectZob::IsEditorMode())
 	{
-		ZobBehaviorSprite* b = (ZobBehaviorSprite*)ZobBehaviorFactory::CreateBehavior(this, "Sprite", true);
+		ZobComponentSprite* b = (ZobComponentSprite*)ZobComponentFactory::CreateComponent(this, "Sprite", true);
 		ZobFilePath zfp = ZobFilePath("camera", SceneLoader::GetResourcePath(), "camera.png", true);
 		b->Set(zfp);
 		b->SetForEditor();

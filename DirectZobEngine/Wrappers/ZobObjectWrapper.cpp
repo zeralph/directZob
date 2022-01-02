@@ -72,13 +72,13 @@ namespace CLI
 		ZobObject* z = GetInstance();
 		if (z)
 		{
-			const std::vector<ZobBehavior*>* behaviors = z->GetBehaviors();
+			const std::vector<ZobComponent*>* behaviors = z->GetComponents();
 			if (behaviors->size() > 0)
 			{
 				for (int i = 0; i < behaviors->size(); i++)
 				{
-					ZobBehavior* zb = behaviors->at(i);
-					ZobGroupBox^ behaviorPanel = FillBehaviorControl(zb);
+					ZobComponent* zb = behaviors->at(i);
+					ZobGroupBox^ behaviorPanel = FillComponentControl(zb);
 					m_container->Controls->Add(behaviorPanel);
 				}
 			}
@@ -96,11 +96,11 @@ namespace CLI
 		return nullptr;
 	}
 
-	ZobGroupBox^ ZobObjectWrapper::FillBehaviorControl(ZobBehavior* zb)
+	ZobGroupBox^ ZobObjectWrapper::FillComponentControl(ZobComponent* zb)
 	{
 		if (zb)
 		{		
-			std::string name = zb->GetBehaviorTypeStr();
+			std::string name = zb->GetComponentTypeStr();
 			ZobVariablesExposer* v = zb->GetVariablesExposer();
 			return FillControlInternal(name, v);
 		}

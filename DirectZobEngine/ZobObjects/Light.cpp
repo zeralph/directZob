@@ -2,7 +2,7 @@
 #include "tinyxml.h"
 #include "DirectZob.h"
 #include "Misc/ZobXmlHelper.h"
-#include "Behaviors/ZobBehaviorSprite.h" 
+#include "Components/ZobComponentSprite.h" 
 #include "Misc/ZobFilePath.h"
 #include "SceneLoader.h"
 
@@ -20,7 +20,7 @@ Light::Light(std::string &name, eLightType type, ZobColor color, float intensity
 	InitVariablesExposer();
 	if (DirectZob::IsEditorMode())
 	{
-		ZobBehaviorSprite* b = (ZobBehaviorSprite*)ZobBehaviorFactory::CreateBehavior(this, "Sprite", true);
+		ZobComponentSprite* b = (ZobComponentSprite*)ZobComponentFactory::CreateComponent(this, "Sprite", true);
 		ZobFilePath zfp = ZobFilePath("light", SceneLoader::GetResourcePath(), "light.png", true);
 		b->Set(zfp);
 		b->SetForEditor();
@@ -38,7 +38,7 @@ Light::Light(zobId id, TiXmlElement* node, ZobObject* parent)
 		m_varExposer->ReadNode(node);
 		if (DirectZob::IsEditorMode())
 		{
-			ZobBehaviorSprite* b = (ZobBehaviorSprite*)ZobBehaviorFactory::CreateBehavior(this, "Sprite", true);
+			ZobComponentSprite* b = (ZobComponentSprite*)ZobComponentFactory::CreateComponent(this, "Sprite", true);
 			ZobFilePath zfp = ZobFilePath("light", SceneLoader::GetResourcePath(), "light.png", true);
 			b->Set(zfp);
 			b->SetForEditor();

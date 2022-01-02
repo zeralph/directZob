@@ -147,7 +147,7 @@ void ZobHUDManager::PreUpdate(float dt)
 {
 }
 
-void ZobHUDManager::UpdateBehavior(float dt) 
+void ZobHUDManager::UpdateComponent(float dt) 
 {
 	
 }

@@ -3,8 +3,8 @@
 #include "ZobObjectManagerWrapper.h"
 #include "../DirectZob.h"
 #include "../ZobObjects/ZobObject.h"
-#include "../Behaviors/ZobBehaviorMesh.h"
-#include "../Behaviors/ZobBehaviorSprite.h"
+#include "../Components/ZobComponentMesh.h"
+#include "../Components/ZobComponentSprite.h"
 
 #define TO_MANAGED_STRING(x) gcnew String(x);
 
@@ -62,9 +62,9 @@ namespace CLI
 		ToolStripMenuItem^ itRemove = gcnew ToolStripMenuItem("Remove object");
 		itRemove->Click += gcnew EventHandler(this, &ZobObjectManagerWrapper::RemoveZobObject);
 		m_nodeMenu->Items->Add(itRemove);
-		ToolStripMenuItem^ itBehavior = gcnew ToolStripMenuItem("Add behavior");
-		CreateBehaviorNodeMenu(itBehavior);
-		m_nodeMenu->Items->Add(itBehavior);
+		ToolStripMenuItem^ itComponent = gcnew ToolStripMenuItem("Add Component");
+		CreateComponentNodeMenu(itComponent);
+		m_nodeMenu->Items->Add(itComponent);
 		ToolStripMenuItem^ itZoom = gcnew ToolStripMenuItem("Zoom");
 		itZoom->Click += gcnew EventHandler(this, &ZobObjectManagerWrapper::ZoomToZobObject);
 		m_nodeMenu->Items->Add(itZoom);
@@ -74,14 +74,14 @@ namespace CLI
 		//m_treeView->ContextMenuStrip = m_nodeMenu;
 	}
 
-	void ZobObjectManagerWrapper::CreateBehaviorNodeMenu(ToolStripMenuItem^ parent)
+	void ZobObjectManagerWrapper::CreateComponentNodeMenu(ToolStripMenuItem^ parent)
 	{
-		int l = ZobBehavior::eBehaviorType::__eBehavior_MAX__;
+		int l = ZobComponent::eComponentType::__eComponent_MAX__;
 		for (int i = 0; i < l; i++)
 		{
-			String^ s = gcnew String(ZobBehaviorFactory::eBehaviorTypeStr[i]);
+			String^ s = gcnew String(ZobComponentFactory::eComponentTypeStr[i]);
 			ToolStripItem^ it = gcnew ToolStripMenuItem(s);
-			it->Click += gcnew EventHandler(this, &ZobObjectManagerWrapper::AddZobBehavior);
+			it->Click += gcnew EventHandler(this, &ZobObjectManagerWrapper::AddZobComponent);
 			parent->DropDownItems->Add(it);
 		}
 	}
@@ -129,18 +129,18 @@ namespace CLI
 			c->SetTarget(&pos);
 		}
 	}
-	void ZobObjectManagerWrapper::AddZobBehavior(Object^ sender, EventArgs^ e)
+	void ZobObjectManagerWrapper::AddZobComponent(Object^ sender, EventArgs^ e)
 	{
 		if (m_selectedObject)
 		{
 			ToolStripMenuItem^ it = (ToolStripMenuItem^)sender;
-			int l = ZobBehavior::eBehaviorType::__eBehavior_MAX__;
+			int l = ZobComponent::eComponentType::__eComponent_MAX__;
 			for (int i = 0; i < l; i++)
 			{
-				String^ s = gcnew String(ZobBehaviorFactory::eBehaviorTypeStr[i]);
+				String^ s = gcnew String(ZobComponentFactory::eComponentTypeStr[i]);
 				if (s == it->Text)
 				{
-					ZobBehaviorFactory::CreateBehavior(m_selectedObject, ZobBehaviorFactory::eBehaviorTypeStr[i], false);
+					ZobComponentFactory::CreateComponent(m_selectedObject, ZobComponentFactory::eComponentTypeStr[i], false);
 					m_selectedObjectWrapper->Refresh();
 					return;
 				}
@@ -329,7 +329,7 @@ namespace CLI
 				//n->SelectedImageIndex()
 			}
 			const std::vector<ZobObject*>* v = z->GetChildren();
-			//const ZobBehaviorMesh* test = z->GetBehavior<ZobBehaviorMesh>();
+			//const ZobComponentMesh* test = z->GetComponent<ZobComponentMesh>();
 			List<String^>^ l = gcnew List<String^>();
 			for (int i = 0; i < v->size(); i++)
 			{

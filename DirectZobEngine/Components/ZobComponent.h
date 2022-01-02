@@ -10,26 +10,26 @@
 
 class ZobObject;
 class Camera;
-class ZobBehavior : public ZobEntity
+class ZobComponent : public ZobEntity
 {
 public:
 
-	enum eBehaviorType
+	enum eComponentType
 	{
-		eBehavior_none = 0,
-		eBehavior_car,
-		eBehavior_hudElement,
-		eBehavior_physicBox,
-		eBehavior_physicSphere,
-		eBehavior_physicCapsule,
-		eBehavior_physicMesh,
-		eBehavior_mesh,
-		eBehavior_sprite,
-		eBehavior_light,
-		__eBehavior_MAX__,
+		eComponent_none = 0,
+		eComponent_car,
+		eComponent_hudElement,
+		eComponent_physicBox,
+		eComponent_physicSphere,
+		eComponent_physicCapsule,
+		eComponent_physicMesh,
+		eComponent_mesh,
+		eComponent_sprite,
+		eComponent_light,
+		__eComponent_MAX__,
 	};
 
-	virtual ~ZobBehavior() {};
+	virtual ~ZobComponent() {};
 	virtual void											Init() = 0;
 	virtual void											PreUpdate(float dt)=0;
 	virtual void											UpdateBeforeObject(float dt) = 0;
@@ -39,15 +39,15 @@ public:
 	virtual void											QueueForDrawing(const Camera* camera, Engine* engine) {};
 	virtual	void											DrawGizmos(const Camera* camera, const ZobVector3* position, const ZobVector3* rotation) const {}
 
-	const char*												GetBehaviorTypeStr();
+	const char*												GetComponentTypeStr();
 	TiXmlNode*												SaveUnderNode(TiXmlNode* node);
-	eBehaviorType											GetBehaviorType() const { return m_type; }
+	eComponentType											GetComponentType() const { return m_type; }
 	void													ReadNode(TiXmlElement* node);
 	void													ReLoadVariables();
 	ZobVariablesExposer*									GetVariablesExposer() { return m_varExposer; }
 protected:
-	ZobBehavior(ZobObject* zobObject, bool bEditorZobBehavior);
-	eBehaviorType m_type;
+	ZobComponent(ZobObject* zobObject, bool bEditorZobComponent);
+	eComponentType m_type;
 	ZobObject* m_zobObject;
 	ZobVariablesExposer* m_varExposer;
 	

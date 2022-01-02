@@ -4,8 +4,8 @@
 #include "Sprite.h"
 #include "ZobPhysic/ZobPhysicComponent.h"
 #include "SceneLoader.h"
-#include "Behaviors/ZobBehaviorMesh.h"
-#include "Behaviors/ZobBehaviorSprite.h"
+#include "Components/ZobComponentMesh.h"
+#include "Components/ZobComponentSprite.h"
 #include "../Misc/ZobXmlHelper.h"
 #include "../../dependencies/optick/include/optick.h"
 
@@ -17,7 +17,7 @@ ZobObject::ZobObject(ZobType t, ZobSubType s, const std::string& name, ZobObject
 	DirectZob::AddIndent();
 	m_varExposer = new ZobVariablesExposer(GetIdValue());
 	sObjectNumber++;
-	m_behaviors.clear();
+	m_Components.clear();
 	m_factoryFile = factoryFile?factoryFile->c_str():"";
 	m_physicComponent = new ZobPhysicComponent(this);
 	if (name.length() == 0)
@@ -71,7 +71,7 @@ ZobObject::ZobObject(zobId id, TiXmlElement* node, ZobObject* parent, const std:
 	:ZobEntity(id)
 {
 	m_varExposer = new ZobVariablesExposer(GetIdValue());
-	m_behaviors.clear();
+	m_Components.clear();
 	sObjectNumber++;
 	m_factoryFile = factoryFile ? factoryFile->c_str() : "";
 	float x, y, z;
@@ -98,13 +98,13 @@ ZobObject::ZobObject(zobId id, TiXmlElement* node, ZobObject* parent, const std:
 	}
 	InitVariablesExposer();
 	m_varExposer->ReadNode(node);
-	//Behavior
-	TiXmlElement* behaviorsNode = node->FirstChildElement("Behaviors");
-	if(behaviorsNode)
+	//Component
+	TiXmlElement* ComponentsNode = node->FirstChildElement("Components");
+	if(ComponentsNode)
 	{
-		for (TiXmlElement* e = behaviorsNode->FirstChildElement("Behavior"); e != NULL; e = e->NextSiblingElement("Behavior"))
+		for (TiXmlElement* e = ComponentsNode->FirstChildElement("Component"); e != NULL; e = e->NextSiblingElement("Component"))
 		{
-			ZobBehavior* b = ZobBehaviorFactory::CreateBehavior(this, e);
+			ZobComponent* b = ZobComponentFactory::CreateComponent(this, e);
 		}
 	}	
 	//Init
@@ -167,9 +167,9 @@ ZobObject::~ZobObject()
 	DirectZob::AddIndent();
 
 	DirectZob::GetInstance()->GetZobObjectManager()->AddIdToDeleted(GetIdValue());
-	for (int i = 0; i < m_behaviors.size(); i++)
+	for (int i = 0; i < m_Components.size(); i++)
 	{
-		delete m_behaviors[i];
+		delete m_Components[i];
 	}
 	delete m_physicComponent;
 	if (m_parent != NULL)
@@ -189,18 +189,18 @@ ZobObject::~ZobObject()
 	DirectZob::RemoveIndent();
 }
 
-ZobBehaviorMesh* ZobObject::LoadMesh(ZobFilePath &zfp, bool bEditorZobBehavior)
+ZobComponentMesh* ZobObject::LoadMesh(ZobFilePath &zfp, bool bEditorZobComponent)
 {
-	ZobBehavior* b = ZobBehaviorFactory::CreateBehavior(this, "Mesh", bEditorZobBehavior);
-	ZobBehaviorMesh* bm = static_cast<ZobBehaviorMesh*>(b);
+	ZobComponent* b = ZobComponentFactory::CreateComponent(this, "Mesh", bEditorZobComponent);
+	ZobComponentMesh* bm = static_cast<ZobComponentMesh*>(b);
 	bm->Set(zfp);
 	return bm;
 }
 
-ZobBehaviorSprite* ZobObject::LoadSprite(ZobFilePath& zfp, bool bEditorZobBehavior)
+ZobComponentSprite* ZobObject::LoadSprite(ZobFilePath& zfp, bool bEditorZobComponent)
 {
-	ZobBehavior* b = ZobBehaviorFactory::CreateBehavior(this, "Sprite", bEditorZobBehavior);
-	ZobBehaviorSprite* bm = static_cast<ZobBehaviorSprite*>(b);
+	ZobComponent* b = ZobComponentFactory::CreateComponent(this, "Sprite", bEditorZobComponent);
+	ZobComponentSprite* bm = static_cast<ZobComponentSprite*>(b);
 	bm->Set(zfp);
 	return bm;
 }
@@ -209,9 +209,9 @@ void ZobObject::Init()
 {
 	m_varExposer->Load();
 	m_physicComponent->Init();
-	for (int i = 0; i < m_behaviors.size(); i++)
+	for (int i = 0; i < m_Components.size(); i++)
 	{
-		m_behaviors[i]->Init();
+		m_Components[i]->Init();
 	}
 	for (int i = 0; i < m_children.size(); i++)
 	{
@@ -223,9 +223,9 @@ void ZobObject::Init()
 void ZobObject::EditorUpdate()
 {
 	m_physicComponent->EditorUpdate();
-	for (int i = 0; i < m_behaviors.size(); i++)
+	for (int i = 0; i < m_Components.size(); i++)
 	{
-		m_behaviors[i]->EditorUpdate();
+		m_Components[i]->EditorUpdate();
 	}
 	for (int i = 0; i < m_children.size(); i++)
 	{
@@ -240,9 +240,9 @@ void ZobObject::EditorUpdate()
 void ZobObject::PreUpdate(float dt)
 {
 	OPTICK_EVENT();
-	for (int i = 0; i < m_behaviors.size(); i++)
+	for (int i = 0; i < m_Components.size(); i++)
 	{
-		m_behaviors[i]->PreUpdate(dt);
+		m_Components[i]->PreUpdate(dt);
 
 	}
 	for (int i = 0; i < m_children.size(); i++)
@@ -256,9 +256,9 @@ void ZobObject::PreUpdate(float dt)
 void ZobObject::PostUpdate()
 {
 	OPTICK_EVENT();
-	for (int i = 0; i < m_behaviors.size(); i++)
+	for (int i = 0; i < m_Components.size(); i++)
 	{
-		m_behaviors[i]->PostUpdate();
+		m_Components[i]->PostUpdate();
 	}
 	for (int i = 0; i < m_children.size(); i++)
 	{
@@ -271,9 +271,9 @@ void ZobObject::PostUpdate()
 void ZobObject::QueueForDrawing(const Camera* camera, Engine* engine)
 {
 	OPTICK_EVENT();
-	for (int i = 0; i < m_behaviors.size(); i++)
+	for (int i = 0; i < m_Components.size(); i++)
 	{
-		m_behaviors[i]->QueueForDrawing(camera, engine);
+		m_Components[i]->QueueForDrawing(camera, engine);
 	}
 	for (int i = 0; i < m_children.size(); i++)
 	{
@@ -384,9 +384,9 @@ void ZobObject::DrawGizmos(const Camera* camera, Engine* engine)
 	ZobVector3 p = GetWorldPosition();
 	ZobVector3 r = GetWorldRotation();
 	m_physicComponent->DrawGizmos(camera, &p, &r);
-	for (int i = 0; i < m_behaviors.size(); i++)
+	for (int i = 0; i < m_Components.size(); i++)
 	{
-		m_behaviors[i]->DrawGizmos(camera, &p, &r);
+		m_Components[i]->DrawGizmos(camera, &p, &r);
 	}
 	for (int i = 0; i < m_children.size(); i++)
 	{
@@ -553,12 +553,12 @@ TiXmlNode* ZobObject::SaveUnderNode(TiXmlNode* node)
 	std::string guid = ZobIdToString();
 	objectNode->SetAttribute(XML_ATTR_GUID, guid.c_str());
 	m_varExposer->SaveUnderNode(objectNode);
-	TiXmlElement behaviors = TiXmlElement(XML_ELEMENT_BEHAVIORS);
-	for (int i = 0; i < m_behaviors.size(); i++)
+	TiXmlElement Components = TiXmlElement(XML_ELEMENT_ComponentS);
+	for (int i = 0; i < m_Components.size(); i++)
 	{
-		m_behaviors[i]->SaveUnderNode(&behaviors);
+		m_Components[i]->SaveUnderNode(&Components);
 	}
-	objectNode->InsertEndChild(behaviors);
+	objectNode->InsertEndChild(Components);
 	return (TiXmlNode*)objectNode;
 }
 
@@ -765,9 +765,9 @@ void ZobObject::RegenerateZobIds()
 {
 	/*
 	ZobEntityRegenerate();
-	for (int i = 0; i < m_behaviors.size(); i++)
+	for (int i = 0; i < m_Components.size(); i++)
 	{
-		m_behaviors[i]->ZobEntityRegenerate();
+		m_Components[i]->ZobEntityRegenerate();
 	}
 	for (std::vector<ZobObject*>::const_iterator iter = m_children.begin(); iter != m_children.end(); iter++)
 	{

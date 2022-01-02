@@ -7,21 +7,21 @@
 #include "../Rendering/Engine.h"
 #include "ZobEntity.h"
 #include "tinyxml.h"
-#include "../Behaviors/ZobBehaviorFactory.h"
+#include "../Components/ZobComponentFactory.h"
 #include "../Misc/ZobFilePath.h"
 
-#include "../Behaviors/ZobBehaviorSprite.h"
-#include "../Behaviors/ZobBehaviorMesh.h"
+#include "../Components/ZobComponentSprite.h"
+#include "../Components/ZobComponentMesh.h"
 
 class Mesh;
 class ZobPhysicComponent;
 class m_varExposer;
-class ZobBehaviorMesh;
+class ZobComponentMesh;
 
 class ZobObject:public ZobEntity
 {
-friend class ZobBehavior;
-friend class ZobBehaviorCar;
+friend class ZobComponent;
+friend class ZobComponentCar;
 public:
 
 	ZobObject(ZobEntity::ZobType t, ZobEntity::ZobSubType s, const std::string& name, ZobObject* parent = NULL, const std::string* factoryFile =NULL);
@@ -79,8 +79,8 @@ public:
 	bool								RemoveChildReference(const ZobObject* z);
 	bool								AddChildReference(ZobObject* z);
 	int									GetChildPosition(const ZobObject* z);
-	ZobBehaviorMesh*					LoadMesh(ZobFilePath& zfp, bool bEditorZobBehavior);
-	ZobBehaviorSprite*					LoadSprite(ZobFilePath& zfp, bool bEditorZobBehavior);
+	ZobComponentMesh*					LoadMesh(ZobFilePath& zfp, bool bEditorZobComponent);
+	ZobComponentSprite*					LoadSprite(ZobFilePath& zfp, bool bEditorZobComponent);
 	const bool							IsMarkedForDeletion() const { return m_markedForDeletion; };
 	void								MarkForDeletion() { m_markedForDeletion=true; };
 	bool								HasChild(const ZobObject* o);
@@ -93,16 +93,16 @@ public:
 	//temp ?
 	const ZobMatrix4x4*					GetModelMatrix() const { return &m_modelMatrix; };
 	const ZobMatrix4x4*					GetRotationMatrix() const { return &m_rotationMatrix; };
-	void								AddBehavior(ZobBehavior* b) { m_behaviors.push_back(b); }
+	void								AddComponent(ZobComponent* b) { m_Components.push_back(b); }
 	ZobVariablesExposer*				GetVariablesExposer() { return m_varExposer; }
 
-	//behaviors
-	const std::vector<ZobBehavior*>*	GetBehaviors() const { return &m_behaviors; }
+	//Components
+	const std::vector<ZobComponent*>*	GetComponents() const { return &m_Components; }
 	template<class T>
-	T* GetBehavior() const
+	T* GetComponent() const
 	{
-		std::vector<ZobBehavior*>::const_iterator it = m_behaviors.begin();
-		while (it != m_behaviors.end())
+		std::vector<ZobComponent*>::const_iterator it = m_Components.begin();
+		while (it != m_Components.end())
 		{
 			bool b = typeid(T) == typeid(**it);
 			if (b)
@@ -129,7 +129,7 @@ protected:
 	ZobVariablesExposer* m_varExposer;
 	ZobPhysicComponent* m_physicComponent;
 	std::vector<ZobObject*> m_children;
-	std::vector <ZobBehavior*> m_behaviors;
+	std::vector <ZobComponent*> m_Components;
 	ZobMatrix4x4 m_modelMatrix;
 	ZobMatrix4x4 m_rotationMatrix;
 	std::string m_name;

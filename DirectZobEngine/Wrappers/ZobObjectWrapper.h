@@ -3,7 +3,7 @@
 #include "ManagedObject.h"
 #include "../ZobObjects/ZobObject.h"
 #include "ZobUserControls/ZobUserControls.h"
-#include "../Behaviors/ZobBehavior.h"
+#include "../Components/ZobComponent.h"
 #include "../ZobObjects/ZobObject.h"
 #using "System.Windows.Forms.dll"
 #using "System.dll"
@@ -63,7 +63,7 @@ namespace CLI {
 	private:
 		ZobObject*				DuplicateInternal(ZobObject* src, ZobObject* parent, int &nbObjs);
 		void					CreateObjectview();
-		ZobGroupBox^			FillBehaviorControl(ZobBehavior* zb);
+		ZobGroupBox^			FillComponentControl(ZobComponent* zb);
 		ZobGroupBox^			FillObjectControl(ZobObject* z);
 		ZobGroupBox^			FillControlInternal(std::string& name, ZobVariablesExposer* ze);
 		void					CreateObjectBeahaviorsView();

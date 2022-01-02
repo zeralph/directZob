@@ -1,15 +1,15 @@
-#include "ZobBehaviorPhysicMesh.h"
+#include "ZobComponentPhysicMesh.h"
 #include "../../DirectZob.h"
 #include "../../ZobPhysic/ZobPhysicsEngine.h"
 
-ZobBehaviorPhysicMesh::~ZobBehaviorPhysicMesh()
+ZobComponentPhysicMesh::~ZobComponentPhysicMesh()
 {
 	RemoveCollider();
 }
 
-ZobBehaviorPhysicMesh::ZobBehaviorPhysicMesh(ZobObject* zobObject) : ZobBehaviorPhysicShape(zobObject)
+ZobComponentPhysicMesh::ZobComponentPhysicMesh(ZobObject* zobObject) : ZobComponentPhysicShape(zobObject)
 {
-	m_type = eBehavior_physicMesh;
+	m_type = eComponent_physicMesh;
 	m_convexMeshPath.Reset();
 	m_concaveMeshNbTriangles = 0;
 	m_mesh = NULL;
@@ -17,9 +17,9 @@ ZobBehaviorPhysicMesh::ZobBehaviorPhysicMesh(ZobObject* zobObject) : ZobBehavior
 	m_varExposer->WrapVariable<int>("Nb triangles", &m_concaveMeshNbTriangles, NULL, true, false);
 }
 
-void ZobBehaviorPhysicMesh::RemoveCollider()
+void ZobComponentPhysicMesh::RemoveCollider()
 {
-	ZobBehaviorPhysicShape::RemoveCollider();
+	ZobComponentPhysicShape::RemoveCollider();
 	PhysicsCommon* pc = DirectZob::GetInstance()->GetPhysicsEngine()->GetPhysicsCommon();
 	pc->destroyConcaveMeshShape(m_convexMeshShape);
 	pc->destroyTriangleMesh(m_triangleMesh);
@@ -32,7 +32,7 @@ void ZobBehaviorPhysicMesh::RemoveCollider()
 	m_concaveMeshNbTriangles = 0;
 }
 
-bool ZobBehaviorPhysicMesh::LoadMeshInternal()
+bool ZobComponentPhysicMesh::LoadMeshInternal()
 {
 	m_mesh = DirectZob::GetInstance()->GetMeshManager()->GetOrLoadMesh(m_convexMeshPath);
 	if (m_mesh)
@@ -86,7 +86,7 @@ bool ZobBehaviorPhysicMesh::LoadMeshInternal()
 	return false;
 }
 
-void ZobBehaviorPhysicMesh::Init()
+void ZobComponentPhysicMesh::Init()
 {
 	ReLoadVariables();
 	if (m_mesh == NULL && m_convexMeshPath.IsDefined())
@@ -97,16 +97,16 @@ void ZobBehaviorPhysicMesh::Init()
 		}
 		else
 		{
-			ZobBehaviorPhysicShape::Init();
+			ZobComponentPhysicShape::Init();
 		}
 	}
 }
 
-void ZobBehaviorPhysicMesh::EditorUpdate()
+void ZobComponentPhysicMesh::EditorUpdate()
 {
 	if (m_isInit)
 	{
-		ZobBehaviorPhysicShape::EditorUpdate();
+		ZobComponentPhysicShape::EditorUpdate();
 		if (m_mesh == NULL)
 		{
 			if (m_convexMeshPath.IsDefined())

@@ -1,4 +1,4 @@
-#include "ZobBehaviorCar.h"
+#include "ZobComponentCar.h"
 #include "../DirectZob.h"
 #include "../Rendering/Engine.h"
 #include "../ZobPhysic/ZobPhysicsEngine.h"
@@ -15,15 +15,15 @@
 #define SGN(x)       (((x) >= 0) ? 1 : -1)
 
 
-ZobBehaviorCar::~ZobBehaviorCar()
+ZobComponentCar::~ZobComponentCar()
 {
 
 }
 
-ZobBehaviorCar::ZobBehaviorCar(ZobObject* zobObject) : ZobBehavior(zobObject, false)
+ZobComponentCar::ZobComponentCar(ZobObject* zobObject) : ZobComponent(zobObject, false)
 {
 	m_carType = eCarType_pouet;
-	m_type = eBehavior_car;
+	m_type = eComponent_car;
 	m_lastGroundPosition = ZobVector3(0, 0, 0);
 	m_lastGroundNormal = ZobVector3(0, 1, 0);
 	m_frontLeftWheel = NULL;
@@ -81,7 +81,7 @@ ZobBehaviorCar::ZobBehaviorCar(ZobObject* zobObject) : ZobBehavior(zobObject, fa
 	m_steeringRotationSpeedRS = M_PI;
 }
 
-void ZobBehaviorCar::PreUpdate(float dt)
+void ZobComponentCar::PreUpdate(float dt)
 {
 	DirectZob* directZob = DirectZob::GetInstance();
 	if (directZob->IsPhysicPlaying())
@@ -310,12 +310,12 @@ void ZobBehaviorCar::PreUpdate(float dt)
 	h->Print(ZobHUDManager::eHudUnit_ratio, 0.1f, 0.9f, 1, "Leelawadee UI", &ZobColor::Red, "wheels %.2f", m_steerangle);
 }
 
-void ZobBehaviorCar::Init()
+void ZobComponentCar::Init()
 {
 	ReLoadVariables();
 }
 
-void ZobBehaviorCar::CheckEnvironmentCollision()
+void ZobComponentCar::CheckEnvironmentCollision()
 {
 	ZobPhysicComponent* zc = m_zobObject->m_physicComponent;
 	ZobPhysicComponent::collision* coll = zc->GetLastCollision();
@@ -355,22 +355,22 @@ void ZobBehaviorCar::CheckEnvironmentCollision()
 	}
 }
 
-reactphysics3d::decimal ZobBehaviorCar::GroundRaycastClass::notifyRaycastHit(const reactphysics3d::RaycastInfo& info) 
+reactphysics3d::decimal ZobComponentCar::GroundRaycastClass::notifyRaycastHit(const reactphysics3d::RaycastInfo& info) 
 {
-	if (behavior)
+	if (Component)
 	{
-		behavior->m_lastGroundPosition.x = info.worldPoint.x;
-		behavior->m_lastGroundPosition.y = info.worldPoint.y;
-		behavior->m_lastGroundPosition.z = info.worldPoint.z;
+		Component->m_lastGroundPosition.x = info.worldPoint.x;
+		Component->m_lastGroundPosition.y = info.worldPoint.y;
+		Component->m_lastGroundPosition.z = info.worldPoint.z;
 		float r = 0.9f;
-		behavior->m_lastGroundNormal.x = behavior->m_lastGroundNormal.x * r + (1.0f - r) * info.worldNormal.x;
-		behavior->m_lastGroundNormal.y = behavior->m_lastGroundNormal.y * r + (1.0f - r) * info.worldNormal.y;
-		behavior->m_lastGroundNormal.z = behavior->m_lastGroundNormal.z * r + (1.0f - r) * info.worldNormal.z;
+		Component->m_lastGroundNormal.x = Component->m_lastGroundNormal.x * r + (1.0f - r) * info.worldNormal.x;
+		Component->m_lastGroundNormal.y = Component->m_lastGroundNormal.y * r + (1.0f - r) * info.worldNormal.y;
+		Component->m_lastGroundNormal.z = Component->m_lastGroundNormal.z * r + (1.0f - r) * info.worldNormal.z;
 	}
 	return reactphysics3d::decimal(1.0);
 }
 
-void ZobBehaviorCar::UpdateWheels(float dt)
+void ZobComponentCar::UpdateWheels(float dt)
 {
 	if (m_rearLeftWheel)
 	{
@@ -395,7 +395,7 @@ void ZobBehaviorCar::UpdateWheels(float dt)
 	}
 }
 
-void ZobBehaviorCar::CheckGroundCollisions()
+void ZobComponentCar::CheckGroundCollisions()
 {
 	DirectZob* directZob = DirectZob::GetInstance();
 	CollisionBody* rb = m_zobObject->m_physicComponent->GetCollisionBody();
@@ -405,13 +405,13 @@ void ZobBehaviorCar::CheckGroundCollisions()
 	e.y -= 1000.0f;
 	reactphysics3d::Ray ray(p, e);
 	reactphysics3d::RaycastInfo info;
-	ZobBehaviorCar::GroundRaycastClass cb;
-	cb.behavior = this;
+	ZobComponentCar::GroundRaycastClass cb;
+	cb.Component = this;
 	short categ = ZobPhysicComponent::eLayer_ground;
 	DirectZob::GetInstance()->GetPhysicsEngine()->GetWorld()->raycast(ray, &cb, categ);
 }
 
-void ZobBehaviorCar::UpdateInputs(float dt)
+void ZobComponentCar::UpdateInputs(float dt)
 {
 	const gainput::InputMap* inputMap = DirectZob::GetInstance()->GetInputManager()->GetMap();
 	float inputAcc = 0.0f;
@@ -448,15 +448,15 @@ void ZobBehaviorCar::UpdateInputs(float dt)
 	}
 }
 
-void ZobBehaviorCar::EditorUpdate()
+void ZobComponentCar::EditorUpdate()
 {
 }
 
-void ZobBehaviorCar::UpdateBeforeObject(float dt)
+void ZobComponentCar::UpdateBeforeObject(float dt)
 {
 }
 
-void ZobBehaviorCar::DrawGizmos(const Camera* camera, const ZobVector3* position, const ZobVector3* rotation) const
+void ZobComponentCar::DrawGizmos(const Camera* camera, const ZobVector3* position, const ZobVector3* rotation) const
 {
 	//return;
 	DirectZob* directZob = DirectZob::GetInstance();

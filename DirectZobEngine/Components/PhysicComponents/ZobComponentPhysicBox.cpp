@@ -1,35 +1,35 @@
-#include "ZobBehaviorPhysicBox.h"
+#include "ZobComponentPhysicBox.h"
 #include "../../DirectZob.h"
 #include "../../ZobPhysic/ZobPhysicsEngine.h"
 
-ZobBehaviorPhysicBox::~ZobBehaviorPhysicBox()
+ZobComponentPhysicBox::~ZobComponentPhysicBox()
 {
 	m_boxShape = NULL;
 }
 
-ZobBehaviorPhysicBox::ZobBehaviorPhysicBox(ZobObject* zobObject) : ZobBehaviorPhysicShape(zobObject)
+ZobComponentPhysicBox::ZobComponentPhysicBox(ZobObject* zobObject) : ZobComponentPhysicShape(zobObject)
 {
 	m_halfExtends = ZobVector3(1, 1, 1);
-	m_type = eBehavior_physicBox;
+	m_type = eComponent_physicBox;
 	m_varExposer->WrapVariable<ZobVector3>("Height", &m_halfExtends, NULL, false, true);
 	m_halfExtends = ZobVector3(1, 1, 1);
 }
 
-void ZobBehaviorPhysicBox::Init()
+void ZobComponentPhysicBox::Init()
 {
 	ReLoadVariables();
 	PhysicsCommon* pc = DirectZob::GetInstance()->GetPhysicsEngine()->GetPhysicsCommon();
 	Vector3 h = Vector3(m_halfExtends.x, m_halfExtends.y, m_halfExtends.z);
 	m_boxShape = pc->createBoxShape(h);
 	AddColliderInternal(m_boxShape);
-	ZobBehaviorPhysicShape::Init();
+	ZobComponentPhysicShape::Init();
 }
 
-void ZobBehaviorPhysicBox::EditorUpdate()
+void ZobComponentPhysicBox::EditorUpdate()
 {
 	if (m_isInit)
 	{
-		ZobBehaviorPhysicShape::EditorUpdate();
+		ZobComponentPhysicShape::EditorUpdate();
 		Vector3 h = m_boxShape->getHalfExtents();
 		if (h.x != m_halfExtends.x || h.y != m_halfExtends.y || h.z != m_halfExtends.z )
 		{

@@ -1,23 +1,23 @@
 #pragma once
 #include "../Types.h"
 #include "../tinyxml/tinyxml.h"
-#include "ZobBehavior.h"
+#include "ZobComponent.h"
 #undef min
 #undef max
 #include <reactphysics3d/reactphysics3d.h>
 
 class Zobobject;
-class ZobBehaviorCar : public ZobBehavior
+class ZobComponentCar : public ZobComponent
 {
 
-	friend class ZobBehaviorFactory;
+	friend class ZobComponentFactory;
 	public:
 
 		class GroundRaycastClass : public reactphysics3d::RaycastCallback {
 		public:
 
 			virtual reactphysics3d::decimal notifyRaycastHit(const reactphysics3d::RaycastInfo& info);
-			ZobBehaviorCar* behavior;
+			ZobComponentCar* Component;
 		};
 
 		enum eCarType
@@ -27,7 +27,7 @@ class ZobBehaviorCar : public ZobBehavior
 			eCarType_truc,
 		};
 
-		~ZobBehaviorCar() override;
+		~ZobComponentCar() override;
 		void		Init() override;
 		void		PreUpdate(float dt) override;
 		void		PostUpdate() override {}
@@ -36,7 +36,7 @@ class ZobBehaviorCar : public ZobBehavior
 		void		UpdateAfterObject(float dt) override {}
 		void		DrawGizmos(const Camera* camera, const ZobVector3* position, const ZobVector3* rotation) const override;
 	private:	
-		ZobBehaviorCar(ZobObject* zobObject);
+		ZobComponentCar(ZobObject* zobObject);
 		void CheckGroundCollisions();
 		void CheckEnvironmentCollision();
 		void UpdateInputs(float dt);

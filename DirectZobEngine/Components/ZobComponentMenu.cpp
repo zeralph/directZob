@@ -1,4 +1,4 @@
-#include "ZobBehaviorMenu.h"
+#include "ZobComponentMenu.h"
 #include "../DirectZob.h"
 #include "../Rendering/Engine.h"
 #include "../ZobPhysic/ZobPhysicsEngine.h"
@@ -8,12 +8,12 @@
 #include "../Rendering/text2D.h"
 #include "../ZobObjects/ZobObject.h"
 
-ZobBehaviorMenu::~ZobBehaviorMenu()
+ZobComponentMenu::~ZobComponentMenu()
 {
 
 }
 
-ZobBehaviorMenu::ZobBehaviorMenu(ZobObject* zobObject, bool bEditorZobBehavior) : ZobBehavior(zobObject, bEditorZobBehavior)
+ZobComponentMenu::ZobComponentMenu(ZobObject* zobObject, bool bEditorZobComponent) : ZobComponent(zobObject, bEditorZobComponent)
 {
 	m_x = 0;
 	m_y = 0;
@@ -23,9 +23,9 @@ ZobBehaviorMenu::ZobBehaviorMenu(ZobObject* zobObject, bool bEditorZobBehavior) 
 	m_fontName = "Arial";
 	m_text ="";
 	m_image = NULL;
-	m_type = eBehavior_hudElement; 
+	m_type = eComponent_hudElement; 
 	m_unit = ZobHUDManager::eHudUnit_ratio;
-	//m_varExposer->WrapAction("Add", &ZobBehaviorMenu::AddItem);
+	//m_varExposer->WrapAction("Add", &ZobComponentMenu::AddItem);
 	m_varExposer->WrapVariable<float>("X", &m_x, NULL, false, true);
 	m_varExposer->WrapVariable<float>("Y", &m_y, NULL, false, true);
 	m_varExposer->WrapVariable<float>("W", &m_w, NULL, false, true);
@@ -38,7 +38,7 @@ ZobBehaviorMenu::ZobBehaviorMenu(ZobObject* zobObject, bool bEditorZobBehavior) 
 	Init();
 }
 
-void ZobBehaviorMenu::PreUpdate(float dt)
+void ZobComponentMenu::PreUpdate(float dt)
 {
 	ZobHUDManager* hud = DirectZob::GetInstance()->GetHudManager();
 	if (m_text.length() > 0)
@@ -51,7 +51,7 @@ void ZobBehaviorMenu::PreUpdate(float dt)
 	}
 }
 
-void ZobBehaviorMenu::EditorUpdate()
+void ZobComponentMenu::EditorUpdate()
 {
 	if (!m_image)
 	{
@@ -69,7 +69,7 @@ void ZobBehaviorMenu::EditorUpdate()
 	}
 }
 
-void ZobBehaviorMenu::LoadMaterialInternal()
+void ZobComponentMenu::LoadMaterialInternal()
 {
 	if (m_texture.IsDefined())
 	{
@@ -90,18 +90,18 @@ void ZobBehaviorMenu::LoadMaterialInternal()
 
 }
 
-void ZobBehaviorMenu::Init()
+void ZobComponentMenu::Init()
 {
 	m_varExposer->Load();
 	LoadMaterialInternal();
 }
 
-void ZobBehaviorMenu::UpdateBeforeObject(float dt)
+void ZobComponentMenu::UpdateBeforeObject(float dt)
 {
 
 }
 
-void ZobBehaviorMenu::DrawGizmos(const Camera* camera, const ZobVector3* position, const ZobVector3* rotation) const
+void ZobComponentMenu::DrawGizmos(const Camera* camera, const ZobVector3* position, const ZobVector3* rotation) const
 {
 
 }
