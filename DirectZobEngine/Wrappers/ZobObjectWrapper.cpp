@@ -72,14 +72,14 @@ namespace CLI
 		ZobObject* z = GetInstance();
 		if (z)
 		{
-			const std::vector<ZobComponent*>* behaviors = z->GetComponents();
-			if (behaviors->size() > 0)
+			const std::vector<ZobComponent*>* components = z->GetComponents();
+			if (components->size() > 0)
 			{
-				for (int i = 0; i < behaviors->size(); i++)
+				for (int i = 0; i < components->size(); i++)
 				{
-					ZobComponent* zb = behaviors->at(i);
-					ZobGroupBox^ behaviorPanel = FillComponentControl(zb);
-					m_container->Controls->Add(behaviorPanel);
+					ZobComponent* zb = components->at(i);
+					ZobGroupBox^ componentPanel = FillComponentControl(zb);
+					m_container->Controls->Add(componentPanel);
 				}
 			}
 		}

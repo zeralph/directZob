@@ -75,36 +75,36 @@ namespace CLI
 			m_rotateZ->SetName(EDITOR_ROTATE_Z);
 
 			ZobFilePath zfpT = ZobFilePath("arrow.obj", tmp, "arrow.obj", true);
-			m_behaviorTranslateX = m_translateX->LoadMesh(zfpT, true);
-			m_behaviorTranslateY = m_translateY->LoadMesh(zfpT, true);
-			m_behaviorTranslateZ = m_translateZ->LoadMesh(zfpT, true);
+			m_componentTranslateX = m_translateX->LoadMesh(zfpT, true);
+			m_componentTranslateY = m_translateY->LoadMesh(zfpT, true);
+			m_componentTranslateZ = m_translateZ->LoadMesh(zfpT, true);
 
 			ZobFilePath zfpR = ZobFilePath("rotate.obj", tmp, "rotate.obj", true);
-			m_behaviorRotateX = m_rotateX->LoadMesh(zfpR, true);
-			m_behaviorRotateY = m_rotateY->LoadMesh(zfpR, true);
-			m_behaviorRotateZ = m_rotateZ->LoadMesh(zfpR, true);
+			m_componentRotateX = m_rotateX->LoadMesh(zfpR, true);
+			m_componentRotateY = m_rotateY->LoadMesh(zfpR, true);
+			m_componentRotateZ = m_rotateZ->LoadMesh(zfpR, true);
 
-			m_behaviorTranslateX->GetRenderOptions()->color = ZobColor::Red;
-			m_behaviorTranslateX->GetRenderOptions()->lightMode = Triangle::RenderOptions::eLightMode_none;
-			m_behaviorTranslateX->GetRenderOptions()->zBuffered = false;
-			m_behaviorTranslateY->GetRenderOptions()->color = ZobColor::Green;
-			m_behaviorTranslateY->GetRenderOptions()->lightMode = Triangle::RenderOptions::eLightMode_none;
-			m_behaviorTranslateY->GetRenderOptions()->zBuffered = false;
-			m_behaviorTranslateZ->GetRenderOptions()->color = ZobColor::Blue;
-			m_behaviorTranslateZ->GetRenderOptions()->lightMode = Triangle::RenderOptions::eLightMode_none;
-			m_behaviorTranslateZ->GetRenderOptions()->zBuffered = false;
+			m_componentTranslateX->GetRenderOptions()->color = ZobColor::Red;
+			m_componentTranslateX->GetRenderOptions()->lightMode = Triangle::RenderOptions::eLightMode_none;
+			m_componentTranslateX->GetRenderOptions()->zBuffered = false;
+			m_componentTranslateY->GetRenderOptions()->color = ZobColor::Green;
+			m_componentTranslateY->GetRenderOptions()->lightMode = Triangle::RenderOptions::eLightMode_none;
+			m_componentTranslateY->GetRenderOptions()->zBuffered = false;
+			m_componentTranslateZ->GetRenderOptions()->color = ZobColor::Blue;
+			m_componentTranslateZ->GetRenderOptions()->lightMode = Triangle::RenderOptions::eLightMode_none;
+			m_componentTranslateZ->GetRenderOptions()->zBuffered = false;
 			m_translateX->SetLocalRotation(0, 90, 0, false);
 			m_translateY->SetLocalRotation(-90, 0, 0, false);
 
-			m_behaviorRotateX->GetRenderOptions()->color = ZobColor::Red;
-			m_behaviorRotateX->GetRenderOptions()->lightMode = Triangle::RenderOptions::eLightMode_none;
-			m_behaviorRotateX->GetRenderOptions()->zBuffered = false;
-			m_behaviorRotateY->GetRenderOptions()->color = ZobColor::Green;
-			m_behaviorRotateY->GetRenderOptions()->lightMode = Triangle::RenderOptions::eLightMode_none;
-			m_behaviorRotateY->GetRenderOptions()->zBuffered = false;
-			m_behaviorRotateZ->GetRenderOptions()->color = ZobColor::Blue;
-			m_behaviorRotateZ->GetRenderOptions()->lightMode = Triangle::RenderOptions::eLightMode_none;
-			m_behaviorRotateZ->GetRenderOptions()->zBuffered = false;
+			m_componentRotateX->GetRenderOptions()->color = ZobColor::Red;
+			m_componentRotateX->GetRenderOptions()->lightMode = Triangle::RenderOptions::eLightMode_none;
+			m_componentRotateX->GetRenderOptions()->zBuffered = false;
+			m_componentRotateY->GetRenderOptions()->color = ZobColor::Green;
+			m_componentRotateY->GetRenderOptions()->lightMode = Triangle::RenderOptions::eLightMode_none;
+			m_componentRotateY->GetRenderOptions()->zBuffered = false;
+			m_componentRotateZ->GetRenderOptions()->color = ZobColor::Blue;
+			m_componentRotateZ->GetRenderOptions()->lightMode = Triangle::RenderOptions::eLightMode_none;
+			m_componentRotateZ->GetRenderOptions()->zBuffered = false;
 			m_rotateX->SetLocalRotation(0, 0, 90, false);
 			m_rotateY->SetLocalRotation(0, 0, 0, false);
 			m_rotateZ->SetLocalRotation(90, 0, 0, false);
@@ -117,43 +117,43 @@ namespace CLI
 		if (z == m_translateX)
 		{
 			m_currentSelectedGizmo = z;
-			m_behaviorTranslateX->GetRenderOptions()->color = ZobColor::Yellow;
+			m_componentTranslateX->GetRenderOptions()->color = ZobColor::Yellow;
 		}
 		else if (z == m_translateY)
 		{
 			m_currentSelectedGizmo = z;
-			m_behaviorTranslateY->GetRenderOptions()->color = ZobColor::Yellow;
+			m_componentTranslateY->GetRenderOptions()->color = ZobColor::Yellow;
 		}
 		else if (z == m_translateZ)
 		{
 			m_currentSelectedGizmo = z;
-			m_behaviorTranslateZ->GetRenderOptions()->color = ZobColor::Yellow;
+			m_componentTranslateZ->GetRenderOptions()->color = ZobColor::Yellow;
 		}
 		else if (z == m_rotateX)
 		{
 			m_currentSelectedGizmo = z;
-			m_behaviorRotateX->GetRenderOptions()->color = ZobColor::Yellow;
+			m_componentRotateX->GetRenderOptions()->color = ZobColor::Yellow;
 		}
 		else if (z == m_rotateY)
 		{
 			m_currentSelectedGizmo = z;
-			m_behaviorRotateY->GetRenderOptions()->color = ZobColor::Yellow;
+			m_componentRotateY->GetRenderOptions()->color = ZobColor::Yellow;
 		}
 		else if (z == m_rotateZ)
 		{
 			m_currentSelectedGizmo = z;
-			m_behaviorRotateZ->GetRenderOptions()->color = ZobColor::Yellow;
+			m_componentRotateZ->GetRenderOptions()->color = ZobColor::Yellow;
 		}
 	}
 
 	void ZobObjectsEditor::UnSelect()
 	{
-		m_behaviorTranslateX->GetRenderOptions()->color = ZobColor::Red;
-		m_behaviorTranslateY->GetRenderOptions()->color = ZobColor::Green;
-		m_behaviorTranslateZ->GetRenderOptions()->color = ZobColor::Blue;
-		m_behaviorRotateX->GetRenderOptions()->color = ZobColor::Red;
-		m_behaviorRotateY->GetRenderOptions()->color = ZobColor::Green;
-		m_behaviorRotateZ->GetRenderOptions()->color = ZobColor::Blue;
+		m_componentTranslateX->GetRenderOptions()->color = ZobColor::Red;
+		m_componentTranslateY->GetRenderOptions()->color = ZobColor::Green;
+		m_componentTranslateZ->GetRenderOptions()->color = ZobColor::Blue;
+		m_componentRotateX->GetRenderOptions()->color = ZobColor::Red;
+		m_componentRotateY->GetRenderOptions()->color = ZobColor::Green;
+		m_componentRotateZ->GetRenderOptions()->color = ZobColor::Blue;
 	}
 
 	void ZobObjectsEditor::SetWorld()
@@ -184,15 +184,15 @@ namespace CLI
 		}
 		else if (type == eGizmo_translate)
 		{
-			m_behaviorTranslateX->SetVisible(true);
-			m_behaviorTranslateY->SetVisible(true);
-			m_behaviorTranslateZ->SetVisible(true);
+			m_componentTranslateX->SetVisible(true);
+			m_componentTranslateY->SetVisible(true);
+			m_componentTranslateZ->SetVisible(true);
 		}
 		else if (type == eGizmo_rotate)
 		{
-			m_behaviorRotateX->SetVisible(true);
-			m_behaviorRotateY->SetVisible(true);
-			m_behaviorRotateZ->SetVisible(true);
+			m_componentRotateX->SetVisible(true);
+			m_componentRotateY->SetVisible(true);
+			m_componentRotateZ->SetVisible(true);
 		}
 		else //scale
 		{
@@ -203,12 +203,12 @@ namespace CLI
 
 	void ZobObjectsEditor::Hide()
 	{
-		m_behaviorTranslateX->SetVisible(false);
-		m_behaviorTranslateY->SetVisible(false);
-		m_behaviorTranslateZ->SetVisible(false);
-		m_behaviorRotateX->SetVisible(false);
-		m_behaviorRotateY->SetVisible(false);
-		m_behaviorRotateZ->SetVisible(false);
+		m_componentTranslateX->SetVisible(false);
+		m_componentTranslateY->SetVisible(false);
+		m_componentTranslateZ->SetVisible(false);
+		m_componentRotateX->SetVisible(false);
+		m_componentRotateY->SetVisible(false);
+		m_componentRotateZ->SetVisible(false);
 		m_editorRoot->SetLocalScale(1, 1, 1);
 	}
 
