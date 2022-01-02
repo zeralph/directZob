@@ -160,7 +160,9 @@ void SceneLoader::NewScene(std::string workspace)
 	m_file = "";
 	DirectZob::GetInstance()->GetHudManager()->Start();
 	DirectZob::GetInstance()->GetLightManager()->ReInitGlobalSettings();
+	DirectZob::GetInstance()->GetHudManager()->Init();
 	DirectZob::GetInstance()->GetEngine()->Start();
+	DirectZob::GetInstance()->GetHudManager()->Start();
 	DirectZob::RemoveIndent();
 }
 
@@ -171,6 +173,7 @@ void SceneLoader::LoadSceneInternal()
 	DirectZob::LogWarning("loading scene %s", m_file.c_str());
 	UnloadScene();
 	DirectZob::GetInstance()->GetLightManager()->ReInitGlobalSettings();
+	DirectZob::GetInstance()->GetHudManager()->Init();
 	MeshManager* meshManager = DirectZob::GetInstance()->GetMeshManager();
 	MaterialManager* materialManager = DirectZob::GetInstance()->GetMaterialManager();
 	ZobObjectManager* zobObjectManager = DirectZob::GetInstance()->GetZobObjectManager();

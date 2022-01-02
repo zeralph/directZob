@@ -249,7 +249,7 @@ int DirectZob::RunAFrame(DirectZob::engineCallback OnSceneUpdated /*=NULL*/, Dir
 			m_engine->SwapBuffers();
 			bool bPhysicUpdated = false;
 			m_zobObjectManager->PreUpdate(dt);
-			m_hudManager->PreUpdate(dt);
+			m_hudManager->UpdateNavigation(dt);
 			m_lightManager->PreUpdate(dt);
 			m_engine->StartDrawingScene();
 			ZobColor c = DirectZob::GetInstance()->GetLightManager()->GetClearColor();

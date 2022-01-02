@@ -441,7 +441,7 @@ void ZobComponentCar::UpdateInputs(float dt)
 	//TODO : move me elsewhere
 	if (inputMap->GetBoolIsNew(ZobInputManager::Start))
 	{
-		std::string sceneName = "menu.dzs";
+		std::string sceneName = "_menu.dzs";
 		std::string scenePath = DirectZob::GetInstance()->GetResourcePath();
 		DirectZob::GetInstance()->LoadScene(scenePath, sceneName, NULL);
 		return;

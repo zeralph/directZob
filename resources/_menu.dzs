@@ -18,13 +18,13 @@
         <Var Name="Perspective Correction" value="True" />
     </Globals>
     <ZobObject Guid="2003412161">
-            <Var Name="Name" value="camera" />
-            <Var Name="Position" value="-0.000;1.898;-4.779" />
-            <Var Name="Rotation" value="15.047;0.000;-0.000" />
-            <Var Name="Scale" value="1.000;1.000;1.000" />
-            <Var Name="FOV" value="70.000" />
-            <Var Name="Camera controller" value="FollowCar" />
-            <Components />
+        <Var Name="Name" value="camera" />
+        <Var Name="Position" value="0.000;1.898;-4.774" />
+        <Var Name="Rotation" value="15.043;0.000;0.000" />
+        <Var Name="Scale" value="1.000;1.000;1.000" />
+        <Var Name="FOV" value="70.000" />
+        <Var Name="Camera controller" value="FollowCar" />
+        <Components />
     </ZobObject>
     <ZobObject Guid="4002144528">
         <Var Name="Name" value="Title" />
@@ -47,9 +47,13 @@
                     <Var Name="Z" value="0.000" />
                     <Var Name="Font size" value="6.000" />
                     <Var Name="Text" value=" EDGE&#x0D;&#x0A;RACING" />
-                    <Var Name="Color" value="255;255;255;128" />
-                    <Var Name="Font Xml" value="vcr_osd_mono_regular_32.xml;D:/Git/directZob/resources/_fonts/;vcr_osd_mono_regular_32.xml;1" />
-                    <Var Name="Font Image" value="vcr_osd_mono_regular_32.PNG;D:/Git/directZob/resources/_fonts/;vcr_osd_mono_regular_32.PNG;1" />
+                    <Var Name="Default color" value="255;255;255;128" />
+                    <Var Name="Selected color" value="255;255;0;0" />
+                    <Var Name="Selectable" value="False" />
+                    <Var Name="Action" value="None" />
+                    <Var Name="Action argument" value="" />
+                    <Var Name="Font Xml" value="vcr_osd_mono_regular_32.xml;_fonts/;vcr_osd_mono_regular_32.xml;0" />
+                    <Var Name="Font Image" value="vcr_osd_mono_regular_32.PNG;_fonts/;vcr_osd_mono_regular_32.PNG;0" />
                 </Component>
             </Components>
         </ZobObject>
@@ -68,7 +72,11 @@
                     <Var Name="Z" value="0.000" />
                     <Var Name="Font size" value="4.000" />
                     <Var Name="Text" value="Car test" />
-                    <Var Name="Color" value="255;255;255;0" />
+                    <Var Name="Default color" value="255;255;255;0" />
+                    <Var Name="Selected color" value="255;255;0;0" />
+                    <Var Name="Selectable" value="True" />
+                    <Var Name="Action" value="Load" />
+                    <Var Name="Action argument" value="_carTest.dzs" />
                     <Var Name="Font Xml" value="vcr_osd_mono_regular_14.xml;_fonts/;vcr_osd_mono_regular_14.xml;0" />
                     <Var Name="Font Image" value="vcr_osd_mono_regular_14.PNG;_fonts/;vcr_osd_mono_regular_14.PNG;0" />
                 </Component>
@@ -106,7 +114,11 @@
                     <Var Name="Z" value="0.000" />
                     <Var Name="Font size" value="4.000" />
                     <Var Name="Text" value="Ground test" />
-                    <Var Name="Color" value="255;255;255;0" />
+                    <Var Name="Default color" value="255;255;255;0" />
+                    <Var Name="Selected color" value="255;255;0;0" />
+                    <Var Name="Selectable" value="True" />
+                    <Var Name="Action" value="Load" />
+                    <Var Name="Action argument" value="testGround.dzs" />
                     <Var Name="Font Xml" value="vcr_osd_mono_regular_14.xml;_fonts/;vcr_osd_mono_regular_14.xml;0" />
                     <Var Name="Font Image" value="vcr_osd_mono_regular_14.PNG;_fonts/;vcr_osd_mono_regular_14.PNG;0" />
                 </Component>
@@ -127,7 +139,11 @@
                     <Var Name="Z" value="0.000" />
                     <Var Name="Font size" value="4.000" />
                     <Var Name="Text" value="Exit" />
-                    <Var Name="Color" value="255;255;255;0" />
+                    <Var Name="Default color" value="255;255;255;0" />
+                    <Var Name="Selected color" value="255;255;0;0" />
+                    <Var Name="Selectable" value="True" />
+                    <Var Name="Action" value="Exit" />
+                    <Var Name="Action argument" value="" />
                     <Var Name="Font Xml" value="vcr_osd_mono_regular_14.xml;_fonts/;vcr_osd_mono_regular_14.xml;0" />
                     <Var Name="Font Image" value="vcr_osd_mono_regular_14.PNG;_fonts/;vcr_osd_mono_regular_14.PNG;0" />
                 </Component>

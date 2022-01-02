@@ -243,6 +243,11 @@ void ZobControlString::OnValueChanged(Object^ sender, EventArgs^ e)
 		std::string s;
 		MarshalString(tb->Text, s);
 		internalString->assign(s);
+		if (_w->callback)
+		{
+			zobId id = _w->id;
+			((ZobVariablesExposer::wrapperCallback)_w->callback)(id);
+		}
 	}
 }
 
@@ -350,8 +355,12 @@ void ZobControlFilePath::OnOk(Object^ sender, System::ComponentModel::CancelEven
 		std::string s;
 		MarshalString(file+";"+dir+";"+file+";1", s);
 		ZobFilePath* zp = (ZobFilePath*)_w->ptr;
-
 		zp->Unserialize(s);
+		if (_w->callback)
+		{
+			zobId id = _w->id;
+			((ZobVariablesExposer::wrapperCallback)_w->callback)(id);
+		}
 	}
 }
 
@@ -636,6 +645,11 @@ void ZobControlBool::OnValueChanged(Object^ sender, EventArgs^ e)
 		_checked = !_checked;
 		bool* b = (bool*)_w->ptr;
 		*b = _checked?true:false;
+		if (_w->callback)
+		{
+			zobId id = _w->id;
+			((ZobVariablesExposer::wrapperCallback)_w->callback)(id);
+		}
 	}
 }
 
@@ -764,6 +778,11 @@ void ZobControlEnum::OnValueChanged(Object^ sender, EventArgs^ e)
 			int* i = (int*)_w->ptr;
 			*i = it->Key;
 		}
+		if (_w->callback)
+		{
+			zobId id = _w->id;
+			((ZobVariablesExposer::wrapperCallback)_w->callback)(id);
+		}
 	}
 }
 
@@ -815,6 +834,11 @@ void ZobControlZobObject::UpdateControlInternal()
 
 void ZobControlZobObject::OnValueChanged(Object^ sender, EventArgs^ e)
 {
+	if (_w->callback)
+	{
+		zobId id = _w->id;
+		((ZobVariablesExposer::wrapperCallback)_w->callback)(id);
+	}
 }
 
 ZobGroupBox::ZobGroupBox(String^ name, bool collapsable) :GroupBox()

@@ -8,6 +8,7 @@
 #include <string>
 #include "Embed/defaultFontData.h"
 #include "Embed/defaultFontImage.h"
+#include "Components/HudComponents/ZobComponentText.h"
 #undef None
 #include "../../dependencies/optick/include/optick.h"
 #define NB_HUD_TRIANGLES 2000
@@ -19,6 +20,7 @@ ZobHUDManager::ZobHUDManager()
 {
 	m_fonts.clear();
 	m_started = false;
+	m_menuItems.resize(0);
 	m_renderOptions.zBuffered = false;
 	m_renderOptions.bTransparency = false;
 	m_renderOptions.cullMode = Triangle::RenderOptions::eCullMode_None;
@@ -75,7 +77,8 @@ static const ZobMaterial* sMat;
 void ZobHUDManager::Init()
 {
 	std::string dir = ZobUtils::GetTempDirectory();
-
+	m_menuCurrentIndex = 0;
+	m_menuItems.resize(0);
 	std::string defaultFontDataFile = dir;
 	defaultFontDataFile.append("defaultFont.xml");
 	std::FILE* tmpf1 = fopen(defaultFontDataFile.c_str(), "w");
@@ -94,44 +97,28 @@ void ZobHUDManager::Init()
 	ZobFilePath zfpTexture;
 	ZobFilePath zfpXml;
 
-	zfpTexture = ZobFilePath(DEFAULT_FONT, dir, "defaultFont.png", true);
-	zfpXml = ZobFilePath(DEFAULT_FONT, dir, "defaultFont.xml", true);
-	CreateOrGetZobFont(zfpXml, zfpTexture);
+	//zfpTexture = ZobFilePath(DEFAULT_FONT, dir, "defaultFont.png", true);
+	//zfpXml = ZobFilePath(DEFAULT_FONT, dir, "defaultFont.xml", true);
+	//CreateOrGetZobFont(zfpXml, zfpTexture);
 
+}
 
-	zfpTexture = ZobFilePath("mv_boli_regular_14", "_fonts", "mv_boli_regular_14.PNG", false);
-	zfpXml = ZobFilePath("mv_boli_regular_14", "_fonts", "mv_boli_regular_14.xml", false);
-	CreateOrGetZobFont(zfpXml, zfpTexture);
+void ZobHUDManager::AddToMenu(ZobComponentText* zct)
+{
+	m_menuItems.push_back(zct);
+}
 
-	zfpTexture.Reset();
-	zfpXml.Reset();
-	zfpTexture = ZobFilePath("mv_boli_regular_32", "_fonts", "mv_boli_regular_32.PNG", false);
-	zfpXml = ZobFilePath("mv_boli_regular_32", "_fonts", "mv_boli_regular_32.xml", false);
-	CreateOrGetZobFont(zfpXml, zfpTexture);
-
-	zfpTexture.Reset();
-	zfpXml.Reset();
-	zfpTexture = ZobFilePath("leelawadee_ui_bold_32", "_fonts", "leelawadee_ui_bold_32.PNG", false);
-	zfpXml = ZobFilePath("leelawadee_ui_bold_32", "_fonts", "leelawadee_ui_bold_32.xml", false);
-	CreateOrGetZobFont(zfpXml, zfpTexture);
-
-	zfpTexture.Reset();
-	zfpXml.Reset();
-	zfpTexture = ZobFilePath("arial_regular_32", "_fonts", "arial_regular_32.PNG", false);
-	zfpXml = ZobFilePath("arial_regular_32", "_fonts", "arial_regular_32.xml", false);
-	CreateOrGetZobFont(zfpXml, zfpTexture);
-
-	zfpTexture.Reset();
-	zfpXml.Reset();
-	zfpTexture = ZobFilePath("vcr_osd_mono_regular_14", "_fonts", "vcr_osd_mono_regular_14.PNG", false);
-	zfpXml = ZobFilePath("vcr_osd_mono_regular_14", "_fonts", "vcr_osd_mono_regular_14.xml", false);
-	CreateOrGetZobFont(zfpXml, zfpTexture);
-
-	zfpTexture.Reset();
-	zfpXml.Reset();
-	zfpTexture = ZobFilePath("mv_boli_regular_32", "_fonts", "mv_boli_regular_32.PNG", false);
-	zfpXml = ZobFilePath("mv_boli_regular_32", "_fonts", "mv_boli_regular_32.xml", false);
-	CreateOrGetZobFont(zfpXml, zfpTexture);
+void ZobHUDManager::RemoveFromMenu(ZobComponentText* zct)
+{
+	std::vector<ZobComponentText*>::iterator iter = m_menuItems.begin();
+	while (iter != m_menuItems.end())
+	{
+		if ((*iter) == zct)
+		{
+			m_menuItems.erase(iter);
+			return;
+		}
+	}
 }
 
 const ZobFont* ZobHUDManager::CreateOrGetZobFont(ZobFilePath zfpXml, ZobFilePath zfpTexture)
@@ -162,17 +149,30 @@ void ZobHUDManager::Stop()
 
 void ZobHUDManager::Start()
 {
-	Init();
+	//Init();
 	m_started = true;
 }
 
-void ZobHUDManager::PreUpdate(float dt)
+void ZobHUDManager::UpdateNavigation(float dt)
 {
-}
-
-void ZobHUDManager::UpdateComponent(float dt) 
-{
-	
+	if (m_started && m_menuItems.size() > 0)
+	{
+		const gainput::InputMap* inputMap = DirectZob::GetInstance()->GetInputManager()->GetMap();
+		if (inputMap->GetBoolIsNew(ZobInputManager::Start))
+		{
+			m_menuItems[m_menuCurrentIndex]->DoAction();
+		}
+		m_menuItems[m_menuCurrentIndex]->SetSelected(false);
+		if (inputMap->GetBoolIsNew(ZobInputManager::MenuUp))
+		{
+			m_menuCurrentIndex = max(m_menuCurrentIndex - 1, 0);
+		}
+		if (inputMap->GetBoolIsNew(ZobInputManager::MenuDown))
+		{
+			m_menuCurrentIndex = min(m_menuCurrentIndex + 1, (int)m_menuItems.size()-1);
+		}
+		m_menuItems[m_menuCurrentIndex]->SetSelected(true);
+	}
 }
 
 void ZobHUDManager::DeleteFonts()
@@ -368,6 +368,7 @@ void ZobHUDManager::PrintInternal(eHudUnit u, float x, float y, float z, float f
 		{
 			x *= screenW;
 			y *= screenH;
+			fontSize = (screenH * fontSize) / 700;;
 		}
 		for (size_t i = 0; i < size; i++)
 		{

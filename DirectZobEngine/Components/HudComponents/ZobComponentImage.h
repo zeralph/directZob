@@ -11,20 +11,6 @@ class ZobComponentImage : public ZobComponent
 	friend class ZobComponentFactory;
 public:
 
-	enum eMenuAction
-	{
-		eAction_none = 0,
-		eAction_Load,
-		eAction_exit,
-	};
-
-	struct MenuEntry
-	{
-		std::string name;
-		std::string file;
-		eMenuAction action;
-	};
-
 	~ZobComponentImage() override;
 	void					Init() override;
 	void					PreUpdate(float dt) override;
