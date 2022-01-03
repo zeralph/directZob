@@ -22,6 +22,8 @@ namespace DirectZobEditor
             InitializeComponent();
             this.Dock = DockStyle.Fill;
             this.DoubleBuffered = true;
+            this.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            this.AutoSize = true;
         }
 
         public PictureBox GetEngineRenderwindow()

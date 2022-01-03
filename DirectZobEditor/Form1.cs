@@ -3,8 +3,10 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Resources;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
+using System.Windows.Interop;
 using Newtonsoft.Json;
 
 namespace DirectZobEditor
@@ -71,6 +73,7 @@ namespace DirectZobEditor
         public delegate void OnSceneLoaded();
         public OnSceneLoaded OnSceneLoadedDelegate;
 
+        private IntPtr m_engineWindowHandle;
         public Form1()
         {
             Font f = new Font("Microsoft Tai Le", 8);
@@ -94,8 +97,12 @@ namespace DirectZobEditor
             OnNewScene += Form1_OnNewScene;
             this.propertiesPanel.MinimumSize = new Size(300, 500);
 
+            p.MouseEnter += P_MouseEnter;
+            p.Click += P_Click;
             this.WindowState = FormWindowState.Maximized;
             EngineRendererPanel.Controls.Add(m_engineWindow);
+            EngineRendererPanel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            EngineRendererPanel.AutoSize = true;
             m_directZobWrapper.NewScene(workspace);
             EventHandler handler = OnNewScene;
             if (null != handler)
@@ -109,9 +116,20 @@ namespace DirectZobEditor
             m_engineThread = new Thread(RunEngineThread);
             m_engineThread.Start();
             SetSnap("None");
-
+            InformEngineStatus("STOPPED");
+            m_engineWindowHandle = this.Handle;// m_engineWindow.Handle;
+            LoadEditorSettings();
         }
 
+        private void P_Click(object sender, EventArgs e)
+        {
+            m_engineWindow.Focus();
+        }
+
+        private void P_MouseEnter(object sender, EventArgs e)
+        {
+            m_engineWindow.Focus();
+        }
         private void Form1_OnNewScene(object sender, EventArgs e)
         {
             toolStripStatusScanePath.Text = GetDirectZobWrapper().GetResourcePath();
@@ -443,6 +461,7 @@ namespace DirectZobEditor
         private void OnApplicationExit(object sender, EventArgs e)
         {
             m_directZobWrapper.Unload();
+            SaveEditorSettings();
         }
 
         private void Onloaded(object sender, EventArgs e)
@@ -465,6 +484,7 @@ namespace DirectZobEditor
         {
             m_running = false;
             e.Cancel = true;
+            SaveEditorSettings();
         }
         private void Form1_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
@@ -539,6 +559,7 @@ namespace DirectZobEditor
                 m_playMode = eplayMode.ePlayMode_play;
                 m_directZobWrapper.StartPhysic();
             }
+            InformEngineStatus("PLAYING");
         }
 
         private void btnPause_Click(object sender, EventArgs e)
@@ -547,11 +568,13 @@ namespace DirectZobEditor
             {
                 m_directZobWrapper.StopPhysic(false);
                 m_playMode = eplayMode.ePlayMode_pause;
+                InformEngineStatus("PAUSED");
             }
             else if (m_playMode == eplayMode.ePlayMode_pause)
             {
                 m_directZobWrapper.StartPhysic();
                 m_playMode = eplayMode.ePlayMode_play;
+                InformEngineStatus("PLAYING");
             }
         }
 
@@ -569,13 +592,21 @@ namespace DirectZobEditor
                 ev.type = Form1.SceneUpdateType.stopPhysics;
                 PropagateSceneUpdateEvent(ev);
             }
+            InformEngineStatus("STOPPED");
         }
         private void RunEngineThread()
         {
             while (m_running)
             {
+                //m_directZobWrapper.EditorInputsUpdate(16, m_engineWindowHandle);
                 m_directZobWrapper.RunAFrame();
                 UpdateAfterEngine();
+                /*
+                m_engineWindow.Invoke(new Action(() =>
+                { 
+                    m_directZobWrapper.EditorInputsUpdate(100, m_engineWindowHandle);
+                }));
+                */
             }
             m_mainForm.Invoke(new Action(() =>
             {
@@ -736,67 +767,28 @@ namespace DirectZobEditor
             m_directZobWrapper.RegenerateZobIds();
         }
 
-        private void GigaPaint(object o)
+        private void SaveEditorSettings()
         {
-            Color backColor = (Color)System.Drawing.ColorTranslator.FromHtml("#2D2D30");
-            Color foreColor = (Color)System.Drawing.ColorTranslator.FromHtml("#F0F0F0");
-            Control c = o as Control;
-            if (c != null)
+            CLI.EditorSettings s = new CLI.EditorSettings();
+            m_directZobWrapper.SaveEditorSettings(s);
+            JsonSerializer serializer = new JsonSerializer();
+            using (StreamWriter file = File.CreateText(@"../settings.json"))
             {
-                c.BackColor = backColor;
-                c.ForeColor = foreColor;
-                for (int i = 0; i < c.Controls.Count; i++)
-                {
-                    object o2 = (object)c.Controls[i];
-                    GigaPaint(o2);
-                }
+                serializer.Serialize(file, s);
             }
-            MenuStrip ms = o as MenuStrip;
-            if (ms != null)
+        }
+        private void LoadEditorSettings()
+        {
+            using (TextReader tr = new StreamReader(@"../settings.json"))
             {
-                ms.BackColor = backColor;
-                ms.ForeColor = foreColor;
-                for (int i = 0; i < ms.Items.Count; i++)
+                using (JsonReader jr = new JsonTextReader(tr))
                 {
-                    object o2 = (object)ms.Items[i];
-                    GigaPaint(o2);
-                }
-            }
-            ToolStrip ts = o as ToolStrip;
-            if (ts != null)
-            {
-                ts.BackColor = backColor;
-                ts.ForeColor = foreColor;
-                for (int i = 0; i < ts.Items.Count; i++)
-                {
-                    object o2 = (object)ts.Items[i];
-                    GigaPaint(o2);
-                }
-            }
-            ToolStripMenuItem tsm = o as ToolStripMenuItem;
-            if (tsm != null)
-            {
-                tsm.BackColor = backColor;
-                tsm.ForeColor = foreColor;
-                for (int i = 0; i < tsm.DropDownItems.Count; i++)
-                {
-                    object o2 = (object)tsm.DropDownItems[i];
-                    GigaPaint(o2);
-                }
-            }
-            TabControl tc = o as TabControl;
-            if (tc != null)
-            {
-                tc.BackColor = backColor;
-                tc.ForeColor = foreColor;
-                for (int i = 0; i < tc.TabPages.Count; i++)
-                {
-                    object o2 = (object)tc.TabPages[i];
-                    GigaPaint(o2);
+                    JsonSerializer serializer = new JsonSerializer();
+                    CLI.EditorSettings s = serializer.Deserialize<CLI.EditorSettings>(jr);
+                    m_directZobWrapper.LoadEditorSettings(s);
                 }
             }
         }
-
         private void EngineRendererPanel_Resize(object sender, EventArgs e)
         {
             if (m_engineWindow != null)
@@ -804,6 +796,7 @@ namespace DirectZobEditor
                 PictureBox p = m_engineWindow.GetEngineRenderwindow();
                 if(p != null)
                 {
+                    Rectangle rect = p.DisplayRectangle;
                     float r = (float)p.Width / (float)p.Height;
                     toolStripStatusLabel1.Text = "Size : " + p.Width + "x" + p.Height + " | Ratio : "+r;
                     m_directZobWrapper.GetEngineWrapper().Resize(p.Width, p.Height);

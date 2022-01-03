@@ -866,6 +866,7 @@
             this.textLog.Dock = System.Windows.Forms.DockStyle.Fill;
             this.textLog.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textLog.Location = new System.Drawing.Point(3, 3);
+            this.textLog.MinimumSize = new System.Drawing.Size(4, 50);
             this.textLog.Name = "textLog";
             this.textLog.Size = new System.Drawing.Size(808, 69);
             this.textLog.TabIndex = 0;

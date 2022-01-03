@@ -41,6 +41,8 @@
             this.EngineRender.Size = new System.Drawing.Size(960, 564);
             this.EngineRender.TabIndex = 1;
             this.EngineRender.TabStop = false;
+            this.EngineRender.MinimumSize = new System.Drawing.Size(320, 240);
+            //this.EngineRender.focu = true;
             // 
             // EngineWindow
             // 

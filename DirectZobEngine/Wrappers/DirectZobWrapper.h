@@ -20,6 +20,22 @@ using namespace System::Drawing;
 
 namespace CLI
 {
+	public ref class EditorSettings
+	{
+	public:
+		EditorSettings() {}
+		~EditorSettings() {}
+		bool wireframe;
+		bool showText;
+		bool showGrid;
+		bool showBBoxes;
+		bool drawPhysicsGizmos;
+		bool showNormals;
+		bool drawGizmos;
+		bool drawCameraGizmos;
+		bool drawZobObjectGizmos;
+	};
+
 	// delegate void onFrameEndCallback();
 	public delegate void engineCallback();
 	public ref class DirectZobWrapper : public ManagedObject<DirectZob>
@@ -57,6 +73,7 @@ namespace CLI
 		void							SaveScene(System::String^ path, System::String^ file);
 		void							Lock();
 		void							EditorUpdate();
+		void							EditorInputsUpdate(float dt, IntPtr window);
 		void							Unlock();
 		System::IntPtr					GetBufferDataPointer();
 		int								GetBufferDataLength();
@@ -70,6 +87,9 @@ namespace CLI
 		ZobObjectManagerWrapper^		GetZobObjectManagerWrapper() { return m_ZobObjectManagerWrapper; }
 		ZobGlobalsWrapper^				GetZobGlobalsWrapper() { return m_ZobGlobalsWrapper; }
 		
+		void							SaveEditorSettings(EditorSettings^ s);
+		void							LoadEditorSettings(EditorSettings^ s);
+
 	private:
 		
 		DirectZobWrapperEvents^			m_events;

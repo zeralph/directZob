@@ -17,11 +17,13 @@ ZobInputManager::~ZobInputManager()
 void ZobInputManager::Update(uint64_t deltaTimeMS, HWND hWnd)
 {
 	MSG msg;
+	int i = 0;
 	while (PeekMessage(&msg, hWnd, 0, 0, PM_REMOVE))
 	{
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
 		m_gainputManager->HandleMessage(msg);
+		i++;
 	}
 	m_gainputManager->Update(deltaTimeMS);
 }

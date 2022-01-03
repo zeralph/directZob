@@ -163,11 +163,11 @@ void ZobHUDManager::UpdateNavigation(float dt)
 			m_menuItems[m_menuCurrentIndex]->DoAction();
 		}
 		m_menuItems[m_menuCurrentIndex]->SetSelected(false);
-		if (inputMap->GetBoolIsNew(ZobInputManager::MenuUp))
+		if (inputMap->GetBool(ZobInputManager::MenuUp))
 		{
 			m_menuCurrentIndex = max(m_menuCurrentIndex - 1, 0);
 		}
-		if (inputMap->GetBoolIsNew(ZobInputManager::MenuDown))
+		if (inputMap->GetBool(ZobInputManager::MenuDown))
 		{
 			m_menuCurrentIndex = min(m_menuCurrentIndex + 1, (int)m_menuItems.size()-1);
 		}

@@ -237,6 +237,11 @@ namespace CLI
 		}
 	}
 
+	void DirectZobWrapper::EditorInputsUpdate(float dt, IntPtr window)
+	{
+		
+		GetInstance()->GetInputManager()->Update(dt, (HWND)window.ToPointer());
+	}
 	int DirectZobWrapper::Stop()
 	{
 		m_run = false;
@@ -347,6 +352,32 @@ namespace CLI
 			return gcnew System::String(c->GetName().c_str());
 		}
 		return nullptr;
+	}
+
+	void DirectZobWrapper::SaveEditorSettings(EditorSettings^ s)
+	{
+		s->wireframe = DirectZob::GetInstance()->GetEngine()->WireFrame();
+		s->showText = DirectZob::GetInstance()->GetEngine()->ShowText();
+		s->showGrid = DirectZob::GetInstance()->GetEngine()->ShowGrid();
+		s->showBBoxes = DirectZob::GetInstance()->GetEngine()->ShowBBoxes();
+		s->drawPhysicsGizmos = DirectZob::GetInstance()->GetEngine()->DrawPhysyicsGizmos();
+		s->showNormals = DirectZob::GetInstance()->GetEngine()->ShowNormals();
+		s->drawGizmos = DirectZob::GetInstance()->GetEngine()->DrawGizmos();
+		s->drawCameraGizmos = DirectZob::GetInstance()->GetEngine()->DrawCameraGizmos();
+		s->drawZobObjectGizmos = DirectZob::GetInstance()->GetEngine()->DrawZobObjectGizmos();
+	}
+
+	void DirectZobWrapper::LoadEditorSettings(EditorSettings^ s)
+	{
+		DirectZob::GetInstance()->GetEngine()->WireFrame(s->wireframe);
+		DirectZob::GetInstance()->GetEngine()->ShowText(s->showText);
+		DirectZob::GetInstance()->GetEngine()->ShowGrid(s->showGrid);
+		DirectZob::GetInstance()->GetEngine()->ShowBBoxes(s->showBBoxes);
+		DirectZob::GetInstance()->GetEngine()->DrawPhysyicsGizmos(s->drawPhysicsGizmos);
+		DirectZob::GetInstance()->GetEngine()->ShowNormals(s->showNormals);
+		DirectZob::GetInstance()->GetEngine()->DrawGizmos(s->drawGizmos);
+		DirectZob::GetInstance()->GetEngine()->DrawCameraGizmos(s->drawCameraGizmos);
+		DirectZob::GetInstance()->GetEngine()->DrawZobObjectGizmos(s->drawZobObjectGizmos);
 	}
 }
 #endif //_WINDLL

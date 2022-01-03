@@ -143,10 +143,20 @@ ZobGroupBox^ ZobControl::CreateWrappedVariablesView(std::string& name, ZobVariab
 			{
 				panel->Controls->Add(gcnew ZobControlFloat(w));
 			}
-			//else if (w.type == ZobVariablesExposer::eWrapperType_ZobVector2)
-			//{
-			//	panel->Controls->Add(AddZobVector2Variable(w));
-			//}
+			else if (w.type == ZobVariablesExposer::eWrapperType_startGroup)
+			{
+				System::String^ s = gcnew String(w.name.c_str());
+				ZobGroupBox^ zb = gcnew ZobGroupBox(s, false);
+				ZobPropertiesContainer^ p = gcnew ZobPropertiesContainer();
+				zb->Controls->Add(p);
+				panel->Controls->Add(zb);
+				panel = p;
+			}
+			else if (w.type == ZobVariablesExposer::eWrapperType_endGroup)
+			{
+				ZobPropertiesContainer^ p = (ZobPropertiesContainer^)panel->Parent->Parent;
+				panel = p;
+			}
 			else if (w.type == ZobVariablesExposer::eWrapperType_zobId)
 			{
 				panel->Controls->Add(gcnew ZobControlZobId(w));

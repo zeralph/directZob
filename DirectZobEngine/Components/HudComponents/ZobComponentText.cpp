@@ -44,8 +44,13 @@ ZobComponentText::ZobComponentText(ZobObject* zobObject, bool bEditorZobComponen
 	m_varExposer->WrapVariable<float>("W", &m_w, NULL, false, true);
 	m_varExposer->WrapVariable<float>("H", &m_h, NULL, false, true);
 	m_varExposer->WrapVariable<float>("Z", &m_z, NULL, false, true);
+	m_varExposer->StartGroup("Font");
 	m_varExposer->WrapVariable<float>("Font size", &m_fontSize, NULL, false, true);
+	m_varExposer->WrapVariable<ZobFilePath>("Font Xml", &m_fontXml, NULL, false, true);
+	m_varExposer->WrapVariable<ZobFilePath>("Font Image", &m_fontImage, NULL, false, true);
 	m_varExposer->WrapVariable<std::string>("Text", &m_text, NULL, false, true);
+	m_varExposer->EndGroup();
+	m_varExposer->StartGroup("Selection");
 	m_varExposer->WrapVariable<ZobColor>("Default color", &m_defaultColor, NULL, false, true);
 	m_varExposer->WrapVariable<ZobColor>("Selected color", &m_selectedColor, NULL, false, true);
 	m_varExposer->WrapVariable<bool>("Selectable", &m_selectable, &ZobComponentText::UpdateSelectableStatus, false, true);
@@ -53,8 +58,7 @@ ZobComponentText::ZobComponentText(ZobObject* zobObject, bool bEditorZobComponen
 	const char* maStr[3] = { "None", "Load", "Exit" };
 	m_varExposer->WrapEnum<eMenuAction>("Action", &m_action, 3, ma, maStr, NULL, false, true);
 	m_varExposer->WrapVariable<std::string>("Action argument", &m_actionArg, NULL, false, true);
-	m_varExposer->WrapVariable<ZobFilePath>("Font Xml", &m_fontXml, NULL, false, true);
-	m_varExposer->WrapVariable<ZobFilePath>("Font Image", &m_fontImage, NULL, false, true);
+	m_varExposer->EndGroup();
 	m_varExposer->Load();
 	Init();
 }

@@ -31,6 +31,8 @@ public:
 		eWrapperType_zobColor,
 		eWrapperType_uint,
 		eWrapperType_action,
+		eWrapperType_startGroup,
+		eWrapperType_endGroup,
 		__eWrapperType_MAX__
 	};
 
@@ -69,6 +71,28 @@ public:
 	void ReadNode(TiXmlNode* node);
 
 	void ChangeId(zobId zid);
+
+	void StartGroup(const char* name)
+	{
+		wrapperData w = wrapperData(m_zobId);
+		w.Init();
+		w.type = eWrapperType_startGroup;
+		w.name = std::string(name);
+		w.bReadOnly = true;
+		w.bSave = false;
+		m_wrappedVariables.push_back(w);
+	}
+
+	void EndGroup()
+	{
+		wrapperData w = wrapperData(m_zobId);
+		w.Init();
+		w.type = eWrapperType_endGroup;
+		w.name = std::string("end");
+		w.bReadOnly = true;
+		w.bSave = false;
+		m_wrappedVariables.push_back(w);
+	}
 
 	void WrapAction(const char* name, wrapperCallback cb)
 	{
