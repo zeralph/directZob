@@ -966,69 +966,6 @@ void ZobControlZobEntity::OnClick(Object^ sender, EventArgs^ e)
 		tableLayoutPanel1->ResumeLayout(false);
 		tableLayoutPanel2->ResumeLayout(false);
 		f->ResumeLayout(false);
-
-		/*
-		std::vector<const ZobEntity*> e = ZobEntity::GetEntityByType(_w->strType);
-		Form^ f = gcnew Form();
-		f->Width = 450;
-
-		ListView^ l = gcnew ListView();
-		l->Dock = DockStyle::Fill;
-		l->GridLines = true;
-		l->AllowColumnReorder = false;
-		l->FullRowSelect = true;
-		l->GridLines = true;
-		l->View = View::Details;
-		l->Scrollable = true;
-
-		ColumnHeader^ h1 = gcnew ColumnHeader();
-		h1->Text = "Name";
-		h1->Name = "col1";
-		l->Columns->Add(h1);
-		ColumnHeader^ h2 = gcnew ColumnHeader();
-		h2->Text = "Guid";
-		h2->Name = "col2";
-		l->Columns->Add(h2);
-		l->Columns[0]->Width = 200;
-		l->Columns[1]->Width = 200;
-		l->AutoSize = true;
-		for (std::vector<const ZobEntity*>::const_iterator it = e.begin(); it != e.end(); it++)
-		{
-			const ZobEntity* z = *it;
-			zobId zid = z->GetIdValue();
-			System::String^ name  = gcnew String(z->GetName().c_str());
-			System::String^ guid = gcnew String("");
-			guid += zid;
-			ListViewItem^ i = gcnew ListViewItem(name);
-			i->SubItems->Add(guid);
-			l->Items->Add(i);
-		}
-		Button^ bOk = gcnew Button();
-		bOk->Text = "OK";
-		Button^ bCancel = gcnew Button();
-		bCancel->Text = "Cancel";
-		TableLayoutPanel^ p2 = gcnew TableLayoutPanel();
-		p2->ColumnCount = 2;
-		p2->RowCount = 1;
-		p2->Controls->Add(bOk);
-		p2->Controls->Add(bCancel);
-		p2->Dock = DockStyle::Fill;
-		p2->Height = 30;
-		p2->AutoSize = true;
-		p2->BackColor = Color::AliceBlue;
-		TableLayoutPanel^ p = gcnew TableLayoutPanel();
-		p->Dock = DockStyle::Fill;
-		p->ColumnCount = 1;
-		p->RowCount = 2;
-		p->Controls->Add(l);
-		p->Controls->Add(p2);
-		p->AutoSize = true;
-		p->BackColor = Color::DarkOrange;
-		p->ColumnStyles->Add(gcnew ColumnStyle(SizeType::AutoSize));
-		f->Controls->Add(p);
-		p->RowStyles->Add(gcnew RowStyle(SizeType::Absolute, (f->Height - 65)));
-		p->RowStyles->Add(gcnew RowStyle(SizeType::AutoSize));
-*/		
 		f->ShowDialog();
 	}
 }
@@ -1089,49 +1026,12 @@ ZobControlTreeNode::ZobControlTreeNode(String^ zobObjectGuid) :TreeNode()
 	MarshalString(zobObjectGuid, s);
 	zobId zid = ZobEntity::ZobIdFromString(s);
 	this->ToolTipText = m_zobObjectGuid;
-	ZobEntity::ZobType t = ZobEntity::GetType(zid);
-	ZobEntity::ZobSubType st = ZobEntity::GetSubType(zid);
-	m_isSelectable = t== ZobEntity::type_internal || t == ZobEntity::type_scene;
-	m_isReadOnly = t == ZobEntity::type_internal || t == ZobEntity::type_editor;
-	if (t != ZobEntity::type_scene && t != ZobEntity::type_internal)
-	{
-		this->ForeColor = Color::Red;
-	}
-	else if (st == ZobEntity::subtype_zobCamera)
-	{
-		this->ForeColor = Color::Brown;
-		this->ImageIndex = (int)ZobObjectManagerWrapper::eImageObjectType::eImageZobCamera; 
-	}
-	else if (st == ZobEntity::subtype_zobLight)
-	{
-		this->ForeColor = Color::Green;
-		this->ImageIndex = (int)ZobObjectManagerWrapper::eImageObjectType::eImageZobLight;
-	}
-	else if (st == ZobEntity::subtype_zobOject)
-	{
-		this->ForeColor = Color::Blue;
-		ZobObject* z = ZobEntity::GetEntity<ZobObject>(zid);
-		if (z)
-		{
-			if (z && z->GetComponent<ZobComponentSprite>())
-			{
-				this->ImageIndex = (int)ZobObjectManagerWrapper::eImageObjectType::eImageZobSprite;
-			}
-			else if (z && z->GetComponent<ZobComponentMesh>())
-			{
-				this->ImageIndex = (int)ZobObjectManagerWrapper::eImageObjectType::eImageZobMesh;
-			}
-			else if (z && (z->GetComponent<ZobComponentText>() || z->GetComponent<ZobComponentImage>()))
-			{
-				this->ImageIndex = (int)ZobObjectManagerWrapper::eImageObjectType::eImageZobHud;
-			}
-			else
-			{
-				this->ImageIndex = (int)ZobObjectManagerWrapper::eImageObjectType::eImageZobObject;
-			}
-		}
-	}
+	ZobEntityInfo^ zi = gcnew ZobEntityInfo(zid);
+	m_isSelectable = zi->_isSelectable;
+	m_isReadOnly = zi->_isReadOnly;
+	this->ImageIndex = (int)zi->_imgType;
 	this->SelectedImageIndex = this->ImageIndex;
+	this->ForeColor = zi->_color;
 }
 
 ZobControlTreeNode::~ZobControlTreeNode()

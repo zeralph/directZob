@@ -9,6 +9,7 @@ ZobComponentPhysicCapsule::~ZobComponentPhysicCapsule()
 
 ZobComponentPhysicCapsule::ZobComponentPhysicCapsule(ZobObject* zobObject) : ZobComponentPhysicShape(zobObject)
 {
+	SET_CLASS_AND_NAME
 	m_type = eComponent_physicCapsule;
 	m_capsuleShape = NULL;
 	m_varExposer->WrapVariable<float>("Radius", &m_radius, NULL, false, true);

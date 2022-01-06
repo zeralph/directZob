@@ -9,12 +9,13 @@ ZobComponentMesh::~ZobComponentMesh()
 
 ZobComponentMesh::ZobComponentMesh(ZobObject* zobObject, bool bEditorZobComponent) : ZobComponent(zobObject, bEditorZobComponent)
 {
+	SET_CLASS_AND_NAME
 	m_type = eComponent_mesh;
 	m_meshPath.Reset();
 	m_mesh = NULL;
 	m_meshPath.SetFileType(ZobFilePath::eFileType_mesh);
 	m_varExposer->WrapVariable<ZobFilePath>("File", &m_meshPath, NULL, false, true);
-	
+
 	Triangle::RenderOptions::eCullMode cm[3] = { Triangle::RenderOptions::eCullMode_None, Triangle::RenderOptions::eCullMode_ClockwiseFace, Triangle::RenderOptions::eCullMode_CounterClockwiseFace};
 	const char* cmStr[3] = { "None", "Clockwise", "Counter clockwise" };
 	m_varExposer->WrapEnum<Triangle::RenderOptions::eCullMode>("Cull mode", &m_renderOptions.cullMode, 3, cm, cmStr, NULL, false, true);

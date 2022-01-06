@@ -9,6 +9,7 @@ ZobComponentPhysicSphere::~ZobComponentPhysicSphere()
 
 ZobComponentPhysicSphere::ZobComponentPhysicSphere(ZobObject* zobObject) : ZobComponentPhysicShape(zobObject)
 {
+	SET_CLASS_AND_NAME
 	m_type = eComponent_physicSphere;
 	m_sphereShape = NULL;
 	m_localPostion = ZobVector3(0,0,0);

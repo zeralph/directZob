@@ -17,6 +17,7 @@ ZobComponentText::~ZobComponentText()
 
 ZobComponentText::ZobComponentText(ZobObject* zobObject, bool bEditorZobComponent) : ZobComponent(zobObject, bEditorZobComponent)
 {
+	SET_CLASS_AND_NAME
 	m_x = 0;
 	m_y = 0;
 	m_w = 0.5f;
@@ -38,7 +39,6 @@ ZobComponentText::ZobComponentText(ZobObject* zobObject, bool bEditorZobComponen
 	m_actionArg = "";
 	m_selected = false;
 	//m_varExposer->WrapAction("Add", &ZobComponentText::AddItem);
-	
 	m_varExposer->WrapVariable<bool>("Visible", &m_visible, NULL, false, true);
 	m_varExposer->WrapVariable<float>("X", &m_x, NULL, false, true);
 	m_varExposer->WrapVariable<float>("Y", &m_y, NULL, false, true);

@@ -3,6 +3,8 @@
 #include <vector>
 #include <map>
 
+#define SET_CLASS_AND_NAME  m_class = typeid(*this).name(); m_class = m_class.substr(5, m_class.length()-5); std::stringstream ss; ss << m_class << "_" << m_id; m_name = ss.str();
+
 class ZobEntity
 {
 public :
@@ -63,6 +65,12 @@ public :
 		if (it != m_entityMap.end())
 		{
 			ZobEntity* ze = it->second;
+			std::string s = typeid(T).name();
+			s = s.substr(5, s.length() - 5);
+			if (s == ze->m_class || s == " ZobEntity")
+			{
+				return static_cast<T*>(ze);
+			}
 			/*
 			ZobSubType st = ZobEntity::GetSubType(it->first);
 			const char* type = typeid(T).name();
@@ -83,7 +91,7 @@ public :
 				return NULL;
 			}
 			*/
-			return dynamic_cast<T*>(ze);
+			//return dynamic_cast<T*>(ze);
 		}
 		return NULL;
 	}
@@ -97,6 +105,7 @@ public :
 	bool											IsEditorObject();
 	bool											ChangeId(const zobId zid);
 	inline const std::string&						GetName() const { return m_name; }
+	inline const std::string&						GetClass() const { return m_class; }
 	inline void										SetName(const std::string& name) { m_name = name; }
 	virtual void									Duplicate() = 0;
 	std::string										ZobIdToString()
@@ -119,6 +128,7 @@ protected:
 	ZobEntity::ZobType								m_type;
 	ZobEntity::ZobSubType							m_subType;
 	std::string										m_name;
+	std::string										m_class;
 private:
 	static ulong									GenerateId();
 	void											EraseEntry(const zobId zid);

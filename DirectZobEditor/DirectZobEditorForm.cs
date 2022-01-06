@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 
 namespace DirectZobEditor
 {
-    public partial class Form1 : Form
+    public partial class DirectZobEditorForm : Form
     {
         private string workspace = "";
         enum eplayMode
@@ -43,8 +43,8 @@ namespace DirectZobEditor
         }
         #endregion
         private bool m_running = false;
-        public static Form1 m_mainForm = null;
-        public static Form1 GetMainForm() { return m_mainForm; }
+        public static DirectZobEditorForm m_mainForm = null;
+        public static DirectZobEditorForm GetMainForm() { return m_mainForm; }
         public event EventHandler OnNewScene;
         public event EventHandler OnSceneLoadedEventHandler;
         public event EventHandler OnSceneSaved;
@@ -56,6 +56,9 @@ namespace DirectZobEditor
 
         private CLI.DirectZobWrapper m_directZobWrapper;
         private CLI.ZobObjectManagerWrapper m_zobObjectManagerWrapper;
+
+        private ZobEntityViewerForm m_entityForm;
+        private MaterialsForm.ZobMaterialsForm m_materialsForm;
 
         private Thread m_engineThread;
         //private ZobObjectListControl m_zobObjectList;
@@ -74,7 +77,7 @@ namespace DirectZobEditor
         public OnSceneLoaded OnSceneLoadedDelegate;
 
         private IntPtr m_engineWindowHandle;
-        public Form1()
+        public DirectZobEditorForm()
         {
             Font f = new Font("Microsoft Tai Le", 8);
             this.Font = f;
@@ -83,7 +86,7 @@ namespace DirectZobEditor
             InitializeComponent();
             m_engineWindow = new EngineWindow(this);
             PictureBox p = m_engineWindow.GetEngineRenderwindow();
-            System.Resources.ResourceManager resources = new ResourceManager("DirectZobEditor.Properties.Resources", typeof(Form1).Assembly);
+            System.Resources.ResourceManager resources = new ResourceManager("DirectZobEditor.Properties.Resources", typeof(DirectZobEditorForm).Assembly);
             m_directZobWrapper = new CLI.DirectZobWrapper(this.ZobObjectListPanel, this.propertiesPanel, this.globalPropertiesPanel, m_engineWindow.GetEngineRenderwindow(), resources);
             m_directZobWrapper.Init(p.Width, p.Height);
             CLI.ZobObjectManagerWrapper.OnObjectSelectedEvent += new CLI.ZobObjectManagerWrapper.OnObjectSelected(OnObjectSelected);
@@ -173,8 +176,8 @@ namespace DirectZobEditor
                 //EngineRender.Invoke(UpdateEngineWindowDelegate);
                 if (m_directZobWrapper.IsPhysicPlaying())
                 {
-                    Form1.SceneUpdateEventArg ev = new Form1.SceneUpdateEventArg();
-                    ev.type = Form1.SceneUpdateType.updateAfterEngine;
+                    DirectZobEditorForm.SceneUpdateEventArg ev = new DirectZobEditorForm.SceneUpdateEventArg();
+                    ev.type = DirectZobEditorForm.SceneUpdateType.updateAfterEngine;
                     PropagateSceneUpdateEvent(ev);
                 }
             }));
@@ -330,8 +333,8 @@ namespace DirectZobEditor
             {
                 handler(this, EventArgs.Empty);
             }
-            Form1.SceneUpdateEventArg ev = new Form1.SceneUpdateEventArg();
-            ev.type = Form1.SceneUpdateType.loadScene;
+            DirectZobEditorForm.SceneUpdateEventArg ev = new DirectZobEditorForm.SceneUpdateEventArg();
+            ev.type = DirectZobEditorForm.SceneUpdateType.loadScene;
             PropagateSceneUpdateEvent(ev);
         }
 
@@ -522,24 +525,24 @@ namespace DirectZobEditor
         private void spotToolStripMenuItem_Click(object sender, EventArgs e)
         {
             m_directZobWrapper.CreateLight(1);
-            Form1.SceneUpdateEventArg ev = new Form1.SceneUpdateEventArg();
-            ev.type = Form1.SceneUpdateType.createLight;
+            DirectZobEditorForm.SceneUpdateEventArg ev = new DirectZobEditorForm.SceneUpdateEventArg();
+            ev.type = DirectZobEditorForm.SceneUpdateType.createLight;
             PropagateSceneUpdateEvent(ev);
         }
 
         private void pointToolStripMenuItem_Click(object sender, EventArgs e)
         {
             m_directZobWrapper.CreateLight(0);
-            Form1.SceneUpdateEventArg ev = new Form1.SceneUpdateEventArg();
-            ev.type = Form1.SceneUpdateType.createLight;
+            DirectZobEditorForm.SceneUpdateEventArg ev = new DirectZobEditorForm.SceneUpdateEventArg();
+            ev.type = DirectZobEditorForm.SceneUpdateType.createLight;
             PropagateSceneUpdateEvent(ev);
         }
 
         private void directionalToolStripMenuItem_Click(object sender, EventArgs e)
         {
             m_directZobWrapper.CreateLight(2);
-            Form1.SceneUpdateEventArg ev = new Form1.SceneUpdateEventArg();
-            ev.type = Form1.SceneUpdateType.createLight;
+            DirectZobEditorForm.SceneUpdateEventArg ev = new DirectZobEditorForm.SceneUpdateEventArg();
+            ev.type = DirectZobEditorForm.SceneUpdateType.createLight;
             PropagateSceneUpdateEvent(ev);
         }
 
@@ -590,8 +593,8 @@ namespace DirectZobEditor
  //                   m_zobObjectList.RestoreTransforms();
                 }
                 m_playMode = eplayMode.ePlayMode_stop;
-                Form1.SceneUpdateEventArg ev = new Form1.SceneUpdateEventArg();
-                ev.type = Form1.SceneUpdateType.stopPhysics;
+                DirectZobEditorForm.SceneUpdateEventArg ev = new DirectZobEditorForm.SceneUpdateEventArg();
+                ev.type = DirectZobEditorForm.SceneUpdateType.stopPhysics;
                 PropagateSceneUpdateEvent(ev);
             }
             InformEngineStatus("STOPPED");
@@ -700,32 +703,32 @@ namespace DirectZobEditor
         private void fixedToolStripMenuItem_Click(object sender, EventArgs e)
         {
             m_directZobWrapper.CreateCamera("Fixed");
-            Form1.SceneUpdateEventArg ev = new Form1.SceneUpdateEventArg();
-            ev.type = Form1.SceneUpdateType.createCamera;
+            DirectZobEditorForm.SceneUpdateEventArg ev = new DirectZobEditorForm.SceneUpdateEventArg();
+            ev.type = DirectZobEditorForm.SceneUpdateType.createCamera;
             PropagateSceneUpdateEvent(ev);
         }
 
         private void fPSToolStripMenuItem_Click(object sender, EventArgs e)
         {
             m_directZobWrapper.CreateCamera("FPS");
-            Form1.SceneUpdateEventArg ev = new Form1.SceneUpdateEventArg();
-            ev.type = Form1.SceneUpdateType.createCamera;
+            DirectZobEditorForm.SceneUpdateEventArg ev = new DirectZobEditorForm.SceneUpdateEventArg();
+            ev.type = DirectZobEditorForm.SceneUpdateType.createCamera;
             PropagateSceneUpdateEvent(ev);
         }
 
         private void orbitalFreeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             m_directZobWrapper.CreateCamera("Orbital");
-            Form1.SceneUpdateEventArg ev = new Form1.SceneUpdateEventArg();
-            ev.type = Form1.SceneUpdateType.createCamera;
+            DirectZobEditorForm.SceneUpdateEventArg ev = new DirectZobEditorForm.SceneUpdateEventArg();
+            ev.type = DirectZobEditorForm.SceneUpdateType.createCamera;
             PropagateSceneUpdateEvent(ev);
         }
 
         private void orbitalToParentToolStripMenuItem_Click(object sender, EventArgs e)
         {
             m_directZobWrapper.CreateCamera("Orbital");
-            Form1.SceneUpdateEventArg ev = new Form1.SceneUpdateEventArg();
-            ev.type = Form1.SceneUpdateType.createCamera;
+            DirectZobEditorForm.SceneUpdateEventArg ev = new DirectZobEditorForm.SceneUpdateEventArg();
+            ev.type = DirectZobEditorForm.SceneUpdateType.createCamera;
             PropagateSceneUpdateEvent(ev);
         }
         #endregion
@@ -827,8 +830,39 @@ namespace DirectZobEditor
 
         private void materialsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MaterialsForm.MaterialsForm f = new MaterialsForm.MaterialsForm(m_directZobWrapper);
-            f.Show();
+            if(m_materialsForm == null)
+            {
+                m_materialsForm = new MaterialsForm.ZobMaterialsForm(this, m_directZobWrapper);
+                m_materialsForm.StartPosition = FormStartPosition.CenterParent;
+                Point p = new Point();
+                p.X = this.Location.X + this.Width / 2 - m_materialsForm.Width / 2;
+                p.Y = this.Location.Y + this.Height / 2 - m_materialsForm.Height / 2;
+                m_materialsForm.Show();
+                m_materialsForm.Location = p;
+            }
+        }
+
+        private void entitiesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (m_entityForm == null)
+            {
+                m_entityForm = new ZobEntityViewerForm(this, m_directZobWrapper);
+                m_entityForm.StartPosition = FormStartPosition.CenterParent;
+                Point p = new Point();
+                p.X = this.Location.X + this.Width / 2 - m_entityForm.Width / 2;
+                p.Y = this.Location.Y + this.Height / 2 - m_entityForm.Height / 2;
+                m_entityForm.Show();
+                m_entityForm.Location = p;
+            }
+        }
+
+        public void UnregisterZobMaterialsViewer()
+        {
+            m_materialsForm = null;
+        }
+        public void UnregisterZobEntitySelector()
+        {
+            m_entityForm = null;
         }
     }
 

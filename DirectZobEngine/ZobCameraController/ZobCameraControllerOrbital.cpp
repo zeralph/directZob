@@ -4,6 +4,7 @@
 
 ZobCameraControllerOrbital::ZobCameraControllerOrbital(Camera* c, bool isFree, zobId guid) :ZobCameraController(c, guid)
 {
+	SET_CLASS_AND_NAME
 	if (isFree)
 	{
 		m_cameraControllerType = Camera::eCamera_orbital_free;
@@ -24,6 +25,7 @@ ZobCameraControllerOrbital::ZobCameraControllerOrbital(Camera* c, bool isFree, z
 
 ZobCameraControllerOrbital::ZobCameraControllerOrbital(Camera* c, bool isFree) :ZobCameraController(c)
 {
+	SET_CLASS_AND_NAME
 	if (isFree)
 	{
 		m_cameraControllerType = Camera::eCamera_orbital_free;
@@ -44,7 +46,7 @@ ZobCameraControllerOrbital::ZobCameraControllerOrbital(Camera* c, bool isFree) :
 
 ZobCameraControllerOrbital::~ZobCameraControllerOrbital()
 {
-    m_zobCamera = NULL;
+    m_zobObject = NULL;
 }
 
 void ZobCameraControllerOrbital::SetTarget(const ZobVector3* t)
@@ -54,7 +56,7 @@ void ZobCameraControllerOrbital::SetTarget(const ZobVector3* t)
 
 void ZobCameraControllerOrbital::PreUpdate(float dt)
 {
-	if (m_zobCamera->m_active)
+	if (m_zobObject->m_active)
 	{
 		const gainput::InputMap* inputMap = DirectZob::GetInstance()->GetInputManager()->GetMap();
 		float rx = -inputMap->GetFloat(ZobInputManager::RightStickX) * 2.0f;
@@ -70,28 +72,28 @@ void ZobCameraControllerOrbital::Update(float dt)
 {
 	if (m_isFree)
 	{
-		ZobVector3 vl = m_zobCamera->m_left;
+		ZobVector3 vl = m_zobObject->m_left;
 		vl = vl * (-m_moveX / 20.0f);
 		vl.y = 0;
-		ZobVector3 vf = m_zobCamera->m_forward;
+		ZobVector3 vf = m_zobObject->m_forward;
 		vf = vf * (m_moveZ / 20.0f);
 		vf.y = 0;
 		ZobVector3 vu = ZobVector3(0, m_moveY / 20.0f, 0);
-		ZobVector3 vp = m_zobCamera->GetWorldPosition();
+		ZobVector3 vp = m_zobObject->GetWorldPosition();
 		ZobVector3 deltaP = (vl + vf + vu);
 		vp = vp - deltaP;
 		m_centerOfRotation = m_centerOfRotation - deltaP;
-		m_zobCamera->SetWorldPosition(vp.x, vp.y, vp.z);
+		m_zobObject->SetWorldPosition(vp.x, vp.y, vp.z);
 		m_moveX = 0.0f;
 		m_moveY = 0.0f;
 		m_moveZ = 0.0f;
 	}
 	else
 	{
-		m_centerOfRotation = m_zobCamera->GetParent()->GetWorldPosition();
+		m_centerOfRotation = m_zobObject->GetParent()->GetWorldPosition();
 	}
 	m_rotationY = std::fminf(std::fmaxf(m_rotationY, -89.9f), 89.9f);
-	m_zobCamera->RotateOrbital(&m_centerOfRotation, m_rotationX, m_rotationY, m_dist);
+	m_zobObject->RotateOrbital(&m_centerOfRotation, m_rotationX, m_rotationY, m_dist);
 }
 
 void ZobCameraControllerOrbital::Rotate(float x, float y, float z)

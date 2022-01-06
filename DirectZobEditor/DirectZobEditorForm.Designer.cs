@@ -1,6 +1,6 @@
 ﻿namespace DirectZobEditor
 {
-    partial class Form1
+    partial class DirectZobEditorForm
     {
         /// <summary>
         /// Variable nécessaire au concepteur.
@@ -28,31 +28,70 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DirectZobEditorForm));
             this.bottomStatusBar = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusEngineState = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusScanePath = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.loadSceneToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveSceneAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveSceneToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.assetsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.loadTextureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.loadMeshToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.LoadSpriteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.createLightToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.spotToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.pointToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.directionalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.createCameraToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.fixedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.fPSToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.orbitalFreeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.orbitalToParentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.createZobObjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.windowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.materialsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.entitiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.regenerateZobIdsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.windowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.FirstPanelSplitter = new System.Windows.Forms.SplitContainer();
             this.ZobObjectListPanel = new System.Windows.Forms.Panel();
             this.ViewAndLogsAndObjectControl = new System.Windows.Forms.SplitContainer();
             this.ViewAndLogs = new System.Windows.Forms.SplitContainer();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.buttonBar = new System.Windows.Forms.ToolStrip();
+            this.btnPlay = new System.Windows.Forms.ToolStripButton();
+            this.btnStop = new System.Windows.Forms.ToolStripButton();
+            this.btnPause = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.btnRotateLocal = new System.Windows.Forms.ToolStripButton();
+            this.btnTranslateLocal = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.btnTranslateWorld = new System.Windows.Forms.ToolStripButton();
+            this.btnRotateWorld = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.btnScale = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSnap = new System.Windows.Forms.ToolStripDropDownButton();
+            this.noneToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.toolStripComboBoxCurrentCamera = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+            this.btnWireframe = new System.Windows.Forms.ToolStripButton();
+            this.btnGizmos = new System.Windows.Forms.ToolStripButton();
+            this.btnGrid = new System.Windows.Forms.ToolStripButton();
+            this.btnNormals = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
             this.EngineRendererPanel = new System.Windows.Forms.Panel();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
@@ -67,44 +106,6 @@
             this.tabEngine = new System.Windows.Forms.TabPage();
             this.panel2 = new System.Windows.Forms.Panel();
             this.EngineControlsFlowLayout = new System.Windows.Forms.FlowLayoutPanel();
-            this.btnPlay = new System.Windows.Forms.ToolStripButton();
-            this.btnStop = new System.Windows.Forms.ToolStripButton();
-            this.btnPause = new System.Windows.Forms.ToolStripButton();
-            this.btnRotateLocal = new System.Windows.Forms.ToolStripButton();
-            this.btnTranslateLocal = new System.Windows.Forms.ToolStripButton();
-            this.btnTranslateWorld = new System.Windows.Forms.ToolStripButton();
-            this.btnRotateWorld = new System.Windows.Forms.ToolStripButton();
-            this.btnScale = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSnap = new System.Windows.Forms.ToolStripDropDownButton();
-            this.noneToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
-            this.btnWireframe = new System.Windows.Forms.ToolStripButton();
-            this.btnGizmos = new System.Windows.Forms.ToolStripButton();
-            this.btnGrid = new System.Windows.Forms.ToolStripButton();
-            this.btnNormals = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
-            this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.loadSceneToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.loadTextureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.loadMeshToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.LoadSpriteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.createLightToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.spotToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.pointToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.directionalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.createCameraToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.fixedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.fPSToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.orbitalFreeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.orbitalToParentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.createZobObjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.materialsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bottomStatusBar.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FirstPanelSplitter)).BeginInit();
@@ -192,12 +193,30 @@
             this.fileToolStripMenuItem.Text = "File";
             this.fileToolStripMenuItem.Click += new System.EventHandler(this.fileToolStripMenuItem_Click);
             // 
+            // newToolStripMenuItem
+            // 
+            this.newToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("newToolStripMenuItem.Image")));
+            this.newToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.newToolStripMenuItem.Name = "newToolStripMenuItem";
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.newToolStripMenuItem.Text = "New scene";
+            this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
+            // 
+            // loadSceneToolStripMenuItem
+            // 
+            this.loadSceneToolStripMenuItem.Image = global::DirectZobEditor.Properties.Resources.load;
+            this.loadSceneToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.loadSceneToolStripMenuItem.Name = "loadSceneToolStripMenuItem";
+            this.loadSceneToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.loadSceneToolStripMenuItem.Text = "Load scene ...";
+            this.loadSceneToolStripMenuItem.Click += new System.EventHandler(this.loadSceneToolStripMenuItem_Click);
+            // 
             // saveSceneAsToolStripMenuItem
             // 
             this.saveSceneAsToolStripMenuItem.Image = global::DirectZobEditor.Properties.Resources.save2;
             this.saveSceneAsToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.saveSceneAsToolStripMenuItem.Name = "saveSceneAsToolStripMenuItem";
-            this.saveSceneAsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveSceneAsToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.saveSceneAsToolStripMenuItem.Text = "Save scene as ...";
             this.saveSceneAsToolStripMenuItem.Click += new System.EventHandler(this.saveSceneAsToolStripMenuItem_Click);
             // 
@@ -206,9 +225,18 @@
             this.saveSceneToolStripMenuItem1.Image = global::DirectZobEditor.Properties.Resources.save2;
             this.saveSceneToolStripMenuItem1.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.saveSceneToolStripMenuItem1.Name = "saveSceneToolStripMenuItem1";
-            this.saveSceneToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.saveSceneToolStripMenuItem1.Size = new System.Drawing.Size(157, 22);
             this.saveSceneToolStripMenuItem1.Text = "Save scene";
             this.saveSceneToolStripMenuItem1.Click += new System.EventHandler(this.saveSceneToolStripMenuItem1_Click);
+            // 
+            // exitToolStripMenuItem
+            // 
+            this.exitToolStripMenuItem.Image = global::DirectZobEditor.Properties.Resources.exit;
+            this.exitToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.exitToolStripMenuItem.Text = "Exit";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.ExitToolStripMenuItem_Click);
             // 
             // assetsToolStripMenuItem
             // 
@@ -224,6 +252,144 @@
             this.assetsToolStripMenuItem.Text = "Assets";
             this.assetsToolStripMenuItem.Click += new System.EventHandler(this.assetsToolStripMenuItem_Click);
             // 
+            // loadTextureToolStripMenuItem
+            // 
+            this.loadTextureToolStripMenuItem.Image = global::DirectZobEditor.Properties.Resources.texture;
+            this.loadTextureToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.loadTextureToolStripMenuItem.Name = "loadTextureToolStripMenuItem";
+            this.loadTextureToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.loadTextureToolStripMenuItem.Text = "Load Texture ...";
+            this.loadTextureToolStripMenuItem.Click += new System.EventHandler(this.LoadTextureToolStripMenuItem_Click);
+            // 
+            // loadMeshToolStripMenuItem
+            // 
+            this.loadMeshToolStripMenuItem.Image = global::DirectZobEditor.Properties.Resources.mesh3;
+            this.loadMeshToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.loadMeshToolStripMenuItem.Name = "loadMeshToolStripMenuItem";
+            this.loadMeshToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.loadMeshToolStripMenuItem.Text = "Load Mesh ...";
+            this.loadMeshToolStripMenuItem.Click += new System.EventHandler(this.LoadMeshToolStripMenuItem_Click);
+            // 
+            // LoadSpriteToolStripMenuItem
+            // 
+            this.LoadSpriteToolStripMenuItem.Image = global::DirectZobEditor.Properties.Resources.sprite;
+            this.LoadSpriteToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.LoadSpriteToolStripMenuItem.Name = "LoadSpriteToolStripMenuItem";
+            this.LoadSpriteToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.LoadSpriteToolStripMenuItem.Text = "Load Sprite ...";
+            this.LoadSpriteToolStripMenuItem.Click += new System.EventHandler(this.createSpriteToolStripMenuItem_Click);
+            // 
+            // createLightToolStripMenuItem
+            // 
+            this.createLightToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.spotToolStripMenuItem,
+            this.pointToolStripMenuItem,
+            this.directionalToolStripMenuItem});
+            this.createLightToolStripMenuItem.Image = global::DirectZobEditor.Properties.Resources.light1;
+            this.createLightToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.createLightToolStripMenuItem.Name = "createLightToolStripMenuItem";
+            this.createLightToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.createLightToolStripMenuItem.Text = "Create Light ";
+            // 
+            // spotToolStripMenuItem
+            // 
+            this.spotToolStripMenuItem.Name = "spotToolStripMenuItem";
+            this.spotToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
+            this.spotToolStripMenuItem.Text = "Spot";
+            this.spotToolStripMenuItem.Click += new System.EventHandler(this.spotToolStripMenuItem_Click);
+            // 
+            // pointToolStripMenuItem
+            // 
+            this.pointToolStripMenuItem.Name = "pointToolStripMenuItem";
+            this.pointToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
+            this.pointToolStripMenuItem.Text = "Point";
+            this.pointToolStripMenuItem.Click += new System.EventHandler(this.pointToolStripMenuItem_Click);
+            // 
+            // directionalToolStripMenuItem
+            // 
+            this.directionalToolStripMenuItem.Name = "directionalToolStripMenuItem";
+            this.directionalToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
+            this.directionalToolStripMenuItem.Text = "Directional";
+            this.directionalToolStripMenuItem.Click += new System.EventHandler(this.directionalToolStripMenuItem_Click);
+            // 
+            // createCameraToolStripMenuItem
+            // 
+            this.createCameraToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fixedToolStripMenuItem,
+            this.fPSToolStripMenuItem,
+            this.orbitalFreeToolStripMenuItem,
+            this.orbitalToParentToolStripMenuItem});
+            this.createCameraToolStripMenuItem.Image = global::DirectZobEditor.Properties.Resources.camera2;
+            this.createCameraToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.createCameraToolStripMenuItem.Name = "createCameraToolStripMenuItem";
+            this.createCameraToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.createCameraToolStripMenuItem.Text = "Create Camera";
+            this.createCameraToolStripMenuItem.Click += new System.EventHandler(this.createCameraToolStripMenuItem_Click);
+            // 
+            // fixedToolStripMenuItem
+            // 
+            this.fixedToolStripMenuItem.Name = "fixedToolStripMenuItem";
+            this.fixedToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.fixedToolStripMenuItem.Text = "Fixed";
+            this.fixedToolStripMenuItem.Click += new System.EventHandler(this.fixedToolStripMenuItem_Click);
+            // 
+            // fPSToolStripMenuItem
+            // 
+            this.fPSToolStripMenuItem.Name = "fPSToolStripMenuItem";
+            this.fPSToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.fPSToolStripMenuItem.Text = "FPS";
+            this.fPSToolStripMenuItem.Click += new System.EventHandler(this.fPSToolStripMenuItem_Click);
+            // 
+            // orbitalFreeToolStripMenuItem
+            // 
+            this.orbitalFreeToolStripMenuItem.Name = "orbitalFreeToolStripMenuItem";
+            this.orbitalFreeToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.orbitalFreeToolStripMenuItem.Text = "Orbital free";
+            this.orbitalFreeToolStripMenuItem.Click += new System.EventHandler(this.orbitalFreeToolStripMenuItem_Click);
+            // 
+            // orbitalToParentToolStripMenuItem
+            // 
+            this.orbitalToParentToolStripMenuItem.Name = "orbitalToParentToolStripMenuItem";
+            this.orbitalToParentToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.orbitalToParentToolStripMenuItem.Text = "Orbital to parent";
+            this.orbitalToParentToolStripMenuItem.Click += new System.EventHandler(this.orbitalToParentToolStripMenuItem_Click);
+            // 
+            // createZobObjectToolStripMenuItem
+            // 
+            this.createZobObjectToolStripMenuItem.Image = global::DirectZobEditor.Properties.Resources._object;
+            this.createZobObjectToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.createZobObjectToolStripMenuItem.Name = "createZobObjectToolStripMenuItem";
+            this.createZobObjectToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.createZobObjectToolStripMenuItem.Text = "Create ZobObject";
+            this.createZobObjectToolStripMenuItem.Click += new System.EventHandler(this.createZobObjectToolStripMenuItem_Click);
+            // 
+            // windowToolStripMenuItem
+            // 
+            this.windowToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.materialsToolStripMenuItem,
+            this.entitiesToolStripMenuItem});
+            this.windowToolStripMenuItem.Name = "windowToolStripMenuItem";
+            this.windowToolStripMenuItem.Size = new System.Drawing.Size(63, 22);
+            this.windowToolStripMenuItem.Text = "Window";
+            // 
+            // materialsToolStripMenuItem
+            // 
+            this.materialsToolStripMenuItem.Image = global::DirectZobEditor.Properties.Resources.material;
+            this.materialsToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.materialsToolStripMenuItem.Name = "materialsToolStripMenuItem";
+            this.materialsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.materialsToolStripMenuItem.Text = "Materials ...";
+            this.materialsToolStripMenuItem.Click += new System.EventHandler(this.materialsToolStripMenuItem_Click);
+            // 
+            // entitiesToolStripMenuItem
+            // 
+            this.entitiesToolStripMenuItem.Image = global::DirectZobEditor.Properties.Resources._object;
+            this.entitiesToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.entitiesToolStripMenuItem.Name = "entitiesToolStripMenuItem";
+            this.entitiesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.entitiesToolStripMenuItem.Text = "Entities ...";
+            this.entitiesToolStripMenuItem.Click += new System.EventHandler(this.entitiesToolStripMenuItem_Click);
+            // 
             // setupToolStripMenuItem
             // 
             this.setupToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -235,17 +401,9 @@
             // regenerateZobIdsToolStripMenuItem
             // 
             this.regenerateZobIdsToolStripMenuItem.Name = "regenerateZobIdsToolStripMenuItem";
-            this.regenerateZobIdsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.regenerateZobIdsToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
             this.regenerateZobIdsToolStripMenuItem.Text = "Regenerate ZobIds";
             this.regenerateZobIdsToolStripMenuItem.Click += new System.EventHandler(this.regenerateZobIdsToolStripMenuItem_Click);
-            // 
-            // windowToolStripMenuItem
-            // 
-            this.windowToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.materialsToolStripMenuItem});
-            this.windowToolStripMenuItem.Name = "windowToolStripMenuItem";
-            this.windowToolStripMenuItem.Size = new System.Drawing.Size(63, 22);
-            this.windowToolStripMenuItem.Text = "Window";
             // 
             // FirstPanelSplitter
             // 
@@ -374,25 +532,184 @@
             this.buttonBar.TabIndex = 1;
             this.buttonBar.Text = "toolStrip1";
             // 
+            // btnPlay
+            // 
+            this.btnPlay.AutoSize = false;
+            this.btnPlay.CheckOnClick = true;
+            this.btnPlay.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnPlay.Image = global::DirectZobEditor.Properties.Resources.play;
+            this.btnPlay.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.btnPlay.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnPlay.Name = "btnPlay";
+            this.btnPlay.Size = new System.Drawing.Size(23, 22);
+            this.btnPlay.Text = "toolStripButton1";
+            this.btnPlay.Click += new System.EventHandler(this.btnPlay_Click);
+            // 
+            // btnStop
+            // 
+            this.btnStop.AutoSize = false;
+            this.btnStop.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnStop.Image = global::DirectZobEditor.Properties.Resources.stop;
+            this.btnStop.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.btnStop.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnStop.Name = "btnStop";
+            this.btnStop.Size = new System.Drawing.Size(23, 22);
+            this.btnStop.Text = "toolStripButton3";
+            this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
+            // 
+            // btnPause
+            // 
+            this.btnPause.AutoSize = false;
+            this.btnPause.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnPause.Image = global::DirectZobEditor.Properties.Resources.pause;
+            this.btnPause.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.btnPause.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnPause.Name = "btnPause";
+            this.btnPause.Size = new System.Drawing.Size(23, 22);
+            this.btnPause.Text = "toolStripButton2";
+            this.btnPause.Click += new System.EventHandler(this.btnPause_Click);
+            // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            // 
+            // btnRotateLocal
+            // 
+            this.btnRotateLocal.AutoSize = false;
+            this.btnRotateLocal.CheckOnClick = true;
+            this.btnRotateLocal.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnRotateLocal.Image = global::DirectZobEditor.Properties.Resources.rotate_L;
+            this.btnRotateLocal.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.btnRotateLocal.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnRotateLocal.Name = "btnRotateLocal";
+            this.btnRotateLocal.Size = new System.Drawing.Size(23, 22);
+            this.btnRotateLocal.Text = "RL";
+            this.btnRotateLocal.ToolTipText = "Rotate in object\'s space";
+            this.btnRotateLocal.Click += new System.EventHandler(this.btnRotateLocal_Click);
+            // 
+            // btnTranslateLocal
+            // 
+            this.btnTranslateLocal.AutoSize = false;
+            this.btnTranslateLocal.Checked = true;
+            this.btnTranslateLocal.CheckOnClick = true;
+            this.btnTranslateLocal.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.btnTranslateLocal.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnTranslateLocal.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.btnTranslateLocal.Image = global::DirectZobEditor.Properties.Resources.move_W;
+            this.btnTranslateLocal.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.btnTranslateLocal.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnTranslateLocal.Name = "btnTranslateLocal";
+            this.btnTranslateLocal.Size = new System.Drawing.Size(23, 22);
+            this.btnTranslateLocal.ToolTipText = "Translate in object\'s space";
+            this.btnTranslateLocal.Click += new System.EventHandler(this.btnTranslateLocal_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
             // 
+            // btnTranslateWorld
+            // 
+            this.btnTranslateWorld.AutoSize = false;
+            this.btnTranslateWorld.CheckOnClick = true;
+            this.btnTranslateWorld.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnTranslateWorld.Image = global::DirectZobEditor.Properties.Resources.rotate_L;
+            this.btnTranslateWorld.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.btnTranslateWorld.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnTranslateWorld.Name = "btnTranslateWorld";
+            this.btnTranslateWorld.Size = new System.Drawing.Size(23, 22);
+            this.btnTranslateWorld.Text = "TW";
+            this.btnTranslateWorld.ToolTipText = "Rotate in world space";
+            this.btnTranslateWorld.Click += new System.EventHandler(this.btnTranslateWorld_Click);
+            // 
+            // btnRotateWorld
+            // 
+            this.btnRotateWorld.AutoSize = false;
+            this.btnRotateWorld.CheckOnClick = true;
+            this.btnRotateWorld.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnRotateWorld.Image = global::DirectZobEditor.Properties.Resources.rotate_W;
+            this.btnRotateWorld.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.btnRotateWorld.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnRotateWorld.Name = "btnRotateWorld";
+            this.btnRotateWorld.Size = new System.Drawing.Size(23, 22);
+            this.btnRotateWorld.Text = "RW";
+            this.btnRotateWorld.Click += new System.EventHandler(this.btnRotateWorld_Click);
+            // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
             this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
             // 
+            // btnScale
+            // 
+            this.btnScale.AutoSize = false;
+            this.btnScale.CheckOnClick = true;
+            this.btnScale.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnScale.Image = global::DirectZobEditor.Properties.Resources.Scale;
+            this.btnScale.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.btnScale.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnScale.Name = "btnScale";
+            this.btnScale.Size = new System.Drawing.Size(23, 22);
+            this.btnScale.Text = "S";
+            this.btnScale.ToolTipText = "Scale";
+            this.btnScale.Click += new System.EventHandler(this.btnScale_Click);
+            // 
+            // toolStripSnap
+            // 
+            this.toolStripSnap.AutoSize = false;
+            this.toolStripSnap.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripSnap.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.noneToolStripMenuItem,
+            this.toolStripMenuItem2,
+            this.toolStripMenuItem3,
+            this.toolStripMenuItem4});
+            this.toolStripSnap.Image = global::DirectZobEditor.Properties.Resources.snap;
+            this.toolStripSnap.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.toolStripSnap.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripSnap.Name = "toolStripSnap";
+            this.toolStripSnap.Size = new System.Drawing.Size(29, 22);
+            this.toolStripSnap.Text = "Snap";
+            this.toolStripSnap.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.toolStripSnap_DropDownItemClicked);
+            // 
+            // noneToolStripMenuItem
+            // 
+            this.noneToolStripMenuItem.Name = "noneToolStripMenuItem";
+            this.noneToolStripMenuItem.Size = new System.Drawing.Size(101, 22);
+            this.noneToolStripMenuItem.Text = "none";
+            // 
+            // toolStripMenuItem2
+            // 
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(101, 22);
+            this.toolStripMenuItem2.Text = "1";
+            // 
+            // toolStripMenuItem3
+            // 
+            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(101, 22);
+            this.toolStripMenuItem3.Text = "0.5";
+            // 
+            // toolStripMenuItem4
+            // 
+            this.toolStripMenuItem4.Name = "toolStripMenuItem4";
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(101, 22);
+            this.toolStripMenuItem4.Text = "0.1";
+            // 
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
             this.toolStripSeparator4.Size = new System.Drawing.Size(6, 25);
+            // 
+            // toolStripLabel1
+            // 
+            this.toolStripLabel1.AutoSize = false;
+            this.toolStripLabel1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripLabel1.Image = global::DirectZobEditor.Properties.Resources.camera2;
+            this.toolStripLabel1.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.toolStripLabel1.Name = "toolStripLabel1";
+            this.toolStripLabel1.Size = new System.Drawing.Size(22, 22);
+            this.toolStripLabel1.Text = "Camera";
             // 
             // toolStripComboBoxCurrentCamera
             // 
@@ -404,6 +721,91 @@
             // 
             this.toolStripSeparator5.Name = "toolStripSeparator5";
             this.toolStripSeparator5.Size = new System.Drawing.Size(6, 25);
+            // 
+            // btnWireframe
+            // 
+            this.btnWireframe.AutoSize = false;
+            this.btnWireframe.CheckOnClick = true;
+            this.btnWireframe.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnWireframe.Image = global::DirectZobEditor.Properties.Resources.wireframe;
+            this.btnWireframe.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.btnWireframe.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnWireframe.Name = "btnWireframe";
+            this.btnWireframe.Size = new System.Drawing.Size(23, 22);
+            this.btnWireframe.Text = "Wf";
+            this.btnWireframe.ToolTipText = "Wireframe";
+            this.btnWireframe.Click += new System.EventHandler(this.btnWireframe_Click);
+            // 
+            // btnGizmos
+            // 
+            this.btnGizmos.Checked = true;
+            this.btnGizmos.CheckOnClick = true;
+            this.btnGizmos.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.btnGizmos.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnGizmos.Image = global::DirectZobEditor.Properties.Resources.gizmo2;
+            this.btnGizmos.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.btnGizmos.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnGizmos.Name = "btnGizmos";
+            this.btnGizmos.Size = new System.Drawing.Size(23, 22);
+            this.btnGizmos.Text = "Gi";
+            this.btnGizmos.Click += new System.EventHandler(this.btnGizmos_Click);
+            // 
+            // btnGrid
+            // 
+            this.btnGrid.Checked = true;
+            this.btnGrid.CheckOnClick = true;
+            this.btnGrid.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.btnGrid.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnGrid.Image = global::DirectZobEditor.Properties.Resources.grid;
+            this.btnGrid.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.btnGrid.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnGrid.Name = "btnGrid";
+            this.btnGrid.Size = new System.Drawing.Size(23, 22);
+            this.btnGrid.Text = "Gr";
+            this.btnGrid.Click += new System.EventHandler(this.btnGrid_Click);
+            // 
+            // btnNormals
+            // 
+            this.btnNormals.AutoSize = false;
+            this.btnNormals.CheckOnClick = true;
+            this.btnNormals.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnNormals.Image = global::DirectZobEditor.Properties.Resources.normals2;
+            this.btnNormals.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.btnNormals.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnNormals.Name = "btnNormals";
+            this.btnNormals.Size = new System.Drawing.Size(25, 22);
+            this.btnNormals.Text = "Ns";
+            this.btnNormals.Click += new System.EventHandler(this.btnNormals_Click);
+            // 
+            // toolStripButton1
+            // 
+            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton1.Image = global::DirectZobEditor.Properties.Resources.text;
+            this.toolStripButton1.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton1.Name = "toolStripButton1";
+            this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton1.Text = "toolStripButton1";
+            // 
+            // toolStripButton2
+            // 
+            this.toolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton2.Image = global::DirectZobEditor.Properties.Resources.physic;
+            this.toolStripButton2.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton2.Name = "toolStripButton2";
+            this.toolStripButton2.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton2.Text = "toolStripButton2";
+            // 
+            // toolStripButton3
+            // 
+            this.toolStripButton3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton3.Image = global::DirectZobEditor.Properties.Resources.bbox;
+            this.toolStripButton3.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.toolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton3.Name = "toolStripButton3";
+            this.toolStripButton3.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton3.Text = "toolStripButton3";
             // 
             // EngineRendererPanel
             // 
@@ -563,398 +965,7 @@
             this.EngineControlsFlowLayout.TabIndex = 0;
             this.EngineControlsFlowLayout.WrapContents = false;
             // 
-            // btnPlay
-            // 
-            this.btnPlay.AutoSize = false;
-            this.btnPlay.CheckOnClick = true;
-            this.btnPlay.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btnPlay.Image = global::DirectZobEditor.Properties.Resources.play;
-            this.btnPlay.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.btnPlay.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnPlay.Name = "btnPlay";
-            this.btnPlay.Size = new System.Drawing.Size(23, 22);
-            this.btnPlay.Text = "toolStripButton1";
-            this.btnPlay.Click += new System.EventHandler(this.btnPlay_Click);
-            // 
-            // btnStop
-            // 
-            this.btnStop.AutoSize = false;
-            this.btnStop.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btnStop.Image = global::DirectZobEditor.Properties.Resources.stop;
-            this.btnStop.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.btnStop.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnStop.Name = "btnStop";
-            this.btnStop.Size = new System.Drawing.Size(23, 22);
-            this.btnStop.Text = "toolStripButton3";
-            this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
-            // 
-            // btnPause
-            // 
-            this.btnPause.AutoSize = false;
-            this.btnPause.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btnPause.Image = global::DirectZobEditor.Properties.Resources.pause;
-            this.btnPause.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.btnPause.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnPause.Name = "btnPause";
-            this.btnPause.Size = new System.Drawing.Size(23, 22);
-            this.btnPause.Text = "toolStripButton2";
-            this.btnPause.Click += new System.EventHandler(this.btnPause_Click);
-            // 
-            // btnRotateLocal
-            // 
-            this.btnRotateLocal.AutoSize = false;
-            this.btnRotateLocal.CheckOnClick = true;
-            this.btnRotateLocal.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btnRotateLocal.Image = global::DirectZobEditor.Properties.Resources.rotate_L;
-            this.btnRotateLocal.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.btnRotateLocal.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnRotateLocal.Name = "btnRotateLocal";
-            this.btnRotateLocal.Size = new System.Drawing.Size(23, 22);
-            this.btnRotateLocal.Text = "RL";
-            this.btnRotateLocal.ToolTipText = "Rotate in object\'s space";
-            this.btnRotateLocal.Click += new System.EventHandler(this.btnRotateLocal_Click);
-            // 
-            // btnTranslateLocal
-            // 
-            this.btnTranslateLocal.AutoSize = false;
-            this.btnTranslateLocal.Checked = true;
-            this.btnTranslateLocal.CheckOnClick = true;
-            this.btnTranslateLocal.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.btnTranslateLocal.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btnTranslateLocal.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnTranslateLocal.Image = global::DirectZobEditor.Properties.Resources.move_W;
-            this.btnTranslateLocal.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.btnTranslateLocal.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnTranslateLocal.Name = "btnTranslateLocal";
-            this.btnTranslateLocal.Size = new System.Drawing.Size(23, 22);
-            this.btnTranslateLocal.ToolTipText = "Translate in object\'s space";
-            this.btnTranslateLocal.Click += new System.EventHandler(this.btnTranslateLocal_Click);
-            // 
-            // btnTranslateWorld
-            // 
-            this.btnTranslateWorld.AutoSize = false;
-            this.btnTranslateWorld.CheckOnClick = true;
-            this.btnTranslateWorld.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btnTranslateWorld.Image = global::DirectZobEditor.Properties.Resources.rotate_L;
-            this.btnTranslateWorld.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.btnTranslateWorld.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnTranslateWorld.Name = "btnTranslateWorld";
-            this.btnTranslateWorld.Size = new System.Drawing.Size(23, 22);
-            this.btnTranslateWorld.Text = "TW";
-            this.btnTranslateWorld.ToolTipText = "Rotate in world space";
-            this.btnTranslateWorld.Click += new System.EventHandler(this.btnTranslateWorld_Click);
-            // 
-            // btnRotateWorld
-            // 
-            this.btnRotateWorld.AutoSize = false;
-            this.btnRotateWorld.CheckOnClick = true;
-            this.btnRotateWorld.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btnRotateWorld.Image = global::DirectZobEditor.Properties.Resources.rotate_W;
-            this.btnRotateWorld.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.btnRotateWorld.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnRotateWorld.Name = "btnRotateWorld";
-            this.btnRotateWorld.Size = new System.Drawing.Size(23, 22);
-            this.btnRotateWorld.Text = "RW";
-            this.btnRotateWorld.Click += new System.EventHandler(this.btnRotateWorld_Click);
-            // 
-            // btnScale
-            // 
-            this.btnScale.AutoSize = false;
-            this.btnScale.CheckOnClick = true;
-            this.btnScale.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btnScale.Image = global::DirectZobEditor.Properties.Resources.Scale;
-            this.btnScale.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.btnScale.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnScale.Name = "btnScale";
-            this.btnScale.Size = new System.Drawing.Size(23, 22);
-            this.btnScale.Text = "S";
-            this.btnScale.ToolTipText = "Scale";
-            this.btnScale.Click += new System.EventHandler(this.btnScale_Click);
-            // 
-            // toolStripSnap
-            // 
-            this.toolStripSnap.AutoSize = false;
-            this.toolStripSnap.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripSnap.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.noneToolStripMenuItem,
-            this.toolStripMenuItem2,
-            this.toolStripMenuItem3,
-            this.toolStripMenuItem4});
-            this.toolStripSnap.Image = global::DirectZobEditor.Properties.Resources.snap;
-            this.toolStripSnap.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.toolStripSnap.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripSnap.Name = "toolStripSnap";
-            this.toolStripSnap.Size = new System.Drawing.Size(29, 22);
-            this.toolStripSnap.Text = "Snap";
-            this.toolStripSnap.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.toolStripSnap_DropDownItemClicked);
-            // 
-            // noneToolStripMenuItem
-            // 
-            this.noneToolStripMenuItem.Name = "noneToolStripMenuItem";
-            this.noneToolStripMenuItem.Size = new System.Drawing.Size(101, 22);
-            this.noneToolStripMenuItem.Text = "none";
-            // 
-            // toolStripMenuItem2
-            // 
-            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(101, 22);
-            this.toolStripMenuItem2.Text = "1";
-            // 
-            // toolStripMenuItem3
-            // 
-            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(101, 22);
-            this.toolStripMenuItem3.Text = "0.5";
-            // 
-            // toolStripMenuItem4
-            // 
-            this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-            this.toolStripMenuItem4.Size = new System.Drawing.Size(101, 22);
-            this.toolStripMenuItem4.Text = "0.1";
-            // 
-            // toolStripLabel1
-            // 
-            this.toolStripLabel1.AutoSize = false;
-            this.toolStripLabel1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripLabel1.Image = global::DirectZobEditor.Properties.Resources.camera2;
-            this.toolStripLabel1.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.toolStripLabel1.Name = "toolStripLabel1";
-            this.toolStripLabel1.Size = new System.Drawing.Size(22, 22);
-            this.toolStripLabel1.Text = "Camera";
-            // 
-            // btnWireframe
-            // 
-            this.btnWireframe.AutoSize = false;
-            this.btnWireframe.CheckOnClick = true;
-            this.btnWireframe.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btnWireframe.Image = global::DirectZobEditor.Properties.Resources.wireframe;
-            this.btnWireframe.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.btnWireframe.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnWireframe.Name = "btnWireframe";
-            this.btnWireframe.Size = new System.Drawing.Size(23, 22);
-            this.btnWireframe.Text = "Wf";
-            this.btnWireframe.ToolTipText = "Wireframe";
-            this.btnWireframe.Click += new System.EventHandler(this.btnWireframe_Click);
-            // 
-            // btnGizmos
-            // 
-            this.btnGizmos.Checked = true;
-            this.btnGizmos.CheckOnClick = true;
-            this.btnGizmos.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.btnGizmos.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btnGizmos.Image = global::DirectZobEditor.Properties.Resources.gizmo2;
-            this.btnGizmos.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.btnGizmos.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnGizmos.Name = "btnGizmos";
-            this.btnGizmos.Size = new System.Drawing.Size(23, 22);
-            this.btnGizmos.Text = "Gi";
-            this.btnGizmos.Click += new System.EventHandler(this.btnGizmos_Click);
-            // 
-            // btnGrid
-            // 
-            this.btnGrid.Checked = true;
-            this.btnGrid.CheckOnClick = true;
-            this.btnGrid.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.btnGrid.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btnGrid.Image = global::DirectZobEditor.Properties.Resources.grid;
-            this.btnGrid.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.btnGrid.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnGrid.Name = "btnGrid";
-            this.btnGrid.Size = new System.Drawing.Size(23, 22);
-            this.btnGrid.Text = "Gr";
-            this.btnGrid.Click += new System.EventHandler(this.btnGrid_Click);
-            // 
-            // btnNormals
-            // 
-            this.btnNormals.AutoSize = false;
-            this.btnNormals.CheckOnClick = true;
-            this.btnNormals.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btnNormals.Image = global::DirectZobEditor.Properties.Resources.normals2;
-            this.btnNormals.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.btnNormals.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnNormals.Name = "btnNormals";
-            this.btnNormals.Size = new System.Drawing.Size(25, 22);
-            this.btnNormals.Text = "Ns";
-            this.btnNormals.Click += new System.EventHandler(this.btnNormals_Click);
-            // 
-            // toolStripButton1
-            // 
-            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton1.Image = global::DirectZobEditor.Properties.Resources.text;
-            this.toolStripButton1.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton1.Text = "toolStripButton1";
-            // 
-            // toolStripButton2
-            // 
-            this.toolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton2.Image = global::DirectZobEditor.Properties.Resources.physic;
-            this.toolStripButton2.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton2.Name = "toolStripButton2";
-            this.toolStripButton2.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton2.Text = "toolStripButton2";
-            // 
-            // toolStripButton3
-            // 
-            this.toolStripButton3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton3.Image = global::DirectZobEditor.Properties.Resources.bbox;
-            this.toolStripButton3.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.toolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton3.Name = "toolStripButton3";
-            this.toolStripButton3.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton3.Text = "toolStripButton3";
-            // 
-            // newToolStripMenuItem
-            // 
-            this.newToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("newToolStripMenuItem.Image")));
-            this.newToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.newToolStripMenuItem.Text = "New scene";
-            this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
-            // 
-            // loadSceneToolStripMenuItem
-            // 
-            this.loadSceneToolStripMenuItem.Image = global::DirectZobEditor.Properties.Resources.load;
-            this.loadSceneToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.loadSceneToolStripMenuItem.Name = "loadSceneToolStripMenuItem";
-            this.loadSceneToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.loadSceneToolStripMenuItem.Text = "Load scene ...";
-            this.loadSceneToolStripMenuItem.Click += new System.EventHandler(this.loadSceneToolStripMenuItem_Click);
-            // 
-            // exitToolStripMenuItem
-            // 
-            this.exitToolStripMenuItem.Image = global::DirectZobEditor.Properties.Resources.exit;
-            this.exitToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.exitToolStripMenuItem.Text = "Exit";
-            this.exitToolStripMenuItem.Click += new System.EventHandler(this.ExitToolStripMenuItem_Click);
-            // 
-            // loadTextureToolStripMenuItem
-            // 
-            this.loadTextureToolStripMenuItem.Image = global::DirectZobEditor.Properties.Resources.texture;
-            this.loadTextureToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.loadTextureToolStripMenuItem.Name = "loadTextureToolStripMenuItem";
-            this.loadTextureToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.loadTextureToolStripMenuItem.Text = "Load Texture ...";
-            this.loadTextureToolStripMenuItem.Click += new System.EventHandler(this.LoadTextureToolStripMenuItem_Click);
-            // 
-            // loadMeshToolStripMenuItem
-            // 
-            this.loadMeshToolStripMenuItem.Image = global::DirectZobEditor.Properties.Resources.mesh3;
-            this.loadMeshToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.loadMeshToolStripMenuItem.Name = "loadMeshToolStripMenuItem";
-            this.loadMeshToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.loadMeshToolStripMenuItem.Text = "Load Mesh ...";
-            this.loadMeshToolStripMenuItem.Click += new System.EventHandler(this.LoadMeshToolStripMenuItem_Click);
-            // 
-            // LoadSpriteToolStripMenuItem
-            // 
-            this.LoadSpriteToolStripMenuItem.Image = global::DirectZobEditor.Properties.Resources.sprite;
-            this.LoadSpriteToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.LoadSpriteToolStripMenuItem.Name = "LoadSpriteToolStripMenuItem";
-            this.LoadSpriteToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.LoadSpriteToolStripMenuItem.Text = "Load Sprite ...";
-            this.LoadSpriteToolStripMenuItem.Click += new System.EventHandler(this.createSpriteToolStripMenuItem_Click);
-            // 
-            // createLightToolStripMenuItem
-            // 
-            this.createLightToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.spotToolStripMenuItem,
-            this.pointToolStripMenuItem,
-            this.directionalToolStripMenuItem});
-            this.createLightToolStripMenuItem.Image = global::DirectZobEditor.Properties.Resources.light1;
-            this.createLightToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.createLightToolStripMenuItem.Name = "createLightToolStripMenuItem";
-            this.createLightToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.createLightToolStripMenuItem.Text = "Create Light ";
-            // 
-            // spotToolStripMenuItem
-            // 
-            this.spotToolStripMenuItem.Name = "spotToolStripMenuItem";
-            this.spotToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
-            this.spotToolStripMenuItem.Text = "Spot";
-            this.spotToolStripMenuItem.Click += new System.EventHandler(this.spotToolStripMenuItem_Click);
-            // 
-            // pointToolStripMenuItem
-            // 
-            this.pointToolStripMenuItem.Name = "pointToolStripMenuItem";
-            this.pointToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
-            this.pointToolStripMenuItem.Text = "Point";
-            this.pointToolStripMenuItem.Click += new System.EventHandler(this.pointToolStripMenuItem_Click);
-            // 
-            // directionalToolStripMenuItem
-            // 
-            this.directionalToolStripMenuItem.Name = "directionalToolStripMenuItem";
-            this.directionalToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
-            this.directionalToolStripMenuItem.Text = "Directional";
-            this.directionalToolStripMenuItem.Click += new System.EventHandler(this.directionalToolStripMenuItem_Click);
-            // 
-            // createCameraToolStripMenuItem
-            // 
-            this.createCameraToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fixedToolStripMenuItem,
-            this.fPSToolStripMenuItem,
-            this.orbitalFreeToolStripMenuItem,
-            this.orbitalToParentToolStripMenuItem});
-            this.createCameraToolStripMenuItem.Image = global::DirectZobEditor.Properties.Resources.camera2;
-            this.createCameraToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.createCameraToolStripMenuItem.Name = "createCameraToolStripMenuItem";
-            this.createCameraToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.createCameraToolStripMenuItem.Text = "Create Camera";
-            this.createCameraToolStripMenuItem.Click += new System.EventHandler(this.createCameraToolStripMenuItem_Click);
-            // 
-            // fixedToolStripMenuItem
-            // 
-            this.fixedToolStripMenuItem.Name = "fixedToolStripMenuItem";
-            this.fixedToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
-            this.fixedToolStripMenuItem.Text = "Fixed";
-            this.fixedToolStripMenuItem.Click += new System.EventHandler(this.fixedToolStripMenuItem_Click);
-            // 
-            // fPSToolStripMenuItem
-            // 
-            this.fPSToolStripMenuItem.Name = "fPSToolStripMenuItem";
-            this.fPSToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
-            this.fPSToolStripMenuItem.Text = "FPS";
-            this.fPSToolStripMenuItem.Click += new System.EventHandler(this.fPSToolStripMenuItem_Click);
-            // 
-            // orbitalFreeToolStripMenuItem
-            // 
-            this.orbitalFreeToolStripMenuItem.Name = "orbitalFreeToolStripMenuItem";
-            this.orbitalFreeToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
-            this.orbitalFreeToolStripMenuItem.Text = "Orbital free";
-            this.orbitalFreeToolStripMenuItem.Click += new System.EventHandler(this.orbitalFreeToolStripMenuItem_Click);
-            // 
-            // orbitalToParentToolStripMenuItem
-            // 
-            this.orbitalToParentToolStripMenuItem.Name = "orbitalToParentToolStripMenuItem";
-            this.orbitalToParentToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
-            this.orbitalToParentToolStripMenuItem.Text = "Orbital to parent";
-            this.orbitalToParentToolStripMenuItem.Click += new System.EventHandler(this.orbitalToParentToolStripMenuItem_Click);
-            // 
-            // createZobObjectToolStripMenuItem
-            // 
-            this.createZobObjectToolStripMenuItem.Image = global::DirectZobEditor.Properties.Resources._object;
-            this.createZobObjectToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.createZobObjectToolStripMenuItem.Name = "createZobObjectToolStripMenuItem";
-            this.createZobObjectToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.createZobObjectToolStripMenuItem.Text = "Create ZobObject";
-            this.createZobObjectToolStripMenuItem.Click += new System.EventHandler(this.createZobObjectToolStripMenuItem_Click);
-            // 
-            // materialsToolStripMenuItem
-            // 
-            this.materialsToolStripMenuItem.Image = global::DirectZobEditor.Properties.Resources.material;
-            this.materialsToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.materialsToolStripMenuItem.Name = "materialsToolStripMenuItem";
-            this.materialsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.materialsToolStripMenuItem.Text = "Materials ...";
-            this.materialsToolStripMenuItem.Click += new System.EventHandler(this.materialsToolStripMenuItem_Click);
-            // 
-            // Form1
+            // DirectZobEditorForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -964,7 +975,7 @@
             this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
-            this.Name = "Form1";
+            this.Name = "DirectZobEditorForm";
             this.Text = "DirectZob";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -1080,6 +1091,7 @@
         private System.Windows.Forms.ToolStripButton toolStripButton1;
         private System.Windows.Forms.ToolStripButton toolStripButton2;
         private System.Windows.Forms.ToolStripButton toolStripButton3;
+        private System.Windows.Forms.ToolStripMenuItem entitiesToolStripMenuItem;
     }
 }
 

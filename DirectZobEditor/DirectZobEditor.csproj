@@ -78,11 +78,11 @@
     <Compile Include="EngineWindow.Designer.cs">
       <DependentUpon>EngineWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form1.cs">
+    <Compile Include="DirectZobEditorForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="DirectZobEditorForm.Designer.cs">
+      <DependentUpon>DirectZobEditorForm.cs</DependentUpon>
     </Compile>
     <Compile Include="MaterialsForm\Material.cs">
       <SubType>UserControl</SubType>
@@ -90,31 +90,31 @@
     <Compile Include="MaterialsForm\Material.Designer.cs">
       <DependentUpon>Material.cs</DependentUpon>
     </Compile>
-    <Compile Include="MaterialsForm\MaterialsForm.cs">
+    <Compile Include="MaterialsForm\ZobMaterialsForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MaterialsForm\MaterialsForm.Designer.cs">
-      <DependentUpon>MaterialsForm.cs</DependentUpon>
+    <Compile Include="MaterialsForm\ZobMaterialsForm.Designer.cs">
+      <DependentUpon>ZobMaterialsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ZobEntitySelector.cs">
+    <Compile Include="ZobEntityViewerForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ZobEntitySelector.Designer.cs">
-      <DependentUpon>ZobEntitySelector.cs</DependentUpon>
+    <Compile Include="ZobEntityViewerForm.Designer.cs">
+      <DependentUpon>ZobEntityViewerForm.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="EngineWindow.resx">
       <DependentUpon>EngineWindow.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <EmbeddedResource Include="DirectZobEditorForm.resx">
+      <DependentUpon>DirectZobEditorForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MaterialsForm\Material.resx">
       <DependentUpon>Material.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MaterialsForm\MaterialsForm.resx">
-      <DependentUpon>MaterialsForm.cs</DependentUpon>
+    <EmbeddedResource Include="MaterialsForm\ZobMaterialsForm.resx">
+      <DependentUpon>ZobMaterialsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -126,8 +126,8 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="ZobEntitySelector.resx">
-      <DependentUpon>ZobEntitySelector.cs</DependentUpon>
+    <EmbeddedResource Include="ZobEntityViewerForm.resx">
+      <DependentUpon>ZobEntityViewerForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -176,6 +176,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="icon.ico" />
+    <None Include="Resources\component.png" />
+    <None Include="Resources\cameraController.png" />
+    <None Include="Resources\unknown.png" />
     <None Include="Resources\save2.png" />
     <None Include="Resources\mesh3.png" />
     <None Include="Resources\exit.png" />

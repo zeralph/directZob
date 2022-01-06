@@ -5,6 +5,7 @@
 
 ZobCameraControllerFPS::ZobCameraControllerFPS(Camera* c, zobId guid) :ZobCameraController(c, guid)
 {
+	SET_CLASS_AND_NAME
 	m_cameraControllerType = Camera::eCamera_fps;
 	m_deltaPitch = 0.0f;
 	m_deltaYaw = 0.0f;
@@ -19,6 +20,7 @@ ZobCameraControllerFPS::ZobCameraControllerFPS(Camera* c, zobId guid) :ZobCamera
 
 ZobCameraControllerFPS::ZobCameraControllerFPS(Camera* c) :ZobCameraController(c)
 {
+	SET_CLASS_AND_NAME
 	m_cameraControllerType = Camera::eCamera_fps;
 	m_deltaPitch = 0.0f;
 	m_deltaYaw = 0.0f;
@@ -33,12 +35,12 @@ ZobCameraControllerFPS::ZobCameraControllerFPS(Camera* c) :ZobCameraController(c
 
 ZobCameraControllerFPS::~ZobCameraControllerFPS()
 {
-    m_zobCamera = NULL;
+    m_zobObject = NULL;
 }
 
 void ZobCameraControllerFPS::PreUpdate(float dt)
 {
-	if (m_zobCamera->m_active)
+	if (m_zobObject->m_active)
 	{
 		//const gainput::InputMap* inputMap = DirectZob::GetInstance()->GetInputManager()->GetMap();
 		//float rx = inputMap->GetFloat(ZobInputManager::RightStickX) * 2.0f;
@@ -56,14 +58,14 @@ void ZobCameraControllerFPS::Update(float dt)
 	m_totalRoll += m_deltaRoll;
 	m_totalYaw += m_deltaYaw;
 	//move
-	ZobVector3 v = m_zobCamera->GetWorldPosition();
-	ZobVector3 le = m_zobCamera->GetLeft() * m_moveX;
-	ZobVector3 up = m_zobCamera->GetUp() * m_moveY;
-	ZobVector3 fw = m_zobCamera->GetForward() * m_moveZ;
+	ZobVector3 v = m_zobObject->GetWorldPosition();
+	ZobVector3 le = m_zobObject->GetLeft() * m_moveX;
+	ZobVector3 up = m_zobObject->GetUp() * m_moveY;
+	ZobVector3 fw = m_zobObject->GetForward() * m_moveZ;
 	v.x += le.x + up.x + fw.x;
 	v.y += le.y + up.y + fw.y;
 	v.z += le.z + up.z + fw.z;
-	m_zobCamera->SetWorldPosition(v.x, v.y, v.z);
+	m_zobObject->SetWorldPosition(v.x, v.y, v.z);
 	//rotation
 	if (m_totalPitch < DEG_TO_RAD(-90.0f))
 	{
@@ -77,7 +79,7 @@ void ZobCameraControllerFPS::Update(float dt)
 	}
 	ZobVector3 deltaZ1 = ZobMatrix4x4::EulerToQuaternion(m_deltaPitch, m_deltaYaw, m_deltaRoll);
 	Quaternion deltaQ1 = Quaternion(deltaZ1.x, deltaZ1.y, deltaZ1.z, deltaZ1.w);
-	Quaternion qAct = m_zobCamera->m_physicComponent->GetLocalTransform().getOrientation();
+	Quaternion qAct = m_zobObject->m_physicComponent->GetLocalTransform().getOrientation();
 	qAct.normalize();
 	Quaternion qFinal;
 	qFinal = qAct * deltaQ1;
@@ -93,17 +95,17 @@ void ZobCameraControllerFPS::Update(float dt)
 		forward.normalize();
 		up = forward.cross(left);
 		forward.normalize();
-		m_zobCamera->m_left.x = left.x;
-		m_zobCamera->m_left.y = left.y;
-		m_zobCamera->m_left.z = left.z;
-		m_zobCamera->m_up.x = up.x;
-		m_zobCamera->m_up.y = up.y;
-		m_zobCamera->m_up.z = up.z;
-		m_zobCamera->m_forward.x = forward.x;
-		m_zobCamera->m_forward.y = forward.y;
-		m_zobCamera->m_forward.z = forward.z;
-		m_zobCamera->LookAt(&m_zobCamera->m_forward, &m_zobCamera->m_left, &m_zobCamera->m_up, false);
-		//m_zobCamera->UpdateViewProjectionMatrix(&v);
+		m_zobObject->m_left.x = left.x;
+		m_zobObject->m_left.y = left.y;
+		m_zobObject->m_left.z = left.z;
+		m_zobObject->m_up.x = up.x;
+		m_zobObject->m_up.y = up.y;
+		m_zobObject->m_up.z = up.z;
+		m_zobObject->m_forward.x = forward.x;
+		m_zobObject->m_forward.y = forward.y;
+		m_zobObject->m_forward.z = forward.z;
+		m_zobObject->LookAt(&m_zobObject->m_forward, &m_zobObject->m_left, &m_zobObject->m_up, false);
+		//m_zobObject->UpdateViewProjectionMatrix(&v);
 		m_deltaPitch = 0.0f;
 		m_deltaYaw = 0.0f;
 		m_deltaRoll = 0.0f;

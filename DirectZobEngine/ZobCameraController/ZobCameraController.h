@@ -25,7 +25,7 @@ public:
 private:
 
 protected:
-    Camera* m_zobCamera;
+    Camera* m_zobObject;
     Camera::eCameraType m_cameraControllerType;
     std::string m_typeName;
 };

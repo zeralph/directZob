@@ -22,6 +22,7 @@ ZobComponentCar::~ZobComponentCar()
 
 ZobComponentCar::ZobComponentCar(ZobObject* zobObject) : ZobComponent(zobObject, false)
 {
+	SET_CLASS_AND_NAME
 	m_carType = eCarType_pouet;
 	m_type = eComponent_car;
 	m_lastGroundPosition = ZobVector3(0, 0, 0);

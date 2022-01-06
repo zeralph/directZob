@@ -5,6 +5,7 @@
 #include "../ZobObjects/ZobObject.h"
 #include "../Components/ZobComponentMesh.h"
 #include "../Components/ZobComponentSprite.h"
+//#include "../ZobCameraController/ZobCameraController.h"
 
 #define TO_MANAGED_STRING(x) gcnew String(x);
 
@@ -527,6 +528,111 @@ namespace CLI
 	void ZobObjectManagerWrapper::RestoreTransforms()
 	{
 		m_Instance->RestoreTransforms();
+	}
+
+	List<ZobEntityInfo^>^ ZobObjectManagerWrapper::GetEntitiesInfo()
+	{
+		List<ZobEntityInfo^>^ l = gcnew List<ZobEntityInfo^>();
+		std::vector<ZobEntity*> v = ZobEntity::GetAllEntities();
+		for (std::vector<ZobEntity*>::iterator iter = v.begin(); iter != v.end(); iter++)
+		{
+			ZobEntityInfo^ zi = gcnew ZobEntityInfo((*iter));
+			l->Add(zi);
+		}
+		return l;
+	}
+
+	ZobEntityInfo::ZobEntityInfo(zobId zid)
+	{
+		ZobEntity* ze = ZobEntity::GetEntity<ZobEntity>(zid);
+		Init(ze);
+	}
+
+	ZobEntityInfo::ZobEntityInfo(ZobEntity* ze)
+	{
+		Init(ze);
+	}
+
+	void ZobEntityInfo::Init(ZobEntity* ze)
+	{
+		_name = gcnew System::String("");
+		_zid = 0;
+		if (ze)
+		{
+			_name = gcnew System::String(ze->GetName().c_str());
+			System:String^ szid = gcnew System::String("");
+			_zid = ze->GetIdValue();
+			_type = gcnew System::String(ze->GetClass().c_str());
+			ZobEntity::ZobType t = ZobEntity::GetType(ze->GetIdValue());
+			ZobEntity::ZobSubType st = ZobEntity::GetSubType(ze->GetIdValue());
+			_isSelectable = t == ZobEntity::type_internal || t == ZobEntity::type_scene;
+			_isReadOnly = t == ZobEntity::type_internal || t == ZobEntity::type_editor;
+			_isEditor = t == ZobEntity::type_editor;
+			std::string myClass = ze->GetClass();
+			if (t != ZobEntity::type_scene && t != ZobEntity::type_internal)
+			{
+				_color = Color::Red;
+			}
+			else if (st == ZobEntity::subtype_zobCamera)
+			{
+				_color = Color::Brown;
+				_imgType = eImageObjectType::eImageZobCamera;
+			}
+			else if (st == ZobEntity::subtype_zobLight)
+			{
+				_color = Color::Green;
+				_imgType = eImageObjectType::eImageZobLight;
+			}
+			else if (st == ZobEntity::subtype_zobOject)
+			{
+				_color = Color::Blue;
+				ZobObject* z = ZobEntity::GetEntity<ZobObject>(ze->GetIdValue());
+				if (z)
+				{
+					if (z && z->GetComponent<ZobComponentSprite>())
+					{
+						_imgType = eImageObjectType::eImageZobSprite;
+					}
+					else if (z && z->GetComponent<ZobComponentMesh>())
+					{
+						_imgType = eImageObjectType::eImageZobMesh;
+					}
+					else if (z && (z->GetComponent<ZobComponentText>() || z->GetComponent<ZobComponentImage>()))
+					{
+						_imgType = eImageObjectType::eImageZobHud;
+					}
+					else
+					{
+						_imgType = eImageObjectType::eImageZobObject;
+					}
+				}
+			}
+			else if (st == ZobEntity::subtype_cameraController)
+			{
+				_imgType = eImageObjectType::eImageZobCameraController;
+			}
+			else if (st == ZobEntity::subtype_Component)
+			{
+				_imgType = eImageObjectType::eImageZobComponent;
+			}
+			else if (st == ZobEntity::subtype_mesh)
+			{
+				_imgType = eImageObjectType::eImageZobMesh;
+			}
+			else if (st == ZobEntity::subtype_sprite)
+			{
+				_imgType = eImageObjectType::eImageZobSprite;
+			}
+			else if (st == ZobEntity::subtype_menuItem)
+			{
+				_imgType = eImageObjectType::eImageZobHud;
+			}
+			else
+			{
+				_imgType = eImageObjectType::eImageZobunknown;
+			}
+			_imgName = eImageObjectTypeStr[(int)_imgType];
+		}
 	}
 }
 #endif //_WINDLL

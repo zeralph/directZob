@@ -27,29 +27,31 @@ Camera::eCameraType ZobCameraController::TypeFromString(const char* typeStr)
 
 ZobCameraController::ZobCameraController(Camera* c, zobId guid) :ZobEntity(guid)
 {
+    SET_CLASS_AND_NAME
     m_cameraControllerType = Camera::eCamera_base;
     m_typeName = eCameraTypeStr[m_cameraControllerType];
-    m_zobCamera = c;
+    m_zobObject = c;
     //c->m_varExposer->WrapVariable<std::string>("pouet Type", &m_typeName, NULL, true, false);
 }
 
 ZobCameraController::ZobCameraController(Camera * c) :ZobEntity(ZobEntity::type_internal, ZobEntity::subtype_cameraController)
 {
+    SET_CLASS_AND_NAME
 	m_cameraControllerType = Camera::eCamera_base;
     m_typeName = eCameraTypeStr[m_cameraControllerType];
-    m_zobCamera = c;
+    m_zobObject = c;
     //c->m_varExposer->WrapVariable<std::string>("pouet 2 Type", &m_typeName, NULL, true, false);
 }
 
 ZobCameraController::~ZobCameraController()
 {
-    m_zobCamera = NULL;
+    m_zobObject = NULL;
 }
 
 void ZobCameraController::Update(float dt)
 {
-    //ZobVector3 v = m_zobCamera->GetWorldPosition();
-    //m_zobCamera->UpdateViewProjectionMatrix(&v);
+    //ZobVector3 v = m_zobObject->GetWorldPosition();
+    //m_zobObject->UpdateViewProjectionMatrix(&v);
 }
 
 void ZobCameraController::Init()

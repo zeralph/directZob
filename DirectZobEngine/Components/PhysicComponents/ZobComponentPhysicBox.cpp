@@ -9,6 +9,7 @@ ZobComponentPhysicBox::~ZobComponentPhysicBox()
 
 ZobComponentPhysicBox::ZobComponentPhysicBox(ZobObject* zobObject) : ZobComponentPhysicShape(zobObject)
 {
+	SET_CLASS_AND_NAME
 	m_halfExtends = ZobVector3(1, 1, 1);
 	m_type = eComponent_physicBox;
 	m_varExposer->WrapVariable<ZobVector3>("Height", &m_halfExtends, NULL, false, true);

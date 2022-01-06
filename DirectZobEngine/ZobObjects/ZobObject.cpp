@@ -13,6 +13,7 @@ static int sObjectNumber = 0;
 ZobObject::ZobObject(ZobType t, ZobSubType s, const std::string& name, ZobObject* parent /*= NULL*/, const std::string* factoryFile /*=NULL*/)
 	:ZobEntity(t,s)
 {
+	SET_CLASS_AND_NAME
 	DirectZob::LogInfo("ZobObject %s creation", name.c_str()); 
 	DirectZob::AddIndent();
 	m_varExposer = new ZobVariablesExposer(GetIdValue());
@@ -70,6 +71,7 @@ ZobObject::ZobObject(ZobType t, ZobSubType s, const std::string& name, ZobObject
 ZobObject::ZobObject(zobId id, TiXmlElement* node, ZobObject* parent, const std::string* factoryFile /*=NULL*/)
 	:ZobEntity(id)
 {
+	SET_CLASS_AND_NAME
 	m_varExposer = new ZobVariablesExposer(GetIdValue());
 	m_Components.clear();
 	sObjectNumber++;

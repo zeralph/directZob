@@ -17,7 +17,7 @@ namespace DirectZobEditor
 {
     public partial class EngineWindow : UserControl
     {
-        public EngineWindow(Form1 f)
+        public EngineWindow(DirectZobEditorForm f)
         {
             InitializeComponent();
             this.Dock = DockStyle.Fill;

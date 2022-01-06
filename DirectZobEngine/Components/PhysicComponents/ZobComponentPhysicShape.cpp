@@ -9,6 +9,7 @@ ZobComponentPhysicShape::~ZobComponentPhysicShape()
 
 ZobComponentPhysicShape::ZobComponentPhysicShape(ZobObject* zobObject) : ZobComponent(zobObject, false)
 {
+	SET_CLASS_AND_NAME
 	m_type = eComponent_none;
 	m_isInit = false;;
 	m_varExposer->WrapVariable<int>("Layers", &m_layers, NULL, false, true);

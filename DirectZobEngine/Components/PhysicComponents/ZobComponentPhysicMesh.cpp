@@ -9,6 +9,7 @@ ZobComponentPhysicMesh::~ZobComponentPhysicMesh()
 
 ZobComponentPhysicMesh::ZobComponentPhysicMesh(ZobObject* zobObject) : ZobComponentPhysicShape(zobObject)
 {
+	SET_CLASS_AND_NAME
 	m_type = eComponent_physicMesh;
 	m_convexMeshPath.Reset();
 	m_concaveMeshNbTriangles = 0;

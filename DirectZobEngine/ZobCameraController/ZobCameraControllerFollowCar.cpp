@@ -4,8 +4,9 @@
 
 ZobCameraControllerFollowCar::ZobCameraControllerFollowCar(Camera* c, zobId guid) :ZobCameraController(c, guid)
 {
+    SET_CLASS_AND_NAME
     m_cameraControllerType = Camera::eCamera_followCar;
-    m_zobCamera = c;
+    m_zobObject = c;
     m_cumulatedExtraRotation = 0.0f;
     m_rotationSpeed = 1.0f;
     m_deltaY = 0.0f;
@@ -15,8 +16,9 @@ ZobCameraControllerFollowCar::ZobCameraControllerFollowCar(Camera* c, zobId guid
 
 ZobCameraControllerFollowCar::ZobCameraControllerFollowCar(Camera * c) :ZobCameraController(c)
 {
+    SET_CLASS_AND_NAME
 	m_cameraControllerType = Camera::eCamera_followCar;
-    m_zobCamera = c;
+    m_zobObject = c;
     m_cumulatedExtraRotation = 0.0f;
     m_rotationSpeed = 1.0f;
     m_deltaY = 0.0f;
@@ -26,31 +28,31 @@ ZobCameraControllerFollowCar::ZobCameraControllerFollowCar(Camera * c) :ZobCamer
 
 ZobCameraControllerFollowCar::~ZobCameraControllerFollowCar()
 {
-    m_zobCamera = NULL;
+    m_zobObject = NULL;
 }
 
 void ZobCameraControllerFollowCar::Init()
 {
-    Vector3 p = m_zobCamera->m_parent->GetPhysicComponent()->GetWorldTransform().getPosition();
-    Vector3 m = m_zobCamera->GetPhysicComponent()->GetWorldTransform().getPosition();
+    Vector3 p = m_zobObject->m_parent->GetPhysicComponent()->GetWorldTransform().getPosition();
+    Vector3 m = m_zobObject->GetPhysicComponent()->GetWorldTransform().getPosition();
     m_distanceToCar.x = m.x - p.x;
     m_distanceToCar.y = m.y - p.y;
     m_distanceToCar.z = m.z - p.z;
-    m_startTransform = m_zobCamera->GetPhysicComponent()->GetLocalTransform();
+    m_startTransform = m_zobObject->GetPhysicComponent()->GetLocalTransform();
     m_lastOrientation = m_startTransform.getOrientation();
 }
 
 void ZobCameraControllerFollowCar::Update(float dt)
 {
-    Transform parentT = m_zobCamera->m_parent->GetPhysicComponent()->GetWorldTransform(); 
+    Transform parentT = m_zobObject->m_parent->GetPhysicComponent()->GetWorldTransform(); 
     Quaternion q = parentT.getOrientation();
     parentT.setOrientation(m_lastOrientation);
     Transform newT = m_startTransform;
     newT = parentT * newT;
-    parentT = m_zobCamera->m_parent->GetPhysicComponent()->GetWorldTransform();
+    parentT = m_zobObject->m_parent->GetPhysicComponent()->GetWorldTransform();
     //newT = parentT.getInverse() * newT;
-    //m_zobCamera->GetPhysicComponentNoConst()->SetLocalTransform(newT);
-    m_zobCamera->GetPhysicComponentNoConst()->SetWorldTransform(newT);
+    //m_zobObject->GetPhysicComponentNoConst()->SetLocalTransform(newT);
+    m_zobObject->GetPhysicComponentNoConst()->SetWorldTransform(newT);
     m_deltaY = dt;
     float d = clamp((float)(dt * 10.0f), 0.0f, 1.0f);// 0.1f;
     //d = 1.0f;
@@ -60,7 +62,7 @@ void ZobCameraControllerFollowCar::Update(float dt)
 
 void ZobCameraControllerFollowCar::PreUpdate(float dt)
 {
-    if (m_zobCamera->m_active)
+    if (m_zobObject->m_active)
     {
     }
 }

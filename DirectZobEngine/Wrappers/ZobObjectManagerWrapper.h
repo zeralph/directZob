@@ -1,6 +1,7 @@
 #ifdef _WINDLL
 #pragma once
 #include "ManagedObject.h"
+#include "../Types.h"
 #include "../Managers/ZobObjectManager.h"
 #include "Editor/ZobObjectsEditor.h"
 #include "ZobObjectWrapper.h"
@@ -17,6 +18,40 @@ using namespace System::Drawing;
 
 namespace CLI
 {
+	public ref class ZobEntityInfo
+	{
+	public:
+		enum class eImageObjectType
+		{
+			eImageZobObject = 0,
+			eImageZobLight = 1,
+			eImageZobCamera = 2,
+			eImageZobMesh = 3,
+			eImageZobSprite = 4,
+			eImageZobHud = 5,
+			eImageZobComponent = 6,
+			eImageZobCameraController = 7,
+			eImageZobunknown = 8,
+			__eImage_MAX__ = 6,
+		};
+		 
+		static const cli::array<System::String^>^ eImageObjectTypeStr = { "_object", "light1", "camera2", "mesh3", "sprite", "hud", "component", "cameraController", "unknown"};
+
+		ZobEntityInfo(ZobEntity* ze);
+		ZobEntityInfo(DirectZobType::zobId zid);
+		String^ _name;
+		ulong _zid;
+		String^ _type;
+		bool _isSelectable;
+		bool _isReadOnly;
+		bool _isEditor;
+		Color _color;
+		eImageObjectType _imgType;
+		String^ _imgName;
+	private:
+		void Init(ZobEntity* ze);
+	};
+
 	public ref class ZobObjectManagerWrapper : public ManagedObject<ZobObjectManager>
 	{
 	public:
@@ -31,16 +66,6 @@ namespace CLI
 			eObjectTypes_all = 0,
 			eObjectTypes_editor,
 			eObjectTypes_scene,
-		};
-
-		enum class eImageObjectType
-		{
-			eImageZobObject = 0,
-			eImageZobLight = 1,
-			eImageZobCamera = 2,
-			eImageZobMesh = 3,
-			eImageZobSprite = 4,
-			eImageZobHud = 5,
 		};
 
 		ZobObjectManagerWrapper(Panel^ objectTreeviewPanel, Panel^ objectPropertiesPanel, Resources::ResourceManager^ rsMgr);
@@ -62,6 +87,7 @@ namespace CLI
 		bool					SelectObject(ZobObject* z);
 		ZobObject*				GetSelectedObject() {return m_selectedObject;}
 		ZobObjectsEditor*		GetEditorGizmos() { return m_editorGizmos; }
+		List<ZobEntityInfo^>^	GetEntitiesInfo();
 	private:
 	
 		void					CreateTreeview();

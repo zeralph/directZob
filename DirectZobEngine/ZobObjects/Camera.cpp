@@ -28,6 +28,7 @@ Camera::Camera(ZobEntity::ZobType zobType, const std::string& name, eCameraType 
 	m_nextControlerType = type;
 	m_fov = fov;
 	m_active = false;
+
 	sRayDbg = ZobVector3(1000, 1000, 1000);
 	sRayDbg2 = ZobVector3(1000, 1000, 1000);
 	WrapVariables();

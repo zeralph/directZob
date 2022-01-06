@@ -15,6 +15,7 @@ ZobComponentImage::~ZobComponentImage()
 
 ZobComponentImage::ZobComponentImage(ZobObject* zobObject, bool bEditorZobComponent) : ZobComponent(zobObject, bEditorZobComponent)
 {
+	SET_CLASS_AND_NAME
 	m_x = 0;
 	m_y = 0;
 	m_w = 0.5f;

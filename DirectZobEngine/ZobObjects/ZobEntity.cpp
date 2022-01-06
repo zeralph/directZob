@@ -6,6 +6,7 @@ std::map<const zobId, ZobEntity*> ZobEntity::m_entityMap;
 
 ZobEntity::ZobEntity(ZobType t, ZobSubType s)
 {
+	SET_CLASS_AND_NAME
 	m_type = t;
 	m_subType = s;
 	ulong id = GenerateId();
@@ -17,6 +18,7 @@ ZobEntity::ZobEntity(ZobType t, ZobSubType s)
 ZobEntity::ZobEntity(const zobId zid)
 {
 	m_id = zid;
+	SET_CLASS_AND_NAME
 	m_type = (ZobType)(m_id / (1000 * 1000 * 1000));
 	unsigned long long  l = (zobId)m_type * 1000 * 1000 * 1000;
 	m_subType = (ZobSubType)((m_id - l) / (1000 * 1000));
@@ -105,18 +107,9 @@ zobId ZobEntity::Regenerate(const zobId zid)
 
 ulong ZobEntity::GenerateId()
 {	
-	DirectZobType::zobId u = 0;
-	for (int i = 0; i < 6; i++)
-	{
-		srand(rand() ^ time(NULL));
-		ulong l = (rand() % 10);
-		if (l == 0 && i == 0)
-		{
-			l = 1;
-		}
-		u += l * pow(10, i);
-	}
-	return u;
+	ulong l = ZobUtils::random(10000, 1000000);
+	return l;
+
 }
 
 std::vector<ZobEntity*> ZobEntity::GetAllEntities()

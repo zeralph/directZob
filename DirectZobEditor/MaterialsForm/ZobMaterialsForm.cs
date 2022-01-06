@@ -10,13 +10,14 @@ using System.Windows.Forms;
 
 namespace DirectZobEditor.MaterialsForm
 {
-    public partial class MaterialsForm : Form
+    public partial class ZobMaterialsForm : Form
     {
         private CLI.DirectZobWrapper m_directZobWrapper;
-
-        public MaterialsForm(CLI.DirectZobWrapper directZobWrapper)
+        private DirectZobEditorForm m_mainForm;
+        public ZobMaterialsForm(DirectZobEditorForm f, CLI.DirectZobWrapper directZobWrapper)
         {
             InitializeComponent();
+            m_mainForm = f;
             m_directZobWrapper = directZobWrapper;
             CLI.ZobMaterialsManagerWrapper manager = new CLI.ZobMaterialsManagerWrapper();
             manager.ParseMaterials();
@@ -36,6 +37,11 @@ namespace DirectZobEditor.MaterialsForm
         {
             int w = MaterialsTableLayout.Width;
             //MaterialsTableLayout.ColumnCount = (int)(w / 300);
+        }
+
+        private void ZobMaterialsForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            m_mainForm.UnregisterZobMaterialsViewer();
         }
     }
 }
