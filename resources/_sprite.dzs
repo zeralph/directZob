@@ -2,7 +2,7 @@
 <Scene>
     <Globals>
         <Var Name="Ambient color" value="255;102;102;102" />
-        <Var Name="Clear color" value="255;63;149;255" />
+        <Var Name="Clear color" value="255;192;192;192" />
         <Var Name="Ambient color intensity" value="0.800" />
         <Var Name="Fog type" value="None" />
         <Var Name="Fog color" value="255;63;149;255" />
@@ -17,120 +17,46 @@
         <Var Name="Equalize triangle queues" value="False" />
         <Var Name="Perspective Correction" value="True" />
     </Globals>
-    <ZobObject Guid="4002670489">
-        <Var Name="Name" value="camaro.obj" />
-        <Var Name="Position" value="-10.692;0.000;0.000" />
+    <ZobObject Guid="4002848108">
+        <Var Name="Name" value="4096_earth.png" />
+        <Var Name="Position" value="0.000;0.000;0.000" />
         <Var Name="Rotation" value="0.000;0.000;0.000" />
         <Var Name="Scale" value="1.000;1.000;1.000" />
-        <Behaviors>
-            <Behavior Type="Mesh" Guid="2007245163">
-                <Var Name="File" value="camaro.obj;/;camaro.obj" />
+        <Components>
+            <Component Type="Sprite" Guid="2007003906">
+                <Var Name="File" value="4096_earth.png;/;4096_earth.png;0" />
                 <Var Name="Cull mode" value="Clockwise" />
                 <Var Name="Lighting" value="Phong" />
                 <Var Name="ZBuffered" value="True" />
-                <Var Name="Transparent" value="False" />
-            </Behavior>
-        </Behaviors>
-        <ZobObject Guid="4002273791">
-            <Var Name="Name" value="spectator.png" />
-            <Var Name="Position" value="0.000;2.806;0.000" />
-            <Var Name="Rotation" value="0.000;0.000;0.000" />
-            <Var Name="Scale" value="5.000;5.000;5.000" />
-            <Behaviors>
-                <Behavior Type="Sprite" Guid="2007756106">
-                    <Var Name="File" value="spectator.png;/;spectator.png" />
-                    <Var Name="Cull mode" value="Clockwise" />
-                    <Var Name="Lighting" value="None" />
-                    <Var Name="ZBuffered" value="True" />
-                </Behavior>
-            </Behaviors>
-            <ZobObject Guid="4002776852">
-                <Var Name="Name" value="camaro.obj_Copy" />
-                <Var Name="Position" value="11.144;-0.112;-11.294" />
-                <Var Name="Rotation" value="0.000;0.000;0.000" />
-                <Var Name="Scale" value="1.000;1.000;1.000" />
-                <Behaviors>
-                    <Behavior Type="Mesh" Guid="2007245163">
-                        <Var Name="File" value="camaro.obj;/;camaro.obj" />
-                        <Var Name="Cull mode" value="Clockwise" />
-                        <Var Name="Lighting" value="Phong" />
-                        <Var Name="ZBuffered" value="True" />
-                        <Var Name="Transparent" value="False" />
-                    </Behavior>
-                </Behaviors>
-                <ZobObject Guid="4002552896">
-                    <Var Name="Name" value="spectator.png" />
-                    <Var Name="Position" value="8.149;0.561;0.000" />
-                    <Var Name="Rotation" value="0.000;0.000;0.000" />
-                    <Var Name="Scale" value="5.000;5.000;5.000" />
-                    <Behaviors>
-                        <Behavior Type="Sprite" Guid="2007756106">
-                            <Var Name="File" value="spectator.png;/;spectator.png" />
-                            <Var Name="Cull mode" value="Clockwise" />
-                            <Var Name="Lighting" value="None" />
-                            <Var Name="ZBuffered" value="True" />
-                        </Behavior>
-                    </Behaviors>
-                </ZobObject>
-            </ZobObject>
-        </ZobObject>
+            </Component>
+        </Components>
     </ZobObject>
-    <ZobObject Guid="4002776852">
-        <Var Name="Name" value="camaro.obj_Copy" />
-        <Var Name="Position" value="-9.691;0.000;0.000" />
+    <ZobObject Guid="4002653678">
+        <Var Name="Name" value="4096_earth.png" />
+        <Var Name="Position" value="0.000;0.000;-5.406" />
         <Var Name="Rotation" value="0.000;0.000;0.000" />
         <Var Name="Scale" value="1.000;1.000;1.000" />
-        <Behaviors>
-            <Behavior Type="Mesh" Guid="2007245163">
-                <Var Name="File" value="camaro.obj;/;camaro.obj" />
+        <Components>
+            <Component Type="Sprite" Guid="2007849385">
+                <Var Name="File" value="4096_earth.png;/;4096_earth.png;0" />
                 <Var Name="Cull mode" value="Clockwise" />
                 <Var Name="Lighting" value="Phong" />
                 <Var Name="ZBuffered" value="True" />
-                <Var Name="Transparent" value="False" />
-            </Behavior>
-        </Behaviors>
-        <ZobObject Guid="4002552896">
-            <Var Name="Name" value="spectator.png" />
-            <Var Name="Position" value="0.999;2.805;0.000" />
-            <Var Name="Rotation" value="0.000;0.000;0.000" />
-            <Var Name="Scale" value="5.000;5.000;5.000" />
-            <Behaviors>
-                <Behavior Type="Sprite" Guid="2007756106">
-                    <Var Name="File" value="spectator.png;/;spectator.png" />
-                    <Var Name="Cull mode" value="Clockwise" />
-                    <Var Name="Lighting" value="None" />
-                    <Var Name="ZBuffered" value="True" />
-                </Behavior>
-            </Behaviors>
-            <ZobObject Guid="4002693938">
-                <Var Name="Name" value="camaro.obj_Copy" />
-                <Var Name="Position" value="0.293;-0.022;0.000" />
-                <Var Name="Rotation" value="0.000;0.000;0.000" />
-                <Var Name="Scale" value="1.000;1.000;1.000" />
-                <Behaviors>
-                    <Behavior Type="Mesh" Guid="2007245163">
-                        <Var Name="File" value="camaro.obj;/;camaro.obj" />
-                        <Var Name="Cull mode" value="Clockwise" />
-                        <Var Name="Lighting" value="Phong" />
-                        <Var Name="ZBuffered" value="True" />
-                        <Var Name="Transparent" value="False" />
-                    </Behavior>
-                </Behaviors>
-                <ZobObject Guid="4002566753">
-                    <Var Name="Name" value="spectator.png" />
-                    <Var Name="Position" value="0.239;0.112;0.000" />
-                    <Var Name="Rotation" value="0.000;0.000;0.000" />
-                    <Var Name="Scale" value="5.000;5.000;5.000" />
-                    <Behaviors>
-                        <Behavior Type="Sprite" Guid="2007756106">
-                            <Var Name="File" value="spectator.png;/;spectator.png" />
-                            <Var Name="Cull mode" value="Clockwise" />
-                            <Var Name="Lighting" value="None" />
-                            <Var Name="ZBuffered" value="True" />
-                        </Behavior>
-                    </Behaviors>
-                </ZobObject>
-            </ZobObject>
-        </ZobObject>
+            </Component>
+        </Components>
+    </ZobObject>
+    <ZobObject Guid="4002546793">
+        <Var Name="Name" value="4096_earth.png" />
+        <Var Name="Position" value="6.258;0.000;0.000" />
+        <Var Name="Rotation" value="0.000;0.000;0.000" />
+        <Var Name="Scale" value="1.000;1.000;1.000" />
+        <Components>
+            <Component Type="Sprite" Guid="2007155168">
+                <Var Name="File" value="4096_earth.png;/;4096_earth.png;0" />
+                <Var Name="Cull mode" value="Clockwise" />
+                <Var Name="Lighting" value="Phong" />
+                <Var Name="ZBuffered" value="True" />
+            </Component>
+        </Components>
     </ZobObject>
 </Scene>

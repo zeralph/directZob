@@ -803,3 +803,8 @@ void ZobObject::ResetPhysic()
 		(*iter)->ResetPhysic();
 	}
 }
+
+void ZobObject::Duplicate()
+{
+	assert(false);
+}

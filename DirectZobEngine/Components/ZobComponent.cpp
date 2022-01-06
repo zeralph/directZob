@@ -49,3 +49,8 @@ void ZobComponent::ReLoadVariables()
 {
 	m_varExposer->Load();
 }
+
+void ZobComponent::Duplicate()
+{
+	assert(false);
+}

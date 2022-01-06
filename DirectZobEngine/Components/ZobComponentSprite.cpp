@@ -24,6 +24,10 @@ ZobComponentSprite::ZobComponentSprite(ZobObject* zobObject, bool bEditorZobComp
 	//m_varExposer->WrapVariable<ZobColor>("diffuse color", &m_diffuseColor, &ZobComponentSprite::ReloadMaterial, false, true);
 	//m_varExposer->WrapVariable<ZobColor>("specular color", &m_specularColor, &ZobComponentSprite::ReloadMaterial, false, true);
 
+	std::stringstream ss;
+	ss << m_zobObject->GetName().c_str() << "_" << "Sprite";
+	m_name = ss.str();
+
 	Triangle::RenderOptions::eCullMode cm[3] = { Triangle::RenderOptions::eCullMode_None, Triangle::RenderOptions::eCullMode_ClockwiseFace, Triangle::RenderOptions::eCullMode_CounterClockwiseFace };
 	const char* cmStr[3] = { "None", "Clockwise", "Counter clockwise" };
 	m_varExposer->WrapEnum<Triangle::RenderOptions::eCullMode>("Cull mode", &m_renderOptions.cullMode, 3, cm, cmStr, NULL, false, true);

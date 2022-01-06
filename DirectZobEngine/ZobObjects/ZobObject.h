@@ -12,6 +12,8 @@
 
 #include "../Components/ZobComponentSprite.h"
 #include "../Components/ZobComponentMesh.h"
+#include "../Components/HudComponents/ZobComponentText.h"
+#include "../Components/HudComponents/ZobComponentImage.h"
 
 class Mesh;
 class ZobPhysicComponent;
@@ -38,6 +40,7 @@ public:
 	virtual void						QueueForDrawing(const Camera* camera,Engine* engine);
 	virtual void						DrawGizmos(const Camera* camera, Engine* engine);
 	virtual								TiXmlNode* SaveUnderNode(TiXmlNode* node);
+	void								Duplicate() override;
 	//
 	void								SaveTransform();
 	void								RestoreTransform();
@@ -69,8 +72,6 @@ public:
 	void								LookAt(const ZobVector3* target, bool addToCurrentRotation);
 	void								LookAt(const ZobVector3* forward, const ZobVector3* left, const ZobVector3* up, bool addToCurrentRotation);
 	
-	inline const std::string&			GetName() const { return m_name; }
-	inline void							SetName(const std::string &name) { m_name = name; }
 	inline ZobVector3					GetForward() const { return &m_forward; }
 	inline ZobVector3					GetLeft() const { return &m_left; }
 	inline ZobVector3					GetUp() const { return &m_up; }
@@ -132,7 +133,6 @@ protected:
 	std::vector <ZobComponent*> m_Components;
 	ZobMatrix4x4 m_modelMatrix;
 	ZobMatrix4x4 m_rotationMatrix;
-	std::string m_name;
 	bool m_markedForDeletion;
 	ZobVector3 m_left;
 	ZobVector3 m_forward;

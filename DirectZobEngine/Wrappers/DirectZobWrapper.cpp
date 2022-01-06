@@ -365,6 +365,7 @@ namespace CLI
 		s->drawGizmos = DirectZob::GetInstance()->GetEngine()->DrawGizmos();
 		s->drawCameraGizmos = DirectZob::GetInstance()->GetEngine()->DrawCameraGizmos();
 		s->drawZobObjectGizmos = DirectZob::GetInstance()->GetEngine()->DrawZobObjectGizmos();
+		s->currentWorkingDir = gcnew System::String(SceneLoader::GetResourcePath().c_str());
 	}
 
 	void DirectZobWrapper::LoadEditorSettings(EditorSettings^ s)
@@ -378,6 +379,12 @@ namespace CLI
 		DirectZob::GetInstance()->GetEngine()->DrawGizmos(s->drawGizmos);
 		DirectZob::GetInstance()->GetEngine()->DrawCameraGizmos(s->drawCameraGizmos);
 		DirectZob::GetInstance()->GetEngine()->DrawZobObjectGizmos(s->drawZobObjectGizmos);
+		if (s->currentWorkingDir != nullptr)
+		{
+			std::string str;
+			MarshalString(s->currentWorkingDir, str);
+			SceneLoader::SetWorkSpace(str);
+		}
 	}
 }
 #endif //_WINDLL

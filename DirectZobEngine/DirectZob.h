@@ -97,7 +97,6 @@ public :
 	int						GetBufferWidth() const { return m_engine->GetBufferData()->width; }
 	int						GetBufferHeight() const { return m_engine->GetBufferData()->height; }
 	uint*					GetEditorBufferDataNoConst() { return m_engine->GetBufferData()->buffer; }
-	std::string				ExePath();
 	double					GetDeltaTime_MS(timespec& start, timespec& end) const;
 	inline static DirectZob*GetInstance() { return DirectZob::singleton; }
 	inline Engine*			GetEngine() const { return m_engine; }

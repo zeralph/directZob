@@ -8,6 +8,7 @@
 #include "../../Rendering/text2D.h"
 #include "../../ZobObjects/ZobObject.h"
 #include "../../SceneLoader.h"
+#include "../../Managers/ZobHUDManager.h"
 
 ZobComponentText::~ZobComponentText()
 {
@@ -31,7 +32,7 @@ ZobComponentText::ZobComponentText(ZobObject* zobObject, bool bEditorZobComponen
 	m_defaultColor = ZobColor::White;
 	m_selectedColor = ZobColor::Red;
 	m_type = eComponent_hudText; 
-	m_unit = ZobHUDManager::eHudUnit_ratio;
+	//m_unit = ZobHUDManager::eHudUnit_ratio;
 	m_fontXml.SetFileType(ZobFilePath::eFileType_xml);
 	m_fontImage.SetFileType(ZobFilePath::eFileType_texture);
 	m_actionArg = "";
@@ -72,11 +73,11 @@ void ZobComponentText::PreUpdate(float dt)
 		{
 			if (m_selected)
 			{
-				hud->Print(m_unit, m_x, m_y, m_z, m_fontSize, m_font, &m_selectedColor, m_text.c_str());
+				hud->Print(ZobHUDManager::eHudUnit_ratio, m_x, m_y, m_z, m_fontSize, m_font, &m_selectedColor, m_text.c_str());
 			}
 			else
 			{
-				hud->Print(m_unit, m_x, m_y, m_z, m_fontSize, m_font, &m_defaultColor, m_text.c_str());
+				hud->Print(ZobHUDManager::eHudUnit_ratio, m_x, m_y, m_z, m_fontSize, m_font, &m_defaultColor, m_text.c_str());
 			}
 		}
 	}

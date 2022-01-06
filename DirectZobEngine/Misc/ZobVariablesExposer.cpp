@@ -109,7 +109,7 @@ void ZobVariablesExposer::wrapperData::Load()
 		ZobFilePath* zb = (ZobFilePath*)(ptr);
 		zb->Unserialize(s);
 	}
-	else if (type == eWrapperType_zobObject)
+	else if (type == eWrapperType_zobEntity)
 	{
 		std::string s = std::string(strValue);
 		zobId zid = ZobEntity::ZobIdFromString(s);
@@ -243,7 +243,7 @@ TiXmlNode* ZobVariablesExposer::SaveUnderNode(TiXmlNode* node)
 			{
 				break;
 			}
-			case eWrapperType_zobObject:
+			case eWrapperType_zobEntity:
 			{
 				ZobObject** z = reinterpret_cast<ZobObject**>(w->ptr);
 				if (z && *z)
@@ -303,7 +303,7 @@ void ZobVariablesExposer::ReadNode(TiXmlNode* node)
 		}
 		else
 		{
-			DirectZob::LogWarning("Attributes not found for mesh loading");
+			DirectZob::LogWarning("Attributes not found for variable loading");
 		}
 	}
 }

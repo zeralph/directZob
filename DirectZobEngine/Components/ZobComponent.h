@@ -39,7 +39,7 @@ public:
 	virtual void											EditorUpdate() = 0;
 	virtual void											QueueForDrawing(const Camera* camera, Engine* engine) {};
 	virtual	void											DrawGizmos(const Camera* camera, const ZobVector3* position, const ZobVector3* rotation) const {}
-
+	void													Duplicate() override;
 	const char*												GetComponentTypeStr();
 	TiXmlNode*												SaveUnderNode(TiXmlNode* node);
 	eComponentType											GetComponentType() const { return m_type; }

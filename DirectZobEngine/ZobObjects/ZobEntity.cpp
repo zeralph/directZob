@@ -10,6 +10,7 @@ ZobEntity::ZobEntity(ZobType t, ZobSubType s)
 	m_subType = s;
 	ulong id = GenerateId();
 	m_id = (u16)t * 1000 * 1000 * 1000 + (u16)s * 1000 * 1000 + id;
+	assert( m_entityMap.find(m_id) == m_entityMap.end());
 	ZobEntity::m_entityMap[m_id] = this;
 }
 
@@ -19,6 +20,7 @@ ZobEntity::ZobEntity(const zobId zid)
 	m_type = (ZobType)(m_id / (1000 * 1000 * 1000));
 	unsigned long long  l = (zobId)m_type * 1000 * 1000 * 1000;
 	m_subType = (ZobSubType)((m_id - l) / (1000 * 1000));
+	assert(m_entityMap.find(m_id) == m_entityMap.end());
 	ZobEntity::m_entityMap[m_id] = this;
 }
 
@@ -102,10 +104,11 @@ zobId ZobEntity::Regenerate(const zobId zid)
 }
 
 ulong ZobEntity::GenerateId()
-{
+{	
 	DirectZobType::zobId u = 0;
 	for (int i = 0; i < 6; i++)
 	{
+		srand(rand() ^ time(NULL));
 		ulong l = (rand() % 10);
 		if (l == 0 && i == 0)
 		{

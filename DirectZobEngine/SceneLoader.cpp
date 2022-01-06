@@ -4,7 +4,7 @@
 #include "Misc/ZobXmlHelper.h"
 
 //TODO !
-std::string SceneLoader::m_path = "D://_Git//directZob//resources//";
+std::string SceneLoader::m_path = "";
 std::string SceneLoader::m_file = "";
 std::string SceneLoader::m_nextScenePath = "";
 std::string SceneLoader::m_nextSceneName = "";
@@ -156,7 +156,10 @@ void SceneLoader::NewScene(std::string workspace)
 {
 	DirectZob::AddIndent();
 	UnloadScene();
-	m_path = workspace;
+	if (workspace.length() > 0)
+	{
+		m_path = workspace;
+	}
 	m_file = "";
 	DirectZob::GetInstance()->GetHudManager()->Start();
 	DirectZob::GetInstance()->GetLightManager()->ReInitGlobalSettings();

@@ -98,6 +98,12 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ZobEntitySelector.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ZobEntitySelector.Designer.cs">
+      <DependentUpon>ZobEntitySelector.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="EngineWindow.resx">
       <DependentUpon>EngineWindow.cs</DependentUpon>
     </EmbeddedResource>
@@ -120,6 +126,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="ZobEntitySelector.resx">
+      <DependentUpon>ZobEntitySelector.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -167,6 +176,14 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="icon.ico" />
+    <None Include="Resources\save2.png" />
+    <None Include="Resources\mesh3.png" />
+    <None Include="Resources\exit.png" />
+    <None Include="Resources\load.png" />
+    <None Include="Resources\save.png" />
+    <None Include="Resources\new.png" />
+    <None Include="Resources\material.png" />
+    <None Include="Resources\hud.png" />
     <None Include="Resources\object.png" />
     <None Include="Resources\physic.png" />
     <None Include="Resources\bbox.png" />

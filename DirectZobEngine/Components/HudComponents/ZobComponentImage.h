@@ -2,10 +2,10 @@
 #include "../../Types.h"
 #include "../../tinyxml/tinyxml.h"
 #include "../ZobComponent.h"
-#include "../../Managers/ZobHUDManager.h"
 #include <string>
 #include <vector>
 
+class ZobMaterial;
 class ZobComponentImage : public ZobComponent
 {
 	friend class ZobComponentFactory;

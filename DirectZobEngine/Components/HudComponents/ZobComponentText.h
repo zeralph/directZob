@@ -2,10 +2,10 @@
 #include "../../Types.h"
 #include "../../tinyxml/tinyxml.h"
 #include "../ZobComponent.h"
-#include "../../Managers/ZobHUDManager.h"
 #include <string>
 #include <vector>
 
+class ZobFont;
 class ZobComponentText : public ZobComponent
 {
 	friend class ZobComponentFactory;
@@ -39,7 +39,7 @@ class ZobComponentText : public ZobComponent
 		ZobComponentText(ZobObject* zobObject, bool bEditorZobComponent);
 		static void				UpdateSelectableStatus(zobId id);
 		void					LoadFontInternal();
-		ZobHUDManager::eHudUnit m_unit;
+		//ZobHUDManager::eHudUnit m_unit;
 		float m_x;
 		float m_y;
 		float m_w;

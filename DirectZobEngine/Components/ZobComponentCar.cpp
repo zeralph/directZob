@@ -39,11 +39,12 @@ ZobComponentCar::ZobComponentCar(ZobObject* zobObject) : ZobComponent(zobObject,
 	m_wheelRotationAngle = 0;
 	Init();
 
-	
-	m_varExposer->WrapVariable<ZobObject*>("Front left wheel", &m_frontLeftWheel, NULL, false, true);
-	m_varExposer->WrapVariable<ZobObject*>("Front right wheel", &m_frontRightWheel, NULL, false, true);
-	m_varExposer->WrapVariable<ZobObject*>("Rear left wheel", &m_rearLeftWheel, NULL, false, true);
-	m_varExposer->WrapVariable<ZobObject*>("Rear right wheel", &m_rearRightWheel, NULL, false, true);
+	m_test = NULL;
+	m_varExposer->WrapEntity<ZobObject*>("Front left wheel", &m_frontLeftWheel, NULL, false, true);
+	m_varExposer->WrapEntity<ZobObject*>("Front right wheel", &m_frontRightWheel, NULL, false, true);
+	m_varExposer->WrapEntity<ZobObject*>("Rear left wheel", &m_rearLeftWheel, NULL, false, true);
+	m_varExposer->WrapEntity<ZobObject*>("Rear right wheel", &m_rearRightWheel, NULL, false, true);
+	m_varExposer->WrapEntity<ZobComponentSprite*>("test", &m_test, NULL, false, true);
 	m_varExposer->WrapVariable<float>("Speed", &m_speed_ms, NULL, true, false);
 	m_varExposer->WrapVariable<bool>("HandBrake", &m_handBrake, NULL, true, true);
 	m_varExposer->WrapVariable<float>("Mass", &m_mass, NULL, false, true);

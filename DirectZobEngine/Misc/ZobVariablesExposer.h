@@ -5,6 +5,7 @@
 #include "../tinyxml/tinyxml.h"
 #include "../Rendering/Color.h"
 #include "ZobFilePath.h"
+#include "../ZobObjects/ZobEntity.h"
 
 class ZobEntity;
 class ZobVector2;
@@ -27,7 +28,7 @@ public:
 		eWrapperType_bool,
 		eWrapperType_zobId,
 		eWrapperType_path,
-		eWrapperType_zobObject,
+		eWrapperType_zobEntity,
 		eWrapperType_zobColor,
 		eWrapperType_uint,
 		eWrapperType_action,
@@ -60,6 +61,9 @@ public:
 		std::vector<std::string> enumNames;
 		void Load();
 		void Init();
+		//for ZobEntities
+		ZobEntity::ZobSubType zobSubType;
+		std::string strType;
 	};
 
 	ZobVariablesExposer(zobId id);
@@ -113,6 +117,32 @@ public:
 	}
 
 	template<typename T>
+	void WrapEntity(const char* name, T* ptr, wrapperCallback cb, bool bReadOnly, bool bSave)
+	{
+		wrapperData w = wrapperData(m_zobId);
+		w.Init();
+		std::string s;
+		w.name = std::string(name);
+		s = "";
+		s = s.append("_").append(w.name);
+		w.id = m_zobId;
+		w.internalName = s;
+		w.type = eWrapperType_zobEntity;
+		w.ptr = (void*)ptr;
+		w.zobSubType = ZobEntity::GetSubType(m_zobId);
+		w.callback = cb;
+		w.bReadOnly = bReadOnly;
+		w.bSave = bSave;
+		w.strType = typeid(T).name();
+		size_t f = w.strType.find('*');
+		if (f > 0)
+		{
+			w.strType = w.strType.substr(0, f - 1);
+		}
+		m_wrappedVariables.push_back(w);
+	}
+
+	template<typename T>
 	void WrapVariable(const char* name, T* ptr, wrapperCallback cb, bool bReadOnly, bool bSave)
 	{
 		eWrapperType type = eWrapperType::__eWrapperType_MAX__;
@@ -144,10 +174,10 @@ public:
 		{
 			type = eWrapperType_zobId;
 		}
-		else if (std::is_same<T, ZobObject*>::value)
-		{
-			type = eWrapperType_zobObject;
-		}
+		//else if (std::is_same<T, ZobObject*>::value)
+		//{
+		//	type = eWrapperType_zobEntity;
+		//}
 		else if (std::is_same<T, ZobFilePath>::value)
 		{
 			type = eWrapperType_path;

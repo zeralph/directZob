@@ -13,7 +13,7 @@ namespace DirectZobEditor
 {
     public partial class Form1 : Form
     {
-        private string workspace = "D://Git//directZob//resources//";
+        private string workspace = "";
         enum eplayMode
         {
             ePlayMode_play=0,
@@ -92,47 +92,49 @@ namespace DirectZobEditor
             this.Load += new EventHandler(this.Onloaded);
             onSceneLoadedCallback = new CLI.engineCallback(onSceneLoadedCallbackMethod);
             OnSceneLoadedDelegate = new OnSceneLoaded(OnSceneLoadedMethod);
-            //CLI.DirectZobWrapperEvents.OnNewSceneEvent += DirectZobWrapperEvents_OnNewSceneEvent;
+
+            SetSnap("None");
+            InformEngineStatus("STOPPED");
+            m_engineWindowHandle = this.Handle;// m_engineWindow.Handle;
+            LoadEditorSettings();
+
             OnSceneSaved += Form1_OnSceneSaved;
             OnNewScene += Form1_OnNewScene;
             this.propertiesPanel.MinimumSize = new Size(300, 500);
-
+            m_directZobWrapper.NewScene("");
             p.MouseEnter += P_MouseEnter;
             p.Click += P_Click;
             this.WindowState = FormWindowState.Maximized;
             EngineRendererPanel.Controls.Add(m_engineWindow);
             EngineRendererPanel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             EngineRendererPanel.AutoSize = true;
-            m_directZobWrapper.NewScene(workspace);
             EventHandler handler = OnNewScene;
             if (null != handler)
             {
                 handler(this, EventArgs.Empty);
             }
-            bBoxToolStripMenuItem.Checked = false;
-            cameraToolStripMenuItem.Checked = false;
-            textToolStripMenuItem.Checked = false;
-            physicsToolStripMenuItem.Checked = false;
             m_engineThread = new Thread(RunEngineThread);
             m_engineThread.Start();
-            SetSnap("None");
-            InformEngineStatus("STOPPED");
-            m_engineWindowHandle = this.Handle;// m_engineWindow.Handle;
-            LoadEditorSettings();
+
+
+
+            
+
+            
         }
 
         private void P_Click(object sender, EventArgs e)
         {
-            m_engineWindow.Focus();
+            //m_engineWindow.Focus();
         }
 
         private void P_MouseEnter(object sender, EventArgs e)
         {
-            m_engineWindow.Focus();
+            //m_engineWindow.Focus();
         }
         private void Form1_OnNewScene(object sender, EventArgs e)
         {
-            toolStripStatusScanePath.Text = GetDirectZobWrapper().GetResourcePath();
+            toolStripStatusScanePath.Text = "| Workspace : " + GetDirectZobWrapper().GetResourcePath();
         }
 
         private void Form1_OnSceneSaved(object sender, EventArgs e)
@@ -728,30 +730,6 @@ namespace DirectZobEditor
         }
         #endregion
 
-        private void bBoxToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            bBoxToolStripMenuItem.Checked = !bBoxToolStripMenuItem.Checked;
-            m_directZobWrapper.GetEngineWrapper().ShowBBoxes(bBoxToolStripMenuItem.Checked);
-        }
-
-        private void cameraToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            cameraToolStripMenuItem.Checked = !cameraToolStripMenuItem.Checked;
-            m_directZobWrapper.GetEngineWrapper().DrawCameraGizmos(cameraToolStripMenuItem.Checked);
-        }
-
-        private void physicsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            physicsToolStripMenuItem.Checked = !physicsToolStripMenuItem.Checked;
-            m_directZobWrapper.GetEngineWrapper().DrawPhysicsGizmos(physicsToolStripMenuItem.Checked);
-        }
-
-        private void textToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            textToolStripMenuItem.Checked = !textToolStripMenuItem.Checked;
-            m_directZobWrapper.GetEngineWrapper().ShowText(textToolStripMenuItem.Checked);
-        }
-
         private void toolStripComboBoxCurrentCamera_SelectedIndexChanged(object sender, EventArgs e)
         {
             string s = (string)toolStripComboBoxCurrentCamera.SelectedItem;
@@ -774,6 +752,7 @@ namespace DirectZobEditor
             JsonSerializer serializer = new JsonSerializer();
             using (StreamWriter file = File.CreateText(@"../settings.json"))
             {
+                serializer.Formatting = Formatting.Indented;
                 serializer.Serialize(file, s);
             }
         }

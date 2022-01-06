@@ -189,16 +189,18 @@ namespace CLI {
 		void UpdateControlInternal() override;
 	};
 
-	public ref class ZobControlZobObject : ZobControl
+	public ref class ZobControlZobEntity : ZobControl
 	{
 	public:
-		ZobControlZobObject(const ZobVariablesExposer::wrapperData& w);
-		~ZobControlZobObject();
+		ZobControlZobEntity(const ZobVariablesExposer::wrapperData& w);
+		~ZobControlZobEntity();
 		ZobLabel^ _label;
 		ZobTextBox^ _txt;
+		ZobButton^ _btn;
 	protected:
 		void OnValueChanged(Object^ sender, EventArgs^ e) override;
 		void UpdateControlInternal() override;
+		void OnClick(Object^ sender, EventArgs^ e);
 	};
 
 	public ref class ZobControlZobId : ZobControl
@@ -220,6 +222,8 @@ namespace CLI {
 		bool IsSelectable() { return m_isSelectable; }
 		bool IsReadOnly() { return m_isReadOnly; }
 		String^ m_zobObjectGuid;
+		CheckBox^ m_visible;
+		CheckBox^ m_locked;
 		bool m_isSelectable;
 		bool m_isReadOnly;
 	};
@@ -229,6 +233,8 @@ namespace CLI {
 	public:
 		ZobControlTreeview();
 		void UpdateZobControl();
+	protected:
+		void OnDrawNode(DrawTreeNodeEventArgs^ e) override;
 	};
 
 	public ref class ZobPropertiesContainer : TableLayoutPanel

@@ -40,6 +40,7 @@ namespace CLI
 			eImageZobCamera = 2,
 			eImageZobMesh = 3,
 			eImageZobSprite = 4,
+			eImageZobHud = 5,
 		};
 
 		ZobObjectManagerWrapper(Panel^ objectTreeviewPanel, Panel^ objectPropertiesPanel, Resources::ResourceManager^ rsMgr);

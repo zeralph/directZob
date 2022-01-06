@@ -188,6 +188,24 @@ namespace CLI
 			Bitmap^ bmp = gcnew Bitmap(im);
 			m_treeView->ImageList->Images->Add(bmp);
 		}
+		im = (Image^)m_resourcesManager->GetObject("mesh3");
+		if (im != nullptr)
+		{
+			Bitmap^ bmp = gcnew Bitmap(im);
+			m_treeView->ImageList->Images->Add(bmp);
+		}
+		im = (Image^)m_resourcesManager->GetObject("sprite");
+		if (im != nullptr)
+		{
+			Bitmap^ bmp = gcnew Bitmap(im);
+			m_treeView->ImageList->Images->Add(bmp);
+		}
+		im = (Image^)m_resourcesManager->GetObject("hud");
+		if (im != nullptr)
+		{
+			Bitmap^ bmp = gcnew Bitmap(im);
+			m_treeView->ImageList->Images->Add(bmp);
+		}
 		
 
 		Refresh();

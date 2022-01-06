@@ -57,12 +57,6 @@ void DirectZob::Shutdown()
 
 }
 
-std::string DirectZob::ExePath() {
-
-	//return std::string("D:\\_PERSO\\directZob\\directZob\\resources\\");
-	return std::string("C:\\_GIT\\directZob\\resources");
-}
-
 void DirectZob::LoadScene(std::string& path, std::string& file, DirectZob::engineCallback OnSceneLoaded)
 {
 	m_onSceneLoaded = OnSceneLoaded;

@@ -1,5 +1,6 @@
 ﻿#include "ZobUserControls.h"
 #include "../DirectZobWrapper.h"
+
 #define TO_MANAGED_STRING(x) gcnew String(x);
 
 using namespace CLI;
@@ -161,9 +162,9 @@ ZobGroupBox^ ZobControl::CreateWrappedVariablesView(std::string& name, ZobVariab
 			{
 				panel->Controls->Add(gcnew ZobControlZobId(w));
 			}
-			else if (w.type == ZobVariablesExposer::eWrapperType_zobObject)
+			else if (w.type == ZobVariablesExposer::eWrapperType_zobEntity)
 			{
-				panel->Controls->Add(gcnew ZobControlZobObject(w));
+				panel->Controls->Add(gcnew ZobControlZobEntity(w));
 			}
 			else if (w.type == ZobVariablesExposer::eWrapperType_zobColor)
 			{
@@ -796,10 +797,10 @@ void ZobControlEnum::OnValueChanged(Object^ sender, EventArgs^ e)
 	}
 }
 
-ZobControlZobObject::ZobControlZobObject(const ZobVariablesExposer::wrapperData& w) :ZobControl(w)
+ZobControlZobEntity::ZobControlZobEntity(const ZobVariablesExposer::wrapperData& w) :ZobControl(w)
 {
 	this->AutoSize = true;
-	this->ColumnCount = 2;
+	this->ColumnCount = 3;
 	this->RowCount = 1;
 	_label = gcnew ZobLabel();
 	_label->Text = TO_MANAGED_STRING(w.name.c_str());
@@ -812,6 +813,12 @@ ZobControlZobObject::ZobControlZobObject(const ZobVariablesExposer::wrapperData&
 	_txt->Width = 140;
 	_txt->Height = _height;
 	_txt->ReadOnly = w.bReadOnly;
+	_btn = gcnew ZobButton();
+	_btn->AutoSize = false;
+	_btn->Width = 40;
+	_btn->Height = _height;
+	_btn->Text = "+";
+	_btn->Click += gcnew EventHandler(this, &ZobControlZobEntity::OnClick);
 	ZobObject** pz = (ZobObject**)(w.ptr);
 	ZobObject* z = (ZobObject*)(*pz);
 	if (z)
@@ -824,15 +831,209 @@ ZobControlZobObject::ZobControlZobObject(const ZobVariablesExposer::wrapperData&
 	}
 	this->Controls->Add(_label,0 ,0);
 	this->Controls->Add(_txt, 1, 0);
+	this->Controls->Add(_btn, 2, 0);
 }
 
-ZobControlZobObject::~ZobControlZobObject()
+ZobControlZobEntity::~ZobControlZobEntity()
 {
 	//delete _txt;
 	//delete _label;
 }
 
-void ZobControlZobObject::UpdateControlInternal()
+void ZobControlZobEntity::OnClick(Object^ sender, EventArgs^ e)
+{
+	if (_w)
+	{
+		Form^ f = gcnew Form();
+		TableLayoutPanel^ tableLayoutPanel1;
+		ListView^ listView1;
+		TableLayoutPanel^ tableLayoutPanel2;
+		Button^ button2;
+		Button^ button1;
+
+		listView1 = gcnew System::Windows::Forms::ListView();
+		tableLayoutPanel1 = gcnew System::Windows::Forms::TableLayoutPanel();
+		tableLayoutPanel2 = gcnew System::Windows::Forms::TableLayoutPanel();
+		button1 = gcnew System::Windows::Forms::Button();
+		button2 = gcnew System::Windows::Forms::Button();
+		tableLayoutPanel1->SuspendLayout();
+		tableLayoutPanel2->SuspendLayout();
+		SuspendLayout();
+		// 
+		// tableLayoutPanel1
+		// 
+		tableLayoutPanel1->ColumnCount = 1;
+		tableLayoutPanel1->ColumnStyles->Add(gcnew ColumnStyle(SizeType::Percent, 50.F));
+		tableLayoutPanel1->ColumnStyles->Add(gcnew ColumnStyle(SizeType::Percent, 50.F));
+		tableLayoutPanel1->Controls->Add(listView1, 0, 0);
+		tableLayoutPanel1->Controls->Add(tableLayoutPanel2, 0, 1);
+		tableLayoutPanel1->Dock = DockStyle::Fill;
+		tableLayoutPanel1->Location = System::Drawing::Point(0, 0);
+		tableLayoutPanel1->Name = "tableLayoutPanel1";
+		tableLayoutPanel1->RowCount = 2;
+		tableLayoutPanel1->RowStyles->Add(gcnew RowStyle(SizeType::Percent, 86.94362F));
+		tableLayoutPanel1->RowStyles->Add(gcnew RowStyle(SizeType::Percent, 13.05638F));
+		tableLayoutPanel1->Size = System::Drawing::Size(382, 337);
+		tableLayoutPanel1->TabIndex = 0;
+		// 
+		// listView1
+		// 
+		listView1->Dock = DockStyle::Fill;
+		listView1->HideSelection = false;
+		listView1->Location = System::Drawing::Point(3, 3);
+		listView1->Name = "listView1";
+		listView1->Size = System::Drawing::Size(376, 286);
+		listView1->TabIndex = 0;
+		listView1->UseCompatibleStateImageBehavior = false;
+		listView1->GridLines = true;
+		listView1->AllowColumnReorder = false;
+		listView1->FullRowSelect = true;
+		listView1->GridLines = true;
+		listView1->View = View::Details;
+		listView1->Scrollable = true;
+		ColumnHeader^ h1 = gcnew ColumnHeader();
+		h1->Text = "Name";
+		h1->Name = "col1";
+		listView1->Columns->Add(h1);
+		ColumnHeader^ h2 = gcnew ColumnHeader();
+		h2->Text = "Guid";
+		h2->Name = "col2";
+		listView1->Columns->Add(h2);
+		listView1->Columns[0]->Width = 200;
+		listView1->Columns[1]->Width = 150;
+		listView1->AutoSize = true;
+		std::vector<const ZobEntity*> e = ZobEntity::GetEntityByType(_w->strType);
+		for (std::vector<const ZobEntity*>::const_iterator it = e.begin(); it != e.end(); it++)
+		{
+			const ZobEntity* z = *it;
+			zobId zid = z->GetIdValue();
+			if (ZobEntity::GetType(zid) == ZobEntity::ZobType::type_scene || ZobEntity::GetType(zid) == ZobEntity::ZobType::type_internal)
+			{
+				System::String^ name = gcnew String(z->GetName().c_str());
+				System::String^ guid = gcnew String("");
+				guid += zid;
+				ListViewItem^ i = gcnew ListViewItem(name);
+				i->SubItems->Add(guid);
+				listView1->Items->Add(i);
+			}
+		}
+		// 
+		// tableLayoutPanel2
+		// 
+		tableLayoutPanel2->ColumnCount = 2;
+		tableLayoutPanel2->ColumnStyles->Add(gcnew ColumnStyle(SizeType::Percent, 50.F));
+		tableLayoutPanel2->ColumnStyles->Add(gcnew ColumnStyle(SizeType::Percent, 50.F));
+		tableLayoutPanel2->Controls->Add(button2, 1, 0);
+		tableLayoutPanel2->Controls->Add(button1, 0, 0);
+		tableLayoutPanel2->Dock = DockStyle::Fill;
+		tableLayoutPanel2->Location = Point(3, 295);
+		tableLayoutPanel2->Name = "tableLayoutPanel2";
+		tableLayoutPanel2->RowCount = 1;
+		tableLayoutPanel2->RowStyles->Add(gcnew RowStyle(SizeType::Percent, 50.F));
+		tableLayoutPanel2->RowStyles->Add(gcnew RowStyle(SizeType::Percent, 50.F));
+		tableLayoutPanel2->Size = System::Drawing::Size(376, 39);
+		tableLayoutPanel2->TabIndex = 1;
+		// 
+		// button1
+		// 
+		button1->Anchor = System::Windows::Forms::AnchorStyles::None;
+		button1->ImageAlign = System::Drawing::ContentAlignment::TopRight;
+		button1->Location = System::Drawing::Point(56, 8);
+		button1->Name = "button1";
+		button1->Size = System::Drawing::Size(75, 23);
+		button1->TabIndex = 0;
+		button1->Text = "button1";
+		button1->UseVisualStyleBackColor = true;
+		// 
+		// button2
+		// 
+		button2->Anchor = System::Windows::Forms::AnchorStyles::None;
+		button2->Location = System::Drawing::Point(244, 8);
+		button2->Name = "button2";
+		button2->Size = System::Drawing::Size(75, 23);
+		button2->TabIndex = 1;
+		button2->Text = "button2";
+		button2->UseVisualStyleBackColor = true;
+		// 
+		// ZobEntitySelector
+		// 
+		f->AutoScaleDimensions = System::Drawing::SizeF(6.F, 13.F);
+		f->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
+		f->ClientSize = System::Drawing::Size(382, 337);
+		f->Controls->Add(tableLayoutPanel1);
+		f->Name = "ZobEntitySelector";
+		f->Text = "ZobEntitySelector";
+		tableLayoutPanel1->ResumeLayout(false);
+		tableLayoutPanel2->ResumeLayout(false);
+		f->ResumeLayout(false);
+
+		/*
+		std::vector<const ZobEntity*> e = ZobEntity::GetEntityByType(_w->strType);
+		Form^ f = gcnew Form();
+		f->Width = 450;
+
+		ListView^ l = gcnew ListView();
+		l->Dock = DockStyle::Fill;
+		l->GridLines = true;
+		l->AllowColumnReorder = false;
+		l->FullRowSelect = true;
+		l->GridLines = true;
+		l->View = View::Details;
+		l->Scrollable = true;
+
+		ColumnHeader^ h1 = gcnew ColumnHeader();
+		h1->Text = "Name";
+		h1->Name = "col1";
+		l->Columns->Add(h1);
+		ColumnHeader^ h2 = gcnew ColumnHeader();
+		h2->Text = "Guid";
+		h2->Name = "col2";
+		l->Columns->Add(h2);
+		l->Columns[0]->Width = 200;
+		l->Columns[1]->Width = 200;
+		l->AutoSize = true;
+		for (std::vector<const ZobEntity*>::const_iterator it = e.begin(); it != e.end(); it++)
+		{
+			const ZobEntity* z = *it;
+			zobId zid = z->GetIdValue();
+			System::String^ name  = gcnew String(z->GetName().c_str());
+			System::String^ guid = gcnew String("");
+			guid += zid;
+			ListViewItem^ i = gcnew ListViewItem(name);
+			i->SubItems->Add(guid);
+			l->Items->Add(i);
+		}
+		Button^ bOk = gcnew Button();
+		bOk->Text = "OK";
+		Button^ bCancel = gcnew Button();
+		bCancel->Text = "Cancel";
+		TableLayoutPanel^ p2 = gcnew TableLayoutPanel();
+		p2->ColumnCount = 2;
+		p2->RowCount = 1;
+		p2->Controls->Add(bOk);
+		p2->Controls->Add(bCancel);
+		p2->Dock = DockStyle::Fill;
+		p2->Height = 30;
+		p2->AutoSize = true;
+		p2->BackColor = Color::AliceBlue;
+		TableLayoutPanel^ p = gcnew TableLayoutPanel();
+		p->Dock = DockStyle::Fill;
+		p->ColumnCount = 1;
+		p->RowCount = 2;
+		p->Controls->Add(l);
+		p->Controls->Add(p2);
+		p->AutoSize = true;
+		p->BackColor = Color::DarkOrange;
+		p->ColumnStyles->Add(gcnew ColumnStyle(SizeType::AutoSize));
+		f->Controls->Add(p);
+		p->RowStyles->Add(gcnew RowStyle(SizeType::Absolute, (f->Height - 65)));
+		p->RowStyles->Add(gcnew RowStyle(SizeType::AutoSize));
+*/		
+		f->ShowDialog();
+	}
+}
+
+void ZobControlZobEntity::UpdateControlInternal()
 {
 	if (!IsControlOk())
 	{
@@ -842,7 +1043,7 @@ void ZobControlZobObject::UpdateControlInternal()
 		return;
 }
 
-void ZobControlZobObject::OnValueChanged(Object^ sender, EventArgs^ e)
+void ZobControlZobEntity::OnValueChanged(Object^ sender, EventArgs^ e)
 {
 	if (_w->callback)
 	{
@@ -899,7 +1100,7 @@ ZobControlTreeNode::ZobControlTreeNode(String^ zobObjectGuid) :TreeNode()
 	else if (st == ZobEntity::subtype_zobCamera)
 	{
 		this->ForeColor = Color::Brown;
-		this->ImageIndex = (int)ZobObjectManagerWrapper::eImageObjectType::eImageZobCamera;
+		this->ImageIndex = (int)ZobObjectManagerWrapper::eImageObjectType::eImageZobCamera; 
 	}
 	else if (st == ZobEntity::subtype_zobLight)
 	{
@@ -920,12 +1121,17 @@ ZobControlTreeNode::ZobControlTreeNode(String^ zobObjectGuid) :TreeNode()
 			{
 				this->ImageIndex = (int)ZobObjectManagerWrapper::eImageObjectType::eImageZobMesh;
 			}
+			else if (z && (z->GetComponent<ZobComponentText>() || z->GetComponent<ZobComponentImage>()))
+			{
+				this->ImageIndex = (int)ZobObjectManagerWrapper::eImageObjectType::eImageZobHud;
+			}
 			else
 			{
 				this->ImageIndex = (int)ZobObjectManagerWrapper::eImageObjectType::eImageZobObject;
 			}
 		}
 	}
+	this->SelectedImageIndex = this->ImageIndex;
 }
 
 ZobControlTreeNode::~ZobControlTreeNode()
@@ -968,6 +1174,26 @@ void ZobGroupBox::OnToggle(Object^ sender, EventArgs^ e)
 
 ZobControlTreeview::ZobControlTreeview():TreeView() 
 {
+	this->DrawMode = TreeViewDrawMode::OwnerDrawAll;
+}
+
+
+void ZobControlTreeview::OnDrawNode(DrawTreeNodeEventArgs^ e)
+{
+	e->DrawDefault = true;
+	/*
+	//TreeView::OnDrawNode(e);
+	ZobControlTreeNode^ n = (ZobControlTreeNode^)e->Node;
+	int x = this->Bounds.Width - 20;
+	Point p = Point(x, e->Bounds.Top);
+	VisualStyles::CheckBoxState s = VisualStyles::CheckBoxState::CheckedNormal;
+	CheckBoxRenderer::DrawCheckBox(e->Graphics, p, s);
+	x = this->Bounds.Width - 40;
+	p = Point(x, e->Bounds.Top);
+	s = VisualStyles::CheckBoxState::CheckedNormal;
+	CheckBoxRenderer::DrawCheckBox(e->Graphics, p, s);
+	//TreeNode::
+	*/
 }
 
 void ZobControlTreeview::UpdateZobControl()

@@ -2,6 +2,7 @@
 #include "../Types.h"
 #include "../tinyxml/tinyxml.h"
 #include "ZobComponent.h"
+#include "ZobComponentSprite.h"
 #undef min
 #undef max
 #include <reactphysics3d/reactphysics3d.h>
@@ -77,5 +78,5 @@ class ZobComponentCar : public ZobComponent
 		eCarType m_carType;
 
 		float m_wheelRotationAngle;
-
+		ZobComponentSprite* m_test;
 };

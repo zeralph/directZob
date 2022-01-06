@@ -288,6 +288,8 @@ namespace CLI
 
 	bool ZobObjectWrapper::Duplicate()
 	{
+		assert(false);
+		/*
 		ZobObject* parent = m_Instance->GetParent();
 		DirectZob::LogInfo("Duplicating %s under %s", m_Instance->GetName(), parent->GetName());
 		DirectZob::eDirectZobLogLevel level = DirectZob::GetLogLevel();
@@ -303,11 +305,14 @@ namespace CLI
 		newObject->SetWorldPosition(p.x, p.y, p.z);
 		DirectZob::SetLogLevel(level);
 		DirectZob::LogInfo("Duplicated as %s (and %i objects)", newObject->GetName().c_str(), nbObjs);
+		*/
 		return true;
 	}
 
 	ZobObject* ZobObjectWrapper::DuplicateInternal(ZobObject* src, ZobObject* parent, int &nbObjs)
 	{
+		assert(false);
+		/*
 		if (src && !src->IsEditorObject())
 		{
 			DirectZob::LogWarning("duplicating object %i : %s", nbObjs, src->GetName());
@@ -328,6 +333,7 @@ namespace CLI
 			}
 			return newObject;
 		}
+		*/
 		return NULL;
 	}
 }

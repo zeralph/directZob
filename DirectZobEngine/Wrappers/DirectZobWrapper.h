@@ -34,6 +34,7 @@ namespace CLI
 		bool drawGizmos;
 		bool drawCameraGizmos;
 		bool drawZobObjectGizmos;
+		String^ currentWorkingDir;
 	};
 
 	// delegate void onFrameEndCallback();
