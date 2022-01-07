@@ -10,7 +10,7 @@ ZobComponentPhysicMesh::~ZobComponentPhysicMesh()
 ZobComponentPhysicMesh::ZobComponentPhysicMesh(ZobObject* zobObject) : ZobComponentPhysicShape(zobObject)
 {
 	SET_CLASS_AND_NAME
-	m_type = eComponent_physicMesh;
+	m_componentType = eComponent_physicMesh;
 	m_convexMeshPath.Reset();
 	m_concaveMeshNbTriangles = 0;
 	m_mesh = NULL;
@@ -87,7 +87,7 @@ bool ZobComponentPhysicMesh::LoadMeshInternal()
 	return false;
 }
 
-void ZobComponentPhysicMesh::Init()
+void ZobComponentPhysicMesh::Init(DirectZobType::sceneLoadingCallback cb)
 {
 	ReLoadVariables();
 	if (m_mesh == NULL && m_convexMeshPath.IsDefined())
@@ -98,7 +98,7 @@ void ZobComponentPhysicMesh::Init()
 		}
 		else
 		{
-			ZobComponentPhysicShape::Init();
+			ZobComponentPhysicShape::Init(cb);
 		}
 	}
 }

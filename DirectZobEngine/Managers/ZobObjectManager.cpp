@@ -96,9 +96,9 @@ ZobObject* ZobObjectManager::GetZobObject(const std::string& name) const
 
 }
 
-void ZobObjectManager::Init()
+void ZobObjectManager::Init(DirectZobType::sceneLoadingCallback cb)
 {
-	m_rootObject->Init();
+	m_rootObject->Init(cb);
 }
 
 void ZobObjectManager::PreUpdate(float dt)

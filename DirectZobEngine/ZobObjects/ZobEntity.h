@@ -32,12 +32,9 @@ public :
 		subtype_zobOject=2,
 		subtype_zobCamera=3,
 		subtype_zobLight=4,
-		subtype_mesh=5,
-		subtype_sprite = 6,
 		subtype_Component=7,
 		subtype_cameraController = 8,
-		subtype_menuItem = 9,
-		subtype_MAX = 10,
+		subtype_MAX = 9,
 	};
 
 	static std::vector<const ZobEntity*> GetEntityByType(std::string type)
@@ -55,6 +52,26 @@ public :
 			it++;
 		}
 		return v;
+	}
+
+	template<class T>
+	static std::vector<T*> GetEntities()
+	{
+		std::vector<T*> ret;
+		ret.resize(0);
+		std::map<const zobId, ZobEntity*>::iterator it = m_entityMap.begin();;
+		while(it != m_entityMap.end())
+		{
+			ZobEntity* ze = it->second;
+			std::string s = typeid(T).name();
+			s = s.substr(5, s.length() - 5);
+			if (s == ze->m_class && ZobEntity::GetType(ze->GetIdValue()) != ZobEntity::ZobType::type_editor && ze->GetName() != "root")
+			{
+				ret.push_back(static_cast<T*>(ze));
+			}
+			it++;
+		}
+		return ret;
 	}
 
 	template<class T>
@@ -123,7 +140,7 @@ protected:
 	ZobEntity(ZobType t, ZobSubType s);
 	ZobEntity(const zobId zid);
 	~ZobEntity();
-	virtual void									dummyFunction() {}
+	virtual void									Init(DirectZobType::sceneLoadingCallback cb) = 0;
 	zobId											m_id;
 	ZobEntity::ZobType								m_type;
 	ZobEntity::ZobSubType							m_subType;

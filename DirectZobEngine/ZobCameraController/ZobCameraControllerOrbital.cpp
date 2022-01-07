@@ -23,7 +23,7 @@ ZobCameraControllerOrbital::ZobCameraControllerOrbital(Camera* c, bool isFree, z
 	m_dist = 40.0f;
 }
 
-ZobCameraControllerOrbital::ZobCameraControllerOrbital(Camera* c, bool isFree) :ZobCameraController(c)
+ZobCameraControllerOrbital::ZobCameraControllerOrbital(Camera* c, bool isFree, bool bEditorZobComponent) :ZobCameraController(c, bEditorZobComponent)
 {
 	SET_CLASS_AND_NAME
 	if (isFree)

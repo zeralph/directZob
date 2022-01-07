@@ -15,7 +15,7 @@ class ZobComponentPhysicMesh : public ZobComponentPhysicShape
 	friend class ZobComponentFactory;
 	public:
 								~ZobComponentPhysicMesh() override;
-		void					Init() override;
+		void					Init(DirectZobType::sceneLoadingCallback cb) override;
 		void					EditorUpdate() override;
 
 	private:	

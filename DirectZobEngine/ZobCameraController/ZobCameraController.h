@@ -4,13 +4,13 @@
 class ZobCameraController : public ZobEntity
 {
 public:
-    ZobCameraController(Camera* c);
+    ZobCameraController(Camera* c, bool bEditorZobComponent);
     ZobCameraController(Camera* c, zobId guid);
     ~ZobCameraController();
 
 
     static const char*          eCameraTypeStr[Camera::eCameraType::__eCameraType_MAX__];
-    virtual void                Init();
+    virtual void                Init(DirectZobType::sceneLoadingCallback cb);
     virtual void                Update(float dt);
     virtual void                PreUpdate(float dt);
     virtual void                Rotate(float x, float y, float z);

@@ -34,9 +34,9 @@ namespace CLI
 		}
 		String^ mStr;
 		ZobControlString^ s;
-		m_globalsPanel = gcnew ZobGroupBox("Globals", false);
+		m_globalsPanel = gcnew ZobGroupBox("Globals", nullptr, false);
 		m_container = gcnew ZobPropertiesContainer();
-		ZobGroupBox^ properties = gcnew ZobGroupBox("Properties", false);
+		ZobGroupBox^ properties = gcnew ZobGroupBox("Properties", nullptr, false);
 		ZobPropertiesContainer^ container = gcnew ZobPropertiesContainer();
 		ZobGroupBox^ sceneGroupBox = FillSceneControl();
 		ZobGroupBox^ engineGroupBox = FillEngineControl();
@@ -50,14 +50,14 @@ namespace CLI
 	{
 		ZobVariablesExposer* ze = DirectZob::GetInstance()->GetLightManager()->GetVariablesExposer();
 		std::string name = std::string("Lighting");
-		return CLI::ZobControl::CreateWrappedVariablesView(name, ze);
+		return CLI::ZobControl::CreateWrappedVariablesView(name, ze, nullptr);
 	}
 
 	ZobGroupBox^ ZobGlobalsWrapper::FillEngineControl()
 	{
 		ZobVariablesExposer* ze = DirectZob::GetInstance()->GetEngine()->GetVariablesExposer();
 		std::string name = std::string("Engine");
-		return CLI::ZobControl::CreateWrappedVariablesView(name, ze);
+		return CLI::ZobControl::CreateWrappedVariablesView(name, ze, nullptr);
 	}
 }
 

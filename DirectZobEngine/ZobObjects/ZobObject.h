@@ -31,7 +31,7 @@ public:
 	virtual ~ZobObject();
 
 	//Mechanics
-	virtual void						Init();
+	virtual void						Init(DirectZobType::sceneLoadingCallback cb);
 	virtual void						PreUpdate(float dt);
 	virtual void						UpdatePhysic(float dt);
 	virtual void						Update(float dt);

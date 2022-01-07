@@ -4,7 +4,7 @@
 class ZobCameraControllerFPS : public ZobCameraController
 {
 public:
-    ZobCameraControllerFPS(Camera* c);
+    ZobCameraControllerFPS(Camera* c, bool bEditorZobComponent);
     ZobCameraControllerFPS(Camera * c, zobId guid);
     ~ZobCameraControllerFPS();
 

@@ -15,7 +15,7 @@ class ZobComponentLight : public ZobComponent
 public:
 
 	~ZobComponentLight() override;
-	void					Init() override;
+	void					Init(DirectZobType::sceneLoadingCallback cb) override;
 	void					PreUpdate(float dt) override;
 	void					PostUpdate() override;
 	void					UpdateBeforeObject(float dt) override;

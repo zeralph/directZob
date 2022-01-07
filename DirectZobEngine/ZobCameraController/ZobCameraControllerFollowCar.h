@@ -7,10 +7,10 @@ class ZobCameraControllerFollowCar: public ZobCameraController
 {
 public:
     ZobCameraControllerFollowCar(Camera* c, zobId guid);
-    ZobCameraControllerFollowCar(Camera * c);
+    ZobCameraControllerFollowCar(Camera * c, bool bEditorZobComponent);
     ~ZobCameraControllerFollowCar();
 
-    void            Init() override;
+    void            Init(DirectZobType::sceneLoadingCallback cb) override;
     void            Update(float dt) override;
     void            PreUpdate(float dt) override;
     void            Rotate(float x, float y, float z) override;

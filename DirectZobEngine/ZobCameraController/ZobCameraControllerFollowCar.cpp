@@ -14,7 +14,7 @@ ZobCameraControllerFollowCar::ZobCameraControllerFollowCar(Camera* c, zobId guid
     m_distanceToCar = ZobVector3(0, 0, 0);
 }
 
-ZobCameraControllerFollowCar::ZobCameraControllerFollowCar(Camera * c) :ZobCameraController(c)
+ZobCameraControllerFollowCar::ZobCameraControllerFollowCar(Camera * c, bool bEditorZobComponent) :ZobCameraController(c, bEditorZobComponent)
 {
     SET_CLASS_AND_NAME
 	m_cameraControllerType = Camera::eCamera_followCar;
@@ -31,8 +31,9 @@ ZobCameraControllerFollowCar::~ZobCameraControllerFollowCar()
     m_zobObject = NULL;
 }
 
-void ZobCameraControllerFollowCar::Init()
+void ZobCameraControllerFollowCar::Init(DirectZobType::sceneLoadingCallback cb)
 {
+    ZobCameraController::Init(cb);
     Vector3 p = m_zobObject->m_parent->GetPhysicComponent()->GetWorldTransform().getPosition();
     Vector3 m = m_zobObject->GetPhysicComponent()->GetWorldTransform().getPosition();
     m_distanceToCar.x = m.x - p.x;

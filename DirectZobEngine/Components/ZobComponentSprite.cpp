@@ -11,7 +11,7 @@ ZobComponentSprite::~ZobComponentSprite()
 ZobComponentSprite::ZobComponentSprite(ZobObject* zobObject, bool bEditorZobComponent) : ZobComponent(zobObject, bEditorZobComponent)
 {
 	SET_CLASS_AND_NAME
-	m_type = eComponent_sprite;
+	m_componentType = eComponent_sprite;
 	m_texturePath.Reset();
 	m_sprite = NULL;
 	m_material = NULL;
@@ -36,8 +36,12 @@ ZobComponentSprite::ZobComponentSprite(ZobObject* zobObject, bool bEditorZobComp
 	m_varExposer->WrapVariable<bool>("ZBuffered", &m_renderOptions.zBuffered, NULL, false, true);
 }
 
-void ZobComponentSprite::Init()
+void ZobComponentSprite::Init(DirectZobType::sceneLoadingCallback cb)
 {
+	if (m_type != ZobEntity::type_editor && cb)
+	{
+		cb(0, 0, m_name);
+	}
 	ReLoadVariables();
 	if (m_sprite == NULL && m_texturePath.IsDefined())
 	{
@@ -72,7 +76,7 @@ void ZobComponentSprite::Set(ZobFilePath zfp)
 { 
 	m_texturePath = zfp;
 	m_texturePath.SetFileType(ZobFilePath::eFileType_texture);
-	Init();
+	Init(NULL);
 }
 
 void ZobComponentSprite::PreUpdate(float dt)

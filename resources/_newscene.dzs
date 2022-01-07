@@ -1,0 +1,33 @@
+<?xml version="1.0" ?>
+<Scene EntitiesCount="1" ZobObjectsCount="1">
+    <Globals>
+        <Var Name="Ambient color" value="255;102;102;102" />
+        <Var Name="Clear color" value="255;192;192;192" />
+        <Var Name="Ambient color intensity" value="0.800" />
+        <Var Name="Fog type" value="None" />
+        <Var Name="Fog color" value="255;63;149;255" />
+        <Var Name="Fog distance" value="20.000" />
+        <Var Name="Fog density" value="2.000" />
+        <Var Name="Render mode" value="Fullframe" />
+        <Var Name="Lighting mode" value="Vertex" />
+        <Var Name="Bits per color" value="Full" />
+        <Var Name="Dithering" value="False" />
+        <Var Name="Z near" value="0.110" />
+        <Var Name="Z far" value="1000.000" />
+        <Var Name="Equalize triangle queues" value="False" />
+        <Var Name="Perspective Correction" value="True" />
+    </Globals>
+    <ZobObject Guid="4004959345">
+        <Var Name="Name" value="Light_1" />
+        <Var Name="Position" value="0.000;10.000;0.000" />
+        <Var Name="Rotation" value="89.999;0.000;0.000" />
+        <Var Name="Scale" value="1.000;1.000;1.000" />
+        <Var Name="Color" value="255;252;212;64" />
+        <Var Name="Intensity" value="5.000" />
+        <Var Name="Distance" value="10.000" />
+        <Var Name="SpotAngle" value="0.523" />
+        <Var Name="Active" value="True" />
+        <Var Name="Type" value="Spot" />
+        <Components />
+    </ZobObject>
+</Scene>

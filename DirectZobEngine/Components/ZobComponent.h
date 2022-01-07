@@ -31,7 +31,7 @@ public:
 	};
 
 	virtual ~ZobComponent() {};
-	virtual void											Init() = 0;
+	virtual void											Init(DirectZobType::sceneLoadingCallback cb) = 0;
 	virtual void											PreUpdate(float dt)=0;
 	virtual void											UpdateBeforeObject(float dt) = 0;
 	virtual void											UpdateAfterObject(float dt) = 0;
@@ -42,13 +42,13 @@ public:
 	void													Duplicate() override;
 	const char*												GetComponentTypeStr();
 	TiXmlNode*												SaveUnderNode(TiXmlNode* node);
-	eComponentType											GetComponentType() const { return m_type; }
+	eComponentType											GetComponentType() const { return m_componentType; }
 	void													ReadNode(TiXmlElement* node);
 	void													ReLoadVariables();
 	ZobVariablesExposer*									GetVariablesExposer() { return m_varExposer; }
 protected:
 	ZobComponent(ZobObject* zobObject, bool bEditorZobComponent);
-	eComponentType m_type;
+	eComponentType m_componentType;
 	ZobObject* m_zobObject;
 	ZobVariablesExposer* m_varExposer;
 	

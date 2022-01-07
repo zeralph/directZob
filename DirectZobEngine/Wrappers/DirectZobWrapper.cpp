@@ -1,4 +1,5 @@
 #ifdef _WINDLL
+#include "../Types.h"
 #include "../DirectZob.h"
 #include "DirectZobWrapper.h"
 #include "../../dependencies/minifb/include/MiniFB_enums.h"
@@ -94,16 +95,17 @@ namespace CLI
 		GetInstance()->GetCameraManager()->CreateCamera(type, NULL);
 	}
 
-	void DirectZobWrapper::LoadScene(System::String^ path, System::String^ file, engineCallback^ loaded)
+	void DirectZobWrapper::LoadScene(System::String^ path, System::String^ file, engineCallback^ loaded, sceneLoadingCallback^ loadingCb)
 	{
 		if (GetInstance())
 		{
 			m_sceneLoadedCb = loaded;
+			m_sceneLoadingCb = loadingCb;
 			std::string stdPath;
 			MarshalString(path, stdPath);
 			std::string stdFile;
 			MarshalString(file, stdFile);
-			GetInstance()->LoadScene(stdPath, stdFile, (DirectZob::engineCallback)CallSceneLoadedCallback);
+			GetInstance()->LoadScene(stdPath, stdFile, (DirectZob::engineCallback)CallSceneLoadedCallback, (DirectZobType::sceneLoadingCallback)CallSceneLoadingCallback);
 		}
 	}
 
@@ -195,6 +197,15 @@ namespace CLI
 		if (m_sceneLoadedCb != nullptr)
 		{
 			m_sceneLoadedCb();
+		};
+	}
+
+	void DirectZobWrapper::CallSceneLoadingCallback(int nbObj, int curObj, std::string s)
+	{
+		if (m_sceneLoadingCb != nullptr)
+		{
+			String^ cs = gcnew String(s.c_str());
+			m_sceneLoadingCb(nbObj, curObj, cs);
 		};
 	}
 

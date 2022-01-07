@@ -10,20 +10,24 @@ ZobComponentPhysicSphere::~ZobComponentPhysicSphere()
 ZobComponentPhysicSphere::ZobComponentPhysicSphere(ZobObject* zobObject) : ZobComponentPhysicShape(zobObject)
 {
 	SET_CLASS_AND_NAME
-	m_type = eComponent_physicSphere;
+	m_componentType = eComponent_physicSphere;
 	m_sphereShape = NULL;
 	m_localPostion = ZobVector3(0,0,0);
 	m_varExposer->WrapVariable<float>("Radius", &m_radius, NULL, false, true);
 	m_radius = 1.0f;
 }
 
-void ZobComponentPhysicSphere::Init()
+void ZobComponentPhysicSphere::Init(DirectZobType::sceneLoadingCallback cb)
 {	
+	if (cb)
+	{
+		cb(0, 0, m_name);
+	}
 	ReLoadVariables();
 	PhysicsCommon* pc = DirectZob::GetInstance()->GetPhysicsEngine()->GetPhysicsCommon();
 	m_sphereShape = pc->createSphereShape(m_radius);
 	AddColliderInternal(m_sphereShape);
-	ZobComponentPhysicShape::Init();
+	ZobComponentPhysicShape::Init(cb);
 }
 
 void ZobComponentPhysicSphere::EditorUpdate()

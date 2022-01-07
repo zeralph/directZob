@@ -29,7 +29,7 @@ class ZobComponentCar : public ZobComponent
 		};
 
 		~ZobComponentCar() override;
-		void		Init() override;
+		void		Init(DirectZobType::sceneLoadingCallback cb) override;
 		void		PreUpdate(float dt) override;
 		void		PostUpdate() override {}
 		void		EditorUpdate() override;

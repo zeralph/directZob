@@ -39,6 +39,7 @@ namespace CLI
 
 	// delegate void onFrameEndCallback();
 	public delegate void engineCallback();
+	public delegate void sceneLoadingCallback(int nbObj, int curObj, String^ s);
 	public ref class DirectZobWrapper : public ManagedObject<DirectZob>
 	{
 	public:
@@ -52,6 +53,7 @@ namespace CLI
 		static void						CallSceneUpdatedCallback();
 		static void						CallQueuingCallback();
 		static void						CallSceneLoadedCallback();
+		static void						CallSceneLoadingCallback(int nbObj, int curObj, std::string s);
 										DirectZobWrapper(Panel^ objectTreeviewPanel, Panel^ objectPropertiesPanel, Panel^ globalPropertiesPanel, PictureBox^ renderWindow, Resources::ResourceManager^ rsMgr);
 		void							RegisterObjectCallbacks(engineCallback^ onSelected);
 		EngineWrapper^					GetEngineWrapper() { return m_ZobEngineWrapper; }
@@ -64,7 +66,7 @@ namespace CLI
 		void							StopPhysic(bool reset);
 		bool							IsPhysicPlaying();
 		void							Init(int width, int height);
-		void							LoadScene(System::String^ path, System::String^ file, engineCallback^ loaded);
+		void							LoadScene(System::String^ path, System::String^ file, engineCallback^ loaded, sceneLoadingCallback^ loading);
 		void							LoadZobObject(System::String^ path, System::String^ file);
 		void							NewScene(System::String^ workspace);
 		void							Unload();
@@ -106,6 +108,7 @@ namespace CLI
 		static engineCallback^			m_queuingCb;
 		static engineCallback^			m_sceneLoadedCb;
 		static engineCallback^			m_objectSelectedCb;
+		static sceneLoadingCallback^	m_sceneLoadingCb;
 		cli::array<byte>^				m_bufferData;
 		int								m_buffferDataLength;
 

@@ -120,7 +120,11 @@ std::vector<ZobEntity*> ZobEntity::GetAllEntities()
 	it = m_entityMap.begin();
 	while (it != m_entityMap.end())
 	{
-		ret.push_back(it->second);
+		ZobEntity* ze = it->second;
+		if (ZobEntity::GetType(ze->GetIdValue()) != ZobEntity::ZobType::type_editor && ze->GetName() != "root")
+		{
+			ret.push_back(it->second);
+		}
 		it++;
 	}
 	return ret;

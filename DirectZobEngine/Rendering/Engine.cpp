@@ -240,9 +240,9 @@ free(m_renderOptions);
 m_events = NULL;
 }
 
-void Engine::Start()
+void Engine::Start(DirectZobType::sceneLoadingCallback cb)
 {
-	DirectZob::GetInstance()->GetZobObjectManager()->Init();
+	DirectZob::GetInstance()->GetZobObjectManager()->Init(cb);
 	m_varExposer->Load();
 	for (int i = 0; i < m_nbRasterizers; i++)
 		m_started = true;
@@ -345,19 +345,19 @@ void Engine::ClearBuffer(const ZobColor* color)
 			int s = m_bufferData.width * y;
 			for (int i = 0; i < m_bufferData.width; i++)
 			{
-				m_zBuffer[oldBuffer][i + s] = 1.0f;
+				m_zBuffer[oldBuffer][i + s] = 0.f;
 				m_buffer[oldBuffer][i + s] = c;
 			}
 		}
 	}
-	else
+	else //interlaced
 	{	
-		for (int y = (m_currentFrame) % 2; y < m_bufferData.height; y += 2)
+		for (int y = (oldBuffer+1) % 2; y < m_bufferData.height; y += 2)
 		{
 			int s = m_bufferData.width * y;
 			for (int i = 0; i < m_bufferData.width; i++)
 			{
-				m_zBuffer[oldBuffer][i+s] = -1.0f;
+				m_zBuffer[oldBuffer][i+s] = 0.f;
 				m_buffer[oldBuffer][i+s] = v;
 			}
 		}

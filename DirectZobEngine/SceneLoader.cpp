@@ -4,14 +4,14 @@
 #include "Misc/ZobXmlHelper.h"
 
 //TODO !
-std::string SceneLoader::m_path = "";
-std::string SceneLoader::m_file = "";
-std::string SceneLoader::m_nextScenePath = "";
-std::string SceneLoader::m_nextSceneName = "";
-int SceneLoader::m_nbZobObjectLoaded = 0;
-char tmpBuffer[256];
-bool SceneLoader::m_loadNextScene = false;
-
+std::string							SceneLoader::m_path = "";
+std::string							SceneLoader::m_file = "";
+std::string							SceneLoader::m_nextScenePath = "";
+std::string							SceneLoader::m_nextSceneName = "";
+int									SceneLoader::m_nbZobObjectLoaded = 0;
+char								tmpBuffer[256];
+bool								SceneLoader::m_loadNextScene = false;
+DirectZobType::sceneLoadingCallback	SceneLoader::m_onSceneLoading = NULL;
 
 void SceneLoader::Update()
 {
@@ -27,8 +27,9 @@ void SceneLoader::Update()
 	}
 }
 
-void SceneLoader::LoadScene(std::string& path, std::string& file)
+void SceneLoader::LoadScene(std::string& path, std::string& file, DirectZobType::sceneLoadingCallback cb)
 {
+	m_onSceneLoading = cb;
 	m_nbZobObjectLoaded = 0;
 	m_nextScenePath = path;
 	m_nextSceneName = file;
@@ -83,12 +84,11 @@ void SceneLoader::LoadZobObject(TiXmlElement* node, ZobObject* parent, const std
 		ZobObjectManager* zobObjectManager = DirectZob::GetInstance()->GetZobObjectManager();
 		parent = zobObjectManager->GetRootObject();
 	}
-	const char* name = node->Attribute(XML_ATTR_NAME);
 	const char* type= node->Attribute(XML_ATTR_TYPE);
 	const char* cid =node->Attribute(XML_ATTR_GUID);
 	if (!cid)
 	{
-		DirectZob::LogError("Cannot create ZobObject ", name);
+		DirectZob::LogError("Cannot create ZobObject %s", cid);
 		return;
 	}
 	std::string id = cid;
@@ -112,6 +112,10 @@ void SceneLoader::LoadZobObject(TiXmlElement* node, ZobObject* parent, const std
 	else
 	{
 		assert(NULL);
+	}
+	if (m_onSceneLoading)
+	{
+		m_onSceneLoading(0, 0, zob->GetName());
 	}
 	for (TiXmlElement* e = node->FirstChildElement(XML_ELEMENT_ZOBOBJECT); e != NULL; e = e->NextSiblingElement("ZobObject"))
 	{
@@ -164,7 +168,7 @@ void SceneLoader::NewScene(std::string workspace)
 	DirectZob::GetInstance()->GetHudManager()->Start();
 	DirectZob::GetInstance()->GetLightManager()->ReInitGlobalSettings();
 	DirectZob::GetInstance()->GetHudManager()->Init();
-	DirectZob::GetInstance()->GetEngine()->Start();
+	DirectZob::GetInstance()->GetEngine()->Start(NULL);
 	DirectZob::GetInstance()->GetHudManager()->Start();
 	DirectZob::RemoveIndent();
 }
@@ -186,6 +190,8 @@ void SceneLoader::LoadSceneInternal()
 	fullPath = m_path + m_file;
 	doc.ClearError();
 	doc.LoadFile(fullPath.c_str());
+	int nbEntities = 0;
+	int nbObjects = 0;
 	if (doc.Error())
 	{
 		DirectZob::LogError("Error loading %s : %s", fullPath.c_str(), doc.ErrorDesc());
@@ -205,8 +211,15 @@ void SceneLoader::LoadSceneInternal()
 			}*/
 			DirectZob::GetInstance()->GetLightManager()->LoadFromNode(scene->FirstChildElement(XML_ELEMENT_GLOBALS));
 			DirectZob::GetInstance()->GetEngine()->LoadFromNode(scene->FirstChildElement(XML_ELEMENT_GLOBALS));
+			nbEntities = scene->Attribute(XML_NUMBER_OF_ENTITIES) ? atoi(scene->Attribute(XML_NUMBER_OF_ENTITIES)) : 0;
+			nbObjects = scene->Attribute(XML_NUMBER_OF_OBJECTS) ? atoi(scene->Attribute(XML_NUMBER_OF_OBJECTS)) : 0;
+			if (m_onSceneLoading)
+			{
+				m_onSceneLoading(nbObjects, 0, "");
+			}
 			for (TiXmlElement* e = scene->FirstChildElement(XML_ELEMENT_ZOBOBJECT); e != NULL; e = e->NextSiblingElement(XML_ELEMENT_ZOBOBJECT))
 			{
+				//curObject++;
 				const char* file = e->Attribute(XML_ATTR_FILE);
 				if (file)
 				{
@@ -225,7 +238,11 @@ void SceneLoader::LoadSceneInternal()
 			DirectZob::LogError("Scene file has error");
 		}
 	}
-	DirectZob::GetInstance()->GetEngine()->Start(); 
+	if (m_onSceneLoading)
+	{
+		m_onSceneLoading(nbEntities+1, 0, "");
+	}
+	DirectZob::GetInstance()->GetEngine()->Start(m_onSceneLoading);
 	DirectZob::GetInstance()->GetHudManager()->Start();
 	DirectZob::RemoveIndent();
 	DirectZob::GetInstance()->OnSceneLoaded();
@@ -253,6 +270,8 @@ void SceneLoader::SaveScene(std::string &path, std::string &file)
 	TiXmlDeclaration* decl = new TiXmlDeclaration("1.0", "", "");
 	doc.LinkEndChild(decl);
 	TiXmlElement * root = new TiXmlElement(XML_ELEMENT_SCENE);
+	root->SetAttribute(XML_NUMBER_OF_ENTITIES, ZobEntity::GetAllEntities().size());
+	root->SetAttribute(XML_NUMBER_OF_OBJECTS, ZobEntity::GetEntities<ZobObject>().size());
 	doc.LinkEndChild(root);
 	TiXmlElement globals = TiXmlElement(XML_ELEMENT_GLOBALS);
 	DirectZob::GetInstance()->GetLightManager()->SaveUnderNode(&globals);

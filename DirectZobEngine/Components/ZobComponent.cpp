@@ -6,7 +6,7 @@
 ZobComponent::ZobComponent(ZobObject* zobObject, bool bEditorZobComponent):ZobEntity((bEditorZobComponent? ZobEntity::type_editor:ZobEntity::type_internal), ZobEntity::subtype_Component)
 {
 	m_zobObject = zobObject;
-	m_type = eComponent_none;
+	m_componentType = eComponent_none;
 	m_varExposer = new ZobVariablesExposer(GetIdValue());
 	m_varExposer->WrapVariable<DirectZobType::zobId>("ZobId", GetIdAddress(), NULL, true, false);
 };
@@ -28,7 +28,7 @@ TiXmlNode* ZobComponent::SaveUnderNode(TiXmlNode* node)
 
 const char* ZobComponent::GetComponentTypeStr()
 {
-	return ZobComponentFactory::eComponentTypeStr[m_type];
+	return ZobComponentFactory::eComponentTypeStr[m_componentType];
 }
 
 void ZobComponent::ReadNode(TiXmlElement* node)

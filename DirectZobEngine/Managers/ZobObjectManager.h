@@ -17,7 +17,7 @@ public:
 
 
 	void										UpdateObjects(const Camera* camera, Engine* engine, float dt);
-	void										Init();
+	void										Init(DirectZobType::sceneLoadingCallback cb);
 	void										PreUpdate(float dt);
 	void										PostUpdate();
 	void										EditorUpdate();

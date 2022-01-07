@@ -207,18 +207,22 @@ ZobComponentSprite* ZobObject::LoadSprite(ZobFilePath& zfp, bool bEditorZobCompo
 	return bm;
 }
 
-void ZobObject::Init()
+void ZobObject::Init(DirectZobType::sceneLoadingCallback cb)
 {
+	if (cb)
+	{
+		cb(0, 0, m_name);
+	}
 	m_varExposer->Load();
 	m_physicComponent->Init();
 	for (int i = 0; i < m_Components.size(); i++)
 	{
-		m_Components[i]->Init();
+		m_Components[i]->Init(cb);
 	}
 	for (int i = 0; i < m_children.size(); i++)
 	{
 		ZobObject* z = m_children[i];
-		z->Init();
+		z->Init(cb);
 	}
 }
 

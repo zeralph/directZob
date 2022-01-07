@@ -104,10 +104,10 @@ void ZobControl::UpdateControl()
 	}
 }
 
-ZobGroupBox^ ZobControl::CreateWrappedVariablesView(std::string& name, ZobVariablesExposer* ze)
+ZobGroupBox^ ZobControl::CreateWrappedVariablesView(std::string& name, ZobVariablesExposer* ze, Image^ im)
 {
 	String^ panelName = TO_MANAGED_STRING(name.c_str());
-	ZobGroupBox^ zobPanel = gcnew ZobGroupBox(panelName, true);
+	ZobGroupBox^ zobPanel = gcnew ZobGroupBox(panelName, im, true);
 	const std::vector<ZobVariablesExposer::wrapperData>* v = ze->GetWrappedVariables();
 	if (v->size() > 0)
 	{
@@ -147,7 +147,7 @@ ZobGroupBox^ ZobControl::CreateWrappedVariablesView(std::string& name, ZobVariab
 			else if (w.type == ZobVariablesExposer::eWrapperType_startGroup)
 			{
 				System::String^ s = gcnew String(w.name.c_str());
-				ZobGroupBox^ zb = gcnew ZobGroupBox(s, false);
+				ZobGroupBox^ zb = gcnew ZobGroupBox(s, nullptr, false);
 				ZobPropertiesContainer^ p = gcnew ZobPropertiesContainer();
 				zb->Controls->Add(p);
 				panel->Controls->Add(zb);
@@ -989,34 +989,62 @@ void ZobControlZobEntity::OnValueChanged(Object^ sender, EventArgs^ e)
 	}
 }
 
-ZobGroupBox::ZobGroupBox(String^ name, bool collapsable) :GroupBox()
+ZobGroupBox::ZobGroupBox(String^ name, Image^ im, bool collapsable) :GroupBox()
 {
 	bToggled = false;
-	this->Text = name;
+	this->Text = "    "+name;
 	this->AutoSize = true;
-	this->Dock = DockStyle::Fill;
-	_label = gcnew ZobButton();
-	_label->Text = "-";
-	_label->Width = 15;
-	_label->Height = 15;
-	_label->Top = this->Top;
-	_label->Left = this->Left;
-	_label->BackColor = Drawing::Color::WhiteSmoke;
-	//_label->BorderStyle = BorderStyle::FixedSingle;
-	//this->Controls->Add(_label);
-	_event = gcnew EventHandler(this, &ZobGroupBox::OnToggle);
-	_label->Click += _event;
+	this->Dock = DockStyle::Top;
+	_image = im;
+	if (_image != nullptr)
+	{
+		_picBox = gcnew PictureBox();
+		_picBox->Image = im;
+		_picBox->Width = 16;
+		_picBox->Height = 16;
+		_picBox->Left += 3;
+		_event = gcnew MouseEventHandler(this, &ZobGroupBox::OnToggle);
+		_event2 = gcnew EventHandler(this, &ZobGroupBox::OnToggle2);
+		_picBox->MouseClick += _event;
+		_picBox->MouseEnter += _event2;
+		this->Controls->Add(_picBox);
+	}
 }
 
 ZobGroupBox::~ZobGroupBox()
 {
-	_label->Click -= _event;
+	if (_picBox != nullptr)
+	{
+		_picBox->MouseClick -= _event;
+	}
 	for (int i = 0; i < this->Controls->Count; i++)
 	{
 		//delete(this->Controls[i]);
 	}
 	//delete _event;
 	//delete _label;
+}
+
+void ZobGroupBox::OnToggle2(Object^ sender, EventArgs^ e)
+{
+}
+
+void ZobGroupBox::OnToggle(Object^ sender, MouseEventArgs^ e)
+{
+	PictureBox^ b = (PictureBox^)sender;
+	ZobGroupBox^ z = (ZobGroupBox^)b->Parent;
+	if (bToggled)
+	{
+		bToggled = false;
+		z->AutoSize = true;
+		z->Refresh();
+	}
+	else
+	{
+		bToggled = true;
+		z->AutoSize = false;
+		z->Height = 25;
+	}
 }
 
 ZobControlTreeNode::ZobControlTreeNode(String^ zobObjectGuid) :TreeNode()
@@ -1050,26 +1078,6 @@ ZobControlTreeNode^ ZobControlTreeNode::GetChildNode(String^ guid)
 		}
 	}
 	return nullptr;
-}
-
-void ZobGroupBox::OnToggle(Object^ sender, EventArgs^ e)
-{
-	Button^ b = (Button^)sender;
-	ZobGroupBox^ z = (ZobGroupBox^)b->Parent;
-	if (bToggled)
-	{
-		bToggled = false;
-		z->AutoSize = true;
-		b->Text = "-";
-		z->Refresh();
-	}
-	else
-	{
-		bToggled = true;
-		b->Text = "+";
-		z->AutoSize = false;
-		z->Height = 25;
-	}
 }
 
 ZobControlTreeview::ZobControlTreeview():TreeView() 

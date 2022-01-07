@@ -10,7 +10,7 @@ ZobComponentPhysicCapsule::~ZobComponentPhysicCapsule()
 ZobComponentPhysicCapsule::ZobComponentPhysicCapsule(ZobObject* zobObject) : ZobComponentPhysicShape(zobObject)
 {
 	SET_CLASS_AND_NAME
-	m_type = eComponent_physicCapsule;
+	m_componentType = eComponent_physicCapsule;
 	m_capsuleShape = NULL;
 	m_varExposer->WrapVariable<float>("Radius", &m_radius, NULL, false, true);
 	m_varExposer->WrapVariable<float>("Height", &m_height, NULL, false, true);
@@ -19,13 +19,13 @@ ZobComponentPhysicCapsule::ZobComponentPhysicCapsule(ZobObject* zobObject) : Zob
 }
 
 
-void ZobComponentPhysicCapsule::Init()
+void ZobComponentPhysicCapsule::Init(DirectZobType::sceneLoadingCallback cb)
 {
 	ReLoadVariables();
 	PhysicsCommon* pc = DirectZob::GetInstance()->GetPhysicsEngine()->GetPhysicsCommon();
 	m_capsuleShape = pc->createCapsuleShape(m_radius, m_height);
 	AddColliderInternal(m_capsuleShape);
-	ZobComponentPhysicShape::Init();
+	ZobComponentPhysicShape::Init(cb);
 }
 
 void ZobComponentPhysicCapsule::EditorUpdate()

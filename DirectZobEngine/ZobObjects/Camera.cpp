@@ -23,7 +23,7 @@ Camera::Camera(ZobEntity::ZobType zobType, const std::string& name, eCameraType 
 	:ZobObject(zobType, ZobEntity::ZobSubType::subtype_zobCamera, name, parent)
 {
 	m_zobCameraController = NULL;
-	ChangeCameraController(type);
+	ChangeCameraController(type, m_type == ZobEntity::ZobType::type_editor);
 	m_controlerType = type;
 	m_nextControlerType = type;
 	m_fov = fov;
@@ -60,7 +60,7 @@ Camera::Camera(zobId id, TiXmlElement* node, ZobObject* parent)
 	//ChangeCameraController(m_nextControlerType);
 }
 
-void Camera::ChangeCameraController(eCameraType newType)
+void Camera::ChangeCameraController(eCameraType newType, bool bEditorZobComponent)
 {
 	if (m_zobCameraController)
 	{
@@ -71,37 +71,37 @@ void Camera::ChangeCameraController(eCameraType newType)
 	{
 		case eCamera_fps:
 		{
-			m_zobCameraController = new ZobCameraControllerFPS(this);
+			m_zobCameraController = new ZobCameraControllerFPS(this, bEditorZobComponent);
 			break;
 		}
 		case eCamera_orbital:
 		{
-			m_zobCameraController = new ZobCameraControllerOrbital(this, false);
+			m_zobCameraController = new ZobCameraControllerOrbital(this, false, bEditorZobComponent);
 			break;
 		}
 		case eCamera_orbital_free:
 		{
-			m_zobCameraController = new ZobCameraControllerOrbital(this, true);
+			m_zobCameraController = new ZobCameraControllerOrbital(this, true, bEditorZobComponent);
 			break;
 		}
 		case eCamera_base:
 		{
-			m_zobCameraController = new ZobCameraController(this);
+			m_zobCameraController = new ZobCameraController(this, bEditorZobComponent);
 			break;
 		}
 		case eCamera_followCar:
 		{
-			m_zobCameraController = new ZobCameraControllerFollowCar(this);
+			m_zobCameraController = new ZobCameraControllerFollowCar(this, bEditorZobComponent);
 			break;
 		}
 		default:
 		{
 			DirectZob::LogError("Error creating camera");
-			m_zobCameraController = new ZobCameraController(this);
+			m_zobCameraController = new ZobCameraController(this, bEditorZobComponent);
 			break;
 		}
 	}
-	m_zobCameraController->Init();
+	m_zobCameraController->Init(NULL);
 }
 
 Camera::~Camera()
@@ -265,11 +265,11 @@ void Camera::SetTarget(const ZobVector3* t)
 	m_zobCameraController->SetTarget(t);
 }
 
-void Camera::Init()
+void Camera::Init(DirectZobType::sceneLoadingCallback cb)
 {
-	ZobObject::Init();
-	ChangeCameraController(m_nextControlerType);
-	m_zobCameraController->Init();
+	ZobObject::Init(cb);
+	ChangeCameraController(m_nextControlerType, m_type == ZobEntity::ZobType::type_editor);
+	m_zobCameraController->Init(cb);
 }
 
 void Camera::PreUpdate(float dt)
@@ -287,7 +287,7 @@ void Camera::Update(float dt)
 {
 	if (m_nextControlerType != m_controlerType)
 	{
-		ChangeCameraController(m_nextControlerType);
+		ChangeCameraController(m_nextControlerType, m_type == ZobEntity::ZobType::type_editor);
 		m_controlerType= m_nextControlerType;
 	}
 	m_zobCameraController->Update(dt);

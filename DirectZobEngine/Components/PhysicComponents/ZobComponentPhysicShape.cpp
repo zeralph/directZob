@@ -10,7 +10,7 @@ ZobComponentPhysicShape::~ZobComponentPhysicShape()
 ZobComponentPhysicShape::ZobComponentPhysicShape(ZobObject* zobObject) : ZobComponent(zobObject, false)
 {
 	SET_CLASS_AND_NAME
-	m_type = eComponent_none;
+	m_componentType = eComponent_none;
 	m_isInit = false;;
 	m_varExposer->WrapVariable<int>("Layers", &m_layers, NULL, false, true);
 	m_varExposer->WrapVariable<bool>("Trigger", &m_isTrigger, NULL, false, true);
@@ -31,8 +31,12 @@ void ZobComponentPhysicShape::PostUpdate()
 
 }
 
-void ZobComponentPhysicShape::Init()
+void ZobComponentPhysicShape::Init(DirectZobType::sceneLoadingCallback cb)
 {
+	if(cb)
+	{
+		cb(0, 0, m_name);
+	}
 	assert(m_collider);
 	//reactphysics3d::Material& material = m_collider->getMaterial();
 	//material.setBounciness(m_bounciness);

@@ -42,12 +42,15 @@ namespace CLI {
 	public ref class ZobGroupBox : GroupBox
 	{
 	public:
-		ZobGroupBox(String^ name, bool collapsable);
+		ZobGroupBox(String^ name, Image^ im, bool collapsable);
 		~ZobGroupBox();
-		void OnToggle(Object^ sender, EventArgs^ e);
+		void OnToggle(Object^ sender, MouseEventArgs^ e);
+		void OnToggle2(Object^ sender, EventArgs^ e);
 		bool bToggled;
-		ZobButton^ _label;
-		EventHandler^ _event;
+		PictureBox^ _picBox;
+		Image^ _image;
+		MouseEventHandler^ _event;
+		EventHandler^ _event2;
 	};
 
 	public ref class ZobControl : TableLayoutPanel
@@ -55,7 +58,7 @@ namespace CLI {
 		public:
 			ZobControl(const ZobVariablesExposer::wrapperData& w);
 			~ZobControl();
-			static ZobGroupBox^ CreateWrappedVariablesView(std::string& name, ZobVariablesExposer* ze);
+			static ZobGroupBox^ CreateWrappedVariablesView(std::string& name, ZobVariablesExposer* ze, Image^ im);
 			static const ZobVariablesExposer::wrapperData* GetDataFromWrapperVariable(String^ variableName, ZobVariablesExposer* ze);
 	protected:
 		virtual void	OnValueChanged(Object^ sender, EventArgs^ e) {}

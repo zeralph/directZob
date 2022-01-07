@@ -11,8 +11,9 @@
 
 namespace CLI
 {
-	ZobObjectWrapper::ZobObjectWrapper(ZobObject* zobObject, Panel^ parentPanel):ManagedObject(zobObject, false)
+	ZobObjectWrapper::ZobObjectWrapper(ZobObject* zobObject, Panel^ parentPanel, Resources::ResourceManager^ rscMgr):ManagedObject(zobObject, false)
 	{
+		m_resourcesManager = rscMgr;
 		m_zobObject = zobObject;
 		m_id = zobObject->GetIdValue();
 		m_parentPanel = parentPanel;
@@ -58,7 +59,7 @@ namespace CLI
 		}
 		String^ mStr;
 		ZobControlString^ s;
-		m_objectPanel = gcnew ZobGroupBox("Object", false);
+		m_objectPanel = gcnew ZobGroupBox("Object", nullptr, false);
 		m_container = gcnew ZobPropertiesContainer();
 		ZobPropertiesContainer^ container = gcnew ZobPropertiesContainer();
 		m_objectGroupBox = FillObjectControl(m_zobObject);
@@ -91,7 +92,8 @@ namespace CLI
 		{
 			std::string name = z->GetName();
 			ZobVariablesExposer* v = z->GetVariablesExposer();
-			return FillControlInternal(name, v);
+			Image^ im = (Image^)m_resourcesManager->GetObject("_object");
+			return FillControlInternal(name, v, im);
 		}
 		return nullptr;
 	}
@@ -102,14 +104,19 @@ namespace CLI
 		{		
 			std::string name = zb->GetComponentTypeStr();
 			ZobVariablesExposer* v = zb->GetVariablesExposer();
-			return FillControlInternal(name, v);
+			ZobEntityInfo^ zi = gcnew ZobEntityInfo(zb);
+			if (!zi->_isEditor)
+			{
+				Image^ im = (Image^)m_resourcesManager->GetObject(zi->_imgName);
+				return FillControlInternal(name, v, im);
+			}
 		}
 		return nullptr;
 	}
 
-	ZobGroupBox^ ZobObjectWrapper::FillControlInternal(std::string& name, ZobVariablesExposer* ze)
+	ZobGroupBox^ ZobObjectWrapper::FillControlInternal(std::string& name, ZobVariablesExposer* ze, Image^ im)
 	{
-		return CLI::ZobControl::CreateWrappedVariablesView(name, ze);
+		return CLI::ZobControl::CreateWrappedVariablesView(name, ze, im);
 	}
 
 	void ZobObjectWrapper::GroupClick(Object^ sender, EventArgs^ e)

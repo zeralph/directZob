@@ -24,6 +24,8 @@
 #define XML_ATTR_B "B"
 
 #define XML_ELEMENT_SCENE "Scene"
+#define XML_NUMBER_OF_ENTITIES "EntitiesCount"
+#define XML_NUMBER_OF_OBJECTS "ZobObjectsCount"
 #define XML_ELEMENT_GLOBALS "Globals"
 #define XML_ELEMENT_ZOBOBJECT "ZobObject"
 #define XML_ELEMENT_POSITION "Position"

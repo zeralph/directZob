@@ -59,6 +59,7 @@ namespace DirectZobEditor
 
         private ZobEntityViewerForm m_entityForm;
         private MaterialsForm.ZobMaterialsForm m_materialsForm;
+        private ZobSceneLoadForm m_loadingForm;
 
         private Thread m_engineThread;
         //private ZobObjectListControl m_zobObjectList;
@@ -73,6 +74,7 @@ namespace DirectZobEditor
         private eplayMode m_playMode = eplayMode.ePlayMode_stop;
 
         public CLI.engineCallback onSceneLoadedCallback;
+        public CLI.sceneLoadingCallback onSceneLoadingCallback;
         public delegate void OnSceneLoaded();
         public OnSceneLoaded OnSceneLoadedDelegate;
 
@@ -95,6 +97,7 @@ namespace DirectZobEditor
             this.Load += new EventHandler(this.Onloaded);
             onSceneLoadedCallback = new CLI.engineCallback(onSceneLoadedCallbackMethod);
             OnSceneLoadedDelegate = new OnSceneLoaded(OnSceneLoadedMethod);
+            onSceneLoadingCallback = new CLI.sceneLoadingCallback(OnSceneLoadingMethod);
 
             SetSnap("None");
             InformEngineStatus("STOPPED");
@@ -311,7 +314,8 @@ namespace DirectZobEditor
                     {
                         handler(this, EventArgs.Empty);
                     }
-                    m_directZobWrapper.LoadScene(m_path, m_file, onSceneLoadedCallback);
+                    ShowLoadingForm();
+                    m_directZobWrapper.LoadScene(m_path, m_file, onSceneLoadedCallback, onSceneLoadingCallback);
                     this.Text = "DirectZob " + m_path + m_file;
                 }
             }
@@ -321,6 +325,15 @@ namespace DirectZobEditor
         {
             this.Invoke(OnSceneLoadedDelegate);
             toolStripStatusScanePath.Text = GetDirectZobWrapper().GetResourcePath();
+            CloseLoadingForm();
+        }
+
+        private void OnSceneLoadingMethod(int nbObj, int curObj, String s)
+        {
+            m_loadingForm.Invoke(new Action(() =>
+            {
+                m_loadingForm.SetText(nbObj, curObj, s);
+            }));       
         }
 
         private void OnSceneLoadedMethod()
@@ -842,6 +855,20 @@ namespace DirectZobEditor
             }
         }
 
+        private void ShowLoadingForm()
+        {
+            if (m_loadingForm == null)
+            {
+                m_loadingForm = new ZobSceneLoadForm(this, m_directZobWrapper);
+                m_loadingForm.StartPosition = FormStartPosition.CenterParent;
+                Point p = new Point();
+                p.X = this.Location.X + this.Width / 2 - m_loadingForm.Width / 2;
+                p.Y = this.Location.Y + this.Height / 2 - m_loadingForm.Height / 2;
+                m_loadingForm.Show();
+                m_loadingForm.Location = p;
+            }
+        }
+
         private void entitiesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (m_entityForm == null)
@@ -863,6 +890,11 @@ namespace DirectZobEditor
         public void UnregisterZobEntitySelector()
         {
             m_entityForm = null;
+        }
+        public void CloseLoadingForm()
+        {
+            m_loadingForm.AskForClose();
+            m_loadingForm = null;
         }
     }
 

@@ -18,7 +18,7 @@ ZobCameraControllerFPS::ZobCameraControllerFPS(Camera* c, zobId guid) :ZobCamera
 	m_moveZ = 0.0f;
 }
 
-ZobCameraControllerFPS::ZobCameraControllerFPS(Camera* c) :ZobCameraController(c)
+ZobCameraControllerFPS::ZobCameraControllerFPS(Camera* c, bool bEditorZobComponent) :ZobCameraController(c, bEditorZobComponent)
 {
 	SET_CLASS_AND_NAME
 	m_cameraControllerType = Camera::eCamera_fps;

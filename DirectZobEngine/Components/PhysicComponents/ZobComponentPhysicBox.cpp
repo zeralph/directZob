@@ -11,19 +11,19 @@ ZobComponentPhysicBox::ZobComponentPhysicBox(ZobObject* zobObject) : ZobComponen
 {
 	SET_CLASS_AND_NAME
 	m_halfExtends = ZobVector3(1, 1, 1);
-	m_type = eComponent_physicBox;
+	m_componentType = eComponent_physicBox;
 	m_varExposer->WrapVariable<ZobVector3>("Height", &m_halfExtends, NULL, false, true);
 	m_halfExtends = ZobVector3(1, 1, 1);
 }
 
-void ZobComponentPhysicBox::Init()
+void ZobComponentPhysicBox::Init(DirectZobType::sceneLoadingCallback cb)
 {
 	ReLoadVariables();
 	PhysicsCommon* pc = DirectZob::GetInstance()->GetPhysicsEngine()->GetPhysicsCommon();
 	Vector3 h = Vector3(m_halfExtends.x, m_halfExtends.y, m_halfExtends.z);
 	m_boxShape = pc->createBoxShape(h);
 	AddColliderInternal(m_boxShape);
-	ZobComponentPhysicShape::Init();
+	ZobComponentPhysicShape::Init(cb);
 }
 
 void ZobComponentPhysicBox::EditorUpdate()

@@ -32,7 +32,7 @@ ZobComponentText::ZobComponentText(ZobObject* zobObject, bool bEditorZobComponen
 	m_visible = true;
 	m_defaultColor = ZobColor::White;
 	m_selectedColor = ZobColor::Red;
-	m_type = eComponent_hudText; 
+	m_componentType = eComponent_hudText; 
 	//m_unit = ZobHUDManager::eHudUnit_ratio;
 	m_fontXml.SetFileType(ZobFilePath::eFileType_xml);
 	m_fontImage.SetFileType(ZobFilePath::eFileType_texture);
@@ -61,7 +61,7 @@ ZobComponentText::ZobComponentText(ZobObject* zobObject, bool bEditorZobComponen
 	m_varExposer->WrapVariable<std::string>("Action argument", &m_actionArg, NULL, false, true);
 	m_varExposer->EndGroup();
 	m_varExposer->Load();
-	Init();
+	Init(NULL);
 }
 
 void ZobComponentText::PreUpdate(float dt)
@@ -109,8 +109,12 @@ void ZobComponentText::LoadFontInternal()
 	}
 }
 
-void ZobComponentText::Init()
+void ZobComponentText::Init(DirectZobType::sceneLoadingCallback cb)
 {
+	if (m_type != ZobEntity::type_editor && cb)
+	{
+		cb(0, 0, m_name);
+	}
 	m_varExposer->Load();
 	LoadFontInternal();
 	if (m_selectable)
@@ -145,7 +149,7 @@ void ZobComponentText::DoAction()
 	if (m_action == eMenuAction::eAction_Load && m_actionArg.length() > 0)
 	{
 		std::string s = SceneLoader::GetResourcePath();
-		SceneLoader::LoadScene(s, m_actionArg);
+		SceneLoader::LoadScene(s, m_actionArg, NULL);
 	}
 	else if (m_action == eMenuAction::eAction_exit)
 	{

@@ -34,7 +34,7 @@ ZobCameraController::ZobCameraController(Camera* c, zobId guid) :ZobEntity(guid)
     //c->m_varExposer->WrapVariable<std::string>("pouet Type", &m_typeName, NULL, true, false);
 }
 
-ZobCameraController::ZobCameraController(Camera * c) :ZobEntity(ZobEntity::type_internal, ZobEntity::subtype_cameraController)
+ZobCameraController::ZobCameraController(Camera * c, bool bEditorZobComponent) :ZobEntity((bEditorZobComponent ? ZobEntity::type_editor : ZobEntity::type_internal), ZobEntity::subtype_cameraController)
 {
     SET_CLASS_AND_NAME
 	m_cameraControllerType = Camera::eCamera_base;
@@ -54,9 +54,12 @@ void ZobCameraController::Update(float dt)
     //m_zobObject->UpdateViewProjectionMatrix(&v);
 }
 
-void ZobCameraController::Init()
+void ZobCameraController::Init(DirectZobType::sceneLoadingCallback cb)
 {
-
+    if (m_type != ZobEntity::type_editor && cb)
+    {
+        cb(0, 0, m_name);
+    }
 }
 
 void ZobCameraController::SetTarget(const ZobVector3* t)

@@ -39,7 +39,7 @@ namespace CLI {
 	public ref class ZobObjectWrapper : ManagedObject<ZobObject>
 	{
 	public:
-		ZobObjectWrapper(ZobObject* zobObject, Panel^ parentPanel);
+		ZobObjectWrapper(ZobObject* zobObject, Panel^ parentPanel, Resources::ResourceManager^ rscMgr);
 		~ZobObjectWrapper() override;
 		bool					IsValid() override;
 		void					SetZobObject(ZobObject* zobObject) { m_Instance = zobObject; }
@@ -65,12 +65,13 @@ namespace CLI {
 		void					CreateObjectview();
 		ZobGroupBox^			FillComponentControl(ZobComponent* zb);
 		ZobGroupBox^			FillObjectControl(ZobObject* z);
-		ZobGroupBox^			FillControlInternal(std::string& name, ZobVariablesExposer* ze);
+		ZobGroupBox^			FillControlInternal(std::string& name, ZobVariablesExposer* ze, Image^ im);
 		void					CreateObjectBeahaviorsView();
 		Panel^					m_parentPanel;
 		ZobGroupBox^			m_objectPanel;
 		ZobGroupBox^			m_objectGroupBox;
 		ZobPropertiesContainer^	m_container;
+		Resources::ResourceManager^ m_resourcesManager;
 		
 	protected:
  		unsigned long long		m_id;

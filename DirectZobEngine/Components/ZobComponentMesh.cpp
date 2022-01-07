@@ -10,7 +10,7 @@ ZobComponentMesh::~ZobComponentMesh()
 ZobComponentMesh::ZobComponentMesh(ZobObject* zobObject, bool bEditorZobComponent) : ZobComponent(zobObject, bEditorZobComponent)
 {
 	SET_CLASS_AND_NAME
-	m_type = eComponent_mesh;
+	m_componentType = eComponent_mesh;
 	m_meshPath.Reset();
 	m_mesh = NULL;
 	m_meshPath.SetFileType(ZobFilePath::eFileType_mesh);
@@ -32,8 +32,12 @@ ZobComponentMesh::ZobComponentMesh(ZobObject* zobObject, bool bEditorZobComponen
 	m_varExposer->WrapVariable<uint>("Size", &m_meshSize, NULL, true, false);
 }
 
-void ZobComponentMesh::Init()
+void ZobComponentMesh::Init(DirectZobType::sceneLoadingCallback cb)
 {
+	if (cb)
+	{
+		cb(0, 0, m_name);
+	}
 	m_meshNbTriangles = 0;
 	m_meshSize = 0;
 	ReLoadVariables();
@@ -57,7 +61,7 @@ void ZobComponentMesh::Set(ZobFilePath zfp)
 { 
 	m_meshPath = zfp;
 	m_meshPath.SetFileType(ZobFilePath::eFileType_mesh);
-	Init();
+	Init(NULL);
 }
 
 void ZobComponentMesh::PreUpdate(float dt)
@@ -115,7 +119,7 @@ void ZobComponentMesh::EditorUpdate()
 	{
 		if (m_meshPath.IsDefined())
 		{
-			Init();
+			Init(NULL);
 		}
 	}
 	else

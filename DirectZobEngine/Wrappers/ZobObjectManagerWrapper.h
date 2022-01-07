@@ -32,10 +32,11 @@ namespace CLI
 			eImageZobComponent = 6,
 			eImageZobCameraController = 7,
 			eImageZobunknown = 8,
+			eImageZobPhysicComponent = 9,
 			__eImage_MAX__ = 6,
 		};
 		 
-		static const cli::array<System::String^>^ eImageObjectTypeStr = { "_object", "light1", "camera2", "mesh3", "sprite", "hud", "component", "cameraController", "unknown"};
+		static const cli::array<System::String^>^ eImageObjectTypeStr = { "_object", "light1", "camera2", "mesh3", "sprite", "hud", "component", "cameraController", "unknown", "physic" };
 
 		ZobEntityInfo(ZobEntity* ze);
 		ZobEntityInfo(DirectZobType::zobId zid);

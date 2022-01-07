@@ -26,7 +26,7 @@ public:
 	Engine(int width, int height, Events* events);
 	~Engine();
 
-	void											Start();
+	void											Start(DirectZobType::sceneLoadingCallback cb);
 	const inline bool								Started() const { return m_started; }
 	void											Stop();
 	void											ClearBuffer(const ZobColor* color);

@@ -47,7 +47,7 @@ public:
 	//void					Update(const ZobMatrix4x4& parentMatrix, const ZobMatrix4x4& parentRSMatrix) override;
 	void					Update(float dt) override;
 	void					PreUpdate(float dt) override;
-	void					Init() override;
+	void					Init(DirectZobType::sceneLoadingCallback cb) override;
 	void					PostUpdate() override;
 	void					DrawGizmos(const Camera* camera, Engine* engine) override;
 	TiXmlNode*				SaveUnderNode(TiXmlNode* node) override;
@@ -73,7 +73,7 @@ public:
 	static bool				ClipSegmentToPlanes(ZobVector3* p1, ZobVector3* p2, const DirectZobType::Plane* planes, float& outP2Factor);
 	Camera::eFrustrumPlanes	PointIsInFrustrum(const ZobVector3* pt) const;
 	bool					AABBIsInFrustrum(const ZobVector3* aabbMin, const ZobVector3* aabbMax) const;
-	void					ChangeCameraController(eCameraType newType);
+	void					ChangeCameraController(eCameraType newType, bool bEditorZobComponent);
 	inline void				ToViewSpace(ZobVector3* v) const
 	{
 		m_viewRotMatrix.Mul(v);

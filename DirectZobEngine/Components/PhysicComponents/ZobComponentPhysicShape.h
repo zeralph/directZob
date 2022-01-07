@@ -28,7 +28,7 @@ class ZobComponentPhysicShape : public ZobComponent
 		};
 
 								~ZobComponentPhysicShape() override;
-		void					Init() override;
+		void					Init(DirectZobType::sceneLoadingCallback cb) override;
 		void					PreUpdate(float dt) override;
 		void					UpdateBeforeObject(float dt) override {}
 		void					UpdateAfterObject(float dt) override {}

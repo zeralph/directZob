@@ -7,6 +7,7 @@
 #include "Mesh.h"
 #include "Rendering/text2D.h"
 #include "Events.h"
+#include "SceneLoader.h"
 #include "Managers/CameraManager.h"
 #include "Managers/MaterialManager.h"
 #include "Managers/MeshManager.h"
@@ -73,7 +74,7 @@ public :
 	void					StopPhysic(bool reset);
 	inline bool				IsPhysicPlaying() const { return m_physicStarted; }
 	void					Init(mfb_window* window, int width, int height, bool bEditorMode);
-	void					LoadScene(std::string& path, std::string& file, DirectZob::engineCallback OnSceneLoaded);
+	void					LoadScene(std::string& path, std::string& file, DirectZob::engineCallback OnSceneLoaded, DirectZobType::sceneLoadingCallback OnSceneLoading);
 	void					LoadZobObject(std::string& path, std::string& file);
 	void					Unload();
 	void					SaveScene(std::string& path, std::string& file);

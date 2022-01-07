@@ -57,10 +57,10 @@ void DirectZob::Shutdown()
 
 }
 
-void DirectZob::LoadScene(std::string& path, std::string& file, DirectZob::engineCallback OnSceneLoaded)
+void DirectZob::LoadScene(std::string& path, std::string& file, DirectZob::engineCallback OnSceneLoaded, DirectZobType::sceneLoadingCallback OnSceneLoading)
 {
 	m_onSceneLoaded = OnSceneLoaded;
-	SceneLoader::LoadScene(path, file);
+	SceneLoader::LoadScene(path, file, OnSceneLoading);
 	if (m_text == NULL)
 	{
 		m_text = new Text2D(m_engine, m_events);
@@ -116,7 +116,7 @@ void DirectZob::NewScene(std::string workspace)
 	{
 		m_text = new Text2D(m_engine, m_events);
 	}
-	DirectZob::GetInstance()->GetEngine()->Start();
+	DirectZob::GetInstance()->GetEngine()->Start(NULL);
 	//g_render_mutex.unlock();
 }
 

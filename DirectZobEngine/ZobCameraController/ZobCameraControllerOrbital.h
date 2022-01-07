@@ -7,7 +7,7 @@ class ZobCameraControllerOrbital : public ZobCameraController
 {
 public:
     ZobCameraControllerOrbital(Camera* c, bool isFree, zobId guid);
-    ZobCameraControllerOrbital(Camera * c, bool isFree);
+    ZobCameraControllerOrbital(Camera * c, bool isFree, bool bEditorZobComponent);
     ~ZobCameraControllerOrbital();
 
     void        Update(float dt) override;

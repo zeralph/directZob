@@ -161,6 +161,7 @@ public:
 		ZobVector3 p6;
 		ZobVector3 p7;
 	};
+	typedef void		(*sceneLoadingCallback)(int nbObj, int curObj, std::string s);
 };
 
 typedef DirectZobType::u8 u8;
@@ -169,6 +170,7 @@ typedef DirectZobType::uint uint;
 typedef DirectZobType::guid u32;
 typedef DirectZobType::ulong ulong;
 typedef DirectZobType::zobId zobId;
+//typedef DirectZobType::(*sceneLoadingCallback) sceneLoadingCallback;
 //typedef struct DirectZobType::ZobFilePath ZobFilePath;
 typedef struct DirectZobType::BufferData BufferData;
 typedef struct DirectZobType::Line3D Line3D;

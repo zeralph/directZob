@@ -189,26 +189,6 @@ namespace CLI
 			Bitmap^ bmp = gcnew Bitmap(im);
 			m_treeView->ImageList->Images->Add(bmp);
 		}
-		im = (Image^)m_resourcesManager->GetObject("mesh3");
-		if (im != nullptr)
-		{
-			Bitmap^ bmp = gcnew Bitmap(im);
-			m_treeView->ImageList->Images->Add(bmp);
-		}
-		im = (Image^)m_resourcesManager->GetObject("sprite");
-		if (im != nullptr)
-		{
-			Bitmap^ bmp = gcnew Bitmap(im);
-			m_treeView->ImageList->Images->Add(bmp);
-		}
-		im = (Image^)m_resourcesManager->GetObject("hud");
-		if (im != nullptr)
-		{
-			Bitmap^ bmp = gcnew Bitmap(im);
-			m_treeView->ImageList->Images->Add(bmp);
-		}
-		
-
 		Refresh();
 		c->Controls->Add(m_treeView);
 		c->Dock = DockStyle::Fill;
@@ -457,7 +437,7 @@ namespace CLI
 		if (z)
 		{
 			m_selectedObject = z;
-			m_selectedObjectWrapper = gcnew ZobObjectWrapper(z, m_objectPropertiesPanel);
+			m_selectedObjectWrapper = gcnew ZobObjectWrapper(z, m_objectPropertiesPanel, m_resourcesManager);
 			m_editorGizmos->SetParent(z);
 			OnObjectSelectedEvent(m_selectedObjectWrapper);
 			ReScan();
@@ -585,27 +565,7 @@ namespace CLI
 			}
 			else if (st == ZobEntity::subtype_zobOject)
 			{
-				_color = Color::Blue;
-				ZobObject* z = ZobEntity::GetEntity<ZobObject>(ze->GetIdValue());
-				if (z)
-				{
-					if (z && z->GetComponent<ZobComponentSprite>())
-					{
-						_imgType = eImageObjectType::eImageZobSprite;
-					}
-					else if (z && z->GetComponent<ZobComponentMesh>())
-					{
-						_imgType = eImageObjectType::eImageZobMesh;
-					}
-					else if (z && (z->GetComponent<ZobComponentText>() || z->GetComponent<ZobComponentImage>()))
-					{
-						_imgType = eImageObjectType::eImageZobHud;
-					}
-					else
-					{
-						_imgType = eImageObjectType::eImageZobObject;
-					}
-				}
+				_imgType = eImageObjectType::eImageZobObject;
 			}
 			else if (st == ZobEntity::subtype_cameraController)
 			{
@@ -614,22 +574,32 @@ namespace CLI
 			else if (st == ZobEntity::subtype_Component)
 			{
 				_imgType = eImageObjectType::eImageZobComponent;
-			}
-			else if (st == ZobEntity::subtype_mesh)
-			{
-				_imgType = eImageObjectType::eImageZobMesh;
-			}
-			else if (st == ZobEntity::subtype_sprite)
-			{
-				_imgType = eImageObjectType::eImageZobSprite;
-			}
-			else if (st == ZobEntity::subtype_menuItem)
-			{
-				_imgType = eImageObjectType::eImageZobHud;
-			}
-			else
-			{
-				_imgType = eImageObjectType::eImageZobunknown;
+				ZobComponent* zc = dynamic_cast<ZobComponent*>(ze);
+				if (zc)
+				{
+					ZobComponent::eComponentType zct = zc->GetComponentType();
+					if (zct == ZobComponent::eComponentType::eComponent_mesh)
+					{
+						_imgType = eImageObjectType::eImageZobMesh;
+					}
+					else if (zct == ZobComponent::eComponentType::eComponent_sprite)
+					{
+						_imgType = eImageObjectType::eImageZobSprite;
+					}
+					else if (zct == ZobComponent::eComponentType::eComponent_hudText || zct == ZobComponent::eComponentType::eComponent_hudImage)
+					{
+						_imgType = eImageObjectType::eImageZobHud;
+					}
+					else if (zct == ZobComponent::eComponentType::eComponent_physicBox || zct == ZobComponent::eComponentType::eComponent_physicCapsule ||
+								zct == ZobComponent::eComponentType::eComponent_physicMesh || zct == ZobComponent::eComponentType::eComponent_physicSphere)
+					{
+						_imgType = eImageObjectType::eImageZobPhysicComponent;
+					}
+					else
+					{
+						_imgType = eImageObjectType::eImageZobComponent;
+					}
+				}
 			}
 			_imgName = eImageObjectTypeStr[(int)_imgType];
 		}

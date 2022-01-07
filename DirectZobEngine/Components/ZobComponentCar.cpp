@@ -24,7 +24,7 @@ ZobComponentCar::ZobComponentCar(ZobObject* zobObject) : ZobComponent(zobObject,
 {
 	SET_CLASS_AND_NAME
 	m_carType = eCarType_pouet;
-	m_type = eComponent_car;
+	m_componentType = eComponent_car;
 	m_lastGroundPosition = ZobVector3(0, 0, 0);
 	m_lastGroundNormal = ZobVector3(0, 1, 0);
 	m_frontLeftWheel = NULL;
@@ -38,7 +38,7 @@ ZobComponentCar::ZobComponentCar(ZobObject* zobObject) : ZobComponent(zobObject,
 	m_lastCollNormal   = ZobVector3(0, 0, 0);
 
 	m_wheelRotationAngle = 0;
-	Init();
+	Init(NULL);
 
 	m_test = NULL;
 	m_varExposer->WrapEntity<ZobObject*>("Front left wheel", &m_frontLeftWheel, NULL, false, true);
@@ -312,8 +312,12 @@ void ZobComponentCar::PreUpdate(float dt)
 	//h->Print(ZobHUDManager::eHudUnit_ratio, 0.1f, 0.9f, 1, "Leelawadee UI", &ZobColor::Red, "wheels %.2f", m_steerangle);
 }
 
-void ZobComponentCar::Init()
+void ZobComponentCar::Init(DirectZobType::sceneLoadingCallback cb)
 {
+	if (cb)
+	{
+		cb(0, 0, m_name);
+	}
 	ReLoadVariables();
 }
 
@@ -445,7 +449,7 @@ void ZobComponentCar::UpdateInputs(float dt)
 	{
 		std::string sceneName = "_menu.dzs";
 		std::string scenePath = DirectZob::GetInstance()->GetResourcePath();
-		DirectZob::GetInstance()->LoadScene(scenePath, sceneName, NULL);
+		DirectZob::GetInstance()->LoadScene(scenePath, sceneName, NULL, NULL);
 		return;
 	}
 }

@@ -78,6 +78,12 @@ namespace DirectZobEditor
 				Bitmap bmp = new Bitmap(im);
 				imageList.Images.Add(bmp);
 			}
+			im = (Image)resources.GetObject("physic");
+			if (im != null)
+			{
+				Bitmap bmp = new Bitmap(im);
+				imageList.Images.Add(bmp);
+			}
 			listView1.LargeImageList = imageList;
 			listView1.SmallImageList = imageList;
 			for (int i=0; i<l.Count; i++)
