@@ -125,7 +125,21 @@ void ZobObject::InitVariablesExposer()
 	m_varExposer->WrapVariable<ZobVector3>("WPosition", GetPhysicComponentNoConst()->GetWorldPositionAddress(), &ZobObject::ReloadVariablesFromWorldData, false, false);
 	m_varExposer->WrapVariable<ZobVector3>("WRotation", GetPhysicComponentNoConst()->GetWorldRotationAddress(), &ZobObject::ReloadVariablesFromWorldData, false, false);
 	m_varExposer->WrapVariable<ZobVector3>("WScale", GetPhysicComponentNoConst()->GetWorldScaleAddress(), &ZobObject::ReloadVariablesFromWorldData, false, false);
+	//
+	m_bodyType = m_physicComponent->GetBodyType();
+	eRigidBodyType bt[3] = { eRigidBodyType::eRigidBody_static, eRigidBodyType::eRigidBody_kinematic, eRigidBodyType::eRigidBody_dynamic };
+	const char* btStr[3] = { "Static", "Kinematic", "Dynamic" };
+	m_varExposer->WrapEnum<eRigidBodyType>("Body type", &m_bodyType, 3, bt, btStr, &ZobObject::OnChangeBodyType, false, true);
 
+}
+
+void ZobObject::OnChangeBodyType(zobId id)
+{
+	ZobObject* z = ZobEntity::GetEntity<ZobObject>(id);
+	if (z)
+	{
+		z->GetPhysicComponentNoConst()->SetBodyType(z->m_bodyType);
+	}
 }
 
 void ZobObject::ReloadVariablesFromWorldData(zobId id)
@@ -215,6 +229,7 @@ void ZobObject::Init(DirectZobType::sceneLoadingCallback cb)
 	}
 	m_varExposer->Load();
 	m_physicComponent->Init();
+	m_physicComponent->SetBodyType(m_bodyType);
 	for (int i = 0; i < m_Components.size(); i++)
 	{
 		m_Components[i]->Init(cb);

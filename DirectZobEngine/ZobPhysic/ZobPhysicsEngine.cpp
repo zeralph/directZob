@@ -141,19 +141,21 @@ void ZobPhysicsEngine::Update(float dt)
 	m_timeStep = (float)(clock() - m_timeStep) / CLOCKS_PER_SEC;
 }
 
-CollisionBody* ZobPhysicsEngine::CreateCollisionBody(const ZobVector3* position, const ZobVector3* orientation)
+RigidBody* ZobPhysicsEngine::CreateCollisionBody(const ZobVector3* position, const ZobVector3* orientation)
 {
     Vector3 p(position->x, position->y, position->z);
     Quaternion o = Quaternion::identity();
     o.fromEulerAngles(orientation->x, orientation->y, orientation->z);
     Transform t(p, o);
-    return m_world->createCollisionBody(t);
-    //return m_world->createRigidBody(t);
+    //return m_world->createCollisionBody(t);
+    RigidBody* r = m_world->createRigidBody(t);
+    r->setType(BodyType::STATIC);
+    return r;
 }
 
-void ZobPhysicsEngine::DestroyCollisionBody(CollisionBody* rb)
+void ZobPhysicsEngine::DestroyCollisionBody(RigidBody* rb)
 {
-    m_world->destroyCollisionBody(rb);
+    m_world->destroyRigidBody(rb);
 }
 
 void ZobPhysicsEngine::DrawGizmos() const

@@ -26,6 +26,13 @@ friend class ZobComponent;
 friend class ZobComponentCar;
 public:
 
+	enum eRigidBodyType
+	{
+		eRigidBody_static = 0,
+		eRigidBody_kinematic = 1,
+		eRigidBody_dynamic = 2,
+	};
+
 	ZobObject(ZobEntity::ZobType t, ZobEntity::ZobSubType s, const std::string& name, ZobObject* parent = NULL, const std::string* factoryFile =NULL);
 	ZobObject(zobId id, TiXmlElement* node, ZobObject* parent, const std::string* factoryFile = NULL);
 	virtual ~ZobObject();
@@ -121,21 +128,22 @@ public:
 private:
 	void								SaveRecusrive(TiXmlNode* node, ZobObject* z);
 	void								DeleteInternal();
-	
+	static void							OnChangeBodyType(zobId id);
 protected:
 
 	virtual void						InitVariablesExposer();
 
-	ZobObject* m_parent;
-	ZobVariablesExposer* m_varExposer;
-	ZobPhysicComponent* m_physicComponent;
-	std::vector<ZobObject*> m_children;
-	std::vector <ZobComponent*> m_Components;
-	ZobMatrix4x4 m_modelMatrix;
-	ZobMatrix4x4 m_rotationMatrix;
-	bool m_markedForDeletion;
-	ZobVector3 m_left;
-	ZobVector3 m_forward;
-	ZobVector3 m_up;
-	std::string m_factoryFile;
+	ZobObject*							m_parent;
+	ZobVariablesExposer*				m_varExposer;
+	ZobPhysicComponent*					m_physicComponent;
+	std::vector<ZobObject*>				m_children;
+	std::vector <ZobComponent*>			m_Components;
+	ZobMatrix4x4						m_modelMatrix;
+	ZobMatrix4x4						m_rotationMatrix;
+	bool								m_markedForDeletion;
+	ZobVector3							m_left;
+	ZobVector3							m_forward;
+	ZobVector3							m_up;
+	std::string							m_factoryFile;
+	eRigidBodyType						m_bodyType;
 };

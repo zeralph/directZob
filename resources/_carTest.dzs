@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<Scene EntitiesCount="106" ZobObjectsCount="60">
+<Scene EntitiesCount="107" ZobObjectsCount="60">
     <Globals>
         <Var Name="Ambient color" value="255;102;102;102" />
         <Var Name="Clear color" value="255;63;149;255" />
@@ -19,14 +19,15 @@
     </Globals>
     <ZobObject Guid="4002129363">
         <Var Name="Name" value="PlayerCar" />
-        <Var Name="Position" value="141.878;1.021;-14.781" />
-        <Var Name="Rotation" value="0.000;-0.000;0.000" />
+        <Var Name="Position" value="-55.859;-3.138;-5.437" />
+        <Var Name="Rotation" value="7.572;64.912;4.522" />
         <Var Name="Scale" value="1.000;1.000;1.000" />
+        <Var Name="Body type" value="Kinematic" />
         <Components>
             <Component Type="PhysicBox" Guid="2007043289">
                 <Var Name="Layers" value="4" />
                 <Var Name="Trigger" value="True" />
-                <Var Name="Local position" value="0.000;2.000;0.000" />
+                <Var Name="Local position" value="0.000;0.000;0.000" />
                 <Var Name="Scale with object" value="True" />
                 <Var Name="Height" value="1.000;0.500;2.000" />
             </Component>
@@ -49,9 +50,10 @@
         </Components>
         <ZobObject Guid="4002153198">
             <Var Name="Name" value="carBody" />
-            <Var Name="Position" value="0.000;-0.544;0.185" />
-            <Var Name="Rotation" value="-179.998;-0.000;-179.998" />
+            <Var Name="Position" value="0.000;-0.540;0.182" />
+            <Var Name="Rotation" value="-179.998;0.000;-179.998" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
+            <Var Name="Body type" value="Static" />
             <Components>
                 <Component Type="Mesh" Guid="2007983524">
                     <Var Name="File" value="Peugeot405;_cars/GLX-400-OBJ/;GLX_400.obj;0" />
@@ -63,9 +65,10 @@
             </Components>
             <ZobObject Guid="4002410782">
                 <Var Name="Name" value="FR_wheel" />
-                <Var Name="Position" value="0.781;0.247;-1.286" />
-                <Var Name="Rotation" value="0.000;-0.000;0.000" />
+                <Var Name="Position" value="0.778;0.243;-1.282" />
+                <Var Name="Rotation" value="97.725;-0.000;0.000" />
                 <Var Name="Scale" value="1.000;1.000;1.000" />
+                <Var Name="Body type" value="Static" />
                 <Components>
                     <Component Type="Mesh" Guid="2007953918">
                         <Var Name="File" value="Tire;_cars/Tire/;Tire.obj;0" />
@@ -78,9 +81,10 @@
             </ZobObject>
             <ZobObject Guid="4002410897">
                 <Var Name="Name" value="FL_wheel" />
-                <Var Name="Position" value="-0.788;0.251;-1.287" />
-                <Var Name="Rotation" value="0.000;-0.000;0.000" />
+                <Var Name="Position" value="-0.784;0.247;-1.284" />
+                <Var Name="Rotation" value="97.725;-0.000;0.000" />
                 <Var Name="Scale" value="1.000;1.000;1.000" />
+                <Var Name="Body type" value="Static" />
                 <Components>
                     <Component Type="Mesh" Guid="2007905557">
                         <Var Name="File" value="Tire;_cars/Tire/;Tire.obj;0" />
@@ -93,9 +97,10 @@
             </ZobObject>
             <ZobObject Guid="4002054282">
                 <Var Name="Name" value="RL_wheel" />
-                <Var Name="Position" value="-0.787;0.244;1.246" />
-                <Var Name="Rotation" value="0.000;0.000;0.000" />
+                <Var Name="Position" value="-0.782;0.240;1.241" />
+                <Var Name="Rotation" value="97.725;0.000;0.000" />
                 <Var Name="Scale" value="1.000;1.000;1.000" />
+                <Var Name="Body type" value="Static" />
                 <Components>
                     <Component Type="Mesh" Guid="2007115044">
                         <Var Name="File" value="Tire;_cars/Tire/;Tire.obj;0" />
@@ -108,9 +113,10 @@
             </ZobObject>
             <ZobObject Guid="4002838095">
                 <Var Name="Name" value="RR_wheel" />
-                <Var Name="Position" value="0.782;0.246;1.245" />
-                <Var Name="Rotation" value="0.000;0.000;0.000" />
+                <Var Name="Position" value="0.781;0.242;1.240" />
+                <Var Name="Rotation" value="97.725;0.000;0.000" />
                 <Var Name="Scale" value="1.000;1.000;1.000" />
+                <Var Name="Body type" value="Static" />
                 <Components>
                     <Component Type="Mesh" Guid="2007839627">
                         <Var Name="File" value="Tire;_cars/Tire/;Tire.obj;0" />
@@ -124,45 +130,50 @@
         </ZobObject>
         <ZobObject Guid="2003412161">
             <Var Name="Name" value="rearCamera" />
-            <Var Name="Position" value="0.000;1.894;-4.773" />
-            <Var Name="Rotation" value="15.041;0.000;-0.000" />
+            <Var Name="Position" value="0.000;1.890;-4.769" />
+            <Var Name="Rotation" value="15.037;0.000;0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
+            <Var Name="Body type" value="Static" />
             <Var Name="FOV" value="70.000" />
             <Var Name="Camera controller" value="FollowCar" />
             <Components />
         </ZobObject>
         <ZobObject Guid="2003143259">
             <Var Name="Name" value="FrontCamera" />
-            <Var Name="Position" value="0.000;0.286;2.181" />
+            <Var Name="Position" value="0.000;0.282;2.176" />
             <Var Name="Rotation" value="0.000;0.000;0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
+            <Var Name="Body type" value="Static" />
             <Var Name="FOV" value="70.000" />
             <Var Name="Camera controller" value="base" />
             <Components />
         </ZobObject>
         <ZobObject Guid="2003861325">
             <Var Name="Name" value="topCamera" />
-            <Var Name="Position" value="-0.000;59.156;-0.991" />
-            <Var Name="Rotation" value="-89.400;-79.758;-179.710" />
+            <Var Name="Position" value="0.000;59.152;-0.988" />
+            <Var Name="Rotation" value="-89.392;-79.750;-179.708" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
+            <Var Name="Body type" value="Static" />
             <Var Name="FOV" value="45.000" />
             <Var Name="Camera controller" value="base" />
             <Components />
         </ZobObject>
         <ZobObject Guid="2003217728">
             <Var Name="Name" value="sideCamera" />
-            <Var Name="Position" value="-5.867;1.884;6.754" />
-            <Var Name="Rotation" value="-176.329;35.923;-176.794" />
+            <Var Name="Position" value="-5.862;1.880;6.749" />
+            <Var Name="Rotation" value="-176.325;35.919;-176.794" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
+            <Var Name="Body type" value="Static" />
             <Var Name="FOV" value="45.000" />
             <Var Name="Camera controller" value="base" />
             <Components />
         </ZobObject>
         <ZobObject Guid="2003649406">
             <Var Name="Name" value="orbitalCamera" />
-            <Var Name="Position" value="-19.999;28.284;19.999" />
-            <Var Name="Rotation" value="-134.999;44.999;0.000" />
+            <Var Name="Position" value="-25.621;28.517;-11.414" />
+            <Var Name="Rotation" value="34.984;69.616;-11.318" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
+            <Var Name="Body type" value="Static" />
             <Var Name="FOV" value="45.000" />
             <Var Name="Camera controller" value="Orbital" />
             <Components />
@@ -170,9 +181,10 @@
     </ZobObject>
     <ZobObject Guid="4004542631">
         <Var Name="Name" value="sun" />
-        <Var Name="Position" value="0.000;60.020;0.000" />
-        <Var Name="Rotation" value="2.321;-25.315;126.358" />
+        <Var Name="Position" value="0.000;60.015;0.000" />
+        <Var Name="Rotation" value="2.317;-25.310;126.353" />
         <Var Name="Scale" value="1.000;1.000;1.000" />
+        <Var Name="Body type" value="Static" />
         <Var Name="Color" value="255;255;255;28" />
         <Var Name="Intensity" value="1.000" />
         <Var Name="Distance" value="100.000" />
@@ -183,9 +195,10 @@
     </ZobObject>
     <ZobObject Guid="4002412188">
         <Var Name="Name" value="house" />
-        <Var Name="Position" value="-281.371;-3.659;26.616" />
-        <Var Name="Rotation" value="0.000;30.750;0.000" />
+        <Var Name="Position" value="-281.367;-3.655;26.612" />
+        <Var Name="Rotation" value="0.000;30.745;0.000" />
         <Var Name="Scale" value="0.300;0.300;0.300" />
+        <Var Name="Body type" value="Static" />
         <Components>
             <Component Type="Mesh" Guid="2007254289">
                 <Var Name="File" value="Cottage;/;cottage_obj.obj;0" />
@@ -198,15 +211,17 @@
     </ZobObject>
     <ZobObject Guid="4002683899">
         <Var Name="Name" value="rocks" />
-        <Var Name="Position" value="0.000;0.000;101.524" />
+        <Var Name="Position" value="0.000;0.000;101.520" />
         <Var Name="Rotation" value="0.000;0.000;0.000" />
         <Var Name="Scale" value="1.000;1.000;1.000" />
+        <Var Name="Body type" value="Static" />
         <Components />
         <ZobObject Guid="4002326689">
             <Var Name="Name" value="rock1" />
-            <Var Name="Position" value="73.791;8.808;9.607" />
-            <Var Name="Rotation" value="-9.815;-15.193;2.592" />
+            <Var Name="Position" value="73.787;8.804;9.602" />
+            <Var Name="Rotation" value="-9.811;-15.189;2.588" />
             <Var Name="Scale" value="10.000;5.000;10.000" />
+            <Var Name="Body type" value="Static" />
             <Components>
                 <Component Type="Mesh" Guid="2007572628">
                     <Var Name="File" value="Rock9;/;Rock_9.fbx;0" />
@@ -219,9 +234,10 @@
         </ZobObject>
         <ZobObject Guid="4002087287">
             <Var Name="Name" value="rock2" />
-            <Var Name="Position" value="66.652;-13.685;24.732" />
-            <Var Name="Rotation" value="-179.870;85.985;-179.867" />
+            <Var Name="Position" value="66.648;-13.681;24.727" />
+            <Var Name="Rotation" value="-179.867;85.969;-179.867" />
             <Var Name="Scale" value="10.000;15.000;10.000" />
+            <Var Name="Body type" value="Static" />
             <Components>
                 <Component Type="Mesh" Guid="2007829802">
                     <Var Name="File" value="Rock9;/;Rock_9.fbx;0" />
@@ -234,9 +250,10 @@
         </ZobObject>
         <ZobObject Guid="4002725502">
             <Var Name="Name" value="rock3" />
-            <Var Name="Position" value="25.781;11.494;29.190" />
-            <Var Name="Rotation" value="-119.407;0.000;0.000" />
+            <Var Name="Position" value="25.777;11.490;29.186" />
+            <Var Name="Rotation" value="-119.403;0.000;0.000" />
             <Var Name="Scale" value="20.000;10.000;10.000" />
+            <Var Name="Body type" value="Static" />
             <Components>
                 <Component Type="Mesh" Guid="2007187876">
                     <Var Name="File" value="Rock9;/;Rock_9.fbx;0" />
@@ -249,9 +266,10 @@
         </ZobObject>
         <ZobObject Guid="4002985906">
             <Var Name="Name" value="rock4" />
-            <Var Name="Position" value="-1.006;-0.387;-22.811" />
-            <Var Name="Rotation" value="89.919;29.281;100.560" />
+            <Var Name="Position" value="-1.002;-0.383;-22.806" />
+            <Var Name="Rotation" value="89.915;29.277;100.556" />
             <Var Name="Scale" value="10.000;5.000;10.000" />
+            <Var Name="Body type" value="Static" />
             <Components>
                 <Component Type="Mesh" Guid="2007527001">
                     <Var Name="File" value="Rock9;/;Rock_9.fbx;0" />
@@ -264,9 +282,10 @@
         </ZobObject>
         <ZobObject Guid="4002684125">
             <Var Name="Name" value="rock5" />
-            <Var Name="Position" value="-2.009;20.363;17.342" />
-            <Var Name="Rotation" value="89.993;0.000;0.000" />
+            <Var Name="Position" value="-2.005;20.359;17.337" />
+            <Var Name="Rotation" value="89.989;0.000;0.000" />
             <Var Name="Scale" value="10.000;10.000;10.000" />
+            <Var Name="Body type" value="Static" />
             <Components>
                 <Component Type="Mesh" Guid="2007389864">
                     <Var Name="File" value="Rock9;/;Rock_9.fbx;0" />
@@ -279,9 +298,10 @@
         </ZobObject>
         <ZobObject Guid="4002855155">
             <Var Name="Name" value="rock6" />
-            <Var Name="Position" value="-0.294;11.686;-21.053" />
-            <Var Name="Rotation" value="0.000;0.000;-36.158" />
+            <Var Name="Position" value="-0.290;11.682;-21.048" />
+            <Var Name="Rotation" value="0.000;0.000;-36.154" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
+            <Var Name="Body type" value="Static" />
             <Components>
                 <Component Type="Mesh" Guid="2007274504">
                     <Var Name="File" value="TreeTrunk;/;tree_trunk.FBX;0" />
@@ -294,9 +314,10 @@
         </ZobObject>
         <ZobObject Guid="4002309941">
             <Var Name="Name" value="mountain_canyon_01.fbx" />
-            <Var Name="Position" value="-130.958;-3.773;-113.829" />
-            <Var Name="Rotation" value="-0.001;49.671;-2.789" />
+            <Var Name="Position" value="-130.954;-3.769;-113.824" />
+            <Var Name="Rotation" value="-0.001;49.667;-2.785" />
             <Var Name="Scale" value="7.000;7.000;12.000" />
+            <Var Name="Body type" value="Static" />
             <Components>
                 <Component Type="Mesh" Guid="2007670531">
                     <Var Name="File" value="Canyon;mountain_canyon/;mountain_canyon_01.fbx;0" />
@@ -313,6 +334,7 @@
         <Var Name="Position" value="0.000;0.000;0.000" />
         <Var Name="Rotation" value="0.000;0.000;0.000" />
         <Var Name="Scale" value="1.000;1.000;1.000" />
+        <Var Name="Body type" value="Static" />
         <Components>
             <Component Type="PhysicMesh" Guid="2007475591">
                 <Var Name="Layers" value="1" />
@@ -328,6 +350,7 @@
         <Var Name="Position" value="0.000;0.000;0.000" />
         <Var Name="Rotation" value="0.000;0.000;0.000" />
         <Var Name="Scale" value="1.000;1.000;1.000" />
+        <Var Name="Body type" value="Static" />
         <Components>
             <Component Type="PhysicMesh" Guid="2007423251">
                 <Var Name="Layers" value="2" />
@@ -343,6 +366,7 @@
         <Var Name="Position" value="0.000;0.000;0.000" />
         <Var Name="Rotation" value="0.000;0.000;0.000" />
         <Var Name="Scale" value="1.000;1.000;1.000" />
+        <Var Name="Body type" value="Static" />
         <Components>
             <Component Type="PhysicMesh" Guid="2007911394">
                 <Var Name="Layers" value="2" />
@@ -355,15 +379,17 @@
     </ZobObject>
     <ZobObject Guid="4002065559">
         <Var Name="Name" value="buildings" />
-        <Var Name="Position" value="91.358;0.942;-110.763" />
-        <Var Name="Rotation" value="0.000;53.576;0.000" />
+        <Var Name="Position" value="91.354;0.938;-110.759" />
+        <Var Name="Rotation" value="0.000;53.571;0.000" />
         <Var Name="Scale" value="1.000;1.000;1.000" />
+        <Var Name="Body type" value="Static" />
         <Components />
         <ZobObject Guid="4002436495">
             <Var Name="Name" value="building_2" />
-            <Var Name="Position" value="-112.192;0.575;-45.449" />
-            <Var Name="Rotation" value="0.000;34.992;0.000" />
+            <Var Name="Position" value="-112.188;0.571;-45.445" />
+            <Var Name="Rotation" value="0.000;34.988;0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
+            <Var Name="Body type" value="Static" />
             <Components>
                 <Component Type="Mesh" Guid="2007247914">
                     <Var Name="File" value="teapot.obj;/;teapot.obj;0" />
@@ -376,9 +402,10 @@
         </ZobObject>
         <ZobObject Guid="4002193509">
             <Var Name="Name" value="building_3" />
-            <Var Name="Position" value="-81.471;-9.987;-1.271" />
-            <Var Name="Rotation" value="0.000;34.992;0.000" />
+            <Var Name="Position" value="-81.467;-9.983;-1.269" />
+            <Var Name="Rotation" value="0.000;34.988;0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
+            <Var Name="Body type" value="Static" />
             <Components>
                 <Component Type="Mesh" Guid="2007681882">
                     <Var Name="File" value="building1;/;building_1.obj;0" />
@@ -391,9 +418,10 @@
         </ZobObject>
         <ZobObject Guid="4002209421">
             <Var Name="Name" value="building_4" />
-            <Var Name="Position" value="-57.112;-9.987;25.643" />
-            <Var Name="Rotation" value="0.000;34.992;0.000" />
+            <Var Name="Position" value="-57.108;-9.983;25.638" />
+            <Var Name="Rotation" value="0.000;34.988;0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
+            <Var Name="Body type" value="Static" />
             <Components>
                 <Component Type="Mesh" Guid="2007444512">
                     <Var Name="File" value="building1;/;building_1.obj;0" />
@@ -406,9 +434,10 @@
         </ZobObject>
         <ZobObject Guid="4002124052">
             <Var Name="Name" value="skyscraper.FBX" />
-            <Var Name="Position" value="-118.657;-7.788;42.381" />
-            <Var Name="Rotation" value="0.000;28.841;0.000" />
+            <Var Name="Position" value="-118.652;-7.784;42.376" />
+            <Var Name="Rotation" value="0.000;28.836;0.000" />
             <Var Name="Scale" value="0.280;0.280;0.280" />
+            <Var Name="Body type" value="Static" />
             <Components>
                 <Component Type="Mesh" Guid="2007559772">
                     <Var Name="File" value="skyscaper.obj;/;skyscaper.obj;0" />
@@ -420,32 +449,19 @@
             </Components>
         </ZobObject>
     </ZobObject>
-    <ZobObject Guid="4002214304">
-        <Var Name="Name" value="free_car_1.obj" />
-        <Var Name="Position" value="-22.822;1.814;9.328" />
-        <Var Name="Rotation" value="179.947;-69.815;-179.962" />
-        <Var Name="Scale" value="1.000;1.000;1.000" />
-        <Components>
-            <Component Type="Mesh" Guid="2007722892">
-                <Var Name="File" value="Free_Car_1_Obj;_cars/Free_Car_1_Obj/;free_car_1.obj;0" />
-                <Var Name="Cull mode" value="Clockwise" />
-                <Var Name="Lighting" value="Phong" />
-                <Var Name="ZBuffered" value="True" />
-                <Var Name="Transparent" value="False" />
-            </Component>
-        </Components>
-    </ZobObject>
     <ZobObject Guid="4002493858">
         <Var Name="Name" value="some_lights" />
         <Var Name="Position" value="0.000;0.000;0.000" />
         <Var Name="Rotation" value="0.000;0.000;0.000" />
         <Var Name="Scale" value="1.000;1.000;1.000" />
+        <Var Name="Body type" value="Static" />
         <Components />
         <ZobObject Guid="4004658964">
             <Var Name="Name" value="Light_5" />
-            <Var Name="Position" value="-22.922;9.988;2.775" />
-            <Var Name="Rotation" value="89.967;0.000;0.000" />
+            <Var Name="Position" value="-22.918;9.984;2.771" />
+            <Var Name="Rotation" value="89.962;0.000;0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
+            <Var Name="Body type" value="Static" />
             <Var Name="Color" value="255;255;0;0" />
             <Var Name="Intensity" value="2.000" />
             <Var Name="Distance" value="30.000" />
@@ -456,9 +472,10 @@
         </ZobObject>
         <ZobObject Guid="4004272706">
             <Var Name="Name" value="Light_4" />
-            <Var Name="Position" value="-39.986;9.988;2.988" />
-            <Var Name="Rotation" value="89.993;0.000;0.000" />
+            <Var Name="Position" value="-39.982;9.984;2.984" />
+            <Var Name="Rotation" value="89.989;0.000;0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
+            <Var Name="Body type" value="Static" />
             <Var Name="Color" value="255;0;255;0" />
             <Var Name="Intensity" value="2.000" />
             <Var Name="Distance" value="30.000" />
@@ -469,9 +486,10 @@
         </ZobObject>
         <ZobObject Guid="4004231746">
             <Var Name="Name" value="Light_3" />
-            <Var Name="Position" value="-9.988;9.988;8.988" />
-            <Var Name="Rotation" value="89.993;0.000;0.000" />
+            <Var Name="Position" value="-9.984;9.984;8.984" />
+            <Var Name="Rotation" value="89.989;0.000;0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
+            <Var Name="Body type" value="Static" />
             <Var Name="Color" value="255;0;128;255" />
             <Var Name="Intensity" value="2.000" />
             <Var Name="Distance" value="30.000" />
@@ -482,9 +500,10 @@
         </ZobObject>
         <ZobObject Guid="4004238361">
             <Var Name="Name" value="Light_2" />
-            <Var Name="Position" value="4.988;9.988;7.988" />
-            <Var Name="Rotation" value="89.993;0.000;0.000" />
+            <Var Name="Position" value="4.984;9.984;7.984" />
+            <Var Name="Rotation" value="89.989;0.000;0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
+            <Var Name="Body type" value="Static" />
             <Var Name="Color" value="255;0;255;0" />
             <Var Name="Intensity" value="2.000" />
             <Var Name="Distance" value="30.000" />
@@ -499,12 +518,14 @@
         <Var Name="Position" value="0.000;0.000;0.000" />
         <Var Name="Rotation" value="0.000;0.000;0.000" />
         <Var Name="Scale" value="1.000;1.000;1.000" />
+        <Var Name="Body type" value="Static" />
         <Components />
         <ZobObject Guid="4002976451">
             <Var Name="Name" value="road01" />
             <Var Name="Position" value="0.000;0.000;0.000" />
             <Var Name="Rotation" value="0.000;0.000;0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
+            <Var Name="Body type" value="Static" />
             <Components>
                 <Component Type="Mesh" Guid="2007188743">
                     <Var Name="File" value="road_01;/;road_block_01.obj;0" />
@@ -520,6 +541,7 @@
             <Var Name="Position" value="0.000;0.000;0.000" />
             <Var Name="Rotation" value="0.000;0.000;0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
+            <Var Name="Body type" value="Static" />
             <Components>
                 <Component Type="Mesh" Guid="2007587327">
                     <Var Name="File" value="road_02;/;road_block_02.obj;0" />
@@ -535,6 +557,7 @@
             <Var Name="Position" value="0.000;0.000;0.000" />
             <Var Name="Rotation" value="0.000;0.000;0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
+            <Var Name="Body type" value="Static" />
             <Components>
                 <Component Type="Mesh" Guid="2007901801">
                     <Var Name="File" value="road_03;/;road_block_03.obj;0" />
@@ -550,6 +573,7 @@
             <Var Name="Position" value="0.000;0.000;0.000" />
             <Var Name="Rotation" value="0.000;0.000;0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
+            <Var Name="Body type" value="Static" />
             <Components>
                 <Component Type="Mesh" Guid="2007022433">
                     <Var Name="File" value="road_04;/;road_block_04.obj;0" />
@@ -565,6 +589,7 @@
             <Var Name="Position" value="0.000;0.000;0.000" />
             <Var Name="Rotation" value="0.000;0.000;0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
+            <Var Name="Body type" value="Static" />
             <Components>
                 <Component Type="Mesh" Guid="2007373014">
                     <Var Name="File" value="road_05;/;road_block_05.obj;0" />
@@ -580,6 +605,7 @@
             <Var Name="Position" value="0.000;0.000;0.000" />
             <Var Name="Rotation" value="0.000;0.000;0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
+            <Var Name="Body type" value="Static" />
             <Components>
                 <Component Type="Mesh" Guid="2007807682">
                     <Var Name="File" value="road_07;/;road_block_07.obj;0" />
@@ -595,6 +621,7 @@
             <Var Name="Position" value="0.000;0.000;0.000" />
             <Var Name="Rotation" value="0.000;0.000;0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
+            <Var Name="Body type" value="Static" />
             <Components>
                 <Component Type="Mesh" Guid="2007148202">
                     <Var Name="File" value="road_08;/;road_block_08.obj;0" />
@@ -610,6 +637,7 @@
             <Var Name="Position" value="0.000;0.000;0.000" />
             <Var Name="Rotation" value="0.000;0.000;0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
+            <Var Name="Body type" value="Static" />
             <Components>
                 <Component Type="Mesh" Guid="2007188407">
                     <Var Name="File" value="road_06;/;road_block_06.obj;0" />
@@ -626,15 +654,17 @@
         <Var Name="Position" value="0.000;0.000;0.000" />
         <Var Name="Rotation" value="0.000;0.000;0.000" />
         <Var Name="Scale" value="1.000;1.000;1.000" />
+        <Var Name="Body type" value="Static" />
         <Components />
         <ZobObject Guid="4002036655">
             <Var Name="Name" value="BodyTypeBall" />
-            <Var Name="Position" value="-2.929;15.338;6.327" />
-            <Var Name="Rotation" value="0.000;0.000;0.000" />
+            <Var Name="Position" value="-56.249;-3.228;1.145" />
+            <Var Name="Rotation" value="38.775;-79.060;-48.611" />
             <Var Name="Scale" value="0.050;0.050;0.050" />
+            <Var Name="Body type" value="Dynamic" />
             <Components>
                 <Component Type="PhysicSphere" Guid="2007032881">
-                    <Var Name="Layers" value="0" />
+                    <Var Name="Layers" value="4" />
                     <Var Name="Trigger" value="True" />
                     <Var Name="Local position" value="0.000;0.000;0.000" />
                     <Var Name="Scale with object" value="True" />
@@ -649,18 +679,43 @@
                 </Component>
             </Components>
         </ZobObject>
+        <ZobObject Guid="4002214304">
+            <Var Name="Name" value="free_car_1.obj" />
+            <Var Name="Position" value="-22.933;-1.400;9.327" />
+            <Var Name="Rotation" value="-178.677;-70.753;-178.722" />
+            <Var Name="Scale" value="1.000;1.000;1.000" />
+            <Var Name="Body type" value="Dynamic" />
+            <Components>
+                <Component Type="Mesh" Guid="2007722892">
+                    <Var Name="File" value="Free_Car_1_Obj;_cars/Free_Car_1_Obj/;free_car_1.obj;0" />
+                    <Var Name="Cull mode" value="Clockwise" />
+                    <Var Name="Lighting" value="Phong" />
+                    <Var Name="ZBuffered" value="True" />
+                    <Var Name="Transparent" value="False" />
+                </Component>
+                <Component Type="PhysicBox" Guid="2007733269">
+                    <Var Name="Layers" value="4" />
+                    <Var Name="Trigger" value="True" />
+                    <Var Name="Local position" value="0.000;1.000;0.000" />
+                    <Var Name="Scale with object" value="True" />
+                    <Var Name="Height" value="1.000;1.000;2.000" />
+                </Component>
+            </Components>
+        </ZobObject>
     </ZobObject>
     <ZobObject Guid="4002279056">
         <Var Name="Name" value="autres_spots" />
         <Var Name="Position" value="0.000;0.000;0.000" />
         <Var Name="Rotation" value="0.000;0.000;0.000" />
         <Var Name="Scale" value="1.000;1.000;1.000" />
+        <Var Name="Body type" value="Static" />
         <Components />
         <ZobObject Guid="4004449282">
             <Var Name="Name" value="Light_7" />
-            <Var Name="Position" value="160.991;8.994;50.992" />
-            <Var Name="Rotation" value="89.985;0.000;0.000" />
+            <Var Name="Position" value="160.987;8.990;50.987" />
+            <Var Name="Rotation" value="89.981;0.000;0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
+            <Var Name="Body type" value="Static" />
             <Var Name="Color" value="255;255;255;0" />
             <Var Name="Intensity" value="5.000" />
             <Var Name="Distance" value="20.000" />
@@ -671,9 +726,10 @@
         </ZobObject>
         <ZobObject Guid="4004852728">
             <Var Name="Name" value="Light_8" />
-            <Var Name="Position" value="149.991;7.994;35.992" />
-            <Var Name="Rotation" value="89.972;0.000;0.000" />
+            <Var Name="Position" value="149.987;7.990;35.987" />
+            <Var Name="Rotation" value="89.967;0.000;0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
+            <Var Name="Body type" value="Static" />
             <Var Name="Color" value="255;255;255;0" />
             <Var Name="Intensity" value="5.000" />
             <Var Name="Distance" value="20.000" />
@@ -684,9 +740,10 @@
         </ZobObject>
         <ZobObject Guid="4004138209">
             <Var Name="Name" value="Light_9" />
-            <Var Name="Position" value="159.991;8.994;25.992" />
-            <Var Name="Rotation" value="89.984;0.000;0.000" />
+            <Var Name="Position" value="159.987;8.990;25.988" />
+            <Var Name="Rotation" value="89.980;0.000;0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
+            <Var Name="Body type" value="Static" />
             <Var Name="Color" value="255;255;255;0" />
             <Var Name="Intensity" value="5.000" />
             <Var Name="Distance" value="20.000" />
@@ -698,9 +755,10 @@
     </ZobObject>
     <ZobObject Guid="4002040134">
         <Var Name="Name" value="water.obj" />
-        <Var Name="Position" value="-199.986;-9.988;199.986" />
+        <Var Name="Position" value="-199.982;-9.984;199.982" />
         <Var Name="Rotation" value="0.000;0.000;0.000" />
         <Var Name="Scale" value="4.000;1.000;4.000" />
+        <Var Name="Body type" value="Static" />
         <Components>
             <Component Type="Mesh" Guid="2007418097">
                 <Var Name="File" value="water;/;water.obj;0" />
@@ -713,9 +771,10 @@
     </ZobObject>
     <ZobObject Guid="4002835971">
         <Var Name="Name" value="plane.obj" />
-        <Var Name="Position" value="0.000;-4.988;-2.597" />
+        <Var Name="Position" value="0.000;-4.984;-2.593" />
         <Var Name="Rotation" value="0.000;0.000;0.000" />
         <Var Name="Scale" value="5.000;5.000;4.000" />
+        <Var Name="Body type" value="Static" />
         <Components>
             <Component Type="Mesh" Guid="2007401232">
                 <Var Name="File" value="plane;/;plane.obj;0" />
@@ -728,9 +787,10 @@
     </ZobObject>
     <ZobObject Guid="4002509571">
         <Var Name="Name" value="boat" />
-        <Var Name="Position" value="0.000;-4.244;8.761" />
+        <Var Name="Position" value="0.000;-4.240;8.757" />
         <Var Name="Rotation" value="0.000;0.000;0.000" />
         <Var Name="Scale" value="1.000;1.000;1.000" />
+        <Var Name="Body type" value="Static" />
         <Components>
             <Component Type="Mesh" Guid="2007989021">
                 <Var Name="File" value="boat;/;boat.obj;0" />
@@ -746,6 +806,7 @@
         <Var Name="Position" value="0.000;0.000;0.000" />
         <Var Name="Rotation" value="0.000;0.000;0.000" />
         <Var Name="Scale" value="1.000;1.000;1.000" />
+        <Var Name="Body type" value="Static" />
         <Components>
             <Component Type="Mesh" Guid="2007982066">
                 <Var Name="File" value="skybox;/;skybox.obj;0" />
@@ -761,12 +822,14 @@
         <Var Name="Position" value="0.000;0.000;0.000" />
         <Var Name="Rotation" value="0.000;0.000;0.000" />
         <Var Name="Scale" value="1.000;1.000;1.000" />
+        <Var Name="Body type" value="Static" />
         <Components />
         <ZobObject Guid="4002914922">
             <Var Name="Name" value="tree.png" />
-            <Var Name="Position" value="-5.517;4.993;-2.437" />
+            <Var Name="Position" value="-5.513;4.989;-2.433" />
             <Var Name="Rotation" value="0.000;0.000;0.000" />
             <Var Name="Scale" value="10.000;15.000;10.000" />
+            <Var Name="Body type" value="Static" />
             <Components>
                 <Component Type="Sprite" Guid="2007552896">
                     <Var Name="File" value="tree.png;/;tree.png;0" />
@@ -778,9 +841,10 @@
         </ZobObject>
         <ZobObject Guid="4002052194">
             <Var Name="Name" value="tree.png" />
-            <Var Name="Position" value="-14.047;4.993;-3.724" />
+            <Var Name="Position" value="-14.043;4.989;-3.720" />
             <Var Name="Rotation" value="0.000;0.000;0.000" />
             <Var Name="Scale" value="10.000;15.000;10.000" />
+            <Var Name="Body type" value="Static" />
             <Components>
                 <Component Type="Sprite" Guid="2007693938">
                     <Var Name="File" value="tree.png;/;tree.png;0" />
@@ -792,9 +856,10 @@
         </ZobObject>
         <ZobObject Guid="4002967997">
             <Var Name="Name" value="tree.png" />
-            <Var Name="Position" value="-3.121;4.993;20.888" />
+            <Var Name="Position" value="-3.117;4.989;20.884" />
             <Var Name="Rotation" value="0.000;0.000;0.000" />
             <Var Name="Scale" value="10.000;15.000;10.000" />
+            <Var Name="Body type" value="Static" />
             <Components>
                 <Component Type="Sprite" Guid="2007566753">
                     <Var Name="File" value="tree.png;/;tree.png;0" />
@@ -810,12 +875,14 @@
         <Var Name="Position" value="0.000;0.000;0.000" />
         <Var Name="Rotation" value="0.000;0.000;0.000" />
         <Var Name="Scale" value="1.000;1.000;1.000" />
+        <Var Name="Body type" value="Static" />
         <Components />
         <ZobObject Guid="4002470398">
             <Var Name="Name" value="tachometer" />
             <Var Name="Position" value="0.000;0.000;0.000" />
             <Var Name="Rotation" value="0.000;0.000;0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
+            <Var Name="Body type" value="Static" />
             <Components>
                 <Component Type="Image" Guid="2007054381">
                     <Var Name="Visible" value="True" />

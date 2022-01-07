@@ -20,8 +20,8 @@ public :
 	void ReInit();
 	void StartUpdatePhysic(float dt);
 	float WaitForUpdatePhysicEnd();
-	CollisionBody* CreateCollisionBody(const ZobVector3* position, const ZobVector3* orientation);
-	void DestroyCollisionBody(CollisionBody* rb);
+	RigidBody* CreateCollisionBody(const ZobVector3* position, const ZobVector3* orientation);
+	void DestroyCollisionBody(RigidBody* rb);
 	PhysicsCommon* GetPhysicsCommon() { return &m_physicsCommon; }
 	const PhysicsWorld* GetWorld() const { return m_world; }
 	void ResetAccumulator() { m_accumulator = 0; }

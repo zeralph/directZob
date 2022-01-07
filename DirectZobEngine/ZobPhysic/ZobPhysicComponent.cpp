@@ -271,11 +271,12 @@ void ZobPhysicComponent::WorldOrientationToAxis(ZobVector3& left, ZobVector3& up
 void ZobPhysicComponent::Update()
 {
 	assert(m_collisionBody);
+	
 	bool bPhysicRunning = DirectZob::GetInstance()->IsPhysicPlaying();
 	if (m_collisionBody)
 	{
 		m_collisionBody->setIsActive(true);
-		if(false)//m_bodyType == ZobObject::eBodyType_dynamic)
+		if(m_collisionBody->getType() == BodyType::DYNAMIC && bPhysicRunning)
 		{
 			SetWorldTransform (m_collisionBody->getTransform());
 		}

@@ -82,12 +82,15 @@ public :
 		if (it != m_entityMap.end())
 		{
 			ZobEntity* ze = it->second;
+			return dynamic_cast<T*>(ze);
+			/*
 			std::string s = typeid(T).name();
 			s = s.substr(5, s.length() - 5);
 			if (s == ze->m_class || s == " ZobEntity")
 			{
 				return static_cast<T*>(ze);
 			}
+			*/
 			/*
 			ZobSubType st = ZobEntity::GetSubType(it->first);
 			const char* type = typeid(T).name();

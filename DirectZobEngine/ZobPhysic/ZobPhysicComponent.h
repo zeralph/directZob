@@ -96,13 +96,15 @@ public:
 	ZobVector3*							GetWorldRotationAddress() { return &m_editorWorldRotation; }
 	ZobVector3*							GetWorldScaleAddress() { return &m_editorWorldScale; }
 	void								WorldOrientationToAxis(ZobVector3& left, ZobVector3& up, ZobVector3& forward) const;
+	void								SetBodyType(ZobObject::eRigidBodyType t) { m_collisionBody->setType((BodyType)t); }
+	ZobObject::eRigidBodyType			GetBodyType() { return (ZobObject::eRigidBodyType)m_collisionBody->getType(); }
 private:
 
 	float								ClampAngle(float a) const;
 	Transform							GetParentWorldTransform() const;
 	Vector3								GetParentWorldScale() const;
 	const ZobObject*					m_zobObject;
-	CollisionBody*						m_collisionBody;
+	RigidBody*							m_collisionBody;
 	Collider*							m_collider;	
 	Transform							m_savedTransform;
 	Transform							m_localTransform;
@@ -112,7 +114,6 @@ private:
 	ZobVector3							m_editorLocalRotation;
 	ZobVector3							m_editorLocalScale;
 	bool								m_scaleWithObject;
-
 	//editor purpose only
 	ZobVector3							m_editorWorldPosition;
 	ZobVector3							m_editorWorldRotation;

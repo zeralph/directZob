@@ -38,9 +38,10 @@ class ZobComponentPhysicShape : public ZobComponent
 
 	protected:	
 								ZobComponentPhysicShape(ZobObject* zobObject);
+		static void				OnVariablesChanged(zobId id);
 		void					AddColliderInternal(CollisionShape* c);
 		virtual void			RemoveCollider();
-
+		
 		Collider* m_collider;
 		int m_layers;
 		bool m_isTrigger;

@@ -589,6 +589,11 @@ void ZobControlFloat::OnValueChanged(Object^ sender, EventArgs^ e)
 				t->Text = (*f).ToString();
 			}
 		}
+		if (_w->callback)
+		{
+			zobId id = _w->id;
+			((ZobVariablesExposer::wrapperCallback)_w->callback)(id);
+		}
 	}
 }
 

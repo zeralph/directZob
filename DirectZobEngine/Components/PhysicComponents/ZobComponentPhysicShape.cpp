@@ -1,4 +1,5 @@
 #include "ZobComponentPhysicShape.h"
+#include "Types.h"
 #include "../../DirectZob.h"
 #include "../../ZobPhysic/ZobPhysicsEngine.h"
 
@@ -11,11 +12,11 @@ ZobComponentPhysicShape::ZobComponentPhysicShape(ZobObject* zobObject) : ZobComp
 {
 	SET_CLASS_AND_NAME
 	m_componentType = eComponent_none;
-	m_isInit = false;;
-	m_varExposer->WrapVariable<int>("Layers", &m_layers, NULL, false, true);
-	m_varExposer->WrapVariable<bool>("Trigger", &m_isTrigger, NULL, false, true);
-	m_varExposer->WrapVariable<ZobVector3>("Local position", &m_localPostion, NULL, false, true);
-	m_varExposer->WrapVariable<bool>("Scale with object", &m_bUpdateSize, NULL, false, true);
+	m_isInit = false;
+	m_varExposer->WrapVariable<int>("Layers", &m_layers, &ZobComponentPhysicShape::OnVariablesChanged, false, true);
+	m_varExposer->WrapVariable<bool>("Trigger", &m_isTrigger, ZobComponentPhysicShape::OnVariablesChanged, false, true);
+	m_varExposer->WrapVariable<ZobVector3>("Local position", &m_localPostion, ZobComponentPhysicShape::OnVariablesChanged, false, true);
+	m_varExposer->WrapVariable<bool>("Scale with object", &m_bUpdateSize, ZobComponentPhysicShape::OnVariablesChanged, false, true);
 	m_isTrigger = false;
 	m_collider = NULL;
 	m_layers = 0;
@@ -29,6 +30,24 @@ void ZobComponentPhysicShape::PreUpdate(float dt)
 void ZobComponentPhysicShape::PostUpdate()
 {
 
+}
+
+void ZobComponentPhysicShape::OnVariablesChanged(zobId id)
+{
+	ZobComponentPhysicShape* zc = ZobEntity::GetEntity< ZobComponentPhysicShape>(id);
+	if(zc)
+	{
+		assert(zc->m_collider);
+		zc->m_collider->setCollisionCategoryBits((short)zc->m_layers);
+		zc->m_collider->setIsTrigger(zc->m_isTrigger);
+		Vector3 v = zc->m_collider->getLocalToBodyTransform().getPosition();
+		Transform t = zc->m_collider->getLocalToBodyTransform();
+		v.x = zc->m_localPostion.x;
+		v.y = zc->m_localPostion.y;
+		v.z = zc->m_localPostion.z;
+		t.setPosition(v);
+		zc->m_collider->setLocalToBodyTransform(t);
+	}
 }
 
 void ZobComponentPhysicShape::Init(DirectZobType::sceneLoadingCallback cb)
@@ -52,7 +71,7 @@ void ZobComponentPhysicShape::Init(DirectZobType::sceneLoadingCallback cb)
 	v.y = m_localPostion.y;
 	v.z = m_localPostion.z;
 	t.setPosition(v);
-//	m_collider->setLocalToBodyTransform(t);
+	m_collider->setLocalToBodyTransform(t);
 	m_isInit = true;
 }
 
