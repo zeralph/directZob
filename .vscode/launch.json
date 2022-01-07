@@ -83,7 +83,7 @@
             "program": "${workspaceFolder}/DirectZobExe",
             "args": [ 
                 "--scene",
-                "./resources/menu.dzs",
+                "./resources/_carTest.dzs",
                 "--width",
                 "640",
                 "--height",
