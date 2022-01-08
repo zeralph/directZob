@@ -13,7 +13,7 @@
             "args": [ 
                 "--bench",
                 "--scene",
-                "./resources/menu.dzs",
+                "./resources/_menu.dzs",
                 "--width",
                 "640",
                 "--height",

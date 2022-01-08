@@ -658,7 +658,7 @@
         <Components />
         <ZobObject Guid="4002036655">
             <Var Name="Name" value="BodyTypeBall" />
-            <Var Name="Position" value="-56.249;-3.228;1.145" />
+            <Var Name="Position" value="-56.249;10.228;1.145" />
             <Var Name="Rotation" value="38.775;-79.060;-48.611" />
             <Var Name="Scale" value="0.050;0.050;0.050" />
             <Var Name="Body type" value="Dynamic" />
@@ -667,7 +667,7 @@
                     <Var Name="Layers" value="4" />
                     <Var Name="Trigger" value="True" />
                     <Var Name="Local position" value="0.000;0.000;0.000" />
-                    <Var Name="Scale with object" value="True" />
+                    <Var Name="Scale with object" value="False" />
                     <Var Name="Radius" value="1.000" />
                 </Component>
                 <Component Type="Mesh" Guid="2007610499">
@@ -681,7 +681,7 @@
         </ZobObject>
         <ZobObject Guid="4002214304">
             <Var Name="Name" value="free_car_1.obj" />
-            <Var Name="Position" value="-22.933;-1.400;9.327" />
+            <Var Name="Position" value="-22.933;14.00;9.327" />
             <Var Name="Rotation" value="-178.677;-70.753;-178.722" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
             <Var Name="Body type" value="Dynamic" />
@@ -697,7 +697,7 @@
                     <Var Name="Layers" value="4" />
                     <Var Name="Trigger" value="True" />
                     <Var Name="Local position" value="0.000;1.000;0.000" />
-                    <Var Name="Scale with object" value="True" />
+                    <Var Name="Scale with object" value="False" />
                     <Var Name="Height" value="1.000;1.000;2.000" />
                 </Component>
             </Components>
