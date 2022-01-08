@@ -74,7 +74,7 @@ ZobPhysicComponent* ZobPhysicsEngine::GetZobComponentFromCollisionBody(const Col
     std::vector<ZobPhysicComponent*>::const_iterator iter;
     for (iter = m_worldCollisionBodies.begin(); iter != m_worldCollisionBodies.end(); iter++)
     {
-        CollisionBody* t = (*iter)->GetCollisionBody();
+        CollisionBody* t = static_cast<CollisionBody*>((*iter)->GetRigidBody());
         if (t == rb)
         {
             return *iter;
@@ -141,7 +141,7 @@ void ZobPhysicsEngine::Update(float dt)
 	m_timeStep = (float)(clock() - m_timeStep) / CLOCKS_PER_SEC;
 }
 
-RigidBody* ZobPhysicsEngine::CreateCollisionBody(const ZobVector3* position, const ZobVector3* orientation)
+RigidBody* ZobPhysicsEngine::CreateRigidBody(const ZobVector3* position, const ZobVector3* orientation)
 {
     Vector3 p(position->x, position->y, position->z);
     Quaternion o = Quaternion::identity();
@@ -153,7 +153,7 @@ RigidBody* ZobPhysicsEngine::CreateCollisionBody(const ZobVector3* position, con
     return r;
 }
 
-void ZobPhysicsEngine::DestroyCollisionBody(RigidBody* rb)
+void ZobPhysicsEngine::DestroyRigidBody(RigidBody* rb)
 {
     m_world->destroyRigidBody(rb);
 }

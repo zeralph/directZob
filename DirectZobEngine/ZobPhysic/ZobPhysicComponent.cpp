@@ -9,11 +9,9 @@ ZobPhysicComponent::ZobPhysicComponent(ZobObject* z)
 	m_zobObject = z;
 	BodyType rigidBodyType = rp3d::BodyType::STATIC;
 	bool rigidBodyActive = false;
-	m_collider = NULL;
-	m_collisionBody = DirectZob::GetInstance()->GetPhysicsEngine()->CreateCollisionBody(&ZobVector3::Vector3Zero, &ZobVector3::Vector3Zero);;
-	m_collisionBody->setIsActive(true);
-//	m_rigidBody->setIsAllowedToSleep(false);
-	m_collider = NULL;
+	//m_collider = NULL;
+	m_rigidBody = DirectZob::GetInstance()->GetPhysicsEngine()->CreateRigidBody(&ZobVector3::Vector3Zero, &ZobVector3::Vector3Zero);;
+	m_rigidBody->setIsActive(true);
 	m_lastCollision.Reset();
 	m_localTransform.setToIdentity();
 	DirectZob::GetInstance()->GetPhysicsEngine()->AddBody(this);
@@ -24,8 +22,8 @@ ZobPhysicComponent::ZobPhysicComponent(ZobObject* z)
 ZobPhysicComponent::~ZobPhysicComponent()
 {
 	DirectZob::GetInstance()->GetPhysicsEngine()->RemoveBody(this);
-	DirectZob::GetInstance()->GetPhysicsEngine()->DestroyCollisionBody(m_collisionBody);
-	m_collisionBody = NULL;
+	DirectZob::GetInstance()->GetPhysicsEngine()->DestroyRigidBody(m_rigidBody);
+	m_rigidBody = NULL;
 }
 
 void ZobPhysicComponent::Init()
@@ -270,20 +268,20 @@ void ZobPhysicComponent::WorldOrientationToAxis(ZobVector3& left, ZobVector3& up
 
 void ZobPhysicComponent::Update()
 {
-	assert(m_collisionBody);
+	assert(m_rigidBody);
 	
 	bool bPhysicRunning = DirectZob::GetInstance()->IsPhysicPlaying();
-	if (m_collisionBody)
+	if (m_rigidBody)
 	{
-		m_collisionBody->setIsActive(true);
-		if(m_collisionBody->getType() == BodyType::DYNAMIC && bPhysicRunning)
+		m_rigidBody->setIsActive(true);
+		if(m_rigidBody->getType() == BodyType::DYNAMIC && bPhysicRunning)
 		{
-			SetWorldTransform (m_collisionBody->getTransform());
+			SetWorldTransform (m_rigidBody->getTransform());
 		}
 		else
 		{
 			Transform t = GetWorldTransform();
-			m_collisionBody->setTransform(t);
+			m_rigidBody->setTransform(t);
 			m_editorLocalRotation = GetLocalOrientation();
 			m_editorLocalPosition.x = m_localTransform.getPosition().x;
 			m_editorLocalPosition.y = m_localTransform.getPosition().y;
@@ -349,21 +347,21 @@ ZobMatrix4x4 ZobPhysicComponent::GetRotationMatrix() const
 void ZobPhysicComponent::SaveTransform()
 {
 
-	m_savedTransform = m_collisionBody->getTransform();
+	m_savedTransform = m_rigidBody->getTransform();
 
 }
 
 void ZobPhysicComponent::RestoreTransform()
 {
-	m_collisionBody->setTransform(m_savedTransform);
+	m_rigidBody->setTransform(m_savedTransform);
 }
 
 void ZobPhysicComponent::ResetPhysic()
 {
-	if(m_collisionBody->isActive())
+	if(m_rigidBody->isActive())
 	{
-		m_collisionBody->setIsActive(false);
-		m_collisionBody->setIsActive(true);
+		m_rigidBody->setIsActive(false);
+		m_rigidBody->setIsActive(true);
 	}
 }
 

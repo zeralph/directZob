@@ -131,14 +131,14 @@ void ZobComponentPhysicShape::AddColliderInternal(CollisionShape* c)
 {
 	assert(m_collider == NULL);
 	Transform t = Transform::identity();
-	m_collider = m_zobObject->GetPhysicComponentNoConst()->GetCollisionBody()->addCollider(c, t);
+	m_collider = m_zobObject->GetPhysicComponentNoConst()->GetRigidBody()->addCollider(c, t);
 }
 
 void ZobComponentPhysicShape::RemoveCollider()
 {
 	if (m_collider)
 	{
-		m_zobObject->GetPhysicComponentNoConst()->GetCollisionBody()->removeCollider(m_collider);
+		m_zobObject->GetPhysicComponentNoConst()->GetRigidBody()->removeCollider(m_collider);
 		m_collider = NULL;
 	}
 }

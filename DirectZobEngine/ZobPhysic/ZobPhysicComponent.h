@@ -85,7 +85,7 @@ public:
 	void								LookAt(const ZobVector3* target);
 	void								LookAt(const ZobVector3* forward, const ZobVector3* left, const ZobVector3* up);
 	static Quaternion					QuaternionFromAxisAngle(Vector3* axis, float angle);
-	CollisionBody*						GetCollisionBody() { return m_collisionBody; }
+	RigidBody*							GetRigidBody() { return m_rigidBody; }
 	void								OnCollide(collision coll);
 	//Serialization & editor
 	collision*							GetLastCollision() { return &m_lastCollision; }
@@ -96,16 +96,16 @@ public:
 	ZobVector3*							GetWorldRotationAddress() { return &m_editorWorldRotation; }
 	ZobVector3*							GetWorldScaleAddress() { return &m_editorWorldScale; }
 	void								WorldOrientationToAxis(ZobVector3& left, ZobVector3& up, ZobVector3& forward) const;
-	void								SetBodyType(ZobObject::eRigidBodyType t) { m_collisionBody->setType((BodyType)t); }
-	ZobObject::eRigidBodyType			GetBodyType() { return (ZobObject::eRigidBodyType)m_collisionBody->getType(); }
+	void								SetBodyType(ZobObject::eRigidBodyType t) { m_rigidBody->setType((BodyType)t); }
+	ZobObject::eRigidBodyType			GetBodyType() { return (ZobObject::eRigidBodyType)m_rigidBody->getType(); }
 private:
 
 	float								ClampAngle(float a) const;
 	Transform							GetParentWorldTransform() const;
 	Vector3								GetParentWorldScale() const;
 	const ZobObject*					m_zobObject;
-	RigidBody*							m_collisionBody;
-	Collider*							m_collider;	
+	RigidBody*							m_rigidBody;
+	//Collider*							m_collider;	
 	Transform							m_savedTransform;
 	Transform							m_localTransform;
 	collision							m_lastCollision;

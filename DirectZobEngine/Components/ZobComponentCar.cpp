@@ -404,7 +404,7 @@ void ZobComponentCar::UpdateWheels(float dt)
 void ZobComponentCar::CheckGroundCollisions()
 {
 	DirectZob* directZob = DirectZob::GetInstance();
-	CollisionBody* rb = m_zobObject->m_physicComponent->GetCollisionBody();
+	RigidBody* rb = m_zobObject->m_physicComponent->GetRigidBody();
 	Vector3 p = Vector3(rb->getTransform().getPosition());
 	Vector3 e = Vector3(rb->getTransform().getPosition());
 	p.y += 1000.0f;
