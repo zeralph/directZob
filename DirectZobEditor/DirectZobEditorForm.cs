@@ -72,6 +72,7 @@ namespace DirectZobEditor
 
         private string[] m_events;
         private eplayMode m_playMode = eplayMode.ePlayMode_stop;
+        private eplayMode m_nextPlayMode = eplayMode.ePlayMode_stop;
 
         public CLI.engineCallback onSceneLoadedCallback;
         public CLI.sceneLoadingCallback onSceneLoadingCallback;
@@ -567,64 +568,64 @@ namespace DirectZobEditor
 
         private void btnPlay_Click(object sender, EventArgs e)
         {
-            if (m_playMode != eplayMode.ePlayMode_play)
-            {
-                //save objects position
-                if (m_playMode == eplayMode.ePlayMode_stop)
-                {
- //                   m_zobObjectList.SaveTransforms();
-                }
-                m_playMode = eplayMode.ePlayMode_play;
-                m_directZobWrapper.StartPhysic();
-            }
-            InformEngineStatus("PLAYING");
+            m_nextPlayMode = eplayMode.ePlayMode_play;
         }
 
         private void btnPause_Click(object sender, EventArgs e)
         {
-            if (m_playMode == eplayMode.ePlayMode_play)
-            {
-                m_directZobWrapper.StopPhysic(false);
-                m_playMode = eplayMode.ePlayMode_pause;
-                InformEngineStatus("PAUSED");
-            }
-            else if (m_playMode == eplayMode.ePlayMode_pause)
-            {
-                m_directZobWrapper.StartPhysic();
-                m_playMode = eplayMode.ePlayMode_play;
-                InformEngineStatus("PLAYING");
-            }
+            m_nextPlayMode = eplayMode.ePlayMode_pause;
         }
 
         private void btnStop_Click(object sender, EventArgs e)
         {
-            if (m_playMode != eplayMode.ePlayMode_stop)
-            {
-                m_directZobWrapper.StopPhysic(true);
-                if (m_playMode != eplayMode.ePlayMode_stop)
-                {
- //                   m_zobObjectList.RestoreTransforms();
-                }
-                m_playMode = eplayMode.ePlayMode_stop;
-                DirectZobEditorForm.SceneUpdateEventArg ev = new DirectZobEditorForm.SceneUpdateEventArg();
-                ev.type = DirectZobEditorForm.SceneUpdateType.stopPhysics;
-                PropagateSceneUpdateEvent(ev);
-            }
-            InformEngineStatus("STOPPED");
+            m_nextPlayMode = eplayMode.ePlayMode_stop;
         }
+
+        private void UpdatePlayStatus()
+        {
+            if(m_nextPlayMode != m_playMode)
+            {
+                if(m_nextPlayMode == eplayMode.ePlayMode_pause)
+                {
+                    if (m_playMode == eplayMode.ePlayMode_play)
+                    {
+                        m_directZobWrapper.StopPhysic(false);
+                        m_playMode = eplayMode.ePlayMode_pause;
+                        InformEngineStatus("PAUSED");
+                    }
+                    else if (m_playMode == eplayMode.ePlayMode_pause)
+                    {
+                        m_directZobWrapper.StartPhysic();
+                        m_playMode = eplayMode.ePlayMode_play;
+                        InformEngineStatus("PLAYING");
+                    }
+                }
+                else if(m_nextPlayMode == eplayMode.ePlayMode_stop)
+                {
+                    m_directZobWrapper.StopPhysic(true);
+                    m_zobObjectManagerWrapper.RestoreTransforms();
+                    DirectZobEditorForm.SceneUpdateEventArg ev = new DirectZobEditorForm.SceneUpdateEventArg();
+                    ev.type = DirectZobEditorForm.SceneUpdateType.stopPhysics;
+                    PropagateSceneUpdateEvent(ev);
+                    InformEngineStatus("STOPPED");
+                }
+                else if(m_nextPlayMode == eplayMode.ePlayMode_play)
+                {
+                    m_zobObjectManagerWrapper.SaveTransforms();
+                    m_directZobWrapper.StartPhysic();
+                    InformEngineStatus("PLAYING");
+                }
+                m_playMode= m_nextPlayMode;
+            }
+        }
+
         private void RunEngineThread()
         {
             while (m_running)
             {
-                //m_directZobWrapper.EditorInputsUpdate(16, m_engineWindowHandle);
                 m_directZobWrapper.RunAFrame();
                 UpdateAfterEngine();
-                /*
-                m_engineWindow.Invoke(new Action(() =>
-                { 
-                    m_directZobWrapper.EditorInputsUpdate(100, m_engineWindowHandle);
-                }));
-                */
+                UpdatePlayStatus();
             }
             m_mainForm.Invoke(new Action(() =>
             {

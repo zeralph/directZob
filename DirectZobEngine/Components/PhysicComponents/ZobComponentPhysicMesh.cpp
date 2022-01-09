@@ -22,7 +22,7 @@ void ZobComponentPhysicMesh::RemoveCollider()
 {
 	ZobComponentPhysicShape::RemoveCollider();
 	PhysicsCommon* pc = DirectZob::GetInstance()->GetPhysicsEngine()->GetPhysicsCommon();
-	pc->destroyConcaveMeshShape(m_convexMeshShape);
+	pc->destroyConcaveMeshShape(m_concaveMeshShape);
 	pc->destroyTriangleMesh(m_triangleMesh);
 	delete m_triangleVertexArray;
 	m_mesh = NULL;
@@ -76,8 +76,8 @@ bool ZobComponentPhysicMesh::LoadMeshInternal()
 
 		m_triangleMesh = pc->createTriangleMesh();
 		m_triangleMesh->addSubpart(m_triangleVertexArray);
-		m_convexMeshShape = pc->createConcaveMeshShape(m_triangleMesh);
-		AddColliderInternal(m_convexMeshShape);
+		m_concaveMeshShape = pc->createConcaveMeshShape(m_triangleMesh);
+		AddColliderInternal(m_concaveMeshShape);
 		return true;
 	}
 	else

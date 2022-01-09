@@ -30,6 +30,6 @@ class ZobComponentPhysicMesh : public ZobComponentPhysicShape
 		ZobFilePath								m_convexMeshPath;
 		reactphysics3d::TriangleVertexArray*	m_triangleVertexArray;
 		reactphysics3d::TriangleMesh*			m_triangleMesh;
-		reactphysics3d::ConcaveMeshShape*		m_convexMeshShape;
+		reactphysics3d::ConcaveMeshShape*		m_concaveMeshShape;
 
 };

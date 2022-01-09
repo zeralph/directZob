@@ -347,13 +347,14 @@ ZobMatrix4x4 ZobPhysicComponent::GetRotationMatrix() const
 void ZobPhysicComponent::SaveTransform()
 {
 
-	m_savedTransform = m_rigidBody->getTransform();
+	m_savedTransform = GetLocalTransform();
 
 }
 
 void ZobPhysicComponent::RestoreTransform()
 {
-	m_rigidBody->setTransform(m_savedTransform);
+	SetLocalTransform(m_savedTransform);
+	//m_rigidBody->setTransform(m_savedTransform);
 }
 
 void ZobPhysicComponent::ResetPhysic()
