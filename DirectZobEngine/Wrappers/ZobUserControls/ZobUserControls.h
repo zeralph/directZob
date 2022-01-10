@@ -16,7 +16,23 @@ using namespace System::Drawing;
 
 namespace CLI {
 
-	
+	public ref class ZobComboboxItem
+	{
+	public:
+		ZobComboboxItem(int k, String^ v, const ZobVariablesExposer::wrapperData& w)
+		{
+			Key = k;
+			Value = v;
+			_w = &(w);
+		}
+		String^ ToString() override
+		{
+			return Value;
+		}
+		int Key;
+		String^ Value;
+		const ZobVariablesExposer::wrapperData* _w;
+	};
 
 	public ref class ZobTextBox : TextBox
 	{
@@ -176,6 +192,19 @@ namespace CLI {
 	protected:
 		void OnValueChanged(Object^ sender, EventArgs^ e) override;
 		void OnClickColor(Object^ sender, EventArgs^ e);
+		void UpdateControlInternal() override;
+	};
+
+	public ref class ZobControlEnumCombo : ZobControl
+	{
+	public:
+		ZobControlEnumCombo(const ZobVariablesExposer::wrapperData& w);
+		~ZobControlEnumCombo();
+		ZobLabel^ _label;
+		CheckedListBox^ _list;
+		EventHandler^ _event;
+	protected:
+		void OnValueChanged(Object^ sender, EventArgs^ e) override;
 		void UpdateControlInternal() override;
 	};
 

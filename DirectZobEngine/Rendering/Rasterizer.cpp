@@ -180,10 +180,7 @@ void Rasterizer::RenderInternal()
 	for (int i = 0; i < m_nbTriangles; i++)
 	{
 		const Triangle* t = m_triangles[i];
-		//if (t->draw)
-		{
-			DrawTriangle(t);
-		}
+		DrawTriangle(t);
 	}
 	OPTICK_POP();
 	OPTICK_PUSH("Lines");
@@ -544,6 +541,10 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector2* screenCoord, con
 	
 	float zf = m_bufferData->zBuffer[k] == 0.0f ? 10000.0f: m_bufferData->zBuffer[k];
 	float transparency = (t->options->bTransparency) ? 0.5f: 1.0f;
+	if (t->options->bForceRender)
+	{
+		z = m_bufferData->zFar - 0.0001f;
+	}
 	if(z>0 && z < zf)
 	{
 		//m_bufferData->zBuffer[k] = -1.0f;

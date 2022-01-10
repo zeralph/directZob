@@ -377,7 +377,7 @@
             this.materialsToolStripMenuItem.Image = global::DirectZobEditor.Properties.Resources.material;
             this.materialsToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.materialsToolStripMenuItem.Name = "materialsToolStripMenuItem";
-            this.materialsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.materialsToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
             this.materialsToolStripMenuItem.Text = "Materials ...";
             this.materialsToolStripMenuItem.Click += new System.EventHandler(this.materialsToolStripMenuItem_Click);
             // 
@@ -386,7 +386,7 @@
             this.entitiesToolStripMenuItem.Image = global::DirectZobEditor.Properties.Resources._object;
             this.entitiesToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.entitiesToolStripMenuItem.Name = "entitiesToolStripMenuItem";
-            this.entitiesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.entitiesToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
             this.entitiesToolStripMenuItem.Text = "Entities ...";
             this.entitiesToolStripMenuItem.Click += new System.EventHandler(this.entitiesToolStripMenuItem_Click);
             // 

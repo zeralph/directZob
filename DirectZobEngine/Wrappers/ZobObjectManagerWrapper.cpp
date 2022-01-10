@@ -3,8 +3,9 @@
 #include "ZobObjectManagerWrapper.h"
 #include "../DirectZob.h"
 #include "../ZobObjects/ZobObject.h"
-#include "../Components/ZobComponentMesh.h"
-#include "../Components/ZobComponentSprite.h"
+#include "../Components/GraphicComponents/ZobComponentMesh.h"
+#include "../Components/GraphicComponents/ZobComponentSprite.h"
+#include "../Components/GraphicComponents/ZobComponentSkybox.h"
 //#include "../ZobCameraController/ZobCameraController.h"
 
 #define TO_MANAGED_STRING(x) gcnew String(x);

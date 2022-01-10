@@ -12,11 +12,14 @@ ZobPhysicComponent::ZobPhysicComponent(ZobObject* z)
 	//m_collider = NULL;
 	m_rigidBody = DirectZob::GetInstance()->GetPhysicsEngine()->CreateRigidBody(&ZobVector3::Vector3Zero, &ZobVector3::Vector3Zero);;
 	m_rigidBody->setIsActive(true);
+	m_rigidBody->setIsAllowedToSleep(false);
 	m_lastCollision.Reset();
 	m_localTransform.setToIdentity();
 	DirectZob::GetInstance()->GetPhysicsEngine()->AddBody(this);
 	m_editorLocalPosition = ZobVector3(m_localTransform.getPosition().x, m_localTransform.getPosition().y, m_localTransform.getPosition().z);
 	m_editorLocalRotation = GetLocalOrientation();
+	m_mass = 1000;
+	m_active = true;
 }
 
 ZobPhysicComponent::~ZobPhysicComponent()
@@ -38,7 +41,24 @@ void ZobPhysicComponent::Init()
 	m_localScale.y = m_editorLocalScale.y;
 	m_localScale.z = m_editorLocalScale.z;
 	SetWorldTransform( GetParentWorldTransform() * m_localTransform);
+	UpdatePropertiesInternal();
 	Update();
+}
+
+void ZobPhysicComponent::UpdateProperties(zobId zid)
+{
+	ZobObject* z = ZobEntity::GetEntity<ZobObject>(zid);
+	if (z)
+	{
+		z->GetPhysicComponentNoConst()->UpdatePropertiesInternal();
+	}
+}
+
+void ZobPhysicComponent::UpdatePropertiesInternal()
+{
+	m_rigidBody->setMass(m_mass);
+	m_rigidBody->setIsActive(m_active);
+	m_rigidBody->setType((BodyType)m_bodyType);
 }
 
 Vector3 ZobPhysicComponent::GetParentWorldScale() const
@@ -359,10 +379,14 @@ void ZobPhysicComponent::RestoreTransform()
 
 void ZobPhysicComponent::ResetPhysic()
 {
+	m_rigidBody->setLinearDamping(0);
+	m_rigidBody->setAngularDamping(0);
+	m_rigidBody->setLinearVelocity(Vector3::zero());
+	m_rigidBody->setAngularVelocity(Vector3::zero());
 	if(m_rigidBody->isActive())
 	{
-		m_rigidBody->setIsActive(false);
-		m_rigidBody->setIsActive(true);
+		//m_rigidBody->setIsActive(false);
+		//m_rigidBody->setIsActive(true);
 	}
 }
 

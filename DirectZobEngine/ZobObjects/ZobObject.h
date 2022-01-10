@@ -10,8 +10,9 @@
 #include "../Components/ZobComponentFactory.h"
 #include "../Misc/ZobFilePath.h"
 
-#include "../Components/ZobComponentSprite.h"
-#include "../Components/ZobComponentMesh.h"
+#include "../Components/GraphicComponents/ZobComponentSprite.h"
+#include "../Components/GraphicComponents/ZobComponentMesh.h"
+#include "../Components/GraphicComponents/ZobComponentSkybox.h"
 #include "../Components/HudComponents/ZobComponentText.h"
 #include "../Components/HudComponents/ZobComponentImage.h"
 
@@ -25,13 +26,6 @@ class ZobObject:public ZobEntity
 friend class ZobComponent;
 friend class ZobComponentCar;
 public:
-
-	enum eRigidBodyType
-	{
-		eRigidBody_static = 0,
-		eRigidBody_kinematic = 1,
-		eRigidBody_dynamic = 2,
-	};
 
 	ZobObject(ZobEntity::ZobType t, ZobEntity::ZobSubType s, const std::string& name, ZobObject* parent = NULL, const std::string* factoryFile =NULL);
 	ZobObject(zobId id, TiXmlElement* node, ZobObject* parent, const std::string* factoryFile = NULL);
@@ -128,7 +122,7 @@ public:
 private:
 	void								SaveRecusrive(TiXmlNode* node, ZobObject* z);
 	void								DeleteInternal();
-	static void							OnChangeBodyType(zobId id);
+
 protected:
 
 	virtual void						InitVariablesExposer();
@@ -145,5 +139,4 @@ protected:
 	ZobVector3							m_forward;
 	ZobVector3							m_up;
 	std::string							m_factoryFile;
-	eRigidBodyType						m_bodyType;
 };

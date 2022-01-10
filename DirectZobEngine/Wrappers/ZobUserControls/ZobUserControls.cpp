@@ -136,6 +136,10 @@ ZobGroupBox^ ZobControl::CreateWrappedVariablesView(std::string& name, ZobVariab
 			{
 				panel->Controls->Add(gcnew ZobControlEnum(w));
 			}
+			else if (w.type == ZobVariablesExposer::eWrapperType_enumCombo)
+			{
+				panel->Controls->Add(gcnew ZobControlEnumCombo(w));
+			}
 			else if (w.type == ZobVariablesExposer::eWrapperType_bool)
 			{
 				panel->Controls->Add(gcnew ZobControlBool(w));
@@ -718,9 +722,66 @@ void ZobControlAction::OnValueChanged(Object^ sender, EventArgs^ e)
 }
 
 
+ZobControlEnumCombo::ZobControlEnumCombo(const ZobVariablesExposer::wrapperData& w) :ZobControl(w)
+{
+	this->AutoSize = true;
+	this->ColumnCount = 2;
+	this->RowCount = 1;
+	_label = gcnew ZobLabel();
+	_label->Text = TO_MANAGED_STRING(w.name.c_str());
+	_label->AutoSize = false;
+	_label->Width = _labelWidth;
+	_label->Height = _height;
+	_label->TextAlign = _alignment;
+	_list = gcnew CheckedListBox();
+	_list->Name = TO_MANAGED_STRING(w.internalName.c_str());
+	_list->AutoSize = false;
+	_list->Width = 140;
+	_list->Height = _height;
+	List<ZobComboboxItem^>^ items = gcnew List<ZobComboboxItem^>();
+	for (int i = 0; i < w.enumNames.size(); i++)
+	{
+		String^ s = TO_MANAGED_STRING(w.enumNames[i].c_str());
+		int idx = w.enumValues[i];
+		ZobComboboxItem^ it = gcnew ZobComboboxItem(idx, s, w);
+		items->Add(it);
+	}
+	_list->BindingContext = gcnew System::Windows::Forms::BindingContext();
+	_list->DataSource = items;
+	int* itemIdx = (int*)(w.ptr);
+	_list->SelectedIndex = 0;
+	for (int i = 0; i < _list->Items->Count; i++)
+	{
+		ZobComboboxItem^ it = (ZobComboboxItem^)_list->Items[i];
+		if (it->Key == *itemIdx)
+		{
+			_list->SelectedIndex = i;
+			break;
+		}
+	}
+	_event = gcnew EventHandler(this, &ZobControlEnumCombo::OnValueChanged);
+	_list->SelectedIndexChanged += _event;
+	this->Controls->Add(_label);
+	this->Controls->Add(_list);
+}
 
+ZobControlEnumCombo::~ZobControlEnumCombo()
+{
+	_list->SelectedIndexChanged -= _event;
+	//delete _event;
+	//delete _label;
+	//delete _list;
+}
 
+void ZobControlEnumCombo::OnValueChanged(Object^ sender, EventArgs^ e)
+{
 
+}
+
+void ZobControlEnumCombo::UpdateControlInternal()
+{
+
+}
 
 ZobControlEnum::ZobControlEnum(const ZobVariablesExposer::wrapperData& w) :ZobControl(w)
 {
@@ -737,13 +798,13 @@ ZobControlEnum::ZobControlEnum(const ZobVariablesExposer::wrapperData& w) :ZobCo
 	_list->Name = TO_MANAGED_STRING(w.internalName.c_str());
 	_list->AutoSize = false;
 	_list->Width = 140;
-	_list->Height = _height;
-	List<ComboboxItem^>^ items = gcnew List<ComboboxItem^>();
+	_list->Height = 3*_height;
+	List<ZobComboboxItem^>^ items = gcnew List<ZobComboboxItem^>();
 	for (int i = 0; i < w.enumNames.size(); i++)
 	{
 		String^ s = TO_MANAGED_STRING(w.enumNames[i].c_str());
 		int idx = w.enumValues[i];
-		ComboboxItem^ it = gcnew ComboboxItem(idx, s, w);
+		ZobComboboxItem^ it = gcnew ZobComboboxItem(idx, s, w);
 		items->Add(it);
 	}
 	_list->BindingContext = gcnew System::Windows::Forms::BindingContext();
@@ -752,7 +813,7 @@ ZobControlEnum::ZobControlEnum(const ZobVariablesExposer::wrapperData& w) :ZobCo
 	_list->SelectedIndex = 0;
 	for (int i = 0; i < _list->Items->Count; i++)
 	{
-		ComboboxItem^ it = (ComboboxItem^)_list->Items[i];
+		ZobComboboxItem^ it = (ZobComboboxItem^)_list->Items[i];
 		if (it->Key == *itemIdx)
 		{
 			_list->SelectedIndex = i;
@@ -788,7 +849,7 @@ void ZobControlEnum::OnValueChanged(Object^ sender, EventArgs^ e)
 	ComboBox^ t = static_cast<ComboBox^>(sender);
 	if (_w)
 	{
-		ComboboxItem^ it = (ComboboxItem^)t->SelectedItem;
+		ZobComboboxItem^ it = (ZobComboboxItem^)t->SelectedItem;
 		if (it)
 		{
 			int* i = (int*)_w->ptr;

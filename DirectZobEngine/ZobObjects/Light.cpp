@@ -2,7 +2,7 @@
 #include "tinyxml.h"
 #include "DirectZob.h"
 #include "Misc/ZobXmlHelper.h"
-#include "Components/ZobComponentSprite.h" 
+#include "Components/GraphicComponents/ZobComponentSprite.h" 
 #include "Misc/ZobFilePath.h"
 #include "SceneLoader.h"
 
@@ -63,7 +63,7 @@ void Light::InitVariablesExposer()
 	m_varExposer->WrapVariable<bool>("InFrustrum", &m_inFrtustrum, NULL, true, false);
 	eLightType types[3] = { eLightType::eLightType_point, eLightType::eLightType_directional, eLightType::eLightType_spot };
 	const char* typeStr[3] = { "Point", "Directional", "Spot"};
-	m_varExposer->WrapEnum<eLightType>("Type", &m_lightType, 3, types, typeStr, NULL, false, true);
+	m_varExposer->WrapEnum<eLightType>("Type", &m_lightType, 3, types, typeStr, NULL, false, false, true);
 }
 
 void Light::NewLightConfiguration()

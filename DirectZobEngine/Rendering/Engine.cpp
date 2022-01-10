@@ -15,7 +15,7 @@
 #include "Rasterizer.h"
 #include "../ZobObjects/Camera.h"
 #include <mutex>
-#include "Components/ZobComponentMesh.h"
+#include "Components/GraphicComponents/ZobComponentMesh.h"
 #undef None
 #include "../../dependencies/optick/include/optick.h"
 
@@ -173,16 +173,16 @@ Engine::Engine(int width, int height, Events* events)
 
 	eRenderMode rm[3] = { eRenderMode::eRenderMode_fullframe, eRenderMode::eRenderMode_interlaced, eRenderMode::eRenderMode_scanline };
 	const char* rmStr[3] = { "Fullframe", "Interlaced", "Scanline" };
-	m_varExposer->WrapEnum<eRenderMode>("Render mode", &m_renderMode, 3, rm, rmStr, NULL, false, true);
+	m_varExposer->WrapEnum<eRenderMode>("Render mode", &m_renderMode, 3, rm, rmStr, NULL, false, false, true);
 
 	eLightingPrecision lm[3] = { eLightingPrecision::eLightingPrecision_noLighting, eLightingPrecision::eLightingPrecision_vertex, eLightingPrecision::eLightingPrecision_pixel };
 	const char* lmStr[3] = { "No lighting", "Vertex", "Pixel" };
-	m_varExposer->WrapEnum<eLightingPrecision>("Lighting mode", &m_lightingPrecision, 3, lm, lmStr, NULL, false, true);
+	m_varExposer->WrapEnum<eLightingPrecision>("Lighting mode", &m_lightingPrecision, 3, lm, lmStr, NULL, false, false, true);
 
 	eBitsPerColor bp[9] = { eBitsPerColor::eBitsPerColor_full, eBitsPerColor::eBitsPerColor_1, eBitsPerColor::eBitsPerColor_2, eBitsPerColor::eBitsPerColor_3, 
 	eBitsPerColor::eBitsPerColor_4, eBitsPerColor::eBitsPerColor_5, eBitsPerColor::eBitsPerColor_6, eBitsPerColor::eBitsPerColor_7, eBitsPerColor::eBitsPerColor_8,};
 	const char* bpStr[9] = { "Full", "1", "2", "3", "4", "5", "6", "7", "8"};
-	m_varExposer->WrapEnum<eBitsPerColor>("Bits per color", &m_nbBitsPerColorDepth, 9, bp, bpStr, NULL, false, true);
+	m_varExposer->WrapEnum<eBitsPerColor>("Bits per color", &m_nbBitsPerColorDepth, 9, bp, bpStr, NULL, false, false, true);
 	m_varExposer->WrapVariable<bool>("Dithering", &m_dithering, NULL, false, true);
 	m_varExposer->WrapVariable<float>("Z near", &m_zNear, NULL, false, true);
 	m_varExposer->WrapVariable<float>("Z far", &m_zFar, NULL, false, true);
@@ -297,8 +297,8 @@ bool Engine::ResizeInternal()
 		m_bufferData.width = m_nextWidth;
 		m_bufferData.buffer = m_buffer[m_currentBuffer];
 		m_bufferData.zBuffer = m_zBuffer[m_currentBuffer];
-		//m_bufferData.zNear = m_zNear;
-		//m_bufferData.zFar = m_zFar;
+		m_bufferData.zNear = m_zNear;
+		m_bufferData.zFar = m_zFar;
 		m_bufferData.size = m_nextWidth * m_nextHeight;
 		ZobColor c = ZobColor(DirectZob::GetInstance()->GetLightManager()->GetClearColor());
 		ClearBuffer(&c);

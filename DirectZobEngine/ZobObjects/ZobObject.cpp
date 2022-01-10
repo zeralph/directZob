@@ -4,8 +4,9 @@
 #include "Sprite.h"
 #include "ZobPhysic/ZobPhysicComponent.h"
 #include "SceneLoader.h"
-#include "Components/ZobComponentMesh.h"
-#include "Components/ZobComponentSprite.h"
+#include "Components/GraphicComponents/ZobComponentMesh.h"
+#include "Components/GraphicComponents/ZobComponentSprite.h"
+#include "Components/GraphicComponents/ZobComponentSkybox.h"
 #include "../Misc/ZobXmlHelper.h"
 #include "../../dependencies/optick/include/optick.h"
 
@@ -126,20 +127,13 @@ void ZobObject::InitVariablesExposer()
 	m_varExposer->WrapVariable<ZobVector3>("WRotation", GetPhysicComponentNoConst()->GetWorldRotationAddress(), &ZobObject::ReloadVariablesFromWorldData, false, false);
 	m_varExposer->WrapVariable<ZobVector3>("WScale", GetPhysicComponentNoConst()->GetWorldScaleAddress(), &ZobObject::ReloadVariablesFromWorldData, false, false);
 	//
-	m_bodyType = m_physicComponent->GetBodyType();
-	eRigidBodyType bt[3] = { eRigidBodyType::eRigidBody_static, eRigidBodyType::eRigidBody_kinematic, eRigidBodyType::eRigidBody_dynamic };
+	m_varExposer->StartGroup("Physic");
+	ZobPhysicComponent::eRigidBodyType bt[3] = { ZobPhysicComponent::eRigidBody_static, ZobPhysicComponent::eRigidBody_kinematic, ZobPhysicComponent::eRigidBody_dynamic };
 	const char* btStr[3] = { "Static", "Kinematic", "Dynamic" };
-	m_varExposer->WrapEnum<eRigidBodyType>("Body type", &m_bodyType, 3, bt, btStr, &ZobObject::OnChangeBodyType, false, true);
-
-}
-
-void ZobObject::OnChangeBodyType(zobId id)
-{
-	ZobObject* z = ZobEntity::GetEntity<ZobObject>(id);
-	if (z)
-	{
-		z->GetPhysicComponentNoConst()->SetBodyType(z->m_bodyType);
-	}
+	m_varExposer->WrapEnum<ZobPhysicComponent::eRigidBodyType>("Body type", &m_physicComponent->m_bodyType, 3, bt, btStr, &ZobPhysicComponent::UpdateProperties, false, false, true);
+	m_varExposer->WrapVariable<bool>("Active", &m_physicComponent->m_active, &ZobPhysicComponent::UpdateProperties, false, true);
+	m_varExposer->WrapVariable<float>("Mass", &m_physicComponent->m_mass, &ZobPhysicComponent::UpdateProperties, false, true);
+	m_varExposer->EndGroup();
 }
 
 void ZobObject::ReloadVariablesFromWorldData(zobId id)
@@ -229,7 +223,6 @@ void ZobObject::Init(DirectZobType::sceneLoadingCallback cb)
 	}
 	m_varExposer->Load();
 	m_physicComponent->Init();
-	m_physicComponent->SetBodyType(m_bodyType);
 	for (int i = 0; i < m_Components.size(); i++)
 	{
 		m_Components[i]->Init(cb);

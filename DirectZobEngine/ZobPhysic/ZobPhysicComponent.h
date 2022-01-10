@@ -14,6 +14,15 @@ class ZobPhysicComponent
 {
 public:
 
+	friend class ZobObject;
+
+	enum eRigidBodyType
+	{
+		eRigidBody_static = 0,
+		eRigidBody_kinematic = 1,
+		eRigidBody_dynamic = 2,
+	};
+
 	enum eContactType
 	{
 		ContactStart,
@@ -27,6 +36,13 @@ public:
 		eLayer_ground = 0x0001,
 		eLayer_wall = 0x0002,
 		eLayer_objects = 0x0004,
+		eLayer_4 = 0x0008,
+		eLayer_5 = 0x0010,
+		eLayer_6 = 0x0020,
+		eLayer_7 = 0x0040,
+		eLayer_8 = 0x0080,
+		eLayer_9 = 0x0100,
+		eLayer_10 = 0x0200,
 	};
 
 	struct collision
@@ -96,10 +112,12 @@ public:
 	ZobVector3*							GetWorldRotationAddress() { return &m_editorWorldRotation; }
 	ZobVector3*							GetWorldScaleAddress() { return &m_editorWorldScale; }
 	void								WorldOrientationToAxis(ZobVector3& left, ZobVector3& up, ZobVector3& forward) const;
-	void								SetBodyType(ZobObject::eRigidBodyType t) { m_rigidBody->setType((BodyType)t); }
-	ZobObject::eRigidBodyType			GetBodyType() { return (ZobObject::eRigidBodyType)m_rigidBody->getType(); }
+	void								SetBodyType(eRigidBodyType t) { m_rigidBody->setType((BodyType)t); }
+	eRigidBodyType						GetBodyType() { return (eRigidBodyType)m_rigidBody->getType(); }
+	const ZobObject*					GetZObObject() const { return m_zobObject; }
+	static void							UpdateProperties(zobId zid);
 private:
-
+	void								UpdatePropertiesInternal();
 	float								ClampAngle(float a) const;
 	Transform							GetParentWorldTransform() const;
 	Vector3								GetParentWorldScale() const;
@@ -118,4 +136,8 @@ private:
 	ZobVector3							m_editorWorldPosition;
 	ZobVector3							m_editorWorldRotation;
 	ZobVector3							m_editorWorldScale;
+	//
+	eRigidBodyType						m_bodyType;
+	float								m_mass;
+	bool								m_active;
 };

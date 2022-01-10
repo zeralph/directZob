@@ -30,6 +30,7 @@ public :
 	void RemoveBody(const ZobPhysicComponent* b);
 	ZobPhysicComponent* GetZobComponentFromCollisionBody(const CollisionBody* rb) const;
 	void DrawGizmos() const;
+	bool HasRigiBodyCollision(std::string& a, std::string& b);
 private:
 	void Init();
 	void UnInit();

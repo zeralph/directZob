@@ -119,6 +119,32 @@ float ZobPhysicsEngine::WaitForUpdatePhysicEnd()
 	return m_timeStep;
 }
 
+bool ZobPhysicsEngine::HasRigiBodyCollision(std::string &a, std::string &b)
+{
+    uint32 nr = m_world->getNbRigidBodies();
+    if (nr > 0)
+    {
+        for (uint32 i = 0; i < nr; i++)
+        {
+            RigidBody* r = m_world->getRigidBody(i);
+            if (r->getType() == BodyType::DYNAMIC)
+            {
+                uint32 nc = m_world->getNbRigidBodies();
+                for (uint32 j = 0; j < nc; j++)
+                {
+                    RigidBody* c = m_world->getRigidBody(j);
+                    if (r != c && m_world->testOverlap(r, c))
+                    {
+                        a = ZobPhysicsEngine::GetZobComponentFromCollisionBody(r)->GetZObObject()->GetName();
+                        b = ZobPhysicsEngine::GetZobComponentFromCollisionBody(c)->GetZObObject()->GetName();
+                        return true;
+                    }
+                }
+            }
+        }
+    }
+    return false;
+}
 
 void ZobPhysicsEngine::Update(float dt)
 {

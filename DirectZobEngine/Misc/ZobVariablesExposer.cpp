@@ -74,6 +74,18 @@ void ZobVariablesExposer::wrapperData::Load()
 			}
 		}
 	}
+	else if (type == eWrapperType_enumCombo)
+	{
+		for (int k = 0; k < enumNames.size(); k++)
+		{
+			if (strcmp(enumNames[k].c_str(), strValue.c_str()) == 0)
+			{
+				int* i = (int*)ptr;
+				int ival = enumValues[k];
+				*i = ival | *i;
+			}
+		}
+	}
 	else if (type == eWrapperType_string)
 	{
 		std::string* s = (std::string*)(ptr);
@@ -217,6 +229,20 @@ TiXmlNode* ZobVariablesExposer::SaveUnderNode(TiXmlNode* node)
 						break;
 					}
 				}
+				break;
+			}
+			case eWrapperType_enumCombo:
+			{
+				int* i = (int*)(w->ptr); 
+				std::stringstream ss;
+				for (int k = 0; k < w->enumValues.size(); k++)
+				{
+					if (w->enumValues[k] == *i)
+					{
+						ss <<  w->enumNames[k] << "|";
+					}
+				}
+				o.SetAttribute(XML_ATTR_VALUE, ss.str().c_str());
 				break;
 			}
 			case eWrapperType_path:

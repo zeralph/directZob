@@ -2,7 +2,7 @@
 #include "../Types.h"
 #include "../tinyxml/tinyxml.h"
 #include "ZobComponent.h"
-#include "ZobComponentSprite.h"
+#include "GraphicComponents/ZobComponentSprite.h"
 #undef min
 #undef max
 #include <reactphysics3d/reactphysics3d.h>

@@ -1,7 +1,7 @@
 #include "ZobComponentSprite.h"
-#include "../DirectZob.h"
-#include "ZobComponentFactory.h"
-#include "../Sprite.h"
+#include "../../DirectZob.h"
+#include "../ZobComponentFactory.h"
+#include "../../Sprite.h"
 
 ZobComponentSprite::~ZobComponentSprite()
 {
@@ -27,11 +27,11 @@ ZobComponentSprite::ZobComponentSprite(ZobObject* zobObject, bool bEditorZobComp
 
 	Triangle::RenderOptions::eCullMode cm[3] = { Triangle::RenderOptions::eCullMode_None, Triangle::RenderOptions::eCullMode_ClockwiseFace, Triangle::RenderOptions::eCullMode_CounterClockwiseFace };
 	const char* cmStr[3] = { "None", "Clockwise", "Counter clockwise" };
-	m_varExposer->WrapEnum<Triangle::RenderOptions::eCullMode>("Cull mode", &m_renderOptions.cullMode, 3, cm, cmStr, NULL, false, true);
+	m_varExposer->WrapEnum<Triangle::RenderOptions::eCullMode>("Cull mode", &m_renderOptions.cullMode, 3, cm, cmStr, NULL, false, false, true);
 
 	Triangle::RenderOptions::eLightMode lm[5] = { Triangle::RenderOptions::eLightMode_none, Triangle::RenderOptions::eLightMode_flat, Triangle::RenderOptions::eLightMode_gouraud, Triangle::RenderOptions::eLightMode_phong , Triangle::RenderOptions::eLightMode_flatPhong };
 	const char* lmStr[5] = { "None", "Flat", "Gouraud", "Phong", "Flat phong" };
-	m_varExposer->WrapEnum<Triangle::RenderOptions::eLightMode>("Lighting", &m_renderOptions.lightMode, 5, lm, lmStr, NULL, false, true);
+	m_varExposer->WrapEnum<Triangle::RenderOptions::eLightMode>("Lighting", &m_renderOptions.lightMode, 5, lm, lmStr, NULL, false, false, true);
 
 	m_varExposer->WrapVariable<bool>("ZBuffered", &m_renderOptions.zBuffered, NULL, false, true);
 }

@@ -43,7 +43,7 @@ class ZobComponentPhysicShape : public ZobComponent
 		virtual void			RemoveCollider();
 		
 		Collider* m_collider;
-		int m_layers;
+		ZobPhysicComponent::eLayer m_layers;
 		bool m_isTrigger;
 		ZobVector3 m_localPostion;
 		bool m_bUpdateSize;

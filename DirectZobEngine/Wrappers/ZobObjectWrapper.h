@@ -16,26 +16,6 @@ using namespace System::Collections::Generic;
 using namespace System::Drawing;
 
 namespace CLI {
-
-	public ref class ComboboxItem
-	{
-		public :
-			ComboboxItem(int k, String^ v, const ZobVariablesExposer::wrapperData& w)
-			{
-				Key = k;
-				Value = v;
-				_w = &(w);
-			}
-			String^ ToString() override
-			{
-				return Value;
-			}
-			int Key;
-			String^ Value;
-			const ZobVariablesExposer::wrapperData* _w;
-	};
-
-
 	public ref class ZobObjectWrapper : ManagedObject<ZobObject>
 	{
 	public:

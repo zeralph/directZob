@@ -10,7 +10,7 @@
 #include "ZobCameraController/ZobCameraControllerFollowCar.h"
 #include "Misc/ZobGeometryHelper.h"
 #include "Misc/ZobXmlHelper.h"
-#include "Components/ZobComponentSprite.h"
+#include "Components/GraphicComponents/ZobComponentSprite.h"
 #include "SceneLoader.h"
 
 static std::mutex g_update_camera_mutex;
@@ -126,7 +126,7 @@ void Camera::WrapVariables()
 		eCameraType::eCamera_followCar,
 		eCameraType::eCamera_orbital_free, };
 	const char* ctStr[7] = { "base", "Revolving", "Orbital", "FPS", "Follow", "FollowCar", "Orbital Free"};
-	m_varExposer->WrapEnum<eCameraType>("Camera controller", &m_nextControlerType, 7, ct, ctStr, NULL, false, true);
+	m_varExposer->WrapEnum<eCameraType>("Camera controller", &m_nextControlerType, 7, ct, ctStr, NULL, false, false, true);
 }
 
 void Camera::DrawGizmos(const Camera* camera, Engine* engine)
@@ -330,20 +330,20 @@ void Camera::RecomputeFrustrumPlanes()
 	m_frustrumPlanes[eFrustrumPlaneNear].c = comboMatrix.GetValue(3, 2) - comboMatrix.GetValue(1, 2);
 	m_frustrumPlanes[eFrustrumPlaneNear].d = comboMatrix.GetValue(3, 3) - comboMatrix.GetValue(1, 3);
 	// Bottom clipping plane
-	m_frustrumPlanes[eFrustrumPlaneFar].a = comboMatrix.GetValue(3, 0) + comboMatrix.GetValue(1, 0);
-	m_frustrumPlanes[eFrustrumPlaneFar].b = comboMatrix.GetValue(3, 1) + comboMatrix.GetValue(1, 1);
-	m_frustrumPlanes[eFrustrumPlaneFar].c = comboMatrix.GetValue(3, 2) + comboMatrix.GetValue(1, 2);
-	m_frustrumPlanes[eFrustrumPlaneFar].d = comboMatrix.GetValue(3, 3) + comboMatrix.GetValue(1, 3);
+	m_frustrumPlanes[eFrustrumPlaneBottom].a = comboMatrix.GetValue(3, 0) + comboMatrix.GetValue(1, 0);
+	m_frustrumPlanes[eFrustrumPlaneBottom].b = comboMatrix.GetValue(3, 1) + comboMatrix.GetValue(1, 1);
+	m_frustrumPlanes[eFrustrumPlaneBottom].c = comboMatrix.GetValue(3, 2) + comboMatrix.GetValue(1, 2);
+	m_frustrumPlanes[eFrustrumPlaneBottom].d = comboMatrix.GetValue(3, 3) + comboMatrix.GetValue(1, 3);
 	// Near clipping plane
 	m_frustrumPlanes[eFrustrumPlaneTop].a = comboMatrix.GetValue(3, 0) + comboMatrix.GetValue(2, 0);
 	m_frustrumPlanes[eFrustrumPlaneTop].b = comboMatrix.GetValue(3, 1) + comboMatrix.GetValue(2, 1);
 	m_frustrumPlanes[eFrustrumPlaneTop].c = comboMatrix.GetValue(3, 2) + comboMatrix.GetValue(2, 2);
 	m_frustrumPlanes[eFrustrumPlaneTop].d = comboMatrix.GetValue(3, 3) + comboMatrix.GetValue(2, 3);
 	// Far clipping plane
-	m_frustrumPlanes[eFrustrumPlaneBottom].a = comboMatrix.GetValue(3, 0) - comboMatrix.GetValue(2, 0);
-	m_frustrumPlanes[eFrustrumPlaneBottom].b = comboMatrix.GetValue(3, 1) - comboMatrix.GetValue(2, 1);
-	m_frustrumPlanes[eFrustrumPlaneBottom].c = comboMatrix.GetValue(3, 2) - comboMatrix.GetValue(2, 2);
-	m_frustrumPlanes[eFrustrumPlaneBottom].d = comboMatrix.GetValue(3, 3) - comboMatrix.GetValue(2, 3);
+	m_frustrumPlanes[eFrustrumPlaneFar].a = comboMatrix.GetValue(3, 0) - comboMatrix.GetValue(2, 0);
+	m_frustrumPlanes[eFrustrumPlaneFar].b = comboMatrix.GetValue(3, 1) - comboMatrix.GetValue(2, 1);
+	m_frustrumPlanes[eFrustrumPlaneFar].c = comboMatrix.GetValue(3, 2) - comboMatrix.GetValue(2, 2);
+	m_frustrumPlanes[eFrustrumPlaneFar].d = comboMatrix.GetValue(3, 3) - comboMatrix.GetValue(2, 3);
 
 	NormalizePlane(m_frustrumPlanes[eFrustrumPlaneLeft]);
 	NormalizePlane(m_frustrumPlanes[eFrustrumPlaneRight]);

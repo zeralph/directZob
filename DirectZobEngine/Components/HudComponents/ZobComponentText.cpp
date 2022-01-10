@@ -57,7 +57,7 @@ ZobComponentText::ZobComponentText(ZobObject* zobObject, bool bEditorZobComponen
 	m_varExposer->WrapVariable<bool>("Selectable", &m_selectable, &ZobComponentText::UpdateSelectableStatus, false, true);
 	eMenuAction ma[3] = { eMenuAction::eAction_none,eMenuAction::eAction_Load, eMenuAction::eAction_exit };
 	const char* maStr[3] = { "None", "Load", "Exit" };
-	m_varExposer->WrapEnum<eMenuAction>("Action", &m_action, 3, ma, maStr, NULL, false, true);
+	m_varExposer->WrapEnum<eMenuAction>("Action", &m_action, 3, ma, maStr, NULL, false, false, true);
 	m_varExposer->WrapVariable<std::string>("Action argument", &m_actionArg, NULL, false, true);
 	m_varExposer->EndGroup();
 	m_varExposer->Load();

@@ -34,6 +34,7 @@ public:
 		eWrapperType_action,
 		eWrapperType_startGroup,
 		eWrapperType_endGroup,
+		eWrapperType_enumCombo,
 		__eWrapperType_MAX__
 	};
 
@@ -213,7 +214,7 @@ public:
 	}
 
 	template<typename E>
-	void WrapEnum(const char* name, E* ptr, int nbParams, E* enumValues, const char** enumNames, wrapperCallback cb, bool bReadOnly, bool bSave)
+	void WrapEnum(const char* name, E* ptr, int nbParams, E* enumValues, const char** enumNames, wrapperCallback cb, bool bMultipleSelection, bool bReadOnly, bool bSave)
 	{
 		wrapperData w = wrapperData(m_zobId);
 		w.Init();
@@ -223,7 +224,14 @@ public:
 		s = s.append("_").append(w.name);
 		w.internalName = s;
 		w.id = m_zobId;
-		w.type = eWrapperType_enum;
+		if (bMultipleSelection)
+		{
+			w.type = eWrapperType_enumCombo;
+		}
+		else
+		{
+			w.type = eWrapperType_enum;
+		}
 		w.ptr = ptr;
 		w.callback = cb;
 		w.bSave = bSave;

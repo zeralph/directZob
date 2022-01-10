@@ -567,8 +567,7 @@ void Mesh::DrawBoundingBox(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& 
 void Mesh::Update(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Engine* engine, const Triangle::RenderOptions* options)
 {
 	engine->ComputeBoundingBoxes(&modelMatrix, &m_minBoundingBox, &m_maxBoundingBox, &m_OBB, &m_AABB);
-
-	m_bDrawn = engine->IsInFrustrum(camera, &m_AABB);
+	m_bDrawn = engine->IsInFrustrum(camera, &m_AABB) || options->bForceRender;
 	if (m_bDrawn)
 	{
 		BufferData* bData = engine->GetBufferData();
@@ -599,9 +598,11 @@ void Mesh::Update(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationM
 			int bf = camera->PointIsInFrustrum(vb);
 			int cf = camera->PointIsInFrustrum(vc);
 
-			bool aIn = af == Camera::__eFrustrumPlane_MAX__;
-			bool bIn = bf == Camera::__eFrustrumPlane_MAX__;
-			bool cIn = cf == Camera::__eFrustrumPlane_MAX__;
+			static Camera::eFrustrumPlanes toto = Camera::eFrustrumPlaneFar;
+
+			bool aIn = (af == Camera::__eFrustrumPlane_MAX__) || (options->bForceRender && af == toto);
+			bool bIn = (bf == Camera::__eFrustrumPlane_MAX__) || (options->bForceRender && bf == toto);
+			bool cIn = (cf == Camera::__eFrustrumPlane_MAX__) || (options->bForceRender && cf == toto);
 			if(aIn && bIn && cIn)
 			{
 				t->clipMode = Triangle::eClip_3_in;

@@ -260,6 +260,16 @@ void SceneLoader::SaveScene()
 void SceneLoader::SaveScene(std::string &path, std::string &file)
 {
 	DirectZob::LogInfo("Saving scene to %s/%s", path.c_str(), file.c_str());
+
+	ZobPhysicsEngine* zp = DirectZob::GetInstance()->GetPhysicsEngine();
+	std::string a;
+	std::string b;
+	if (zp->HasRigiBodyCollision(a,b))
+	{
+		DirectZob::LogError("Dynamic rigidbody of '%s' is in collision with '%s'.\nRigid bodies cannot collide with an object in a save.\n Saving abort", a.c_str(), b.c_str());
+		return;
+	}
+
 	MeshManager* meshManager = DirectZob::GetInstance()->GetMeshManager();
 	ZobObjectManager* zobObjectManager = DirectZob::GetInstance()->GetZobObjectManager();
 	std::string fullPath;

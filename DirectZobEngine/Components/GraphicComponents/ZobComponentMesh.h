@@ -4,19 +4,19 @@
 #undef max
 #undef None
 
-#include "../tinyxml/tinyxml.h"
-#include "ZobComponent.h"
-#include "../Misc/ZobFilePath.h"
+#include "../../tinyxml/tinyxml.h"
+#include "../ZobComponent.h"
+
 #include <string>
 #include <vector>
 
-class ZobSprite;
-class ZobComponentSprite : public ZobComponent
+class Mesh;
+class ZobComponentMesh : public ZobComponent
 {
 	friend class ZobComponentFactory;
 public:
 
-	~ZobComponentSprite() override;
+	~ZobComponentMesh() override;
 	void						Init(DirectZobType::sceneLoadingCallback cb) override;
 	void						PreUpdate(float dt) override;
 	void						PostUpdate() override;
@@ -27,19 +27,14 @@ public:
 	void						Set(ZobFilePath zfp);
 	void						SetVisible(bool v);
 	Triangle::RenderOptions*	GetRenderOptions() { return &m_renderOptions; }
-	const ZobSprite*			GetMesh() const { return m_sprite; }
-	static void					ReloadMaterial(zobId id);
-	void						SetForEditor();
+	const Mesh*					GetMesh() const { return m_mesh; }
 private:
-								ZobComponentSprite(ZobObject* zobObject, bool bEditorZobComponent);
+								ZobComponentMesh(ZobObject* zobObject, bool bEditorZobComponent);
 	bool						LoadMeshInternal();
-	
-	ZobSprite*					m_sprite;
-	ZobObject*					m_zobObject;
-	const ZobMaterial*			m_material;
+	Mesh*						m_mesh;
 	Triangle::RenderOptions		m_renderOptions;
-	ZobFilePath					m_texturePath;
-	ZobColor					m_ambientColor;
-	ZobColor					m_diffuseColor;
-	ZobColor					m_specularColor;
+	ZobFilePath					m_meshPath;
+	int							m_meshNbTriangles;
+	uint						m_meshSize;
+
 };

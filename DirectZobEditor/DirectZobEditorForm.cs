@@ -316,7 +316,7 @@ namespace DirectZobEditor
                         handler(this, EventArgs.Empty);
                     }
                     ShowLoadingForm();
-                    m_directZobWrapper.LoadScene(m_path, m_file, onSceneLoadedCallback, onSceneLoadingCallback);
+                    m_directZobWrapper.LoadScene(m_path, m_file, onSceneLoadedCallback, null);//, onSceneLoadingCallback);
                     this.Text = "DirectZob " + m_path + m_file;
                 }
             }
@@ -896,6 +896,11 @@ namespace DirectZobEditor
         {
             m_loadingForm.AskForClose();
             m_loadingForm = null;
+        }
+
+        private void toolStripComboBox1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 

@@ -33,10 +33,10 @@ public:
 	{
 		eFrustrumPlaneLeft=0,
 		eFrustrumPlaneRight = 1,
-		eFrustrumPlaneBottom = 2,
+		eFrustrumPlaneFar= 2,
 		eFrustrumPlaneTop = 3,
 		eFrustrumPlaneNear = 5,
-		eFrustrumPlaneFar = 4,		
+		eFrustrumPlaneBottom = 4,
 		__eFrustrumPlane_MAX__ = 6
 	};
 

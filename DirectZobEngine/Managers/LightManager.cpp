@@ -11,7 +11,7 @@ LightManager::LightManager()
 
 	eFogType ft[4] = { eFogType::eFogType_NoFog, eFogType::eFogType_Linear, eFogType::eFogType_Exp, eFogType::eFogType_Exp2 };
 	const char* ftStr[4] = { "None", "Linear", "Exp", "Exp2"};
-	m_varExposer->WrapEnum<eFogType>("Fog type", &m_fogType, 4, ft, ftStr, NULL, false, true);
+	m_varExposer->WrapEnum<eFogType>("Fog type", &m_fogType, 4, ft, ftStr, NULL, false, false, true);
 	m_varExposer->WrapVariable<ZobColor>("Fog color", &m_fogColor, NULL, false, true);
 	m_varExposer->WrapVariable<float>("Fog distance", &m_fogDistance, NULL, false, true);
 	m_varExposer->WrapVariable<float>("Fog density", &m_fogDensity, NULL, false, true);

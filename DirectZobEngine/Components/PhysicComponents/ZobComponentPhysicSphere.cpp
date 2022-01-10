@@ -19,10 +19,6 @@ ZobComponentPhysicSphere::ZobComponentPhysicSphere(ZobObject* zobObject) : ZobCo
 
 void ZobComponentPhysicSphere::Init(DirectZobType::sceneLoadingCallback cb)
 {	
-	if (cb)
-	{
-		cb(0, 0, m_name);
-	}
 	ReLoadVariables();
 	PhysicsCommon* pc = DirectZob::GetInstance()->GetPhysicsEngine()->GetPhysicsCommon();
 	m_sphereShape = pc->createSphereShape(m_radius);

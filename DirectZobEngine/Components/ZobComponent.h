@@ -27,6 +27,7 @@ public:
 		eComponent_mesh,
 		eComponent_sprite,
 		eComponent_light,
+		eComponent_skybox,
 		__eComponent_MAX__,
 	};
 
