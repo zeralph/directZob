@@ -1,7 +1,12 @@
 #pragma once
-#include "../Rendering/ZobVector3.h"
 #include "ZobObject.h"
+#include "../Rendering/Color.h"
+#include "../Rendering/ZobMatrix4x4.h" 
 
+class ZobVector3;
+class Camera;
+class Engine;
+class TiXmlElement;
 class Light : public ZobObject
 {
 public:

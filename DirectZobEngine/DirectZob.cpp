@@ -1,13 +1,18 @@
 #include <mutex>
-#include <thread>
 #include "DirectZob.h"
-#include "Events.h"
-#include "tinyxml.h"
 #include "ZobObjects/ZobObject.h"
-#include "SceneLoader.h"
+#include "ZobObjects/Camera.h"
+#include "ZobObjects/Light.h"
 #include "ZobPhysic/ZobPhysicsEngine.h"
 #include "Rendering/Rasterizer.h"
 #include "ZobCameraController/ZobCameraController.h"
+#include "Managers/LightManager.h"
+#include "Managers/ZobInputManager.h"
+#include "Managers/ZobHUDManager.h"
+#include "Managers/CameraManager.h"
+#include "Managers/LightManager.h"
+#include "SceneLoader.h"
+#include "Rendering/text2D.h"
 #ifdef WINDOWS
 #include "../minifb/src/windows/WindowData_Win.h"
 #elif LINUX
@@ -15,16 +20,12 @@
 #endif
 #undef None
 #include "../../dependencies/optick/include/optick.h"
-#define LOG_BUFFER_SIZE 1024
 
 static const int fpsTargetsN = 6;
 static const float fpsTargets[fpsTargetsN] = { 1.0f, 16.6666667, 33.3333333f, 41.666667f,  50.0f, 1000.0f };
-static int sTargetMSPerFrameIdx = 1;
-static char logBuffer[LOG_BUFFER_SIZE];
+int DirectZob::sTargetMSPerFrameIdx = 1;
+char DirectZob::logBuffer[LOG_BUFFER_SIZE];
 bool DirectZob::g_isInEditorMode = false;
-static int s_logIndent;
-//static std::mutex g_render_mutex;
-static std::thread g_editorModeThread;
 int DirectZob::s_logIndent = 0;
 DirectZob *DirectZob::singleton = nullptr;
 DirectZob::eDirectZobLogLevel DirectZob::sLogLevel = DirectZob::eDirectZobLogLevel_info;
@@ -170,8 +171,6 @@ void DirectZob::Init(mfb_window* window, int width, int height, bool bEditorMode
 	m_physicStarted = false;
 }
 
-static float rot = 1.0f;
-
 void DirectZob::StopPhysic(bool reset)
 { 
 	m_physicStarted = false; 
@@ -180,12 +179,6 @@ void DirectZob::StopPhysic(bool reset)
 		DirectZob::GetInstance()->GetZobObjectManager()->ResetPhysic();
 		m_physicsEngine->ResetAccumulator();
 	}
-}
-
-int	DirectZob::Run(void func(void))
-{
-	g_editorModeThread = std::thread(&DirectZob::RunInternal, this, func);
-	return 12;
 }
 
 int DirectZob::RunInternal(void func(void))

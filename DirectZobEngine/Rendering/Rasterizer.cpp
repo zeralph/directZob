@@ -1,7 +1,10 @@
 #include "Rasterizer.h"
 #include "DirectZob.h"
 #include "ZobObjects/Light.h"
+#include "../Managers/LightManager.h"
+#include "../Managers/CameraManager.h"
 #include "Texture.h"
+#include "../ZobObjects/Camera.h"
 #undef None
 #include "../../dependencies/optick/include/optick.h"
 

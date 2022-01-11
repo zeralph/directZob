@@ -1,8 +1,8 @@
 #pragma once
-#include "../Types.h"
+#include <assert.h>
 #include <vector>
 #include <string>
-#include "../tinyxml/tinyxml.h"
+#include "../Types.h"
 #include "../Rendering/Color.h"
 #include "ZobFilePath.h"
 #include "../ZobObjects/ZobEntity.h"
@@ -11,6 +11,8 @@ class ZobEntity;
 class ZobVector2;
 class ZobVector3;
 class ZobObject;
+class TiXmlNode;
+class TiXmlElement;
 class ZobVariablesExposer
 {
 public:

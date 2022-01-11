@@ -1,13 +1,11 @@
 #pragma once
 #include "../Types.h"
-#include "../tinyxml/tinyxml.h"
 #include "ZobComponent.h"
-#include "GraphicComponents/ZobComponentSprite.h"
 #undef min
 #undef max
 #include <reactphysics3d/reactphysics3d.h>
 
-class Zobobject;
+class ZobComponentSprite;
 class ZobComponentCar : public ZobComponent
 {
 

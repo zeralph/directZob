@@ -6,6 +6,7 @@
 #include "tinyxml.h"
 #include "Misc/ZobXmlHelper.h"
 #include "DirectZob.h"
+#include "Managers/ZobObjectManager.h"
 #include <fstream>
 
 #ifdef WINDOWS

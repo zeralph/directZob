@@ -1,6 +1,8 @@
 #include "ZobPhysicsEngine.h"
 #include "ZobPhysicComponent.h"
 #include "ZobPhysicsContactsListener.h"
+#include "../Managers/CameraManager.h"
+#include "../ZobObjects/Camera.h"
 #include <thread>
 #undef None
 #include "../dependencies/optick/include/optick.h"

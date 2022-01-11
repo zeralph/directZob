@@ -5,6 +5,7 @@
 #include "../../ZobPhysic/ZobPhysicComponent.h"
 #include "../../Managers/ZobInputManager.h"
 #include "../../Managers/ZobHUDManager.h"
+#include "../../Managers/MaterialManager.h"
 #include "../../Rendering/text2D.h"
 #include "../../ZobObjects/ZobObject.h"
 
@@ -22,7 +23,7 @@ ZobComponentImage::ZobComponentImage(ZobObject* zobObject, bool bEditorZobCompon
 	m_h = 0.5f;
 	m_z = 0;
 	m_visible = true;
-	m_componentType = eComponent_hudImage;
+	m_componentType = ZobComponentFactory::eComponent_hudImage;
 	//m_varExposer->WrapAction("Add", &ZobComponentImage::AddItem);
 	m_texture.SetFileType(ZobFilePath::eFileType_texture);
 	m_varExposer->WrapVariable<bool>("Visible", &m_visible, NULL, false, true);

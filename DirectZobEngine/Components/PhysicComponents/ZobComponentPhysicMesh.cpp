@@ -1,6 +1,8 @@
 #include "ZobComponentPhysicMesh.h"
 #include "../../DirectZob.h"
 #include "../../ZobPhysic/ZobPhysicsEngine.h"
+#include "../../Mesh.h"
+#include "../../Managers/MeshManager.h"
 
 ZobComponentPhysicMesh::~ZobComponentPhysicMesh()
 {
@@ -10,7 +12,7 @@ ZobComponentPhysicMesh::~ZobComponentPhysicMesh()
 ZobComponentPhysicMesh::ZobComponentPhysicMesh(ZobObject* zobObject) : ZobComponentPhysicShape(zobObject)
 {
 	SET_CLASS_AND_NAME
-	m_componentType = eComponent_physicMesh;
+	m_componentType = ZobComponentFactory::eComponent_physicMesh;
 	m_convexMeshPath.Reset();
 	m_concaveMeshNbTriangles = 0;
 	m_mesh = NULL;

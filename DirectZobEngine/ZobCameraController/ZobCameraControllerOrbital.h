@@ -1,8 +1,8 @@
 #pragma once
 #include "ZobCameraController.h"
-#include "ZobObjects/Camera.h"
-#include "string.h"
 
+
+class Camera;
 class ZobCameraControllerOrbital : public ZobCameraController
 {
 public:

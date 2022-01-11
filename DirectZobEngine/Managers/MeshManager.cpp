@@ -1,8 +1,5 @@
 #include "MeshManager.h"
-#include "DirectZob.h"
-
-static int spriteIdx = 1;
-static int meshIdx = 1;
+#include "../DirectZob.h"
 
 MeshManager::MeshManager()
 {
@@ -26,9 +23,7 @@ MeshManager::~MeshManager()
 
 ZobSprite* MeshManager::CreateSprite()
 {
-	std::string n = std::string("Sprite_");
-	n.append(std::to_string(spriteIdx));
-	spriteIdx++;
+	std::string n = std::string("Sprite");
 	ZobSprite* s = new ZobSprite(n);
 	m_meshes.push_back(s);
 	return s;

@@ -11,11 +11,18 @@
 #include <assert.h>
 #include <mutex>
 #include <condition_variable>
-#include "DirectZob.h"
+#include "../DirectZob.h"
+#include "../Managers/ZobObjectManager.h"
+#include "../Managers/ZobInputManager.h"
+#include "../Managers/LightManager.h"
+#include "../Managers/CameraManager.h"
+#include "text2D.h"
+#include "../Mesh.h"
+#include "../../dependencies/tinyxml/tinyxml.h"
 #include "Rasterizer.h"
 #include "../ZobObjects/Camera.h"
-#include <mutex>
-#include "Components/GraphicComponents/ZobComponentMesh.h"
+#include "../Components/ZobComponentFactory.h"
+#include "../Components/GraphicComponents/ZobComponentMesh.h"
 #undef None
 #include "../../dependencies/optick/include/optick.h"
 
@@ -74,8 +81,6 @@ Engine::Engine(int width, int height, Events* events)
 	m_maxLineQueueSize = 200000;
 	m_events = events;
 	m_currentFrame = 0;
-	m_zNear = 0.11f;
-	m_zFar = 1000.0f;
 	m_currentBuffer = 0;
 	m_buffer = (uint**)malloc(sizeof(uint*) * 2);
 	m_zBuffer = (float**)malloc(sizeof(float*) * 2);
@@ -97,8 +102,8 @@ Engine::Engine(int width, int height, Events* events)
 	m_nextHeight = height;
 	m_bufferData.height = height;
 	m_bufferData.width = width;
-	m_bufferData.zNear = m_zNear;
-	m_bufferData.zFar = m_zFar;
+	m_bufferData.zNear = 0.11f;
+	m_bufferData.zFar = 1000.0f;
 	m_bufferData.buffer = m_buffer[m_currentBuffer];
 	m_bufferData.zBuffer = m_zBuffer[m_currentBuffer];
 	m_bufferData.size = width * height;
@@ -184,8 +189,8 @@ Engine::Engine(int width, int height, Events* events)
 	const char* bpStr[9] = { "Full", "1", "2", "3", "4", "5", "6", "7", "8"};
 	m_varExposer->WrapEnum<eBitsPerColor>("Bits per color", &m_nbBitsPerColorDepth, 9, bp, bpStr, NULL, false, false, true);
 	m_varExposer->WrapVariable<bool>("Dithering", &m_dithering, NULL, false, true);
-	m_varExposer->WrapVariable<float>("Z near", &m_zNear, NULL, false, true);
-	m_varExposer->WrapVariable<float>("Z far", &m_zFar, NULL, false, true);
+	m_varExposer->WrapVariable<float>("Z near", &m_bufferData.zNear, NULL, false, true);
+	m_varExposer->WrapVariable<float>("Z far", &m_bufferData.zFar, NULL, false, true);
 
 	m_varExposer->WrapVariable<bool>("Show Z Buffer", &m_showZBuffer, NULL, false, false);
 	m_varExposer->WrapVariable<bool>("Wireframe", &m_wireFrame, NULL, false, false);
@@ -297,8 +302,6 @@ bool Engine::ResizeInternal()
 		m_bufferData.width = m_nextWidth;
 		m_bufferData.buffer = m_buffer[m_currentBuffer];
 		m_bufferData.zBuffer = m_zBuffer[m_currentBuffer];
-		m_bufferData.zNear = m_zNear;
-		m_bufferData.zFar = m_zFar;
 		m_bufferData.size = m_nextWidth * m_nextHeight;
 		ZobColor c = ZobColor(DirectZob::GetInstance()->GetLightManager()->GetClearColor());
 		ClearBuffer(&c);
@@ -1267,7 +1270,7 @@ BoudingBox2D Engine::Get2DBoundingBox(const ZobObject* z) const
 			for (int i = 0; i < behaviors->size(); i++)
 			{
 				const ZobComponent* zb = behaviors->at(i);
-				if (zb->GetComponentType() == ZobComponent::eComponent_mesh)
+				if (zb->GetComponentType() == ZobComponentFactory::eComponent_mesh)
 				{
 					const ZobComponentMesh* zbm = (const ZobComponentMesh*)zb;
 					const Mesh* m = zbm->GetMesh();

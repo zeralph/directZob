@@ -1,4 +1,5 @@
 #include "ZobCameraController.h"
+#include "../Rendering/Engine.h"
 
 const char* ZobCameraController::eCameraTypeStr[Camera::eCameraType::__eCameraType_MAX__] =
 {

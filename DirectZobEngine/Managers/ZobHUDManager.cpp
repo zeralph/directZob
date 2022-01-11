@@ -8,7 +8,15 @@
 #include <string>
 #include "Embed/defaultFontData.h"
 #include "Embed/defaultFontImage.h"
+#include <gainput/gainput.h>
+#include "ZobInputManager.h"
 #include "Components/HudComponents/ZobComponentText.h"
+#include "../ZobObjects/ZobObject.h"
+#include "../ZobObjects/Camera.h"
+#include "../Rendering/Engine.h"
+#include "../ZobObjects/Light.h"
+#include "../ZobMaterial.h"
+#include "CameraManager.h"
 #undef None
 #include "../../dependencies/optick/include/optick.h"
 #define NB_HUD_TRIANGLES 2000

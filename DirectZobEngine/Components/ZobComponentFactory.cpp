@@ -1,4 +1,6 @@
 #include "ZobComponentFactory.h"
+#include "../../dependencies/tinyxml/tinyxml.h"
+#include "ZobComponent.h"
 #include "ZobComponentCar.h"
 #include "HudComponents/ZobComponentText.h"
 #include "HudComponents/ZobComponentImage.h"
@@ -12,7 +14,7 @@
 #include "PhysicComponents/ZobComponentPhysicMesh.h"
 #include "../DirectZob.h"
 
-const char* ZobComponentFactory::eComponentTypeStr[ZobComponent::__eComponent_MAX__] =
+const char* ZobComponentFactory::eComponentTypeStr[__eComponent_MAX__] =
 {
 	"None",
 	"Car",
@@ -35,48 +37,48 @@ ZobComponent* ZobComponentFactory::CreateComponentInternal(ZobObject* zobObject,
 	{
 		if (ComponentName)
 		{
-			ZobComponent::eComponentType ComponentType = ZobComponent::eComponent_none;
-			for (int i = 0; i < ZobComponent::__eComponent_MAX__; i++)
+			eComponentType ComponentType = eComponent_none;
+			for (int i = 0; i < __eComponent_MAX__; i++)
 			{
 				if (strcmp(eComponentTypeStr[i], ComponentName) == 0)
 				{
-					ComponentType = (ZobComponent::eComponentType)i;
+					ComponentType = (eComponentType)i;
 					break;
 				}
 			}
 			switch (ComponentType)
 			{
-			case ZobComponent::eComponent_car:
+			case eComponent_car:
 				zb = new ZobComponentCar(zobObject);
 				break;
-			case ZobComponent::eComponent_physicBox:
+			case eComponent_physicBox:
 				zb = new ZobComponentPhysicBox(zobObject);
 				break;
-			case ZobComponent::eComponent_physicSphere:
+			case eComponent_physicSphere:
 				zb = new ZobComponentPhysicSphere(zobObject);
 				break;
-			case ZobComponent::eComponent_physicCapsule:
+			case eComponent_physicCapsule:
 				zb = new ZobComponentPhysicCapsule(zobObject);
 				break;
-			case ZobComponent::eComponent_physicMesh:
+			case eComponent_physicMesh:
 				zb = new ZobComponentPhysicMesh(zobObject);
 				break;
-			case ZobComponent::eComponent_hudText:
+			case eComponent_hudText:
 				zb = new ZobComponentText(zobObject, bEditorZobComponent);
 				break;
-			case ZobComponent::eComponent_hudImage:
+			case eComponent_hudImage:
 				zb = new ZobComponentImage(zobObject, bEditorZobComponent);
 				break;
-			case ZobComponent::eComponent_mesh:
+			case eComponent_mesh:
 				zb = new ZobComponentMesh(zobObject, bEditorZobComponent);
 				break;
-			case ZobComponent::eComponent_sprite:
+			case eComponent_sprite:
 				zb = new ZobComponentSprite(zobObject, bEditorZobComponent);
 				break;
-			case ZobComponent::eComponent_light:
+			case eComponent_light:
 				zb = new ZobComponentLight(zobObject, bEditorZobComponent);
 				break;
-			case ZobComponent::eComponent_none:
+			case eComponent_none:
 				zb = NULL;
 				break;
 			default:

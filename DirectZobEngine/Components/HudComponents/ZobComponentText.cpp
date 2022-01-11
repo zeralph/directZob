@@ -6,9 +6,9 @@
 #include "../../Managers/ZobInputManager.h"
 #include "../../Managers/ZobHUDManager.h"
 #include "../../Rendering/text2D.h"
+#include "../../Managers/MaterialManager.h"
 #include "../../ZobObjects/ZobObject.h"
 #include "../../SceneLoader.h"
-#include "../../Managers/ZobHUDManager.h"
 
 ZobComponentText::~ZobComponentText()
 {
@@ -32,7 +32,7 @@ ZobComponentText::ZobComponentText(ZobObject* zobObject, bool bEditorZobComponen
 	m_visible = true;
 	m_defaultColor = ZobColor::White;
 	m_selectedColor = ZobColor::Red;
-	m_componentType = eComponent_hudText; 
+	m_componentType = ZobComponentFactory::eComponent_hudText; 
 	//m_unit = ZobHUDManager::eHudUnit_ratio;
 	m_fontXml.SetFileType(ZobFilePath::eFileType_xml);
 	m_fontImage.SetFileType(ZobFilePath::eFileType_texture);

@@ -4,9 +4,9 @@
 #undef max
 #undef None
 
-#include "../../tinyxml/tinyxml.h"
 #include "../ZobComponent.h"
-
+#include "../../Rendering/Triangle.h"
+#include "../../Misc/ZobFilePath.h"
 #include <string>
 #include <vector>
 

@@ -4,7 +4,6 @@
 #undef max
 #undef None
 
-#include "../tinyxml/tinyxml.h"
 #include "ZobComponentPhysicShape.h"
 #include <reactphysics3d/reactphysics3d.h>
 #include <string>

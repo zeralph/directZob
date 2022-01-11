@@ -6,6 +6,8 @@
 #include "../Managers/ZobInputManager.h"
 #include "../Rendering/text2D.h"
 #include "../ZobObjects/ZobObject.h"
+#include "../Managers/CameraManager.h"
+#include "ZobComponentFactory.h"
 #include <math.h>
 
 #define MS_TO_KMH(a) a * 3.6f 
@@ -24,7 +26,7 @@ ZobComponentCar::ZobComponentCar(ZobObject* zobObject) : ZobComponent(zobObject,
 {
 	SET_CLASS_AND_NAME
 	m_carType = eCarType_pouet;
-	m_componentType = eComponent_car;
+	m_componentType = ZobComponentFactory::eComponent_car;
 	m_lastGroundPosition = ZobVector3(0, 0, 0);
 	m_lastGroundNormal = ZobVector3(0, 1, 0);
 	m_frontLeftWheel = NULL;

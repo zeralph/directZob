@@ -1,5 +1,6 @@
 #include "LightManager.h"
 #include "DirectZob.h"
+#include "../../dependencies/tinyxml/tinyxml.h"
 
 LightManager::LightManager()
 {

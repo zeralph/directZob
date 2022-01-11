@@ -2,6 +2,10 @@
 #include "../../DirectZob.h"
 #include "../ZobComponentFactory.h"
 #include "../../Sprite.h"
+#include "../../ZobObjects/Camera.h"
+#include "../../Managers/CameraManager.h"
+#include "../../Managers/MeshManager.h"
+#include "../../Managers/MaterialManager.h"
 
 ZobComponentSprite::~ZobComponentSprite()
 {
@@ -11,7 +15,7 @@ ZobComponentSprite::~ZobComponentSprite()
 ZobComponentSprite::ZobComponentSprite(ZobObject* zobObject, bool bEditorZobComponent) : ZobComponent(zobObject, bEditorZobComponent)
 {
 	SET_CLASS_AND_NAME
-	m_componentType = eComponent_sprite;
+	m_componentType = ZobComponentFactory::eComponent_sprite;
 	m_texturePath.Reset();
 	m_sprite = NULL;
 	m_material = NULL;

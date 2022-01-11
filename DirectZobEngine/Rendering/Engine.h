@@ -52,8 +52,8 @@ public:
 	const int										GetNbRasterizer() const { return m_nbRasterizers; }
 	const int										GetRasterizerHeight() const { return m_rasterizerHeight; }
 	inline BufferData*								GetBufferData() { return &m_bufferData; }
-	inline const float								GetZNear() const { return m_zNear; }
-	inline const float								GetZFar() const { return m_zFar; }
+	inline const float								GetZNear() const { return m_bufferData.zNear; }
+	inline const float								GetZFar() const { return m_bufferData.zFar; }
 	inline const ulong								GetNbPixels() const { return m_nbPixels; }
 	inline void										ShowGrid(bool b) { m_showGrid = b; }
 	inline void										ShowBBoxes(bool b) { m_showBBoxes = b; }
@@ -164,8 +164,6 @@ private:
 
 	eRenderMode m_renderMode = eRenderMode_fullframe;
 	eLightingPrecision m_lightingPrecision = eLightingPrecision_vertex;
-	float m_zNear;
-	float m_zFar;
 	bool m_showZBuffer;
 	bool m_wireFrame;
 	int m_rasterizerHeight;

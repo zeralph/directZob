@@ -1,23 +1,17 @@
 #include "Camera.h"
-#include "DirectZob.h"
 #include <math.h>
 #include <mutex>
-#include "DirectZob.h"
-#include "ZobPhysic/ZobPhysicComponent.h"
-#include "ZobCameraController/ZobCameraController.h"
-#include "ZobCameraController/ZobCameraControllerOrbital.h"
-#include "ZobCameraController/ZobCameraControllerFPS.h"
-#include "ZobCameraController/ZobCameraControllerFollowCar.h"
-#include "Misc/ZobGeometryHelper.h"
-#include "Misc/ZobXmlHelper.h"
-#include "Components/GraphicComponents/ZobComponentSprite.h"
-#include "SceneLoader.h"
-
-static std::mutex g_update_camera_mutex;
-static float ee = 0.0f;
-
-static ZobVector3 sRayDbg;
-static ZobVector3 sRayDbg2;
+#include "../DirectZob.h"
+#include "../ZobPhysic/ZobPhysicComponent.h"
+#include "../ZobCameraController/ZobCameraController.h"
+#include "../ZobCameraController/ZobCameraControllerOrbital.h"
+#include "../ZobCameraController/ZobCameraControllerFPS.h"
+#include "../ZobCameraController/ZobCameraControllerFollowCar.h"
+#include "../Misc/ZobGeometryHelper.h"
+#include "../Misc/ZobXmlHelper.h"
+#include "../Components/GraphicComponents/ZobComponentSprite.h"
+#include "../SceneLoader.h"
+#include "../Managers/CameraManager.h"
 
 Camera::Camera(ZobEntity::ZobType zobType, const std::string& name, eCameraType type, float fov, BufferData* bufferData, ZobObject* parent)
 	:ZobObject(zobType, ZobEntity::ZobSubType::subtype_zobCamera, name, parent)
@@ -28,9 +22,6 @@ Camera::Camera(ZobEntity::ZobType zobType, const std::string& name, eCameraType 
 	m_nextControlerType = type;
 	m_fov = fov;
 	m_active = false;
-
-	sRayDbg = ZobVector3(1000, 1000, 1000);
-	sRayDbg2 = ZobVector3(1000, 1000, 1000);
 	WrapVariables();
 	if (DirectZob::IsEditorMode())
 	{
@@ -647,9 +638,7 @@ DirectZobType::Ray Camera::From2DToWorld(float x, float y) const
 	//if(fabsf(x)<=1.0f && fabsf(y)<=1.0f)
 	{
 		BufferData* b = DirectZob::GetInstance()->GetEngine()->GetBufferData();
-		static float pouet = 0.f;
-		ZobVector3 v = ZobVector3(x, y, pouet);
-		static bool mytest = true;
+		ZobVector3 v = ZobVector3(x, y, 0.0f);
 		m_invProjectionMatrix.Mul(&v);
 		m_invViewMatrix.Mul(&v);
 		v.x /= v.w;
