@@ -1,6 +1,6 @@
 #pragma once
-#include "ZobObjects/Camera.h"
-#include "ZobObjects/ZobEntity.h"
+#include "../ZobObjects/Camera.h"
+#include "../ZobObjects/ZobEntity.h"
 class ZobCameraController : public ZobEntity
 {
 public:

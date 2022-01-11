@@ -1,17 +1,19 @@
 #pragma once
 #include "../Types.h"
-#include "../ZobObjects/ZobObject.h"
 #include <string>
 #include <vector>
-#include "../ZobObjects/Camera.h"
-#include "../Rendering/Engine.h"
-#include "../ZobObjects/Light.h"
 #include "../Rendering/ZobFont.h"
-#include "../ZobMaterial.h"
 
 #define HUD_TEXT_BUFFER_SIZE 4096
 
+class Engine;
+class Camera;
 class ZobComponentText;
+class HUDElement;
+class ZobMaterial;
+class ZobVector2;
+class ZobVector3;
+class ZobColor;
 class ZobHUDManager
 {
 public:

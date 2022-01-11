@@ -1,7 +1,11 @@
 #include "ZobComponentMesh.h"
 #include "../../DirectZob.h"
 #include "../../Mesh.h"
-
+#include "../../ZobObjects/Camera.h"
+#include "../../Managers/CameraManager.h"
+#include "../../Managers/MeshManager.h"
+#include "../../Managers/MaterialManager.h"
+#include "../ZobComponentFactory.h"
 ZobComponentMesh::~ZobComponentMesh()
 {
 
@@ -10,7 +14,7 @@ ZobComponentMesh::~ZobComponentMesh()
 ZobComponentMesh::ZobComponentMesh(ZobObject* zobObject, bool bEditorZobComponent) : ZobComponent(zobObject, bEditorZobComponent)
 {
 	SET_CLASS_AND_NAME
-	m_componentType = eComponent_mesh;
+	m_componentType = ZobComponentFactory::eComponent_mesh;
 	m_meshPath.Reset();
 	m_mesh = NULL;
 	m_meshPath.SetFileType(ZobFilePath::eFileType_mesh);

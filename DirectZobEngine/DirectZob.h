@@ -1,25 +1,24 @@
 #pragma once
+#include "Types.h"
+#include "Rendering/Engine.h"
 #include <string>
 #include <iostream>
 #include <algorithm>
-#include "Rendering/Engine.h"
-#include "ZobMaterial.h"
-#include "Mesh.h"
-#include "Rendering/text2D.h"
-#include "Events.h"
-#include "SceneLoader.h"
-#include "Managers/CameraManager.h"
-#include "Managers/MaterialManager.h"
-#include "Managers/MeshManager.h"
-#include "Managers/LightManager.h"
-#include "Managers/ZobObjectManager.h"
-#include "Managers/ZobInputManager.h"
-#include "Managers/ZobHUDManager.h"
-#include "../minifb/src/WindowData.h"
+#include "../dependencies/minifb/src/WindowData.h"
 
+#define LOG_BUFFER_SIZE 1024
 #define kUnused(var) (void) var;
 using namespace std;
 class ZobPhysicsEngine;
+class Text2D;
+class Events;
+class MaterialManager;
+class CameraManager;
+class MeshManager;
+class ZobObjectManager;
+class ZobInputManager;
+class ZobHUDManager;
+class LightManager;
 class DirectZob
 {
 	
@@ -91,8 +90,7 @@ public :
 	const float				GetFrameTime() const { return m_frameTime; };
 	const float				GetCopyTime() const { return m_copyTime; };
 	int						RunAFrame(engineCallback = NULL, DirectZob::engineCallback OnQueuing = NULL);
-	void					EditorUpdate();
-	int						Run( void func(void) );
+	void					EditorUpdate();;
 	int						GetBufferDataLenght() const { return m_engine->GetBufferData()->size; }
 	const uint*				GetBufferData() const { return m_engine->GetBufferData()->buffer; }
 	int						GetBufferWidth() const { return m_engine->GetBufferData()->width; }
@@ -163,4 +161,6 @@ private:
 	static DirectZob::eDirectZobLogLevel sLogLevel;
 	bool m_physicStarted;
 	DirectZob::engineCallback m_onSceneLoaded;
+	static char logBuffer[LOG_BUFFER_SIZE];
+	static int sTargetMSPerFrameIdx;
 };

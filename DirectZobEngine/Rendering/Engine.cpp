@@ -11,11 +11,18 @@
 #include <assert.h>
 #include <mutex>
 #include <condition_variable>
-#include "DirectZob.h"
+#include "../DirectZob.h"
+#include "../Managers/ZobObjectManager.h"
+#include "../Managers/ZobInputManager.h"
+#include "../Managers/LightManager.h"
+#include "../Managers/CameraManager.h"
+#include "text2D.h"
+#include "../Mesh.h"
+#include "../../dependencies/tinyxml/tinyxml.h"
 #include "Rasterizer.h"
 #include "../ZobObjects/Camera.h"
-#include <mutex>
-#include "Components/GraphicComponents/ZobComponentMesh.h"
+#include "../Components/ZobComponentFactory.h"
+#include "../Components/GraphicComponents/ZobComponentMesh.h"
 #undef None
 #include "../../dependencies/optick/include/optick.h"
 
@@ -1267,7 +1274,7 @@ BoudingBox2D Engine::Get2DBoundingBox(const ZobObject* z) const
 			for (int i = 0; i < behaviors->size(); i++)
 			{
 				const ZobComponent* zb = behaviors->at(i);
-				if (zb->GetComponentType() == ZobComponent::eComponent_mesh)
+				if (zb->GetComponentType() == ZobComponentFactory::eComponent_mesh)
 				{
 					const ZobComponentMesh* zbm = (const ZobComponentMesh*)zb;
 					const Mesh* m = zbm->GetMesh();

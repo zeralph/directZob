@@ -2,13 +2,14 @@
 #include "../Rendering/ZobMatrix4x4.h"
 #include "ZobObject.h"
 #include <string>
-#include "tinyxml.h"
 
 
 class ZobCameraController;
 class ZobCameraControllerOrbital;
 class ZobCameraControllerFPS;
 class ZobCameraControllerFollowCar;
+class TiXmlElement;
+class TiXmlNode;
 class Camera : public ZobObject
 {
 friend class ZobCameraController;

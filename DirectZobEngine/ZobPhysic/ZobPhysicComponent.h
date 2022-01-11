@@ -6,7 +6,6 @@
 #include <reactphysics3d/reactphysics3d.h>
 #include "../Rendering/ZobVector3.h"
 #include "../ZobObjects/Camera.h"
-#include "tinyxml.h"
 
 using namespace reactphysics3d;
 class ZobObject;

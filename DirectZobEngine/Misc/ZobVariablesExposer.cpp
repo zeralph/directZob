@@ -1,8 +1,9 @@
 #include "ZobVariablesExposer.h"
 #include "ZobXmlHelper.h"
 #include "ZobUtils.h"
+#include "../ZobObjects/ZobObject.h"
 #include "../DirectZobEngine/DirectZob.h"
-
+#include "../../dependencies/tinyxml/tinyxml.h"
 ZobVariablesExposer::ZobVariablesExposer(zobId id)
 {
 	m_wrappedVariables.clear();

@@ -1,7 +1,8 @@
 #pragma once
 #include "../../Types.h"
-#include "../../tinyxml/tinyxml.h"
 #include "../ZobComponent.h"
+#include "../../Rendering/Color.h"
+#include "../../Misc/ZobFilePath.h"
 #include <string>
 #include <vector>
 

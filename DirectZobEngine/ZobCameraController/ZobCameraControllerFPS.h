@@ -1,6 +1,7 @@
 #pragma once
 #include "ZobCameraController.h"
-#include "ZobObjects/Camera.h"
+
+class Camera;
 class ZobCameraControllerFPS : public ZobCameraController
 {
 public:

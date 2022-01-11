@@ -5,7 +5,6 @@
 #undef None
 
 #include "../../Types.h"
-#include "../tinyxml/tinyxml.h"
 #include "../ZobComponent.h"
 #include "../../ZobPhysic/ZobPhysicComponent.h"
 #include <reactphysics3d/reactphysics3d.h>

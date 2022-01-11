@@ -4,7 +4,7 @@
 #undef max
 #undef None
 
-#include "../tinyxml/tinyxml.h"
+#include "../Rendering/Color.h"
 #include "ZobComponent.h"
 #include <string>
 #include <vector>

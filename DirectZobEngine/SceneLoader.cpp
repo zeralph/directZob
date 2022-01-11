@@ -1,6 +1,9 @@
 #include "SceneLoader.h"
 #include "DirectZob.h"
 #include "ZobPhysic/ZobPhysicsEngine.h"
+#include "Managers/LightManager.h"
+#include "Managers/ZobHUDManager.h"
+#include "Managers/CameraManager.h"
 #include "Misc/ZobXmlHelper.h"
 
 //TODO !

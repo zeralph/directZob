@@ -2,6 +2,7 @@
 #include "../Types.h"
 #include "../ZobObjects/Light.h"
 #include "../Rendering/ZobVector3.h"
+#include "../Rendering/Color.h"
 #include <string>
 #include <vector>
 

@@ -2,6 +2,8 @@
 #include "tinyxml.h"
 #include "DirectZob.h"
 #include "Misc/ZobXmlHelper.h"
+#include "../Managers/LightManager.h"
+#include "../Managers/CameraManager.h"
 #include "Components/GraphicComponents/ZobComponentSprite.h" 
 #include "Misc/ZobFilePath.h"
 #include "SceneLoader.h"

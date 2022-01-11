@@ -1,8 +1,8 @@
 #pragma once
 #include "ZobCameraController.h"
-#include "ZobObjects/Camera.h"
 #include "../ZobPhysic/ZobPhysicComponent.h"
 
+class Camera;
 class ZobCameraControllerFollowCar: public ZobCameraController
 {
 public:
@@ -16,7 +16,6 @@ public:
     void            Rotate(float x, float y, float z) override;
     void            Move(float x, float y, float z) override;
     void            DrawGizmos(const Camera* camera, Engine* engine) const override;
-    Camera::eCameraType     GetType() const { return m_cameraControllerType; }
     std::string             GetTypeName() const { return m_typeName; }
 private:
 

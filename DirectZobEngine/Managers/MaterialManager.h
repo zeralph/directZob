@@ -1,13 +1,14 @@
 #pragma once
-#include "../Types.h"
-#include "../ZobMaterial.h"
 #undef PropertyNotify
+#include "../Types.h"
 #include <fbxsdk.h>
 #include <string>
 #include <vector>
-#include "../Rendering/Texture.h"
 #include "../Misc/ZobFilePath.h"
 
+class Texture;
+class ZobMaterial;
+class ZobColor;
 class MaterialManager
 {
 public:

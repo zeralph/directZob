@@ -1,9 +1,10 @@
 #include "ZobComponentLight.h"
 #include "../ZobObjects/ZobObject.h"
+#include "ZobComponentFactory.h"
 
 ZobComponentLight::ZobComponentLight(ZobObject* zobObject, bool bEditorZobComponent) : ZobComponent(zobObject, bEditorZobComponent)
 {
-	m_componentType = eComponent_light;
+	m_componentType = ZobComponentFactory::eComponent_light;
 	SET_CLASS_AND_NAME
 }
 

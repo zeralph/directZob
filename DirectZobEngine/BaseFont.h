@@ -1,5 +1,4 @@
 /* GIMP RGB C-Source image dump (font2.c) */
-#include "Types.h"
 
 static const struct {
   uint  	 width;

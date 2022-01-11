@@ -4,9 +4,7 @@
 #include <string>
 #include <vector>
 #include "../Types.h"
-#include "../Rendering/Engine.h"
 #include "ZobEntity.h"
-#include "tinyxml.h"
 #include "../Components/ZobComponentFactory.h"
 #include "../Misc/ZobFilePath.h"
 
@@ -16,11 +14,11 @@
 #include "../Components/HudComponents/ZobComponentText.h"
 #include "../Components/HudComponents/ZobComponentImage.h"
 
-class Mesh;
+class Engine;
+class TiXmlNode;
+class TiXmlElement;
 class ZobPhysicComponent;
-class m_varExposer;
-class ZobComponentMesh;
-
+class ZobVariablesExposer;
 class ZobObject:public ZobEntity
 {
 friend class ZobComponent;

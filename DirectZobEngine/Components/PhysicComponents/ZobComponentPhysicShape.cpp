@@ -1,5 +1,4 @@
 #include "ZobComponentPhysicShape.h"
-#include "Types.h"
 #include "../../DirectZob.h"
 #include "../../ZobPhysic/ZobPhysicsEngine.h"
 
@@ -11,7 +10,7 @@ ZobComponentPhysicShape::~ZobComponentPhysicShape()
 ZobComponentPhysicShape::ZobComponentPhysicShape(ZobObject* zobObject) : ZobComponent(zobObject, false)
 {
 	SET_CLASS_AND_NAME
-		m_componentType = eComponent_none;
+		m_componentType = ZobComponentFactory::eComponent_none;
 	m_isInit = false;
 
 	ZobPhysicComponent::eLayer ly[11] = {
