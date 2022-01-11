@@ -13,7 +13,7 @@
         <Var Name="Bits per color" value="Full" />
         <Var Name="Dithering" value="False" />
         <Var Name="Z near" value="0.110" />
-        <Var Name="Z far" value="1000.000" />
+        <Var Name="Z far" value="200.000" />
         <Var Name="Equalize triangle queues" value="False" />
         <Var Name="Perspective Correction" value="True" />
     </Globals>
