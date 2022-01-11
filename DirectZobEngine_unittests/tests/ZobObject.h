@@ -4,18 +4,18 @@
 
 TEST(ZobObject, Constructor)
 {
-	ZobObject* z = new ZobObject(ZobEntity::ZobType::type_scene, ZobEntity::ZobSubType::subtype_zobOject, "zob_object");
+	ZobObject* z = new ZobObject(ZobEntity::ZobType::type_scene, ZobEntity::ZobSubType::subtype_Component, "zob_object");
 	EXPECT_EQ(z->GetName(), "zob_object");
 	EXPECT_EQ(ZobEntity::GetType(z->GetIdValue()), ZobEntity::ZobType::type_scene);
-	EXPECT_EQ(ZobEntity::GetSubType(z->GetIdValue()), ZobEntity::ZobSubType::subtype_zobOject);
+	EXPECT_EQ(ZobEntity::GetSubType(z->GetIdValue()), ZobEntity::ZobSubType::subtype_Component);
 	delete(z);
 }
 
 TEST(ZobObject, chain_parent)
 {
-	ZobObject* z1 = new ZobObject(ZobEntity::ZobType::type_scene, ZobEntity::ZobSubType::subtype_zobOject, "zob_object_1");
-	ZobObject* z2 = new ZobObject(ZobEntity::ZobType::type_scene, ZobEntity::ZobSubType::subtype_zobOject, "zob_object_2");
-	ZobObject* z3 = new ZobObject(ZobEntity::ZobType::type_scene, ZobEntity::ZobSubType::subtype_zobOject, "zob_object_2");
+	ZobObject* z1 = new ZobObject(ZobEntity::ZobType::type_scene, ZobEntity::ZobSubType::subtype_Component, "zob_object_1");
+	ZobObject* z2 = new ZobObject(ZobEntity::ZobType::type_scene, ZobEntity::ZobSubType::subtype_Component, "zob_object_2");
+	ZobObject* z3 = new ZobObject(ZobEntity::ZobType::type_scene, ZobEntity::ZobSubType::subtype_Component, "zob_object_2");
 	z2->SetParent(z1);
 	z3->SetParent(z2);
 	EXPECT_EQ(z2->GetParent(), z1);
@@ -34,9 +34,9 @@ TEST(ZobObject, chain_parent)
 
 TEST(ZobObject, chain_move)
 {
-	ZobObject* z1 = new ZobObject(ZobEntity::ZobType::type_scene, ZobEntity::ZobSubType::subtype_zobOject, "zob_object_1");
-	ZobObject* z2 = new ZobObject(ZobEntity::ZobType::type_scene, ZobEntity::ZobSubType::subtype_zobOject, "zob_object_2");
-	ZobObject* z3 = new ZobObject(ZobEntity::ZobType::type_scene, ZobEntity::ZobSubType::subtype_zobOject, "zob_object_2");
+	ZobObject* z1 = new ZobObject(ZobEntity::ZobType::type_scene, ZobEntity::ZobSubType::subtype_Component, "zob_object_1");
+	ZobObject* z2 = new ZobObject(ZobEntity::ZobType::type_scene, ZobEntity::ZobSubType::subtype_Component, "zob_object_2");
+	ZobObject* z3 = new ZobObject(ZobEntity::ZobType::type_scene, ZobEntity::ZobSubType::subtype_Component, "zob_object_2");
 	z2->SetParent(z1);
 	z3->SetParent(z2);
 	EXPECT_EQ(z2->GetParent(), z1);
@@ -66,9 +66,9 @@ TEST(ZobObject, chain_move)
 
 TEST(ZobObject, chain_scale)
 {
-	ZobObject* z1 = new ZobObject(ZobEntity::ZobType::type_scene, ZobEntity::ZobSubType::subtype_zobOject, "zob_object_1");
-	ZobObject* z2 = new ZobObject(ZobEntity::ZobType::type_scene, ZobEntity::ZobSubType::subtype_zobOject, "zob_object_2");
-	ZobObject* z3 = new ZobObject(ZobEntity::ZobType::type_scene, ZobEntity::ZobSubType::subtype_zobOject, "zob_object_2");
+	ZobObject* z1 = new ZobObject(ZobEntity::ZobType::type_scene, ZobEntity::ZobSubType::subtype_Component, "zob_object_1");
+	ZobObject* z2 = new ZobObject(ZobEntity::ZobType::type_scene, ZobEntity::ZobSubType::subtype_Component, "zob_object_2");
+	ZobObject* z3 = new ZobObject(ZobEntity::ZobType::type_scene, ZobEntity::ZobSubType::subtype_Component, "zob_object_2");
 	z2->SetParent(z1);
 	z3->SetParent(z2);
 	z1->SetWorldPosition(0, 0, 0);
@@ -89,9 +89,9 @@ TEST(ZobObject, chain_scale)
 
 TEST(ZobObject, chain_rotate)
 {
-	ZobObject* z1 = new ZobObject(ZobEntity::ZobType::type_scene, ZobEntity::ZobSubType::subtype_zobOject, "zob_object_1");
-	ZobObject* z2 = new ZobObject(ZobEntity::ZobType::type_scene, ZobEntity::ZobSubType::subtype_zobOject, "zob_object_2");
-	ZobObject* z3 = new ZobObject(ZobEntity::ZobType::type_scene, ZobEntity::ZobSubType::subtype_zobOject, "zob_object_2");
+	ZobObject* z1 = new ZobObject(ZobEntity::ZobType::type_scene, ZobEntity::ZobSubType::subtype_Component, "zob_object_1");
+	ZobObject* z2 = new ZobObject(ZobEntity::ZobType::type_scene, ZobEntity::ZobSubType::subtype_Component, "zob_object_2");
+	ZobObject* z3 = new ZobObject(ZobEntity::ZobType::type_scene, ZobEntity::ZobSubType::subtype_Component, "zob_object_2");
 	z2->SetParent(z1);
 	z3->SetParent(z2);
 	z1->SetWorldPosition(0, 0, 0);
@@ -110,9 +110,9 @@ TEST(ZobObject, chain_rotate)
 
 TEST(ZobObject, chain_all)
 {
-	ZobObject* z1 = new ZobObject(ZobEntity::ZobType::type_scene, ZobEntity::ZobSubType::subtype_zobOject, "zob_object_1");
-	ZobObject* z2 = new ZobObject(ZobEntity::ZobType::type_scene, ZobEntity::ZobSubType::subtype_zobOject, "zob_object_2");
-	ZobObject* z3 = new ZobObject(ZobEntity::ZobType::type_scene, ZobEntity::ZobSubType::subtype_zobOject, "zob_object_2");
+	ZobObject* z1 = new ZobObject(ZobEntity::ZobType::type_scene, ZobEntity::ZobSubType::subtype_Component, "zob_object_1");
+	ZobObject* z2 = new ZobObject(ZobEntity::ZobType::type_scene, ZobEntity::ZobSubType::subtype_Component, "zob_object_2");
+	ZobObject* z3 = new ZobObject(ZobEntity::ZobType::type_scene, ZobEntity::ZobSubType::subtype_Component, "zob_object_2");
 	z2->SetParent(z1);
 	z3->SetParent(z2);
 	z1->SetLocalPosition(-3.f, 2.f, -2.f);

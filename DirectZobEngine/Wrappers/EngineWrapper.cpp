@@ -4,7 +4,9 @@
 #include "ZobObjectManagerWrapper.h"
 #include "../ZobObjects/ZobObject.h"
 #include "../Misc/ZobGeometryHelper.h"
-
+#include "../Managers/CameraManager.h"
+#include "../Managers/LightManager.h"
+#include "../Managers/ZobInputManager.h"
 namespace CLI
 {
 	static Line m_lines[NB_EDITOR_LINES];

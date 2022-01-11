@@ -3,6 +3,9 @@
 #include "ZobObjectManagerWrapper.h"
 #include "../DirectZob.h"
 #include "../ZobObjects/ZobObject.h"
+#include "../Managers/CameraManager.h"
+#include "../Managers/LightManager.h"
+#include "../Managers/ZobInputManager.h"
 #include "../Components/GraphicComponents/ZobComponentMesh.h"
 #include "../Components/GraphicComponents/ZobComponentSprite.h"
 #include "../Components/GraphicComponents/ZobComponentSkybox.h"
@@ -78,7 +81,7 @@ namespace CLI
 
 	void ZobObjectManagerWrapper::CreateComponentNodeMenu(ToolStripMenuItem^ parent)
 	{
-		int l = ZobComponent::eComponentType::__eComponent_MAX__;
+		int l = ZobComponentFactory::eComponentType::__eComponent_MAX__;
 		for (int i = 0; i < l; i++)
 		{
 			String^ s = gcnew String(ZobComponentFactory::eComponentTypeStr[i]);
@@ -136,7 +139,7 @@ namespace CLI
 		if (m_selectedObject)
 		{
 			ToolStripMenuItem^ it = (ToolStripMenuItem^)sender;
-			int l = ZobComponent::eComponentType::__eComponent_MAX__;
+			int l = ZobComponentFactory::eComponentType::__eComponent_MAX__;
 			for (int i = 0; i < l; i++)
 			{
 				String^ s = gcnew String(ZobComponentFactory::eComponentTypeStr[i]);
@@ -578,21 +581,21 @@ namespace CLI
 				ZobComponent* zc = dynamic_cast<ZobComponent*>(ze);
 				if (zc)
 				{
-					ZobComponent::eComponentType zct = zc->GetComponentType();
-					if (zct == ZobComponent::eComponentType::eComponent_mesh)
+					ZobComponentFactory::eComponentType zct = zc->GetComponentType();
+					if (zct == ZobComponentFactory::eComponentType::eComponent_mesh)
 					{
 						_imgType = eImageObjectType::eImageZobMesh;
 					}
-					else if (zct == ZobComponent::eComponentType::eComponent_sprite)
+					else if (zct == ZobComponentFactory::eComponentType::eComponent_sprite)
 					{
 						_imgType = eImageObjectType::eImageZobSprite;
 					}
-					else if (zct == ZobComponent::eComponentType::eComponent_hudText || zct == ZobComponent::eComponentType::eComponent_hudImage)
+					else if (zct == ZobComponentFactory::eComponentType::eComponent_hudText || zct == ZobComponentFactory::eComponentType::eComponent_hudImage)
 					{
 						_imgType = eImageObjectType::eImageZobHud;
 					}
-					else if (zct == ZobComponent::eComponentType::eComponent_physicBox || zct == ZobComponent::eComponentType::eComponent_physicCapsule ||
-								zct == ZobComponent::eComponentType::eComponent_physicMesh || zct == ZobComponent::eComponentType::eComponent_physicSphere)
+					else if (zct == ZobComponentFactory::eComponentType::eComponent_physicBox || zct == ZobComponentFactory::eComponentType::eComponent_physicCapsule ||
+								zct == ZobComponentFactory::eComponentType::eComponent_physicMesh || zct == ZobComponentFactory::eComponentType::eComponent_physicSphere)
 					{
 						_imgType = eImageObjectType::eImageZobPhysicComponent;
 					}

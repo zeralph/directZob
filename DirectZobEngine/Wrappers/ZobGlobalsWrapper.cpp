@@ -4,6 +4,9 @@
 #include "../DirectZob.h"
 #include "../Misc/ZobVariablesExposer.h"
 #include "ZobUserControls/ZobUserControls.h"
+#include "../Managers/CameraManager.h"
+#include "../Managers/LightManager.h"
+#include "../Managers/ZobInputManager.h"
 
 #define TO_MANAGED_STRING(x) gcnew String(x);
 

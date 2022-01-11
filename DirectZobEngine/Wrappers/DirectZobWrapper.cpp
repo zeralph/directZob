@@ -4,6 +4,9 @@
 #include "DirectZobWrapper.h"
 #include "../../dependencies/minifb/include/MiniFB_enums.h"
 #include "../SceneLoader.h"
+#include "../Managers/CameraManager.h"
+#include "../Managers/LightManager.h"
+#include "../Managers/ZobInputManager.h"
 
 namespace CLI
 {
