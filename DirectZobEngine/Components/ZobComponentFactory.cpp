@@ -24,7 +24,8 @@ const char* ZobComponentFactory::eComponentTypeStr[ZobComponent::__eComponent_MA
 	"PhysicMesh",
 	"Mesh",
 	"Sprite",
-	"Light"
+	"Light",
+	"Skybox"
 };
 
 ZobComponent* ZobComponentFactory::CreateComponentInternal(ZobObject* zobObject, const char* ComponentName, bool bEditorZobComponent)

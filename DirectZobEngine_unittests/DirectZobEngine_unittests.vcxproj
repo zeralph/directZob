@@ -89,18 +89,19 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>X64;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PreprocessorDefinitions>X64;_DEBUG;_CONSOLE;%(PreprocessorDefinitions);WINDOWS</PreprocessorDefinitions>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
-      <AdditionalDependencies>..\DirectZobEngine\build\DirectZob\Release\lib\DirectZobEngine.lib;..\DirectZobEngine\build\DirectZob\Release\lib\lodepng.lib;..\DirectZobEngine\build\DirectZob\Release\lib\minifb.lib;..\DirectZobEngine\build\DirectZob\Release\lib\nanojpeg.lib;..\DirectZobEngine\build\DirectZob\Release\lib\tga.lib;..\DirectZobEngine\build\DirectZob\Release\lib\tinyxml.lib;..\dependencies\fbxsdk\windows\lib\vs2017\x64\release\libfbxsdk.lib;..\dependencies\optick\lib\windows\OptickCore.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\DirectZobEngine\build\DirectZob\Debug\lib\DirectZobEngine.lib;..\DirectZobEngine\build\DirectZob\Debug\lib\lodepng.lib;..\DirectZobEngine\build\DirectZob\Debug\lib\minifb.lib;..\DirectZobEngine\build\DirectZob\Debug\lib\nanojpeg.lib;..\DirectZobEngine\build\DirectZob\Debug\lib\tga.lib;..\DirectZobEngine\build\DirectZob\Debug\lib\tinyxml.lib;..\dependencies\fbxsdk\windows\lib\vs2017\x64\release\libfbxsdk.lib;..\dependencies\optick\lib\windows\OptickCore.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
