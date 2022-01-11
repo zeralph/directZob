@@ -26,7 +26,8 @@ const char* ZobComponentFactory::eComponentTypeStr[__eComponent_MAX__] =
 	"PhysicMesh",
 	"Mesh",
 	"Sprite",
-	"Light"
+	"Light",
+	"Skybox"
 };
 
 ZobComponent* ZobComponentFactory::CreateComponentInternal(ZobObject* zobObject, const char* ComponentName, bool bEditorZobComponent)
