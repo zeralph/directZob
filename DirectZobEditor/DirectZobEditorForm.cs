@@ -793,9 +793,11 @@ namespace DirectZobEditor
                 if(p != null)
                 {
                     Rectangle rect = p.DisplayRectangle;
+                    int x = p.Width;
+                    int y = p.Height;
                     float r = (float)p.Width / (float)p.Height;
-                    toolStripStatusLabel1.Text = "Size : " + p.Width + "x" + p.Height + " | Ratio : "+r;
-                    m_directZobWrapper.GetEngineWrapper().Resize(p.Width, p.Height);
+                    toolStripStatusLabel1.Text = "Size : " + x + "x" + y + " | Ratio : "+r;
+                    m_directZobWrapper.GetEngineWrapper().Resize(x, y);
                 }
             }
         }

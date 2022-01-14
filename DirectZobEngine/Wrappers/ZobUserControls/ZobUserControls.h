@@ -254,10 +254,12 @@ namespace CLI {
 		bool IsSelectable() { return m_isSelectable; }
 		bool IsReadOnly() { return m_isReadOnly; }
 		String^ m_zobObjectGuid;
-		CheckBox^ m_visible;
-		CheckBox^ m_locked;
+		bool m_visible;
+		bool m_locked;
+		EventHandler^ _event;
 		bool m_isSelectable;
 		bool m_isReadOnly;
+		void OnClick(Object^ sender, TreeNodeMouseClickEventArgs^ e);
 	};
 
 	public ref class ZobControlTreeview : TreeView

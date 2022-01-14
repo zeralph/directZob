@@ -1133,6 +1133,21 @@ ZobControlTreeNode::~ZobControlTreeNode()
 
 }
 
+void ZobControlTreeNode::OnClick(Object^ sender, TreeNodeMouseClickEventArgs^ e)
+{
+	ZobControlTreeview^ tv = (ZobControlTreeview^)sender;
+	int x = e->Location.X - tv->Bounds.Left;
+	if (x > tv->Bounds.Width - 40 && x < tv->Bounds.Width - 20)
+	{
+		m_locked = !m_locked;
+	}
+	else if (x > tv->Bounds.Width - 40 && x < tv->Bounds.Width)
+	{
+		m_visible = !m_visible;
+	}
+	tv->Invalidate();
+}
+
 ZobControlTreeNode^ ZobControlTreeNode::GetChildNode(String^ guid) 
 {
 	for (int i = 0; i < this->Nodes->Count; i++)
@@ -1154,20 +1169,24 @@ ZobControlTreeview::ZobControlTreeview():TreeView()
 
 void ZobControlTreeview::OnDrawNode(DrawTreeNodeEventArgs^ e)
 {
+	//e->Bounds.Left += 40;
 	e->DrawDefault = true;
-	/*
 	//TreeView::OnDrawNode(e);
+	int x;
+	VisualStyles::CheckBoxState s;
+	x = this->Bounds.Width - 40;
+	Drawing::Rectangle r = Drawing::Rectangle(x-1, e->Bounds.Top-1, 40, e->Bounds.Height);
+	e->Graphics->FillRectangle(SystemBrushes::ActiveBorder, r);
 	ZobControlTreeNode^ n = (ZobControlTreeNode^)e->Node;
-	int x = this->Bounds.Width - 20;
+	x = this->Bounds.Width - 20;
 	Point p = Point(x, e->Bounds.Top);
-	VisualStyles::CheckBoxState s = VisualStyles::CheckBoxState::CheckedNormal;
+	s = n->m_visible?VisualStyles::CheckBoxState::CheckedNormal: VisualStyles::CheckBoxState::UncheckedNormal;
 	CheckBoxRenderer::DrawCheckBox(e->Graphics, p, s);
 	x = this->Bounds.Width - 40;
 	p = Point(x, e->Bounds.Top);
-	s = VisualStyles::CheckBoxState::CheckedNormal;
+	s = n->m_locked ? VisualStyles::CheckBoxState::CheckedNormal : VisualStyles::CheckBoxState::UncheckedNormal;
 	CheckBoxRenderer::DrawCheckBox(e->Graphics, p, s);
-	//TreeNode::
-	*/
+	TreeView::OnDrawNode(e);
 }
 
 void ZobControlTreeview::UpdateZobControl()

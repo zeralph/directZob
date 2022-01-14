@@ -617,7 +617,7 @@ namespace CLI
 		int renderH = m_renderWindow->Height;
 		if (renderH != h || renderW != w)
 		{
-			m_Instance->Resize(renderW, renderH);
+			//m_Instance->Resize(renderW, renderH);
 			m_renderWindowGraphics = m_renderWindow->CreateGraphics();
 			bData = m_Instance->GetBufferData();
 			w = bData->width;
@@ -628,6 +628,7 @@ namespace CLI
 		Drawing::Rectangle srcRect = Drawing::Rectangle(0, 0, w, h);
 		Drawing::Rectangle dstRect = Drawing::Rectangle(0, 0, renderW, renderH);
 		m_renderWindow->SizeMode = PictureBoxSizeMode::StretchImage;
+		m_renderWindowGraphics->InterpolationMode = Drawing2D::InterpolationMode::NearestNeighbor;
 		m_renderWindowGraphics->DrawImage(b, dstRect, srcRect, Drawing::GraphicsUnit::Pixel);
 	}
 

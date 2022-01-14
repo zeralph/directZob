@@ -263,6 +263,7 @@ namespace CLI
 		{
 			if (tn->IsSelectable())
 			{
+				tn->OnClick(sender, e);
 				m_treeView->SelectedNode = e->Node;
 				if (e->Button == MouseButtons::Left)
 				{
