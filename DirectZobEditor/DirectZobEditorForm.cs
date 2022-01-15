@@ -775,13 +775,17 @@ namespace DirectZobEditor
         }
         private void LoadEditorSettings()
         {
-            using (TextReader tr = new StreamReader(@"../settings.json"))
+            string f = @"../settings.json";
+            if (File.Exists(f))
             {
-                using (JsonReader jr = new JsonTextReader(tr))
+                using (TextReader tr = new StreamReader(f))
                 {
-                    JsonSerializer serializer = new JsonSerializer();
-                    CLI.EditorSettings s = serializer.Deserialize<CLI.EditorSettings>(jr);
-                    m_directZobWrapper.LoadEditorSettings(s);
+                    using (JsonReader jr = new JsonTextReader(tr))
+                    {
+                        JsonSerializer serializer = new JsonSerializer();
+                        CLI.EditorSettings s = serializer.Deserialize<CLI.EditorSettings>(jr);
+                        m_directZobWrapper.LoadEditorSettings(s);
+                    }
                 }
             }
         }
