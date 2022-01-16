@@ -1,0 +1,337 @@
+<?xml version="1.0" ?>
+<Scene EntitiesCount="36" ZobObjectsCount="19">
+    <Globals>
+        <Var Name="Ambient color" value="255;102;102;102" />
+        <Var Name="Clear color" value="255;192;192;192" />
+        <Var Name="Ambient color intensity" value="0.800" />
+        <Var Name="Fog type" value="None" />
+        <Var Name="Fog color" value="255;63;149;255" />
+        <Var Name="Fog distance" value="20.000" />
+        <Var Name="Fog density" value="2.000" />
+        <Var Name="Render mode" value="Fullframe" />
+        <Var Name="Lighting mode" value="Vertex" />
+        <Var Name="Bits per color" value="Full" />
+        <Var Name="Dithering" value="False" />
+        <Var Name="Z near" value="0.110" />
+        <Var Name="Z far" value="1000.000" />
+        <Var Name="Equalize triangle queues" value="False" />
+        <Var Name="Perspective Correction" value="True" />
+    </Globals>
+    <ZobObject Guid="4002928242">
+        <Var Name="Name" value="Physic" />
+        <Var Name="Position" value="0.000;0.000;0.000" />
+        <Var Name="Rotation" value="0.000;0.000;0.000" />
+        <Var Name="Scale" value="1.000;1.000;1.000" />
+        <Var Name="Body type" value="Static" />
+        <Var Name="Active" value="True" />
+        <Var Name="Mass" value="1000.000" />
+        <Components />
+        <ZobObject Guid="4002625108">
+            <Var Name="Name" value="phy_road" />
+            <Var Name="Position" value="0.000;0.000;0.000" />
+            <Var Name="Rotation" value="0.000;0.000;0.000" />
+            <Var Name="Scale" value="1.000;1.000;1.000" />
+            <Var Name="Body type" value="Static" />
+            <Var Name="Active" value="True" />
+            <Var Name="Mass" value="1000.000" />
+            <Components>
+                <Component Type="PhysicMesh" Guid="2007061869">
+                    <Var Name="Layer" value="ground" />
+                    <Var Name="Trigger" value="False" />
+                    <Var Name="Local position" value="0.000;0.000;0.000" />
+                    <Var Name="Scale with object" value="True" />
+                    <Var Name="Mesh" value="phy_road.obj;daytona_itl_speedway/;phy_road.obj;0" />
+                </Component>
+            </Components>
+        </ZobObject>
+        <ZobObject Guid="4002972686">
+            <Var Name="Name" value="phy_ground" />
+            <Var Name="Position" value="0.000;0.000;0.000" />
+            <Var Name="Rotation" value="0.000;0.000;0.000" />
+            <Var Name="Scale" value="1.000;1.000;1.000" />
+            <Var Name="Body type" value="Static" />
+            <Var Name="Active" value="True" />
+            <Var Name="Mass" value="1000.000" />
+            <Components>
+                <Component Type="PhysicMesh" Guid="2007872946">
+                    <Var Name="Layer" value="ground" />
+                    <Var Name="Trigger" value="False" />
+                    <Var Name="Local position" value="0.000;0.000;0.000" />
+                    <Var Name="Scale with object" value="True" />
+                    <Var Name="Mesh" value="phy_ground.obj;daytona_itl_speedway/;phy_ground.obj;0" />
+                </Component>
+            </Components>
+        </ZobObject>
+        <ZobObject Guid="4002065376">
+            <Var Name="Name" value="phy_ext_wall" />
+            <Var Name="Position" value="0.000;0.000;0.000" />
+            <Var Name="Rotation" value="0.000;0.000;0.000" />
+            <Var Name="Scale" value="1.000;1.000;1.000" />
+            <Var Name="Body type" value="Static" />
+            <Var Name="Active" value="True" />
+            <Var Name="Mass" value="1000.000" />
+            <Components>
+                <Component Type="PhysicMesh" Guid="2007135337">
+                    <Var Name="Layer" value="wall" />
+                    <Var Name="Trigger" value="False" />
+                    <Var Name="Local position" value="0.000;0.000;0.000" />
+                    <Var Name="Scale with object" value="False" />
+                    <Var Name="Mesh" value="phy_external_wall.obj;daytona_itl_speedway/;phy_external_wall.obj;0" />
+                </Component>
+            </Components>
+        </ZobObject>
+    </ZobObject>
+    <ZobObject Guid="4002526713">
+        <Var Name="Name" value="Road" />
+        <Var Name="Position" value="0.000;0.000;0.000" />
+        <Var Name="Rotation" value="0.000;0.000;0.000" />
+        <Var Name="Scale" value="1.000;1.000;1.000" />
+        <Var Name="Body type" value="Static" />
+        <Var Name="Active" value="True" />
+        <Var Name="Mass" value="1000.000" />
+        <Components />
+        <ZobObject Guid="4002804767">
+            <Var Name="Name" value="circuit" />
+            <Var Name="Position" value="0.000;0.000;0.000" />
+            <Var Name="Rotation" value="0.000;0.000;0.000" />
+            <Var Name="Scale" value="1.000;1.000;1.000" />
+            <Var Name="Body type" value="Static" />
+            <Var Name="Active" value="True" />
+            <Var Name="Mass" value="1000.000" />
+            <Components>
+                <Component Type="Mesh" Guid="2007136771">
+                    <Var Name="File" value="disp_road.obj;daytona_itl_speedway/;disp_road.obj;0" />
+                    <Var Name="Cull mode" value="Clockwise" />
+                    <Var Name="Lighting" value="Phong" />
+                    <Var Name="ZBuffered" value="True" />
+                    <Var Name="Transparent" value="False" />
+                    <Var Name="Force rendering" value="False" />
+                </Component>
+            </Components>
+        </ZobObject>
+        <ZobObject Guid="4002756815">
+            <Var Name="Name" value="ground" />
+            <Var Name="Position" value="0.000;0.000;0.000" />
+            <Var Name="Rotation" value="0.000;0.000;0.000" />
+            <Var Name="Scale" value="1.000;1.000;1.000" />
+            <Var Name="Body type" value="Static" />
+            <Var Name="Active" value="True" />
+            <Var Name="Mass" value="1000.000" />
+            <Components>
+                <Component Type="Mesh" Guid="2007891425">
+                    <Var Name="File" value="disp_ground.obj;daytona_itl_speedway/;disp_ground.obj;0" />
+                    <Var Name="Cull mode" value="Clockwise" />
+                    <Var Name="Lighting" value="Phong" />
+                    <Var Name="ZBuffered" value="True" />
+                    <Var Name="Transparent" value="False" />
+                    <Var Name="Force rendering" value="False" />
+                </Component>
+            </Components>
+        </ZobObject>
+    </ZobObject>
+    <ZobObject Guid="4002129363">
+        <Var Name="Name" value="PlayerCar" />
+        <Var Name="Position" value="0.000;2.983;8.928" />
+        <Var Name="Rotation" value="0.000;0.000;0.000" />
+        <Var Name="Scale" value="1.000;1.000;1.000" />
+        <Var Name="Body type" value="Kinematic" />
+        <Var Name="Active" value="True" />
+        <Var Name="Mass" value="1000.000" />
+        <Components>
+            <Component Type="PhysicBox" Guid="2007043289">
+                <Var Name="Layer" value="objects" />
+                <Var Name="Trigger" value="False" />
+                <Var Name="Local position" value="0.000;0.500;0.000" />
+                <Var Name="Scale with object" value="True" />
+                <Var Name="Height" value="1.000;0.500;2.000" />
+            </Component>
+            <Component Type="Car" Guid="2007989132">
+                <Var Name="Front left wheel" value="4002410897" />
+                <Var Name="Front right wheel" value="4002410782" />
+                <Var Name="Rear left wheel" value="4002054282" />
+                <Var Name="Rear right wheel" value="4002838095" />
+                <Var Name="test" />
+                <Var Name="HandBrake" value="False" />
+                <Var Name="Mass" value="1500.000" />
+                <Var Name="Max friction" value="10.000" />
+                <Var Name="Inertia" value="1500.000" />
+                <Var Name="Air resistance" value="6.000" />
+                <Var Name="Rolling resistance" value="30.000" />
+                <Var Name="Front cornering stiffness" value="-5.000" />
+                <Var Name="Rear cornering stiffness" value="-5.200" />
+                <Var Name="Steering rotation speed" value="3.141" />
+            </Component>
+        </Components>
+        <ZobObject Guid="4002153198">
+            <Var Name="Name" value="carBody" />
+            <Var Name="Position" value="0.000;-0.540;0.181" />
+            <Var Name="Rotation" value="-179.998;0.000;-179.998" />
+            <Var Name="Scale" value="1.000;1.000;1.000" />
+            <Var Name="Body type" value="Static" />
+            <Var Name="Active" value="True" />
+            <Var Name="Mass" value="1000.000" />
+            <Components>
+                <Component Type="Mesh" Guid="2007983524">
+                    <Var Name="File" value="Peugeot405;_cars/GLX-400-OBJ/;GLX_400.obj;0" />
+                    <Var Name="Cull mode" value="Clockwise" />
+                    <Var Name="Lighting" value="Phong" />
+                    <Var Name="ZBuffered" value="True" />
+                    <Var Name="Transparent" value="False" />
+                    <Var Name="Force rendering" value="False" />
+                </Component>
+            </Components>
+            <ZobObject Guid="4002410782">
+                <Var Name="Name" value="FR_wheel" />
+                <Var Name="Position" value="0.776;0.243;-1.282" />
+                <Var Name="Rotation" value="97.723;0.000;0.000" />
+                <Var Name="Scale" value="1.000;1.000;1.000" />
+                <Var Name="Body type" value="Static" />
+                <Var Name="Active" value="True" />
+                <Var Name="Mass" value="1000.000" />
+                <Components>
+                    <Component Type="Mesh" Guid="2007953918">
+                        <Var Name="File" value="Tire;_cars/Tire/;Tire.obj;0" />
+                        <Var Name="Cull mode" value="Clockwise" />
+                        <Var Name="Lighting" value="Phong" />
+                        <Var Name="ZBuffered" value="True" />
+                        <Var Name="Transparent" value="False" />
+                        <Var Name="Force rendering" value="False" />
+                    </Component>
+                </Components>
+            </ZobObject>
+            <ZobObject Guid="4002410897">
+                <Var Name="Name" value="FL_wheel" />
+                <Var Name="Position" value="-0.783;0.247;-1.276" />
+                <Var Name="Rotation" value="97.723;0.000;0.000" />
+                <Var Name="Scale" value="1.000;1.000;1.000" />
+                <Var Name="Body type" value="Static" />
+                <Var Name="Active" value="True" />
+                <Var Name="Mass" value="1000.000" />
+                <Components>
+                    <Component Type="Mesh" Guid="2007905557">
+                        <Var Name="File" value="Tire;_cars/Tire/;Tire.obj;0" />
+                        <Var Name="Cull mode" value="Clockwise" />
+                        <Var Name="Lighting" value="Phong" />
+                        <Var Name="ZBuffered" value="True" />
+                        <Var Name="Transparent" value="False" />
+                        <Var Name="Force rendering" value="False" />
+                    </Component>
+                </Components>
+            </ZobObject>
+            <ZobObject Guid="4002054282">
+                <Var Name="Name" value="RL_wheel" />
+                <Var Name="Position" value="-0.780;0.240;1.241" />
+                <Var Name="Rotation" value="97.723;0.000;0.000" />
+                <Var Name="Scale" value="1.000;1.000;1.000" />
+                <Var Name="Body type" value="Static" />
+                <Var Name="Active" value="True" />
+                <Var Name="Mass" value="1000.000" />
+                <Components>
+                    <Component Type="Mesh" Guid="2007115044">
+                        <Var Name="File" value="Tire;_cars/Tire/;Tire.obj;0" />
+                        <Var Name="Cull mode" value="Clockwise" />
+                        <Var Name="Lighting" value="Phong" />
+                        <Var Name="ZBuffered" value="True" />
+                        <Var Name="Transparent" value="False" />
+                        <Var Name="Force rendering" value="False" />
+                    </Component>
+                </Components>
+            </ZobObject>
+            <ZobObject Guid="4002838095">
+                <Var Name="Name" value="RR_wheel" />
+                <Var Name="Position" value="0.781;0.242;1.240" />
+                <Var Name="Rotation" value="97.723;0.000;0.000" />
+                <Var Name="Scale" value="1.000;1.000;1.000" />
+                <Var Name="Body type" value="Static" />
+                <Var Name="Active" value="True" />
+                <Var Name="Mass" value="1000.000" />
+                <Components>
+                    <Component Type="Mesh" Guid="2007839627">
+                        <Var Name="File" value="Tire;_cars/Tire/;Tire.obj;0" />
+                        <Var Name="Cull mode" value="Clockwise" />
+                        <Var Name="Lighting" value="Phong" />
+                        <Var Name="ZBuffered" value="True" />
+                        <Var Name="Transparent" value="False" />
+                        <Var Name="Force rendering" value="False" />
+                    </Component>
+                </Components>
+            </ZobObject>
+        </ZobObject>
+        <ZobObject Guid="2003412161">
+            <Var Name="Name" value="rearCamera" />
+            <Var Name="Position" value="0.000;1.888;-4.764" />
+            <Var Name="Rotation" value="15.031;0.000;0.000" />
+            <Var Name="Scale" value="1.000;1.000;1.000" />
+            <Var Name="Body type" value="Static" />
+            <Var Name="Active" value="True" />
+            <Var Name="Mass" value="1000.000" />
+            <Var Name="FOV" value="70.000" />
+            <Var Name="Camera controller" value="FollowCar" />
+            <Components />
+        </ZobObject>
+        <ZobObject Guid="2003143259">
+            <Var Name="Name" value="FrontCamera" />
+            <Var Name="Position" value="0.000;0.282;2.175" />
+            <Var Name="Rotation" value="0.000;0.000;0.000" />
+            <Var Name="Scale" value="1.000;1.000;1.000" />
+            <Var Name="Body type" value="Static" />
+            <Var Name="Active" value="True" />
+            <Var Name="Mass" value="1000.000" />
+            <Var Name="FOV" value="70.000" />
+            <Var Name="Camera controller" value="base" />
+            <Components />
+        </ZobObject>
+        <ZobObject Guid="2003861325">
+            <Var Name="Name" value="topCamera" />
+            <Var Name="Position" value="0.000;59.152;-0.988" />
+            <Var Name="Rotation" value="-89.392;-79.750;-179.707" />
+            <Var Name="Scale" value="1.000;1.000;1.000" />
+            <Var Name="Body type" value="Static" />
+            <Var Name="Active" value="True" />
+            <Var Name="Mass" value="1000.000" />
+            <Var Name="FOV" value="45.000" />
+            <Var Name="Camera controller" value="base" />
+            <Components />
+        </ZobObject>
+        <ZobObject Guid="2003217728">
+            <Var Name="Name" value="sideCamera" />
+            <Var Name="Position" value="-5.862;1.880;6.748" />
+            <Var Name="Rotation" value="-176.324;35.919;-176.794" />
+            <Var Name="Scale" value="1.000;1.000;1.000" />
+            <Var Name="Body type" value="Static" />
+            <Var Name="Active" value="True" />
+            <Var Name="Mass" value="1000.000" />
+            <Var Name="FOV" value="45.000" />
+            <Var Name="Camera controller" value="base" />
+            <Components />
+        </ZobObject>
+        <ZobObject Guid="2003649406">
+            <Var Name="Name" value="orbitalCamera" />
+            <Var Name="Position" value="-20.000;28.284;19.999" />
+            <Var Name="Rotation" value="-135.000;45.000;0.000" />
+            <Var Name="Scale" value="1.000;1.000;1.000" />
+            <Var Name="Body type" value="Static" />
+            <Var Name="Active" value="True" />
+            <Var Name="Mass" value="1000.000" />
+            <Var Name="FOV" value="45.000" />
+            <Var Name="Camera controller" value="Orbital" />
+            <Components />
+        </ZobObject>
+    </ZobObject>
+    <ZobObject Guid="4004349910">
+        <Var Name="Name" value="Light_1" />
+        <Var Name="Position" value="0.000;10.000;0.000" />
+        <Var Name="Rotation" value="88.306;44.999;44.998" />
+        <Var Name="Scale" value="1.000;1.000;1.000" />
+        <Var Name="Body type" value="Static" />
+        <Var Name="Active" value="True" />
+        <Var Name="Mass" value="1000.000" />
+        <Var Name="Color" value="255;254;238;184" />
+        <Var Name="Intensity" value="1.000" />
+        <Var Name="Distance" value="100.000" />
+        <Var Name="SpotAngle" value="0.523" />
+        <Var Name="Active" value="True" />
+        <Var Name="Type" value="Directional" />
+        <Components />
+    </ZobObject>
+</Scene>
