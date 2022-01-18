@@ -104,6 +104,7 @@ public:
 	{
 		uint width;
 		uint height;
+		uint downscale;
 		uint size;
 		float zNear;
 		float zFar;

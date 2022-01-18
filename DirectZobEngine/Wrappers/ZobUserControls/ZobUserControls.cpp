@@ -390,7 +390,7 @@ ZobControlVector3::ZobControlVector3(const ZobVariablesExposer::wrapperData& w):
 	String^ name = TO_MANAGED_STRING(w.name.c_str());
 	ZobVector3* v = (ZobVector3*)(w.ptr);
 	this->AutoSize = true;
-	this->ColumnCount = 4;
+	this->ColumnCount = 5;
 	this->RowCount = 1;
 	this->Name = name;
 	int width = 80;
@@ -420,8 +420,16 @@ ZobControlVector3::ZobControlVector3(const ZobVariablesExposer::wrapperData& w):
 	_txt_Z->Width = width;
 	_txt_Z->AutoSize = false;
 	_txt_Z->Height = _height;
-	_txt_X->AutoSize = false;
+	_txt_Z->AutoSize = false;
 	_txt_Z->ReadOnly = _w->bReadOnly;
+
+	_txt_W = gcnew ZobTextBox();
+	_txt_W->Name = name;
+	_txt_W->Width = width;
+	_txt_W->AutoSize = false;
+	_txt_W->Height = _height;
+	_txt_W->AutoSize = false;
+	_txt_W->ReadOnly = _w->bReadOnly;
 
 	UpdateControlInternal();
 	_eventX = gcnew EventHandler(this, &ZobControlVector3::OnValueChanged);
@@ -435,7 +443,7 @@ ZobControlVector3::ZobControlVector3(const ZobVariablesExposer::wrapperData& w):
 	this->Controls->Add(_txt_X, 1, 0);
 	this->Controls->Add(_txt_Y, 2, 0);
 	this->Controls->Add(_txt_Z, 3, 0);
-
+	this->Controls->Add(_txt_W, 4, 0);
 }
 
 ZobControlVector3::~ZobControlVector3()
@@ -471,6 +479,8 @@ void ZobControlVector3::UpdateControlInternal()
 				_txt_Y->Text = String::Format("{0:0.000}", z ? z->y:0);
 			if (!_txt_Z->Focused)
 				_txt_Z->Text = String::Format("{0:0.000}", z ? z->z:0);
+			if (!_txt_W->Focused)
+				_txt_W->Text = String::Format("{0:0.000}", z ? z->w : 0);
 		}
 	}
 }
@@ -486,14 +496,16 @@ void ZobControlVector3::OnValueChanged(Object^ sender, EventArgs^ e)
 	MarshalString(zb->_txt_Y->Text, sy);
 	std::string sz;
 	MarshalString(zb->_txt_Z->Text, sz);
-	if (v.FromString(sx, sy, sz))
+	std::string sw;
+	MarshalString(zb->_txt_W->Text, sw);
+	if (v.FromString(sx, sy, sz, sw))
 	{
 		ZobVector3* vv = (ZobVector3*)_w->ptr;
-		if (_txt_X->Focused)
+		//if (_txt_X->Focused)
 			vv->x = v.x;
-		if (_txt_Y->Focused)
+		//if (_txt_Y->Focused)
 			vv->y = v.y;
-		if (_txt_Z->Focused)
+		//if (_txt_Z->Focused)
 			vv->z = v.z;
 		if (_w->callback)
 		{

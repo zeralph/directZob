@@ -54,6 +54,7 @@ public:
 		eWrapperType type;
 		bool bReadOnly;
 		bool bSave;
+		bool bVisible;
 		void* ptr;
 		wrapperCallback callback;
 		std::string name;
@@ -146,7 +147,7 @@ public:
 	}
 
 	template<typename T>
-	void WrapVariable(const char* name, T* ptr, wrapperCallback cb, bool bReadOnly, bool bSave)
+	void WrapVariable(const char* name, T* ptr, wrapperCallback cb, bool bReadOnly, bool bSave, bool bVisible = true)
 	{
 		eWrapperType type = eWrapperType::__eWrapperType_MAX__;
 		if (std::is_same<T, int>::value)
@@ -212,6 +213,7 @@ public:
 		w.callback = cb;
 		w.bReadOnly = bReadOnly;
 		w.bSave = bSave;
+		w.bVisible = bVisible;
 		m_wrappedVariables.push_back(w);
 	}
 

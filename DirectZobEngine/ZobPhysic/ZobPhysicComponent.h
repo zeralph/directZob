@@ -110,6 +110,7 @@ public:
 	ZobVector3*							GetWorldPositionAddress() { return &m_editorWorldPosition; }
 	ZobVector3*							GetWorldRotationAddress() { return &m_editorWorldRotation; }
 	ZobVector3*							GetWorldScaleAddress() { return &m_editorWorldScale; }
+	ZobVector3*							GetQuaternionAddress() { return &m_quaternion; }
 	void								WorldOrientationToAxis(ZobVector3& left, ZobVector3& up, ZobVector3& forward) const;
 	void								SetBodyType(eRigidBodyType t) { m_rigidBody->setType((BodyType)t); }
 	eRigidBodyType						GetBodyType() { return (eRigidBodyType)m_rigidBody->getType(); }
@@ -130,6 +131,7 @@ private:
 	ZobVector3							m_editorLocalPosition;
 	ZobVector3							m_editorLocalRotation;
 	ZobVector3							m_editorLocalScale;
+	ZobVector3							m_quaternion;
 	bool								m_scaleWithObject;
 	//editor purpose only
 	ZobVector3							m_editorWorldPosition;

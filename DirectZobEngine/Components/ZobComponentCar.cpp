@@ -394,10 +394,12 @@ void ZobComponentCar::UpdateWheels(float dt)
 		float g = m_steerangle;
 		Vector3 v = Vector3(-f, 0, 0);
 		q = q.fromEulerAngles(v);
+		q.normalize();
 		m_rearLeftWheel->m_physicComponent->SetLocalOrientation(q, false);
 		m_rearRightWheel->m_physicComponent->SetLocalOrientation(q, false);
 		v = Vector3(-f, -g, 0);
 		q = q.fromEulerAngles(v);
+		q.normalize();
 		m_frontLeftWheel->m_physicComponent->SetLocalOrientation(q, false);
 		m_frontRightWheel->m_physicComponent->SetLocalOrientation(q, false);
 	}

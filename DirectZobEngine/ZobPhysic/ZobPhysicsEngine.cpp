@@ -174,6 +174,7 @@ RigidBody* ZobPhysicsEngine::CreateRigidBody(const ZobVector3* position, const Z
     Vector3 p(position->x, position->y, position->z);
     Quaternion o = Quaternion::identity();
     o.fromEulerAngles(orientation->x, orientation->y, orientation->z);
+    o.normalize();
     Transform t(p, o);
     //return m_world->createCollisionBody(t);
     RigidBody* r = m_world->createRigidBody(t);

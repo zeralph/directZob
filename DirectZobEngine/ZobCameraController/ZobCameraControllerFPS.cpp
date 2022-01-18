@@ -79,6 +79,7 @@ void ZobCameraControllerFPS::Update(float dt)
 	}
 	ZobVector3 deltaZ1 = ZobMatrix4x4::EulerToQuaternion(m_deltaPitch, m_deltaYaw, m_deltaRoll);
 	Quaternion deltaQ1 = Quaternion(deltaZ1.x, deltaZ1.y, deltaZ1.z, deltaZ1.w);
+	deltaQ1.normalize();
 	Quaternion qAct = m_zobObject->m_physicComponent->GetLocalTransform().getOrientation();
 	qAct.normalize();
 	Quaternion qFinal;

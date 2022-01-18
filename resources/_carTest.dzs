@@ -243,7 +243,7 @@
     </ZobObject>
     <ZobObject Guid="4002683899">
         <Var Name="Name" value="rocks" />
-        <Var Name="Position" value="0.000;0.000;101.515" />
+        <Var Name="Position" value="0.000;0.000;101.514" />
         <Var Name="Rotation" value="0.000;0.000;0.000" />
         <Var Name="Scale" value="1.000;1.000;1.000" />
         <Var Name="Body type" value="Static" />
@@ -347,7 +347,7 @@
         </ZobObject>
         <ZobObject Guid="4002855155">
             <Var Name="Name" value="rock6" />
-            <Var Name="Position" value="-0.290;11.682;-21.043" />
+            <Var Name="Position" value="-0.290;11.682;-21.042" />
             <Var Name="Rotation" value="0.000;0.000;-36.154" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
             <Var Name="Body type" value="Static" />
@@ -440,7 +440,7 @@
     </ZobObject>
     <ZobObject Guid="4002065559">
         <Var Name="Name" value="buildings" />
-        <Var Name="Position" value="91.349;0.938;-110.759" />
+        <Var Name="Position" value="91.348;0.938;-110.759" />
         <Var Name="Rotation" value="0.000;53.571;0.000" />
         <Var Name="Scale" value="1.000;1.000;1.000" />
         <Var Name="Body type" value="Static" />
@@ -449,7 +449,7 @@
         <Components />
         <ZobObject Guid="4002436495">
             <Var Name="Name" value="building_2" />
-            <Var Name="Position" value="-112.187;0.571;-45.445" />
+            <Var Name="Position" value="-112.187;0.571;-45.444" />
             <Var Name="Rotation" value="0.000;34.988;0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
             <Var Name="Body type" value="Static" />

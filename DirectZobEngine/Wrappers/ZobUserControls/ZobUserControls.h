@@ -125,6 +125,7 @@ namespace CLI {
 		ZobTextBox^ _txt_X;
 		ZobTextBox^ _txt_Y;
 		ZobTextBox^ _txt_Z;
+		ZobTextBox^ _txt_W;
 		ZobLabel^ _label;
 		EventHandler^ _eventX;
 		EventHandler^ _eventY;

@@ -109,13 +109,9 @@ public:
 		//float pitch = Math.Atan2(ds.Z, Math.Sqrt((ds.X * ds.X) + (ds.Y * ds.Y)));
 
 	};
-	std::string ToString() 
-	{ 
-		return ZobUtils::floatToString(x, 3).append(";").append(ZobUtils::floatToString(y, 3)).append(";").append(ZobUtils::floatToString(z, 3));
-		//return std::to_string(x).append(";") + std::to_string(y).append(";") + std::to_string(z); 
-	}
-	bool FromString(std::string& s);
-	bool FromString(std::string& sx, std::string& sy, std::string& sz);
+	virtual std::string ToString();
+	virtual bool FromString(std::string& s);
+	virtual bool FromString(std::string& sx, std::string& sy, std::string& sz, std::string& sw);
 	inline void Add(const ZobVector3* v) { x += v->x; y += v->y; z += v->z; }
 	inline void Sub(const ZobVector3* v) { x -= v->x; y -= v->y; z -= v->z; }
 	inline void Div(float f) { x /= f; y /= f; z /= f; }
@@ -151,4 +147,9 @@ static inline bool operator!= (const ZobVector3* v1, const ZobVector3& v2) { ret
 static inline bool operator!= (const ZobVector3& v1, const ZobVector3* v2) { return (v2->x != v1.x || v2->y != v1.y || v1.z != v2->z || v2->w != v1.w); }
 static inline bool operator== (const ZobVector3 v1, const ZobVector3 v2) { return (EpsilonEQ(v2.x, v1.x) && EpsilonEQ(v2.y, v1.y) && EpsilonEQ(v1.z, v2.z) && EpsilonEQ(v2.w, v1.w)); }
 
-
+/*
+class ZobVector4 : ZobVector3
+{
+public:
+}
+*/

@@ -100,7 +100,7 @@ ZobObject::ZobObject(zobId id, TiXmlElement* node, ZobObject* parent, const std:
 		m_parent->AddChildReference(this);
 	}
 	InitVariablesExposer();
-	m_varExposer->ReadNode(node);
+ 	m_varExposer->ReadNode(node);
 	//Component
 	TiXmlElement* ComponentsNode = node->FirstChildElement("Components");
 	if(ComponentsNode)
@@ -120,8 +120,9 @@ void ZobObject::InitVariablesExposer()
 	m_varExposer->WrapVariable<zobId>("GUID", GetIdAddress(), NULL, true, false);
 	m_varExposer->WrapVariable<std::string>("Name", &m_name, NULL, false, true);
 	m_varExposer->WrapVariable<ZobVector3>("Position", GetPhysicComponentNoConst()->GetLocalPositionAddress(), &ZobObject::ReloadVariablesFromLocalData, false, true);
-	m_varExposer->WrapVariable<ZobVector3>("Rotation", GetPhysicComponentNoConst()->GetLocalRotationAddress(), &ZobObject::ReloadVariablesFromLocalData, false, true);
+	m_varExposer->WrapVariable<ZobVector3>("Rotation", GetPhysicComponentNoConst()->GetLocalRotationAddress(), &ZobObject::ReloadVariablesFromLocalData, false, false);
 	m_varExposer->WrapVariable<ZobVector3>("Scale", GetPhysicComponentNoConst()->GetLocalScaleAddress(), &ZobObject::ReloadVariablesFromLocalData, false, true);
+	m_varExposer->WrapVariable<ZobVector3>("Quaternion", GetPhysicComponentNoConst()->GetQuaternionAddress(), &ZobObject::ReloadVariablesFromLocalData, true, true, false);
 	//
 	m_varExposer->WrapVariable<ZobVector3>("WPosition", GetPhysicComponentNoConst()->GetWorldPositionAddress(), &ZobObject::ReloadVariablesFromWorldData, false, false);
 	m_varExposer->WrapVariable<ZobVector3>("WRotation", GetPhysicComponentNoConst()->GetWorldRotationAddress(), &ZobObject::ReloadVariablesFromWorldData, false, false);
@@ -148,6 +149,7 @@ void ZobObject::ReloadVariablesFromWorldData(zobId id)
 		Vector3 vp = Vector3(zp->x, zp->y, zp->z);
 		t.setPosition(vp);
 		Quaternion q = Quaternion::fromEulerAngles(DEG_TO_RAD(zr->x), DEG_TO_RAD(zr->y), DEG_TO_RAD(zr->z));
+		q.normalize();
 		t.setOrientation(q);
 		z->GetPhysicComponentNoConst()->SetWorldTransform(t);
 		z->GetPhysicComponentNoConst()->SetWorldScale(zs->x, zs->y, zs->z);
@@ -165,6 +167,7 @@ void ZobObject::ReloadVariablesFromLocalData(zobId id)
 		Vector3 vp = Vector3(zp->x, zp->y, zp->z);
 		t.setPosition(vp);
 		Quaternion q = Quaternion::fromEulerAngles(DEG_TO_RAD(zr->x), DEG_TO_RAD(zr->y), DEG_TO_RAD(zr->z));
+		q.normalize();
 		t.setOrientation(q);
 		z->GetPhysicComponentNoConst()->SetLocalScale(zs->x, zs->y, zs->z);
 		z->GetPhysicComponentNoConst()->SetLocalTransform(t);
@@ -650,17 +653,6 @@ void ZobObject::LookAt(const ZobVector3* forward, const ZobVector3* left, const 
 
 void ZobObject::SetWorldRotation(float x, float y, float z)
 {
-	/*
-	float dy = DEG_TO_RAD(y);
-	float dz = DEG_TO_RAD(z);
-	float dx = DEG_TO_RAD(x);
-	Quaternion q;
-	ZobVector3 v = ZobMatrix4x4::EulerToQuaternion(dx, dy, dz);
-	q.x = v.x;
-	q.y = v.y;
-	q.z = v.z;
-	q.w = v.w;
-	*/
 	m_physicComponent->SetWorldOrientation(x, y, z);
 }
 
@@ -688,6 +680,7 @@ void ZobObject::SetLocalRotation(float x, float y, float z, bool add)
 	q.y = v.y;
 	q.z = v.z;
 	q.w = v.w;
+	q.normalize();
 	Transform parentTransform = Transform::identity();
 	Vector3 position = Vector3(x, y, z);
 	Transform newTransform = GetPhysicComponent()->GetLocalTransform();
@@ -737,6 +730,7 @@ void ZobObject::SetWorldPosition(float x, float y, float z)
 ZobVector3 ZobObject::GetLocalRotation() const
 {
 	Quaternion q= m_physicComponent->GetLocalTransform().getOrientation();
+	q.normalize();
 	ZobVector3 v = ZobMatrix4x4::QuaternionToEuler(q.x, q.y, q.z, q.w);
 	v.x = RAD_TO_DEG(v.x);
 	v.y = RAD_TO_DEG(v.y);
@@ -754,6 +748,7 @@ ZobVector3 ZobObject::GetLocalPosition() const
 ZobVector3 ZobObject::GetWorldRotation() const
 {
 	Quaternion q = m_physicComponent->GetWorldTransform().getOrientation();
+	q.normalize();
 	ZobVector3 v = ZobMatrix4x4::QuaternionToEuler(q.x, q.y, q.z, q.w);
 	v.x = RAD_TO_DEG(v.x);
 	v.y = RAD_TO_DEG(v.y);

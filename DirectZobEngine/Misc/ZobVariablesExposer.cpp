@@ -114,6 +114,7 @@ void ZobVariablesExposer::wrapperData::Load()
 			v->x = p.x;
 			v->y = p.y;
 			v->z = p.z;
+			v->w = p.w;
 		}
 	}
 	else if (type == eWrapperType_path)
