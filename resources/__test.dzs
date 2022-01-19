@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<Scene EntitiesCount="4" ZobObjectsCount="2">
+<Scene EntitiesCount="6" ZobObjectsCount="3">
     <Globals>
         <Var Name="Ambient color" value="255;102;102;102" />
         <Var Name="Clear color" value="255;192;192;192" />
@@ -16,20 +16,18 @@
         <Var Name="Z far" value="1000.000" />
         <Var Name="Equalize triangle queues" value="False" />
         <Var Name="Perspective Correction" value="True" />
+        <Var Name="Downscale" value="1" />
     </Globals>
-    <ZobObject Guid="4002510292">
+    <ZobObject Guid="4002941709">
         <Var Name="Name" value="camaro.obj" />
         <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
-        <Var Name="Rotation" value="21.47083;1.65886;-27.61904;1.00000" />
         <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
-        <Var Name="Quaternion" value="0.17747;-0.03064;-0.23711;0.95464" />
-        <Var Name="WPosition" value="0.00000;0.00000;0.00000;1.00000" />
-        <Var Name="WQuaternion" value="0.17747;-0.03064;-0.23711;0.95464" />
-        <Var Name="Body type" value="Dynamic" />
+        <Var Name="Quaternion" value="0.14644;0.35355;0.35355;0.85355" />
+        <Var Name="Body type" value="Static" />
         <Var Name="Active" value="True" />
         <Var Name="Mass" value="1000.000" />
         <Components>
-            <Component Type="Mesh" Guid="2007151304">
+            <Component Type="Mesh" Guid="2007018070">
                 <Var Name="File" value="camaro.obj;/;camaro.obj;0" />
                 <Var Name="Cull mode" value="Clockwise" />
                 <Var Name="Lighting" value="Phong" />
@@ -38,20 +36,17 @@
                 <Var Name="Force rendering" value="False" />
             </Component>
         </Components>
-        <ZobObject Guid="4002071924">
-            <Var Name="Name" value="cube.obj" />
-            <Var Name="Position" value="8.74099;-20.51357;-18.70903;1.00000" />
-            <Var Name="Rotation" value="-36.16411;9.19155;-2.69388;1.00000" />
+        <ZobObject Guid="4002509492">
+            <Var Name="Name" value="camaro.obj" />
+            <Var Name="Position" value="12.88926;0.00000;0.00000;1.00000" />
             <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
-            <Var Name="Quaternion" value="-0.31108;0.08342;0.00258;0.94671" />
-            <Var Name="WPosition" value="1.34744;-14.89925;-24.96870;1.00000" />
-            <Var Name="WQuaternion" value="-0.21841;0.24774;-0.43327;1.92346" />
+            <Var Name="Quaternion" value="0.65494;0.25675;0.38289;0.59876" />
             <Var Name="Body type" value="Static" />
             <Var Name="Active" value="True" />
             <Var Name="Mass" value="1000.000" />
             <Components>
-                <Component Type="Mesh" Guid="2007191384">
-                    <Var Name="File" value="cube.obj;D:\Git\directZob\resources\/;cube.obj;1" />
+                <Component Type="Mesh" Guid="2007094515">
+                    <Var Name="File" value="camaro.obj;/;camaro.obj;0" />
                     <Var Name="Cull mode" value="Clockwise" />
                     <Var Name="Lighting" value="Phong" />
                     <Var Name="ZBuffered" value="True" />
@@ -59,6 +54,25 @@
                     <Var Name="Force rendering" value="False" />
                 </Component>
             </Components>
+            <ZobObject Guid="4002540714">
+                <Var Name="Name" value="camaro.obj" />
+                <Var Name="Position" value="16.42133;0.00000;0.00000;1.00000" />
+                <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+                <Var Name="Quaternion" value="-0.69131;-0.60633;-0.34456;0.18901" />
+                <Var Name="Body type" />
+                <Var Name="Active" value="True" />
+                <Var Name="Mass" value="1000.000" />
+                <Components>
+                    <Component Type="Mesh" Guid="2007021323">
+                        <Var Name="File" value="camaro.obj;/;camaro.obj;0" />
+                        <Var Name="Cull mode" value="Clockwise" />
+                        <Var Name="Lighting" value="Phong" />
+                        <Var Name="ZBuffered" value="True" />
+                        <Var Name="Transparent" value="False" />
+                        <Var Name="Force rendering" value="False" />
+                    </Component>
+                </Components>
+            </ZobObject>
         </ZobObject>
     </ZobObject>
 </Scene>

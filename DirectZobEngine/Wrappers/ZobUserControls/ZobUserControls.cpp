@@ -112,82 +112,82 @@ ZobGroupBox^ ZobControl::CreateWrappedVariablesView(std::string& name, ZobVariab
 	if (v->size() > 0)
 	{
 		ZobPropertiesContainer^ panel = gcnew ZobPropertiesContainer();
-		int idx = 1;
 		for (std::vector<ZobVariablesExposer::wrapperData>::const_iterator iter = v->begin(); iter != v->end(); iter++)
 		{
 			const ZobVariablesExposer::wrapperData& w = (*iter);
-			if (w.type == ZobVariablesExposer::eWrapperType_path)
+			if (w.bVisible)
 			{
-				panel->Controls->Add(gcnew ZobControlFilePath(w));
+				if (w.type == ZobVariablesExposer::eWrapperType_path)
+				{
+					panel->Controls->Add(gcnew ZobControlFilePath(w));
+				}
+				else if (w.type == ZobVariablesExposer::eWrapperType_string)
+				{
+					panel->Controls->Add(gcnew ZobControlString(w));
+				}
+				else if (w.type == ZobVariablesExposer::eWrapperType_ZobVector3)
+				{
+					panel->Controls->Add(gcnew ZobControlVector3(w));
+				}
+				else if (w.type == ZobVariablesExposer::eWrapperType_float)
+				{
+					panel->Controls->Add(gcnew ZobControlFloat(w));
+				}
+				else if (w.type == ZobVariablesExposer::eWrapperType_enum)
+				{
+					panel->Controls->Add(gcnew ZobControlEnum(w));
+				}
+				else if (w.type == ZobVariablesExposer::eWrapperType_enumCombo)
+				{
+					panel->Controls->Add(gcnew ZobControlEnumCombo(w));
+				}
+				else if (w.type == ZobVariablesExposer::eWrapperType_bool)
+				{
+					panel->Controls->Add(gcnew ZobControlBool(w));
+				}
+				else if (w.type == ZobVariablesExposer::eWrapperType_int)
+				{
+					panel->Controls->Add(gcnew ZobControlFloat(w));
+				}
+				else if (w.type == ZobVariablesExposer::eWrapperType_startGroup)
+				{
+					System::String^ s = gcnew String(w.name.c_str());
+					ZobGroupBox^ zb = gcnew ZobGroupBox(s, nullptr, false);
+					ZobPropertiesContainer^ p = gcnew ZobPropertiesContainer();
+					zb->Controls->Add(p);
+					panel->Controls->Add(zb);
+					panel = p;
+				}
+				else if (w.type == ZobVariablesExposer::eWrapperType_endGroup)
+				{
+					ZobPropertiesContainer^ p = (ZobPropertiesContainer^)panel->Parent->Parent;
+					panel = p;
+				}
+				else if (w.type == ZobVariablesExposer::eWrapperType_zobId)
+				{
+					panel->Controls->Add(gcnew ZobControlZobId(w));
+				}
+				else if (w.type == ZobVariablesExposer::eWrapperType_zobEntity)
+				{
+					panel->Controls->Add(gcnew ZobControlZobEntity(w));
+				}
+				else if (w.type == ZobVariablesExposer::eWrapperType_zobColor)
+				{
+					panel->Controls->Add(gcnew ZobControlColor(w));
+				}
+				else if (w.type == ZobVariablesExposer::eWrapperType_uint)
+				{
+					panel->Controls->Add(gcnew ZobControlFloat(w));
+				}
+				else if (w.type == ZobVariablesExposer::eWrapperType_action)
+				{
+					panel->Controls->Add(gcnew ZobControlAction(w));
+				}
+				else
+				{
+					assert(NULL);
+				}
 			}
-			else if (w.type == ZobVariablesExposer::eWrapperType_string)
-			{
-				panel->Controls->Add(gcnew ZobControlString(w));
-			}
-			else if (w.type == ZobVariablesExposer::eWrapperType_ZobVector3)
-			{
-				panel->Controls->Add(gcnew ZobControlVector3(w));
-			}
-			else if (w.type == ZobVariablesExposer::eWrapperType_float)
-			{
-				panel->Controls->Add(gcnew ZobControlFloat(w));
-			}
-			else if (w.type == ZobVariablesExposer::eWrapperType_enum)
-			{
-				panel->Controls->Add(gcnew ZobControlEnum(w));
-			}
-			else if (w.type == ZobVariablesExposer::eWrapperType_enumCombo)
-			{
-				panel->Controls->Add(gcnew ZobControlEnumCombo(w));
-			}
-			else if (w.type == ZobVariablesExposer::eWrapperType_bool)
-			{
-				panel->Controls->Add(gcnew ZobControlBool(w));
-			}
-			else if (w.type == ZobVariablesExposer::eWrapperType_int)
-			{
-				panel->Controls->Add(gcnew ZobControlFloat(w));
-			}
-			else if (w.type == ZobVariablesExposer::eWrapperType_startGroup)
-			{
-				System::String^ s = gcnew String(w.name.c_str());
-				ZobGroupBox^ zb = gcnew ZobGroupBox(s, nullptr, false);
-				ZobPropertiesContainer^ p = gcnew ZobPropertiesContainer();
-				zb->Controls->Add(p);
-				panel->Controls->Add(zb);
-				panel = p;
-			}
-			else if (w.type == ZobVariablesExposer::eWrapperType_endGroup)
-			{
-				ZobPropertiesContainer^ p = (ZobPropertiesContainer^)panel->Parent->Parent;
-				panel = p;
-			}
-			else if (w.type == ZobVariablesExposer::eWrapperType_zobId)
-			{
-				panel->Controls->Add(gcnew ZobControlZobId(w));
-			}
-			else if (w.type == ZobVariablesExposer::eWrapperType_zobEntity)
-			{
-				panel->Controls->Add(gcnew ZobControlZobEntity(w));
-			}
-			else if (w.type == ZobVariablesExposer::eWrapperType_zobColor)
-			{
-				panel->Controls->Add(gcnew ZobControlColor(w));
-			}
-			else if (w.type == ZobVariablesExposer::eWrapperType_uint)
-			{
-				panel->Controls->Add(gcnew ZobControlFloat(w));
-			}
-			else if (w.type == ZobVariablesExposer::eWrapperType_action)
-			{
-				panel->Controls->Add(gcnew ZobControlAction(w));
-			}
-			else
-			{
-				assert(NULL);
-			}
-
-			idx++;
 		}
 		zobPanel->Controls->Add(panel);
 	}
@@ -390,7 +390,7 @@ ZobControlVector3::ZobControlVector3(const ZobVariablesExposer::wrapperData& w):
 	String^ name = TO_MANAGED_STRING(w.name.c_str());
 	ZobVector3* v = (ZobVector3*)(w.ptr);
 	this->AutoSize = true;
-	this->ColumnCount = 5;
+	this->ColumnCount = 4;
 	this->RowCount = 1;
 	this->Name = name;
 	int width = 80;
@@ -423,14 +423,6 @@ ZobControlVector3::ZobControlVector3(const ZobVariablesExposer::wrapperData& w):
 	_txt_Z->AutoSize = false;
 	_txt_Z->ReadOnly = _w->bReadOnly;
 
-	_txt_W = gcnew ZobTextBox();
-	_txt_W->Name = name;
-	_txt_W->Width = width;
-	_txt_W->AutoSize = false;
-	_txt_W->Height = _height;
-	_txt_W->AutoSize = false;
-	_txt_W->ReadOnly = _w->bReadOnly;
-
 	UpdateControlInternal();
 	_eventX = gcnew EventHandler(this, &ZobControlVector3::OnValueChanged);
 	_eventY = gcnew EventHandler(this, &ZobControlVector3::OnValueChanged);
@@ -443,7 +435,6 @@ ZobControlVector3::ZobControlVector3(const ZobVariablesExposer::wrapperData& w):
 	this->Controls->Add(_txt_X, 1, 0);
 	this->Controls->Add(_txt_Y, 2, 0);
 	this->Controls->Add(_txt_Z, 3, 0);
-	this->Controls->Add(_txt_W, 4, 0);
 }
 
 ZobControlVector3::~ZobControlVector3()
@@ -479,8 +470,6 @@ void ZobControlVector3::UpdateControlInternal()
 				_txt_Y->Text = String::Format("{0:0.0000000}", z ? z->y:0);
 			if (!_txt_Z->Focused)
 				_txt_Z->Text = String::Format("{0:0.0000000}", z ? z->z:0);
-			if (!_txt_W->Focused)
-				_txt_W->Text = String::Format("{0:0.0000000}", z ? z->w : 0);
 		}
 	}
 }
@@ -496,9 +485,7 @@ void ZobControlVector3::OnValueChanged(Object^ sender, EventArgs^ e)
 	MarshalString(zb->_txt_Y->Text->Replace(",", "."), sy);
 	std::string sz;
 	MarshalString(zb->_txt_Z->Text->Replace(",", "."), sz);
-	std::string sw;
-	MarshalString(zb->_txt_W->Text->Replace(",", "."), sw);
-	if (v.FromString(sx, sy, sz, sw))
+	if (v.FromString(sx, sy, sz, std::string("1")))
 	{
 		if (!v.isNaN())
 		{

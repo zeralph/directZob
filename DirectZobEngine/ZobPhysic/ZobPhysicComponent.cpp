@@ -212,15 +212,12 @@ void ZobPhysicComponent::SetWorldOrientation(float x, float y, float z)
 	float rz = DEG_TO_RAD(z);
 	Transform t = GetWorldTransform();
 	Quaternion q;
-	//q = Quaternion::fromEulerAngles((dx), (dy), (dz));
 	ZobVector3 v = ZobMatrix4x4::EulerToQuaternion(rx, ry, rz);
 	q.x = v.x;
 	q.y = v.y;
 	q.z = v.z;
 	q.w = v.w;
 	q.normalize();
-	//Quaternion q2 = t.getOrientation();
-	//q = q2 * q;
 	t.setOrientation(q);
 	SetWorldTransform(t);
 	m_editorLocalRotation = GetLocalOrientation();
@@ -228,21 +225,12 @@ void ZobPhysicComponent::SetWorldOrientation(float x, float y, float z)
 
 ZobVector3 ZobPhysicComponent::GetLocalOrientation() const
 {
-	if (m_zobObject->GetName() == "camaro.obj")
-	{
-		int y = 0;
-		y++;
-	}
 	Quaternion q = m_localTransform.getOrientation();
-	//assert(q.isFinite());
 	q.normalize();
 	ZobVector3 z = ZobMatrix4x4::QuaternionToEuler(q.x, q.y, q.z, q.w);
 	float ax = RAD_TO_DEG(z.x);
 	float ay = RAD_TO_DEG(z.y);
 	float az = RAD_TO_DEG(z.z);
-	ax = ClampAngle(ax);
-	ay = ClampAngle(ay);
-	az = ClampAngle(az);
 	return ZobVector3(ax, ay, az);
 }
 
@@ -254,10 +242,7 @@ ZobVector3 ZobPhysicComponent::GetWorldOrientation() const
 	float ax = RAD_TO_DEG(z.x);
 	float ay = RAD_TO_DEG(z.y);
 	float az = RAD_TO_DEG(z.z);
-	ax = ClampAngle(ax);
-	ay = ClampAngle(ay);
-	az = ClampAngle(az);
-	return ZobVector3(az, ax, ay);
+	return ZobVector3(ax, ay, az);
 }
 
 float ZobPhysicComponent::ClampAngle(float a) const
