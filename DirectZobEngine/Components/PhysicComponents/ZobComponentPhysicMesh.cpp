@@ -107,7 +107,7 @@ void ZobComponentPhysicMesh::Init(DirectZobType::sceneLoadingCallback cb)
 
 void ZobComponentPhysicMesh::EditorUpdate()
 {
-	if (m_isInit)
+	//if (m_isInit)
 	{
 		ZobComponentPhysicShape::EditorUpdate();
 		if (m_mesh == NULL)

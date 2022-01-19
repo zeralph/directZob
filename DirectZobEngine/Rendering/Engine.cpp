@@ -100,8 +100,10 @@ Engine::Engine(int width, int height, Events* events)
 	m_showZBuffer = false;
 	m_nextWidth = width;
 	m_nextHeight = height;
+	m_nextDownscale = 1;
 	m_bufferData.height = height;
 	m_bufferData.width = width;
+	m_bufferData.downscale = 1;
 	m_bufferData.zNear = 0.11f;
 	m_bufferData.zFar = 1000.0f;
 	m_bufferData.buffer = m_buffer[m_currentBuffer];
@@ -204,12 +206,19 @@ Engine::Engine(int width, int height, Events* events)
 	m_varExposer->WrapVariable<bool>("Show text", &m_showText, NULL, false, false);
 	m_varExposer->WrapVariable<bool>("Equalize triangle queues", &m_EqualizeTriangleQueues, NULL, false, true);
 	m_varExposer->WrapVariable<bool>("Perspective Correction", &m_perspCorrection, NULL, false, true);
+	m_varExposer->WrapVariable<int>("Downscale", &m_nextDownscale, &Engine::UpdateVariables, false, true);
 	m_varExposer->WrapVariable<int>("Rastyerizer height", &m_rasterizerHeight, NULL, true, false);
 	m_varExposer->WrapVariable<uint>("Number of rasterizers", &m_nbRasterizers, NULL, true, false);
 	m_varExposer->WrapVariable<uint>("Number of drawn triangles", &m_drawnTriangles, NULL, true, false);
 	m_varExposer->Load();
 	std::string n = "Engine initialized with " + std::to_string(m_nbRasterizers) + " rasterizer(s) for " + std::to_string(m_maxTrianglesQueueSize) + " triangles per image";
 	DirectZob::LogWarning(n.c_str());
+}
+
+void Engine::UpdateVariables(zobId zid)
+{
+	Engine* e = DirectZob::GetInstance()->GetEngine();
+	e->Resize(e->m_nextWidth, e->m_nextHeight);
 }
 
 uint Engine::GetObjectIdAtCoords(uint x, uint y)
@@ -266,7 +275,7 @@ void Engine::Stop()
 
 bool Engine::Resize(int width, int height)
 {
-	if (m_nextWidth != width || m_nextHeight != height)
+	if (m_nextWidth != width || m_nextHeight != height || m_nextDownscale != m_bufferData.downscale)
 	{
 		m_nextWidth = width;
 		m_nextHeight = height;
@@ -293,22 +302,25 @@ bool Engine::ResizeInternal()
 		m_zBuffer = NULL;
 		m_buffer = (uint**)malloc(sizeof(uint*) * 2);
 		m_zBuffer = (float**)malloc(sizeof(float*) * 2);
+		int w = m_nextWidth / m_nextDownscale;
+		int h = m_nextHeight / m_nextDownscale;
 		for (int i = 0; i < 2; i++)
 		{
-			m_buffer[i] = (uint*)malloc(sizeof(uint) * m_nextWidth * m_nextHeight);
-			m_zBuffer[i] = (float*)malloc(sizeof(float) * m_nextWidth * m_nextHeight);
+			m_buffer[i] = (uint*)malloc(sizeof(uint) * w * h);
+			m_zBuffer[i] = (float*)malloc(sizeof(float) * m_nextWidth * h);
 		}
-		m_bufferData.height = m_nextHeight;
-		m_bufferData.width = m_nextWidth;
+		m_bufferData.downscale = m_nextDownscale;
+		m_bufferData.height = h;
+		m_bufferData.width = w;
 		m_bufferData.buffer = m_buffer[m_currentBuffer];
 		m_bufferData.zBuffer = m_zBuffer[m_currentBuffer];
-		m_bufferData.size = m_nextWidth * m_nextHeight;
+		m_bufferData.size = w * h;
 		ZobColor c = ZobColor(DirectZob::GetInstance()->GetLightManager()->GetClearColor());
 		ClearBuffer(&c);
-		m_rasterizerHeight = ceil((float)m_nextHeight / (float)m_nbRasterizers);
+		m_rasterizerHeight = ceil((float)h / (float)m_nbRasterizers);
 		for (int i = 0; i < m_nbRasterizers; i++)
 		{
-			m_rasterizers[i]->Resize(m_nextWidth, m_nextHeight);
+			m_rasterizers[i]->Resize(w, h);
 		}
 		return true;
 	}

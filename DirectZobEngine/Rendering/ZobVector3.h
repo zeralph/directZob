@@ -13,6 +13,7 @@ class ZobVector3
 public:
 	ZobVector3();
 	ZobVector3(float x, float y, float z);
+	ZobVector3(float x, float y, float z, float w);
 	ZobVector3(const ZobVector3* v);
 
 	static const ZobVector3 Vector3Zero;

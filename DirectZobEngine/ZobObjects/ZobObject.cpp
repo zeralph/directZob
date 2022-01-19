@@ -142,6 +142,7 @@ void ZobObject::ReloadVariablesFromWorldData(zobId id)
 	ZobObject* z = ZobEntity::GetEntity<ZobObject>(id);
 	if (z)
 	{
+		/*
 		ZobVector3* zp = z->GetPhysicComponentNoConst()->GetWorldPositionAddress();
 		ZobVector3* zr = z->GetPhysicComponentNoConst()->GetWorldRotationAddress();
 		ZobVector3* zs = z->GetPhysicComponentNoConst()->GetWorldScaleAddress();
@@ -153,6 +154,22 @@ void ZobObject::ReloadVariablesFromWorldData(zobId id)
 		t.setOrientation(q);
 		z->GetPhysicComponentNoConst()->SetWorldTransform(t);
 		z->GetPhysicComponentNoConst()->SetWorldScale(zs->x, zs->y, zs->z);
+		*/
+		ZobVector3* zp = z->GetPhysicComponentNoConst()->GetLocalPositionAddress();
+		ZobVector3* zr = z->GetPhysicComponentNoConst()->GetLocalRotationAddress();
+		ZobVector3* zs = z->GetPhysicComponentNoConst()->GetLocalScaleAddress();
+		Transform t;
+		Vector3 vp = Vector3(zp->x, zp->y, zp->z);
+		t.setPosition(vp);
+		/*
+		ZobVector3 qv = ZobMatrix4x4::EulerToQuaternion(DEG_TO_RAD(zr->x), DEG_TO_RAD(zr->y), DEG_TO_RAD(zr->z));
+		Quaternion q = Quaternion(qv.x, qv.y, qv.z, qv.w);
+		*/
+		Quaternion q = Quaternion::fromEulerAngles(DEG_TO_RAD(zr->x), DEG_TO_RAD(zr->y), DEG_TO_RAD(zr->z));
+		q.normalize();
+		t.setOrientation(q);
+		z->GetPhysicComponentNoConst()->m_localTransform = t;
+		z->GetPhysicComponentNoConst()->m_localScale = Vector3(zs->x, zs->y, zs->z);
 	}
 }
 
@@ -166,7 +183,19 @@ void ZobObject::ReloadVariablesFromLocalData(zobId id)
 		Transform t = z->GetPhysicComponentNoConst()->GetLocalTransform();
 		Vector3 vp = Vector3(zp->x, zp->y, zp->z);
 		t.setPosition(vp);
-		Quaternion q = Quaternion::fromEulerAngles(DEG_TO_RAD(zr->x), DEG_TO_RAD(zr->y), DEG_TO_RAD(zr->z));
+		ZobVector3 qv = ZobMatrix4x4::EulerToQuaternion(DEG_TO_RAD(zr->x), DEG_TO_RAD(zr->y), DEG_TO_RAD(zr->z));
+		Quaternion q = Quaternion(qv.x, qv.y, qv.z, qv.w);
+		
+		Quaternion q2 = Quaternion::fromEulerAngles(DEG_TO_RAD(zr->x), DEG_TO_RAD(zr->y), DEG_TO_RAD(zr->z));
+		
+		ZobVector3 vqx = ZobMatrix4x4::AxisAngleToQuaternion(DEG_TO_RAD(zr->x), &ZobVector3::Vector3X);
+		ZobVector3 vqy = ZobMatrix4x4::AxisAngleToQuaternion(DEG_TO_RAD(zr->y), &ZobVector3::Vector3Y);
+		ZobVector3 vqz = ZobMatrix4x4::AxisAngleToQuaternion(DEG_TO_RAD(zr->z), &ZobVector3::Vector3Z);
+		Quaternion qx = Quaternion(vqx.x, vqx.y, vqx.z, vqx.w);
+		Quaternion qy = Quaternion(vqy.x, vqy.y, vqy.z, vqy.w);
+		Quaternion qz = Quaternion(vqz.x, vqz.y, vqz.z, vqz.w);
+		Quaternion q3 = qz * qy * qx;
+		
 		q.normalize();
 		t.setOrientation(q);
 		z->GetPhysicComponentNoConst()->SetLocalScale(zs->x, zs->y, zs->z);

@@ -84,6 +84,7 @@ public:
 	void								SetLocalTransform(Transform t);
 	ZobVector3							GetLocalOrientation() const;
 	void								GetLocalAxisAngleRotation(ZobVector3& axis, float& angle);
+	ZobVector3							QuaternionToAngles(Quaternion q);
 	void								SetLocalOrientation(Quaternion q, bool add) 
 										{ 
 											Quaternion qn = m_localTransform.getOrientation();

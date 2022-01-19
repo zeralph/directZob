@@ -145,7 +145,8 @@ namespace CLI
 				String^ s = gcnew String(ZobComponentFactory::eComponentTypeStr[i]);
 				if (s == it->Text)
 				{
-					ZobComponentFactory::CreateComponent(m_selectedObject, ZobComponentFactory::eComponentTypeStr[i], false);
+					ZobComponent* z = ZobComponentFactory::CreateComponent(m_selectedObject, ZobComponentFactory::eComponentTypeStr[i], false);
+					z->Init(NULL);
 					m_selectedObjectWrapper->Refresh();
 					return;
 				}
@@ -263,6 +264,7 @@ namespace CLI
 		{
 			if (tn->IsSelectable())
 			{
+				tn->OnClick(sender, e);
 				m_treeView->SelectedNode = e->Node;
 				if (e->Button == MouseButtons::Left)
 				{

@@ -35,6 +35,8 @@ public:
 	void AddRotation(const ZobVector3& v);
 	void SetPosition(const ZobVector3& v);
 	void AddTranslation(const ZobVector3& v);
+	static ZobVector3 AxisAngleToQuaternion(float angle, const ZobVector3* axis);
+	ZobVector3 ToQuaternion();
 	ZobVector3 GetRotation() const;
 	ZobVector3 GetScale() const 
 	{

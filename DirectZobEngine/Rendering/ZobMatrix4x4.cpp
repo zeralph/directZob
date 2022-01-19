@@ -253,18 +253,18 @@ ZobVector3 ZobMatrix4x4::EulerToQuaternion(float x, float y, float z)
 	float pitch = y;
 	float roll = x;
 	// Abbreviations for the various angular functions
-	float cy = cos(yaw * 0.5f);
-	float sy = sin(yaw * 0.5f);
-	float cp = cos(pitch * 0.5f);
-	float sp = sin(pitch * 0.5f);
-	float cr = cos(roll * 0.5f);
-	float sr = sin(roll * 0.5f);
+	float c1 = cos(x * 0.5f);
+	float s1 = sin(x * 0.5f);
+	float c2 = cos(y * 0.5f);
+	float s2 = sin(y * 0.5f);
+	float c3 = cos(z * 0.5f);
+	float s3 = sin(z * 0.5f);
 
 	ZobVector3 q;
-	q.w = cr * cp * cy + sr * sp * sy;
-	q.x = sr * cp * cy - cr * sp * sy;
-	q.y = cr * sp * cy + sr * cp * sy;
-	q.z = cr * cp * sy - sr * sp * cy;
+	q.w = c1 * c2 * c3 - s1 * s2 * s3;
+	q.x = s1 * c2 * c3 + c1 * s2 * s3;
+	q.y = c1 * s2 * c3 - s1 * c2 * s3;
+	q.z = c1 * c2 * s3 + s1 * s2 * c3;
 	return q;
 	/*
 	double roll = x;
@@ -289,84 +289,142 @@ ZobVector3 ZobMatrix4x4::EulerToQuaternion(float x, float y, float z)
 	q.w = vw;
 	return q;
 	*/
+
+}
+
+ZobVector3 ZobMatrix4x4::AxisAngleToQuaternion(float angle, const ZobVector3* axis)
+{
+	double s = sin(angle / 2.0f);
+	float x = axis->x * s;
+	float y = axis->y * s;
+	float z = axis->z * s;
+	float w = cos(angle / 2.0f);
+	return ZobVector3(x, y, z, w);
+}
+
+ZobVector3 ZobMatrix4x4::ToQuaternion()
+{
+	ZobVector3 q;
+	float trace = m_data[0][0] + m_data[1][1] + m_data[2][2]; // I removed + 1.0f; see discussion with Ethan
+	if (trace > 0) {// I changed M_EPSILON to 0
+		float s = 0.5f / sqrtf(trace + 1.0f);
+		q.w = 0.25f / s;
+		q.x = (m_data[2][1] - m_data[1][2]) * s;
+		q.y = (m_data[0][2] - m_data[2][0]) * s;
+		q.z = (m_data[1][0] - m_data[0][1]) * s;
+	}
+	else {
+		if (m_data[0][0] > m_data[1][1] && m_data[0][0] > m_data[2][2]) {
+			float s = 2.0f * sqrtf(1.0f + m_data[0][0] - m_data[1][1] - m_data[2][2]);
+			q.w = (m_data[2][1] - m_data[1][2]) / s;
+			q.x = 0.25f * s;
+			q.y = (m_data[0][1] + m_data[1][0]) / s;
+			q.z = (m_data[0][2] + m_data[2][0]) / s;
+		}
+		else if (m_data[1][1] > m_data[2][2]) {
+			float s = 2.0f * sqrtf(1.0f + m_data[1][1] - m_data[0][0] - m_data[2][2]);
+			q.w = (m_data[0][2] - m_data[2][0]) / s;
+			q.x = (m_data[0][1] + m_data[1][0]) / s;
+			q.y = 0.25f * s;
+			q.z = (m_data[1][2] + m_data[2][1]) / s;
+		}
+		else {
+			float s = 2.0f * sqrtf(1.0f + m_data[2][2] - m_data[0][0] - m_data[1][1]);
+			q.w = (m_data[1][0] - m_data[0][1]) / s;
+			q.x = (m_data[0][2] + m_data[2][0]) / s;
+			q.y = (m_data[1][2] + m_data[2][1]) / s;
+			q.z = 0.25f * s;
+		}
+	}
+	return q;
 }
 
 ZobVector3 ZobMatrix4x4::QuaternionToEuler(float x, float y, float z, float w)
 {
-	/*
-	double roll, pitch, yaw;
-	// roll (x-axis rotation)
-	double sinr_cosp = 2 * (w * x + y * z);
-	double cosr_cosp = 1 - 2 * (x * x + y * y);
-	roll = std::atan2(sinr_cosp, cosr_cosp);
 
-	// pitch (y-axis rotation)
-	double sinp = 2 * (w * y - z * x);
-	if (std::abs(sinp) >= 1)
-		pitch = std::copysign(M_PI / 2, sinp); // use 90 degrees if out of range
-	else
-		pitch = std::asin(sinp);
+	static int testQ = 1;
+	if (testQ == 0)
+	{
+		double roll, pitch, yaw;
+		// roll (x-axis rotation)
+		double sinr_cosp = 2 * (w * x + y * z);
+		double cosr_cosp = 1 - 2 * (x * x + y * y);
+		roll = std::atan2(sinr_cosp, cosr_cosp);
 
-	// yaw (z-axis rotation)
-	double siny_cosp = 2 * (w * z + x * y);
-	double cosy_cosp = 1 - 2 * (y * y + z * z);
-	yaw = std::atan2(siny_cosp, cosy_cosp);
-	return ZobVector3((float)roll, (float)pitch, (float)yaw);
-	*/
-	
-	double roll;
-	double pitch;
-	double yaw;
-	double sqw = w * w;
-	double sqx = x * x;
-	double sqy = y * y;
-	double sqz = z * z;
-	double unit = sqx + sqy + sqz + sqw; // if normalised is one, otherwise is correction factor
-	double test = x* y + z * w;
-	if (test > 0.499 * unit) { // singularity at north pole
-		roll = 2 * atan2(x, w);
-		pitch = M_PI / 2;
-		yaw = 0;
+		// pitch (y-axis rotation)
+		double sinp = 2 * (w * y - z * x);
+		if (std::abs(sinp) >= 1)
+			pitch = std::copysign(M_PI / 2, sinp); // use 90 degrees if out of range
+		else
+			pitch = std::asin(sinp);
+
+		// yaw (z-axis rotation)
+		double siny_cosp = 2 * (w * z + x * y);
+		double cosy_cosp = 1 - 2 * (y * y + z * z);
+		yaw = std::atan2(siny_cosp, cosy_cosp);
+		return ZobVector3((float)roll, (float)pitch, (float)yaw);
 	}
-	else if (test < -0.499 * unit) { // singularity at south pole
-		roll = -2 * atan2(x, w);
-		pitch = -M_PI / 2;
-		yaw = 0;
-	}
-	else
+	else if (testQ == 1)
 	{
-		roll = atan2(2 * y * w - 2 * x * z, sqx - sqy - sqz + sqw);
-		pitch = asin(2 * test / unit);
-		yaw = atan2(2 * x * w - 2 * y * z, -sqx + sqy - sqz + sqw);
-	}
-	return ZobVector3(roll, pitch, yaw);
-	
-	/*
-	double roll;
-	double pitch;
-	double yaw;
-	double test = x * y + z * w;
-	if (test > 0.499) { // singularity at north pole
-		roll = 2 * atan2(x, w);
-		pitch = M_PI / 2;
-		yaw = 0;
-	}
-	if (test < -0.499) { // singularity at south pole
-		roll = -2 * atan2(x, w);
-		pitch = -M_PI / 2;
-		yaw = 0;
-	}
-	else
-	{
+		double roll;
+		double pitch;
+		double yaw;
+		double sqw = w * w;
 		double sqx = x * x;
 		double sqy = y * y;
 		double sqz = z * z;
-		roll = atan2(2 * y * w - 2 * x * z, 1 - 2 * sqy - 2 * sqz);
-		pitch = asin(2 * test);
-		yaw = atan2(2 * x * w - 2 * y * z, 1 - 2 * sqx - 2 * sqz);
+		double unit = sqx + sqy + sqz + sqw; // if normalised is one, otherwise is correction factor
+		double test = x* y + z * w;
+		if (test > 0.499 * unit) { // singularity at north pole
+			roll = 2 * atan2(x, w);
+			pitch = M_PI / 2;
+			yaw = 0;
+		}
+		else if (test < -0.499 * unit) { // singularity at south pole
+			roll = -2 * atan2(x, w);
+			pitch = -M_PI / 2;
+			yaw = 0;
+		}
+		else
+		{
+			//roll = atan2(2 * y * w - 2 * x * z, sqx - sqy - sqz + sqw);
+			//pitch = asin(2 * test / unit);
+			//yaw = atan2(2 * x * w - 2 * y * z, -sqx + sqy - sqz + sqw);
+			roll = atan2(-2 * (y * z - w * x), w * w - x * x - y * y + z * z);
+			float s = 2 * (x * z + w * y);
+			s = fminf(fmaxf(s, -1.0f), 1.0f);
+			pitch = asin(s);
+			yaw = atan2(-2 * (x * y - w * z), w * w + x * x - y * y - z * z);
+		}
+		return ZobVector3(roll, pitch, yaw);
 	}
-	return ZobVector3(roll, pitch, yaw);
-	*/
+	else
+	{
+		double roll;
+		double pitch;
+		double yaw;
+		double test = x * y + z * w;
+		if (test > 0.499) { // singularity at north pole
+			roll = 2 * atan2(x, w);
+			pitch = M_PI / 2;
+			yaw = 0;
+		}
+		if (test < -0.499) { // singularity at south pole
+			roll = -2 * atan2(x, w);
+			pitch = -M_PI / 2;
+			yaw = 0;
+		}
+		else
+		{
+			double sqx = x * x;
+			double sqy = y * y;
+			double sqz = z * z;
+			roll = atan2(2 * y * w - 2 * x * z, 1 - 2 * sqy - 2 * sqz);
+			pitch = asin(2 * test);
+			yaw = atan2(2 * x * w - 2 * y * z, 1 - 2 * sqx - 2 * sqz);
+		}
+		return ZobVector3(roll, pitch, yaw);
+	}
 }
 
 void ZobMatrix4x4::InvertMatrix4(const ZobMatrix4x4& m, ZobMatrix4x4& im)

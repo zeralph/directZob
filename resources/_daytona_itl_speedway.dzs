@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<Scene EntitiesCount="60" ZobObjectsCount="32">
+<Scene EntitiesCount="62" ZobObjectsCount="33">
     <Globals>
         <Var Name="Ambient color" value="255;102;102;102" />
         <Var Name="Clear color" value="255;192;192;192" />
@@ -13,12 +13,13 @@
         <Var Name="Bits per color" value="Full" />
         <Var Name="Dithering" value="False" />
         <Var Name="Z near" value="0.110" />
-        <Var Name="Z far" value="1000.000" />
+        <Var Name="Z far" value="500.000" />
         <Var Name="Equalize triangle queues" value="False" />
         <Var Name="Perspective Correction" value="True" />
+        <Var Name="Downscale" value="1" />
     </Globals>
     <ZobObject Guid="4002928242">
-        <Var Name="Name" value="Physic" />
+        <Var Name="Name" value="phy_int_wall" />
         <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
         <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
         <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
@@ -80,6 +81,24 @@
                 </Component>
             </Components>
         </ZobObject>
+        <ZobObject Guid="4002811640">
+            <Var Name="Name" value="phy_int_wall" />
+            <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+            <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+            <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+            <Var Name="Body type" value="Static" />
+            <Var Name="Active" value="True" />
+            <Var Name="Mass" value="1000.000" />
+            <Components>
+                <Component Type="PhysicMesh" Guid="2007806819">
+                    <Var Name="Layer" value="none" />
+                    <Var Name="Trigger" value="False" />
+                    <Var Name="Local position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale with object" value="False" />
+                    <Var Name="Mesh" value="phy_internal_wall.obj;daytona_itl_speedway/;phy_internal_wall.obj;0" />
+                </Component>
+            </Components>
+        </ZobObject>
     </ZobObject>
     <ZobObject Guid="4002526713">
         <Var Name="Name" value="Road" />
@@ -130,7 +149,7 @@
         </ZobObject>
         <ZobObject Guid="4002223284">
             <Var Name="Name" value="sidemarks" />
-            <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+            <Var Name="Position" value="0.00000;0.16162;0.00000;1.00000" />
             <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
             <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
             <Var Name="Body type" value="Static" />
@@ -188,9 +207,9 @@
     </ZobObject>
     <ZobObject Guid="4004349910">
         <Var Name="Name" value="Light_1" />
-        <Var Name="Position" value="0.00000;11.57806;0.00000;1.00000" />
+        <Var Name="Position" value="0.00001;91.91918;-1.36180;1.00000" />
         <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
-        <Var Name="Quaternion" value="0.70634;-0.09309;-0.09456;0.69532" />
+        <Var Name="Quaternion" value="0.61541;-0.35374;-0.35934;0.60581" />
         <Var Name="Body type" value="Static" />
         <Var Name="Active" value="True" />
         <Var Name="Mass" value="1000.000" />
@@ -384,7 +403,7 @@
         <Var Name="Mass" value="1000.000" />
         <Components>
             <Component Type="PhysicBox" Guid="2007043289">
-                <Var Name="Layer" value="none" />
+                <Var Name="Layer" value="objects" />
                 <Var Name="Trigger" value="False" />
                 <Var Name="Local position" value="0.00000;1.00000;0.00000;1.00000" />
                 <Var Name="Scale with object" value="True" />

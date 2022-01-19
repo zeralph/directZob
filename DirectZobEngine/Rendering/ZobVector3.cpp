@@ -20,6 +20,15 @@ ZobVector3::ZobVector3(float x, float y, float z) :
 
 }
 
+ZobVector3::ZobVector3(float x, float y, float z, float w) :
+	x(x),
+	y(y),
+	z(z),
+	w(w)
+{
+
+}
+
 ZobVector3::ZobVector3(const ZobVector3* v)
 {
 	x = v->x;

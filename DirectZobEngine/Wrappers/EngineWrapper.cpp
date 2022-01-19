@@ -459,6 +459,7 @@ namespace CLI
 			return;
 		}
 		ZobObject* curObj = DirectZobWrapper::GetWrapper()->GetZobObjectManagerWrapper()->GetSelectedObject();
+		bool bIsObjectModified = curObj && m_modificatorData->m_currentObjectModificator && m_modificatorData->m_moveObject;
 		if (GetAsyncKeyState(VK_LBUTTON) & 0x8000 && GetKeyState(VK_CONTROL) & 0x8000)
 		{
 			float factor = 20.0f;
@@ -471,7 +472,7 @@ namespace CLI
 			m_modificatorData->Reset();
 			//c->Rotate(30, 0, 0);
 		}
-		else if (curObj == NULL && GetAsyncKeyState(VK_LBUTTON) & 0x8000)
+		else if (!bIsObjectModified && GetAsyncKeyState(VK_LBUTTON) & 0x8000)
 		{
 			float factor = 40.0f;
 			Point p;
@@ -617,7 +618,7 @@ namespace CLI
 		int renderH = m_renderWindow->Height;
 		if (renderH != h || renderW != w)
 		{
-			m_Instance->Resize(renderW, renderH);
+			//m_Instance->Resize(renderW, renderH);
 			m_renderWindowGraphics = m_renderWindow->CreateGraphics();
 			bData = m_Instance->GetBufferData();
 			w = bData->width;
@@ -628,6 +629,7 @@ namespace CLI
 		Drawing::Rectangle srcRect = Drawing::Rectangle(0, 0, w, h);
 		Drawing::Rectangle dstRect = Drawing::Rectangle(0, 0, renderW, renderH);
 		m_renderWindow->SizeMode = PictureBoxSizeMode::StretchImage;
+		m_renderWindowGraphics->InterpolationMode = Drawing2D::InterpolationMode::NearestNeighbor;
 		m_renderWindowGraphics->DrawImage(b, dstRect, srcRect, Drawing::GraphicsUnit::Pixel);
 	}
 

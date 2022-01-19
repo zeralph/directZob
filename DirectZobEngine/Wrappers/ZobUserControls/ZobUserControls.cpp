@@ -474,13 +474,13 @@ void ZobControlVector3::UpdateControlInternal()
 		if (z)
 		{
 			if (!_txt_X->Focused)
-				_txt_X->Text = String::Format("{0:0.000}", z?z->x:0);
+				_txt_X->Text = String::Format("{0:0.0000000}", z?z->x:0);
 			if (!_txt_Y->Focused)
-				_txt_Y->Text = String::Format("{0:0.000}", z ? z->y:0);
+				_txt_Y->Text = String::Format("{0:0.0000000}", z ? z->y:0);
 			if (!_txt_Z->Focused)
-				_txt_Z->Text = String::Format("{0:0.000}", z ? z->z:0);
+				_txt_Z->Text = String::Format("{0:0.0000000}", z ? z->z:0);
 			if (!_txt_W->Focused)
-				_txt_W->Text = String::Format("{0:0.000}", z ? z->w : 0);
+				_txt_W->Text = String::Format("{0:0.0000000}", z ? z->w : 0);
 		}
 	}
 }
@@ -491,26 +491,29 @@ void ZobControlVector3::OnValueChanged(Object^ sender, EventArgs^ e)
 	ZobControlVector3^ zb = (ZobControlVector3^)tb->Parent;
 	ZobVector3 v;
 	std::string sx;
-	MarshalString(zb->_txt_X->Text, sx);
+	MarshalString(zb->_txt_X->Text->Replace(",","."), sx);
 	std::string sy;
-	MarshalString(zb->_txt_Y->Text, sy);
+	MarshalString(zb->_txt_Y->Text->Replace(",", "."), sy);
 	std::string sz;
-	MarshalString(zb->_txt_Z->Text, sz);
+	MarshalString(zb->_txt_Z->Text->Replace(",", "."), sz);
 	std::string sw;
-	MarshalString(zb->_txt_W->Text, sw);
+	MarshalString(zb->_txt_W->Text->Replace(",", "."), sw);
 	if (v.FromString(sx, sy, sz, sw))
 	{
-		ZobVector3* vv = (ZobVector3*)_w->ptr;
-		//if (_txt_X->Focused)
-			vv->x = v.x;
-		//if (_txt_Y->Focused)
-			vv->y = v.y;
-		//if (_txt_Z->Focused)
-			vv->z = v.z;
-		if (_w->callback)
+		if (!v.isNaN())
 		{
-			zobId id = _w->id;
-			((ZobVariablesExposer::wrapperCallback)_w->callback)(id);
+			ZobVector3* vv = (ZobVector3*)_w->ptr;
+			if (_txt_X->Focused)
+				vv->x = v.x;
+			if (_txt_Y->Focused)
+				vv->y = v.y;
+			if (_txt_Z->Focused)
+				vv->z = v.z;
+			if (_w->callback)
+			{
+				zobId id = _w->id;
+				((ZobVariablesExposer::wrapperCallback)_w->callback)(id);
+			}
 		}
 	}
 }
@@ -1145,6 +1148,21 @@ ZobControlTreeNode::~ZobControlTreeNode()
 
 }
 
+void ZobControlTreeNode::OnClick(Object^ sender, TreeNodeMouseClickEventArgs^ e)
+{
+	ZobControlTreeview^ tv = (ZobControlTreeview^)sender;
+	int x = e->Location.X - tv->Bounds.Left;
+	if (x > tv->Bounds.Width - 40 && x < tv->Bounds.Width - 20)
+	{
+		m_locked = !m_locked;
+	}
+	else if (x > tv->Bounds.Width - 40 && x < tv->Bounds.Width)
+	{
+		m_visible = !m_visible;
+	}
+	tv->Invalidate();
+}
+
 ZobControlTreeNode^ ZobControlTreeNode::GetChildNode(String^ guid) 
 {
 	for (int i = 0; i < this->Nodes->Count; i++)
@@ -1166,20 +1184,25 @@ ZobControlTreeview::ZobControlTreeview():TreeView()
 
 void ZobControlTreeview::OnDrawNode(DrawTreeNodeEventArgs^ e)
 {
+	//e->Graphics->lay
+	//e->Bounds.Left += 40;
 	e->DrawDefault = true;
-	/*
 	//TreeView::OnDrawNode(e);
+	int x;
+	VisualStyles::CheckBoxState s;
+	x = this->Bounds.Width - 40;
+	Drawing::Rectangle r = Drawing::Rectangle(x-1, e->Bounds.Top-1, 40, e->Bounds.Height);
+	e->Graphics->FillRectangle(SystemBrushes::ActiveBorder, r);
 	ZobControlTreeNode^ n = (ZobControlTreeNode^)e->Node;
-	int x = this->Bounds.Width - 20;
+	x = this->Bounds.Width - 20;
 	Point p = Point(x, e->Bounds.Top);
-	VisualStyles::CheckBoxState s = VisualStyles::CheckBoxState::CheckedNormal;
+	s = n->m_visible?VisualStyles::CheckBoxState::CheckedNormal: VisualStyles::CheckBoxState::UncheckedNormal;
 	CheckBoxRenderer::DrawCheckBox(e->Graphics, p, s);
 	x = this->Bounds.Width - 40;
 	p = Point(x, e->Bounds.Top);
-	s = VisualStyles::CheckBoxState::CheckedNormal;
+	s = n->m_locked ? VisualStyles::CheckBoxState::CheckedNormal : VisualStyles::CheckBoxState::UncheckedNormal;
 	CheckBoxRenderer::DrawCheckBox(e->Graphics, p, s);
-	//TreeNode::
-	*/
+	TreeView::OnDrawNode(e);
 }
 
 void ZobControlTreeview::UpdateZobControl()

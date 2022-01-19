@@ -303,8 +303,11 @@ namespace DirectZobEditor
                 //openFileDialog.InitialDirectory = m_path;
                 openFileDialog.Filter = "xml files (*.xml)|*.xml|zob scene (*.dzs)|*.dzs";
                 openFileDialog.FilterIndex = 2;
-                openFileDialog.RestoreDirectory = true;
-
+                string workspace = m_directZobWrapper.GetResourcePath();
+                if (!String.IsNullOrEmpty(workspace) && Directory.Exists(workspace))
+                {
+                    openFileDialog.InitialDirectory = workspace.Replace("/", "\\"); ;
+                }
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     m_path = Path.GetDirectoryName(openFileDialog.FileName) +"\\";
@@ -359,8 +362,11 @@ namespace DirectZobEditor
                 saveFileDialog.InitialDirectory = m_path;
                 saveFileDialog.Filter = "xml files (*.xml)|*.xml|zob scene (*.dzs)|*.dzs";
                 saveFileDialog.FilterIndex = 2;
-                saveFileDialog.RestoreDirectory = true;
-                //openFileDialog.AutoUpgradeEnabled = false;
+                string workspace = m_directZobWrapper.GetResourcePath();
+                if (!String.IsNullOrEmpty(workspace) && Directory.Exists(workspace))
+                {
+                    saveFileDialog.InitialDirectory = workspace.Replace("/", "\\");
+                }
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     string path = Path.GetDirectoryName(saveFileDialog.FileName) + "\\";
@@ -797,9 +803,11 @@ namespace DirectZobEditor
                 if(p != null)
                 {
                     Rectangle rect = p.DisplayRectangle;
+                    int x = p.Width;
+                    int y = p.Height;
                     float r = (float)p.Width / (float)p.Height;
-                    toolStripStatusLabel1.Text = "Size : " + p.Width + "x" + p.Height + " | Ratio : "+r;
-                    m_directZobWrapper.GetEngineWrapper().Resize(p.Width, p.Height);
+                    toolStripStatusLabel1.Text = "Size : " + x + "x" + y + " | Ratio : "+r;
+                    m_directZobWrapper.GetEngineWrapper().Resize(x, y);
                 }
             }
         }

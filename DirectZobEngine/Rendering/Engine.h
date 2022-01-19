@@ -102,6 +102,7 @@ public:
 	ZobVariablesExposer*							GetVariablesExposer() { return m_varExposer; }
 	BoudingBox2D									Get2DBoundingBox(const ZobObject* z) const;
 private:	
+	static void										UpdateVariables(zobId zid);
 	void											DrawHorizontalLine(const float x1, const float x2, const float y, const uint color);
 	void											QueuePartialSphere(const Camera* camera, const ZobMatrix4x4* mat, const float radius, const ZobColor* c, bool bold, bool noZ, float from, float to);
 	uint											SubDivideClippedTriangle(const Camera* c, const Triangle* t);
@@ -160,6 +161,7 @@ private:
 	volatile bool m_started;
 	int m_nextWidth;
 	int m_nextHeight;
+	int m_nextDownscale;
 	bool m_doResize;
 
 	eRenderMode m_renderMode = eRenderMode_fullframe;

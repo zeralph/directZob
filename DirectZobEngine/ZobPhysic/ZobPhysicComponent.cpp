@@ -228,6 +228,11 @@ void ZobPhysicComponent::SetWorldOrientation(float x, float y, float z)
 
 ZobVector3 ZobPhysicComponent::GetLocalOrientation() const
 {
+	if (m_zobObject->GetName() == "camaro.obj")
+	{
+		int y = 0;
+		y++;
+	}
 	Quaternion q = m_localTransform.getOrientation();
 	//assert(q.isFinite());
 	q.normalize();
@@ -238,7 +243,7 @@ ZobVector3 ZobPhysicComponent::GetLocalOrientation() const
 	ax = ClampAngle(ax);
 	ay = ClampAngle(ay);
 	az = ClampAngle(az);
-	return ZobVector3(az, ax, ay);
+	return ZobVector3(ax, ay, az);
 }
 
 ZobVector3 ZobPhysicComponent::GetWorldOrientation() const
@@ -337,8 +342,32 @@ void ZobPhysicComponent::Update()
 			m_quaternion.y = q.y;
 			m_quaternion.z = q.z;
 			m_quaternion.w = q.w;
+			ZobVector3 z = ZobMatrix4x4::QuaternionToEuler(q.x, q.y, q.z, q.w);
+			float ax = RAD_TO_DEG(z.x);
+			float ay = RAD_TO_DEG(z.y);
+			float az = RAD_TO_DEG(z.z);
+			m_editorLocalRotation.x = ClampAngle(ax);
+			m_editorLocalRotation.y = ClampAngle(ay);
+			m_editorLocalRotation.z = ClampAngle(az);
 		}
 	}
+}
+
+ZobVector3 ZobPhysicComponent::QuaternionToAngles(Quaternion q)
+{
+	ZobVector3 ret;
+	float thetaX = atan2(q.x, q.w);
+	Quaternion qx = Quaternion(0, sin(thetaX), 0, cos(thetaX));
+	float thetaY = atan2(q.y, q.w);
+	Quaternion qy = Quaternion(0, sin(thetaY), 0, cos(thetaY));
+	float thetaZ = atan2(q.z, q.w);
+	Quaternion qz = Quaternion(0, sin(thetaZ), 0, cos(thetaZ));
+	thetaX = 2.0f * RAD_TO_DEG(thetaX);
+	thetaY = 2.0f * RAD_TO_DEG(thetaY);
+	thetaZ = 2.0f * RAD_TO_DEG(thetaZ);
+	ret = ZobVector3(thetaX, thetaY, thetaZ);
+
+	return ret;
 }
 
 ZobMatrix4x4 ZobPhysicComponent::GetModelMatrix() const
