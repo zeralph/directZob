@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<Scene EntitiesCount="62" ZobObjectsCount="33">
+<Scene EntitiesCount="64" ZobObjectsCount="34">
     <Globals>
         <Var Name="Ambient color" value="255;102;102;102" />
         <Var Name="Clear color" value="255;192;192;192" />
@@ -581,5 +581,24 @@
             <Var Name="Camera controller" value="Orbital" />
             <Components />
         </ZobObject>
+    </ZobObject>
+    <ZobObject Guid="4002643229">
+        <Var Name="Name" value="tunnel" />
+        <Var Name="Position" value="51.98685;-2.68257;-212.20442;1.00000" />
+        <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+        <Var Name="Quaternion" value="0.00000;-0.24543;0.00000;0.96941" />
+        <Var Name="Body type" value="Static" />
+        <Var Name="Active" value="True" />
+        <Var Name="Mass" value="1000.000" />
+        <Components>
+            <Component Type="Mesh" Guid="2007995010">
+                <Var Name="File" value="disp_tunnel.obj;daytona_itl_speedway/;disp_tunnel.obj;0" />
+                <Var Name="Cull mode" value="Clockwise" />
+                <Var Name="Lighting" value="Phong" />
+                <Var Name="ZBuffered" value="True" />
+                <Var Name="Transparent" value="False" />
+                <Var Name="Force rendering" value="False" />
+            </Component>
+        </Components>
     </ZobObject>
 </Scene>

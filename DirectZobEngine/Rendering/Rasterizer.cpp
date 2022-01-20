@@ -539,7 +539,13 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector2* screenCoord, con
 	float w = (t->pa->w * wa + t->pb->w * wb + t->pc->w * wc);
 
 	z = t->options->zBuffered?(t->pa->z * wa + t->pb->z * wb + t->pc->z * wc):m_bufferData->zNear;
-
+	if (t->options->bHalfZ)
+	{
+		if (((int)screenCoord->x + (int)screenCoord->y) % 2 == 0)
+		{
+			z = m_bufferData->zNear;
+		}
+	}
 	const ZobMaterial* material = t->material;
 	
 	float zf = m_bufferData->zBuffer[k] == 0.0f ? 10000.0f: m_bufferData->zBuffer[k];

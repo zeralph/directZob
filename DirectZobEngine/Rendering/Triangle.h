@@ -35,6 +35,7 @@ public:
 
 		bool bTransparency = false;
 		bool zBuffered = true;
+		bool bHalfZ = false;
 		bool bForceRender = false;
 		ZobColor color = ZobColor::White;
 		eLightMode lightMode = eLightMode::eLightMode_phong;
