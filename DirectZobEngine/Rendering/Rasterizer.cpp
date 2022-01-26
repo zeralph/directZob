@@ -169,9 +169,11 @@ void Rasterizer::RenderInternal()
 	m_tick = clock();
 	//warning : invert lightdir ! https://fr.wikipedia.org/wiki/Ombrage_de_Phong
 	LightManager* lm = DirectZob::GetInstance()->GetLightManager();
+
 	if (lm)
 	{
 		m_activeLights = lm->GetActiveLights();
+		m_editorLights = lm->GetEditorLight();
 		m_ambientColor = lm->GetAmbientColor();
 		m_ambientIntensity = lm->GetAmbientColorIntensity();
 		m_fogColor = lm->GetFogColor();
@@ -318,7 +320,12 @@ inline void Rasterizer::ComputeLightingAtPoint(const ZobVector3* position, const
 		ZobVector3 lightDir = ZobVector3(0, 0, 0);
 		ZobVector3 lightPos = ZobVector3(0, 0, 0);
 		float lightPower, cl, sl = 0.0f;
-		for (std::vector<const Light*>::const_iterator iter = m_activeLights->begin(); iter != m_activeLights->end(); iter++)
+		const std::vector<const Light*>* lightsVec = m_activeLights;
+		if (t->zobObject->IsEditorObject())
+		{
+			lightsVec = m_editorLights;
+		}
+		for (std::vector<const Light*>::const_iterator iter = lightsVec->begin(); iter != lightsVec->end(); iter++)
 		{
 			const Light* l = (*iter);
 			if (l->IsActive())
@@ -538,22 +545,38 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector2* screenCoord, con
 	
 	float w = (t->pa->w * wa + t->pb->w * wb + t->pc->w * wc);
 
-	z = t->options->zBuffered?(t->pa->z * wa + t->pb->z * wb + t->pc->z * wc):m_bufferData->zNear;
-	if (t->options->bHalfZ)
+	switch (t->options->zBuffer)
 	{
-		if (((int)screenCoord->x + (int)screenCoord->y) % 2 == 0)
+		case Triangle::RenderOptions::buffered:
+		{
+			z = t->pa->z * wa + t->pb->z * wb + t->pc->z * wc;
+			break;
+		}
+		case Triangle::RenderOptions::unBuffered:
 		{
 			z = m_bufferData->zNear;
+			break;
+		}
+		case Triangle::RenderOptions::halfBuffered:
+		{
+			if (((int)screenCoord->x + (int)screenCoord->y) % 2 == 0)
+			{
+				z = m_bufferData->zNear;
+			}
+			else
+			{
+				z = t->pa->z * wa + t->pb->z * wb + t->pc->z * wc;
+			}
+			break;
+		}
+		case Triangle::RenderOptions::noZFar:
+		{
+			z = m_bufferData->zFar - 0.0001f;
 		}
 	}
 	const ZobMaterial* material = t->material;
-	
 	float zf = m_bufferData->zBuffer[k] == 0.0f ? 10000.0f: m_bufferData->zBuffer[k];
 	float transparency = (t->options->bTransparency) ? 0.5f: 1.0f;
-	if (t->options->bForceRender)
-	{
-		z = m_bufferData->zFar - 0.0001f;
-	}
 	if(z>0 && z < zf)
 	{
 		//m_bufferData->zBuffer[k] = -1.0f;
@@ -729,6 +752,21 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector2* screenCoord, con
 			fb = (int)(fb * 255.0f);
 			fg = (int)(fg * 255.0f);
 			fr = (int)(fr * 255.0f);
+		}
+		static bool bPouet = true;
+		if (bPouet && t->clipMode != Triangle::eClip::eClip_3_in)
+		{
+			ZobColor cc = ZobColor::White;
+			if (t->clipMode == Triangle::eClip::eClip_A_in_BC_out) { cc = ZobColor::Blue; };
+			if (t->clipMode == Triangle::eClip::eClip_B_in_AC_out) { cc = ZobColor::Cyan; };
+			if (t->clipMode == Triangle::eClip::eClip_C_in_AB_out) { cc = ZobColor::Green; };
+			if (t->clipMode == Triangle::eClip::eClip_AB_in_C_out) { cc = ZobColor::LightGrey; };
+			if (t->clipMode == Triangle::eClip::eClip_AC_in_B_out) { cc = ZobColor::Magenta; };
+			if (t->clipMode == Triangle::eClip::eClip_BC_in_A_out) { cc = ZobColor::Trout; };
+			if (t->clipMode == Triangle::eClip::eClip_3_out_corner) { cc = ZobColor::Seal; };
+			fr = cc.GetRed();
+			fg = cc.GetGreen();
+			fb = cc.GetBlue();
 		}
 		c = ((int)fr << 16) + ((int)fg << 8) + (int)fb;
 		WriteInBuffer(k, c, z);

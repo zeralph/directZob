@@ -29,7 +29,7 @@ ZobHUDManager::ZobHUDManager()
 	m_fonts.clear();
 	m_started = false;
 	m_menuItems.resize(0);
-	m_renderOptions.zBuffered = false;
+	m_renderOptions.zBuffer = Triangle::RenderOptions::buffered;
 	m_renderOptions.bTransparency = false;
 	m_renderOptions.cullMode = Triangle::RenderOptions::eCullMode_None;
 	m_renderOptions.lightMode = Triangle::RenderOptions::eLightMode_none;

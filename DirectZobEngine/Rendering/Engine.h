@@ -37,7 +37,7 @@ public:
 	void											ToggleZbufferOutput() { m_showZBuffer = !m_showZBuffer; }
 
 	void											QueueLine(const Camera* camera, const ZobVector3* v1, const ZobVector3* v2, const ZobColor* c, bool bold, bool noZ);
-	void											QueueTriangle(const Camera* camera, const ZobVector3* v1, const ZobVector3* v2, const ZobVector3* v3, const ZobColor* c, bool transparent, bool noZ);
+	void											QueueTriangle(const Camera* camera, const ZobVector3* v1, const ZobVector3* v2, const ZobVector3* v3, const ZobColor* c, bool transparent, Triangle::RenderOptions::eZBufferMode zMode);
 	void											QueueEllipse(const Camera* camera, const ZobVector3* center, const ZobVector3* vectorUp, const float r1, const float r2, const ZobColor* c, bool bold, bool noZ);
 	void											QueueSphere(const Camera* camera, const ZobMatrix4x4* mat, const float radius, const ZobColor* c, bool bold, bool noZ);
 	void											QueueWorldBox(const Camera* camera, const Box* box, const ZobColor* c, bool bold, bool noZ);

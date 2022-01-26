@@ -8,8 +8,8 @@
 #include "Misc/ZobFilePath.h"
 #include "SceneLoader.h"
 
-Light::Light(std::string &name, eLightType type, ZobColor color, float intensity, float distance, ZobObject*parent):
-	ZobObject(ZobEntity::type_scene, ZobEntity::subtype_zobLight, name, parent)
+Light::Light(std::string& name, eLightType type, ZobColor color, float intensity, float distance, ZobObject* parent, bool bEditor) :
+	ZobObject((bEditor?ZobEntity::type_editor:ZobEntity::type_scene), ZobEntity::subtype_zobLight, name, parent)
 {
 	m_lightColor = color;
 	m_intensity = intensity;
@@ -20,7 +20,7 @@ Light::Light(std::string &name, eLightType type, ZobColor color, float intensity
 	m_inFrtustrum = false;
 	NewLightConfiguration();
 	InitVariablesExposer();
-	if (DirectZob::IsEditorMode())
+	if (DirectZob::IsEditorMode() && !bEditor)
 	{
 		ZobComponentSprite* b = (ZobComponentSprite*)ZobComponentFactory::CreateComponent(this, "Sprite", true);
 		ZobFilePath zfp = ZobFilePath("light", SceneLoader::GetResourcePath(), "light.png", true);
@@ -157,25 +157,28 @@ void Light::drawSpotGizmos(const Camera* camera, Engine* engine) const
 
 void Light::drawDirectionalGizmos(const Camera* camera, Engine* engine) const
 {
-	ZobVector3 t = GetWorldPosition();
-	ZobVector3 v0 = t + m_forward;
-	ZobVector3 v1 = t - m_forward;
-	v0 = v0 + m_left;
-	v1 = v1 + m_left;
-	engine->QueueLine(camera, &v0, &v1, &m_lightColor, true, false);
-	v0 = v0 + m_up;
-	v1 = v1 + m_up;
-	engine->QueueLine(camera, &v0, &v1, &m_lightColor, true, false);
-	v0 = t + m_forward;
-	v1 = t - m_forward;
-	v0 = v0 - m_left;
-	v1 = v1 - m_left;
-	engine->QueueLine(camera, &v0, &v1, &m_lightColor, true, false);
-	v0 = v0 - m_up;
-	v1 = v1 - m_up;
-	engine->QueueLine(camera, &v0, &v1, &m_lightColor, true, false);
-	v1 = t - m_forward;
-	engine->QueueEllipse(camera, &v1, &m_forward, 1.0f, 1.0f, &m_lightColor, true, false);
+	if (m_type != ZobEntity::type_editor)
+	{
+		ZobVector3 t = GetWorldPosition();
+		ZobVector3 v0 = t + m_forward;
+		ZobVector3 v1 = t - m_forward;
+		v0 = v0 + m_left;
+		v1 = v1 + m_left;
+		engine->QueueLine(camera, &v0, &v1, &m_lightColor, true, false);
+		v0 = v0 + m_up;
+		v1 = v1 + m_up;
+		engine->QueueLine(camera, &v0, &v1, &m_lightColor, true, false);
+		v0 = t + m_forward;
+		v1 = t - m_forward;
+		v0 = v0 - m_left;
+		v1 = v1 - m_left;
+		engine->QueueLine(camera, &v0, &v1, &m_lightColor, true, false);
+		v0 = v0 - m_up;
+		v1 = v1 - m_up;
+		engine->QueueLine(camera, &v0, &v1, &m_lightColor, true, false);
+		v1 = t - m_forward;
+		engine->QueueEllipse(camera, &v1, &m_forward, 1.0f, 1.0f, &m_lightColor, true, false);
+	}
 }
 
 void Light::DrawGizmos(const Camera* camera, Engine* engine)

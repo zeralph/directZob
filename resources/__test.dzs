@@ -56,10 +56,10 @@
             </Components>
             <ZobObject Guid="4002540714">
                 <Var Name="Name" value="camaro.obj" />
-                <Var Name="Position" value="16.42133;0.00000;0.00000;1.00000" />
+                <Var Name="Position" value="16.42132;0.00000;0.00000;1.00000" />
                 <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
                 <Var Name="Quaternion" value="-0.69131;-0.60633;-0.34456;0.18901" />
-                <Var Name="Body type" />
+                <Var Name="Body type" value="Static" />
                 <Var Name="Active" value="True" />
                 <Var Name="Mass" value="1000.000" />
                 <Components>

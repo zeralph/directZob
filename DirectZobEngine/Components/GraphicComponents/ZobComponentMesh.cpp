@@ -27,12 +27,12 @@ ZobComponentMesh::ZobComponentMesh(ZobObject* zobObject, bool bEditorZobComponen
 	Triangle::RenderOptions::eLightMode lm[5] = { Triangle::RenderOptions::eLightMode_none, Triangle::RenderOptions::eLightMode_flat, Triangle::RenderOptions::eLightMode_gouraud, Triangle::RenderOptions::eLightMode_phong , Triangle::RenderOptions::eLightMode_flatPhong };
 	const char* lmStr[5] = { "None", "Flat", "Gouraud", "Phong", "Flat phong" };
 	m_varExposer->WrapEnum<Triangle::RenderOptions::eLightMode>("Lighting", &m_renderOptions.lightMode, 5, lm, lmStr, NULL, false, false, true);
+	
+	Triangle::RenderOptions::eZBufferMode zm[4] = { Triangle::RenderOptions::buffered, Triangle::RenderOptions::unBuffered, Triangle::RenderOptions::halfBuffered, Triangle::RenderOptions::noZFar };
+	const char* zmStr[4] = { "Buffered", "Unbuffered", "Half buffered", "No Z-far"};
+	m_varExposer->WrapEnum<Triangle::RenderOptions::eZBufferMode>("Z-buffer mode", &m_renderOptions.zBuffer, 4, zm, zmStr, NULL, false, false, true);
 
-	m_varExposer->WrapVariable<bool>("ZBuffered", &m_renderOptions.zBuffered, NULL, false, true);
-	
 	m_varExposer->WrapVariable<bool>("Transparent", &m_renderOptions.bTransparency, NULL, false, true);
-	
-	m_varExposer->WrapVariable<bool>("Force rendering", &m_renderOptions.bForceRender, NULL, false, true);
 
 	m_varExposer->WrapVariable<int>("Nb triangles", &m_meshNbTriangles, NULL, true, false);
 	m_varExposer->WrapVariable<uint>("Size", &m_meshSize, NULL, true, false);

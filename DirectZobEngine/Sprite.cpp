@@ -63,7 +63,7 @@ ZobSprite::ZobSprite(std::string& name):Mesh(name)
 	m_triangleUvs[0] = ZobVector2(1, 1);
 	m_triangleUvs[3] = ZobVector2(1, 0);
 
-	m_triangleOptions.zBuffered = false;
+	m_triangleOptions.zBuffer = Triangle::RenderOptions::buffered;
 	m_triangleOptions.lightMode = Triangle::RenderOptions::eLightMode_none;
 	m_triangleOptions.cullMode = Triangle::RenderOptions::eCullMode_CounterClockwiseFace;
 

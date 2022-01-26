@@ -716,7 +716,7 @@ void Engine::QueueEllipse(const Camera* camera, const ZobVector3* center, const 
 	}
 }
 
-void Engine::QueueTriangle(const Camera* camera, const ZobVector3* v1, const ZobVector3* v2, const ZobVector3* v3, const ZobColor* c, bool transparent, bool noZ)
+void Engine::QueueTriangle(const Camera* camera, const ZobVector3* v1, const ZobVector3* v2, const ZobVector3* v3, const ZobColor* c, bool transparent, Triangle::RenderOptions::eZBufferMode zMode)
 {
 	Triangle* t = &m_TrianglesQueue[m_TriangleQueueSize];
 	t->va->x = v1->x;
@@ -739,7 +739,7 @@ void Engine::QueueTriangle(const Camera* camera, const ZobVector3* v1, const Zob
 	Triangle::RenderOptions* r = &m_renderOptions[m_usedRenderOptions];
 	r->bTransparency = transparent;
 	r->cullMode = Triangle::RenderOptions::eCullMode_None;
-	r->zBuffered = !noZ;
+	r->zBuffer = zMode;
 	r->lightMode = Triangle::RenderOptions::eLightMode_none;
 	t->options = r;
 	m_usedRenderOptions++;

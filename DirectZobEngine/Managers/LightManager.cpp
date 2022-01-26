@@ -1,7 +1,8 @@
 #include "LightManager.h"
 #include "DirectZob.h"
 #include "../../dependencies/tinyxml/tinyxml.h"
-
+#include "ZobObjectManager.h"
+#include "CameraManager.h"
 LightManager::LightManager()
 {
 	m_varExposer = new ZobVariablesExposer(0);
@@ -22,10 +23,7 @@ LightManager::LightManager()
 
 LightManager::~LightManager()
 {
-	for (int i = 0; i < m_lights.size(); i++)
-	{
-		delete (m_lights[i]);
-	}
+	ReInitGlobalSettings();
 	delete m_varExposer;
 }
 
@@ -38,10 +36,13 @@ void LightManager::ReInitGlobalSettings()
 	m_fogDistance = 20.0f;
 	m_lights.clear();
 	m_lightsToAdd.clear();
+	m_editorLight.clear();
 	m_lightsToRemove.clear();
 	m_fogDensity = 2.0f;
 	m_fogType = eFogType::eFogType_NoFog;
 	m_lightIndex = 1;
+	Light* editorLight = new Light(std::string("editorLight"), Light::eLightType_directional, ZobColor::White, 1.0f, 1000.0f, DirectZob::GetInstance()->GetZobObjectManager()->GetRootObject(), true);
+	m_editorLight.push_back(editorLight);
 }
 
 void LightManager::Setup(ZobColor* fogColor, ZobColor* ambientColor, ZobColor* clearColor, float fogDistance, float fogDensity, eFogType fogType, float ambientIntensity)
@@ -151,6 +152,14 @@ void LightManager::Update()
 				m_activeLights.push_back((*iter));
 			}
 		}
+	}
+	const Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
+	if (c)
+	{
+		ZobVector3 p = ZobVector3(0, 0, 0);// c->GetWorldPosition();
+		ZobVector3 o = c->GetWorldRotation();
+		m_editorLight[0]->SetWorldPosition(p.x, p.y, p.z);
+		m_editorLight[0]->SetWorldRotation(o.x, o.y, o.z);
 	}
 }
 

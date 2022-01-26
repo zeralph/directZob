@@ -121,6 +121,7 @@ private:
 	};
 
 	const std::vector<const Light*>* m_activeLights;
+	const std::vector<const Light*>* m_editorLights;
 	std::vector<const Line3D*> m_lines;
 	const Triangle** m_triangles;
 	uint m_maxTriangleQueueSize;

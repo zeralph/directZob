@@ -37,7 +37,9 @@ ZobComponentSkybox::ZobComponentSkybox(ZobObject* zobObject, bool bEditorZobComp
 	const char* lmStr[5] = { "None", "Flat", "Gouraud", "Phong", "Flat phong" };
 	m_varExposer->WrapEnum<Triangle::RenderOptions::eLightMode>("Lighting", &m_renderOptions.lightMode, 5, lm, lmStr, NULL, false, false, true);
 
-	m_varExposer->WrapVariable<bool>("ZBuffered", &m_renderOptions.zBuffered, NULL, false, true);
+	Triangle::RenderOptions::eZBufferMode zm[4] = { Triangle::RenderOptions::buffered, Triangle::RenderOptions::unBuffered, Triangle::RenderOptions::halfBuffered, Triangle::RenderOptions::noZFar };
+	const char* zmStr[4] = { "Buffered", "Unbuffered", "Half buffered", "No Z-far" };
+	m_varExposer->WrapEnum<Triangle::RenderOptions::eZBufferMode>("Z-buffer mode", &m_renderOptions.zBuffer, 4, zm, zmStr, NULL, false, false, true);
 }
 
 void ZobComponentSkybox::Init(DirectZobType::sceneLoadingCallback cb)
@@ -72,7 +74,7 @@ void ZobComponentSkybox::SetVisible(bool v)
 
 void ZobComponentSkybox::SetForEditor()
 {
-	m_renderOptions.zBuffered = false;
+	m_renderOptions.zBuffer = Triangle::RenderOptions::noZFar;
 	m_renderOptions.lightMode = Triangle::RenderOptions::eLightMode_none;
 }
 

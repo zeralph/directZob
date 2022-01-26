@@ -218,7 +218,7 @@ public:
 	}
 
 	template<typename E>
-	void WrapEnum(const char* name, E* ptr, int nbParams, E* enumValues, const char** enumNames, wrapperCallback cb, bool bMultipleSelection, bool bReadOnly, bool bSave)
+	void WrapEnum(const char* name, E* ptr, int nbParams, E* enumValues, const char** enumNames, wrapperCallback cb, bool bMultipleSelection, bool bReadOnly, bool bSave, bool bVisible = true)
 	{
 		wrapperData w = wrapperData(m_zobId);
 		w.Init();
@@ -228,6 +228,7 @@ public:
 		s = s.append("_").append(w.name);
 		w.internalName = s;
 		w.id = m_zobId;
+		w.bVisible = bVisible;
 		if (bMultipleSelection)
 		{
 			w.type = eWrapperType_enumCombo;

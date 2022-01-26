@@ -32,11 +32,15 @@ public:
 			eCullMode_CounterClockwiseFace,
 			__eCullMode_MAX__,
 		};
-
+		enum eZBufferMode
+		{
+			buffered = 0,
+			unBuffered = 1,
+			halfBuffered = 2,
+			noZFar = 3,
+		};
 		bool bTransparency = false;
-		bool zBuffered = true;
-		bool bHalfZ = false;
-		bool bForceRender = false;
+		eZBufferMode zBuffer = eZBufferMode::buffered;
 		ZobColor color = ZobColor::White;
 		eLightMode lightMode = eLightMode::eLightMode_phong;
 		eCullMode cullMode = eCullMode_ClockwiseFace;
