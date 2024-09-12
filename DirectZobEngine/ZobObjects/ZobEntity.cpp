@@ -91,7 +91,7 @@ DirectZobType::zobId ZobEntity::GetIdValue() const
 	return m_id;
 }
 
-bool ZobEntity::IsEditorObject()
+bool ZobEntity::IsEditorObject() const
 {
 	return m_type == ZobType::type_editor;
 }

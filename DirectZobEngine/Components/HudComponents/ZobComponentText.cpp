@@ -51,7 +51,7 @@ ZobComponentText::ZobComponentText(ZobObject* zobObject, bool bEditorZobComponen
 	m_varExposer->WrapVariable<ZobFilePath>("Font Image", &m_fontImage, NULL, false, true);
 	m_varExposer->WrapVariable<std::string>("Text", &m_text, NULL, false, true);
 	m_varExposer->EndGroup();
-	m_varExposer->StartGroup("Selection");
+	//m_varExposer->StartGroup("Selection");
 	m_varExposer->WrapVariable<ZobColor>("Default color", &m_defaultColor, NULL, false, true);
 	m_varExposer->WrapVariable<ZobColor>("Selected color", &m_selectedColor, NULL, false, true);
 	m_varExposer->WrapVariable<bool>("Selectable", &m_selectable, &ZobComponentText::UpdateSelectableStatus, false, true);
@@ -59,7 +59,7 @@ ZobComponentText::ZobComponentText(ZobObject* zobObject, bool bEditorZobComponen
 	const char* maStr[3] = { "None", "Load", "Exit" };
 	m_varExposer->WrapEnum<eMenuAction>("Action", &m_action, 3, ma, maStr, NULL, false, false, true);
 	m_varExposer->WrapVariable<std::string>("Action argument", &m_actionArg, NULL, false, true);
-	m_varExposer->EndGroup();
+	//m_varExposer->EndGroup();
 	m_varExposer->Load();
 	Init(NULL);
 }
@@ -73,11 +73,11 @@ void ZobComponentText::PreUpdate(float dt)
 		{
 			if (m_selected)
 			{
-				hud->Print(ZobHUDManager::eHudUnit_ratio, m_x, m_y, m_z, m_fontSize, m_font, &m_selectedColor, m_text.c_str());
+				hud->Print(m_zobObject, ZobHUDManager::eHudUnit_ratio, m_x, m_y, m_z, m_fontSize, m_font, &m_selectedColor, m_text.c_str());
 			}
 			else
 			{
-				hud->Print(ZobHUDManager::eHudUnit_ratio, m_x, m_y, m_z, m_fontSize, m_font, &m_defaultColor, m_text.c_str());
+				hud->Print(m_zobObject, ZobHUDManager::eHudUnit_ratio, m_x, m_y, m_z, m_fontSize, m_font, &m_defaultColor, m_text.c_str());
 			}
 		}
 	}

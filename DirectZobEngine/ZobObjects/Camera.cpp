@@ -303,7 +303,8 @@ void Camera::PostUpdate()
 
 void Camera::RecomputeFrustrumPlanes()
 {
-	ZobMatrix4x4 comboMatrix = ZobMatrix4x4(m_projMatrix);
+	ZobMatrix4x4 comboMatrix = ZobMatrix4x4(m_projMatrixForClipping);
+	//comboMatrix.
 	ZobMatrix4x4 transpose = m_viewRotMatrix;
 	comboMatrix.Mul(&transpose);
 	m_frustrumPlanes[eFrustrumPlaneLeft].a = comboMatrix.GetValue(3, 0) + comboMatrix.GetValue(0, 0);
@@ -361,12 +362,17 @@ Camera::eFrustrumPlanes Camera::PointIsInFrustrum(const ZobVector3* pt) const
 	float d; 
 	for (int i = 0; i < __eFrustrumPlane_MAX__; ++i)
 	{
-		p = m_frustrumPlanes[i];
-		pv = ZobVector3(p.a, p.b, p.c);
-		d = ZobVector3::Dot(&pv, pt) + p.d;
-		if (d < 0)
+		//clip on far ? might be good, dunno
+		//if (i != eFrustrumPlaneFar)
+		//if (i == eFrustrumPlaneNear)
 		{
-			return (Camera::eFrustrumPlanes)i;
+			p = m_frustrumPlanes[i];
+			pv = ZobVector3(p.a, p.b, p.c);
+			d = ZobVector3::Dot(&pv, pt) + p.d;
+			if (d < 0)
+			{
+				return (Camera::eFrustrumPlanes)i;
+			}
 		}
 	}
 	return __eFrustrumPlane_MAX__;
@@ -576,9 +582,9 @@ void Camera::SetViewMatrix(const ZobVector3& left, const ZobVector3& up, const Z
 
 void Camera::setProjectionMatrix(const float angleOfView, const float width, const float height, const float zNear, const float zFar)
 {
-	const float ar = width / height;
-	const float zRange = zFar- zNear;
-	const float tanHalfFOV = -tanf(angleOfView / 2.0 * M_PI / 180.0);
+	float ar = width / height;
+	float zRange = zFar- zNear;
+	float tanHalfFOV = -tanf(angleOfView / 2.0 * M_PI / 180.0);
 
 	float a = 1.0f / (tanHalfFOV * ar);
 	float b = 1.0f / tanHalfFOV;
@@ -629,6 +635,33 @@ void Camera::setProjectionMatrix(const float angleOfView, const float width, con
 	m_invProjectionMatrix.SetData(3, 3, -c / (d*e) );
 
 	ZobMatrix4x4::InvertMatrix4(GetViewMatrix(), m_invViewMatrix);
+
+	//clipping camera 
+	static float fovInc = 1.5;
+	ar = width / height;
+	zRange = zFar - zNear;
+	tanHalfFOV = -tanf((angleOfView * fovInc) / 2.0 * M_PI / 180.0);
+	a = 1.0f / (tanHalfFOV * ar);
+	b = 1.0f / tanHalfFOV;
+	c = (zNear + zFar) / zRange;
+	d = -2.0f * zFar * zNear / zRange;
+	e = 1.0f;
+	m_projMatrixForClipping.SetData(0, 0, a);
+	m_projMatrixForClipping.SetData(0, 1, 0.0f);
+	m_projMatrixForClipping.SetData(0, 2, 0.0f);
+	m_projMatrixForClipping.SetData(0, 3, 0.0f);
+	m_projMatrixForClipping.SetData(1, 0, 0.0f);
+	m_projMatrixForClipping.SetData(1, 1, b);
+	m_projMatrixForClipping.SetData(1, 2, 0.0f);
+	m_projMatrixForClipping.SetData(1, 3, 0.0f);
+	m_projMatrixForClipping.SetData(2, 0, 0.0f);
+	m_projMatrixForClipping.SetData(2, 1, 0.0f);
+	m_projMatrixForClipping.SetData(2, 2, c);
+	m_projMatrixForClipping.SetData(2, 3, d);
+	m_projMatrixForClipping.SetData(3, 0, 0.0f);
+	m_projMatrixForClipping.SetData(3, 1, 0.0f);
+	m_projMatrixForClipping.SetData(3, 2, e);
+	m_projMatrixForClipping.SetData(3, 3, 0.0f);
 }
 
 // x in [-1,1], y in [-1,1}
@@ -645,8 +678,27 @@ DirectZobType::Ray Camera::From2DToWorld(float x, float y) const
 		v.y /= v.w;
 		v.z /= v.w;
 		v.w = 1.0f;
-		r.p = v;
+		r.p =  v;
 		v = v - this->GetWorldPosition();
+		v.Normalize();
+		r.n = v;
+	}
+	return r;
+}
+
+// x in [-1,1], y in [-1,1}
+DirectZobType::Ray Camera::From2DToProj(float x, float y) const
+{
+	DirectZobType::Ray r;
+	//if(fabsf(x)<=1.0f && fabsf(y)<=1.0f)
+	{
+		ZobVector3 v = ZobVector3(x, y, 0.0f);
+		m_invProjectionMatrix.Mul(&v);
+		v.x /= v.w;
+		v.y /= v.w;
+		v.z /= v.w;
+		v.w = 1.0f;
+		r.p = ZobVector3::Vector3Zero;
 		v.Normalize();
 		r.n = v;
 	}

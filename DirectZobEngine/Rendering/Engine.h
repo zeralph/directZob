@@ -37,7 +37,6 @@ public:
 	void											ToggleZbufferOutput() { m_showZBuffer = !m_showZBuffer; }
 
 	void											QueueLine(const Camera* camera, const ZobVector3* v1, const ZobVector3* v2, const ZobColor* c, bool bold, bool noZ);
-	void											QueueTriangle(const Camera* camera, const ZobVector3* v1, const ZobVector3* v2, const ZobVector3* v3, const ZobColor* c, bool transparent, Triangle::RenderOptions::eZBufferMode zMode);
 	void											QueueEllipse(const Camera* camera, const ZobVector3* center, const ZobVector3* vectorUp, const float r1, const float r2, const ZobColor* c, bool bold, bool noZ);
 	void											QueueSphere(const Camera* camera, const ZobMatrix4x4* mat, const float radius, const ZobColor* c, bool bold, bool noZ);
 	void											QueueWorldBox(const Camera* camera, const Box* box, const ZobColor* c, bool bold, bool noZ);
@@ -75,7 +74,10 @@ public:
 	inline bool										DrawCameraGizmos() const { return m_started && m_drawCameraGizmos; }
 	inline bool										DrawZobObjectGizmos() const { return m_started && m_drawZobObjectGizmos; }
 	inline bool										LockFrustrum() const { return m_started && m_lockFrustrum;  }
+	inline bool										RayTracingEnabled() const { return m_rayTracedRendering; }
+	inline void										EnableRayTracing(bool bEnable) { m_rayTracedRendering = bEnable; }
 	inline void										SetRenderMode(eRenderMode b) { m_renderMode = b; }
+	inline void										SetWobbleFactor(float w) { m_wobbleFactor = w;  }
 	inline const eRenderMode						GetRenderMode() const { return m_renderMode; }
 	inline const eLightingPrecision					GetLightingPrecision() const  { return m_lightingPrecision ; }
 	void											SetLightingPrecision(eLightingPrecision l) { m_lightingPrecision = l; }
@@ -94,6 +96,8 @@ public:
 	void											PrintRasterizersInfos();
 	inline const bool								EqualizeTriangleQueues() const {return m_EqualizeTriangleQueues;}
 	void 											EnablePerspectiveCorrection(bool enable);
+	bool											DebugCulling() const { return m_debugCulling; }
+	void											EnableDebugCulling(bool enable);
 	inline const eBitsPerColor						GetNbBitsPerColorDepth() const {return m_nbBitsPerColorDepth;}
 	inline const bool								UsePerspectiveCorrection() const {return m_perspCorrection;}
 	void											SaveUnderNode(TiXmlElement* node);
@@ -163,7 +167,7 @@ private:
 	int m_nextHeight;
 	int m_nextDownscale;
 	bool m_doResize;
-
+	float m_wobbleFactor;
 	eRenderMode m_renderMode = eRenderMode_fullframe;
 	eLightingPrecision m_lightingPrecision = eLightingPrecision_vertex;
 	bool m_showZBuffer;
@@ -180,6 +184,8 @@ private:
 	volatile bool m_lockFrustrum;
 	bool m_EqualizeTriangleQueues;
 	bool m_perspCorrection;
+	bool m_rayTracedRendering;
+	bool m_debugCulling;
 	eBitsPerColor m_nbBitsPerColorDepth;
 	bool m_dithering;
 	uint m_nbRasterizers;

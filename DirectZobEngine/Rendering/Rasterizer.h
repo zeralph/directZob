@@ -73,6 +73,7 @@ public:
 private:
 
 	void					RenderInternal();
+	void					RenderInternalRayTrace();
 	void 					FillTopFlatTriangle2(ZobVector2* v1, ZobVector2* v2, ZobVector2* v3, const Triangle* t, const LightingData* lDataA, const LightingData* lDataB, const LightingData* lDataC) const;
 	void 					FillBottomFlatTriangle2(ZobVector2* v1, ZobVector2* v2, ZobVector2* v3, const Triangle* t, const LightingData* lDataA, const LightingData* lDataB, const LightingData* lDataC) const;
 	inline const void 		FillBufferPixel(const ZobVector2* screenCoord, const Triangle* t, const LightingData* lDataA, const LightingData* lDataB, const LightingData* lDataC) const;

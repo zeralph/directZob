@@ -29,7 +29,7 @@
             <Var Name="Rotation" value="0.000;0.000;0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
             <Components>
-                <Component Type="Menu" Guid="2007592986">
+                <Component Type="Text" Guid="2007592986">
                     <Var Name="Visible" value="True" />
                     <Var Name="X" value="0.220" />
                     <Var Name="Y" value="0.030" />
@@ -51,7 +51,7 @@
             <Var Name="Rotation" value="0.000;0.000;0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
             <Components>
-                <Component Type="Menu" Guid="2007566753">
+                <Component Type="Text" Guid="2007566753">
                     <Var Name="Visible" value="True" />
                     <Var Name="X" value="0.350" />
                     <Var Name="Y" value="0.550" />
@@ -73,7 +73,7 @@
             <Var Name="Rotation" value="0.000;0.000;0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
             <Components>
-                <Component Type="Menu" Guid="2007363284">
+                <Component Type="Image" Guid="2007363284">
                     <Var Name="Visible" value="True" />
                     <Var Name="X" value="0.000" />
                     <Var Name="Y" value="0.000" />
@@ -95,7 +95,7 @@
             <Var Name="Rotation" value="0.000;0.000;0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
             <Components>
-                <Component Type="Menu" Guid="2007470398">
+                <Component Type="Text" Guid="2007470398">
                     <Var Name="Visible" value="True" />
                     <Var Name="X" value="0.300" />
                     <Var Name="Y" value="0.650" />
@@ -117,7 +117,7 @@
             <Var Name="Rotation" value="0.000;0.000;0.000" />
             <Var Name="Scale" value="1.000;1.000;1.000" />
             <Components>
-                <Component Type="Menu" Guid="2007054381">
+                <Component Type="Text" Guid="2007054381">
                     <Var Name="Visible" value="True" />
                     <Var Name="X" value="0.420" />
                     <Var Name="Y" value="0.750" />

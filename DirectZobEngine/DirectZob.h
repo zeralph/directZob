@@ -163,4 +163,5 @@ private:
 	DirectZob::engineCallback m_onSceneLoaded;
 	static char logBuffer[LOG_BUFFER_SIZE];
 	static int sTargetMSPerFrameIdx;
+	static int sTargetWobbleFactorIdx;
 };

@@ -14,6 +14,7 @@ class ZobMaterial;
 class ZobVector2;
 class ZobVector3;
 class ZobColor;
+class ZobObject;
 class ZobHUDManager
 {
 public:
@@ -38,6 +39,7 @@ public:
 		ZobColor color;
 		const ZobMaterial* mat;
 		const ZobFont::FontGlyphe* glyphe;
+		ZobObject* zo;
 	};
 
 	ZobHUDManager();
@@ -49,16 +51,16 @@ public:
 	void UpdateNavigation(float dt);
 	void UpdateObjects(const Camera* camera, Engine* engine, float dt);
 	void QueueForDrawing(const Camera* camera, Engine* engine);
-	void Print(eHudUnit u, float x, float y, float z, float fontSize, const ZobFont* font, const ZobColor* color, const char* fmt, ...);
-	void Print(eHudUnit u, float x, float y, float z, float w, float h, const ZobMaterial* mat);
+	void Print(ZobObject* zobObj, eHudUnit u, float x, float y, float z, float fontSize, const ZobFont* font, const ZobColor* color, const char* fmt, ...);
+	void Print(ZobObject* zobObj, eHudUnit u, float x, float y, float z, float w, float h, const ZobMaterial* mat);
 	const ZobFont* CreateOrGetZobFont(ZobFilePath zfpXml, ZobFilePath zfpTexture);
 	void AddToMenu(ZobComponentText* zct);
 	void RemoveFromMenu(ZobComponentText* zct);
 	void Init();
 private:
 	void DeleteFonts();
-	bool CreateQuad(float xMin, float yMin, float xMax, float yMax, HUDElement* elem);
-	void PrintInternal(eHudUnit u, float x, float y, float z, float fontSize, const ZobFont* font, const ZobColor* color, const char* buf, size_t size);
+	bool CreateQuad(ZobObject* zobObj, float xMin, float yMin, float xMax, float yMax, HUDElement* elem);
+	void PrintInternal(ZobObject* zobObj, eHudUnit u, float x, float y, float z, float fontSize, const ZobFont* font, const ZobColor* color, const char* buf, size_t size);
 	const ZobFont* GetFont(const std::string& fontName) const;
 	Triangle* m_trianglesBuffer;
 	ZobVector3* m_vertices;

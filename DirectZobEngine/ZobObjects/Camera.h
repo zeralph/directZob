@@ -68,6 +68,7 @@ public:
 	void					Rotate(float x, float y, float z);
 	void					SetActive(bool b) { m_active = b; }
 	DirectZobType::Ray		From2DToWorld(float x, float y) const;
+	DirectZobType::Ray		From2DToProj(float x, float y) const;
 	const Plane*			GetFrustrumPlanes() const { return &m_frustrumPlanes[0]; };
 	ZobVector3				From2DToWorldOnPlane(const float x, const float y, const ZobVector3* p0, const ZobVector3* pn) const;
 	bool					ClipSegmentToFrustrum(ZobVector3* p1, ZobVector3* p2, float& outP2Factor) const;
@@ -98,6 +99,7 @@ private:
 	void					WrapVariables();
 	ZobMatrix4x4 m_viewRotMatrix;
 	ZobMatrix4x4 m_projMatrix;
+	ZobMatrix4x4 m_projMatrixForClipping;
 	float m_fov;
 	ZobVector3 m_viewTransaltion;
 	ZobMatrix4x4 m_invProjectionMatrix;

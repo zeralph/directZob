@@ -122,9 +122,8 @@
                     <Var Name="File" value="disp_road.obj;daytona_itl_speedway/;disp_road.obj;0" />
                     <Var Name="Cull mode" value="Clockwise" />
                     <Var Name="Lighting" value="Phong" />
-                    <Var Name="ZBuffered" value="True" />
+                    <Var Name="Z-buffer mode" value="Buffered" />
                     <Var Name="Transparent" value="False" />
-                    <Var Name="Force rendering" value="False" />
                 </Component>
             </Components>
         </ZobObject>
@@ -141,9 +140,8 @@
                     <Var Name="File" value="disp_ground.obj;daytona_itl_speedway/;disp_ground.obj;0" />
                     <Var Name="Cull mode" value="Clockwise" />
                     <Var Name="Lighting" value="Phong" />
-                    <Var Name="ZBuffered" value="True" />
+                    <Var Name="Z-buffer mode" value="Buffered" />
                     <Var Name="Transparent" value="False" />
-                    <Var Name="Force rendering" value="False" />
                 </Component>
             </Components>
         </ZobObject>
@@ -160,9 +158,8 @@
                     <Var Name="File" value="disp_sidemark.obj;daytona_itl_speedway/;disp_sidemark.obj;0" />
                     <Var Name="Cull mode" value="Clockwise" />
                     <Var Name="Lighting" value="Phong" />
-                    <Var Name="ZBuffered" value="True" />
+                    <Var Name="Z-buffer mode" value="Buffered" />
                     <Var Name="Transparent" value="False" />
-                    <Var Name="Force rendering" value="False" />
                 </Component>
             </Components>
         </ZobObject>
@@ -179,9 +176,8 @@
                     <Var Name="File" value="disp_ext_wall.obj;daytona_itl_speedway/;disp_ext_wall.obj;0" />
                     <Var Name="Cull mode" value="Clockwise" />
                     <Var Name="Lighting" value="Phong" />
-                    <Var Name="ZBuffered" value="True" />
+                    <Var Name="Z-buffer mode" value="Buffered" />
                     <Var Name="Transparent" value="False" />
-                    <Var Name="Force rendering" value="False" />
                 </Component>
             </Components>
         </ZobObject>
@@ -198,9 +194,8 @@
                     <Var Name="File" value="disp_int_wall.obj;daytona_itl_speedway/;disp_int_wall.obj;0" />
                     <Var Name="Cull mode" value="Clockwise" />
                     <Var Name="Lighting" value="Phong" />
-                    <Var Name="ZBuffered" value="True" />
+                    <Var Name="Z-buffer mode" value="Buffered" />
                     <Var Name="Transparent" value="False" />
-                    <Var Name="Force rendering" value="False" />
                 </Component>
             </Components>
         </ZobObject>
@@ -243,9 +238,8 @@
                     <Var Name="File" value="disp_gradin.obj;daytona_itl_speedway/;disp_gradin.obj;0" />
                     <Var Name="Cull mode" value="Clockwise" />
                     <Var Name="Lighting" value="Phong" />
-                    <Var Name="ZBuffered" value="True" />
+                    <Var Name="Z-buffer mode" value="Buffered" />
                     <Var Name="Transparent" value="False" />
-                    <Var Name="Force rendering" value="False" />
                 </Component>
             </Components>
         </ZobObject>
@@ -262,9 +256,8 @@
                     <Var Name="File" value="disp_gradin.obj;daytona_itl_speedway/;disp_gradin.obj;0" />
                     <Var Name="Cull mode" value="Clockwise" />
                     <Var Name="Lighting" value="Phong" />
-                    <Var Name="ZBuffered" value="True" />
+                    <Var Name="Z-buffer mode" value="Buffered" />
                     <Var Name="Transparent" value="False" />
-                    <Var Name="Force rendering" value="False" />
                 </Component>
             </Components>
         </ZobObject>
@@ -282,9 +275,8 @@
                 <Var Name="File" value="skybox.obj;/;skybox.obj;0" />
                 <Var Name="Cull mode" value="Counter clockwise" />
                 <Var Name="Lighting" value="None" />
-                <Var Name="ZBuffered" value="True" />
+                <Var Name="Z-buffer mode" value="No Z-far" />
                 <Var Name="Transparent" value="False" />
-                <Var Name="Force rendering" value="False" />
             </Component>
         </Components>
     </ZobObject>
@@ -310,9 +302,8 @@
                     <Var Name="File" value="Rock_9.fbx;/;Rock_9.fbx;0" />
                     <Var Name="Cull mode" value="Clockwise" />
                     <Var Name="Lighting" value="Phong" />
-                    <Var Name="ZBuffered" value="True" />
+                    <Var Name="Z-buffer mode" value="Buffered" />
                     <Var Name="Transparent" value="False" />
-                    <Var Name="Force rendering" value="False" />
                 </Component>
             </Components>
         </ZobObject>
@@ -329,9 +320,8 @@
                     <Var Name="File" value="Rock_9.fbx;/;Rock_9.fbx;0" />
                     <Var Name="Cull mode" value="Clockwise" />
                     <Var Name="Lighting" value="Phong" />
-                    <Var Name="ZBuffered" value="True" />
+                    <Var Name="Z-buffer mode" value="Buffered" />
                     <Var Name="Transparent" value="False" />
-                    <Var Name="Force rendering" value="False" />
                 </Component>
             </Components>
         </ZobObject>
@@ -348,9 +338,8 @@
                     <Var Name="File" value="Rock_9.fbx;/;Rock_9.fbx;0" />
                     <Var Name="Cull mode" value="Clockwise" />
                     <Var Name="Lighting" value="Phong" />
-                    <Var Name="ZBuffered" value="True" />
+                    <Var Name="Z-buffer mode" value="Buffered" />
                     <Var Name="Transparent" value="False" />
-                    <Var Name="Force rendering" value="False" />
                 </Component>
             </Components>
         </ZobObject>
@@ -367,9 +356,8 @@
                     <Var Name="File" value="water.obj;/;water.obj;0" />
                     <Var Name="Cull mode" value="Clockwise" />
                     <Var Name="Lighting" value="Phong" />
-                    <Var Name="ZBuffered" value="True" />
+                    <Var Name="Z-buffer mode" value="Buffered" />
                     <Var Name="Transparent" value="False" />
-                    <Var Name="Force rendering" value="False" />
                 </Component>
             </Components>
         </ZobObject>
@@ -386,9 +374,8 @@
                     <Var Name="File" value="Rock_9.fbx;D:\Git\directZob\resources\/;Rock_9.fbx;1" />
                     <Var Name="Cull mode" value="Clockwise" />
                     <Var Name="Lighting" value="Phong" />
-                    <Var Name="ZBuffered" value="True" />
+                    <Var Name="Z-buffer mode" value="Buffered" />
                     <Var Name="Transparent" value="False" />
-                    <Var Name="Force rendering" value="False" />
                 </Component>
             </Components>
         </ZobObject>
@@ -439,9 +426,8 @@
                     <Var Name="File" value="Peugeot405;_cars/GLX-400-OBJ/;GLX_400.obj;0" />
                     <Var Name="Cull mode" value="Clockwise" />
                     <Var Name="Lighting" value="Phong" />
-                    <Var Name="ZBuffered" value="True" />
+                    <Var Name="Z-buffer mode" value="Buffered" />
                     <Var Name="Transparent" value="False" />
-                    <Var Name="Force rendering" value="False" />
                 </Component>
             </Components>
             <ZobObject Guid="4002410782">
@@ -457,9 +443,8 @@
                         <Var Name="File" value="Tire;_cars/Tire/;Tire.obj;0" />
                         <Var Name="Cull mode" value="Clockwise" />
                         <Var Name="Lighting" value="Phong" />
-                        <Var Name="ZBuffered" value="True" />
+                        <Var Name="Z-buffer mode" value="Buffered" />
                         <Var Name="Transparent" value="False" />
-                        <Var Name="Force rendering" value="False" />
                     </Component>
                 </Components>
             </ZobObject>
@@ -476,9 +461,8 @@
                         <Var Name="File" value="Tire;_cars/Tire/;Tire.obj;0" />
                         <Var Name="Cull mode" value="Clockwise" />
                         <Var Name="Lighting" value="Phong" />
-                        <Var Name="ZBuffered" value="True" />
+                        <Var Name="Z-buffer mode" value="Buffered" />
                         <Var Name="Transparent" value="False" />
-                        <Var Name="Force rendering" value="False" />
                     </Component>
                 </Components>
             </ZobObject>
@@ -495,9 +479,8 @@
                         <Var Name="File" value="Tire;_cars/Tire/;Tire.obj;0" />
                         <Var Name="Cull mode" value="Clockwise" />
                         <Var Name="Lighting" value="Phong" />
-                        <Var Name="ZBuffered" value="True" />
+                        <Var Name="Z-buffer mode" value="Buffered" />
                         <Var Name="Transparent" value="False" />
-                        <Var Name="Force rendering" value="False" />
                     </Component>
                 </Components>
             </ZobObject>
@@ -514,9 +497,8 @@
                         <Var Name="File" value="Tire;_cars/Tire/;Tire.obj;0" />
                         <Var Name="Cull mode" value="Clockwise" />
                         <Var Name="Lighting" value="Phong" />
-                        <Var Name="ZBuffered" value="True" />
+                        <Var Name="Z-buffer mode" value="Buffered" />
                         <Var Name="Transparent" value="False" />
-                        <Var Name="Force rendering" value="False" />
                     </Component>
                 </Components>
             </ZobObject>
@@ -595,9 +577,8 @@
                 <Var Name="File" value="disp_tunnel.obj;daytona_itl_speedway/;disp_tunnel.obj;0" />
                 <Var Name="Cull mode" value="Clockwise" />
                 <Var Name="Lighting" value="Phong" />
-                <Var Name="ZBuffered" value="True" />
+                <Var Name="Z-buffer mode" value="Buffered" />
                 <Var Name="Transparent" value="False" />
-                <Var Name="Force rendering" value="False" />
             </Component>
         </Components>
     </ZobObject>

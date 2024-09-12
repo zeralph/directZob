@@ -122,7 +122,7 @@ public :
 	ZobSubType										GetSubType() { return m_subType; }
 	zobId*											GetIdAddress();
 	zobId											GetIdValue() const;
-	bool											IsEditorObject();
+	bool											IsEditorObject() const;
 	bool											ChangeId(const zobId zid);
 	inline const std::string&						GetName() const { return m_name; }
 	inline const std::string&						GetClass() const { return m_class; }

@@ -36,6 +36,9 @@ public:
 		MenuDown,
 		switchPerspectiveCorrection,
 		switchColorDepth,
+		switchRayTracing,
+		switchDebugCulling,
+		SwitchWobbleFactor,
 	};
 
 	ZobInputManager(int width, int height);

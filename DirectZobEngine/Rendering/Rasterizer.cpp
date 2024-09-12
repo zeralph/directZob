@@ -7,6 +7,7 @@
 #include "../ZobObjects/Camera.h"
 #undef None
 #include "../../dependencies/optick/include/optick.h"
+#include "../Misc/ZobGeometryHelper.h"
 
 static ZobVector3 sFog = ZobVector3(1.0f, 1.0f, 0.95f);
 static float fogDecal = -0.6f;
@@ -157,11 +158,114 @@ void Rasterizer::Render()
 			std::unique_lock<std::mutex> g(*m_drawMutex);
 			{
 				(*m_startConditionVariable).wait(g, [this] { return m_bStartDraw; });
-				RenderInternal();
+				if (DirectZob::GetInstance()->GetEngine()->RayTracingEnabled())
+				{
+					RenderInternalRayTrace();
+				}
+				else
+				{
+					RenderInternal();
+				}
 				m_bStartDraw = false;
 			}
 		}
 	}
+}
+void Rasterizer::RenderInternalRayTrace()
+{
+	OPTICK_CATEGORY("Rendering", Optick::Category::Rendering);
+	m_tick = clock();
+	Camera* camera = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
+	if (camera)
+	{
+		float texPixelData[4];
+		ZobVector3 intersection;
+		float fr, fb, fg, fa;
+		float fx, fy;
+		uint c, k;
+		uint startH = m_startHeight * m_width;
+		uint rasterHeigth = m_endHeight - m_startHeight;
+		float z, lastZ;
+		float u, v;
+		Ray ray;
+		float fov = camera->GetFov();
+		ZobVector3 camPos = camera->GetWorldPosition();
+		ZobVector3 camFw = camera->GetForward();
+		ZobMatrix4x4 mat = camera->GetViewMatrix();
+		mat.FromVectors(camera->GetLeft(), camera->GetUp(), camera->GetForward());
+		//mat.SetPosition(0, 0, 0);
+		ray.p = camPos;
+		static float zzz = -0.1f;
+		float dx = fov / 90.0f;
+		float dy = dx * (float)m_height / (float)m_width;
+		ZobVector3 fw;
+		const Triangle* t;
+		const ZobMaterial* m;
+		for (int y = m_startHeight; y < m_endHeight; y++)
+		{
+			for (int x = 0; x < m_width; x++)
+			{
+				fx = (x / (float)m_width * 2.0f - 1.0f) * dx;
+				fy = (y / (float)m_height * 2.0f - 1.0f)* dy;
+				fw = ZobVector3(-fx, -fy, 1.f);
+				mat.Mul(&fw);
+				fw.Normalize();
+				ray.n = fw;
+				k = y * m_width + x;
+				lastZ = 1000000.0f;
+				for (int l = 0; l < m_nbTriangles; l++)
+				{
+					t = m_triangles[l];
+					bool ret = ZobGeometryHelper::RayTriangleIntersect(&ray, t, z, u, v);
+					if (ret && z < lastZ)
+					{					
+						m = t->material;
+						if (m)
+						{
+							const Texture* texture = m->GetDiffuseTexture();
+							if (texture && texture->GetData())
+							{
+								float wa = u;
+								float wb = v;
+								float wc = 1 - u - v;
+								float su = wa * t->ua->x + wb * t->ub->x + wc * t->uc->x;
+								float tu = wa * t->ua->y + wb * t->ub->y + wc * t->uc->y;
+								su = (su * (float)texture->GetWidth());
+								tu = (tu * (float)texture->GetHeight());
+								su = (int)floor(su) % texture->GetWidth();
+								tu = (int)floor(tu) % texture->GetHeight();
+
+								c = (int)(((int)tu * (int)texture->GetWidth() + (int)su) * 4);
+								const float* d = texture->GetData();
+								std::memcpy(texPixelData, &d[c], sizeof(float) * 4);
+								fr = texPixelData[0] * 255.0f;
+								fg = texPixelData[1] * 255.0f;
+								fb = texPixelData[2] * 255.0f;
+								fa = texPixelData[3] * 255.0f;
+								if (fa == 0)
+								{
+									continue;
+								}
+							}
+							else
+							{
+								fr = m->GetDiffuseColor()->GetRed();
+								fg = m->GetDiffuseColor()->GetGreen();
+								fb = m->GetDiffuseColor()->GetBlue();
+								fr = fabsf(t->n->x) * 255.0f;
+								fg = fabsf(t->n->y) * 255.0f;
+								fb = fabsf(t->n->z) * 255.0f;
+							}
+							c = ((int)fr << 16) + ((int)fg << 8) + (int)fb;
+							WriteInBuffer(k, c, 1);
+						}
+						lastZ = z;
+					}
+				}
+			}
+		}
+	}
+	m_time = (float)(clock() - m_tick) / CLOCKS_PER_SEC * 1000;
 }
 void Rasterizer::RenderInternal()
 {
@@ -633,7 +737,7 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector2* screenCoord, con
 
 				c = (int)(((int)tu * (int)texture->GetWidth() + (int)su) * 4);
 				const float* d = texture->GetData();
-				memcpy(texPixelData, &d[c], sizeof(float) * 4);
+				std::memcpy(texPixelData, &d[c], sizeof(float) * 4);
 				dr *= texPixelData[0];
 				dg *= texPixelData[1];
 				db *= texPixelData[2];
@@ -753,21 +857,25 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector2* screenCoord, con
 			fg = (int)(fg * 255.0f);
 			fr = (int)(fr * 255.0f);
 		}
-		static bool bPouet = true;
-		if (bPouet && t->clipMode != Triangle::eClip::eClip_3_in)
+		
+		if (engine->DebugCulling() && t->clipMode != Triangle::eClip::eClip_3_in)
 		{
 			ZobColor cc = ZobColor::White;
 			if (t->clipMode == Triangle::eClip::eClip_A_in_BC_out) { cc = ZobColor::Blue; };
 			if (t->clipMode == Triangle::eClip::eClip_B_in_AC_out) { cc = ZobColor::Cyan; };
 			if (t->clipMode == Triangle::eClip::eClip_C_in_AB_out) { cc = ZobColor::Green; };
-			if (t->clipMode == Triangle::eClip::eClip_AB_in_C_out) { cc = ZobColor::LightGrey; };
+			if (t->clipMode == Triangle::eClip::eClip_AB_in_C_out) { cc = ZobColor::Yellow; };
 			if (t->clipMode == Triangle::eClip::eClip_AC_in_B_out) { cc = ZobColor::Magenta; };
-			if (t->clipMode == Triangle::eClip::eClip_BC_in_A_out) { cc = ZobColor::Trout; };
-			if (t->clipMode == Triangle::eClip::eClip_3_out_corner) { cc = ZobColor::Seal; };
+			if (t->clipMode == Triangle::eClip::eClip_BC_in_A_out) { cc = ZobColor::White; };
+			if (t->clipMode == Triangle::eClip::eClip_3_out_corner) 
+			{ 
+				cc = ZobColor::Red; 
+			};
 			fr = cc.GetRed();
 			fg = cc.GetGreen();
 			fb = cc.GetBlue();
 		}
+		
 		c = ((int)fr << 16) + ((int)fg << 8) + (int)fb;
 		WriteInBuffer(k, c, z);
 	}

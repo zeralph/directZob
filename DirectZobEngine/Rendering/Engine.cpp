@@ -40,6 +40,7 @@ std::mutex** m_mutexes;
 
 Engine::Engine(int width, int height, Events* events)
 {
+	m_rayTracedRendering = false;
 	m_started = false;
 	m_wireFrame = false;
 	m_rasterizerHeight = 0;
@@ -56,9 +57,11 @@ Engine::Engine(int width, int height, Events* events)
 	m_nbRasterizers = std::thread::hardware_concurrency();
 	m_EqualizeTriangleQueues = false;
 	m_perspCorrection = true;
+	m_debugCulling = false;
 	m_nbBitsPerColorDepth = eBitsPerColor_full;	//
 	m_varExposer = new ZobVariablesExposer(0);
 	m_dithering = false;
+	m_wobbleFactor = 0.0f;
 	while (height % m_nbRasterizers != 0 && m_nbRasterizers>1)
 	{
 		m_nbRasterizers--;
@@ -76,7 +79,7 @@ Engine::Engine(int width, int height, Events* events)
 	*/
 	m_nbRasterizers --;
 	m_nbRasterizers = max(m_nbRasterizers, (uint)1);
-	//m_nbRasterizers = 4;
+//	m_nbRasterizers = 1;
 	m_maxTrianglesQueueSize = 200000;// MAX_TRIANGLES_PER_IMAGE / m_nbRasterizers;
 	m_maxLineQueueSize = 200000;
 	m_events = events;
@@ -191,6 +194,7 @@ Engine::Engine(int width, int height, Events* events)
 	const char* bpStr[9] = { "Full", "1", "2", "3", "4", "5", "6", "7", "8"};
 	m_varExposer->WrapEnum<eBitsPerColor>("Bits per color", &m_nbBitsPerColorDepth, 9, bp, bpStr, NULL, false, false, true);
 	m_varExposer->WrapVariable<bool>("Dithering", &m_dithering, NULL, false, true);
+	m_varExposer->WrapVariable<float>("Woobble factor", &m_wobbleFactor, NULL, false, false);
 	m_varExposer->WrapVariable<float>("Z near", &m_bufferData.zNear, NULL, false, true);
 	m_varExposer->WrapVariable<float>("Z far", &m_bufferData.zFar, NULL, false, true);
 
@@ -398,6 +402,18 @@ int Engine::StartDrawingScene()
 		m_perspCorrection = !m_perspCorrection;
 		EnablePerspectiveCorrection(m_perspCorrection);
 	}
+	if (inputMap->GetBoolIsNew(ZobInputManager::switchDebugCulling))
+	{
+		m_debugCulling = !m_debugCulling;
+		EnableDebugCulling(m_debugCulling);
+	}
+	/*
+	if (inputMap->GetBoolIsNew(ZobInputManager::switchRayTracing))
+	{
+		m_rayTracedRendering = !m_rayTracedRendering;
+		EnableRayTracing(m_rayTracedRendering);
+	}
+	*/
 	if (inputMap->GetBoolIsNew(ZobInputManager::switchColorDepth))
 	{
 		eBitsPerColor i = (eBitsPerColor)(m_nbBitsPerColorDepth + 1);
@@ -716,38 +732,6 @@ void Engine::QueueEllipse(const Camera* camera, const ZobVector3* center, const 
 	}
 }
 
-void Engine::QueueTriangle(const Camera* camera, const ZobVector3* v1, const ZobVector3* v2, const ZobVector3* v3, const ZobColor* c, bool transparent, Triangle::RenderOptions::eZBufferMode zMode)
-{
-	Triangle* t = &m_TrianglesQueue[m_TriangleQueueSize];
-	t->va->x = v1->x;
-	t->va->y = v1->y;
-	t->va->z = v1->z;
-	t->va->w = 1;
-	t->vb->x = v2->x;
-	t->vb->y = v2->y;
-	t->vb->z = v2->z;
-	t->vb->w = 1;
-	t->vc->x = v3->x;
-	t->vc->y = v3->y;
-	t->vc->z = v3->z;
-	t->vc->w = 1;
-	t->ca->Copy(c);
-	t->cb->Copy(c);
-	t->cc->Copy(c);
-	t->material = NULL;
-	t->clipMode = Triangle::eClip_3_in;
-	Triangle::RenderOptions* r = &m_renderOptions[m_usedRenderOptions];
-	r->bTransparency = transparent;
-	r->cullMode = Triangle::RenderOptions::eCullMode_None;
-	r->zBuffer = zMode;
-	r->lightMode = Triangle::RenderOptions::eLightMode_none;
-	t->options = r;
-	m_usedRenderOptions++;
-	RecomputeTriangleProj(camera, t);
-	m_drawnTriangles += QueueTriangleInRasters(&m_TrianglesQueue[m_TriangleQueueSize], m_TriangleQueueSize);
-	m_TriangleQueueSize++;
-}
-
 void Engine::QueueLine(const Camera* camera, const ZobVector3* v1, const ZobVector3* v2, const ZobColor* c, bool bold, bool noZ)
 {
 	if (m_started)
@@ -975,7 +959,21 @@ uint Engine::ClipTriangle(const Camera* c, Triangle* t)
 	}
 	else if (t->clipMode == Triangle::eClip_3_out_corner)
 	{
-		DirectZob::LogWarning("here");
+		//DirectZob::LogWarning("here");
+		c->ClipSegmentToFrustrum(nt->vc, nt->va, outP2factor);
+		RecomputeUv(nt->uc, nt->ua, outP2factor);
+		RecomputeNormal(nt->nc, nt->na, outP2factor);
+		RecomputeColor(nt->cc, nt->ca, outP2factor);
+
+		c->ClipSegmentToFrustrum(nt->vc, nt->vb, outP2factor);
+		RecomputeUv(nt->uc, nt->ub, outP2factor);
+		RecomputeNormal(nt->nc, nt->nb, outP2factor);
+		RecomputeColor(nt->cc, nt->cb, outP2factor);
+
+		c->ClipSegmentToFrustrum(nt->vb, nt->va, outP2factor);
+		RecomputeUv(nt->ub, nt->ua, outP2factor);
+		RecomputeNormal(nt->nb, nt->na, outP2factor);
+		RecomputeColor(nt->cb, nt->ca, outP2factor);
 	}
 	else
 	{
@@ -1125,19 +1123,37 @@ uint Engine::SubDivideClippedTriangle(const Camera* c, const Triangle* t)
 void Engine::RecomputeTriangleProj(const Camera* c, Triangle* t)
 {
 	t->draw = true;
-	t->clipMode = Triangle::eClip_3_in;
-	t->pa->x = t->va->x;
-	t->pa->y = t->va->y;
-	t->pa->z = t->va->z;
-	t->pa->w = t->va->w;
-	t->pb->x = t->vb->x;
-	t->pb->y = t->vb->y;
-	t->pb->z = t->vb->z;
-	t->pb->w = t->vb->w;
-	t->pc->x = t->vc->x;
-	t->pc->y = t->vc->y;
-	t->pc->z = t->vc->z;
-	t->pc->w = t->vc->w;
+
+	if (m_wobbleFactor != 0.0f)
+	{
+		t->pa->x = roundf(t->va->x * m_wobbleFactor) / m_wobbleFactor;
+		t->pa->y = roundf(t->va->y * m_wobbleFactor) / m_wobbleFactor;
+		t->pa->z = roundf(t->va->z * m_wobbleFactor) / m_wobbleFactor;
+		t->pa->w = roundf(t->va->w * m_wobbleFactor) / m_wobbleFactor;
+		t->pb->x = roundf(t->vb->x * m_wobbleFactor) / m_wobbleFactor;
+		t->pb->y = roundf(t->vb->y * m_wobbleFactor) / m_wobbleFactor;
+		t->pb->z = roundf(t->vb->z * m_wobbleFactor) / m_wobbleFactor;
+		t->pb->w = roundf(t->vb->w * m_wobbleFactor) / m_wobbleFactor;
+		t->pc->x = roundf(t->vc->x * m_wobbleFactor) / m_wobbleFactor;
+		t->pc->y = roundf(t->vc->y * m_wobbleFactor) / m_wobbleFactor;
+		t->pc->z = roundf(t->vc->z * m_wobbleFactor) / m_wobbleFactor;
+		t->pc->w = roundf(t->vc->w * m_wobbleFactor) / m_wobbleFactor;
+	}
+	else
+	{
+		t->pa->x = t->va->x;
+		t->pa->y = t->va->y;
+		t->pa->z = t->va->z;
+		t->pa->w = t->va->w;
+		t->pb->x = t->vb->x;
+		t->pb->y = t->vb->y;
+		t->pb->z = t->vb->z;
+		t->pb->w = t->vb->w;
+		t->pc->x = t->vc->x;
+		t->pc->y = t->vc->y;
+		t->pc->z = t->vc->z;
+		t->pc->w = t->vc->w;
+	}
 	BufferData* bData = GetBufferData();
 	const ZobMatrix4x4* view = c->GetViewMatrix();
 	const ZobMatrix4x4* proj = c->GetProjectionMatrix();
@@ -1155,7 +1171,6 @@ void Engine::RecomputeTriangleProj(const Camera* c, Triangle* t)
 	t->pb->y = (t->pb->y / t->pb->z + 1) * h;
 	t->pc->x = (t->pc->x / t->pc->z + 1) * w;
 	t->pc->y = (t->pc->y / t->pc->z + 1) * h;
-
 	t->ComputeArea();
 }
 
@@ -1407,6 +1422,11 @@ void Engine::PrintRasterizersInfos()
 void Engine::EnablePerspectiveCorrection(bool enable)
 {
 	m_perspCorrection = enable;
+}
+
+void Engine::EnableDebugCulling(bool enable)
+{
+	m_debugCulling = enable;
 }
 
 void Engine::LoadFromNode(TiXmlElement* node)

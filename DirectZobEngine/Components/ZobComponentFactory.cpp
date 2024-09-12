@@ -63,10 +63,12 @@ ZobComponent* ZobComponentFactory::CreateComponentInternal(ZobObject* zobObject,
 			case eComponent_physicMesh:
 				zb = new ZobComponentPhysicMesh(zobObject);
 				break;
-			case eComponent_hudText:
+			case eComponent_hudText:	
+				//zb = NULL;
 				zb = new ZobComponentText(zobObject, bEditorZobComponent);
 				break;
 			case eComponent_hudImage:
+				//zb = NULL;
 				zb = new ZobComponentImage(zobObject, bEditorZobComponent);
 				break;
 			case eComponent_mesh:
@@ -80,6 +82,7 @@ ZobComponent* ZobComponentFactory::CreateComponentInternal(ZobObject* zobObject,
 				break;
 			case eComponent_none:
 				zb = NULL;
+				assert(1==0, "component type '%s' of object '%s' not found", ComponentName, zobObject->GetName());
 				break;
 			default:
 				assert(false);

@@ -113,12 +113,12 @@
                     <Var Name="H" value="0.500" />
                     <Var Name="Z" value="0.000" />
                     <Var Name="Font size" value="4.000" />
-                    <Var Name="Text" value="Ground test" />
+                    <Var Name="Text" value="_daytona_itl_speedway" />
                     <Var Name="Default color" value="255;255;255;0" />
                     <Var Name="Selected color" value="255;255;0;0" />
                     <Var Name="Selectable" value="True" />
                     <Var Name="Action" value="Load" />
-                    <Var Name="Action argument" value="testGround.dzs" />
+                    <Var Name="Action argument" value="_daytona_itl_speedway.dzs" />
                     <Var Name="Font Xml" value="vcr_osd_mono_regular_14.xml;_fonts/;vcr_osd_mono_regular_14.xml;0" />
                     <Var Name="Font Image" value="vcr_osd_mono_regular_14.PNG;_fonts/;vcr_osd_mono_regular_14.PNG;0" />
                 </Component>

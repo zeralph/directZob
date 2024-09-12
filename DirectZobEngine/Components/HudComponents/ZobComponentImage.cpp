@@ -44,7 +44,7 @@ void ZobComponentImage::PreUpdate(float dt)
 		ZobHUDManager* hud = DirectZob::GetInstance()->GetHudManager();
 		if (m_image)
 		{
-			hud->Print(ZobHUDManager::eHudUnit_ratio, m_x, m_y, m_w, m_h, m_z, m_image);
+			hud->Print(m_zobObject, ZobHUDManager::eHudUnit_ratio, m_x, m_y, m_w, m_h, m_z, m_image);
 		}
 	}
 }

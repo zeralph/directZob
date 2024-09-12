@@ -23,7 +23,10 @@
 
 static const int fpsTargetsN = 6;
 static const float fpsTargets[fpsTargetsN] = { 1.0f, 16.6666667, 33.3333333f, 41.666667f,  50.0f, 1000.0f };
+static const int wobbleFactorN = 7;
+static const float wobbleFactor[wobbleFactorN] = { 0.0f, 100.0f, 50.0f, 25.0f, 10.0f, 2.0f, 1.0f };
 int DirectZob::sTargetMSPerFrameIdx = 1;
+int DirectZob::sTargetWobbleFactorIdx = 0;
 char DirectZob::logBuffer[LOG_BUFFER_SIZE];
 bool DirectZob::g_isInEditorMode = false;
 int DirectZob::s_logIndent = 0;
@@ -311,6 +314,17 @@ int DirectZob::RunAFrame(DirectZob::engineCallback OnSceneUpdated /*=NULL*/, Dir
 			}
 			LogWarning("FPS set to %i", fpsTargets[sTargetMSPerFrameIdx]?(int)(1000.0f / fpsTargets[sTargetMSPerFrameIdx]):0);
 		}
+		if (m_inputManager->GetMap()->GetBoolIsNew(ZobInputManager::SwitchWobbleFactor))
+		{
+			sTargetWobbleFactorIdx++;
+			if (sTargetWobbleFactorIdx == wobbleFactorN)
+			{
+				sTargetWobbleFactorIdx = 0;
+			}
+			m_engine->SetWobbleFactor(wobbleFactor[sTargetWobbleFactorIdx]);
+			LogWarning("Wobble factor set to %f", wobbleFactor[sTargetWobbleFactorIdx]);
+		}
+
 		if (m_engine->DrawGizmos())
 		{
 			m_engine->PrintRasterizersInfos();
@@ -445,7 +459,7 @@ void DirectZob::PrintObjectList()
 		{
 			c = 0xFF00FF00;
 		}
-		if (s && s->GetMesh()->IsDrawn())
+		if (s && s->GetMesh() && s->GetMesh()->IsDrawn())
 		{
 			c = 0xFF00FF00;
 		}
