@@ -9,6 +9,7 @@ echo "building target "$target
 if [ x"$1" != x"Clean" ]; then
     cd ./DirectZobEngine
     rm -f ../DirectZobExe
+	pip3 install --upgrade six>=1.13.0
     gyp DirectZob.gyp --depth=. --generator-output=./build/DirectZob/ --format=make
     cd ./build/DirectZob/
     make DirectZobExe BUILDTYPE=$target -j 4

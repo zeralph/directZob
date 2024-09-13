@@ -15,6 +15,7 @@ if [ "$1" == "Clean" ]; then
 else
     cd ./DirectZobEngine
     rm -f ../DirectZobExe
+	pip3 install --upgrade six>=1.13.0
     gyp DirectZob.gyp --depth=. --generator-output=./build/DirectZob/ --format=make
     cd ./build/DirectZob/
     make DirectZobExe BUILDTYPE=$target -j 4
