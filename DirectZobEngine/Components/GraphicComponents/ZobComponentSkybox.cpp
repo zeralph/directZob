@@ -90,32 +90,6 @@ void ZobComponentSkybox::PreUpdate(float dt)
 	//m_material->
 }
 
-void ZobComponentSkybox::UpdateAfterObject(float dt)
-{
-	/*
-	const Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
-	if (c)
-	{
-		ZobVector3 t = m_modelMatrix.GetTranslation();
-		ZobVector3 l = camera->GetLeft();
-		ZobVector3 u = camera->GetUp();
-		ZobVector3 f = camera->GetForward();
-		ZobMatrix4x4 rotScale = ZobMatrix4x4::identity();
-		m_rotationScaleMatrix.FromVectors(l, u, f);
-		m_modelMatrix.FromVectors(l, u, f);
-		m_rotationScaleMatrix.SetScale(GetScale());
-		m_modelMatrix.AddTranslation(t);
-		m_modelMatrix.SetScale(GetScale());
-
-		m_left = ZobVector3(1, 0, 0);
-		m_forward = ZobVector3(0, 0, 1);
-		m_up = ZobVector3(0, 1, 0);
-
-
-	}
-	*/
-}
-
 void ZobComponentSkybox::PostUpdate()
 {
 	/*if (m_sprite)

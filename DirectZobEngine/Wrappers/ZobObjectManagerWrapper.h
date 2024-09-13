@@ -109,6 +109,7 @@ namespace CLI
 		void					AddZobObject(Object^ sender, EventArgs^ e);
 		void					RemoveZobObject(Object^ sender, EventArgs^ e);
 		void					ZoomToZobObject(Object^ sender, EventArgs^ e);
+		void					ShowHideZobObject(Object^ sender, EventArgs^ e);;
 		void					AddZobComponent(Object^ sender, EventArgs^ e);
 		void					DuplicateZobObject(Object^ sender, EventArgs^ e);
 

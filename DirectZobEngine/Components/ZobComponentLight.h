@@ -18,8 +18,6 @@ public:
 	void					Init(DirectZobType::sceneLoadingCallback cb) override;
 	void					PreUpdate(float dt) override;
 	void					PostUpdate() override;
-	void					UpdateBeforeObject(float dt) override;
-	void					UpdateAfterObject(float dt) override;
 	void					QueueForDrawing(const Camera* camera, Engine* engine) override;
 	void					EditorUpdate() override;
 

@@ -98,11 +98,6 @@ void ZobComponentImage::Init(DirectZobType::sceneLoadingCallback cb)
 	LoadMaterialInternal();
 }
 
-void ZobComponentImage::UpdateBeforeObject(float dt)
-{
-
-}
-
 void ZobComponentImage::DrawGizmos(const Camera* camera, const ZobVector3* position, const ZobVector3* rotation) const
 {
 

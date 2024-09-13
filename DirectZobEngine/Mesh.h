@@ -44,6 +44,7 @@ public:
 	const Box*							GetOBB() const { return &m_OBB; }
 	const Box*							GetAABB() const { return &m_AABB; }
 	void								SetVisible(bool v) { m_visible = v; }
+	const bool							IsVisible() const { return m_visible; }
 	const long							GetSize() const { return m_size; }
 protected:
 										Mesh(std::string& parentName, ZobFilePath zfp, fbxsdk::FbxMesh* mesh);

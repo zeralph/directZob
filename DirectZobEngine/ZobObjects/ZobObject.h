@@ -90,11 +90,15 @@ public:
 	void								SaveToFactoryFile(std::string& file);
 	const ZobPhysicComponent*			GetPhysicComponent() const { return m_physicComponent; };
 	ZobPhysicComponent*					GetPhysicComponentNoConst() { return m_physicComponent; };
+	void								SetVisible(bool v);
+	bool								IsVisible() const { return m_visible; };
+
 	//temp ?
 	const ZobMatrix4x4*					GetModelMatrix() const { return &m_modelMatrix; };
 	const ZobMatrix4x4*					GetRotationMatrix() const { return &m_rotationMatrix; };
 	void								AddComponent(ZobComponent* b) { m_Components.push_back(b); }
 	ZobVariablesExposer*				GetVariablesExposer() { return m_varExposer; }
+
 
 	//Components
 	const std::vector<ZobComponent*>*	GetComponents() const { return &m_Components; }
@@ -113,7 +117,22 @@ public:
 		}
 		return NULL;
 	}
-
+	template<class T>
+	std::vector<T*> GetComponents() const
+	{
+		std::vector<T*> v;
+		std::vector<ZobComponent*>::const_iterator it = m_Components.begin();
+		while (it != m_Components.end())
+		{
+			bool b = typeid(T) == typeid(**it);
+			if (b)
+			{
+				v.push_back(static_cast<T*>(*it));
+			}
+			it++;
+		}
+		return v;
+	}
 
 	static void							ReloadVariablesFromLocalData(zobId id);
 	static void							ReloadVariablesFromWorldData(zobId id);
@@ -137,4 +156,5 @@ protected:
 	ZobVector3							m_forward;
 	ZobVector3							m_up;
 	std::string							m_factoryFile;
+	bool								m_visible;
 };

@@ -4,9 +4,9 @@
         <Var Name="Ambient color" value="255;102;102;102" />
         <Var Name="Clear color" value="255;63;149;255" />
         <Var Name="Ambient color intensity" value="0.800" />
-        <Var Name="Fog type" value="Exp2" />
-        <Var Name="Fog color" value="255;63;149;255" />
-        <Var Name="Fog distance" value="20.000" />
+        <Var Name="Fog type" value="Exp" />
+        <Var Name="Fog color" value="255;0;128;255" />
+        <Var Name="Fog distance" value="50.000" />
         <Var Name="Fog density" value="1.000" />
         <Var Name="Render mode" value="Fullframe" />
         <Var Name="Lighting mode" value="Vertex" />
@@ -247,9 +247,9 @@
         <Components />
         <ZobObject Guid="4002326689">
             <Var Name="Name" value="rock1" />
-            <Var Name="Position" value="73.78700;8.80400;9.59800;1.00000" />
+            <Var Name="Position" value="73.78700;5.29577;2.42926;1.00000" />
             <Var Name="Scale" value="10.00000;5.00000;10.00000;1.00000" />
-            <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+            <Var Name="Quaternion" value="-0.24391;0.00000;0.00000;0.96979" />
             <Var Name="Body type" value="Static" />
             <Var Name="Active" value="True" />
             <Var Name="Mass" value="1000.000" />
@@ -265,9 +265,9 @@
         </ZobObject>
         <ZobObject Guid="4002087287">
             <Var Name="Name" value="rock2" />
-            <Var Name="Position" value="66.64800;-13.68100;24.72300;1.00000" />
+            <Var Name="Position" value="66.64800;-8.48578;29.36930;1.00000" />
             <Var Name="Scale" value="10.00000;15.00000;10.00000;1.00000" />
-            <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+            <Var Name="Quaternion" value="0.00000;-0.68467;0.00000;0.72885" />
             <Var Name="Body type" value="Static" />
             <Var Name="Active" value="True" />
             <Var Name="Mass" value="1000.000" />
@@ -283,9 +283,9 @@
         </ZobObject>
         <ZobObject Guid="4002725502">
             <Var Name="Name" value="rock3" />
-            <Var Name="Position" value="25.77700;11.49000;29.18100;1.00000" />
+            <Var Name="Position" value="25.77700;-6.36238;44.32920;1.00000" />
             <Var Name="Scale" value="20.00000;10.00000;10.00000;1.00000" />
-            <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+            <Var Name="Quaternion" value="0.00000;-0.67904;0.00000;0.73410" />
             <Var Name="Body type" value="Static" />
             <Var Name="Active" value="True" />
             <Var Name="Mass" value="1000.000" />
@@ -301,7 +301,7 @@
         </ZobObject>
         <ZobObject Guid="4002985906">
             <Var Name="Name" value="rock4" />
-            <Var Name="Position" value="-1.00200;-0.38300;-22.80600;1.00000" />
+            <Var Name="Position" value="-1.00200;-0.38300;-33.46501;1.00000" />
             <Var Name="Scale" value="10.00000;5.00000;10.00000;1.00000" />
             <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
             <Var Name="Body type" value="Static" />
@@ -319,7 +319,7 @@
         </ZobObject>
         <ZobObject Guid="4002684125">
             <Var Name="Name" value="rock5" />
-            <Var Name="Position" value="-2.00500;20.35800;17.33400;1.00000" />
+            <Var Name="Position" value="-2.00500;4.67149;8.66770;1.00000" />
             <Var Name="Scale" value="10.00000;10.00000;10.00000;1.00000" />
             <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
             <Var Name="Body type" value="Static" />
@@ -337,7 +337,7 @@
         </ZobObject>
         <ZobObject Guid="4002855155">
             <Var Name="Name" value="rock6" />
-            <Var Name="Position" value="-0.29000;11.68200;-21.04200;1.00000" />
+            <Var Name="Position" value="-0.29000;8.37635;-34.69480;1.00000" />
             <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
             <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
             <Var Name="Body type" value="Static" />
@@ -437,7 +437,7 @@
         <Components />
         <ZobObject Guid="4002436495">
             <Var Name="Name" value="building_2" />
-            <Var Name="Position" value="-112.18699;0.57100;-45.44400;1.00000" />
+            <Var Name="Position" value="-112.18698;0.57100;-45.44400;1.00000" />
             <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
             <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
             <Var Name="Body type" value="Static" />
@@ -521,7 +521,7 @@
             <Var Name="Name" value="Light_5" />
             <Var Name="Position" value="-22.91700;9.98400;2.77100;1.00000" />
             <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
-            <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+            <Var Name="Quaternion" value="0.63057;0.00000;0.00000;0.77612" />
             <Var Name="Body type" value="Static" />
             <Var Name="Active" value="True" />
             <Var Name="Mass" value="1000.000" />
@@ -537,7 +537,7 @@
             <Var Name="Name" value="Light_4" />
             <Var Name="Position" value="-39.98000;9.98400;2.98400;1.00000" />
             <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
-            <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+            <Var Name="Quaternion" value="0.54647;0.00000;0.00000;0.83747" />
             <Var Name="Body type" value="Static" />
             <Var Name="Active" value="True" />
             <Var Name="Mass" value="1000.000" />
@@ -553,7 +553,7 @@
             <Var Name="Name" value="Light_3" />
             <Var Name="Position" value="-9.98400;9.98400;8.98400;1.00000" />
             <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
-            <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+            <Var Name="Quaternion" value="0.67225;0.00000;0.00000;0.74031" />
             <Var Name="Body type" value="Static" />
             <Var Name="Active" value="True" />
             <Var Name="Mass" value="1000.000" />
@@ -569,11 +569,11 @@
             <Var Name="Name" value="Light_2" />
             <Var Name="Position" value="4.98400;9.98400;7.98400;1.00000" />
             <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
-            <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+            <Var Name="Quaternion" value="0.76245;0.00000;0.00000;0.64703" />
             <Var Name="Body type" value="Static" />
             <Var Name="Active" value="True" />
             <Var Name="Mass" value="1000.000" />
-            <Var Name="Color" value="255;0;255;0" />
+            <Var Name="Color" value="255;255;255;0" />
             <Var Name="Intensity" value="2.000" />
             <Var Name="Distance" value="30.000" />
             <Var Name="SpotAngle" value="0.523" />
@@ -807,9 +807,9 @@
         <Components />
         <ZobObject Guid="4004449282">
             <Var Name="Name" value="Light_7" />
-            <Var Name="Position" value="160.98700;8.99000;50.98700;1.00000" />
+            <Var Name="Position" value="160.98700;16.31739;51.53989;1.00000" />
             <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
-            <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+            <Var Name="Quaternion" value="0.73322;0.00000;0.00000;0.67998" />
             <Var Name="Body type" value="Static" />
             <Var Name="Active" value="True" />
             <Var Name="Mass" value="1000.000" />
@@ -823,9 +823,9 @@
         </ZobObject>
         <ZobObject Guid="4004852728">
             <Var Name="Name" value="Light_8" />
-            <Var Name="Position" value="149.98700;7.99000;35.98700;1.00000" />
+            <Var Name="Position" value="149.98700;15.50217;38.44166;1.00000" />
             <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
-            <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+            <Var Name="Quaternion" value="0.80950;0.00000;0.00000;0.58711" />
             <Var Name="Body type" value="Static" />
             <Var Name="Active" value="True" />
             <Var Name="Mass" value="1000.000" />
@@ -839,9 +839,9 @@
         </ZobObject>
         <ZobObject Guid="4004138209">
             <Var Name="Name" value="Light_9" />
-            <Var Name="Position" value="159.98700;8.99000;25.98800;1.00000" />
+            <Var Name="Position" value="159.98700;16.18956;25.74245;1.00000" />
             <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
-            <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+            <Var Name="Quaternion" value="0.69495;0.00000;0.00000;0.71905" />
             <Var Name="Body type" value="Static" />
             <Var Name="Active" value="True" />
             <Var Name="Mass" value="1000.000" />
@@ -908,24 +908,6 @@
             </Component>
         </Components>
     </ZobObject>
-    <!--<ZobObject Guid="4002703371">
-        <Var Name="Name" value="skybox" />
-        <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
-        <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
-        <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
-        <Var Name="Body type" value="Static" />
-        <Var Name="Active" value="True" />
-        <Var Name="Mass" value="1000.000" />
-        <Components>
-            <Component Type="Mesh" Guid="2007982066">
-                <Var Name="File" value="skybox;/;skybox.obj;0" />
-                <Var Name="Cull mode" value="Counter clockwise" />
-                <Var Name="Lighting" value="None" />
-                <Var Name="Z-buffer mode" value="Buffered" />
-                <Var Name="Transparent" value="False" />
-            </Component>
-        </Components>
-    </ZobObject>-->
     <ZobObject Guid="4002776852">
         <Var Name="Name" value="Trees" />
         <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
@@ -1016,5 +998,23 @@
                 </Component>
             </Components>
         </ZobObject>
+    </ZobObject>
+    <ZobObject Guid="4002667128">
+        <Var Name="Name" value="skybox.obj" />
+        <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+        <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+        <Var Name="Quaternion" value="0.00000;0.00000;-0.00000;1.00000" />
+        <Var Name="Body type" value="Static" />
+        <Var Name="Active" value="True" />
+        <Var Name="Mass" value="1000.000" />
+        <Components>
+            <Component Type="Mesh" Guid="2007100252">
+                <Var Name="File" value="skybox.obj;D:\Git\directZob\resources\/;skybox.obj;1" />
+                <Var Name="Cull mode" value="Counter clockwise" />
+                <Var Name="Lighting" value="None" />
+                <Var Name="Z-buffer mode" value="No Z-far" />
+                <Var Name="Transparent" value="False" />
+            </Component>
+        </Components>
     </ZobObject>
 </Scene>

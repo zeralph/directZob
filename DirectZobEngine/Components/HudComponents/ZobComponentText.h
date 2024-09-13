@@ -29,8 +29,6 @@ class ZobComponentText : public ZobComponent
 		~ZobComponentText() override;
 		void					Init(DirectZobType::sceneLoadingCallback cb) override;
 		void					PreUpdate(float dt) override;
-		void					UpdateAfterObject(float dt) override {}
-		void					UpdateBeforeObject(float dt) override;
 		void					PostUpdate() override {}
 		void					EditorUpdate() override;
 		void					DrawGizmos(const Camera* camera, const ZobVector3* position, const ZobVector3* rotation) const override;

@@ -21,6 +21,7 @@ namespace CLI
 		m_resourcesManager = rsMgr;
 		m_selectedObject = NULL;
 		m_objectTreeviewPanel = objectTreeviewPanel;
+		
 		m_objectPropertiesPanel = objectPropertiesPanel;
 		m_selectedObjectWrapper = nullptr;
 		m_draggedNode = nullptr;
@@ -76,6 +77,9 @@ namespace CLI
 		ToolStripMenuItem^ itDuplicate = gcnew ToolStripMenuItem("Duplicate");
 		itDuplicate->Click += gcnew EventHandler(this, &ZobObjectManagerWrapper::DuplicateZobObject);
 		m_nodeMenu->Items->Add(itDuplicate);
+		ToolStripMenuItem^ itShowHide = gcnew ToolStripMenuItem("Show/Hide");
+		itShowHide->Click += gcnew EventHandler(this, &ZobObjectManagerWrapper::ShowHideZobObject);
+		m_nodeMenu->Items->Add(itShowHide);
 		//m_treeView->ContextMenuStrip = m_nodeMenu;
 	}
 
@@ -119,6 +123,15 @@ namespace CLI
 	void ZobObjectManagerWrapper::DuplicateZobObject(Object^ sender, EventArgs^ e)
 	{
 		m_duplicate = true;
+	}
+	void ZobObjectManagerWrapper::ShowHideZobObject(Object^ sender, EventArgs^ e)
+	{
+		String^ guid = ((ZobControlTreeNode^)m_treeView->SelectedNode)->m_zobObjectGuid;
+		std::string id;
+		MarshalString(guid, id);
+		zobId zid = ZobEntity::ZobIdFromString(id);
+		ZobObject* z = ZobEntity::GetEntity<ZobObject>(zid);
+		z->SetVisible(!z->IsVisible());;
 	}
 	void ZobObjectManagerWrapper::ZoomToZobObject(Object^ sender, EventArgs^ e)
 	{
@@ -332,6 +345,14 @@ namespace CLI
 			{
 				m_treeView->SelectedNode = n;
 				//n->SelectedImageIndex()
+			}
+			if (z->IsVisible())
+			{
+				n->ForeColor = Color::Black;
+			}
+			else
+			{
+				n->ForeColor = Color::LightGray;
 			}
 			const std::vector<ZobObject*>* v = z->GetChildren();
 			//const ZobComponentMesh* test = z->GetComponent<ZobComponentMesh>();

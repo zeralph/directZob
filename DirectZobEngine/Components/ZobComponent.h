@@ -19,8 +19,6 @@ public:
 	virtual ~ZobComponent() {};
 	virtual void											Init(DirectZobType::sceneLoadingCallback cb) = 0;
 	virtual void											PreUpdate(float dt)=0;
-	virtual void											UpdateBeforeObject(float dt) = 0;
-	virtual void											UpdateAfterObject(float dt) = 0;
 	virtual void											PostUpdate() = 0;
 	virtual void											EditorUpdate() = 0;
 	virtual void											QueueForDrawing(const Camera* camera, Engine* engine) {};
@@ -32,12 +30,14 @@ public:
 	void													ReadNode(TiXmlElement* node);
 	void													ReLoadVariables();
 	ZobVariablesExposer*									GetVariablesExposer() { return m_varExposer; }
+	bool													IsEnabled() const { return m_enabled; }
+	void													Enable(bool b) { m_enabled = b; }
 protected:
 	ZobComponent(ZobObject* zobObject, bool bEditorZobComponent);
-	ZobComponentFactory::eComponentType m_componentType;
-	ZobObject* m_zobObject;
-	ZobVariablesExposer* m_varExposer;
-	
+	ZobComponentFactory::eComponentType						m_componentType;
+	ZobObject*												m_zobObject;
+	ZobVariablesExposer*									m_varExposer;
+	bool													m_enabled;
 protected:
 
 };

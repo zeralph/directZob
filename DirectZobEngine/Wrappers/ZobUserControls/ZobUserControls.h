@@ -268,7 +268,7 @@ namespace CLI {
 		ZobControlTreeview();
 		void UpdateZobControl();
 	protected:
-		void OnDrawNode(DrawTreeNodeEventArgs^ e) override;
+		//void OnDrawNode(DrawTreeNodeEventArgs^ e) override;
 	};
 
 	public ref class ZobPropertiesContainer : TableLayoutPanel

@@ -157,11 +157,6 @@ void ZobComponentText::DoAction()
 	}
 }
 
-void ZobComponentText::UpdateBeforeObject(float dt)
-{
-
-}
-
 void ZobComponentText::DrawGizmos(const Camera* camera, const ZobVector3* position, const ZobVector3* rotation) const
 {
 

@@ -20,6 +20,7 @@ ZobObject::ZobObject(ZobType t, ZobSubType s, const std::string& name, ZobObject
 	m_varExposer = new ZobVariablesExposer(GetIdValue());
 	sObjectNumber++;
 	m_Components.clear();
+	m_visible = true;
 	m_factoryFile = factoryFile?factoryFile->c_str():"";
 	m_physicComponent = new ZobPhysicComponent(this);
 	if (name.length() == 0)
@@ -91,6 +92,7 @@ ZobObject::ZobObject(zobId id, TiXmlElement* node, ZobObject* parent, const std:
 		m_parent = parent;
 	}
 	m_markedForDeletion = false;
+	m_visible = true;
 	m_physicComponent = new ZobPhysicComponent(this);
 	//parenting
 	m_children.clear();
@@ -244,7 +246,8 @@ void ZobObject::EditorUpdate()
 	m_physicComponent->EditorUpdate();
 	for (int i = 0; i < m_Components.size(); i++)
 	{
-		m_Components[i]->EditorUpdate();
+		if (m_Components[i]->IsEnabled())
+			m_Components[i]->EditorUpdate();
 	}
 	for (int i = 0; i < m_children.size(); i++)
 	{
@@ -261,7 +264,8 @@ void ZobObject::PreUpdate(float dt)
 	OPTICK_EVENT();
 	for (int i = 0; i < m_Components.size(); i++)
 	{
-		m_Components[i]->PreUpdate(dt);
+		if(m_Components[i]->IsEnabled())
+			m_Components[i]->PreUpdate(dt);
 
 	}
 	for (int i = 0; i < m_children.size(); i++)
@@ -277,7 +281,8 @@ void ZobObject::PostUpdate()
 	OPTICK_EVENT();
 	for (int i = 0; i < m_Components.size(); i++)
 	{
-		m_Components[i]->PostUpdate();
+		if (m_Components[i]->IsEnabled())
+			m_Components[i]->PostUpdate();
 	}
 	for (int i = 0; i < m_children.size(); i++)
 	{
@@ -287,12 +292,33 @@ void ZobObject::PostUpdate()
 	}
 }
 
+void ZobObject::SetVisible(bool v)
+{
+	if (m_visible != v)
+	{
+		m_visible = v;
+		std::vector<ZobComponentMesh*> m = GetComponents<ZobComponentMesh>();
+		for (int i = 0; i < m.size(); i++)
+		{
+			m[i]->SetVisible(v);
+		}
+		for (int i = 0; i < m_children.size(); i++)
+		{
+			ZobObject* z = m_children[i];
+			if (z)
+				z->SetVisible(v);
+		}
+	}
+
+}
+
 void ZobObject::QueueForDrawing(const Camera* camera, Engine* engine)
 {
 	OPTICK_EVENT();
 	for (int i = 0; i < m_Components.size(); i++)
 	{
-		m_Components[i]->QueueForDrawing(camera, engine);
+		if (m_Components[i]->IsEnabled())
+			m_Components[i]->QueueForDrawing(camera, engine);
 	}
 	for (int i = 0; i < m_children.size(); i++)
 	{
@@ -405,7 +431,8 @@ void ZobObject::DrawGizmos(const Camera* camera, Engine* engine)
 	m_physicComponent->DrawGizmos(camera, &p, &r);
 	for (int i = 0; i < m_Components.size(); i++)
 	{
-		m_Components[i]->DrawGizmos(camera, &p, &r);
+		if (m_Components[i]->IsEnabled())
+			m_Components[i]->DrawGizmos(camera, &p, &r);
 	}
 	for (int i = 0; i < m_children.size(); i++)
 	{

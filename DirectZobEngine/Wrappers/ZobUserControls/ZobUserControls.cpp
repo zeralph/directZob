@@ -1165,12 +1165,15 @@ ZobControlTreeNode^ ZobControlTreeNode::GetChildNode(String^ guid)
 
 ZobControlTreeview::ZobControlTreeview():TreeView() 
 {
-	this->DrawMode = TreeViewDrawMode::OwnerDrawAll;
+	this->DoubleBuffered = true;
+	//this->DrawMode = TreeViewDrawMode::OwnerDrawAll;
 }
 
-
+/*
 void ZobControlTreeview::OnDrawNode(DrawTreeNodeEventArgs^ e)
 {
+	TreeView::OnDrawNode(e);
+	return;
 	//e->Graphics->lay
 	//e->Bounds.Left += 40;
 	e->DrawDefault = true;
@@ -1191,7 +1194,7 @@ void ZobControlTreeview::OnDrawNode(DrawTreeNodeEventArgs^ e)
 	CheckBoxRenderer::DrawCheckBox(e->Graphics, p, s);
 	TreeView::OnDrawNode(e);
 }
-
+*/
 void ZobControlTreeview::UpdateZobControl()
 {
 }

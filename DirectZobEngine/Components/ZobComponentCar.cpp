@@ -462,10 +462,6 @@ void ZobComponentCar::EditorUpdate()
 {
 }
 
-void ZobComponentCar::UpdateBeforeObject(float dt)
-{
-}
-
 void ZobComponentCar::DrawGizmos(const Camera* camera, const ZobVector3* position, const ZobVector3* rotation) const
 {
 	//return;

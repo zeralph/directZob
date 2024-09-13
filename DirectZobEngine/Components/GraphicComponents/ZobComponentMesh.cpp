@@ -74,11 +74,6 @@ void ZobComponentMesh::PreUpdate(float dt)
 {
 }
 
-void ZobComponentMesh::UpdateAfterObject(float dt)
-{
-
-}
-
 void ZobComponentMesh::SetVisible(bool v)
 { 
 	m_mesh->SetVisible(v); 
