@@ -21,7 +21,7 @@ public:
 
 										Mesh(const std::string& name);
 										Mesh(Mesh* m);
-										Mesh(ZobFilePath zfp);
+										Mesh(ZobFilePath* zfp);
 	virtual								~Mesh();
 
 	virtual void						Update(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Engine* engine, const Triangle::RenderOptions* options);
@@ -47,11 +47,11 @@ public:
 	const bool							IsVisible() const { return m_visible; }
 	const long							GetSize() const { return m_size; }
 protected:
-										Mesh(std::string& parentName, ZobFilePath zfp, fbxsdk::FbxMesh* mesh);
+										Mesh(std::string& parentName, ZobFilePath* zfp, fbxsdk::FbxMesh* mesh);
 	void								SplitEntry(const std::string* s, std::vector<std::string>* v, const char delim) const;
 	void								CreateTriangles(const std::vector<std::string>* line, std::vector<Triangle>* t, size_t& tArrayIdx, const ZobMaterial* tex);
-	void								LoadOBJ(ZobFilePath zfp);
-	void								LoadFbx(ZobFilePath zfp);
+	void								LoadOBJ(ZobFilePath* zfp);
+	void								LoadFbx(ZobFilePath* zfp);
 	void								FbxMultT(FbxNode* node, FbxVector4 &vector);
 	inline bool							RejectTriangle(const Triangle* t, const float znear, const float zfar, const float width, const float height);
 	void								ParseObjFaceData(const std::string* s, int &v, int &u, int &n, bool& hasUv, bool& hasNormals) const;

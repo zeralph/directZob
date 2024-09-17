@@ -154,6 +154,7 @@ namespace tga
 		* @return true if success, otherwise false.
 		*/
 		bool Load(const std::string& Filename);
+		bool LoadFromStream(char* buf, size_t len);
 
 		~TGA()
 		{
@@ -346,6 +347,158 @@ namespace tga
 
 		uint8_t* Buffer = new uint8_t[DataSize];
 		File.read((char*)Buffer, DataSize);
+
+		Data = new uint8_t[ImageSize];
+		memset(Data, 0, ImageSize);
+
+		switch (Head.ImageType)
+		{
+		case 0: break; // No Image
+		case 1: // Uncompressed paletted
+		{
+			if (Head.Bits == 8)
+			{
+				switch (PixelSize)
+				{
+				case 3: RGBPaletted((uint8_t*)Buffer, ColorMap, Data, Head.Width * Head.Height); break;
+				case 4: RGBAPaletted((uint8_t*)Buffer, ColorMap, Data, Head.Width * Head.Height); break;
+				}
+			}
+			else if (Head.Bits == 16)
+			{
+				switch (PixelSize)
+				{
+				case 3: RGBPaletted((uint16_t*)Buffer, ColorMap, Data, Head.Width * Head.Height); break;
+				case 4: RGBAPaletted((uint16_t*)Buffer, ColorMap, Data, Head.Width * Head.Height); break;
+				}
+			}
+
+			break;
+		}
+		case 2: // Uncompressed TrueColor
+		{
+			if (Head.Bits == 24 || Head.Bits == 32)
+			{
+				std::copy(&Buffer[0], &Buffer[ImageSize], &Data[0]);
+
+				for (size_t i = 0; i < ImageSize; i += PixelSize)
+				{
+					std::swap(Data[i], Data[i + 2]);
+				}
+			}
+
+			break;
+		}
+
+		case 3: // Uncompressed Monochrome
+		{
+			if (Head.Bits == 8)
+			{
+				std::copy(&Buffer[0], &Buffer[ImageSize], &Data[0]);
+			}
+
+			break;
+		}
+
+		case 9: break; // Compressed paletted TODO
+		case 10: // Compressed TrueColor
+		{
+			switch (Head.Bits)
+			{
+			case 24: RGBCompressed(Buffer, Data, Head.Width * Head.Height); break;
+			case 32: RGBACompressed(Buffer, Data, Head.Width * Head.Height); break;
+			}
+
+			break;
+		}
+
+		case 11: // Compressed Monocrhome
+		{
+			if (Head.Bits == 8)
+			{
+				MonochromeCompressed(Buffer, Data, Head.Width * Head.Height);
+			}
+
+			break;
+		}
+		}
+
+		if (Head.ImageType != 0)
+		{
+			switch (PixelSize)
+			{
+			case 1: Format = ImageFormat::Monochrome; break;
+			case 3: Format = ImageFormat::RGB;        break;
+			case 4: Format = ImageFormat::RGBA;       break;
+			}
+
+			Width = Head.Width;
+			Height = Head.Height;
+			Size = ImageSize;
+		}
+
+		delete[] ColorMap;
+		delete[] Descriptor;
+		delete[] Buffer;
+		return true;
+	}
+
+	bool TGA::LoadFromStream(char* buf, size_t len)
+	{
+		Clear();
+
+		Header Head;
+		size_t FileSize = 0;
+
+		char* idx = &buf[0];
+		memcpy((char*)&Head.IDLength, idx, sizeof(Head.IDLength));
+		idx += sizeof(Head.IDLength);
+		memcpy((char*)&Head.IDLength, idx, sizeof(Head.IDLength));
+		idx += sizeof(Head.IDLength);
+		memcpy((char*)&Head.ColorMapType, idx, sizeof(Head.ColorMapType)); 
+		idx += sizeof(Head.ColorMapType);
+		memcpy((char*)&Head.ImageType, idx, sizeof(Head.ImageType)); 
+		idx += sizeof(Head.ImageType);
+		memcpy((char*)&Head.ColorMapOrigin, idx, sizeof(Head.ColorMapOrigin)); 
+		idx += sizeof(Head.ColorMapOrigin);
+		memcpy((char*)&Head.ColorMapLength, idx, sizeof(Head.ColorMapLength)); 
+		idx += sizeof(Head.ColorMapLength);
+		memcpy((char*)&Head.ColorMapEntrySize, idx, sizeof(Head.ColorMapEntrySize)); 
+		idx += sizeof(Head.ColorMapEntrySize);
+		memcpy((char*)&Head.XOrigin, idx, sizeof(Head.XOrigin)); 
+		idx += sizeof(Head.XOrigin);
+		memcpy((char*)&Head.YOrigin, idx, sizeof(Head.YOrigin)); 
+		idx += sizeof(Head.YOrigin);
+		memcpy((char*)&Head.Width, idx, sizeof(Head.Width)); 
+		idx += sizeof(Head.Width);
+		memcpy((char*)&Head.Height, idx, sizeof(Head.Height)); 
+		idx += sizeof(Head.Height);
+		memcpy((char*)&Head.Bits, idx, sizeof(Head.Bits)); 
+		idx += sizeof(Head.Bits);
+		memcpy((char*)&Head.ImageDescriptor, idx, sizeof(Head.ImageDescriptor));
+		idx += sizeof(Head.ImageDescriptor);
+
+		uint8_t* Descriptor = new uint8_t[Head.ImageDescriptor];
+		memcpy((char*)Descriptor, idx, Head.ImageDescriptor);
+		idx += Head.ImageDescriptor;
+
+		size_t ColorMapElementSize = Head.ColorMapEntrySize / 8;
+		size_t ColorMapSize = Head.ColorMapLength * ColorMapElementSize;
+		uint8_t* ColorMap = new uint8_t[ColorMapSize];
+
+		if (Head.ColorMapType == 1)
+		{
+			memcpy((char*)ColorMap, idx, ColorMapSize);
+			idx += ColorMapSize;
+		}
+
+		size_t PixelSize = Head.ColorMapLength == 0 ? (Head.Bits / 8) : ColorMapElementSize;
+		size_t DataSize = FileSize - sizeof(Header) - (Head.ColorMapType == 1 ? ColorMapSize : 0);
+		size_t ImageSize = Head.Width * Head.Height * PixelSize;
+
+		uint8_t* Buffer = new uint8_t[DataSize];
+		memcpy((char*)Buffer, idx, DataSize);
+		idx += DataSize;
 
 		Data = new uint8_t[ImageSize];
 		memset(Data, 0, ImageSize);

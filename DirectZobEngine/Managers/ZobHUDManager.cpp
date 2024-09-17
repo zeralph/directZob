@@ -129,14 +129,13 @@ void ZobHUDManager::RemoveFromMenu(ZobComponentText* zct)
 	}
 }
 
-const ZobFont* ZobHUDManager::CreateOrGetZobFont(ZobFilePath zfpXml, ZobFilePath zfpTexture)
+const ZobFont* ZobHUDManager::CreateOrGetZobFont(ZobFilePath* zfpXml, ZobFilePath* zfpTexture)
 {
-	std::string fontName = ZobFont::GetFontNameFromXml(zfpXml);
 	std::vector<const ZobFont*>::const_iterator iter = m_fonts.begin();
 	while (iter != m_fonts.end())
 	{
 		std::string s = (*iter)->GetName();
-		if (s == fontName)
+		if (s == zfpXml->GetName())
 		{
 			return (*iter);
 		}
@@ -171,11 +170,11 @@ void ZobHUDManager::UpdateNavigation(float dt)
 			m_menuItems[m_menuCurrentIndex]->DoAction();
 		}
 		m_menuItems[m_menuCurrentIndex]->SetSelected(false);
-		if (inputMap->GetBool(ZobInputManager::MenuUp))
+		if (inputMap->GetBoolIsNew(ZobInputManager::MenuUp))
 		{
 			m_menuCurrentIndex = max(m_menuCurrentIndex - 1, 0);
 		}
-		if (inputMap->GetBool(ZobInputManager::MenuDown))
+		if (inputMap->GetBoolIsNew(ZobInputManager::MenuDown))
 		{
 			m_menuCurrentIndex = min(m_menuCurrentIndex + 1, (int)m_menuItems.size()-1);
 		}
@@ -199,6 +198,7 @@ void ZobHUDManager::UpdateObjects(const Camera* camera, Engine* engine, float dt
 		bool operator()(HUDElement &a, HUDElement &b) const { return a.z < b.z; }
 	} customLess;
 	std::sort(m_hudElements.begin(), m_hudElements.end(), customLess);
+	int idx = 0;
 	for (std::vector<HUDElement>::const_iterator iter = m_hudElements.begin(); iter != m_hudElements.end(); iter++)
 	{
 		HUDElement e = *iter;
@@ -210,7 +210,8 @@ void ZobHUDManager::UpdateObjects(const Camera* camera, Engine* engine, float dt
 		yMin = e.y;
 		xMax = xMin + e.w;
 		yMax = yMin + e.h;
-		CreateQuad(e.zo, xMin, yMin, xMax, yMax, &e);
+		CreateQuad(e.zo, xMin, yMin, xMax, yMax, idx, &e);
+		idx++;
 	}
 }
 
@@ -230,7 +231,7 @@ static ZobVector3 scb = ZobVector3(0, 1, 0);
 static ZobVector3 scc = ZobVector3(0, 0, 1);
 static ZobVector3 scd = ZobVector3(1, 0, 0);
 
-bool ZobHUDManager::CreateQuad(ZobObject* zobObj, float xMin, float yMin, float xMax, float yMax, HUDElement* elem)
+bool ZobHUDManager::CreateQuad(ZobObject* zobObj, float xMin, float yMin, float xMax, float yMax, int idx, HUDElement* elem)
 {
 	float uv_a_x = 0;
 	float uv_a_y = 0;
@@ -257,7 +258,7 @@ bool ZobHUDManager::CreateQuad(ZobObject* zobObj, float xMin, float yMin, float 
 		uv_c_x = elem->glyphe->uv_min_x;
 		uv_c_y = -elem->glyphe->uv_min_y;
 	}
-	float z = DirectZob::GetInstance()->GetEngine()->GetBufferData()->zNear + 0.001f;
+	float z = DirectZob::GetInstance()->GetEngine()->GetBufferData()->zNear + 0.00001f * (idx+1.0f);
 	Triangle* t1 = &m_trianglesBuffer[m_nbDrawnTriangles];
 	t1->pc->x = xMin;
 	t1->pc->y = yMin;

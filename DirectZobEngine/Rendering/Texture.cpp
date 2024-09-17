@@ -27,28 +27,30 @@ Texture::~Texture()
 
 void Texture::LoadFromData(std::string &name, int w, int h, float* data)
 {
-	m_fullPath = name;
+	m_name = name;
 	m_width = w;
 	m_height = h;
 	m_data = data;
 	m_dataSize = w * h * 4;
 }
 
-void Texture::LoadFromFile(const std::string& textureFile)
+void Texture::Load(ZobFilePath* zfp)
 {
-	m_fullPath = textureFile;
-	DirectZob::LogInfo("Texture %s creation", m_fullPath.c_str());
+	zfp->LoadData();
+	m_name = zfp->GetName();
+ 	DirectZob::LogInfo("Texture %s creation", m_name.c_str());
 	DirectZob::AddIndent();
 	std::vector<unsigned char> image; //the raw pixels
-	unsigned width, height;
+	//unsigned char* image = 0;
+	unsigned int width, height;
 	uint8_t error = 0;
 	std::string name = "";
-	if (textureFile.find(".png") != -1 || textureFile.find(".PNG") != -1)
+	if (zfp->GetFile().find(".png") != -1 || zfp->GetFile().find(".PNG") != -1)
 	{
-		error = lodepng::decode(image, width, height, textureFile);
+		error = lodepng::decode(image, width, height, (unsigned char*)zfp->GetData(), zfp->GetDataLength());
 		if (error)
 		{
-			OnError(error, name.c_str(), textureFile.c_str());
+			OnError(error, name.c_str(), m_name.c_str());
 		}
 		else
 		{
@@ -67,70 +69,53 @@ void Texture::LoadFromFile(const std::string& textureFile)
 				m_data[i + 3] = a;
 			}
 			m_dataSize = width * height * 4;
-			DirectZob::LogInfo("Loaded texture %s", textureFile.c_str());
+			DirectZob::LogInfo("Loaded texture %s", m_name.c_str());
 		}
 	}
-	else if (textureFile.find(".jpg") != -1 || textureFile.find(".jpeg") != -1 || textureFile.find(".JPG") != -1 || textureFile.find(".JPEG") != -1)
+	else if (zfp->GetFile().find(".jpg") != -1 || zfp->GetFile().find(".jpeg") != -1 || zfp->GetFile().find(".JPG") != -1 || zfp->GetFile().find(".JPEG") != -1)
 	{
-		FILE* f;
-		int err = (int)fopen_s(&f, textureFile.c_str(), "rb");
-		if (err == 0)
-		{
-			char* buf;
-			fseek(f, 0, SEEK_END);
-			int size = (int)ftell(f);
-			buf = (char*)malloc(size);
-			fseek(f, 0, SEEK_SET);
-			size = (int)fread(buf, 1, size, f);
-			fclose(f);
-
-			nanojpeg::njInit();
-			error = nanojpeg::njDecode(buf, size);
-			if (error == NJ_OK) {
-				int s = nanojpeg::njGetImageSize();
-				for (int i = 0; i < s; i++)
-				{
-					image.push_back(nanojpeg::njGetImage()[i]);
-				}
-				width = nanojpeg::njGetWidth();
-				height = nanojpeg::njGetHeight();
-				m_width = width;
-				m_height = height;
-				m_data = (float*)malloc(sizeof(float) * 4 * image.size());
-				int j = 0;
-				for (int i = 0; i < image.size(); i += 3)
-				{
-					float r = (float)image[i] / 255.0f;
-					float g = (float)image[i + 1] / 255.0f;
-					float b = (float)image[i + 2] / 255.0f;
-					float a = 1.0f;
-					m_data[j] = r;
-					m_data[j + 1] = g;
-					m_data[j + 2] = b;
-					m_data[j + 3] = a;
-					j += 4;
-				}
-				m_dataSize = width * height * 4;
-				nanojpeg::njDone();
-				DirectZob::LogInfo("Loaded texture %s", textureFile.c_str());
-			}
-			else
+		nanojpeg::njInit();
+		error = nanojpeg::njDecode(zfp->GetData(), zfp->GetDataLength());
+		if (error == NJ_OK) {
+			int s = nanojpeg::njGetImageSize();
+			for (int i = 0; i < s; i++)
 			{
-				OnError(error, name.c_str(), textureFile.c_str());
+				image.push_back(nanojpeg::njGetImage()[i]);
 			}
-			free((void*)buf);
+			width = nanojpeg::njGetWidth();
+			height = nanojpeg::njGetHeight();
+			m_width = width;
+			m_height = height;
+			m_data = (float*)malloc(sizeof(float) * 4 * image.size());
+			int j = 0;
+			for (int i = 0; i < image.size(); i += 3)
+			{
+				float r = (float)image[i] / 255.0f;
+				float g = (float)image[i + 1] / 255.0f;
+				float b = (float)image[i + 2] / 255.0f;
+				float a = 1.0f;
+				m_data[j] = r;
+				m_data[j + 1] = g;
+				m_data[j + 2] = b;
+				m_data[j + 3] = a;
+				j += 4;
+			}
+			m_dataSize = width * height * 4;
+			nanojpeg::njDone();
+			DirectZob::LogInfo("Loaded texture %s", m_name.c_str());
 		}
 		else
 		{
-			OnError(error, name.c_str(), textureFile.c_str());
+			OnError(error, name.c_str(), m_name.c_str());
 		}
 	}
-	else if (textureFile.find(".tga") != -1 || textureFile.find(".TGA") != -1)
+	else if (zfp->GetFile().find(".tga") != -1 || zfp->GetFile().find(".TGA") != -1)
 	{
 		int w, h, bpp = 0;
 		tga::ImageFormat format = tga::ImageFormat::Undefined;
 		tga::TGA tgaTex;
-		if (tgaTex.Load(textureFile))
+		if (tgaTex.LoadFromStream((char*)zfp->GetData(), zfp->GetDataLength()))
+		//if (tgaTex.Load(m_name))
 		{
 			w = tgaTex.GetWidth();
 			h = tgaTex.GetHeight();
@@ -179,18 +164,19 @@ void Texture::LoadFromFile(const std::string& textureFile)
 			m_width = w;
 			m_height = h;
 			m_dataSize = width * height * 4;
-			DirectZob::LogInfo("Loaded texture %s", textureFile.c_str());
+			DirectZob::LogInfo("Loaded texture %s", m_name.c_str());
 		}
 		else
 		{
-			OnError(error, name.c_str(), textureFile.c_str());
+			OnError(error, name.c_str(), m_name.c_str());
 		}
 	}
 	else
 	{
-		DirectZob::LogError("no decoder for file %s", textureFile.c_str());
+		DirectZob::LogError("no decoder for file %s", m_name.c_str());
 	}
 	image.shrink_to_fit();
+	zfp->UnloadData();
 	DirectZob::RemoveIndent();
 }
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<Scene>
+<Scene EntitiesCount="15" ZobObjectsCount="8">
     <Globals>
         <Var Name="Ambient color" value="255;102;102;102" />
         <Var Name="Clear color" value="255;192;192;192" />
@@ -16,54 +16,69 @@
         <Var Name="Z far" value="1000.000" />
         <Var Name="Equalize triangle queues" value="False" />
         <Var Name="Perspective Correction" value="True" />
+        <Var Name="Downscale" value="1" />
     </Globals>
     <ZobObject Guid="2003412161">
         <Var Name="Name" value="camera" />
-        <Var Name="Position" value="0.000;1.898;-4.774" />
-        <Var Name="Rotation" value="15.043;0.000;0.000" />
-        <Var Name="Scale" value="1.000;1.000;1.000" />
+        <Var Name="Position" value="0.00000;1.89800;-4.77400;1.00000" />
+        <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+        <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+        <Var Name="Body type" value="Static" />
+        <Var Name="Active" value="True" />
+        <Var Name="Mass" value="1000.000" />
         <Var Name="FOV" value="70.000" />
         <Var Name="Camera controller" value="FollowCar" />
         <Components />
     </ZobObject>
     <ZobObject Guid="4002144528">
         <Var Name="Name" value="Title" />
-        <Var Name="Position" value="0.000;0.000;0.000" />
-        <Var Name="Rotation" value="0.000;0.000;0.000" />
-        <Var Name="Scale" value="1.000;1.000;1.000" />
+        <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+        <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+        <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+        <Var Name="Body type" value="Static" />
+        <Var Name="Active" value="True" />
+        <Var Name="Mass" value="1000.000" />
         <Components />
         <ZobObject Guid="4002566753">
             <Var Name="Name" value="Title" />
-            <Var Name="Position" value="0.000;0.000;0.000" />
-            <Var Name="Rotation" value="0.000;0.000;0.000" />
-            <Var Name="Scale" value="1.000;1.000;1.000" />
+            <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+            <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+            <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+            <Var Name="Body type" value="Static" />
+            <Var Name="Active" value="True" />
+            <Var Name="Mass" value="1000.000" />
             <Components>
                 <Component Type="Text" Guid="2007144528">
+                    <Var Name="Enabled" value="True" />
                     <Var Name="Visible" value="True" />
-                    <Var Name="X" value="0.220" />
+                    <Var Name="X" value="0.090" />
                     <Var Name="Y" value="0.000" />
                     <Var Name="W" value="0.500" />
                     <Var Name="H" value="0.500" />
                     <Var Name="Z" value="0.000" />
-                    <Var Name="Font size" value="6.000" />
-                    <Var Name="Text" value=" EDGE&#x0D;&#x0A;RACING" />
+                    <Var Name="Font size" value="4.000" />
+                    <Var Name="Font Xml" value="mv_boli_regular_32 - Copie.xml;_fonts/;mv_boli_regular_32 - Copie.xml;0" />
+                    <Var Name="Font Image" value="mv_boli_regular_32 - Copie.PNG;_fonts/;mv_boli_regular_32 - Copie.PNG;0" />
+                    <Var Name="Text" value="DirectZob demo" />
                     <Var Name="Default color" value="255;255;255;128" />
                     <Var Name="Selected color" value="255;255;0;0" />
                     <Var Name="Selectable" value="False" />
                     <Var Name="Action" value="None" />
                     <Var Name="Action argument" value="" />
-                    <Var Name="Font Xml" value="vcr_osd_mono_regular_32.xml;_fonts/;vcr_osd_mono_regular_32.xml;0" />
-                    <Var Name="Font Image" value="vcr_osd_mono_regular_32.PNG;_fonts/;vcr_osd_mono_regular_32.PNG;0" />
                 </Component>
             </Components>
         </ZobObject>
         <ZobObject Guid="4002967997">
-            <Var Name="Name" value="level_1" />
-            <Var Name="Position" value="0.000;7.105;0.000" />
-            <Var Name="Rotation" value="0.000;0.000;0.000" />
-            <Var Name="Scale" value="1.000;1.000;1.000" />
+            <Var Name="Name" value="car test" />
+            <Var Name="Position" value="0.00000;7.10500;0.00000;1.00000" />
+            <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+            <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+            <Var Name="Body type" value="Static" />
+            <Var Name="Active" value="True" />
+            <Var Name="Mass" value="1000.000" />
             <Components>
                 <Component Type="Text" Guid="2007566753">
+                    <Var Name="Enabled" value="True" />
                     <Var Name="Visible" value="True" />
                     <Var Name="X" value="0.350" />
                     <Var Name="Y" value="0.550" />
@@ -71,24 +86,28 @@
                     <Var Name="H" value="0.500" />
                     <Var Name="Z" value="0.000" />
                     <Var Name="Font size" value="4.000" />
+                    <Var Name="Font Xml" value="vcr_osd_mono_regular_14.xml;_fonts/;vcr_osd_mono_regular_14.xml;0" />
+                    <Var Name="Font Image" value="vcr_osd_mono_regular_14.PNG;_fonts/;vcr_osd_mono_regular_14.PNG;0" />
                     <Var Name="Text" value="Car test" />
                     <Var Name="Default color" value="255;255;255;0" />
                     <Var Name="Selected color" value="255;255;0;0" />
                     <Var Name="Selectable" value="True" />
                     <Var Name="Action" value="Load" />
                     <Var Name="Action argument" value="_carTest.dzs" />
-                    <Var Name="Font Xml" value="vcr_osd_mono_regular_14.xml;_fonts/;vcr_osd_mono_regular_14.xml;0" />
-                    <Var Name="Font Image" value="vcr_osd_mono_regular_14.PNG;_fonts/;vcr_osd_mono_regular_14.PNG;0" />
                 </Component>
             </Components>
         </ZobObject>
         <ZobObject Guid="4002273791">
             <Var Name="Name" value="bkg" />
-            <Var Name="Position" value="0.000;7.105;0.000" />
-            <Var Name="Rotation" value="0.000;0.000;0.000" />
-            <Var Name="Scale" value="1.000;1.000;1.000" />
+            <Var Name="Position" value="0.00000;7.10500;0.00000;1.00000" />
+            <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+            <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+            <Var Name="Body type" value="Static" />
+            <Var Name="Active" value="True" />
+            <Var Name="Mass" value="1000.000" />
             <Components>
                 <Component Type="Image" Guid="2007363284">
+                    <Var Name="Enabled" value="True" />
                     <Var Name="Visible" value="True" />
                     <Var Name="X" value="0.000" />
                     <Var Name="Y" value="0.000" />
@@ -100,52 +119,89 @@
             </Components>
         </ZobObject>
         <ZobObject Guid="4002077588">
-            <Var Name="Name" value="level_2" />
-            <Var Name="Position" value="0.000;0.000;0.000" />
-            <Var Name="Rotation" value="0.000;0.000;0.000" />
-            <Var Name="Scale" value="1.000;1.000;1.000" />
+            <Var Name="Name" value="daytona_line" />
+            <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+            <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+            <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+            <Var Name="Body type" value="Static" />
+            <Var Name="Active" value="True" />
+            <Var Name="Mass" value="1000.000" />
             <Components>
                 <Component Type="Text" Guid="2007470398">
+                    <Var Name="Enabled" value="True" />
                     <Var Name="Visible" value="True" />
-                    <Var Name="X" value="0.300" />
+                    <Var Name="X" value="0.150" />
                     <Var Name="Y" value="0.650" />
                     <Var Name="W" value="0.500" />
                     <Var Name="H" value="0.500" />
                     <Var Name="Z" value="0.000" />
                     <Var Name="Font size" value="4.000" />
+                    <Var Name="Font Xml" value="vcr_osd_mono_regular_14.xml;_fonts/;vcr_osd_mono_regular_14.xml;0" />
+                    <Var Name="Font Image" value="vcr_osd_mono_regular_14.PNG;_fonts/;vcr_osd_mono_regular_14.PNG;0" />
                     <Var Name="Text" value="_daytona_itl_speedway" />
                     <Var Name="Default color" value="255;255;255;0" />
                     <Var Name="Selected color" value="255;255;0;0" />
                     <Var Name="Selectable" value="True" />
                     <Var Name="Action" value="Load" />
                     <Var Name="Action argument" value="_daytona_itl_speedway.dzs" />
-                    <Var Name="Font Xml" value="vcr_osd_mono_regular_14.xml;_fonts/;vcr_osd_mono_regular_14.xml;0" />
-                    <Var Name="Font Image" value="vcr_osd_mono_regular_14.PNG;_fonts/;vcr_osd_mono_regular_14.PNG;0" />
                 </Component>
             </Components>
         </ZobObject>
-        <ZobObject Guid="4002017387">
-            <Var Name="Name" value="exit" />
-            <Var Name="Position" value="0.000;0.000;0.000" />
-            <Var Name="Rotation" value="0.000;0.000;0.000" />
-            <Var Name="Scale" value="1.000;1.000;1.000" />
+        <ZobObject Guid="4002189904">
+            <Var Name="Name" value="skull" />
+            <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+            <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+            <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+            <Var Name="Body type" value="Static" />
+            <Var Name="Active" value="True" />
+            <Var Name="Mass" value="1000.000" />
             <Components>
-                <Component Type="Text" Guid="2007054381">
+                <Component Type="Text" Guid="2007326597">
+                    <Var Name="Enabled" value="True" />
                     <Var Name="Visible" value="True" />
                     <Var Name="X" value="0.420" />
                     <Var Name="Y" value="0.750" />
                     <Var Name="W" value="0.500" />
                     <Var Name="H" value="0.500" />
                     <Var Name="Z" value="0.000" />
+                    <Var Name="Font size" value="2.000" />
+                    <Var Name="Font Xml" value="arial_regular_32.xml;_fonts/;arial_regular_32.xml;0" />
+                    <Var Name="Font Image" value="arial_regular_32.PNG;_fonts/;arial_regular_32.PNG;0" />
+                    <Var Name="Text" value="Skull" />
+                    <Var Name="Default color" value="255;255;255;0" />
+                    <Var Name="Selected color" value="255;255;0;0" />
+                    <Var Name="Selectable" value="True" />
+                    <Var Name="Action" value="Load" />
+                    <Var Name="Action argument" value="skull.dzs" />
+                </Component>
+            </Components>
+        </ZobObject>
+        <ZobObject Guid="4002017387">
+            <Var Name="Name" value="exit" />
+            <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+            <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+            <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+            <Var Name="Body type" value="Static" />
+            <Var Name="Active" value="True" />
+            <Var Name="Mass" value="1000.000" />
+            <Components>
+                <Component Type="Text" Guid="2007054381">
+                    <Var Name="Enabled" value="True" />
+                    <Var Name="Visible" value="True" />
+                    <Var Name="X" value="0.420" />
+                    <Var Name="Y" value="0.850" />
+                    <Var Name="W" value="0.500" />
+                    <Var Name="H" value="0.500" />
+                    <Var Name="Z" value="0.000" />
                     <Var Name="Font size" value="4.000" />
+                    <Var Name="Font Xml" value="vcr_osd_mono_regular_14.xml;_fonts/;vcr_osd_mono_regular_14.xml;0" />
+                    <Var Name="Font Image" value="vcr_osd_mono_regular_14.PNG;_fonts/;vcr_osd_mono_regular_14.PNG;0" />
                     <Var Name="Text" value="Exit" />
                     <Var Name="Default color" value="255;255;255;0" />
                     <Var Name="Selected color" value="255;255;0;0" />
                     <Var Name="Selectable" value="True" />
                     <Var Name="Action" value="Exit" />
-                    <Var Name="Action argument" value="" />
-                    <Var Name="Font Xml" value="vcr_osd_mono_regular_14.xml;_fonts/;vcr_osd_mono_regular_14.xml;0" />
-                    <Var Name="Font Image" value="vcr_osd_mono_regular_14.PNG;_fonts/;vcr_osd_mono_regular_14.PNG;0" />
+                    <Var Name="Action argument" value="skull.dsz" />
                 </Component>
             </Components>
         </ZobObject>

@@ -5,6 +5,7 @@
 #include "Managers/ZobHUDManager.h"
 #include "Managers/CameraManager.h"
 #include "Misc/ZobXmlHelper.h"
+#include "../../dependencies/physfs/include/physfs.h"
 
 //TODO !
 std::string							SceneLoader::m_path = "";
@@ -14,6 +15,7 @@ std::string							SceneLoader::m_nextSceneName = "";
 int									SceneLoader::m_nbZobObjectLoaded = 0;
 char								tmpBuffer[256];
 bool								SceneLoader::m_loadNextScene = false;
+bool								SceneLoader::m_loadFromArchive = false;
 DirectZobType::sceneLoadingCallback	SceneLoader::m_onSceneLoading = NULL;
 
 void SceneLoader::Update()
@@ -24,9 +26,50 @@ void SceneLoader::Update()
 		m_path = m_nextScenePath;
 		CleanPath(m_path);
 		m_file = m_nextSceneName;
-		LoadSceneInternal();
+		if(m_loadFromArchive)
+		{
+			LoadSceneInternalFromArchive();
+		}
+		else
+		{
+			LoadSceneInternalFromFiles();
+		}
 		m_nextScenePath = "";
 		m_nextSceneName = "";
+	}
+}
+
+void SceneLoader::LoadPack(std::string &path, std::string &file)
+{
+	PHYSFS_init(NULL);
+	std::string fullPath = path + file;
+	int res = PHYSFS_mount(fullPath.c_str(), "", 1);
+	m_loadFromArchive = true;
+	if (!res)
+	{
+		DirectZob::LogError("cannot load archive %s", fullPath);
+		exit(-1);
+	}
+	else
+	{
+		int res = PHYSFS_exists("0");
+		if (res)
+		{
+			PHYSFS_file* myfile = PHYSFS_openRead("0");
+			int fileLength = PHYSFS_fileLength(myfile);
+			char* myBuf;
+			myBuf = new char[fileLength + 1];
+			int length_read = PHYSFS_read(myfile, myBuf, 1, PHYSFS_fileLength(myfile));
+			myBuf[fileLength] = '\0';
+			m_loadNextScene = true;
+			m_nextScenePath = "";
+			m_nextSceneName = std::string(myBuf);
+		}
+		else
+		{
+			DirectZob::LogError("Entrypoint '0' not found in %s", fullPath);
+			exit(-1);
+		}
 	}
 }
 
@@ -44,7 +87,7 @@ void SceneLoader::LoadMesh(TiXmlElement* node)
 	std::string name = node->Attribute(XML_ATTR_NAME);
 	std::string file = node->Attribute(XML_ATTR_FILE);
 	ZobFilePath zfp = ZobFilePath(name, m_path, file, false);
-	DirectZob::GetInstance()->GetMeshManager()->LoadMesh(zfp);
+	DirectZob::GetInstance()->GetMeshManager()->LoadMesh(&zfp);
 }
 
 void SceneLoader::LoadZobObject(std::string& path, std::string& file)
@@ -61,6 +104,7 @@ void SceneLoader::LoadZobObject(std::string& path, std::string& file)
 
 void SceneLoader::LoadZobObject(std::string& fullPath, ZobObject* parent /* = NULL*/)
 {
+	throw("deprecated");
 	TiXmlDocument doc(XML_ELEMENT_ZOBOBJECT);
 	doc.ClearError();
 	doc.LoadFile(fullPath.c_str());
@@ -162,49 +206,85 @@ void SceneLoader::UnloadScene()
 void SceneLoader::NewScene(std::string workspace)
 {
 	DirectZob::AddIndent();
-	UnloadScene();
+	//UnloadScene();
 	if (workspace.length() > 0)
 	{
 		m_path = workspace;
 	}
 	m_file = "";
-	DirectZob::GetInstance()->GetHudManager()->Start();
-	DirectZob::GetInstance()->GetLightManager()->ReInitGlobalSettings();
-	DirectZob::GetInstance()->GetHudManager()->Init();
-	DirectZob::GetInstance()->GetEngine()->Start(NULL);
-	DirectZob::GetInstance()->GetHudManager()->Start();
-	DirectZob::RemoveIndent();
+	ResetEngine();
 }
 
-void SceneLoader::LoadSceneInternal()
+void SceneLoader::ResetEngine()
 {
-	DirectZob::AddIndent();
-	DirectZob::LogWarning("WORKSPACE PATH : %s", m_path.c_str());
-	DirectZob::LogWarning("loading scene %s", m_file.c_str());
 	UnloadScene();
 	DirectZob::GetInstance()->GetLightManager()->ReInitGlobalSettings();
 	DirectZob::GetInstance()->GetHudManager()->Init();
 	MeshManager* meshManager = DirectZob::GetInstance()->GetMeshManager();
 	MaterialManager* materialManager = DirectZob::GetInstance()->GetMaterialManager();
 	ZobObjectManager* zobObjectManager = DirectZob::GetInstance()->GetZobObjectManager();
+}
+
+void SceneLoader::LoadSceneInternalFromArchive()
+{
+	ResetEngine();
+	int res = PHYSFS_exists(m_file.c_str());
+	if (res)
+	{
+		PHYSFS_file* myfile = PHYSFS_openRead(m_file.c_str());
+		int fileLngth = PHYSFS_fileLength(myfile);
+		char* myBuf;
+		myBuf = new char[fileLngth + 1];
+		int length_read = PHYSFS_read(myfile, myBuf, 1, PHYSFS_fileLength(myfile));
+		myBuf[fileLngth] = '\0';
+		PHYSFS_close(myfile);
+		TiXmlDocument doc("Scene");
+		doc.ClearError();
+		//doc.LoadFile()
+		doc.Parse(myBuf);
+		ParseXml(&doc);
+	}
+	else
+	{
+		DirectZob::LogError("cannot find entryPoint %s", m_file);
+		exit(-1);
+	}
+}
+
+void SceneLoader::LoadSceneInternalFromFiles()
+{
+	DirectZob::AddIndent();
+	DirectZob::LogWarning("WORKSPACE PATH : %s", m_path.c_str());
+	DirectZob::LogWarning("loading scene %s", m_file.c_str());
+	ResetEngine();
 	float x, y, z, fov, znear, zfar;
-	std::string name, texture, fullPath;
+	std::string name, fullPath;
 	TiXmlDocument doc("Scene");
 	fullPath = m_path + m_file;
 	doc.ClearError();
 	doc.LoadFile(fullPath.c_str());
+	ParseXml(&doc);
+}
+
+const std::string& SceneLoader::GetResourcePath() 
+{ 
+	return m_path; 
+}
+
+void SceneLoader::ParseXml(TiXmlDocument* doc)
+{
 	int nbEntities = 0;
 	int nbObjects = 0;
-	if (doc.Error())
+	if (doc->Error())
 	{
-		DirectZob::LogError("Error loading %s : %s", fullPath.c_str(), doc.ErrorDesc());
+		DirectZob::LogError("Error loading %s", doc->ErrorDesc());
 		m_path = "";
 		m_file = "";
 	}
 	else
 	{
 		DirectZob::LogInfo("loading objects");
-		TiXmlElement* scene = doc.FirstChildElement(XML_ELEMENT_SCENE);
+		TiXmlElement* scene = doc->FirstChildElement(XML_ELEMENT_SCENE);
 		if (scene)
 		{
 			/*TiXmlElement* textures = root->FirstChildElement("Textures");
@@ -243,7 +323,7 @@ void SceneLoader::LoadSceneInternal()
 	}
 	if (m_onSceneLoading)
 	{
-		m_onSceneLoading(nbEntities+1, 0, "");
+		m_onSceneLoading(nbEntities + 1, 0, "");
 	}
 	DirectZob::GetInstance()->GetEngine()->Start(m_onSceneLoading);
 	DirectZob::GetInstance()->GetHudManager()->Start();

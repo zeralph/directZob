@@ -2,6 +2,159 @@
 #include "DirectZob.h"
 #include "SceneLoader.h"
 
+class CustomStreamClass : public FbxStream
+{
+public:
+	CustomStreamClass(FbxManager* pSdkManager, ZobFilePath* zfp)
+	{
+		m_zfp = zfp;
+		m_zfp->LoadData();
+		const char* format = "FBX (*.fbx)";
+		//const char* format = "FBX ascii (*.fbx)";
+		m_readerID = pSdkManager->GetIOPluginRegistry()->FindReaderIDByDescription(format);
+		m_writerID = -1;
+		m_init = false;
+	}
+
+	~CustomStreamClass()
+	{
+		Close();
+		m_zfp->UnloadData();
+	}
+
+	virtual EState GetState()
+	{
+		return m_init ? FbxStream::eOpen : eClosed;
+	}
+
+	/** Open the stream.
+	  * \return True if successful.
+	  */
+	virtual bool Open(void* /*pStreamData*/)
+	{
+		bool isGood = false;
+		if (m_zfp->GetData() != NULL)
+		{
+			m_curPos = 0;
+			m_init = true;
+		}
+		return m_init;
+	}
+
+	/** Close the stream.
+	  * \return True if successful.
+	  */
+	virtual bool Close()
+	{
+		// This method can be called several times during the
+		// Initialize phase so it is important that it can handle multiple closes
+		m_curPos = 0;
+		m_init = false;
+		return true;
+	}
+
+	/** Empties the internal data of the stream.
+	  * \return True if successful.
+	  */
+	virtual bool Flush()
+	{
+		return true;
+	}
+
+	/** Writes a memory block.
+	  * \param pData Pointer to the memory block to write.
+	  * \param pSize Size (in bytes) of the memory block to write.
+	  * \return The number of bytes written in the stream.
+	  */
+	virtual int Write(const void* pData, int pSize)
+	{
+		return 0;
+	}
+
+	/** Read bytes from the stream and store them in the memory block.
+	  * \param pData Pointer to the memory block where the read bytes are stored.
+	  * \param pSize Number of bytes read from the stream.
+	  * \return The actual number of bytes successfully read from the stream.
+	  */
+	virtual int Read(void* pData, int pSize) const
+	{
+		if (!m_init)
+			return 0;
+		size_t bl = m_zfp->GetDataLength();
+		size_t l = m_curPos + pSize;
+		if (l > bl)
+		{
+			l = bl - pSize;
+		}
+		else
+		{
+			l = pSize;
+		}
+		const char* p = &m_zfp->GetData()[m_curPos];
+		memcpy(pData, (void*)p, l);
+		m_curPos = m_curPos + pSize;
+		return l;
+		//return (int)fread(pData, 1, pSize, mFile);
+	}
+
+	virtual int GetReaderID() const
+	{
+		return m_readerID;
+	}
+
+	virtual int GetWriterID() const
+	{
+		return m_writerID;
+	}
+
+	void Seek(const FbxInt64& pOffset, const FbxFile::ESeekPos& pSeekPos)
+	{
+		switch (pSeekPos)
+		{
+		case FbxFile::eBegin:
+			m_curPos = pOffset;
+			break;
+		case FbxFile::eCurrent:
+			m_curPos += pOffset;
+			break;
+		case FbxFile::eEnd:
+			m_curPos = m_zfp->GetDataLength() - pSeekPos -1;
+			break;
+		}
+	}
+
+	virtual long GetPosition() const
+	{
+		if (!m_init)
+			return 0;
+		long s = (long)m_curPos;
+		return s;
+	}
+	virtual void SetPosition(long pPosition)
+	{
+		if (m_init)
+			m_curPos = pPosition;
+	}
+
+	virtual int GetError() const
+	{
+		if (!m_init == NULL)
+			return 0;
+		return 0;
+	}
+	virtual void ClearError()
+	{
+		
+	}
+
+private:
+	ZobFilePath* m_zfp;
+	bool m_init;
+	mutable size_t m_curPos;
+	int m_readerID;
+	int m_writerID;
+};
+
 using namespace std;
 static ZobVector2 vec2zero = ZobVector2(0,0);
 static std::string emptyStr = std::string("");
@@ -31,19 +184,19 @@ Mesh::Mesh(const std::string& name)
 	DirectZob::RemoveIndent();
 }
 
-Mesh::Mesh(ZobFilePath zfp):Mesh(zfp.GetName())
+Mesh::Mesh(ZobFilePath* zfp):Mesh(zfp->GetName())
 {
 	DirectZob::AddIndent();
-	std::string fullPath = zfp.GetFullPath();
+	std::string fullPath = zfp->GetFullPath();
 	if (fullPath.length())
 	{ 
-		std::ifstream f(fullPath.c_str());
-		if (!f.good())
+		//std::ifstream f(fullPath.c_str());
+		/*if (!f.good())
 		{
 			//throw errorB
 			DirectZob::LogError("Cannot load %s, path '%s' not found", zfp.GetName().c_str(), fullPath.c_str());	
 		}
-		else
+		else*/
 		{
 			if (fullPath.find(".fbx") != -1 || fullPath.find(".FBX") != -1)
 			{
@@ -55,13 +208,14 @@ Mesh::Mesh(ZobFilePath zfp):Mesh(zfp.GetName())
 			}
 			else
 			{
-				DirectZob::LogError("Mesh %s : bad filename extension. Loading ignored", zfp.GetName().c_str());
+				DirectZob::LogError("Mesh %s : bad filename extension. Loading ignored", zfp->GetName().c_str());
 			}
 		}
+		//f.close();
 	}
 	else
 	{
-		DirectZob::LogError("Cannot load %s, path empty", zfp.GetName().c_str());
+		DirectZob::LogError("Cannot load %s, path empty", zfp->GetName().c_str());
 	}
 	m_size = ComputeSize();
 	DirectZob::RemoveIndent();
@@ -72,11 +226,11 @@ Mesh::Mesh(Mesh* m)
 
 }
 
-Mesh::Mesh(std::string &parentName, ZobFilePath zfp, fbxsdk::FbxMesh* mesh)
+Mesh::Mesh(std::string &parentName, ZobFilePath* zfp, fbxsdk::FbxMesh* mesh)
 {
 	if (mesh)
 	{
-		m_path = zfp.GetFullPathWithoutFile();
+		m_path = zfp->GetFullPathWithoutFile();
 		m_name = parentName+"."+mesh->GetName();
 		DirectZob::LogInfo("Mesh %s Creation", m_name.c_str());
 		DirectZob::AddIndent();
@@ -251,15 +405,20 @@ Mesh::Mesh(std::string &parentName, ZobFilePath zfp, fbxsdk::FbxMesh* mesh)
 	DirectZob::RemoveIndent();
 }
 
-void Mesh::LoadFbx(ZobFilePath zfp)
+void Mesh::LoadFbx(ZobFilePath* zfp)
 {
-	std::string fullPath = zfp.GetFullPath();
+	zfp->LoadData();
+	std::string fullPath = zfp->GetFullPath();
 	DirectZob::LogInfo("Load FBX %s", fullPath.c_str());
 	DirectZob::AddIndent();
 	FbxManager* fbxManag = DirectZob::GetInstance()->GetMeshManager()->GetFbxManager();
 	FbxImporter* importer = FbxImporter::Create(fbxManag, "");
-	//importer->SetEmbeddingExtractionFolder("C:\\_GIT\\directZob\\resources\\test");
-	if (importer->Initialize(fullPath.c_str(), -1, fbxManag->GetIOSettings()))
+
+	CustomStreamClass stream(fbxManag, zfp);
+	void* streamData = NULL;
+	if (importer->Initialize(&stream, streamData, -1, fbxManag->GetIOSettings()))
+
+	//if (importer->Initialize(fullPath.c_str(), -1, fbxManag->GetIOSettings()))
 	{
 		FbxScene* lScene = FbxScene::Create(fbxManag, "myScene");
 		importer->Import(lScene);
@@ -299,6 +458,12 @@ void Mesh::LoadFbx(ZobFilePath zfp)
 		}
 		lScene->Destroy(true);
 	}
+	else
+	{
+		FbxStatus s = importer->GetStatus();
+		DirectZob::LogError(s.GetErrorString());
+	}
+	zfp->UnloadData();
 	DirectZob::RemoveIndent();
 }
 
@@ -378,24 +543,21 @@ const long Mesh::ComputeSize() const
 	return s;
 }
 
-void Mesh::LoadOBJ(ZobFilePath zfp)
+void Mesh::LoadOBJ(ZobFilePath* zfp)
 {
 	static std::string sMtllib = std::string("mtllib");
-	std::string fullPath = zfp.GetFullPath();
+	std::string fullPath = zfp->GetFullPath();
 	DirectZob::LogInfo("Load OBJ %s", fullPath.c_str());
 	DirectZob::AddIndent();
 	std::string::size_type sz;
 	// Open the file.
-	std::ifstream sfile(fullPath, ios::in);
 	std::string line;
 	std::string mtlFile = "";
-	if (!sfile.is_open())
+	zfp->LoadData();
+	std::istringstream stream(std::string(zfp->GetData()));
+	while (getline(stream, line, '\n'))
 	{
-		DirectZob::LogError("Error opening %s", fullPath.c_str());
-		return;
-	}
-	while (getline(sfile, line))
-	{
+		line.erase(std::remove(line.begin(), line.end(), '\r'), line.end());
 		if (line[0] == 'v')
 		{
 			if (line[1] == 't')
@@ -418,13 +580,13 @@ void Mesh::LoadOBJ(ZobFilePath zfp)
 			if (DirectZob::GetInstance() && v.size() == 2)
 			{
 				mtlFile = v[1];
-				ZobFilePath zfpMaterial = ZobFilePath(mtlFile, zfp.GetPath(), mtlFile, zfp.IsAbsolute());
-				DirectZob::GetInstance()->GetMaterialManager()->LoadOBJMaterials(zfpMaterial);
+				ZobFilePath zfpMaterial = ZobFilePath(mtlFile, zfp->GetPath(), mtlFile, zfp->IsAbsolute());
+				DirectZob::GetInstance()->GetMaterialManager()->LoadOBJMaterials(&zfpMaterial);
 			}
 		}
 	}
-	sfile.clear();
-	sfile.seekg(0, ios::beg);
+	stream.clear();
+	stream.seekg(0, ios::beg);
 	if (m_nbNormals > 0)
 	{
 		m_hasNormals = true;
@@ -462,8 +624,9 @@ void Mesh::LoadOBJ(ZobFilePath zfp)
 	size_t curUv = 0;
 	size_t curface = 0;
 	const ZobMaterial* tex = NULL;
-	while (getline(sfile, line))
+	while (getline(stream, line, '\n'))
 	{
+		line.erase(std::remove(line.begin(), line.end(), '\r'), line.end());
 		if (line[0] == 'v')
 		{
 			if (line[1] == 't')
@@ -530,7 +693,7 @@ void Mesh::LoadOBJ(ZobFilePath zfp)
 	memcpy(m_verticesData, m_meshVertices, sizeof(ZobVector3) * m_nbVertices);
 	memcpy(m_verticesNormalsData, m_triangleVerticesNormals, sizeof(ZobVector3) * m_nbNormals);
 	memcpy(m_trianglesNormalsData, m_trianglesNormals, sizeof(ZobVector3) * m_nbFaces);
-
+	zfp->UnloadData();
 	DirectZob::RemoveIndent();
 }
 

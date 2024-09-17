@@ -1,0 +1,157 @@
+<?xml version="1.0" ?>
+<Scene EntitiesCount="14" ZobObjectsCount="8">
+    <Globals>
+        <Var Name="Ambient color" value="255;13;0;26" />
+        <Var Name="Clear color" value="255;0;0;0" />
+        <Var Name="Ambient color intensity" value="0.800" />
+        <Var Name="Fog type" value="None" />
+        <Var Name="Fog color" value="255;63;149;255" />
+        <Var Name="Fog distance" value="20.000" />
+        <Var Name="Fog density" value="2.000" />
+        <Var Name="Render mode" value="Fullframe" />
+        <Var Name="Lighting mode" value="Vertex" />
+        <Var Name="Bits per color" value="4" />
+        <Var Name="Dithering" value="True" />
+        <Var Name="Z near" value="0.110" />
+        <Var Name="Z far" value="1000.000" />
+        <Var Name="Equalize triangle queues" value="True" />
+        <Var Name="Perspective Correction" value="False" />
+        <Var Name="Downscale" value="1" />
+    </Globals>
+    <ZobObject Guid="4002819433">
+        <Var Name="Name" value="skull.obj" />
+        <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+        <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+        <Var Name="Quaternion" value="-0.70697;0.01357;0.01357;0.70697" />
+        <Var Name="Body type" value="Static" />
+        <Var Name="Active" value="True" />
+        <Var Name="Mass" value="1000.000" />
+        <Components>
+            <Component Type="Mesh" Guid="2007196348">
+                <Var Name="Enabled" value="True" />
+                <Var Name="File" value="skull.obj;/;skull.obj;0" />
+                <Var Name="Cull mode" value="Clockwise" />
+                <Var Name="Lighting" value="Phong" />
+                <Var Name="Z-buffer mode" value="Buffered" />
+                <Var Name="Transparent" value="False" />
+            </Component>
+            <Component Type="Rotator" Guid="2007928556">
+                <Var Name="Enabled" value="True" />
+                <Var Name="Rotate X" value="0.000" />
+                <Var Name="Rotate Y" value="0.000" />
+                <Var Name="Rotate Z" value="0.100" />
+            </Component>
+        </Components>
+    </ZobObject>
+    <ZobObject Guid="4002796641">
+        <Var Name="Name" value="lightsCW" />
+        <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+        <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+        <Var Name="Quaternion" value="0.00000;-0.38994;0.00000;0.92083" />
+        <Var Name="Body type" value="Static" />
+        <Var Name="Active" value="True" />
+        <Var Name="Mass" value="1000.000" />
+        <Components>
+            <Component Type="Rotator" Guid="2007471801">
+                <Var Name="Enabled" value="True" />
+                <Var Name="Rotate X" value="0.000" />
+                <Var Name="Rotate Y" value="0.700" />
+                <Var Name="Rotate Z" value="0.000" />
+            </Component>
+        </Components>
+        <ZobObject Guid="4004329309">
+            <Var Name="Name" value="Light_3" />
+            <Var Name="Position" value="0.00000;52.34278;46.44984;1.00000" />
+            <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+            <Var Name="Quaternion" value="0.00000;0.00000;-0.00000;1.00000" />
+            <Var Name="Body type" value="Static" />
+            <Var Name="Active" value="True" />
+            <Var Name="Mass" value="1000.000" />
+            <Var Name="Color" value="255;0;255;0" />
+            <Var Name="Intensity" value="5.000" />
+            <Var Name="Distance" value="60.000" />
+            <Var Name="SpotAngle" value="0.524" />
+            <Var Name="Active" value="True" />
+            <Var Name="Type" value="Point" />
+            <Components />
+        </ZobObject>
+    </ZobObject>
+    <ZobObject Guid="4003393973">
+        <Var Name="Name" value="Fixed_camera_1" />
+        <Var Name="Position" value="0.00000;12.85639;48.24398;1.00000" />
+        <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+        <Var Name="Quaternion" value="0.00000;-1.00000;0.00000;0.00000" />
+        <Var Name="Body type" value="Static" />
+        <Var Name="Active" value="True" />
+        <Var Name="Mass" value="1000.000" />
+        <Var Name="FOV" value="45.000" />
+        <Var Name="Camera controller" value="base" />
+        <Components />
+    </ZobObject>
+    <ZobObject Guid="4002123756">
+        <Var Name="Name" value="lightsCCW" />
+        <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+        <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+        <Var Name="Quaternion" value="0.00000;-0.99452;0.00000;-0.10453" />
+        <Var Name="Body type" value="Static" />
+        <Var Name="Active" value="True" />
+        <Var Name="Mass" value="1000.000" />
+        <Components>
+            <Component Type="Rotator" Guid="2007298932">
+                <Var Name="Enabled" value="True" />
+                <Var Name="Rotate X" value="0.000" />
+                <Var Name="Rotate Y" value="-2.000" />
+                <Var Name="Rotate Z" value="0.000" />
+            </Component>
+        </Components>
+        <ZobObject Guid="4004988639">
+            <Var Name="Name" value="Light_1" />
+            <Var Name="Position" value="-23.29792;10.00019;-86.94950;1.00000" />
+            <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+            <Var Name="Quaternion" value="0.00000;-0.79335;0.00000;-0.60876" />
+            <Var Name="Body type" value="Static" />
+            <Var Name="Active" value="True" />
+            <Var Name="Mass" value="1000.000" />
+            <Var Name="Color" value="255;0;0;255" />
+            <Var Name="Intensity" value="5.000" />
+            <Var Name="Distance" value="100.000" />
+            <Var Name="SpotAngle" value="0.523" />
+            <Var Name="Active" value="True" />
+            <Var Name="Type" value="Point" />
+            <Components />
+        </ZobObject>
+    </ZobObject>
+    <ZobObject Guid="4002483685">
+        <Var Name="Name" value="newObject_42" />
+        <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+        <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+        <Var Name="Quaternion" value="-0.76604;0.00000;0.00000;-0.64278" />
+        <Var Name="Body type" value="Static" />
+        <Var Name="Active" value="True" />
+        <Var Name="Mass" value="1000.000" />
+        <Components>
+            <Component Type="Rotator" Guid="2007250865">
+                <Var Name="Enabled" value="True" />
+                <Var Name="Rotate X" value="1.000" />
+                <Var Name="Rotate Y" value="0.000" />
+                <Var Name="Rotate Z" value="0.000" />
+            </Component>
+        </Components>
+        <ZobObject Guid="4004127641">
+            <Var Name="Name" value="Light_2" />
+            <Var Name="Position" value="85.13596;10.00037;22.81234;1.00000" />
+            <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+            <Var Name="Quaternion" value="-0.00000;0.00000;-0.00000;1.00000" />
+            <Var Name="Body type" value="Static" />
+            <Var Name="Active" value="True" />
+            <Var Name="Mass" value="1000.000" />
+            <Var Name="Color" value="255;255;0;0" />
+            <Var Name="Intensity" value="5.000" />
+            <Var Name="Distance" value="100.000" />
+            <Var Name="SpotAngle" value="0.524" />
+            <Var Name="Active" value="True" />
+            <Var Name="Type" value="Point" />
+            <Components />
+        </ZobObject>
+    </ZobObject>
+</Scene>

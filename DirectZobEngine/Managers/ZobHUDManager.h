@@ -53,13 +53,13 @@ public:
 	void QueueForDrawing(const Camera* camera, Engine* engine);
 	void Print(ZobObject* zobObj, eHudUnit u, float x, float y, float z, float fontSize, const ZobFont* font, const ZobColor* color, const char* fmt, ...);
 	void Print(ZobObject* zobObj, eHudUnit u, float x, float y, float z, float w, float h, const ZobMaterial* mat);
-	const ZobFont* CreateOrGetZobFont(ZobFilePath zfpXml, ZobFilePath zfpTexture);
+	const ZobFont* CreateOrGetZobFont(ZobFilePath* zfpXml, ZobFilePath* zfpTexture);
 	void AddToMenu(ZobComponentText* zct);
 	void RemoveFromMenu(ZobComponentText* zct);
 	void Init();
 private:
 	void DeleteFonts();
-	bool CreateQuad(ZobObject* zobObj, float xMin, float yMin, float xMax, float yMax, HUDElement* elem);
+	bool CreateQuad(ZobObject* zobObj, float xMin, float yMin, float xMax, float yMax, int idx, HUDElement* elem);
 	void PrintInternal(ZobObject* zobObj, eHudUnit u, float x, float y, float z, float fontSize, const ZobFont* font, const ZobColor* color, const char* buf, size_t size);
 	const ZobFont* GetFont(const std::string& fontName) const;
 	Triangle* m_trianglesBuffer;

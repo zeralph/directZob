@@ -26,6 +26,7 @@
                 '.',
                 '../dependencies/reactphysics3d/include',
 				'../dependencies/gainput/include',
+				'../dependencies/physfs/include',
             ],
             'direct_dependent_settings': {
                 'include_dirs': [
@@ -109,7 +110,9 @@
 				'Components/ZobComponentCar.h',
 				'Components/ZobComponentCar.cpp',	
 				'Components/ZobComponentLight.h',
-				'Components/ZobComponentLight.cpp',			
+				'Components/ZobComponentLight.cpp',
+				'Components/ZobComponentRotator.h',
+				'Components/ZobComponentRotator.cpp',				
 				'Components/GraphicComponents/ZobComponentMesh.h',
 				'Components/GraphicComponents/ZobComponentMesh.cpp',
 				'Components/GraphicComponents/ZobComponentSprite.h',
@@ -165,6 +168,7 @@
                                 '../../../dependencies/reactphysics3d/lib/windows/Release/reactphysics3d.lib',
 								'../../../dependencies/optick/lib/windows/OptickCore.lib',
 								'../../../dependencies/gainput/lib/windows/gainput.lib',
+								'../../../dependencies/physfs/lib/windows/physfs.lib',
                             ],
                         },
                         'msvs_settings': {
@@ -265,6 +269,7 @@
                                 # relative to sln
                                 '../../../dependencies/fbxsdk/windows/lib/vs2017/x64/release/libfbxsdk.lib',
                                 '../../../dependencies/gainput/lib/windows/gainput.lib',
+								'../../../dependencies/physfs/lib/windows/physfs.lib',
                                 'user32.lib',
                                 'gdi32.lib',
                             ],
@@ -280,6 +285,8 @@
                                     '../dependencies/fbxsdk/windows/lib/vs2017/x64/release/libfbxsdk.dll',  # copy fbxsdk
 									'../dependencies/optick/lib/windows/OptickCore.dll',  # copy OptickCore.dll
                                     '../dependencies/gainput/lib/windows/gainput.dll',
+									'../dependencies/physfs/lib/windows/physfs.dll',
+									
                                 ],
                             },
                         ],

@@ -1,0 +1,11 @@
+D:\Git\directZob\resources\_fonts/mv_boli_regular_32 - Copie.xml -> _fonts/mv_boli_regular_32 - Copie.xml
+D:\Git\directZob\resources\_fonts/vcr_osd_mono_regular_14.xml -> _fonts/vcr_osd_mono_regular_14.xml
+D:\Git\directZob\resources\_fonts/vcr_osd_mono_regular_14.xml -> _fonts/vcr_osd_mono_regular_14.xml
+D:\Git\directZob\resources\_fonts/arial_regular_32.xml -> _fonts/arial_regular_32.xml
+D:\Git\directZob\resources\_fonts/vcr_osd_mono_regular_14.xml -> _fonts/vcr_osd_mono_regular_14.xml
+D:\Git\directZob\resources\_fonts/mv_boli_regular_32 - Copie.PNG -> _fonts/mv_boli_regular_32 - Copie.PNG
+D:\Git\directZob\resources\_fonts/vcr_osd_mono_regular_14.PNG -> _fonts/vcr_osd_mono_regular_14.PNG
+D:\Git\directZob\resources\_fonts/vcr_osd_mono_regular_14.PNG -> _fonts/vcr_osd_mono_regular_14.PNG
+D:\Git\directZob\resources\_fonts/arial_regular_32.PNG -> _fonts/arial_regular_32.PNG
+D:\Git\directZob\resources\_fonts/vcr_osd_mono_regular_14.PNG -> _fonts/vcr_osd_mono_regular_14.PNG
+D:\Git\directZob\resources\bkg.png -> bkg.png

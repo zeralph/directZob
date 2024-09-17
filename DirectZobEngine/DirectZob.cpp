@@ -61,6 +61,16 @@ void DirectZob::Shutdown()
 
 }
 
+void DirectZob::LoadPack(std::string& path, std::string& file)
+{
+	m_onSceneLoaded = NULL;
+	SceneLoader::LoadPack(path, file);
+	if (m_text == NULL)
+	{
+		m_text = new Text2D(m_engine, m_events);
+	}
+}
+
 void DirectZob::LoadScene(std::string& path, std::string& file, DirectZob::engineCallback OnSceneLoaded, DirectZobType::sceneLoadingCallback OnSceneLoading)
 {
 	m_onSceneLoaded = OnSceneLoaded;

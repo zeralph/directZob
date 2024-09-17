@@ -9,30 +9,29 @@
 #include <iostream>
 #include "tinyxml.h"
 
-ZobFont::ZobFont(ZobFilePath zfpXml, ZobFilePath zfpTexture)
+ZobFont::ZobFont(ZobFilePath* zfpXml, ZobFilePath* zfpTexture)
 {
-	DirectZob::LogInfo("Loading font at %s / %s", zfpTexture.GetFullPath().c_str(), zfpXml.GetFullPath().c_str());
+	DirectZob::LogInfo("Loading font at %s / %s", zfpTexture->GetFullPath().c_str(), zfpXml->GetFullPath().c_str());
 	DirectZob::AddIndent();
 	m_loaded = false;
 	m_color = ZobColor::White;
-	m_name = "";
+	m_name = zfpXml->GetName();
 	m_charMaterial = NULL;
 	m_glyphes.resize(0);
 	m_height = 0;
 	TiXmlDocument doc("Font");
 	doc.ClearError();
-	std::string xmlFile = zfpXml.GetFullPath();
-	doc.LoadFile(xmlFile.c_str());
+	zfpXml->LoadData();
+	doc.Parse((char*)zfpXml->GetData());
 	if (doc.Error())
 	{
-		DirectZob::LogError("[ZobFont] Error loading %s : %s", xmlFile.c_str(), doc.ErrorDesc());
+		DirectZob::LogError("[ZobFont] Error loading %s : %s", zfpXml->GetName().c_str(), doc.ErrorDesc());
 	}
 	else
 	{
 		TiXmlElement* font = doc.FirstChildElement("Font");
 		if (font)
 		{
-			m_name = GetFontNameFromXml(zfpXml);
 			DirectZob::LogInfo("Font name : %s", m_name.c_str());
 			std::vector<std::string> v;
 			std::string s;
@@ -78,6 +77,7 @@ ZobFont::ZobFont(ZobFilePath zfpXml, ZobFilePath zfpTexture)
 			m_loaded = true;
 		}
 	}
+	zfpXml->UnloadData();
 	DirectZob::RemoveIndent();
 	DirectZob::LogInfo("Font %s loaded", m_name.c_str());
 }
@@ -85,25 +85,6 @@ ZobFont::ZobFont(ZobFilePath zfpXml, ZobFilePath zfpTexture)
 ZobFont::~ZobFont()
 {
 	m_glyphes.clear();
-}
-
-std::string ZobFont::GetFontNameFromXml(ZobFilePath zfpXml)
-{
-	TiXmlDocument doc("Font");
-	doc.ClearError();
-	std::string xmlFile = zfpXml.GetFullPath();
-	doc.LoadFile(xmlFile.c_str());
-	if (!doc.Error())
-	{
-		TiXmlElement* font = doc.FirstChildElement("Font");
-		if (font)
-		{
-			std::stringstream ss;
-			ss << font->Attribute("family") << "_" << font->Attribute("style") << "_" << font->Attribute("size");
-			return ss.str();
-		}
-	}
-	return "";
 }
 
 const ZobFont::FontGlyphe* ZobFont::GetChar(char c) const

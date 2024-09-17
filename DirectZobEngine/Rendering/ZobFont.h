@@ -29,13 +29,12 @@ public:
 		float uv_max_y;
 	};
 
-	ZobFont(ZobFilePath zfpXml, ZobFilePath zfpTexture);
+	ZobFont(ZobFilePath* zfpXml, ZobFilePath* zfpTexture);
 	~ZobFont();
 	const FontGlyphe*	GetChar(char c) const;
 	inline float		GetHeight() const { return m_height; }
 	inline const char*	GetName() const { return m_name.c_str(); }
 	inline const bool   IsLoaded() const { return m_loaded; }
-	static std::string  GetFontNameFromXml(ZobFilePath zfpXml);
 private:
 	void				SplitEntry(const std::string* s, std::vector<std::string>* v, const char delim) const;
 	ZobColor m_color;

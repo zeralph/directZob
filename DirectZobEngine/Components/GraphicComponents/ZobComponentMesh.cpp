@@ -134,7 +134,7 @@ void ZobComponentMesh::EditorUpdate()
 
 bool ZobComponentMesh::LoadMeshInternal()
 {
-	m_mesh = DirectZob::GetInstance()->GetMeshManager()->LoadMesh(m_meshPath);
+	m_mesh = DirectZob::GetInstance()->GetMeshManager()->LoadMesh(&m_meshPath);
 	if (m_mesh)
 	{
 		m_meshNbTriangles = m_mesh->GetNbTriangles();

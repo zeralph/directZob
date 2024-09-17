@@ -4,6 +4,7 @@
 #include "ZobComponentCar.h"
 #include "HudComponents/ZobComponentText.h"
 #include "HudComponents/ZobComponentImage.h"
+#include "ZobComponentRotator.h"
 #include "GraphicComponents/ZobComponentMesh.h"
 #include "GraphicComponents/ZobComponentSprite.h"
 #include "GraphicComponents/ZobComponentSkybox.h"
@@ -27,7 +28,8 @@ const char* ZobComponentFactory::eComponentTypeStr[__eComponent_MAX__] =
 	"Mesh",
 	"Sprite",
 	"Light",
-	"Skybox"
+	"Skybox",
+	"Rotator"
 };
 
 ZobComponent* ZobComponentFactory::CreateComponentInternal(ZobObject* zobObject, const char* ComponentName, bool bEditorZobComponent)
@@ -70,6 +72,10 @@ ZobComponent* ZobComponentFactory::CreateComponentInternal(ZobObject* zobObject,
 			case eComponent_hudImage:
 				//zb = NULL;
 				zb = new ZobComponentImage(zobObject, bEditorZobComponent);
+				break;
+			case eComponent_rotator:
+				//zb = NULL;
+				zb = new ZobComponentRotator(zobObject);
 				break;
 			case eComponent_mesh:
 				zb = new ZobComponentMesh(zobObject, bEditorZobComponent);

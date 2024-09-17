@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Interop;
+using DirectZobEditor.Packer;
 using Newtonsoft.Json;
 
 namespace DirectZobEditor
@@ -59,6 +60,7 @@ namespace DirectZobEditor
 
         private ZobEntityViewerForm m_entityForm;
         private MaterialsForm.ZobMaterialsForm m_materialsForm;
+        private ZobPackerForm m_packerForm;
         private ZobSceneLoadForm m_loadingForm;
 
         private Thread m_engineThread;
@@ -210,6 +212,22 @@ namespace DirectZobEditor
             }
         }
 
+        public void logInfo(string text)
+        {
+            AppendText(textLog, text + "\n", Color.Blue);
+            textLog.ScrollToCaret();
+        }
+        public void logWarning(string text)
+        {
+            AppendText(textLog, text + "\n", Color.Orange);
+            textLog.ScrollToCaret();
+        }
+        public void logError(string text)
+        {
+            AppendText(textLog, text + "\n", Color.Red);
+            textLog.ScrollToCaret();
+            MessageBox.Show(text, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
         private void UpdateEventsLog()
         {
             int l = m_events.Count();
@@ -775,7 +793,7 @@ namespace DirectZobEditor
             JsonSerializer serializer = new JsonSerializer();
             using (StreamWriter file = File.CreateText(@"../settings.json"))
             {
-                serializer.Formatting = Formatting.Indented;
+                serializer.Formatting = Newtonsoft.Json.Formatting.Indented;
                 serializer.Serialize(file, s);
             }
         }
@@ -913,6 +931,20 @@ namespace DirectZobEditor
         private void toolStripComboBox1_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void packLevelToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (m_packerForm == null)
+            {
+                m_packerForm = new ZobPackerForm(this, m_directZobWrapper);
+                m_packerForm.StartPosition = FormStartPosition.CenterParent;
+                Point p = new Point();
+                p.X = this.Location.X + this.Width / 2 - m_packerForm.Width / 2;
+                p.Y = this.Location.Y + this.Height / 2 - m_packerForm.Height / 2;
+                m_packerForm.Show();
+                m_packerForm.Location = p;
+            }
         }
     }
 

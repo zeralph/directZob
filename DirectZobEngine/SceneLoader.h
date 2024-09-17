@@ -15,6 +15,7 @@ class SceneLoader
 {
 public:
 	
+	static void							LoadPack(std::string& path, std::string& file);
 	static void							SetWorkSpace(std::string path) { m_path = path; }
 	static void							LoadScene(std::string &path, std::string &file, DirectZobType::sceneLoadingCallback cb);
 	static void							SaveScene(std::string &path, std::string &file);
@@ -23,12 +24,16 @@ public:
 	static void							NewScene(std::string workspace);
 	static void							UnloadScene();
 	static void							Update();
-	static const std::string&			GetResourcePath() { return m_path; };
+	static const std::string&			GetResourcePath();
 	static void							LoadZobObject(std::string& path, std::string& file);
 	static void							LoadZobObject(std::string& fullPath, ZobObject* parent = NULL);
 	static const int					GetNbZobObjectsInScene() { return m_nbZobObjectLoaded; }
+	static const bool					LoadFromArchive() { return m_loadFromArchive; }
 private:
-	static void							LoadSceneInternal();
+	static void							ResetEngine();
+	static void							LoadSceneInternalFromArchive();
+	static void							LoadSceneInternalFromFiles();
+	static void							ParseXml(TiXmlDocument* doc);
 	static void							LoadMesh(TiXmlElement* node);
 	static void							CleanPath(std::string &path);
 	static void							LoadZobObject(TiXmlElement* node, ZobObject* parent, const std::string* factoryPath);
@@ -40,5 +45,6 @@ private:
 	static std::string					m_nextSceneName;
 	static bool							m_loadNextScene;
 	static int							m_nbZobObjectLoaded;
+	static bool							m_loadFromArchive;
 	static DirectZobType::sceneLoadingCallback			m_onSceneLoading;
 };

@@ -1,9 +1,13 @@
 #include "ZobFilePath.h"
+#include "../DirectZob.h"
 #include "../SceneLoader.h"
+
 
 ZobFilePath::ZobFilePath()
 {
 	m_fileType = eFileType_all;
+	m_buf = NULL;
+	m_bufLen = 0;
 	Reset();
 }
 
@@ -12,6 +16,9 @@ ZobFilePath::ZobFilePath(std::string name, std::string path, std::string file, b
 	m_name = name;
 	m_path = path;
 	m_file = file;
+	m_buf = NULL;
+	m_bufLen = 0;
+	m_bufLen = 0;
 	m_bAbsolute = bAbsolute;
 	if (m_path.length() && m_path[m_path.length()- 1] != '/')
 	{
@@ -21,7 +28,7 @@ ZobFilePath::ZobFilePath(std::string name, std::string path, std::string file, b
 
 ZobFilePath::~ZobFilePath()
 {
-
+	Reset();
 }
 
 bool ZobFilePath::IsDefined()
@@ -31,6 +38,7 @@ bool ZobFilePath::IsDefined()
 
 void ZobFilePath::Reset()
 {
+	UnloadData();
 	m_name = "";
 	m_path = ""; 
 	m_file = "";
@@ -90,6 +98,79 @@ std::string ZobFilePath::Serialize()
 	}
 	s = s.append(";").append(m_path).append(";").append(m_file).append(";").append(m_bAbsolute?"1":"0");
 	return s;
+}
+
+void ZobFilePath::LoadData()
+{
+	if (m_buf != NULL)
+	{
+		return;
+	}
+	if (SceneLoader::LoadFromArchive())
+	{
+		std::string fp = (m_path + m_file);
+		if (PHYSFS_exists(fp.c_str()))
+		{
+			PHYSFS_file* m_phyFile = PHYSFS_openRead(fp.c_str());
+			if (m_phyFile)
+			{
+				m_bufLen = PHYSFS_fileLength(m_phyFile);
+				m_buf = (char*)malloc(sizeof(char) * (m_bufLen + 1));
+				int length_read = PHYSFS_read(m_phyFile, m_buf, sizeof(char), PHYSFS_fileLength(m_phyFile));
+				m_buf[m_bufLen] = '\0';
+				PHYSFS_close(m_phyFile);
+			}
+			else
+			{
+				DirectZob::LogError("cannot load %s from archive", fp.c_str());
+			}
+		}
+		else
+		{
+			DirectZob::LogError("cannot find %s in archive", fp.c_str());
+		}
+	}
+	else
+	{
+		std::string f = GetFullPath();
+		/*
+		FILE* fp;
+		fp = fopen(f.c_str(), "r");
+		fseek(fp, 0, SEEK_END);
+		m_bufLen = ftell(fp);
+		rewind(fp);
+		m_buf = (char*)malloc(sizeof(char) * (m_bufLen + 1));
+		fread(m_buf, sizeof(unsigned char), m_bufLen, fp);
+		m_buf[m_bufLen] = '\0';
+		*/
+		std::ifstream infile;
+		infile.open(f, std::ios::in | std::ios::binary);
+		if (infile.good())
+		{
+			infile.seekg(0, std::ios::end);
+			std::streamsize size = infile.tellg();
+			infile.seekg(0, std::ios::beg);
+			m_buf = (char*)malloc(sizeof(char) * (size + 1));
+			infile.read(m_buf, size);
+			m_buf[size] = '\0';
+			m_bufLen = size;
+		}
+		else
+		{
+			m_bufLen = 0;
+			m_buf = NULL;
+		}
+	}
+}
+
+void ZobFilePath::UnloadData()
+{
+	if (m_buf)
+	{
+		free(m_buf);
+		m_buf = NULL;
+		m_bufLen = 0;
+	}
 }
 
 void ZobFilePath::Unserialize(std::string s)

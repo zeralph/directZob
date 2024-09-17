@@ -12,9 +12,9 @@ public:
 	MeshManager();
 	~MeshManager();
 
-	Mesh* LoadMesh(ZobFilePath zfp);
+	Mesh* LoadMesh(ZobFilePath* zfp);
 	Mesh* GetMesh(const std::string& name) const;
-	Mesh* GetOrLoadMesh(ZobFilePath zp);
+	Mesh* GetOrLoadMesh(ZobFilePath* zp);
 	const int GetNbMeshes() const { return (int)m_meshes.size(); }
 	std::string GetMeshList();
 	const Mesh* GetMesh(const int i) const;

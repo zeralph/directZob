@@ -106,6 +106,8 @@
             this.tabEngine = new System.Windows.Forms.TabPage();
             this.panel2 = new System.Windows.Forms.Panel();
             this.EngineControlsFlowLayout = new System.Windows.Forms.FlowLayoutPanel();
+            this.publishToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.packLevelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bottomStatusBar.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FirstPanelSplitter)).BeginInit();
@@ -171,7 +173,8 @@
             this.fileToolStripMenuItem,
             this.assetsToolStripMenuItem,
             this.windowToolStripMenuItem,
-            this.setupToolStripMenuItem});
+            this.setupToolStripMenuItem,
+            this.publishToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Padding = new System.Windows.Forms.Padding(3, 1, 0, 1);
@@ -965,6 +968,21 @@
             this.EngineControlsFlowLayout.TabIndex = 0;
             this.EngineControlsFlowLayout.WrapContents = false;
             // 
+            // publishToolStripMenuItem
+            // 
+            this.publishToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.packLevelToolStripMenuItem});
+            this.publishToolStripMenuItem.Name = "publishToolStripMenuItem";
+            this.publishToolStripMenuItem.Size = new System.Drawing.Size(58, 22);
+            this.publishToolStripMenuItem.Text = "Publish";
+            // 
+            // packLevelToolStripMenuItem
+            // 
+            this.packLevelToolStripMenuItem.Name = "packLevelToolStripMenuItem";
+            this.packLevelToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.packLevelToolStripMenuItem.Text = "Pack level";
+            this.packLevelToolStripMenuItem.Click += new System.EventHandler(this.packLevelToolStripMenuItem_Click);
+            // 
             // DirectZobEditorForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1092,6 +1110,8 @@
         private System.Windows.Forms.ToolStripButton toolStripButton2;
         private System.Windows.Forms.ToolStripButton toolStripButton3;
         private System.Windows.Forms.ToolStripMenuItem entitiesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem publishToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem packLevelToolStripMenuItem;
     }
 }
 

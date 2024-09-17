@@ -182,28 +182,38 @@ int main(int argc, char* argv[])
 		i++;
 	}
 
-	std::ifstream f(scenePath.c_str());
-	if (!f.good())
+	m_path = "";
+	m_file = "";
+	if (scenePath.length() > 0)
 	{
-		std::cout << "Cannot open " << scenePath << " : File not found or not accessible."<< std::endl;
-		printf("Cannot open %s : File not found or not accessible.\n", scenePath.c_str());
-		return 0;
-	}
+		std::ifstream f(scenePath.c_str());
+		if (!f.good())
+		{
+			std::cout << "Cannot open " << scenePath << " : File not found or not accessible." << std::endl;
+			printf("Cannot open %s : File not found or not accessible.\n", scenePath.c_str());
+			return 0;
+		}
 #ifdef WINDOWS
-	std::size_t found = scenePath.rfind('\\');
+		std::size_t found = scenePath.rfind('\\');
 #elif LINUX
-	std::size_t found = scenePath.rfind('/');
+		std::size_t found = scenePath.rfind('/');
 #elif MACOS
-	std::size_t found = scenePath.rfind('/');
+		std::size_t found = scenePath.rfind('/');
 #endif	
-	if (found == std::string::npos)
-	{
-		std::cerr << "cannot parse path to file " << scenePath << std::endl;
-		printf("cannot parse path to file %s\n", scenePath.c_str());
-		return 0;
+		if (found == std::string::npos)
+		{
+			std::cerr << "cannot parse path to file " << scenePath << std::endl;
+			printf("cannot parse path to file %s\n", scenePath.c_str());
+			return 0;
+		}
+		m_path = scenePath.substr(0, found + 1);
+		m_file = scenePath.substr(found + 1, scenePath.length() - found - 1);
 	}
-	m_path = scenePath.substr(0,found+1);
-	m_file = scenePath.substr(found + 1, scenePath.length() - found - 1);
+	else
+	{
+		m_path = "D:\\";
+		m_file = "0.dzp";
+	}
 	
 	m_mouseLastX = -1;
 	m_mouseLastY = -1;
@@ -220,7 +230,15 @@ int main(int argc, char* argv[])
 	mfb_set_mouse_scroll_callback(m_window, mouse_scroll);
 	*/
 	m_directZob.Init(m_window, width, height, false);
-	m_directZob.LoadScene(m_path, m_file, NULL, NULL);
+
+	if (m_file.substr(m_file.length() - 3, 3) == "dzp")
+	{
+		m_directZob.LoadPack(m_path, m_file);
+	}
+	else
+	{
+		m_directZob.LoadScene(m_path, m_file, NULL, NULL);
+	}
 
 	float rot = 0.0f;
 	float to = 0.5f;
@@ -244,7 +262,7 @@ int main(int argc, char* argv[])
 		m_directZob.GetEngine()->ShowBBoxes(false);
 		m_directZob.GetEngine()->ShowGrid(false);
 		m_directZob.GetEngine()->SetRenderMode(eRenderMode::eRenderMode_fullframe);
-		m_directZob.GetEngine()->DrawGizmos(true);
+		m_directZob.GetEngine()->DrawGizmos(false);
 	}
 
 	//m_directZob.GetEngine()->GetBufferData()->zFar = 70.0f;

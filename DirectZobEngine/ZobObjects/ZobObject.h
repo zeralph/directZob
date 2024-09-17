@@ -13,6 +13,7 @@
 #include "../Components/GraphicComponents/ZobComponentSkybox.h"
 #include "../Components/HudComponents/ZobComponentText.h"
 #include "../Components/HudComponents/ZobComponentImage.h"
+#include "../Components/ZobComponentRotator.h"
 
 class Engine;
 class TiXmlNode;

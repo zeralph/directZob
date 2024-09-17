@@ -98,9 +98,9 @@ void ZobComponentText::LoadFontInternal()
 {
 	if (m_fontXml.IsDefined() && m_fontImage.IsDefined())
 	{
-		if (!m_font || ZobFont::GetFontNameFromXml(m_fontXml) != m_font->GetName())
+		if (!m_font || m_fontXml.GetName() != m_font->GetName())
 		{
-			m_font = DirectZob::GetInstance()->GetHudManager()->CreateOrGetZobFont(m_fontXml, m_fontImage);
+			m_font = DirectZob::GetInstance()->GetHudManager()->CreateOrGetZobFont(&m_fontXml, &m_fontImage);
 		}
 	}
 	else if (m_font)

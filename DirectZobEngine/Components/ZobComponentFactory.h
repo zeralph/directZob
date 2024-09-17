@@ -21,6 +21,7 @@ public:
 		eComponent_sprite,
 		eComponent_light,
 		eComponent_skybox,
+		eComponent_rotator,
 		__eComponent_MAX__,
 	};
 	static const char* eComponentTypeStr[__eComponent_MAX__];

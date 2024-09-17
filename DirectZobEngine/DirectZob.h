@@ -74,6 +74,7 @@ public :
 	inline bool				IsPhysicPlaying() const { return m_physicStarted; }
 	void					Init(mfb_window* window, int width, int height, bool bEditorMode);
 	void					LoadScene(std::string& path, std::string& file, DirectZob::engineCallback OnSceneLoaded, DirectZobType::sceneLoadingCallback OnSceneLoading);
+	void					LoadPack(std::string& path, std::string& file);
 	void					LoadZobObject(std::string& path, std::string& file);
 	void					Unload();
 	void					SaveScene(std::string& path, std::string& file);
