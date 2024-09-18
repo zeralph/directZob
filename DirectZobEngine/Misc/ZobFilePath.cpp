@@ -1,7 +1,8 @@
 #include "ZobFilePath.h"
 #include "../DirectZob.h"
 #include "../SceneLoader.h"
-
+#include <filesystem>
+#include <iostream>
 
 ZobFilePath::ZobFilePath()
 {
@@ -108,7 +109,11 @@ void ZobFilePath::LoadData()
 	}
 	if (SceneLoader::LoadFromArchive())
 	{
-		std::string fp = (m_path + m_file);
+		std::string fp = m_path + m_file;
+		std::filesystem::path pp = std::filesystem::path(fp.c_str());
+		std::filesystem::path p = std::filesystem::weakly_canonical(pp);
+		fp = p.u8string();
+		std::replace(fp.begin(), fp.end(), '\\', '/');
 		if (PHYSFS_exists(fp.c_str()))
 		{
 			PHYSFS_file* m_phyFile = PHYSFS_openRead(fp.c_str());

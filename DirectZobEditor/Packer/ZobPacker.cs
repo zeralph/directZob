@@ -150,19 +150,29 @@ namespace DirectZobEditor.Packer
                     string mtl = Path.Combine(Path.GetDirectoryName(zfp.absolutePath), mtlName);
                     if (File.Exists(mtl))
                     {
-                        Copy(mtl, Path.Combine(outFolder, mtlName), mtlName);
-                        string[] f = File.ReadAllText(mtl).Replace("\r", string.Empty).Replace("\\\\", "/").Replace("\\", "/").Split('\n');
-                        foreach(string s in f)
+                        //copy the file too the tmp folder
+                        string dst = Path.Combine(outFolder, mtlName);
+                        Copy(mtl, dst, mtlName);
+                        string[] f = File.ReadAllText(dst).Split('\n'); ;
+                        for(int i=0; i<f.Length; i++)
                         {
-                           if(s.StartsWith("map_Kd"))
-                            {  
-                                string texFile = s.Split(' ')[1];
+                           if (f[i].StartsWith("map_Kd"))
+                           {  
+                                string texFile = f[i].Split(' ')[1];
                                 //texFile = texFile.Replace("\\", "/");
                                 string imgPathIn = Path.Combine(Path.GetDirectoryName(mtl), texFile);
                                 string imgPathOut = Path.Combine(outFolder, texFile);
                                 Copy(imgPathIn, imgPathOut, texFile);
-                            }
+                                //set absolute path
+                                //Uri texPath = new Uri(Path.Combine(Path.GetDirectoryName(mtl), texFile));
+                                //Uri absPath = new Uri(p+"/");
+                                //string finalPath = absPath.MakeRelativeUri(texPath).ToString();
+                                //absolutPath = Path.Combine(p, texFile);
+                                texFile = texFile.Replace("\r", string.Empty).Replace("\\\\", "/").Replace("\\", "/");
+                                f[i] = "map_Kd " + texFile;
+                           }
                         }
+                        File.WriteAllText(dst, string.Join("\n", f));
                     }
                 }
                 Copy(zfp.absolutePath, outPath, zfp.relativePath);

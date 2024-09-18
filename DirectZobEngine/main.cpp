@@ -100,15 +100,6 @@ int main(int argc, char* argv[])
 	std::string scenePath = "";
 	int width = 640;
 	int height = 480;
-	if (argc < 2) {
-		std::cerr << "Usage: " << argv[0] << " --scene <scene to load>" << std::endl;
-		std::cerr << "Additional options : " << std::endl;
-		std::cerr << "\t--bench  : run a benchmark" << std::endl;
-		std::cerr << "\t--width  : width" << std::endl;
-		std::cerr << "\t--height : height" << std::endl;
-		printf("enter --scene argument");
-		return 0;
-	}
 	int i = 0;
 	while( i < argc)
 	{
@@ -130,8 +121,15 @@ int main(int argc, char* argv[])
 		{
 			btest = true;
 		}
-		else if(std::string(argv[i]) == "--bench")
+		else if(std::string(argv[i]) == "--help")
 		{
+			std::cerr << "Usage: " << argv[0] << " --scene <scene to load>" << std::endl;
+			std::cerr << "Additional options : " << std::endl;
+			std::cerr << "\t--bench  : run a benchmark" << std::endl;
+			std::cerr << "\t--width  : width" << std::endl;
+			std::cerr << "\t--height : height" << std::endl;
+			printf("enter --scene argument");
+			return 0;
 		}
 		else if (std::string(argv[i]) == "--width")
 		{
