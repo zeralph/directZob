@@ -47,7 +47,7 @@ void SceneLoader::LoadPack(std::string &path, std::string &file)
 	m_loadFromArchive = true;
 	if (!res)
 	{
-		DirectZob::LogError("cannot load archive %s", fullPath);
+		DirectZob::LogError("cannot load archive %s", fullPath.c_str());
 		exit(-1);
 	}
 	else
@@ -67,7 +67,7 @@ void SceneLoader::LoadPack(std::string &path, std::string &file)
 		}
 		else
 		{
-			DirectZob::LogError("Entrypoint '0' not found in %s", fullPath);
+			DirectZob::LogError("Entrypoint '0' not found in %s", fullPath.c_str());
 			exit(-1);
 		}
 	}
@@ -246,7 +246,7 @@ void SceneLoader::LoadSceneInternalFromArchive()
 	}
 	else
 	{
-		DirectZob::LogError("cannot find entryPoint %s", m_file);
+		DirectZob::LogError("cannot find entryPoint %s", m_file.c_str());
 		exit(-1);
 	}
 }

@@ -23,7 +23,8 @@
                     'xcode_settings': {
                         'CC': 'clang++',
                         'MACOSX_DEPLOYMENT_TARGET': '11.1',
-                        'CLANG_CXX_LANGUAGE_STANDARD': 'c++11',
+                        'CLANG_CXX_LANGUAGE_STANDARD': 'c++17',
+                        'GCC_ENABLE_CPP_RTTI': 'YES',
                         'CLANG_CXX_LIBRARY': 'libc++',
                         'ARCHS': ['x86_64'],
                     },
@@ -63,6 +64,9 @@
                                 'GCC_OPTIMIZATION_LEVEL': '0',
                                 'GCC_FAST_MATH': 'YES',
                                 'CLANG_X86_VECTOR_INSTRUCTIONS': 'avx2',
+                                'CLANG_CXX_LANGUAGE_STANDARD': 'c++17',
+                                'GCC_ENABLE_CPP_RTTI': 'YES',
+                                'ARCHS': ['x86_64'],
                             },
                             'cflags': [
                                 '-Wno-pragma-pack',

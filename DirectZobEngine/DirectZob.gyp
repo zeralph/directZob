@@ -185,6 +185,7 @@
                             '../dependencies/fbxsdk/macos/include',
                             '../dependencies/gainput/include',
                             '../dependencies/reactphysics3d/include',
+                            '../dependencies/physfs/include',
                         ],
                         'direct_dependent_settings': {
                             'include_dirs': [
@@ -206,6 +207,7 @@
                                 '../../../dependencies/reactphysics3d/lib/macos/libreactphysics3d.a',
                                 '../../../dependencies/gainput/lib/macos/libgainputstatic.a',
                                 '../../../dependencies/optick/lib/macos/libOptickCore.dylib',
+                                '../../../dependencies/physfs/lib/macos/libphysfs.a',
                             ],
                         },
                     },
@@ -307,6 +309,7 @@
                                 # relative to xcode project
                                 '../../../dependencies/fbxsdk/macos/lib/clang/release/libfbxsdk.a',
 				                '../../../dependencies/gainput/lib/macos/libgainputstatic.a',
+                                '../../../dependencies/physfs/lib/macos/libphysfs.a',
                                 '$(SDKROOT)/System/Library/Frameworks/Cocoa.framework',
                                 '$(SDKROOT)/System/Library/Frameworks/Metal.framework',
                                 '$(SDKROOT)/System/Library/Frameworks/GameKit.framework',
