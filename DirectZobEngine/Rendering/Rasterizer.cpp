@@ -5,6 +5,7 @@
 #include "../Managers/CameraManager.h"
 #include "Texture.h"
 #include "../ZobObjects/Camera.h"
+#include <cstring>
 #undef None
 #include "../../dependencies/optick/include/optick.h"
 #include "../Misc/ZobGeometryHelper.h"

@@ -88,7 +88,8 @@ ZobComponent* ZobComponentFactory::CreateComponentInternal(ZobObject* zobObject,
 				break;
 			case eComponent_none:
 				zb = NULL;
-				assert(1==0, "component type '%s' of object '%s' not found", ComponentName, zobObject->GetName());
+				//assert(1==0, "component type '%s' of object '%s' not found", ComponentName, zobObject->GetName());
+				assert(false);
 				break;
 			default:
 				assert(false);

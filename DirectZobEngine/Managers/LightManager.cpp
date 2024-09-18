@@ -41,7 +41,8 @@ void LightManager::ReInitGlobalSettings()
 	m_fogDensity = 2.0f;
 	m_fogType = eFogType::eFogType_NoFog;
 	m_lightIndex = 1;
-	Light* editorLight = new Light(std::string("editorLight"), Light::eLightType_directional, ZobColor::White, 1.0f, 1000.0f, DirectZob::GetInstance()->GetZobObjectManager()->GetRootObject(), true);
+	std::string n = std::string("editorLight");
+	Light* editorLight = new Light(n, Light::eLightType_directional, ZobColor::White, 1.0f, 1000.0f, DirectZob::GetInstance()->GetZobObjectManager()->GetRootObject(), true);
 	m_editorLight.push_back(editorLight);
 }
 

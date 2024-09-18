@@ -31,13 +31,14 @@ bool ZobGeometryHelper::RayTriangleIntersect(const Ray* r, const Triangle* t, fl
 	}
 
 	// compute d parameter using equation 2
-	float d = ZobVector3::Dot(&-N, t->va);
+	ZobVector3 minusN = -N;
+	float d = ZobVector3::Dot(&minusN, t->va);
 
 	// compute t (equation 3)
 	z = -(ZobVector3::Dot(&N, &r->p) + d) / NdotRayDirection;
 
 	// check if the triangle is behind the ray
-	if (t < 0)
+	//if (t. < 0)
 	{
 		return false; // the triangle is behind
 	}

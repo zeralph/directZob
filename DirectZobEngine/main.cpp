@@ -209,7 +209,7 @@ int main(int argc, char* argv[])
 	}
 	else
 	{
-		m_path = "D:\\";
+		m_path = "";
 		m_file = "0.dzp";
 	}
 	

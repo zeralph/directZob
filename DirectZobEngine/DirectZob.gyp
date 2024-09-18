@@ -217,6 +217,7 @@
                             '../dependencies/fbxsdk/linux/include',
                             '../dependencies/gainput/include',
                             '../dependencies/reactphysics3d/include',
+                            '../dependencies/physfs/include',
                         ],
                         'defines': [
                             'LINUX',
@@ -234,6 +235,7 @@
                                 '../../../dependencies/reactphysics3d/lib/linux/libreactphysics3d.a',
                                 '../../../dependencies/gainput/lib/linux/libgainputstatic.a',
                                 '../../../dependencies/optick/lib/linux/libOptickCore.so',
+                                '../../../dependencies/physfs/lib/linux/libphysfs.a',
                                 '-lpthread',
                                 '-lxml2',
                                 '-lX11',
