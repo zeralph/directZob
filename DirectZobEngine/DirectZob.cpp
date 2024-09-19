@@ -73,6 +73,7 @@ void DirectZob::LoadPack(std::string& path, std::string& file)
 
 void DirectZob::LoadScene(std::string& path, std::string& file, DirectZob::engineCallback OnSceneLoaded, DirectZobType::sceneLoadingCallback OnSceneLoading)
 {
+	m_physicStarted = false;
 	m_onSceneLoaded = OnSceneLoaded;
 	SceneLoader::LoadScene(path, file, OnSceneLoading);
 	if (m_text == NULL)
@@ -334,7 +335,13 @@ int DirectZob::RunAFrame(DirectZob::engineCallback OnSceneUpdated /*=NULL*/, Dir
 			m_engine->SetWobbleFactor(wobbleFactor[sTargetWobbleFactorIdx]);
 			LogWarning("Wobble factor set to %f", wobbleFactor[sTargetWobbleFactorIdx]);
 		}
-
+		//TODO : move me elsewhere
+		if (m_inputManager->GetMap()->GetBoolIsNew(ZobInputManager::Select))
+		{
+			std::string sceneName = "_menu.dzs";
+			std::string scenePath = DirectZob::GetInstance()->GetResourcePath();
+			DirectZob::GetInstance()->LoadScene(scenePath, sceneName, NULL, NULL);
+		}
 		if (m_engine->DrawGizmos())
 		{
 			m_engine->PrintRasterizersInfos();

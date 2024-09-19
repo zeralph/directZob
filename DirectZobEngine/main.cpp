@@ -99,7 +99,7 @@ int main(int argc, char* argv[])
 	bool btest = false;
 	std::string scenePath = "";
 	int width = 640;
-	int height = 480;
+	int height = 360;
 	int i = 0;
 	while( i < argc)
 	{

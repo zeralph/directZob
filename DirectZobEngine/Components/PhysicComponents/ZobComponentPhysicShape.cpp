@@ -64,7 +64,7 @@ void ZobComponentPhysicShape::PostUpdate()
 void ZobComponentPhysicShape::OnVariablesChanged(zobId id)
 {
 	ZobComponentPhysicShape* zc = ZobEntity::GetEntity< ZobComponentPhysicShape>(id);
-	if(zc)
+	if(zc && zc->m_isInit)
 	{
 		assert(zc->m_collider);
 		//zc->m_collider->setCollisionCategoryBits(0x0001);
@@ -107,7 +107,6 @@ void ZobComponentPhysicShape::Init(DirectZobType::sceneLoadingCallback cb)
 
 	RigidBody* r = (RigidBody*)m_collider->getBody();
 	r->setMass(1);
-
 	m_isInit = true;
 }
 

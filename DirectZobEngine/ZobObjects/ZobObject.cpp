@@ -133,9 +133,9 @@ void ZobObject::InitVariablesExposer()
 	m_varExposer->StartGroup("Physic");
 	ZobPhysicComponent::eRigidBodyType bt[3] = { ZobPhysicComponent::eRigidBody_static, ZobPhysicComponent::eRigidBody_kinematic, ZobPhysicComponent::eRigidBody_dynamic };
 	const char* btStr[3] = { "Static", "Kinematic", "Dynamic" };
-	m_varExposer->WrapEnum<ZobPhysicComponent::eRigidBodyType>("Body type", &m_physicComponent->m_bodyType, 3, bt, btStr, &ZobPhysicComponent::UpdateProperties, false, false, true);
-	m_varExposer->WrapVariable<bool>("Active", &m_physicComponent->m_active, &ZobPhysicComponent::UpdateProperties, false, true);
-	m_varExposer->WrapVariable<float>("Mass", &m_physicComponent->m_mass, &ZobPhysicComponent::UpdateProperties, false, true);
+	m_varExposer->WrapEnum<ZobPhysicComponent::eRigidBodyType>("Body type", GetPhysicComponentNoConst()->GetBodyTypeAddress(), 3, bt, btStr, &ZobPhysicComponent::UpdateProperties, false, false, true);
+	m_varExposer->WrapVariable<bool>("Active", GetPhysicComponentNoConst()->GetActiveAddress(), &ZobPhysicComponent::UpdateProperties, false, true);
+	m_varExposer->WrapVariable<float>("Mass", GetPhysicComponentNoConst()->GetMassAddress(), &ZobPhysicComponent::UpdateProperties, false, true);
 	m_varExposer->EndGroup();
 }
 
@@ -228,7 +228,12 @@ void ZobObject::Init(DirectZobType::sceneLoadingCallback cb)
 	{
 		cb(0, 0, m_name);
 	}
-	m_varExposer->Load();
+	if (m_name == "BodyTypeBall")
+	{
+		int uu = 0; 
+		uu++;
+	}
+	m_varExposer->Load(true);
 	m_physicComponent->Init();
 	for (int i = 0; i < m_Components.size(); i++)
 	{
@@ -836,6 +841,7 @@ void ZobObject::RestoreTransform()
 void ZobObject::ResetPhysic()
 {
 	m_physicComponent->ResetPhysic();
+	//this->Init(NULL);
 	for (std::vector<ZobObject*>::const_iterator iter = m_children.begin(); iter != m_children.end(); iter++)
 	{
 		(*iter)->ResetPhysic();

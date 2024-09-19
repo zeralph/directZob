@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<Scene EntitiesCount="64" ZobObjectsCount="34">
+<Scene EntitiesCount="66" ZobObjectsCount="35">
     <Globals>
         <Var Name="Ambient color" value="255;102;102;102" />
         <Var Name="Clear color" value="255;192;192;192" />
@@ -15,7 +15,7 @@
         <Var Name="Z near" value="0.110" />
         <Var Name="Z far" value="400.000" />
         <Var Name="Equalize triangle queues" value="False" />
-        <Var Name="Perspective Correction" value="True" />
+        <Var Name="Perspective Correction" value="False" />
         <Var Name="Downscale" value="1" />
     </Globals>
     <ZobObject Guid="4002928242">
@@ -37,6 +37,7 @@
             <Var Name="Mass" value="1000.000" />
             <Components>
                 <Component Type="PhysicMesh" Guid="2007061869">
+                    <Var Name="Enabled" value="True" />
                     <Var Name="Layer" value="ground" />
                     <Var Name="Trigger" value="False" />
                     <Var Name="Local position" value="0.00000;0.00000;0.00000;1.00000" />
@@ -55,6 +56,7 @@
             <Var Name="Mass" value="1000.000" />
             <Components>
                 <Component Type="PhysicMesh" Guid="2007872946">
+                    <Var Name="Enabled" value="True" />
                     <Var Name="Layer" value="ground" />
                     <Var Name="Trigger" value="False" />
                     <Var Name="Local position" value="0.00000;0.00000;0.00000;1.00000" />
@@ -73,6 +75,7 @@
             <Var Name="Mass" value="1000.000" />
             <Components>
                 <Component Type="PhysicMesh" Guid="2007135337">
+                    <Var Name="Enabled" value="True" />
                     <Var Name="Layer" value="wall" />
                     <Var Name="Trigger" value="False" />
                     <Var Name="Local position" value="0.00000;0.00000;0.00000;1.00000" />
@@ -91,6 +94,7 @@
             <Var Name="Mass" value="1000.000" />
             <Components>
                 <Component Type="PhysicMesh" Guid="2007806819">
+                    <Var Name="Enabled" value="True" />
                     <Var Name="Layer" value="none" />
                     <Var Name="Trigger" value="False" />
                     <Var Name="Local position" value="0.00000;0.00000;0.00000;1.00000" />
@@ -119,6 +123,7 @@
             <Var Name="Mass" value="1000.000" />
             <Components>
                 <Component Type="Mesh" Guid="2007136771">
+                    <Var Name="Enabled" value="True" />
                     <Var Name="File" value="disp_road.obj;daytona_itl_speedway/;disp_road.obj;0" />
                     <Var Name="Cull mode" value="Clockwise" />
                     <Var Name="Lighting" value="Phong" />
@@ -137,6 +142,7 @@
             <Var Name="Mass" value="1000.000" />
             <Components>
                 <Component Type="Mesh" Guid="2007891425">
+                    <Var Name="Enabled" value="True" />
                     <Var Name="File" value="disp_ground.obj;daytona_itl_speedway/;disp_ground.obj;0" />
                     <Var Name="Cull mode" value="Clockwise" />
                     <Var Name="Lighting" value="Phong" />
@@ -155,6 +161,7 @@
             <Var Name="Mass" value="1000.000" />
             <Components>
                 <Component Type="Mesh" Guid="2007505427">
+                    <Var Name="Enabled" value="True" />
                     <Var Name="File" value="disp_sidemark.obj;daytona_itl_speedway/;disp_sidemark.obj;0" />
                     <Var Name="Cull mode" value="Clockwise" />
                     <Var Name="Lighting" value="Phong" />
@@ -173,6 +180,7 @@
             <Var Name="Mass" value="1000.000" />
             <Components>
                 <Component Type="Mesh" Guid="2007834176">
+                    <Var Name="Enabled" value="True" />
                     <Var Name="File" value="disp_ext_wall.obj;daytona_itl_speedway/;disp_ext_wall.obj;0" />
                     <Var Name="Cull mode" value="Clockwise" />
                     <Var Name="Lighting" value="Phong" />
@@ -191,6 +199,7 @@
             <Var Name="Mass" value="1000.000" />
             <Components>
                 <Component Type="Mesh" Guid="2007525059">
+                    <Var Name="Enabled" value="True" />
                     <Var Name="File" value="disp_int_wall.obj;daytona_itl_speedway/;disp_int_wall.obj;0" />
                     <Var Name="Cull mode" value="Clockwise" />
                     <Var Name="Lighting" value="Phong" />
@@ -235,6 +244,7 @@
             <Var Name="Mass" value="1000.000" />
             <Components>
                 <Component Type="Mesh" Guid="2007215361">
+                    <Var Name="Enabled" value="True" />
                     <Var Name="File" value="disp_gradin.obj;daytona_itl_speedway/;disp_gradin.obj;0" />
                     <Var Name="Cull mode" value="Clockwise" />
                     <Var Name="Lighting" value="Phong" />
@@ -253,6 +263,7 @@
             <Var Name="Mass" value="1000.000" />
             <Components>
                 <Component Type="Mesh" Guid="2007347150">
+                    <Var Name="Enabled" value="True" />
                     <Var Name="File" value="disp_gradin.obj;daytona_itl_speedway/;disp_gradin.obj;0" />
                     <Var Name="Cull mode" value="Clockwise" />
                     <Var Name="Lighting" value="Phong" />
@@ -272,6 +283,7 @@
         <Var Name="Mass" value="1000.000" />
         <Components>
             <Component Type="Mesh" Guid="2007507298">
+                <Var Name="Enabled" value="True" />
                 <Var Name="File" value="skybox.obj;/;skybox.obj;0" />
                 <Var Name="Cull mode" value="Counter clockwise" />
                 <Var Name="Lighting" value="None" />
@@ -299,6 +311,7 @@
             <Var Name="Mass" value="1000.000" />
             <Components>
                 <Component Type="Mesh" Guid="2007798772">
+                    <Var Name="Enabled" value="True" />
                     <Var Name="File" value="Rock_9.fbx;/;Rock_9.fbx;0" />
                     <Var Name="Cull mode" value="Clockwise" />
                     <Var Name="Lighting" value="Phong" />
@@ -317,6 +330,7 @@
             <Var Name="Mass" value="1000.000" />
             <Components>
                 <Component Type="Mesh" Guid="2007171277">
+                    <Var Name="Enabled" value="True" />
                     <Var Name="File" value="Rock_9.fbx;/;Rock_9.fbx;0" />
                     <Var Name="Cull mode" value="Clockwise" />
                     <Var Name="Lighting" value="Phong" />
@@ -335,6 +349,7 @@
             <Var Name="Mass" value="1000.000" />
             <Components>
                 <Component Type="Mesh" Guid="2007216020">
+                    <Var Name="Enabled" value="True" />
                     <Var Name="File" value="Rock_9.fbx;/;Rock_9.fbx;0" />
                     <Var Name="Cull mode" value="Clockwise" />
                     <Var Name="Lighting" value="Phong" />
@@ -353,6 +368,7 @@
             <Var Name="Mass" value="1000.000" />
             <Components>
                 <Component Type="Mesh" Guid="2007928359">
+                    <Var Name="Enabled" value="True" />
                     <Var Name="File" value="water.obj;/;water.obj;0" />
                     <Var Name="Cull mode" value="Clockwise" />
                     <Var Name="Lighting" value="Phong" />
@@ -371,6 +387,7 @@
             <Var Name="Mass" value="1000.000" />
             <Components>
                 <Component Type="Mesh" Guid="2007887065">
+                    <Var Name="Enabled" value="True" />
                     <Var Name="File" value="Rock_9.fbx;D:\Git\directZob\resources\/;Rock_9.fbx;1" />
                     <Var Name="Cull mode" value="Clockwise" />
                     <Var Name="Lighting" value="Phong" />
@@ -390,6 +407,7 @@
         <Var Name="Mass" value="1000.000" />
         <Components>
             <Component Type="PhysicBox" Guid="2007043289">
+                <Var Name="Enabled" value="True" />
                 <Var Name="Layer" value="objects" />
                 <Var Name="Trigger" value="False" />
                 <Var Name="Local position" value="0.00000;1.00000;0.00000;1.00000" />
@@ -397,6 +415,7 @@
                 <Var Name="Height" value="1.00000;0.50000;2.00000;1.00000" />
             </Component>
             <Component Type="Car" Guid="2007989132">
+                <Var Name="Enabled" value="True" />
                 <Var Name="Front left wheel" value="4002410897" />
                 <Var Name="Front right wheel" value="4002410782" />
                 <Var Name="Rear left wheel" value="4002054282" />
@@ -423,6 +442,7 @@
             <Var Name="Mass" value="1000.000" />
             <Components>
                 <Component Type="Mesh" Guid="2007983524">
+                    <Var Name="Enabled" value="True" />
                     <Var Name="File" value="Peugeot405;_cars/GLX-400-OBJ/;GLX_400.obj;0" />
                     <Var Name="Cull mode" value="Clockwise" />
                     <Var Name="Lighting" value="Phong" />
@@ -440,6 +460,7 @@
                 <Var Name="Mass" value="1000.000" />
                 <Components>
                     <Component Type="Mesh" Guid="2007953918">
+                        <Var Name="Enabled" value="True" />
                         <Var Name="File" value="Tire;_cars/Tire/;Tire.obj;0" />
                         <Var Name="Cull mode" value="Clockwise" />
                         <Var Name="Lighting" value="Phong" />
@@ -458,6 +479,7 @@
                 <Var Name="Mass" value="1000.000" />
                 <Components>
                     <Component Type="Mesh" Guid="2007905557">
+                        <Var Name="Enabled" value="True" />
                         <Var Name="File" value="Tire;_cars/Tire/;Tire.obj;0" />
                         <Var Name="Cull mode" value="Clockwise" />
                         <Var Name="Lighting" value="Phong" />
@@ -476,6 +498,7 @@
                 <Var Name="Mass" value="1000.000" />
                 <Components>
                     <Component Type="Mesh" Guid="2007115044">
+                        <Var Name="Enabled" value="True" />
                         <Var Name="File" value="Tire;_cars/Tire/;Tire.obj;0" />
                         <Var Name="Cull mode" value="Clockwise" />
                         <Var Name="Lighting" value="Phong" />
@@ -494,6 +517,7 @@
                 <Var Name="Mass" value="1000.000" />
                 <Components>
                     <Component Type="Mesh" Guid="2007839627">
+                        <Var Name="Enabled" value="True" />
                         <Var Name="File" value="Tire;_cars/Tire/;Tire.obj;0" />
                         <Var Name="Cull mode" value="Clockwise" />
                         <Var Name="Lighting" value="Phong" />
@@ -574,11 +598,41 @@
         <Var Name="Mass" value="1000.000" />
         <Components>
             <Component Type="Mesh" Guid="2007995010">
+                <Var Name="Enabled" value="True" />
                 <Var Name="File" value="disp_tunnel.obj;daytona_itl_speedway/;disp_tunnel.obj;0" />
                 <Var Name="Cull mode" value="Clockwise" />
                 <Var Name="Lighting" value="Phong" />
                 <Var Name="Z-buffer mode" value="Buffered" />
                 <Var Name="Transparent" value="False" />
+            </Component>
+        </Components>
+    </ZobObject>
+    <ZobObject Guid="4002421083">
+        <Var Name="Name" value="menu" />
+        <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+        <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+        <Var Name="Quaternion" value="-0.00000;0.00000;-0.00000;1.00000" />
+        <Var Name="Body type" value="Static" />
+        <Var Name="Active" value="True" />
+        <Var Name="Mass" value="1000.000" />
+        <Components>
+            <Component Type="Text" Guid="2007097394">
+                <Var Name="Enabled" value="True" />
+                <Var Name="Visible" value="True" />
+                <Var Name="X" value="0.000" />
+                <Var Name="Y" value="0.000" />
+                <Var Name="W" value="0.500" />
+                <Var Name="H" value="0.500" />
+                <Var Name="Z" value="0.000" />
+                <Var Name="Font size" value="1.000" />
+                <Var Name="Font Xml" value="impact_regular_32.xml;_fonts/;impact_regular_32.xml;0" />
+                <Var Name="Font Image" value="impact_regular_32.PNG;_fonts/;impact_regular_32.PNG;0" />
+                <Var Name="Text" value="Select or Maj : return to menu" />
+                <Var Name="Default color" value="255;255;255;255" />
+                <Var Name="Selected color" value="255;255;0;0" />
+                <Var Name="Selectable" value="False" />
+                <Var Name="Action" value="None" />
+                <Var Name="Action argument" value="" />
             </Component>
         </Components>
     </ZobObject>

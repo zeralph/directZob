@@ -91,7 +91,6 @@ bool ZobComponentPhysicMesh::LoadMeshInternal()
 
 void ZobComponentPhysicMesh::Init(DirectZobType::sceneLoadingCallback cb)
 {
-	ReLoadVariables();
 	if (m_mesh == NULL && m_convexMeshPath.IsDefined())
 	{
 		if (!LoadMeshInternal())
@@ -100,6 +99,7 @@ void ZobComponentPhysicMesh::Init(DirectZobType::sceneLoadingCallback cb)
 		}
 		else
 		{
+			ReLoadVariables();
 			ZobComponentPhysicShape::Init(cb);
 		}
 	}

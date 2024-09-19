@@ -63,7 +63,7 @@ public:
 		//for enums
 		std::vector<int> enumValues;
 		std::vector<std::string> enumNames;
-		void Load();
+		void Load(bool callCb);
 		void Init();
 		//for ZobEntities
 		ZobEntity::ZobSubType zobSubType;
@@ -75,7 +75,7 @@ public:
 
 	const std::vector<wrapperData>* GetWrappedVariables() const { return &m_wrappedVariables; }
 	TiXmlNode* SaveUnderNode(TiXmlNode* node);
-	void Load();
+	void Load(bool callCb);
 	void ReadNode(TiXmlNode* node);
 
 	void ChangeId(zobId zid);

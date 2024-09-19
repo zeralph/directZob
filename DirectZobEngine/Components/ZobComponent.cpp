@@ -50,7 +50,7 @@ void ZobComponent::ReadNode(TiXmlElement* node)
 
 void ZobComponent::ReLoadVariables()
 {
-	m_varExposer->Load();
+	m_varExposer->Load(true);
 }
 
 void ZobComponent::Duplicate()

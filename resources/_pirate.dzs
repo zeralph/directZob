@@ -1,0 +1,68 @@
+<?xml version="1.0" ?>
+<Scene EntitiesCount="5" ZobObjectsCount="3">
+    <Globals>
+        <Var Name="Ambient color" value="255;136;188;247" />
+        <Var Name="Clear color" value="255;137;182;248" />
+        <Var Name="Ambient color intensity" value="0.800" />
+        <Var Name="Fog type" value="None" />
+        <Var Name="Fog color" value="255;63;149;255" />
+        <Var Name="Fog distance" value="20.000" />
+        <Var Name="Fog density" value="2.000" />
+        <Var Name="Render mode" value="Fullframe" />
+        <Var Name="Lighting mode" value="Pixel" />
+        <Var Name="Bits per color" value="8" />
+        <Var Name="Dithering" value="True" />
+        <Var Name="Z near" value="0.110" />
+        <Var Name="Z far" value="1000.000" />
+        <Var Name="Equalize triangle queues" value="False" />
+        <Var Name="Perspective Correction" value="False" />
+        <Var Name="Downscale" value="1" />
+    </Globals>
+    <ZobObject Guid="4002377169">
+        <Var Name="Name" value="11.fbx" />
+        <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+        <Var Name="Scale" value="0.30000;0.33000;0.30000;1.00000" />
+        <Var Name="Quaternion" value="0.00000;0.00000;-0.00000;1.00000" />
+        <Var Name="Body type" value="Static" />
+        <Var Name="Active" value="True" />
+        <Var Name="Mass" value="1000.000" />
+        <Components>
+            <Component Type="Mesh" Guid="2007375837">
+                <Var Name="Enabled" value="True" />
+                <Var Name="File" value="11.fbx;/;11.fbx;0" />
+                <Var Name="Cull mode" value="Clockwise" />
+                <Var Name="Lighting" value="Phong" />
+                <Var Name="Z-buffer mode" value="Buffered" />
+                <Var Name="Transparent" value="False" />
+            </Component>
+        </Components>
+    </ZobObject>
+    <ZobObject Guid="4003855178">
+        <Var Name="Name" value="FPS_camera_1" />
+        <Var Name="Position" value="-0.75713;4.06539;34.15548;1.00000" />
+        <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+        <Var Name="Quaternion" value="-0.03018;-0.01107;-0.00032;0.99948" />
+        <Var Name="Body type" value="Static" />
+        <Var Name="Active" value="True" />
+        <Var Name="Mass" value="1000.000" />
+        <Var Name="FOV" value="45.000" />
+        <Var Name="Camera controller" value="FPS" />
+        <Components />
+    </ZobObject>
+    <ZobObject Guid="4004024533">
+        <Var Name="Name" value="Light_1" />
+        <Var Name="Position" value="0.00000;10.00000;0.00000;1.00000" />
+        <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+        <Var Name="Quaternion" value="0.30905;-0.49052;0.09687;0.80900" />
+        <Var Name="Body type" value="Static" />
+        <Var Name="Active" value="True" />
+        <Var Name="Mass" value="1000.000" />
+        <Var Name="Color" value="255;255;128;0" />
+        <Var Name="Intensity" value="2.000" />
+        <Var Name="Distance" value="100.000" />
+        <Var Name="SpotAngle" value="0.523" />
+        <Var Name="Active" value="True" />
+        <Var Name="Type" value="Directional" />
+        <Components />
+    </ZobObject>
+</Scene>

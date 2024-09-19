@@ -183,6 +183,6 @@ void Texture::Load(ZobFilePath* zfp)
 
 void Texture::OnError(int error, const char* material, const char* texture)
 {
-	DirectZob::LogError("Error %i occured when loading texture %s for material %s : format not supported", error, texture, material);
+	DirectZob::LogError("Error %i\noccured when loading texture '%s'\nfor material '%s'", error, texture, material);
 }
 

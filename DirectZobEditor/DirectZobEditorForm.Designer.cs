@@ -59,6 +59,8 @@
             this.entitiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.regenerateZobIdsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.publishToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.packLevelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.FirstPanelSplitter = new System.Windows.Forms.SplitContainer();
             this.ZobObjectListPanel = new System.Windows.Forms.Panel();
             this.ViewAndLogsAndObjectControl = new System.Windows.Forms.SplitContainer();
@@ -106,8 +108,6 @@
             this.tabEngine = new System.Windows.Forms.TabPage();
             this.panel2 = new System.Windows.Forms.Panel();
             this.EngineControlsFlowLayout = new System.Windows.Forms.FlowLayoutPanel();
-            this.publishToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.packLevelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bottomStatusBar.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FirstPanelSplitter)).BeginInit();
@@ -407,6 +407,21 @@
             this.regenerateZobIdsToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
             this.regenerateZobIdsToolStripMenuItem.Text = "Regenerate ZobIds";
             this.regenerateZobIdsToolStripMenuItem.Click += new System.EventHandler(this.regenerateZobIdsToolStripMenuItem_Click);
+            // 
+            // publishToolStripMenuItem
+            // 
+            this.publishToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.packLevelToolStripMenuItem});
+            this.publishToolStripMenuItem.Name = "publishToolStripMenuItem";
+            this.publishToolStripMenuItem.Size = new System.Drawing.Size(58, 22);
+            this.publishToolStripMenuItem.Text = "Publish";
+            // 
+            // packLevelToolStripMenuItem
+            // 
+            this.packLevelToolStripMenuItem.Name = "packLevelToolStripMenuItem";
+            this.packLevelToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
+            this.packLevelToolStripMenuItem.Text = "Pack level";
+            this.packLevelToolStripMenuItem.Click += new System.EventHandler(this.packLevelToolStripMenuItem_Click);
             // 
             // FirstPanelSplitter
             // 
@@ -799,6 +814,7 @@
             this.toolStripButton2.Name = "toolStripButton2";
             this.toolStripButton2.Size = new System.Drawing.Size(23, 22);
             this.toolStripButton2.Text = "toolStripButton2";
+            this.toolStripButton2.Click += new System.EventHandler(this.toolStripButton2_Click);
             // 
             // toolStripButton3
             // 
@@ -967,21 +983,6 @@
             this.EngineControlsFlowLayout.Size = new System.Drawing.Size(394, 472);
             this.EngineControlsFlowLayout.TabIndex = 0;
             this.EngineControlsFlowLayout.WrapContents = false;
-            // 
-            // publishToolStripMenuItem
-            // 
-            this.publishToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.packLevelToolStripMenuItem});
-            this.publishToolStripMenuItem.Name = "publishToolStripMenuItem";
-            this.publishToolStripMenuItem.Size = new System.Drawing.Size(58, 22);
-            this.publishToolStripMenuItem.Text = "Publish";
-            // 
-            // packLevelToolStripMenuItem
-            // 
-            this.packLevelToolStripMenuItem.Name = "packLevelToolStripMenuItem";
-            this.packLevelToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.packLevelToolStripMenuItem.Text = "Pack level";
-            this.packLevelToolStripMenuItem.Click += new System.EventHandler(this.packLevelToolStripMenuItem_Click);
             // 
             // DirectZobEditorForm
             // 

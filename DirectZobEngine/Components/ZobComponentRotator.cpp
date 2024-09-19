@@ -3,6 +3,7 @@
 #include "ZobComponentFactory.h"
 #include "../Rendering/Engine.h"
 #include "../ZobObjects/ZobObject.h"
+#include "../DirectZob.h"
 
 ZobComponentRotator::ZobComponentRotator(ZobObject* zobObject) : ZobComponent(zobObject, false)
 {
@@ -24,12 +25,19 @@ ZobComponentRotator::~ZobComponentRotator()
 
 void ZobComponentRotator::Init(DirectZobType::sceneLoadingCallback cb)
 {
+	m_rotateXdt = 0.0f;
+	m_rotateYdt = 0.0f;
+	m_rotateZdt = 0.0f;
 	ReLoadVariables();
+	m_zobObject->SetLocalRotation(m_rotateXdt, m_rotateYdt, m_rotateZdt, true);
 }
 
 void ZobComponentRotator::PreUpdate(float dt)
 {
-	m_zobObject->SetLocalRotation(m_rotateXdt, m_rotateYdt, m_rotateZdt, true);
+	if (DirectZob::GetInstance()->IsPhysicPlaying())
+	{
+		m_zobObject->SetLocalRotation(m_rotateXdt, m_rotateYdt, m_rotateZdt, true);
+	}	
 }
 
 void ZobComponentRotator::PostUpdate()

@@ -44,7 +44,10 @@ void ZobPhysicComponent::Init()
 	m_localScale.x = m_editorLocalScale.x;
 	m_localScale.y = m_editorLocalScale.y;
 	m_localScale.z = m_editorLocalScale.z;
-
+	//if (m_rigidBody->getType() == BodyType::DYNAMIC)
+	{
+		m_rigidBody->setTransform(m_localTransform);
+	}
 	/*
 	Transform t = Transform::identity();
 	Vector3 vp = Vector3(m_editorWorldPosition.x, m_editorWorldPosition.y, m_editorWorldPosition.z);

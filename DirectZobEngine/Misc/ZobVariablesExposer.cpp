@@ -30,7 +30,7 @@ void ZobVariablesExposer::wrapperData::Init()
 	enumNames.clear();
 }
 
-void ZobVariablesExposer::wrapperData::Load()
+void ZobVariablesExposer::wrapperData::Load(bool callCb)
 {
 	if (strValue.size() == 0)
 	{
@@ -153,6 +153,10 @@ void ZobVariablesExposer::wrapperData::Load()
 	else
 	{
 		assert(false);
+	}
+	if (/*callCb && */callback)
+	{
+		((ZobVariablesExposer::wrapperCallback)callback)(id);
 	}
 }
 
@@ -300,12 +304,12 @@ TiXmlNode* ZobVariablesExposer::SaveUnderNode(TiXmlNode* node)
 	return node;
 }
 
-void ZobVariablesExposer::Load()
+void ZobVariablesExposer::Load(bool callCb)
 {
 	for (std::vector<wrapperData>::iterator iter = m_wrappedVariables.begin(); iter != m_wrappedVariables.end(); iter++)
 	{
 		wrapperData* w = &(*iter);
-		w->Load();
+		w->Load(callCb);
 	}
 }
 
@@ -325,7 +329,7 @@ void ZobVariablesExposer::ReadNode(TiXmlNode* node)
 				{
 					w->strValue.resize(0);
 					w->strValue.append(val);
-					w->Load();
+					w->Load(false);
 				}
 			}
 		}

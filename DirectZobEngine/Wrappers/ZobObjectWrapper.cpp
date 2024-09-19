@@ -295,7 +295,7 @@ namespace CLI
 
 	bool ZobObjectWrapper::Duplicate()
 	{
-		assert(false);
+		//assert(false);
 		/*
 		ZobObject* parent = m_Instance->GetParent();
 		DirectZob::LogInfo("Duplicating %s under %s", m_Instance->GetName(), parent->GetName());
@@ -313,6 +313,7 @@ namespace CLI
 		DirectZob::SetLogLevel(level);
 		DirectZob::LogInfo("Duplicated as %s (and %i objects)", newObject->GetName().c_str(), nbObjs);
 		*/
+		DirectZob::LogError("function not implemented");
 		return true;
 	}
 

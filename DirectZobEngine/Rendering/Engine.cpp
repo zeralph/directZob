@@ -214,7 +214,7 @@ Engine::Engine(int width, int height, Events* events)
 	m_varExposer->WrapVariable<int>("Rastyerizer height", &m_rasterizerHeight, NULL, true, false);
 	m_varExposer->WrapVariable<uint>("Number of rasterizers", &m_nbRasterizers, NULL, true, false);
 	m_varExposer->WrapVariable<uint>("Number of drawn triangles", &m_drawnTriangles, NULL, true, false);
-	m_varExposer->Load();
+	m_varExposer->Load(true);
 	std::string n = "Engine initialized with " + std::to_string(m_nbRasterizers) + " rasterizer(s) for " + std::to_string(m_maxTrianglesQueueSize) + " triangles per image";
 	DirectZob::LogWarning(n.c_str());
 }
@@ -222,6 +222,7 @@ Engine::Engine(int width, int height, Events* events)
 void Engine::UpdateVariables(zobId zid)
 {
 	Engine* e = DirectZob::GetInstance()->GetEngine();
+
 	e->Resize(e->m_nextWidth, e->m_nextHeight);
 }
 
@@ -261,7 +262,7 @@ m_events = NULL;
 void Engine::Start(DirectZobType::sceneLoadingCallback cb)
 {
 	DirectZob::GetInstance()->GetZobObjectManager()->Init(cb);
-	m_varExposer->Load();
+	m_varExposer->Load(true);
 	for (int i = 0; i < m_nbRasterizers; i++)
 		m_started = true;
 }
@@ -294,6 +295,7 @@ bool Engine::ResizeInternal()
 {
 	if (m_doResize)
 	{
+		m_nextDownscale = 1;
 		m_doResize = false;
 		for (int i = 0; i < 2; i++)
 		{

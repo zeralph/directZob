@@ -18,11 +18,11 @@ ZobComponentPhysicBox::ZobComponentPhysicBox(ZobObject* zobObject) : ZobComponen
 
 void ZobComponentPhysicBox::Init(DirectZobType::sceneLoadingCallback cb)
 {
-	ReLoadVariables();
 	PhysicsCommon* pc = DirectZob::GetInstance()->GetPhysicsEngine()->GetPhysicsCommon();
 	Vector3 h = Vector3(m_halfExtends.x, m_halfExtends.y, m_halfExtends.z);
 	m_boxShape = pc->createBoxShape(h);
 	AddColliderInternal(m_boxShape);
+	ReLoadVariables();
 	ZobComponentPhysicShape::Init(cb);
 }
 

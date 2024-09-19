@@ -39,6 +39,7 @@ class ZobComponentText : public ZobComponent
 		static void				UpdateSelectableStatus(zobId id);
 		void					LoadFontInternal();
 		//ZobHUDManager::eHudUnit m_unit;
+		bool m_init;
 		float m_x;
 		float m_y;
 		float m_w;

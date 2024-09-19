@@ -112,6 +112,11 @@ public:
 	ZobVector3*							GetWorldRotationAddress() { return &m_editorWorldRotation; }
 	ZobVector3*							GetWorldScaleAddress() { return &m_editorWorldScale; }
 	ZobVector3*							GetQuaternionAddress() { return &m_quaternion; }
+
+	bool*								GetActiveAddress() { return &m_active; }
+	eRigidBodyType*						GetBodyTypeAddress() { return &m_bodyType; }
+	float*								GetMassAddress() { return &m_mass; }
+
 	void								WorldOrientationToAxis(ZobVector3& left, ZobVector3& up, ZobVector3& forward) const;
 	void								SetBodyType(eRigidBodyType t) { m_rigidBody->setType((BodyType)t); }
 	eRigidBodyType						GetBodyType() { return (eRigidBodyType)m_rigidBody->getType(); }

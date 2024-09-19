@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<Scene EntitiesCount="14" ZobObjectsCount="8">
+<Scene EntitiesCount="16" ZobObjectsCount="9">
     <Globals>
         <Var Name="Ambient color" value="255;13;0;26" />
         <Var Name="Clear color" value="255;0;0;0" />
@@ -22,7 +22,7 @@
         <Var Name="Name" value="skull.obj" />
         <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
         <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
-        <Var Name="Quaternion" value="-0.70697;0.01357;0.01357;0.70697" />
+        <Var Name="Quaternion" value="-0.70696;0.01418;0.01418;0.70696" />
         <Var Name="Body type" value="Static" />
         <Var Name="Active" value="True" />
         <Var Name="Mass" value="1000.000" />
@@ -47,7 +47,7 @@
         <Var Name="Name" value="lightsCW" />
         <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
         <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
-        <Var Name="Quaternion" value="0.00000;-0.38994;0.00000;0.92083" />
+        <Var Name="Quaternion" value="0.00000;-0.38431;0.00000;0.92320" />
         <Var Name="Body type" value="Static" />
         <Var Name="Active" value="True" />
         <Var Name="Mass" value="1000.000" />
@@ -92,7 +92,7 @@
         <Var Name="Name" value="lightsCCW" />
         <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
         <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
-        <Var Name="Quaternion" value="0.00000;-0.99452;0.00000;-0.10453" />
+        <Var Name="Quaternion" value="0.00000;-0.99254;0.00000;-0.12187" />
         <Var Name="Body type" value="Static" />
         <Var Name="Active" value="True" />
         <Var Name="Mass" value="1000.000" />
@@ -125,7 +125,7 @@
         <Var Name="Name" value="newObject_42" />
         <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
         <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
-        <Var Name="Quaternion" value="-0.76604;0.00000;0.00000;-0.64278" />
+        <Var Name="Quaternion" value="-0.77162;0.00000;0.00000;-0.63607" />
         <Var Name="Body type" value="Static" />
         <Var Name="Active" value="True" />
         <Var Name="Mass" value="1000.000" />
@@ -153,5 +153,34 @@
             <Var Name="Type" value="Point" />
             <Components />
         </ZobObject>
+    </ZobObject>
+    <ZobObject Guid="4002629562">
+        <Var Name="Name" value="newObject_114" />
+        <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+        <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+        <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+        <Var Name="Body type" />
+        <Var Name="Active" value="True" />
+        <Var Name="Mass" value="1000.000" />
+        <Components>
+            <Component Type="Text" Guid="2007628019">
+                <Var Name="Enabled" value="True" />
+                <Var Name="Visible" value="True" />
+                <Var Name="X" value="0.000" />
+                <Var Name="Y" value="0.000" />
+                <Var Name="W" value="0.500" />
+                <Var Name="H" value="0.500" />
+                <Var Name="Z" value="0.000" />
+                <Var Name="Font size" value="2.000" />
+                <Var Name="Font Xml" value="mv_boli_regular_14.xml;_fonts/;mv_boli_regular_14.xml;0" />
+                <Var Name="Font Image" value="mv_boli_regular_14.PNG;_fonts/;mv_boli_regular_14.PNG;0" />
+                <Var Name="Text" value="Select or Maj : return to menu" />
+                <Var Name="Default color" value="255;0;0;255" />
+                <Var Name="Selected color" value="255;255;0;0" />
+                <Var Name="Selectable" value="False" />
+                <Var Name="Action" value="None" />
+                <Var Name="Action argument" value="" />
+            </Component>
+        </Components>
     </ZobObject>
 </Scene>

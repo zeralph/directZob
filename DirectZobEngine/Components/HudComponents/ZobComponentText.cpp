@@ -18,6 +18,7 @@ ZobComponentText::~ZobComponentText()
 ZobComponentText::ZobComponentText(ZobObject* zobObject, bool bEditorZobComponent) : ZobComponent(zobObject, bEditorZobComponent)
 {
 	SET_CLASS_AND_NAME
+	m_init = false;
 	m_x = 0;
 	m_y = 0;
 	m_w = 0.5f;
@@ -60,7 +61,7 @@ ZobComponentText::ZobComponentText(ZobObject* zobObject, bool bEditorZobComponen
 	m_varExposer->WrapEnum<eMenuAction>("Action", &m_action, 3, ma, maStr, NULL, false, false, true);
 	m_varExposer->WrapVariable<std::string>("Action argument", &m_actionArg, NULL, false, true);
 	//m_varExposer->EndGroup();
-	m_varExposer->Load();
+	m_varExposer->Load(false);
 	Init(NULL);
 }
 
@@ -101,6 +102,7 @@ void ZobComponentText::LoadFontInternal()
 		if (!m_font || m_fontXml.GetName() != m_font->GetName())
 		{
 			m_font = DirectZob::GetInstance()->GetHudManager()->CreateOrGetZobFont(&m_fontXml, &m_fontImage);
+			m_init = true;
 		}
 	}
 	else if (m_font)
@@ -115,7 +117,7 @@ void ZobComponentText::Init(DirectZobType::sceneLoadingCallback cb)
 	{
 		cb(0, 0, m_name);
 	}
-	m_varExposer->Load();
+	m_varExposer->Load(true);
 	LoadFontInternal();
 	if (m_selectable)
 	{
@@ -126,7 +128,7 @@ void ZobComponentText::Init(DirectZobType::sceneLoadingCallback cb)
 void ZobComponentText::UpdateSelectableStatus(zobId id)
 {
 	ZobComponentText* z = ZobEntity::GetEntity<ZobComponentText>(id);
-	if (z)
+	if (z && z->m_init)
 	{
 		if (z->m_selectable)
 		{

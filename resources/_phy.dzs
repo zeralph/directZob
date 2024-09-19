@@ -1,10 +1,10 @@
 <?xml version="1.0" ?>
-<Scene>
+<Scene EntitiesCount="49" ZobObjectsCount="21">
     <Globals>
-        <Var Name="Ambient color" value="255;102;102;102" />
-        <Var Name="Clear color" value="255;63;149;255" />
+        <Var Name="Ambient color" value="255;192;192;192" />
+        <Var Name="Clear color" value="255;130;185;253" />
         <Var Name="Ambient color intensity" value="0.800" />
-        <Var Name="Fog type" value="None" />
+        <Var Name="Fog type" value="Exp" />
         <Var Name="Fog color" value="255;63;149;255" />
         <Var Name="Fog distance" value="20.000" />
         <Var Name="Fog density" value="2.000" />
@@ -16,19 +16,468 @@
         <Var Name="Z far" value="1000.000" />
         <Var Name="Equalize triangle queues" value="False" />
         <Var Name="Perspective Correction" value="True" />
+        <Var Name="Downscale" value="1" />
     </Globals>
-    <ZobObject Guid="4002245163">
-        <Var Name="Name" value="4096_earth.png" />
-        <Var Name="Position" value="0.000;0.000;0.000" />
-        <Var Name="Rotation" value="0.000;0.000;0.000" />
-        <Var Name="Scale" value="10.000;10.000;10.000" />
-        <Behaviors>
-            <Behavior Type="Sprite" Guid="2007273791">
-                <Var Name="File" value="4096_earth.png;D:\Git\directZob\resources\;4096_earth.png;1" />
-                <Var Name="Cull mode" value="Clockwise" />
-                <Var Name="Lighting" value="Phong" />
-                <Var Name="ZBuffered" value="True" />
-            </Behavior>
-        </Behaviors>
+    <ZobObject Guid="4002512024">
+        <Var Name="Name" value="deco" />
+        <Var Name="Position" value="0.00000;1.02918;0.00000;1.00000" />
+        <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+        <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+        <Var Name="Body type" value="Static" />
+        <Var Name="Active" value="True" />
+        <Var Name="Mass" value="1000.000" />
+        <Components />
+        <ZobObject Guid="4002163431">
+            <Var Name="Name" value="hill1" />
+            <Var Name="Position" value="-11.56582;0.00000;0.00000;1.00000" />
+            <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+            <Var Name="Quaternion" value="0.00000;0.00000;-0.00000;1.00000" />
+            <Var Name="Body type" value="Static" />
+            <Var Name="Active" value="True" />
+            <Var Name="Mass" value="1000.000" />
+            <Components>
+                <Component Type="Mesh" Guid="2007726629">
+                    <Var Name="Enabled" value="True" />
+                    <Var Name="File" value="hill_2.obj;/;hill_2.obj;0" />
+                    <Var Name="Cull mode" value="Clockwise" />
+                    <Var Name="Lighting" value="Phong" />
+                    <Var Name="Z-buffer mode" value="Buffered" />
+                    <Var Name="Transparent" value="False" />
+                </Component>
+            </Components>
+        </ZobObject>
+        <ZobObject Guid="4002752484">
+            <Var Name="Name" value="water.obj" />
+            <Var Name="Position" value="137.02803;-5.55667;145.31596;1.00000" />
+            <Var Name="Scale" value="3.00000;1.00000;3.00000;1.00000" />
+            <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+            <Var Name="Body type" value="Static" />
+            <Var Name="Active" value="True" />
+            <Var Name="Mass" value="1000.000" />
+            <Components>
+                <Component Type="Mesh" Guid="2007114776">
+                    <Var Name="Enabled" value="True" />
+                    <Var Name="File" value="water.obj;/;water.obj;0" />
+                    <Var Name="Cull mode" value="Clockwise" />
+                    <Var Name="Lighting" value="Phong" />
+                    <Var Name="Z-buffer mode" value="Buffered" />
+                    <Var Name="Transparent" value="False" />
+                </Component>
+            </Components>
+        </ZobObject>
+    </ZobObject>
+    <ZobObject Guid="4002619757">
+        <Var Name="Name" value="level" />
+        <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+        <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+        <Var Name="Quaternion" value="-0.00000;0.00000;-0.00000;1.00000" />
+        <Var Name="Body type" value="Static" />
+        <Var Name="Active" value="True" />
+        <Var Name="Mass" value="1000.000" />
+        <Components />
+        <ZobObject Guid="4002329569">
+            <Var Name="Name" value="ground" />
+            <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+            <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+            <Var Name="Quaternion" value="0.00000;0.00000;-0.00000;1.00000" />
+            <Var Name="Body type" value="Static" />
+            <Var Name="Active" value="True" />
+            <Var Name="Mass" value="1000.000" />
+            <Components>
+                <Component Type="Mesh" Guid="2007389644">
+                    <Var Name="Enabled" value="True" />
+                    <Var Name="File" value="plane.obj;/;plane.obj;0" />
+                    <Var Name="Cull mode" value="Clockwise" />
+                    <Var Name="Lighting" value="Phong" />
+                    <Var Name="Z-buffer mode" value="Buffered" />
+                    <Var Name="Transparent" value="False" />
+                </Component>
+                <Component Type="PhysicBox" Guid="2007150901">
+                    <Var Name="Enabled" value="True" />
+                    <Var Name="Layer" value="ground" />
+                    <Var Name="Trigger" value="False" />
+                    <Var Name="Local position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale with object" value="False" />
+                    <Var Name="Height" value="50.00000;0.10000;50.00000;1.00000" />
+                </Component>
+            </Components>
+        </ZobObject>
+        <ZobObject Guid="4002586442">
+            <Var Name="Name" value="wall4" />
+            <Var Name="Position" value="-40.00000;0.00000;0.00000;1.00000" />
+            <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+            <Var Name="Quaternion" value="-0.00000;0.00000;-0.00000;1.00000" />
+            <Var Name="Body type" value="Static" />
+            <Var Name="Active" value="True" />
+            <Var Name="Mass" value="1000.000" />
+            <Components>
+                <Component Type="PhysicBox" Guid="2007799291">
+                    <Var Name="Enabled" value="True" />
+                    <Var Name="Layer" value="none" />
+                    <Var Name="Trigger" value="False" />
+                    <Var Name="Local position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale with object" value="False" />
+                    <Var Name="Height" value="1.00000;10.00000;50.00000;1.00000" />
+                </Component>
+                <Component Type="Mesh" Guid="2007461589">
+                    <Var Name="Enabled" value="True" />
+                    <Var Name="File" value=";;;0" />
+                    <Var Name="Cull mode" value="Clockwise" />
+                    <Var Name="Lighting" value="Phong" />
+                    <Var Name="Z-buffer mode" value="Buffered" />
+                    <Var Name="Transparent" value="False" />
+                </Component>
+            </Components>
+        </ZobObject>
+        <ZobObject Guid="4002818539">
+            <Var Name="Name" value="wall3" />
+            <Var Name="Position" value="0.00000;0.00000;40.00000;1.00000" />
+            <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+            <Var Name="Quaternion" value="-0.00000;0.00000;-0.00000;1.00000" />
+            <Var Name="Body type" value="Static" />
+            <Var Name="Active" value="True" />
+            <Var Name="Mass" value="1000.000" />
+            <Components>
+                <Component Type="PhysicBox" Guid="2007588152">
+                    <Var Name="Enabled" value="True" />
+                    <Var Name="Layer" value="none" />
+                    <Var Name="Trigger" value="False" />
+                    <Var Name="Local position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale with object" value="True" />
+                    <Var Name="Height" value="50.00000;10.00000;1.00000;1.00000" />
+                </Component>
+            </Components>
+        </ZobObject>
+        <ZobObject Guid="4002649612">
+            <Var Name="Name" value="wall2" />
+            <Var Name="Position" value="0.00000;0.00000;-40.00000;1.00000" />
+            <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+            <Var Name="Quaternion" value="-0.00000;0.00000;-0.00000;1.00000" />
+            <Var Name="Body type" value="Static" />
+            <Var Name="Active" value="True" />
+            <Var Name="Mass" value="1000.000" />
+            <Components>
+                <Component Type="PhysicBox" Guid="2007853398">
+                    <Var Name="Enabled" value="True" />
+                    <Var Name="Layer" value="none" />
+                    <Var Name="Trigger" value="False" />
+                    <Var Name="Local position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale with object" value="True" />
+                    <Var Name="Height" value="50.00000;10.00000;1.00000;1.00000" />
+                </Component>
+            </Components>
+        </ZobObject>
+        <ZobObject Guid="4002428469">
+            <Var Name="Name" value="wall1" />
+            <Var Name="Position" value="39.20903;8.91199;0.00000;1.00000" />
+            <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+            <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+            <Var Name="Body type" value="Static" />
+            <Var Name="Active" value="True" />
+            <Var Name="Mass" value="1000.000" />
+            <Components>
+                <Component Type="PhysicBox" Guid="2007313507">
+                    <Var Name="Enabled" value="True" />
+                    <Var Name="Layer" value="none" />
+                    <Var Name="Trigger" value="False" />
+                    <Var Name="Local position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale with object" value="False" />
+                    <Var Name="Height" value="1.00000;10.00000;50.00000;1.00000" />
+                </Component>
+            </Components>
+        </ZobObject>
+    </ZobObject>
+    <ZobObject Guid="4002311002">
+        <Var Name="Name" value="physicObjects" />
+        <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+        <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+        <Var Name="Quaternion" value="-0.00000;0.00000;-0.00000;1.00000" />
+        <Var Name="Body type" value="Static" />
+        <Var Name="Active" value="True" />
+        <Var Name="Mass" value="1000.000" />
+        <Components />
+        <ZobObject Guid="4002994164">
+            <Var Name="Name" value="cube.obj" />
+            <Var Name="Position" value="-1.64374;5.82327;3.46354;1.00000" />
+            <Var Name="Scale" value="2.00000;2.00000;2.00000;1.00000" />
+            <Var Name="Quaternion" value="0.25720;0.11697;0.39711;0.87319" />
+            <Var Name="Body type" value="Dynamic" />
+            <Var Name="Active" value="True" />
+            <Var Name="Mass" value="1.000" />
+            <Components>
+                <Component Type="Mesh" Guid="2007367452">
+                    <Var Name="Enabled" value="True" />
+                    <Var Name="File" value="cube.obj;D:\Git\directZob\resources\/;cube.obj;1" />
+                    <Var Name="Cull mode" value="Clockwise" />
+                    <Var Name="Lighting" value="Phong" />
+                    <Var Name="Z-buffer mode" value="Buffered" />
+                    <Var Name="Transparent" value="False" />
+                </Component>
+                <Component Type="PhysicBox" Guid="2007648497">
+                    <Var Name="Enabled" value="True" />
+                    <Var Name="Layer" value="objects" />
+                    <Var Name="Trigger" value="False" />
+                    <Var Name="Local position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale with object" value="True" />
+                    <Var Name="Height" value="1.00000;1.00000;1.00000;1.00000" />
+                </Component>
+            </Components>
+        </ZobObject>
+        <ZobObject Guid="4002212020">
+            <Var Name="Name" value="sphere_r1.obj" />
+            <Var Name="Position" value="-0.99474;6.05398;0.00000;1.00000" />
+            <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+            <Var Name="Quaternion" value="0.00000;0.00000;-0.00000;1.00000" />
+            <Var Name="Body type" value="Dynamic" />
+            <Var Name="Active" value="True" />
+            <Var Name="Mass" value="1000.000" />
+            <Components>
+                <Component Type="Mesh" Guid="2007952017">
+                    <Var Name="Enabled" value="True" />
+                    <Var Name="File" value="sphere_r1.obj;D:\Git\directZob\resources\/;sphere_r1.obj;1" />
+                    <Var Name="Cull mode" value="Clockwise" />
+                    <Var Name="Lighting" value="Phong" />
+                    <Var Name="Z-buffer mode" value="Buffered" />
+                    <Var Name="Transparent" value="False" />
+                </Component>
+                <Component Type="PhysicSphere" Guid="2007153489">
+                    <Var Name="Enabled" value="True" />
+                    <Var Name="Layer" value="none" />
+                    <Var Name="Trigger" value="False" />
+                    <Var Name="Local position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale with object" value="False" />
+                    <Var Name="Radius" value="1.000" />
+                </Component>
+            </Components>
+        </ZobObject>
+        <ZobObject Guid="4002600874">
+            <Var Name="Name" value="sphere_r1.obj" />
+            <Var Name="Position" value="-1.64374;3.92045;0.00000;1.00000" />
+            <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+            <Var Name="Quaternion" value="0.00000;0.00000;-0.00000;1.00000" />
+            <Var Name="Body type" value="Dynamic" />
+            <Var Name="Active" value="True" />
+            <Var Name="Mass" value="250.000" />
+            <Components>
+                <Component Type="Mesh" Guid="2007936217">
+                    <Var Name="Enabled" value="True" />
+                    <Var Name="File" value="sphere_r1.obj;/;sphere_r1.obj;0" />
+                    <Var Name="Cull mode" value="Clockwise" />
+                    <Var Name="Lighting" value="Phong" />
+                    <Var Name="Z-buffer mode" value="Buffered" />
+                    <Var Name="Transparent" value="False" />
+                </Component>
+                <Component Type="PhysicSphere" Guid="2007405378">
+                    <Var Name="Enabled" value="True" />
+                    <Var Name="Layer" value="objects" />
+                    <Var Name="Trigger" value="False" />
+                    <Var Name="Local position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale with object" value="False" />
+                    <Var Name="Radius" value="1.000" />
+                </Component>
+            </Components>
+        </ZobObject>
+        <ZobObject Guid="4002489585">
+            <Var Name="Name" value="sphere_r1.obj" />
+            <Var Name="Position" value="0.00000;8.46832;0.00000;1.00000" />
+            <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+            <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+            <Var Name="Body type" value="Dynamic" />
+            <Var Name="Active" value="True" />
+            <Var Name="Mass" value="1000.000" />
+            <Components>
+                <Component Type="Mesh" Guid="2007466114">
+                    <Var Name="Enabled" value="True" />
+                    <Var Name="File" value="sphere_r1.obj;D:\Git\directZob\resources\/;sphere_r1.obj;1" />
+                    <Var Name="Cull mode" value="Clockwise" />
+                    <Var Name="Lighting" value="Phong" />
+                    <Var Name="Z-buffer mode" value="Buffered" />
+                    <Var Name="Transparent" value="False" />
+                </Component>
+                <Component Type="PhysicSphere" Guid="2007858917">
+                    <Var Name="Enabled" value="True" />
+                    <Var Name="Layer" value="none" />
+                    <Var Name="Trigger" value="False" />
+                    <Var Name="Local position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale with object" value="False" />
+                    <Var Name="Radius" value="1.000" />
+                </Component>
+            </Components>
+        </ZobObject>
+        <ZobObject Guid="4002063759">
+            <Var Name="Name" value="sphere_r1.obj" />
+            <Var Name="Position" value="-3.01123;7.54002;0.00000;1.00000" />
+            <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+            <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+            <Var Name="Body type" value="Dynamic" />
+            <Var Name="Active" value="True" />
+            <Var Name="Mass" value="1000.000" />
+            <Components>
+                <Component Type="Mesh" Guid="2007891314">
+                    <Var Name="Enabled" value="True" />
+                    <Var Name="File" value="sphere_r1.obj;D:\Git\directZob\resources\/;sphere_r1.obj;1" />
+                    <Var Name="Cull mode" value="Clockwise" />
+                    <Var Name="Lighting" value="Phong" />
+                    <Var Name="Z-buffer mode" value="Buffered" />
+                    <Var Name="Transparent" value="False" />
+                </Component>
+                <Component Type="PhysicSphere" Guid="2007760435">
+                    <Var Name="Enabled" value="True" />
+                    <Var Name="Layer" value="none" />
+                    <Var Name="Trigger" value="False" />
+                    <Var Name="Local position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale with object" value="False" />
+                    <Var Name="Radius" value="1.000" />
+                </Component>
+            </Components>
+        </ZobObject>
+        <ZobObject Guid="4002441026">
+            <Var Name="Name" value="sphere_r1.obj" />
+            <Var Name="Position" value="0.00000;12.54763;0.00000;1.00000" />
+            <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+            <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+            <Var Name="Body type" value="Dynamic" />
+            <Var Name="Active" value="True" />
+            <Var Name="Mass" value="1000.000" />
+            <Components>
+                <Component Type="Mesh" Guid="2007481382">
+                    <Var Name="Enabled" value="True" />
+                    <Var Name="File" value="sphere_r1.obj;D:\Git\directZob\resources\/;sphere_r1.obj;1" />
+                    <Var Name="Cull mode" value="Clockwise" />
+                    <Var Name="Lighting" value="Phong" />
+                    <Var Name="Z-buffer mode" value="Buffered" />
+                    <Var Name="Transparent" value="False" />
+                </Component>
+                <Component Type="PhysicSphere" Guid="2007417153">
+                    <Var Name="Enabled" value="True" />
+                    <Var Name="Layer" value="none" />
+                    <Var Name="Trigger" value="False" />
+                    <Var Name="Local position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale with object" value="True" />
+                    <Var Name="Radius" value="1.000" />
+                </Component>
+            </Components>
+        </ZobObject>
+        <ZobObject Guid="4002452245">
+            <Var Name="Name" value="sphere_r1.obj" />
+            <Var Name="Position" value="0.00000;9.51296;3.94487;1.00000" />
+            <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+            <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+            <Var Name="Body type" value="Dynamic" />
+            <Var Name="Active" value="True" />
+            <Var Name="Mass" value="1000.000" />
+            <Components>
+                <Component Type="Mesh" Guid="2007933032">
+                    <Var Name="Enabled" value="True" />
+                    <Var Name="File" value="sphere_r1.obj;D:\Git\directZob\resources\/;sphere_r1.obj;1" />
+                    <Var Name="Cull mode" value="Clockwise" />
+                    <Var Name="Lighting" value="Phong" />
+                    <Var Name="Z-buffer mode" value="Buffered" />
+                    <Var Name="Transparent" value="False" />
+                </Component>
+                <Component Type="PhysicSphere" Guid="2007116883">
+                    <Var Name="Enabled" value="True" />
+                    <Var Name="Layer" value="none" />
+                    <Var Name="Trigger" value="False" />
+                    <Var Name="Local position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale with object" value="False" />
+                    <Var Name="Radius" value="1.000" />
+                </Component>
+            </Components>
+        </ZobObject>
+        <ZobObject Guid="4002192632">
+            <Var Name="Name" value="sphere_r1.obj" />
+            <Var Name="Position" value="1.31937;5.70859;1.50740;1.00000" />
+            <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+            <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+            <Var Name="Body type" value="Dynamic" />
+            <Var Name="Active" value="True" />
+            <Var Name="Mass" value="1000.000" />
+            <Components>
+                <Component Type="Mesh" Guid="2007497462">
+                    <Var Name="Enabled" value="True" />
+                    <Var Name="File" value="sphere_r1.obj;D:\Git\directZob\resources\/;sphere_r1.obj;1" />
+                    <Var Name="Cull mode" value="Clockwise" />
+                    <Var Name="Lighting" value="Phong" />
+                    <Var Name="Z-buffer mode" value="Buffered" />
+                    <Var Name="Transparent" value="False" />
+                </Component>
+                <Component Type="PhysicSphere" Guid="2007951237">
+                    <Var Name="Enabled" value="True" />
+                    <Var Name="Layer" value="none" />
+                    <Var Name="Trigger" value="False" />
+                    <Var Name="Local position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale with object" value="True" />
+                    <Var Name="Radius" value="1.000" />
+                </Component>
+            </Components>
+        </ZobObject>
+    </ZobObject>
+    <ZobObject Guid="4004194038">
+        <Var Name="Name" value="Light_1" />
+        <Var Name="Position" value="0.00000;10.00000;0.00000;1.00000" />
+        <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+        <Var Name="Quaternion" value="0.39389;-0.47733;0.14884;0.77126" />
+        <Var Name="Body type" value="Static" />
+        <Var Name="Active" value="True" />
+        <Var Name="Mass" value="1000.000" />
+        <Var Name="Color" value="255;252;212;64" />
+        <Var Name="Intensity" value="0.500" />
+        <Var Name="Distance" value="100.000" />
+        <Var Name="SpotAngle" value="0.523" />
+        <Var Name="Active" value="True" />
+        <Var Name="Type" value="Directional" />
+        <Components />
+    </ZobObject>
+    <ZobObject Guid="4003176708">
+        <Var Name="Name" value="FPS_camera_1" />
+        <Var Name="Position" value="3.42662;4.96667;-12.62427;1.00000" />
+        <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+        <Var Name="Quaternion" value="0.04357;-0.12407;0.00545;0.99130" />
+        <Var Name="Body type" value="Kinematic" />
+        <Var Name="Active" value="True" />
+        <Var Name="Mass" value="1000.000" />
+        <Var Name="FOV" value="45.000" />
+        <Var Name="Camera controller" value="FPS" />
+        <Components>
+            <Component Type="PhysicCapsule" Guid="2007648168">
+                <Var Name="Enabled" value="True" />
+                <Var Name="Layer" value="objects" />
+                <Var Name="Trigger" value="False" />
+                <Var Name="Local position" value="0.00000;0.00000;0.00000;1.00000" />
+                <Var Name="Scale with object" value="False" />
+                <Var Name="Radius" value="1.000" />
+                <Var Name="Height" value="2.000" />
+            </Component>
+        </Components>
+    </ZobObject>
+    <ZobObject Guid="4002837028">
+        <Var Name="Name" value="menu" />
+        <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+        <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+        <Var Name="Quaternion" value="-0.00000;0.00000;-0.00000;1.00000" />
+        <Var Name="Body type" value="Static" />
+        <Var Name="Active" value="True" />
+        <Var Name="Mass" value="1000.000" />
+        <Components>
+            <Component Type="Text" Guid="2007105992">
+                <Var Name="Enabled" value="True" />
+                <Var Name="Visible" value="True" />
+                <Var Name="X" value="0.000" />
+                <Var Name="Y" value="0.000" />
+                <Var Name="W" value="0.500" />
+                <Var Name="H" value="0.500" />
+                <Var Name="Z" value="0.000" />
+                <Var Name="Font size" value="1.000" />
+                <Var Name="Font Xml" value="leelawadee_ui_bold_32.xml;_fonts/;leelawadee_ui_bold_32.xml;0" />
+                <Var Name="Font Image" value="leelawadee_ui_bold_32.PNG;_fonts/;leelawadee_ui_bold_32.PNG;0" />
+                <Var Name="Text" value="Select or Maj : return to menu" />
+                <Var Name="Default color" value="255;255;255;0" />
+                <Var Name="Selected color" value="255;255;0;0" />
+                <Var Name="Selectable" value="False" />
+                <Var Name="Action" value="None" />
+                <Var Name="Action argument" value="" />
+            </Component>
+        </Components>
     </ZobObject>
 </Scene>

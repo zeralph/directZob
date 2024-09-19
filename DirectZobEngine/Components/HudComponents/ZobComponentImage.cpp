@@ -33,7 +33,7 @@ ZobComponentImage::ZobComponentImage(ZobObject* zobObject, bool bEditorZobCompon
 	m_varExposer->WrapVariable<float>("H", &m_h, NULL, false, true);
 	m_varExposer->WrapVariable<float>("Z", &m_z, NULL, false, true);
 	m_varExposer->WrapVariable<ZobFilePath>("Image", &m_texture, NULL, false, true);
-	m_varExposer->Load();
+	m_varExposer->Load(false);
 	Init(NULL);
 }
 
@@ -94,7 +94,7 @@ void ZobComponentImage::Init(DirectZobType::sceneLoadingCallback cb)
 	{
 		cb(0, 0, m_name);
 	}
-	m_varExposer->Load();
+	m_varExposer->Load(true);
 	LoadMaterialInternal();
 }
 

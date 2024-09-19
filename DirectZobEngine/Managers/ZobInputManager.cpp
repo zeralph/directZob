@@ -126,9 +126,13 @@ void ZobInputManager::Map()
 		m_map->SetDeadZone(gainput::PadButtonRightStickY, m_deadZone);
 	
 		m_map->MapBool(Handbrake, padId, gainput::PadButtonA);
-		m_map->MapBool(NextCamera, padId, gainput::PadButtonB);
-		m_map->MapBool(WireFrame, padId, gainput::PadButtonL1);
+		m_map->MapBool(NextCamera, padId, gainput::PadButtonB);		
 		m_map->MapBool(Gizmos, padId, gainput::PadButtonX);
+
+		m_map->MapBool(WireFrame, padId, gainput::PadButtonL1);
+		m_map->MapBool(switchPerspectiveCorrection, padId, gainput::PadButtonR1);
+		//m_map->MapBool(switchColorDepth, padId, gainput::PadButtonL2);
+		//m_map->MapBool(SwitchWobbleFactor, padId, gainput::PadButtonR2);
 
 		m_map->MapBool(MenuUp, padId, gainput::PadButtonUp);
 		m_map->MapBool(MenuLeft, padId, gainput::PadButtonLeft);

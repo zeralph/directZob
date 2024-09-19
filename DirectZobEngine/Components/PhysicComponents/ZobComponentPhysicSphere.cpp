@@ -19,10 +19,10 @@ ZobComponentPhysicSphere::ZobComponentPhysicSphere(ZobObject* zobObject) : ZobCo
 
 void ZobComponentPhysicSphere::Init(DirectZobType::sceneLoadingCallback cb)
 {	
-	ReLoadVariables();
 	PhysicsCommon* pc = DirectZob::GetInstance()->GetPhysicsEngine()->GetPhysicsCommon();
 	m_sphereShape = pc->createSphereShape(m_radius);
 	AddColliderInternal(m_sphereShape);
+	ReLoadVariables();
 	ZobComponentPhysicShape::Init(cb);
 }
 

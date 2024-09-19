@@ -61,10 +61,14 @@ void ZobCameraControllerOrbital::PreUpdate(float dt)
 		const gainput::InputMap* inputMap = DirectZob::GetInstance()->GetInputManager()->GetMap();
 		float rx = -inputMap->GetFloat(ZobInputManager::RightStickX) * 2.0f;
 		float ry = -inputMap->GetFloat(ZobInputManager::RightStickY) * 2.0f;
+		if (abs(rx) < 0.1f) rx = 0.0f;
+		if (abs(ry) < 0.1f) ry = 0.0f;
 		Rotate(rx, -ry, 0);
 		float mx = inputMap->GetFloat(ZobInputManager::LeftStickX) * 2.0f;
 		float my = inputMap->GetFloat(ZobInputManager::LeftStickY) * 2.0f;
-		//Move(-mx, 0, -my);
+		if (abs(mx) < 0.1f) mx = 0.0f;
+		if (abs(my) < 0.1f) my = 0.0f;
+		Move(-mx, 0, -my);
 	}
 }
 

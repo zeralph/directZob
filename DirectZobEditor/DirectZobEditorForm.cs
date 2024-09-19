@@ -946,6 +946,12 @@ namespace DirectZobEditor
                 m_packerForm.Location = p;
             }
         }
+
+        private void toolStripButton2_Click(object sender, EventArgs e)
+        {
+            m_directZobWrapper.GetEngineWrapper().DrawPhysicsGizmos(true);
+            m_directZobWrapper.GetEngineWrapper().DrawGizmos(true);
+        }
     }
 
     public class LogEvent
