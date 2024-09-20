@@ -19,13 +19,13 @@ variables:
 steps:
 - task: UsePythonVersion@0
   inputs:
-    versionSpec: '3.6'
+    versionSpec: '3.10'
 
 #- script: python -m pip install --upgrade pip setuptools
 #  displayName: 'Install pyhton tools'
 
 - script: python -m pip install git+https://chromium.googlesource.com/external/gyp
-  displayName: 'Install gyp'
+  displayName: 'Install gyp gyp-next'
 
 #- script: gyp ./DirectZobEngine/DirectZob.gyp --depth=. --generator-output=./DirectZobEngine/build/DirectZob/ -f msvs -G msvs_version=2017 -d all
 #  displayName: 'Generate sln'
