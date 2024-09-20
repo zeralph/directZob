@@ -6,6 +6,7 @@ else
     target=Release
 fi
 cwd=$(pwd)
+var="#!/usr/bin/env python3"
 echo "building target "$target
 if [ "$1" == "Clean" ]; then
     cd ./DirectZobEngine
@@ -18,6 +19,7 @@ else
 	pip3 install --upgrade six>=1.13.0
     gyp DirectZob.gyp --depth=. --generator-output=./build/DirectZob/ --format=make
     cd ./build/DirectZob/
+    sed -i -e "1 s/.*/#\!\/usr\/bin\/env python3/" gyp-mac-tool
     make DirectZobExe BUILDTYPE=$target -j 4
     cd $cwd
     cp DirectZobEngine/build/DirectZob/out/$target/DirectZobExe .
