@@ -9,6 +9,12 @@
                             'MultiProcessorCompilation': 'true',
                         },
                     },
+					"msbuild_settings": {
+						"ClCompile": {
+							"LanguageStandard": "stdcpp17",
+							'MultiProcessorCompilation': 'true',
+						}
+					},
                     'defines': [
                         'WINDOWS',
                     ],
@@ -57,6 +63,12 @@
                                     'FloatingPointModel': '2',  # fast
                                 },
                             },
+							"msbuild_settings": {
+								"ClCompile": {
+									"LanguageStandard": "stdcpp17",
+									'MultiProcessorCompilation': 'true',
+								}
+							},
                         },
                         'OS=="mac"',
                         {
@@ -105,8 +117,7 @@
                                     'FloatingPointModel': '2',  # fast
                                     'EnableIntrinsicFunctions': 'true',
                                     'WholeProgramOptimization': 'true',  # No
-                                    'EnableEnhancedInstructionSet':
-                                    '3',  # enable AVX instructions
+                                    'EnableEnhancedInstructionSet': '3',  # enable AVX instructions
                                 },
                                 'VCLinkerTool': {
                                     'LinkTimeCodeGeneration':
@@ -117,6 +128,12 @@
                                         '/LTCG:INCREMENTAL',  # incremental link-time code generation
                                     ]
                                 },
+								"msbuild_settings": {
+									"ClCompile": {
+										"LanguageStandard": "stdcpp17",
+										'MultiProcessorCompilation': 'true',
+									}
+								},
                             },
                         },
                         'OS=="mac"',

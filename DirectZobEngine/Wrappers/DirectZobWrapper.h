@@ -1,3 +1,4 @@
+#pragma managed
 #ifdef _WINDLL
 #pragma once
 #include "ManagedObject.h"
@@ -109,7 +110,7 @@ namespace CLI
 		static engineCallback^			m_sceneLoadedCb;
 		static engineCallback^			m_objectSelectedCb;
 		static sceneLoadingCallback^	m_sceneLoadingCb;
-		cli::array<byte>^				m_bufferData;
+		cli::array<std::byte>^			m_bufferData;
 		int								m_buffferDataLength;
 
 		Panel^							m_objectTreeviewPanel;

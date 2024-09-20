@@ -358,10 +358,15 @@
                         'msvs_settings': {
                             'VCCLCompilerTool': {
                                 'CompileAsManaged': 'true',
-                                'ExceptionHandling':
-                                '0',  # /clr is incompatible with /EHs
+                                'ExceptionHandling': '0',  # /clr is incompatible with /EHs
                             },
                         },
+						"msbuild_settings": {
+						  "ClCompile": {
+							"CompileAsManaged": "true",
+							"ExceptionHandling": "Async",
+						  }
+						},
                         'sources': [
                             'Wrappers/DirectZobWrapper.cpp',
                             'Wrappers/EngineWrapper.cpp',
