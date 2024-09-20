@@ -1070,7 +1070,7 @@
         <Components>
             <Component Type="Mesh" Guid="2007100252">
                 <Var Name="Enabled" value="True" />
-                <Var Name="File" value="skybox.obj;D:\Git\directZob\resources\/;skybox.obj;1" />
+                <Var Name="File" value="skybox.obj;/;skybox.obj;0" />
                 <Var Name="Cull mode" value="Counter clockwise" />
                 <Var Name="Lighting" value="None" />
                 <Var Name="Z-buffer mode" value="No Z-far" />

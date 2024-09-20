@@ -17,6 +17,7 @@ else
     rm -f ../DirectZobExe
     gyp DirectZob.gyp --depth=. --generator-output=./build/DirectZob/ --format=make -Dminifb_macos_flags="USE_METAL_API"
     cd ./build/DirectZob/
+    sed -i -e "1 s/.*/#\!\/usr\/bin\/env python3/" gyp-mac-tool
     make DirectZobExe BUILDTYPE=$target -j 4
     cd $cwd
     cp DirectZobEngine/build/DirectZob/out/$target/DirectZobExe .
