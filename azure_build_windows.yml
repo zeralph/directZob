@@ -31,9 +31,9 @@ steps:
 #- script: gyp ./DirectZobEngine/DirectZob.gyp --depth=. --generator-output=./DirectZobEngine/build/DirectZob/ -f msvs -G msvs_version=2017 -d all
 #  displayName: 'Generate sln'
 
-- pwsh: ./DirectZobEngine/generate_sln.ps1
-  workingDirectory: ./DirectZobEngine/
-  displayName: 'Generate sln'
+- task: PowerShell@2
+  inputs:
+    filePath: './DirectZobEngine/generate_sln.ps1'
 
 - script: python ./strip_emptylines.py ./build\DirectZob\DirectZob.sln
   workingDirectory: ./DirectZobEngine/
