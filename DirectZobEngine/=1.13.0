@@ -1,2 +1,2 @@
 Defaulting to user installation because normal site-packages is not writeable
-Requirement already satisfied: six in /Users/lucasrichalland/Library/Python/3.8/lib/python/site-packages (1.16.0)
+Requirement already satisfied: six in /usr/lib/python3/dist-packages (1.16.0)
