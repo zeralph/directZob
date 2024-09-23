@@ -19,7 +19,7 @@ using namespace System::Drawing;
 #define NB_EDITOR_LINES 1000
 #define NB_EDITOR_CIRCLES 1000
 class DirectZobWrapper;
-namespace CLI
+namespace DirectZobInterface
 {
 	public struct Line
 	{

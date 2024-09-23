@@ -21,9 +21,9 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{ca17149e-c8f5-4292-9125-6785ae7c9e8c}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.22000.0</WindowsTargetPlatformVersion>
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -69,7 +69,7 @@
   <ItemDefinitionGroup />
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="packages\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.1.8.1.3\build\native\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.targets" Condition="Exists('packages\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.1.8.1.3\build\native\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.targets')" />
+    <Import Project="packages\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.1.8.1.7\build\native\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.targets" Condition="Exists('packages\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.1.8.1.7\build\native\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.targets')" />
   </ImportGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -97,12 +97,18 @@
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <FloatingPointModel>Fast</FloatingPointModel>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <AdditionalDependencies>..\DirectZobEngine\build\DirectZob\Debug\lib\DirectZobEngine.lib;..\DirectZobEngine\build\DirectZob\Debug\lib\lodepng.lib;..\DirectZobEngine\build\DirectZob\Debug\lib\minifb.lib;..\DirectZobEngine\build\DirectZob\Debug\lib\nanojpeg.lib;..\DirectZobEngine\build\DirectZob\Debug\lib\tga.lib;..\DirectZobEngine\build\DirectZob\Debug\lib\tinyxml.lib;..\dependencies\fbxsdk\windows\lib\vs2017\x64\release\libfbxsdk.lib;..\dependencies\optick\lib\windows\OptickCore.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -130,25 +136,29 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <FloatingPointModel>Fast</FloatingPointModel>
+      <AdditionalIncludeDirectories>.../dependencies/physfs/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <AdditionalDependencies>..\DirectZobEngine\build\DirectZob\Release\lib\DirectZobEngine.lib;..\DirectZobEngine\build\DirectZob\Release\lib\lodepng.lib;..\DirectZobEngine\build\DirectZob\Release\lib\minifb.lib;..\DirectZobEngine\build\DirectZob\Release\lib\nanojpeg.lib;..\DirectZobEngine\build\DirectZob\Release\lib\tga.lib;..\DirectZobEngine\build\DirectZob\Release\lib\tinyxml.lib;..\dependencies\fbxsdk\windows\lib\vs2017\x64\release\libfbxsdk.lib;..\dependencies\optick\lib\windows\OptickCore.lib;..\dependencies\gainput\lib\windows\gainput.lib;..\dependencies\reactphysics3d\lib\windows\Release\reactphysics3d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\DirectZobEngine\build\DirectZob\Release\lib\DirectZobEngine.lib;..\DirectZobEngine\build\DirectZob\Release\lib\lodepng.lib;..\DirectZobEngine\build\DirectZob\Release\lib\minifb.lib;..\DirectZobEngine\build\DirectZob\Release\lib\nanojpeg.lib;..\DirectZobEngine\build\DirectZob\Release\lib\tga.lib;..\DirectZobEngine\build\DirectZob\Release\lib\tinyxml.lib;..\dependencies\fbxsdk\windows\lib\vs2017\x64\release\libfbxsdk.lib;..\dependencies\optick\lib\windows\OptickCore.lib;..\dependencies\gainput\lib\windows\gainput.lib;..\dependencies\reactphysics3d\lib\windows\Release\reactphysics3d.lib;..\dependencies\physfs\lib\windows\physfs.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../dependencies/physfs/lib/windows;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
       <Command>copy /Y "$(SolutionDir)..\dependencies\gainput\lib\windows\gainput.dll" "$(TargetDir)gainput.dll"
 copy /Y "$(SolutionDir)..\dependencies\fbxsdk\windows\lib\vs2017\x64\release\libfbxsdk.dll" "$(TargetDir)libfbxsdk.dll"
 copy /Y "$(SolutionDir)..\dependencies\optick\lib\windows\OptickCore.dll" "$(TargetDir)OptickCore.dll"
+copy /Y "$(SolutionDir)..\dependencies\physfs\lib\windows\physfs.dll" "$(TargetDir)physfs.dll"
 </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
-      <ErrorText>Ce projet fait référence à des packages NuGet qui sont manquants sur cet ordinateur. Utilisez l'option de restauration des packages NuGet pour les télécharger. Pour plus d'informations, consultez http://go.microsoft.com/fwlink/?LinkID=322105. Le fichier manquant est : {0}.</ErrorText>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('packages\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.1.8.1.3\build\native\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.1.8.1.3\build\native\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.targets'))" />
+    <Error Condition="!Exists('packages\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.1.8.1.7\build\native\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.1.8.1.7\build\native\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.targets'))" />
   </Target>
 </Project>

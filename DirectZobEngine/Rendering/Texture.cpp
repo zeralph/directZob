@@ -47,8 +47,9 @@ void Texture::Load(ZobFilePath* zfp)
 	std::string name = "";
 	if (zfp->GetFile().find(".png") != -1 || zfp->GetFile().find(".PNG") != -1)
 	{
-		error = lodepng::decode(image, width, height, (unsigned char*)zfp->GetData(), zfp->GetDataLength());
-		if (error)
+		lodepng::State state;
+		error = (uint8_t)lodepng::decode(image, width, height, state, (unsigned char*)zfp->GetData(), zfp->GetDataLength());
+		if (error != 0)
 		{
 			OnError(error, name.c_str(), m_name.c_str());
 		}

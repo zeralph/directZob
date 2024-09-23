@@ -9,7 +9,7 @@
 
 #define TO_MANAGED_STRING(x) gcnew String(x);
 
-namespace CLI
+namespace DirectZobInterface
 {
 	ZobObjectWrapper::ZobObjectWrapper(ZobObject* zobObject, Panel^ parentPanel, Resources::ResourceManager^ rscMgr):ManagedObject(zobObject, false)
 	{
@@ -116,7 +116,7 @@ namespace CLI
 
 	ZobGroupBox^ ZobObjectWrapper::FillControlInternal(std::string& name, ZobVariablesExposer* ze, Image^ im)
 	{
-		return CLI::ZobControl::CreateWrappedVariablesView(name, ze, im);
+		return DirectZobInterface::ZobControl::CreateWrappedVariablesView(name, ze, im);
 	}
 
 	void ZobObjectWrapper::GroupClick(Object^ sender, EventArgs^ e)
@@ -148,25 +148,6 @@ namespace CLI
 
 	void ZobObjectWrapper::EditorUpdate()
 	{
-	}
-
-	bool ZobObjectWrapper::IsFromFactoryFile()
-	{ 
-		ZobObject* z = GetInstance();
-		if (z)
-		{
-			return z->IsFromFactoryFile();
-		}
-		return nullptr;
-	}
-	String^ ZobObjectWrapper::FactoryFile()
-	{ 
-		ZobObject* z = GetInstance();
-		if (z)
-		{
-			return TO_MANAGED_STRING(z->FactoryFile().c_str());
-		}
-		return nullptr;
 	}
 
 	void ZobObjectWrapper::SaveToFactoryFile(String^ file)
@@ -295,25 +276,12 @@ namespace CLI
 
 	bool ZobObjectWrapper::Duplicate()
 	{
-		//assert(false);
-		/*
+
 		ZobObject* parent = m_Instance->GetParent();
 		DirectZob::LogInfo("Duplicating %s under %s", m_Instance->GetName(), parent->GetName());
 		DirectZob::eDirectZobLogLevel level = DirectZob::GetLogLevel();
 		DirectZob::SetLogLevel(DirectZob::eDirectZobLogLevel_warning);
-		int nbObjs = 0;
-		ZobObject* newObject = DuplicateInternal(m_Instance, parent, nbObjs);
-		std::string newName = std::string(m_Instance->GetName().c_str());
-		newName.append("_Copy");
-		newObject->SetName(newName);
-		ZobVector3 p = newObject->GetWorldPosition();
-		p.x += 5;
-		p.z += 5;
-		newObject->SetWorldPosition(p.x, p.y, p.z);
-		DirectZob::SetLogLevel(level);
-		DirectZob::LogInfo("Duplicated as %s (and %i objects)", newObject->GetName().c_str(), nbObjs);
-		*/
-		DirectZob::LogError("function not implemented");
+		m_Instance->Duplicate();
 		return true;
 	}
 

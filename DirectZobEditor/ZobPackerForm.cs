@@ -15,9 +15,9 @@ namespace DirectZobEditor
     public partial class ZobPackerForm : Form
     {
         private DirectZobEditorForm m_mainForm;
-        private CLI.DirectZobWrapper m_directZobWrapper;
+        private DirectZobInterface.DirectZobWrapper m_directZobWrapper;
         private ZobPacker m_zobPacker;
-        public ZobPackerForm(DirectZobEditorForm f, CLI.DirectZobWrapper directZobWrapper)
+        public ZobPackerForm(DirectZobEditorForm f, DirectZobInterface.DirectZobWrapper directZobWrapper)
         {
             m_directZobWrapper = directZobWrapper;
             m_mainForm = f;

@@ -13,14 +13,14 @@ namespace DirectZobEditor
 {
     public partial class ZobEntityViewerForm : Form
     {
-        private CLI.DirectZobWrapper m_directZobWrapper;
+        private DirectZobInterface.DirectZobWrapper m_directZobWrapper;
         private DirectZobEditorForm m_mainForm;
-        public ZobEntityViewerForm(DirectZobEditorForm f,  CLI.DirectZobWrapper directZobWrapper)
+        public ZobEntityViewerForm(DirectZobEditorForm f, DirectZobInterface.DirectZobWrapper directZobWrapper)
         {
             m_directZobWrapper = directZobWrapper;
             m_mainForm = f;
             InitializeComponent();
-            List<CLI.ZobEntityInfo> l = m_directZobWrapper.GetZobObjectManagerWrapper().GetEntitiesInfo();
+            List<DirectZobInterface.ZobEntityInfo> l = m_directZobWrapper.GetZobObjectManagerWrapper().GetEntitiesInfo();
             listView1.Items.Clear();
 			ImageList imageList = new ImageList();
 			System.Resources.ResourceManager resources = new ResourceManager("DirectZobEditor.Properties.Resources", typeof(DirectZobEditorForm).Assembly);

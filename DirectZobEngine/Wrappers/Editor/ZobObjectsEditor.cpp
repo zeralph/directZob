@@ -6,7 +6,7 @@
 #include "../../DirectZobEngine/Misc/ZobUtils.h"
 #include <iostream>
 #include <filesystem>
-namespace CLI
+namespace DirectZobInterface
 {
 	ZobObjectsEditor::ZobObjectsEditor()
 	{

@@ -3,7 +3,7 @@
 
 #define TO_MANAGED_STRING(x) gcnew String(x);
 
-using namespace CLI;
+using namespace DirectZobInterface;
 static ContentAlignment _alignment = ContentAlignment::MiddleLeft;
 static int _height = 15;
 static int _labelWidth = 100;

@@ -15,15 +15,19 @@ using namespace System::Collections::Generic;
 using namespace System::Drawing;
 
 class DirectZobWrapper;
-namespace CLI
+namespace DirectZobInterface
 {
 	public ref class ZobMaterialWrapper : public ManagedObject<ZobMaterial>
 	{
 	public:
 		ZobMaterialWrapper(ZobMaterial* zm);
 		~ZobMaterialWrapper(){}
-		String^ name;
-		Bitmap^ texture;
+		ZobMaterial* m_material;
+		String^ m_name;
+		//Bitmap^ texture;
+		Bitmap^ GetTexture();
+		int m_width;
+		int m_height;
 		//cli::array<Byte>^ _b;
 	};
 

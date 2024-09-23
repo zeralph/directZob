@@ -2,6 +2,7 @@
 #include "DirectZobWrapper.h"
 #include "ZobObjectManagerWrapper.h"
 #include "../DirectZob.h"
+#include "../SceneLoader.h"
 #include "../ZobObjects/ZobObject.h"
 #include "../Managers/CameraManager.h"
 #include "../Managers/LightManager.h"
@@ -13,7 +14,7 @@
 
 #define TO_MANAGED_STRING(x) gcnew String(x);
 
-namespace CLI
+namespace DirectZobInterface
 {
 
 	ZobObjectManagerWrapper::ZobObjectManagerWrapper(Panel^ objectTreeviewPanel, Panel^ objectPropertiesPanel, Resources::ResourceManager^ rsMgr):ManagedObject(DirectZob::GetInstance()->GetZobObjectManager(), false)
@@ -30,7 +31,7 @@ namespace CLI
 		CreateNodeMenu();
 		m_editorGizmos = new ZobObjectsEditor();
 		DirectZobWrapperEvents::OnNewSceneEvent += gcnew DirectZobWrapperEvents::OnNewScene(this, &ZobObjectManagerWrapper::OnNewScene);
-		DirectZobWrapperEvents::OnEditorUpdateEvent += gcnew DirectZobWrapperEvents::OnEditorUpdate(m_treeView, &CLI::ZobControlTreeview::UpdateZobControl);
+		DirectZobWrapperEvents::OnEditorUpdateEvent += gcnew DirectZobWrapperEvents::OnEditorUpdate(m_treeView, &DirectZobInterface::ZobControlTreeview::UpdateZobControl);
 		m_bShowAllNodes = false;
 		m_duplicate = false;
 	}
@@ -46,7 +47,7 @@ namespace CLI
 	{
 		if (!m_treeView->IsHandleCreated)
 			return;
-		m_treeView->Invoke(gcnew Action(m_treeView, &CLI::ZobControlTreeview::UpdateZobControl));
+		m_treeView->Invoke(gcnew Action(m_treeView, &DirectZobInterface::ZobControlTreeview::UpdateZobControl));
 		if (m_selectedObjectWrapper)
 		{
 			m_selectedObjectWrapper->EditorUpdate();
@@ -80,6 +81,9 @@ namespace CLI
 		ToolStripMenuItem^ itShowHide = gcnew ToolStripMenuItem("Show/Hide");
 		itShowHide->Click += gcnew EventHandler(this, &ZobObjectManagerWrapper::ShowHideZobObject);
 		m_nodeMenu->Items->Add(itShowHide);
+		ToolStripMenuItem^ itSaveAsAsset = gcnew ToolStripMenuItem("Save as Asset...");
+		itSaveAsAsset->Click += gcnew EventHandler(this, &ZobObjectManagerWrapper::SaveAsAsset);
+		m_nodeMenu->Items->Add(itSaveAsAsset);
 		//m_treeView->ContextMenuStrip = m_nodeMenu;
 	}
 
@@ -123,6 +127,30 @@ namespace CLI
 	void ZobObjectManagerWrapper::DuplicateZobObject(Object^ sender, EventArgs^ e)
 	{
 		m_duplicate = true;
+	}
+	void ZobObjectManagerWrapper::SaveAsAsset(Object^ sender, EventArgs^ e)
+	{
+		String^ guid = ((ZobControlTreeNode^)m_treeView->SelectedNode)->m_zobObjectGuid;
+		std::string id;
+		MarshalString(guid, id);
+		zobId zid = ZobEntity::ZobIdFromString(id);
+		ZobObject* z = ZobEntity::GetEntity<ZobObject>(zid);
+		if (z)
+		{
+			SaveFileDialog^ d = gcnew SaveFileDialog();
+			//openFileDialog->InitialDirectory = m_Instance->GetResourcePath();
+			d->Filter = "asset files (*.dza)|*.dza";
+			d->FilterIndex = 2;
+			d->RestoreDirectory = true;
+
+			if (d->ShowDialog() == System::Windows::Forms::DialogResult::OK)
+			{
+				String^ f = d->FileName;
+				std::string file;
+				MarshalString(f, file);
+				z->SaveAsAsset(file);
+			}
+		}
 	}
 	void ZobObjectManagerWrapper::ShowHideZobObject(Object^ sender, EventArgs^ e)
 	{
@@ -175,7 +203,7 @@ namespace CLI
 	void ZobObjectManagerWrapper::CreateTreeview()
 	{
 		UserControl^ c = gcnew UserControl();
-		m_treeView = gcnew CLI::ZobControlTreeview();
+		m_treeView = gcnew DirectZobInterface::ZobControlTreeview();
 		m_treeView->Dock = DockStyle::Fill;
 		m_treeView->NodeMouseClick += gcnew TreeNodeMouseClickEventHandler(this, &ZobObjectManagerWrapper::TreeNodeClick);
 		m_treeView->ItemDrag += gcnew ItemDragEventHandler(this, &ZobObjectManagerWrapper::ItemDrag);
@@ -322,7 +350,7 @@ namespace CLI
 
 	void ZobObjectManagerWrapper::ReScan()
 	{	
-		m_treeView->Invoke(gcnew Action(this, &CLI::ZobObjectManagerWrapper::ReScanInternal));
+		m_treeView->Invoke(gcnew Action(this, &DirectZobInterface::ZobObjectManagerWrapper::ReScanInternal));
 	}
 
 	void ZobObjectManagerWrapper::ReScanInternal()

@@ -16,7 +16,7 @@ using namespace System::Windows::Forms;
 using namespace System::Collections::Generic;
 using namespace System::Drawing;
 
-namespace CLI
+namespace DirectZobInterface
 {
 	public ref class ZobEntityInfo
 	{
@@ -109,14 +109,15 @@ namespace CLI
 		void					AddZobObject(Object^ sender, EventArgs^ e);
 		void					RemoveZobObject(Object^ sender, EventArgs^ e);
 		void					ZoomToZobObject(Object^ sender, EventArgs^ e);
-		void					ShowHideZobObject(Object^ sender, EventArgs^ e);;
+		void					ShowHideZobObject(Object^ sender, EventArgs^ e);
+		void					SaveAsAsset(Object^ sender, EventArgs^ e);
 		void					AddZobComponent(Object^ sender, EventArgs^ e);
 		void					DuplicateZobObject(Object^ sender, EventArgs^ e);
 
 		Panel^ m_objectTreeviewPanel;
 		Panel^ m_objectPropertiesPanel;
 		ZobObjectsEditor* m_editorGizmos;
-		CLI::ZobControlTreeview^ m_treeView;
+		DirectZobInterface::ZobControlTreeview^ m_treeView;
 		ZobObject* m_selectedObject;
 		ZobObjectWrapper^ m_selectedObjectWrapper;
 		ZobControlTreeNode^ m_draggedNode;

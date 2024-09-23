@@ -40,7 +40,7 @@ namespace DirectZobEditor
         public class SceneUpdateEventArg : EventArgs
         {
             public SceneUpdateType type = SceneUpdateType.unknown;
-            public CLI.ZobObjectWrapper zobObject = null;
+            public DirectZobInterface.ZobObjectWrapper zobObject = null;
         }
         #endregion
         private bool m_running = false;
@@ -55,8 +55,8 @@ namespace DirectZobEditor
         public delegate void OnSceneUpdateHandler(object s, SceneUpdateEventArg e);
         public event OnSceneUpdateHandler OnSceneUpdated;
 
-        private CLI.DirectZobWrapper m_directZobWrapper;
-        private CLI.ZobObjectManagerWrapper m_zobObjectManagerWrapper;
+        private DirectZobInterface.DirectZobWrapper m_directZobWrapper;
+        private DirectZobInterface.ZobObjectManagerWrapper m_zobObjectManagerWrapper;
 
         private ZobEntityViewerForm m_entityForm;
         private MaterialsForm.ZobMaterialsForm m_materialsForm;
@@ -76,8 +76,8 @@ namespace DirectZobEditor
         private eplayMode m_playMode = eplayMode.ePlayMode_stop;
         private eplayMode m_nextPlayMode = eplayMode.ePlayMode_stop;
 
-        public CLI.engineCallback onSceneLoadedCallback;
-        public CLI.sceneLoadingCallback onSceneLoadingCallback;
+        public DirectZobInterface.engineCallback onSceneLoadedCallback;
+        public DirectZobInterface.sceneLoadingCallback onSceneLoadingCallback;
         public delegate void OnSceneLoaded();
         public OnSceneLoaded OnSceneLoadedDelegate;
 
@@ -92,15 +92,15 @@ namespace DirectZobEditor
             m_engineWindow = new EngineWindow(this);
             PictureBox p = m_engineWindow.GetEngineRenderwindow();
             System.Resources.ResourceManager resources = new ResourceManager("DirectZobEditor.Properties.Resources", typeof(DirectZobEditorForm).Assembly);
-            m_directZobWrapper = new CLI.DirectZobWrapper(this.ZobObjectListPanel, this.propertiesPanel, this.globalPropertiesPanel, m_engineWindow.GetEngineRenderwindow(), resources);
+            m_directZobWrapper = new DirectZobInterface.DirectZobWrapper(this.ZobObjectListPanel, this.propertiesPanel, this.globalPropertiesPanel, m_engineWindow.GetEngineRenderwindow(), resources);
             m_directZobWrapper.Init(p.Width, p.Height);
-            CLI.ZobObjectManagerWrapper.OnObjectSelectedEvent += new CLI.ZobObjectManagerWrapper.OnObjectSelected(OnObjectSelected);
+            DirectZobInterface.ZobObjectManagerWrapper.OnObjectSelectedEvent += new DirectZobInterface.ZobObjectManagerWrapper.OnObjectSelected(OnObjectSelected);
             m_zobObjectManagerWrapper = m_directZobWrapper.GetZobObjectManagerWrapper();
             Application.ApplicationExit += new EventHandler(this.OnApplicationExit);
             this.Load += new EventHandler(this.Onloaded);
-            onSceneLoadedCallback = new CLI.engineCallback(onSceneLoadedCallbackMethod);
+            onSceneLoadedCallback = new DirectZobInterface.engineCallback(onSceneLoadedCallbackMethod);
             OnSceneLoadedDelegate = new OnSceneLoaded(OnSceneLoadedMethod);
-            onSceneLoadingCallback = new CLI.sceneLoadingCallback(OnSceneLoadingMethod);
+            onSceneLoadingCallback = new DirectZobInterface.sceneLoadingCallback(OnSceneLoadingMethod);
 
             SetSnap("None");
             InformEngineStatus("STOPPED");
@@ -151,7 +151,7 @@ namespace DirectZobEditor
             toolStripStatusScanePath.Text = GetDirectZobWrapper().GetResourcePath();
         }
 
-        private void OnObjectSelected(CLI.ZobObjectWrapper z)
+        private void OnObjectSelected(DirectZobInterface.ZobObjectWrapper z)
         {
             if(z != null)
             {
@@ -189,7 +189,7 @@ namespace DirectZobEditor
             }));
         }
 
-        public CLI.EngineWrapper GetEngineWrapper()
+        public DirectZobInterface.EngineWrapper GetEngineWrapper()
         {
             return m_directZobWrapper.GetEngineWrapper();
         }
@@ -278,7 +278,7 @@ namespace DirectZobEditor
             return m_engineWindow;
         }
 
-        public CLI.DirectZobWrapper GetDirectZobWrapper()
+        public DirectZobInterface.DirectZobWrapper GetDirectZobWrapper()
         {
             return m_directZobWrapper;
         }
@@ -437,8 +437,8 @@ namespace DirectZobEditor
                     string file = openFileDialog.SafeFileName;
                     string name = file;
                     name.Replace(' ', '_');
-                    CLI.ZobObjectWrapper root = m_zobObjectManagerWrapper.GetRootObject();
-                    CLI.ZobObjectWrapper z = null;
+                    DirectZobInterface.ZobObjectWrapper root = m_zobObjectManagerWrapper.GetRootObject();
+                    DirectZobInterface.ZobObjectWrapper z = null;
                     z = m_zobObjectManagerWrapper.CreateZobObject();
                     z.SetName(name);
                     string workspace = m_directZobWrapper.GetResourcePath();
@@ -475,8 +475,8 @@ namespace DirectZobEditor
                     string file = openFileDialog.SafeFileName;
                     string name = file;
                     name.Replace(' ', '_');
-                    CLI.ZobObjectWrapper root = m_zobObjectManagerWrapper.GetRootObject();
-                    CLI.ZobObjectWrapper z = null;
+                    DirectZobInterface.ZobObjectWrapper root = m_zobObjectManagerWrapper.GetRootObject();
+                    DirectZobInterface.ZobObjectWrapper z = null;
                     z = m_zobObjectManagerWrapper.CreateZobObject();
                     z.SetName(name);
                     string workspace = m_directZobWrapper.GetResourcePath();
@@ -690,7 +690,7 @@ namespace DirectZobEditor
 
         private void btnTranslateLocal_Click(object sender, EventArgs e)
         {
-            m_directZobWrapper.GetEngineWrapper().SetObjectModificator((CLI.ZobObjectsEditor.eGizmoModificatorType)1, (CLI.ZobObjectsEditor.eGizmoModificatorSpace)1);
+            m_directZobWrapper.GetEngineWrapper().SetObjectModificator((DirectZobInterface.ZobObjectsEditor.eGizmoModificatorType)1, (DirectZobInterface.ZobObjectsEditor.eGizmoModificatorSpace)1);
             btnRotateLocal.Checked = false;
             btnScale.Checked = false;
             btnTranslateWorld.Checked = false;
@@ -699,7 +699,7 @@ namespace DirectZobEditor
 
         private void btnRotateLocal_Click(object sender, EventArgs e)
         {
-            m_directZobWrapper.GetEngineWrapper().SetObjectModificator((CLI.ZobObjectsEditor.eGizmoModificatorType)2, (CLI.ZobObjectsEditor.eGizmoModificatorSpace)1);
+            m_directZobWrapper.GetEngineWrapper().SetObjectModificator((DirectZobInterface.ZobObjectsEditor.eGizmoModificatorType)2, (DirectZobInterface.ZobObjectsEditor.eGizmoModificatorSpace)1);
             btnTranslateLocal.Checked = false;
             btnTranslateWorld.Checked = false;
             btnScale.Checked = false;
@@ -708,7 +708,7 @@ namespace DirectZobEditor
 
         private void btnScale_Click(object sender, EventArgs e)
         {
-            m_directZobWrapper.GetEngineWrapper().SetObjectModificator((CLI.ZobObjectsEditor.eGizmoModificatorType)3, (CLI.ZobObjectsEditor.eGizmoModificatorSpace)1);
+            m_directZobWrapper.GetEngineWrapper().SetObjectModificator((DirectZobInterface.ZobObjectsEditor.eGizmoModificatorType)3, (DirectZobInterface.ZobObjectsEditor.eGizmoModificatorSpace)1);
             btnTranslateLocal.Checked = false;
             btnRotateLocal.Checked = false;
             btnTranslateWorld.Checked = false;
@@ -717,7 +717,7 @@ namespace DirectZobEditor
 
         private void btnTranslateWorld_Click(object sender, EventArgs e)
         {
-            m_directZobWrapper.GetEngineWrapper().SetObjectModificator((CLI.ZobObjectsEditor.eGizmoModificatorType)1, (CLI.ZobObjectsEditor.eGizmoModificatorSpace)2);
+            m_directZobWrapper.GetEngineWrapper().SetObjectModificator((DirectZobInterface.ZobObjectsEditor.eGizmoModificatorType)1, (DirectZobInterface.ZobObjectsEditor.eGizmoModificatorSpace)2);
             btnRotateLocal.Checked = false;
             btnScale.Checked = false;
             btnTranslateLocal.Checked = false;
@@ -726,7 +726,7 @@ namespace DirectZobEditor
 
         private void btnRotateWorld_Click(object sender, EventArgs e)
         {
-            m_directZobWrapper.GetEngineWrapper().SetObjectModificator((CLI.ZobObjectsEditor.eGizmoModificatorType)2, (CLI.ZobObjectsEditor.eGizmoModificatorSpace)2);
+            m_directZobWrapper.GetEngineWrapper().SetObjectModificator((DirectZobInterface.ZobObjectsEditor.eGizmoModificatorType)2, (DirectZobInterface.ZobObjectsEditor.eGizmoModificatorSpace)2);
             btnRotateLocal.Checked = false;
             btnScale.Checked = false;
             btnTranslateLocal.Checked = false;
@@ -788,7 +788,7 @@ namespace DirectZobEditor
 
         private void SaveEditorSettings()
         {
-            CLI.EditorSettings s = new CLI.EditorSettings();
+            DirectZobInterface.EditorSettings s = new DirectZobInterface.EditorSettings();
             m_directZobWrapper.SaveEditorSettings(s);
             JsonSerializer serializer = new JsonSerializer();
             using (StreamWriter file = File.CreateText(@"../settings.json"))
@@ -807,7 +807,7 @@ namespace DirectZobEditor
                     using (JsonReader jr = new JsonTextReader(tr))
                     {
                         JsonSerializer serializer = new JsonSerializer();
-                        CLI.EditorSettings s = serializer.Deserialize<CLI.EditorSettings>(jr);
+                        DirectZobInterface.EditorSettings s = serializer.Deserialize<DirectZobInterface.EditorSettings>(jr);
                         m_directZobWrapper.LoadEditorSettings(s);
                     }
                 }
@@ -951,6 +951,27 @@ namespace DirectZobEditor
         {
             m_directZobWrapper.GetEngineWrapper().DrawPhysicsGizmos(true);
             m_directZobWrapper.GetEngineWrapper().DrawGizmos(true);
+        }
+
+        private void loadAssetToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                //openFileDialog.InitialDirectory = m_path;
+                openFileDialog.Filter = "DirectZob Assets(*.dza)|*.dza";
+                openFileDialog.FilterIndex = 2;
+                string workspace = m_directZobWrapper.GetResourcePath();
+                if (!String.IsNullOrEmpty(workspace) && Directory.Exists(workspace))
+                {
+                    openFileDialog.InitialDirectory = workspace.Replace("/", "\\"); ;
+                }
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    string path = Path.GetDirectoryName(openFileDialog.FileName) + "\\";
+                    string file = openFileDialog.SafeFileName;
+                    m_directZobWrapper.LoadAsset(path, file);
+                }
+            }
         }
     }
 

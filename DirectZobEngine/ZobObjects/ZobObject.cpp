@@ -11,7 +11,7 @@
 #include "../../dependencies/optick/include/optick.h"
 
 static int sObjectNumber = 0;
-ZobObject::ZobObject(ZobType t, ZobSubType s, const std::string& name, ZobObject* parent /*= NULL*/, const std::string* factoryFile /*=NULL*/)
+ZobObject::ZobObject(ZobType t, ZobSubType s, const std::string& name, ZobObject* parent /*= NULL*/)
 	:ZobEntity(t,s)
 {
 	SET_CLASS_AND_NAME
@@ -21,7 +21,6 @@ ZobObject::ZobObject(ZobType t, ZobSubType s, const std::string& name, ZobObject
 	sObjectNumber++;
 	m_Components.clear();
 	m_visible = true;
-	m_factoryFile = factoryFile?factoryFile->c_str():"";
 	m_physicComponent = new ZobPhysicComponent(this);
 	if (name.length() == 0)
 	{
@@ -70,14 +69,13 @@ ZobObject::ZobObject(ZobType t, ZobSubType s, const std::string& name, ZobObject
 	DirectZob::RemoveIndent();
 }
 
-ZobObject::ZobObject(zobId id, TiXmlElement* node, ZobObject* parent, const std::string* factoryFile /*=NULL*/)
+ZobObject::ZobObject(zobId id, TiXmlElement* node, ZobObject* parent)
 	:ZobEntity(id)
 {
 	SET_CLASS_AND_NAME
 	m_varExposer = new ZobVariablesExposer(GetIdValue());
 	m_Components.clear();
 	sObjectNumber++;
-	m_factoryFile = factoryFile ? factoryFile->c_str() : "";
 	float x, y, z;
 	TiXmlElement* f;
 	DirectZob::LogInfo("ZobObject %i creation", id);
@@ -850,5 +848,19 @@ void ZobObject::ResetPhysic()
 
 void ZobObject::Duplicate()
 {
-	assert(false);
+	TiXmlElement n = TiXmlElement("tmp_root");
+	
+	TiXmlDocument doc(XML_ELEMENT_SCENE);
+	//TiXmlDeclaration* decl = new TiXmlDeclaration("1.0", "", "");
+	//doc.LinkEndChild(decl);
+	SaveRecusrive(&doc, this);
+	doc.SaveFile("D:\\text.xml");	
+	SceneLoader::LoadAsset(this->GetParent(), (TiXmlElement*)doc.FirstChild());
+}
+
+void ZobObject::SaveAsAsset(std::string& file)
+{
+	TiXmlDocument doc(XML_ELEMENT_SCENE);
+	SaveRecusrive(&doc, this);
+	doc.SaveFile(file.c_str());
 }

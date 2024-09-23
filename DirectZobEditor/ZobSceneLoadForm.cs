@@ -17,7 +17,7 @@ namespace DirectZobEditor
         private int m_curObject = 0;
 
 
-        public ZobSceneLoadForm(DirectZobEditorForm f, CLI.DirectZobWrapper directZobWrapper)
+        public ZobSceneLoadForm(DirectZobEditorForm f, DirectZobInterface.DirectZobWrapper directZobWrapper)
         {
             this.TopMost = true;
             m_nbObjects = 0;

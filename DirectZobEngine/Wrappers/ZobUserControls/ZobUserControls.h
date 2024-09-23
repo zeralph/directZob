@@ -14,7 +14,7 @@ using namespace System::Collections::Generic;
 using namespace System::Drawing;
 
 
-namespace CLI {
+namespace DirectZobInterface {
 
 	public ref class ZobComboboxItem
 	{

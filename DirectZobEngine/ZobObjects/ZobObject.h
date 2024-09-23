@@ -26,8 +26,8 @@ friend class ZobComponent;
 friend class ZobComponentCar;
 public:
 
-	ZobObject(ZobEntity::ZobType t, ZobEntity::ZobSubType s, const std::string& name, ZobObject* parent = NULL, const std::string* factoryFile =NULL);
-	ZobObject(zobId id, TiXmlElement* node, ZobObject* parent, const std::string* factoryFile = NULL);
+	ZobObject(ZobEntity::ZobType t, ZobEntity::ZobSubType s, const std::string& name, ZobObject* parent = NULL);
+	ZobObject(zobId id, TiXmlElement* node, ZobObject* parent);
 	virtual ~ZobObject();
 
 	//Mechanics
@@ -41,6 +41,7 @@ public:
 	virtual void						DrawGizmos(const Camera* camera, Engine* engine);
 	virtual								TiXmlNode* SaveUnderNode(TiXmlNode* node);
 	void								Duplicate() override;
+	void								SaveAsAsset(std::string& file);
 	//
 	void								SaveTransform();
 	void								RestoreTransform();
@@ -86,8 +87,6 @@ public:
 	void								MarkForDeletion() { m_markedForDeletion=true; };
 	bool								HasChild(const ZobObject* o);
 	void								CreateSprite();
-	bool								IsFromFactoryFile() {return m_factoryFile.length()>0;}
-	std::string&						FactoryFile() { return m_factoryFile; }
 	void								SaveToFactoryFile(std::string& file);
 	const ZobPhysicComponent*			GetPhysicComponent() const { return m_physicComponent; };
 	ZobPhysicComponent*					GetPhysicComponentNoConst() { return m_physicComponent; };
@@ -156,6 +155,5 @@ protected:
 	ZobVector3							m_left;
 	ZobVector3							m_forward;
 	ZobVector3							m_up;
-	std::string							m_factoryFile;
 	bool								m_visible;
 };

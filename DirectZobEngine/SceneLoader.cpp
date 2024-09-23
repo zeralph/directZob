@@ -122,7 +122,7 @@ void SceneLoader::LoadZobObject(std::string& fullPath, ZobObject* parent /* = NU
 	}
 }
 
-void SceneLoader::LoadZobObject(TiXmlElement* node, ZobObject* parent, const std::string* factoryPath)
+void SceneLoader::LoadZobObject(TiXmlElement* node, ZobObject* parent, bool bRegenerateGuid)
 {	
 	m_nbZobObjectLoaded++;
 	ZobObject* zob = NULL;
@@ -140,9 +140,13 @@ void SceneLoader::LoadZobObject(TiXmlElement* node, ZobObject* parent, const std
 	}
 	std::string id = cid;
 	zobId zid = ZobEntity::ZobIdFromString(id);
+	if (bRegenerateGuid)
+	{
+		zid = ZobEntity::Regenerate(zid);
+	}
 	if (ZobEntity::GetSubType(zid) == ZobEntity::subtype_zobOject)
 	{
-		zob = new ZobObject(zid, node, parent, factoryPath);
+		zob = new ZobObject(zid, node, parent);
 	}
 	else if (ZobEntity::GetSubType(zid) == ZobEntity::subtype_zobCamera)
 	{
@@ -174,7 +178,7 @@ void SceneLoader::LoadZobObject(TiXmlElement* node, ZobObject* parent, const std
 		}
 		else
 		{
-			LoadZobObject(e, zob, factoryPath);
+			LoadZobObject(e, zob, bRegenerateGuid);
 		}
 	}
 }
@@ -264,6 +268,20 @@ void SceneLoader::LoadSceneInternalFromFiles()
 	doc.ClearError();
 	doc.LoadFile(fullPath.c_str());
 	ParseXml(&doc);
+}
+
+void SceneLoader::LoadAsset(ZobObject* parent, std::string& path, std::string& file)
+{
+	TiXmlDocument doc("Scene");
+	std::string fullPath = path + file;
+	doc.ClearError();
+	doc.LoadFile(fullPath.c_str());
+	LoadAsset(parent, (TiXmlElement*)doc.FirstChild());
+}
+
+void SceneLoader::LoadAsset(ZobObject* parent, TiXmlElement* node)
+{
+	LoadZobObject(node, parent, true);
 }
 
 const std::string& SceneLoader::GetResourcePath() 

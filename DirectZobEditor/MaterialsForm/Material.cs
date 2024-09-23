@@ -13,12 +13,12 @@ namespace DirectZobEditor.MaterialsForm
 {
     public partial class Material : UserControl
     {
-        private CLI.ZobMaterialWrapper m_material;
-        public Material(CLI.ZobMaterialWrapper mat)
+        private DirectZobInterface.ZobMaterialWrapper m_material;
+        public Material(DirectZobInterface.ZobMaterialWrapper mat)
         {
             m_material = mat;
             InitializeComponent();
-            LabelMaterial.Text = m_material.name;
+            LabelMaterial.Text = m_material.m_name + "("+ m_material.m_width +"x"+ m_material.m_height +")";
             SetTexture();
         }
 
@@ -29,7 +29,7 @@ namespace DirectZobEditor.MaterialsForm
 
         private void SetTexture()
         {
-            pictureBox1.Image = m_material.texture;
+            pictureBox1.Image = m_material.GetTexture();
             pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
         }
     }

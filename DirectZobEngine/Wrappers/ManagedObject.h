@@ -3,7 +3,7 @@
 #include <string> 
 #include <iostream>
 #include "../DirectZob.h"
-namespace CLI {
+namespace DirectZobInterface {
 
 	template<class T>
 	public ref class ManagedObject

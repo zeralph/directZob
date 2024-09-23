@@ -8,10 +8,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Windows.Forms;
-using CLI;
 using System.Runtime.CompilerServices;
 using System.Numerics;
 using System.IO;
+using DirectZobInterface;
+
 
 namespace DirectZobEditor
 {

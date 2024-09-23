@@ -15,7 +15,7 @@ using namespace System::Windows::Forms;
 using namespace System::Collections::Generic;
 using namespace System::Drawing;
 
-namespace CLI {
+namespace DirectZobInterface {
 
 	public ref class ZobGlobalsWrapper
 	{

@@ -10,7 +10,7 @@
 
 #define TO_MANAGED_STRING(x) gcnew String(x);
 
-namespace CLI
+namespace DirectZobInterface
 {
 	ZobGlobalsWrapper::ZobGlobalsWrapper(Panel^ parentPanel)
 	{
@@ -53,14 +53,14 @@ namespace CLI
 	{
 		ZobVariablesExposer* ze = DirectZob::GetInstance()->GetLightManager()->GetVariablesExposer();
 		std::string name = std::string("Lighting");
-		return CLI::ZobControl::CreateWrappedVariablesView(name, ze, nullptr);
+		return DirectZobInterface::ZobControl::CreateWrappedVariablesView(name, ze, nullptr);
 	}
 
 	ZobGroupBox^ ZobGlobalsWrapper::FillEngineControl()
 	{
 		ZobVariablesExposer* ze = DirectZob::GetInstance()->GetEngine()->GetVariablesExposer();
 		std::string name = std::string("Engine");
-		return CLI::ZobControl::CreateWrappedVariablesView(name, ze, nullptr);
+		return DirectZobInterface::ZobControl::CreateWrappedVariablesView(name, ze, nullptr);
 	}
 }
 

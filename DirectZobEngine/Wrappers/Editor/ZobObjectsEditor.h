@@ -16,7 +16,7 @@
 using namespace System;
 using namespace System::Collections::Generic;
 
-namespace CLI
+namespace DirectZobInterface
 {
 	public class ZobObjectsEditor
 	{

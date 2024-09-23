@@ -1,7 +1,7 @@
 #ifdef _WINDLL
 #pragma once
 
-namespace CLI
+namespace DirectZobInterface
 {
 	public ref class DirectZobWrapperEvents
 	{

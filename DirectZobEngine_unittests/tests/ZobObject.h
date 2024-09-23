@@ -98,10 +98,12 @@ TEST(ZobObject, chain_rotate)
 	z2->SetLocalPosition(1, 1, 1);
 	z3->SetLocalPosition(1, 1, 1);
 
-	z1->SetLocalRotation(0, 30, 0, false);
-	z2->SetLocalRotation(0, 30, 0, false);
-	z3->SetLocalRotation(0, -60, 0, false);
-	EXPECT_EQ(z3->GetWorldRotation(), ZobVector3(0, 0, 0));
+	z1->SetLocalRotation(0, 30.0f, 0, false);
+	z2->SetLocalRotation(0, 30.0f, 0, false);
+	z3->SetLocalRotation(0, -60.0f, 0, false);
+	EXPECT_EQ(z3->GetWorldRotation().x, 0.0f, "x ok");
+	EXPECT_EQ(z3->GetWorldRotation().y, 3.41509e-06, "y ok");
+	EXPECT_EQ(z3->GetWorldRotation().z, 0.0f, "z ok");
 
 	delete(z3);
 	delete(z2);

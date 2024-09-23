@@ -19,7 +19,7 @@ using namespace System::Windows::Forms;
 using namespace System::Collections::Generic;
 using namespace System::Drawing;
 
-namespace CLI
+namespace DirectZobInterface
 {
 	public ref class EditorSettings
 	{
@@ -69,6 +69,7 @@ namespace CLI
 		void							Init(int width, int height);
 		void							LoadScene(System::String^ path, System::String^ file, engineCallback^ loaded, sceneLoadingCallback^ loading);
 		void							LoadZobObject(System::String^ path, System::String^ file);
+		void							LoadAsset(System::String^ path, System::String^ file);
 		void							NewScene(System::String^ workspace);
 		void							Unload();
 		bool							CanFastSave();
@@ -110,7 +111,7 @@ namespace CLI
 		static engineCallback^			m_sceneLoadedCb;
 		static engineCallback^			m_objectSelectedCb;
 		static sceneLoadingCallback^	m_sceneLoadingCb;
-		cli::array<std::byte>^			m_bufferData;
+		cli::array<byte>^				m_bufferData;
 		int								m_buffferDataLength;
 
 		Panel^							m_objectTreeviewPanel;

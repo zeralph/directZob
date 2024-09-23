@@ -15,7 +15,7 @@ using namespace System::Windows::Forms;
 using namespace System::Collections::Generic;
 using namespace System::Drawing;
 
-namespace CLI {
+namespace DirectZobInterface {
 	public ref class ZobObjectWrapper : ManagedObject<ZobObject>
 	{
 	public:
@@ -33,8 +33,6 @@ namespace CLI {
 		bool					IsCamera();
 		void					Detach();
 		DirectZobType::guid		GetId() { return m_id; }
-		bool					IsFromFactoryFile();
-		String^					FactoryFile();
 		void					SaveToFactoryFile(String^ file);
 		void					EditorUpdate();
 		void					GroupClick(Object^ sender, System::EventArgs^ e);

@@ -195,6 +195,7 @@ void MaterialManager::LoadOBJMaterials(ZobFilePath* zfp)
 	{
 		return;
 	}
+	materials.resize(0);
 	std::istringstream stream(std::string(zfp->GetData()));
 	std::string s = "Opening ";
 	s.append(fullPath);

@@ -8,7 +8,7 @@ TEST(Mesh, Constructor_OBJ_MAN)
 {
 	std::string resPath = MyUtils::GetPath() + "resources\\";
 	ZobFilePath zfp = ZobFilePath("mesh1", resPath, "man.obj", true);
-	Mesh* m = new Mesh(zfp);
+	Mesh* m = new Mesh(&zfp);
 	EXPECT_EQ(m->GetNbTriangles(), 48918);
 	EXPECT_EQ(m->GetNbVertices(), 24461);
 	EXPECT_EQ(m->GetNbNormals(), 24460);
@@ -21,7 +21,7 @@ TEST(Mesh, Constructor_OBJ_MAN)
 TEST(Mesh, Constructor_OBJ_CAMARO)
 {
 	ZobFilePath zfp = ZobFilePath("mesh2", MyUtils::GetPath() + "resources\\", "camaro.obj", true);
-	Mesh* m = new Mesh(zfp);
+	Mesh* m = new Mesh(&zfp);
 	EXPECT_EQ(m->GetNbTriangles(), 20044);
 	EXPECT_EQ(m->GetNbVertices(), 13542);
 	EXPECT_EQ(m->GetNbNormals(), 15838);
@@ -34,7 +34,7 @@ TEST(Mesh, Constructor_OBJ_CAMARO)
 TEST(Mesh, Constructor_FBX_11)
 {
 	ZobFilePath zfp = ZobFilePath("mesh3", MyUtils::GetPath() + "resources\\", "11.fbx", true);
-	Mesh* m = new Mesh(zfp);
+	Mesh* m = new Mesh(&zfp);
 	EXPECT_EQ(m->GetNbTriangles(), 0);
 	EXPECT_EQ(m->GetNbVertices(), 0);
 	EXPECT_EQ(m->GetNbNormals(), 0);

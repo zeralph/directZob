@@ -12,19 +12,19 @@ namespace DirectZobEditor.MaterialsForm
 {
     public partial class ZobMaterialsForm : Form
     {
-        private CLI.DirectZobWrapper m_directZobWrapper;
+        private DirectZobInterface.DirectZobWrapper m_directZobWrapper;
         private DirectZobEditorForm m_mainForm;
-        public ZobMaterialsForm(DirectZobEditorForm f, CLI.DirectZobWrapper directZobWrapper)
+        public ZobMaterialsForm(DirectZobEditorForm f, DirectZobInterface.DirectZobWrapper directZobWrapper)
         {
             InitializeComponent();
             m_mainForm = f;
             m_directZobWrapper = directZobWrapper;
-            CLI.ZobMaterialsManagerWrapper manager = new CLI.ZobMaterialsManagerWrapper();
+            DirectZobInterface.ZobMaterialsManagerWrapper manager = new DirectZobInterface.ZobMaterialsManagerWrapper();
             manager.ParseMaterials();
             int nbMat = manager.GetNbMaterials();
             for (int i = 0; i < nbMat; i++)
             {
-                CLI.ZobMaterialWrapper mat = manager.GetMaterial(i);
+                DirectZobInterface.ZobMaterialWrapper mat = manager.GetMaterial(i);
                 Material ctrl = new Material(mat);
                 MaterialsTableLayout.Controls.Add(ctrl);
                 MaterialsTableLayout.Controls[i].Height = ctrl.Height + 2;

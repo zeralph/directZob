@@ -8,7 +8,7 @@
 #include "../Managers/LightManager.h"
 #include "../Managers/ZobInputManager.h"
 
-namespace CLI
+namespace DirectZobInterface
 {
 	DirectZobWrapper::DirectZobWrapper(Panel^ objectTreeviewPanel, Panel^ objectPropertiesPanel, Panel^ globalPropertiesPanel, PictureBox^ renderWindow, Resources::ResourceManager^ rsMgr):ManagedObject(new DirectZob, true)
 	{
@@ -126,6 +126,18 @@ namespace CLI
 			std::string stdFile;
 			MarshalString(file, stdFile);
 			GetInstance()->LoadZobObject(stdPath, stdFile);
+		}
+	}
+
+	void DirectZobWrapper::LoadAsset(System::String^ path, System::String^ file)
+	{
+		if (GetInstance())
+		{
+			std::string stdPath;
+			MarshalString(path, stdPath);
+			std::string stdFile;
+			MarshalString(file, stdFile);
+			SceneLoader::LoadAsset(NULL, stdPath, stdFile);
 		}
 	}
 

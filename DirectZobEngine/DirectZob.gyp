@@ -358,6 +358,7 @@
                         'msvs_settings': {
                             'VCCLCompilerTool': {
                                 'CompileAsManaged': 'true',
+								'RuntimeLibrary':'MultiThreadedDLL',
                                 'ExceptionHandling': '0',  # /clr is incompatible with /EHs
                             },
                         },

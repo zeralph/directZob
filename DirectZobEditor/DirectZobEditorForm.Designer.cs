@@ -108,6 +108,7 @@
             this.tabEngine = new System.Windows.Forms.TabPage();
             this.panel2 = new System.Windows.Forms.Panel();
             this.EngineControlsFlowLayout = new System.Windows.Forms.FlowLayoutPanel();
+            this.loadAssetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bottomStatusBar.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FirstPanelSplitter)).BeginInit();
@@ -249,7 +250,8 @@
             this.LoadSpriteToolStripMenuItem,
             this.createLightToolStripMenuItem,
             this.createCameraToolStripMenuItem,
-            this.createZobObjectToolStripMenuItem});
+            this.createZobObjectToolStripMenuItem,
+            this.loadAssetToolStripMenuItem});
             this.assetsToolStripMenuItem.Name = "assetsToolStripMenuItem";
             this.assetsToolStripMenuItem.Size = new System.Drawing.Size(52, 22);
             this.assetsToolStripMenuItem.Text = "Assets";
@@ -260,7 +262,7 @@
             this.loadTextureToolStripMenuItem.Image = global::DirectZobEditor.Properties.Resources.texture;
             this.loadTextureToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.loadTextureToolStripMenuItem.Name = "loadTextureToolStripMenuItem";
-            this.loadTextureToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.loadTextureToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.loadTextureToolStripMenuItem.Text = "Load Texture ...";
             this.loadTextureToolStripMenuItem.Click += new System.EventHandler(this.LoadTextureToolStripMenuItem_Click);
             // 
@@ -269,7 +271,7 @@
             this.loadMeshToolStripMenuItem.Image = global::DirectZobEditor.Properties.Resources.mesh3;
             this.loadMeshToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.loadMeshToolStripMenuItem.Name = "loadMeshToolStripMenuItem";
-            this.loadMeshToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.loadMeshToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.loadMeshToolStripMenuItem.Text = "Load Mesh ...";
             this.loadMeshToolStripMenuItem.Click += new System.EventHandler(this.LoadMeshToolStripMenuItem_Click);
             // 
@@ -278,7 +280,7 @@
             this.LoadSpriteToolStripMenuItem.Image = global::DirectZobEditor.Properties.Resources.sprite;
             this.LoadSpriteToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.LoadSpriteToolStripMenuItem.Name = "LoadSpriteToolStripMenuItem";
-            this.LoadSpriteToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.LoadSpriteToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.LoadSpriteToolStripMenuItem.Text = "Load Sprite ...";
             this.LoadSpriteToolStripMenuItem.Click += new System.EventHandler(this.createSpriteToolStripMenuItem_Click);
             // 
@@ -291,7 +293,7 @@
             this.createLightToolStripMenuItem.Image = global::DirectZobEditor.Properties.Resources.light1;
             this.createLightToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.createLightToolStripMenuItem.Name = "createLightToolStripMenuItem";
-            this.createLightToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.createLightToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.createLightToolStripMenuItem.Text = "Create Light ";
             // 
             // spotToolStripMenuItem
@@ -325,7 +327,7 @@
             this.createCameraToolStripMenuItem.Image = global::DirectZobEditor.Properties.Resources.camera2;
             this.createCameraToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.createCameraToolStripMenuItem.Name = "createCameraToolStripMenuItem";
-            this.createCameraToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.createCameraToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.createCameraToolStripMenuItem.Text = "Create Camera";
             this.createCameraToolStripMenuItem.Click += new System.EventHandler(this.createCameraToolStripMenuItem_Click);
             // 
@@ -362,7 +364,7 @@
             this.createZobObjectToolStripMenuItem.Image = global::DirectZobEditor.Properties.Resources._object;
             this.createZobObjectToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.createZobObjectToolStripMenuItem.Name = "createZobObjectToolStripMenuItem";
-            this.createZobObjectToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.createZobObjectToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.createZobObjectToolStripMenuItem.Text = "Create ZobObject";
             this.createZobObjectToolStripMenuItem.Click += new System.EventHandler(this.createZobObjectToolStripMenuItem_Click);
             // 
@@ -984,6 +986,13 @@
             this.EngineControlsFlowLayout.TabIndex = 0;
             this.EngineControlsFlowLayout.WrapContents = false;
             // 
+            // loadAssetToolStripMenuItem
+            // 
+            this.loadAssetToolStripMenuItem.Name = "loadAssetToolStripMenuItem";
+            this.loadAssetToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.loadAssetToolStripMenuItem.Text = "Load Asset ...";
+            this.loadAssetToolStripMenuItem.Click += new System.EventHandler(this.loadAssetToolStripMenuItem_Click);
+            // 
             // DirectZobEditorForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1113,6 +1122,7 @@
         private System.Windows.Forms.ToolStripMenuItem entitiesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem publishToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem packLevelToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem loadAssetToolStripMenuItem;
     }
 }
 

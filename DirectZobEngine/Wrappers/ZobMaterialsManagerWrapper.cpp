@@ -2,28 +2,24 @@
 #include "ZobMaterialsManagerWrapper.h"
 #define TO_MANAGED_STRING(x) gcnew String(x);
 
-namespace CLI
+namespace DirectZobInterface
 {
-
-	ZobMaterialWrapper::ZobMaterialWrapper(ZobMaterial* zm) :ManagedObject(zm, true)
+	Bitmap^ ZobMaterialWrapper::GetTexture()
 	{
-		name = TO_MANAGED_STRING(zm->GetName().c_str());
-		if (zm->GetDiffuseTexture())
+		if (m_material->GetDiffuseTexture() && m_material->GetDiffuseTexture()->GetData())
 		{
-			const float* d = zm->GetDiffuseTexture()->GetData();
+			const float* d = m_material->GetDiffuseTexture()->GetData();
 			IntPtr p = (IntPtr)&d;
-			int w = zm->GetDiffuseTexture()->GetWidth();
-			int h = zm->GetDiffuseTexture()->GetWidth();
-			int l = w * h * 4;
+			int l = m_width * m_height * 4;
 			cli::array<Byte>^ b = gcnew cli::array<Byte>(l);
-			for (int i = 0; i < l; i+=4)
+			for (int i = 0; i < l; i += 4)
 			{
 				if (d[i + 3] != 0)
 				{
 					b[i + 3] = (int)(d[i + 3] * 255.0f);
-					b[i+2] = (int)(d[i] * 255.0f);
-					b[i+1] = (int)(d[i+1] * 255.0f);
-					b[i+0] = (int)(d[i+2] * 255.0f);
+					b[i + 2] = (int)(d[i] * 255.0f);
+					b[i + 1] = (int)(d[i + 1] * 255.0f);
+					b[i + 0] = (int)(d[i + 2] * 255.0f);
 				}
 				else
 				{
@@ -32,14 +28,33 @@ namespace CLI
 					b[i + 1] = 0;
 					b[i + 0] = 255;
 				}
-				
+
 			}
-			texture = gcnew Bitmap(w, h, Imaging::PixelFormat::Format32bppArgb);
-			Drawing::Rectangle rect = Drawing::Rectangle(0, 0, w, h);
+			Bitmap^ texture = gcnew Bitmap(m_width, m_height, Imaging::PixelFormat::Format32bppArgb);
+			Drawing::Rectangle rect = Drawing::Rectangle(0, 0, m_width, m_height);
 			Imaging::BitmapData^ bmpData = texture->LockBits(rect, Imaging::ImageLockMode::ReadWrite, texture->PixelFormat);
 			IntPtr ptr = bmpData->Scan0;
 			System::Runtime::InteropServices::Marshal::Copy(b, 0, ptr, l);
 			texture->UnlockBits(bmpData);
+			return texture;
+		}
+	}
+
+	ZobMaterialWrapper::ZobMaterialWrapper(ZobMaterial* zm) :ManagedObject(zm, true)
+	{
+		m_material = zm;
+		m_width = 0;
+		m_height = 0;
+		m_name = TO_MANAGED_STRING(zm->GetName().c_str());
+		DirectZob::LogWarning("tex %s %i", zm->GetName().c_str(), zm->GetDiffuseTexture());
+		if (m_material->GetDiffuseTexture() && m_material->GetDiffuseTexture()->GetData())
+		{
+			const float* d = m_material->GetDiffuseTexture()->GetData();
+			IntPtr p = (IntPtr)&d;
+			int w = zm->GetDiffuseTexture()->GetWidth();
+			int h = zm->GetDiffuseTexture()->GetHeight();
+			m_width = w;;
+			m_height = h;
 		}
 	}
 

@@ -7,7 +7,7 @@
 #include "../Managers/CameraManager.h"
 #include "../Managers/LightManager.h"
 #include "../Managers/ZobInputManager.h"
-namespace CLI
+namespace DirectZobInterface
 {
 	static Line m_lines[NB_EDITOR_LINES];
 	static Circle m_circles[NB_EDITOR_CIRCLES];
@@ -492,7 +492,7 @@ namespace CLI
 	{
 		if (!m_running)
 			return;
-		m_renderWindow->Invoke(gcnew Action(this, &CLI::EngineWrapper::UpdateMousePosition));
+		m_renderWindow->Invoke(gcnew Action(this, &DirectZobInterface::EngineWrapper::UpdateMousePosition));
 		ZobObject* curObj = DirectZobWrapper::GetWrapper()->GetZobObjectManagerWrapper()->GetSelectedObject();
 		if (curObj)
 		{
@@ -535,7 +535,7 @@ namespace CLI
 
 		if (GetInstance() && m_renderWindow && m_running)
 		{
-			m_renderWindow->Invoke(gcnew Action(this, &CLI::EngineWrapper::UpdateRenderWindowInternal));
+			m_renderWindow->Invoke(gcnew Action(this, &DirectZobInterface::EngineWrapper::UpdateRenderWindowInternal));
 		}
 	}
 
