@@ -111,7 +111,7 @@ namespace DirectZobInterface
 		static engineCallback^			m_sceneLoadedCb;
 		static engineCallback^			m_objectSelectedCb;
 		static sceneLoadingCallback^	m_sceneLoadingCb;
-		cli::array<byte>^				m_bufferData;
+		cli::array<std::byte>^				m_bufferData;
 		int								m_buffferDataLength;
 
 		Panel^							m_objectTreeviewPanel;

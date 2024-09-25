@@ -38,6 +38,7 @@ namespace DirectZobInterface
 			texture->UnlockBits(bmpData);
 			return texture;
 		}
+		return nullptr;
 	}
 
 	ZobMaterialWrapper::ZobMaterialWrapper(ZobMaterial* zm) :ManagedObject(zm, true)

@@ -8,7 +8,7 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>DirectZobEditor</RootNamespace>
     <AssemblyName>DirectZobEditor</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
@@ -266,9 +266,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy /Y "$(SolutionDir)dependencies/fbxsdk/windows/lib/vs2017/x64/release/libfbxsdk.dll"  "$(TargetDir)libfbxsdk.dll"
-copy /Y "$(SolutionDir)dependencies/gainput/lib/windows/gainput.dll"  "$(TargetDir)gainput.dll"
-copy /Y "$(SolutionDir)dependencies/optick/lib/windows/OptickCore.dll"  "$(TargetDir)OptickCore.dll"
-copy /Y "$(SolutionDir)dependencies/physfs/lib/windows/physfs.dll"  "$(TargetDir)physfs.dll"</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
 </Project>

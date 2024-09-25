@@ -33,7 +33,7 @@ int DirectZob::s_logIndent = 0;
 DirectZob *DirectZob::singleton = nullptr;
 DirectZob::eDirectZobLogLevel DirectZob::sLogLevel = DirectZob::eDirectZobLogLevel_info;
 
-DirectZob::DirectZob()
+DIRECTZOB_API DirectZob::DirectZob()
 {
 	ZobEntity::Init();
 	m_initialized = false;
@@ -43,7 +43,7 @@ DirectZob::DirectZob()
 	m_onSceneLoaded = NULL;
 }
 
-DirectZob::~DirectZob()
+DIRECTZOB_API DirectZob::~DirectZob()
 {
 	delete m_hudManager;
 	delete m_meshManager;
@@ -56,12 +56,12 @@ DirectZob::~DirectZob()
 	delete m_engine;
 }
 
-void DirectZob::Shutdown()
+DIRECTZOB_API void DirectZob::Shutdown()
 {
 
 }
 
-void DirectZob::LoadPack(std::string& path, std::string& file)
+DIRECTZOB_API void DirectZob::LoadPack(std::string& path, std::string& file)
 {
 	m_onSceneLoaded = NULL;
 	SceneLoader::LoadPack(path, file);
@@ -71,7 +71,7 @@ void DirectZob::LoadPack(std::string& path, std::string& file)
 	}
 }
 
-void DirectZob::LoadScene(std::string& path, std::string& file, DirectZob::engineCallback OnSceneLoaded, DirectZobType::sceneLoadingCallback OnSceneLoading)
+DIRECTZOB_API void DirectZob::LoadScene(std::string& path, std::string& file, DirectZob::engineCallback OnSceneLoaded, DirectZobType::sceneLoadingCallback OnSceneLoading)
 {
 	m_physicStarted = false;
 	m_onSceneLoaded = OnSceneLoaded;
@@ -82,13 +82,13 @@ void DirectZob::LoadScene(std::string& path, std::string& file, DirectZob::engin
 	}
 }
 
-void DirectZob::RegenerateZobIds()
+DIRECTZOB_API void DirectZob::RegenerateZobIds()
 {
 	m_zobObjectManager->GetRootObject()->RegenerateZobIds();
 }
 
 
-void DirectZob::OnSceneLoaded()
+DIRECTZOB_API void DirectZob::OnSceneLoaded()
 {
 	if (m_onSceneLoaded)
 	{
@@ -96,32 +96,32 @@ void DirectZob::OnSceneLoaded()
 	}
 }
 
-void DirectZob::LoadZobObject(std::string& path, std::string& file)
+DIRECTZOB_API void DirectZob::LoadZobObject(std::string& path, std::string& file)
 {
 	SceneLoader::LoadZobObject(path, file);
 }
 
-void DirectZob::Lock()
+DIRECTZOB_API void DirectZob::Lock()
 {
 	//g_render_mutex.lock();
 }
 
-void DirectZob::Unlock()
+DIRECTZOB_API void DirectZob::Unlock()
 {
 	//g_render_mutex.unlock();
 }
 
-void DirectZob::SaveScene(std::string& path, std::string& file)
+DIRECTZOB_API void DirectZob::SaveScene(std::string& path, std::string& file)
 {
 	SceneLoader::SaveScene(path, file);
 }
 
-void DirectZob::SaveScene()
+DIRECTZOB_API void DirectZob::SaveScene()
 {
 	SceneLoader::SaveScene();
 }
 
-void DirectZob::NewScene(std::string workspace)
+DIRECTZOB_API void DirectZob::NewScene(std::string workspace)
 {
 	//g_render_mutex.lock();
 	m_physicStarted = false;
@@ -135,14 +135,14 @@ void DirectZob::NewScene(std::string workspace)
 	//g_render_mutex.unlock();
 }
 
-void DirectZob::Resize(int width, int height)
+DIRECTZOB_API void DirectZob::Resize(int width, int height)
 {
 	//g_render_mutex.lock();
 	m_engine->Resize(width, height);
 	//g_render_mutex.unlock();
 }
 
-void DirectZob::Unload()
+DIRECTZOB_API void DirectZob::Unload()
 {
 	//g_render_mutex.lock();
 	DirectZob::GetInstance()->GetEngine()->Stop();
@@ -152,12 +152,12 @@ void DirectZob::Unload()
 	//g_render_mutex.unlock();
 }
 
-bool DirectZob::CanFastSave()
+DIRECTZOB_API bool DirectZob::CanFastSave()
 {
 	return SceneLoader::CanFastSave();
 }
 
-void DirectZob::Init(mfb_window* window, int width, int height, bool bEditorMode)
+DIRECTZOB_API void DirectZob::Init(mfb_window* window, int width, int height, bool bEditorMode)
 {
 	m_window = window;
 	g_isInEditorMode = bEditorMode;
@@ -185,7 +185,7 @@ void DirectZob::Init(mfb_window* window, int width, int height, bool bEditorMode
 	m_physicStarted = false;
 }
 
-void DirectZob::StopPhysic(bool reset)
+DIRECTZOB_API void DirectZob::StopPhysic(bool reset)
 { 
 	m_physicStarted = false; 
 	if (reset)
@@ -195,21 +195,12 @@ void DirectZob::StopPhysic(bool reset)
 	}
 }
 
-int DirectZob::RunInternal(void func(void))
-{
-	for (;;)
-	{
-		RunAFrame(0);
-		func();
-	}
-}
-
-void DirectZob::EditorUpdate()
+DIRECTZOB_API void DirectZob::EditorUpdate()
 {
 	m_zobObjectManager->EditorUpdate();
 }
 
-int DirectZob::RunAFrame(DirectZob::engineCallback OnSceneUpdated /*=NULL*/, DirectZob::engineCallback OnQueuing /*=NULL*/)
+DIRECTZOB_API int DirectZob::RunAFrame(DirectZob::engineCallback OnSceneUpdated /*=NULL*/, DirectZob::engineCallback OnQueuing /*=NULL*/)
 {
 	OPTICK_EVENT();
 	ZobVector3 color = ZobVector3(1, 1, 1);
@@ -360,31 +351,12 @@ int DirectZob::RunAFrame(DirectZob::engineCallback OnSceneUpdated /*=NULL*/, Dir
 	return state;
 }
 
-void DirectZob::Exit()
+DIRECTZOB_API void DirectZob::Exit()
 {
 	mfb_close(m_window);
 }
 
-void DirectZob::WaitToTargetFrameTime(float dt)
-{
-	OPTICK_CATEGORY("WaitToTargetFrameTime", Optick::Category::Wait);
-	if (dt < 0)
-	{
-		throw "rput";
-	}
-	float targetDt = fpsTargets[sTargetMSPerFrameIdx] - dt;
-	if (targetDt > 0.0f && targetDt < 1000.0f)
-	{
-		SleepMS(targetDt);
-		m_frameTime = fpsTargets[sTargetMSPerFrameIdx];
-	}
-	else
-	{
-		m_frameTime = dt;
-	}
-}
-
-void DirectZob::SleepMS(float ms)
+DIRECTZOB_API void DirectZob::SleepMS(float ms)
 {
 #ifdef LINUX
 	usleep((uint)(ms * 1000.0f));
@@ -395,7 +367,7 @@ void DirectZob::SleepMS(float ms)
 #endif //LINUX
 }
 
-double DirectZob::GetDeltaTime_MS(timespec& start, timespec& end) const
+DIRECTZOB_API double DirectZob::GetDeltaTime_MS(timespec& start, timespec& end) const
 {
 	double f;
 	double billion = 1000000000.0;
@@ -414,97 +386,12 @@ double DirectZob::GetDeltaTime_MS(timespec& start, timespec& end) const
 	return f * 1000.0;
 }
 
-void DirectZob::PrintEntityList()
-{
-	int txtW = 300;
-	int txtH = 100;
-	std::vector<ZobEntity*> v = ZobEntity::GetAllEntities();
-	int obj =0;
-	int comp = 0;
-	int camc = 0;
-	int unkn = 0;
-	for (int i = 0; i < v.size(); i++)
-	{
-		const ZobEntity* z = v.at(i);
-		zobId zid = z->GetIdValue();
-		ZobObject* zo = ZobEntity::GetEntity<ZobObject>(zid);
-		if (zo)
-		{
-			obj ++;
-		}
-		else
-		{
-			ZobComponent* zb = ZobEntity::GetEntity<ZobComponent>(zid);
-			if (zb)
-			{
-				comp ++;
-			}
-			else
-			{
-				ZobCameraController* zc = ZobEntity::GetEntity<ZobCameraController>(zid);
-				if (zc)
-				{
-					camc++;
-				}
-				else
-				{
-					unkn ++;
-				}
-			}
-		}
-	}
-	int c = 0xFFFFFFFF;
-	m_text->Print(txtW, txtH, c, "%i obj %i comp %i camc %i unkn", obj, comp, camc, unkn);
-}
-
-void DirectZob::PrintObjectList()
-{
-	int txtW = m_engine->GetBufferData()->width - 190;
-	std::vector<const ZobObject*> v;
-	m_zobObjectManager->GetZobObjectList(v);
-	for (int i = 0; i < v.size(); i++)
-	{
-		const ZobObject* z = v.at(i);
-		int c = 0xFFFFFFFF; 
-		const ZobComponentMesh* m = z->GetComponent<ZobComponentMesh>();
-		const ZobComponentSprite* s = z->GetComponent<ZobComponentSprite>();
-		if (m || s)
-		{
-			c = 0xFFFF0000;
-		}
-		if (m && m->GetMesh() && m->GetMesh()->IsDrawn())
-		{
-			c = 0xFF00FF00;
-		}
-		if (s && s->GetMesh() && s->GetMesh()->IsDrawn())
-		{
-			c = 0xFF00FF00;
-		}
-		m_text->Print(txtW, (i*10), c, z->GetName().c_str());
-	}
-}
-
-void DirectZob::PrintInfos()
-{
-
-	m_text->Print(10, 10, ZobColor::Blue.GetRawValue(), "Triangles : %i color depth : %i", m_engine->GetNbDrawnTriangles(), m_engine->GetNbBitsPerColorDepth());
-	m_text->Print(10, 20, ZobColor::Blue.GetRawValue(), "FPS : %03i, TargetFPS : %f", (int)m_fps, fpsTargets[sTargetMSPerFrameIdx]);// (int)(1.0f / fpsTargets[sTargetMSPerFrameIdx]));
-	m_text->Print(10, 30, ZobColor::Blue.GetRawValue(), "render : %03i, geom : %03i, phys : %03i, cpy : %03i, tot : %03i", (int)m_renderTime, (int)m_geometryTime, (int)m_physicTime, (int)m_copyTime, (int)m_frameTime);
-	m_text->Print(10, 40, ZobColor::Blue.GetRawValue(), "Controller LX : %.2f, LY  : %.2f, RX : %.2f, RY : %.2f, LT : %.2f, RT : %.2f",
-		m_inputManager->GetMap()->GetFloat(ZobInputManager::LeftStickX),
-		m_inputManager->GetMap()->GetFloat(ZobInputManager::LeftStickY),
-		m_inputManager->GetMap()->GetFloat(ZobInputManager::RightStickX),
-		m_inputManager->GetMap()->GetFloat(ZobInputManager::RightStickY),
-		m_inputManager->GetMap()->GetFloat(ZobInputManager::LeftShoulder),
-		m_inputManager->GetMap()->GetFloat(ZobInputManager::RightShoulder));
-}
-
-const std::string& DirectZob::GetResourcePath()
+DIRECTZOB_API const std::string& DirectZob::GetResourcePath()
 { 
 	return SceneLoader::GetResourcePath(); 
 }
 
-void DirectZob::LogInfo(const char* format, ...)
+DIRECTZOB_API void DirectZob::LogInfo(const char* format, ...)
 {
 	if(sLogLevel > eDirectZobLogLevel_info)
 	{
@@ -537,7 +424,7 @@ void DirectZob::LogInfo(const char* format, ...)
 	}
 }
 
-void DirectZob::LogError(const char* format, ...)
+DIRECTZOB_API void DirectZob::LogError(const char* format, ...)
 {
 	if(sLogLevel > eDirectZobLogLevel_error)
 	{
@@ -561,7 +448,8 @@ void DirectZob::LogError(const char* format, ...)
 		printf("%s\n", s.c_str());
 	}
 }
-void DirectZob::LogWarning(const char* format, ...)
+
+DIRECTZOB_API void DirectZob::LogWarning(const char* format, ...)
 {
 	if(sLogLevel > eDirectZobLogLevel_warning)
 	{
@@ -583,5 +471,120 @@ void DirectZob::LogWarning(const char* format, ...)
 	else
 	{
 		printf("%s\n", s.c_str());
+	}
+}
+
+//----------------------------
+
+int DirectZob::RunInternal(void func(void))
+{
+	for (;;)
+	{
+		RunAFrame(0);
+		func();
+	}
+}
+
+void DirectZob::PrintEntityList()
+{
+	int txtW = 300;
+	int txtH = 100;
+	std::vector<ZobEntity*> v = ZobEntity::GetAllEntities();
+	int obj = 0;
+	int comp = 0;
+	int camc = 0;
+	int unkn = 0;
+	for (int i = 0; i < v.size(); i++)
+	{
+		const ZobEntity* z = v.at(i);
+		zobId zid = z->GetIdValue();
+		ZobObject* zo = ZobEntity::GetEntity<ZobObject>(zid);
+		if (zo)
+		{
+			obj++;
+		}
+		else
+		{
+			ZobComponent* zb = ZobEntity::GetEntity<ZobComponent>(zid);
+			if (zb)
+			{
+				comp++;
+			}
+			else
+			{
+				ZobCameraController* zc = ZobEntity::GetEntity<ZobCameraController>(zid);
+				if (zc)
+				{
+					camc++;
+				}
+				else
+				{
+					unkn++;
+				}
+			}
+		}
+	}
+	int c = 0xFFFFFFFF;
+	m_text->Print(txtW, txtH, c, "%i obj %i comp %i camc %i unkn", obj, comp, camc, unkn);
+}
+
+void DirectZob::PrintObjectList()
+{
+	int txtW = m_engine->GetBufferData()->width - 190;
+	std::vector<const ZobObject*> v;
+	m_zobObjectManager->GetZobObjectList(v);
+	for (int i = 0; i < v.size(); i++)
+	{
+		const ZobObject* z = v.at(i);
+		int c = 0xFFFFFFFF;
+		const ZobComponentMesh* m = z->GetComponent<ZobComponentMesh>();
+		const ZobComponentSprite* s = z->GetComponent<ZobComponentSprite>();
+		if (m || s)
+		{
+			c = 0xFFFF0000;
+		}
+		if (m && m->GetMesh() && m->GetMesh()->IsDrawn())
+		{
+			c = 0xFF00FF00;
+		}
+		if (s && s->GetMesh() && s->GetMesh()->IsDrawn())
+		{
+			c = 0xFF00FF00;
+		}
+		m_text->Print(txtW, (i * 10), c, z->GetName().c_str());
+	}
+}
+
+void DirectZob::PrintInfos()
+{
+
+	m_text->Print(10, 10, ZobColor::Blue.GetRawValue(), "Triangles : %i color depth : %i", m_engine->GetNbDrawnTriangles(), m_engine->GetNbBitsPerColorDepth());
+	m_text->Print(10, 20, ZobColor::Blue.GetRawValue(), "FPS : %03i, TargetFPS : %f", (int)m_fps, fpsTargets[sTargetMSPerFrameIdx]);// (int)(1.0f / fpsTargets[sTargetMSPerFrameIdx]));
+	m_text->Print(10, 30, ZobColor::Blue.GetRawValue(), "render : %03i, geom : %03i, phys : %03i, cpy : %03i, tot : %03i", (int)m_renderTime, (int)m_geometryTime, (int)m_physicTime, (int)m_copyTime, (int)m_frameTime);
+	m_text->Print(10, 40, ZobColor::Blue.GetRawValue(), "Controller LX : %.2f, LY  : %.2f, RX : %.2f, RY : %.2f, LT : %.2f, RT : %.2f",
+		m_inputManager->GetMap()->GetFloat(ZobInputManager::LeftStickX),
+		m_inputManager->GetMap()->GetFloat(ZobInputManager::LeftStickY),
+		m_inputManager->GetMap()->GetFloat(ZobInputManager::RightStickX),
+		m_inputManager->GetMap()->GetFloat(ZobInputManager::RightStickY),
+		m_inputManager->GetMap()->GetFloat(ZobInputManager::LeftShoulder),
+		m_inputManager->GetMap()->GetFloat(ZobInputManager::RightShoulder));
+}
+
+void DirectZob::WaitToTargetFrameTime(float dt)
+{
+	OPTICK_CATEGORY("WaitToTargetFrameTime", Optick::Category::Wait);
+	if (dt < 0)
+	{
+		throw "rput";
+	}
+	float targetDt = fpsTargets[sTargetMSPerFrameIdx] - dt;
+	if (targetDt > 0.0f && targetDt < 1000.0f)
+	{
+		SleepMS(targetDt);
+		m_frameTime = fpsTargets[sTargetMSPerFrameIdx];
+	}
+	else
+	{
+		m_frameTime = dt;
 	}
 }

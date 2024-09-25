@@ -279,13 +279,13 @@ int main(int argc, char* argv[])
 #endif
 		if (bStartPhysics && !m_directZob.IsPhysicPlaying())
 		{
-			DirectZob::GetInstance()->GetZobObjectManager()->SaveTransforms();
+//			DirectZob::GetInstance()->GetZobObjectManager()->SaveTransforms();
 			m_directZob.StartPhysic();
 		}
 		else if(!bStartPhysics && m_directZob.IsPhysicPlaying())
 		{
 			m_directZob.StopPhysic(true);
-			DirectZob::GetInstance()->GetZobObjectManager()->RestoreTransforms();
+//			DirectZob::GetInstance()->GetZobObjectManager()->RestoreTransforms();
 		}
 		if (!bPause)
 		{

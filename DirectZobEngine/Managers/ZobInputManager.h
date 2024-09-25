@@ -6,7 +6,9 @@
 #ifdef LINUX
 #include <X11/Xlib.h>
 #endif
-
+//#ifdef WINDOWS
+//#pragma comment(lib,"user32.lib") 
+//#endif
 class ZobInputManager
 {
 public:

@@ -31,7 +31,7 @@ public:
 #ifdef LINUX
 		char* t = tempnam(NULL, "dzob");
 #elif WINDOWS
-		char* t = tempnam(NULL, "dzob");
+		char* t = _tempnam(NULL, "dzob");
 #elif MACOS
 		char* t = tempnam(NULL, "dzob");
 #endif	

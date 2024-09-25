@@ -4,10 +4,8 @@
     ],
     'targets': [
         {
-            'target_name':
-            'DirectZobEngine',
-            'type':
-            'static_library',
+            'target_name':'DirectZobEngine',
+            'type':'shared_library',
             'dependencies': [
                 '../dependencies/minifb/minifb.gyp:minifb',
                 '../dependencies/tinyxml/tinyxml.gyp:tinyxml',
@@ -154,6 +152,7 @@
                         ],
                         'defines': [
                             'FBXSDK_SHARED',  # required to link with dll
+							'DIRECTZOB_EXPORTS',
                         ],
                         'direct_dependent_settings': {
                             'include_dirs': [
@@ -161,14 +160,22 @@
                             ],
                             'defines': [
                                 'FBXSDK_SHARED',
+								
                             ],
                         },
                         'link_settings': {
                             'libraries': [
+								'../../../dependencies/fbxsdk/windows/lib/vs2017/x64/release/libfbxsdk.lib',
                                 '../../../dependencies/reactphysics3d/lib/windows/Release/reactphysics3d.lib',
 								'../../../dependencies/optick/lib/windows/OptickCore.lib',
 								'../../../dependencies/gainput/lib/windows/gainput.lib',
 								'../../../dependencies/physfs/lib/windows/physfs.lib',
+								#'../../../dependencies/lodepng/lib/windows/lodepng.lib',
+								#'../../../dependencies/minifb/lib/windows/minifb.lib',
+								#'../../../dependencies/nanojpeg/lib/windows/nanojpeg.lib',
+								#'../../../dependencies/tga/lib/windows/tga.lib',
+								#'../../../dependencies/tinyxml/lib/windows/tinyxml.lib',
+								'user32.lib',
                             ],
                         },
                         'msvs_settings': {
@@ -276,6 +283,19 @@
 								'../../../dependencies/physfs/lib/windows/physfs.lib',
                                 'user32.lib',
                                 'gdi32.lib',
+                                '../../../dependencies/reactphysics3d/lib/windows/Release/reactphysics3d.lib',
+								'../../../dependencies/optick/lib/windows/OptickCore.lib',
+								#'../../../dependencies/lodepng/lib/windows/lodepng.lib',
+								#'../../../dependencies/minifb/lib/windows/minifb.lib',
+								#'../../../dependencies/nanojpeg/lib/windows/nanojpeg.lib',
+								#'../../../dependencies/tga/lib/windows/tga.lib',
+								#'../../../dependencies/tinyxml/lib/windows/tinyxml.lib',
+								'$(SolutionDir)$(Configuration)/lib/lodepng.lib',
+								'$(SolutionDir)$(Configuration)/lib/minifb.lib',
+								'$(SolutionDir)$(Configuration)/lib/nanojpeg.lib',
+								'$(SolutionDir)$(Configuration)/lib/tga.lib',
+								'$(SolutionDir)$(Configuration)/lib/tinyxml.lib',
+								'$(SolutionDir)$(Configuration)/DirectZobEngine.lib',
                             ],
                             #		'library_dirs': [
                             #			'/usr/lib',
@@ -290,6 +310,7 @@
 									'../dependencies/optick/lib/windows/OptickCore.dll',  # copy OptickCore.dll
                                     '../dependencies/gainput/lib/windows/gainput.dll',
 									'../dependencies/physfs/lib/windows/physfs.dll',
+									'$(SolutionDir)$(Configuration)/DirectZobEngine.dll',
 									
                                 ],
                             },
