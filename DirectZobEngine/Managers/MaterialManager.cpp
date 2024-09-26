@@ -1,9 +1,9 @@
 #include "MaterialManager.h"
-#include "DirectZob.h"
+#include "../DirectZob.h"
 #include <fstream>
 #include <iostream>
-#include "Rendering/ZobVector3.h"
-#include <SceneLoader.h>
+#include "../Rendering/ZobVector3.h"
+#include "../SceneLoader.h"
 
 struct OBJMaterialInfo
 {

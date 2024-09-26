@@ -1,5 +1,5 @@
 #include "Texture.h"
-#include "DirectZob.h"
+#include "../DirectZob.h"
 #include "nanojpeg.h"
 #include "lodepng.h"
 #include "tga.h"

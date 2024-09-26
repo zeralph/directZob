@@ -5,7 +5,7 @@
 #include "../ZobObjects/Camera.h"
 #include <thread>
 #undef None
-#include "../dependencies/optick/include/optick.h"
+#include "../../dependencies/optick/include/optick.h"
 static std::thread g_physicThread;
 
 static bool sPhysicThreaded = false;

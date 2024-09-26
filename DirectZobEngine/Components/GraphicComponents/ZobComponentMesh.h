@@ -22,7 +22,7 @@ public:
 	void						PostUpdate() override;
 	void						QueueForDrawing(const Camera* camera, Engine* engine) override;
 	void						EditorUpdate() override;
-	void						Set(ZobFilePath zfp);
+	void						Set(ZobFilePath& zfp);
 	void						SetVisible(bool v);
 	Triangle::RenderOptions*	GetRenderOptions() { return &m_renderOptions; }
 	const Mesh*					GetMesh() const { return m_mesh; }

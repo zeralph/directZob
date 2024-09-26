@@ -2,7 +2,7 @@
 #include "ZobXmlHelper.h"
 #include "ZobUtils.h"
 #include "../ZobObjects/ZobObject.h"
-#include "../DirectZobEngine/DirectZob.h"
+#include "../DirectZob.h"
 #include "../../dependencies/tinyxml/tinyxml.h"
 ZobVariablesExposer::ZobVariablesExposer(zobId id)
 {

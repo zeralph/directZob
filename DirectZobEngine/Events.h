@@ -14,6 +14,12 @@ public:
 		LogError
 	};
 
+	struct event
+	{
+		LogType t;
+		std::string m;
+	};
+
 	Events()
 	{
 		ClearEvents();
@@ -32,14 +38,23 @@ public:
 		s.append(escapeJsonString(data));
 		s.append("\"}");
 		m_events.push_back(s);
+		event e;
+		e.t = eventType;
+		e.m = data;
+		m_eventsStruct.push_back(e);
 	}
 	std::vector<std::string>* GetEvents() 
 	{ 
 		return &m_events; 
 	}
-	 void ClearEvents() 
+	std::vector<event>* GetEventsStruct()
+	{
+		return &m_eventsStruct;
+	}
+	void ClearEvents() 
 	{ 
 		m_events.clear(); 
+		m_eventsStruct.clear();
 	}
 private:
 
@@ -64,4 +79,5 @@ private:
 	}
 
 	std::vector<std::string> m_events;
+	std::vector<event> m_eventsStruct;
 };

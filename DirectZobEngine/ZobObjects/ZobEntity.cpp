@@ -1,6 +1,6 @@
 #include "ZobEntity.h"
 #include <algorithm>
-#include <DirectZob.h>
+#include "../DirectZob.h"
 
 std::map<const zobId, ZobEntity*> ZobEntity::m_entityMap;
 

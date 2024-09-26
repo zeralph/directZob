@@ -1,6 +1,6 @@
 #include "text2D.h"
 #include "lodepng.h"
-#include "BaseFont.h"
+#include "../BaseFont.h"
 #include "../Types.h"
 #include <stdio.h>
 #include <string>

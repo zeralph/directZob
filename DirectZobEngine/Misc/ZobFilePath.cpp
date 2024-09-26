@@ -9,6 +9,7 @@ ZobFilePath::ZobFilePath()
 	m_fileType = eFileType_all;
 	m_buf = NULL;
 	m_bufLen = 0;
+	m_freeBuffer = true;
 	Reset();
 }
 
@@ -19,12 +20,23 @@ ZobFilePath::ZobFilePath(std::string name, std::string path, std::string file, b
 	m_file = file;
 	m_buf = NULL;
 	m_bufLen = 0;
-	m_bufLen = 0;
 	m_bAbsolute = bAbsolute;
 	if (m_path.length() && m_path[m_path.length()- 1] != '/')
 	{
 		m_path.append("/");
 	}
+	m_freeBuffer = true;
+}
+
+ZobFilePath::ZobFilePath(std::string name, char* buffer, long len)
+{
+	m_name = name;
+	m_path = "/";
+	m_file = name;
+	m_buf = buffer;
+	m_bufLen = 0;
+	m_bAbsolute = false;
+	m_freeBuffer = false;
 }
 
 ZobFilePath::~ZobFilePath()
@@ -170,7 +182,7 @@ void ZobFilePath::LoadData()
 
 void ZobFilePath::UnloadData()
 {
-	if (m_buf)
+	if (m_buf && m_freeBuffer)
 	{
 		free(m_buf);
 		m_buf = NULL;

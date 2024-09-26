@@ -4,7 +4,7 @@
 #undef max
 #undef None
 #include <reactphysics3d/reactphysics3d.h>
-#include "Rendering/ZobVector3.h"
+#include "../Rendering/ZobVector3.h"
 #include <vector>
 
 using namespace reactphysics3d;

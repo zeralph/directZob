@@ -6,8 +6,8 @@
 #include <reactphysics3d/reactphysics3d.h>
 #include "ZobPhysicsEngine.h"
 #include "ZobPhysicComponent.h"
-#include "Rendering/ZobVector3.h"
-#include "DirectZob.h"
+#include "../Rendering/ZobVector3.h"
+#include "../DirectZob.h"
 #include <vector>
 
 using namespace reactphysics3d;

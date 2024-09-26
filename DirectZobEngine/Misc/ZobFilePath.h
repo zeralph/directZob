@@ -17,6 +17,7 @@ public:
 
 	ZobFilePath();
 	ZobFilePath(std::string name, std::string path, std::string file, bool bAbsolute);
+	ZobFilePath(std::string name, char* buffer, long len);
 	~ZobFilePath();
 	bool						IsDefined();
 	std::string					GetFullPath();
@@ -44,4 +45,5 @@ private:
 	eFileType					m_fileType;
 	char*						m_buf;
 	long						m_bufLen;
+	bool						m_freeBuffer;
 };

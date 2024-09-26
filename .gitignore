@@ -5,6 +5,7 @@
 **/*.dmp
 /*.dll
 /Debug
+/build
 /x64
 /Release
 /FontExport/.vs

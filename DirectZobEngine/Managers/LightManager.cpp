@@ -1,5 +1,5 @@
 #include "LightManager.h"
-#include "DirectZob.h"
+#include "../DirectZob.h"
 #include "../../dependencies/tinyxml/tinyxml.h"
 #include "ZobObjectManager.h"
 #include "CameraManager.h"

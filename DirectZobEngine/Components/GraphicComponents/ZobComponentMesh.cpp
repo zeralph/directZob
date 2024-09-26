@@ -63,7 +63,7 @@ void ZobComponentMesh::Init(DirectZobType::sceneLoadingCallback cb)
 	}
 }
 
-void ZobComponentMesh::Set(ZobFilePath zfp) 
+void ZobComponentMesh::Set(ZobFilePath& zfp) 
 { 
 	m_meshPath = zfp;
 	m_meshPath.SetFileType(ZobFilePath::eFileType_mesh);

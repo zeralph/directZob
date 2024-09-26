@@ -1,5 +1,5 @@
 #include "CameraManager.h"
-#include "DirectZob.h"
+#include "../DirectZob.h"
 
 CameraManager::CameraManager()
 {

@@ -1,6 +1,6 @@
 #include "ZobFont.h"
 #include "lodepng.h"
-#include "BaseFont.h"
+#include "../BaseFont.h"
 #include "../Types.h"
 #include "../DirectZob.h"
 #include "../Managers/MaterialManager.h"

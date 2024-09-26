@@ -1,6 +1,6 @@
 #include <thread>
 #include "ZobObjectManager.h"
-#include "DirectZob.h"
+#include "../DirectZob.h"
 #include "MeshManager.h"
 #include <mutex>
 #include <condition_variable>

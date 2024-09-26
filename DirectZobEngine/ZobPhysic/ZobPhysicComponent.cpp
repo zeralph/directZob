@@ -1,7 +1,7 @@
 #include "ZobPhysicComponent.h"
 #include "ZobPhysicsEngine.h"
-#include "DirectZob.h"
-#include "Rendering/ZobMatrix4x4.h"
+#include "../DirectZob.h"
+#include "../Rendering/ZobMatrix4x4.h"
 #include <cfloat>
 
 ZobPhysicComponent::ZobPhysicComponent(ZobObject* z)

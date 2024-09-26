@@ -1,5 +1,5 @@
 #include "ZobVector3.h"
-#include "Misc/ZobXmlHelper.h"
+#include "../Misc/ZobXmlHelper.h"
 #include <sstream>
 
 ZobVector3::ZobVector3() :

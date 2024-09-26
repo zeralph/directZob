@@ -1,11 +1,11 @@
 #pragma once
 
-#include "Types.h"
+#include "../Types.h"
 #include "ZobVector2.h"
 #include "ZobVector3.h"
-#include "ZobMaterial.h"
+#include "../ZobMaterial.h"
 #include "ZobMatrix4x4.h"
-#include "Rendering/Color.h"
+#include "../Rendering/Color.h"
 #include "Triangle.h"
 #include <thread> 
 #include <mutex>

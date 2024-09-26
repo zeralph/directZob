@@ -1,12 +1,12 @@
 #include "Light.h"
 #include "tinyxml.h"
-#include "DirectZob.h"
-#include "Misc/ZobXmlHelper.h"
+#include "../DirectZob.h"
+#include "../Misc/ZobXmlHelper.h"
 #include "../Managers/LightManager.h"
 #include "../Managers/CameraManager.h"
-#include "Components/GraphicComponents/ZobComponentSprite.h" 
-#include "Misc/ZobFilePath.h"
-#include "SceneLoader.h"
+#include "../Components/GraphicComponents/ZobComponentSprite.h" 
+#include "../Misc/ZobFilePath.h"
+#include "../SceneLoader.h"
 
 Light::Light(std::string& name, eLightType type, ZobColor color, float intensity, float distance, ZobObject* parent, bool bEditor) :
 	ZobObject((bEditor?ZobEntity::type_editor:ZobEntity::type_scene), ZobEntity::subtype_zobLight, name, parent)

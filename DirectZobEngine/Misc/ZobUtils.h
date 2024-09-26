@@ -28,12 +28,13 @@ public:
 
 	static std::string GetTempFile(std::string extension)
 	{
+		char* t = NULL;
 #ifdef LINUX
-		char* t = tempnam(NULL, "dzob");
+		t = tempnam(NULL, "dzob");
 #elif WINDOWS
-		char* t = tempnam(NULL, "dzob");
+		t = _tempnam(NULL, "dzob");
 #elif MACOS
-		char* t = tempnam(NULL, "dzob");
+		t = tempnam(NULL, "dzob");
 #endif	
 		return std::string(t).append(extension);
 	}
