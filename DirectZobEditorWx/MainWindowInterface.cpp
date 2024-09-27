@@ -17,6 +17,46 @@ MainWindowInterface::MainWindowInterface(DirectZob* dz, ZobEditorManager* dze) :
     m_directZob = dz;
     m_editor = dze;
     m_singleton = this;
+    m_logFont = new wxFont(8, wxSCRIPT, wxNORMAL, wxNORMAL);
+    m_singleton->m_log->SetFont(*m_logFont);
+    //double d  = m_singleton->m_log->GetDimensionScale();
+    //m_singleton->m_log->SetDimensionScale(0.1, false);
+}
+
+MainWindowInterface::~MainWindowInterface()
+{
+    delete m_logFont;
+}
+
+void MainWindowInterface::OnPlay(wxCommandEvent& event)
+{
+    m_Pause->SetValue(0);
+    m_Stop->SetValue(0);
+    m_Play->SetValue(1);
+    m_directZob->StartPhysic();
+}
+
+void MainWindowInterface::OnPause(wxCommandEvent& event)
+{
+    m_Pause->SetValue(1);
+    m_Stop->SetValue(0);
+    m_Play->SetValue(0);
+    m_directZob->StopPhysic(0);
+}
+
+void MainWindowInterface::OnStop(wxCommandEvent& event)
+{
+    m_Pause->SetValue(0);
+    m_Stop->SetValue(1);
+    m_Play->SetValue(0);
+    m_directZob->StopPhysic(1);
+}
+
+void MainWindowInterface::OnMaximize(wxMaximizeEvent& event)
+{
+    //m_splitter3->SetSashSize(-250);
+    //m_panelInspector->SetSize(250, -1);
+    //wxSize toto = m_panelInspector->GetSize();
 }
 
 void MainWindowInterface::MyOnPaint(wxPaintEvent& event)
@@ -96,8 +136,6 @@ void MainWindowInterface::AddLog(const Events::event& e)
         m_singleton->m_log->BeginTextColour(wxColour(0, 0, 200));
         break;
     } 
-    //wxFont font(8, wxTELETYPE, wxNORMAL, wxNORMAL);
-    //m_singleton->m_log->SetFont(font);
     m_singleton->m_log->WriteText(e.m);
     m_singleton->m_log->Newline();
     m_singleton->m_log->ScrollIntoView(m_singleton->m_log->GetCaretPosition(), WXK_PAGEDOWN);

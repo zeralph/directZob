@@ -14,6 +14,7 @@ class MainWindowInterface : public MainWindow
 {
 public:
                                 MainWindowInterface(DirectZob * dz, ZobEditorManager* dze);
+                                ~MainWindowInterface();
     void                        MyOnPaint(wxPaintEvent& event);
     static void                 AddLog(const Events::event& e);
     static void                 OnSceneLoaded();
@@ -29,6 +30,10 @@ public:
     void                        OnExit(wxCommandEvent& event) override;
     void                        OnTreeSelChanged(wxTreeEvent& event) override;
     void                        OnCameraSelected(wxCommandEvent& event) override;
+    void                        OnMaximize(wxMaximizeEvent& event) override;
+    void                        OnPlay(wxCommandEvent& event) override;
+    void                        OnPause(wxCommandEvent& event) override;
+    void                        OnStop(wxCommandEvent& event) override;
 //private:
 
     wxBitmap m_bitmapBuffer;
@@ -38,4 +43,5 @@ public:
 private:
     void                        BuildObjectTree(ZobObject* z, wxTreeItemId& node);
     static MainWindowInterface* m_singleton;
+    wxFont* m_logFont;
 };

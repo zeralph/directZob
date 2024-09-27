@@ -45,6 +45,7 @@ MainWindow::MainWindow( wxWindow* parent, wxWindowID id, const wxString& title, 
 
 	bSizer4->SetMinSize( wxSize( 150,-1 ) );
 	m_splitter3 = new wxSplitterWindow( m_panel2, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_3D );
+	m_splitter3->SetSashGravity( 1 );
 	m_splitter3->Connect( wxEVT_IDLE, wxIdleEventHandler( MainWindow::m_splitter3OnIdle ), NULL, this );
 	m_splitter3->SetMinimumPaneSize( 150 );
 
@@ -54,6 +55,7 @@ MainWindow::MainWindow( wxWindow* parent, wxWindowID id, const wxString& title, 
 
 	bSizer5->SetMinSize( wxSize( 150,-1 ) );
 	m_splitter4 = new wxSplitterWindow( m_panel3, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_3D );
+	m_splitter4->SetSashGravity( 1 );
 	m_splitter4->Connect( wxEVT_IDLE, wxIdleEventHandler( MainWindow::m_splitter4OnIdle ), NULL, this );
 	m_splitter4->SetMinimumPaneSize( 150 );
 
@@ -62,8 +64,12 @@ MainWindow::MainWindow( wxWindow* parent, wxWindowID id, const wxString& title, 
 	bSizer6 = new wxBoxSizer( wxVERTICAL );
 
 	m_toolBar1 = new wxToolBar( m_panel7, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTB_HORIZONTAL );
-	m_button1 = new wxButton( m_toolBar1, wxID_ANY, _("MyButton"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_toolBar1->AddControl( m_button1 );
+	m_Play = new wxToggleButton( m_toolBar1, wxID_ANY, _("Play"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_toolBar1->AddControl( m_Play );
+	m_Pause = new wxToggleButton( m_toolBar1, wxID_ANY, _("Pause"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_toolBar1->AddControl( m_Pause );
+	m_Stop = new wxToggleButton( m_toolBar1, wxID_ANY, _("Stop"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_toolBar1->AddControl( m_Stop );
 	m_cameraSelector = new wxComboBox( m_toolBar1, wxID_ANY, _("Camera"), wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
 	m_toolBar1->AddControl( m_cameraSelector );
 	m_toolBar1->Realize();
@@ -97,12 +103,12 @@ MainWindow::MainWindow( wxWindow* parent, wxWindowID id, const wxString& title, 
 	m_panel3->SetSizer( bSizer5 );
 	m_panel3->Layout();
 	bSizer5->Fit( m_panel3 );
-	m_panel4 = new wxPanel( m_splitter3, wxID_ANY, wxDefaultPosition, wxSize( 150,-1 ), wxTAB_TRAVERSAL );
-	m_panel4->SetBackgroundColour( wxColour( 200, 0, 0 ) );
-	m_panel4->SetMinSize( wxSize( 150,-1 ) );
-	m_panel4->SetMaxSize( wxSize( 250,-1 ) );
+	m_panelInspector = new wxPanel( m_splitter3, wxID_ANY, wxDefaultPosition, wxSize( 150,-1 ), wxTAB_TRAVERSAL );
+	m_panelInspector->SetBackgroundColour( wxColour( 200, 0, 0 ) );
+	m_panelInspector->SetMinSize( wxSize( 150,-1 ) );
+	m_panelInspector->SetMaxSize( wxSize( 250,-1 ) );
 
-	m_splitter3->SplitVertically( m_panel3, m_panel4, -250 );
+	m_splitter3->SplitVertically( m_panel3, m_panelInspector, -250 );
 	bSizer4->Add( m_splitter3, 1, wxEXPAND, 5 );
 
 
@@ -149,7 +155,11 @@ MainWindow::MainWindow( wxWindow* parent, wxWindowID id, const wxString& title, 
 	this->Centre( wxBOTH );
 
 	// Connect Events
+	this->Connect( wxEVT_MAXIMIZE, wxMaximizeEventHandler( MainWindow::OnMaximize ) );
 	m_treeNode->Connect( wxEVT_COMMAND_TREE_SEL_CHANGED, wxTreeEventHandler( MainWindow::OnTreeSelChanged ), NULL, this );
+	m_Play->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( MainWindow::OnPlay ), NULL, this );
+	m_Pause->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( MainWindow::OnPause ), NULL, this );
+	m_Stop->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( MainWindow::OnStop ), NULL, this );
 	m_cameraSelector->Connect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( MainWindow::OnCameraSelected ), NULL, this );
 	m_renderPanel->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( MainWindow::OnLeftDown ), NULL, this );
 	m_renderPanel->Connect( wxEVT_MIDDLE_DOWN, wxMouseEventHandler( MainWindow::OnMiddleDown ), NULL, this );

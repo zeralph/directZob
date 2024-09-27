@@ -339,6 +339,10 @@
 				'directZobEditorWx/directZobEditor.cpp',
 				'directZobEditorWx/MainWindow.h',
 				'directZobEditorWx/MainWindow.cpp',
+				'directZobEditorWx/MainWindowInterface.h',
+				'directZobEditorWx/MainWindowInterface.cpp',
+				'directZobEditorWx/ZobEditorManager.h',
+				'directZobEditorWx/ZobEditorManager.cpp',
 			],
 			'conditions': [
 				[

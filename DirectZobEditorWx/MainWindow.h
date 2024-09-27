@@ -18,7 +18,7 @@
 #include <wx/string.h>
 #include <wx/sizer.h>
 #include <wx/panel.h>
-#include <wx/button.h>
+#include <wx/tglbtn.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
@@ -48,18 +48,24 @@ class MainWindow : public wxFrame
 		wxSplitterWindow* m_splitter4;
 		wxPanel* m_panel7;
 		wxToolBar* m_toolBar1;
-		wxButton* m_button1;
+		wxToggleButton* m_Play;
+		wxToggleButton* m_Pause;
+		wxToggleButton* m_Stop;
 		wxComboBox* m_cameraSelector;
 		wxPanel* m_panel10;
 		wxRichTextCtrl* m_log;
-		wxPanel* m_panel4;
+		wxPanel* m_panelInspector;
 		wxMenuBar* m_menubar1;
 		wxMenu* m_menu1;
 		wxMenu* m_menu2;
 		wxStatusBar* m_statusBar1;
 
 		// Virtual event handlers, override them in your derived class
+		virtual void OnMaximize( wxMaximizeEvent& event ) { event.Skip(); }
 		virtual void OnTreeSelChanged( wxTreeEvent& event ) { event.Skip(); }
+		virtual void OnPlay( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnPause( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnStop( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCameraSelected( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnLeftDown( wxMouseEvent& event ) { event.Skip(); }
 		virtual void OnMiddleDown( wxMouseEvent& event ) { event.Skip(); }
