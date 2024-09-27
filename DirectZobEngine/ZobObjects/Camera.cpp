@@ -16,6 +16,7 @@
 Camera::Camera(ZobEntity::ZobType zobType, const std::string& name, eCameraType type, float fov, BufferData* bufferData, ZobObject* parent)
 	:ZobObject(zobType, ZobEntity::ZobSubType::subtype_zobCamera, name, parent)
 {
+	SET_CLASS_AND_NAME
 	m_zobCameraController = NULL;
 	ChangeCameraController(type, m_type == ZobEntity::ZobType::type_editor);
 	m_controlerType = type;
@@ -36,6 +37,7 @@ Camera::Camera(ZobEntity::ZobType zobType, const std::string& name, eCameraType 
 Camera::Camera(zobId id, TiXmlElement* node, ZobObject* parent)
 	:ZobObject(id, node, parent)
 {
+	SET_CLASS_AND_NAME
 	m_zobCameraController = NULL;
 	m_controlerType = Camera::eCamera_unset;
 	m_nextControlerType = Camera::eCamera_unset;

@@ -22,6 +22,7 @@
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
+#include <wx/combobox.h>
 #include <wx/toolbar.h>
 #include <wx/richtext/richtextctrl.h>
 #include <wx/splitter.h>
@@ -48,6 +49,7 @@ class MainWindow : public wxFrame
 		wxPanel* m_panel7;
 		wxToolBar* m_toolBar1;
 		wxButton* m_button1;
+		wxComboBox* m_cameraSelector;
 		wxPanel* m_panel10;
 		wxRichTextCtrl* m_log;
 		wxPanel* m_panel4;
@@ -58,6 +60,7 @@ class MainWindow : public wxFrame
 
 		// Virtual event handlers, override them in your derived class
 		virtual void OnTreeSelChanged( wxTreeEvent& event ) { event.Skip(); }
+		virtual void OnCameraSelected( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnLeftDown( wxMouseEvent& event ) { event.Skip(); }
 		virtual void OnMiddleDown( wxMouseEvent& event ) { event.Skip(); }
 		virtual void OnMotion( wxMouseEvent& event ) { event.Skip(); }

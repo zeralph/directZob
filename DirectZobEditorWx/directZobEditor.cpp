@@ -56,9 +56,10 @@ void MyApp::onIdle(wxIdleEvent& evt)
         m_directZob->Resize(w, h);
         if (m_directZob->GetEngine()->Started())
         {
-            m_editor->Update();
+            
             m_directZob->RunAFrame();
             m_directZob->EditorUpdate();
+            m_editor->Update();
         }
         const uint* buffer = m_directZob->GetBufferData();
         //m_mainWindow->m_renderPanel->paintNow();

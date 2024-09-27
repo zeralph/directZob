@@ -4,7 +4,8 @@
 
 ZobEditorManager::ZobEditorManager()
 {
-
+	m_currentSelectedGizmo = NULL;
+	m_selectedObject = NULL;
 }
 
 ZobEditorManager::~ZobEditorManager()
@@ -14,8 +15,70 @@ ZobEditorManager::~ZobEditorManager()
 
 void ZobEditorManager::Update()
 {
+	UpdateView();
 	DrawGrid();
 	UpdateLog();
+	UpdateGizmos();
+	ZobObject* z = DirectZob::GetInstance()->GetEngine()->GetObjectAt2DCoords(m_mouseX, m_mouseY, true);
+	UpdateGizmoSelection(z);
+}
+
+void ZobEditorManager::ResetMousePos(wxMouseEvent& event)
+{
+	m_mouseDx = event.GetX();
+	m_mouseDy = event.GetY();
+}
+
+void ZobEditorManager::UpdateView()
+{
+	m_mouseX = m_lastMouseEvent.GetX();
+	m_mouseY = m_lastMouseEvent.GetY();
+	if (m_lastMouseEvent.ButtonIsDown(wxMouseButton::wxMOUSE_BTN_LEFT))
+	{
+		float x = (float)m_mouseDx - m_lastMouseEvent.GetX();
+		float y = (float)m_mouseDy - m_lastMouseEvent.GetY();
+		Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
+		if (c)
+		{
+			c->Rotate(x, y, 0);
+		}
+		m_mouseDx = m_lastMouseEvent.GetX();
+		m_mouseDy = m_lastMouseEvent.GetY();
+	}
+	if (m_lastMouseEvent.ButtonIsDown(wxMouseButton::wxMOUSE_BTN_MIDDLE))
+	{
+		float x = (float)m_mouseDx - m_lastMouseEvent.GetX();
+		float y = (float)m_mouseDy - m_lastMouseEvent.GetY();
+		Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
+		if (c)
+		{
+			c->Move(-x, y, 0, false);
+		}
+		m_mouseDx = m_lastMouseEvent.GetX();
+		m_mouseDy = m_lastMouseEvent.GetY();
+	}
+}
+
+void ZobEditorManager::UpdateGizmos()
+{
+	if (m_selectedObject)
+	{
+		ZobVector3 p = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera()->GetWorldPosition();
+		p = m_selectedObject->GetWorldPosition() - p;
+		float f = p.sqrtLength();
+		Scale(f / 8.0f);
+		//Show(m_modificatorData->m_objectModificatorType);
+		/*
+		if (m_modificatorData->m_objectModificatorSpace == ZobObjectsEditor::eGizmoModificatorSpace::space_local)
+		{
+			DirectZobWrapper::GetWrapper()->GetZobObjectManagerWrapper()->GetEditorGizmos()->SetLocal();
+		}
+		else
+		{
+			DirectZobWrapper::GetWrapper()->GetZobObjectManagerWrapper()->GetEditorGizmos()->SetWorld();
+		}
+		*/
+	}
 }
 
 void ZobEditorManager::UpdateLog()
@@ -89,6 +152,25 @@ void ZobEditorManager::OnNewScene()
 	DirectZob::GetInstance()->GetEngine()->ShowGrid(true);
 	DirectZob::GetInstance()->GetEngine()->SetRenderMode(eRenderMode::eRenderMode_fullframe);
 	DirectZob::GetInstance()->GetEngine()->DrawGizmos(true);
+
+	MainWindowInterface::RefreshCamerasList();
+}
+
+void ZobEditorManager::SetSelectedObject(ZobObject* z)
+{
+	m_selectedObject = z;
+	if (z)
+	{
+		m_gizmosNode->SetVisible(true);
+		m_gizmosNode->SetParent(z);
+		m_gizmosNode->SetLocalPosition(0, 0, 0);
+		m_gizmosNode->SetLocalRotation(0, 0, 0, false);
+	}
+	else
+	{
+		m_gizmosNode->SetVisible(false);
+		m_gizmosNode->SetParent(m_editorRootNode);
+	}
 }
 
 void ZobEditorManager::Scale(float s)
@@ -99,6 +181,11 @@ void ZobEditorManager::Scale(float s)
 	m_rotateX->SetWorldScale(s, s, s);
 	m_rotateY->SetWorldScale(s, s, s);
 	m_rotateZ->SetWorldScale(s, s, s);
+}
+
+void ZobEditorManager::SetLastMouseEvent(wxMouseEvent& e)
+{
+	m_lastMouseEvent = e;
 }
 
 void ZobEditorManager::DrawGrid()
@@ -174,6 +261,46 @@ void ZobEditorManager::DrawGrid()
 	}
 }
 
+void ZobEditorManager::UpdateGizmoSelection(ZobObject* z)
+{
+	m_componentTranslateX->GetRenderOptions()->color = ZobColor::Red;
+	m_componentTranslateY->GetRenderOptions()->color = ZobColor::Green;
+	m_componentTranslateZ->GetRenderOptions()->color = ZobColor::Blue;
+	m_componentRotateX->GetRenderOptions()->color = ZobColor::Red;
+	m_componentRotateY->GetRenderOptions()->color = ZobColor::Green;
+	m_componentRotateZ->GetRenderOptions()->color = ZobColor::Blue;
+
+	if (z == m_translateX)
+	{
+		m_currentSelectedGizmo = z;
+		m_componentTranslateX->GetRenderOptions()->color = ZobColor::Yellow;
+	}
+	else if (z == m_translateY)
+	{
+		m_currentSelectedGizmo = z;
+		m_componentTranslateY->GetRenderOptions()->color = ZobColor::Yellow;
+	}
+	else if (z == m_translateZ)
+	{
+		m_currentSelectedGizmo = z;
+		m_componentTranslateZ->GetRenderOptions()->color = ZobColor::Yellow;
+	}
+	else if (z == m_rotateX)
+	{
+		m_currentSelectedGizmo = z;
+		m_componentRotateX->GetRenderOptions()->color = ZobColor::Yellow;
+	}
+	else if (z == m_rotateY)
+	{
+		m_currentSelectedGizmo = z;
+		m_componentRotateY->GetRenderOptions()->color = ZobColor::Yellow;
+	}
+	else if (z == m_rotateZ)
+	{
+		m_currentSelectedGizmo = z;
+		m_componentRotateZ->GetRenderOptions()->color = ZobColor::Yellow;
+	}
+}
 
 
 

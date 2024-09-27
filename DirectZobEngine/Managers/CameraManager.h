@@ -23,6 +23,7 @@ public:
 	void 							SetNextCamera(const std::string& name);
 	void 							RemoveCamera(Camera* c);
 	const std::vector<std::string> 	GetCameraList() const;
+	const std::vector<Camera*>*		GetCameras() const;
 	void							UnloadAll();
 
 private:

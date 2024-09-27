@@ -64,6 +64,8 @@ MainWindow::MainWindow( wxWindow* parent, wxWindowID id, const wxString& title, 
 	m_toolBar1 = new wxToolBar( m_panel7, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTB_HORIZONTAL );
 	m_button1 = new wxButton( m_toolBar1, wxID_ANY, _("MyButton"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_toolBar1->AddControl( m_button1 );
+	m_cameraSelector = new wxComboBox( m_toolBar1, wxID_ANY, _("Camera"), wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
+	m_toolBar1->AddControl( m_cameraSelector );
 	m_toolBar1->Realize();
 
 	bSizer6->Add( m_toolBar1, 0, wxEXPAND, 5 );
@@ -148,6 +150,7 @@ MainWindow::MainWindow( wxWindow* parent, wxWindowID id, const wxString& title, 
 
 	// Connect Events
 	m_treeNode->Connect( wxEVT_COMMAND_TREE_SEL_CHANGED, wxTreeEventHandler( MainWindow::OnTreeSelChanged ), NULL, this );
+	m_cameraSelector->Connect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( MainWindow::OnCameraSelected ), NULL, this );
 	m_renderPanel->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( MainWindow::OnLeftDown ), NULL, this );
 	m_renderPanel->Connect( wxEVT_MIDDLE_DOWN, wxMouseEventHandler( MainWindow::OnMiddleDown ), NULL, this );
 	m_renderPanel->Connect( wxEVT_MOTION, wxMouseEventHandler( MainWindow::OnMotion ), NULL, this );

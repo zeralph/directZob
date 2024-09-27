@@ -17,8 +17,6 @@ MainWindowInterface::MainWindowInterface(DirectZob* dz, ZobEditorManager* dze) :
     m_directZob = dz;
     m_editor = dze;
     m_singleton = this;
-    m_mouseDx = 0;
-    m_mouseDy = 0;
 }
 
 void MainWindowInterface::MyOnPaint(wxPaintEvent& event)
@@ -41,6 +39,24 @@ void MainWindowInterface::OnSceneLoaded()
     m_singleton->m_treeNode->Expand(node);
 }
 
+void MainWindowInterface::OnCameraSelected(wxCommandEvent& event) 
+{ 
+    //RefreshCamerasList();
+    std::string cam = m_singleton->m_cameraSelector->GetStringSelection();
+    DirectZob::GetInstance()->GetCameraManager()->SetNextCamera(cam);
+}
+
+void MainWindowInterface::RefreshCamerasList()
+{
+    m_singleton->m_cameraSelector->Clear();
+    m_singleton->m_cameraSelector->Append("AA");
+    const std::vector<Camera*>* cameras = DirectZob::GetInstance()->GetCameraManager()->GetCameras();
+    std::vector<Camera*>::const_iterator iter = cameras->begin();
+    for (iter; iter != cameras->end(); iter++)
+    {
+        m_singleton->m_cameraSelector->Append((*iter)->GetName());
+    }
+}
 
 void MainWindowInterface::OnTreeSelChanged(wxTreeEvent& event)
 {
@@ -50,6 +66,7 @@ void MainWindowInterface::OnTreeSelChanged(wxTreeEvent& event)
         zobId id = ZobEntity::ZobIdFromString(data->id);
         ZobObject* z = ZobEntity::GetEntity<ZobObject>(id);
         DirectZob::LogInfo("Selected %s", z->GetName().c_str());
+        m_editor->SetSelectedObject(z);
     }
 }
 
@@ -95,44 +112,23 @@ void MainWindowInterface::OnMouseWheel(wxMouseEvent& event)
 
 void MainWindowInterface::OnLeftDown(wxMouseEvent& event)
 {
-    m_mouseDx = event.GetX();
-    m_mouseDy = event.GetY();
+    m_editor->ResetMousePos(event);
+    //m_mouseDx = event.GetX();
+    //m_mouseDy = event.GetY();
     //DirectZob::LogError("-> %f, %f", m_mouseDx, m_mouseDy);
 }
 
 void MainWindowInterface::OnMiddleDown(wxMouseEvent& event)
 {
-    m_mouseDx = event.GetX();
-    m_mouseDy = event.GetY();
+    m_editor->ResetMousePos(event);
+    //m_mouseDx = event.GetX();
+    //m_mouseDy = event.GetY();
     //DirectZob::LogError("-> %f, %f", m_mouseDx, m_mouseDy);
 }
 
 void MainWindowInterface::OnMotion(wxMouseEvent& event)
 {
-    if (event.ButtonIsDown(wxMouseButton::wxMOUSE_BTN_LEFT))
-    {
-        float x = (float)m_mouseDx - event.GetX();
-        float y = (float)m_mouseDy - event.GetY();
-        Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
-        if (c)
-        {
-            c->Rotate(x, y, 0);
-        } 
-        m_mouseDx = event.GetX();
-        m_mouseDy = event.GetY();
-    }
-    if (event.ButtonIsDown(wxMouseButton::wxMOUSE_BTN_MIDDLE))
-    {
-        float x = (float)m_mouseDx - event.GetX();
-        float y = (float)m_mouseDy - event.GetY();
-        Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
-        if (c)
-        {
-            c->Move(-x, y, 0, false);
-        }
-        m_mouseDx = event.GetX();
-        m_mouseDy = event.GetY();
-    }
+    m_editor->SetLastMouseEvent(event);
 }
 
 void MainWindowInterface::OnNew(wxCommandEvent& event) 

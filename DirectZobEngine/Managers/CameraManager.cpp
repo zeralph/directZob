@@ -193,3 +193,8 @@ const std::vector<std::string> CameraManager::GetCameraList() const
 	}
 	return vec;
 }
+
+const std::vector<Camera*>* CameraManager::GetCameras() const
+{
+	return &m_cameras;
+}

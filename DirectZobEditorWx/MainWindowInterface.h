@@ -17,6 +17,7 @@ public:
     void                        MyOnPaint(wxPaintEvent& event);
     static void                 AddLog(const Events::event& e);
     static void                 OnSceneLoaded();
+    static void                 RefreshCamerasList();
     void                        OnMouseWheel(wxMouseEvent& event) override;
     void                        OnLeftDown(wxMouseEvent& event) override;
     void                        OnMiddleDown(wxMouseEvent& event) override;
@@ -27,6 +28,7 @@ public:
     void                        OnSave(wxCommandEvent& event) override;
     void                        OnExit(wxCommandEvent& event) override;
     void                        OnTreeSelChanged(wxTreeEvent& event) override;
+    void                        OnCameraSelected(wxCommandEvent& event) override;
 //private:
 
     wxBitmap m_bitmapBuffer;
@@ -36,6 +38,4 @@ public:
 private:
     void                        BuildObjectTree(ZobObject* z, wxTreeItemId& node);
     static MainWindowInterface* m_singleton;
-    float                       m_mouseDx;
-    float                       m_mouseDy;
 };
