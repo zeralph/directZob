@@ -64,14 +64,25 @@ MainWindow::MainWindow( wxWindow* parent, wxWindowID id, const wxString& title, 
 	bSizer6 = new wxBoxSizer( wxVERTICAL );
 
 	m_toolBar1 = new wxToolBar( m_panel7, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTB_HORIZONTAL );
-	m_Play = new wxToggleButton( m_toolBar1, wxID_ANY, _("Play"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_Play = new wxToggleButton( m_toolBar1, wxID_ANY, _("Play"), wxDefaultPosition, wxSize( 50,-1 ), 0 );
 	m_toolBar1->AddControl( m_Play );
-	m_Pause = new wxToggleButton( m_toolBar1, wxID_ANY, _("Pause"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_Pause = new wxToggleButton( m_toolBar1, wxID_ANY, _("Pause"), wxDefaultPosition, wxSize( 50,-1 ), 0 );
 	m_toolBar1->AddControl( m_Pause );
-	m_Stop = new wxToggleButton( m_toolBar1, wxID_ANY, _("Stop"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_Stop = new wxToggleButton( m_toolBar1, wxID_ANY, _("Stop"), wxDefaultPosition, wxSize( 50,-1 ), 0 );
 	m_toolBar1->AddControl( m_Stop );
+	m_toolBar1->AddSeparator();
+
 	m_cameraSelector = new wxComboBox( m_toolBar1, wxID_ANY, _("Camera"), wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
 	m_toolBar1->AddControl( m_cameraSelector );
+	m_WT = new wxToggleButton( m_toolBar1, wxID_ANY, _("WT"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_WT->SetValue( true );
+	m_toolBar1->AddControl( m_WT );
+	m_WR = new wxToggleButton( m_toolBar1, wxID_ANY, _("WR"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_toolBar1->AddControl( m_WR );
+	m_LT = new wxToggleButton( m_toolBar1, wxID_ANY, _("LT"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_toolBar1->AddControl( m_LT );
+	m_LR = new wxToggleButton( m_toolBar1, wxID_ANY, _("LR"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_toolBar1->AddControl( m_LR );
 	m_toolBar1->Realize();
 
 	bSizer6->Add( m_toolBar1, 0, wxEXPAND, 5 );
@@ -104,7 +115,7 @@ MainWindow::MainWindow( wxWindow* parent, wxWindowID id, const wxString& title, 
 	m_panel3->Layout();
 	bSizer5->Fit( m_panel3 );
 	m_panelInspector = new wxPanel( m_splitter3, wxID_ANY, wxDefaultPosition, wxSize( 150,-1 ), wxTAB_TRAVERSAL );
-	m_panelInspector->SetBackgroundColour( wxColour( 200, 0, 0 ) );
+	m_panelInspector->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_3DLIGHT ) );
 	m_panelInspector->SetMinSize( wxSize( 150,-1 ) );
 	m_panelInspector->SetMaxSize( wxSize( 250,-1 ) );
 
@@ -145,8 +156,24 @@ MainWindow::MainWindow( wxWindow* parent, wxWindowID id, const wxString& title, 
 
 	m_menubar1->Append( m_menu1, _("File") );
 
-	m_menu2 = new wxMenu();
-	m_menubar1->Append( m_menu2, _("MyMenu") );
+	m_gizmosMenu = new wxMenu();
+	wxMenuItem* m_menuItemGrid;
+	m_menuItemGrid = new wxMenuItem( m_gizmosMenu, wxID_ANY, wxString( _("Grid") ) , wxEmptyString, wxITEM_CHECK );
+	m_gizmosMenu->Append( m_menuItemGrid );
+
+	wxMenuItem* m_menuItemDebugText;
+	m_menuItemDebugText = new wxMenuItem( m_gizmosMenu, wxID_ANY, wxString( _("Debug text") ) , wxEmptyString, wxITEM_CHECK );
+	m_gizmosMenu->Append( m_menuItemDebugText );
+
+	wxMenuItem* m_menuItemPhysics;
+	m_menuItemPhysics = new wxMenuItem( m_gizmosMenu, wxID_ANY, wxString( _("Physics") ) , wxEmptyString, wxITEM_CHECK );
+	m_gizmosMenu->Append( m_menuItemPhysics );
+
+	wxMenuItem* m_menuItemObject;
+	m_menuItemObject = new wxMenuItem( m_gizmosMenu, wxID_ANY, wxString( _("Objects") ) , wxEmptyString, wxITEM_CHECK );
+	m_gizmosMenu->Append( m_menuItemObject );
+
+	m_menubar1->Append( m_gizmosMenu, _("Gizmos") );
 
 	this->SetMenuBar( m_menubar1 );
 
@@ -155,17 +182,29 @@ MainWindow::MainWindow( wxWindow* parent, wxWindowID id, const wxString& title, 
 	this->Centre( wxBOTH );
 
 	// Connect Events
+	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( MainWindow::OnExit ) );
 	this->Connect( wxEVT_MAXIMIZE, wxMaximizeEventHandler( MainWindow::OnMaximize ) );
+	m_treeNode->Connect( wxEVT_COMMAND_TREE_BEGIN_DRAG, wxTreeEventHandler( MainWindow::OnStartDrag ), NULL, this );
+	m_treeNode->Connect( wxEVT_COMMAND_TREE_END_DRAG, wxTreeEventHandler( MainWindow::OnEndDrag ), NULL, this );
 	m_treeNode->Connect( wxEVT_COMMAND_TREE_SEL_CHANGED, wxTreeEventHandler( MainWindow::OnTreeSelChanged ), NULL, this );
 	m_Play->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( MainWindow::OnPlay ), NULL, this );
 	m_Pause->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( MainWindow::OnPause ), NULL, this );
 	m_Stop->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( MainWindow::OnStop ), NULL, this );
 	m_cameraSelector->Connect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( MainWindow::OnCameraSelected ), NULL, this );
-	m_renderPanel->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( MainWindow::OnLeftDown ), NULL, this );
-	m_renderPanel->Connect( wxEVT_MIDDLE_DOWN, wxMouseEventHandler( MainWindow::OnMiddleDown ), NULL, this );
+	m_WT->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( MainWindow::OnModificatorClick ), NULL, this );
+	m_WR->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( MainWindow::OnModificatorClick ), NULL, this );
+	m_LT->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( MainWindow::OnModificatorClick ), NULL, this );
+	m_LR->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( MainWindow::OnModificatorClick ), NULL, this );
+	m_renderPanel->Connect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( MainWindow::OnMouseClick ), NULL, this );
+	m_renderPanel->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( MainWindow::OnMouseDown ), NULL, this );
+	m_renderPanel->Connect( wxEVT_LEFT_UP, wxMouseEventHandler( MainWindow::OnMouseUp ), NULL, this );
+	m_renderPanel->Connect( wxEVT_MIDDLE_DOWN, wxMouseEventHandler( MainWindow::OnMouseDown ), NULL, this );
+	m_renderPanel->Connect( wxEVT_MIDDLE_UP, wxMouseEventHandler( MainWindow::OnMouseUp ), NULL, this );
 	m_renderPanel->Connect( wxEVT_MOTION, wxMouseEventHandler( MainWindow::OnMotion ), NULL, this );
 	m_renderPanel->Connect( wxEVT_MOUSEWHEEL, wxMouseEventHandler( MainWindow::OnMouseWheel ), NULL, this );
 	m_renderPanel->Connect( wxEVT_PAINT, wxPaintEventHandler( MainWindow::OnMyPaint ), NULL, this );
+	m_renderPanel->Connect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( MainWindow::OnMouseDown ), NULL, this );
+	m_renderPanel->Connect( wxEVT_RIGHT_UP, wxMouseEventHandler( MainWindow::OnMouseUp ), NULL, this );
 	m_menu1->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindow::OnNew ), this, m_menuItem1->GetId());
 	m_menu1->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindow::OnOpen ), this, m_menuItem2->GetId());
 	m_menu1->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindow::OnSaveAs ), this, m_menuItem3->GetId());
@@ -175,4 +214,5 @@ MainWindow::MainWindow( wxWindow* parent, wxWindowID id, const wxString& title, 
 
 MainWindow::~MainWindow()
 {
+	
 }

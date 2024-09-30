@@ -1,20 +1,25 @@
 #include "ZobEditorManager.h"
 #include "MainWindowInterface.h"
-
+#include "../DirectZobEngine/Misc/ZobGeometryHelper.h"
+#include "Inspector.h"
 
 ZobEditorManager::ZobEditorManager()
 {
 	m_currentSelectedGizmo = NULL;
 	m_selectedObject = NULL;
+	m_modificatorData.Reset();
+	m_modificatorData.m_objectModificatorType = eGizmoModificatorType::eGizmo_translate;
+	m_modificatorData.m_objectModificatorSpace = eGizmoModificatorSpace::space_local;
 }
 
 ZobEditorManager::~ZobEditorManager()
 {
-
 }
 
 void ZobEditorManager::Update()
 {
+	MainWindowInterface::UpdateControls();
+	UpdateMoveObject();
 	UpdateView();
 	DrawGrid();
 	UpdateLog();
@@ -23,14 +28,367 @@ void ZobEditorManager::Update()
 	UpdateGizmoSelection(z);
 }
 
-void ZobEditorManager::ResetMousePos(wxMouseEvent& event)
+
+void ZobEditorManager::OnMouseClick(wxMouseEvent& event)
 {
-	m_mouseDx = event.GetX();
-	m_mouseDy = event.GetY();
+	ZobObject* z = DirectZob::GetInstance()->GetEngine()->GetObjectAt2DCoords(event.GetX(), event.GetY(), false);
+	if (z && z != m_selectedObject)
+	{
+		if (z->IsEditorObject())
+		{
+			//DirectZobWrapper::GetWrapper()->GetZobObjectManagerWrapper()->SelectObject(z);
+		}
+		else
+		{
+			SetSelectedObject(z);
+		}
+	}
+	else
+	{
+		SetSelectedObject(NULL);
+	}
+	MainWindowInterface::UpdateTreeView();
+}
+
+void ZobEditorManager::OnMouseUp(wxMouseEvent& event)
+{
+	m_modificatorData.m_moveObject = false;
+	m_modificatorData.Reset();
+}
+
+void ZobEditorManager::SetObjectModificator(eGizmoModificatorType type, eGizmoModificatorSpace space)
+{
+	m_modificatorData.m_objectModificatorType = type;
+	m_modificatorData.m_objectModificatorSpace = space;
+	if (space == ZobEditorManager::space_world)
+	{
+		m_gizmosNode->SetWorldRotation(0, 0, 0);
+	}
+	else
+	{
+		m_gizmosNode->SetLocalRotation(0, 0, 0, false);
+	}
+	SetupObjectModificator();
+	ShowGizmos();
+}
+
+void ZobEditorManager::UpdateMoveObject()
+{
+	ZobObject* curObj = m_selectedObject;
+	Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
+	
+	if (curObj && m_modificatorData.m_currentObjectModificator && m_modificatorData.m_moveObject)
+	{
+		if (m_modificatorData.m_objectModificatorType == eGizmoModificatorType::eGizmo_translate)
+		{
+			BufferData* bData = DirectZob::GetInstance()->GetEngine()->GetBufferData();
+			float fx = (float)m_mouseX;
+			float fy = (float)m_mouseY;
+			fx /= (float)bData->width;
+			fy /= (float)bData->height;
+			fx = fx * 2.0f - 1.0f;
+			fy = fy * 2.0f - 1.0f;
+			ZobVector3 ret = c->From2DToWorldOnPlane(fx, fy, &m_modificatorData.m_planePosition, &m_modificatorData.m_planeNormal);
+			ret = ZobGeometryHelper::ProjectPointOnLine(&m_modificatorData.m_objectPosition, &m_modificatorData.m_objectDirection, &ret);
+			ret = ret - m_modificatorData.m_deltaStart;
+			if (m_modificatorData.m_snap != 0)
+			{
+				ret.x = (int)(ret.x / m_modificatorData.m_snap) * m_modificatorData.m_snap;
+				ret.y = (int)(ret.y / m_modificatorData.m_snap) * m_modificatorData.m_snap;
+				ret.z = (int)(ret.z / m_modificatorData.m_snap) * m_modificatorData.m_snap;
+			}
+			if (ret.isNaN())
+			{
+				return;
+			}
+			curObj->SetWorldPosition(ret.x, ret.y, ret.z);
+		}
+		else if (m_modificatorData.m_objectModificatorType == eGizmoModificatorType::eGizmo_rotate)
+		{
+			BufferData* bData = DirectZob::GetInstance()->GetEngine()->GetBufferData();
+			float fx = (float)m_mouseX;
+			float fy = (float)m_mouseY;
+			fx /= (float)bData->width;
+			fy /= (float)bData->height;
+			fx = fx * 2.0f - 1.0f;
+			fy = fy * 2.0f - 1.0f;
+
+			ZobVector3 ret = c->From2DToWorldOnPlane(fx, fy, &m_modificatorData.m_planePosition, &m_modificatorData.m_planeNormal);
+			ZobVector3 st = m_modificatorData.m_deltaStart;
+			DirectZob::GetInstance()->GetEngine()->QueueLine(c, &m_modificatorData.m_objectPosition, &st, &ZobColor::Yellow, false, true);
+			DirectZob::GetInstance()->GetEngine()->QueueLine(c, &m_modificatorData.m_objectPosition, &ret, &ZobColor::Yellow, false, true);
+			ZobVector3 a = st - m_modificatorData.m_objectPosition;
+			ZobVector3 b = ret - m_modificatorData.m_objectPosition;
+			a.Normalize();
+			b.Normalize();
+			float d = ZobVector3::Dot(&a, &b);
+			//d = fabsf(d);
+			ZobVector3 cr = ZobVector3::Cross(&a, &b);
+			cr.Normalize();
+			float s = ZobVector3::Dot(&m_modificatorData.m_planeNormal, &cr);
+			//s = s / fabsf(s);
+			if (isnan(s))
+			{
+				return;
+			}
+			DirectZob::LogInfo("d : %f - %f", d, s);
+			if (d <= 1.0f)
+			{
+				d = acosf(d) * s;
+				if (m_modificatorData.m_snap != 0)
+				{
+					float rad = DEG_TO_RAD(m_modificatorData.m_snap);
+					d = (int)(d / rad) * rad;
+				}
+				assert(!m_modificatorData.m_startAxisRotationVector.isNaN());
+				assert(!isnan(d));
+				if (m_modificatorData.m_objectModificatorAxis == eGizmoModificatorAxis::axis_x)
+				{
+					curObj->SetLocalOrientation(&m_modificatorData.m_startAxisRotationVector, m_modificatorData.m_startAngleRotation, 0);
+					curObj->SetLocalOrientation(&ZobVector3::Vector3X, d, 1);
+				}
+				else  if (m_modificatorData.m_objectModificatorAxis == eGizmoModificatorAxis::axis_y)
+				{
+					curObj->SetLocalOrientation(&m_modificatorData.m_startAxisRotationVector, m_modificatorData.m_startAngleRotation, 0);
+					curObj->SetLocalOrientation(&ZobVector3::Vector3Y, d, 1);
+				}
+				else  if (m_modificatorData.m_objectModificatorAxis == eGizmoModificatorAxis::axis_z)
+				{
+					curObj->SetLocalOrientation(&m_modificatorData.m_startAxisRotationVector, m_modificatorData.m_startAngleRotation, 0);
+					curObj->SetLocalOrientation(&ZobVector3::Vector3Z, d, 1);
+				}
+			}
+		}
+	}
+	ZobVector3 va;
+	ZobVector3 vb;
+	if (m_modificatorData.m_objectModificatorType == eGizmoModificatorType::eGizmo_translate)
+	{
+		va = m_modificatorData.m_objectDirection;
+		vb = m_modificatorData.m_objectDirection;
+	}
+	else if (m_modificatorData.m_objectModificatorType == eGizmoModificatorType::eGizmo_rotate)
+	{
+		va = m_modificatorData.m_planeNormal;
+		vb = m_modificatorData.m_planeNormal;
+	}
+	float f = 500.0f;
+	va.Mul(-f);
+	va.Add(&m_modificatorData.m_objectPosition);
+	vb.Mul(f);
+	vb.Add(&m_modificatorData.m_objectPosition);
+	DirectZob::GetInstance()->GetEngine()->QueueLine(c, &va, &vb, &m_modificatorData.m_color, false, true);
+}
+
+void ZobEditorManager::OnMouseDown(wxMouseEvent& event)
+{
+	m_mouseDx = (float)event.GetX();
+	m_mouseDy = (float)event.GetY();
+	if (event.ButtonIsDown(wxMouseButton::wxMOUSE_BTN_LEFT))
+	{
+		if (!m_modificatorData.m_moveObject && m_selectedObject)
+		{			
+			ZobObject* z = DirectZob::GetInstance()->GetEngine()->GetObjectAt2DCoords(event.GetX(), event.GetY(), true);
+			if (z)
+			{
+				if (z->IsEditorObject())
+				{
+					DirectZob::LogInfo("mouse down left btn, modificator selected");
+					m_modificatorData.m_moveObject = true;
+					ZobObject* pz = z->GetParent();
+					m_modificatorData.m_currentObjectModificator = z;
+					if (pz && pz->GetName() == EDITOR_GIZMOS_NODE)
+					{
+						std:string s = z->GetName();
+						if (s == EDITOR_ARROW_X || s == EDITOR_ROTATE_X)
+						{
+							m_modificatorData.m_objectModificatorAxis = eGizmoModificatorAxis::axis_x;
+						}
+						else if (s == EDITOR_ARROW_Y || s == EDITOR_ROTATE_Y)
+						{
+							m_modificatorData.m_objectModificatorAxis = eGizmoModificatorAxis::axis_y;
+						}
+						else if (s == EDITOR_ARROW_Z || s == EDITOR_ROTATE_Z)
+						{
+							m_modificatorData.m_objectModificatorAxis = eGizmoModificatorAxis::axis_z;
+						}
+						SetupObjectModificator();
+					}
+				}
+			}
+		}
+	}
+}
+
+void ZobEditorManager::ShowGizmos()
+{
+	HideGizmos();
+	if (m_modificatorData.m_objectModificatorType == eGizmo_none)
+	{
+	}
+	else if (m_selectedObject && m_modificatorData.m_objectModificatorType == eGizmo_translate)
+	{
+		m_componentTranslateX->SetVisible(true);
+		m_componentTranslateY->SetVisible(true);
+		m_componentTranslateZ->SetVisible(true);
+	}
+	else if (m_selectedObject && m_modificatorData.m_objectModificatorType == eGizmo_rotate)
+	{
+		m_componentRotateX->SetVisible(true);
+		m_componentRotateY->SetVisible(true);
+		m_componentRotateZ->SetVisible(true);
+	}
+	else //scale
+	{
+
+	}
+}
+
+void ZobEditorManager::HideGizmos()
+{
+	m_componentTranslateX->SetVisible(false);
+	m_componentTranslateY->SetVisible(false);
+	m_componentTranslateZ->SetVisible(false);
+	m_componentRotateX->SetVisible(false);
+	m_componentRotateY->SetVisible(false);
+	m_componentRotateZ->SetVisible(false);
+	ScaleGizmos(1);
+}
+
+void ZobEditorManager::SetupObjectModificator()
+{
+	Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
+	if (m_selectedObject && m_modificatorData.m_currentObjectModificator && m_modificatorData.m_moveObject)
+	{
+		m_modificatorData.m_currentModifiedObject = m_selectedObject;
+		m_modificatorData.m_objectPosition = m_selectedObject->GetWorldPosition();
+		m_modificatorData.m_planePosition = m_selectedObject->GetWorldPosition();
+		m_modificatorData.m_startOrientation = m_selectedObject->GetLocalRotation();
+		if (m_modificatorData.m_objectModificatorType == eGizmoModificatorType::eGizmo_translate)
+		{
+			if (m_modificatorData.m_objectModificatorAxis == eGizmoModificatorAxis::axis_x)
+			{
+				if (m_modificatorData.m_objectModificatorSpace == eGizmoModificatorSpace::space_local)
+				{
+					m_modificatorData.m_planeNormal = m_selectedObject->GetUp();
+					m_modificatorData.m_objectDirection = m_selectedObject->GetLeft();
+				}
+				else
+				{
+					m_modificatorData.m_planeNormal = ZobVector3::Vector3Y;
+					m_modificatorData.m_objectDirection = ZobVector3::Vector3X;
+				}
+			}
+			else if (m_modificatorData.m_objectModificatorAxis == eGizmoModificatorAxis::axis_y)
+			{
+				if (m_modificatorData.m_objectModificatorSpace == eGizmoModificatorSpace::space_local)
+				{
+					m_modificatorData.m_planeNormal = m_selectedObject->GetLeft();
+					m_modificatorData.m_objectDirection = m_selectedObject->GetUp();
+				}
+				else
+				{
+					m_modificatorData.m_planeNormal = ZobVector3::Vector3Z;
+					m_modificatorData.m_objectDirection = ZobVector3::Vector3Y;
+				}
+			}
+			else if (m_modificatorData.m_objectModificatorAxis == eGizmoModificatorAxis::axis_z)
+			{
+				if (m_modificatorData.m_objectModificatorSpace == eGizmoModificatorSpace::space_local)
+				{
+					m_modificatorData.m_planeNormal = m_selectedObject->GetLeft();
+					m_modificatorData.m_objectDirection = m_selectedObject->GetForward();
+				}
+				else
+				{
+					m_modificatorData.m_planeNormal = ZobVector3::Vector3X;
+					m_modificatorData.m_objectDirection = ZobVector3::Vector3Z;
+				}
+			}
+			BufferData* bData = DirectZob::GetInstance()->GetEngine()->GetBufferData();
+			float fx = (float)m_mouseX;
+			float fy = (float)m_mouseY;
+			fx /= (float)bData->width;
+			fy /= (float)bData->height;
+			fx = fx * 2.0f - 1.0f;
+			fy = fy * 2.0f - 1.0f;
+			ZobVector3 ret = c->From2DToWorldOnPlane(fx, fy, &m_modificatorData.m_planePosition, &m_modificatorData.m_planeNormal);
+			ret = ZobGeometryHelper::ProjectPointOnLine(&m_modificatorData.m_objectPosition, &m_modificatorData.m_objectDirection, &ret);
+			ret = ret - m_modificatorData.m_objectPosition;
+			//float d = ret.sqrtLength();
+			m_modificatorData.m_deltaStart = ret;// m_modificatorData.m_objectDirection* d;
+		}
+		else if (m_modificatorData.m_objectModificatorType == eGizmoModificatorType::eGizmo_rotate)
+		{
+			if (m_modificatorData.m_objectModificatorAxis == eGizmoModificatorAxis::axis_x)
+			{
+				if (m_modificatorData.m_objectModificatorSpace == eGizmoModificatorSpace::space_local)
+				{
+					m_modificatorData.m_planeNormal = m_selectedObject->GetLeft();
+				}
+				else
+				{
+					m_modificatorData.m_planeNormal = ZobVector3::Vector3X;
+				}
+			}
+			else if (m_modificatorData.m_objectModificatorAxis == eGizmoModificatorAxis::axis_y)
+			{
+				if (m_modificatorData.m_objectModificatorSpace == eGizmoModificatorSpace::space_local)
+				{
+					m_modificatorData.m_planeNormal = m_selectedObject->GetUp();
+				}
+				else
+				{
+					m_modificatorData.m_planeNormal = ZobVector3::Vector3Y;
+				}
+			}
+			else if (m_modificatorData.m_objectModificatorAxis == eGizmoModificatorAxis::axis_z)
+			{
+				if (m_modificatorData.m_objectModificatorSpace == eGizmoModificatorSpace::space_local)
+				{
+					m_modificatorData.m_planeNormal = m_selectedObject->GetForward();
+				}
+				else
+				{
+					m_modificatorData.m_planeNormal = ZobVector3::Vector3Z;
+				}
+			}
+			m_selectedObject->GetLocalAxisAngleRotation(m_modificatorData.m_startAxisRotationVector, m_modificatorData.m_startAngleRotation);
+			assert(!m_modificatorData.m_startAxisRotationVector.isNaN());
+			assert(!isnan(m_modificatorData.m_startAngleRotation));
+			BufferData* bData = DirectZob::GetInstance()->GetEngine()->GetBufferData();
+			float fx = (float)m_mouseX;
+			float fy = (float)m_mouseY;
+			fx /= (float)bData->width;
+			fy /= (float)bData->height;
+			fx = fx * 2.0f - 1.0f;
+			fy = fy * 2.0f - 1.0f;
+			ZobVector3 ret = c->From2DToWorldOnPlane(fx, fy, &m_modificatorData.m_planePosition, &m_modificatorData.m_planeNormal);
+			m_modificatorData.m_deltaStart = ret;
+			assert(!ret.isNaN());
+		}
+		if (m_modificatorData.m_objectModificatorAxis == eGizmoModificatorAxis::axis_x)
+		{
+			m_modificatorData.m_color = ZobColor::Red;
+		}
+		else if (m_modificatorData.m_objectModificatorAxis == eGizmoModificatorAxis::axis_y)
+		{
+			m_modificatorData.m_color = ZobColor::Green;
+		}
+		else if (m_modificatorData.m_objectModificatorAxis == eGizmoModificatorAxis::axis_z)
+		{
+			m_modificatorData.m_color = ZobColor::Blue;
+		}
+	}
 }
 
 void ZobEditorManager::UpdateView()
 {
+	if (m_modificatorData.m_moveObject && m_selectedObject)
+	{
+		m_mouseDx = m_lastMouseEvent.GetX();
+		m_mouseDy = m_lastMouseEvent.GetY();
+	}
 	m_mouseX = m_lastMouseEvent.GetX();
 	m_mouseY = m_lastMouseEvent.GetY();
 	if (m_lastMouseEvent.ButtonIsDown(wxMouseButton::wxMOUSE_BTN_LEFT))
@@ -45,7 +403,7 @@ void ZobEditorManager::UpdateView()
 		m_mouseDx = m_lastMouseEvent.GetX();
 		m_mouseDy = m_lastMouseEvent.GetY();
 	}
-	if (m_lastMouseEvent.ButtonIsDown(wxMouseButton::wxMOUSE_BTN_MIDDLE))
+	if (m_lastMouseEvent.ButtonIsDown(wxMouseButton::wxMOUSE_BTN_RIGHT))
 	{
 		float x = (float)m_mouseDx - m_lastMouseEvent.GetX();
 		float y = (float)m_mouseDy - m_lastMouseEvent.GetY();
@@ -66,10 +424,10 @@ void ZobEditorManager::UpdateGizmos()
 		ZobVector3 p = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera()->GetWorldPosition();
 		p = m_selectedObject->GetWorldPosition() - p;
 		float f = p.sqrtLength();
-		Scale(f / 8.0f);
-		//Show(m_modificatorData->m_objectModificatorType);
+		ScaleGizmos(f / 8.0f);
+		//Show(m_modificatorData.m_objectModificatorType);
 		/*
-		if (m_modificatorData->m_objectModificatorSpace == ZobObjectsEditor::eGizmoModificatorSpace::space_local)
+		if (m_modificatorData.m_objectModificatorSpace == eGizmoModificatorSpace::space_local)
 		{
 			DirectZobWrapper::GetWrapper()->GetZobObjectManagerWrapper()->GetEditorGizmos()->SetLocal();
 		}
@@ -94,55 +452,57 @@ void ZobEditorManager::UpdateLog()
 
 void ZobEditorManager::OnNewScene()
 {
-	m_editorRootNode = new ZobObject(ZobEntity::type_editor, ZobEntity::subtype_zobOject, "EditorRootNode", NULL);
+	m_selectedObject = NULL;
+	MainWindowInterface::OnNewScene();
+	m_editorRootNode = new ZobObject(ZobEntity::type_editor, ZobEntity::subtype_zobOject, EDITOR_ROOT_NODE, NULL);
 	std::string name = std::string("EditorCamera");
-	Camera* c = DirectZob::GetInstance()->GetCameraManager()->CreateEditorCamera(name, Camera::eCamera_orbital_free, 45.0f, m_editorRootNode);
+	Camera* c = DirectZob::GetInstance()->GetCameraManager()->CreateEditorCamera(name, Camera::eCamera_orbital_free, 45.0f, NULL);
 	c->SetWorldPosition(-20, 20, -20);
 	ZobVector3 v = ZobVector3(0, 0, 0);
 	c->SetTarget(&v);
 
-	m_gizmosNode = new ZobObject(ZobEntity::type_editor, ZobEntity::subtype_zobOject, "EditorGizmos", m_editorRootNode);
+	m_gizmosNode = new ZobObject(ZobEntity::type_editor, ZobEntity::subtype_zobOject, EDITOR_GIZMOS_NODE, m_editorRootNode);
 
 	ZobFilePath zfpT = ZobFilePath("arrow.obj", gArrow, gArrowLen);
 	ZobFilePath zfpR = ZobFilePath("circle.obj", gCircle, gCircleLen);
 	Triangle::RenderOptions::eLightMode lm = Triangle::RenderOptions::eLightMode_phong;
 
-	m_translateX = new ZobObject(ZobEntity::type_editor, ZobEntity::subtype_zobOject, "Tx", m_gizmosNode);
+	m_translateX = new ZobObject(ZobEntity::type_editor, ZobEntity::subtype_zobOject, EDITOR_ARROW_X, m_gizmosNode);
 	m_componentTranslateX = m_translateX->LoadMesh(zfpT, true);
 	m_componentTranslateX->GetRenderOptions()->color = ZobColor::Red;
 	m_componentTranslateX->GetRenderOptions()->lightMode = lm;
 	m_componentTranslateX->GetRenderOptions()->zBuffer = Triangle::RenderOptions::halfBuffered;
 	m_translateX->SetLocalRotation(0, 90, 0, false);
 
-	m_translateY = new ZobObject(ZobEntity::type_editor, ZobEntity::subtype_zobOject, "Ty", m_gizmosNode);
+	m_translateY = new ZobObject(ZobEntity::type_editor, ZobEntity::subtype_zobOject, EDITOR_ARROW_Y, m_gizmosNode);
 	m_componentTranslateY = m_translateY->LoadMesh(zfpT, true);
 	m_componentTranslateY->GetRenderOptions()->color = ZobColor::Blue;
 	m_componentTranslateY->GetRenderOptions()->lightMode = lm;
 	m_componentTranslateY->GetRenderOptions()->zBuffer = Triangle::RenderOptions::halfBuffered;
 	m_translateY->SetLocalRotation(-90, 0, 0, false);
 
-	m_translateZ = new ZobObject(ZobEntity::type_editor, ZobEntity::subtype_zobOject, "Tz", m_gizmosNode);
+	m_translateZ = new ZobObject(ZobEntity::type_editor, ZobEntity::subtype_zobOject, EDITOR_ARROW_Z, m_gizmosNode);
 	m_componentTranslateZ = m_translateZ->LoadMesh(zfpT, true);
 	m_componentTranslateZ->GetRenderOptions()->color = ZobColor::Green;
 	m_componentTranslateZ->GetRenderOptions()->lightMode = lm;
 	m_componentTranslateZ->GetRenderOptions()->zBuffer = Triangle::RenderOptions::halfBuffered;
 	m_translateZ->SetLocalRotation(0, 0, 0, false);
 
-	m_rotateX = new ZobObject(ZobEntity::type_editor, ZobEntity::subtype_zobOject, "Rx", m_gizmosNode);
+	m_rotateX = new ZobObject(ZobEntity::type_editor, ZobEntity::subtype_zobOject, EDITOR_ROTATE_X, m_gizmosNode);
 	m_componentRotateX = m_rotateX->LoadMesh(zfpR, true);
 	m_componentRotateX->GetRenderOptions()->color = ZobColor::Red;
 	m_componentRotateX->GetRenderOptions()->lightMode = lm;
 	m_componentRotateX->GetRenderOptions()->zBuffer = Triangle::RenderOptions::halfBuffered;
 	m_rotateX->SetLocalRotation(0, 0, 90, false);
 
-	m_rotateY = new ZobObject(ZobEntity::type_editor, ZobEntity::subtype_zobOject, "Ry", m_gizmosNode);
+	m_rotateY = new ZobObject(ZobEntity::type_editor, ZobEntity::subtype_zobOject, EDITOR_ROTATE_Y, m_gizmosNode);
 	m_componentRotateY = m_rotateY->LoadMesh(zfpR, true);
 	m_componentRotateY->GetRenderOptions()->color = ZobColor::Blue;
 	m_componentRotateY->GetRenderOptions()->lightMode = lm;
 	m_componentRotateY->GetRenderOptions()->zBuffer = Triangle::RenderOptions::halfBuffered;
 	m_rotateY->SetLocalRotation(0, 0, 0, false);
 
-	m_rotateZ = new ZobObject(ZobEntity::type_editor, ZobEntity::subtype_zobOject, "Rz", m_gizmosNode);
+	m_rotateZ = new ZobObject(ZobEntity::type_editor, ZobEntity::subtype_zobOject, EDITOR_ROTATE_Z, m_gizmosNode);
 	m_componentRotateZ = m_rotateZ->LoadMesh(zfpR, true);
 	m_componentRotateZ->GetRenderOptions()->color = ZobColor::Green;
 	m_componentRotateZ->GetRenderOptions()->lightMode = lm;
@@ -152,7 +512,7 @@ void ZobEditorManager::OnNewScene()
 	DirectZob::GetInstance()->GetEngine()->ShowGrid(true);
 	DirectZob::GetInstance()->GetEngine()->SetRenderMode(eRenderMode::eRenderMode_fullframe);
 	DirectZob::GetInstance()->GetEngine()->DrawGizmos(true);
-
+	HideGizmos();
 	MainWindowInterface::RefreshCamerasList();
 }
 
@@ -161,19 +521,21 @@ void ZobEditorManager::SetSelectedObject(ZobObject* z)
 	m_selectedObject = z;
 	if (z)
 	{
-		m_gizmosNode->SetVisible(true);
+		ShowGizmos();
 		m_gizmosNode->SetParent(z);
 		m_gizmosNode->SetLocalPosition(0, 0, 0);
 		m_gizmosNode->SetLocalRotation(0, 0, 0, false);
+		ZobVariablesExposer* zvars = z->GetVariablesExposer();
+		MainWindowInterface::SetCurrentZobVariables(zvars);
 	}
 	else
 	{
-		m_gizmosNode->SetVisible(false);
+		HideGizmos();
 		m_gizmosNode->SetParent(m_editorRootNode);
 	}
 }
 
-void ZobEditorManager::Scale(float s)
+void ZobEditorManager::ScaleGizmos(float s)
 {
 	m_translateX->SetWorldScale(s, s, s);
 	m_translateY->SetWorldScale(s, s, s);

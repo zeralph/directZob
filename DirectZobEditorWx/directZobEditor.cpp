@@ -14,6 +14,7 @@ class MyApp : public wxApp
 {
 public:
     bool OnInit() override;
+    int OnExit() override;
     void UpdateEngine();
     void onIdle(wxIdleEvent& evt);
 
@@ -30,6 +31,15 @@ enum
 {
     ID_Hello = 1
 };
+
+int MyApp::OnExit()
+{
+    //delete m_mainWindow;
+    m_directZob->Unload();
+    delete m_directZob;
+    delete m_editor;
+    return 0;
+}
 
 bool MyApp::OnInit()
 {

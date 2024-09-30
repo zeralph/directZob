@@ -57,6 +57,7 @@ Light::~Light()
 
 void Light::InitVariablesExposer()
 {
+	m_varExposer->StartGroup("Light");
 	m_varExposer->WrapVariable<ZobColor>("Color", &m_lightColor, NULL, false, true);
 	m_varExposer->WrapVariable<float>("Intensity", &m_intensity, NULL, false, true);
 	m_varExposer->WrapVariable<float>("Distance", &m_distance, NULL, false, true);
@@ -66,6 +67,7 @@ void Light::InitVariablesExposer()
 	eLightType types[3] = { eLightType::eLightType_point, eLightType::eLightType_directional, eLightType::eLightType_spot };
 	const char* typeStr[3] = { "Point", "Directional", "Spot"};
 	m_varExposer->WrapEnum<eLightType>("Type", &m_lightType, 3, types, typeStr, NULL, false, false, true);
+	m_varExposer->EndGroup();
 }
 
 void Light::NewLightConfiguration()

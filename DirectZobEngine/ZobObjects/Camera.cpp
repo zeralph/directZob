@@ -110,6 +110,7 @@ Camera::~Camera()
 void Camera::WrapVariables()
 {
 
+	m_varExposer->StartGroup("Camera");
 	m_varExposer->WrapVariable<float>("FOV", &m_fov, NULL, false, true);
 	eCameraType ct[7] = { eCameraType::eCamera_base,
 		eCameraType::eCamera_revolving,
@@ -120,6 +121,7 @@ void Camera::WrapVariables()
 		eCameraType::eCamera_orbital_free, };
 	const char* ctStr[7] = { "base", "Revolving", "Orbital", "FPS", "Follow", "FollowCar", "Orbital Free"};
 	m_varExposer->WrapEnum<eCameraType>("Camera controller", &m_nextControlerType, 7, ct, ctStr, NULL, false, false, true);
+	m_varExposer->EndGroup();
 }
 
 void Camera::DrawGizmos(const Camera* camera, Engine* engine)

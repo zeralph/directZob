@@ -530,6 +530,14 @@ ZobObject* Engine::GetObjectAt2DCoords(float x, float y, bool editorObjectsOnly)
 			{
 				if (t->PointInTriangle2D(&p) && t->zobObject && t->pa->z < minZ)
 				{
+					if (t->zobObject->GetComponent<ZobComponentText>())
+					{
+						continue;
+					}
+					if (t->zobObject->GetComponent<ZobComponentImage>())
+					{
+						continue;
+					}
 					z = t->zobObject;
 					minZ = t->pa->z;
 				}

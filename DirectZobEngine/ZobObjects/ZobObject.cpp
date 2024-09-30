@@ -119,14 +119,18 @@ void ZobObject::InitVariablesExposer()
 {
 	m_varExposer->WrapVariable<zobId>("GUID", GetIdAddress(), NULL, true, false);
 	m_varExposer->WrapVariable<std::string>("Name", &m_name, NULL, false, true);
+	m_varExposer->StartGroup("Local");
 	m_varExposer->WrapVariable<ZobVector3>("Position", GetPhysicComponentNoConst()->GetLocalPositionAddress(), &ZobObject::ReloadVariablesFromLocalData, false, true);
 	m_varExposer->WrapVariable<ZobVector3>("Rotation", GetPhysicComponentNoConst()->GetLocalRotationAddress(), &ZobObject::ReloadVariablesFromLocalData, false, false);
 	m_varExposer->WrapVariable<ZobVector3>("Scale", GetPhysicComponentNoConst()->GetLocalScaleAddress(), &ZobObject::ReloadVariablesFromLocalData, false, true);
 	m_varExposer->WrapVariable<ZobVector3>("Quaternion", GetPhysicComponentNoConst()->GetQuaternionAddress(), &ZobObject::ReloadVariablesFromLocalData, true, true, false);
+	m_varExposer->EndGroup();
 	//
+	m_varExposer->StartGroup("World");
 	m_varExposer->WrapVariable<ZobVector3>("WPosition", GetPhysicComponentNoConst()->GetWorldPositionAddress(), &ZobObject::ReloadVariablesFromWorldData, false, false);
 	m_varExposer->WrapVariable<ZobVector3>("WRotation", GetPhysicComponentNoConst()->GetWorldRotationAddress(), &ZobObject::ReloadVariablesFromWorldData, false, false);
 	m_varExposer->WrapVariable<ZobVector3>("WScale", GetPhysicComponentNoConst()->GetWorldScaleAddress(), &ZobObject::ReloadVariablesFromWorldData, false, false);
+	m_varExposer->EndGroup();
 	//
 	m_varExposer->StartGroup("Physic");
 	ZobPhysicComponent::eRigidBodyType bt[3] = { ZobPhysicComponent::eRigidBody_static, ZobPhysicComponent::eRigidBody_kinematic, ZobPhysicComponent::eRigidBody_dynamic };
@@ -297,7 +301,7 @@ void ZobObject::PostUpdate()
 
 void ZobObject::SetVisible(bool v)
 {
-	if (m_visible != v)
+	//if (m_visible != v)
 	{
 		m_visible = v;
 		std::vector<ZobComponentMesh*> m = GetComponents<ZobComponentMesh>();
@@ -519,7 +523,8 @@ void ZobObject::SetParent(ZobObject* p)
 	{
 		if (!p->IsEditorObject())
 		{
-			DirectZob::LogInfo("Reparented %s from %s to %s", ZobIdToString().c_str(), m_parent->ZobIdToString().c_str(), p->ZobIdToString().c_str());
+			DirectZob::LogInfo("Reparented %s from %s to %s", this->GetName().c_str(), m_parent->GetName().c_str(), p->GetName().c_str());
+			//DirectZob::LogInfo("Reparented %s from %s to %s", ZobIdToString().c_str(), m_parent->ZobIdToString().c_str(), p->ZobIdToString().c_str());
 		}
 		ZobVector3 pos = GetWorldPosition();
 		ZobVector3 rot = GetWorldRotation();

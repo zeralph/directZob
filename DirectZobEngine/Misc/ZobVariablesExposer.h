@@ -88,6 +88,7 @@ public:
 		w.name = std::string(name);
 		w.bReadOnly = true;
 		w.bSave = false;
+		w.bVisible = true;
 		m_wrappedVariables.push_back(w);
 	}
 
@@ -99,6 +100,7 @@ public:
 		w.name = std::string("end");
 		w.bReadOnly = true;
 		w.bSave = false;
+		w.bVisible = true;
 		m_wrappedVariables.push_back(w);
 	}
 

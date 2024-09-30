@@ -52,23 +52,32 @@ class MainWindow : public wxFrame
 		wxToggleButton* m_Pause;
 		wxToggleButton* m_Stop;
 		wxComboBox* m_cameraSelector;
+		wxToggleButton* m_WT;
+		wxToggleButton* m_WR;
+		wxToggleButton* m_LT;
+		wxToggleButton* m_LR;
 		wxPanel* m_panel10;
 		wxRichTextCtrl* m_log;
 		wxPanel* m_panelInspector;
 		wxMenuBar* m_menubar1;
 		wxMenu* m_menu1;
-		wxMenu* m_menu2;
+		wxMenu* m_gizmosMenu;
 		wxStatusBar* m_statusBar1;
 
 		// Virtual event handlers, override them in your derived class
+		virtual void OnExit( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnMaximize( wxMaximizeEvent& event ) { event.Skip(); }
+		virtual void OnStartDrag( wxTreeEvent& event ) { event.Skip(); }
+		virtual void OnEndDrag( wxTreeEvent& event ) { event.Skip(); }
 		virtual void OnTreeSelChanged( wxTreeEvent& event ) { event.Skip(); }
 		virtual void OnPlay( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPause( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnStop( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCameraSelected( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnLeftDown( wxMouseEvent& event ) { event.Skip(); }
-		virtual void OnMiddleDown( wxMouseEvent& event ) { event.Skip(); }
+		virtual void OnModificatorClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnMouseClick( wxMouseEvent& event ) { event.Skip(); }
+		virtual void OnMouseDown( wxMouseEvent& event ) { event.Skip(); }
+		virtual void OnMouseUp( wxMouseEvent& event ) { event.Skip(); }
 		virtual void OnMotion( wxMouseEvent& event ) { event.Skip(); }
 		virtual void OnMouseWheel( wxMouseEvent& event ) { event.Skip(); }
 		virtual void OnMyPaint( wxPaintEvent& event ) { event.Skip(); }
