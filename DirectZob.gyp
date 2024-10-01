@@ -206,11 +206,12 @@
 						'link_settings': {
 							'libraries': [
 								# relative to xcode project
-								'../../dependencies/fbxsdk/macos/lib/clang/release/libfbxsdk.a',
-								'../../dependencies/reactphysics3d/lib/macos/libreactphysics3d.a',
-								'../../dependencies/gainput/lib/macos/libgainputstatic.a',
-								'../../dependencies/optick/lib/macos/libOptickCore.dylib',
-								'../../dependencies/physfs/lib/macos/libphysfs.a',
+								'../dependencies/fbxsdk/macos/lib/clang/release/libfbxsdk.a',
+                                '../dependencies/reactphysics3d/lib/macos/arm64/libreactphysics3d.a',
+								#'../dependencies/reactphysics3d/lib/macos/x86_64/libreactphysics3d.a',
+								'../dependencies/gainput/lib/macos/arm64/libgainputstatic.a',
+								'../dependencies/optick/lib/macos/arm64/libOptickCore.a',
+								'../dependencies/physfs/lib/macos/arm64/libphysfs.a',
 							],
 						},
 					},
@@ -236,11 +237,11 @@
 						},
 						'link_settings': {
 							'libraries': [
-								'../../dependencies/fbxsdk/linux/lib/libfbxsdk.a', 
-								'../../dependencies/reactphysics3d/lib/linux/libreactphysics3d.a',
-								'../../dependencies/gainput/lib/linux/libgainputstatic.a',
-								'../../dependencies/optick/lib/linux/libOptickCore.so',
-								'../../dependencies/physfs/lib/linux/libphysfs.a',
+								'../dependencies/fbxsdk/linux/lib/libfbxsdk.a', 
+								'../dependencies/reactphysics3d/lib/linux/libreactphysics3d.a',
+								'../dependencies/gainput/lib/linux/libgainputstatic.a',
+								'../dependencies/optick/lib/linux/libOptickCore.so',
+								'../dependencies/physfs/lib/linux/libphysfs.a',
 								'-lpthread',
 								'-lxml2',
 								'-lX11',
@@ -303,9 +304,9 @@
 						'link_settings': {
 							'libraries': [
 								# relative to xcode project
-								'../../dependencies/fbxsdk/macos/lib/clang/release/libfbxsdk.a',
-								'../../dependencies/gainput/lib/macos/libgainputstatic.a',
-								'../../dependencies/physfs/lib/macos/libphysfs.a',
+								'../dependencies/fbxsdk/macos/lib/clang/release/libfbxsdk.a',
+								'../dependencies/gainput/lib/macos/arm64/libgainputstatic.a',
+								'../dependencies/physfs/lib/macos/arm64/libphysfs.a',
 								'$(SDKROOT)/System/Library/Frameworks/Cocoa.framework',
 								'$(SDKROOT)/System/Library/Frameworks/Metal.framework',
 								'$(SDKROOT)/System/Library/Frameworks/GameKit.framework',
@@ -318,9 +319,9 @@
 								'-lxml2',
 								'-ObjC',
 								'-v',
-				#'-lmingw32',
-				'-lstdc++',
-				#'-enable-auto-import',
+								#'-lmingw32',
+								'-lstdc++',
+								#'-enable-auto-import',
 							],
 						},
 					},
@@ -343,6 +344,10 @@
 				'directZobEditorWx/MainWindowInterface.cpp',
 				'directZobEditorWx/ZobEditorManager.h',
 				'directZobEditorWx/ZobEditorManager.cpp',
+                'directZobEditorWx/Inspector.h',
+				'directZobEditorWx/Inspector.cpp',
+                'directZobEditorWx/ZobControls.h',
+				'directZobEditorWx/ZobControls.cpp',
 			],
 			'conditions': [
 				[
@@ -390,13 +395,20 @@
 						'include_dirs': [
 							'.',
 							'dependencies/fbxsdk/macos/include',
+                            '../../wxWidgets-3.2.6/include',
 						],
+                        'cxxflags': [
+                        	'`wx-config --cxxflags`',
+                        ],
+                        "cflags_c": [
+                             "`../../../wxWidgets-3.2.6/build/wx-config --cxxflags`"
+                    	],
 						'link_settings': {
 							'libraries': [
 								# relative to xcode project
-								'../../dependencies/fbxsdk/macos/lib/clang/release/libfbxsdk.a',
-								'../../dependencies/gainput/lib/macos/libgainputstatic.a',
-								'../../dependencies/physfs/lib/macos/libphysfs.a',
+								'../dependencies/fbxsdk/macos/lib/clang/release/libfbxsdk.a',
+								'../dependencies/gainput/lib/macos/arm64/libgainputstatic.a',
+								'../dependencies/physfs/lib/macos/arm64/libphysfs.a',
 								'$(SDKROOT)/System/Library/Frameworks/Cocoa.framework',
 								'$(SDKROOT)/System/Library/Frameworks/Metal.framework',
 								'$(SDKROOT)/System/Library/Frameworks/GameKit.framework',
@@ -409,9 +421,10 @@
 								'-lxml2',
 								'-ObjC',
 								'-v',
-				#'-lmingw32',
-				'-lstdc++',
-				#'-enable-auto-import',
+								#'-lmingw32',
+								'-lstdc++',
+								#'-enable-auto-import',
+                                '`../../../wxWidgets-3.2.6/build/wx-config --libs`',
 							],
 						},
 					},

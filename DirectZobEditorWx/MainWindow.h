@@ -57,7 +57,7 @@ class MainWindow : public wxFrame
 		wxToggleButton* m_LT;
 		wxToggleButton* m_LR;
 		wxPanel* m_panel10;
-		wxRichTextCtrl* m_log;
+		wxTextCtrl* m_log;
 		wxPanel* m_panelInspector;
 		wxMenuBar* m_menubar1;
 		wxMenu* m_menu1;

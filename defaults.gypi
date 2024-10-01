@@ -25,14 +25,15 @@
                 {
                     'defines': [
                         'MACOS',
+                        "_UNICODE", "UNICODE",
                     ],
                     'xcode_settings': {
                         'CC': 'clang++',
-                        'MACOSX_DEPLOYMENT_TARGET': '12.0',
+                        'MACOSX_DEPLOYMENT_TARGET': '15.0',
                         'CLANG_CXX_LANGUAGE_STANDARD': 'c++17',
                         'GCC_ENABLE_CPP_RTTI': 'YES',
                         'CLANG_CXX_LIBRARY': 'libc++',
-                        'ARCHS': ['x86_64'],
+                        'ARCHS': ['arm64'],
                     },
                 },
             ],
@@ -78,14 +79,16 @@
                                 'CLANG_X86_VECTOR_INSTRUCTIONS': 'avx2',
                                 'CLANG_CXX_LANGUAGE_STANDARD': 'c++17',
                                 'GCC_ENABLE_CPP_RTTI': 'YES',
-                                'ARCHS': ['x86_64'],
+                                'ARCHS': ['arm64'],
+                                'OTHER_CPLUSPLUSFLAGS' : [ '`../../../wxWidgets-3.2.6/build/wx-config --cxxflags`' ],
+                                'OTHER_CFLAGS' : [ '`../../../wxWidgets-3.2.6/build/wx-config --cxxflags`' ],
                             },
                             'cflags': [
                                 '-Wno-pragma-pack',
                             ],
                             'cxxflags': [
                                 '-Wno-pragma-pack',
-                            ]
+                            ],
                         },
                         'OS=="linux"',
                         {
@@ -142,7 +145,15 @@
                                 'GCC_OPTIMIZATION_LEVEL': 's',
                                 'GCC_FAST_MATH': 'YES',
                                 'CLANG_X86_VECTOR_INSTRUCTIONS': 'avx2',
+                                'OTHER_CPLUSPLUSFLAGS' : [ '`../../../wxWidgets-3.2.6/build/wx-config --cxxflags`' ],
+                                'OTHER_CFLAGS' : [ '`../../../wxWidgets-3.2.6/build/wx-config --cxxflags`' ],
                             },
+                            'cflags': [
+                                '-Wno-pragma-pack',
+                            ],
+                            'cxxflags': [
+                                '-Wno-pragma-pack',
+                            ],
                         },
                         'OS=="linux"',
                         {

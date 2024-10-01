@@ -4,14 +4,18 @@
 MeshManager::MeshManager()
 {
 	m_meshes.clear();
+#ifdef ENABLE_FBX_SUPPORT
 	m_lSdkManager = FbxManager::Create();
 	FbxIOSettings* ios = FbxIOSettings::Create(m_lSdkManager, IOSROOT);
 	m_lSdkManager->SetIOSettings(ios);
+#endif
 }
 
 MeshManager::~MeshManager()
 {
+#ifdef ENABLE_FBX_SUPPORT
 	m_lSdkManager->Destroy();
+#endif
 	for (int i = 0; i < m_meshes.size(); i++)
 	{
 		Mesh* m = m_meshes[i];

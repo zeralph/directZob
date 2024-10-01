@@ -4,8 +4,9 @@
 #include "../Sprite.h"
 #include <string>
 #undef PropertyNotify
+#ifdef ENABLE_FBX_SUPPORT
 #include <fbxsdk.h>
-
+#endif
 class MeshManager
 {
 public:
@@ -19,9 +20,13 @@ public:
 	std::string GetMeshList();
 	const Mesh* GetMesh(const int i) const;
 	void UnloadAll(); 
+#ifdef ENABLE_FBX_SUPPORT
 	FbxManager* GetFbxManager() { return m_lSdkManager; }
+#endif
 	ZobSprite* CreateSprite();
 private:
 	std::vector<Mesh*> m_meshes;
+#ifdef ENABLE_FBX_SUPPORT
 	FbxManager* m_lSdkManager = NULL;
+#endif
 };

@@ -26,17 +26,15 @@ MainWindowInterface::MainWindowInterface(DirectZob* dz, ZobEditorManager* dze) :
     m_directZob = dz;
     m_editor = dze;
     m_singleton = this;
-    m_logFont = new wxFont(8, wxSCRIPT, wxNORMAL, wxNORMAL);
-    m_singleton->m_log->SetFont(*m_logFont);
+//    m_logFont = new wxFont(8, wxSCRIPT, wxNORMAL, wxNORMAL);
+//    m_singleton->m_log->SetFont(*m_logFont);
     m_currentZobObjectInspector = new Inspector(m_panelInspector);
-    //double d  = m_singleton->m_log->GetDimensionScale();
-    //m_singleton->m_log->SetDimensionScale(0.1, false);
 }
 
 MainWindowInterface::~MainWindowInterface()
 {
     delete m_currentZobObjectInspector;
-    delete m_logFont;
+//    delete m_logFont;
 }
 
 void MainWindowInterface::SetCurrentZobVariables(ZobVariablesExposer* zvars)
@@ -106,7 +104,7 @@ void MainWindowInterface::OnSceneLoaded()
 void MainWindowInterface::OnCameraSelected(wxCommandEvent& event) 
 { 
     //RefreshCamerasList();
-    std::string cam = m_singleton->m_cameraSelector->GetStringSelection();
+    std::string cam = std::string(m_singleton->m_cameraSelector->GetStringSelection().mb_str());
     DirectZob::GetInstance()->GetCameraManager()->SetNextCamera(cam);
 }
 
@@ -150,7 +148,8 @@ void MainWindowInterface::RefreshObjectTree()
     ZobObject* z = m_editor->GetSelectedObject();
     if (z)
     {
-        wxTreeItemId item = SelectZobObjectInTree(m_singleton->m_treeNode->GetRootItem(), z->ZobIdToString());
+        std::string id = z->ZobIdToString();
+        wxTreeItemId item = SelectZobObjectInTree(m_singleton->m_treeNode->GetRootItem(), id);
         if (item.IsOk())
         {
             wxEventBlocker blocker(m_singleton->m_treeNode);
@@ -223,6 +222,7 @@ void MainWindowInterface::BuildObjectTree(ZobObject* z, wxTreeItemId node)
 
 void MainWindowInterface::AddLog(const Events::event& e)
 {
+    /*
     switch (e.t)
     {
     case Events::LogError:
@@ -238,6 +238,9 @@ void MainWindowInterface::AddLog(const Events::event& e)
     m_singleton->m_log->WriteText(e.m);
     m_singleton->m_log->Newline();
     m_singleton->m_log->ScrollIntoView(m_singleton->m_log->GetCaretPosition(), WXK_PAGEDOWN);
+    */
+   m_singleton->m_log->AppendText(e.m);
+   m_singleton->m_log->AppendText("\n");
 }
 
 void MainWindowInterface::UpdateControls()
@@ -253,7 +256,7 @@ void MainWindowInterface::OnMouseClick(wxMouseEvent& event)
 void MainWindowInterface::OnModificatorClick(wxCommandEvent& event)
 {
     wxToggleButton* b = (wxToggleButton*)event.GetEventObject();
-    std::string s = b->GetLabel();
+    std::string s = std::string(b->GetLabel().c_str());
     if (s == "WT")
     {
         m_WT->SetValue(true);
@@ -319,7 +322,7 @@ void MainWindowInterface::OnMotion(wxMouseEvent& event)
 void MainWindowInterface::OnNew(wxCommandEvent& event) 
 { 
     m_directZob->Unload();
-    m_singleton->m_log->Clear();
+//    m_singleton->m_log->Clear();
     m_directZob->NewScene("");
     //m_singleton->m_editor->OnNewScene();
     OnSceneLoaded();
@@ -332,8 +335,8 @@ void MainWindowInterface::OnOpen(wxCommandEvent& event)
     {
         return;
     }
-    std::string p = openFileDialog.GetDirectory();
-    std::string f = openFileDialog.GetFilename();
+    std::string p = std::string(openFileDialog.GetDirectory().mb_str());
+    std::string f = std::string(openFileDialog.GetFilename().mb_str());
     m_directZob->LoadScene(p, f, MainWindowInterface::OnSceneLoaded, NULL);
 }
 

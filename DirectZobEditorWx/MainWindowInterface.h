@@ -62,6 +62,6 @@ private:
     void                        BuildObjectTree(ZobObject* z, wxTreeItemId node);
     static                      MainWindowInterface* m_singleton;
     std::string                 m_dragSource;
-    wxFont*                     m_logFont;
+ //   wxFont*                     m_logFont;
     Inspector*                  m_currentZobObjectInspector;
 };

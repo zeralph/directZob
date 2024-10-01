@@ -1,7 +1,8 @@
 #include "Mesh.h"
 #include "DirectZob.h"
 #include "SceneLoader.h"
-
+#include <float.h>
+#ifdef ENABLE_FBX_SUPPORT
 class CustomStreamClass : public FbxStream
 {
 public:
@@ -146,7 +147,6 @@ public:
 	{
 		
 	}
-
 private:
 	ZobFilePath* m_zfp;
 	bool m_init;
@@ -154,7 +154,7 @@ private:
 	int m_readerID;
 	int m_writerID;
 };
-
+#endif
 using namespace std;
 static ZobVector2 vec2zero = ZobVector2(0,0);
 static std::string emptyStr = std::string("");
@@ -190,22 +190,17 @@ Mesh::Mesh(ZobFilePath* zfp):Mesh(zfp->GetName())
 	std::string fullPath = zfp->GetFullPath();
 	if (fullPath.length())
 	{ 
-		//std::ifstream f(fullPath.c_str());
-		/*if (!f.good())
 		{
-			//throw errorB
-			DirectZob::LogError("Cannot load %s, path '%s' not found", zfp.GetName().c_str(), fullPath.c_str());	
-		}
-		else*/
-		{
-			if (fullPath.find(".fbx") != -1 || fullPath.find(".FBX") != -1)
-			{
-				LoadFbx(zfp);
-			}
-			else if (fullPath.find(".obj") != -1 || fullPath.find(".OBJ") != -1)
+			if (fullPath.find(".obj") != -1 || fullPath.find(".OBJ") != -1)
 			{
 				LoadOBJ(zfp);
 			}
+#ifdef ENABLE_FBX_SUPPORT
+			else if (fullPath.find(".fbx") != -1 || fullPath.find(".FBX") != -1)
+			{
+				LoadFbx(zfp);
+			}
+#endif
 			else
 			{
 				DirectZob::LogError("Mesh %s : bad filename extension. Loading ignored", zfp->GetName().c_str());
@@ -225,7 +220,7 @@ Mesh::Mesh(Mesh* m)
 {
 
 }
-
+#ifdef ENABLE_FBX_SUPPORT
 Mesh::Mesh(std::string &parentName, ZobFilePath* zfp, fbxsdk::FbxMesh* mesh)
 {
 	if (mesh)
@@ -404,7 +399,8 @@ Mesh::Mesh(std::string &parentName, ZobFilePath* zfp, fbxsdk::FbxMesh* mesh)
 	}
 	DirectZob::RemoveIndent();
 }
-
+#endif
+#ifdef ENABLE_FBX_SUPPORT
 void Mesh::LoadFbx(ZobFilePath* zfp)
 {
 	zfp->LoadData();
@@ -466,7 +462,8 @@ void Mesh::LoadFbx(ZobFilePath* zfp)
 	zfp->UnloadData();
 	DirectZob::RemoveIndent();
 }
-
+#endif
+#ifdef ENABLE_FBX_SUPPORT
 void Mesh::FbxMultT(FbxNode* node, FbxVector4 &vector) 
 {
 	fbxsdk::FbxAMatrix matrixGeo;
@@ -484,7 +481,7 @@ void Mesh::FbxMultT(FbxNode* node, FbxVector4 &vector)
 	fbxsdk::FbxAMatrix matrix = globalMatrix * matrixGeo;
 	vector = matrix.MultT(vector);
 }
-
+#endif
 Mesh::~Mesh()
 {
 	DirectZob::LogInfo("Delete mesh %s", m_name.c_str());

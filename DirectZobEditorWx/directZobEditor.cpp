@@ -2,6 +2,7 @@
 
 #include <wx/wx.h>
 #include <wx/mstream.h>
+#include <wx/dc.h>
 #include <thread> 
 #include <mutex>
 #include <wx/rawbmp.h>
@@ -73,7 +74,7 @@ void MyApp::onIdle(wxIdleEvent& evt)
         }
         const uint* buffer = m_directZob->GetBufferData();
         //m_mainWindow->m_renderPanel->paintNow();
-        wxClientDC dc(m_mainWindow->m_renderPanel);
+        wxInfoDC dc(m_mainWindow->m_renderPanel);
         int width = m_directZob->GetBufferWidth();
         int height = m_directZob->GetBufferHeight();
         uint* engineData = m_directZob->GetEditorBufferDataNoConst();
@@ -113,7 +114,8 @@ void MyApp::onIdle(wxIdleEvent& evt)
         }
         m_mainWindow->m_bitmapBuffer = b;
         dc.DrawBitmap(m_mainWindow->m_bitmapBuffer, 0, 0);
-        //m_mainWindow->m_renderPanel->Refresh();
+        dc.
+        m_mainWindow->m_renderPanel->Refresh();
         m_mainWindow->m_renderPanel->Update();
         evt.RequestMore(); // render continuously, not only once on idle
     }

@@ -12,8 +12,9 @@
 #include "ZobObjects/Camera.h"
 #include "Events.h"
 #include "Rendering/Engine.h"
+#ifdef ENABLE_FBX_SUPPORT
 #include <fbxsdk.h>
-
+#endif
 class ZobObject;
 class Mesh
 {
@@ -47,12 +48,16 @@ public:
 	const bool							IsVisible() const { return m_visible; }
 	const long							GetSize() const { return m_size; }
 protected:
+#ifdef ENABLE_FBX_SUPPORT
 										Mesh(std::string& parentName, ZobFilePath* zfp, fbxsdk::FbxMesh* mesh);
+#endif
 	void								SplitEntry(const std::string* s, std::vector<std::string>* v, const char delim) const;
 	void								CreateTriangles(const std::vector<std::string>* line, std::vector<Triangle>* t, size_t& tArrayIdx, const ZobMaterial* tex);
 	void								LoadOBJ(ZobFilePath* zfp);
+#ifdef ENABLE_FBX_SUPPORT
 	void								LoadFbx(ZobFilePath* zfp);
 	void								FbxMultT(FbxNode* node, FbxVector4 &vector);
+#endif
 	inline bool							RejectTriangle(const Triangle* t, const float znear, const float zfar, const float width, const float height);
 	void								ParseObjFaceData(const std::string* s, int &v, int &u, int &n, bool& hasUv, bool& hasNormals) const;
 	const long							ComputeSize() const;

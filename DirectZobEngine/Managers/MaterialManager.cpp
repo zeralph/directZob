@@ -86,7 +86,7 @@ const ZobMaterial* MaterialManager::LoadMaterial(const std::string& name, const 
 		return GetMaterial(name);
 	}
 }
-
+#ifdef ENABLE_FBX_SUPPORT
 const ZobMaterial* MaterialManager::LoadFbxMaterial(const fbxsdk::FbxMesh* mesh, ZobFilePath* zfp)
 {
 	const ZobMaterial* finalMaterial = NULL;
@@ -182,7 +182,7 @@ const ZobMaterial* MaterialManager::LoadFbxMaterial(const fbxsdk::FbxMesh* mesh,
 	}
 	return finalMaterial;
 }
-
+#endif
 
 void MaterialManager::LoadOBJMaterials(ZobFilePath* zfp)
 {

@@ -1,7 +1,9 @@
 #pragma once
 #undef PropertyNotify
 #include "../Types.h"
+#ifdef ENABLE_FBX_SUPPORT
 #include <fbxsdk.h>
+#endif
 #include <string>
 #include <vector>
 #include "../Misc/ZobFilePath.h"
@@ -25,7 +27,9 @@ public:
 	const ZobMaterial* 			GetMaterial(const int i) const;
 	ZobMaterial*				GetMaterialNoConst(const int i) const;
 	void 						LoadOBJMaterials(ZobFilePath* zfp);
+#ifdef ENABLE_FBX_SUPPORT
 	const ZobMaterial* 			LoadFbxMaterial(const fbxsdk::FbxMesh* mesh, ZobFilePath* zfp);
+#endif
 	void 						UnloadAll();
 	ZobMaterial*				CreateMaterial();
 	const Texture*				GetTexture(const std::string name);
