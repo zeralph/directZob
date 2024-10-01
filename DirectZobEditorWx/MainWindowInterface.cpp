@@ -1,5 +1,7 @@
 #include <wx/filedlg.h>
 #include <wx/wfstream.h>
+#include <wx/dcclient.h>
+#include <wx/dcbuffer.h>
 #include "MainWindowInterface.h"
 #include "MainWindow.h"
 #include "ZobEditorManager.h"
@@ -29,12 +31,18 @@ MainWindowInterface::MainWindowInterface(DirectZob* dz, ZobEditorManager* dze) :
 //    m_logFont = new wxFont(8, wxSCRIPT, wxNORMAL, wxNORMAL);
 //    m_singleton->m_log->SetFont(*m_logFont);
     m_currentZobObjectInspector = new Inspector(m_panelInspector);
+    m_renderPanel->SetDoubleBuffered(true);
+    Connect(wxID_ANY, wxEVT_IDLE, wxIdleEventHandler(MainWindowInterface::OnIdle));
+    m_renderPanel->Bind(wxEVT_PAINT, &MainWindowInterface::OnPaint, this);
+    m_timer.SetOwner(this);
+    m_timer.Start(16);
+    this->Bind(wxEVT_TIMER, &MainWindowInterface::OnTimer, this);
 }
 
 MainWindowInterface::~MainWindowInterface()
 {
+    m_timer.Stop();
     delete m_currentZobObjectInspector;
-//    delete m_logFont;
 }
 
 void MainWindowInterface::SetCurrentZobVariables(ZobVariablesExposer* zvars)
@@ -83,23 +91,11 @@ void MainWindowInterface::OnMaximize(wxMaximizeEvent& event)
     //wxSize toto = m_panelInspector->GetSize();
 }
 
-void MainWindowInterface::MyOnPaint(wxPaintEvent& event)
-{
-    /*wxPaintDC dc(m_renderPanel);
-    if (m_bitmapBuffer.IsOk())
-    {
-        dc.DrawBitmap(m_bitmapBuffer, 0, 0);
-    }
-    */
-}
-
 void MainWindowInterface::OnSceneLoaded()
 {
     m_singleton->m_editor->OnNewScene();
     m_singleton->RefreshObjectTree();
 }
-
-
 
 void MainWindowInterface::OnCameraSelected(wxCommandEvent& event) 
 { 
@@ -355,3 +351,79 @@ void MainWindowInterface::OnExit(wxCommandEvent& event)
     
 }
 
+void MainWindowInterface::OnTimer(wxTimerEvent& event)
+{
+    RenderAFrame();
+}
+
+void MainWindowInterface::OnPaint(wxPaintEvent& event)
+{
+    wxBufferedPaintDC  dc(m_renderPanel);
+    if (m_bitmapBuffer.IsOk())
+    {
+        dc.DrawBitmap(m_bitmapBuffer, 0, 0);
+    }
+}
+
+void MainWindowInterface::OnIdle(wxIdleEvent& evt)
+{
+    if (0)
+    {
+        RenderAFrame();
+        m_renderPanel->Refresh();
+        m_renderPanel->Update();
+    }
+}
+
+
+void MainWindowInterface::RenderAFrame()
+{
+    int w, h;
+    m_renderPanel->GetClientSize(&w, &h);
+    m_directZob->Resize(w, h);
+    if (m_directZob->GetEngine()->Started())
+    {
+
+        m_directZob->RunAFrame();
+        m_directZob->EditorUpdate();
+        m_editor->Update();
+    }
+    const uint* buffer = m_directZob->GetBufferData();
+    int width = m_directZob->GetBufferWidth();
+    int height = m_directZob->GetBufferHeight();
+    uint* engineData = m_directZob->GetEditorBufferDataNoConst();
+    // Now transfer the pixel data into a wxBitmap
+    wxBitmap b(width, height, 24);
+    wxNativePixelData data(b);
+    if (!data)
+    {
+        return;
+    }
+    wxNativePixelData::Iterator p(data);
+    int curPixelDataLoc = 0;
+    for (int y = 0; y < height; ++y)
+    {
+        wxNativePixelData::Iterator rowStart = p;
+        for (int x = 0; x < width; ++x, ++p)
+        {
+            uint c = engineData[curPixelDataLoc];
+            if (c != 0)
+            {
+                int tt = 0;
+                tt++;
+            }
+            uint r = (c & 0xFF0000) >> 16;
+            uint g = (c & 0x00FF00) >> 8;
+            uint b = (c & 0x0000FF) >> 0;
+            p.Red() = r;// 
+            p.Green() = g;// c & 0x00FF00 >> 8;
+            p.Blue() = b;// c & 0x0000FF;
+            curPixelDataLoc++;
+        }
+        p = rowStart;
+        p.OffsetY(data, 1);
+    }
+    m_bitmapBuffer = b;
+    m_renderPanel->Refresh();
+    m_renderPanel->Update();
+}

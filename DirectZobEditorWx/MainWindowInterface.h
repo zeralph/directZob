@@ -1,4 +1,6 @@
 #include <wx/rawbmp.h>
+#include <wx/time.h>
+#include <wx/graphics.h>
 #include "MainWindow.h"
 #include "../DirectZobEngine/Events.h"
 
@@ -29,7 +31,6 @@ public:
     static void                 SetCurrentZobVariables(ZobVariablesExposer* zvars);
     static void                 UpdateControls();
     static void                 OnInspectorUpdate(wxCommandEvent& event);
-    void                        MyOnPaint(wxPaintEvent& event);
     void                        OnModificatorClick(wxCommandEvent& event) override;
     void                        OnMouseWheel(wxMouseEvent& event) override;
     void                        OnMouseDown(wxMouseEvent& event) override;
@@ -49,19 +50,24 @@ public:
     void                        OnStop(wxCommandEvent& event) override;
     void                        OnStartDrag(wxTreeEvent& event) override ;
     void                        OnEndDrag(wxTreeEvent& event) override;
+    void                        OnPaint(wxPaintEvent& event);
+    void                        OnIdle(wxIdleEvent& evt);
+    void                        OnTimer(wxTimerEvent& event);
     static wxPanel*             GetInspectorPanel() { return m_singleton->m_panelInspector; }
 //private:
 
-    wxBitmap m_bitmapBuffer;
     DirectZob* m_directZob;
     ZobEditorManager* m_editor;
 
 private:
     wxTreeItemId                SelectZobObjectInTree(wxTreeItemId root, std::string& zobIdStr);
     void                        RefreshObjectTree();
+    void                        RenderAFrame();
     void                        BuildObjectTree(ZobObject* z, wxTreeItemId node);
     static                      MainWindowInterface* m_singleton;
     std::string                 m_dragSource;
  //   wxFont*                     m_logFont;
     Inspector*                  m_currentZobObjectInspector;
+    wxBitmap                    m_bitmapBuffer;
+    wxTimer                     m_timer;
 };
