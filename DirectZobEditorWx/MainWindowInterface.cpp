@@ -1,7 +1,11 @@
 #include <wx/filedlg.h>
+#include <wx/stdpaths.h>
 #include <wx/wfstream.h>
 #include <wx/dcclient.h>
 #include <wx/dcbuffer.h>
+#include <wx/dc.h>
+#include <wx/display.h>
+#include <wx/fileconf.h>
 #include "MainWindowInterface.h"
 #include "MainWindow.h"
 #include "ZobEditorManager.h"
@@ -25,18 +29,24 @@ zobTreeItemData::~zobTreeItemData()
 
 MainWindowInterface::MainWindowInterface(DirectZob* dz, ZobEditorManager* dze) : MainWindow(NULL, -1, "DirectZob editor", wxDefaultPosition, wxSize(958, 648), wxDEFAULT_FRAME_STYLE | wxTAB_TRAVERSAL)
 {
+    //wxFileConfig* conf = new wxFileConfig()
+    wxString configDir = wxStandardPaths::Get().GetConfigDir();
     m_directZob = dz;
     m_editor = dze;
     m_singleton = this;
 //    m_logFont = new wxFont(8, wxSCRIPT, wxNORMAL, wxNORMAL);
 //    m_singleton->m_log->SetFont(*m_logFont);
     m_currentZobObjectInspector = new Inspector(m_panelInspector);
-    m_renderPanel->SetDoubleBuffered(true);
+ //   m_renderPanel->SetDoubleBuffered(true);
     Connect(wxID_ANY, wxEVT_IDLE, wxIdleEventHandler(MainWindowInterface::OnIdle));
     m_renderPanel->Bind(wxEVT_PAINT, &MainWindowInterface::OnPaint, this);
     m_timer.SetOwner(this);
     m_timer.Start(16);
     this->Bind(wxEVT_TIMER, &MainWindowInterface::OnTimer, this);
+    wxDisplay display(wxDisplay::GetFromWindow(this));
+    wxRect screen = display.GetGeometry();
+    this->SetSize(50, 50, screen.width-100, screen.height-100);
+    //this->ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL)  
 }
 
 MainWindowInterface::~MainWindowInterface()
@@ -358,7 +368,15 @@ void MainWindowInterface::OnTimer(wxTimerEvent& event)
 
 void MainWindowInterface::OnPaint(wxPaintEvent& event)
 {
-    wxBufferedPaintDC  dc(m_renderPanel);
+#ifdef LINUX
+	wxBufferedPaintDC  dc(m_renderPanel);
+#elif WINDOWS
+	wxBufferedPaintDC  dc(m_renderPanel);
+#elif MACOS
+	wxPaintDC  dc(m_renderPanel);
+#endif //LINUX    
+//    wxBufferedPaintDC  dc(m_renderPanel);
+
     if (m_bitmapBuffer.IsOk())
     {
         dc.DrawBitmap(m_bitmapBuffer, 0, 0);

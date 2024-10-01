@@ -3,7 +3,8 @@
         {
             "name": "Mac",
             "includePath": [
-                "${workspaceFolder}/**"
+                "${workspaceFolder}/**",
+                "/Users/lucasrichalland/Documents/wxWidgets-3.2.6/include/**"
             ],
             "defines": [],
             "macFrameworkPath": [
@@ -11,7 +12,7 @@
                 "/Library/Frameworks"
             ],
             "compilerPath": "/usr/bin/clang",
-            "cStandard": "c11",
+            "cStandard": "c17",
             "cppStandard": "c++17",
             "intelliSenseMode": "clang-x64"
         }

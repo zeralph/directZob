@@ -5,6 +5,7 @@
 #include <wx/statbox.h>
 #include <wx/checkbox.h>
 #include "MainWindowInterface.h"
+#include <string>
 
 wxSize Inspector::sLabelSize = wxSize(50, 20);
 wxSize Inspector::sFloatSize = wxSize(50, 20);
