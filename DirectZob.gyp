@@ -240,7 +240,7 @@
 								'../dependencies/fbxsdk/linux/lib/libfbxsdk.a', 
 								'../dependencies/reactphysics3d/lib/linux/libreactphysics3d.a',
 								'../dependencies/gainput/lib/linux/libgainputstatic.a',
-								'../dependencies/optick/lib/linux/libOptickCore.so',
+								'../dependencies/optick/lib/linux/libOptickCore.a',
 								'../dependencies/physfs/lib/linux/libphysfs.a',
 								'-lpthread',
 								'-lxml2',
@@ -337,17 +337,17 @@
 				'DirectZobEngine',
 			],
 			'sources': [
-				'directZobEditorWx/directZobEditor.cpp',
-				'directZobEditorWx/MainWindow.h',
-				'directZobEditorWx/MainWindow.cpp',
-				'directZobEditorWx/MainWindowInterface.h',
-				'directZobEditorWx/MainWindowInterface.cpp',
-				'directZobEditorWx/ZobEditorManager.h',
-				'directZobEditorWx/ZobEditorManager.cpp',
-                'directZobEditorWx/Inspector.h',
-				'directZobEditorWx/Inspector.cpp',
-                'directZobEditorWx/ZobControls.h',
-				'directZobEditorWx/ZobControls.cpp',
+				'DirectZobEditorWx/directZobEditor.cpp',
+				'DirectZobEditorWx/MainWindow.h',
+				'DirectZobEditorWx/MainWindow.cpp',
+				'DirectZobEditorWx/MainWindowInterface.h',
+				'DirectZobEditorWx/MainWindowInterface.cpp',
+				'DirectZobEditorWx/ZobEditorManager.h',
+				'DirectZobEditorWx/ZobEditorManager.cpp',
+                'DirectZobEditorWx/Inspector.h',
+				'DirectZobEditorWx/Inspector.cpp',
+                'DirectZobEditorWx/ZobControls.h',
+				'DirectZobEditorWx/ZobControls.cpp',
 			],
 			'conditions': [
 				[
@@ -389,6 +389,35 @@
 					},
 					'OS=="linux"',
 					{
+						'include_dirs': [
+							'.',
+							'dependencies/fbxsdk/linux/include',
+                            '../../../wxWidgets-3.2.6/include',
+						],
+                        'cxxflags': [
+                        	'`../../../wxWidgets-3.2.6/build/wx-config --cxxflags`'
+                        ],
+                        "cflags_c": [
+                            '`../../../wxWidgets-3.2.6/build/wx-config --cxxflags`'
+                    	],
+						'link_settings': {
+							'libraries': [
+								'../dependencies/fbxsdk/linux/lib/libfbxsdk.a', 
+								'../dependencies/reactphysics3d/lib/linux/libreactphysics3d.a',
+								'../dependencies/gainput/lib/linux/libgainputstatic.a',
+								'../dependencies/optick/lib/linux/libOptickCore.a',
+								'../dependencies/physfs/lib/linux/libphysfs.a',
+								'-lpthread',
+								'-lxml2',
+								'-lX11',
+								'-ldl',
+								'-lz',
+								'`/home/zeralph/Documents/wxWidgets-3.2.6/build/wx-config --libs`',
+							],
+							'library_dirs': [
+								'/usr/lib/x86_64-linux-gnu',
+							],
+						},
 					},
 					'OS=="mac"',
 					{

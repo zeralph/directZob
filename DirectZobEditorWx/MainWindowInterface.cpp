@@ -369,13 +369,12 @@ void MainWindowInterface::OnTimer(wxTimerEvent& event)
 void MainWindowInterface::OnPaint(wxPaintEvent& event)
 {
 #ifdef LINUX
-	wxBufferedPaintDC  dc(m_renderPanel);
+	wxPaintDC  dc(m_renderPanel);
 #elif WINDOWS
 	wxBufferedPaintDC  dc(m_renderPanel);
 #elif MACOS
 	wxPaintDC  dc(m_renderPanel);
-#endif //LINUX    
-//    wxBufferedPaintDC  dc(m_renderPanel);
+#endif
 
     if (m_bitmapBuffer.IsOk())
     {

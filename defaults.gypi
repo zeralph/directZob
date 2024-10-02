@@ -43,6 +43,7 @@
                     'defines': [
                         'LINUX',
                         '__LINUX__',
+                        "_UNICODE", "UNICODE",
                     ],
                 },
             ],
@@ -80,8 +81,8 @@
                                 'CLANG_CXX_LANGUAGE_STANDARD': 'c++17',
                                 'GCC_ENABLE_CPP_RTTI': 'YES',
                                 'ARCHS': ['arm64'],
-                                'OTHER_CPLUSPLUSFLAGS' : [ '`../../../wxWidgets-3.2.6/build/wx-config --cxxflags`' ],
-                                'OTHER_CFLAGS' : [ '`../../../wxWidgets-3.2.6/build/wx-config --cxxflags`' ],
+                                'OTHER_CPLUSPLUSFLAGS' : [ '`../../wxWidgets-3.2.6/build/wx-config --cxxflags`' ],
+                                'OTHER_CFLAGS' : [ '`../../wxWidgets-3.2.6/build/wx-config --cxxflags`' ],
                             },
                             'cflags': [
                                 '-Wno-pragma-pack',
@@ -95,7 +96,12 @@
                             'cflags': [
                                 '-g',
                                 '-ggdb3',
-                                ],
+                                '`../../wxWidgets-3.2.6/build/wx-config --cxxflags`' ,
+                            ],
+                            'cxxflags': [
+                                '-Wno-pragma-pack',
+                                '`../../wxWidgets-3.2.6/build/wx-config --cxxflags`' ,
+                            ],
                         }
                     ],
                 ],
@@ -163,6 +169,11 @@
                                 '-march=native', 
                                 '-ffast-math',
                                 '-Wnarrowing',
+                                '`../../wxWidgets-3.2.6/build/wx-config --cxxflags`' ,
+                            ],
+                            'cxxflags': [
+                                '-Wno-pragma-pack',
+                                '`../../wxWidgets-3.2.6/build/wx-config --cxxflags`' ,
                             ],
                         }
                     ],
