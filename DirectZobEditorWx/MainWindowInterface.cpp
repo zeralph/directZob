@@ -6,6 +6,7 @@
 #include <wx/dc.h>
 #include <wx/display.h>
 #include <wx/fileconf.h>
+#include <thread>
 #include "MainWindowInterface.h"
 #include "MainWindow.h"
 #include "ZobEditorManager.h"
@@ -44,18 +45,81 @@ MainWindowInterface::MainWindowInterface(DirectZob* dz, ZobEditorManager* dze) :
 #endif
     Connect(wxID_ANY, wxEVT_IDLE, wxIdleEventHandler(MainWindowInterface::OnIdle));
     m_renderPanel->Bind(wxEVT_PAINT, &MainWindowInterface::OnPaint, this);
-    m_timer.SetOwner(this);
-    m_timer.Start(16);
-    this->Bind(wxEVT_TIMER, &MainWindowInterface::OnTimer, this);
     wxDisplay display(wxDisplay::GetFromWindow(this));
     wxRect screen = display.GetGeometry();
     this->SetSize(50, 50, screen.width-100, screen.height-100);
+    m_run = true;
+    std::thread t = std::thread(&MainWindowInterface::MyThread, this);
+    t.detach();
+}
 
+void MainWindowInterface::MyThread()
+{
+    while (m_run)
+    {
+        RenderAFrame();
+    }
+    m_directZob->Unload();
+}
+
+
+
+void MainWindowInterface::RenderAFrame()
+{
+    int w, h;
+    m_renderPanel->GetClientSize(&w, &h);
+    m_directZob->Resize(w, h);
+    if (m_directZob->GetEngine()->Started())
+    {
+
+        m_directZob->RunAFrame();
+        m_directZob->EditorUpdate();
+        m_editor->Update();
+    }
+    const uint* buffer = m_directZob->GetBufferData();
+    int width = m_directZob->GetBufferWidth();
+    int height = m_directZob->GetBufferHeight();
+    uint* engineData = m_directZob->GetEditorBufferDataNoConst();
+    // Now transfer the pixel data into a wxBitmap
+    wxBitmap b(width, height, 24);
+    wxNativePixelData data(b);
+    if (!data)
+    {
+        return;
+    }
+    wxNativePixelData::Iterator p(data);
+    int curPixelDataLoc = 0;
+    for (int y = 0; y < height; ++y)
+    {
+        wxNativePixelData::Iterator rowStart = p;
+        for (int x = 0; x < width; ++x, ++p)
+        {
+            uint c = engineData[curPixelDataLoc];
+            if (c != 0)
+            {
+                int tt = 0;
+                tt++;
+            }
+            uint r = (c & 0xFF0000) >> 16;
+            uint g = (c & 0x00FF00) >> 8;
+            uint b = (c & 0x0000FF) >> 0;
+            p.Red() = r;// 
+            p.Green() = g;// c & 0x00FF00 >> 8;
+            p.Blue() = b;// c & 0x0000FF;
+            curPixelDataLoc++;
+        }
+        p = rowStart;
+        p.OffsetY(data, 1);
+    }
+    m_bitmapBuffer = b;
+    m_renderPanel->Refresh();
+    m_renderPanel->Update();
 }
 
 MainWindowInterface::~MainWindowInterface()
 {
-    m_timer.Stop();
+    m_run = false;
+    delete m_EngineInspector;
     delete m_currentZobObjectInspector;
 }
 
@@ -363,12 +427,7 @@ void MainWindowInterface::OnSave(wxCommandEvent& event)
 
 void MainWindowInterface::OnExit(wxCommandEvent& event) 
 { 
-    
-}
-
-void MainWindowInterface::OnTimer(wxTimerEvent& event)
-{
-    RenderAFrame();
+    m_run = false;
 }
 
 void MainWindowInterface::OnPaint(wxPaintEvent& event)
@@ -395,59 +454,6 @@ void MainWindowInterface::OnIdle(wxIdleEvent& evt)
         m_renderPanel->Refresh();
         m_renderPanel->Update();
     }
-}
-
-
-void MainWindowInterface::RenderAFrame()
-{
-    int w, h;
-    m_renderPanel->GetClientSize(&w, &h);
-    m_directZob->Resize(w, h);
-    if (m_directZob->GetEngine()->Started())
-    {
-
-        m_directZob->RunAFrame();
-        m_directZob->EditorUpdate();
-        m_editor->Update();
-    }
-    const uint* buffer = m_directZob->GetBufferData();
-    int width = m_directZob->GetBufferWidth();
-    int height = m_directZob->GetBufferHeight();
-    uint* engineData = m_directZob->GetEditorBufferDataNoConst();
-    // Now transfer the pixel data into a wxBitmap
-    wxBitmap b(width, height, 24);
-    wxNativePixelData data(b);
-    if (!data)
-    {
-        return;
-    }
-    wxNativePixelData::Iterator p(data);
-    int curPixelDataLoc = 0;
-    for (int y = 0; y < height; ++y)
-    {
-        wxNativePixelData::Iterator rowStart = p;
-        for (int x = 0; x < width; ++x, ++p)
-        {
-            uint c = engineData[curPixelDataLoc];
-            if (c != 0)
-            {
-                int tt = 0;
-                tt++;
-            }
-            uint r = (c & 0xFF0000) >> 16;
-            uint g = (c & 0x00FF00) >> 8;
-            uint b = (c & 0x0000FF) >> 0;
-            p.Red() = r;// 
-            p.Green() = g;// c & 0x00FF00 >> 8;
-            p.Blue() = b;// c & 0x0000FF;
-            curPixelDataLoc++;
-        }
-        p = rowStart;
-        p.OffsetY(data, 1);
-    }
-    m_bitmapBuffer = b;
-    m_renderPanel->Refresh();
-    m_renderPanel->Update();
 }
 
 void MainWindowInterface::OnGizmosGrid(wxCommandEvent& event)

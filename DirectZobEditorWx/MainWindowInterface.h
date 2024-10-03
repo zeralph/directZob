@@ -54,14 +54,13 @@ public:
     void                        OnEndDrag(wxTreeEvent& event) override;
     void                        OnPaint(wxPaintEvent& event);
     void                        OnIdle(wxIdleEvent& evt);
-    void                        OnTimer(wxTimerEvent& event);
     void                        OnGizmosGrid(wxCommandEvent& event);
     void                        OnGizmosText(wxCommandEvent& event);
     void                        OnGizmosPhysics(wxCommandEvent& event);
     void                        OnGizmosObjects(wxCommandEvent& event);
-
+    
 //private:
-
+    
     DirectZob* m_directZob;
     ZobEditorManager* m_editor;
 
@@ -71,6 +70,7 @@ private:
         eInpector_object = 0,
         eInpector_engine = 1,
     };
+    void                        MyThread();
     wxTreeItemId                SelectZobObjectInTree(wxTreeItemId root, std::string& zobIdStr);
     void                        RefreshObjectTree();
     void                        RenderAFrame();
@@ -81,6 +81,6 @@ private:
     Inspector*                  m_currentZobObjectInspector;
     Inspector*                  m_EngineInspector;
     wxBitmap                    m_bitmapBuffer;
-    wxTimer                     m_timer;
     wxFileConfig                m_config;
+    bool                        m_run;
 };
