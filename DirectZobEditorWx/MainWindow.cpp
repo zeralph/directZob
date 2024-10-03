@@ -120,7 +120,7 @@ MainWindow::MainWindow( wxWindow* parent, wxWindowID id, const wxString& title, 
 	bSizer5->Fit( m_panel3 );
 	m_panelRight = new wxPanel( m_splitter3, wxID_ANY, wxDefaultPosition, wxSize( 150,-1 ), wxTAB_TRAVERSAL );
 	m_panelRight->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_MENU ) );
-	m_panelRight->SetMinSize( wxSize( 150,-1 ) );
+	m_panelRight->SetMinSize( wxSize( 350,-1 ) );
 	m_panelRight->SetMaxSize( wxSize( 350,-1 ) );
 
 	wxBoxSizer* bSizer7;
@@ -146,7 +146,7 @@ MainWindow::MainWindow( wxWindow* parent, wxWindowID id, const wxString& title, 
 
 	m_panelRight->SetSizer( bSizer7 );
 	m_panelRight->Layout();
-	m_splitter3->SplitVertically( m_panel3, m_panelRight, -250 );
+	m_splitter3->SplitVertically( m_panel3, m_panelRight, -350 );
 	bSizer4->Add( m_splitter3, 1, wxEXPAND, 5 );
 
 

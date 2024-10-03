@@ -360,7 +360,7 @@
                       <property name="pos"></property>
                       <property name="resize">Resizable</property>
                       <property name="sashgravity">1</property>
-                      <property name="sashpos">-250</property>
+                      <property name="sashpos">-350</property>
                       <property name="sashsize">-1</property>
                       <property name="show">1</property>
                       <property name="size"></property>
@@ -1461,10 +1461,10 @@
                           <property name="id">wxID_ANY</property>
                           <property name="max_size"></property>
                           <property name="maximize_button">0</property>
-                          <property name="maximum_size">250,-1</property>
+                          <property name="maximum_size">350,-1</property>
                           <property name="min_size"></property>
                           <property name="minimize_button">0</property>
-                          <property name="minimum_size">150,-1</property>
+                          <property name="minimum_size">350,-1</property>
                           <property name="moveable">1</property>
                           <property name="name">m_panelRight</property>
                           <property name="pane_border">1</property>
@@ -1526,7 +1526,7 @@
                                 <property name="maximum_size"></property>
                                 <property name="min_size">250,-1</property>
                                 <property name="minimize_button">0</property>
-                                <property name="minimum_size">250,-1</property>
+                                <property name="minimum_size">350,-1</property>
                                 <property name="moveable">1</property>
                                 <property name="name">m_notebookInspector</property>
                                 <property name="pane_border">1</property>
