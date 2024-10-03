@@ -19,7 +19,7 @@ ZobControl::ZobControl(const ZobVariablesExposer::wrapperData* w, wxBoxSizer* b,
 ZobControl::~ZobControl()
 {
 }
-void ZobControl::Update()
+void ZobControl::UpdateFromEngine()
 {
 }
 /*------------------------------------------------
@@ -70,9 +70,17 @@ ZobFloatCtrl::~ZobFloatCtrl()
 {
 
 }
-void ZobFloatCtrl::Update()
+void ZobFloatCtrl::UpdateFromEngine()
 {
-
+	float f = *((float*)m_vars->ptr);
+	if (m_value != f)
+	{
+		std::string s;
+		Inspector::FloatToString(f, s);
+		wxEventBlocker blockerX(m_f);
+		m_value = f;
+		m_f->SetValue(s);
+	}
 }
 /*------------------------------------------------
 *
@@ -120,7 +128,7 @@ ZobVector3Ctrl::~ZobVector3Ctrl()
 {
 
 }
-void ZobVector3Ctrl::Update()
+void ZobVector3Ctrl::UpdateFromEngine()
 {
 	ZobVector3* z = (ZobVector3*)m_vars->ptr;
 	if (m_x != z->x)
@@ -244,7 +252,7 @@ ZobEnumCtrl::~ZobEnumCtrl()
 {
 
 }
-void ZobEnumCtrl::Update()
+void ZobEnumCtrl::UpdateFromEngine()
 {
 
 }
@@ -280,7 +288,7 @@ ZobStringCtrl::~ZobStringCtrl()
 
 }
 
-void ZobStringCtrl::Update()
+void ZobStringCtrl::UpdateFromEngine()
 {
 
 }
@@ -306,6 +314,15 @@ ZobBoolCtrl::ZobBoolCtrl(const ZobVariablesExposer::wrapperData* w, wxBoxSizer* 
 ZobBoolCtrl::~ZobBoolCtrl()
 {
 
+}
+
+void ZobBoolCtrl::UpdateFromEngine()
+{
+	bool bval = *((bool*)m_vars->ptr);
+	if (bval != m_b->GetValue())
+	{
+		m_b->SetValue(bval);
+	}
 }
 
 void ZobBoolCtrl::OnUpdate(wxCommandEvent& event)

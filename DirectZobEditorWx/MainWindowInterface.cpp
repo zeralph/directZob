@@ -225,13 +225,21 @@ void MainWindowInterface::OnCameraSelected(wxCommandEvent& event)
 void MainWindowInterface::RefreshCamerasList()
 {
     m_singleton->m_cameraSelector->Clear();
-    m_singleton->m_cameraSelector->Append("AA");
     const std::vector<Camera*>* cameras = DirectZob::GetInstance()->GetCameraManager()->GetCameras();
+    Camera* curCam = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
     std::vector<Camera*>::const_iterator iter = cameras->begin();
+    int i = 0;
+    int j = 0;
     for (iter; iter != cameras->end(); iter++)
     {
         m_singleton->m_cameraSelector->Append((*iter)->GetName());
+        if ((*iter)->GetName() == "EditorCamera")
+        {
+            j = i;
+        }
+        i++;
     }
+    m_singleton->m_cameraSelector->SetSelection(j);
 }
 
 void MainWindowInterface::OnTreeSelChanged(wxTreeEvent& event)

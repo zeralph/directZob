@@ -476,7 +476,9 @@ void ZobEditorManager::OnNewScene()
 	c->SetWorldPosition(-20, 20, -20);
 	ZobVector3 v = ZobVector3(0, 0, 0);
 	c->SetTarget(&v);
-
+	c->SetName(name);
+	DirectZob::GetInstance()->GetCameraManager()->SetNextCamera(name);
+	MainWindowInterface::RefreshCamerasList();
 	m_gizmosNode = new ZobObject(ZobEntity::type_editor, ZobEntity::subtype_zobOject, EDITOR_GIZMOS_NODE, m_editorRootNode);
 
 	ZobFilePath zfpT = ZobFilePath("arrow.obj", gArrow, gArrowLen);
@@ -529,7 +531,6 @@ void ZobEditorManager::OnNewScene()
 	DirectZob::GetInstance()->GetEngine()->SetRenderMode(eRenderMode::eRenderMode_fullframe);
 	DirectZob::GetInstance()->GetEngine()->DrawGizmos(true);
 	HideGizmos();
-	MainWindowInterface::RefreshCamerasList();
 	m_init = true;
 }
 

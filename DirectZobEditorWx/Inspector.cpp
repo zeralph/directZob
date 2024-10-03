@@ -50,7 +50,8 @@ void Inspector::UpdateControls()
 {
 	for (std::vector<ZobControl*>::iterator iter = m_controls.begin(); iter != m_controls.end(); iter++)
 	{
-		(*iter)->Update();
+		ZobControl* zc = (*iter);
+		zc->UpdateFromEngine();
 	}
 }
 
