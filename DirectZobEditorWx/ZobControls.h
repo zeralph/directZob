@@ -1,12 +1,14 @@
 #pragma once
 #include "../DirectZobEngine/DirectZob.h"
 #include "../DirectZobEngine/Misc/ZobVariablesExposer.h"
+#include "../DirectZobEngine/Rendering/Color.h"
 #include <wx/panel.h>
 
 class wxTextCtrl;
 class wxBoxSizer;
 class wxComboBox;
 class wxCheckBox;
+class wxColourPickerCtrl;
 class ZobControl : public wxPanel
 {
 public:
@@ -84,4 +86,16 @@ public:
 	void OnInput(wxFocusEvent& event);
 private:
 	wxCheckBox* m_b;
+};
+
+class ZobColorControl : public ZobControl
+{
+public:
+	ZobColorControl(const ZobVariablesExposer::wrapperData* w, wxBoxSizer* b, wxPanel* p);
+	virtual ~ZobColorControl();
+	void UpdateFromEngine() override;
+	void OnUpdate(wxCommandEvent& event);
+private:
+	wxColourPickerCtrl* m_c;
+	ZobColor m_color;
 };

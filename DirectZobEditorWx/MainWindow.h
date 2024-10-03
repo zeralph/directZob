@@ -116,7 +116,7 @@ class MainWindow : public wxFrame
 
 		void m_splitter3OnIdle( wxIdleEvent& )
 		{
-			m_splitter3->SetSashPosition( -250 );
+			m_splitter3->SetSashPosition( -350 );
 			m_splitter3->Disconnect( wxEVT_IDLE, wxIdleEventHandler( MainWindow::m_splitter3OnIdle ), NULL, this );
 		}
 

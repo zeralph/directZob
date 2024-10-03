@@ -29,5 +29,8 @@ public:
 	static wxSize sFloatSize;
 	static wxSize sStringSize;
 	static wxSize sBoolSize;
+	static wxSize sColorSize;
+	static wxSize sComboSize;
+	static wxSize sCheckBoxSize;
 	//wxBoxSizer* m_boxSizer;
 };

@@ -1,3 +1,5 @@
+
+#pragma once
 #ifndef _COLOR_H_
 #define _COLOR_H_
 
@@ -103,5 +105,10 @@ class ZobColor
 		static const ZobColor Seal;
 		static const ZobColor Silver;
 };
-
+/*
+bool operator != (ZobColor const & a, ZobColor const & b) 
+{
+	return a.GetRed() != b.GetRed() || a.GetGreen() != b.GetGreen() || a.GetBlue() != b.GetBlue() || a.GetAlpha() != b.GetAlpha();
+}
+*/
 #endif

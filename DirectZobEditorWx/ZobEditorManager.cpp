@@ -19,9 +19,11 @@ ZobEditorManager::~ZobEditorManager()
 
 void ZobEditorManager::UpdateInterface()
 {
-	MainWindowInterface::UpdateControls();	
-	MainWindowInterface::AddLog(m_logTmpData);
-	//m_logTmpData = "";
+	if(m_init)
+	{
+		MainWindowInterface::UpdateControls();	
+		MainWindowInterface::AddLog(m_logTmpData);
+	}
 }
 
 void ZobEditorManager::Unload()

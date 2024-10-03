@@ -73,6 +73,14 @@
             ]
         },
         {
+            "name": "Macos Editor Debug build",
+            "type": "cppdbg",
+            "program": "${workspaceFolder}/build/make BUILDTYPE=Debug",
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/build/",
+            "environment": [],
+        },
+        {
             "name": "Macos Debug build and run",
             "type": "cppdbg",
             "request": "launch",
@@ -97,6 +105,20 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/build/out/Debug/DirectZobEditor",
+            "args": [
+            ],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/build/",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "lldb",
+            "preLaunchTask": ""
+        },
+        {
+            "name": "Macos Editor Release",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/out/Release/DirectZobEditor",
             "args": [
             ],
             "stopAtEntry": false,

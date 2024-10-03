@@ -182,7 +182,7 @@ void MainWindowInterface::SetCurrentZobVariables(ZobVariablesExposer* zvars)
 void MainWindowInterface::OnNewScene()
 {
     m_singleton->m_currentZobObjectInspector->Clear();
-    m_singleton->m_notebookInspector->ChangeSelection(eInspectorTabs::eInpector_engine);
+    //m_singleton->m_notebookInspector->ChangeSelection(eInspectorTabs::eInpector_engine);
     m_singleton->m_notebookInspector->ChangeSelection(eInspectorTabs::eInpector_object);
     m_singleton->m_notebookInspector->Refresh();
 }
@@ -348,7 +348,9 @@ void MainWindowInterface::BuildObjectTree(ZobObject* z, wxTreeItemId node)
 {  
     for (std::vector<ZobObject*>::const_iterator iter = z->GetChildren()->begin(); iter != z->GetChildren()->end(); iter++ )
     {
-        if (ZobEntity::GetType((*iter)->GetIdValue()) != ZobEntity::type_editor)
+        zobId id = (*iter)->GetIdValue();
+        ZobEntity::ZobType zt  =ZobEntity::GetType(id);
+        if (zt!= ZobEntity::type_editor)
         {
             wxTreeItemId newNode = m_treeNode->AppendItem(node, (*iter)->GetName());
             zobTreeItemData* data = new zobTreeItemData();
@@ -385,6 +387,7 @@ void MainWindowInterface::AddLog(std::string& s)
 void MainWindowInterface::UpdateControls()
 {
     m_singleton->m_currentZobObjectInspector->UpdateControls();
+    m_singleton->m_EngineInspector->UpdateControls();
 }
 
 void MainWindowInterface::OnMouseClick(wxMouseEvent& event)

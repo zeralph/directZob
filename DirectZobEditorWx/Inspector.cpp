@@ -8,10 +8,13 @@
 #include <string>
 #include "../DirectZobEngine/ZobObjects/ZobObject.h";
 
-wxSize Inspector::sLabelSize = wxSize(80, 20);
-wxSize Inspector::sFloatSize = wxSize(50, 20);
+wxSize Inspector::sLabelSize = wxSize(140, 20);
+wxSize Inspector::sFloatSize = wxSize(100, 20);
+wxSize Inspector::sColorSize = wxSize(100, 20);
 wxSize Inspector::sBoolSize = wxSize(250, 20);
 wxSize Inspector::sStringSize = wxSize(100, 20);
+wxSize Inspector::sComboSize = wxSize(100, 20);
+wxSize Inspector::sCheckBoxSize = wxSize(100, 20);
 
 bool Inspector::FloatToString(float f, std::string& s)
 {
@@ -80,7 +83,6 @@ void Inspector::Set(ZobObject* z)
 	sizers.clear();
 	m_panel->SetSizerAndFit(boxSizer, false);
 	m_panel->Layout();
-	m_panel->Show();
 }
 
 void Inspector::Set(ZobVariablesExposer* vars)
@@ -97,7 +99,6 @@ void Inspector::Set(ZobVariablesExposer* vars)
 	sizers.clear();
 	m_panel->SetSizerAndFit(boxSizer, false);
 	m_panel->Layout();
-	m_panel->Show();
 }
 
 void Inspector::AddVars(ZobVariablesExposer* vars, std::vector<wxStaticBoxSizer*> sizers)
@@ -160,19 +161,11 @@ void Inspector::AddVars(ZobVariablesExposer* vars, std::vector<wxStaticBoxSizer*
 				wxStaticBoxSizer* newSizer = new wxStaticBoxSizer(new wxStaticBox(m_panel, wxID_ANY, _(w->name.c_str())), wxVERTICAL);
 				sizers.back()->Add(newSizer, 0, wxALL, 1);
 				sizers.push_back(newSizer);
-				//ZobGroupBox^ zb = gcnew ZobGroupBox(s, nullptr, false);
-				//ZobPropertiesContainer^ p = gcnew ZobPropertiesContainer();
-				//zb->Controls->Add(p);
-				//panel->Controls->Add(zb);
-				//System::String^ s = gcnew String(w.name.c_str());
-				//panel = p;
 			}
 			else if (w->type == ZobVariablesExposer::eWrapperType_endGroup)
 			{
 				assert((sizers.size() > 1));
 				sizers.pop_back();
-				//ZobPropertiesContainer^ p = (ZobPropertiesContainer^)panel->Parent->Parent;
-				//panel = p;
 			}
 			else if (w->type == ZobVariablesExposer::eWrapperType_zobId)
 			{
@@ -184,7 +177,9 @@ void Inspector::AddVars(ZobVariablesExposer* vars, std::vector<wxStaticBoxSizer*
 			}
 			else if (w->type == ZobVariablesExposer::eWrapperType_zobColor)
 			{
-				//panel->Controls->Add(gcnew ZobControlColor(w));
+				wxBoxSizer* b = sizers.back();
+				ZobColorControl* f = new ZobColorControl(w, b, m_panel);
+				m_controls.push_back(f);
 			}
 			else if (w->type == ZobVariablesExposer::eWrapperType_uint)
 			{

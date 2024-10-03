@@ -3,6 +3,7 @@
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
 #include <wx/sizer.h>
+#include <wx/clrpicker.h>
 #include <wx/combobox.h>
 #include <wx/checkbox.h>
 /*------------------------------------------------
@@ -235,7 +236,7 @@ ZobEnumCtrl::ZobEnumCtrl(const ZobVariablesExposer::wrapperData* w, wxBoxSizer* 
 	float* f = (float*)w->ptr;
 	std::string s;
 	Inspector::FloatToString(*f, s);
-	m_c = new wxComboBox(m_panel, wxID_ANY, _("Combo!"), wxDefaultPosition, wxDefaultSize, 0, NULL, 0);
+	m_c = new wxComboBox(m_panel, wxID_ANY, _("Combo!"), wxDefaultPosition, Inspector::sComboSize, 0, NULL, 0);
 	bs->Add(m_c, 0, wxALL, 1);
 	bs->Add(t, 0, wxALL, 1);
 	std::vector<std::string>::const_iterator iter = w->enumNames.begin();
@@ -256,7 +257,6 @@ void ZobEnumCtrl::UpdateFromEngine()
 {
 
 }
-
 void ZobEnumCtrl::OnSelected(wxCommandEvent& event)
 { 
 	int idx = m_c->GetSelection();
@@ -268,7 +268,11 @@ void ZobEnumCtrl::OnSelected(wxCommandEvent& event)
 		m_vars->callback(m_vars->id);
 	}
 }
-
+/*------------------------------------------------
+*
+*	ZobStringCtrl
+*
+*/
 ZobStringCtrl::ZobStringCtrl(const ZobVariablesExposer::wrapperData* w, wxBoxSizer* b, wxPanel* p) : ZobControl(w, b, p)
 {
 	wxBoxSizer* bs = new wxBoxSizer(wxHORIZONTAL);
@@ -299,13 +303,20 @@ void ZobStringCtrl::OnInput(wxFocusEvent& event)
 	std::string n = std::string(m_t->GetValue().c_str());
 	s->assign(n);
 }
-
+/*------------------------------------------------
+*
+*	ZobBoolCtrl
+*
+*/
 ZobBoolCtrl::ZobBoolCtrl(const ZobVariablesExposer::wrapperData* w, wxBoxSizer* b, wxPanel* p) : ZobControl(w, b, p)
 {
 	wxBoxSizer* bs = new wxBoxSizer(wxHORIZONTAL);
 	bool* bval = (bool*)w->ptr;
-	m_b = new wxCheckBox(m_panel, wxID_ANY, _(w->name.c_str()), wxDefaultPosition, Inspector::sBoolSize, 0);
+	m_b = new wxCheckBox(m_panel, wxID_ANY, _(""), wxDefaultPosition, Inspector::sCheckBoxSize, 0);
+	wxStaticText* t = new wxStaticText(m_panel, wxID_ANY, _(w->name.c_str()), wxDefaultPosition, Inspector::sLabelSize, 0);
+	t->Wrap(-1);
 	bs->Add(m_b, 0, wxALL, 1);
+	bs->Add(t, 0, wxALL, 1);
 	b->Add(bs);
 	m_b->Connect(wxEVT_CHECKBOX, wxCommandEventHandler(ZobBoolCtrl::OnUpdate), NULL, this);
 	m_b->SetValue(*bval);
@@ -338,4 +349,55 @@ void ZobBoolCtrl::OnUpdate(wxCommandEvent& event)
 void ZobBoolCtrl::OnInput(wxFocusEvent& event)
 {
 
+}
+
+/*------------------------------------------------
+*
+*	ZobColorCtrl
+*
+*/
+ZobColorControl::ZobColorControl(const ZobVariablesExposer::wrapperData* w, wxBoxSizer* b, wxPanel* p) : ZobControl(w, b, p)
+{
+	wxBoxSizer* bs = new wxBoxSizer(wxHORIZONTAL);
+	ZobColor* c = (ZobColor*)w->ptr;
+	m_c = new wxColourPickerCtrl(m_panel, wxID_ANY, *wxWHITE, wxDefaultPosition, Inspector::sColorSize);
+	wxStaticText* t = new wxStaticText(m_panel, wxID_ANY, _(w->name.c_str()), wxDefaultPosition, Inspector::sLabelSize, 0);
+	t->Wrap(-1);
+	bs->Add(m_c, 0, wxALL, 1);
+	bs->Add(t, 0, wxALL, 1);
+	b->Add(bs);
+	m_c->Connect(wxEVT_COLOURPICKER_CHANGED, wxCommandEventHandler(ZobColorControl::OnUpdate), NULL, this);
+	wxColor wxc = wxColor();
+	wxc.Set(c->GetRed(), c->GetGreen(), c->GetBlue(), c->GetAlpha());
+	m_c->SetColour(wxc);
+	//m_b->SetValue(*bval);
+}
+ZobColorControl::~ZobColorControl()
+{
+}
+void ZobColorControl::UpdateFromEngine()
+{
+	ZobColor* c = (ZobColor*)m_vars->ptr;
+	bool b = c->GetRed() != m_color.GetRed() || 
+			c->GetGreen() != m_color.GetGreen() || 
+			c->GetBlue() != m_color.GetBlue() || 
+			c->GetAlpha() != m_color.GetAlpha();
+	if(b)
+	{
+		m_color = c;
+		wxColor wxc = wxColor();
+		wxc.Set(c->GetRed(), c->GetGreen(), c->GetBlue(), c->GetAlpha());
+		m_c->SetColour(wxc);
+	}
+}
+void ZobColorControl::OnUpdate(wxCommandEvent& event)
+{
+	wxColor wxc = m_c->GetColour();
+	ZobColor* c = (ZobColor*)m_vars->ptr;
+	c->Set(wxc.GetAlpha(), wxc.GetRed(), wxc.GetGreen(), wxc.GetBlue());
+	//*pb = m_c->GetValue();
+	if (m_vars->callback)
+	{
+		m_vars->callback(m_vars->id);
+	}
 }
