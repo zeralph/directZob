@@ -64,6 +64,7 @@ void MainWindowInterface::MyThread()
     {
         if (!m_renderedAFrame)
         {
+            m_editor->UpdateEngine();
             RenderAFrame();
             const uint* buffer = m_directZob->GetBufferData();
             int width = m_directZob->GetBufferWidth();
@@ -121,7 +122,7 @@ void MainWindowInterface::RenderAFrame()
 
 void MainWindowInterface::OnTimer(wxTimerEvent& event)
 {
-
+    m_editor->UpdateInterface();
 }
 
 void MainWindowInterface::OnPaint(wxPaintEvent& event)
@@ -134,7 +135,7 @@ void MainWindowInterface::OnIdle(wxIdleEvent& evt)
 {
     if (m_renderedAFrame)
     {
-        m_editor->Update();
+        //m_editor->Update();
         m_renderPanel->Refresh();
         m_renderPanel->Update();
     }
@@ -435,6 +436,7 @@ void MainWindowInterface::OnMotion(wxMouseEvent& event)
 
 void MainWindowInterface::OnNew(wxCommandEvent& event) 
 { 
+    m_editor->Unload();
     m_directZob->Unload();
 //    m_singleton->m_log->Clear();
     m_directZob->NewScene("");
@@ -451,6 +453,8 @@ void MainWindowInterface::OnOpen(wxCommandEvent& event)
     }
     std::string p = std::string(openFileDialog.GetDirectory().mb_str());
     std::string f = std::string(openFileDialog.GetFilename().mb_str());
+    m_editor->Unload();
+    m_directZob->Unload();
     m_directZob->LoadScene(p, f, MainWindowInterface::OnSceneLoaded, NULL);
 }
 

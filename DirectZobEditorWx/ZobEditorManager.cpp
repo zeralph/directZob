@@ -5,6 +5,7 @@
 
 ZobEditorManager::ZobEditorManager()
 {
+	m_init = false;
 	m_currentSelectedGizmo = NULL;
 	m_selectedObject = NULL;
 	m_modificatorData.Reset();
@@ -16,16 +17,31 @@ ZobEditorManager::~ZobEditorManager()
 {
 }
 
-void ZobEditorManager::Update()
+void ZobEditorManager::UpdateInterface()
 {
-	MainWindowInterface::UpdateControls();
-	UpdateMoveObject();
-	UpdateView();
-	DrawGrid();
-	UpdateLog();
-	UpdateGizmos();
-	ZobObject* z = DirectZob::GetInstance()->GetEngine()->GetObjectAt2DCoords(m_mouseX, m_mouseY, true);
-	UpdateGizmoSelection(z);
+	MainWindowInterface::UpdateControls();	
+}
+
+void ZobEditorManager::Unload()
+{
+	m_init = false;
+	m_currentSelectedGizmo = NULL;
+	m_selectedObject = NULL;
+	m_modificatorData.Reset();
+}
+
+void ZobEditorManager::UpdateEngine()
+{
+	if (m_init)
+	{
+		UpdateMoveObject();
+		UpdateView();
+		DrawGrid();
+		UpdateGizmos();
+		ZobObject* z = DirectZob::GetInstance()->GetEngine()->GetObjectAt2DCoords(m_mouseX, m_mouseY, true);
+		UpdateGizmoSelection(z);
+		UpdateLog();
+	}
 }
 
 
@@ -514,6 +530,7 @@ void ZobEditorManager::OnNewScene()
 	DirectZob::GetInstance()->GetEngine()->DrawGizmos(true);
 	HideGizmos();
 	MainWindowInterface::RefreshCamerasList();
+	m_init = true;
 }
 
 void ZobEditorManager::SetSelectedObject(ZobObject* z)

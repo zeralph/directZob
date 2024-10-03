@@ -84,9 +84,11 @@ public:
 	ZobEditorManager(); 
 	~ZobEditorManager();
 
-	void				Update();
+	void				UpdateInterface();
+	void				UpdateEngine();
 	void				UpdateLog();
 	void				OnNewScene();
+	void				Unload();
 	void				DrawGrid();
 	void				UpdateGizmos();
 	void				SetSelectedObject(ZobObject* z);
@@ -132,4 +134,5 @@ private:
 	static long			gArrowLen;
 	static char*		gCircle;
 	static long			gCircleLen;
+	bool				m_init;
 };

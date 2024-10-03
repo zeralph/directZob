@@ -74,6 +74,7 @@ void DirectZob::LoadPack(std::string& path, std::string& file)
 
 void DirectZob::LoadScene(std::string& path, std::string& file, DirectZob::engineCallback OnSceneLoaded, DirectZobType::sceneLoadingCallback OnSceneLoading)
 {
+	DirectZob::GetInstance()->GetEngine()->Start(NULL);
 	m_physicStarted = false;
 	m_onSceneLoaded = OnSceneLoaded;
 	SceneLoader::LoadScene(path, file, OnSceneLoading);
