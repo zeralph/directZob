@@ -288,7 +288,7 @@ void ZobStringCtrl::Update()
 void ZobStringCtrl::OnInput(wxFocusEvent& event)
 {
 	std::string* s = (std::string*)m_vars->ptr;
-	std::string n = m_t->GetValue();
+	std::string n = std::string(m_t->GetValue().c_str());
 	s->assign(n);
 }
 
