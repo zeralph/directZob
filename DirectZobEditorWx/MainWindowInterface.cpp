@@ -342,7 +342,7 @@ void MainWindowInterface::BuildObjectTree(ZobObject* z, wxTreeItemId node)
     }
  }
 
-void MainWindowInterface::AddLog(const Events::event& e)
+void MainWindowInterface::AddLog(std::string& s)
 {
     /*
     switch (e.t)
@@ -361,8 +361,8 @@ void MainWindowInterface::AddLog(const Events::event& e)
     m_singleton->m_log->Newline();
     m_singleton->m_log->ScrollIntoView(m_singleton->m_log->GetCaretPosition(), WXK_PAGEDOWN);
     */
-   m_singleton->m_log->AppendText(e.m);
-   m_singleton->m_log->AppendText("\n");
+   m_singleton->m_log->AppendText(s);
+   //m_singleton->m_log->AppendText("\n");
 }
 
 void MainWindowInterface::UpdateControls()

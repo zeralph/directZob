@@ -20,6 +20,8 @@ ZobEditorManager::~ZobEditorManager()
 void ZobEditorManager::UpdateInterface()
 {
 	MainWindowInterface::UpdateControls();	
+	MainWindowInterface::AddLog(m_logTmpData);
+	//m_logTmpData = "";
 }
 
 void ZobEditorManager::Unload()
@@ -457,13 +459,18 @@ void ZobEditorManager::UpdateGizmos()
 
 void ZobEditorManager::UpdateLog()
 {
+	//m_logTmpData = "";
+	std:stringstream ss;
 	std::vector<Events::event>* ev = DirectZob::GetInstance()->GetEventManager()->GetEventsStruct();
 	for (std::vector<Events::event>::const_iterator iter = ev->begin(); iter != ev->end(); iter++)
 	{
-		MainWindowInterface::AddLog(*iter);
+		ss << (*iter).m << "\n";
+		//m_logTmpData += (*iter);
+		//m_logTmpData += ('\n');
+		//MainWindowInterface::AddLog(*iter);
 	}
 	DirectZob::GetInstance()->GetEventManager()->ClearEvents();
-	
+	m_logTmpData = ss.str();
 }
 
 void ZobEditorManager::OnNewScene()

@@ -135,4 +135,5 @@ private:
 	static char*		gCircle;
 	static long			gCircleLen;
 	bool				m_init;
+	std::string 		m_logTmpData;
 };

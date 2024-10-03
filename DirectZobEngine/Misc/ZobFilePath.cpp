@@ -139,11 +139,15 @@ void ZobFilePath::LoadData()
 			}
 			else
 			{
+				m_buf = (char*)malloc(sizeof(char) * (1));
+				m_buf[0] = '\0';
 				DirectZob::LogError("cannot load %s from archive", fp.c_str());
 			}
 		}
 		else
 		{
+			m_buf = (char*)malloc(sizeof(char) * (1));
+			m_buf[0] = '\0';
 			DirectZob::LogError("cannot find %s in archive", fp.c_str());
 		}
 	}
@@ -174,8 +178,8 @@ void ZobFilePath::LoadData()
 		}
 		else
 		{
-			m_bufLen = 0;
-			m_buf = NULL;
+			m_buf = (char*)malloc(sizeof(char) * (1));
+			m_buf[0] = '\0';
 		}
 	}
 }

@@ -430,7 +430,7 @@
                         	'`wx-config --cxxflags`',
                         ],
                         "cflags_c": [
-                             "`../../../wxWidgets-3.2.6/build/wx-config --cxxflags`"
+                             "`/home/zeralph/Documents/wxWidgets-3.2.6/build/wx-config --cxxflags`"
                     	],
 						'link_settings': {
 							'libraries': [
@@ -453,7 +453,7 @@
 								#'-lmingw32',
 								'-lstdc++',
 								#'-enable-auto-import',
-                                '`../../../wxWidgets-3.2.6/build/wx-config --libs`',
+                                '`/Users/lucasrichalland/Documents/wxWidgets-3.2.6/build/wx-config --libs`',
 							],
 						},
 					},
