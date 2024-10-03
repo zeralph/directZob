@@ -86,6 +86,5 @@ private:
     wxFileConfig                m_config;
     wxTimer                     m_timer;
     bool                        m_run;
-    UINT64                      m_EngineFrameNumber;
     volatile bool               m_renderedAFrame;
 };
