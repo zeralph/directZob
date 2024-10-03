@@ -43,6 +43,11 @@ MainWindowInterface::MainWindowInterface(DirectZob* dz, ZobEditorManager* dze) :
 #if WINDOWS
     m_renderPanel->SetDoubleBuffered(true);
 #endif
+    m_EngineFrameNumber = 0;
+    m_renderedAFrame = false;
+    m_timer.SetOwner(this);
+    m_timer.Start(16);
+    this->Bind(wxEVT_TIMER, &MainWindowInterface::OnTimer, this);
     Connect(wxID_ANY, wxEVT_IDLE, wxIdleEventHandler(MainWindowInterface::OnIdle));
     m_renderPanel->Bind(wxEVT_PAINT, &MainWindowInterface::OnPaint, this);
     wxDisplay display(wxDisplay::GetFromWindow(this));
@@ -57,12 +62,50 @@ void MainWindowInterface::MyThread()
 {
     while (m_run)
     {
-        RenderAFrame();
+        if (!m_renderedAFrame)
+        {
+            RenderAFrame();
+            const uint* buffer = m_directZob->GetBufferData();
+            int width = m_directZob->GetBufferWidth();
+            int height = m_directZob->GetBufferHeight();
+            uint* engineData = m_directZob->GetEditorBufferDataNoConst();
+            // Now transfer the pixel data into a wxBitmap
+            wxBitmap b(width, height, 24);
+            wxNativePixelData data(b);
+            if (!data)
+            {
+                return;
+            }
+            wxNativePixelData::Iterator p(data);
+            int curPixelDataLoc = 0;
+            for (int y = 0; y < height; ++y)
+            {
+                wxNativePixelData::Iterator rowStart = p;
+                for (int x = 0; x < width; ++x, ++p)
+                {
+                    uint c = engineData[curPixelDataLoc];
+                    if (c != 0)
+                    {
+                        int tt = 0;
+                        tt++;
+                    }
+                    uint r = (c & 0xFF0000) >> 16;
+                    uint g = (c & 0x00FF00) >> 8;
+                    uint b = (c & 0x0000FF) >> 0;
+                    p.Red() = r;// 
+                    p.Green() = g;// c & 0x00FF00 >> 8;
+                    p.Blue() = b;// c & 0x0000FF;
+                    curPixelDataLoc++;
+                }
+                p = rowStart;
+                p.OffsetY(data, 1);
+            }
+            m_bitmapBuffer = b;
+            m_renderedAFrame = true;
+        }
     }
     m_directZob->Unload();
 }
-
-
 
 void MainWindowInterface::RenderAFrame()
 {
@@ -71,49 +114,45 @@ void MainWindowInterface::RenderAFrame()
     m_directZob->Resize(w, h);
     if (m_directZob->GetEngine()->Started())
     {
-
         m_directZob->RunAFrame();
         m_directZob->EditorUpdate();
+    }
+}
+
+void MainWindowInterface::OnTimer(wxTimerEvent& event)
+{
+
+}
+
+void MainWindowInterface::OnPaint(wxPaintEvent& event)
+{
+    DrawFrame();
+    m_renderedAFrame = false;
+}
+
+void MainWindowInterface::OnIdle(wxIdleEvent& evt)
+{
+    if (m_renderedAFrame)
+    {
         m_editor->Update();
+        m_renderPanel->Refresh();
+        m_renderPanel->Update();
     }
-    const uint* buffer = m_directZob->GetBufferData();
-    int width = m_directZob->GetBufferWidth();
-    int height = m_directZob->GetBufferHeight();
-    uint* engineData = m_directZob->GetEditorBufferDataNoConst();
-    // Now transfer the pixel data into a wxBitmap
-    wxBitmap b(width, height, 24);
-    wxNativePixelData data(b);
-    if (!data)
+}
+
+void MainWindowInterface::DrawFrame()
+{
+#ifdef LINUX
+    wxPaintDC  dc(m_renderPanel);
+#elif WINDOWS
+    wxBufferedPaintDC  dc(m_renderPanel);
+#elif MACOS
+    wxPaintDC  dc(m_renderPanel);
+#endif
+    if (m_bitmapBuffer.IsOk())
     {
-        return;
+        dc.DrawBitmap(m_bitmapBuffer, 0, 0);
     }
-    wxNativePixelData::Iterator p(data);
-    int curPixelDataLoc = 0;
-    for (int y = 0; y < height; ++y)
-    {
-        wxNativePixelData::Iterator rowStart = p;
-        for (int x = 0; x < width; ++x, ++p)
-        {
-            uint c = engineData[curPixelDataLoc];
-            if (c != 0)
-            {
-                int tt = 0;
-                tt++;
-            }
-            uint r = (c & 0xFF0000) >> 16;
-            uint g = (c & 0x00FF00) >> 8;
-            uint b = (c & 0x0000FF) >> 0;
-            p.Red() = r;// 
-            p.Green() = g;// c & 0x00FF00 >> 8;
-            p.Blue() = b;// c & 0x0000FF;
-            curPixelDataLoc++;
-        }
-        p = rowStart;
-        p.OffsetY(data, 1);
-    }
-    m_bitmapBuffer = b;
-    m_renderPanel->Refresh();
-    m_renderPanel->Update();
 }
 
 MainWindowInterface::~MainWindowInterface()
@@ -428,32 +467,6 @@ void MainWindowInterface::OnSave(wxCommandEvent& event)
 void MainWindowInterface::OnExit(wxCommandEvent& event) 
 { 
     m_run = false;
-}
-
-void MainWindowInterface::OnPaint(wxPaintEvent& event)
-{
-#ifdef LINUX
-	wxPaintDC  dc(m_renderPanel);
-#elif WINDOWS
-	wxBufferedPaintDC  dc(m_renderPanel);
-#elif MACOS
-	wxPaintDC  dc(m_renderPanel);
-#endif
-
-    if (m_bitmapBuffer.IsOk())
-    {
-        dc.DrawBitmap(m_bitmapBuffer, 0, 0);
-    }
-}
-
-void MainWindowInterface::OnIdle(wxIdleEvent& evt)
-{
-    if (0)
-    {
-        RenderAFrame();
-        m_renderPanel->Refresh();
-        m_renderPanel->Update();
-    }
 }
 
 void MainWindowInterface::OnGizmosGrid(wxCommandEvent& event)

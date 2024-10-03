@@ -85,11 +85,12 @@ public :
 	void					RegenerateZobIds();
 	void					Resize(int width, int height);
 	void					OnSceneLoaded();
-	const float				GetFps() const { return m_fps; };
-	const float				GetRenderTime() const { return m_renderTime; };
-	const float				GetGeometryTime() const { return m_geometryTime; };
-	const float				GetFrameTime() const { return m_frameTime; };
-	const float				GetCopyTime() const { return m_copyTime; };
+	inline const float		GetFps() const { return m_fps; };
+	inline const float		GetRenderTime() const { return m_renderTime; };
+	inline const float		GetGeometryTime() const { return m_geometryTime; };
+	inline const float		GetFrameTime() const { return m_frameTime; };
+	inline const float		GetCopyTime() const { return m_copyTime; };
+	inline const  ulong		GetFrameNumber() const { return m_frameNumber; }
 	int						RunAFrame(engineCallback = NULL, DirectZob::engineCallback OnQueuing = NULL);
 	void					EditorUpdate();;
 	int						GetBufferDataLenght() const { return m_engine->GetBufferData()->size; }
@@ -158,11 +159,12 @@ private:
 	float m_copyTime;
 	float m_physicTime;
 	float m_frameTick;
+	ulong m_frameNumber;
 	static int s_logIndent;
 	static DirectZob::eDirectZobLogLevel sLogLevel;
 	bool m_physicStarted;
 	DirectZob::engineCallback m_onSceneLoaded;
 	static char logBuffer[LOG_BUFFER_SIZE];
 	static int sTargetMSPerFrameIdx;
-	static int sTargetWobbleFactorIdx;
+	static int sTargetWobbleFactorIdx;	
 };

@@ -39,6 +39,7 @@ DirectZob::DirectZob()
 	m_initialized = false;
 	DirectZob::singleton= this; 
 	m_frameTime = 1.0f;
+	m_frameNumber = 0;
 	m_window = NULL;
 	m_onSceneLoaded = NULL;
 }
@@ -349,8 +350,8 @@ int DirectZob::RunAFrame(DirectZob::engineCallback OnSceneUpdated /*=NULL*/, Dir
 			PrintObjectList();
 			PrintEntityList();
 		}
-		
 		m_engine->SetDisplayedBuffer();
+		m_frameNumber++;
 	}
 	SaveTime(&tend);
 	float dt = (float)GetDeltaTime_MS(tstart, tend);

@@ -53,6 +53,7 @@ public:
     void                        OnStartDrag(wxTreeEvent& event) override ;
     void                        OnEndDrag(wxTreeEvent& event) override;
     void                        OnPaint(wxPaintEvent& event);
+    void                        OnTimer(wxTimerEvent& event);
     void                        OnIdle(wxIdleEvent& evt);
     void                        OnGizmosGrid(wxCommandEvent& event);
     void                        OnGizmosText(wxCommandEvent& event);
@@ -74,6 +75,7 @@ private:
     wxTreeItemId                SelectZobObjectInTree(wxTreeItemId root, std::string& zobIdStr);
     void                        RefreshObjectTree();
     void                        RenderAFrame();
+    void                        DrawFrame();
     void                        BuildObjectTree(ZobObject* z, wxTreeItemId node);
     static                      MainWindowInterface* m_singleton;
     std::string                 m_dragSource;
@@ -82,5 +84,8 @@ private:
     Inspector*                  m_EngineInspector;
     wxBitmap                    m_bitmapBuffer;
     wxFileConfig                m_config;
+    wxTimer                     m_timer;
     bool                        m_run;
+    UINT64                      m_EngineFrameNumber;
+    volatile bool               m_renderedAFrame;
 };
