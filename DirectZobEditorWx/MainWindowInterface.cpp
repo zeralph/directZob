@@ -14,6 +14,7 @@
 #include "../DirectZobEngine/Managers/ZobObjectManager.h"
 #include "../DirectZobEngine/ZobObjects/ZobObject.h"
 #include "../DirectZobEngine/Managers/CameraManager.h"
+#include "../DirectZobEngine/Managers/LightManager.h"
 #include "../DirectZobEngine/Types.h"
 #include "Inspector.h"
 
@@ -39,6 +40,9 @@ MainWindowInterface::MainWindowInterface(DirectZob* dz, ZobEditorManager* dze) :
     m_currentZobObjectInspector = new Inspector(m_panelInspector);
     m_EngineInspector = new Inspector(m_panelEngine);
     m_EngineInspector->Set(DirectZob::GetInstance()->GetEngine()->GetVariablesExposer());
+    m_SceneInspector = new Inspector(m_panelScene);
+    m_SceneInspector->Set(DirectZob::GetInstance()->GetLightManager()->GetVariablesExposer());
+
 #if WINDOWS
     m_renderPanel->SetDoubleBuffered(true);
 #endif

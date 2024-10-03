@@ -138,6 +138,8 @@ MainWindow::MainWindow( wxWindow* parent, wxWindowID id, const wxString& title, 
 	m_panelEngine->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_MENU ) );
 
 	m_notebookInspector->AddPage( m_panelEngine, _("Engine"), false );
+	m_panelScene = new wxPanel( m_notebookInspector, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	m_notebookInspector->AddPage( m_panelScene, _("Scene"), false );
 
 	bSizer7->Add( m_notebookInspector, 1, wxEXPAND | wxALL, 0 );
 

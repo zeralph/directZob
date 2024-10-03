@@ -83,6 +83,7 @@ private:
  //   wxFont*                     m_logFont;
     Inspector*                  m_currentZobObjectInspector;
     Inspector*                  m_EngineInspector;
+    Inspector*                  m_SceneInspector;
     wxBitmap                    m_bitmapBuffer;
     wxFileConfig                m_config;
     wxTimer                     m_timer;
