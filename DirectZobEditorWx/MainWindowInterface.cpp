@@ -43,7 +43,6 @@ MainWindowInterface::MainWindowInterface(DirectZob* dz, ZobEditorManager* dze) :
 #if WINDOWS
     m_renderPanel->SetDoubleBuffered(true);
 #endif
-    m_EngineFrameNumber = 0;
     m_renderedAFrame = false;
     m_timer.SetOwner(this);
     m_timer.Start(16);
