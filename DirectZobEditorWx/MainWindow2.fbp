@@ -1440,7 +1440,7 @@
                           <property name="aui_position">0</property>
                           <property name="aui_row">0</property>
                           <property name="best_size"></property>
-                          <property name="bg">wxSYS_COLOUR_3DLIGHT</property>
+                          <property name="bg">wxSYS_COLOUR_MENU</property>
                           <property name="caption"></property>
                           <property name="caption_visible">1</property>
                           <property name="center_pane">0</property>
@@ -1488,7 +1488,7 @@
                             <property name="orient">wxVERTICAL</property>
                             <property name="permission">none</property>
                             <object class="sizeritem" expanded="true">
-                              <property name="border">1</property>
+                              <property name="border">0</property>
                               <property name="flag">wxEXPAND | wxALL</property>
                               <property name="proportion">1</property>
                               <object class="wxNotebook" expanded="true">
@@ -1501,7 +1501,7 @@
                                 <property name="aui_position">0</property>
                                 <property name="aui_row">0</property>
                                 <property name="best_size"></property>
-                                <property name="bg"></property>
+                                <property name="bg">wxSYS_COLOUR_MENU</property>
                                 <property name="bitmapsize"></property>
                                 <property name="caption"></property>
                                 <property name="caption_visible">1</property>
@@ -1548,7 +1548,7 @@
                                 <object class="notebookpage" expanded="true">
                                   <property name="bitmap"></property>
                                   <property name="label">Object</property>
-                                  <property name="select">0</property>
+                                  <property name="select">1</property>
                                   <object class="wxPanel" expanded="true">
                                     <property name="BottomDockable">1</property>
                                     <property name="LeftDockable">1</property>
@@ -1559,7 +1559,7 @@
                                     <property name="aui_position">0</property>
                                     <property name="aui_row">0</property>
                                     <property name="best_size"></property>
-                                    <property name="bg"></property>
+                                    <property name="bg">wxSYS_COLOUR_MENU</property>
                                     <property name="caption"></property>
                                     <property name="caption_visible">1</property>
                                     <property name="center_pane">0</property>
@@ -1606,7 +1606,7 @@
                                 <object class="notebookpage" expanded="true">
                                   <property name="bitmap"></property>
                                   <property name="label">Engine</property>
-                                  <property name="select">1</property>
+                                  <property name="select">0</property>
                                   <object class="wxPanel" expanded="true">
                                     <property name="BottomDockable">1</property>
                                     <property name="LeftDockable">1</property>

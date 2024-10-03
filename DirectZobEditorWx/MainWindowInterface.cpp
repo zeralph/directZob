@@ -39,7 +39,6 @@ MainWindowInterface::MainWindowInterface(DirectZob* dz, ZobEditorManager* dze) :
     m_currentZobObjectInspector = new Inspector(m_panelInspector);
     m_EngineInspector = new Inspector(m_panelEngine);
     m_EngineInspector->Set(DirectZob::GetInstance()->GetEngine()->GetVariablesExposer());
-    m_notebookInspector->SetSelection(eInspectorTabs::eInpector_object);
 #if WINDOWS
     m_renderPanel->SetDoubleBuffered(true);
 #endif
@@ -162,15 +161,26 @@ MainWindowInterface::~MainWindowInterface()
     delete m_currentZobObjectInspector;
 }
 
+void MainWindowInterface::SetCurrentZobVariables(ZobObject* z)
+{
+    m_singleton->m_currentZobObjectInspector->Set(z);
+    m_singleton->m_notebookInspector->ChangeSelection(eInspectorTabs::eInpector_object);
+    m_singleton->m_notebookInspector->Refresh();
+}
+
 void MainWindowInterface::SetCurrentZobVariables(ZobVariablesExposer* zvars)
 {
     m_singleton->m_currentZobObjectInspector->Set(zvars);
-    m_singleton->m_notebookInspector->SetSelection(eInspectorTabs::eInpector_object);
+    m_singleton->m_notebookInspector->ChangeSelection(eInspectorTabs::eInpector_object);
+    m_singleton->m_notebookInspector->Refresh();
 }
 
 void MainWindowInterface::OnNewScene()
 {
     m_singleton->m_currentZobObjectInspector->Clear();
+    m_singleton->m_notebookInspector->ChangeSelection(eInspectorTabs::eInpector_engine);
+    m_singleton->m_notebookInspector->ChangeSelection(eInspectorTabs::eInpector_object);
+    m_singleton->m_notebookInspector->Refresh();
 }
 
 void MainWindowInterface::OnPlay(wxCommandEvent& event)
@@ -334,11 +344,14 @@ void MainWindowInterface::BuildObjectTree(ZobObject* z, wxTreeItemId node)
 {  
     for (std::vector<ZobObject*>::const_iterator iter = z->GetChildren()->begin(); iter != z->GetChildren()->end(); iter++ )
     {
-        wxTreeItemId newNode = m_treeNode->AppendItem(node, (*iter)->GetName());
-        zobTreeItemData* data = new zobTreeItemData();
-        data->zobIdStr = (*iter)->ZobIdToString();
-        m_singleton->m_treeNode->SetItemData(newNode, data);
-        BuildObjectTree(*iter, newNode);
+        if (ZobEntity::GetType((*iter)->GetIdValue()) != ZobEntity::type_editor)
+        {
+            wxTreeItemId newNode = m_treeNode->AppendItem(node, (*iter)->GetName());
+            zobTreeItemData* data = new zobTreeItemData();
+            data->zobIdStr = (*iter)->ZobIdToString();
+            m_singleton->m_treeNode->SetItemData(newNode, data);
+            BuildObjectTree(*iter, newNode);
+        }
     }
  }
 

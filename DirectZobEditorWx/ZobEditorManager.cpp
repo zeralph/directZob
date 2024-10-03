@@ -551,7 +551,7 @@ void ZobEditorManager::SetSelectedObject(ZobObject* z)
 		m_gizmosNode->SetLocalPosition(0, 0, 0);
 		m_gizmosNode->SetLocalRotation(0, 0, 0, false);
 		ZobVariablesExposer* zvars = z->GetVariablesExposer();
-		MainWindowInterface::SetCurrentZobVariables(zvars);
+		MainWindowInterface::SetCurrentZobVariables(z);
 	}
 	else
 	{

@@ -4,17 +4,20 @@
 #include <wx/sizer.h>
 #include "ZobControls.h"
 
+
 class Inspector
 {
 public:
 	Inspector(wxPanel* p);
 	~Inspector();
 	void Set(ZobVariablesExposer* vars);
+	void Set(ZobObject* z);
 	void Clear();
 	void UpdateControls();
 	static bool StringToFloat(const char* c, float& f);
 	static bool	FloatToString(float f, std::string& s);
 private:
+	void AddVars(ZobVariablesExposer* vars, std::vector<wxStaticBoxSizer*> sizers);
 	void CreateBoolControl(const ZobVariablesExposer::wrapperData* w, wxBoxSizer* b);
 	void CreateFloatControl(const ZobVariablesExposer::wrapperData* w, wxBoxSizer* b);
 	void CreateStringControl(const ZobVariablesExposer::wrapperData* w, wxBoxSizer* b);

@@ -31,6 +31,7 @@ public:
     static void                 RefreshCamerasList();
     static void                 UpdateTreeView();
     static void                 SetCurrentZobVariables(ZobVariablesExposer* zvars);
+    static void                 SetCurrentZobVariables(ZobObject* z);
     static void                 UpdateControls();
     static void                 OnInspectorUpdate(wxCommandEvent& event);
     void                        OnModificatorClick(wxCommandEvent& event) override;
