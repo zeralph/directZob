@@ -4,6 +4,7 @@
 #include <wx/textctrl.h>
 #include <wx/sizer.h>
 #include <wx/combobox.h>
+#include <wx/checkbox.h>
 /*------------------------------------------------
 *
 *	ZobControl
@@ -31,12 +32,13 @@ ZobFloatCtrl::ZobFloatCtrl(const ZobVariablesExposer::wrapperData* w, wxBoxSizer
 	wxBoxSizer* bs = new wxBoxSizer(wxHORIZONTAL);
 	wxStaticText* t = new wxStaticText(m_panel, wxID_ANY, _(w->name.c_str()), wxDefaultPosition, Inspector::sLabelSize, 0);
 	t->Wrap(-1);
-	bs->Add(t, 0, wxALL, 1);
+	
 	float* f = (float*)w->ptr;
 	std::string s;
 	Inspector::FloatToString(*f, s);
 	m_f = new wxTextCtrl(m_panel, wxID_ANY, s.c_str(), wxDefaultPosition, Inspector::sFloatSize, 0);
 	bs->Add(m_f, 0, wxALL, 1);
+	bs->Add(t, 0, wxALL, 1);
 	m_boxSizer->Add(bs);
 	m_f->Connect(wxEVT_KILL_FOCUS, wxFocusEventHandler(ZobFloatCtrl::OnInput), NULL, this);
 }
@@ -47,6 +49,8 @@ void ZobFloatCtrl::OnInput(wxFocusEvent& event)
 	const char* val = m_f->GetValue().c_str();
 	if (Inspector::StringToFloat(val, f))
 	{
+		float* pf = (float*)m_vars->ptr;
+		*pf = f;
 		if (m_vars->callback)
 		{
 			m_vars->callback(m_vars->id);
@@ -219,14 +223,22 @@ ZobEnumCtrl::ZobEnumCtrl(const ZobVariablesExposer::wrapperData* w, wxBoxSizer* 
 	wxBoxSizer* bs = new wxBoxSizer(wxHORIZONTAL);
 	wxStaticText* t = new wxStaticText(m_panel, wxID_ANY, _(w->name.c_str()), wxDefaultPosition, Inspector::sLabelSize, 0);
 	t->Wrap(-1);
-	bs->Add(t, 0, wxALL, 1);
+	
 	float* f = (float*)w->ptr;
 	std::string s;
 	Inspector::FloatToString(*f, s);
 	m_c = new wxComboBox(m_panel, wxID_ANY, _("Combo!"), wxDefaultPosition, wxDefaultSize, 0, NULL, 0);
 	bs->Add(m_c, 0, wxALL, 1);
+	bs->Add(t, 0, wxALL, 1);
+	std::vector<std::string>::const_iterator iter = w->enumNames.begin();
+	for (iter; iter != w->enumNames.end(); iter++)
+	{
+		m_c->Append((*iter));
+	}
+	int* idx = (int*)m_vars->ptr;
+	m_c->SetSelection(*idx);
 	m_boxSizer->Add(bs);
-	m_c->Connect(wxEVT_KILL_FOCUS, wxFocusEventHandler(ZobFloatCtrl::OnInput), NULL, this);
+	m_c->Connect(wxEVT_COMBOBOX, wxCommandEventHandler(ZobEnumCtrl::OnSelected), NULL, this);
 }
 ZobEnumCtrl::~ZobEnumCtrl()
 {
@@ -236,12 +248,77 @@ void ZobEnumCtrl::Update()
 {
 
 }
-void ZobEnumCtrl::OnInput(wxFocusEvent& event)
+
+void ZobEnumCtrl::OnSelected(wxCommandEvent& event)
+{ 
+	int idx = m_c->GetSelection();
+	int enumValue = m_vars->enumValues.at(idx);
+	int* v = (int*)m_vars->ptr;
+	*v = enumValue;
+	if (m_vars->callback)
+	{
+		m_vars->callback(m_vars->id);
+	}
+}
+
+ZobStringCtrl::ZobStringCtrl(const ZobVariablesExposer::wrapperData* w, wxBoxSizer* b, wxPanel* p) : ZobControl(w, b, p)
+{
+	wxBoxSizer* bs = new wxBoxSizer(wxHORIZONTAL);
+	wxStaticText* t = new wxStaticText(m_panel, wxID_ANY, _(w->name.c_str()), wxDefaultPosition, Inspector::sLabelSize, 0);
+	t->Wrap(-1);
+	
+	std::string* s = (std::string*)w->ptr;
+	m_t = new wxTextCtrl(m_panel, wxID_ANY, s->c_str(), wxDefaultPosition, Inspector::sStringSize, 0);
+	bs->Add(m_t, 0, wxALL, 1);
+	b->Add(bs);
+	bs->Add(t, 0, wxALL, 1);
+	m_t->Connect(wxEVT_KILL_FOCUS, wxFocusEventHandler(ZobStringCtrl::OnInput), NULL, this);
+}
+
+ZobStringCtrl::~ZobStringCtrl()
 {
 
 }
 
-void ZobEnumCtrl::OnSelected(wxCommandEvent& event)
-{ 
-	event.Skip(); 
+void ZobStringCtrl::Update()
+{
+
+}
+
+void ZobStringCtrl::OnInput(wxFocusEvent& event)
+{
+	std::string* s = (std::string*)m_vars->ptr;
+	std::string n = m_t->GetValue();
+	s->assign(n);
+}
+
+ZobBoolCtrl::ZobBoolCtrl(const ZobVariablesExposer::wrapperData* w, wxBoxSizer* b, wxPanel* p) : ZobControl(w, b, p)
+{
+	wxBoxSizer* bs = new wxBoxSizer(wxHORIZONTAL);
+	bool* bval = (bool*)w->ptr;
+	m_b = new wxCheckBox(m_panel, wxID_ANY, _(w->name.c_str()), wxDefaultPosition, Inspector::sBoolSize, 0);
+	bs->Add(m_b, 0, wxALL, 1);
+	b->Add(bs);
+	m_b->Connect(wxEVT_CHECKBOX, wxCommandEventHandler(ZobBoolCtrl::OnUpdate), NULL, this);
+	m_b->SetValue(*bval);
+}
+
+ZobBoolCtrl::~ZobBoolCtrl()
+{
+
+}
+
+void ZobBoolCtrl::OnUpdate(wxCommandEvent& event)
+{
+	bool* pb = (bool*)m_vars->ptr;
+	*pb = m_b->GetValue();
+	if (m_vars->callback)
+	{
+		m_vars->callback(m_vars->id);
+	}
+}
+
+void ZobBoolCtrl::OnInput(wxFocusEvent& event)
+{
+
 }

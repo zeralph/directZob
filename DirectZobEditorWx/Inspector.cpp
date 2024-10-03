@@ -7,9 +7,9 @@
 #include "MainWindowInterface.h"
 #include <string>
 
-wxSize Inspector::sLabelSize = wxSize(50, 20);
+wxSize Inspector::sLabelSize = wxSize(80, 20);
 wxSize Inspector::sFloatSize = wxSize(50, 20);
-wxSize Inspector::sBoolSize = wxSize(50, 20);
+wxSize Inspector::sBoolSize = wxSize(250, 20);
 wxSize Inspector::sStringSize = wxSize(100, 20);
 
 bool Inspector::FloatToString(float f, std::string& s)
@@ -75,8 +75,9 @@ void Inspector::Set(ZobVariablesExposer* vars)
 				}
 				else if (w->type == ZobVariablesExposer::eWrapperType_string)
 				{
-					CreateStringControl(w, sizers.back());
-					//panel->Controls->Add(gcnew ZobControlString(w));
+					wxBoxSizer* b = sizers.back();
+					ZobStringCtrl* f = new ZobStringCtrl(w, b, m_panel);
+					m_controls.push_back(f);
 				}
 				else if (w->type == ZobVariablesExposer::eWrapperType_ZobVector3)
 				{
@@ -103,8 +104,9 @@ void Inspector::Set(ZobVariablesExposer* vars)
 				}
 				else if (w->type == ZobVariablesExposer::eWrapperType_bool)
 				{
-					CreateBoolControl(w, sizers.back());
-					//panel->Controls->Add(gcnew ZobControlBool(w));
+					wxBoxSizer* b = sizers.back();
+					ZobBoolCtrl* f = new ZobBoolCtrl(w, b, m_panel);
+					m_controls.push_back(f);
 				}
 				else if (w->type == ZobVariablesExposer::eWrapperType_int)
 				{
@@ -171,24 +173,11 @@ Inspector::~Inspector()
 
 void Inspector::CreateStringControl(const ZobVariablesExposer::wrapperData* w, wxBoxSizer* b)
 {
-	wxBoxSizer* bs = new wxBoxSizer(wxHORIZONTAL);
-	wxStaticText* t = new wxStaticText(m_panel, wxID_ANY, _(w->name.c_str()), wxDefaultPosition, sLabelSize, 0);
-	t->Wrap(-1);
-	bs->Add(t, 0, wxALL, 1);
-	std::string* s = (std::string*)w->ptr;
-	wxTextCtrl* tc = new wxTextCtrl(m_panel, wxID_ANY, s->c_str(), wxDefaultPosition, sStringSize, 0);
-	bs->Add(tc, 0, wxALL, 1);
-	b->Add(bs);
+
 }
 
 void Inspector::CreateBoolControl(const ZobVariablesExposer::wrapperData* w, wxBoxSizer* b)
 {
-	wxBoxSizer* bs = new wxBoxSizer(wxHORIZONTAL);
-	bool* bval= (bool*)w->ptr;
-	wxCheckBox* tc = new wxCheckBox(m_panel, wxID_ANY, _(w->name.c_str()), wxDefaultPosition, sBoolSize, 0);
-	tc->SetValue(bval);
-	bs->Add(tc, 0, wxALL, 1);
-	b->Add(bs);
 }
 
 void Inspector::CreateFloatControl(const ZobVariablesExposer::wrapperData* w, wxBoxSizer* b)

@@ -552,6 +552,10 @@ void ZobEditorManager::SetLastMouseEvent(wxMouseEvent& e)
 
 void ZobEditorManager::DrawGrid()
 {
+	if (!DirectZob::GetInstance()->GetEngine()->ShowGrid())
+	{
+		return;
+	}
 	Camera* cam = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
 	Engine* engine = DirectZob::GetInstance()->GetEngine();
 	if (cam && engine)

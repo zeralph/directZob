@@ -74,6 +74,8 @@ MainWindow::MainWindow( wxWindow* parent, wxWindowID id, const wxString& title, 
 
 	m_cameraSelector = new wxComboBox( m_toolBar1, wxID_ANY, _("Camera"), wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
 	m_toolBar1->AddControl( m_cameraSelector );
+	m_toolBar1->AddSeparator();
+
 	m_WT = new wxToggleButton( m_toolBar1, wxID_ANY, _("WT"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_WT->SetValue( true );
 	m_toolBar1->AddControl( m_WT );
@@ -83,6 +85,8 @@ MainWindow::MainWindow( wxWindow* parent, wxWindowID id, const wxString& title, 
 	m_toolBar1->AddControl( m_LT );
 	m_LR = new wxToggleButton( m_toolBar1, wxID_ANY, _("LR"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_toolBar1->AddControl( m_LR );
+	m_Snap = new wxButton( m_toolBar1, wxID_ANY, _("Snap"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_toolBar1->AddControl( m_Snap );
 	m_toolBar1->Realize();
 
 	bSizer6->Add( m_toolBar1, 0, wxEXPAND, 5 );
@@ -100,8 +104,8 @@ MainWindow::MainWindow( wxWindow* parent, wxWindowID id, const wxString& title, 
 	wxBoxSizer* bSizer8;
 	bSizer8 = new wxBoxSizer( wxVERTICAL );
 
-	m_log = new wxTextCtrl( m_panel10, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_RICH);//0|wxVSCROLL|wxHSCROLL|wxNO_BORDER|wxWANTS_CHARS );
-	bSizer8->Add( m_log, 1, wxEXPAND | wxALL, 5 );
+	m_log = new wxTextCtrl( m_panel10, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_AUTO_URL|wxTE_MULTILINE|wxTE_RICH );
+	bSizer8->Add( m_log, 1, wxALL|wxEXPAND, 2 );
 
 
 	m_panel10->SetSizer( bSizer8 );
@@ -114,12 +118,30 @@ MainWindow::MainWindow( wxWindow* parent, wxWindowID id, const wxString& title, 
 	m_panel3->SetSizer( bSizer5 );
 	m_panel3->Layout();
 	bSizer5->Fit( m_panel3 );
-	m_panelInspector = new wxPanel( m_splitter3, wxID_ANY, wxDefaultPosition, wxSize( 150,-1 ), wxTAB_TRAVERSAL );
-	m_panelInspector->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_3DLIGHT ) );
-	m_panelInspector->SetMinSize( wxSize( 150,-1 ) );
-	m_panelInspector->SetMaxSize( wxSize( 250,-1 ) );
+	m_panelRight = new wxPanel( m_splitter3, wxID_ANY, wxDefaultPosition, wxSize( 150,-1 ), wxTAB_TRAVERSAL );
+	m_panelRight->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_3DLIGHT ) );
+	m_panelRight->SetMinSize( wxSize( 150,-1 ) );
+	m_panelRight->SetMaxSize( wxSize( 250,-1 ) );
 
-	m_splitter3->SplitVertically( m_panel3, m_panelInspector, -250 );
+	wxBoxSizer* bSizer7;
+	bSizer7 = new wxBoxSizer( wxVERTICAL );
+
+	m_notebookInspector = new wxNotebook( m_panelRight, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_notebookInspector->SetMinSize( wxSize( 250,-1 ) );
+
+	m_panelInspector = new wxPanel( m_notebookInspector, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	m_notebookInspector->AddPage( m_panelInspector, _("Object"), false );
+	m_panelEngine = new wxPanel( m_notebookInspector, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	m_panelEngine->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_MENU ) );
+
+	m_notebookInspector->AddPage( m_panelEngine, _("Engine"), true );
+
+	bSizer7->Add( m_notebookInspector, 1, wxEXPAND | wxALL, 1 );
+
+
+	m_panelRight->SetSizer( bSizer7 );
+	m_panelRight->Layout();
+	m_splitter3->SplitVertically( m_panel3, m_panelRight, -250 );
 	bSizer4->Add( m_splitter3, 1, wxEXPAND, 5 );
 
 
@@ -134,25 +156,25 @@ MainWindow::MainWindow( wxWindow* parent, wxWindowID id, const wxString& title, 
 	this->Layout();
 	m_menubar1 = new wxMenuBar( 0 );
 	m_menu1 = new wxMenu();
-	wxMenuItem* m_menuItem1;
-	m_menuItem1 = new wxMenuItem( m_menu1, wxID_ANY, wxString( _("New") ) , wxEmptyString, wxITEM_NORMAL );
-	m_menu1->Append( m_menuItem1 );
+	wxMenuItem* m_menuIItemNew;
+	m_menuIItemNew = new wxMenuItem( m_menu1, wxID_ANY, wxString( _("New") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menu1->Append( m_menuIItemNew );
 
-	wxMenuItem* m_menuItem2;
-	m_menuItem2 = new wxMenuItem( m_menu1, wxID_ANY, wxString( _("Open ...") ) , wxEmptyString, wxITEM_NORMAL );
-	m_menu1->Append( m_menuItem2 );
+	wxMenuItem* m_menuItemOpen;
+	m_menuItemOpen = new wxMenuItem( m_menu1, wxID_ANY, wxString( _("Open ...") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menu1->Append( m_menuItemOpen );
 
-	wxMenuItem* m_menuItem3;
-	m_menuItem3 = new wxMenuItem( m_menu1, wxID_ANY, wxString( _("Save as ...") ) , wxEmptyString, wxITEM_NORMAL );
-	m_menu1->Append( m_menuItem3 );
+	wxMenuItem* m_menuItemSaveAs;
+	m_menuItemSaveAs = new wxMenuItem( m_menu1, wxID_ANY, wxString( _("Save as ...") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menu1->Append( m_menuItemSaveAs );
 
-	wxMenuItem* m_menuItem4;
-	m_menuItem4 = new wxMenuItem( m_menu1, wxID_ANY, wxString( _("Save") ) , wxEmptyString, wxITEM_NORMAL );
-	m_menu1->Append( m_menuItem4 );
+	wxMenuItem* m_menuItemSave;
+	m_menuItemSave = new wxMenuItem( m_menu1, wxID_ANY, wxString( _("Save") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menu1->Append( m_menuItemSave );
 
-	wxMenuItem* m_menuItem5;
-	m_menuItem5 = new wxMenuItem( m_menu1, wxID_ANY, wxString( _("Exit") ) , wxEmptyString, wxITEM_NORMAL );
-	m_menu1->Append( m_menuItem5 );
+	wxMenuItem* m_menuItemExit;
+	m_menuItemExit = new wxMenuItem( m_menu1, wxID_ANY, wxString( _("Exit") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menu1->Append( m_menuItemExit );
 
 	m_menubar1->Append( m_menu1, _("File") );
 
@@ -195,6 +217,7 @@ MainWindow::MainWindow( wxWindow* parent, wxWindowID id, const wxString& title, 
 	m_WR->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( MainWindow::OnModificatorClick ), NULL, this );
 	m_LT->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( MainWindow::OnModificatorClick ), NULL, this );
 	m_LR->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( MainWindow::OnModificatorClick ), NULL, this );
+	m_Snap->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MainWindow::OnSnap ), NULL, this );
 	m_renderPanel->Connect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( MainWindow::OnMouseClick ), NULL, this );
 	m_renderPanel->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( MainWindow::OnMouseDown ), NULL, this );
 	m_renderPanel->Connect( wxEVT_LEFT_UP, wxMouseEventHandler( MainWindow::OnMouseUp ), NULL, this );
@@ -205,14 +228,17 @@ MainWindow::MainWindow( wxWindow* parent, wxWindowID id, const wxString& title, 
 	m_renderPanel->Connect( wxEVT_PAINT, wxPaintEventHandler( MainWindow::OnMyPaint ), NULL, this );
 	m_renderPanel->Connect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( MainWindow::OnMouseDown ), NULL, this );
 	m_renderPanel->Connect( wxEVT_RIGHT_UP, wxMouseEventHandler( MainWindow::OnMouseUp ), NULL, this );
-	m_menu1->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindow::OnNew ), this, m_menuItem1->GetId());
-	m_menu1->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindow::OnOpen ), this, m_menuItem2->GetId());
-	m_menu1->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindow::OnSaveAs ), this, m_menuItem3->GetId());
-	m_menu1->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindow::OnSave ), this, m_menuItem4->GetId());
-	m_menu1->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindow::OnExit ), this, m_menuItem5->GetId());
+	m_menu1->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindow::OnNew ), this, m_menuIItemNew->GetId());
+	m_menu1->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindow::OnOpen ), this, m_menuItemOpen->GetId());
+	m_menu1->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindow::OnSaveAs ), this, m_menuItemSaveAs->GetId());
+	m_menu1->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindow::OnSave ), this, m_menuItemSave->GetId());
+	m_menu1->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindow::OnExit ), this, m_menuItemExit->GetId());
+	m_gizmosMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindow::OnGizmosGrid ), this, m_menuItemGrid->GetId());
+	m_gizmosMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindow::OnGizmosText ), this, m_menuItemDebugText->GetId());
+	m_gizmosMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindow::OnGizmosPhysics ), this, m_menuItemPhysics->GetId());
+	m_gizmosMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindow::OnGizmosObjects ), this, m_menuItemObject->GetId());
 }
 
 MainWindow::~MainWindow()
 {
-	
 }

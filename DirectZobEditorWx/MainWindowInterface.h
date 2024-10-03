@@ -1,6 +1,8 @@
 #include <wx/rawbmp.h>
 #include <wx/time.h>
+#include <wx/timer.h>
 #include <wx/graphics.h>
+#include <wx/fileconf.h>
 #include "MainWindow.h"
 #include "../DirectZobEngine/Events.h"
 
@@ -53,13 +55,22 @@ public:
     void                        OnPaint(wxPaintEvent& event);
     void                        OnIdle(wxIdleEvent& evt);
     void                        OnTimer(wxTimerEvent& event);
-    static wxPanel*             GetInspectorPanel() { return m_singleton->m_panelInspector; }
+    void                        OnGizmosGrid(wxCommandEvent& event);
+    void                        OnGizmosText(wxCommandEvent& event);
+    void                        OnGizmosPhysics(wxCommandEvent& event);
+    void                        OnGizmosObjects(wxCommandEvent& event);
+
 //private:
 
     DirectZob* m_directZob;
     ZobEditorManager* m_editor;
 
 private:
+    enum eInspectorTabs
+    {
+        eInpector_object = 0,
+        eInpector_engine = 1,
+    };
     wxTreeItemId                SelectZobObjectInTree(wxTreeItemId root, std::string& zobIdStr);
     void                        RefreshObjectTree();
     void                        RenderAFrame();
@@ -68,6 +79,8 @@ private:
     std::string                 m_dragSource;
  //   wxFont*                     m_logFont;
     Inspector*                  m_currentZobObjectInspector;
+    Inspector*                  m_EngineInspector;
     wxBitmap                    m_bitmapBuffer;
     wxTimer                     m_timer;
+    wxFileConfig                m_config;
 };

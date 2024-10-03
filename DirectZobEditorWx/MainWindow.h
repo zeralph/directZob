@@ -23,9 +23,11 @@
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/combobox.h>
+#include <wx/button.h>
 #include <wx/toolbar.h>
-#include <wx/richtext/richtextctrl.h>
+#include <wx/textctrl.h>
 #include <wx/splitter.h>
+#include <wx/notebook.h>
 #include <wx/menu.h>
 #include <wx/statusbr.h>
 #include <wx/frame.h>
@@ -56,8 +58,10 @@ class MainWindow : public wxFrame
 		wxToggleButton* m_WR;
 		wxToggleButton* m_LT;
 		wxToggleButton* m_LR;
+		wxButton* m_Snap;
 		wxPanel* m_panel10;
-		wxTextCtrl* m_log;
+		wxPanel* m_panelRight;
+		wxNotebook* m_notebookInspector;
 		wxPanel* m_panelInspector;
 		wxMenuBar* m_menubar1;
 		wxMenu* m_menu1;
@@ -75,6 +79,7 @@ class MainWindow : public wxFrame
 		virtual void OnStop( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCameraSelected( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnModificatorClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnSnap( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnMouseClick( wxMouseEvent& event ) { event.Skip(); }
 		virtual void OnMouseDown( wxMouseEvent& event ) { event.Skip(); }
 		virtual void OnMouseUp( wxMouseEvent& event ) { event.Skip(); }
@@ -86,11 +91,17 @@ class MainWindow : public wxFrame
 		virtual void OnSaveAs( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSave( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnExit( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnGizmosGrid( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnGizmosText( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnGizmosPhysics( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnGizmosObjects( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:
 		wxTreeCtrl* m_treeNode;
 		wxPanel* m_renderPanel;
+		wxTextCtrl* m_log;
+		wxPanel* m_panelEngine;
 
 		MainWindow( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 1397,762 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
 

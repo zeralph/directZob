@@ -16,6 +16,7 @@
 #include "../DirectZobEngine/Types.h"
 #include "Inspector.h"
 
+
 MainWindowInterface* MainWindowInterface::m_singleton = NULL;
 
 zobTreeItemData::zobTreeItemData() 
@@ -29,15 +30,18 @@ zobTreeItemData::~zobTreeItemData()
 
 MainWindowInterface::MainWindowInterface(DirectZob* dz, ZobEditorManager* dze) : MainWindow(NULL, -1, "DirectZob editor", wxDefaultPosition, wxSize(958, 648), wxDEFAULT_FRAME_STYLE | wxTAB_TRAVERSAL)
 {
-    //wxFileConfig* conf = new wxFileConfig()
     wxString configDir = wxStandardPaths::Get().GetConfigDir();
+    //m_config.;
     m_directZob = dz;
     m_editor = dze;
     m_singleton = this;
-//    m_logFont = new wxFont(8, wxSCRIPT, wxNORMAL, wxNORMAL);
-//    m_singleton->m_log->SetFont(*m_logFont);
     m_currentZobObjectInspector = new Inspector(m_panelInspector);
- //   m_renderPanel->SetDoubleBuffered(true);
+    m_EngineInspector = new Inspector(m_panelEngine);
+    m_EngineInspector->Set(DirectZob::GetInstance()->GetEngine()->GetVariablesExposer());
+    m_notebookInspector->SetSelection(eInspectorTabs::eInpector_object);
+#if WINDOWS
+    m_renderPanel->SetDoubleBuffered(true);
+#endif
     Connect(wxID_ANY, wxEVT_IDLE, wxIdleEventHandler(MainWindowInterface::OnIdle));
     m_renderPanel->Bind(wxEVT_PAINT, &MainWindowInterface::OnPaint, this);
     m_timer.SetOwner(this);
@@ -46,7 +50,7 @@ MainWindowInterface::MainWindowInterface(DirectZob* dz, ZobEditorManager* dze) :
     wxDisplay display(wxDisplay::GetFromWindow(this));
     wxRect screen = display.GetGeometry();
     this->SetSize(50, 50, screen.width-100, screen.height-100);
-    //this->ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL)  
+
 }
 
 MainWindowInterface::~MainWindowInterface()
@@ -58,6 +62,7 @@ MainWindowInterface::~MainWindowInterface()
 void MainWindowInterface::SetCurrentZobVariables(ZobVariablesExposer* zvars)
 {
     m_singleton->m_currentZobObjectInspector->Set(zvars);
+    m_singleton->m_notebookInspector->SetSelection(eInspectorTabs::eInpector_object);
 }
 
 void MainWindowInterface::OnNewScene()
@@ -443,4 +448,25 @@ void MainWindowInterface::RenderAFrame()
     m_bitmapBuffer = b;
     m_renderPanel->Refresh();
     m_renderPanel->Update();
+}
+
+void MainWindowInterface::OnGizmosGrid(wxCommandEvent& event)
+{
+    bool b = DirectZob::GetInstance()->GetEngine()->ShowGrid();
+    DirectZob::GetInstance()->GetEngine()->ShowGrid(!b);
+}
+void MainWindowInterface::OnGizmosText(wxCommandEvent& event)
+{
+    bool b = DirectZob::GetInstance()->GetEngine()->ShowText();
+    DirectZob::GetInstance()->GetEngine()->ShowText(!b);
+}
+void MainWindowInterface::OnGizmosPhysics(wxCommandEvent& event)
+{
+    bool b = DirectZob::GetInstance()->GetEngine()->DrawPhysyicsGizmos();
+    DirectZob::GetInstance()->GetEngine()->DrawPhysyicsGizmos(!b);
+}
+void MainWindowInterface::OnGizmosObjects(wxCommandEvent& event)
+{
+    bool b = DirectZob::GetInstance()->GetEngine()->DrawZobObjectGizmos();
+    DirectZob::GetInstance()->GetEngine()->DrawZobObjectGizmos(!b);
 }

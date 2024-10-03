@@ -6,12 +6,13 @@
 class wxTextCtrl;
 class wxBoxSizer;
 class wxComboBox;
+class wxCheckBox;
 class ZobControl : public wxPanel
 {
 public:
 	ZobControl(const ZobVariablesExposer::wrapperData* w, wxBoxSizer* b, wxPanel* p);
 	virtual ~ZobControl();
-	virtual void Update() = 0;
+	virtual void Update();
 protected:
 	const ZobVariablesExposer::wrapperData* m_vars;
 	wxBoxSizer* m_boxSizer;
@@ -57,8 +58,29 @@ public:
 	ZobEnumCtrl(const ZobVariablesExposer::wrapperData* w, wxBoxSizer* b, wxPanel* p);
 	~ZobEnumCtrl() override;
 	void Update() override;
-	void OnInput(wxFocusEvent& event);
 	void OnSelected(wxCommandEvent& event);
 private:
 	wxComboBox* m_c;
+};
+
+class ZobStringCtrl : public ZobControl
+{
+public:
+	ZobStringCtrl(const ZobVariablesExposer::wrapperData* w, wxBoxSizer* b, wxPanel* p);
+	~ZobStringCtrl() override;
+	void Update() override;
+	void OnInput(wxFocusEvent& event);
+private:
+	wxTextCtrl* m_t;
+};
+
+class ZobBoolCtrl : public ZobControl
+{
+public:
+	ZobBoolCtrl(const ZobVariablesExposer::wrapperData* w, wxBoxSizer* b, wxPanel* p);
+	~ZobBoolCtrl() override;
+	void OnUpdate(wxCommandEvent& event);
+	void OnInput(wxFocusEvent& event);
+private:
+	wxCheckBox* m_b;
 };
