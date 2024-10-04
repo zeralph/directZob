@@ -1,5 +1,8 @@
 #include "ZobEditorManager.h"
 #include "MainWindowInterface.h"
+#include "../DirectZobEngine/DirectZob.h"
+#include "../DirectZobEngine/Managers/LightManager.h"
+#include "../DirectZobEngine/Managers/CameraManager.h"
 #include "../DirectZobEngine/Misc/ZobGeometryHelper.h"
 #include "Inspector.h"
 
@@ -695,7 +698,29 @@ void ZobEditorManager::UpdateGizmoSelection(ZobObject* z)
 	}
 }
 
+void ZobEditorManager::CreateLight()
+{
+	Light* l = DirectZob::GetInstance()->GetLightManager()->CreateLight(Light::eLightType_point);
+	Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
+	BufferData* bData = DirectZob::GetInstance()->GetEngine()->GetBufferData();
+	float fx = (float)m_mouseX;
+	float fy = (float)m_mouseY;
+	fx /= (float)bData->width;
+	fy /= (float)bData->height;
+	fx = fx * 2.0f - 1.0f;
+	fy = fy * 2.0f - 1.0f;
+	ZobVector3 ret = c->From2DToWorldOnPlane(fx, fy, &ZobVector3::Vector3Zero, &ZobVector3::Vector3Y);
+	if (m_selectedObject)
+	{
+		l->SetParent(m_selectedObject);
+	}
+	l->SetWorldPosition(ret.x, ret.y, ret.z);
+}
 
+void ZobEditorManager::CreateCamera()
+{
+	DirectZob::GetInstance()->GetCameraManager()->CreateCamera(Camera::eCamera_base, m_selectedObject);
+}
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 

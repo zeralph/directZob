@@ -62,14 +62,18 @@ public:
     void                        OnGizmosObjects(wxCommandEvent& event) override;
     
     //tree menu
-    void OnTreeMenuAdd(wxCommandEvent& event) override;
+    void OnMenuAddObject(wxCommandEvent& event) override;
     void OnTreeMenuRemove(wxCommandEvent& event) override;
     void OnTreeMenuAddComponent(wxCommandEvent& event) override;
     void OnTreeMenuZoom(wxCommandEvent& event) override;
     void OnTreeMenuDuplicate(wxCommandEvent& event) override;
     void OnTreeMenuShowHide(wxCommandEvent& event) override;
-    void OnTreeMenuAddObject(wxCommandEvent& event) override;
     void OnTreeRightClick(wxTreeEvent& event) override;
+    void OnMenuAddMesh(wxCommandEvent& event) override;
+    void OnMenuAddSprite(wxCommandEvent& event) override;
+    void OnMenuAddAsset(wxCommandEvent& event) override;
+    void OnMenuAddLight(wxCommandEvent& event) override;
+    void OnMenuAddCamera(wxCommandEvent& event) override;
 
 //private:
     

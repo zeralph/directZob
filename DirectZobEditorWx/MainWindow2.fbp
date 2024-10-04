@@ -252,19 +252,107 @@
                         <property name="label">MyMenu</property>
                         <property name="name">m_treeMenu</property>
                         <property name="permission">protected</property>
-                        <object class="wxMenuItem" expanded="true">
+                        <object class="submenu" expanded="true">
                           <property name="bitmap"></property>
-                          <property name="checked">0</property>
-                          <property name="enabled">1</property>
-                          <property name="help"></property>
-                          <property name="id">wxID_ANY</property>
-                          <property name="kind">wxITEM_NORMAL</property>
-                          <property name="label">Add object</property>
-                          <property name="name">m_treeMenuAddObject</property>
-                          <property name="permission">none</property>
-                          <property name="shortcut"></property>
-                          <property name="unchecked_bitmap"></property>
-                          <event name="OnMenuSelection">OnTreeMenuAdd</event>
+                          <property name="label">Add</property>
+                          <property name="name">m_menu11</property>
+                          <property name="permission">protected</property>
+                          <object class="wxMenuItem" expanded="true">
+                            <property name="bitmap"></property>
+                            <property name="checked">0</property>
+                            <property name="enabled">1</property>
+                            <property name="help"></property>
+                            <property name="id">wxID_ANY</property>
+                            <property name="kind">wxITEM_NORMAL</property>
+                            <property name="label">Object</property>
+                            <property name="name">m_treeMenuAddObject</property>
+                            <property name="permission">none</property>
+                            <property name="shortcut"></property>
+                            <property name="unchecked_bitmap"></property>
+                            <event name="OnMenuSelection">OnMenuAddObject</event>
+                          </object>
+                          <object class="wxMenuItem" expanded="true">
+                            <property name="bitmap"></property>
+                            <property name="checked">0</property>
+                            <property name="enabled">1</property>
+                            <property name="help"></property>
+                            <property name="id">wxID_ANY</property>
+                            <property name="kind">wxITEM_NORMAL</property>
+                            <property name="label">Mesh ...</property>
+                            <property name="name">m_menuAddMesh</property>
+                            <property name="permission">none</property>
+                            <property name="shortcut"></property>
+                            <property name="unchecked_bitmap"></property>
+                            <event name="OnMenuSelection">OnMenuAddMesh</event>
+                          </object>
+                          <object class="wxMenuItem" expanded="true">
+                            <property name="bitmap"></property>
+                            <property name="checked">0</property>
+                            <property name="enabled">1</property>
+                            <property name="help"></property>
+                            <property name="id">wxID_ANY</property>
+                            <property name="kind">wxITEM_NORMAL</property>
+                            <property name="label">Sprite ...</property>
+                            <property name="name">m_menuIAddSprite</property>
+                            <property name="permission">none</property>
+                            <property name="shortcut"></property>
+                            <property name="unchecked_bitmap"></property>
+                            <event name="OnMenuSelection">OnMenuAddSprite</event>
+                          </object>
+                          <object class="wxMenuItem" expanded="true">
+                            <property name="bitmap"></property>
+                            <property name="checked">0</property>
+                            <property name="enabled">1</property>
+                            <property name="help"></property>
+                            <property name="id">wxID_ANY</property>
+                            <property name="kind">wxITEM_NORMAL</property>
+                            <property name="label">Asset ...</property>
+                            <property name="name">m_menuAddAsset</property>
+                            <property name="permission">none</property>
+                            <property name="shortcut"></property>
+                            <property name="unchecked_bitmap"></property>
+                            <event name="OnMenuSelection">OnMenuAddAsset</event>
+                          </object>
+                          <object class="submenu" expanded="true">
+                            <property name="bitmap"></property>
+                            <property name="label">Light</property>
+                            <property name="name">m_menuLight</property>
+                            <property name="permission">protected</property>
+                            <object class="wxMenuItem" expanded="true">
+                              <property name="bitmap"></property>
+                              <property name="checked">0</property>
+                              <property name="enabled">1</property>
+                              <property name="help"></property>
+                              <property name="id">wxID_ANY</property>
+                              <property name="kind">wxITEM_NORMAL</property>
+                              <property name="label">Light</property>
+                              <property name="name">m_menuAddLight</property>
+                              <property name="permission">none</property>
+                              <property name="shortcut"></property>
+                              <property name="unchecked_bitmap"></property>
+                              <event name="OnMenuSelection">OnMenuAddLight</event>
+                            </object>
+                          </object>
+                          <object class="submenu" expanded="true">
+                            <property name="bitmap"></property>
+                            <property name="label">Camera</property>
+                            <property name="name">m_menuCamera</property>
+                            <property name="permission">protected</property>
+                            <object class="wxMenuItem" expanded="true">
+                              <property name="bitmap"></property>
+                              <property name="checked">0</property>
+                              <property name="enabled">1</property>
+                              <property name="help"></property>
+                              <property name="id">wxID_ANY</property>
+                              <property name="kind">wxITEM_NORMAL</property>
+                              <property name="label">Camera</property>
+                              <property name="name">m_menuIAddCamera</property>
+                              <property name="permission">none</property>
+                              <property name="shortcut"></property>
+                              <property name="unchecked_bitmap"></property>
+                              <event name="OnMenuSelection">OnMenuAddCamera</event>
+                            </object>
+                          </object>
                         </object>
                         <object class="wxMenuItem" expanded="true">
                           <property name="bitmap"></property>
@@ -1395,6 +1483,7 @@
                                           <event name="OnMotion">OnMotion</event>
                                           <event name="OnMouseWheel">OnMouseWheel</event>
                                           <event name="OnPaint">OnMyPaint</event>
+                                          <event name="OnRightDClick">OnRenderRightClick</event>
                                           <event name="OnRightDown">OnMouseDown</event>
                                           <event name="OnRightUp">OnMouseUp</event>
                                         </object>

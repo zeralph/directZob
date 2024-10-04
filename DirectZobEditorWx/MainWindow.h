@@ -45,6 +45,9 @@ class MainWindow : public wxFrame
 		wxSplitterWindow* m_splitter1;
 		wxPanel* m_panel1;
 		wxMenu* m_treeMenu;
+		wxMenu* m_menu11;
+		wxMenu* m_menuLight;
+		wxMenu* m_menuCamera;
 		wxPanel* m_panel2;
 		wxSplitterWindow* m_splitter3;
 		wxPanel* m_panel3;
@@ -78,7 +81,12 @@ class MainWindow : public wxFrame
 		virtual void OnEndDrag( wxTreeEvent& event ) { event.Skip(); }
 		virtual void OnTreeRightClick( wxTreeEvent& event ) { event.Skip(); }
 		virtual void OnTreeSelChanged( wxTreeEvent& event ) { event.Skip(); }
-		virtual void OnTreeMenuAdd( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnMenuAddObject( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnMenuAddMesh( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnMenuAddSprite( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnMenuAddAsset( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnMenuAddLight( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnMenuAddCamera( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTreeMenuRemove( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTreeMenuAddComponent( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTreeMenuZoom( wxCommandEvent& event ) { event.Skip(); }
@@ -97,6 +105,7 @@ class MainWindow : public wxFrame
 		virtual void OnMotion( wxMouseEvent& event ) { event.Skip(); }
 		virtual void OnMouseWheel( wxMouseEvent& event ) { event.Skip(); }
 		virtual void OnMyPaint( wxPaintEvent& event ) { event.Skip(); }
+		virtual void OnRenderRightClick( wxMouseEvent& event ) { event.Skip(); }
 		virtual void OnNew( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOpen( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSaveAs( wxCommandEvent& event ) { event.Skip(); }

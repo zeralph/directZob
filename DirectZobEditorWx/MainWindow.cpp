@@ -34,9 +34,41 @@ MainWindow::MainWindow( wxWindow* parent, wxWindowID id, const wxString& title, 
 	m_treeNode->SetMaxSize( wxSize( 250,-1 ) );
 
 	m_treeMenu = new wxMenu();
+	m_menu11 = new wxMenu();
+	wxMenuItem* m_menu11Item = new wxMenuItem( m_treeMenu, wxID_ANY, _("Add"), wxEmptyString, wxITEM_NORMAL, m_menu11 );
 	wxMenuItem* m_treeMenuAddObject;
-	m_treeMenuAddObject = new wxMenuItem( m_treeMenu, wxID_ANY, wxString( _("Add object") ) , wxEmptyString, wxITEM_NORMAL );
-	m_treeMenu->Append( m_treeMenuAddObject );
+	m_treeMenuAddObject = new wxMenuItem( m_menu11, wxID_ANY, wxString( _("Object") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menu11->Append( m_treeMenuAddObject );
+
+	wxMenuItem* m_menuAddMesh;
+	m_menuAddMesh = new wxMenuItem( m_menu11, wxID_ANY, wxString( _("Mesh ...") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menu11->Append( m_menuAddMesh );
+
+	wxMenuItem* m_menuIAddSprite;
+	m_menuIAddSprite = new wxMenuItem( m_menu11, wxID_ANY, wxString( _("Sprite ...") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menu11->Append( m_menuIAddSprite );
+
+	wxMenuItem* m_menuAddAsset;
+	m_menuAddAsset = new wxMenuItem( m_menu11, wxID_ANY, wxString( _("Asset ...") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menu11->Append( m_menuAddAsset );
+
+	m_menuLight = new wxMenu();
+	wxMenuItem* m_menuLightItem = new wxMenuItem( m_menu11, wxID_ANY, _("Light"), wxEmptyString, wxITEM_NORMAL, m_menuLight );
+	wxMenuItem* m_menuAddLight;
+	m_menuAddLight = new wxMenuItem( m_menuLight, wxID_ANY, wxString( _("Light") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menuLight->Append( m_menuAddLight );
+
+	m_menu11->Append( m_menuLightItem );
+
+	m_menuCamera = new wxMenu();
+	wxMenuItem* m_menuCameraItem = new wxMenuItem( m_menu11, wxID_ANY, _("Camera"), wxEmptyString, wxITEM_NORMAL, m_menuCamera );
+	wxMenuItem* m_menuIAddCamera;
+	m_menuIAddCamera = new wxMenuItem( m_menuCamera, wxID_ANY, wxString( _("Camera") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menuCamera->Append( m_menuIAddCamera );
+
+	m_menu11->Append( m_menuCameraItem );
+
+	m_treeMenu->Append( m_menu11Item );
 
 	wxMenuItem* m_treeMenuRemoveObject;
 	m_treeMenuRemoveObject = new wxMenuItem( m_treeMenu, wxID_ANY, wxString( _("Remove object") ) , wxEmptyString, wxITEM_NORMAL );
@@ -241,7 +273,12 @@ MainWindow::MainWindow( wxWindow* parent, wxWindowID id, const wxString& title, 
 	m_treeNode->Connect( wxEVT_COMMAND_TREE_END_DRAG, wxTreeEventHandler( MainWindow::OnEndDrag ), NULL, this );
 	m_treeNode->Connect( wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK, wxTreeEventHandler( MainWindow::OnTreeRightClick ), NULL, this );
 	m_treeNode->Connect( wxEVT_COMMAND_TREE_SEL_CHANGED, wxTreeEventHandler( MainWindow::OnTreeSelChanged ), NULL, this );
-	m_treeMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindow::OnTreeMenuAdd ), this, m_treeMenuAddObject->GetId());
+	m_menu11->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindow::OnMenuAddObject ), this, m_treeMenuAddObject->GetId());
+	m_menu11->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindow::OnMenuAddMesh ), this, m_menuAddMesh->GetId());
+	m_menu11->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindow::OnMenuAddSprite ), this, m_menuIAddSprite->GetId());
+	m_menu11->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindow::OnMenuAddAsset ), this, m_menuAddAsset->GetId());
+	m_menuLight->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindow::OnMenuAddLight ), this, m_menuAddLight->GetId());
+	m_menuCamera->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindow::OnMenuAddCamera ), this, m_menuIAddCamera->GetId());
 	m_treeMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindow::OnTreeMenuRemove ), this, m_treeMenuRemoveObject->GetId());
 	m_treeMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindow::OnTreeMenuAddComponent ), this, m_treeMenuAddComponent->GetId());
 	m_treeMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindow::OnTreeMenuZoom ), this, m_treeMenuZoom->GetId());
@@ -265,6 +302,7 @@ MainWindow::MainWindow( wxWindow* parent, wxWindowID id, const wxString& title, 
 	m_renderPanel->Connect( wxEVT_MOTION, wxMouseEventHandler( MainWindow::OnMotion ), NULL, this );
 	m_renderPanel->Connect( wxEVT_MOUSEWHEEL, wxMouseEventHandler( MainWindow::OnMouseWheel ), NULL, this );
 	m_renderPanel->Connect( wxEVT_PAINT, wxPaintEventHandler( MainWindow::OnMyPaint ), NULL, this );
+	m_renderPanel->Connect( wxEVT_RIGHT_DCLICK, wxMouseEventHandler( MainWindow::OnRenderRightClick ), NULL, this );
 	m_renderPanel->Connect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( MainWindow::OnMouseDown ), NULL, this );
 	m_renderPanel->Connect( wxEVT_RIGHT_UP, wxMouseEventHandler( MainWindow::OnMouseUp ), NULL, this );
 	m_menu1->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindow::OnNew ), this, m_menuIItemNew->GetId());

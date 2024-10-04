@@ -99,6 +99,9 @@ public:
 	void				OnMouseClick(wxMouseEvent& event);
 	void				SetObjectModificator(eGizmoModificatorType type, eGizmoModificatorSpace space);
 
+	void				CreateLight();
+	void				CreateCamera();
+
 private:
 
 	void				UpdateView();

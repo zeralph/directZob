@@ -446,9 +446,10 @@ void MainWindowInterface::OnMouseDown(wxMouseEvent& event)
 void MainWindowInterface::OnMouseUp(wxMouseEvent& event)
 {
     m_editor->OnMouseUp(event);
-    //m_mouseDx = event.GetX();
-    //m_mouseDy = event.GetY();
-    //DirectZob::LogError("-> %f, %f", m_mouseDx, m_mouseDy);
+    if(event.ButtonUp(wxMouseButton::wxMOUSE_BTN_RIGHT))
+    {
+        m_renderPanel->PopupMenu(m_treeMenu, wxDefaultPosition);
+    }
 }
 
 void MainWindowInterface::OnMotion(wxMouseEvent& event)
@@ -529,7 +530,7 @@ void MainWindowInterface::OnTreeRightClick(wxTreeEvent& event)
     m_treeNode->PopupMenu(m_treeMenu, wxDefaultPosition);// event.GetPosition());
 }
 
-void MainWindowInterface::OnTreeMenuAdd(wxCommandEvent& event)
+void MainWindowInterface::OnMenuAddObject(wxCommandEvent& event)
 {
     wxEventBlocker blocker(m_singleton->m_treeNode);
     wxTreeItemId t = m_treeNode->GetSelection();
@@ -545,7 +546,17 @@ void MainWindowInterface::OnTreeMenuAdd(wxCommandEvent& event)
 }
 void MainWindowInterface::OnTreeMenuRemove(wxCommandEvent& event)
 {
-
+    /*		String^ guid = ((ZobControlTreeNode^)m_treeView->SelectedNode)->m_zobObjectGuid;
+		std::string id;
+		MarshalString(guid, id);
+		zobId zid = ZobEntity::ZobIdFromString(id);
+		ZobObject* p = ZobEntity::GetEntity<ZobObject>(zid);
+		if (m_selectedObject == p)
+		{
+			SelectObject(p->GetParent());
+		}
+		DirectZob::GetInstance()->GetZobObjectManager()->RemoveZobObject(p);
+		ReScan((ZobControlTreeNode^)m_treeView->TopNode, m_bShowAllNodes);*/
 }
 void MainWindowInterface::OnTreeMenuAddComponent(wxCommandEvent& event)
 {
@@ -553,17 +564,54 @@ void MainWindowInterface::OnTreeMenuAddComponent(wxCommandEvent& event)
 }
 void MainWindowInterface::OnTreeMenuZoom(wxCommandEvent& event)
 {
-
+/*		String^ guid = ((ZobControlTreeNode^)m_treeView->SelectedNode)->m_zobObjectGuid;
+		std::string id;
+		MarshalString(guid, id);
+		zobId zid = ZobEntity::ZobIdFromString(id);
+		ZobObject* p = ZobEntity::GetEntity<ZobObject>(zid);
+		Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCamera(std::string("EditorCamera"));
+		if (c && p)
+		{
+			ZobVector3 pos = p->GetWorldPosition();
+			c->SetTarget(&pos);*/
 }
 void MainWindowInterface::OnTreeMenuDuplicate(wxCommandEvent& event)
 {
-
+    /*		ZobObject* parent = m_Instance->GetParent();
+		DirectZob::LogInfo("Duplicating %s under %s", m_Instance->GetName(), parent->GetName());
+		DirectZob::eDirectZobLogLevel level = DirectZob::GetLogLevel();
+		DirectZob::SetLogLevel(DirectZob::eDirectZobLogLevel_warning);
+		m_Instance->Duplicate();
+		return true;*/
 }
 void MainWindowInterface::OnTreeMenuShowHide(wxCommandEvent& event)
 {
-
+/*		String^ guid = ((ZobControlTreeNode^)m_treeView->SelectedNode)->m_zobObjectGuid;
+		std::string id;
+		MarshalString(guid, id);
+		zobId zid = ZobEntity::ZobIdFromString(id);
+		ZobObject* z = ZobEntity::GetEntity<ZobObject>(zid);
+		z->SetVisible(!z->IsVisible());;*/
 }
-void MainWindowInterface::OnTreeMenuAddObject(wxCommandEvent& event)
+void MainWindowInterface::OnMenuAddMesh(wxCommandEvent& event)
 {
 
+}
+void MainWindowInterface::OnMenuAddSprite(wxCommandEvent& event)
+{
+
+}
+void MainWindowInterface::OnMenuAddAsset(wxCommandEvent& event)
+{
+
+}
+void MainWindowInterface::OnMenuAddLight(wxCommandEvent& event)
+{
+    m_editor->CreateLight();
+    RefreshObjectTree();
+}
+void MainWindowInterface::OnMenuAddCamera(wxCommandEvent& event)
+{
+    m_editor->CreateCamera();
+    RefreshObjectTree();
 }
