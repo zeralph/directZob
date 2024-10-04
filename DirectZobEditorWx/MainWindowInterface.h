@@ -14,8 +14,8 @@ class ZobVariablesExposer;
 class zobTreeItemData : public wxTreeItemData
 {
 public:
-    zobTreeItemData();
-    ~zobTreeItemData();
+//    zobTreeItemData();
+//    ~zobTreeItemData();
 public:
     std::string zobIdStr;
 };
@@ -61,6 +61,16 @@ public:
     void                        OnGizmosPhysics(wxCommandEvent& event) override;
     void                        OnGizmosObjects(wxCommandEvent& event) override;
     
+    //tree menu
+    void OnTreeMenuAdd(wxCommandEvent& event) override;
+    void OnTreeMenuRemove(wxCommandEvent& event) override;
+    void OnTreeMenuAddComponent(wxCommandEvent& event) override;
+    void OnTreeMenuZoom(wxCommandEvent& event) override;
+    void OnTreeMenuDuplicate(wxCommandEvent& event) override;
+    void OnTreeMenuShowHide(wxCommandEvent& event) override;
+    void OnTreeMenuAddObject(wxCommandEvent& event) override;
+    void OnTreeRightClick(wxTreeEvent& event) override;
+
 //private:
     
     DirectZob* m_directZob;

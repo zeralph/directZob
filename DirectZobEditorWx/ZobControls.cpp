@@ -11,10 +11,9 @@
 *	ZobControl
 *
 */
-ZobControl::ZobControl(const ZobVariablesExposer::wrapperData* w, wxBoxSizer* b, wxPanel* p) : wxPanel()
+ZobControl::ZobControl(const ZobVariablesExposer::wrapperData* w, wxBoxSizer* b, wxPanel* p) : wxPanel(p)
 {
 	m_vars = w;
-	m_boxSizer = b;
 	m_panel = p;
 }
 ZobControl::~ZobControl()
@@ -31,16 +30,16 @@ void ZobControl::UpdateFromEngine()
 ZobFloatCtrl::ZobFloatCtrl(const ZobVariablesExposer::wrapperData* w, wxBoxSizer* b, wxPanel* p) : ZobControl(w, b, p)
 {
 	wxBoxSizer* bs = new wxBoxSizer(wxHORIZONTAL);
-	wxStaticText* t = new wxStaticText(m_panel, wxID_ANY, _(w->name.c_str()), wxDefaultPosition, Inspector::sLabelSize, 0);
+	wxStaticText* t = new wxStaticText(p, wxID_ANY, _(w->name.c_str()), wxDefaultPosition, Inspector::sLabelSize, 0);
 	t->Wrap(-1);
 	
 	float* f = (float*)w->ptr;
 	std::string s;
 	Inspector::FloatToString(*f, s);
-	m_f = new wxTextCtrl(m_panel, wxID_ANY, s.c_str(), wxDefaultPosition, Inspector::sFloatSize, 0);
+	m_f = new wxTextCtrl(p, wxID_ANY, s.c_str(), wxDefaultPosition, Inspector::sFloatSize, 0);
 	bs->Add(m_f, 0, wxALL, 1);
 	bs->Add(t, 0, wxALL, 1);
-	m_boxSizer->Add(bs);
+	b->Add(bs);
 	m_f->Connect(wxEVT_KILL_FOCUS, wxFocusEventHandler(ZobFloatCtrl::OnInput), NULL, this);
 }
 void ZobFloatCtrl::OnInput(wxFocusEvent& event)
@@ -91,7 +90,7 @@ void ZobFloatCtrl::UpdateFromEngine()
 ZobVector3Ctrl::ZobVector3Ctrl(const ZobVariablesExposer::wrapperData* w, wxBoxSizer* b, wxPanel* p) : ZobControl(w, b, p)
 {
 	wxBoxSizer* bsv = new wxBoxSizer(wxVERTICAL);
-	wxStaticText* t = new wxStaticText(m_panel, wxID_ANY, _(w->name.c_str()), wxDefaultPosition, Inspector::sLabelSize, 0);
+	wxStaticText* t = new wxStaticText(p, wxID_ANY, _(w->name.c_str()), wxDefaultPosition, Inspector::sLabelSize, 0);
 	t->Wrap(-1);
 	bsv->Add(t, 0, wxALL, 1);
 	wxBoxSizer* bsh = new wxBoxSizer(wxHORIZONTAL);
@@ -102,21 +101,21 @@ ZobVector3Ctrl::ZobVector3Ctrl(const ZobVariablesExposer::wrapperData* w, wxBoxS
 	m_x = z->x;
 	std::string sx;
 	Inspector::FloatToString(z->x, sx);
-	m_tx = new wxTextCtrl(m_panel, wxID_ANY, sx, wxDefaultPosition, Inspector::sFloatSize, 0);
+	m_tx = new wxTextCtrl(p, wxID_ANY, sx, wxDefaultPosition, Inspector::sFloatSize, 0);
 	bsh->Add(m_tx, 0, wxALL, 1);
 	//Y
 	m_y = z->y;
 	std::string sy;
 	Inspector::FloatToString(z->y, sy);
-	m_ty = new wxTextCtrl(m_panel, wxID_ANY, sy, wxDefaultPosition, Inspector::sFloatSize, 0);
+	m_ty = new wxTextCtrl(p, wxID_ANY, sy, wxDefaultPosition, Inspector::sFloatSize, 0);
 	bsh->Add(m_ty, 0, wxALL, 1);
 	//Z
 	m_z = z->z;
 	std::string sz;
 	Inspector::FloatToString(z->z, sz);
-	m_tz = new wxTextCtrl(m_panel, wxID_ANY, sz, wxDefaultPosition, Inspector::sFloatSize, 0);
+	m_tz = new wxTextCtrl(p, wxID_ANY, sz, wxDefaultPosition, Inspector::sFloatSize, 0);
 	bsh->Add(m_tz, 0, wxALL, 1);
-	m_boxSizer->Add(bsv);
+	b->Add(bsv);
 	//m_menu1->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindow::OnExit ), this, m_menuItem5->GetId());
 	m_tx->Connect(wxEVT_KILL_FOCUS, wxFocusEventHandler(ZobVector3Ctrl::OnInputX), NULL, this);
 	m_ty->Connect(wxEVT_KILL_FOCUS, wxFocusEventHandler(ZobVector3Ctrl::OnInputY), NULL, this);
@@ -230,15 +229,14 @@ void ZobVector3Ctrl::OnInputZ(wxFocusEvent& event)
 ZobEnumCtrl::ZobEnumCtrl(const ZobVariablesExposer::wrapperData* w, wxBoxSizer* b, wxPanel* p) : ZobControl(w, b, p)
 {
 	wxBoxSizer* bs = new wxBoxSizer(wxHORIZONTAL);
-	wxStaticText* t = new wxStaticText(m_panel, wxID_ANY, _(w->name.c_str()), wxDefaultPosition, Inspector::sLabelSize, 0);
+	wxStaticText* t = new wxStaticText(p, wxID_ANY, _(w->name.c_str()), wxDefaultPosition, Inspector::sLabelSize, 0);
 	t->Wrap(-1);
 	
 	float* f = (float*)w->ptr;
 	std::string s;
 	Inspector::FloatToString(*f, s);
-	m_c = new wxComboBox(m_panel, wxID_ANY, _("Combo!"), wxDefaultPosition, Inspector::sComboSize, 0, NULL, 0);
-	bs->Add(m_c, 0, wxALL, 1);
-	bs->Add(t, 0, wxALL, 1);
+	m_c = new wxChoice(p, wxID_ANY, wxDefaultPosition, Inspector::sComboSize, 0, NULL, 0);
+
 	std::vector<std::string>::const_iterator iter;
 	for (iter = w->enumNames.begin(); iter != w->enumNames.end(); iter++)
 	{
@@ -246,7 +244,9 @@ ZobEnumCtrl::ZobEnumCtrl(const ZobVariablesExposer::wrapperData* w, wxBoxSizer* 
 	}
 	int* idx = (int*)m_vars->ptr;
 	m_c->SetSelection(*idx);
-	m_boxSizer->Add(bs);
+	bs->Add(m_c, 0, wxALL, 1);
+	bs->Add(t, 0, wxALL, 1);
+	b->Add(bs);
 	m_c->Connect(wxEVT_COMBOBOX, wxCommandEventHandler(ZobEnumCtrl::OnSelected), NULL, this);
 }
 ZobEnumCtrl::~ZobEnumCtrl()
@@ -276,11 +276,11 @@ void ZobEnumCtrl::OnSelected(wxCommandEvent& event)
 ZobStringCtrl::ZobStringCtrl(const ZobVariablesExposer::wrapperData* w, wxBoxSizer* b, wxPanel* p) : ZobControl(w, b, p)
 {
 	wxBoxSizer* bs = new wxBoxSizer(wxHORIZONTAL);
-	wxStaticText* t = new wxStaticText(m_panel, wxID_ANY, _(w->name.c_str()), wxDefaultPosition, Inspector::sLabelSize, 0);
+	wxStaticText* t = new wxStaticText(p, wxID_ANY, _(w->name.c_str()), wxDefaultPosition, Inspector::sLabelSize, 0);
 	t->Wrap(-1);
 	
 	std::string* s = (std::string*)w->ptr;
-	m_t = new wxTextCtrl(m_panel, wxID_ANY, s->c_str(), wxDefaultPosition, Inspector::sStringSize, 0);
+	m_t = new wxTextCtrl(p, wxID_ANY, s->c_str(), wxDefaultPosition, Inspector::sStringSize, 0);
 	bs->Add(m_t, 0, wxALL, 1);
 	b->Add(bs);
 	bs->Add(t, 0, wxALL, 1);
@@ -312,8 +312,8 @@ ZobBoolCtrl::ZobBoolCtrl(const ZobVariablesExposer::wrapperData* w, wxBoxSizer* 
 {
 	wxBoxSizer* bs = new wxBoxSizer(wxHORIZONTAL);
 	bool* bval = (bool*)w->ptr;
-	m_b = new wxCheckBox(m_panel, wxID_ANY, _(""), wxDefaultPosition, Inspector::sCheckBoxSize, 0);
-	wxStaticText* t = new wxStaticText(m_panel, wxID_ANY, _(w->name.c_str()), wxDefaultPosition, Inspector::sLabelSize, 0);
+	m_b = new wxCheckBox(p, wxID_ANY, _(""), wxDefaultPosition, Inspector::sCheckBoxSize, 0);
+	wxStaticText* t = new wxStaticText(p, wxID_ANY, _(w->name.c_str()), wxDefaultPosition, Inspector::sLabelSize, 0);
 	t->Wrap(-1);
 	bs->Add(m_b, 0, wxALL, 1);
 	bs->Add(t, 0, wxALL, 1);
@@ -360,8 +360,8 @@ ZobColorControl::ZobColorControl(const ZobVariablesExposer::wrapperData* w, wxBo
 {
 	wxBoxSizer* bs = new wxBoxSizer(wxHORIZONTAL);
 	ZobColor* c = (ZobColor*)w->ptr;
-	m_c = new wxColourPickerCtrl(m_panel, wxID_ANY, *wxWHITE, wxDefaultPosition, Inspector::sColorSize);
-	wxStaticText* t = new wxStaticText(m_panel, wxID_ANY, _(w->name.c_str()), wxDefaultPosition, Inspector::sLabelSize, 0);
+	m_c = new wxColourPickerCtrl(p, wxID_ANY, *wxWHITE, wxDefaultPosition, Inspector::sColorSize);
+	wxStaticText* t = new wxStaticText(p, wxID_ANY, _(w->name.c_str()), wxDefaultPosition, Inspector::sLabelSize, 0);
 	t->Wrap(-1);
 	bs->Add(m_c, 0, wxALL, 1);
 	bs->Add(t, 0, wxALL, 1);

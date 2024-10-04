@@ -10,25 +10,25 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+#include <wx/string.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
+#include <wx/menu.h>
 #include <wx/treectrl.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/string.h>
 #include <wx/sizer.h>
 #include <wx/panel.h>
 #include <wx/tglbtn.h>
-#include <wx/bitmap.h>
-#include <wx/image.h>
-#include <wx/icon.h>
 #include <wx/combobox.h>
 #include <wx/button.h>
 #include <wx/toolbar.h>
 #include <wx/textctrl.h>
 #include <wx/splitter.h>
 #include <wx/notebook.h>
-#include <wx/menu.h>
 #include <wx/statusbr.h>
 #include <wx/frame.h>
 
@@ -44,6 +44,7 @@ class MainWindow : public wxFrame
 	protected:
 		wxSplitterWindow* m_splitter1;
 		wxPanel* m_panel1;
+		wxMenu* m_treeMenu;
 		wxPanel* m_panel2;
 		wxSplitterWindow* m_splitter3;
 		wxPanel* m_panel3;
@@ -73,7 +74,15 @@ class MainWindow : public wxFrame
 		virtual void OnMaximize( wxMaximizeEvent& event ) { event.Skip(); }
 		virtual void OnStartDrag( wxTreeEvent& event ) { event.Skip(); }
 		virtual void OnEndDrag( wxTreeEvent& event ) { event.Skip(); }
+		virtual void OnTreeRightClick( wxTreeEvent& event ) { event.Skip(); }
 		virtual void OnTreeSelChanged( wxTreeEvent& event ) { event.Skip(); }
+		virtual void OnTreeMenuAdd( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnTreeMenuRemove( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnTreeMenuAddComponent( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnTreeMenuZoom( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnTreeMenuDuplicate( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnTreeMenuShowHide( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnTreeMenuAddObject( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPlay( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPause( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnStop( wxCommandEvent& event ) { event.Skip(); }

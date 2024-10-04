@@ -37,17 +37,21 @@ bool Inspector::StringToFloat(const char* c, float& f)
 
 Inspector::Inspector(wxPanel* p)
 {
-	m_panel = p;
+	m_parentPanel = p;
+	m_panel = NULL;
+	//m_panel = p;
 }
 
 void Inspector::Clear()
 {
+	/*
 	for (std::vector<ZobControl*>::iterator iter = m_controls.begin(); iter != m_controls.end(); iter++)
 	{
-		delete (*iter);
+		//delete (*iter);
 	}
 	m_controls.clear();
 	m_panel->DestroyChildren();
+	*/
 }
 
 void Inspector::UpdateControls()
@@ -61,12 +65,18 @@ void Inspector::UpdateControls()
 
 void Inspector::Set(ZobObject* z)
 {
-	Clear();
+	if (m_panel)
+	{
+		m_controls.clear();
+		delete m_panel;
+	}
+	m_panel = new wxPanel(m_parentPanel);
 	m_panel->Hide();
+	//Clear();
 	std::vector<wxStaticBoxSizer*> sizers;
 	wxStaticBoxSizer* boxSizer = new wxStaticBoxSizer(new wxStaticBox(m_panel, wxID_ANY, _("Entity")), wxVERTICAL);
 	sizers.push_back(boxSizer);
-	AddVars(z->GetVariablesExposer(), sizers);
+	AddVars(z->GetVariablesExposer(), &sizers);
 	std::vector<ZobComponent*>::const_iterator iter;
 	for (iter = z->GetComponents()->begin(); iter != z->GetComponents()->end(); iter++)
 	{
@@ -77,16 +87,25 @@ void Inspector::Set(ZobObject* z)
 			wxStaticBoxSizer* newSizer = new wxStaticBoxSizer(new wxStaticBox(m_panel, wxID_ANY, _(compName.c_str())), wxVERTICAL);
 			sizers.back()->Add(newSizer, 0, wxALL, 1);
 			sizers.push_back(newSizer);
-			AddVars((*iter)->GetVariablesExposer(), sizers);
+			AddVars((*iter)->GetVariablesExposer(), &sizers);
 		}
 	}
 	sizers.clear();
 	m_panel->SetSizerAndFit(boxSizer, false);
 	m_panel->Layout();
+	//m_panel->Update();
+	//m_panel->Refresh();
+	m_panel->Show();
 }
 
 void Inspector::Set(ZobVariablesExposer* vars)
 {
+	if (m_panel)
+	{
+		m_controls.clear();
+		delete m_panel;
+	}
+	m_panel = new wxPanel(m_parentPanel);
 	Clear();
 	m_panel->Hide();
 	std::vector<wxStaticBoxSizer*> sizers;
@@ -94,14 +113,15 @@ void Inspector::Set(ZobVariablesExposer* vars)
 	sizers.push_back(boxSizer);
 	if (vars)
 	{
-		AddVars(vars, sizers);
+		AddVars(vars, &sizers);
 	}
 	sizers.clear();
 	m_panel->SetSizerAndFit(boxSizer, false);
 	m_panel->Layout();
+	m_panel->Show();
 }
 
-void Inspector::AddVars(ZobVariablesExposer* vars, std::vector<wxStaticBoxSizer*> sizers)
+void Inspector::AddVars(ZobVariablesExposer* vars, std::vector<wxStaticBoxSizer*>* sizers)
 {
 	if (!vars)
 	{
@@ -119,28 +139,27 @@ void Inspector::AddVars(ZobVariablesExposer* vars, std::vector<wxStaticBoxSizer*
 			}
 			else if (w->type == ZobVariablesExposer::eWrapperType_string)
 			{
-				wxBoxSizer* b = sizers.back();
+				wxBoxSizer* b = sizers->back();
 				ZobStringCtrl* f = new ZobStringCtrl(w, b, m_panel);
 				m_controls.push_back(f);
 			}
 			else if (w->type == ZobVariablesExposer::eWrapperType_ZobVector3)
 			{
-				wxBoxSizer* b = sizers.back();
+				wxBoxSizer* b = sizers->back();
 				ZobVector3Ctrl* f = new ZobVector3Ctrl(w, b, m_panel);
 				m_controls.push_back(f);
 			}
 			else if (w->type == ZobVariablesExposer::eWrapperType_float)
 			{
-				wxBoxSizer* b = sizers.back();
+				wxBoxSizer* b = sizers->back();
 				ZobFloatCtrl* f = new ZobFloatCtrl(w, b, m_panel);
 				m_controls.push_back(f);
 			}
 			else if (w->type == ZobVariablesExposer::eWrapperType_enum)
 			{
-				wxBoxSizer* b = sizers.back();
+				wxBoxSizer* b = sizers->back();
 				ZobEnumCtrl* f = new ZobEnumCtrl(w, b, m_panel);
 				m_controls.push_back(f);
-				//panel->Controls->Add(gcnew ZobControlEnum(w));
 			}
 			else if (w->type == ZobVariablesExposer::eWrapperType_enumCombo)
 			{
@@ -148,7 +167,7 @@ void Inspector::AddVars(ZobVariablesExposer* vars, std::vector<wxStaticBoxSizer*
 			}
 			else if (w->type == ZobVariablesExposer::eWrapperType_bool)
 			{
-				wxBoxSizer* b = sizers.back();
+				wxBoxSizer* b = sizers->back();
 				ZobBoolCtrl* f = new ZobBoolCtrl(w, b, m_panel);
 				m_controls.push_back(f);
 			}
@@ -159,13 +178,13 @@ void Inspector::AddVars(ZobVariablesExposer* vars, std::vector<wxStaticBoxSizer*
 			else if (w->type == ZobVariablesExposer::eWrapperType_startGroup)
 			{
 				wxStaticBoxSizer* newSizer = new wxStaticBoxSizer(new wxStaticBox(m_panel, wxID_ANY, _(w->name.c_str())), wxVERTICAL);
-				sizers.back()->Add(newSizer, 0, wxALL, 1);
-				sizers.push_back(newSizer);
+				sizers->back()->Add(newSizer, 0, wxALL, 1);
+				sizers->push_back(newSizer);
 			}
 			else if (w->type == ZobVariablesExposer::eWrapperType_endGroup)
 			{
-				assert((sizers.size() > 1));
-				sizers.pop_back();
+				assert((sizers->size() > 1));
+				sizers->pop_back();
 			}
 			else if (w->type == ZobVariablesExposer::eWrapperType_zobId)
 			{
@@ -177,7 +196,7 @@ void Inspector::AddVars(ZobVariablesExposer* vars, std::vector<wxStaticBoxSizer*
 			}
 			else if (w->type == ZobVariablesExposer::eWrapperType_zobColor)
 			{
-				wxBoxSizer* b = sizers.back();
+				wxBoxSizer* b = sizers->back();
 				ZobColorControl* f = new ZobColorControl(w, b, m_panel);
 				m_controls.push_back(f);
 			}

@@ -21,15 +21,6 @@
 
 MainWindowInterface* MainWindowInterface::m_singleton = NULL;
 
-zobTreeItemData::zobTreeItemData() 
-{
-    zobIdStr = "";
-}
-zobTreeItemData::~zobTreeItemData() 
-{
-    zobIdStr = "";
-}
-
 MainWindowInterface::MainWindowInterface(DirectZob* dz, ZobEditorManager* dze) : MainWindow(NULL, -1, "DirectZob editor", wxDefaultPosition, wxSize(958, 648), wxDEFAULT_FRAME_STYLE | wxTAB_TRAVERSAL)
 {
     wxString configDir = wxStandardPaths::Get().GetConfigDir();
@@ -168,8 +159,9 @@ MainWindowInterface::~MainWindowInterface()
 void MainWindowInterface::SetCurrentZobVariables(ZobObject* z)
 {
     m_singleton->m_currentZobObjectInspector->Set(z);
-    m_singleton->m_notebookInspector->ChangeSelection(eInspectorTabs::eInpector_object);
-    m_singleton->m_notebookInspector->Refresh();
+    //m_singleton->m_notebookInspector->SetSelection(eInspectorTabs::eInpector_engine);
+    m_singleton->m_notebookInspector->SetSelection(eInspectorTabs::eInpector_object);
+    //m_singleton->m_notebookInspector->Refresh();
 }
 
 void MainWindowInterface::SetCurrentZobVariables(ZobVariablesExposer* zvars)
@@ -265,7 +257,7 @@ void MainWindowInterface::OnTreeSelChanged(wxTreeEvent& event)
         ZobObject* z = ZobEntity::GetEntity<ZobObject>(id);
         DirectZob::LogInfo("Selected %s", z->GetName().c_str());
         m_editor->SetSelectedObject(z);
-        RefreshObjectTree();
+//        RefreshObjectTree();
     }
 }
 
@@ -276,9 +268,13 @@ void MainWindowInterface::UpdateTreeView()
 
 void MainWindowInterface::RefreshObjectTree()
 {
+    wxEventBlocker(m_singleton->m_treeNode);
     ZobObject* root = DirectZob::GetInstance()->GetZobObjectManager()->GetRootObject();
     m_singleton->m_treeNode->DeleteAllItems();
     wxTreeItemId rootNode = m_singleton->m_treeNode->AddRoot(root->GetName());
+    zobTreeItemData* data = new zobTreeItemData();
+    data->zobIdStr = root->ZobIdToString();
+    m_singleton->m_treeNode->SetItemData(rootNode, data);
     m_singleton->BuildObjectTree(root, rootNode);
     m_singleton->m_treeNode->ExpandAll();
     ZobObject* z = m_editor->GetSelectedObject();
@@ -519,4 +515,55 @@ void MainWindowInterface::OnGizmosObjects(wxCommandEvent& event)
 {
     bool b = DirectZob::GetInstance()->GetEngine()->DrawZobObjectGizmos();
     DirectZob::GetInstance()->GetEngine()->DrawZobObjectGizmos(!b);
+}
+
+void MainWindowInterface::OnTreeRightClick(wxTreeEvent& event)
+{
+    wxEventBlocker blocker(m_singleton->m_treeNode);
+    wxTreeItemId t = event.GetItem();
+    if (m_treeNode->GetSelection() != t)
+    {
+        m_treeNode->Unselect();
+        m_treeNode->SelectItem(t);
+    }
+    m_treeNode->PopupMenu(m_treeMenu, wxDefaultPosition);// event.GetPosition());
+}
+
+void MainWindowInterface::OnTreeMenuAdd(wxCommandEvent& event)
+{
+    wxEventBlocker blocker(m_singleton->m_treeNode);
+    wxTreeItemId t = m_treeNode->GetSelection();
+    zobTreeItemData* data = static_cast<zobTreeItemData*>(m_treeNode->GetItemData(t));
+    if (data)
+    {
+        std::string id = data->zobIdStr;
+        zobId zid = ZobEntity::ZobIdFromString(id);
+        ZobObject* z = ZobEntity::GetEntity<ZobObject>(zid);
+        DirectZob::GetInstance()->GetZobObjectManager()->CreateZobObject(z);
+        RefreshObjectTree();
+    }
+}
+void MainWindowInterface::OnTreeMenuRemove(wxCommandEvent& event)
+{
+
+}
+void MainWindowInterface::OnTreeMenuAddComponent(wxCommandEvent& event)
+{
+
+}
+void MainWindowInterface::OnTreeMenuZoom(wxCommandEvent& event)
+{
+
+}
+void MainWindowInterface::OnTreeMenuDuplicate(wxCommandEvent& event)
+{
+
+}
+void MainWindowInterface::OnTreeMenuShowHide(wxCommandEvent& event)
+{
+
+}
+void MainWindowInterface::OnTreeMenuAddObject(wxCommandEvent& event)
+{
+
 }

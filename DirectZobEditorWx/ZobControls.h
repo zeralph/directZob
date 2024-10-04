@@ -6,7 +6,7 @@
 
 class wxTextCtrl;
 class wxBoxSizer;
-class wxComboBox;
+class wxChoice;
 class wxCheckBox;
 class wxColourPickerCtrl;
 class ZobControl : public wxPanel
@@ -17,7 +17,6 @@ public:
 	virtual void UpdateFromEngine()=0;
 protected:
 	const ZobVariablesExposer::wrapperData* m_vars;
-	wxBoxSizer* m_boxSizer;
 	wxPanel* m_panel;
 };
 
@@ -62,7 +61,7 @@ public:
 	void UpdateFromEngine() override;
 	void OnSelected(wxCommandEvent& event);
 private:
-	wxComboBox* m_c;
+	wxChoice* m_c;
 };
 
 class ZobStringCtrl : public ZobControl

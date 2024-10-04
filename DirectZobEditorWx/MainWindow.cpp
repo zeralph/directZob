@@ -22,7 +22,7 @@ MainWindow::MainWindow( wxWindow* parent, wxWindowID id, const wxString& title, 
 	m_splitter1->SetMinimumPaneSize( 150 );
 
 	m_panel1 = new wxPanel( m_splitter1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	//m_panel1->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_INACTIVECAPTION ) );
+	m_panel1->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_INACTIVECAPTION ) );
 	m_panel1->SetMinSize( wxSize( 150,-1 ) );
 	m_panel1->SetMaxSize( wxSize( 250,-1 ) );
 
@@ -32,6 +32,36 @@ MainWindow::MainWindow( wxWindow* parent, wxWindowID id, const wxString& title, 
 	m_treeNode = new wxTreeCtrl( m_panel1, wxID_ANY, wxDefaultPosition, wxSize( 150,-1 ), wxTR_DEFAULT_STYLE );
 	m_treeNode->SetMinSize( wxSize( 150,-1 ) );
 	m_treeNode->SetMaxSize( wxSize( 250,-1 ) );
+
+	m_treeMenu = new wxMenu();
+	wxMenuItem* m_treeMenuAddObject;
+	m_treeMenuAddObject = new wxMenuItem( m_treeMenu, wxID_ANY, wxString( _("Add object") ) , wxEmptyString, wxITEM_NORMAL );
+	m_treeMenu->Append( m_treeMenuAddObject );
+
+	wxMenuItem* m_treeMenuRemoveObject;
+	m_treeMenuRemoveObject = new wxMenuItem( m_treeMenu, wxID_ANY, wxString( _("Remove object") ) , wxEmptyString, wxITEM_NORMAL );
+	m_treeMenu->Append( m_treeMenuRemoveObject );
+
+	wxMenuItem* m_treeMenuAddComponent;
+	m_treeMenuAddComponent = new wxMenuItem( m_treeMenu, wxID_ANY, wxString( _("Add component") ) , wxEmptyString, wxITEM_NORMAL );
+	m_treeMenu->Append( m_treeMenuAddComponent );
+
+	wxMenuItem* m_treeMenuZoom;
+	m_treeMenuZoom = new wxMenuItem( m_treeMenu, wxID_ANY, wxString( _("Zoom") ) , wxEmptyString, wxITEM_NORMAL );
+	m_treeMenu->Append( m_treeMenuZoom );
+
+	wxMenuItem* m_treeMenuDuplicate;
+	m_treeMenuDuplicate = new wxMenuItem( m_treeMenu, wxID_ANY, wxString( _("Duplicate") ) , wxEmptyString, wxITEM_NORMAL );
+	m_treeMenu->Append( m_treeMenuDuplicate );
+
+	wxMenuItem* m_treeMenuShowHide;
+	m_treeMenuShowHide = new wxMenuItem( m_treeMenu, wxID_ANY, wxString( _("Show/hide") ) , wxEmptyString, wxITEM_NORMAL );
+	m_treeMenu->Append( m_treeMenuShowHide );
+
+	wxMenuItem* m_treeMenuSaveAsAsset;
+	m_treeMenuSaveAsAsset = new wxMenuItem( m_treeMenu, wxID_ANY, wxString( _("Save as Asset ...") ) , wxEmptyString, wxITEM_NORMAL );
+	m_treeMenu->Append( m_treeMenuSaveAsAsset );
+
 
 	bSizer2->Add( m_treeNode, 1, wxALL|wxEXPAND, 0 );
 
@@ -92,7 +122,7 @@ MainWindow::MainWindow( wxWindow* parent, wxWindowID id, const wxString& title, 
 	bSizer6->Add( m_toolBar1, 0, wxEXPAND, 5 );
 
 	m_renderPanel = new wxPanel( m_panel7, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	//m_renderPanel->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
+	m_renderPanel->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
 
 	bSizer6->Add( m_renderPanel, 1, wxEXPAND | wxALL, 1 );
 
@@ -119,7 +149,7 @@ MainWindow::MainWindow( wxWindow* parent, wxWindowID id, const wxString& title, 
 	m_panel3->Layout();
 	bSizer5->Fit( m_panel3 );
 	m_panelRight = new wxPanel( m_splitter3, wxID_ANY, wxDefaultPosition, wxSize( 150,-1 ), wxTAB_TRAVERSAL );
-	//m_panelRight->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_MENU ) );
+	m_panelRight->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_MENU ) );
 	m_panelRight->SetMinSize( wxSize( 350,-1 ) );
 	m_panelRight->SetMaxSize( wxSize( 350,-1 ) );
 
@@ -127,15 +157,15 @@ MainWindow::MainWindow( wxWindow* parent, wxWindowID id, const wxString& title, 
 	bSizer7 = new wxBoxSizer( wxVERTICAL );
 
 	m_notebookInspector = new wxNotebook( m_panelRight, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	//m_notebookInspector->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_MENU ) );
+	m_notebookInspector->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_MENU ) );
 	m_notebookInspector->SetMinSize( wxSize( 350,-1 ) );
 
 	m_panelInspector = new wxPanel( m_notebookInspector, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	//m_panelInspector->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_MENU ) );
+	m_panelInspector->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_MENU ) );
 
 	m_notebookInspector->AddPage( m_panelInspector, _("Object"), true );
 	m_panelEngine = new wxPanel( m_notebookInspector, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	//m_panelEngine->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_MENU ) );
+	m_panelEngine->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_MENU ) );
 
 	m_notebookInspector->AddPage( m_panelEngine, _("Engine"), false );
 	m_panelScene = new wxPanel( m_notebookInspector, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
@@ -213,7 +243,15 @@ MainWindow::MainWindow( wxWindow* parent, wxWindowID id, const wxString& title, 
 	this->Connect( wxEVT_MAXIMIZE, wxMaximizeEventHandler( MainWindow::OnMaximize ) );
 	m_treeNode->Connect( wxEVT_COMMAND_TREE_BEGIN_DRAG, wxTreeEventHandler( MainWindow::OnStartDrag ), NULL, this );
 	m_treeNode->Connect( wxEVT_COMMAND_TREE_END_DRAG, wxTreeEventHandler( MainWindow::OnEndDrag ), NULL, this );
+	m_treeNode->Connect( wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK, wxTreeEventHandler( MainWindow::OnTreeRightClick ), NULL, this );
 	m_treeNode->Connect( wxEVT_COMMAND_TREE_SEL_CHANGED, wxTreeEventHandler( MainWindow::OnTreeSelChanged ), NULL, this );
+	m_treeMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindow::OnTreeMenuAdd ), this, m_treeMenuAddObject->GetId());
+	m_treeMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindow::OnTreeMenuRemove ), this, m_treeMenuRemoveObject->GetId());
+	m_treeMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindow::OnTreeMenuAddComponent ), this, m_treeMenuAddComponent->GetId());
+	m_treeMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindow::OnTreeMenuZoom ), this, m_treeMenuZoom->GetId());
+	m_treeMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindow::OnTreeMenuDuplicate ), this, m_treeMenuDuplicate->GetId());
+	m_treeMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindow::OnTreeMenuShowHide ), this, m_treeMenuShowHide->GetId());
+	m_treeMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindow::OnTreeMenuAddObject ), this, m_treeMenuSaveAsAsset->GetId());
 	m_Play->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( MainWindow::OnPlay ), NULL, this );
 	m_Pause->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( MainWindow::OnPause ), NULL, this );
 	m_Stop->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( MainWindow::OnStop ), NULL, this );
@@ -246,4 +284,5 @@ MainWindow::MainWindow( wxWindow* parent, wxWindowID id, const wxString& title, 
 
 MainWindow::~MainWindow()
 {
+	delete m_treeMenu;
 }

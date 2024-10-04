@@ -187,11 +187,11 @@
                   <property name="name">bSizer2</property>
                   <property name="orient">wxVERTICAL</property>
                   <property name="permission">none</property>
-                  <object class="sizeritem" expanded="false">
+                  <object class="sizeritem" expanded="true">
                     <property name="border">0</property>
                     <property name="flag">wxALL|wxEXPAND</property>
                     <property name="proportion">1</property>
-                    <object class="wxTreeCtrl" expanded="false">
+                    <object class="wxTreeCtrl" expanded="true">
                       <property name="BottomDockable">1</property>
                       <property name="LeftDockable">1</property>
                       <property name="RightDockable">1</property>
@@ -207,7 +207,7 @@
                       <property name="center_pane">0</property>
                       <property name="close_button">1</property>
                       <property name="context_help"></property>
-                      <property name="context_menu">1</property>
+                      <property name="context_menu">0</property>
                       <property name="default_pane">0</property>
                       <property name="dock">Dock</property>
                       <property name="dock_fixed">1</property>
@@ -246,7 +246,111 @@
                       <property name="window_style"></property>
                       <event name="OnTreeBeginDrag">OnStartDrag</event>
                       <event name="OnTreeEndDrag">OnEndDrag</event>
+                      <event name="OnTreeItemRightClick">OnTreeRightClick</event>
                       <event name="OnTreeSelChanged">OnTreeSelChanged</event>
+                      <object class="wxMenu" expanded="true">
+                        <property name="label">MyMenu</property>
+                        <property name="name">m_treeMenu</property>
+                        <property name="permission">protected</property>
+                        <object class="wxMenuItem" expanded="true">
+                          <property name="bitmap"></property>
+                          <property name="checked">0</property>
+                          <property name="enabled">1</property>
+                          <property name="help"></property>
+                          <property name="id">wxID_ANY</property>
+                          <property name="kind">wxITEM_NORMAL</property>
+                          <property name="label">Add object</property>
+                          <property name="name">m_treeMenuAddObject</property>
+                          <property name="permission">none</property>
+                          <property name="shortcut"></property>
+                          <property name="unchecked_bitmap"></property>
+                          <event name="OnMenuSelection">OnTreeMenuAdd</event>
+                        </object>
+                        <object class="wxMenuItem" expanded="true">
+                          <property name="bitmap"></property>
+                          <property name="checked">0</property>
+                          <property name="enabled">1</property>
+                          <property name="help"></property>
+                          <property name="id">wxID_ANY</property>
+                          <property name="kind">wxITEM_NORMAL</property>
+                          <property name="label">Remove object</property>
+                          <property name="name">m_treeMenuRemoveObject</property>
+                          <property name="permission">none</property>
+                          <property name="shortcut"></property>
+                          <property name="unchecked_bitmap"></property>
+                          <event name="OnMenuSelection">OnTreeMenuRemove</event>
+                        </object>
+                        <object class="wxMenuItem" expanded="true">
+                          <property name="bitmap"></property>
+                          <property name="checked">0</property>
+                          <property name="enabled">1</property>
+                          <property name="help"></property>
+                          <property name="id">wxID_ANY</property>
+                          <property name="kind">wxITEM_NORMAL</property>
+                          <property name="label">Add component</property>
+                          <property name="name">m_treeMenuAddComponent</property>
+                          <property name="permission">none</property>
+                          <property name="shortcut"></property>
+                          <property name="unchecked_bitmap"></property>
+                          <event name="OnMenuSelection">OnTreeMenuAddComponent</event>
+                        </object>
+                        <object class="wxMenuItem" expanded="true">
+                          <property name="bitmap"></property>
+                          <property name="checked">0</property>
+                          <property name="enabled">1</property>
+                          <property name="help"></property>
+                          <property name="id">wxID_ANY</property>
+                          <property name="kind">wxITEM_NORMAL</property>
+                          <property name="label">Zoom</property>
+                          <property name="name">m_treeMenuZoom</property>
+                          <property name="permission">none</property>
+                          <property name="shortcut"></property>
+                          <property name="unchecked_bitmap"></property>
+                          <event name="OnMenuSelection">OnTreeMenuZoom</event>
+                        </object>
+                        <object class="wxMenuItem" expanded="true">
+                          <property name="bitmap"></property>
+                          <property name="checked">0</property>
+                          <property name="enabled">1</property>
+                          <property name="help"></property>
+                          <property name="id">wxID_ANY</property>
+                          <property name="kind">wxITEM_NORMAL</property>
+                          <property name="label">Duplicate</property>
+                          <property name="name">m_treeMenuDuplicate</property>
+                          <property name="permission">none</property>
+                          <property name="shortcut"></property>
+                          <property name="unchecked_bitmap"></property>
+                          <event name="OnMenuSelection">OnTreeMenuDuplicate</event>
+                        </object>
+                        <object class="wxMenuItem" expanded="true">
+                          <property name="bitmap"></property>
+                          <property name="checked">0</property>
+                          <property name="enabled">1</property>
+                          <property name="help"></property>
+                          <property name="id">wxID_ANY</property>
+                          <property name="kind">wxITEM_NORMAL</property>
+                          <property name="label">Show/hide</property>
+                          <property name="name">m_treeMenuShowHide</property>
+                          <property name="permission">none</property>
+                          <property name="shortcut"></property>
+                          <property name="unchecked_bitmap"></property>
+                          <event name="OnMenuSelection">OnTreeMenuShowHide</event>
+                        </object>
+                        <object class="wxMenuItem" expanded="true">
+                          <property name="bitmap"></property>
+                          <property name="checked">0</property>
+                          <property name="enabled">1</property>
+                          <property name="help"></property>
+                          <property name="id">wxID_ANY</property>
+                          <property name="kind">wxITEM_NORMAL</property>
+                          <property name="label">Save as Asset ...</property>
+                          <property name="name">m_treeMenuSaveAsAsset</property>
+                          <property name="permission">none</property>
+                          <property name="shortcut"></property>
+                          <property name="unchecked_bitmap"></property>
+                          <event name="OnMenuSelection">OnTreeMenuAddObject</event>
+                        </object>
+                      </object>
                     </object>
                   </object>
                 </object>
@@ -1732,7 +1836,7 @@
           </object>
         </object>
       </object>
-      <object class="wxMenuBar" expanded="true">
+      <object class="wxMenuBar" expanded="false">
         <property name="bg"></property>
         <property name="context_help"></property>
         <property name="context_menu">1</property>
@@ -1754,11 +1858,11 @@
         <property name="window_extra_style"></property>
         <property name="window_name"></property>
         <property name="window_style"></property>
-        <object class="wxMenu" expanded="true">
+        <object class="wxMenu" expanded="false">
           <property name="label">File</property>
           <property name="name">m_menu1</property>
           <property name="permission">protected</property>
-          <object class="wxMenuItem" expanded="true">
+          <object class="wxMenuItem" expanded="false">
             <property name="bitmap"></property>
             <property name="checked">0</property>
             <property name="enabled">1</property>
@@ -1772,7 +1876,7 @@
             <property name="unchecked_bitmap"></property>
             <event name="OnMenuSelection">OnNew</event>
           </object>
-          <object class="wxMenuItem" expanded="true">
+          <object class="wxMenuItem" expanded="false">
             <property name="bitmap"></property>
             <property name="checked">0</property>
             <property name="enabled">1</property>
@@ -1786,7 +1890,7 @@
             <property name="unchecked_bitmap"></property>
             <event name="OnMenuSelection">OnOpen</event>
           </object>
-          <object class="wxMenuItem" expanded="true">
+          <object class="wxMenuItem" expanded="false">
             <property name="bitmap"></property>
             <property name="checked">0</property>
             <property name="enabled">1</property>
@@ -1800,7 +1904,7 @@
             <property name="unchecked_bitmap"></property>
             <event name="OnMenuSelection">OnSaveAs</event>
           </object>
-          <object class="wxMenuItem" expanded="true">
+          <object class="wxMenuItem" expanded="false">
             <property name="bitmap"></property>
             <property name="checked">0</property>
             <property name="enabled">1</property>
@@ -1814,7 +1918,7 @@
             <property name="unchecked_bitmap"></property>
             <event name="OnMenuSelection">OnSave</event>
           </object>
-          <object class="wxMenuItem" expanded="true">
+          <object class="wxMenuItem" expanded="false">
             <property name="bitmap"></property>
             <property name="checked">0</property>
             <property name="enabled">1</property>
@@ -1829,11 +1933,11 @@
             <event name="OnMenuSelection">OnExit</event>
           </object>
         </object>
-        <object class="wxMenu" expanded="true">
+        <object class="wxMenu" expanded="false">
           <property name="label">Gizmos</property>
           <property name="name">m_gizmosMenu</property>
           <property name="permission">protected</property>
-          <object class="wxMenuItem" expanded="true">
+          <object class="wxMenuItem" expanded="false">
             <property name="bitmap"></property>
             <property name="checked">0</property>
             <property name="enabled">1</property>
@@ -1847,7 +1951,7 @@
             <property name="unchecked_bitmap"></property>
             <event name="OnMenuSelection">OnGizmosGrid</event>
           </object>
-          <object class="wxMenuItem" expanded="true">
+          <object class="wxMenuItem" expanded="false">
             <property name="bitmap"></property>
             <property name="checked">0</property>
             <property name="enabled">1</property>
@@ -1861,7 +1965,7 @@
             <property name="unchecked_bitmap"></property>
             <event name="OnMenuSelection">OnGizmosText</event>
           </object>
-          <object class="wxMenuItem" expanded="true">
+          <object class="wxMenuItem" expanded="false">
             <property name="bitmap"></property>
             <property name="checked">0</property>
             <property name="enabled">1</property>
@@ -1875,7 +1979,7 @@
             <property name="unchecked_bitmap"></property>
             <event name="OnMenuSelection">OnGizmosPhysics</event>
           </object>
-          <object class="wxMenuItem" expanded="true">
+          <object class="wxMenuItem" expanded="false">
             <property name="bitmap"></property>
             <property name="checked">0</property>
             <property name="enabled">1</property>
