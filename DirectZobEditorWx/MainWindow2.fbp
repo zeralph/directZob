@@ -477,7 +477,7 @@
                       <property name="window_name"></property>
                       <property name="window_style"></property>
                       <object class="splitteritem" expanded="true">
-                        <object class="wxPanel" expanded="false">
+                        <object class="wxPanel" expanded="true">
                           <property name="BottomDockable">1</property>
                           <property name="LeftDockable">1</property>
                           <property name="RightDockable">1</property>
@@ -529,16 +529,16 @@
                           <property name="window_extra_style"></property>
                           <property name="window_name"></property>
                           <property name="window_style">wxTAB_TRAVERSAL</property>
-                          <object class="wxBoxSizer" expanded="false">
+                          <object class="wxBoxSizer" expanded="true">
                             <property name="minimum_size">150,-1</property>
                             <property name="name">bSizer5</property>
                             <property name="orient">wxHORIZONTAL</property>
                             <property name="permission">none</property>
-                            <object class="sizeritem" expanded="false">
+                            <object class="sizeritem" expanded="true">
                               <property name="border">5</property>
                               <property name="flag">wxEXPAND</property>
                               <property name="proportion">1</property>
-                              <object class="wxSplitterWindow" expanded="false">
+                              <object class="wxSplitterWindow" expanded="true">
                                 <property name="BottomDockable">1</property>
                                 <property name="LeftDockable">1</property>
                                 <property name="RightDockable">1</property>
@@ -1402,8 +1402,8 @@
                                     </object>
                                   </object>
                                 </object>
-                                <object class="splitteritem" expanded="false">
-                                  <object class="wxPanel" expanded="false">
+                                <object class="splitteritem" expanded="true">
+                                  <object class="wxPanel" expanded="true">
                                     <property name="BottomDockable">1</property>
                                     <property name="LeftDockable">1</property>
                                     <property name="RightDockable">1</property>
@@ -1534,7 +1534,7 @@
                         </object>
                       </object>
                       <object class="splitteritem" expanded="true">
-                        <object class="wxPanel" expanded="false">
+                        <object class="wxPanel" expanded="true">
                           <property name="BottomDockable">1</property>
                           <property name="LeftDockable">1</property>
                           <property name="RightDockable">1</property>
@@ -1544,7 +1544,7 @@
                           <property name="aui_position">0</property>
                           <property name="aui_row">0</property>
                           <property name="best_size"></property>
-                          <property name="bg">wxSYS_COLOUR_MENU</property>
+                          <property name="bg">wxSYS_COLOUR_WINDOW</property>
                           <property name="caption"></property>
                           <property name="caption_visible">1</property>
                           <property name="center_pane">0</property>
@@ -1605,14 +1605,14 @@
                                 <property name="aui_position">0</property>
                                 <property name="aui_row">0</property>
                                 <property name="best_size"></property>
-                                <property name="bg">wxSYS_COLOUR_MENU</property>
+                                <property name="bg">wxSYS_COLOUR_WINDOW</property>
                                 <property name="bitmapsize"></property>
                                 <property name="caption"></property>
                                 <property name="caption_visible">1</property>
                                 <property name="center_pane">0</property>
                                 <property name="close_button">1</property>
                                 <property name="context_help"></property>
-                                <property name="context_menu">1</property>
+                                <property name="context_menu">0</property>
                                 <property name="default_pane">0</property>
                                 <property name="dock">Dock</property>
                                 <property name="dock_fixed">0</property>
@@ -1651,8 +1651,8 @@
                                 <property name="window_style"></property>
                                 <object class="notebookpage" expanded="true">
                                   <property name="bitmap"></property>
-                                  <property name="label">Object</property>
-                                  <property name="select">1</property>
+                                  <property name="label">a page</property>
+                                  <property name="select">0</property>
                                   <object class="wxPanel" expanded="true">
                                     <property name="BottomDockable">1</property>
                                     <property name="LeftDockable">1</property>
@@ -1663,7 +1663,7 @@
                                     <property name="aui_position">0</property>
                                     <property name="aui_row">0</property>
                                     <property name="best_size"></property>
-                                    <property name="bg">wxSYS_COLOUR_MENU</property>
+                                    <property name="bg"></property>
                                     <property name="caption"></property>
                                     <property name="caption_visible">1</property>
                                     <property name="center_pane">0</property>
@@ -1709,7 +1709,7 @@
                                 </object>
                                 <object class="notebookpage" expanded="true">
                                   <property name="bitmap"></property>
-                                  <property name="label">Engine</property>
+                                  <property name="label">a page</property>
                                   <property name="select">0</property>
                                   <object class="wxPanel" expanded="true">
                                     <property name="BottomDockable">1</property>
@@ -1721,7 +1721,7 @@
                                     <property name="aui_position">0</property>
                                     <property name="aui_row">0</property>
                                     <property name="best_size"></property>
-                                    <property name="bg">wxSYS_COLOUR_MENU</property>
+                                    <property name="bg"></property>
                                     <property name="caption"></property>
                                     <property name="caption_visible">1</property>
                                     <property name="center_pane">0</property>
@@ -1751,7 +1751,7 @@
                                     <property name="pane_border">1</property>
                                     <property name="pane_position"></property>
                                     <property name="pane_size"></property>
-                                    <property name="permission">public</property>
+                                    <property name="permission">protected</property>
                                     <property name="pin_button">1</property>
                                     <property name="pos"></property>
                                     <property name="resize">Resizable</property>
@@ -1767,7 +1767,7 @@
                                 </object>
                                 <object class="notebookpage" expanded="true">
                                   <property name="bitmap"></property>
-                                  <property name="label">Scene</property>
+                                  <property name="label">a page</property>
                                   <property name="select">0</property>
                                   <object class="wxPanel" expanded="true">
                                     <property name="BottomDockable">1</property>
@@ -1809,7 +1809,7 @@
                                     <property name="pane_border">1</property>
                                     <property name="pane_position"></property>
                                     <property name="pane_size"></property>
-                                    <property name="permission">public</property>
+                                    <property name="permission">protected</property>
                                     <property name="pin_button">1</property>
                                     <property name="pos"></property>
                                     <property name="resize">Resizable</property>

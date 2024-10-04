@@ -64,6 +64,8 @@ class MainWindow : public wxFrame
 		wxPanel* m_panelRight;
 		wxNotebook* m_notebookInspector;
 		wxPanel* m_panelInspector;
+		wxPanel* m_panelEngine;
+		wxPanel* m_panelScene;
 		wxMenuBar* m_menubar1;
 		wxMenu* m_menu1;
 		wxMenu* m_gizmosMenu;
@@ -110,8 +112,6 @@ class MainWindow : public wxFrame
 		wxTreeCtrl* m_treeNode;
 		wxPanel* m_renderPanel;
 		wxTextCtrl* m_log;
-		wxPanel* m_panelEngine;
-		wxPanel* m_panelScene;
 
 		MainWindow( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 1397,762 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
 

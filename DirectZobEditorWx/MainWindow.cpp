@@ -149,7 +149,7 @@ MainWindow::MainWindow( wxWindow* parent, wxWindowID id, const wxString& title, 
 	m_panel3->Layout();
 	bSizer5->Fit( m_panel3 );
 	m_panelRight = new wxPanel( m_splitter3, wxID_ANY, wxDefaultPosition, wxSize( 150,-1 ), wxTAB_TRAVERSAL );
-	m_panelRight->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_MENU ) );
+	m_panelRight->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
 	m_panelRight->SetMinSize( wxSize( 350,-1 ) );
 	m_panelRight->SetMaxSize( wxSize( 350,-1 ) );
 
@@ -157,19 +157,15 @@ MainWindow::MainWindow( wxWindow* parent, wxWindowID id, const wxString& title, 
 	bSizer7 = new wxBoxSizer( wxVERTICAL );
 
 	m_notebookInspector = new wxNotebook( m_panelRight, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	m_notebookInspector->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_MENU ) );
+	m_notebookInspector->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
 	m_notebookInspector->SetMinSize( wxSize( 350,-1 ) );
 
 	m_panelInspector = new wxPanel( m_notebookInspector, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	m_panelInspector->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_MENU ) );
-
-	m_notebookInspector->AddPage( m_panelInspector, _("Object"), true );
+	m_notebookInspector->AddPage( m_panelInspector, _("a page"), false );
 	m_panelEngine = new wxPanel( m_notebookInspector, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	m_panelEngine->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_MENU ) );
-
-	m_notebookInspector->AddPage( m_panelEngine, _("Engine"), false );
+	m_notebookInspector->AddPage( m_panelEngine, _("a page"), false );
 	m_panelScene = new wxPanel( m_notebookInspector, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	m_notebookInspector->AddPage( m_panelScene, _("Scene"), false );
+	m_notebookInspector->AddPage( m_panelScene, _("a page"), false );
 
 	bSizer7->Add( m_notebookInspector, 1, wxEXPAND | wxALL, 0 );
 
