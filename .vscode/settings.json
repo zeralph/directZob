@@ -73,7 +73,19 @@
         "memory_resource": "cpp",
         "numeric": "cpp",
         "optional": "cpp",
-        "random": "cpp"
+        "random": "cpp",
+        "__node_handle": "cpp",
+        "__verbose_abort": "cpp",
+        "charconv": "cpp",
+        "execution": "cpp",
+        "forward_list": "cpp",
+        "list": "cpp",
+        "print": "cpp",
+        "queue": "cpp",
+        "regex": "cpp",
+        "stack": "cpp",
+        "unordered_set": "cpp",
+        "variant": "cpp"
     },
     "files.watcherExclude": 
     {

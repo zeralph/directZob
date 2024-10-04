@@ -241,10 +241,10 @@ void MainWindowInterface::RefreshCamerasList()
     m_singleton->m_cameraSelector->Clear();
     const std::vector<Camera*>* cameras = DirectZob::GetInstance()->GetCameraManager()->GetCameras();
     Camera* curCam = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
-    std::vector<Camera*>::const_iterator iter = cameras->begin();
     int i = 0;
     int j = 0;
-    for (iter; iter != cameras->end(); iter++)
+    std::vector<Camera*>::const_iterator iter;
+    for (iter = cameras->begin(); iter != cameras->end(); iter++)
     {
         m_singleton->m_cameraSelector->Append((*iter)->GetName());
         if ((*iter)->GetName() == "EditorCamera")

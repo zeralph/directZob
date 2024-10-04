@@ -841,7 +841,7 @@ void Mesh::QueueForDrawing(ZobObject* z, const ZobMatrix4x4& modelMatrix, const 
 {
 	if (m_visible && m_bDrawn)
 	{
-		memcpy(m_meshVertices, m_verticesTmp, sizeof(ZobVector3) * m_nbVertices);
+		memcpy((ZobVector3*)m_meshVertices, (ZobVector3*)m_verticesTmp, sizeof(ZobVector3) * m_nbVertices);
 		memcpy(m_triangleVerticesNormals, m_verticesNormalsTmp, sizeof(ZobVector3) * m_nbNormals);
 		memcpy(m_trianglesNormals, m_trianglesNormalsTmp, sizeof(ZobVector3) * m_nbFaces);
 		memcpy(m_triangleProjectedVertices, m_projectedVerticesTmp, sizeof(ZobVector3) * m_nbVertices);

@@ -17,7 +17,7 @@ class ZobComponent : public ZobEntity
 public:
 
 	virtual ~ZobComponent() {};
-	virtual void											Init(DirectZobType::sceneLoadingCallback cb) = 0;
+	virtual void											Init(DirectZobType::sceneLoadingCallback cb) override = 0;
 	virtual void											PreUpdate(float dt)=0;
 	virtual void											PostUpdate() = 0;
 	virtual void											EditorUpdate() = 0;

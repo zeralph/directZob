@@ -81,14 +81,32 @@
                                 'CLANG_CXX_LANGUAGE_STANDARD': 'c++17',
                                 'GCC_ENABLE_CPP_RTTI': 'YES',
                                 'ARCHS': ['arm64'],
-                                'OTHER_CPLUSPLUSFLAGS' : [ '`/Users/lucasrichalland/Documents/wxWidgets-3.2.6/build/wx-config --cxxflags`' ],
-                                'OTHER_CFLAGS' : [ '`/Users/lucasrichalland/Documents/wxWidgets-3.2.6/build/wx-config --cxxflags`' ],
+                                'OTHER_CPLUSPLUSFLAGS' : [ 
+                                    '`/Users/lucasrichalland/Documents/wxWidgets-3.2.6/build/wx-config --cxxflags`' 
+                                    '-Wno-pragma-pack',
+                                    #'-Wpotentially-evaluated-expression',
+                                    '-Wno-defaulted-function-deleted',
+                                    '-Wno-writable-strings',
+                                    '-Wno-dynamic-class-memaccess',
+                                ],
+                                'OTHER_CFLAGS' : [ 
+                                    '`/Users/lucasrichalland/Documents/wxWidgets-3.2.6/build/wx-config --cxxflags`' 
+                                    '-Wno-pragma-pack',
+                                    #'-Wpotentially-evaluated-expression',
+                                    '-Wno-defaulted-function-deleted',
+                                    '-Wno-writable-strings',
+                                    '-Wno-dynamic-class-memaccess',
+                                ],
                             },
                             'cflags': [
                                 '-Wno-pragma-pack',
+                                #'-Wpotentially-evaluated-expression',
+                                '-Wnodefaulted-function-deleted',
                             ],
                             'cxxflags': [
                                 '-Wno-pragma-pack',
+                                #'-Wpotentially-evaluated-expression',
+                                '-Wdefaulted-function-deleted',
                             ],
                         },
                         'OS=="linux"',
@@ -151,8 +169,22 @@
                                 'GCC_OPTIMIZATION_LEVEL': 's',
                                 'GCC_FAST_MATH': 'YES',
                                 'CLANG_X86_VECTOR_INSTRUCTIONS': 'avx2',
-                                'OTHER_CPLUSPLUSFLAGS' : [ '`/Users/lucasrichalland/Documents/wxWidgets-3.2.6/build/wx-config --cxxflags`' ],
-                                'OTHER_CFLAGS' : [ '`/Users/lucasrichalland/Documents/wxWidgets-3.2.6/build/wx-config --cxxflags`' ],
+                                'OTHER_CPLUSPLUSFLAGS' : [ 
+                                    '`/Users/lucasrichalland/Documents/wxWidgets-3.2.6/build/wx-config --cxxflags`' 
+                                    '-Wno-pragma-pack',
+                                    #'-Wpotentially-evaluated-expression',
+                                    '-Wno-defaulted-function-deleted',
+                                    '-Wno-writable-strings',
+                                    '-Wno-dynamic-class-memaccess',
+                                ],
+                                'OTHER_CFLAGS' : [ 
+                                    '`/Users/lucasrichalland/Documents/wxWidgets-3.2.6/build/wx-config --cxxflags`' 
+                                    '-Wno-pragma-pack',
+                                    #'-Wpotentially-evaluated-expression',
+                                    '-Wno-defaulted-function-deleted',
+                                    '-Wno-writable-strings',
+                                    '-Wno-dynamic-class-memaccess',
+                                    ],
                             },
                             'cflags': [
                                 '-Wno-pragma-pack',

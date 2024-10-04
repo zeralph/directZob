@@ -10,7 +10,7 @@ public:
 
 
     static const char*          eCameraTypeStr[Camera::eCameraType::__eCameraType_MAX__];
-    virtual void                Init(DirectZobType::sceneLoadingCallback cb);
+    virtual void                Init(DirectZobType::sceneLoadingCallback cb) override;
     virtual void                Update(float dt);
     virtual void                PreUpdate(float dt);
     virtual void                Rotate(float x, float y, float z);

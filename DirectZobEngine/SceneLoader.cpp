@@ -59,7 +59,7 @@ void SceneLoader::LoadPack(std::string &path, std::string &file)
 			int fileLength = PHYSFS_fileLength(myfile);
 			char* myBuf;
 			myBuf = new char[fileLength + 1];
-			int length_read = PHYSFS_read(myfile, myBuf, 1, PHYSFS_fileLength(myfile));
+			int length_read = PHYSFS_readBytes(myfile, myBuf, PHYSFS_fileLength(myfile));
 			myBuf[fileLength] = '\0';
 			m_loadNextScene = true;
 			m_nextScenePath = "";
@@ -118,7 +118,7 @@ void SceneLoader::LoadZobObject(std::string& fullPath, ZobObject* parent /* = NU
 	{
 		ZobObjectManager* zobObjectManager = DirectZob::GetInstance()->GetZobObjectManager();
 		TiXmlElement* n = doc.FirstChildElement(XML_ELEMENT_ZOBOBJECT);
-		LoadZobObject(n, parent, &fullPath);
+		LoadZobObject(n, parent, false);
 	}
 }
 
@@ -239,7 +239,7 @@ void SceneLoader::LoadSceneInternalFromArchive()
 		int fileLngth = PHYSFS_fileLength(myfile);
 		char* myBuf;
 		myBuf = new char[fileLngth + 1];
-		int length_read = PHYSFS_read(myfile, myBuf, 1, PHYSFS_fileLength(myfile));
+		int length_read = PHYSFS_readBytes(myfile, myBuf, PHYSFS_fileLength(myfile));
 		myBuf[fileLngth] = '\0';
 		PHYSFS_close(myfile);
 		TiXmlDocument doc("Scene");
@@ -329,7 +329,7 @@ void SceneLoader::ParseXml(TiXmlDocument* doc)
 				}
 				else
 				{
-					LoadZobObject(e, NULL, NULL);
+					LoadZobObject(e, NULL, false);
 				}
 			}
 			DirectZob::LogInfo("Scene loaded");

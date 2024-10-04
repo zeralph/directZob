@@ -34,7 +34,7 @@ public:
 #elif WINDOWS
 		t = _tempnam(NULL, "dzob");
 #elif MACOS
-		t = tempnam(NULL, "dzob");
+		mkstemp(t);
 #endif	
 		return std::string(t).append(extension);
 	}

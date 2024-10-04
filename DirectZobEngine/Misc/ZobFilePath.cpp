@@ -133,7 +133,7 @@ void ZobFilePath::LoadData()
 			{
 				m_bufLen = PHYSFS_fileLength(m_phyFile);
 				m_buf = (char*)malloc(sizeof(char) * (m_bufLen + 1));
-				int length_read = PHYSFS_read(m_phyFile, m_buf, sizeof(char), PHYSFS_fileLength(m_phyFile));
+				int length_read = PHYSFS_readBytes(m_phyFile, m_buf, PHYSFS_fileLength(m_phyFile));
 				m_buf[m_bufLen] = '\0';
 				PHYSFS_close(m_phyFile);
 			}

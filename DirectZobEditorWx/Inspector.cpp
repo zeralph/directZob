@@ -6,7 +6,7 @@
 #include <wx/checkbox.h>
 #include "MainWindowInterface.h"
 #include <string>
-#include "../DirectZobEngine/ZobObjects/ZobObject.h";
+#include "../DirectZobEngine/ZobObjects/ZobObject.h"
 
 wxSize Inspector::sLabelSize = wxSize(140, 20);
 wxSize Inspector::sFloatSize = wxSize(100, 20);
@@ -67,8 +67,8 @@ void Inspector::Set(ZobObject* z)
 	wxStaticBoxSizer* boxSizer = new wxStaticBoxSizer(new wxStaticBox(m_panel, wxID_ANY, _("Entity")), wxVERTICAL);
 	sizers.push_back(boxSizer);
 	AddVars(z->GetVariablesExposer(), sizers);
-	std::vector<ZobComponent*>::const_iterator iter = z->GetComponents()->begin();
-	for (iter; iter != z->GetComponents()->end(); iter++)
+	std::vector<ZobComponent*>::const_iterator iter;
+	for (iter = z->GetComponents()->begin(); iter != z->GetComponents()->end(); iter++)
 	{
 		const ZobComponent* zc = (*iter);
 		if (ZobEntity::GetType(zc->GetIdValue()) != ZobEntity::type_editor)

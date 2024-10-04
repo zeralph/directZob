@@ -31,7 +31,7 @@ public:
 	virtual ~ZobObject();
 
 	//Mechanics
-	virtual void						Init(DirectZobType::sceneLoadingCallback cb);
+	virtual void						Init(DirectZobType::sceneLoadingCallback cb) override;
 	virtual void						PreUpdate(float dt);
 	virtual void						UpdatePhysic(float dt);
 	virtual void						Update(float dt);
@@ -108,7 +108,8 @@ public:
 		std::vector<ZobComponent*>::const_iterator it = m_Components.begin();
 		while (it != m_Components.end())
 		{
-			bool b = typeid(T) == typeid(**it);
+			ZobComponent* ptr = (*it);
+			bool b = typeid(T) == typeid(*ptr);
 			if (b)
 			{
 				return static_cast<T*>(*it);
@@ -124,7 +125,8 @@ public:
 		std::vector<ZobComponent*>::const_iterator it = m_Components.begin();
 		while (it != m_Components.end())
 		{
-			bool b = typeid(T) == typeid(**it);
+			ZobComponent* ptr = (*it);
+			bool b = typeid(T) == typeid(*ptr);
 			if (b)
 			{
 				v.push_back(static_cast<T*>(*it));

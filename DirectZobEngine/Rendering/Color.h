@@ -69,7 +69,7 @@ class ZobColor
 		std::string ToString()
 		{
 			char str[64];
-			sprintf(str, "%i;%i;%i;%i", m_a, m_r, m_g, m_b);
+			snprintf(str, 64, "%i;%i;%i;%i", m_a, m_r, m_g, m_b);
 			std::string s = std::string(str);
 			return s;
 			//return std::to_string(x).append(";") + std::to_string(y).append(";") + std::to_string(z); 

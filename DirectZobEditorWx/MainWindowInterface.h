@@ -56,10 +56,10 @@ public:
     void                        OnPaint(wxPaintEvent& event);
     void                        OnTimer(wxTimerEvent& event);
     void                        OnIdle(wxIdleEvent& evt);
-    void                        OnGizmosGrid(wxCommandEvent& event);
-    void                        OnGizmosText(wxCommandEvent& event);
-    void                        OnGizmosPhysics(wxCommandEvent& event);
-    void                        OnGizmosObjects(wxCommandEvent& event);
+    void                        OnGizmosGrid(wxCommandEvent& event) override;
+    void                        OnGizmosText(wxCommandEvent& event) override;
+    void                        OnGizmosPhysics(wxCommandEvent& event) override;
+    void                        OnGizmosObjects(wxCommandEvent& event) override;
     
 //private:
     

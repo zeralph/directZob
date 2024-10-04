@@ -24,11 +24,11 @@ public:
 
 	inline void Copy(const ZobVector3* v)
 	{
-		memcpy(this, v, sizeof(ZobVector3));
-		//x = v->x;
-		//y = v->y;
-		//z = v->z;
-		//w = v->w;
+		//memcpy(this, v, sizeof(ZobVector3));
+		x = v->x;
+		y = v->y;
+		z = v->z;
+		w = v->w;
 	}
 
 	inline void Normalize() 

@@ -239,8 +239,8 @@ ZobEnumCtrl::ZobEnumCtrl(const ZobVariablesExposer::wrapperData* w, wxBoxSizer* 
 	m_c = new wxComboBox(m_panel, wxID_ANY, _("Combo!"), wxDefaultPosition, Inspector::sComboSize, 0, NULL, 0);
 	bs->Add(m_c, 0, wxALL, 1);
 	bs->Add(t, 0, wxALL, 1);
-	std::vector<std::string>::const_iterator iter = w->enumNames.begin();
-	for (iter; iter != w->enumNames.end(); iter++)
+	std::vector<std::string>::const_iterator iter;
+	for (iter = w->enumNames.begin(); iter != w->enumNames.end(); iter++)
 	{
 		m_c->Append((*iter));
 	}

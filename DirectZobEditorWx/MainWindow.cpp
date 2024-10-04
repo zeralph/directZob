@@ -22,7 +22,7 @@ MainWindow::MainWindow( wxWindow* parent, wxWindowID id, const wxString& title, 
 	m_splitter1->SetMinimumPaneSize( 150 );
 
 	m_panel1 = new wxPanel( m_splitter1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	m_panel1->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_INACTIVECAPTION ) );
+	//m_panel1->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_INACTIVECAPTION ) );
 	m_panel1->SetMinSize( wxSize( 150,-1 ) );
 	m_panel1->SetMaxSize( wxSize( 250,-1 ) );
 
@@ -92,7 +92,7 @@ MainWindow::MainWindow( wxWindow* parent, wxWindowID id, const wxString& title, 
 	bSizer6->Add( m_toolBar1, 0, wxEXPAND, 5 );
 
 	m_renderPanel = new wxPanel( m_panel7, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	m_renderPanel->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
+	//m_renderPanel->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
 
 	bSizer6->Add( m_renderPanel, 1, wxEXPAND | wxALL, 1 );
 
@@ -119,7 +119,7 @@ MainWindow::MainWindow( wxWindow* parent, wxWindowID id, const wxString& title, 
 	m_panel3->Layout();
 	bSizer5->Fit( m_panel3 );
 	m_panelRight = new wxPanel( m_splitter3, wxID_ANY, wxDefaultPosition, wxSize( 150,-1 ), wxTAB_TRAVERSAL );
-	m_panelRight->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_MENU ) );
+	//m_panelRight->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_MENU ) );
 	m_panelRight->SetMinSize( wxSize( 350,-1 ) );
 	m_panelRight->SetMaxSize( wxSize( 350,-1 ) );
 
@@ -127,15 +127,15 @@ MainWindow::MainWindow( wxWindow* parent, wxWindowID id, const wxString& title, 
 	bSizer7 = new wxBoxSizer( wxVERTICAL );
 
 	m_notebookInspector = new wxNotebook( m_panelRight, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	m_notebookInspector->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_MENU ) );
+	//m_notebookInspector->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_MENU ) );
 	m_notebookInspector->SetMinSize( wxSize( 350,-1 ) );
 
 	m_panelInspector = new wxPanel( m_notebookInspector, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	m_panelInspector->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_MENU ) );
+	//m_panelInspector->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_MENU ) );
 
 	m_notebookInspector->AddPage( m_panelInspector, _("Object"), true );
 	m_panelEngine = new wxPanel( m_notebookInspector, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	m_panelEngine->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_MENU ) );
+	//m_panelEngine->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_MENU ) );
 
 	m_notebookInspector->AddPage( m_panelEngine, _("Engine"), false );
 	m_panelScene = new wxPanel( m_notebookInspector, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );

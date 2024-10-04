@@ -44,7 +44,8 @@ public :
 		std::map<const zobId, ZobEntity*>::const_iterator it = m_entityMap.begin();
 		while (it != m_entityMap.end())
 		{
-			const char* t = typeid(*it->second).name();
+			ZobEntity* ze = it->second;
+			const char* t = typeid(ze).name();
 			if (!strcmp(t, type.c_str()))
 			{
 				v.push_back(it->second);
