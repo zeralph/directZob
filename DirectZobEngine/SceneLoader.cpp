@@ -122,7 +122,7 @@ void SceneLoader::LoadZobObject(std::string& fullPath, ZobObject* parent /* = NU
 	}
 }
 
-void SceneLoader::LoadZobObject(TiXmlElement* node, ZobObject* parent, bool bRegenerateGuid)
+ZobObject* SceneLoader::LoadZobObject(TiXmlElement* node, ZobObject* parent, bool bRegenerateGuid)
 {	
 	m_nbZobObjectLoaded++;
 	ZobObject* zob = NULL;
@@ -136,7 +136,7 @@ void SceneLoader::LoadZobObject(TiXmlElement* node, ZobObject* parent, bool bReg
 	if (!cid)
 	{
 		DirectZob::LogError("Cannot create ZobObject %s", cid);
-		return;
+		return NULL;
 	}
 	std::string id = cid;
 	zobId zid = ZobEntity::ZobIdFromString(id);
@@ -181,6 +181,7 @@ void SceneLoader::LoadZobObject(TiXmlElement* node, ZobObject* parent, bool bReg
 			LoadZobObject(e, zob, bRegenerateGuid);
 		}
 	}
+	return zob;
 }
 
 void SceneLoader::UnloadScene()
@@ -279,9 +280,9 @@ void SceneLoader::LoadAsset(ZobObject* parent, std::string& path, std::string& f
 	LoadAsset(parent, (TiXmlElement*)doc.FirstChild());
 }
 
-void SceneLoader::LoadAsset(ZobObject* parent, TiXmlElement* node)
+ZobObject* SceneLoader::LoadAsset(ZobObject* parent, TiXmlElement* node)
 {
-	LoadZobObject(node, parent, true);
+	return LoadZobObject(node, parent, true);
 }
 
 const std::string& SceneLoader::GetResourcePath() 

@@ -3,6 +3,7 @@
 #include "../DirectZobEngine/DirectZob.h"
 #include "../DirectZobEngine/Managers/LightManager.h"
 #include "../DirectZobEngine/Managers/CameraManager.h"
+#include "../DirectZobEngine/Managers/ZobObjectManager.h"
 #include "../DirectZobEngine/Misc/ZobGeometryHelper.h"
 #include "Inspector.h"
 
@@ -722,6 +723,50 @@ void ZobEditorManager::CreateCamera()
 	DirectZob::GetInstance()->GetCameraManager()->CreateCamera(Camera::eCamera_base, m_selectedObject);
 }
 
+void ZobEditorManager::LoadMesh(std::string& p, std::string& f)
+{
+	ZobObject* z = DirectZob::GetInstance()->GetZobObjectManager()->CreateZobObject(m_selectedObject);
+	ZobFilePath zfp = ZobFilePath(f, p, f, false);
+	z->LoadMesh(zfp, false);
+	m_selectedObject = z;
+}
+
+void ZobEditorManager::ShowHide()
+{
+	if (m_selectedObject)
+	{
+		m_selectedObject->SetVisible(!m_selectedObject->IsVisible());
+	}
+}
+void ZobEditorManager::LoadSprite(std::string& p, std::string& f)
+{
+
+}
+void ZobEditorManager::AddObject()
+{
+	m_selectedObject = DirectZob::GetInstance()->GetZobObjectManager()->CreateZobObject(m_selectedObject);
+}
+
+void ZobEditorManager::Duplicate()
+{
+	if (m_selectedObject)
+	{
+		ZobObject* parent = m_selectedObject->GetParent();
+		if (parent)
+		{
+			DirectZob::LogInfo("Duplicating %s under %s", m_selectedObject->GetName(), parent->GetName());
+			ZobObject* z =m_selectedObject->Duplicate();
+			if (z)
+			{
+				m_selectedObject = z;
+			}
+		}
+		else
+		{
+			DirectZob::LogError("cannot duplicate root node");
+		}
+	}
+}
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 
 

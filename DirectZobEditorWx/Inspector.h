@@ -26,12 +26,13 @@ private:
 	wxPanel* m_panel;
 	std::vector<ZobControl*> m_controls;
 public:
-	static wxSize sLabelSize;
-	static wxSize sFloatSize;
-	static wxSize sStringSize;
-	static wxSize sBoolSize;
-	static wxSize sColorSize;
-	static wxSize sComboSize;
-	static wxSize sCheckBoxSize;
+	bool			m_dirty;
+	static wxSize	sLabelSize;
+	static wxSize	sFloatSize;
+	static wxSize	sStringSize;
+	static wxSize	sBoolSize;
+	static wxSize	sColorSize;
+	static wxSize	sComboSize;
+	static wxSize	sCheckBoxSize;
 	//wxBoxSizer* m_boxSizer;
 };

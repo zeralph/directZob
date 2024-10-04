@@ -381,7 +381,7 @@ ZobMatrix4x4 ZobPhysicComponent::GetModelMatrix() const
 
 ZobMatrix4x4 ZobPhysicComponent::GetRotationMatrix() const
 {
-	Transform t = GetLocalTransform();
+	Transform t = GetWorldTransform();
 	t.setPosition(Vector3(0, 0, 0));
 	reactphysics3d::decimal mat[16];// = (reactphysics3d::decimal*)malloc(sizeof(decimal) * 16);
 	t.getOpenGLMatrix(mat);

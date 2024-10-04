@@ -40,7 +40,7 @@ public:
 	virtual void						QueueForDrawing(const Camera* camera,Engine* engine);
 	virtual void						DrawGizmos(const Camera* camera, Engine* engine);
 	virtual								TiXmlNode* SaveUnderNode(TiXmlNode* node);
-	void								Duplicate() override;
+	ZobObject*							Duplicate() override;
 	void								SaveAsAsset(std::string& file);
 	//
 	void								SaveTransform();

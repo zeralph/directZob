@@ -532,17 +532,8 @@ void MainWindowInterface::OnTreeRightClick(wxTreeEvent& event)
 
 void MainWindowInterface::OnMenuAddObject(wxCommandEvent& event)
 {
-    wxEventBlocker blocker(m_singleton->m_treeNode);
-    wxTreeItemId t = m_treeNode->GetSelection();
-    zobTreeItemData* data = static_cast<zobTreeItemData*>(m_treeNode->GetItemData(t));
-    if (data)
-    {
-        std::string id = data->zobIdStr;
-        zobId zid = ZobEntity::ZobIdFromString(id);
-        ZobObject* z = ZobEntity::GetEntity<ZobObject>(zid);
-        DirectZob::GetInstance()->GetZobObjectManager()->CreateZobObject(z);
-        RefreshObjectTree();
-    }
+    m_editor->AddObject();
+    RefreshObjectTree();
 }
 void MainWindowInterface::OnTreeMenuRemove(wxCommandEvent& event)
 {
@@ -577,25 +568,24 @@ void MainWindowInterface::OnTreeMenuZoom(wxCommandEvent& event)
 }
 void MainWindowInterface::OnTreeMenuDuplicate(wxCommandEvent& event)
 {
-    /*		ZobObject* parent = m_Instance->GetParent();
-		DirectZob::LogInfo("Duplicating %s under %s", m_Instance->GetName(), parent->GetName());
-		DirectZob::eDirectZobLogLevel level = DirectZob::GetLogLevel();
-		DirectZob::SetLogLevel(DirectZob::eDirectZobLogLevel_warning);
-		m_Instance->Duplicate();
-		return true;*/
+    m_editor->Duplicate();
+    RefreshObjectTree();
 }
 void MainWindowInterface::OnTreeMenuShowHide(wxCommandEvent& event)
 {
-/*		String^ guid = ((ZobControlTreeNode^)m_treeView->SelectedNode)->m_zobObjectGuid;
-		std::string id;
-		MarshalString(guid, id);
-		zobId zid = ZobEntity::ZobIdFromString(id);
-		ZobObject* z = ZobEntity::GetEntity<ZobObject>(zid);
-		z->SetVisible(!z->IsVisible());;*/
+    m_editor->ShowHide();
 }
 void MainWindowInterface::OnMenuAddMesh(wxCommandEvent& event)
 {
-
+    wxFileDialog openFileDialog(this, _("Mesh"), "", "", "obj files (*.obj)|*.obj|fbx files (*.fbx)|*.fbx", wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+    if (openFileDialog.ShowModal() == wxID_CANCEL)
+    {
+        return;
+    }
+    std::string p = std::string(openFileDialog.GetDirectory().mb_str());
+    std::string f = std::string(openFileDialog.GetFilename().mb_str());
+    m_editor->LoadMesh(p, f);
+    RefreshObjectTree();
 }
 void MainWindowInterface::OnMenuAddSprite(wxCommandEvent& event)
 {

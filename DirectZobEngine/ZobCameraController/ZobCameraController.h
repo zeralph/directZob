@@ -18,7 +18,7 @@ public:
     virtual void                Zoom(float f);
     virtual void                DrawGizmos(const Camera* camera, Engine* engine) const;
     virtual void                SetTarget(const ZobVector3* t);
-    void                        Duplicate() override;
+    ZobCameraController*        Duplicate() override;
     Camera::eCameraType         GetType() const { return m_cameraControllerType; }
     static Camera::eCameraType  TypeFromString(const char* typeStr);
     const char*                 GetTypeName() const { return ZobCameraController::eCameraTypeStr[m_cameraControllerType]; }

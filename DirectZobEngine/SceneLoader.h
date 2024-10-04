@@ -30,7 +30,7 @@ public:
 	static const int					GetNbZobObjectsInScene() { return m_nbZobObjectLoaded; }
 	static const bool					LoadFromArchive() { return m_loadFromArchive; }
 	static void							LoadAsset(ZobObject* parent, std::string& path, std::string& file);
-	static void							LoadAsset(ZobObject* parent, TiXmlElement* node);
+	static ZobObject*					LoadAsset(ZobObject* parent, TiXmlElement* node);
 private:
 	static void							ResetEngine();
 	static void							LoadSceneInternalFromArchive();
@@ -38,7 +38,7 @@ private:
 	static void							ParseXml(TiXmlDocument* doc);
 	static void							LoadMesh(TiXmlElement* node);
 	static void							CleanPath(std::string &path);
-	static void							LoadZobObject(TiXmlElement* node, ZobObject* parent, bool bRegenerateGuid);
+	static ZobObject*					LoadZobObject(TiXmlElement* node, ZobObject* parent, bool bRegenerateGuid);
 	static bool							SaveZobObjectRecusrive(TiXmlNode* node, ZobObject* z);
 	static std::string					m_path;
 	static std::string					m_file;

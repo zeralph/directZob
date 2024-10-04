@@ -128,7 +128,7 @@ public :
 	inline const std::string&						GetName() const { return m_name; }
 	inline const std::string&						GetClass() const { return m_class; }
 	inline void										SetName(const std::string& name) { m_name = name; }
-	virtual void									Duplicate() = 0;
+	virtual ZobEntity*								Duplicate() = 0;
 	std::string										ZobIdToString()
 	{
 		return std::to_string((ulong)m_id);

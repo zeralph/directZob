@@ -39,23 +39,22 @@ Inspector::Inspector(wxPanel* p)
 {
 	m_parentPanel = p;
 	m_panel = NULL;
+	m_dirty = true;
 	//m_panel = p;
 }
 
 void Inspector::Clear()
 {
-	/*
-	for (std::vector<ZobControl*>::iterator iter = m_controls.begin(); iter != m_controls.end(); iter++)
-	{
-		//delete (*iter);
-	}
+	m_dirty = true;
 	m_controls.clear();
-	m_panel->DestroyChildren();
-	*/
 }
 
 void Inspector::UpdateControls()
 {
+	if (m_dirty)
+	{
+		return;
+	}
 	for (std::vector<ZobControl*>::iterator iter = m_controls.begin(); iter != m_controls.end(); iter++)
 	{
 		ZobControl* zc = (*iter);
@@ -65,6 +64,7 @@ void Inspector::UpdateControls()
 
 void Inspector::Set(ZobObject* z)
 {
+	m_dirty = true;
 	if (m_panel)
 	{
 		m_controls.clear();
@@ -96,10 +96,12 @@ void Inspector::Set(ZobObject* z)
 	//m_panel->Update();
 	//m_panel->Refresh();
 	m_panel->Show();
+	m_dirty = false;
 }
 
 void Inspector::Set(ZobVariablesExposer* vars)
 {
+	m_dirty = true;
 	if (m_panel)
 	{
 		m_controls.clear();
@@ -214,6 +216,7 @@ void Inspector::AddVars(ZobVariablesExposer* vars, std::vector<wxStaticBoxSizer*
 			}
 		}
 	}
+	m_dirty = false;
 }
 
 Inspector::~Inspector()

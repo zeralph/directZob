@@ -93,7 +93,8 @@ void ZobCameraController::DrawGizmos(const Camera* camera, Engine* engine) const
     }
 }
 
-void ZobCameraController::Duplicate()
+ZobCameraController* ZobCameraController::Duplicate()
 {
     assert(false);
+    return NULL;
 }

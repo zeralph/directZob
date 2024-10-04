@@ -851,7 +851,7 @@ void ZobObject::ResetPhysic()
 	}
 }
 
-void ZobObject::Duplicate()
+ZobObject* ZobObject::Duplicate()
 {
 	TiXmlElement n = TiXmlElement("tmp_root");
 	
@@ -860,7 +860,9 @@ void ZobObject::Duplicate()
 	//doc.LinkEndChild(decl);
 	SaveRecusrive(&doc, this);
 	doc.SaveFile("D:\\text.xml");	
-	SceneLoader::LoadAsset(this->GetParent(), (TiXmlElement*)doc.FirstChild());
+	ZobObject* z = SceneLoader::LoadAsset(this->GetParent(), (TiXmlElement*)doc.FirstChild());
+	z->SetName(z->GetName() + "_duplicate");
+	return z;
 }
 
 void ZobObject::SaveAsAsset(std::string& file)

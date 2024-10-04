@@ -101,6 +101,11 @@ public:
 
 	void				CreateLight();
 	void				CreateCamera();
+	void				LoadMesh(std::string& p, std::string& f);
+	void				AddObject();
+	void				ShowHide();
+	void				LoadSprite(std::string& p, std::string& f);
+	void				Duplicate();
 
 private:
 
