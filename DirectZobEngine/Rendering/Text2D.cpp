@@ -64,7 +64,7 @@ void Text2D::Print(uint x, uint y, uint color, const char* fmt, ...)
 		size_t charsNeeded = vsnprintf(NULL, 0, fmt, argList);
 		va_end(argList);
 		va_start(argList, fmt);
-		vsprintf(m_buffer, fmt, argList);
+		vsnprintf(m_buffer, charsNeeded+1, fmt, argList);
 		va_end(argList);
 		for (size_t i = 0; i < charsNeeded; i++)
 		{

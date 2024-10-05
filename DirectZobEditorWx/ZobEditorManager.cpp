@@ -754,7 +754,7 @@ void ZobEditorManager::Duplicate()
 		ZobObject* parent = m_selectedObject->GetParent();
 		if (parent)
 		{
-			DirectZob::LogInfo("Duplicating %s under %s", m_selectedObject->GetName(), parent->GetName());
+			DirectZob::LogInfo("Duplicating %s under %s", m_selectedObject->GetName().c_str(), parent->GetName().c_str());
 			ZobObject* z =m_selectedObject->Duplicate();
 			if (z)
 			{

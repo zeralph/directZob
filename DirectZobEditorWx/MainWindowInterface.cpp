@@ -431,8 +431,11 @@ void MainWindowInterface::OnModificatorClick(wxCommandEvent& event)
 
 void MainWindowInterface::OnMouseWheel(wxMouseEvent& event)
 { 
-    float f = (float)event.m_wheelDelta / 40.0f * event.m_wheelRotation / abs(event.m_wheelRotation);
-    DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera()->Zoom(f);
+    if(event.m_wheelRotation != 0)
+    {
+        float f = (float)event.m_wheelDelta / 40.0f * event.m_wheelRotation / abs(event.m_wheelRotation);
+        DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera()->Zoom(f);
+    }
 }
 
 void MainWindowInterface::OnMouseDown(wxMouseEvent& event)
