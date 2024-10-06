@@ -49,6 +49,7 @@ public:
 	const bool							IsVisible() const { return m_visible; }
 	const long							GetSize() const { return m_size; }
 protected:
+										Mesh(std::string& name, tinygltf::Model& model, tinygltf::Mesh& mesh);
 #ifdef ENABLE_FBX_SUPPORT
 										Mesh(std::string& parentName, ZobFilePath* zfp, fbxsdk::FbxMesh* mesh);
 #endif
@@ -65,7 +66,6 @@ protected:
 	const long							ComputeSize() const;
 
 	void 								bindGlTFModelNodes(tinygltf::Model &model, tinygltf::Node &node);
-	void 								bindGlTFMesh(tinygltf::Model &model, tinygltf::Mesh &mesh);
 	std::vector<Mesh*> m_subMeshes;
 	uint m_nbVertices = 0;
 	uint m_nbUvs = 0;
@@ -88,7 +88,7 @@ protected:
 	ZobVector3* m_verticesData = NULL;
 
 	ZobVector3* m_triangleProjectedVertices = NULL;
-	ZobVector3* m_projectedVerticesTmp = NULL;
+	//ZobVector3* m_projectedVerticesTmp = NULL;
 
 	ZobVector3* m_triangleVerticesNormals = NULL;
 	ZobVector3* m_verticesNormalsData = NULL;

@@ -22,7 +22,7 @@ ZobSprite::ZobSprite(std::string& name):Mesh(name)
 	m_verticesData = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
 	m_verticesTmp = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
 	m_triangleProjectedVertices = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
-	m_projectedVerticesTmp = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
+	//m_projectedVerticesTmp = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
 	m_nbNormals = m_nbVertices;
 	m_triangleVerticesNormals = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbNormals);
 	m_verticesNormalsData = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbNormals);
@@ -144,7 +144,7 @@ ZobSprite::~ZobSprite()
 	free(m_trianglesNormalsTmp);
 	free(m_trianglesNormalsData);
 	free(m_triangleProjectedVertices);
-	free(m_projectedVerticesTmp);
+	//free(m_projectedVerticesTmp);
 	free(m_triangleUvs);
 	m_indices = NULL;
 	m_meshVertices = NULL;
@@ -157,7 +157,7 @@ ZobSprite::~ZobSprite()
 	m_trianglesNormalsTmp = NULL;
 	m_trianglesNormalsData = NULL;
 	m_triangleProjectedVertices = NULL;
-	m_projectedVerticesTmp = NULL;
+	//m_projectedVerticesTmp = NULL;
 	m_triangleUvs = NULL;
 	DirectZob::RemoveIndent();
 }

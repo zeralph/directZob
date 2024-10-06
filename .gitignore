@@ -20,6 +20,7 @@
 **/obj
 **/*_unittests.xml
 /.DS_Store
+/resources/gltf/**
 .DS_Store
 DirectZobEditor/bin
 DirectZobEditor/obj

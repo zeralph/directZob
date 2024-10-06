@@ -1,8 +1,0 @@
-Model Information:
-* title:	Renault
-* source:	https://sketchfab.com/3d-models/renault-0c372cc3b8e948ca8b9410f8c714092f
-* author:	Korolv (https://sketchfab.com/Korolv)
-
-Model License:
-* license type:	SKETCHFAB Standard (https://sketchfab.com/licenses)
-* requirements:	Under basic restrictions, use worldwide, on all types of media, commercially or not, and in all types of derivative works
