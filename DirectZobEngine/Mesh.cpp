@@ -588,17 +588,21 @@ void Mesh::bindGlTFModelNodes(tinygltf::Model &model, tinygltf::Node &node)
 
 void Mesh::bindGlTFMesh(tinygltf::Model &model, tinygltf::Mesh &mesh) 
 {
+	int f = model.bufferViews.size();
 	for (size_t i = 0; i < model.bufferViews.size(); ++i)
 	{
 		const tinygltf::BufferView& bufferView = model.bufferViews[i];
-		if (bufferView.target == 0) {  // TODO impl drawarrays
+		/*if (bufferView.target == 0) {  // TODO impl drawarrays
 			std::cout << "WARN: bufferView.target is zero" << std::endl;
 			continue;  // Unsupported bufferView.
-		}
+		}*/
 		const tinygltf::Buffer& buffer = model.buffers[bufferView.buffer];
-		for (size_t i = 0; i < mesh.primitives.size(); ++i) {
-			tinygltf::Primitive primitive = mesh.primitives[i];
-			for (auto& attrib : primitive.attributes) 
+		int s = mesh.primitives.size();
+		int primitiveIdx=0;
+//		for (size_t i = 0; i < mesh.primitives.size(); ++i) 
+		{
+			tinygltf::Primitive primitive = mesh.primitives[primitiveIdx];
+			//for (auto& attrib : primitive.attributes) 
 			{
 				const tinygltf::Accessor& accessorP = model.accessors[primitive.attributes["POSITION"]];
 				const tinygltf::Accessor& accessorN = model.accessors[primitive.attributes["NORMAL"]];
@@ -612,19 +616,84 @@ void Mesh::bindGlTFMesh(tinygltf::Model &model, tinygltf::Mesh &mesh)
 				const float* normals = reinterpret_cast<const float*>(&buffer.data[bufferViewN.byteOffset + accessorN.byteOffset]);
 				const float* uvs = reinterpret_cast<const float*>(&buffer.data[bufferViewUV.byteOffset + accessorUV.byteOffset]);
 				const int* indexes = reinterpret_cast<const int*>(&buffer.data[bufferViewI.byteOffset + accessorI.byteOffset]);
+				
+				m_visible = true;
+				m_nbVertices += accessorP.count;
+				m_nbFaces = 0;
+				
+				m_meshVertices = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
+				m_verticesData = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
+				m_verticesTmp = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
+
+				m_triangleColors = (ZobColor*)malloc(sizeof(ZobColor) * m_nbVertices);
+
+				m_triangleProjectedVertices = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
+				m_projectedVerticesTmp = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
+
+				m_nbNormals = m_nbVertices;
+				m_triangleVerticesNormals = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbNormals);
+				m_verticesNormalsData = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbNormals);
+				m_verticesNormalsTmp = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbNormals);
+
+				m_nbUvs = m_nbVertices;
+				m_triangleUvs = (ZobVector2*)malloc(sizeof(ZobVector2) * m_nbUvs);
+				
 				for (size_t i = 0; i < accessorP.count; ++i)
 				{
 					float x = positions[i * 3 + 0];
 					float y = positions[i * 3 + 1];
 					float z = positions[i * 3 + 2];
-					//DirectZob::LogInfo("-> %f, %f, %f", x, y, z);
+					m_meshVertices[i] = ZobVector3(x, y, z);
 				}
-				for (size_t i = 0; i < accessorI.count; ++i)
+				for (size_t i = 0; i < accessorUV.count; ++i)
 				{
-					int idx = indexes[i];
+					float u = uvs[i * 3 + 0];
+					float v = uvs[i * 3 + 1];
+					m_triangleUvs[i] = ZobVector2(u, v);
+				}
+				for (size_t i = 0; i < accessorN.count; ++i)
+				{
+					float x = normals[i * 3 + 0];
+					float y = normals[i * 3 + 1];
+					float z = normals[i * 3 + 2];
+					m_triangleVerticesNormals[i] = ZobVector3(x, y, z);
+				}
+				m_triangles.resize(0);
+				for (size_t i = 0; i < accessorI.count; i+=3)
+				{
+					int startIdx = indexes[i];
+					Triangle t;
+					t.verticeAIndex = startIdx;
+					t.verticeBIndex = startIdx + 1;
+					t.verticeCIndex = startIdx + 2;
+					t.va = &m_meshVertices[startIdx];
+					t.vb = &m_meshVertices[startIdx + 1];
+					t.vc = &m_meshVertices[startIdx + 2];
+					t.pa = &m_triangleProjectedVertices[startIdx];
+					t.pb = &m_triangleProjectedVertices[startIdx + 1];
+					t.pc = &m_triangleProjectedVertices[startIdx + 2];
+					t.na = &m_triangleVerticesNormals[startIdx];
+					t.nb = &m_triangleVerticesNormals[startIdx + 1];
+					t.nc = &m_triangleVerticesNormals[startIdx + 2];
+					t.ua = &m_triangleUvs[startIdx];
+					t.ub = &m_triangleUvs[startIdx + 1];
+					t.uc = &m_triangleUvs[startIdx + 2];
+					t.ca = &m_triangleColors[startIdx];
+					t.cb = &m_triangleColors[startIdx + 1];
+					t.cc = &m_triangleColors[startIdx + 2];
+					//t.material = material;
+					m_triangles.push_back(t);
+					m_nbFaces++;
 				}
 			}
-
+			memcpy(m_verticesData, m_meshVertices, sizeof(ZobVector3) * m_nbVertices);
+			memcpy(m_verticesTmp, m_meshVertices, sizeof(ZobVector3)* m_nbVertices);
+			memcpy(m_verticesNormalsData, m_triangleVerticesNormals, sizeof(ZobVector3) * m_nbNormals);
+			memcpy(m_verticesNormalsTmp, m_triangleVerticesNormals, sizeof(ZobVector3)* m_nbNormals);
+			memcpy(m_trianglesNormalsData, m_trianglesNormals, sizeof(ZobVector3) * m_nbFaces);
+			memcpy(m_trianglesNormalsTmp, m_trianglesNormals, sizeof(ZobVector3)* m_nbFaces);
+			m_minBoundingBox = ZobVector3(FLT_MAX, FLT_MAX, FLT_MAX);
+			m_maxBoundingBox = ZobVector3(-FLT_MAX, -FLT_MAX, -FLT_MAX);
 			if (model.textures.size() > 0) {
 				// fixme: Use material's baseColor
 				tinygltf::Texture& tex = model.textures[0];
