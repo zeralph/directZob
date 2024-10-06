@@ -27,6 +27,7 @@
 				'dependencies/reactphysics3d/include',
 				'dependencies/gainput/include',
 				'dependencies/physfs/include',
+                'dependencies/tinygltf/include',
 			],
 			'direct_dependent_settings': {
 				'include_dirs': [
@@ -212,6 +213,7 @@
 								'../dependencies/gainput/lib/macos/arm64/libgainputstatic.a',
 								'../dependencies/optick/lib/macos/arm64/libOptickCore.a',
 								'../dependencies/physfs/lib/macos/arm64/libphysfs.a',
+                                '../dependencies/tinygltf/lib/macos/arm64/libtinygltf.a',
 							],
 						},
 					},

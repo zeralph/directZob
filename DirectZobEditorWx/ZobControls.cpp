@@ -247,7 +247,7 @@ ZobEnumCtrl::ZobEnumCtrl(const ZobVariablesExposer::wrapperData* w, wxBoxSizer* 
 	bs->Add(m_c, 0, wxALL, 1);
 	bs->Add(t, 0, wxALL, 1);
 	b->Add(bs);
-	m_c->Connect(wxEVT_COMBOBOX, wxCommandEventHandler(ZobEnumCtrl::OnSelected), NULL, this);
+	m_c->Connect(wxEVT_CHOICE, wxCommandEventHandler(ZobEnumCtrl::OnSelected), NULL, this);
 }
 ZobEnumCtrl::~ZobEnumCtrl()
 {

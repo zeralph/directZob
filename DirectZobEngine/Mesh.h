@@ -15,6 +15,7 @@
 #ifdef ENABLE_FBX_SUPPORT
 #include <fbxsdk.h>
 #endif
+#include "../dependencies/tinygltf/include/tiny_gltf.h"
 class ZobObject;
 class Mesh
 {
@@ -54,6 +55,7 @@ protected:
 	void								SplitEntry(const std::string* s, std::vector<std::string>* v, const char delim) const;
 	void								CreateTriangles(const std::vector<std::string>* line, std::vector<Triangle>* t, size_t& tArrayIdx, const ZobMaterial* tex);
 	void								LoadOBJ(ZobFilePath* zfp);
+	void								LoadGlTF(ZobFilePath* zfp);
 #ifdef ENABLE_FBX_SUPPORT
 	void								LoadFbx(ZobFilePath* zfp);
 	void								FbxMultT(FbxNode* node, FbxVector4 &vector);
@@ -61,6 +63,9 @@ protected:
 	inline bool							RejectTriangle(const Triangle* t, const float znear, const float zfar, const float width, const float height);
 	void								ParseObjFaceData(const std::string* s, int &v, int &u, int &n, bool& hasUv, bool& hasNormals) const;
 	const long							ComputeSize() const;
+
+	void 								bindGlTFModelNodes(tinygltf::Model &model, tinygltf::Node &node);
+	void 								bindGlTFMesh(tinygltf::Model &model, tinygltf::Mesh &mesh);
 	std::vector<Mesh*> m_subMeshes;
 	uint m_nbVertices = 0;
 	uint m_nbUvs = 0;

@@ -191,7 +191,11 @@ Mesh::Mesh(ZobFilePath* zfp):Mesh(zfp->GetName())
 	if (fullPath.length())
 	{ 
 		{
-			if (fullPath.find(".obj") != -1 || fullPath.find(".OBJ") != -1)
+			if (fullPath.find(".gltf") != -1 || fullPath.find(".glb") != -1)
+			{
+				LoadGlTF(zfp);
+			}			
+			else if (fullPath.find(".obj") != -1 || fullPath.find(".OBJ") != -1)
 			{
 				LoadOBJ(zfp);
 			}
@@ -538,6 +542,53 @@ const long Mesh::ComputeSize() const
 		s += m_subMeshes[i]->ComputeSize();
 	}
 	return s;
+}
+
+void Mesh::LoadGlTF(ZobFilePath* zfp)
+{
+	tinygltf::Model model;
+	tinygltf::TinyGLTF loader;
+	std::string err;
+	std::string warn;
+
+	//LoadASCIIFromString
+	bool res = loader.LoadASCIIFromFile(&model, &err, &warn, zfp->GetFullPath());
+	if (!warn.empty()) {
+		DirectZob::LogWarning("GlTF warning : %s", warn.c_str());
+	}
+
+	if (!err.empty()) {
+		DirectZob::LogWarning("GlTF error : %s", err.c_str());
+	}
+
+	if (!res)
+		DirectZob::LogInfo("GlTF warning : %s", zfp->GetName().c_str());
+	else
+		DirectZob::LogInfo("GlTF warning : %s", zfp->GetName().c_str());
+
+  	const tinygltf::Scene &scene = model.scenes[model.defaultScene];
+	for (size_t i = 0; i < scene.nodes.size(); ++i) 
+	{
+		assert((scene.nodes[i] >= 0) && (scene.nodes[i] < model.nodes.size()));
+		bindGlTFModelNodes(model, model.nodes[scene.nodes[i]]);
+	}
+}
+
+void Mesh::bindGlTFModelNodes(tinygltf::Model &model, tinygltf::Node &node) 
+{
+  	if ((node.mesh >= 0) && (node.mesh < model.meshes.size())) 
+	{
+		bindGlTFMesh(model, model.meshes[node.mesh]);
+	}
+	for (size_t i = 0; i < node.children.size(); i++) {
+		assert((node.children[i] >= 0) && (node.children[i] < model.nodes.size()));
+		bindGlTFModelNodes(model, model.nodes[node.children[i]]);
+	}
+}
+
+void Mesh::bindGlTFMesh(tinygltf::Model &model, tinygltf::Mesh &mesh) 
+{
+
 }
 
 void Mesh::LoadOBJ(ZobFilePath* zfp)
