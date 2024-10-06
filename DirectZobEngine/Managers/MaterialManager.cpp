@@ -184,6 +184,33 @@ const ZobMaterial* MaterialManager::LoadFbxMaterial(const fbxsdk::FbxMesh* mesh,
 }
 #endif
 
+const ZobMaterial* MaterialManager::LoadGlTFMaterial(tinygltf::Model& model, int index)
+{
+	tinygltf::Material& m = model.materials[index];
+	const ZobMaterial* zm = GetMaterial(m.name);
+	if (zm)
+	{
+		return zm;
+	}
+	Texture* texture = NULL;
+	int texIdx = m.pbrMetallicRoughness.baseColorTexture.index;
+	if (texIdx >= 0)
+	{
+		tinygltf::Image& image = model.images[texIdx];
+		texture = new Texture();
+		texture->LoadFromGlTF(image);
+	}
+	ZobColor ambientColor = ZobColor(255, 255, 255, 255);
+	ZobColor diffuseColor = ZobColor(255, 255, 255, 255);
+	ZobColor specularColor = ZobColor(255, 255, 255, 255);
+	float specularExponent = 1.0f;
+	float transparency = 1.0f;
+	const std::string matName = m.name;
+	ZobMaterial* mat = new ZobMaterial(matName, &ambientColor, &diffuseColor, &specularColor, specularExponent, transparency, texture);
+	m_materials.push_back(mat);
+	return mat;
+}
+
 void MaterialManager::LoadOBJMaterials(ZobFilePath* zfp)
 {
 	std::string::size_type sz;

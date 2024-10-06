@@ -2,6 +2,7 @@
 #include "../Types.h"
 #include <string>
 #include <vector>
+#include "../../dependencies/tinygltf/include/tiny_gltf.h"
 
 class ZobFilePath;
 class Texture
@@ -11,6 +12,7 @@ public:
 	~Texture();
 	void Load(ZobFilePath* zfp);
 	void LoadFromData(std::string& name, int w, int h, float* data);
+	void LoadFromGlTF(tinygltf::Image& image);
 
 	inline const uint GetWidth() const { return m_width; }
 	inline const uint GetHeight() const { return m_height; }

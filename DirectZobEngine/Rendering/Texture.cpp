@@ -25,6 +25,27 @@ Texture::~Texture()
 	DirectZob::RemoveIndent();
 }
 
+void Texture::LoadFromGlTF(tinygltf::Image& image)
+{
+	m_name = image.name;
+	m_width = image.width;
+	m_height = image.height;
+	m_dataSize = m_width * m_height * 4;
+	m_data = (float*)malloc(sizeof(float) * m_dataSize);
+	for (int i = 0; i < m_dataSize; i += 4)
+	{
+		float r = (float)image.image[i] / 255.0f;
+		float g = (float)image.image[i + 1] / 255.0f;
+		float b = (float)image.image[i + 2] / 255.0f;
+		float a = (float)image.image[i + 3] / 255.0f;
+		m_data[i] = r;
+		m_data[i + 1] = g;
+		m_data[i + 2] = b;
+		m_data[i + 3] = a;
+	}
+	m_dataSize = m_width * m_height * 4;
+}
+
 void Texture::LoadFromData(std::string &name, int w, int h, float* data)
 {
 	m_name = name;

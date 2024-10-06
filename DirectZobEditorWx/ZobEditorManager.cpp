@@ -701,7 +701,7 @@ void ZobEditorManager::UpdateGizmoSelection(ZobObject* z)
 
 void ZobEditorManager::CreateLight()
 {
-	Light* l = DirectZob::GetInstance()->GetLightManager()->CreateLight(Light::eLightType_point);
+	Light* l = DirectZob::GetInstance()->GetLightManager()->CreateLight(Light::eLightType_directional);
 	Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
 	BufferData* bData = DirectZob::GetInstance()->GetEngine()->GetBufferData();
 	float fx = (float)m_mouseX;
@@ -716,6 +716,10 @@ void ZobEditorManager::CreateLight()
 		l->SetParent(m_selectedObject);
 	}
 	l->SetWorldPosition(ret.x, ret.y, ret.z);
+	ret.x -= 10.0f;
+	ret.y -= 50.0f;
+	ret.z -= 10.0f;
+	l->LookAt(&ret, false);
 }
 
 void ZobEditorManager::CreateCamera()

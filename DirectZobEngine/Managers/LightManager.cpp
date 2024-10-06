@@ -121,7 +121,7 @@ Light* LightManager::CreateLight(Light::eLightType type)
 	int l = m_lightIndex;
 	std::string name = std::string("Light_").append(std::to_string((l)));
 	ZobColor color = ZobColor(255, 252, 212, 64);
-	return CreateLight(name, type, ZobVector3(0, 10, 0), color, 5.0f, 100.0f, NULL);
+	return CreateLight(name, type, ZobVector3(0, 10, 0), color, 1.0f, 100.0f, NULL);
 }
 
 Light* LightManager::GetLight(const std::string& name) const

@@ -294,7 +294,8 @@ Mesh::Mesh(std::string& name, tinygltf::Model& model, tinygltf::Mesh& mesh)
 		m_verticesData = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
 		m_verticesTmp = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
 
-		m_triangleColors = (ZobColor*)malloc(sizeof(ZobColor) * m_nbVertices);
+		m_triangleColors = (ZobColor*)malloc(sizeof(ZobColor) * 1);
+		m_triangleColors[0] = ZobColor::White;
 
 		m_triangleProjectedVertices = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
 		//m_projectedVerticesTmp = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
@@ -321,7 +322,7 @@ Mesh::Mesh(std::string& name, tinygltf::Model& model, tinygltf::Mesh& mesh)
 		for (size_t i = 0; i < accessorT.count; ++i)
 		{
 			float u = uvs[i * 2 + 0];
-			float v = uvs[i * 2 + 1];
+			float v = 1.0f - uvs[i * 2 + 1];
 			m_triangleUvs[i] = ZobVector2(u, v);
 		}
 		for (size_t i = 0; i < accessorN.count; ++i)
@@ -331,6 +332,7 @@ Mesh::Mesh(std::string& name, tinygltf::Model& model, tinygltf::Mesh& mesh)
 			float z = normals[i * 3 + 2];
 			m_triangleVerticesNormals[i] = ZobVector3(x, y, z);
 		}
+		const ZobMaterial* zm = DirectZob::GetInstance()->GetMaterialManager()->LoadGlTFMaterial(model, primitive.material);
 		m_triangles.resize(0);
 		int curT = 0;
 		for (size_t i = 0; i < accessorI.count; i +=3)
@@ -354,10 +356,10 @@ Mesh::Mesh(std::string& name, tinygltf::Model& model, tinygltf::Mesh& mesh)
 			t.ua = &m_triangleUvs[a];
 			t.ub = &m_triangleUvs[b];
 			t.uc = &m_triangleUvs[c];
-			t.ca = &m_triangleColors[a];
-			t.cb = &m_triangleColors[b];
-			t.cc = &m_triangleColors[c];
-			//t.material = material;
+			t.ca = &m_triangleColors[0];
+			t.cb = &m_triangleColors[0];
+			t.cc = &m_triangleColors[0];
+			t.material = zm;
 
 			float nx = (t.na->x + t.nb->x + t.nc->x) / 3.0f;
 			float ny = (t.na->y + t.nb->y + t.nc->y) / 3.0f;

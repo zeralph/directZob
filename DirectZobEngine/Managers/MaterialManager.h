@@ -7,10 +7,12 @@
 #include <string>
 #include <vector>
 #include "../Misc/ZobFilePath.h"
+#include "../../dependencies/tinygltf/include/tiny_gltf.h"
 
 class Texture;
 class ZobMaterial;
 class ZobColor;
+class tinygltf::Material;
 class MaterialManager
 {
 public:
@@ -22,6 +24,7 @@ public:
 											float specularExponent, float transparency, ZobFilePath* zfp);
 	const ZobMaterial*			LoadMaterial(const std::string& name, const ZobColor* ambientColor, const ZobColor* diffuseColor, const ZobColor* specularColor,
 											float specularExponent, float transparency, Texture* texture);
+	const ZobMaterial*			LoadGlTFMaterial(tinygltf::Model& model, int index);
 	const ZobMaterial* 			GetMaterial(const std::string& name) const;
 	const int 					GetNbMaterials() const { return (int)m_materials.size(); }
 	const ZobMaterial* 			GetMaterial(const int i) const;
