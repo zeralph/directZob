@@ -588,7 +588,95 @@ void Mesh::bindGlTFModelNodes(tinygltf::Model &model, tinygltf::Node &node)
 
 void Mesh::bindGlTFMesh(tinygltf::Model &model, tinygltf::Mesh &mesh) 
 {
+	for (size_t i = 0; i < model.bufferViews.size(); ++i)
+	{
+		const tinygltf::BufferView& bufferView = model.bufferViews[i];
+		if (bufferView.target == 0) {  // TODO impl drawarrays
+			std::cout << "WARN: bufferView.target is zero" << std::endl;
+			continue;  // Unsupported bufferView.
+		}
+		const tinygltf::Buffer& buffer = model.buffers[bufferView.buffer];
+		for (size_t i = 0; i < mesh.primitives.size(); ++i) {
+			tinygltf::Primitive primitive = mesh.primitives[i];
+			for (auto& attrib : primitive.attributes) 
+			{
+				const tinygltf::Accessor& accessorP = model.accessors[primitive.attributes["POSITION"]];
+				const tinygltf::Accessor& accessorN = model.accessors[primitive.attributes["NORMAL"]];
+				const tinygltf::Accessor& accessorUV = model.accessors[primitive.attributes["TEXCOORD_0"]];
+				const tinygltf::Accessor& accessorI = model.accessors[primitive.indices];
+				const tinygltf::BufferView& bufferViewP = model.bufferViews[accessorP.bufferView];
+				const tinygltf::BufferView& bufferViewN = model.bufferViews[accessorN.bufferView];
+				const tinygltf::BufferView& bufferViewUV = model.bufferViews[accessorUV.bufferView];
+				const tinygltf::BufferView& bufferViewI = model.bufferViews[accessorI.bufferView];
+				const float* positions = reinterpret_cast<const float*>(&buffer.data[bufferViewP.byteOffset + accessorP.byteOffset]);
+				const float* normals = reinterpret_cast<const float*>(&buffer.data[bufferViewN.byteOffset + accessorN.byteOffset]);
+				const float* uvs = reinterpret_cast<const float*>(&buffer.data[bufferViewUV.byteOffset + accessorUV.byteOffset]);
+				const int* indexes = reinterpret_cast<const int*>(&buffer.data[bufferViewI.byteOffset + accessorI.byteOffset]);
+				for (size_t i = 0; i < accessorP.count; ++i)
+				{
+					float x = positions[i * 3 + 0];
+					float y = positions[i * 3 + 1];
+					float z = positions[i * 3 + 2];
+					//DirectZob::LogInfo("-> %f, %f, %f", x, y, z);
+				}
+				for (size_t i = 0; i < accessorI.count; ++i)
+				{
+					int idx = indexes[i];
+				}
+			}
 
+			if (model.textures.size() > 0) {
+				// fixme: Use material's baseColor
+				tinygltf::Texture& tex = model.textures[0];
+
+				if (tex.source > -1) {
+
+					/*
+					GLuint texid;
+					glGenTextures(1, &texid);
+
+					tinygltf::Image& image = model.images[tex.source];
+
+					glBindTexture(GL_TEXTURE_2D, texid);
+					glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+					glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+					glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+					GLenum format = GL_RGBA;
+
+					if (image.component == 1) {
+						format = GL_RED;
+					}
+					else if (image.component == 2) {
+						format = GL_RG;
+					}
+					else if (image.component == 3) {
+						format = GL_RGB;
+					}
+					else {
+						// ???
+					}
+
+					GLenum type = GL_UNSIGNED_BYTE;
+					if (image.bits == 8) {
+						// ok
+					}
+					else if (image.bits == 16) {
+						type = GL_UNSIGNED_SHORT;
+					}
+					else {
+						// ???
+					}
+
+					glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image.width, image.height, 0,
+						format, type, &image.image.at(0));
+						*/
+				}
+			}
+		}
+	}
 }
 
 void Mesh::LoadOBJ(ZobFilePath* zfp)

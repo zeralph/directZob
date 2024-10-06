@@ -171,6 +171,7 @@
 								'../dependencies/optick/lib/windows/OptickCore.lib',
 								'../dependencies/gainput/lib/windows/gainput.lib',
 								'../dependencies/physfs/lib/windows/physfs.lib',
+								'../dependencies/tinygltf/lib/windows/tinygltf.lib',
 								'user32.lib',
 								'gdi32.lib',
 							],
