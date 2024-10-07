@@ -5,7 +5,7 @@ using namespace std;
 
 std::string emptyStr = std::string("");
 
-ZobSprite::ZobSprite(std::string& name):Mesh(name)
+ZobSprite::ZobSprite(std::string& name, ZobComponentMesh* zm):Mesh(name, zm)
 {
 	DirectZob::LogInfo("Sprite %s Creation", m_name.c_str());
 	DirectZob::AddIndent();

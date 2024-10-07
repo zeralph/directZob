@@ -2,6 +2,7 @@
 #include "DirectZob.h"
 #include "SceneLoader.h"
 #include <float.h>
+#include "../DirectZobEngine/Components/ZobComponentFactory.h"
 #ifdef ENABLE_FBX_SUPPORT
 class CustomStreamClass : public FbxStream
 {
@@ -158,11 +159,12 @@ private:
 using namespace std;
 static ZobVector2 vec2zero = ZobVector2(0,0);
 static std::string emptyStr = std::string("");
-Mesh::Mesh(const std::string& name)
+Mesh::Mesh(const std::string& name, ZobComponent* zm)
 {	
 	DirectZob::LogInfo("Mesh %s Creation", m_name.c_str());
 	DirectZob::AddIndent();
 	m_subMeshes.clear();
+	m_parent = zm;
 	m_nbVertices = 0;
 	m_nbUvs = 0;
 	m_nbNormals = 0;
@@ -184,7 +186,7 @@ Mesh::Mesh(const std::string& name)
 	DirectZob::RemoveIndent();
 }
 
-Mesh::Mesh(ZobFilePath* zfp):Mesh(zfp->GetName())
+Mesh::Mesh(ZobFilePath* zfp, ZobComponent* zm):Mesh(zfp->GetName(), zm)
 {
 	DirectZob::AddIndent();
 	std::string fullPath = zfp->GetFullPath();
@@ -220,13 +222,14 @@ Mesh::Mesh(ZobFilePath* zfp):Mesh(zfp->GetName())
 	DirectZob::RemoveIndent();
 }
 
-Mesh::Mesh(Mesh* m)
+Mesh::Mesh(Mesh* m, ZobComponent* zm)
 {
-
+	m_parent = zm;
 }
-Mesh::Mesh(std::string& name, tinygltf::Model& model, tinygltf::Mesh& mesh)
+Mesh::Mesh(std::string& name, tinygltf::Model& model, tinygltf::Mesh& mesh, ZobComponent* zm)
 {
 	DirectZob::AddIndent();
+	m_parent = zm;
 	m_subMeshes.clear();
 	m_nbVertices = 0;
 	m_nbUvs = 0;
@@ -288,7 +291,9 @@ Mesh::Mesh(std::string& name, tinygltf::Model& model, tinygltf::Mesh& mesh)
 
 		m_visible = true;
 		m_nbVertices = accessorP.count;
+		m_nbNormals = accessorN.count;
 		m_nbFaces = accessorI.count / 3;
+		m_nbUvs = accessorT.count;
 
 		m_meshVertices = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
 		m_verticesData = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
@@ -300,7 +305,7 @@ Mesh::Mesh(std::string& name, tinygltf::Model& model, tinygltf::Mesh& mesh)
 		m_triangleProjectedVertices = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
 		//m_projectedVerticesTmp = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbVertices);
 
-		m_nbNormals = m_nbVertices;
+		
 		m_triangleVerticesNormals = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbNormals);
 		m_verticesNormalsData = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbNormals);
 		m_verticesNormalsTmp = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbNormals);
@@ -309,7 +314,7 @@ Mesh::Mesh(std::string& name, tinygltf::Model& model, tinygltf::Mesh& mesh)
 		m_trianglesNormalsData = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbFaces);
 		m_trianglesNormalsTmp = (ZobVector3*)malloc(sizeof(ZobVector3) * m_nbFaces);
 
-		m_nbUvs = m_nbVertices;
+		
 		m_triangleUvs = (ZobVector2*)malloc(sizeof(ZobVector2) * m_nbUvs);
 
 		for (size_t i = 0; i < accessorP.count; ++i)
@@ -787,8 +792,16 @@ void Mesh::bindGlTFModelNodes(tinygltf::Model &model, tinygltf::Node &node)
 	{
 		//if (m_subMeshes.size() == 0)
 		{
-			Mesh* m = new Mesh(node.name, model, model.meshes[node.mesh]);
-			m_subMeshes.push_back(m);
+			if (node.name == "Material2")
+			{
+				int g = 0;
+				g++;;
+			}
+			ZobObject* p = m_parent->GetZobObject();
+			ZobObject* z = new ZobObject(ZobEntity::type_scene, ZobEntity::subtype_Component, node.name, p);
+			ZobComponentMesh* zm = (ZobComponentMesh*)ZobComponentFactory::CreateComponent(z, "Mesh", false);
+			Mesh* m = new Mesh(node.name, model, model.meshes[node.mesh], zm);
+			zm->Set(m);
 		}
 	}
 	for (size_t i = 0; i < node.children.size(); i++) {

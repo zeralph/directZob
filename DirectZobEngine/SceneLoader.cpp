@@ -81,7 +81,7 @@ void SceneLoader::LoadScene(std::string& path, std::string& file, DirectZobType:
 	m_nextSceneName = file;
 	m_loadNextScene = true;
 }
-
+/*
 void SceneLoader::LoadMesh(TiXmlElement* node)
 {
 	std::string name = node->Attribute(XML_ATTR_NAME);
@@ -89,7 +89,7 @@ void SceneLoader::LoadMesh(TiXmlElement* node)
 	ZobFilePath zfp = ZobFilePath(name, m_path, file, false);
 	DirectZob::GetInstance()->GetMeshManager()->LoadMesh(&zfp);
 }
-
+*/
 void SceneLoader::LoadZobObject(std::string& path, std::string& file)
 {
 	if (m_path.size() == 0)

@@ -13,9 +13,9 @@ public:
 	MeshManager();
 	~MeshManager();
 
-	Mesh* LoadMesh(ZobFilePath* zfp);
+	Mesh* LoadMesh(ZobFilePath* zfp, ZobComponent* zm);
 	Mesh* GetMesh(const std::string& name) const;
-	Mesh* GetOrLoadMesh(ZobFilePath* zp);
+	Mesh* GetOrLoadMesh(ZobFilePath* zp, ZobComponent* zm);
 	const int GetNbMeshes() const { return (int)m_meshes.size(); }
 	std::string GetMeshList();
 	const Mesh* GetMesh(const int i) const;
@@ -23,7 +23,7 @@ public:
 #ifdef ENABLE_FBX_SUPPORT
 	FbxManager* GetFbxManager() { return m_lSdkManager; }
 #endif
-	ZobSprite* CreateSprite();
+	//ZobSprite* CreateSprite();
 private:
 	std::vector<Mesh*> m_meshes;
 #ifdef ENABLE_FBX_SUPPORT

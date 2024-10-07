@@ -37,7 +37,7 @@ void ZobComponentPhysicMesh::RemoveCollider()
 
 bool ZobComponentPhysicMesh::LoadMeshInternal()
 {
-	m_mesh = DirectZob::GetInstance()->GetMeshManager()->GetOrLoadMesh(&m_convexMeshPath);
+	m_mesh = DirectZob::GetInstance()->GetMeshManager()->GetOrLoadMesh(&m_convexMeshPath, this);
 	if (m_mesh)
 	{
 		PhysicsCommon* pc = DirectZob::GetInstance()->GetPhysicsEngine()->GetPhysicsCommon();

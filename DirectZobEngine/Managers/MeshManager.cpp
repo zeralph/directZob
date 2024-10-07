@@ -24,7 +24,7 @@ MeshManager::~MeshManager()
 	}
 	m_meshes.clear();
 }
-
+/*
 ZobSprite* MeshManager::CreateSprite()
 {
 	std::string n = std::string("Sprite");
@@ -32,14 +32,14 @@ ZobSprite* MeshManager::CreateSprite()
 	m_meshes.push_back(s);
 	return s;
 }
-
-Mesh* MeshManager::LoadMesh(ZobFilePath* zfp)
+*/
+Mesh* MeshManager::LoadMesh(ZobFilePath* zfp, ZobComponent* zm)
 {
     DirectZob::LogInfo("Loading mesh '%s' at '%s'", zfp->GetName().c_str(), zfp->GetFullPath().c_str());
 	Mesh* outMesh = NULL;
 	//if (GetMesh(name) == NULL)
 	{
-		outMesh = new Mesh(zfp);
+		outMesh = new Mesh(zfp, zm);
 		m_meshes.push_back(outMesh);
 	}
 	return outMesh;
@@ -66,12 +66,12 @@ Mesh* MeshManager::GetMesh(const std::string& name) const
 	return NULL;
 }
 
-Mesh* MeshManager::GetOrLoadMesh(ZobFilePath* zfp)
+Mesh* MeshManager::GetOrLoadMesh(ZobFilePath* zfp, ZobComponent* zm)
 {
 	Mesh* m = GetMesh(zfp->GetName());
 	if (!m)
 	{
-		m = LoadMesh(zfp);
+		m = LoadMesh(zfp, zm);
 	}
 	return m;
 }

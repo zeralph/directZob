@@ -167,7 +167,8 @@ void ZobComponentSprite::EditorUpdate()
 bool ZobComponentSprite::LoadMeshInternal()
 {
 	std::string s = std::string(m_texturePath.GetName());
-	m_sprite = new ZobSprite(s);
+	throw "todo";
+//	m_sprite = new ZobSprite(s, this);
 	if (m_sprite)
 	{
 		ZobColor color = &ZobColor::White;

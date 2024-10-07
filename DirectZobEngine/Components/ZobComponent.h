@@ -32,6 +32,7 @@ public:
 	ZobVariablesExposer*									GetVariablesExposer() { return m_varExposer; }
 	bool													IsEnabled() const { return m_enabled; }
 	void													Enable(bool b) { m_enabled = b; }
+	ZobObject*												GetZobObject() { return m_zobObject; }
 protected:
 	ZobComponent(ZobObject* zobObject, bool bEditorZobComponent);
 	ZobComponentFactory::eComponentType						m_componentType;

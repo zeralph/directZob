@@ -17,13 +17,14 @@
 #endif
 #include "../dependencies/tinygltf/include/tiny_gltf.h"
 class ZobObject;
+class ZobComponent;
 class Mesh
 {
 public:
 
-										Mesh(const std::string& name);
-										Mesh(Mesh* m);
-										Mesh(ZobFilePath* zfp);
+										Mesh(const std::string& name, ZobComponent* zm);
+										Mesh(Mesh* m, ZobComponent* zm);
+										Mesh(ZobFilePath* zfp, ZobComponent* zm);
 	virtual								~Mesh();
 
 	virtual void						Update(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Engine* engine, const Triangle::RenderOptions* options);
@@ -49,7 +50,7 @@ public:
 	const bool							IsVisible() const { return m_visible; }
 	const long							GetSize() const { return m_size; }
 protected:
-										Mesh(std::string& name, tinygltf::Model& model, tinygltf::Mesh& mesh);
+										Mesh(std::string& name, tinygltf::Model& model, tinygltf::Mesh& mesh, ZobComponent* zm);
 #ifdef ENABLE_FBX_SUPPORT
 										Mesh(std::string& parentName, ZobFilePath* zfp, fbxsdk::FbxMesh* mesh);
 #endif
@@ -66,6 +67,7 @@ protected:
 	const long							ComputeSize() const;
 
 	void 								bindGlTFModelNodes(tinygltf::Model &model, tinygltf::Node &node);
+	ZobComponent* m_parent;
 	std::vector<Mesh*> m_subMeshes;
 	uint m_nbVertices = 0;
 	uint m_nbUvs = 0;

@@ -36,7 +36,7 @@ private:
 	static void							LoadSceneInternalFromArchive();
 	static void							LoadSceneInternalFromFiles();
 	static void							ParseXml(TiXmlDocument* doc);
-	static void							LoadMesh(TiXmlElement* node);
+	//static void							LoadMesh(TiXmlElement* node);
 	static void							CleanPath(std::string &path);
 	static ZobObject*					LoadZobObject(TiXmlElement* node, ZobObject* parent, bool bRegenerateGuid);
 	static bool							SaveZobObjectRecusrive(TiXmlNode* node, ZobObject* z);

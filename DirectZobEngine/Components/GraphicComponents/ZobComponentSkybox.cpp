@@ -167,7 +167,8 @@ void ZobComponentSkybox::EditorUpdate()
 bool ZobComponentSkybox::LoadMeshInternal()
 {
 	std::string s = std::string(m_texturePath.GetName());
-	m_sprite = new ZobSprite(s);
+	throw "todo";
+	//m_sprite = new ZobSprite(s);
 	if (m_sprite)
 	{
 		ZobColor color = &ZobColor::White;
