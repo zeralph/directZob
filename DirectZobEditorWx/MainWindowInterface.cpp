@@ -376,7 +376,7 @@ void MainWindowInterface::AddLog(std::string& s)
     m_singleton->m_log->Newline();
     m_singleton->m_log->ScrollIntoView(m_singleton->m_log->GetCaretPosition(), WXK_PAGEDOWN);
     */
-   m_singleton->m_log->AppendText(s);
+//   m_singleton->m_log->AppendText(s);
    //m_singleton->m_log->AppendText("\n");
 }
 

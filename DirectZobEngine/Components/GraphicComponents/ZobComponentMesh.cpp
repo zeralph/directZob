@@ -72,11 +72,14 @@ void ZobComponentMesh::Set(ZobFilePath& zfp)
 
 void ZobComponentMesh::Set(Mesh* m) 
 { 
-	m_mesh = m;
-	m_meshPath = ZobFilePath(m_mesh->GetName(), "", "", false);
-	m_mesh->SetVisible(true);
-	m_meshNbTriangles = m_mesh->GetNbTriangles();
-	m_meshSize = m_mesh->GetSize();
+	if (m)
+	{
+		m_mesh = m;
+		m_meshPath = ZobFilePath(m_mesh->GetName(), "", "", false);
+		m_mesh->SetVisible(true);
+		m_meshNbTriangles = m_mesh->GetNbTriangles();
+		m_meshSize = m_mesh->GetSize();
+	}
 }
 
 void ZobComponentMesh::PreUpdate(float dt)

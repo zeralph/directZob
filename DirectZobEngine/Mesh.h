@@ -66,8 +66,8 @@ protected:
 	void								ParseObjFaceData(const std::string* s, int &v, int &u, int &n, bool& hasUv, bool& hasNormals) const;
 	const long							ComputeSize() const;
 
-	void 								bindGlTFModelNodes(tinygltf::Model &model, tinygltf::Node &node);
-	ZobComponent* m_parent;
+	void 								bindGlTFModelNodes(ZobObject*z, tinygltf::Model &model, tinygltf::Node &node);
+	ZobComponent* m_component;
 	std::vector<Mesh*> m_subMeshes;
 	uint m_nbVertices = 0;
 	uint m_nbUvs = 0;

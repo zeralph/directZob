@@ -164,7 +164,7 @@ Mesh::Mesh(const std::string& name, ZobComponent* zm)
 	DirectZob::LogInfo("Mesh %s Creation", m_name.c_str());
 	DirectZob::AddIndent();
 	m_subMeshes.clear();
-	m_parent = zm;
+	m_component = zm;
 	m_nbVertices = 0;
 	m_nbUvs = 0;
 	m_nbNormals = 0;
@@ -224,12 +224,12 @@ Mesh::Mesh(ZobFilePath* zfp, ZobComponent* zm):Mesh(zfp->GetName(), zm)
 
 Mesh::Mesh(Mesh* m, ZobComponent* zm)
 {
-	m_parent = zm;
+	m_component = zm;
 }
 Mesh::Mesh(std::string& name, tinygltf::Model& model, tinygltf::Mesh& mesh, ZobComponent* zm)
 {
 	DirectZob::AddIndent();
-	m_parent = zm;
+	m_component = zm;
 	m_subMeshes.clear();
 	m_nbVertices = 0;
 	m_nbUvs = 0;
@@ -782,31 +782,30 @@ void Mesh::LoadGlTF(ZobFilePath* zfp)
 	for (size_t i = 0; i < scene.nodes.size(); ++i) 
 	{
 		assert((scene.nodes[i] >= 0) && (scene.nodes[i] < model.nodes.size()));
-		bindGlTFModelNodes(model, model.nodes[scene.nodes[i]]);
+
+		bindGlTFModelNodes(m_component->GetZobObject(), model, model.nodes[scene.nodes[i]]);
 	}
 }
 
-void Mesh::bindGlTFModelNodes(tinygltf::Model &model, tinygltf::Node &node) 
+void Mesh::bindGlTFModelNodes(ZobObject* z, tinygltf::Model &model, tinygltf::Node &node) 
 {
+	ZobObject* nz = new ZobObject(ZobEntity::type_scene, ZobEntity::subtype_Component, node.name, z);
+	if (node.matrix.size())
+	{
+		float x = node.matrix[12];
+		float y = node.matrix[13];
+		float z = node.matrix[14];
+		nz->SetLocalPosition(x, y, z);
+	}
   	if ((node.mesh >= 0) && (node.mesh < model.meshes.size())) 
 	{
-		//if (m_subMeshes.size() == 0)
-		{
-			if (node.name == "Material2")
-			{
-				int g = 0;
-				g++;;
-			}
-			ZobObject* p = m_parent->GetZobObject();
-			ZobObject* z = new ZobObject(ZobEntity::type_scene, ZobEntity::subtype_Component, node.name, p);
-			ZobComponentMesh* zm = (ZobComponentMesh*)ZobComponentFactory::CreateComponent(z, "Mesh", false);
-			Mesh* m = new Mesh(node.name, model, model.meshes[node.mesh], zm);
-			zm->Set(m);
-		}
+		ZobComponentMesh* zm = (ZobComponentMesh*)ZobComponentFactory::CreateComponent(nz, "Mesh", false);
+		Mesh* m = new Mesh(node.name, model, model.meshes[node.mesh], zm);
+		zm->Set(m);
 	}
 	for (size_t i = 0; i < node.children.size(); i++) {
 		assert((node.children[i] >= 0) && (node.children[i] < model.nodes.size()));
-		bindGlTFModelNodes(model, model.nodes[node.children[i]]);
+		bindGlTFModelNodes(nz, model, model.nodes[node.children[i]]);
 	}
 }
 
