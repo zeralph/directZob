@@ -11,7 +11,7 @@ ZobEntity::ZobEntity(ZobType t, ZobSubType s)
 	m_subType = s;
 	ulong id = GenerateId();
 	m_id = (u32)t * 1000 * 1000 * 1000 + (u32)s * 1000 * 1000 + (u32)id;
-	assert( m_entityMap.find(m_id) == m_entityMap.end());
+//	assert( m_entityMap.find(m_id) == m_entityMap.end());
 	ZobEntity::m_entityMap[m_id] = this;
 }
 

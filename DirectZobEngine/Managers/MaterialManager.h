@@ -12,7 +12,7 @@
 class Texture;
 class ZobMaterial;
 class ZobColor;
-class tinygltf::Material;
+//class tinygltf::Material;
 class MaterialManager
 {
 public:

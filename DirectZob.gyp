@@ -351,6 +351,10 @@
 				'DirectZobEditorWx/Inspector.cpp',
                 'DirectZobEditorWx/ZobControls.h',
 				'DirectZobEditorWx/ZobControls.cpp',
+                'DirectZobEditorWx/Dialogs.h',
+				'DirectZobEditorWx/Dialogs.cpp',
+                'DirectZobEditorWx/DialogsInterface.h',
+				'DirectZobEditorWx/DialogsInterface.cpp',
 			],
 			'conditions': [
 				[

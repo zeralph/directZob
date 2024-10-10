@@ -833,7 +833,8 @@ void ZobEditorManager::CreateCamera()
 
 void ZobEditorManager::LoadMesh(std::string& p, std::string& f)
 {
-	ZobObject* z = DirectZob::GetInstance()->GetZobObjectManager()->CreateZobObject(m_selectedObject, std::string(""));
+	std::string name = std::string("");
+	ZobObject* z = DirectZob::GetInstance()->GetZobObjectManager()->CreateZobObject(m_selectedObject, name);
 	ZobFilePath zfp = ZobFilePath(f, p, f, false);
 	z->LoadMesh(zfp, false);
 	m_selectedObject = z;
@@ -843,7 +844,8 @@ void ZobEditorManager::ZoomToSelected()
 {
 	if (m_selectedObject)
 	{
-		Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCamera(std::string("EditorCamera"));
+		std::string name = std::string("EditorCamera");
+		Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCamera(name);
 		if (c)
 		{
 			ZobVector3 pos = m_selectedObject->GetWorldPosition();
