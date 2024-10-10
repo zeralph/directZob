@@ -150,8 +150,12 @@ private:
 	static long			gCircleLen;
 	static unsigned long			gLight2[];
 	static long			gLight2Len;
+	static unsigned long			gCamera[];
+	static long			gCameraLen;
 	Texture*			m_lightImage;
 	const ZobMaterial*	m_lightMaterial;
+	Texture*			m_cameraImage;
+	const ZobMaterial*	m_cameraMaterial;
 	bool				m_init;
 	std::string 		m_logTmpData;
 };

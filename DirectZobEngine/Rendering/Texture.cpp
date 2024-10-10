@@ -45,7 +45,7 @@ void Texture::LoadFromGlTF(tinygltf::Image& image)
 	}
 }
 
-void Texture::LoadFromData(std::string& name, int w, int h, unsigned long* data)
+void Texture::LoadFromData(const std::string& name, int w, int h, unsigned long* data)
 {
 	m_name = name;
 	m_width = w;
@@ -72,7 +72,7 @@ void Texture::LoadFromData(std::string& name, int w, int h, unsigned long* data)
 	}
 }
 
-void Texture::LoadFromData(std::string &name, int w, int h, float* data)
+void Texture::LoadFromData(const std::string &name, int w, int h, float* data)
 {
 	m_name = name;
 	m_width = w;

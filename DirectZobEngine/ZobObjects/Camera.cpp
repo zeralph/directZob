@@ -24,14 +24,6 @@ Camera::Camera(ZobEntity::ZobType zobType, const std::string& name, eCameraType 
 	m_fov = fov;
 	m_active = false;
 	WrapVariables();
-	if (DirectZob::IsEditorMode())
-	{
-		ZobComponentSprite* b = (ZobComponentSprite*)ZobComponentFactory::CreateComponent(this, "Sprite", true);
-		ZobFilePath zfp = ZobFilePath("camera", SceneLoader::GetResourcePath(), "camera.png", true);
-		b->Set(zfp);
-		b->SetForEditor();
-	}
-	//m_nextTranslation = m_translation;
 }
 
 Camera::Camera(zobId id, TiXmlElement* node, ZobObject* parent)

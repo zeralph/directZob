@@ -11,8 +11,8 @@ public:
 	Texture();
 	~Texture();
 	void Load(ZobFilePath* zfp);
-	void LoadFromData(std::string& name, int w, int h, float* data);
-	void LoadFromData(std::string& name, int w, int h, unsigned long* data);
+	void LoadFromData(const std::string& name, int w, int h, float* data);
+	void LoadFromData(const std::string& name, int w, int h, unsigned long* data);
 	void LoadFromGlTF(tinygltf::Image& image);
 
 	inline const uint GetWidth() const { return m_width; }
