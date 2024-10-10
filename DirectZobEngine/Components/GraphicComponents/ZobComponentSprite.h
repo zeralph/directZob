@@ -11,6 +11,7 @@
 #include <vector>
 
 class ZobSprite;
+class ZobMaterial;
 class ZobComponentSprite : public ZobComponent
 {
 	friend class ZobComponentFactory;
@@ -28,6 +29,8 @@ public:
 	const ZobSprite*			GetMesh() const { return m_sprite; }
 	static void					ReloadMaterial(zobId id);
 	void						SetForEditor();
+	void						SetMaterial(const ZobMaterial* m);
+	void						SetSpriteScale(float f) { m_spriteScale = f; }
 private:
 								ZobComponentSprite(ZobObject* zobObject, bool bEditorZobComponent);
 	bool						LoadMeshInternal();
@@ -40,4 +43,5 @@ private:
 	ZobColor					m_ambientColor;
 	ZobColor					m_diffuseColor;
 	ZobColor					m_specularColor;
+	float						m_spriteScale;
 };

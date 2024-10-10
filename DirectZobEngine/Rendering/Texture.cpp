@@ -43,7 +43,33 @@ void Texture::LoadFromGlTF(tinygltf::Image& image)
 		m_data[i + 2] = b;
 		m_data[i + 3] = a;
 	}
+}
+
+void Texture::LoadFromData(std::string& name, int w, int h, unsigned long* data)
+{
+	m_name = name;
+	m_width = w;
+	m_height = h;
 	m_dataSize = m_width * m_height * 4;
+	m_data = (float*)malloc(sizeof(float) * m_dataSize);
+	int k = 0;
+	for (int i = 0; i < m_dataSize; i += 4)
+	{
+		if (data[k] != 0)
+		{
+			int y= 0;
+			y++;
+		}
+		float r = (float)((data[k] & 0xFF000000) >> 24) / 255.0f;
+		float g = (float)((data[k] & 0x00FF0000) >> 16) / 255.0f;
+		float b = (float)((data[k] & 0x0000FF00) >> 8) / 255.0f;
+		float a = (float)(data[k] & 0x000000FF) / 255.0f;
+		m_data[i] = r;
+		m_data[i + 1] = g;
+		m_data[i + 2] = b;
+		m_data[i + 3] = a;
+		k++;
+	}
 }
 
 void Texture::LoadFromData(std::string &name, int w, int h, float* data)

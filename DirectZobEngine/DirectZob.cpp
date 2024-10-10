@@ -468,6 +468,8 @@ void DirectZob::PrintObjectList()
 	{
 		const ZobObject* z = v.at(i);
 		int c = 0xFFFFFFFF; 
+		int l = 0;
+		int d = 0;
 		const ZobComponentMesh* m = z->GetComponent<ZobComponentMesh>();
 		const ZobComponentSprite* s = z->GetComponent<ZobComponentSprite>();
 		if (m || s)
@@ -477,12 +479,21 @@ void DirectZob::PrintObjectList()
 		if (m && m->GetMesh() && m->GetMesh()->IsDrawn())
 		{
 			c = 0xFF00FF00;
+			l = m->GetMesh()->GetNbSubMeshes();
+			d = 0;
+			for (int i = 0; i < l; i++)
+			{
+				if (m->GetMesh()->GetSubMesh(i)->IsDrawn())
+				{
+					d++;
+				}
+			}
 		}
 		if (s && s->GetMesh() && s->GetMesh()->IsDrawn())
 		{
 			c = 0xFF00FF00;
 		}
-		m_text->Print(txtW, (i*10), c, z->GetName().c_str());
+		m_text->Print(txtW, (i*10), c, "%s (%i/%i)", z->GetName().c_str(), d, l);
 	}
 }
 

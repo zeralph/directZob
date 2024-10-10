@@ -103,6 +103,20 @@ Transform ZobPhysicComponent::GetParentWorldTransform() const
 	}
 }
 
+void ZobPhysicComponent::SetLocalFromOpenglMatrix(double* mat)
+{
+	Transform t;
+	decimal d[16] = {
+		(decimal)mat[0], (decimal)mat[1], (decimal)mat[2] ,(decimal)mat[3],
+		(decimal)mat[4] ,(decimal)mat[5] ,(decimal)mat[6] ,(decimal)mat[7],
+		(decimal)mat[8] ,(decimal)mat[9], (decimal)mat[10], (decimal)mat[11],
+		(decimal)mat[12], (decimal)mat[13], (decimal)mat[14], (decimal)mat[15]
+	};
+	
+	t.setFromOpenGL(&d[0]);
+	m_localTransform = t;
+}
+
 void ZobPhysicComponent::SetLocalTransform(Transform t) 
 {
 	assert(t.getPosition().isFinite());

@@ -80,7 +80,7 @@ Engine::Engine(int width, int height, Events* events)
 	m_nbRasterizers --;
 	m_nbRasterizers = max(m_nbRasterizers, (uint)1);
 //	m_nbRasterizers = 1;
-	m_maxTrianglesQueueSize = 200000;// MAX_TRIANGLES_PER_IMAGE / m_nbRasterizers;
+	m_maxTrianglesQueueSize = 300000;// MAX_TRIANGLES_PER_IMAGE / m_nbRasterizers;
 	m_maxLineQueueSize = 200000;
 	m_events = events;
 	m_currentFrame = 0;

@@ -1,3 +1,4 @@
+#pragma once
 #include <wx/event.h>
 #include "../DirectZobEngine/DirectZob.h"
 #include "../DirectZobEngine/Managers/CameraManager.h"
@@ -11,6 +12,8 @@
 #define EDITOR_ROTATE_Y "Editor_rotate_y"
 #define EDITOR_ROTATE_Z "Editor_rotate_z"
 
+class ZobMaterial;
+class Texture;
 class ZobEditorManager
 {
 public:
@@ -97,6 +100,7 @@ public:
 	void				OnMouseDown(wxMouseEvent& event);
 	void				OnMouseUp(wxMouseEvent& event);
 	void				OnMouseClick(wxMouseEvent& event);
+	void				OnKeyDown(wxKeyEvent& event);
 	void				SetObjectModificator(eGizmoModificatorType type, eGizmoModificatorSpace space);
 
 	void				CreateLight();
@@ -106,6 +110,7 @@ public:
 	void				ShowHide();
 	void				LoadSprite(std::string& p, std::string& f);
 	void				Duplicate();
+	void				ZoomToSelected();
 
 private:
 
@@ -118,6 +123,7 @@ private:
 	void				ScaleGizmos(float s);
 	ModificatorData		m_modificatorData;
 	wxMouseEvent		m_lastMouseEvent;
+	wxKeyEvent			m_lastKeyEvent;
 	ZobObject*			m_selectedObject;
 	ZobObject*			m_currentSelectedGizmo;
 	ZobObject*			m_editorRootNode;
@@ -142,6 +148,10 @@ private:
 	static long			gArrowLen;
 	static char*		gCircle;
 	static long			gCircleLen;
+	static unsigned long			gLight2[];
+	static long			gLight2Len;
+	Texture*			m_lightImage;
+	const ZobMaterial*	m_lightMaterial;
 	bool				m_init;
 	std::string 		m_logTmpData;
 };

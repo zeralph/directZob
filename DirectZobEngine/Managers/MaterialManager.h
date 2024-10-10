@@ -21,9 +21,9 @@ public:
 	~MaterialManager();
 
 	const ZobMaterial* 			LoadMaterial(const std::string& name, const ZobColor* ambientColor, const ZobColor* diffuseColor, const ZobColor* specularColor,
-											float specularExponent, float transparency, ZobFilePath* zfp);
+											float specularExponent, ZobFilePath* zfp);
 	const ZobMaterial*			LoadMaterial(const std::string& name, const ZobColor* ambientColor, const ZobColor* diffuseColor, const ZobColor* specularColor,
-											float specularExponent, float transparency, Texture* texture);
+											float specularExponent, Texture* texture);
 	const ZobMaterial*			LoadGlTFMaterial(tinygltf::Model& model, int index);
 	const ZobMaterial* 			GetMaterial(const std::string& name) const;
 	const int 					GetNbMaterials() const { return (int)m_materials.size(); }

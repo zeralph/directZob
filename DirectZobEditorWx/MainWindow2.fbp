@@ -31,7 +31,7 @@
     <property name="relative_path">1</property>
     <property name="use_microsoft_bom">0</property>
     <property name="use_native_eol">0</property>
-    <object class="Frame" expanded="true">
+    <object class="Frame" expanded="false">
       <property name="aui_managed">0</property>
       <property name="aui_manager_style">wxAUI_MGR_DEFAULT</property>
       <property name="bg"></property>
@@ -60,18 +60,19 @@
       <property name="window_name"></property>
       <property name="window_style">wxTAB_TRAVERSAL</property>
       <property name="xrc_skip_sizer">1</property>
+      <event name="OnCharHook">OnKeyDown</event>
       <event name="OnClose">OnExit</event>
       <event name="OnMaximize">OnMaximize</event>
-      <object class="wxBoxSizer" expanded="true">
+      <object class="wxBoxSizer" expanded="false">
         <property name="minimum_size">150,-1</property>
         <property name="name">bSizer1</property>
         <property name="orient">wxVERTICAL</property>
         <property name="permission">none</property>
-        <object class="sizeritem" expanded="true">
+        <object class="sizeritem" expanded="false">
           <property name="border">5</property>
           <property name="flag">wxEXPAND</property>
           <property name="proportion">1</property>
-          <object class="wxSplitterWindow" expanded="true">
+          <object class="wxSplitterWindow" expanded="false">
             <property name="BottomDockable">1</property>
             <property name="LeftDockable">1</property>
             <property name="RightDockable">1</property>
@@ -129,8 +130,8 @@
             <property name="window_extra_style"></property>
             <property name="window_name"></property>
             <property name="window_style"></property>
-            <object class="splitteritem" expanded="true">
-              <object class="wxPanel" expanded="true">
+            <object class="splitteritem" expanded="false">
+              <object class="wxPanel" expanded="false">
                 <property name="BottomDockable">1</property>
                 <property name="LeftDockable">1</property>
                 <property name="RightDockable">1</property>
@@ -182,16 +183,16 @@
                 <property name="window_extra_style"></property>
                 <property name="window_name"></property>
                 <property name="window_style">wxTAB_TRAVERSAL</property>
-                <object class="wxBoxSizer" expanded="true">
+                <object class="wxBoxSizer" expanded="false">
                   <property name="minimum_size"></property>
                   <property name="name">bSizer2</property>
                   <property name="orient">wxVERTICAL</property>
                   <property name="permission">none</property>
-                  <object class="sizeritem" expanded="true">
+                  <object class="sizeritem" expanded="false">
                     <property name="border">0</property>
                     <property name="flag">wxALL|wxEXPAND</property>
                     <property name="proportion">1</property>
-                    <object class="wxTreeCtrl" expanded="true">
+                    <object class="wxTreeCtrl" expanded="false">
                       <property name="BottomDockable">1</property>
                       <property name="LeftDockable">1</property>
                       <property name="RightDockable">1</property>
@@ -248,16 +249,16 @@
                       <event name="OnTreeEndDrag">OnEndDrag</event>
                       <event name="OnTreeItemRightClick">OnTreeRightClick</event>
                       <event name="OnTreeSelChanged">OnTreeSelChanged</event>
-                      <object class="wxMenu" expanded="true">
+                      <object class="wxMenu" expanded="false">
                         <property name="label">MyMenu</property>
                         <property name="name">m_treeMenu</property>
                         <property name="permission">protected</property>
-                        <object class="submenu" expanded="true">
+                        <object class="submenu" expanded="false">
                           <property name="bitmap"></property>
                           <property name="label">Add</property>
                           <property name="name">m_menu11</property>
                           <property name="permission">protected</property>
-                          <object class="wxMenuItem" expanded="true">
+                          <object class="wxMenuItem" expanded="false">
                             <property name="bitmap"></property>
                             <property name="checked">0</property>
                             <property name="enabled">1</property>
@@ -267,11 +268,11 @@
                             <property name="label">Object</property>
                             <property name="name">m_treeMenuAddObject</property>
                             <property name="permission">none</property>
-                            <property name="shortcut"></property>
+                            <property name="shortcut">CTRL-SHIFT-O</property>
                             <property name="unchecked_bitmap"></property>
                             <event name="OnMenuSelection">OnMenuAddObject</event>
                           </object>
-                          <object class="wxMenuItem" expanded="true">
+                          <object class="wxMenuItem" expanded="false">
                             <property name="bitmap"></property>
                             <property name="checked">0</property>
                             <property name="enabled">1</property>
@@ -281,11 +282,11 @@
                             <property name="label">Mesh ...</property>
                             <property name="name">m_menuAddMesh</property>
                             <property name="permission">none</property>
-                            <property name="shortcut"></property>
+                            <property name="shortcut">CTRL-SHIFT-M</property>
                             <property name="unchecked_bitmap"></property>
                             <event name="OnMenuSelection">OnMenuAddMesh</event>
                           </object>
-                          <object class="wxMenuItem" expanded="true">
+                          <object class="wxMenuItem" expanded="false">
                             <property name="bitmap"></property>
                             <property name="checked">0</property>
                             <property name="enabled">1</property>
@@ -295,11 +296,11 @@
                             <property name="label">Sprite ...</property>
                             <property name="name">m_menuIAddSprite</property>
                             <property name="permission">none</property>
-                            <property name="shortcut"></property>
+                            <property name="shortcut">CTRL-SHIFT-S</property>
                             <property name="unchecked_bitmap"></property>
                             <event name="OnMenuSelection">OnMenuAddSprite</event>
                           </object>
-                          <object class="wxMenuItem" expanded="true">
+                          <object class="wxMenuItem" expanded="false">
                             <property name="bitmap"></property>
                             <property name="checked">0</property>
                             <property name="enabled">1</property>
@@ -309,52 +310,40 @@
                             <property name="label">Asset ...</property>
                             <property name="name">m_menuAddAsset</property>
                             <property name="permission">none</property>
-                            <property name="shortcut"></property>
+                            <property name="shortcut">CTRL-SHIFT-A</property>
                             <property name="unchecked_bitmap"></property>
                             <event name="OnMenuSelection">OnMenuAddAsset</event>
                           </object>
-                          <object class="submenu" expanded="true">
+                          <object class="wxMenuItem" expanded="false">
                             <property name="bitmap"></property>
+                            <property name="checked">0</property>
+                            <property name="enabled">1</property>
+                            <property name="help"></property>
+                            <property name="id">wxID_ANY</property>
+                            <property name="kind">wxITEM_NORMAL</property>
                             <property name="label">Light</property>
-                            <property name="name">m_menuLight</property>
-                            <property name="permission">protected</property>
-                            <object class="wxMenuItem" expanded="true">
-                              <property name="bitmap"></property>
-                              <property name="checked">0</property>
-                              <property name="enabled">1</property>
-                              <property name="help"></property>
-                              <property name="id">wxID_ANY</property>
-                              <property name="kind">wxITEM_NORMAL</property>
-                              <property name="label">Light</property>
-                              <property name="name">m_menuAddLight</property>
-                              <property name="permission">none</property>
-                              <property name="shortcut"></property>
-                              <property name="unchecked_bitmap"></property>
-                              <event name="OnMenuSelection">OnMenuAddLight</event>
-                            </object>
+                            <property name="name">m_menuAddLight</property>
+                            <property name="permission">none</property>
+                            <property name="shortcut">CTRL-SHIFT-L</property>
+                            <property name="unchecked_bitmap"></property>
+                            <event name="OnMenuSelection">OnMenuAddLight</event>
                           </object>
-                          <object class="submenu" expanded="true">
+                          <object class="wxMenuItem" expanded="false">
                             <property name="bitmap"></property>
+                            <property name="checked">0</property>
+                            <property name="enabled">1</property>
+                            <property name="help"></property>
+                            <property name="id">wxID_ANY</property>
+                            <property name="kind">wxITEM_NORMAL</property>
                             <property name="label">Camera</property>
-                            <property name="name">m_menuCamera</property>
-                            <property name="permission">protected</property>
-                            <object class="wxMenuItem" expanded="true">
-                              <property name="bitmap"></property>
-                              <property name="checked">0</property>
-                              <property name="enabled">1</property>
-                              <property name="help"></property>
-                              <property name="id">wxID_ANY</property>
-                              <property name="kind">wxITEM_NORMAL</property>
-                              <property name="label">Camera</property>
-                              <property name="name">m_menuIAddCamera</property>
-                              <property name="permission">none</property>
-                              <property name="shortcut"></property>
-                              <property name="unchecked_bitmap"></property>
-                              <event name="OnMenuSelection">OnMenuAddCamera</event>
-                            </object>
+                            <property name="name">m_menuIAddCamera</property>
+                            <property name="permission">none</property>
+                            <property name="shortcut">CTRL-SHIFT-C</property>
+                            <property name="unchecked_bitmap"></property>
+                            <event name="OnMenuSelection">OnMenuAddCamera</event>
                           </object>
                         </object>
-                        <object class="wxMenuItem" expanded="true">
+                        <object class="wxMenuItem" expanded="false">
                           <property name="bitmap"></property>
                           <property name="checked">0</property>
                           <property name="enabled">1</property>
@@ -368,7 +357,7 @@
                           <property name="unchecked_bitmap"></property>
                           <event name="OnMenuSelection">OnTreeMenuRemove</event>
                         </object>
-                        <object class="wxMenuItem" expanded="true">
+                        <object class="wxMenuItem" expanded="false">
                           <property name="bitmap"></property>
                           <property name="checked">0</property>
                           <property name="enabled">1</property>
@@ -382,7 +371,7 @@
                           <property name="unchecked_bitmap"></property>
                           <event name="OnMenuSelection">OnTreeMenuAddComponent</event>
                         </object>
-                        <object class="wxMenuItem" expanded="true">
+                        <object class="wxMenuItem" expanded="false">
                           <property name="bitmap"></property>
                           <property name="checked">0</property>
                           <property name="enabled">1</property>
@@ -392,11 +381,11 @@
                           <property name="label">Zoom</property>
                           <property name="name">m_treeMenuZoom</property>
                           <property name="permission">none</property>
-                          <property name="shortcut"></property>
+                          <property name="shortcut">Z</property>
                           <property name="unchecked_bitmap"></property>
                           <event name="OnMenuSelection">OnTreeMenuZoom</event>
                         </object>
-                        <object class="wxMenuItem" expanded="true">
+                        <object class="wxMenuItem" expanded="false">
                           <property name="bitmap"></property>
                           <property name="checked">0</property>
                           <property name="enabled">1</property>
@@ -410,7 +399,7 @@
                           <property name="unchecked_bitmap"></property>
                           <event name="OnMenuSelection">OnTreeMenuDuplicate</event>
                         </object>
-                        <object class="wxMenuItem" expanded="true">
+                        <object class="wxMenuItem" expanded="false">
                           <property name="bitmap"></property>
                           <property name="checked">0</property>
                           <property name="enabled">1</property>
@@ -420,11 +409,11 @@
                           <property name="label">Show/hide</property>
                           <property name="name">m_treeMenuShowHide</property>
                           <property name="permission">none</property>
-                          <property name="shortcut"></property>
+                          <property name="shortcut">V</property>
                           <property name="unchecked_bitmap"></property>
                           <event name="OnMenuSelection">OnTreeMenuShowHide</event>
                         </object>
-                        <object class="wxMenuItem" expanded="true">
+                        <object class="wxMenuItem" expanded="false">
                           <property name="bitmap"></property>
                           <property name="checked">0</property>
                           <property name="enabled">1</property>
@@ -444,8 +433,8 @@
                 </object>
               </object>
             </object>
-            <object class="splitteritem" expanded="true">
-              <object class="wxPanel" expanded="true">
+            <object class="splitteritem" expanded="false">
+              <object class="wxPanel" expanded="false">
                 <property name="BottomDockable">1</property>
                 <property name="LeftDockable">1</property>
                 <property name="RightDockable">1</property>
@@ -497,16 +486,16 @@
                 <property name="window_extra_style"></property>
                 <property name="window_name"></property>
                 <property name="window_style">wxTAB_TRAVERSAL</property>
-                <object class="wxBoxSizer" expanded="true">
+                <object class="wxBoxSizer" expanded="false">
                   <property name="minimum_size">150,-1</property>
                   <property name="name">bSizer4</property>
                   <property name="orient">wxVERTICAL</property>
                   <property name="permission">none</property>
-                  <object class="sizeritem" expanded="true">
+                  <object class="sizeritem" expanded="false">
                     <property name="border">5</property>
                     <property name="flag">wxEXPAND</property>
                     <property name="proportion">1</property>
-                    <object class="wxSplitterWindow" expanded="true">
+                    <object class="wxSplitterWindow" expanded="false">
                       <property name="BottomDockable">1</property>
                       <property name="LeftDockable">1</property>
                       <property name="RightDockable">1</property>
@@ -564,8 +553,8 @@
                       <property name="window_extra_style"></property>
                       <property name="window_name"></property>
                       <property name="window_style"></property>
-                      <object class="splitteritem" expanded="true">
-                        <object class="wxPanel" expanded="true">
+                      <object class="splitteritem" expanded="false">
+                        <object class="wxPanel" expanded="false">
                           <property name="BottomDockable">1</property>
                           <property name="LeftDockable">1</property>
                           <property name="RightDockable">1</property>
@@ -617,16 +606,16 @@
                           <property name="window_extra_style"></property>
                           <property name="window_name"></property>
                           <property name="window_style">wxTAB_TRAVERSAL</property>
-                          <object class="wxBoxSizer" expanded="true">
+                          <object class="wxBoxSizer" expanded="false">
                             <property name="minimum_size">150,-1</property>
                             <property name="name">bSizer5</property>
                             <property name="orient">wxHORIZONTAL</property>
                             <property name="permission">none</property>
-                            <object class="sizeritem" expanded="true">
+                            <object class="sizeritem" expanded="false">
                               <property name="border">5</property>
                               <property name="flag">wxEXPAND</property>
                               <property name="proportion">1</property>
-                              <object class="wxSplitterWindow" expanded="true">
+                              <object class="wxSplitterWindow" expanded="false">
                                 <property name="BottomDockable">1</property>
                                 <property name="LeftDockable">1</property>
                                 <property name="RightDockable">1</property>
@@ -1491,8 +1480,8 @@
                                     </object>
                                   </object>
                                 </object>
-                                <object class="splitteritem" expanded="true">
-                                  <object class="wxPanel" expanded="true">
+                                <object class="splitteritem" expanded="false">
+                                  <object class="wxPanel" expanded="false">
                                     <property name="BottomDockable">1</property>
                                     <property name="LeftDockable">1</property>
                                     <property name="RightDockable">1</property>
@@ -1622,8 +1611,8 @@
                           </object>
                         </object>
                       </object>
-                      <object class="splitteritem" expanded="true">
-                        <object class="wxPanel" expanded="true">
+                      <object class="splitteritem" expanded="false">
+                        <object class="wxPanel" expanded="false">
                           <property name="BottomDockable">1</property>
                           <property name="LeftDockable">1</property>
                           <property name="RightDockable">1</property>
@@ -1675,16 +1664,16 @@
                           <property name="window_extra_style"></property>
                           <property name="window_name"></property>
                           <property name="window_style">wxTAB_TRAVERSAL</property>
-                          <object class="wxBoxSizer" expanded="true">
+                          <object class="wxBoxSizer" expanded="false">
                             <property name="minimum_size"></property>
                             <property name="name">bSizer7</property>
                             <property name="orient">wxVERTICAL</property>
                             <property name="permission">none</property>
-                            <object class="sizeritem" expanded="true">
+                            <object class="sizeritem" expanded="false">
                               <property name="border">0</property>
                               <property name="flag">wxEXPAND | wxALL</property>
                               <property name="proportion">1</property>
-                              <object class="wxNotebook" expanded="true">
+                              <object class="wxNotebook" expanded="false">
                                 <property name="BottomDockable">1</property>
                                 <property name="LeftDockable">1</property>
                                 <property name="RightDockable">1</property>
@@ -1738,11 +1727,11 @@
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
                                 <property name="window_style"></property>
-                                <object class="notebookpage" expanded="true">
+                                <object class="notebookpage" expanded="false">
                                   <property name="bitmap"></property>
                                   <property name="label">a page</property>
                                   <property name="select">0</property>
-                                  <object class="wxPanel" expanded="true">
+                                  <object class="wxPanel" expanded="false">
                                     <property name="BottomDockable">1</property>
                                     <property name="LeftDockable">1</property>
                                     <property name="RightDockable">1</property>
@@ -1796,11 +1785,11 @@
                                     <property name="window_style">wxTAB_TRAVERSAL</property>
                                   </object>
                                 </object>
-                                <object class="notebookpage" expanded="true">
+                                <object class="notebookpage" expanded="false">
                                   <property name="bitmap"></property>
                                   <property name="label">a page</property>
                                   <property name="select">0</property>
-                                  <object class="wxPanel" expanded="true">
+                                  <object class="wxPanel" expanded="false">
                                     <property name="BottomDockable">1</property>
                                     <property name="LeftDockable">1</property>
                                     <property name="RightDockable">1</property>
@@ -1854,11 +1843,11 @@
                                     <property name="window_style">wxTAB_TRAVERSAL</property>
                                   </object>
                                 </object>
-                                <object class="notebookpage" expanded="true">
+                                <object class="notebookpage" expanded="false">
                                   <property name="bitmap"></property>
                                   <property name="label">a page</property>
                                   <property name="select">0</property>
-                                  <object class="wxPanel" expanded="true">
+                                  <object class="wxPanel" expanded="false">
                                     <property name="BottomDockable">1</property>
                                     <property name="LeftDockable">1</property>
                                     <property name="RightDockable">1</property>
@@ -1961,7 +1950,7 @@
             <property name="label">New</property>
             <property name="name">m_menuIItemNew</property>
             <property name="permission">none</property>
-            <property name="shortcut"></property>
+            <property name="shortcut">CTRL-N</property>
             <property name="unchecked_bitmap"></property>
             <event name="OnMenuSelection">OnNew</event>
           </object>
@@ -1975,7 +1964,7 @@
             <property name="label">Open ...</property>
             <property name="name">m_menuItemOpen</property>
             <property name="permission">none</property>
-            <property name="shortcut"></property>
+            <property name="shortcut">CTRL-F</property>
             <property name="unchecked_bitmap"></property>
             <event name="OnMenuSelection">OnOpen</event>
           </object>
@@ -1989,7 +1978,7 @@
             <property name="label">Save as ...</property>
             <property name="name">m_menuItemSaveAs</property>
             <property name="permission">none</property>
-            <property name="shortcut"></property>
+            <property name="shortcut">CTRL-SHIFT-S</property>
             <property name="unchecked_bitmap"></property>
             <event name="OnMenuSelection">OnSaveAs</event>
           </object>
@@ -2003,7 +1992,7 @@
             <property name="label">Save</property>
             <property name="name">m_menuItemSave</property>
             <property name="permission">none</property>
-            <property name="shortcut"></property>
+            <property name="shortcut">CTRL-S</property>
             <property name="unchecked_bitmap"></property>
             <event name="OnMenuSelection">OnSave</event>
           </object>
@@ -2017,7 +2006,7 @@
             <property name="label">Exit</property>
             <property name="name">m_menuItemExit</property>
             <property name="permission">none</property>
-            <property name="shortcut"></property>
+            <property name="shortcut">CTRL-Q</property>
             <property name="unchecked_bitmap"></property>
             <event name="OnMenuSelection">OnExit</event>
           </object>
@@ -2084,7 +2073,7 @@
           </object>
         </object>
       </object>
-      <object class="wxStatusBar" expanded="true">
+      <object class="wxStatusBar" expanded="false">
         <property name="bg"></property>
         <property name="context_help"></property>
         <property name="context_menu">1</property>

@@ -37,12 +37,12 @@ ZobMaterial* MaterialManager::CreateMaterial()
 }
 
 const ZobMaterial* MaterialManager::LoadMaterial(const std::string& name, const ZobColor* ambientColor, const ZobColor* diffuseColor, const ZobColor* specularColor,
-												float specularExponent, float transparency, Texture* texture)
+												float specularExponent, Texture* texture)
 {
 	m_textures.push_back(texture);
 	if (GetMaterial(name) == NULL)
 	{
-		ZobMaterial* t = new ZobMaterial(name, ambientColor, diffuseColor, specularColor, specularExponent, transparency, texture);
+		ZobMaterial* t = new ZobMaterial(name, ambientColor, diffuseColor, specularColor, specularExponent, texture);
 		m_materials.push_back(t);
 		return t;
 	}
@@ -54,7 +54,7 @@ const ZobMaterial* MaterialManager::LoadMaterial(const std::string& name, const 
 }
 
 const ZobMaterial* MaterialManager::LoadMaterial(const std::string& name, const ZobColor* ambientColor, const ZobColor* diffuseColor, const ZobColor* specularColor,
-												float specularExponent, float transparency, ZobFilePath* zfp)
+												float specularExponent, ZobFilePath* zfp)
 {
 	//assert(zfp.IsDefined());
 	if (GetMaterial(name) == NULL)
@@ -76,7 +76,7 @@ const ZobMaterial* MaterialManager::LoadMaterial(const std::string& name, const 
 				texture = LoadTexture(zfp);
 			}
 		}
-		ZobMaterial* t = new ZobMaterial(name, ambientColor, diffuseColor, specularColor, specularExponent, transparency, texture);
+		ZobMaterial* t = new ZobMaterial(name, ambientColor, diffuseColor, specularColor, specularExponent, texture);
 		m_materials.push_back(t);
 		return t;
 	}
@@ -192,6 +192,12 @@ const ZobMaterial* MaterialManager::LoadGlTFMaterial(tinygltf::Model& model, int
 	{
 		return zm;
 	}
+	const std::string matName = m.name;
+	if (matName == "BMW_M3_GTR_E46_Street_ACschnitzer_BlackEdition_by_Alex_Ka")
+	{
+		int y = 0;
+		y++;
+	}
 	Texture* texture = NULL;
 	int texIdx = m.pbrMetallicRoughness.baseColorTexture.index;
 	if (texIdx >= 0)
@@ -201,12 +207,17 @@ const ZobMaterial* MaterialManager::LoadGlTFMaterial(tinygltf::Model& model, int
 		texture->LoadFromGlTF(image);
 	}
 	ZobColor ambientColor = ZobColor(255, 255, 255, 255);
-	ZobColor diffuseColor = ZobColor(255, 255, 255, 255);
+	if (m.pbrMetallicRoughness.baseColorFactor.size() > 0)
+	{
+		ambientColor = ZobColor(255.0f * m.pbrMetallicRoughness.baseColorFactor[3], 
+								255.0f * m.pbrMetallicRoughness.baseColorFactor[0], 
+								255.0f * m.pbrMetallicRoughness.baseColorFactor[1],
+								255.0f * m.pbrMetallicRoughness.baseColorFactor[2]);
+	}
+	ZobColor diffuseColor = ambientColor;
 	ZobColor specularColor = ZobColor(255, 255, 255, 255);
-	float specularExponent = 1.0f;
-	float transparency = 1.0f;
-	const std::string matName = m.name;
-	ZobMaterial* mat = new ZobMaterial(matName, &ambientColor, &diffuseColor, &specularColor, specularExponent, transparency, texture);
+	float specularExponent = m.pbrMetallicRoughness.metallicFactor;
+	ZobMaterial* mat = new ZobMaterial(matName, &ambientColor, &diffuseColor, &specularColor, specularExponent, texture);
 	m_materials.push_back(mat);
 	return mat;
 }
@@ -331,12 +342,12 @@ void MaterialManager::LoadOBJMaterials(ZobFilePath* zfp)
 		if (materials.at(i).texture.length() > 0)
 		{
 			ZobFilePath zfpMaterial = ZobFilePath(materials.at(i).texture, zfp->GetPath(), materials.at(i).texture, zfp->IsAbsolute());
-			LoadMaterial(n, &materials.at(i).ambient, &materials.at(i).diffuse, &materials.at(i).specular, materials.at(i).specularExponent, materials.at(i).transparency, &zfpMaterial);
+			LoadMaterial(n, &materials.at(i).ambient, &materials.at(i).diffuse, &materials.at(i).specular, materials.at(i).specularExponent, &zfpMaterial);
 		}
 		else
 		{
 			ZobFilePath zfpMaterial;
-			LoadMaterial(n, &materials.at(i).ambient, &materials.at(i).diffuse, &materials.at(i).specular, materials.at(i).specularExponent, materials.at(i).transparency, &zfpMaterial);
+			LoadMaterial(n, &materials.at(i).ambient, &materials.at(i).diffuse, &materials.at(i).specular, materials.at(i).specularExponent, &zfpMaterial);
 		}
 	}
 }

@@ -19,6 +19,7 @@ ZobComponentSprite::ZobComponentSprite(ZobObject* zobObject, bool bEditorZobComp
 	m_texturePath.Reset();
 	m_sprite = NULL;
 	m_material = NULL;
+	m_spriteScale = 1.0f;
 	m_zobObject = zobObject;
 	m_ambientColor = &ZobColor::White;
 	m_diffuseColor = &ZobColor::White;
@@ -49,7 +50,7 @@ void ZobComponentSprite::Init(DirectZobType::sceneLoadingCallback cb)
 		cb(0, 0, m_name);
 	}
 	ReLoadVariables();
-	if (m_sprite == NULL && m_texturePath.IsDefined())
+	if (m_sprite == NULL/* && m_texturePath.IsDefined()*/)
 	{
 		if (!LoadMeshInternal())
 		{
@@ -112,8 +113,11 @@ void ZobComponentSprite::PostUpdate()
 		ZobVector3 u = c->GetUp();
 		ZobVector3 f = c->GetForward();
 		rotScale.FromVectors(l, u, f);
-		ZobVector3 s = mm->GetScale();
-		rotScale.AddScale(s);
+		ZobVector3 ls = mm->GetScale();
+		ls.x += m_spriteScale;
+		ls.y += m_spriteScale;
+		ls.z += m_spriteScale;
+		rotScale.AddScale(ls);
 		rotScale.AddTranslation(mm->GetTranslation());
 		const Triangle::RenderOptions* ro = &this->m_renderOptions;
 		const Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
@@ -136,7 +140,12 @@ void ZobComponentSprite::QueueForDrawing(const Camera* camera, Engine* engine)
 		ZobVector3 u = c->GetUp();
 		ZobVector3 f = c->GetForward();
 		rotScale.FromVectors(l, u, f);
-		rotScale.AddScale(mm->GetScale());
+		
+		ZobVector3 ls = mm->GetScale();
+		ls.x += m_spriteScale;
+		ls.y += m_spriteScale;
+		ls.z += m_spriteScale;
+		rotScale.AddScale(ls);
 		rotScale.AddTranslation(mm->GetTranslation());
 		Triangle::RenderOptions* ro = &this->m_renderOptions;
 		const Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
@@ -164,15 +173,20 @@ void ZobComponentSprite::EditorUpdate()
 	}
 }
 
+void ZobComponentSprite::SetMaterial(const ZobMaterial* m)
+{
+	m_material = m;
+	m_sprite->Setmaterial(m_material);
+}
+
 bool ZobComponentSprite::LoadMeshInternal()
 {
 	std::string s = std::string(m_texturePath.GetName());
-	throw "todo";
-//	m_sprite = new ZobSprite(s, this);
+	m_sprite = new ZobSprite(s, this);
 	if (m_sprite)
 	{
 		ZobColor color = &ZobColor::White;
- 		m_material = DirectZob::GetInstance()->GetMaterialManager()->LoadMaterial(m_texturePath.GetName(), &m_ambientColor, &m_diffuseColor, &m_specularColor, 0, 1, &m_texturePath);
+ 		m_material = DirectZob::GetInstance()->GetMaterialManager()->LoadMaterial(m_texturePath.GetName(), &m_ambientColor, &m_diffuseColor, &m_specularColor, 0, &m_texturePath);
 		m_sprite->Setmaterial(m_material);
 	}
 	return m_sprite != NULL;

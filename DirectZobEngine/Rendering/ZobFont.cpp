@@ -58,7 +58,7 @@ ZobFont::ZobFont(ZobFilePath* zfpXml, ZobFilePath* zfpTexture)
 			m_color = &ZobColor::White;
 			std::string matName = "Font_";
 			matName.append(m_name);
-			m_charMaterial = DirectZob::GetInstance()->GetMaterialManager()->LoadMaterial(matName, &m_color, &m_color, &m_color, 0, 1, zfpTexture);
+			m_charMaterial = DirectZob::GetInstance()->GetMaterialManager()->LoadMaterial(matName, &m_color, &m_color, &m_color, 0, zfpTexture);
 			float texW = m_charMaterial->GetDiffuseTexture()->GetWidth();
 			float texH = m_charMaterial->GetDiffuseTexture()->GetHeight();
 			for (std::vector<FontGlyphe>::iterator iter = m_glyphes.begin(); iter != m_glyphes.end(); iter++)

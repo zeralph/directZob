@@ -736,6 +736,11 @@ void ZobObject::SetLocalRotation(float x, float y, float z, bool add)
 	m_physicComponent->SetLocalTransform(newTransform);
 }
 
+void ZobObject::SetLocalFromOpenglMatrix(double* mat)
+{
+	m_physicComponent->SetLocalFromOpenglMatrix(mat);
+}
+
 void ZobObject::SetLocalPosition(float x, float y, float z)
 {
 	Vector3 position = Vector3(x, y, z);

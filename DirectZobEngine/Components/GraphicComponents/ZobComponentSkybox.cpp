@@ -172,7 +172,7 @@ bool ZobComponentSkybox::LoadMeshInternal()
 	if (m_sprite)
 	{
 		ZobColor color = &ZobColor::White;
- 		m_material = DirectZob::GetInstance()->GetMaterialManager()->LoadMaterial(m_texturePath.GetName(), &m_ambientColor, &m_diffuseColor, &m_specularColor, 0, 1, &m_texturePath);
+ 		m_material = DirectZob::GetInstance()->GetMaterialManager()->LoadMaterial(m_texturePath.GetName(), &m_ambientColor, &m_diffuseColor, &m_specularColor, 0, &m_texturePath);
 		m_sprite->Setmaterial(m_material);
 	}
 	return m_sprite != NULL;

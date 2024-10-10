@@ -1,3 +1,4 @@
+#pragma once
 #include "../DirectZobEngine/DirectZob.h"
 #include "../DirectZobEngine/Misc/ZobVariablesExposer.h"
 #include <wx/panel.h>

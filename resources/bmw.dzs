@@ -1,0 +1,1140 @@
+<?xml version="1.0" ?>
+<Scene EntitiesCount="117" ZobObjectsCount="60">
+    <Globals>
+        <Var Name="Ambient color" value="255;102;102;102" />
+        <Var Name="Clear color" value="255;192;192;192" />
+        <Var Name="Ambient color intensity" value="0.800" />
+        <Var Name="Fog type" value="None" />
+        <Var Name="Fog color" value="255;63;149;255" />
+        <Var Name="Fog distance" value="20.000" />
+        <Var Name="Fog density" value="2.000" />
+        <Var Name="Render mode" value="Fullframe" />
+        <Var Name="Lighting mode" value="Vertex" />
+        <Var Name="Bits per color" value="Full" />
+        <Var Name="Dithering" value="False" />
+        <Var Name="Z near" value="0.110" />
+        <Var Name="Z far" value="1000.000" />
+        <Var Name="Equalize triangle queues" value="False" />
+        <Var Name="Perspective Correction" value="True" />
+        <Var Name="Downscale" value="1" />
+    </Globals>
+    <ZobObject Guid="4004708836">
+        <Var Name="Name" value="Light_1" />
+        <Var Name="Position" value="-4.67872;-0.00000;-18.54674;1.00000" />
+        <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+        <Var Name="Quaternion" value="0.23085;-0.73683;0.55733;0.30520" />
+        <Var Name="Body type" value="Static" />
+        <Var Name="Active" value="True" />
+        <Var Name="Mass" value="1000.000" />
+        <Var Name="Color" value="255;252;212;64" />
+        <Var Name="Intensity" value="1.000" />
+        <Var Name="Distance" value="100.000" />
+        <Var Name="SpotAngle" value="0.523" />
+        <Var Name="Active" value="True" />
+        <Var Name="Type" value="Directional" />
+        <Components />
+    </ZobObject>
+    <ZobObject Guid="4002825372">
+        <Var Name="Name" value="newObject_15" />
+        <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+        <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+        <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+        <Var Name="Body type" value="Static" />
+        <Var Name="Active" value="True" />
+        <Var Name="Mass" value="1000.000" />
+        <Components>
+            <Component Type="Mesh" Guid="2007485441">
+                <Var Name="Enabled" value="True" />
+                <Var Name="File" value="scene.gltf;D:\Git\directZob\resources\gltf\bmw/;scene.gltf;0" />
+                <Var Name="Cull mode" value="Clockwise" />
+                <Var Name="Lighting" value="Phong" />
+                <Var Name="Z-buffer mode" value="Buffered" />
+                <Var Name="Transparent" value="False" />
+            </Component>
+        </Components>
+        <ZobObject Guid="4007974835">
+            <Var Name="Name" value="gltf_Sketchfab_model" />
+            <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+            <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+            <Var Name="Quaternion" value="-0.70710;0.00000;0.00000;0.70710" />
+            <Var Name="Body type" value="Static" />
+            <Var Name="Active" value="True" />
+            <Var Name="Mass" value="1000.000" />
+            <Components />
+            <ZobObject Guid="4007827646">
+                <Var Name="Name" value="gltf_BMW M3 GTR E46 Street ACschnitzer BlackEdition by Alex.Ka..obj.cleaner.materialmerger.gles" />
+                <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+                <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+                <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+                <Var Name="Body type" value="Static" />
+                <Var Name="Active" value="True" />
+                <Var Name="Mass" value="1000.000" />
+                <Components />
+                <ZobObject Guid="4007882602">
+                    <Var Name="Name" value="gltf_Object_2" />
+                    <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+                    <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Body type" value="Static" />
+                    <Var Name="Active" value="True" />
+                    <Var Name="Mass" value="1000.000" />
+                    <Components>
+                        <Component Type="Mesh" Guid="2007788295">
+                            <Var Name="Enabled" value="True" />
+                            <Var Name="File" value="Object_2;;;0" />
+                            <Var Name="Cull mode" value="Clockwise" />
+                            <Var Name="Lighting" value="Phong" />
+                            <Var Name="Z-buffer mode" value="Buffered" />
+                            <Var Name="Transparent" value="False" />
+                        </Component>
+                    </Components>
+                </ZobObject>
+                <ZobObject Guid="4007122691">
+                    <Var Name="Name" value="gltf_Object_3" />
+                    <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+                    <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Body type" value="Static" />
+                    <Var Name="Active" value="True" />
+                    <Var Name="Mass" value="1000.000" />
+                    <Components>
+                        <Component Type="Mesh" Guid="2007172072">
+                            <Var Name="Enabled" value="True" />
+                            <Var Name="File" value="Object_3;;;0" />
+                            <Var Name="Cull mode" value="Clockwise" />
+                            <Var Name="Lighting" value="Phong" />
+                            <Var Name="Z-buffer mode" value="Buffered" />
+                            <Var Name="Transparent" value="False" />
+                        </Component>
+                    </Components>
+                </ZobObject>
+                <ZobObject Guid="4007246729">
+                    <Var Name="Name" value="gltf_Object_4" />
+                    <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+                    <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Body type" value="Static" />
+                    <Var Name="Active" value="True" />
+                    <Var Name="Mass" value="1000.000" />
+                    <Components>
+                        <Component Type="Mesh" Guid="2007099330">
+                            <Var Name="Enabled" value="True" />
+                            <Var Name="File" value="Object_4;;;0" />
+                            <Var Name="Cull mode" value="Clockwise" />
+                            <Var Name="Lighting" value="Phong" />
+                            <Var Name="Z-buffer mode" value="Buffered" />
+                            <Var Name="Transparent" value="False" />
+                        </Component>
+                    </Components>
+                </ZobObject>
+                <ZobObject Guid="4007125654">
+                    <Var Name="Name" value="gltf_Object_5" />
+                    <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+                    <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Body type" value="Static" />
+                    <Var Name="Active" value="True" />
+                    <Var Name="Mass" value="1000.000" />
+                    <Components>
+                        <Component Type="Mesh" Guid="2007941515">
+                            <Var Name="Enabled" value="True" />
+                            <Var Name="File" value="Object_5;;;0" />
+                            <Var Name="Cull mode" value="Clockwise" />
+                            <Var Name="Lighting" value="Phong" />
+                            <Var Name="Z-buffer mode" value="Buffered" />
+                            <Var Name="Transparent" value="False" />
+                        </Component>
+                    </Components>
+                </ZobObject>
+                <ZobObject Guid="4007606312">
+                    <Var Name="Name" value="gltf_Object_6" />
+                    <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+                    <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Body type" value="Static" />
+                    <Var Name="Active" value="True" />
+                    <Var Name="Mass" value="1000.000" />
+                    <Components>
+                        <Component Type="Mesh" Guid="2007291833">
+                            <Var Name="Enabled" value="True" />
+                            <Var Name="File" value="Object_6;;;0" />
+                            <Var Name="Cull mode" value="Clockwise" />
+                            <Var Name="Lighting" value="Phong" />
+                            <Var Name="Z-buffer mode" value="Buffered" />
+                            <Var Name="Transparent" value="False" />
+                        </Component>
+                    </Components>
+                </ZobObject>
+                <ZobObject Guid="4007946907">
+                    <Var Name="Name" value="gltf_Object_7" />
+                    <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+                    <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Body type" value="Static" />
+                    <Var Name="Active" value="True" />
+                    <Var Name="Mass" value="1000.000" />
+                    <Components>
+                        <Component Type="Mesh" Guid="2007918289">
+                            <Var Name="Enabled" value="True" />
+                            <Var Name="File" value="Object_7;;;0" />
+                            <Var Name="Cull mode" value="Clockwise" />
+                            <Var Name="Lighting" value="Phong" />
+                            <Var Name="Z-buffer mode" value="Buffered" />
+                            <Var Name="Transparent" value="False" />
+                        </Component>
+                    </Components>
+                </ZobObject>
+                <ZobObject Guid="4007401382">
+                    <Var Name="Name" value="gltf_Object_8" />
+                    <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+                    <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Body type" value="Static" />
+                    <Var Name="Active" value="True" />
+                    <Var Name="Mass" value="1000.000" />
+                    <Components>
+                        <Component Type="Mesh" Guid="2007676888">
+                            <Var Name="Enabled" value="True" />
+                            <Var Name="File" value="Object_8;;;0" />
+                            <Var Name="Cull mode" value="Clockwise" />
+                            <Var Name="Lighting" value="Phong" />
+                            <Var Name="Z-buffer mode" value="Buffered" />
+                            <Var Name="Transparent" value="False" />
+                        </Component>
+                    </Components>
+                </ZobObject>
+                <ZobObject Guid="4007892830">
+                    <Var Name="Name" value="gltf_Object_9" />
+                    <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+                    <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Body type" value="Static" />
+                    <Var Name="Active" value="True" />
+                    <Var Name="Mass" value="1000.000" />
+                    <Components>
+                        <Component Type="Mesh" Guid="2007192389">
+                            <Var Name="Enabled" value="True" />
+                            <Var Name="File" value="Object_9;;;0" />
+                            <Var Name="Cull mode" value="Clockwise" />
+                            <Var Name="Lighting" value="Phong" />
+                            <Var Name="Z-buffer mode" value="Buffered" />
+                            <Var Name="Transparent" value="False" />
+                        </Component>
+                    </Components>
+                </ZobObject>
+                <ZobObject Guid="4007578337">
+                    <Var Name="Name" value="gltf_Object_10" />
+                    <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+                    <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Body type" value="Static" />
+                    <Var Name="Active" value="True" />
+                    <Var Name="Mass" value="1000.000" />
+                    <Components>
+                        <Component Type="Mesh" Guid="2007692154">
+                            <Var Name="Enabled" value="True" />
+                            <Var Name="File" value="Object_10;;;0" />
+                            <Var Name="Cull mode" value="Clockwise" />
+                            <Var Name="Lighting" value="Phong" />
+                            <Var Name="Z-buffer mode" value="Buffered" />
+                            <Var Name="Transparent" value="False" />
+                        </Component>
+                    </Components>
+                </ZobObject>
+                <ZobObject Guid="4007126857">
+                    <Var Name="Name" value="gltf_Object_11" />
+                    <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+                    <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Body type" value="Static" />
+                    <Var Name="Active" value="True" />
+                    <Var Name="Mass" value="1000.000" />
+                    <Components>
+                        <Component Type="Mesh" Guid="2007309303">
+                            <Var Name="Enabled" value="True" />
+                            <Var Name="File" value="Object_11;;;0" />
+                            <Var Name="Cull mode" value="Clockwise" />
+                            <Var Name="Lighting" value="Phong" />
+                            <Var Name="Z-buffer mode" value="Buffered" />
+                            <Var Name="Transparent" value="False" />
+                        </Component>
+                    </Components>
+                </ZobObject>
+                <ZobObject Guid="4007310064">
+                    <Var Name="Name" value="gltf_Object_12" />
+                    <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+                    <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Body type" value="Static" />
+                    <Var Name="Active" value="True" />
+                    <Var Name="Mass" value="1000.000" />
+                    <Components>
+                        <Component Type="Mesh" Guid="2007143229">
+                            <Var Name="Enabled" value="True" />
+                            <Var Name="File" value="Object_12;;;0" />
+                            <Var Name="Cull mode" value="Clockwise" />
+                            <Var Name="Lighting" value="Phong" />
+                            <Var Name="Z-buffer mode" value="Buffered" />
+                            <Var Name="Transparent" value="False" />
+                        </Component>
+                    </Components>
+                </ZobObject>
+                <ZobObject Guid="4007024078">
+                    <Var Name="Name" value="gltf_Object_13" />
+                    <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+                    <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Body type" value="Static" />
+                    <Var Name="Active" value="True" />
+                    <Var Name="Mass" value="1000.000" />
+                    <Components>
+                        <Component Type="Mesh" Guid="2007702795">
+                            <Var Name="Enabled" value="True" />
+                            <Var Name="File" value="Object_13;;;0" />
+                            <Var Name="Cull mode" value="Clockwise" />
+                            <Var Name="Lighting" value="Phong" />
+                            <Var Name="Z-buffer mode" value="Buffered" />
+                            <Var Name="Transparent" value="False" />
+                        </Component>
+                    </Components>
+                </ZobObject>
+                <ZobObject Guid="4007732383">
+                    <Var Name="Name" value="gltf_Object_14" />
+                    <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+                    <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Body type" value="Static" />
+                    <Var Name="Active" value="True" />
+                    <Var Name="Mass" value="1000.000" />
+                    <Components>
+                        <Component Type="Mesh" Guid="2007931498">
+                            <Var Name="Enabled" value="True" />
+                            <Var Name="File" value="Object_14;;;0" />
+                            <Var Name="Cull mode" value="Clockwise" />
+                            <Var Name="Lighting" value="Phong" />
+                            <Var Name="Z-buffer mode" value="Buffered" />
+                            <Var Name="Transparent" value="False" />
+                        </Component>
+                    </Components>
+                </ZobObject>
+                <ZobObject Guid="4007723492">
+                    <Var Name="Name" value="gltf_Object_15" />
+                    <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+                    <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Body type" value="Static" />
+                    <Var Name="Active" value="True" />
+                    <Var Name="Mass" value="1000.000" />
+                    <Components>
+                        <Component Type="Mesh" Guid="2007622201">
+                            <Var Name="Enabled" value="True" />
+                            <Var Name="File" value="Object_15;;;0" />
+                            <Var Name="Cull mode" value="Clockwise" />
+                            <Var Name="Lighting" value="Phong" />
+                            <Var Name="Z-buffer mode" value="Buffered" />
+                            <Var Name="Transparent" value="False" />
+                        </Component>
+                    </Components>
+                </ZobObject>
+                <ZobObject Guid="4007249221">
+                    <Var Name="Name" value="gltf_Object_16" />
+                    <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+                    <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Body type" value="Static" />
+                    <Var Name="Active" value="True" />
+                    <Var Name="Mass" value="1000.000" />
+                    <Components>
+                        <Component Type="Mesh" Guid="2007851731">
+                            <Var Name="Enabled" value="True" />
+                            <Var Name="File" value="Object_16;;;0" />
+                            <Var Name="Cull mode" value="Clockwise" />
+                            <Var Name="Lighting" value="Phong" />
+                            <Var Name="Z-buffer mode" value="Buffered" />
+                            <Var Name="Transparent" value="False" />
+                        </Component>
+                    </Components>
+                </ZobObject>
+                <ZobObject Guid="4007898136">
+                    <Var Name="Name" value="gltf_Object_17" />
+                    <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+                    <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Body type" value="Static" />
+                    <Var Name="Active" value="True" />
+                    <Var Name="Mass" value="1000.000" />
+                    <Components>
+                        <Component Type="Mesh" Guid="2007711294">
+                            <Var Name="Enabled" value="True" />
+                            <Var Name="File" value="Object_17;;;0" />
+                            <Var Name="Cull mode" value="Clockwise" />
+                            <Var Name="Lighting" value="Phong" />
+                            <Var Name="Z-buffer mode" value="Buffered" />
+                            <Var Name="Transparent" value="False" />
+                        </Component>
+                    </Components>
+                </ZobObject>
+                <ZobObject Guid="4007846717">
+                    <Var Name="Name" value="gltf_Object_18" />
+                    <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+                    <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Body type" value="Static" />
+                    <Var Name="Active" value="True" />
+                    <Var Name="Mass" value="1000.000" />
+                    <Components>
+                        <Component Type="Mesh" Guid="2007689518">
+                            <Var Name="Enabled" value="True" />
+                            <Var Name="File" value="Object_18;;;0" />
+                            <Var Name="Cull mode" value="Clockwise" />
+                            <Var Name="Lighting" value="Phong" />
+                            <Var Name="Z-buffer mode" value="Buffered" />
+                            <Var Name="Transparent" value="False" />
+                        </Component>
+                    </Components>
+                </ZobObject>
+                <ZobObject Guid="4007083575">
+                    <Var Name="Name" value="gltf_Object_19" />
+                    <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+                    <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Body type" />
+                    <Var Name="Active" value="True" />
+                    <Var Name="Mass" value="1000.000" />
+                    <Components>
+                        <Component Type="Mesh" Guid="2007778772">
+                            <Var Name="Enabled" value="True" />
+                            <Var Name="File" value="Object_19;;;0" />
+                            <Var Name="Cull mode" value="Clockwise" />
+                            <Var Name="Lighting" value="Phong" />
+                            <Var Name="Z-buffer mode" value="Buffered" />
+                            <Var Name="Transparent" value="False" />
+                        </Component>
+                    </Components>
+                </ZobObject>
+                <ZobObject Guid="4007204974">
+                    <Var Name="Name" value="gltf_Object_20" />
+                    <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+                    <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Body type" />
+                    <Var Name="Active" value="True" />
+                    <Var Name="Mass" value="1000.000" />
+                    <Components>
+                        <Component Type="Mesh" Guid="2007353945">
+                            <Var Name="Enabled" value="True" />
+                            <Var Name="File" value="Object_20;;;0" />
+                            <Var Name="Cull mode" value="Clockwise" />
+                            <Var Name="Lighting" value="Phong" />
+                            <Var Name="Z-buffer mode" value="Buffered" />
+                            <Var Name="Transparent" value="False" />
+                        </Component>
+                    </Components>
+                </ZobObject>
+                <ZobObject Guid="4007410705">
+                    <Var Name="Name" value="gltf_Object_21" />
+                    <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+                    <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Body type" value="Static" />
+                    <Var Name="Active" value="True" />
+                    <Var Name="Mass" value="1000.000" />
+                    <Components>
+                        <Component Type="Mesh" Guid="2007727838">
+                            <Var Name="Enabled" value="True" />
+                            <Var Name="File" value="Object_21;;;0" />
+                            <Var Name="Cull mode" value="Clockwise" />
+                            <Var Name="Lighting" value="Phong" />
+                            <Var Name="Z-buffer mode" value="Buffered" />
+                            <Var Name="Transparent" value="False" />
+                        </Component>
+                    </Components>
+                </ZobObject>
+                <ZobObject Guid="4007479674">
+                    <Var Name="Name" value="gltf_Object_22" />
+                    <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+                    <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Body type" value="Static" />
+                    <Var Name="Active" value="True" />
+                    <Var Name="Mass" value="1000.000" />
+                    <Components>
+                        <Component Type="Mesh" Guid="2007736898">
+                            <Var Name="Enabled" value="True" />
+                            <Var Name="File" value="Object_22;;;0" />
+                            <Var Name="Cull mode" value="Clockwise" />
+                            <Var Name="Lighting" value="Phong" />
+                            <Var Name="Z-buffer mode" value="Buffered" />
+                            <Var Name="Transparent" value="False" />
+                        </Component>
+                    </Components>
+                </ZobObject>
+                <ZobObject Guid="4007802979">
+                    <Var Name="Name" value="gltf_Object_23" />
+                    <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+                    <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Body type" value="Static" />
+                    <Var Name="Active" value="True" />
+                    <Var Name="Mass" value="1000.000" />
+                    <Components>
+                        <Component Type="Mesh" Guid="2007979858">
+                            <Var Name="Enabled" value="True" />
+                            <Var Name="File" value="Object_23;;;0" />
+                            <Var Name="Cull mode" value="Clockwise" />
+                            <Var Name="Lighting" value="Phong" />
+                            <Var Name="Z-buffer mode" value="Buffered" />
+                            <Var Name="Transparent" value="False" />
+                        </Component>
+                    </Components>
+                </ZobObject>
+                <ZobObject Guid="4007042294">
+                    <Var Name="Name" value="gltf_Object_24" />
+                    <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+                    <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Body type" value="Static" />
+                    <Var Name="Active" value="True" />
+                    <Var Name="Mass" value="1000.000" />
+                    <Components>
+                        <Component Type="Mesh" Guid="2007853977">
+                            <Var Name="Enabled" value="True" />
+                            <Var Name="File" value="Object_24;;;0" />
+                            <Var Name="Cull mode" value="Clockwise" />
+                            <Var Name="Lighting" value="Phong" />
+                            <Var Name="Z-buffer mode" value="Buffered" />
+                            <Var Name="Transparent" value="False" />
+                        </Component>
+                    </Components>
+                </ZobObject>
+                <ZobObject Guid="4007655756">
+                    <Var Name="Name" value="gltf_Object_25" />
+                    <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+                    <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Body type" value="Static" />
+                    <Var Name="Active" value="True" />
+                    <Var Name="Mass" value="1000.000" />
+                    <Components>
+                        <Component Type="Mesh" Guid="2007429298">
+                            <Var Name="Enabled" value="True" />
+                            <Var Name="File" value="Object_25;;;0" />
+                            <Var Name="Cull mode" value="Clockwise" />
+                            <Var Name="Lighting" value="Phong" />
+                            <Var Name="Z-buffer mode" value="Buffered" />
+                            <Var Name="Transparent" value="False" />
+                        </Component>
+                    </Components>
+                </ZobObject>
+                <ZobObject Guid="4007118714">
+                    <Var Name="Name" value="gltf_Object_26" />
+                    <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+                    <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Body type" value="Static" />
+                    <Var Name="Active" value="True" />
+                    <Var Name="Mass" value="1000.000" />
+                    <Components>
+                        <Component Type="Mesh" Guid="2007926865">
+                            <Var Name="Enabled" value="True" />
+                            <Var Name="File" value="Object_26;;;0" />
+                            <Var Name="Cull mode" value="Clockwise" />
+                            <Var Name="Lighting" value="Phong" />
+                            <Var Name="Z-buffer mode" value="Buffered" />
+                            <Var Name="Transparent" value="False" />
+                        </Component>
+                    </Components>
+                </ZobObject>
+                <ZobObject Guid="4007907086">
+                    <Var Name="Name" value="gltf_Object_27" />
+                    <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+                    <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Body type" value="Static" />
+                    <Var Name="Active" value="True" />
+                    <Var Name="Mass" value="1000.000" />
+                    <Components>
+                        <Component Type="Mesh" Guid="2007525213">
+                            <Var Name="Enabled" value="True" />
+                            <Var Name="File" value="Object_27;;;0" />
+                            <Var Name="Cull mode" value="Clockwise" />
+                            <Var Name="Lighting" value="Phong" />
+                            <Var Name="Z-buffer mode" value="Buffered" />
+                            <Var Name="Transparent" value="False" />
+                        </Component>
+                    </Components>
+                </ZobObject>
+                <ZobObject Guid="4007084989">
+                    <Var Name="Name" value="gltf_Object_28" />
+                    <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+                    <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Body type" value="Static" />
+                    <Var Name="Active" value="True" />
+                    <Var Name="Mass" value="1000.000" />
+                    <Components>
+                        <Component Type="Mesh" Guid="2007642768">
+                            <Var Name="Enabled" value="True" />
+                            <Var Name="File" value="Object_28;;;0" />
+                            <Var Name="Cull mode" value="Clockwise" />
+                            <Var Name="Lighting" value="Phong" />
+                            <Var Name="Z-buffer mode" value="Buffered" />
+                            <Var Name="Transparent" value="False" />
+                        </Component>
+                    </Components>
+                </ZobObject>
+                <ZobObject Guid="4007256725">
+                    <Var Name="Name" value="gltf_Object_29" />
+                    <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+                    <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Body type" value="Static" />
+                    <Var Name="Active" value="True" />
+                    <Var Name="Mass" value="1000.000" />
+                    <Components>
+                        <Component Type="Mesh" Guid="2007795471">
+                            <Var Name="Enabled" value="True" />
+                            <Var Name="File" value="Object_29;;;0" />
+                            <Var Name="Cull mode" value="Clockwise" />
+                            <Var Name="Lighting" value="Phong" />
+                            <Var Name="Z-buffer mode" value="Buffered" />
+                            <Var Name="Transparent" value="False" />
+                        </Component>
+                    </Components>
+                </ZobObject>
+                <ZobObject Guid="4007562596">
+                    <Var Name="Name" value="gltf_Object_30" />
+                    <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+                    <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Body type" value="Static" />
+                    <Var Name="Active" value="True" />
+                    <Var Name="Mass" value="1000.000" />
+                    <Components>
+                        <Component Type="Mesh" Guid="2007698821">
+                            <Var Name="Enabled" value="True" />
+                            <Var Name="File" value="Object_30;;;0" />
+                            <Var Name="Cull mode" value="Clockwise" />
+                            <Var Name="Lighting" value="Phong" />
+                            <Var Name="Z-buffer mode" value="Buffered" />
+                            <Var Name="Transparent" value="False" />
+                        </Component>
+                    </Components>
+                </ZobObject>
+                <ZobObject Guid="4007063790">
+                    <Var Name="Name" value="gltf_Object_31" />
+                    <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+                    <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Body type" />
+                    <Var Name="Active" value="True" />
+                    <Var Name="Mass" value="1000.000" />
+                    <Components>
+                        <Component Type="Mesh" Guid="2007812756">
+                            <Var Name="Enabled" value="True" />
+                            <Var Name="File" value="Object_31;;;0" />
+                            <Var Name="Cull mode" value="Clockwise" />
+                            <Var Name="Lighting" value="Phong" />
+                            <Var Name="Z-buffer mode" value="Buffered" />
+                            <Var Name="Transparent" value="False" />
+                        </Component>
+                    </Components>
+                </ZobObject>
+                <ZobObject Guid="4007372314">
+                    <Var Name="Name" value="gltf_Object_32" />
+                    <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+                    <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Body type" value="Static" />
+                    <Var Name="Active" value="True" />
+                    <Var Name="Mass" value="1000.000" />
+                    <Components>
+                        <Component Type="Mesh" Guid="2007719114">
+                            <Var Name="Enabled" value="True" />
+                            <Var Name="File" value="Object_32;;;0" />
+                            <Var Name="Cull mode" value="Clockwise" />
+                            <Var Name="Lighting" value="Phong" />
+                            <Var Name="Z-buffer mode" value="Buffered" />
+                            <Var Name="Transparent" value="False" />
+                        </Component>
+                    </Components>
+                </ZobObject>
+                <ZobObject Guid="4007788986">
+                    <Var Name="Name" value="gltf_Object_33" />
+                    <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+                    <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Body type" value="Static" />
+                    <Var Name="Active" value="True" />
+                    <Var Name="Mass" value="1000.000" />
+                    <Components>
+                        <Component Type="Mesh" Guid="2007934928">
+                            <Var Name="Enabled" value="True" />
+                            <Var Name="File" value="Object_33;;;0" />
+                            <Var Name="Cull mode" value="Clockwise" />
+                            <Var Name="Lighting" value="Phong" />
+                            <Var Name="Z-buffer mode" value="Buffered" />
+                            <Var Name="Transparent" value="False" />
+                        </Component>
+                    </Components>
+                </ZobObject>
+                <ZobObject Guid="4007456190">
+                    <Var Name="Name" value="gltf_Object_34" />
+                    <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+                    <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Body type" value="Static" />
+                    <Var Name="Active" value="True" />
+                    <Var Name="Mass" value="1000.000" />
+                    <Components>
+                        <Component Type="Mesh" Guid="2007133027">
+                            <Var Name="Enabled" value="True" />
+                            <Var Name="File" value="Object_34;;;0" />
+                            <Var Name="Cull mode" value="Clockwise" />
+                            <Var Name="Lighting" value="Phong" />
+                            <Var Name="Z-buffer mode" value="Buffered" />
+                            <Var Name="Transparent" value="False" />
+                        </Component>
+                    </Components>
+                </ZobObject>
+                <ZobObject Guid="4007637882">
+                    <Var Name="Name" value="gltf_Object_35" />
+                    <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+                    <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Body type" value="Static" />
+                    <Var Name="Active" value="True" />
+                    <Var Name="Mass" value="1000.000" />
+                    <Components>
+                        <Component Type="Mesh" Guid="2007884244">
+                            <Var Name="Enabled" value="True" />
+                            <Var Name="File" value="Object_35;;;0" />
+                            <Var Name="Cull mode" value="Clockwise" />
+                            <Var Name="Lighting" value="Phong" />
+                            <Var Name="Z-buffer mode" value="Buffered" />
+                            <Var Name="Transparent" value="False" />
+                        </Component>
+                    </Components>
+                </ZobObject>
+                <ZobObject Guid="4007758311">
+                    <Var Name="Name" value="gltf_Object_36" />
+                    <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+                    <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Body type" value="Static" />
+                    <Var Name="Active" value="True" />
+                    <Var Name="Mass" value="1000.000" />
+                    <Components>
+                        <Component Type="Mesh" Guid="2007017292">
+                            <Var Name="Enabled" value="True" />
+                            <Var Name="File" value="Object_36;;;0" />
+                            <Var Name="Cull mode" value="Clockwise" />
+                            <Var Name="Lighting" value="Phong" />
+                            <Var Name="Z-buffer mode" value="Buffered" />
+                            <Var Name="Transparent" value="False" />
+                        </Component>
+                    </Components>
+                </ZobObject>
+                <ZobObject Guid="4007797507">
+                    <Var Name="Name" value="gltf_Object_37" />
+                    <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+                    <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Body type" value="Static" />
+                    <Var Name="Active" value="True" />
+                    <Var Name="Mass" value="1000.000" />
+                    <Components>
+                        <Component Type="Mesh" Guid="2007794294">
+                            <Var Name="Enabled" value="True" />
+                            <Var Name="File" value="Object_37;;;0" />
+                            <Var Name="Cull mode" value="Clockwise" />
+                            <Var Name="Lighting" value="Phong" />
+                            <Var Name="Z-buffer mode" value="Buffered" />
+                            <Var Name="Transparent" value="False" />
+                        </Component>
+                    </Components>
+                </ZobObject>
+                <ZobObject Guid="4007421298">
+                    <Var Name="Name" value="gltf_Object_38" />
+                    <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+                    <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Body type" value="Static" />
+                    <Var Name="Active" value="True" />
+                    <Var Name="Mass" value="1000.000" />
+                    <Components>
+                        <Component Type="Mesh" Guid="2007599863">
+                            <Var Name="Enabled" value="True" />
+                            <Var Name="File" value="Object_38;;;0" />
+                            <Var Name="Cull mode" value="Clockwise" />
+                            <Var Name="Lighting" value="Phong" />
+                            <Var Name="Z-buffer mode" value="Buffered" />
+                            <Var Name="Transparent" value="False" />
+                        </Component>
+                    </Components>
+                </ZobObject>
+                <ZobObject Guid="4007342439">
+                    <Var Name="Name" value="gltf_Object_39" />
+                    <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+                    <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Body type" value="Static" />
+                    <Var Name="Active" value="True" />
+                    <Var Name="Mass" value="1000.000" />
+                    <Components>
+                        <Component Type="Mesh" Guid="2007663240">
+                            <Var Name="Enabled" value="True" />
+                            <Var Name="File" value="Object_39;;;0" />
+                            <Var Name="Cull mode" value="Clockwise" />
+                            <Var Name="Lighting" value="Phong" />
+                            <Var Name="Z-buffer mode" value="Buffered" />
+                            <Var Name="Transparent" value="False" />
+                        </Component>
+                    </Components>
+                </ZobObject>
+                <ZobObject Guid="4007021227">
+                    <Var Name="Name" value="gltf_Object_40" />
+                    <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+                    <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Body type" value="Static" />
+                    <Var Name="Active" value="True" />
+                    <Var Name="Mass" value="1000.000" />
+                    <Components>
+                        <Component Type="Mesh" Guid="2007305400">
+                            <Var Name="Enabled" value="True" />
+                            <Var Name="File" value="Object_40;;;0" />
+                            <Var Name="Cull mode" value="Clockwise" />
+                            <Var Name="Lighting" value="Phong" />
+                            <Var Name="Z-buffer mode" value="Buffered" />
+                            <Var Name="Transparent" value="False" />
+                        </Component>
+                    </Components>
+                </ZobObject>
+                <ZobObject Guid="4007790886">
+                    <Var Name="Name" value="gltf_Object_41" />
+                    <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+                    <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Body type" value="Static" />
+                    <Var Name="Active" value="True" />
+                    <Var Name="Mass" value="1000.000" />
+                    <Components>
+                        <Component Type="Mesh" Guid="2007261376">
+                            <Var Name="Enabled" value="True" />
+                            <Var Name="File" value="Object_41;;;0" />
+                            <Var Name="Cull mode" value="Clockwise" />
+                            <Var Name="Lighting" value="Phong" />
+                            <Var Name="Z-buffer mode" value="Buffered" />
+                            <Var Name="Transparent" value="False" />
+                        </Component>
+                    </Components>
+                </ZobObject>
+                <ZobObject Guid="4007832360">
+                    <Var Name="Name" value="gltf_Object_42" />
+                    <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+                    <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Body type" value="Static" />
+                    <Var Name="Active" value="True" />
+                    <Var Name="Mass" value="1000.000" />
+                    <Components>
+                        <Component Type="Mesh" Guid="2007763405">
+                            <Var Name="Enabled" value="True" />
+                            <Var Name="File" value="Object_42;;;0" />
+                            <Var Name="Cull mode" value="Clockwise" />
+                            <Var Name="Lighting" value="Phong" />
+                            <Var Name="Z-buffer mode" value="Buffered" />
+                            <Var Name="Transparent" value="False" />
+                        </Component>
+                    </Components>
+                </ZobObject>
+                <ZobObject Guid="4007576471">
+                    <Var Name="Name" value="gltf_Object_43" />
+                    <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+                    <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Body type" value="Static" />
+                    <Var Name="Active" value="True" />
+                    <Var Name="Mass" value="1000.000" />
+                    <Components>
+                        <Component Type="Mesh" Guid="2007663732">
+                            <Var Name="Enabled" value="True" />
+                            <Var Name="File" value="Object_43;;;0" />
+                            <Var Name="Cull mode" value="Clockwise" />
+                            <Var Name="Lighting" value="Phong" />
+                            <Var Name="Z-buffer mode" value="Buffered" />
+                            <Var Name="Transparent" value="False" />
+                        </Component>
+                    </Components>
+                </ZobObject>
+                <ZobObject Guid="4007048418">
+                    <Var Name="Name" value="gltf_Object_44" />
+                    <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+                    <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Body type" value="Static" />
+                    <Var Name="Active" value="True" />
+                    <Var Name="Mass" value="1000.000" />
+                    <Components>
+                        <Component Type="Mesh" Guid="2007664032">
+                            <Var Name="Enabled" value="True" />
+                            <Var Name="File" value="Object_44;;;0" />
+                            <Var Name="Cull mode" value="Clockwise" />
+                            <Var Name="Lighting" value="Phong" />
+                            <Var Name="Z-buffer mode" value="Buffered" />
+                            <Var Name="Transparent" value="False" />
+                        </Component>
+                    </Components>
+                </ZobObject>
+                <ZobObject Guid="4007066079">
+                    <Var Name="Name" value="gltf_Object_45" />
+                    <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+                    <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Body type" value="Static" />
+                    <Var Name="Active" value="True" />
+                    <Var Name="Mass" value="1000.000" />
+                    <Components>
+                        <Component Type="Mesh" Guid="2007118658">
+                            <Var Name="Enabled" value="True" />
+                            <Var Name="File" value="Object_45;;;0" />
+                            <Var Name="Cull mode" value="Clockwise" />
+                            <Var Name="Lighting" value="Phong" />
+                            <Var Name="Z-buffer mode" value="Buffered" />
+                            <Var Name="Transparent" value="False" />
+                        </Component>
+                    </Components>
+                </ZobObject>
+                <ZobObject Guid="4007250646">
+                    <Var Name="Name" value="gltf_Object_46" />
+                    <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+                    <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Body type" value="Static" />
+                    <Var Name="Active" value="True" />
+                    <Var Name="Mass" value="1000.000" />
+                    <Components>
+                        <Component Type="Mesh" Guid="2007928753">
+                            <Var Name="Enabled" value="True" />
+                            <Var Name="File" value="Object_46;;;0" />
+                            <Var Name="Cull mode" value="Clockwise" />
+                            <Var Name="Lighting" value="Phong" />
+                            <Var Name="Z-buffer mode" value="Buffered" />
+                            <Var Name="Transparent" value="False" />
+                        </Component>
+                    </Components>
+                </ZobObject>
+                <ZobObject Guid="4007863903">
+                    <Var Name="Name" value="gltf_Object_47" />
+                    <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+                    <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Body type" value="Static" />
+                    <Var Name="Active" value="True" />
+                    <Var Name="Mass" value="1000.000" />
+                    <Components>
+                        <Component Type="Mesh" Guid="2007068293">
+                            <Var Name="Enabled" value="True" />
+                            <Var Name="File" value="Object_47;;;0" />
+                            <Var Name="Cull mode" value="Clockwise" />
+                            <Var Name="Lighting" value="Phong" />
+                            <Var Name="Z-buffer mode" value="Buffered" />
+                            <Var Name="Transparent" value="False" />
+                        </Component>
+                    </Components>
+                </ZobObject>
+                <ZobObject Guid="4007720328">
+                    <Var Name="Name" value="gltf_Object_48" />
+                    <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+                    <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Body type" value="Static" />
+                    <Var Name="Active" value="True" />
+                    <Var Name="Mass" value="1000.000" />
+                    <Components>
+                        <Component Type="Mesh" Guid="2007514604">
+                            <Var Name="Enabled" value="True" />
+                            <Var Name="File" value="Object_48;;;0" />
+                            <Var Name="Cull mode" value="Clockwise" />
+                            <Var Name="Lighting" value="Phong" />
+                            <Var Name="Z-buffer mode" value="Buffered" />
+                            <Var Name="Transparent" value="False" />
+                        </Component>
+                    </Components>
+                </ZobObject>
+                <ZobObject Guid="4007734587">
+                    <Var Name="Name" value="gltf_Object_49" />
+                    <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+                    <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Body type" value="Static" />
+                    <Var Name="Active" value="True" />
+                    <Var Name="Mass" value="1000.000" />
+                    <Components>
+                        <Component Type="Mesh" Guid="2007374192">
+                            <Var Name="Enabled" value="True" />
+                            <Var Name="File" value="Object_49;;;0" />
+                            <Var Name="Cull mode" value="Clockwise" />
+                            <Var Name="Lighting" value="Phong" />
+                            <Var Name="Z-buffer mode" value="Buffered" />
+                            <Var Name="Transparent" value="False" />
+                        </Component>
+                    </Components>
+                </ZobObject>
+                <ZobObject Guid="4007224516">
+                    <Var Name="Name" value="gltf_Object_50" />
+                    <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+                    <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Body type" value="Static" />
+                    <Var Name="Active" value="True" />
+                    <Var Name="Mass" value="1000.000" />
+                    <Components>
+                        <Component Type="Mesh" Guid="2007960205">
+                            <Var Name="Enabled" value="True" />
+                            <Var Name="File" value="Object_50;;;0" />
+                            <Var Name="Cull mode" value="Clockwise" />
+                            <Var Name="Lighting" value="Phong" />
+                            <Var Name="Z-buffer mode" value="Buffered" />
+                            <Var Name="Transparent" value="False" />
+                        </Component>
+                    </Components>
+                </ZobObject>
+                <ZobObject Guid="4007659258">
+                    <Var Name="Name" value="gltf_Object_51" />
+                    <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+                    <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Body type" value="Static" />
+                    <Var Name="Active" value="True" />
+                    <Var Name="Mass" value="1000.000" />
+                    <Components>
+                        <Component Type="Mesh" Guid="2007200320">
+                            <Var Name="Enabled" value="True" />
+                            <Var Name="File" value="Object_51;;;0" />
+                            <Var Name="Cull mode" value="Clockwise" />
+                            <Var Name="Lighting" value="Phong" />
+                            <Var Name="Z-buffer mode" value="Buffered" />
+                            <Var Name="Transparent" value="False" />
+                        </Component>
+                    </Components>
+                </ZobObject>
+                <ZobObject Guid="4007742515">
+                    <Var Name="Name" value="gltf_Object_52" />
+                    <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+                    <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Body type" value="Static" />
+                    <Var Name="Active" value="True" />
+                    <Var Name="Mass" value="1000.000" />
+                    <Components>
+                        <Component Type="Mesh" Guid="2007517901">
+                            <Var Name="Enabled" value="True" />
+                            <Var Name="File" value="Object_52;;;0" />
+                            <Var Name="Cull mode" value="Clockwise" />
+                            <Var Name="Lighting" value="Phong" />
+                            <Var Name="Z-buffer mode" value="Buffered" />
+                            <Var Name="Transparent" value="False" />
+                        </Component>
+                    </Components>
+                </ZobObject>
+                <ZobObject Guid="4007859561">
+                    <Var Name="Name" value="gltf_Object_53" />
+                    <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+                    <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Body type" value="Static" />
+                    <Var Name="Active" value="True" />
+                    <Var Name="Mass" value="1000.000" />
+                    <Components>
+                        <Component Type="Mesh" Guid="2007500644">
+                            <Var Name="Enabled" value="True" />
+                            <Var Name="File" value="Object_53;;;0" />
+                            <Var Name="Cull mode" value="Clockwise" />
+                            <Var Name="Lighting" value="Phong" />
+                            <Var Name="Z-buffer mode" value="Buffered" />
+                            <Var Name="Transparent" value="False" />
+                        </Component>
+                    </Components>
+                </ZobObject>
+                <ZobObject Guid="4007065623">
+                    <Var Name="Name" value="gltf_Object_54" />
+                    <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+                    <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Body type" value="Static" />
+                    <Var Name="Active" value="True" />
+                    <Var Name="Mass" value="1000.000" />
+                    <Components>
+                        <Component Type="Mesh" Guid="2007378122">
+                            <Var Name="Enabled" value="True" />
+                            <Var Name="File" value="Object_54;;;0" />
+                            <Var Name="Cull mode" value="Clockwise" />
+                            <Var Name="Lighting" value="Phong" />
+                            <Var Name="Z-buffer mode" value="Buffered" />
+                            <Var Name="Transparent" value="False" />
+                        </Component>
+                    </Components>
+                </ZobObject>
+                <ZobObject Guid="4007173296">
+                    <Var Name="Name" value="gltf_Object_55" />
+                    <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+                    <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Body type" value="Static" />
+                    <Var Name="Active" value="True" />
+                    <Var Name="Mass" value="1000.000" />
+                    <Components>
+                        <Component Type="Mesh" Guid="2007320233">
+                            <Var Name="Enabled" value="True" />
+                            <Var Name="File" value="Object_55;;;0" />
+                            <Var Name="Cull mode" value="Clockwise" />
+                            <Var Name="Lighting" value="Phong" />
+                            <Var Name="Z-buffer mode" value="Buffered" />
+                            <Var Name="Transparent" value="False" />
+                        </Component>
+                    </Components>
+                </ZobObject>
+                <ZobObject Guid="4007715700">
+                    <Var Name="Name" value="gltf_Object_56" />
+                    <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+                    <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Body type" value="Static" />
+                    <Var Name="Active" value="True" />
+                    <Var Name="Mass" value="1000.000" />
+                    <Components>
+                        <Component Type="Mesh" Guid="2007419841">
+                            <Var Name="Enabled" value="True" />
+                            <Var Name="File" value="Object_56;;;0" />
+                            <Var Name="Cull mode" value="Clockwise" />
+                            <Var Name="Lighting" value="Phong" />
+                            <Var Name="Z-buffer mode" value="Buffered" />
+                            <Var Name="Transparent" value="False" />
+                        </Component>
+                    </Components>
+                </ZobObject>
+                <ZobObject Guid="4007636677">
+                    <Var Name="Name" value="gltf_Object_57" />
+                    <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+                    <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+                    <Var Name="Body type" value="Static" />
+                    <Var Name="Active" value="True" />
+                    <Var Name="Mass" value="1000.000" />
+                    <Components>
+                        <Component Type="Mesh" Guid="2007650322">
+                            <Var Name="Enabled" value="True" />
+                            <Var Name="File" value="Object_57;;;0" />
+                            <Var Name="Cull mode" value="Clockwise" />
+                            <Var Name="Lighting" value="Phong" />
+                            <Var Name="Z-buffer mode" value="Buffered" />
+                            <Var Name="Transparent" value="False" />
+                        </Component>
+                    </Components>
+                </ZobObject>
+            </ZobObject>
+        </ZobObject>
+    </ZobObject>
+</Scene>

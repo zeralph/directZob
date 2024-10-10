@@ -55,6 +55,17 @@ ZobMatrix4x4 ZobMatrix4x4::Transpose() const
 	return outM;
 }
 
+void ZobMatrix4x4::SetData(std::vector<double>& d)
+{
+	for (int n = 0; n < 4; n++) 
+	{
+		for (int p = 0; p < 4; p++) 
+		{
+			m_data[p][n] = (float)d[n * 4 + p];
+		}
+	}
+}
+
 void ZobMatrix4x4::Identity()
 {
 	memcpy(&m_data, &identityArray, sizeof(identityArray));

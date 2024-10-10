@@ -11,6 +11,7 @@
 Light::Light(std::string& name, eLightType type, ZobColor color, float intensity, float distance, ZobObject* parent, bool bEditor) :
 	ZobObject((bEditor?ZobEntity::type_editor:ZobEntity::type_scene), ZobEntity::subtype_zobLight, name, parent)
 {
+	SET_CLASS_AND_NAME
 	m_lightColor = color;
 	m_intensity = intensity;
 	m_distance = distance;
@@ -20,31 +21,36 @@ Light::Light(std::string& name, eLightType type, ZobColor color, float intensity
 	m_inFrtustrum = false;
 	NewLightConfiguration();
 	InitVariablesExposer();
+	/*
 	if (DirectZob::IsEditorMode() && !bEditor)
+	{
+		ZobComponentSprite* b = (ZobComponentSprite*)ZobComponentFactory::CreateComponent(this, "Sprite", true);
+		std::string path = SceneLoader::GetResourcePath();
+		path = "D:\\Git\\directZob\\resources\\";
+		ZobFilePath zfp = ZobFilePath("light", path, "light.png", true);
+		b->Set(zfp);
+		b->SetForEditor();
+	}
+	*/
+}
+
+Light::Light(zobId id, TiXmlElement* node, ZobObject* parent)
+	:ZobObject(id, node, parent)
+{
+	SET_CLASS_AND_NAME
+	m_distance = 0;
+	m_intensity = 0;
+	m_active = false;
+	m_spotAngleRad = 0;
+	InitVariablesExposer();
+	m_varExposer->ReadNode(node);
+	if (DirectZob::IsEditorMode())
 	{
 		ZobComponentSprite* b = (ZobComponentSprite*)ZobComponentFactory::CreateComponent(this, "Sprite", true);
 		ZobFilePath zfp = ZobFilePath("light", SceneLoader::GetResourcePath(), "light.png", true);
 		b->Set(zfp);
 		b->SetForEditor();
 	}
-}
-
-Light::Light(zobId id, TiXmlElement* node, ZobObject* parent)
-	:ZobObject(id, node, parent)
-{
-		m_distance = 0;
-		m_intensity = 0;
-		m_active = false;
-		m_spotAngleRad = 0;
-		InitVariablesExposer();
-		m_varExposer->ReadNode(node);
-		if (DirectZob::IsEditorMode())
-		{
-			ZobComponentSprite* b = (ZobComponentSprite*)ZobComponentFactory::CreateComponent(this, "Sprite", true);
-			ZobFilePath zfp = ZobFilePath("light", SceneLoader::GetResourcePath(), "light.png", true);
-			b->Set(zfp);
-			b->SetForEditor();
-		}
 }
 
 Light::~Light()

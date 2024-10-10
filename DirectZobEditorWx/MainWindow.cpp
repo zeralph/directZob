@@ -37,36 +37,28 @@ MainWindow::MainWindow( wxWindow* parent, wxWindowID id, const wxString& title, 
 	m_menu11 = new wxMenu();
 	wxMenuItem* m_menu11Item = new wxMenuItem( m_treeMenu, wxID_ANY, _("Add"), wxEmptyString, wxITEM_NORMAL, m_menu11 );
 	wxMenuItem* m_treeMenuAddObject;
-	m_treeMenuAddObject = new wxMenuItem( m_menu11, wxID_ANY, wxString( _("Object") ) , wxEmptyString, wxITEM_NORMAL );
+	m_treeMenuAddObject = new wxMenuItem( m_menu11, wxID_ANY, wxString( _("Object") ) + wxT('\t') + wxT("CTRL-SHIFT-O"), wxEmptyString, wxITEM_NORMAL );
 	m_menu11->Append( m_treeMenuAddObject );
 
 	wxMenuItem* m_menuAddMesh;
-	m_menuAddMesh = new wxMenuItem( m_menu11, wxID_ANY, wxString( _("Mesh ...") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menuAddMesh = new wxMenuItem( m_menu11, wxID_ANY, wxString( _("Mesh ...") ) + wxT('\t') + wxT("CTRL-SHIFT-M"), wxEmptyString, wxITEM_NORMAL );
 	m_menu11->Append( m_menuAddMesh );
 
 	wxMenuItem* m_menuIAddSprite;
-	m_menuIAddSprite = new wxMenuItem( m_menu11, wxID_ANY, wxString( _("Sprite ...") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menuIAddSprite = new wxMenuItem( m_menu11, wxID_ANY, wxString( _("Sprite ...") ) + wxT('\t') + wxT("CTRL-SHIFT-S"), wxEmptyString, wxITEM_NORMAL );
 	m_menu11->Append( m_menuIAddSprite );
 
 	wxMenuItem* m_menuAddAsset;
-	m_menuAddAsset = new wxMenuItem( m_menu11, wxID_ANY, wxString( _("Asset ...") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menuAddAsset = new wxMenuItem( m_menu11, wxID_ANY, wxString( _("Asset ...") ) + wxT('\t') + wxT("CTRL-SHIFT-A"), wxEmptyString, wxITEM_NORMAL );
 	m_menu11->Append( m_menuAddAsset );
 
-	m_menuLight = new wxMenu();
-	wxMenuItem* m_menuLightItem = new wxMenuItem( m_menu11, wxID_ANY, _("Light"), wxEmptyString, wxITEM_NORMAL, m_menuLight );
 	wxMenuItem* m_menuAddLight;
-	m_menuAddLight = new wxMenuItem( m_menuLight, wxID_ANY, wxString( _("Light") ) , wxEmptyString, wxITEM_NORMAL );
-	m_menuLight->Append( m_menuAddLight );
+	m_menuAddLight = new wxMenuItem( m_menu11, wxID_ANY, wxString( _("Light") ) + wxT('\t') + wxT("CTRL-SHIFT-L"), wxEmptyString, wxITEM_NORMAL );
+	m_menu11->Append( m_menuAddLight );
 
-	m_menu11->Append( m_menuLightItem );
-
-	m_menuCamera = new wxMenu();
-	wxMenuItem* m_menuCameraItem = new wxMenuItem( m_menu11, wxID_ANY, _("Camera"), wxEmptyString, wxITEM_NORMAL, m_menuCamera );
 	wxMenuItem* m_menuIAddCamera;
-	m_menuIAddCamera = new wxMenuItem( m_menuCamera, wxID_ANY, wxString( _("Camera") ) , wxEmptyString, wxITEM_NORMAL );
-	m_menuCamera->Append( m_menuIAddCamera );
-
-	m_menu11->Append( m_menuCameraItem );
+	m_menuIAddCamera = new wxMenuItem( m_menu11, wxID_ANY, wxString( _("Camera") ) + wxT('\t') + wxT("CTRL-SHIFT-C"), wxEmptyString, wxITEM_NORMAL );
+	m_menu11->Append( m_menuIAddCamera );
 
 	m_treeMenu->Append( m_menu11Item );
 
@@ -79,7 +71,7 @@ MainWindow::MainWindow( wxWindow* parent, wxWindowID id, const wxString& title, 
 	m_treeMenu->Append( m_treeMenuAddComponent );
 
 	wxMenuItem* m_treeMenuZoom;
-	m_treeMenuZoom = new wxMenuItem( m_treeMenu, wxID_ANY, wxString( _("Zoom") ) , wxEmptyString, wxITEM_NORMAL );
+	m_treeMenuZoom = new wxMenuItem( m_treeMenu, wxID_ANY, wxString( _("Zoom") ) + wxT('\t') + wxT("Z"), wxEmptyString, wxITEM_NORMAL );
 	m_treeMenu->Append( m_treeMenuZoom );
 
 	wxMenuItem* m_treeMenuDuplicate;
@@ -87,7 +79,7 @@ MainWindow::MainWindow( wxWindow* parent, wxWindowID id, const wxString& title, 
 	m_treeMenu->Append( m_treeMenuDuplicate );
 
 	wxMenuItem* m_treeMenuShowHide;
-	m_treeMenuShowHide = new wxMenuItem( m_treeMenu, wxID_ANY, wxString( _("Show/hide") ) , wxEmptyString, wxITEM_NORMAL );
+	m_treeMenuShowHide = new wxMenuItem( m_treeMenu, wxID_ANY, wxString( _("Show/hide") ) + wxT('\t') + wxT("V"), wxEmptyString, wxITEM_NORMAL );
 	m_treeMenu->Append( m_treeMenuShowHide );
 
 	wxMenuItem* m_treeMenuSaveAsAsset;
@@ -220,23 +212,23 @@ MainWindow::MainWindow( wxWindow* parent, wxWindowID id, const wxString& title, 
 	m_menubar1 = new wxMenuBar( 0 );
 	m_menu1 = new wxMenu();
 	wxMenuItem* m_menuIItemNew;
-	m_menuIItemNew = new wxMenuItem( m_menu1, wxID_ANY, wxString( _("New") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menuIItemNew = new wxMenuItem( m_menu1, wxID_ANY, wxString( _("New") ) + wxT('\t') + wxT("CTRL-N"), wxEmptyString, wxITEM_NORMAL );
 	m_menu1->Append( m_menuIItemNew );
 
 	wxMenuItem* m_menuItemOpen;
-	m_menuItemOpen = new wxMenuItem( m_menu1, wxID_ANY, wxString( _("Open ...") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menuItemOpen = new wxMenuItem( m_menu1, wxID_ANY, wxString( _("Open ...") ) + wxT('\t') + wxT("CTRL-F"), wxEmptyString, wxITEM_NORMAL );
 	m_menu1->Append( m_menuItemOpen );
 
 	wxMenuItem* m_menuItemSaveAs;
-	m_menuItemSaveAs = new wxMenuItem( m_menu1, wxID_ANY, wxString( _("Save as ...") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menuItemSaveAs = new wxMenuItem( m_menu1, wxID_ANY, wxString( _("Save as ...") ) + wxT('\t') + wxT("CTRL-SHIFT-S"), wxEmptyString, wxITEM_NORMAL );
 	m_menu1->Append( m_menuItemSaveAs );
 
 	wxMenuItem* m_menuItemSave;
-	m_menuItemSave = new wxMenuItem( m_menu1, wxID_ANY, wxString( _("Save") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menuItemSave = new wxMenuItem( m_menu1, wxID_ANY, wxString( _("Save") ) + wxT('\t') + wxT("CTRL-S"), wxEmptyString, wxITEM_NORMAL );
 	m_menu1->Append( m_menuItemSave );
 
 	wxMenuItem* m_menuItemExit;
-	m_menuItemExit = new wxMenuItem( m_menu1, wxID_ANY, wxString( _("Exit") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menuItemExit = new wxMenuItem( m_menu1, wxID_ANY, wxString( _("Exit") ) + wxT('\t') + wxT("CTRL-Q"), wxEmptyString, wxITEM_NORMAL );
 	m_menu1->Append( m_menuItemExit );
 
 	m_menubar1->Append( m_menu1, _("File") );
@@ -267,6 +259,7 @@ MainWindow::MainWindow( wxWindow* parent, wxWindowID id, const wxString& title, 
 	this->Centre( wxBOTH );
 
 	// Connect Events
+	this->Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( MainWindow::OnKeyDown ) );
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( MainWindow::OnExit ) );
 	this->Connect( wxEVT_MAXIMIZE, wxMaximizeEventHandler( MainWindow::OnMaximize ) );
 	m_treeNode->Connect( wxEVT_COMMAND_TREE_BEGIN_DRAG, wxTreeEventHandler( MainWindow::OnStartDrag ), NULL, this );
@@ -277,8 +270,8 @@ MainWindow::MainWindow( wxWindow* parent, wxWindowID id, const wxString& title, 
 	m_menu11->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindow::OnMenuAddMesh ), this, m_menuAddMesh->GetId());
 	m_menu11->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindow::OnMenuAddSprite ), this, m_menuIAddSprite->GetId());
 	m_menu11->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindow::OnMenuAddAsset ), this, m_menuAddAsset->GetId());
-	m_menuLight->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindow::OnMenuAddLight ), this, m_menuAddLight->GetId());
-	m_menuCamera->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindow::OnMenuAddCamera ), this, m_menuIAddCamera->GetId());
+	m_menu11->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindow::OnMenuAddLight ), this, m_menuAddLight->GetId());
+	m_menu11->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindow::OnMenuAddCamera ), this, m_menuIAddCamera->GetId());
 	m_treeMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindow::OnTreeMenuRemove ), this, m_treeMenuRemoveObject->GetId());
 	m_treeMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindow::OnTreeMenuAddComponent ), this, m_treeMenuAddComponent->GetId());
 	m_treeMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindow::OnTreeMenuZoom ), this, m_treeMenuZoom->GetId());

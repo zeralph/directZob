@@ -77,7 +77,7 @@ void ZobComponentImage::LoadMaterialInternal()
 			if (!m_image)
 			{
 				ZobColor a = ZobColor::White;
-				m_image = DirectZob::GetInstance()->GetMaterialManager()->LoadMaterial(m_texture.GetName(), &a, &a, &a, 0, false, &m_texture);
+				m_image = DirectZob::GetInstance()->GetMaterialManager()->LoadMaterial(m_texture.GetName(), &a, &a, &a, 0, &m_texture);
 			}
 		}
 	}

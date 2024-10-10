@@ -1,3 +1,4 @@
+#pragma once
 #include <wx/rawbmp.h>
 #include <wx/time.h>
 #include <wx/timer.h>
@@ -60,6 +61,7 @@ public:
     void                        OnGizmosText(wxCommandEvent& event) override;
     void                        OnGizmosPhysics(wxCommandEvent& event) override;
     void                        OnGizmosObjects(wxCommandEvent& event) override;
+    void                        OnKeyDown(wxKeyEvent& event) override;
     
     //tree menu
     void OnMenuAddObject(wxCommandEvent& event) override;

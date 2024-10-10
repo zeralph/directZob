@@ -41,13 +41,13 @@ void ZobObjectManager::AddZobObject(ZobObject* z)
 	}
 }
 
-ZobObject* ZobObjectManager::CreateZobObject(ZobObject* parent)
+ZobObject* ZobObjectManager::CreateZobObject(ZobObject* parent, std::string& name)
 {
 	if (parent == NULL)
 	{
 		parent = m_rootObject;
 	}
-	return new ZobObject(ZobEntity::type_scene, ZobEntity::subtype_zobOject, emptyStr, parent);
+	return new ZobObject(ZobEntity::type_scene, ZobEntity::subtype_zobOject, name, parent);
 }
 
 void ZobObjectManager::RemoveZobObject(ZobObject* z)

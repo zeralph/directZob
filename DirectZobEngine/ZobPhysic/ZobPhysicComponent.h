@@ -82,6 +82,7 @@ public:
 	//Local
 	Transform							GetLocalTransform() const { return Transform(m_localTransform); };
 	void								SetLocalTransform(Transform t);
+	void								SetLocalFromOpenglMatrix(double* mat);
 	ZobVector3							GetLocalOrientation() const;
 	void								GetLocalAxisAngleRotation(ZobVector3& axis, float& angle);
 	ZobVector3							QuaternionToAngles(Quaternion q);

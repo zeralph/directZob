@@ -56,6 +56,7 @@ public:
 	ZobVector3							GetLocalScale() const;
 	void 								SetLocalScale(float x, float y, float z);
 	void 								SetWorldScale(float x, float y, float z);
+	void								SetLocalFromOpenglMatrix(double* mat);
 	//Local
 	ZobVector3							GetLocalPosition() const;
 	void								SetLocalPosition(float x, float y, float z);

@@ -15,6 +15,11 @@ class Triangle
 public:
 	struct RenderOptions
 	{
+		enum eColorMode
+		{
+			eColorMode_add = 0,
+			eColorMode_blend = 1,
+		};
 		enum eLightMode
 		{
 			eLightMode_none = 0,
@@ -41,7 +46,8 @@ public:
 		};
 		bool bTransparency = false;
 		eZBufferMode zBuffer = eZBufferMode::buffered;
-		ZobColor color = ZobColor::White;
+		ZobColor color = ZobColor::Black;
+		eColorMode colorMode = RenderOptions::eColorMode_add;
 		eLightMode lightMode = eLightMode::eLightMode_phong;
 		eCullMode cullMode = eCullMode_ClockwiseFace;
 	};

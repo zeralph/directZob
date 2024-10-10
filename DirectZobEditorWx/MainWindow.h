@@ -46,8 +46,6 @@ class MainWindow : public wxFrame
 		wxPanel* m_panel1;
 		wxMenu* m_treeMenu;
 		wxMenu* m_menu11;
-		wxMenu* m_menuLight;
-		wxMenu* m_menuCamera;
 		wxPanel* m_panel2;
 		wxSplitterWindow* m_splitter3;
 		wxPanel* m_panel3;
@@ -75,6 +73,7 @@ class MainWindow : public wxFrame
 		wxStatusBar* m_statusBar1;
 
 		// Virtual event handlers, override them in your derived class
+		virtual void OnKeyDown( wxKeyEvent& event ) { event.Skip(); }
 		virtual void OnExit( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnMaximize( wxMaximizeEvent& event ) { event.Skip(); }
 		virtual void OnStartDrag( wxTreeEvent& event ) { event.Skip(); }

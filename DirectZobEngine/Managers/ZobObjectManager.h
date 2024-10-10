@@ -27,7 +27,7 @@ public:
 	ZobObject*									GetZobObject(const std::string& name) const;
 	void										GetZobObjectList(std::string &s) const;
 	ZobObject*									GetRootObject() { return m_rootObject;  }
-	ZobObject*									CreateZobObject(ZobObject* parent);
+	ZobObject*									CreateZobObject(ZobObject* parent, std::string& name);
 	void										RemoveZobObject(ZobObject* z);
 	void										UnloadAll();
 	bool										Reparent(ZobObject* o, ZobObject* parent);

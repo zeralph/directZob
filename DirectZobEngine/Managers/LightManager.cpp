@@ -41,9 +41,9 @@ void LightManager::ReInitGlobalSettings()
 	m_fogDensity = 2.0f;
 	m_fogType = eFogType::eFogType_NoFog;
 	m_lightIndex = 1;
-	std::string n = std::string("editorLight");
-	Light* editorLight = new Light(n, Light::eLightType_directional, ZobColor::White, 1.0f, 1000.0f, DirectZob::GetInstance()->GetZobObjectManager()->GetRootObject(), true);
-	m_editorLight.push_back(editorLight);
+	//std::string n = std::string("editorLight");
+	//Light* editorLight = new Light(n, Light::eLightType_directional, ZobColor::White, 1.0f, 1000.0f, DirectZob::GetInstance()->GetZobObjectManager()->GetRootObject(), true);
+	//m_editorLight.push_back(editorLight);
 }
 
 void LightManager::Setup(ZobColor* fogColor, ZobColor* ambientColor, ZobColor* clearColor, float fogDistance, float fogDensity, eFogType fogType, float ambientIntensity)
@@ -159,8 +159,8 @@ void LightManager::Update()
 	{
 		ZobVector3 p = ZobVector3(0, 0, 0);// c->GetWorldPosition();
 		ZobVector3 o = c->GetWorldRotation();
-		m_editorLight[0]->SetWorldPosition(p.x, p.y, p.z);
-		m_editorLight[0]->SetWorldRotation(o.x, o.y, o.z);
+		//m_editorLight[0]->SetWorldPosition(p.x, p.y, p.z);
+		//m_editorLight[0]->SetWorldRotation(o.x, o.y, o.z);
 	}
 }
 

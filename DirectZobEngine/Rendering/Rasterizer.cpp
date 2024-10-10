@@ -12,7 +12,22 @@
 
 static ZobVector3 sFog = ZobVector3(1.0f, 1.0f, 0.95f);
 static float fogDecal = -0.6f;
-
+const float TRANSPARENCY_MATRIX_88[8][8] =
+{
+	{ 1. / 64., 33. / 64.,  9. / 64., 41. / 64.,  3. / 64., 35. / 64., 11. / 64., 43. / 64. },
+	{ 49. / 64., 17. / 64., 57. / 64., 25. / 64., 51. / 64., 19. / 64., 59. / 64., 27. / 64. },
+	{ 13. / 64., 45. / 64.,  5. / 64., 37. / 64., 15. / 64., 47. / 64.,  7. / 64., 39. / 64. },
+	{ 61. / 64., 29. / 64., 53. / 64., 21. / 64., 63. / 64., 31. / 64., 55. / 64., 23. / 64. },
+	{ 4. / 64., 36. / 64., 12. / 64., 44. / 64.,  2. / 64., 34. / 64., 10. / 64., 42. / 64. },
+	{ 52. / 64., 20. / 64., 60. / 64., 28. / 64., 50. / 64., 18. / 64., 58. / 64., 26. / 64. },
+	{ 16. / 64., 48. / 64.,  8. / 64., 40. / 64., 14. / 64., 46. / 64.,  6. / 64., 38. / 64. },
+	{ 64. / 64., 32. / 64., 56. / 64., 24. / 64., 62. / 64., 30. / 64., 54. / 64., 22. / 64. }
+};
+const float TRANSPARENCY_MATRIX_33[3][3] = { 
+	{0.25, 0.50, 0.25},
+	{0.50, 1.00, 0.50}, 
+	{0.25, 0.50, 0.25}
+};
 const int BAYER_PATTERN_16X16[16][16] =   {   //  16x16 Bayer Dithering Matrix.  Color levels: 256
 	{     0, 191,  48, 239,  12, 203,  60, 251,   3, 194,  51, 242,  15, 206,  63, 254  }, 
 	{   127,  64, 175, 112, 139,  76, 187, 124, 130,  67, 178, 115, 142,  79, 190, 127  },
@@ -743,21 +758,25 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector2* screenCoord, con
 				dg *= texPixelData[1];
 				db *= texPixelData[2];
 				a *= texPixelData[3];
-				if (a == 0.0f)
-				{
-					return;
-				}
 			}
 			else
 			{
 				dr *= material->GetDiffuseColor()->GetRedNormalized();
 				dg *= material->GetDiffuseColor()->GetGreenNormalized();
 				db *= material->GetDiffuseColor()->GetBlueNormalized();
-				a = 1.0f;
+				a = material->GetAmbientColor()->GetAlphaNormalized();
 			}
 			sr = material->GetSpecularColor()->GetRedNormalized();
 			sg = material->GetSpecularColor()->GetGreenNormalized();
 			sb = material->GetSpecularColor()->GetBlueNormalized();
+		}
+		if (a == 0)
+		{
+			return;
+		}
+		if (a < 1.0f)
+		{
+			transparency = a;
 		}
 		if (lighting != Triangle::RenderOptions::eLightMode_none)
 		{
@@ -806,24 +825,35 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector2* screenCoord, con
 			fg = dg;
 			fb = db;
 		}
-		fr = CLAMP(fr, 0.0f, 1.0f) * t->options->color.GetRedNormalized();
-		fg = CLAMP(fg, 0.0f, 1.0f) * t->options->color.GetGreenNormalized();
-		fb = CLAMP(fb, 0.0f, 1.0f) * t->options->color.GetBlueNormalized();
+
 		float fog = ComputeFog(z);
 		fr = fr * (1.0f - fog) + fog * m_fogColor->GetRedNormalized();
 		fg = fg * (1.0f - fog) + fog * m_fogColor->GetGreenNormalized();
 		fb = fb * (1.0f - fog) + fog * m_fogColor->GetBlueNormalized();
 		static int modulo = 2;
+		
 		if (transparency < 1.0f)
 		{
-			//int t = (int)(0.25f * p->x + 0.5f * p->y) % modulo * (int)(p->y) % modulo;
-			//if(!t)
-			if (((int)screenCoord->x  + (int)screenCoord->y) % 2 == 0)
+			const int row = (int)screenCoord->y % 8;   //  y % 16
+			const int col = (int)screenCoord->x % 8;   //  x % 16
+			const float t = transparency - (float)TRANSPARENCY_MATRIX_88[col][row];
+			if (t < 0.f)
 			{
 				return;
 			}
 		}
-
+		if (t->options->colorMode == Triangle::RenderOptions::eColorMode_blend)
+		{
+			fr = CLAMP(fr, 0.0f, 1.0f) * t->options->color.GetRedNormalized();
+			fg = CLAMP(fg, 0.0f, 1.0f) * t->options->color.GetGreenNormalized();
+			fb = CLAMP(fb, 0.0f, 1.0f) * t->options->color.GetBlueNormalized();
+		}
+		else
+		{
+			fr = CLAMP(fr + t->options->color.GetRedNormalized(), 0.0f, 1.0f);
+			fg = CLAMP(fg + t->options->color.GetGreenNormalized(), 0.0f, 1.0f);
+			fb = CLAMP(fb + t->options->color.GetBlueNormalized(), 0.0f, 1.0f);
+		}
 		const int ncolors = (int)engine->GetNbBitsPerColorDepth();
 		if(ncolors != 0)
 		{

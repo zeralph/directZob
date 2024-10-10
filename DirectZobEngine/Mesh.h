@@ -51,6 +51,7 @@ public:
 	const long							GetSize() const { return m_size; }
 protected:
 										Mesh(std::string& name, tinygltf::Model& model, tinygltf::Mesh& mesh, ZobComponent* zm);
+										Mesh(std::string& name, tinygltf::Model& model, tinygltf::Mesh& mesh, ZobMatrix4x4& mat);
 #ifdef ENABLE_FBX_SUPPORT
 										Mesh(std::string& parentName, ZobFilePath* zfp, fbxsdk::FbxMesh* mesh);
 #endif
@@ -66,7 +67,8 @@ protected:
 	void								ParseObjFaceData(const std::string* s, int &v, int &u, int &n, bool& hasUv, bool& hasNormals) const;
 	const long							ComputeSize() const;
 
-	void 								bindGlTFModelNodes(ZobObject*z, tinygltf::Model &model, tinygltf::Node &node);
+	void 								bindGlTFModelNodes(ZobObject* z, tinygltf::Model &model, tinygltf::Node &node);
+	void 								bindGlTFModelNodes(ZobMatrix4x4 mat, tinygltf::Model& model, tinygltf::Node& node);
 	ZobComponent* m_component;
 	std::vector<Mesh*> m_subMeshes;
 	uint m_nbVertices = 0;

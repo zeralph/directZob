@@ -56,6 +56,26 @@ public :
 	}
 
 	template<class T>
+	static std::vector<T*> GetEditorEntities()
+	{
+		std::vector<T*> ret;
+		ret.resize(0);
+		std::map<const zobId, ZobEntity*>::iterator it = m_entityMap.begin();;
+		while (it != m_entityMap.end())
+		{
+			ZobEntity* ze = it->second;
+			std::string s = typeid(T).name();
+			s = s.substr(5, s.length() - 5);
+			if (s == ze->m_class && ZobEntity::GetType(ze->GetIdValue()) == ZobEntity::ZobType::type_editor && ze->GetName() != "root")
+			{
+				ret.push_back(static_cast<T*>(ze));
+			}
+			it++;
+		}
+		return ret;
+	}
+
+	template<class T>
 	static std::vector<T*> GetEntities()
 	{
 		std::vector<T*> ret;

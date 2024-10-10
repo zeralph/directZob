@@ -26,6 +26,7 @@ public:
 	ZobMatrix4x4 Transpose() const;
 	void FromVectors(const ZobVector3& left, const ZobVector3& up, const ZobVector3& forward);
 	inline void SetData(uint i, uint j, float f) { m_data[i][j] = f; }
+	void SetData(std::vector<double>& d);
 	void SetScale(const float x, const float y, const float z);
 	void SetRotation(const float x, const float y, const float z);
 	void SetPosition(const float x, const float y, const float z);

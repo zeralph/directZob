@@ -13,7 +13,7 @@ public:
 
 	//Material(const std::string& path, const std::string& file, const std::string& name);
 	ZobMaterial();
-	ZobMaterial(const std::string& name, const ZobColor* ambientColor, const ZobColor* diffuseColor, const ZobColor* specularColor, float specularExponent, float transparency, const Texture* texture);
+	ZobMaterial(const std::string& name, const ZobColor* ambientColor, const ZobColor* diffuseColor, const ZobColor* specularColor, float specularExponent, const Texture* texture);
 	~ZobMaterial();
 	inline const Texture*		GetDiffuseTexture() const { return m_diffuseTexture; }
 	void						SetDiffuseTexture(const Texture* t) { m_diffuseTexture = t; }

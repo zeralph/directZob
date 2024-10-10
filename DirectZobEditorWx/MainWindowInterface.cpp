@@ -346,7 +346,7 @@ void MainWindowInterface::BuildObjectTree(ZobObject* z, wxTreeItemId node)
     {
         zobId id = (*iter)->GetIdValue();
         ZobEntity::ZobType zt  =ZobEntity::GetType(id);
-        if (zt!= ZobEntity::type_editor)
+        //if (zt!= ZobEntity::type_editor)
         {
             wxTreeItemId newNode = m_treeNode->AppendItem(node, (*iter)->GetName());
             zobTreeItemData* data = new zobTreeItemData();
@@ -389,6 +389,60 @@ void MainWindowInterface::UpdateControls()
 void MainWindowInterface::OnMouseClick(wxMouseEvent& event)
 {
     m_editor->OnMouseClick(event);
+}
+
+void MainWindowInterface::OnKeyDown(wxKeyEvent& event)
+{
+    bool handled = false;
+    if (wxGetKeyState(WXK_CONTROL))
+    {
+        //Object additioon
+        if(wxGetKeyState(WXK_SHIFT))
+        {
+            wxCommandEvent e;
+            switch (event.GetKeyCode())
+            {
+            case 'M':
+                OnMenuAddMesh(e);
+                handled = true;
+                break;
+            case 'O':
+                OnMenuAddObject(e);
+                handled = true;
+                break;
+            case 'S':
+                OnMenuAddSprite(e);
+                handled = true;
+                break;
+            case 'A':
+                OnMenuAddAsset(e);
+                handled = true;
+                break;
+            case 'L':
+                OnMenuAddLight(e);
+                handled = true;
+                break;
+            case 'C':
+                OnMenuAddCamera(e);
+                handled = true;
+                break;
+            }
+        }
+    }
+    else
+    {
+        switch (event.GetKeyCode())
+        {
+        case 'Z':
+            m_editor->ZoomToSelected();
+            handled = true;
+            break;
+        }
+    }
+    if (!handled)
+    {
+        event.Skip();
+    }
 }
 
 void MainWindowInterface::OnModificatorClick(wxCommandEvent& event)
@@ -487,12 +541,23 @@ void MainWindowInterface::OnOpen(wxCommandEvent& event)
 
 void MainWindowInterface::OnSaveAs(wxCommandEvent& event) 
 { 
-    event.Skip(); 
+    wxFileDialog openFileDialog(this, _("DirectZob Scene"), "", "", "dzs files (*.dzs)|*.dzs", wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+    if (openFileDialog.ShowModal() == wxID_CANCEL)
+    {
+        return;
+    }
+    std::string p = std::string(openFileDialog.GetDirectory().mb_str());
+    p.append("\\");
+    std::string f = std::string(openFileDialog.GetFilename().mb_str());
+    m_directZob->SaveScene(p, f);
 }
 
 void MainWindowInterface::OnSave(wxCommandEvent& event) 
 { 
-    event.Skip(); 
+    if (m_directZob->CanFastSave())
+    {
+        m_directZob->SaveScene();
+    }
 }
 
 void MainWindowInterface::OnExit(wxCommandEvent& event) 
@@ -534,7 +599,8 @@ void MainWindowInterface::OnTreeRightClick(wxTreeEvent& event)
 }
 
 void MainWindowInterface::OnMenuAddObject(wxCommandEvent& event)
-{
+{   
+    //m_newObjectDialog
     m_editor->AddObject();
     RefreshObjectTree();
 }
@@ -558,16 +624,7 @@ void MainWindowInterface::OnTreeMenuAddComponent(wxCommandEvent& event)
 }
 void MainWindowInterface::OnTreeMenuZoom(wxCommandEvent& event)
 {
-/*		String^ guid = ((ZobControlTreeNode^)m_treeView->SelectedNode)->m_zobObjectGuid;
-		std::string id;
-		MarshalString(guid, id);
-		zobId zid = ZobEntity::ZobIdFromString(id);
-		ZobObject* p = ZobEntity::GetEntity<ZobObject>(zid);
-		Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCamera(std::string("EditorCamera"));
-		if (c && p)
-		{
-			ZobVector3 pos = p->GetWorldPosition();
-			c->SetTarget(&pos);*/
+    m_editor->ZoomToSelected();
 }
 void MainWindowInterface::OnTreeMenuDuplicate(wxCommandEvent& event)
 {

@@ -81,7 +81,7 @@ void Inspector::Set(ZobObject* z)
 	for (iter = z->GetComponents()->begin(); iter != z->GetComponents()->end(); iter++)
 	{
 		const ZobComponent* zc = (*iter);
-		if (ZobEntity::GetType(zc->GetIdValue()) != ZobEntity::type_editor)
+		//if (ZobEntity::GetType(zc->GetIdValue()) != ZobEntity::type_editor)
 		{
 			std::string compName = (*iter)->GetName();
 			wxStaticBoxSizer* newSizer = new wxStaticBoxSizer(new wxStaticBox(m_panel, wxID_ANY, _(compName.c_str())), wxVERTICAL);
