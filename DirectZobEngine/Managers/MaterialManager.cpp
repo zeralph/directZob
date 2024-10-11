@@ -37,7 +37,7 @@ ZobMaterial* MaterialManager::CreateMaterial()
 }
 
 const ZobMaterial* MaterialManager::LoadMaterial(const std::string& name, const ZobColor* ambientColor, const ZobColor* diffuseColor, const ZobColor* specularColor,
-												float specularExponent, Texture* texture)
+												float specularExponent, ZobTexture* texture)
 {
 	m_textures.push_back(texture);
 	if (GetMaterial(name) == NULL)
@@ -59,11 +59,11 @@ const ZobMaterial* MaterialManager::LoadMaterial(const std::string& name, const 
 	//assert(zfp.IsDefined());
 	if (GetMaterial(name) == NULL)
 	{
-		const Texture* texture = NULL;
+		const ZobTexture* texture = NULL;
 		if (zfp->IsDefined())
 		{
 			std::string textureFile = zfp->GetName();
-			for (std::vector<Texture*>::const_iterator iter = m_textures.begin(); iter != m_textures.end(); iter++)
+			for (std::vector<ZobTexture*>::const_iterator iter = m_textures.begin(); iter != m_textures.end(); iter++)
 			{
 				if ((*iter)->GetName() == textureFile)
 				{
@@ -198,12 +198,12 @@ const ZobMaterial* MaterialManager::LoadGlTFMaterial(tinygltf::Model& model, int
 		int y = 0;
 		y++;
 	}
-	Texture* texture = NULL;
+	ZobTexture* texture = NULL;
 	int texIdx = m.pbrMetallicRoughness.baseColorTexture.index;
 	if (texIdx >= 0)
 	{
 		tinygltf::Image& image = model.images[texIdx];
-		texture = new Texture();
+		texture = new ZobTexture();
 		texture->LoadFromGlTF(image);
 	}
 	ZobColor ambientColor = ZobColor(255, 255, 255, 255);
@@ -370,7 +370,7 @@ ZobMaterial* MaterialManager::GetMaterialNoConst(const int i) const
 	return NULL;
 }
 
-const Texture* MaterialManager::GetTexture(const std::string name)
+const ZobTexture* MaterialManager::GetTexture(const std::string name)
 {
 	for(int i=0; i<m_textures.size(); i++)
 	{
@@ -382,9 +382,9 @@ const Texture* MaterialManager::GetTexture(const std::string name)
 	return NULL;
 }
 
-const Texture* MaterialManager::LoadTexture(ZobFilePath* zfp)
+const ZobTexture* MaterialManager::LoadTexture(ZobFilePath* zfp)
 {
-	Texture* texture = new Texture();
+	ZobTexture* texture = new ZobTexture();
 	texture->Load(zfp);
 	m_textures.push_back(texture);
 	return texture;
@@ -414,7 +414,7 @@ void MaterialManager::UnloadAll()
 	m_materials.clear();
 	for (int i = 0; i < m_textures.size(); i++)
 	{
-		Texture* t = m_textures[i];
+		ZobTexture* t = m_textures[i];
 		m_textures[i] = NULL;
 		delete t;
 	}

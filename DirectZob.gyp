@@ -54,7 +54,7 @@
 				'DirectZobEngine/Rendering/Rasterizer.cpp',
 				'DirectZobEngine/Rendering/Color.cpp',
 				'DirectZobEngine/Rendering/Text2D.h',
-				'DirectZobEngine/Rendering/Texture.h',
+				'DirectZobEngine/Rendering/ZobTexture.h',
 				'DirectZobEngine/Rendering/Triangle.h',
 				'DirectZobEngine/Rendering/ZobMatrix2x2.h',
 				'DirectZobEngine/Rendering/ZobMatrix4x4.h',

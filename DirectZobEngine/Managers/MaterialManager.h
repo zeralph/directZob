@@ -9,7 +9,7 @@
 #include "../Misc/ZobFilePath.h"
 #include "../../dependencies/tinygltf/include/tiny_gltf.h"
 
-class Texture;
+class ZobTexture;
 class ZobMaterial;
 class ZobColor;
 //class tinygltf::Material;
@@ -23,7 +23,7 @@ public:
 	const ZobMaterial* 			LoadMaterial(const std::string& name, const ZobColor* ambientColor, const ZobColor* diffuseColor, const ZobColor* specularColor,
 											float specularExponent, ZobFilePath* zfp);
 	const ZobMaterial*			LoadMaterial(const std::string& name, const ZobColor* ambientColor, const ZobColor* diffuseColor, const ZobColor* specularColor,
-											float specularExponent, Texture* texture);
+											float specularExponent, ZobTexture* texture);
 	const ZobMaterial*			LoadGlTFMaterial(tinygltf::Model& model, int index);
 	const ZobMaterial* 			GetMaterial(const std::string& name) const;
 	const int 					GetNbMaterials() const { return (int)m_materials.size(); }
@@ -35,10 +35,10 @@ public:
 #endif
 	void 						UnloadAll();
 	ZobMaterial*				CreateMaterial();
-	const Texture*				GetTexture(const std::string name);
+	const ZobTexture*				GetTexture(const std::string name);
 private:
-	const Texture*				LoadTexture(ZobFilePath* zfp);
+	const ZobTexture*				LoadTexture(ZobFilePath* zfp);
 	void 						SplitEntry(const std::string* s, std::vector<std::string>* v, const char delim);
 	std::vector<ZobMaterial*> 	m_materials;
-	std::vector<Texture*> 		m_textures;
+	std::vector<ZobTexture*> 		m_textures;
 };

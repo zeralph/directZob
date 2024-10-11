@@ -28,7 +28,7 @@ Text2D::~Text2D()
 {
 }
 
-void Text2D::GetChar(char c, Texture& tex) const
+void Text2D::GetChar(char c, ZobTexture& tex) const
 {
 }
 
@@ -69,6 +69,7 @@ void Text2D::Print(uint x, uint y, uint color, const char* fmt, ...)
 		for (size_t i = 0; i < charsNeeded; i++)
 		{
 			int xx = x + i * m_charWidth;
+			PrintChar(xx+1, y+1, m_buffer[i], ~(color)/2);
 			PrintChar(xx, y, m_buffer[i], color);
 		}
 	}

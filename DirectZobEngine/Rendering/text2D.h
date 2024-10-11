@@ -13,7 +13,7 @@ public:
 	~Text2D();
 	void Print(uint x, uint y, const std::string* text, uint color);
 	void Print(uint x, uint y, uint color, const char* fmt, ...);
-	void GetChar(char c, Texture &tex) const;
+	void GetChar(char c, ZobTexture &tex) const;
 private:
 
 	void PrintChar(uint x, uint y, const char c, uint color);

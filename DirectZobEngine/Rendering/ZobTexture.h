@@ -5,11 +5,11 @@
 #include "../../dependencies/tinygltf/include/tiny_gltf.h"
 
 class ZobFilePath;
-class Texture
+class ZobTexture
 {
 public:
-	Texture();
-	~Texture();
+	ZobTexture();
+	~ZobTexture();
 	void Load(ZobFilePath* zfp);
 	void LoadFromData(const std::string& name, int w, int h, float* data);
 	void LoadFromData(const std::string& name, int w, int h, unsigned long* data);

@@ -195,7 +195,7 @@ Mesh::Mesh(ZobFilePath* zfp, ZobComponent* zm):Mesh(zfp->GetName(), zm)
 		{
 			if (fullPath.find(".gltf") != -1 || fullPath.find(".glb") != -1)
 			{
-				LoadGlTF(zfp);
+				LoadGlTF(zfp, false);
 			}			
 			else if (fullPath.find(".obj") != -1 || fullPath.find(".OBJ") != -1)
 			{
@@ -418,11 +418,6 @@ Mesh::Mesh(std::string& name, tinygltf::Model& model, tinygltf::Mesh& mesh, ZobC
 	m_name = name;
 	DirectZob::LogInfo("create GlTF submesh %s", name.c_str());
 	int g = mesh.primitives.size();
-	if (g > 1)
-	{
-		int y = 0;
-		y++;
-	}
 	for (size_t primitiveIndex = 0; primitiveIndex < mesh.primitives.size(); ++primitiveIndex)
 	{
 		tinygltf::Primitive primitive = mesh.primitives[primitiveIndex];
@@ -863,6 +858,17 @@ Mesh::~Mesh()
 	DirectZob::RemoveIndent();
 }
 
+bool Mesh::IsDrawn() const 
+{ 
+
+	bool b = m_bDrawn; 
+	for (int i = 0; i < m_subMeshes.size(); i++)
+	{
+		b |= m_subMeshes[i]->IsDrawn();
+	}
+	return b;
+}
+
 const long Mesh::ComputeSize() const
 {
 	long s;
@@ -877,7 +883,7 @@ const long Mesh::ComputeSize() const
 	return s;
 }
 
-void Mesh::LoadGlTF(ZobFilePath* zfp)
+void Mesh::LoadGlTF(ZobFilePath* zfp, bool bAsZobObjects)
 {
 	tinygltf::Model model;
 	tinygltf::TinyGLTF loader;
@@ -903,10 +909,15 @@ void Mesh::LoadGlTF(ZobFilePath* zfp)
 	for (size_t i = 0; i < scene.nodes.size(); ++i) 
 	{
 		assert((scene.nodes[i] >= 0) && (scene.nodes[i] < model.nodes.size()));
-
-		bindGlTFModelNodes(m_component->GetZobObject(), model, model.nodes[scene.nodes[i]]);
-		//ZobMatrix4x4 mat;
-		//bindGlTFModelNodes(mat, model, model.nodes[scene.nodes[i]]);
+		if (!bAsZobObjects)
+		{
+			ZobMatrix4x4 mat;
+			bindGlTFModelNodes(mat, model, model.nodes[scene.nodes[i]]);			
+		}
+		else
+		{
+			bindGlTFModelNodes(m_component->GetZobObject(), model, model.nodes[scene.nodes[i]]);
+		}
 	}
 }
 
@@ -1162,7 +1173,7 @@ void Mesh::DrawBoundingBox(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& 
 void Mesh::Update(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Engine* engine, const Triangle::RenderOptions* options)
 {
 	engine->ComputeBoundingBoxes(&modelMatrix, &m_minBoundingBox, &m_maxBoundingBox, &m_OBB, &m_AABB);
-	m_bDrawn = engine->IsInFrustrum(camera, &m_AABB) || options->zBuffer == Triangle::RenderOptions::noZFar;
+	m_bDrawn = engine->IsInFrustrum(camera, &m_AABB);// || options->zBuffer == Triangle::RenderOptions::noZFar;
 	if (m_bDrawn)
 	{
 		BufferData* bData = engine->GetBufferData();
@@ -1266,10 +1277,10 @@ void Mesh::Update(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationM
 			rotationMatrix.Mul(&m_trianglesNormalsTmp[i]);
 			m_trianglesNormalsTmp[i].Normalize();
 		}
-		for (int i = 0; i < m_subMeshes.size(); i++)
-		{
-			m_subMeshes[i]->Update(modelMatrix, rotationMatrix, camera, engine, options);
-		}
+	}
+	for (int i = 0; i < m_subMeshes.size(); i++)
+	{
+		m_subMeshes[i]->Update(modelMatrix, rotationMatrix, camera, engine, options);
 	}
 }
 void Mesh::QueueForDrawing(ZobObject* z, const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationMatrix, const Camera* camera, Engine* engine, const Triangle::RenderOptions* options)
@@ -1315,10 +1326,10 @@ void Mesh::QueueForDrawing(ZobObject* z, const ZobMatrix4x4& modelMatrix, const 
 				}
 			}
 		}
-		for (int i = 0; i < m_subMeshes.size(); i++)
-		{
-			m_subMeshes[i]->QueueForDrawing(z, modelMatrix, rotationMatrix, camera,  engine, options);
-		}
+	}
+	for (int i = 0; i < m_subMeshes.size(); i++)
+	{
+		m_subMeshes[i]->QueueForDrawing(z, modelMatrix, rotationMatrix, camera, engine, options);
 	}
 }
 

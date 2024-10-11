@@ -41,7 +41,7 @@ public:
 	const std::string&					GetName() const { return m_name; }
 	const std::string&					GetPath() const { return m_path; }
 	const std::string&					GetFileName() const { return m_fileName; }
-	inline bool							IsDrawn() const { return m_bDrawn; }
+	bool								IsDrawn() const;
 	const int							GetNbSubMeshes() const { return m_subMeshes.size(); }
 	const Mesh*							GetSubMesh(int idx) const { return (m_subMeshes.size()>idx)?m_subMeshes.at(idx):NULL; }
 	const Box*							GetOBB() const { return &m_OBB; }
@@ -58,7 +58,7 @@ protected:
 	void								SplitEntry(const std::string* s, std::vector<std::string>* v, const char delim) const;
 	void								CreateTriangles(const std::vector<std::string>* line, std::vector<Triangle>* t, size_t& tArrayIdx, const ZobMaterial* tex);
 	void								LoadOBJ(ZobFilePath* zfp);
-	void								LoadGlTF(ZobFilePath* zfp);
+	void								LoadGlTF(ZobFilePath* zfp, bool bAsZobObjects);
 #ifdef ENABLE_FBX_SUPPORT
 	void								LoadFbx(ZobFilePath* zfp);
 	void								FbxMultT(FbxNode* node, FbxVector4 &vector);

@@ -3,7 +3,7 @@
 #include "../ZobObjects/Light.h"
 #include "../Managers/LightManager.h"
 #include "../Managers/CameraManager.h"
-#include "Texture.h"
+#include "ZobTexture.h"
 #include "../ZobObjects/Camera.h"
 #include <cstring>
 #undef None
@@ -238,7 +238,7 @@ void Rasterizer::RenderInternalRayTrace()
 						m = t->material;
 						if (m)
 						{
-							const Texture* texture = m->GetDiffuseTexture();
+							const ZobTexture* texture = m->GetDiffuseTexture();
 							if (texture && texture->GetData())
 							{
 								float wa = u;
@@ -526,7 +526,11 @@ void Rasterizer::DrawTriangle(const Triangle* t) const
 		ComputeLightingAtPoint(t->vc, t->nc, t, verticeCLightingData);
 	}
 	const Engine* engine = DirectZob::GetInstance()->GetEngineConst();
-
+	static float maxArea = 1000000.0f;
+	if (t->area > maxArea)
+	{
+		return;
+	}
 	/* here we know that v1.y <= v2.y <= v3.y */
 	/* check for trivial case of bottom-flat triangle */
 	if (v2.y == v3.y)
@@ -727,7 +731,7 @@ inline const void Rasterizer::FillBufferPixel(const ZobVector2* screenCoord, con
 		if (material)
 		{
 			//transparency *= material->GetTransparency();
-			const Texture* texture = material->GetDiffuseTexture();
+			const ZobTexture* texture = material->GetDiffuseTexture();
 			if (texture && texture->GetData())
 			{
 				su = wa * t->ua->x + wb * t->ub->x + wc * t->uc->x;

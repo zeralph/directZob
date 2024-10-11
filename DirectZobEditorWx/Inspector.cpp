@@ -7,6 +7,7 @@
 #include "MainWindowInterface.h"
 #include <string>
 #include "../DirectZobEngine/ZobObjects/ZobObject.h"
+#include "ZobEditorManager.h"
 
 wxSize Inspector::sLabelSize = wxSize(140, 20);
 wxSize Inspector::sFloatSize = wxSize(100, 20);
@@ -81,7 +82,7 @@ void Inspector::Set(ZobObject* z)
 	for (iter = z->GetComponents()->begin(); iter != z->GetComponents()->end(); iter++)
 	{
 		const ZobComponent* zc = (*iter);
-		//if (ZobEntity::GetType(zc->GetIdValue()) != ZobEntity::type_editor)
+		if (ZobEntity::GetType(zc->GetIdValue()) != ZobEntity::type_editor || ZobEditorManager::sShowEditorObjects)
 		{
 			std::string compName = (*iter)->GetName();
 			wxStaticBoxSizer* newSizer = new wxStaticBoxSizer(new wxStaticBox(m_panel, wxID_ANY, _(compName.c_str())), wxVERTICAL);

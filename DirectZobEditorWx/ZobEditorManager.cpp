@@ -8,7 +8,7 @@
 #include "../DirectZobEngine/Managers/MaterialManager.h"
 #include "../DirectZobEngine/Misc/ZobGeometryHelper.h"
 #include "../DirectZobEngine/Components/GraphicComponents/ZobComponentSprite.h"
-#include "../DirectZobEngine/Rendering/Texture.h"
+#include "../DirectZobEngine/Rendering/ZobTexture.h"
 #include "../DirectZobEngine/Rendering/Triangle.h"
 
 #define LIGHT_TEX_NAME "editor_light_texture"
@@ -16,6 +16,8 @@
 
 #define CAMERA_TEX_NAME "editor_camera_texture"
 #define CAMERA_MAT_NAME "editor_camera_material"
+
+bool ZobEditorManager::sShowEditorObjects = true;
 
 ZobEditorManager::ZobEditorManager()
 {
@@ -615,11 +617,11 @@ void ZobEditorManager::OnNewScene()
 	DirectZob::GetInstance()->GetEngine()->DrawGizmos(true);
 	HideGizmos();
 
-	m_lightImage = new Texture();
+	m_lightImage = new ZobTexture();
 	m_lightImage->LoadFromData(LIGHT_TEX_NAME, 64, 64, gLight2);
 	m_lightMaterial = DirectZob::GetInstance()->GetMaterialManager()->LoadMaterial(LIGHT_MAT_NAME, &ZobColor::White, &ZobColor::White, &ZobColor::White, 0, m_lightImage);
 	
-	m_cameraImage = new Texture();
+	m_cameraImage = new ZobTexture();
 	m_cameraImage->LoadFromData(CAMERA_TEX_NAME, 64, 64, gCamera);
 	m_cameraMaterial = DirectZob::GetInstance()->GetMaterialManager()->LoadMaterial(CAMERA_MAT_NAME, &ZobColor::White, &ZobColor::White, &ZobColor::White, 0, m_cameraImage);
 

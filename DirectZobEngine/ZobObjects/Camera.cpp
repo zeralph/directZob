@@ -633,7 +633,7 @@ void Camera::setProjectionMatrix(const float angleOfView, const float width, con
 	ZobMatrix4x4::InvertMatrix4(GetViewMatrix(), m_invViewMatrix);
 
 	//clipping camera 
-	static float fovInc = 1.2f;
+	static float fovInc =  1.2f;
 	ar = width / height;
 	zRange = zFar - zNear;
 	tanHalfFOV = -tanf((angleOfView * fovInc) / 2.0 * M_PI / 180.0);

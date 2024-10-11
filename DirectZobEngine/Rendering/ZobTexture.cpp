@@ -1,10 +1,10 @@
-#include "Texture.h"
+#include "ZobTexture.h"
 #include "../DirectZob.h"
 #include "nanojpeg.h"
 #include "lodepng.h"
 #include "tga.h"
 
-Texture::Texture()
+ZobTexture::ZobTexture()
 {
 	float* m_data = NULL;
 	uint m_dataSize = 0;
@@ -13,7 +13,7 @@ Texture::Texture()
 	std::string m_fullPath = "";
 }
 
-Texture::~Texture()
+ZobTexture::~ZobTexture()
 {
 	//DirectZob::LogInfo("Delete Texture %s", m_fullPath.c_str());
 	DirectZob::AddIndent();
@@ -25,7 +25,7 @@ Texture::~Texture()
 	DirectZob::RemoveIndent();
 }
 
-void Texture::LoadFromGlTF(tinygltf::Image& image)
+void ZobTexture::LoadFromGlTF(tinygltf::Image& image)
 {
 	m_name = image.name;
 	m_width = image.width;
@@ -45,7 +45,7 @@ void Texture::LoadFromGlTF(tinygltf::Image& image)
 	}
 }
 
-void Texture::LoadFromData(const std::string& name, int w, int h, unsigned long* data)
+void ZobTexture::LoadFromData(const std::string& name, int w, int h, unsigned long* data)
 {
 	m_name = name;
 	m_width = w;
@@ -72,7 +72,7 @@ void Texture::LoadFromData(const std::string& name, int w, int h, unsigned long*
 	}
 }
 
-void Texture::LoadFromData(const std::string &name, int w, int h, float* data)
+void ZobTexture::LoadFromData(const std::string &name, int w, int h, float* data)
 {
 	m_name = name;
 	m_width = w;
@@ -81,7 +81,7 @@ void Texture::LoadFromData(const std::string &name, int w, int h, float* data)
 	m_dataSize = w * h * 4;
 }
 
-void Texture::Load(ZobFilePath* zfp)
+void ZobTexture::Load(ZobFilePath* zfp)
 {
 	zfp->LoadData();
 	m_name = zfp->GetName();
@@ -229,7 +229,7 @@ void Texture::Load(ZobFilePath* zfp)
 }
 
 
-void Texture::OnError(int error, const char* material, const char* texture)
+void ZobTexture::OnError(int error, const char* material, const char* texture)
 {
 	DirectZob::LogError("Error %i\noccured when loading texture '%s'\nfor material '%s'", error, texture, material);
 }

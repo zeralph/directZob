@@ -346,7 +346,7 @@ void MainWindowInterface::BuildObjectTree(ZobObject* z, wxTreeItemId node)
     {
         zobId id = (*iter)->GetIdValue();
         ZobEntity::ZobType zt  =ZobEntity::GetType(id);
-        //if (zt!= ZobEntity::type_editor)
+        if (zt!= ZobEntity::type_editor || ZobEditorManager::sShowEditorObjects)
         {
             wxTreeItemId newNode = m_treeNode->AppendItem(node, (*iter)->GetName());
             zobTreeItemData* data = new zobTreeItemData();

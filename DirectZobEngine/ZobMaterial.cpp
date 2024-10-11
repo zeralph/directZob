@@ -18,7 +18,7 @@ ZobMaterial::ZobMaterial()
 	DirectZob::RemoveIndent();
 }
 
-ZobMaterial::ZobMaterial(const std::string& name, const ZobColor* ambientColor, const ZobColor* diffuseColor, const ZobColor* specularColor, float specularExponent, const Texture* texture)
+ZobMaterial::ZobMaterial(const std::string& name, const ZobColor* ambientColor, const ZobColor* diffuseColor, const ZobColor* specularColor, float specularExponent, const ZobTexture* texture)
 {
 	sMaterialNumber++;
 	//DirectZob::LogInfo("Material %s creation", name.c_str());

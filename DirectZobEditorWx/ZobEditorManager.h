@@ -13,10 +13,11 @@
 #define EDITOR_ROTATE_Z "Editor_rotate_z"
 
 class ZobMaterial;
-class Texture;
+class ZobTexture;
 class ZobEditorManager
 {
 public:
+	static bool sShowEditorObjects;
 	enum eGizmoModificatorType
 	{
 		eGizmo_none = 0,
@@ -152,9 +153,9 @@ private:
 	static long			gLight2Len;
 	static unsigned long			gCamera[];
 	static long			gCameraLen;
-	Texture*			m_lightImage;
+	ZobTexture*			m_lightImage;
 	const ZobMaterial*	m_lightMaterial;
-	Texture*			m_cameraImage;
+	ZobTexture*			m_cameraImage;
 	const ZobMaterial*	m_cameraMaterial;
 	bool				m_init;
 	std::string 		m_logTmpData;
