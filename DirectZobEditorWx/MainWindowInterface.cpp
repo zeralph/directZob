@@ -257,7 +257,7 @@ void MainWindowInterface::OnTreeSelChanged(wxTreeEvent& event)
         ZobObject* z = ZobEntity::GetEntity<ZobObject>(id);
         DirectZob::LogInfo("Selected %s", z->GetName().c_str());
         m_editor->SetSelectedObject(z);
-//        RefreshObjectTree();
+        RefreshObjectTree();
     }
 }
 
@@ -293,12 +293,20 @@ void MainWindowInterface::RefreshObjectTree()
 
 void MainWindowInterface::OnStartDrag(wxTreeEvent& event)
 {
-    event.Allow();
     wxTreeItemId item = event.GetItem();
     if (item.IsOk())
     {
         zobTreeItemData* data = static_cast<zobTreeItemData*>(m_treeNode->GetItemData(item));
         m_dragSource = data ? data->zobIdStr : "";
+        ZobObject* source = ZobEntity::GetEntity<ZobObject>(ZobEntity::ZobIdFromString(m_dragSource));
+        if (source && !source->IsEditorObject())
+        {
+            event.Allow();
+        }
+        else
+        {
+            m_dragSource = "";
+        }
     }
 }
 
@@ -313,11 +321,15 @@ void MainWindowInterface::OnEndDrag(wxTreeEvent& event)
         {
             ZobObject* source = ZobEntity::GetEntity<ZobObject>(ZobEntity::ZobIdFromString(m_dragSource));
             ZobObject* newParent = ZobEntity::GetEntity<ZobObject>(ZobEntity::ZobIdFromString(dragTo));
-            DirectZob::GetInstance()->GetZobObjectManager()->Reparent(source, newParent);
-            DirectZob::LogInfo("Re-parented '%s' under '%s'", source->GetName().c_str(), newParent->GetName().c_str());
-            RefreshObjectTree();
+            if (newParent && !newParent->IsEditorObject())
+            {
+                DirectZob::GetInstance()->GetZobObjectManager()->Reparent(source, newParent);
+                DirectZob::LogInfo("Re-parented '%s' under '%s'", source->GetName().c_str(), newParent->GetName().c_str());
+                RefreshObjectTree();
+            }
         }
     }
+    m_dragSource = "";
 }
 
 wxTreeItemId MainWindowInterface::SelectZobObjectInTree(wxTreeItemId root, std::string& zobIdStr)
@@ -349,6 +361,10 @@ void MainWindowInterface::BuildObjectTree(ZobObject* z, wxTreeItemId node)
         if (zt!= ZobEntity::type_editor || ZobEditorManager::sShowEditorObjects)
         {
             wxTreeItemId newNode = m_treeNode->AppendItem(node, (*iter)->GetName());
+            if (zt == ZobEntity::type_editor)
+            {
+                m_singleton->m_treeNode->SetItemTextColour(newNode, wxColour(128, 128, 128, 255));
+            }
             zobTreeItemData* data = new zobTreeItemData();
             data->zobIdStr = (*iter)->ZobIdToString();
             m_singleton->m_treeNode->SetItemData(newNode, data);

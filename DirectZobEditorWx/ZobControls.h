@@ -73,6 +73,7 @@ public:
 	void OnInput(wxFocusEvent& event);
 private:
 	wxTextCtrl* m_t;
+	std::string m_value;
 };
 
 class ZobBoolCtrl : public ZobControl
@@ -97,4 +98,28 @@ public:
 private:
 	wxColourPickerCtrl* m_c;
 	ZobColor m_color;
+};
+
+class ZobEntityControl : public ZobControl
+{
+public:
+	ZobEntityControl(const ZobVariablesExposer::wrapperData* w, wxBoxSizer* b, wxPanel* p);
+	virtual ~ZobEntityControl();
+	void UpdateFromEngine() override;
+	void OnUpdate(wxCommandEvent& event);
+private:
+	wxTextCtrl* m_t;
+	ZobObject* m_entity;
+};
+
+class ZobPathControl : public ZobControl
+{
+public:
+	ZobPathControl(const ZobVariablesExposer::wrapperData* w, wxBoxSizer* b, wxPanel* p);
+	virtual ~ZobPathControl();
+	void UpdateFromEngine() override;
+	void OnUpdate(wxCommandEvent& event);
+private:
+	wxTextCtrl* m_t;
+	std::string m_path;
 };

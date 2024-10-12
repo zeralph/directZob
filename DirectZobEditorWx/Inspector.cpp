@@ -97,6 +97,7 @@ void Inspector::Set(ZobObject* z)
 	//m_panel->Update();
 	//m_panel->Refresh();
 	m_panel->Show();
+	m_parentPanel->SetVirtualSize(m_panel->GetSize());
 	m_dirty = false;
 }
 
@@ -138,7 +139,9 @@ void Inspector::AddVars(ZobVariablesExposer* vars, std::vector<wxStaticBoxSizer*
 		{
 			if (w->type == ZobVariablesExposer::eWrapperType_path)
 			{
-				//panel->Controls->Add(gcnew ZobControlFilePath(w));
+				wxBoxSizer* b = sizers->back();
+				ZobPathControl* f = new ZobPathControl(w, b, m_panel);
+				m_controls.push_back(f);
 			}
 			else if (w->type == ZobVariablesExposer::eWrapperType_string)
 			{
@@ -192,10 +195,15 @@ void Inspector::AddVars(ZobVariablesExposer* vars, std::vector<wxStaticBoxSizer*
 			else if (w->type == ZobVariablesExposer::eWrapperType_zobId)
 			{
 				//panel->Controls->Add(gcnew ZobControlZobId(w));
+				wxBoxSizer* b = sizers->back();
+				ZobEntityControl* f = new ZobEntityControl(w, b, m_panel);
+				m_controls.push_back(f);
 			}
 			else if (w->type == ZobVariablesExposer::eWrapperType_zobEntity)
 			{
-				//panel->Controls->Add(gcnew ZobControlZobEntity(w));
+				wxBoxSizer* b = sizers->back();
+				ZobEntityControl* f = new ZobEntityControl(w, b, m_panel);
+				m_controls.push_back(f);
 			}
 			else if (w->type == ZobVariablesExposer::eWrapperType_zobColor)
 			{

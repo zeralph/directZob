@@ -184,12 +184,13 @@ MainWindow::MainWindow( wxWindow* parent, wxWindowID id, const wxString& title, 
 	m_notebookInspector->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
 	m_notebookInspector->SetMinSize( wxSize( 350,-1 ) );
 
-	m_panelInspector = new wxPanel( m_notebookInspector, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	m_notebookInspector->AddPage( m_panelInspector, _("a page"), false );
+	m_panelInspector = new wxScrolledWindow( m_notebookInspector, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHSCROLL|wxVSCROLL );
+	m_panelInspector->SetScrollRate( 5, 5 );
+	m_notebookInspector->AddPage( m_panelInspector, _("Object"), false );
 	m_panelEngine = new wxPanel( m_notebookInspector, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	m_notebookInspector->AddPage( m_panelEngine, _("a page"), false );
+	m_notebookInspector->AddPage( m_panelEngine, _("Engine"), false );
 	m_panelScene = new wxPanel( m_notebookInspector, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	m_notebookInspector->AddPage( m_panelScene, _("a page"), false );
+	m_notebookInspector->AddPage( m_panelScene, _("Scene"), false );
 
 	bSizer7->Add( m_notebookInspector, 1, wxEXPAND | wxALL, 0 );
 

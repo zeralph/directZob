@@ -28,6 +28,7 @@
 #include <wx/toolbar.h>
 #include <wx/textctrl.h>
 #include <wx/splitter.h>
+#include <wx/scrolwin.h>
 #include <wx/notebook.h>
 #include <wx/statusbr.h>
 #include <wx/frame.h>
@@ -64,7 +65,7 @@ class MainWindow : public wxFrame
 		wxPanel* m_panel10;
 		wxPanel* m_panelRight;
 		wxNotebook* m_notebookInspector;
-		wxPanel* m_panelInspector;
+		wxScrolledWindow* m_panelInspector;
 		wxPanel* m_panelEngine;
 		wxPanel* m_panelScene;
 		wxMenuBar* m_menubar1;

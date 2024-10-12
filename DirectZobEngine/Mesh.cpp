@@ -1253,20 +1253,6 @@ void Mesh::Update(const ZobMatrix4x4& modelMatrix, const ZobMatrix4x4& rotationM
 				}	
 			}
 		}
-	/*
-		for (uint i = 0; i < m_nbVertices; i++)
-		{
-			m_projectedVerticesTmp[i].x = m_verticesTmp[i].x;
-			m_projectedVerticesTmp[i].y = m_verticesTmp[i].y;
-			m_projectedVerticesTmp[i].z = m_verticesTmp[i].z;
-			m_projectedVerticesTmp[i].w = m_verticesTmp[i].w;
-			view->Mul(&m_projectedVerticesTmp[i]);
-			proj->Mul(&m_projectedVerticesTmp[i]);
-			//static float kk = 1.0f; // sinf(m_projectedVerticesTmp[i].y) * kk
-			m_projectedVerticesTmp[i].x = ((m_projectedVerticesTmp[i].x )/ m_projectedVerticesTmp[i].z + 1) * w;
-			m_projectedVerticesTmp[i].y = (m_projectedVerticesTmp[i].y / m_projectedVerticesTmp[i].z + 1) * h;
-		}
-	*/	
 		for (uint i = 0; i < m_nbNormals; i++)
 		{
 			rotationMatrix.Mul(&m_verticesNormalsTmp[i]);

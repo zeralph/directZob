@@ -280,6 +280,7 @@ ZobStringCtrl::ZobStringCtrl(const ZobVariablesExposer::wrapperData* w, wxBoxSiz
 	t->Wrap(-1);
 	
 	std::string* s = (std::string*)w->ptr;
+	m_value = std::string(s->c_str());
 	m_t = new wxTextCtrl(p, wxID_ANY, s->c_str(), wxDefaultPosition, Inspector::sStringSize, 0);
 	bs->Add(m_t, 0, wxALL, 1);
 	b->Add(bs);
@@ -294,7 +295,13 @@ ZobStringCtrl::~ZobStringCtrl()
 
 void ZobStringCtrl::UpdateFromEngine()
 {
-
+	std::string* s = (std::string*)m_vars->ptr;
+	std::string v = std::string(s->c_str());
+	if (v != m_value)
+	{
+		m_value = v;
+		m_t->SetValue(v);
+	}
 }
 
 void ZobStringCtrl::OnInput(wxFocusEvent& event)
@@ -396,6 +403,76 @@ void ZobColorControl::OnUpdate(wxCommandEvent& event)
 	ZobColor* c = (ZobColor*)m_vars->ptr;
 	c->Set(wxc.GetAlpha(), wxc.GetRed(), wxc.GetGreen(), wxc.GetBlue());
 	//*pb = m_c->GetValue();
+	if (m_vars->callback)
+	{
+		m_vars->callback(m_vars->id);
+	}
+}
+
+/*------------------------------------------------
+*
+*	ZobEntityCtrl
+*
+*/
+ZobEntityControl::ZobEntityControl(const ZobVariablesExposer::wrapperData* w, wxBoxSizer* b, wxPanel* p) : ZobControl(w, b, p)
+{
+	wxBoxSizer* bs = new wxBoxSizer(wxHORIZONTAL);
+	int style = 0;
+	if (w->bReadOnly)
+	{
+		style = wxTE_READONLY;
+	}
+	m_t = new wxTextCtrl(p, wxID_ANY, "", wxDefaultPosition, Inspector::sStringSize, style);
+	DirectZobType::zobId* zid = (DirectZobType::zobId*)w->ptr;
+	std::stringstream ss;
+	ss << *zid;
+	m_t->SetValue(ss.str());
+	wxStaticText* t = new wxStaticText(p, wxID_ANY, _(w->name.c_str()), wxDefaultPosition, Inspector::sLabelSize, 0);
+	bs->Add(m_t, 0, wxALL, 1);
+	bs->Add(t, 0, wxALL, 1);
+	b->Add(bs);
+}
+ZobEntityControl::~ZobEntityControl()
+{
+}
+void ZobEntityControl::UpdateFromEngine()
+{
+}
+void ZobEntityControl::OnUpdate(wxCommandEvent& event)
+{
+	if (m_vars->callback)
+	{
+		m_vars->callback(m_vars->id);
+	}
+}
+
+/*------------------------------------------------
+*
+*	ZobPathCtrl
+*
+*/
+ZobPathControl::ZobPathControl(const ZobVariablesExposer::wrapperData* w, wxBoxSizer* b, wxPanel* p) : ZobControl(w, b, p)
+{
+	wxBoxSizer* bs = new wxBoxSizer(wxHORIZONTAL);
+	std::string* c = (std::string*)w->ptr;
+	m_t = new wxTextCtrl(p, wxID_ANY, "", wxDefaultPosition, Inspector::sStringSize, wxTE_READONLY);
+	m_t->SetValue(*c);
+	wxStaticText* t = new wxStaticText(p, wxID_ANY, _(w->name.c_str()), wxDefaultPosition, Inspector::sLabelSize, 0);
+	wxButton* btn = new wxButton(p, wxID_ANY, _("..."));
+	t->Wrap(-1);
+	bs->Add(m_t, 0, wxALL, 1);
+	bs->Add(btn, 0, wxALL, 1);
+	bs->Add(t, 0, wxALL, 1);
+	b->Add(bs);
+}
+ZobPathControl::~ZobPathControl()
+{
+}
+void ZobPathControl::UpdateFromEngine()
+{
+}
+void ZobPathControl::OnUpdate(wxCommandEvent& event)
+{
 	if (m_vars->callback)
 	{
 		m_vars->callback(m_vars->id);
