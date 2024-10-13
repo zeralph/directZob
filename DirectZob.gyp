@@ -245,6 +245,7 @@
 								'../dependencies/gainput/lib/linux/libgainputstatic.a',
 								'../dependencies/optick/lib/linux/libOptickCore.a',
 								'../dependencies/physfs/lib/linux/libphysfs.a',
+								'../dependencies/tinygltf/lib/linux/libtinygltf.a',
 								'-lpthread',
 								'-lxml2',
 								'-lX11',

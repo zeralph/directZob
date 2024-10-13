@@ -2,18 +2,11 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Linux Debug build and run",
+            "name": "Linux Editor Debug",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/DirectZobExe",
+            "program": "${workspaceFolder}/build/out/Release/DirectZobEditor",
             "args": [
-                "--bench",
-                "--scene",
-                "./resources/_menu.dzs",
-                "--width",
-                "640",
-                "--height",
-                "400"
             ],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}/",
@@ -32,7 +25,7 @@
                     "text": "set solib-search-path ${workspaceFolder}/dependencies/optick/lib/linux/"
                 }
             ],
-            "preLaunchTask": "Linux build debug",
+            "preLaunchTask": "",
             "miDebuggerPath": "/usr/bin/gdb"
         },
         {
