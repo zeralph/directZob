@@ -63,7 +63,7 @@
 				'DirectZobEngine/Rendering/Text2D.cpp',
 				'DirectZobEngine/Rendering/ZobFont.cpp',
 				'DirectZobEngine/Rendering/ZobFont.h',
-				'DirectZobEngine/Rendering/Texture.cpp',
+				'DirectZobEngine/Rendering/ZobTexture.cpp',
 				'DirectZobEngine/Rendering/Triangle.cpp',
 				'DirectZobEngine/Rendering/ZobMatrix2x2.cpp',
 				'DirectZobEngine/Rendering/ZobMatrix4x4.cpp',
