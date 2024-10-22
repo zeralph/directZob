@@ -9,7 +9,6 @@ ZobComponent::ZobComponent(ZobObject* zobObject, bool bEditorZobComponent):ZobEn
 	m_enabled = true;
 	m_zobObject = zobObject;
 	m_componentType = ZobComponentFactory::eComponent_none;
-	m_varExposer = new ZobVariablesExposer(GetIdValue());
 	m_varExposer->WrapVariable<DirectZobType::zobId>("ZobId", GetIdAddress(), NULL, true, false);
 	m_varExposer->WrapVariable<bool>("Enabled", &m_enabled, NULL, false, true, true);
 };

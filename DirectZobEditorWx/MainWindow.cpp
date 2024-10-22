@@ -66,9 +66,9 @@ MainWindow::MainWindow( wxWindow* parent, wxWindowID id, const wxString& title, 
 	m_treeMenuRemoveObject = new wxMenuItem( m_treeMenu, wxID_ANY, wxString( _("Remove object") ) , wxEmptyString, wxITEM_NORMAL );
 	m_treeMenu->Append( m_treeMenuRemoveObject );
 
-	wxMenuItem* m_treeMenuAddComponent;
-	m_treeMenuAddComponent = new wxMenuItem( m_treeMenu, wxID_ANY, wxString( _("Add component") ) , wxEmptyString, wxITEM_NORMAL );
-	m_treeMenu->Append( m_treeMenuAddComponent );
+	m_treeMenuAddComponent = new wxMenu();
+	wxMenuItem* m_treeMenuAddComponentItem = new wxMenuItem( m_treeMenu, wxID_ANY, _("Add component"), wxEmptyString, wxITEM_NORMAL, m_treeMenuAddComponent );
+	m_treeMenu->Append( m_treeMenuAddComponentItem );
 
 	wxMenuItem* m_treeMenuZoom;
 	m_treeMenuZoom = new wxMenuItem( m_treeMenu, wxID_ANY, wxString( _("Zoom") ) + wxT('\t') + wxT("Z"), wxEmptyString, wxITEM_NORMAL );
@@ -267,6 +267,7 @@ MainWindow::MainWindow( wxWindow* parent, wxWindowID id, const wxString& title, 
 	m_treeNode->Connect( wxEVT_COMMAND_TREE_END_DRAG, wxTreeEventHandler( MainWindow::OnEndDrag ), NULL, this );
 	m_treeNode->Connect( wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK, wxTreeEventHandler( MainWindow::OnTreeRightClick ), NULL, this );
 	m_treeNode->Connect( wxEVT_COMMAND_TREE_SEL_CHANGED, wxTreeEventHandler( MainWindow::OnTreeSelChanged ), NULL, this );
+	m_treeNode->Connect( wxEVT_COMMAND_TREE_SEL_CHANGING, wxTreeEventHandler( MainWindow::OnTreeSelChanging ), NULL, this );
 	m_menu11->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindow::OnMenuAddObject ), this, m_treeMenuAddObject->GetId());
 	m_menu11->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindow::OnMenuAddMesh ), this, m_menuAddMesh->GetId());
 	m_menu11->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindow::OnMenuAddSprite ), this, m_menuIAddSprite->GetId());
@@ -274,11 +275,10 @@ MainWindow::MainWindow( wxWindow* parent, wxWindowID id, const wxString& title, 
 	m_menu11->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindow::OnMenuAddLight ), this, m_menuAddLight->GetId());
 	m_menu11->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindow::OnMenuAddCamera ), this, m_menuIAddCamera->GetId());
 	m_treeMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindow::OnTreeMenuRemove ), this, m_treeMenuRemoveObject->GetId());
-	m_treeMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindow::OnTreeMenuAddComponent ), this, m_treeMenuAddComponent->GetId());
 	m_treeMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindow::OnTreeMenuZoom ), this, m_treeMenuZoom->GetId());
 	m_treeMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindow::OnTreeMenuDuplicate ), this, m_treeMenuDuplicate->GetId());
 	m_treeMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindow::OnTreeMenuShowHide ), this, m_treeMenuShowHide->GetId());
-	m_treeMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindow::OnTreeMenuAddObject ), this, m_treeMenuSaveAsAsset->GetId());
+	m_treeMenu->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindow::OnTreeMenuSaveAsAsset ), this, m_treeMenuSaveAsAsset->GetId());
 	m_Play->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( MainWindow::OnPlay ), NULL, this );
 	m_Pause->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( MainWindow::OnPause ), NULL, this );
 	m_Stop->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( MainWindow::OnStop ), NULL, this );

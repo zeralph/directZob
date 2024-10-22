@@ -95,7 +95,7 @@ public:
 	void				Unload();
 	void				DrawGrid();
 	void				UpdateGizmos();
-	void				SetSelectedObject(ZobObject* z);
+	bool				SetSelectedObject(ZobObject* z);
 	ZobObject*			GetSelectedObject() { return m_selectedObject; }
 	void				SetLastMouseEvent(wxMouseEvent& e);
 	void				OnMouseDown(wxMouseEvent& event);
@@ -103,7 +103,7 @@ public:
 	void				OnMouseClick(wxMouseEvent& event);
 	void				OnKeyDown(wxKeyEvent& event);
 	void				SetObjectModificator(eGizmoModificatorType type, eGizmoModificatorSpace space);
-
+	void				AddComponent(std::string& name);
 	void				CreateLight();
 	void				CreateCamera();
 	void				LoadMesh(std::string& p, std::string& f);
@@ -112,6 +112,9 @@ public:
 	void				LoadSprite(std::string& p, std::string& f);
 	void				Duplicate();
 	void				ZoomToSelected();
+
+	void				OnPlay();
+	void				OnStop();
 
 private:
 
@@ -159,4 +162,5 @@ private:
 	const ZobMaterial*	m_cameraMaterial;
 	bool				m_init;
 	std::string 		m_logTmpData;
+	std::map<zobId, TiXmlElement> m_playPauseSave;
 };

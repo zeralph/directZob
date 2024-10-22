@@ -16,6 +16,7 @@
 #include "../DirectZobEngine/Managers/CameraManager.h"
 #include "../DirectZobEngine/Managers/LightManager.h"
 #include "../DirectZobEngine/Types.h"
+#include "../DirectZobEngine/Components/ZobComponentFactory.h"
 #include "Inspector.h"
 
 
@@ -33,6 +34,15 @@ MainWindowInterface::MainWindowInterface(DirectZob* dz, ZobEditorManager* dze) :
     m_EngineInspector->Set(DirectZob::GetInstance()->GetEngine()->GetVariablesExposer());
     m_SceneInspector = new Inspector(m_panelScene);
     m_SceneInspector->Set(DirectZob::GetInstance()->GetLightManager()->GetVariablesExposer());
+
+    int l = ZobComponentFactory::eComponentType::__eComponent_MAX__;
+    for (int i = 0; i < l; i++)
+    {
+        wxMenuItem* mi = new wxMenuItem(m_gizmosMenu, wxID_ANY, _(ZobComponentFactory::eComponentTypeStr[i]), wxEmptyString, wxITEM_CHECK);
+        m_treeMenuAddComponent->Append(mi);
+        m_treeMenuAddComponent->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MainWindowInterface::OnAddComponent), this, mi->GetId());
+    }
+    
 
 #if WINDOWS
     m_renderPanel->SetDoubleBuffered(true);
@@ -113,6 +123,17 @@ void MainWindowInterface::RenderAFrame()
     }
 }
 
+void MainWindowInterface::OnAddComponent(wxCommandEvent& event)
+{
+    int id = event.GetId();
+    if (id)
+    {
+        wxMenu* mi = (wxMenu*)event.GetEventObject();
+        std::string s = std::string(mi->GetLabel(id).c_str());
+        m_editor->AddComponent(s);
+    }
+}
+
 void MainWindowInterface::OnTimer(wxTimerEvent& event)
 {
     m_editor->UpdateInterface();
@@ -181,6 +202,7 @@ void MainWindowInterface::OnNewScene()
 
 void MainWindowInterface::OnPlay(wxCommandEvent& event)
 {
+    m_editor->OnPlay();
     m_Pause->SetValue(0);
     m_Stop->SetValue(0);
     m_Play->SetValue(1);
@@ -206,6 +228,7 @@ void MainWindowInterface::OnStop(wxCommandEvent& event)
     m_Stop->SetValue(1);
     m_Play->SetValue(0);
     m_directZob->StopPhysic(1);
+    m_editor->OnStop();
 }
 
 void MainWindowInterface::OnMaximize(wxMaximizeEvent& event)
@@ -246,6 +269,20 @@ void MainWindowInterface::RefreshCamerasList()
         i++;
     }
     m_singleton->m_cameraSelector->SetSelection(j);
+}
+
+void MainWindowInterface::OnTreeSelChanging(wxTreeEvent& event)
+{
+    zobTreeItemData* data = static_cast<zobTreeItemData*>(m_treeNode->GetItemData(event.GetItem()));
+    if (data)
+    {
+        zobId id = ZobEntity::ZobIdFromString(data->zobIdStr);
+        ZobObject* z = ZobEntity::GetEntity<ZobObject>(id);
+        if (!z || z->IsEditorObject())
+        {
+            event.Veto();
+        }
+    }
 }
 
 void MainWindowInterface::OnTreeSelChanged(wxTreeEvent& event)
@@ -613,7 +650,10 @@ void MainWindowInterface::OnTreeRightClick(wxTreeEvent& event)
     }
     m_treeNode->PopupMenu(m_treeMenu, wxDefaultPosition);// event.GetPosition());
 }
+void MainWindowInterface::OnTreeMenuSaveAsAsset(wxCommandEvent& event)
+{
 
+}
 void MainWindowInterface::OnMenuAddObject(wxCommandEvent& event)
 {   
     //m_newObjectDialog
@@ -634,10 +674,7 @@ void MainWindowInterface::OnTreeMenuRemove(wxCommandEvent& event)
 		DirectZob::GetInstance()->GetZobObjectManager()->RemoveZobObject(p);
 		ReScan((ZobControlTreeNode^)m_treeView->TopNode, m_bShowAllNodes);*/
 }
-void MainWindowInterface::OnTreeMenuAddComponent(wxCommandEvent& event)
-{
 
-}
 void MainWindowInterface::OnTreeMenuZoom(wxCommandEvent& event)
 {
     m_editor->ZoomToSelected();

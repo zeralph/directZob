@@ -13,6 +13,7 @@ ZobEntity::ZobEntity(ZobType t, ZobSubType s)
 	m_id = (u32)t * 1000 * 1000 * 1000 + (u32)s * 1000 * 1000 + (u32)id;
 //	assert( m_entityMap.find(m_id) == m_entityMap.end());
 	ZobEntity::m_entityMap[m_id] = this;
+	m_varExposer = new ZobVariablesExposer(GetIdValue());
 }
 
 ZobEntity::ZobEntity(const zobId zid)
@@ -24,10 +25,13 @@ ZobEntity::ZobEntity(const zobId zid)
 	m_subType = (ZobSubType)((m_id - l) / (1000 * 1000));
 	assert(m_entityMap.find(m_id) == m_entityMap.end());
 	ZobEntity::m_entityMap[m_id] = this;
+	m_varExposer = new ZobVariablesExposer(GetIdValue());
 }
 
 ZobEntity::~ZobEntity()
 {
+	delete m_varExposer;
+	m_varExposer = NULL;
 	EraseEntry(m_id);
 }
 

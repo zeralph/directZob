@@ -17,7 +17,6 @@ ZobObject::ZobObject(ZobType t, ZobSubType s, const std::string& name, ZobObject
 	SET_CLASS_AND_NAME
 	DirectZob::LogInfo("ZobObject %s creation", name.c_str()); 
 	DirectZob::AddIndent();
-	m_varExposer = new ZobVariablesExposer(GetIdValue());
 	sObjectNumber++;
 	m_Components.clear();
 	m_visible = true;
@@ -202,8 +201,6 @@ ZobObject::~ZobObject()
 		m_children[i] = NULL;
 		delete z;
 	}
-	delete m_varExposer;
-	m_varExposer = NULL;
 	m_children.resize(0);
 	DirectZob::RemoveIndent();
 }

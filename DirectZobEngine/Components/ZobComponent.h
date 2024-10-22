@@ -29,7 +29,6 @@ public:
 	ZobComponentFactory::eComponentType						GetComponentType() const { return m_componentType; }
 	void													ReadNode(TiXmlElement* node);
 	void													ReLoadVariables();
-	ZobVariablesExposer*									GetVariablesExposer() { return m_varExposer; }
 	bool													IsEnabled() const { return m_enabled; }
 	void													Enable(bool b) { m_enabled = b; }
 	ZobObject*												GetZobObject() { return m_zobObject; }
@@ -37,7 +36,6 @@ protected:
 	ZobComponent(ZobObject* zobObject, bool bEditorZobComponent);
 	ZobComponentFactory::eComponentType						m_componentType;
 	ZobObject*												m_zobObject;
-	ZobVariablesExposer*									m_varExposer;
 	bool													m_enabled;
 protected:
 

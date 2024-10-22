@@ -98,7 +98,6 @@ public:
 	const ZobMatrix4x4*					GetModelMatrix() const { return &m_modelMatrix; };
 	const ZobMatrix4x4*					GetRotationMatrix() const { return &m_rotationMatrix; };
 	void								AddComponent(ZobComponent* b) { m_Components.push_back(b); }
-	ZobVariablesExposer*				GetVariablesExposer() { return m_varExposer; }
 
 
 	//Components
@@ -148,7 +147,6 @@ protected:
 	virtual void						InitVariablesExposer();
 
 	ZobObject*							m_parent;
-	ZobVariablesExposer*				m_varExposer;
 	ZobPhysicComponent*					m_physicComponent;
 	std::vector<ZobObject*>				m_children;
 	std::vector <ZobComponent*>			m_Components;

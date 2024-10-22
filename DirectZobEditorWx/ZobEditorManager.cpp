@@ -10,6 +10,7 @@
 #include "../DirectZobEngine/Components/GraphicComponents/ZobComponentSprite.h"
 #include "../DirectZobEngine/Rendering/ZobTexture.h"
 #include "../DirectZobEngine/Rendering/Triangle.h"
+#include "../dependencies/tinyxml/tinyxml.h"
 
 #define LIGHT_TEX_NAME "editor_light_texture"
 #define LIGHT_MAT_NAME "editor_light_material"
@@ -39,6 +40,51 @@ void ZobEditorManager::UpdateInterface()
 	{
 		MainWindowInterface::UpdateControls();	
 		MainWindowInterface::AddLog(m_logTmpData);
+	}
+}
+
+void ZobEditorManager::OnPlay()
+{
+	if (m_playPauseSave.size() == 0)
+	{
+		std::vector<ZobEntity*> entities = ZobEntity::GetAllEntities();
+		std::vector<ZobEntity*>::iterator iter;
+		for (iter = entities.begin(); iter != entities.end(); iter++)
+		{
+			zobId id = (*iter)->GetIdValue();
+			TiXmlElement node("save");
+			(*iter)->GetVariablesExposer()->SaveUnderNode(&node);
+			m_playPauseSave.insert(std::pair<zobId, TiXmlElement>(id, node));
+		}
+	}
+}
+
+void ZobEditorManager::OnStop()
+{
+	std::vector<ZobObject*> objects = ZobEntity::GetEntities<ZobObject>();
+	std::vector<ZobEntity*> entities = ZobEntity::GetAllEntities();
+	std::vector<ZobEntity*>::iterator iter;	
+	for (iter = entities.begin(); iter != entities.end(); iter++)
+	{
+		zobId id = (*iter)->GetIdValue();
+		std::map<zobId, TiXmlElement>::iterator saved = m_playPauseSave.find(id);
+		if (saved != m_playPauseSave.end())
+		{
+			(*iter)->GetVariablesExposer()->ReadNode(&saved->second);
+		}
+		else
+		{
+			//DirectZob::GetInstance()->GetZobObjectManager()->RemoveZobObject()
+		}
+	}
+	m_playPauseSave.clear();
+}
+
+void ZobEditorManager::AddComponent(std::string& name)
+{
+	if (m_selectedObject && !m_selectedObject->IsEditorObject() && m_selectedObject != DirectZob::GetInstance()->GetZobObjectManager()->GetRootObject())
+	{
+		ZobComponentFactory::CreateComponent(m_selectedObject, name.c_str(), false);
 	}
 }
 
@@ -148,6 +194,10 @@ void ZobEditorManager::SetObjectModificator(eGizmoModificatorType type, eGizmoMo
 void ZobEditorManager::UpdateMoveObject()
 {
 	ZobObject* curObj = m_selectedObject;
+	if (!curObj || curObj == DirectZob::GetInstance()->GetZobObjectManager()->GetRootObject())
+	{
+		return;
+	}
 	Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
 	
 	if (curObj && m_modificatorData.m_currentObjectModificator && m_modificatorData.m_moveObject)
@@ -628,8 +678,12 @@ void ZobEditorManager::OnNewScene()
 	m_init = true;
 }
 
-void ZobEditorManager::SetSelectedObject(ZobObject* z)
+bool ZobEditorManager::SetSelectedObject(ZobObject* z)
 {
+	if (!z || z->IsEditorObject())
+	{
+		return false;
+	}
 	if (m_selectedObject)
 	{
 		ZobComponentMesh* zm = m_selectedObject->GetComponent<ZobComponentMesh>();
@@ -659,6 +713,7 @@ void ZobEditorManager::SetSelectedObject(ZobObject* z)
 		HideGizmos();
 		m_gizmosNode->SetParent(m_editorRootNode);
 	}
+	return true;
 }
 
 void ZobEditorManager::ScaleGizmos(float s)

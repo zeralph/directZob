@@ -66,7 +66,7 @@ public:
     //tree menu
     void OnMenuAddObject(wxCommandEvent& event) override;
     void OnTreeMenuRemove(wxCommandEvent& event) override;
-    void OnTreeMenuAddComponent(wxCommandEvent& event) override;
+    void OnTreeMenuSaveAsAsset(wxCommandEvent& event) override;
     void OnTreeMenuZoom(wxCommandEvent& event) override;
     void OnTreeMenuDuplicate(wxCommandEvent& event) override;
     void OnTreeMenuShowHide(wxCommandEvent& event) override;
@@ -76,6 +76,8 @@ public:
     void OnMenuAddAsset(wxCommandEvent& event) override;
     void OnMenuAddLight(wxCommandEvent& event) override;
     void OnMenuAddCamera(wxCommandEvent& event) override;
+    void OnAddComponent(wxCommandEvent& event);
+    void OnTreeSelChanging(wxTreeEvent& event) override;
 
 //private:
     
@@ -100,6 +102,7 @@ private:
     Inspector*                  m_currentZobObjectInspector;
     Inspector*                  m_EngineInspector;
     Inspector*                  m_SceneInspector;
+    wxMenu*                     m_componentsMenu;
     wxBitmap                    m_bitmapBuffer;
     wxFileConfig                m_config;
     wxTimer                     m_timer;

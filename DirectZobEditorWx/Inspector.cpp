@@ -86,7 +86,7 @@ void Inspector::Set(ZobObject* z)
 		{
 			std::string compName = (*iter)->GetName();
 			wxStaticBoxSizer* newSizer = new wxStaticBoxSizer(new wxStaticBox(m_panel, wxID_ANY, _(compName.c_str())), wxVERTICAL);
-			sizers.back()->Add(newSizer, 0, wxALL, 1);
+			boxSizer->Add(newSizer, 0, wxALL, 1);
 			sizers.push_back(newSizer);
 			AddVars((*iter)->GetVariablesExposer(), &sizers);
 		}

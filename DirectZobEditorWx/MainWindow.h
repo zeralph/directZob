@@ -47,6 +47,7 @@ class MainWindow : public wxFrame
 		wxPanel* m_panel1;
 		wxMenu* m_treeMenu;
 		wxMenu* m_menu11;
+		wxMenu* m_treeMenuAddComponent;
 		wxPanel* m_panel2;
 		wxSplitterWindow* m_splitter3;
 		wxPanel* m_panel3;
@@ -81,6 +82,7 @@ class MainWindow : public wxFrame
 		virtual void OnEndDrag( wxTreeEvent& event ) { event.Skip(); }
 		virtual void OnTreeRightClick( wxTreeEvent& event ) { event.Skip(); }
 		virtual void OnTreeSelChanged( wxTreeEvent& event ) { event.Skip(); }
+		virtual void OnTreeSelChanging( wxTreeEvent& event ) { event.Skip(); }
 		virtual void OnMenuAddObject( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnMenuAddMesh( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnMenuAddSprite( wxCommandEvent& event ) { event.Skip(); }
@@ -88,11 +90,10 @@ class MainWindow : public wxFrame
 		virtual void OnMenuAddLight( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnMenuAddCamera( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTreeMenuRemove( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnTreeMenuAddComponent( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTreeMenuZoom( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTreeMenuDuplicate( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTreeMenuShowHide( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnTreeMenuAddObject( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnTreeMenuSaveAsAsset( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPlay( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPause( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnStop( wxCommandEvent& event ) { event.Skip(); }

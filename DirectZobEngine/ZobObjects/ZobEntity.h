@@ -5,6 +5,7 @@
 
 #define SET_CLASS_AND_NAME  m_class = typeid(*this).name(); m_class = m_class.substr(5, m_class.length()-5); std::stringstream ss; ss << m_class << "_" << m_id; m_name = ss.str();
 
+class ZobVariablesExposer;
 class ZobEntity
 {
 public :
@@ -159,6 +160,7 @@ public :
 		return strtoull(id.c_str(), &pEnd, 10);
 	}
 	static zobId									Regenerate(const zobId zid);
+	ZobVariablesExposer*							GetVariablesExposer() { return m_varExposer; }
 
 protected:
 	ZobEntity(ZobType t, ZobSubType s);
@@ -170,6 +172,7 @@ protected:
 	ZobEntity::ZobSubType							m_subType;
 	std::string										m_name;
 	std::string										m_class;
+	ZobVariablesExposer*							m_varExposer;
 private:
 	static ulong									GenerateId();
 	void											EraseEntry(const zobId zid);
