@@ -13,6 +13,8 @@
 #include "PhysicComponents/ZobComponentPhysicSphere.h"
 #include "PhysicComponents/ZobComponentPhysicCapsule.h"
 #include "PhysicComponents/ZobComponentPhysicMesh.h"
+#include "GameComponents/Canon.h"
+#include "GameComponents/Bullet.h"
 #include "../DirectZob.h"
 
 const char* ZobComponentFactory::eComponentTypeStr[__eComponent_MAX__] =
@@ -29,7 +31,9 @@ const char* ZobComponentFactory::eComponentTypeStr[__eComponent_MAX__] =
 	"Sprite",
 	"Light",
 	"Skybox",
-	"Rotator"
+	"Rotator",
+	"Bullet",
+	"canon"
 };
 
 ZobComponent* ZobComponentFactory::CreateComponentInternal(ZobObject* zobObject, const char* ComponentName, bool bEditorZobComponent)
@@ -85,6 +89,12 @@ ZobComponent* ZobComponentFactory::CreateComponentInternal(ZobObject* zobObject,
 				break;
 			case eComponent_light:
 				zb = new ZobComponentLight(zobObject, bEditorZobComponent);
+				break;
+			case eComponent_bullet:
+				zb = new Bullet(zobObject);
+				break;
+			case eComponent_canon:
+				zb = new Canon(zobObject);
 				break;
 			case eComponent_none:
 				zb = NULL;

@@ -143,7 +143,12 @@
 				'DirectZobEngine/Misc/ZobGeometryHelper.h',
 				'DirectZobEngine/Misc/ZobGeometryHelper.cpp',	
 				'DirectZobEngine/Embed/DefaultFontData.h',
-				'DirectZobEngine/Embed/DefaultFontImage.h',				
+				'DirectZobEngine/Embed/DefaultFontImage.h',		
+                #game components
+				'DirectZobEngine/Components/GameComponents/Bullet.h',		
+                'DirectZobEngine/Components/GameComponents/Bullet.cpp',		
+                'DirectZobEngine/Components/GameComponents/Canon.h',		
+                'DirectZobEngine/Components/GameComponents/Canon.cpp',		
 			],
 			'conditions': [
 				[
