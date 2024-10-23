@@ -18,4 +18,7 @@ class Bullet : public ZobComponent
 		void		DrawGizmos(const Camera* camera, const ZobVector3* position, const ZobVector3* rotation) const override;
 	private:	
 		Bullet(ZobObject* zobObject);
+
+        float       m_lifeTimeSec;
+        float       m_speed;
 };

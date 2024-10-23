@@ -6,6 +6,7 @@
 
 ZobComponent::ZobComponent(ZobObject* zobObject, bool bEditorZobComponent):ZobEntity((bEditorZobComponent? ZobEntity::type_editor:ZobEntity::type_internal), ZobEntity::subtype_Component)
 {
+	SET_CLASS_AND_NAME
 	m_enabled = true;
 	m_zobObject = zobObject;
 	m_componentType = ZobComponentFactory::eComponent_none;

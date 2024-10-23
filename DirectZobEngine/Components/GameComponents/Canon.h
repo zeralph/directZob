@@ -18,4 +18,5 @@ class Canon : public ZobComponent
 		void		DrawGizmos(const Camera* camera, const ZobVector3* position, const ZobVector3* rotation) const override;
 	private:	
 		Canon(ZobObject* zobObject);
+        float       m_fireSpeed;
 };

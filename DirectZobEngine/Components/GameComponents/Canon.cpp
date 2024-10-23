@@ -1,8 +1,13 @@
 #include "Canon.h"
 #include "../../ZobObjects/ZobObject.h"
+#include "../../Misc/ZobVariablesExposer.h"
+
 Canon::Canon(ZobObject* zobObject): ZobComponent(zobObject, false)
 {
-
+    SET_CLASS_AND_NAME
+    m_componentType = ZobComponentFactory::eComponent_canon;
+    Init(NULL);
+    m_varExposer->WrapVariable<float>("Speed", &m_fireSpeed, NULL, false, true);
 }
 Canon::~Canon()
 {
