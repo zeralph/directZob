@@ -69,7 +69,6 @@ void LightManager::PreUpdate(float dt)
 
 void LightManager::RemoveLight(Light* l)
 {
-	m_lightsToRemove.push_back(l);
 	std::vector<Light*>::iterator iter2;
 	for (iter2 = m_lights.begin(); iter2 != m_lights.end(); iter2++)
 	{
