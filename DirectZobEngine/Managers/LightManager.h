@@ -19,8 +19,7 @@ public:
 	void								Update();
 	Light*								CreateLight(Light::eLightType type);
 	Light*								CreateLight(std::string& name, Light::eLightType type, ZobVector3 position, ZobColor color, float intensity, float distance, ZobObject* parent);
-	const std::vector<const Light*>*	GetActiveLights() const;
-	const std::vector<const Light*>*	GetEditorLight() const { return (std::vector<const Light*>*)&m_editorLight; }
+	const std::vector<Light*>*			GetLights() const { return &m_lights; }
 	Light*								GetLight(const std::string& name) const;
 	const ZobColor*						GetAmbientColor() const { return &m_ambientColor; };
 	const ZobColor*						GetFogColor() const { return &m_fogColor; };
@@ -47,9 +46,6 @@ public:
 private:
 	std::vector<Light*> m_lights;
 	std::vector<Light*> m_lightsToAdd;
-	std::vector<Light*> m_lightsToRemove;
-	std::vector<const Light*> m_activeLights;
-	std::vector<Light*> m_editorLight;
 	int m_lightIndex;
 	ZobColor m_fogColor;
 	ZobColor m_ambientColor;

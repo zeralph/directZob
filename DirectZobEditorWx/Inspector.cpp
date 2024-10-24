@@ -66,7 +66,8 @@ void Inspector::UpdateControls()
 	for (std::vector<ZobControl*>::iterator iter = m_controls.begin(); iter != m_controls.end(); iter++)
 	{
 		ZobControl* zc = (*iter);
-		zc->UpdateFromEngine();
+		if(zc->IsValid())
+			zc->UpdateFromEngine();
 	}
 }
 void Inspector::ThreadSafeUpdate()

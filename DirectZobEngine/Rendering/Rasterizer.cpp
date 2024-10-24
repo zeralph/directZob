@@ -292,8 +292,6 @@ void Rasterizer::RenderInternal()
 
 	if (lm)
 	{
-		m_activeLights = lm->GetActiveLights();
-		m_editorLights = lm->GetEditorLight();
 		m_ambientColor = lm->GetAmbientColor();
 		m_ambientIntensity = lm->GetAmbientColorIntensity();
 		m_fogColor = lm->GetFogColor();
@@ -440,12 +438,8 @@ inline void Rasterizer::ComputeLightingAtPoint(const ZobVector3* position, const
 		ZobVector3 lightDir = ZobVector3(0, 0, 0);
 		ZobVector3 lightPos = ZobVector3(0, 0, 0);
 		float lightPower, cl, sl = 0.0f;
-		const std::vector<const Light*>* lightsVec = m_activeLights;
-		if (t->zobObject->IsEditorObject())
-		{
-			lightsVec = m_editorLights;
-		}
-		for (std::vector<const Light*>::const_iterator iter = lightsVec->begin(); iter != lightsVec->end(); iter++)
+		const std::vector<Light*>* lightsVec = DirectZob::GetInstance()->GetLightManager()->GetLights();
+		for (std::vector<Light*>::const_iterator iter = lightsVec->begin(); iter != lightsVec->end(); iter++)
 		{
 			const Light* l = (*iter);
 			if (l->IsActive())

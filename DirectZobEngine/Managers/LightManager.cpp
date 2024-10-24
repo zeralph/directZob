@@ -36,8 +36,6 @@ void LightManager::ReInitGlobalSettings()
 	m_fogDistance = 20.0f;
 	m_lights.clear();
 	m_lightsToAdd.clear();
-	m_editorLight.clear();
-	m_lightsToRemove.clear();
 	m_fogDensity = 2.0f;
 	m_fogType = eFogType::eFogType_NoFog;
 	m_lightIndex = 1;
@@ -59,31 +57,33 @@ void LightManager::Setup(ZobColor* fogColor, ZobColor* ambientColor, ZobColor* c
 
 void LightManager::PreUpdate(float dt)
 {
+	/*
 	for (std::vector<Light*>::const_iterator iter = m_lightsToAdd.begin(); iter != m_lightsToAdd.end(); iter++)
 	{
 		m_lights.push_back(*iter);
 		m_lightIndex++;
 	}
 	m_lightsToAdd.clear();
-	for (std::vector<Light*>::const_iterator iter = m_lightsToRemove.begin(); iter != m_lightsToRemove.end(); iter++)
-	{
-		Light* toRemove = (*iter);
-		std::vector<Light*>::iterator iter2;
-		for (iter2 = m_lights.begin(); iter2 != m_lights.end(); iter2++)
-		{
-			if ((*iter2) == toRemove)
-			{
-				m_lights.erase(iter2);
-				break;
-			}
-		}
-	}
-	m_lightsToRemove.clear();
+	*/
 }
 
 void LightManager::RemoveLight(Light* l)
 {
 	m_lightsToRemove.push_back(l);
+	std::vector<Light*>::iterator iter2;
+	for (iter2 = m_lights.begin(); iter2 != m_lights.end(); iter2++)
+	{
+		if ((*iter2) == l)
+		{
+			DirectZob::LogInfo("removes light %s", l->GetName().c_str());
+			m_lights.erase(iter2);
+			break;
+		}
+	}
+	if (iter2 == m_lights.end())
+	{
+		DirectZob::LogInfo("light %s not removed !", l->GetName().c_str());
+	}
 }
 
 void LightManager::UnloadAll()
@@ -113,7 +113,7 @@ Light* LightManager::CreateLight(std::string& name, Light::eLightType type, ZobV
 
 void LightManager::AddLight(Light* l)
 {
-	m_lightsToAdd.push_back(l);
+	m_lights.push_back(l);
 }
 
 Light* LightManager::CreateLight(Light::eLightType type)
@@ -136,32 +136,8 @@ Light* LightManager::GetLight(const std::string& name) const
 	return NULL;
 }
 
-const std::vector<const Light*>* LightManager::GetActiveLights() const
-{
-	return &m_activeLights;
-}
-
 void LightManager::Update()
 {
-	m_activeLights.clear();
-	if (m_lightingEnabled)
-	{
-		for (std::vector<Light*>::const_iterator iter = m_lights.begin(); iter != m_lights.end(); iter++)
-		{
-			if ((*iter)->IsActive())
-			{
-				m_activeLights.push_back((*iter));
-			}
-		}
-	}
-	const Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
-	if (c)
-	{
-		ZobVector3 p = ZobVector3(0, 0, 0);// c->GetWorldPosition();
-		ZobVector3 o = c->GetWorldRotation();
-		//m_editorLight[0]->SetWorldPosition(p.x, p.y, p.z);
-		//m_editorLight[0]->SetWorldRotation(o.x, o.y, o.z);
-	}
 }
 
 void LightManager::LoadFromNode(TiXmlElement* node)

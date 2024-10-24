@@ -13,6 +13,7 @@ class ZobControl : public wxPanel
 {
 public:
 	ZobControl(const ZobVariablesExposer::wrapperData* w, wxBoxSizer* b, wxPanel* p);
+	bool IsValid() { return m_vars && m_vars->ptr; }
 	virtual ~ZobControl();
 	virtual void UpdateFromEngine()=0;
 protected:
