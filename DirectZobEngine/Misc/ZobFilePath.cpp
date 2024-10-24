@@ -6,7 +6,7 @@
 
 ZobFilePath::ZobFilePath()
 {
-	m_fileType = eFileType_all;
+	m_fileType = eFileType_any;
 	m_buf = NULL;
 	m_bufLen = 0;
 	m_freeBuffer = true;
@@ -47,6 +47,12 @@ ZobFilePath::~ZobFilePath()
 bool ZobFilePath::IsDefined()
 {
 	return m_name.size() && m_path.size() && m_file.size();
+}
+
+void ZobFilePath::ChangePath(std::string& path, std::string& file)
+{
+	m_path = path;
+	m_file = file;
 }
 
 void ZobFilePath::Reset()

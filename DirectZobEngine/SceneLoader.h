@@ -29,7 +29,7 @@ public:
 	static void							LoadZobObject(std::string& fullPath, ZobObject* parent = NULL);
 	static const int					GetNbZobObjectsInScene() { return m_nbZobObjectLoaded; }
 	static const bool					LoadFromArchive() { return m_loadFromArchive; }
-	static void							LoadAsset(ZobObject* parent, std::string& path, std::string& file);
+	static ZobObject*					LoadAsset(ZobObject* parent, const std::string& path, const std::string& file);
 	static ZobObject*					LoadAsset(ZobObject* parent, TiXmlElement* node);
 private:
 	static void							ResetEngine();

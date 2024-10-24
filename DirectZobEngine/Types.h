@@ -86,7 +86,8 @@ enum eBitsPerColor
 	eBitsPerColor_8 = 8,
 	__eBitsPerColor_MAX__
 };
-class  DirectZobType
+class ZobObject;
+class DirectZobType
 {
 public:
 	
@@ -163,6 +164,7 @@ public:
 		ZobVector3 p7;
 	};
 	typedef void		(*sceneLoadingCallback)(int nbObj, int curObj, std::string s);
+	typedef void		(*OnRemoveEntityCallback)(ZobObject* e);
 };
 
 typedef DirectZobType::u8 u8;

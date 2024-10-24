@@ -7,6 +7,14 @@
 #include "MainWindow.h"
 #include "../DirectZobEngine/Events.h"
 
+#define ZOB_ANY_EXT "all|*.*"
+#define ZOB_ASSET_EXT "asset|*.dza"
+#define ZOB_XML_EXT "xml|*.xml"
+#define ZOB_SCENE_EXT "scene|*.dzs"
+#define ZOB_MESH_EXT "mesh|*.gltf;*.obj;*.fbx"
+#define ZOB_IMG_EXT "image|*.png;*.jpg;*.tga;*.jpeg"
+
+
 class ZobObject;
 class ZobEditorManager;
 class DirectZob;
@@ -33,8 +41,10 @@ public:
     static void                 UpdateTreeView();
     static void                 SetCurrentZobVariables(ZobVariablesExposer* zvars);
     static void                 SetCurrentZobVariables(ZobObject* z);
+    static void                 UnsetCurrentZobVariables(ZobObject* z);
     static void                 UpdateControls();
     static void                 OnInspectorUpdate(wxCommandEvent& event);
+    static void                 OnRemoveZobObject(ZobObject* z);
     void                        OnModificatorClick(wxCommandEvent& event) override;
     void                        OnMouseWheel(wxMouseEvent& event) override;
     void                        OnMouseDown(wxMouseEvent& event) override;

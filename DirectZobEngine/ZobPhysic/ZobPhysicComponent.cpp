@@ -269,7 +269,7 @@ float ZobPhysicComponent::ClampAngle(float a) const
 	return a;
 }
 
-void ZobPhysicComponent::EditorUpdate()
+void ZobPhysicComponent::EditorUpdate(bool isPlaying)
 {
 	/*
 	Vector3 p = m_localTransform.getPosition();

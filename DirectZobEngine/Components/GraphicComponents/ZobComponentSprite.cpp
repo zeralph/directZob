@@ -24,7 +24,7 @@ ZobComponentSprite::ZobComponentSprite(ZobObject* zobObject, bool bEditorZobComp
 	m_ambientColor = &ZobColor::White;
 	m_diffuseColor = &ZobColor::White;
 	m_specularColor = &ZobColor::White;
-	m_texturePath.SetFileType(ZobFilePath::eFileType_texture);
+	m_texturePath.SetFileType(ZobFilePath::eFileType_image);
 	m_varExposer->WrapVariable<ZobFilePath>("File", &m_texturePath, &ZobComponentSprite::ReloadMaterial, false, true);
 	//m_varExposer->WrapVariable<ZobColor>("Ambient color", &m_ambientColor, &ZobComponentSprite::ReloadMaterial, false, true);
 	//m_varExposer->WrapVariable<ZobColor>("diffuse color", &m_diffuseColor, &ZobComponentSprite::ReloadMaterial, false, true);
@@ -82,16 +82,16 @@ void ZobComponentSprite::SetForEditor()
 void ZobComponentSprite::Set(ZobFilePath zfp) 
 { 
 	m_texturePath = zfp;
-	m_texturePath.SetFileType(ZobFilePath::eFileType_texture);
+	m_texturePath.SetFileType(ZobFilePath::eFileType_image);
 	Init(NULL);
 }
 
-void ZobComponentSprite::PreUpdate(float dt)
+void ZobComponentSprite::PreUpdate(float dt, bool isPlaying)
 {
 	//m_material->
 }
 
-void ZobComponentSprite::PostUpdate()
+void ZobComponentSprite::PostUpdate(bool isPlaying)
 {
 	/*if (m_sprite)
 	{
@@ -155,7 +155,7 @@ void ZobComponentSprite::QueueForDrawing(const Camera* camera, Engine* engine)
 	}
 }
 
-void ZobComponentSprite::EditorUpdate()
+void ZobComponentSprite::EditorUpdate(bool isPlaying)
 {
 	if (!m_sprite)
 	{

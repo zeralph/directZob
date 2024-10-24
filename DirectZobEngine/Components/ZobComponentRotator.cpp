@@ -32,7 +32,7 @@ void ZobComponentRotator::Init(DirectZobType::sceneLoadingCallback cb)
 	m_zobObject->SetLocalRotation(m_rotateXdt, m_rotateYdt, m_rotateZdt, true);
 }
 
-void ZobComponentRotator::PreUpdate(float dt)
+void ZobComponentRotator::PreUpdate(float dt, bool isPlaying)
 {
 	if (DirectZob::GetInstance()->IsPhysicPlaying())
 	{
@@ -40,7 +40,7 @@ void ZobComponentRotator::PreUpdate(float dt)
 	}	
 }
 
-void ZobComponentRotator::PostUpdate()
+void ZobComponentRotator::PostUpdate(bool isPlaying)
 {
 
 }
@@ -50,7 +50,7 @@ void ZobComponentRotator::QueueForDrawing(const Camera* camera, Engine* engine)
 
 }
 
-void ZobComponentRotator::EditorUpdate()
+void ZobComponentRotator::EditorUpdate(bool isPlaying)
 {
 
 }

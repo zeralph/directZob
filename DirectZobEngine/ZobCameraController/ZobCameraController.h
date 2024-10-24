@@ -11,8 +11,8 @@ public:
 
     static const char*          eCameraTypeStr[Camera::eCameraType::__eCameraType_MAX__];
     virtual void                Init(DirectZobType::sceneLoadingCallback cb) override;
-    virtual void                Update(float dt);
-    virtual void                PreUpdate(float dt);
+    virtual void                Update(float dt, bool isPlaying);
+    virtual void                PreUpdate(float dt, bool isPlaying);
     virtual void                Rotate(float x, float y, float z);
     virtual void                Move(float x, float y, float z);
     virtual void                Zoom(float f);

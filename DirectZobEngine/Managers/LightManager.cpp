@@ -68,13 +68,13 @@ void LightManager::PreUpdate(float dt)
 	for (std::vector<Light*>::const_iterator iter = m_lightsToRemove.begin(); iter != m_lightsToRemove.end(); iter++)
 	{
 		Light* toRemove = (*iter);
-		for (int i = 0; i < m_lights.size(); i++)
+		std::vector<Light*>::iterator iter2;
+		for (iter2 = m_lights.begin(); iter2 != m_lights.end(); iter2++)
 		{
-			if (m_lights[i] == toRemove)
+			if ((*iter2) == toRemove)
 			{
-				std::swap(m_lights.at(i), m_lights.at(m_lights.size() - 1));
-				m_lights.pop_back();
-				m_lightIndex--;
+				m_lights.erase(iter2);
+				break;
 			}
 		}
 	}

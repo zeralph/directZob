@@ -26,11 +26,11 @@ void ZobComponentPhysicBox::Init(DirectZobType::sceneLoadingCallback cb)
 	ZobComponentPhysicShape::Init(cb);
 }
 
-void ZobComponentPhysicBox::EditorUpdate()
+void ZobComponentPhysicBox::EditorUpdate(bool isPlaying)
 {
 	if (m_isInit)
 	{
-		ZobComponentPhysicShape::EditorUpdate();
+		ZobComponentPhysicShape::EditorUpdate(isPlaying);
 		Vector3 h = m_boxShape->getHalfExtents();
 		if (h.x != m_halfExtends.x || h.y != m_halfExtends.y || h.z != m_halfExtends.z )
 		{

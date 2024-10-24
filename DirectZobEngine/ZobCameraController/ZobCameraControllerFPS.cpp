@@ -38,7 +38,7 @@ ZobCameraControllerFPS::~ZobCameraControllerFPS()
     m_zobObject = NULL;
 }
 
-void ZobCameraControllerFPS::PreUpdate(float dt)
+void ZobCameraControllerFPS::PreUpdate(float dt, bool isPlaying)
 {
 	if (m_zobObject->m_active)
 	{
@@ -56,7 +56,7 @@ void ZobCameraControllerFPS::PreUpdate(float dt)
 	}
 }
 
-void ZobCameraControllerFPS::Update(float dt)
+void ZobCameraControllerFPS::Update(float dt, bool isPlaying)
 {
 	m_totalPitch += m_deltaPitch;
 	m_totalRoll += m_deltaRoll;

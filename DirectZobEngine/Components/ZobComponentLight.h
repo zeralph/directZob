@@ -16,10 +16,10 @@ public:
 
 	~ZobComponentLight() override;
 	void					Init(DirectZobType::sceneLoadingCallback cb) override;
-	void					PreUpdate(float dt) override;
-	void					PostUpdate() override;
+	void					PreUpdate(float dt, bool isPlaying) override;
+	void					PostUpdate(bool isPlaying) override;
 	void					QueueForDrawing(const Camera* camera, Engine* engine) override;
-	void					EditorUpdate() override;
+	void					EditorUpdate(bool isPlaying) override;
 
 private:
 	ZobComponentLight(ZobObject* zobObject, bool bEditorZobComponent);

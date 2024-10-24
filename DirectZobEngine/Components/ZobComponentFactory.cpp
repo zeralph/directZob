@@ -130,7 +130,7 @@ ZobComponent* ZobComponentFactory::CreateComponent(ZobObject* zobObject, TiXmlEl
 	if (zobObject && node)
 	{
 		const char* ComponentTypeStr = node->Attribute("Type");
-		ZobComponent* zb = CreateComponentInternal(zobObject, ComponentTypeStr, false);
+		zb = CreateComponentInternal(zobObject, ComponentTypeStr, false);
 		if (zb)
 		{
 			zb->ReadNode(node);

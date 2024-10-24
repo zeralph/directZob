@@ -17,7 +17,7 @@ class ZobComponentPhysicSphere : public ZobComponentPhysicShape
 
 								~ZobComponentPhysicSphere() override;
 		void					Init(DirectZobType::sceneLoadingCallback cb) override;
-		void					EditorUpdate() override;
+		void					EditorUpdate(bool isPlaying) override;
 	private:	
 								ZobComponentPhysicSphere(ZobObject* zobObject);
 

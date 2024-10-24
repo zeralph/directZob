@@ -69,7 +69,7 @@ public :
 								unsigned long long randULL = (rand1 | rand2);
 								return (DirectZobType::zobId)randULL;
 							}
-	void					StartPhysic() { m_physicStarted = true; };
+	void					StartPhysic();
 	void					StopPhysic(bool reset);
 	inline bool				IsPhysicPlaying() const { return m_physicStarted; }
 	void					Init(mfb_window* window, int width, int height, bool bEditorMode);

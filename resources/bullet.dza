@@ -1,0 +1,51 @@
+<ZobObject Guid="4002107657">
+    <Var Name="Name" value="bullet" />
+    <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+    <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+    <Var Name="Quaternion" value="0.00000;0.00000;-0.00000;1.00000" />
+    <Var Name="Body type" value="Static" />
+    <Var Name="Active" value="True" />
+    <Var Name="Mass" value="1000.000" />
+    <Components>
+        <Component Type="Bullet" Guid="2007934107">
+            <Var Name="Enabled" value="True" />
+            <Var Name="LifeTime" value="3.000" />
+            <Var Name="Speed" value="5.000" />
+        </Component>
+    </Components>
+    <ZobObject Guid="4002058099">
+        <Var Name="Name" value="sphere" />
+        <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+        <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+        <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+        <Var Name="Body type" value="Static" />
+        <Var Name="Active" value="True" />
+        <Var Name="Mass" value="1000.000" />
+        <Components>
+            <Component Type="Mesh" Guid="2007583151">
+                <Var Name="Enabled" value="True" />
+                <Var Name="File" value="sphere_r1.obj;D:\Git\directZob\resources/;sphere_r1.obj;1" />
+                <Var Name="Cull mode" value="Clockwise" />
+                <Var Name="Lighting" value="Phong" />
+                <Var Name="Z-buffer mode" value="Buffered" />
+                <Var Name="Transparent" value="False" />
+            </Component>
+        </Components>
+    </ZobObject>
+    <ZobObject Guid="4004901780">
+        <Var Name="Name" value=" Light_4004509727" />
+        <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+        <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+        <Var Name="Quaternion" value="-0.00000;0.00000;-0.00000;1.00000" />
+        <Var Name="Body type" value="Static" />
+        <Var Name="Active" value="True" />
+        <Var Name="Mass" value="1000.000" />
+        <Var Name="Color" value="255;252;212;64" />
+        <Var Name="Intensity" value="1.000" />
+        <Var Name="Distance" value="100.000" />
+        <Var Name="SpotAngle" value="0.523" />
+        <Var Name="Active" value="True" />
+        <Var Name="Type" value="Point" />
+        <Components />
+    </ZobObject>
+</ZobObject>

@@ -32,11 +32,13 @@ public:
 
 	//Mechanics
 	virtual void						Init(DirectZobType::sceneLoadingCallback cb) override;
-	virtual void						PreUpdate(float dt);
+	virtual void						Start();
+	virtual void						Stop();
+	virtual void						PreUpdate(float dt, bool isPlaying);
 	virtual void						UpdatePhysic(float dt);
-	virtual void						Update(float dt);
-	virtual void						PostUpdate();
-	virtual void						EditorUpdate();
+	virtual void						Update(float dt, bool isPlaying);
+	virtual void						PostUpdate(bool isPlaying);
+	virtual void						EditorUpdate(bool isPlaying);
 	virtual void						QueueForDrawing(const Camera* camera,Engine* engine);
 	virtual void						DrawGizmos(const Camera* camera, Engine* engine);
 	virtual								TiXmlNode* SaveUnderNode(TiXmlNode* node);
@@ -91,9 +93,9 @@ public:
 	void								SaveToFactoryFile(std::string& file);
 	const ZobPhysicComponent*			GetPhysicComponent() const { return m_physicComponent; };
 	ZobPhysicComponent*					GetPhysicComponentNoConst() { return m_physicComponent; };
-	void								SetVisible(bool v);
+	void								SetVisible(bool v, bool propagate);
 	bool								IsVisible() const { return m_visible; };
-
+	void								DeleteMarkedObjects();
 	//temp ?
 	const ZobMatrix4x4*					GetModelMatrix() const { return &m_modelMatrix; };
 	const ZobMatrix4x4*					GetRotationMatrix() const { return &m_rotationMatrix; };
@@ -140,7 +142,6 @@ public:
 	static void							ReloadVariablesFromWorldData(zobId id);
 private:
 	void								SaveRecusrive(TiXmlNode* node, ZobObject* z);
-	void								DeleteInternal();
 
 protected:
 

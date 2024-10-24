@@ -11,6 +11,7 @@
 #include "../DirectZobEngine/Rendering/ZobTexture.h"
 #include "../DirectZobEngine/Rendering/Triangle.h"
 #include "../dependencies/tinyxml/tinyxml.h"
+#include "../DirectZobEngine/SceneLoader.h"
 
 #define LIGHT_TEX_NAME "editor_light_texture"
 #define LIGHT_MAT_NAME "editor_light_material"
@@ -96,6 +97,15 @@ void ZobEditorManager::Unload()
 	m_modificatorData.Reset();
 }
 
+void ZobEditorManager::PostUpdate()
+{
+	if (m_selectedObject && m_selectedObject->IsMarkedForDeletion())
+	{
+		MainWindowInterface::UnsetCurrentZobVariables(m_selectedObject);
+		SetSelectedObject(NULL);
+	}
+}
+
 void ZobEditorManager::UpdateEngine()
 {
 	if (m_init)
@@ -107,7 +117,6 @@ void ZobEditorManager::UpdateEngine()
 		ZobObject* z = DirectZob::GetInstance()->GetEngine()->GetObjectAt2DCoords(m_mouseX, m_mouseY, true);
 		UpdateGizmoSelection(z);
 		UpdateLog();
-
 		Camera* c = DirectZob::GetInstance()->GetCameraManager()->GetCurrentCamera();
 		std::vector<Light*> vl = ZobEntity::GetEntities<Light>();
 		std::vector<Light*>::const_iterator iterL;
@@ -139,7 +148,6 @@ void ZobEditorManager::UpdateEngine()
 				//zs->se
 			}
 		}
-
 	}
 }
 
@@ -577,6 +585,8 @@ void ZobEditorManager::UpdateGizmos()
 		}
 		*/
 	}
+	bool bVis = m_gizmosNode->GetParent() != DirectZob::GetInstance()->GetZobObjectManager()->GetRootObject();
+	m_gizmosNode->SetVisible(bVis, false);
 }
 
 void ZobEditorManager::UpdateLog()
@@ -810,7 +820,6 @@ void ZobEditorManager::DrawGrid()
 
 void ZobEditorManager::UpdateGizmoSelection(ZobObject* z)
 {
-	
 	m_componentTranslateX->GetRenderOptions()->color = ZobColor::Red;
 	m_componentTranslateY->GetRenderOptions()->color = ZobColor::Green;
 	m_componentTranslateZ->GetRenderOptions()->color = ZobColor::Blue;
@@ -897,6 +906,20 @@ void ZobEditorManager::LoadMesh(std::string& p, std::string& f)
 	m_selectedObject = z;
 }
 
+void ZobEditorManager::LoadAsset(std::string& p, std::string& f)
+{
+	ZobObject* z = m_selectedObject;
+	if (!z)
+	{
+		z = DirectZob::GetInstance()->GetZobObjectManager()->GetRootObject();
+	}
+	if (p.back() != '\\')
+	{
+		p = p + '\\';
+	}
+	SceneLoader::LoadAsset(z, p, f);
+}
+
 void ZobEditorManager::ZoomToSelected()
 {
 	if (m_selectedObject)
@@ -915,12 +938,20 @@ void ZobEditorManager::ShowHide()
 {
 	if (m_selectedObject)
 	{
-		m_selectedObject->SetVisible(!m_selectedObject->IsVisible());
+		m_selectedObject->SetVisible(!m_selectedObject->IsVisible(), false);
 	}
 }
 void ZobEditorManager::LoadSprite(std::string& p, std::string& f)
 {
 
+}
+void ZobEditorManager::SaveAsAsset(std::string& p, std::string& f)
+{
+	if (m_selectedObject)
+	{
+		std::string file = p + '\\' + f;
+		m_selectedObject->SaveAsAsset(file);
+	}
 }
 void ZobEditorManager::AddObject()
 {

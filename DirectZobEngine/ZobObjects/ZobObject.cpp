@@ -107,6 +107,8 @@ ZobObject::ZobObject(zobId id, TiXmlElement* node, ZobObject* parent)
 		for (TiXmlElement* e = ComponentsNode->FirstChildElement("Component"); e != NULL; e = e->NextSiblingElement("Component"))
 		{
 			ZobComponent* b = ZobComponentFactory::CreateComponent(this, e);
+			if(b)
+				b->Init(NULL);
 		}
 	}	
 	//Init
@@ -245,58 +247,90 @@ void ZobObject::Init(DirectZobType::sceneLoadingCallback cb)
 	}
 }
 
-void ZobObject::EditorUpdate()
+void ZobObject::EditorUpdate(bool isPlaying)
 {
-	m_physicComponent->EditorUpdate();
+	m_physicComponent->EditorUpdate(isPlaying);
 	for (int i = 0; i < m_Components.size(); i++)
 	{
 		if (m_Components[i]->IsEnabled())
-			m_Components[i]->EditorUpdate();
+			m_Components[i]->EditorUpdate(isPlaying);
 	}
 	for (int i = 0; i < m_children.size(); i++)
 	{
 		ZobObject* z = m_children[i];
 		if (z)
 		{
-			z->EditorUpdate();
+			z->EditorUpdate(isPlaying);
 		}
 	}
 }
 
-void ZobObject::PreUpdate(float dt)
-{
-	OPTICK_EVENT();
-	for (int i = 0; i < m_Components.size(); i++)
-	{
-		if(m_Components[i]->IsEnabled())
-			m_Components[i]->PreUpdate(dt);
-
-	}
-	for (int i = 0; i < m_children.size(); i++)
-	{
-		ZobObject* z = m_children[i];
-		z->PreUpdate(dt);
-	}
-	DeleteInternal();
-}
-
-void ZobObject::PostUpdate()
+void ZobObject::Start()
 {
 	OPTICK_EVENT();
 	for (int i = 0; i < m_Components.size(); i++)
 	{
 		if (m_Components[i]->IsEnabled())
-			m_Components[i]->PostUpdate();
+			m_Components[i]->Start();
+
+	}
+	for (int i = 0; i < m_children.size(); i++)
+	{
+		ZobObject* z = m_children[i];
+		z->Start();
+	}
+}
+
+void ZobObject::Stop()
+{
+	OPTICK_EVENT();
+	for (int i = 0; i < m_Components.size(); i++)
+	{
+		if (m_Components[i]->IsEnabled())
+			m_Components[i]->Stop();
+
+	}
+	for (int i = 0; i < m_children.size(); i++)
+	{
+		ZobObject* z = m_children[i];
+		z->Stop();
+	}
+}
+
+void ZobObject::PreUpdate(float dt, bool isPlaying)
+{
+	OPTICK_EVENT();
+	for (int i = 0; i < m_Components.size(); i++)
+	{
+		if(m_Components[i]->IsEnabled())
+			m_Components[i]->PreUpdate(dt, isPlaying);
+
+	}
+	for (int i = 0; i < m_children.size(); i++)
+	{
+		ZobObject* z = m_children[i];
+		z->PreUpdate(dt, isPlaying);
+	}
+	//DeleteInternal();
+}
+
+void ZobObject::PostUpdate(bool isPlaying)
+{
+	OPTICK_EVENT();
+	for (int i = 0; i < m_Components.size(); i++)
+	{
+		if (m_Components[i]->IsEnabled())
+			m_Components[i]->PostUpdate(isPlaying);
 	}
 	for (int i = 0; i < m_children.size(); i++)
 	{
 		ZobObject* z = m_children[i];
 		if(z)
-			z->PostUpdate();
+			z->PostUpdate(isPlaying);
 	}
 }
 
-void ZobObject::SetVisible(bool v)
+void ZobObject::SetVisible(bool v, bool propagate)
 {
 	//if (m_visible != v)
 	{
@@ -306,11 +340,14 @@ void ZobObject::SetVisible(bool v)
 		{
 			m[i]->SetVisible(v);
 		}
-		for (int i = 0; i < m_children.size(); i++)
+		if (propagate)
 		{
-			ZobObject* z = m_children[i];
-			if (z)
-				z->SetVisible(v);
+			for (int i = 0; i < m_children.size(); i++)
+			{
+				ZobObject* z = m_children[i];
+				if (z)
+					z->SetVisible(v, propagate);
+			}
 		}
 	}
 
@@ -319,33 +356,35 @@ void ZobObject::SetVisible(bool v)
 void ZobObject::QueueForDrawing(const Camera* camera, Engine* engine)
 {
 	OPTICK_EVENT();
-	for (int i = 0; i < m_Components.size(); i++)
+	if (m_visible)
 	{
-		if (m_Components[i]->IsEnabled())
-			m_Components[i]->QueueForDrawing(camera, engine);
-	}
-	for (int i = 0; i < m_children.size(); i++)
-	{
-		ZobObject* z = m_children[i];
-		if (z)
-			z->QueueForDrawing(camera, engine);
+		for (int i = 0; i < m_Components.size(); i++)
+		{
+			if (m_Components[i]->IsEnabled())
+				m_Components[i]->QueueForDrawing(camera, engine);
+		}
+		for (int i = 0; i < m_children.size(); i++)
+		{
+			ZobObject* z = m_children[i];
+			if (z)
+				z->QueueForDrawing(camera, engine);
+		}
 	}
 }
 
-void ZobObject::DeleteInternal()
+void ZobObject::DeleteMarkedObjects()
 {
-	for (int i = 0; i < m_children.size(); i++)
+	if (IsMarkedForDeletion())
 	{
-		ZobObject* z = m_children[i];
-		if (z->IsMarkedForDeletion())
+		delete this;
+	}
+	else
+	{
+		for (int i = 0; i < m_children.size(); i++)
 		{
-			RemoveChildReference(z);
-			delete z;
+			ZobObject* z = m_children[i];
+			z->DeleteMarkedObjects();
 		}
-//		else
-//		{
-//			z->PreUpdate(0);
-//		}
 	}
 }
 
@@ -360,7 +399,7 @@ void ZobObject::UpdatePhysic(float dt)
 }
 
 //void ZobObject::Update(const ZobMatrix4x4& parentMatrix, const ZobMatrix4x4& parentRSMatrix)
-void ZobObject::Update(float dt)
+void ZobObject::Update(float dt, bool isPlaying)
 {
 	OPTICK_EVENT();
 	UpdatePhysic(dt);
@@ -394,7 +433,7 @@ void ZobObject::Update(float dt)
 	for (int i = 0; i < m_children.size(); i++)
 	{
 		ZobObject* z = m_children[i];
-		z->Update(dt);
+		z->Update(dt, isPlaying);
 	}
 }
 

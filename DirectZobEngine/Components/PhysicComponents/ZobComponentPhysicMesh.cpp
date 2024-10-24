@@ -105,11 +105,11 @@ void ZobComponentPhysicMesh::Init(DirectZobType::sceneLoadingCallback cb)
 	}
 }
 
-void ZobComponentPhysicMesh::EditorUpdate()
+void ZobComponentPhysicMesh::EditorUpdate(bool isPlaying)
 {
 	//if (m_isInit)
 	{
-		ZobComponentPhysicShape::EditorUpdate();
+		ZobComponentPhysicShape::EditorUpdate(isPlaying);
 		if (m_mesh == NULL)
 		{
 			if (m_convexMeshPath.IsDefined())

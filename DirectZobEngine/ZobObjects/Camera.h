@@ -46,10 +46,10 @@ public:
 	~Camera() override;
 
 	//void					Update(const ZobMatrix4x4& parentMatrix, const ZobMatrix4x4& parentRSMatrix) override;
-	void					Update(float dt) override;
-	void					PreUpdate(float dt) override;
+	void					Update(float dt, bool isPlaying) override;
+	void					PreUpdate(float dt, bool isPlaying) override;
 	void					Init(DirectZobType::sceneLoadingCallback cb) override;
-	void					PostUpdate() override;
+	void					PostUpdate(bool isPlaying) override;
 	void					DrawGizmos(const Camera* camera, Engine* engine) override;
 	TiXmlNode*				SaveUnderNode(TiXmlNode* node) override;
 	void					UpdateViewProjectionMatrix(/*const ZobVector3* eyeV*/);

@@ -43,6 +43,7 @@ MainWindowInterface::MainWindowInterface(DirectZob* dz, ZobEditorManager* dze) :
         m_treeMenuAddComponent->Bind(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MainWindowInterface::OnAddComponent), this, mi->GetId());
     }
     
+    m_directZob->GetZobObjectManager()->RegisterOnRemoveObjectCallback(MainWindowInterface::OnRemoveZobObject);
 
 #if WINDOWS
     m_renderPanel->SetDoubleBuffered(true);
@@ -60,7 +61,13 @@ MainWindowInterface::MainWindowInterface(DirectZob* dz, ZobEditorManager* dze) :
     std::thread t = std::thread(&MainWindowInterface::MyThread, this);
     t.detach();
 }
-
+void MainWindowInterface::OnRemoveZobObject(ZobObject* z)
+{
+    ZobObject* root = m_singleton->m_directZob->GetZobObjectManager()->GetRootObject();
+    m_singleton->m_currentZobObjectInspector->Unset(z);
+    //m_singleton->m_editor->SetSelectedObject(root);
+    //m_singleton->RefreshObjectTree();
+}
 void MainWindowInterface::MyThread()
 {
     while (m_run)
@@ -69,6 +76,8 @@ void MainWindowInterface::MyThread()
         {
             m_editor->UpdateEngine();
             RenderAFrame();
+            m_editor->PostUpdate();
+            m_currentZobObjectInspector->ThreadSafeUpdate();
             const uint* buffer = m_directZob->GetBufferData();
             int width = m_directZob->GetBufferWidth();
             int height = m_directZob->GetBufferHeight();
@@ -78,6 +87,7 @@ void MainWindowInterface::MyThread()
             wxNativePixelData data(b);
             if (!data)
             {
+                m_renderedAFrame = true;
                 return;
             }
             wxNativePixelData::Iterator p(data);
@@ -131,6 +141,8 @@ void MainWindowInterface::OnAddComponent(wxCommandEvent& event)
         wxMenu* mi = (wxMenu*)event.GetEventObject();
         std::string s = std::string(mi->GetLabel(id).c_str());
         m_editor->AddComponent(s);
+        ZobObject* z = m_editor->GetSelectedObject();
+        m_singleton->m_currentZobObjectInspector->Set(z);
     }
 }
 
@@ -177,6 +189,11 @@ MainWindowInterface::~MainWindowInterface()
     delete m_currentZobObjectInspector;
 }
 
+void MainWindowInterface::UnsetCurrentZobVariables(ZobObject* z)
+{
+    m_singleton->m_currentZobObjectInspector->Unset(z);
+}
+
 void MainWindowInterface::SetCurrentZobVariables(ZobObject* z)
 {
     m_singleton->m_currentZobObjectInspector->Set(z);
@@ -206,6 +223,7 @@ void MainWindowInterface::OnPlay(wxCommandEvent& event)
     m_Pause->SetValue(0);
     m_Stop->SetValue(0);
     m_Play->SetValue(1);
+    //m_directZob->GetZobObjectManager()->Init(NULL);
     m_directZob->StartPhysic();
 }
 
@@ -229,6 +247,7 @@ void MainWindowInterface::OnStop(wxCommandEvent& event)
     m_Play->SetValue(0);
     m_directZob->StopPhysic(1);
     m_editor->OnStop();
+    //m_directZob->GetZobObjectManager()->Init(NULL);
 }
 
 void MainWindowInterface::OnMaximize(wxMaximizeEvent& event)
@@ -429,8 +448,11 @@ void MainWindowInterface::AddLog(std::string& s)
     m_singleton->m_log->Newline();
     m_singleton->m_log->ScrollIntoView(m_singleton->m_log->GetCaretPosition(), WXK_PAGEDOWN);
     */
-//   m_singleton->m_log->AppendText(s);
-   //m_singleton->m_log->AppendText("\n");
+    if (s.length() > 0)
+    {
+        m_singleton->m_log->AppendText(s);
+        m_singleton->m_log->AppendText("\n");
+    }
 }
 
 void MainWindowInterface::UpdateControls()
@@ -652,7 +674,14 @@ void MainWindowInterface::OnTreeRightClick(wxTreeEvent& event)
 }
 void MainWindowInterface::OnTreeMenuSaveAsAsset(wxCommandEvent& event)
 {
-
+    wxFileDialog openFileDialog(this, _("DirectZob Aset"), "", "", ZOB_ASSET_EXT, wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+    if (openFileDialog.ShowModal() == wxID_CANCEL)
+    {
+        return;
+    }
+    std::string p = std::string(openFileDialog.GetDirectory().mb_str());
+    std::string f = std::string(openFileDialog.GetFilename().mb_str());
+    m_editor->SaveAsAsset(p, f);
 }
 void MainWindowInterface::OnMenuAddObject(wxCommandEvent& event)
 {   
@@ -690,7 +719,7 @@ void MainWindowInterface::OnTreeMenuShowHide(wxCommandEvent& event)
 }
 void MainWindowInterface::OnMenuAddMesh(wxCommandEvent& event)
 {
-    wxFileDialog openFileDialog(this, _("Mesh"), "", "", "gltf files (*.gltf)|*.gltf|obj files (*.obj)|*.obj|fbx files (*.fbx)|*.fbx", wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+    wxFileDialog openFileDialog(this, _("Mesh"), "", "", ZOB_MESH_EXT, wxFD_OPEN | wxFD_FILE_MUST_EXIST);
     if (openFileDialog.ShowModal() == wxID_CANCEL)
     {
         return;
@@ -706,7 +735,15 @@ void MainWindowInterface::OnMenuAddSprite(wxCommandEvent& event)
 }
 void MainWindowInterface::OnMenuAddAsset(wxCommandEvent& event)
 {
-
+    wxFileDialog openFileDialog(this, _("DirectZob Aset"), "", "", ZOB_ASSET_EXT, wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+    if (openFileDialog.ShowModal() == wxID_CANCEL)
+    {
+        return;
+    }
+    std::string p = std::string(openFileDialog.GetDirectory().mb_str());
+    std::string f = std::string(openFileDialog.GetFilename().mb_str());
+    m_editor->LoadAsset(p, f);
+    RefreshObjectTree();
 }
 void MainWindowInterface::OnMenuAddLight(wxCommandEvent& event)
 {

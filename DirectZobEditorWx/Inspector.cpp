@@ -7,6 +7,7 @@
 #include "MainWindowInterface.h"
 #include <string>
 #include "../DirectZobEngine/ZobObjects/ZobObject.h"
+#include "../DirectZobEngine/Managers/ZobObjectManager.h"
 #include "ZobEditorManager.h"
 
 wxSize Inspector::sLabelSize = wxSize(140, 20);
@@ -41,7 +42,13 @@ Inspector::Inspector(wxPanel* p)
 	m_parentPanel = p;
 	m_panel = NULL;
 	m_dirty = true;
+	m_unset = false;
 	//m_panel = p;
+}
+
+void Inspector::Reload()
+{
+
 }
 
 void Inspector::Clear()
@@ -62,9 +69,29 @@ void Inspector::UpdateControls()
 		zc->UpdateFromEngine();
 	}
 }
-
+void Inspector::ThreadSafeUpdate()
+{
+	if (m_unset)
+	{
+		ZobObject* r = DirectZob::GetInstance()->GetZobObjectManager()->GetRootObject();
+		Set(r);
+		m_unset = false;
+	}
+}
+void Inspector::Unset(ZobObject* z)
+{
+	if (m_currentObject == z)
+	{
+		m_unset = true;
+	}
+}
 void Inspector::Set(ZobObject* z)
 {
+	m_currentObject = z;
+	if (!z)
+	{
+		return;
+	}
 	m_dirty = true;
 	if (m_panel)
 	{

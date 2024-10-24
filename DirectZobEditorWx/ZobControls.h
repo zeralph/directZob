@@ -119,7 +119,10 @@ public:
 	virtual ~ZobPathControl();
 	void UpdateFromEngine() override;
 	void OnUpdate(wxCommandEvent& event);
+	void OnOpen(wxCommandEvent& event);
 private:
 	wxTextCtrl* m_t;
 	std::string m_path;
+	std::string m_file;
+	std::string m_fullPath;
 };

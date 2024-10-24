@@ -18,9 +18,11 @@ public:
 
 	virtual ~ZobComponent() {};
 	virtual void											Init(DirectZobType::sceneLoadingCallback cb) override = 0;
-	virtual void											PreUpdate(float dt)=0;
-	virtual void											PostUpdate() = 0;
-	virtual void											EditorUpdate() = 0;
+	virtual void											Start() {};
+	virtual void											Stop() {};
+	virtual void											PreUpdate(float dt, bool isPlaying)=0;
+	virtual void											PostUpdate(bool isPlaying) = 0;
+	virtual void											EditorUpdate(bool isPlaying) = 0;
 	virtual void											QueueForDrawing(const Camera* camera, Engine* engine) {};
 	virtual	void											DrawGizmos(const Camera* camera, const ZobVector3* position, const ZobVector3* rotation) const {}
 	ZobComponent*											Duplicate() override;

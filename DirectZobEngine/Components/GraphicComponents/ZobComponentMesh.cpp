@@ -8,7 +8,7 @@
 #include "../ZobComponentFactory.h"
 ZobComponentMesh::~ZobComponentMesh()
 {
-
+	DirectZob::GetInstance()->GetMeshManager()->DeleteMesh(m_mesh);
 }
 
 ZobComponentMesh::ZobComponentMesh(ZobObject* zobObject, bool bEditorZobComponent) : ZobComponent(zobObject, bEditorZobComponent)
@@ -82,7 +82,7 @@ void ZobComponentMesh::Set(Mesh* m)
 	}
 }
 
-void ZobComponentMesh::PreUpdate(float dt)
+void ZobComponentMesh::PreUpdate(float dt, bool isPlaying)
 {
 }
 
@@ -91,7 +91,7 @@ void ZobComponentMesh::SetVisible(bool v)
 	m_mesh->SetVisible(v); 
 }
 
-void ZobComponentMesh::PostUpdate()
+void ZobComponentMesh::PostUpdate(bool isPlaying)
 {
 	/*if (m_mesh)
 	{
@@ -126,7 +126,7 @@ void ZobComponentMesh::QueueForDrawing(const Camera* camera, Engine* engine)
 	}
 }
 
-void ZobComponentMesh::EditorUpdate()
+void ZobComponentMesh::EditorUpdate(bool isPlaying)
 {
 	if (!m_mesh)
 	{

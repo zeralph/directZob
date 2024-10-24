@@ -9,6 +9,7 @@
 
 
 static std::string emptyStr = std::string("");
+DirectZobType::OnRemoveEntityCallback ZobObjectManager::m_onRemoveObjectCb = NULL;
 
 ZobObjectManager::ZobObjectManager()
 {
@@ -52,6 +53,10 @@ ZobObject* ZobObjectManager::CreateZobObject(ZobObject* parent, std::string& nam
 
 void ZobObjectManager::RemoveZobObject(ZobObject* z)
 {
+	if (m_onRemoveObjectCb)
+	{
+		m_onRemoveObjectCb(z);
+	}
 	z->MarkForDeletion();
 	//todo : delay deletion
 	//delete z;
@@ -101,16 +106,28 @@ void ZobObjectManager::Init(DirectZobType::sceneLoadingCallback cb)
 	m_rootObject->Init(cb);
 }
 
-void ZobObjectManager::PreUpdate(float dt)
+void ZobObjectManager::Start()
 {
 	OPTICK_EVENT();
-	m_rootObject->PreUpdate(dt);
+	m_rootObject->Start();
 }
 
-void ZobObjectManager::PostUpdate()
+void ZobObjectManager::Stop()
 {
 	OPTICK_EVENT();
-	m_rootObject->PostUpdate();
+	m_rootObject->Stop();
+}
+
+void ZobObjectManager::PreUpdate(float dt, bool isPlaying)
+{
+	OPTICK_EVENT();
+	m_rootObject->PreUpdate(dt, isPlaying);
+}
+
+void ZobObjectManager::PostUpdate(bool isPlaying)
+{
+	OPTICK_EVENT();
+	m_rootObject->PostUpdate(isPlaying);
 }
 
 void ZobObjectManager::DrawGizmos(const Camera* camera, Engine* engine)
@@ -125,15 +142,20 @@ void ZobObjectManager::QueueForDrawing(const Camera* camera, Engine* engine)
 	m_rootObject->QueueForDrawing(camera, engine);
 }
 
-void ZobObjectManager::EditorUpdate()
+void ZobObjectManager::EditorUpdate(bool isPlaying)
 {
-	m_rootObject->EditorUpdate();
+	m_rootObject->EditorUpdate(isPlaying);
+}
+
+void ZobObjectManager::DeleteMarkedObjects()
+{
+	m_rootObject->DeleteMarkedObjects();
 }
 
 void ZobObjectManager::UpdateObjects(const Camera* camera, Engine* engine, float dt)
 {
 	OPTICK_EVENT();
-	m_rootObject->Update(dt);
+	m_rootObject->Update(dt, DirectZob::GetInstance()->IsPhysicPlaying());
 	m_time = (float)(clock() - m_drawTick) / CLOCKS_PER_SEC * 1000;
 }
 
@@ -216,4 +238,9 @@ void ZobObjectManager::RestoreTransforms()
 void ZobObjectManager::ResetPhysic()
 {
 	m_rootObject->ResetPhysic();
+}
+
+void ZobObjectManager::RegisterOnRemoveObjectCallback(DirectZobType::OnRemoveEntityCallback cb)
+{
+	m_onRemoveObjectCb = cb;
 }

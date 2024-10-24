@@ -85,7 +85,7 @@ ZobComponentCar::ZobComponentCar(ZobObject* zobObject) : ZobComponent(zobObject,
 	m_steeringRotationSpeedRS = M_PI;
 }
 
-void ZobComponentCar::PreUpdate(float dt)
+void ZobComponentCar::PreUpdate(float dt, bool isPlaying)
 {
 	DirectZob* directZob = DirectZob::GetInstance();
 	if (directZob->IsPhysicPlaying())
@@ -449,7 +449,7 @@ void ZobComponentCar::UpdateInputs(float dt)
 	}
 }
 
-void ZobComponentCar::EditorUpdate()
+void ZobComponentCar::EditorUpdate(bool isPlaying)
 {
 }
 

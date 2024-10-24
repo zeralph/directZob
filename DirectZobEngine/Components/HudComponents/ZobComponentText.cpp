@@ -36,7 +36,7 @@ ZobComponentText::ZobComponentText(ZobObject* zobObject, bool bEditorZobComponen
 	m_componentType = ZobComponentFactory::eComponent_hudText; 
 	//m_unit = ZobHUDManager::eHudUnit_ratio;
 	m_fontXml.SetFileType(ZobFilePath::eFileType_xml);
-	m_fontImage.SetFileType(ZobFilePath::eFileType_texture);
+	m_fontImage.SetFileType(ZobFilePath::eFileType_image);
 	m_actionArg = "";
 	m_selected = false;
 	//m_varExposer->WrapAction("Add", &ZobComponentText::AddItem);
@@ -65,7 +65,7 @@ ZobComponentText::ZobComponentText(ZobObject* zobObject, bool bEditorZobComponen
 	Init(NULL);
 }
 
-void ZobComponentText::PreUpdate(float dt)
+void ZobComponentText::PreUpdate(float dt, bool isPlaying)
 {
 	if (m_visible)
 	{
@@ -84,7 +84,7 @@ void ZobComponentText::PreUpdate(float dt)
 	}
 }
 
-void ZobComponentText::EditorUpdate()
+void ZobComponentText::EditorUpdate(bool isPlaying)
 {
 	if (!m_font)
 	{

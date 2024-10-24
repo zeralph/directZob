@@ -28,11 +28,11 @@ void ZobComponentPhysicCapsule::Init(DirectZobType::sceneLoadingCallback cb)
 	ZobComponentPhysicShape::Init(cb);
 }
 
-void ZobComponentPhysicCapsule::EditorUpdate()
+void ZobComponentPhysicCapsule::EditorUpdate(bool isPlaying)
 {
 	if (m_isInit)
 	{
-		ZobComponentPhysicShape::EditorUpdate();
+		ZobComponentPhysicShape::EditorUpdate(isPlaying);
 		if (m_capsuleShape->getRadius() != m_radius)
 		{
 			m_capsuleShape->setRadius(m_radius);

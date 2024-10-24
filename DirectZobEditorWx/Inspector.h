@@ -5,7 +5,7 @@
 #include <wx/sizer.h>
 #include "ZobControls.h"
 
-
+class ZobObject;
 class Inspector
 {
 public:
@@ -13,8 +13,11 @@ public:
 	~Inspector();
 	void Set(ZobVariablesExposer* vars);
 	void Set(ZobObject* z);
+	void Unset(ZobObject* z);
 	void Clear();
+	void Reload();
 	void UpdateControls();
+	void ThreadSafeUpdate();
 	static bool StringToFloat(const char* c, float& f);
 	static bool	FloatToString(float f, std::string& s);
 private:
@@ -27,7 +30,9 @@ private:
 	wxPanel* m_panel;
 	std::vector<ZobControl*> m_controls;
 public:
+	ZobObject*		m_currentObject;
 	bool			m_dirty;
+	bool			m_unset;
 	static wxSize	sLabelSize;
 	static wxSize	sFloatSize;
 	static wxSize	sStringSize;

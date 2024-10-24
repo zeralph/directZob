@@ -1,3 +1,4 @@
+#include <wx/filedlg.h>
 #include "ZobControls.h"
 #include "Inspector.h"
 #include <wx/stattext.h>
@@ -6,6 +7,8 @@
 #include <wx/clrpicker.h>
 #include <wx/combobox.h>
 #include <wx/checkbox.h>
+#include "MainWindowInterface.h"
+
 /*------------------------------------------------
 *
 *	ZobControl
@@ -463,18 +466,63 @@ ZobPathControl::ZobPathControl(const ZobVariablesExposer::wrapperData* w, wxBoxS
 	bs->Add(m_t, 0, wxALL, 1);
 	bs->Add(btn, 0, wxALL, 1);
 	bs->Add(t, 0, wxALL, 1);
+	btn->Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(ZobPathControl::OnOpen), NULL, this);
 	b->Add(bs);
+}
+void ZobPathControl::OnOpen(wxCommandEvent& event)
+{
+	ZobFilePath* zfp = (ZobFilePath*)m_vars->ptr;
+	const char* ft = ZOB_ANY_EXT;
+	if (zfp)
+	{
+		switch (zfp->GetFileType())
+		{
+		case ZobFilePath::eFileType_asset:
+			ft = ZOB_ASSET_EXT;
+			break;
+		case ZobFilePath::eFileType_image:
+			ft = ZOB_IMG_EXT;
+			break;
+		case ZobFilePath::eFileType_mesh:
+			ft = ZOB_MESH_EXT;
+			break;
+		case ZobFilePath::eFileType_scene:
+			ft = ZOB_SCENE_EXT;
+			break;
+		case ZobFilePath::eFileType_xml:
+			ft = ZOB_XML_EXT;
+			break;
+		default:
+			break;
+		}
+	}
+	wxFileDialog openFileDialog(this, _("DirectZob Scene"), "", "", ft, wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+	if (openFileDialog.ShowModal() == wxID_CANCEL)
+	{
+		return;
+	}
+	m_path = std::string(openFileDialog.GetDirectory().mb_str()) + '\\';
+	m_file = std::string(openFileDialog.GetFilename().mb_str());
+	m_fullPath = m_path + m_file;
+	zfp->ChangePath(m_path, m_file);
+	if (m_vars->callback)
+	{
+		m_vars->callback(m_vars->id);
+	}
 }
 ZobPathControl::~ZobPathControl()
 {
 }
 void ZobPathControl::UpdateFromEngine()
 {
+	ZobFilePath* zfp = (ZobFilePath*)m_vars->ptr;
+	if (zfp->GetFullPath() != m_fullPath)
+	{
+		m_fullPath = zfp->GetFullPath();
+		m_t->SetValue(m_fullPath);
+	}
 }
 void ZobPathControl::OnUpdate(wxCommandEvent& event)
 {
-	if (m_vars->callback)
-	{
-		m_vars->callback(m_vars->id);
-	}
+
 }

@@ -101,3 +101,18 @@ void MeshManager::UnloadAll()
 	}
 	m_meshes.clear();
 }
+
+void MeshManager::DeleteMesh(Mesh* m)
+{
+	std::vector<Mesh*>::iterator iter;
+	for (iter = m_meshes.begin(); iter!=m_meshes.end(); iter++)
+	{
+		if ((*iter) == m)
+		{
+			m_meshes.erase(iter);
+			delete m;
+			m = NULL;
+			break;
+		}
+	}
+}

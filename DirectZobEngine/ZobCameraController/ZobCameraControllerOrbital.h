@@ -10,8 +10,8 @@ public:
     ZobCameraControllerOrbital(Camera * c, bool isFree, bool bEditorZobComponent);
     ~ZobCameraControllerOrbital();
 
-    void        Update(float dt) override;
-    void        PreUpdate(float dt) override;
+    void        Update(float dt, bool isPlaying) override;
+    void        PreUpdate(float dt, bool isPlaying) override;
     void        Rotate(float x, float y, float z) override;
     void        Move(float x, float y, float z) override;
     void        SetTarget(const ZobVector3* t) override;

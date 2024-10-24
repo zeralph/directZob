@@ -25,7 +25,7 @@ public:
 	~Light() override;
 
 	void				DrawGizmos(const Camera* camera, Engine* engine) override;
-	void				Update(float dt) override;
+	void				Update(float dt, bool isPlaying) override;
 	const ZobColor*		GetColor() const { return &m_lightColor; }
 	const float			GetFallOffDistance() const { return m_distance; }
 	const float			GetIntensity() const { return m_intensity; }

@@ -49,7 +49,7 @@ ZobCameraController::~ZobCameraController()
     m_zobObject = NULL;
 }
 
-void ZobCameraController::Update(float dt)
+void ZobCameraController::Update(float dt, bool isPlaying)
 {
     //ZobVector3 v = m_zobObject->GetWorldPosition();
     //m_zobObject->UpdateViewProjectionMatrix(&v);
@@ -68,7 +68,7 @@ void ZobCameraController::SetTarget(const ZobVector3* t)
 
 }
 
-void ZobCameraController::PreUpdate(float dt)
+void ZobCameraController::PreUpdate(float dt, bool isPlaying)
 {
 }
 

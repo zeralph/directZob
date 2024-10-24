@@ -67,7 +67,7 @@ public:
 	//Mechanics
 	void								Init();
 	void								Update();
-	void								EditorUpdate();
+	void								EditorUpdate(bool isPlaying);
 	void								SaveTransform();
 	void								RestoreTransform();
 	void								ResetPhysic();

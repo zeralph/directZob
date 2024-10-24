@@ -8,10 +8,12 @@ class ZobFilePath
 public:
 	enum eFileType
 	{
-		eFileType_all=0,
+		eFileType_any=0,
 		eFileType_mesh=1,
-		eFileType_texture=2,
+		eFileType_image=2,
 		eFileType_xml=3,
+		eFileType_scene = 4,
+		eFileType_asset= 5,
 		__eFileType_ALL__
 	};
 
@@ -25,6 +27,7 @@ public:
 	std::string					Serialize();
 	void						Unserialize(std::string s);
 	void						Reset();
+	void						ChangePath(std::string& path, std::string& file);
 	
 	eFileType					GetFileType() const { return m_fileType; }
 	void						SetFileType(eFileType t) { m_fileType = t; }

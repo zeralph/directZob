@@ -1,0 +1,74 @@
+<?xml version="1.0" ?>
+<Scene EntitiesCount="7" ZobObjectsCount="2">
+    <Globals>
+        <Var Name="Ambient color" value="255;102;102;102" />
+        <Var Name="Clear color" value="255;192;192;192" />
+        <Var Name="Ambient color intensity" value="0.800" />
+        <Var Name="Fog type" value="None" />
+        <Var Name="Fog color" value="255;63;149;255" />
+        <Var Name="Fog distance" value="20.000" />
+        <Var Name="Fog density" value="2.000" />
+        <Var Name="Render mode" value="Fullframe" />
+        <Var Name="Lighting mode" value="Vertex" />
+        <Var Name="Bits per color" value="Full" />
+        <Var Name="Dithering" value="False" />
+        <Var Name="Z near" value="0.110" />
+        <Var Name="Z far" value="1000.000" />
+        <Var Name="Equalize triangle queues" value="False" />
+        <Var Name="Perspective Correction" value="True" />
+        <Var Name="Downscale" value="1" />
+    </Globals>
+    <ZobObject Guid="4003345773">
+        <Var Name="Name" value=" Camera_4003345773" />
+        <Var Name="Position" value="-20.00000;28.28427;19.99999;1.00000" />
+        <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+        <Var Name="Quaternion" value="0.14644;0.85355;-0.35355;0.35355" />
+        <Var Name="Body type" value="Static" />
+        <Var Name="Active" value="True" />
+        <Var Name="Mass" value="1000.000" />
+        <Var Name="FOV" value="45.000" />
+        <Var Name="Camera controller" value="Orbital Free" />
+        <Components />
+    </ZobObject>
+    <ZobObject Guid="4002377769">
+        <Var Name="Name" value="Canon" />
+        <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+        <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+        <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+        <Var Name="Body type" value="Static" />
+        <Var Name="Active" value="True" />
+        <Var Name="Mass" value="1000.000" />
+        <Components>
+            <Component Type="canon" Guid="2007114130">
+                <Var Name="Enabled" value="True" />
+                <Var Name="Speed" value="0.500" />
+                <Var Name="File" value=";D:\Git\directZob\resources\;bullet.dza;1" />
+            </Component>
+            <Component Type="Rotator" Guid="2007539781">
+                <Var Name="Enabled" value="True" />
+                <Var Name="Rotate X" value="0.000" />
+                <Var Name="Rotate Y" value="5.000" />
+                <Var Name="Rotate Z" value="0.000" />
+            </Component>
+        </Components>
+        <ZobObject Guid="4002486060">
+            <Var Name="Name" value="wolf" />
+            <Var Name="Position" value="0.00000;0.00000;0.00000;1.00000" />
+            <Var Name="Scale" value="1.00000;1.00000;1.00000;1.00000" />
+            <Var Name="Quaternion" value="0.00000;0.00000;0.00000;1.00000" />
+            <Var Name="Body type" value="Static" />
+            <Var Name="Active" value="True" />
+            <Var Name="Mass" value="1000.000" />
+            <Components>
+                <Component Type="Mesh" Guid="2007097752">
+                    <Var Name="Enabled" value="True" />
+                    <Var Name="File" value="Wolf.obj;D:\Git\directZob\resources/;Wolf.obj;1" />
+                    <Var Name="Cull mode" value="Clockwise" />
+                    <Var Name="Lighting" value="Phong" />
+                    <Var Name="Z-buffer mode" value="Buffered" />
+                    <Var Name="Transparent" value="False" />
+                </Component>
+            </Components>
+        </ZobObject>
+    </ZobObject>
+</Scene>

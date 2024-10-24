@@ -90,6 +90,7 @@ public:
 
 	void				UpdateInterface();
 	void				UpdateEngine();
+	void				PostUpdate();
 	void				UpdateLog();
 	void				OnNewScene();
 	void				Unload();
@@ -107,12 +108,13 @@ public:
 	void				CreateLight();
 	void				CreateCamera();
 	void				LoadMesh(std::string& p, std::string& f);
+	void				LoadAsset(std::string& p, std::string& f);
 	void				AddObject();
 	void				ShowHide();
 	void				LoadSprite(std::string& p, std::string& f);
 	void				Duplicate();
 	void				ZoomToSelected();
-
+	void				SaveAsAsset(std::string& p, std::string& f);
 	void				OnPlay();
 	void				OnStop();
 

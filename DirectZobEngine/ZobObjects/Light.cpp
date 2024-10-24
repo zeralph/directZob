@@ -94,9 +94,9 @@ void Light::NewLightConfiguration()
 	}
 }
 
-void Light::Update(float dt)
+void Light::Update(float dt, bool isPlaying)
 {
-	ZobObject::Update(dt);
+	ZobObject::Update(dt, isPlaying);
 	if (m_lightType == eLightType_directional)
 	{
 		m_inFrtustrum = true;

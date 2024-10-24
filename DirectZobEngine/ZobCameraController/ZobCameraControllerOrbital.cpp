@@ -54,7 +54,7 @@ void ZobCameraControllerOrbital::SetTarget(const ZobVector3* t)
 	m_centerOfRotation = t;
 }
 
-void ZobCameraControllerOrbital::PreUpdate(float dt)
+void ZobCameraControllerOrbital::PreUpdate(float dt, bool isPlaying)
 {
 	if (m_zobObject->m_active)
 	{
@@ -72,7 +72,7 @@ void ZobCameraControllerOrbital::PreUpdate(float dt)
 	}
 }
 
-void ZobCameraControllerOrbital::Update(float dt)
+void ZobCameraControllerOrbital::Update(float dt, bool isPlaying)
 {
 	if (m_isFree)
 	{

@@ -271,18 +271,39 @@ void SceneLoader::LoadSceneInternalFromFiles()
 	ParseXml(&doc);
 }
 
-void SceneLoader::LoadAsset(ZobObject* parent, std::string& path, std::string& file)
+ZobObject* SceneLoader::LoadAsset(ZobObject* parent, const std::string& path, const std::string& file)
 {
 	TiXmlDocument doc("Scene");
 	std::string fullPath = path + file;
 	doc.ClearError();
-	doc.LoadFile(fullPath.c_str());
-	LoadAsset(parent, (TiXmlElement*)doc.FirstChild());
+	if (doc.LoadFile(fullPath.c_str()))
+	{
+
+		return LoadAsset(parent, (TiXmlElement*)doc.FirstChild());
+	}
+	else
+	{
+		DirectZob::LogError("Load asset : file '%s' not found", fullPath.c_str());
+	}
+	return NULL;
 }
 
 ZobObject* SceneLoader::LoadAsset(ZobObject* parent, TiXmlElement* node)
 {
-	return LoadZobObject(node, parent, true);
+	if(node != NULL)
+	{
+		ZobObject* z = LoadZobObject(node, parent, true);
+		if (DirectZob::GetInstance()->IsPhysicPlaying())
+		{
+			z->Start();
+		}
+		return z;
+	}
+	else
+	{
+		DirectZob::LogError("Load asset : xml in empty");
+		return NULL;
+	}
 }
 
 const std::string& SceneLoader::GetResourcePath() 

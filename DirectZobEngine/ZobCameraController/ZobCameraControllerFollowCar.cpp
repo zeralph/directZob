@@ -43,7 +43,7 @@ void ZobCameraControllerFollowCar::Init(DirectZobType::sceneLoadingCallback cb)
     m_lastOrientation = m_startTransform.getOrientation();
 }
 
-void ZobCameraControllerFollowCar::Update(float dt)
+void ZobCameraControllerFollowCar::Update(float dt, bool isPlaying)
 {
     Transform parentT = m_zobObject->m_parent->GetPhysicComponent()->GetWorldTransform(); 
     Quaternion q = parentT.getOrientation();
@@ -61,7 +61,7 @@ void ZobCameraControllerFollowCar::Update(float dt)
     m_lastOrientation = q;
 }
 
-void ZobCameraControllerFollowCar::PreUpdate(float dt)
+void ZobCameraControllerFollowCar::PreUpdate(float dt, bool isPlaying)
 {
     if (m_zobObject->m_active)
     {

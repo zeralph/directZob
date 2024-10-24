@@ -187,11 +187,18 @@ void DirectZob::Init(mfb_window* window, int width, int height, bool bEditorMode
 	m_physicStarted = false;
 }
 
+void DirectZob::StartPhysic()
+{ 
+	m_physicStarted = true; 
+	DirectZob::GetInstance()->GetZobObjectManager()->Start();
+}
+
 void DirectZob::StopPhysic(bool reset)
 { 
 	m_physicStarted = false; 
 	if (reset)
 	{
+		DirectZob::GetInstance()->GetZobObjectManager()->Stop();
 		DirectZob::GetInstance()->GetZobObjectManager()->ResetPhysic();
 		m_physicsEngine->ResetAccumulator();
 	}
@@ -208,7 +215,7 @@ int DirectZob::RunInternal(void func(void))
 
 void DirectZob::EditorUpdate()
 {
-	m_zobObjectManager->EditorUpdate();
+	m_zobObjectManager->EditorUpdate(IsPhysicPlaying());
 }
 
 int DirectZob::RunAFrame(DirectZob::engineCallback OnSceneUpdated /*=NULL*/, DirectZob::engineCallback OnQueuing /*=NULL*/)
@@ -249,9 +256,10 @@ int DirectZob::RunAFrame(DirectZob::engineCallback OnSceneUpdated /*=NULL*/, Dir
 		if (cam)
 		{
 			float dt = m_frameTime / 1000.0f;
+			m_zobObjectManager->DeleteMarkedObjects();
 			m_engine->SwapBuffers();
 			bool bPhysicUpdated = false;
-			m_zobObjectManager->PreUpdate(dt);
+			m_zobObjectManager->PreUpdate(dt, m_physicStarted);
 			m_hudManager->UpdateNavigation(dt);
 			m_lightManager->PreUpdate(dt);
 			m_engine->StartDrawingScene();
@@ -270,7 +278,7 @@ int DirectZob::RunAFrame(DirectZob::engineCallback OnSceneUpdated /*=NULL*/, Dir
 			}
 					
 			m_hudManager->UpdateObjects(cam, m_engine, dt);
-			m_zobObjectManager->PostUpdate();
+			m_zobObjectManager->PostUpdate(m_physicStarted);
 			m_engine->ClearBuffer(&c);
 			m_renderTime = m_engine->WaitForRasterizersEnd();
 			//ZobLightManager update is made after resterizers' work because it changes the active lights vectors
@@ -283,11 +291,7 @@ int DirectZob::RunAFrame(DirectZob::engineCallback OnSceneUpdated /*=NULL*/, Dir
 			m_engine->ClearRenderQueues();
 			SaveTime( &tend);
 			m_copyTime = GetDeltaTime_MS(tstart, tend);
-			if (OnQueuing) 
-			{
-				//OnQueuing();
-			}
-			//m_zobObjectManager->PostUpdate();
+			
 			m_zobObjectManager->QueueForDrawing(cam, m_engine);
 			m_hudManager->QueueForDrawing(cam, m_engine);
 			if (m_engine->DrawPhysyicsGizmos())

@@ -28,9 +28,9 @@ class ZobComponentPhysicShape : public ZobComponent
 
 								~ZobComponentPhysicShape() override;
 		void					Init(DirectZobType::sceneLoadingCallback cb) override;
-		void					PreUpdate(float dt) override;
-		void					PostUpdate() override;
-		void					EditorUpdate() override;
+		void					PreUpdate(float dt, bool isPlaying) override;
+		void					PostUpdate(bool isPlaying) override;
+		void					EditorUpdate(bool isPlaying) override;
 		void					DrawGizmos(const Camera* camera, const ZobVector3* position, const ZobVector3* rotation) const override;
 
 	protected:	

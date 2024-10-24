@@ -25,7 +25,7 @@ ZobComponentImage::ZobComponentImage(ZobObject* zobObject, bool bEditorZobCompon
 	m_visible = true;
 	m_componentType = ZobComponentFactory::eComponent_hudImage;
 	//m_varExposer->WrapAction("Add", &ZobComponentImage::AddItem);
-	m_texture.SetFileType(ZobFilePath::eFileType_texture);
+	m_texture.SetFileType(ZobFilePath::eFileType_image);
 	m_varExposer->WrapVariable<bool>("Visible", &m_visible, NULL, false, true);
 	m_varExposer->WrapVariable<float>("X", &m_x, NULL, false, true);
 	m_varExposer->WrapVariable<float>("Y", &m_y, NULL, false, true);
@@ -37,7 +37,7 @@ ZobComponentImage::ZobComponentImage(ZobObject* zobObject, bool bEditorZobCompon
 	Init(NULL);
 }
 
-void ZobComponentImage::PreUpdate(float dt)
+void ZobComponentImage::PreUpdate(float dt, bool isPlaying)
 {
 	if (m_visible)
 	{
@@ -49,7 +49,7 @@ void ZobComponentImage::PreUpdate(float dt)
 	}
 }
 
-void ZobComponentImage::EditorUpdate()
+void ZobComponentImage::EditorUpdate(bool isPlaying)
 {
 	if (!m_image)
 	{

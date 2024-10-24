@@ -11,8 +11,8 @@ public:
     ~ZobCameraControllerFollowCar();
 
     void            Init(DirectZobType::sceneLoadingCallback cb) override;
-    void            Update(float dt) override;
-    void            PreUpdate(float dt) override;
+    void            Update(float dt, bool isPlaying) override;
+    void            PreUpdate(float dt, bool isPlaying) override;
     void            Rotate(float x, float y, float z) override;
     void            Move(float x, float y, float z) override;
     void            DrawGizmos(const Camera* camera, Engine* engine) const override;

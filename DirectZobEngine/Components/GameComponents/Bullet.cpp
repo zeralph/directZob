@@ -1,5 +1,7 @@
 #include "Bullet.h"
 #include "../../ZobObjects/ZobObject.h"
+#include "../../DirectZob.h"
+#include "../../Managers/ZobObjectManager.h"
 #include "../../Misc/ZobVariablesExposer.h"
 Bullet::Bullet(ZobObject* zobObject): ZobComponent(zobObject, false)
 {
@@ -8,6 +10,7 @@ Bullet::Bullet(ZobObject* zobObject): ZobComponent(zobObject, false)
     Init(NULL);
     m_varExposer->WrapVariable<float>("LifeTime", &m_lifeTimeSec, NULL, false, true);
     m_varExposer->WrapVariable<float>("Speed", &m_speed, NULL, false, true);
+    m_varExposer->WrapVariable<float>("Remaining", &m_remainingTime, NULL, true, false);  
 }
 Bullet::~Bullet()
 {
@@ -17,15 +20,31 @@ void Bullet::Init(DirectZobType::sceneLoadingCallback cb)
 {
     ReLoadVariables();
 }
-void Bullet::PreUpdate(float dt)
+void Bullet::Start()
+{
+    m_remainingTime = m_lifeTimeSec;
+}
+void Bullet::PreUpdate(float dt, bool isPlaying)
+{
+    if (isPlaying)
+    {
+        ZobObject* z = GetZobObject();
+        ZobVector3 v = z->GetForward();
+        v.Mul(dt * m_speed);
+        v.Add(&z->GetWorldPosition());
+        z->SetWorldPosition(v.x, v.y, v.z);
+        m_remainingTime -= dt;
+        if (m_remainingTime < 0)
+        {
+            DirectZob::GetInstance()->GetZobObjectManager()->RemoveZobObject(m_zobObject);
+        }
+    }
+}
+void Bullet::PostUpdate(bool isPlaying)
 {
 
 }
-void Bullet::PostUpdate()
-{
-
-}
-void Bullet::EditorUpdate()
+void Bullet::EditorUpdate(bool isPlaying)
 {
 
 }

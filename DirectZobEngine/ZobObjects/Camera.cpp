@@ -254,15 +254,19 @@ void Camera::SetTarget(const ZobVector3* t)
 
 void Camera::Init(DirectZobType::sceneLoadingCallback cb)
 {
+	if (IsEditorObject())
+	{
+		return;
+	}
 	ZobObject::Init(cb);
 	ChangeCameraController(m_nextControlerType, m_type == ZobEntity::ZobType::type_editor);
 	m_zobCameraController->Init(cb);
 }
 
-void Camera::PreUpdate(float dt)
+void Camera::PreUpdate(float dt, bool isPlaying)
 {
-	ZobObject::PreUpdate(dt);
-	m_zobCameraController->PreUpdate(dt);
+	ZobObject::PreUpdate(dt, isPlaying);
+	m_zobCameraController->PreUpdate(dt, isPlaying);
 }
 
 void Camera::Move(float x, float y, float z)
@@ -270,15 +274,15 @@ void Camera::Move(float x, float y, float z)
 	m_zobCameraController->Move(x, y, z);
 }
 
-void Camera::Update(float dt)
+void Camera::Update(float dt, bool isPlaying)
 {
 	if (m_nextControlerType != m_controlerType)
 	{
 		ChangeCameraController(m_nextControlerType, m_type == ZobEntity::ZobType::type_editor);
 		m_controlerType= m_nextControlerType;
 	}
-	m_zobCameraController->Update(dt);
-	ZobObject::Update(dt);
+	m_zobCameraController->Update(dt, isPlaying);
+	ZobObject::Update(dt, isPlaying);
 	UpdateViewProjectionMatrix();
 	if (!DirectZob::GetInstance()->GetEngine()->LockFrustrum())
 	{
@@ -286,9 +290,9 @@ void Camera::Update(float dt)
 	}
 }
 
-void Camera::PostUpdate()
+void Camera::PostUpdate(bool isPlaying)
 {
-	ZobObject::PostUpdate();
+	ZobObject::PostUpdate(isPlaying);
 	//UpdateViewProjectionMatrix();
 	//if (!DirectZob::GetInstance()->GetEngine()->LockFrustrum())
 	//{

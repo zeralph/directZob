@@ -53,11 +53,11 @@ ZobComponentPhysicShape::ZobComponentPhysicShape(ZobObject* zobObject) : ZobComp
 	//ReLoadVariables();
 }
 
-void ZobComponentPhysicShape::PreUpdate(float dt)
+void ZobComponentPhysicShape::PreUpdate(float dt, bool isPlaying)
 {
 }
 
-void ZobComponentPhysicShape::PostUpdate()
+void ZobComponentPhysicShape::PostUpdate(bool isPlaying)
 {
 }
 
@@ -110,7 +110,7 @@ void ZobComponentPhysicShape::Init(DirectZobType::sceneLoadingCallback cb)
 	m_isInit = true;
 }
 
-void ZobComponentPhysicShape::EditorUpdate()
+void ZobComponentPhysicShape::EditorUpdate(bool isPlaying)
 {
 	if (m_isInit && m_collider)
 	{

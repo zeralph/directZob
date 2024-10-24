@@ -21,12 +21,12 @@ void ZobComponentLight::Init(DirectZobType::sceneLoadingCallback cb)
 	}
 }
 
-void ZobComponentLight::PreUpdate(float dt)
+void ZobComponentLight::PreUpdate(float dt, bool isPlaying)
 {
 
 }
 
-void ZobComponentLight::PostUpdate()
+void ZobComponentLight::PostUpdate(bool isPlaying)
 {
 
 }
@@ -36,7 +36,7 @@ void ZobComponentLight::QueueForDrawing(const Camera* camera, Engine* engine)
 
 }
 
-void ZobComponentLight::EditorUpdate()
+void ZobComponentLight::EditorUpdate(bool isPlaying)
 {
 
 }
