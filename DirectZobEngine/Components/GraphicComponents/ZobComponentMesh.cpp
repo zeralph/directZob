@@ -18,7 +18,7 @@ ZobComponentMesh::ZobComponentMesh(ZobObject* zobObject, bool bEditorZobComponen
 	m_meshPath.Reset();
 	m_mesh = NULL;
 	m_meshPath.SetFileType(ZobFilePath::eFileType_mesh);
-	m_varExposer->WrapVariable<ZobFilePath>("File", &m_meshPath, NULL, false, true);
+	m_varExposer->WrapVariable<ZobFilePath>("File", &m_meshPath, &ZobComponentMesh::ChangeMesh, false, true);
 
 	Triangle::RenderOptions::eCullMode cm[3] = { Triangle::RenderOptions::eCullMode_None, Triangle::RenderOptions::eCullMode_ClockwiseFace, Triangle::RenderOptions::eCullMode_CounterClockwiseFace};
 	const char* cmStr[3] = { "None", "Clockwise", "Counter clockwise" };
@@ -156,4 +156,14 @@ bool ZobComponentMesh::LoadMeshInternal()
 		m_meshNbTriangles = 0;
 	}
 	return m_mesh != NULL;
+}
+
+
+void ZobComponentMesh::ChangeMesh(zobId id)
+{
+	ZobComponentMesh* m = ZobEntity::GetEntity<ZobComponentMesh>(id);
+	if (m)
+	{
+		m->LoadMeshInternal();
+	}
 }

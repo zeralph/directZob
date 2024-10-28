@@ -36,7 +36,14 @@ void Canon::PreUpdate(float dt, bool isPlaying)
             
             ZobObject* root = DirectZob::GetInstance()->GetZobObjectManager()->GetRootObject();
             ZobObject* bullet = SceneLoader::LoadAsset(m_zobObject, m_bulletAsset.GetPath(), m_bulletAsset.GetFile());
-            bullet->SetParent(root);
+            if (bullet)
+            {
+                bullet->SetParent(root);
+            }
+            else
+            {
+                DirectZob::LogError("Canon  : cannot load bullet asset");
+            }
         }
     }
 }

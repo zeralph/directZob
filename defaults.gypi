@@ -17,6 +17,7 @@
 					},
                     'defines': [
                         'WINDOWS',
+						'UNICODE',
                     ],
                 },
             ],
@@ -43,7 +44,7 @@
                     'defines': [
                         'LINUX',
                         '__LINUX__',
-                        "_UNICODE", "UNICODE",
+                        '_UNICODE',
                     ],
                 },
             ],

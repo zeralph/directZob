@@ -35,7 +35,8 @@ public:
                                 ~MainWindowInterface() override;
     static MainWindowInterface* GetInstance() { return m_singleton; }
     static void                 OnNewScene();
-    static void                 AddLog(std::string& e);
+    static void                 FlushLog();
+    static void                 AddLog(const Events::event& e);
     static void                 OnSceneLoaded();
     static void                 RefreshCamerasList();
     static void                 UpdateTreeView();

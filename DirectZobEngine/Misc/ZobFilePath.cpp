@@ -10,6 +10,7 @@ ZobFilePath::ZobFilePath()
 	m_buf = NULL;
 	m_bufLen = 0;
 	m_freeBuffer = true;
+	m_fullPath = "";
 	Reset();
 }
 
@@ -17,10 +18,12 @@ ZobFilePath::ZobFilePath(std::string name, std::string path, std::string file, b
 {
 	m_name = name;
 	m_path = path;
+	NormalizePath(m_path);
 	m_file = file;
 	m_buf = NULL;
 	m_bufLen = 0;
 	m_bAbsolute = bAbsolute;
+	m_fullPath = "";
 	if (m_path.length() && m_path[m_path.length()- 1] != '/')
 	{
 		m_path.append("/");
@@ -34,7 +37,8 @@ ZobFilePath::ZobFilePath(std::string name, char* buffer, long len)
 	m_path = "/";
 	m_file = name;
 	m_buf = buffer;
-	m_bufLen = 0;
+	m_bufLen = len;
+	m_fullPath = "";
 	m_bAbsolute = false;
 	m_freeBuffer = false;
 }
@@ -49,10 +53,37 @@ bool ZobFilePath::IsDefined()
 	return m_name.size() && m_path.size() && m_file.size();
 }
 
-void ZobFilePath::ChangePath(std::string& path, std::string& file)
+void ZobFilePath::ChangePath(std::string& path, std::string& file, bool bAbsolute)
 {
+	Reset();
 	m_path = path;
+	NormalizePath(m_path);
 	m_file = file;
+	m_bAbsolute = bAbsolute;
+}
+
+bool ZobFilePath::IsValid()
+{
+	if (m_bufLen > 0 && m_buf != NULL)
+	{
+		return true;
+	}
+	if (SceneLoader::LoadFromArchive())
+	{
+		std::string fp = m_path + m_file;
+		std::filesystem::path pp = std::filesystem::path(fp.c_str());
+		std::filesystem::path p = std::filesystem::weakly_canonical(pp);
+		fp = p.u8string();
+		std::replace(fp.begin(), fp.end(), '\\', '/');
+		return PHYSFS_exists(fp.c_str());
+	}
+	else
+	{
+		std::string f = GetFullPath();
+		std::ifstream infile;
+		infile.open(f, std::ios::in | std::ios::binary);
+		return (infile.good());
+	}
 }
 
 void ZobFilePath::Reset()
@@ -61,27 +92,31 @@ void ZobFilePath::Reset()
 	m_name = "";
 	m_path = ""; 
 	m_file = "";
+	m_fullPath = "";
 	m_bAbsolute = false;
 }
 
 std::string ZobFilePath::GetFullPath()
 {
-	std::string s;
-	if (m_bAbsolute)
+	if (m_fullPath.length() == 0)
 	{
-		s = m_path + m_file;
-	}
-	else
-	{
-		s = std::string(SceneLoader::GetResourcePath());
-		if (s.length() && s[s.length() - 1] != '/')
+		if (m_bAbsolute)
 		{
-			s .append("/");
+			m_fullPath = m_path + m_file;
 		}
-		s.append(m_path);
-		s.append(m_file);
+		else
+		{
+			m_fullPath = std::string(SceneLoader::GetResourcePath());
+			if (m_fullPath.length() && m_fullPath[m_fullPath.length() - 1] != '/')
+			{
+				m_fullPath.append("/");
+			}
+			m_fullPath.append(m_path);
+			m_fullPath.append(m_file);
+		}
 	}
-	return s;
+	return m_fullPath;
+
 }
 
 std::string ZobFilePath::GetFullPathWithoutFile()
@@ -100,6 +135,18 @@ std::string ZobFilePath::GetFullPathWithoutFile()
 	return s;
 }
 
+void ZobFilePath::NormalizePath(std::string& path)
+{
+	if (!path.empty())
+	{
+		std::replace(path.begin(), path.end(), '\\', '/');
+		if (path.length() == 0 || path[path.length() - 1] != '/')
+		{
+			path.append(std::string("/"));
+		}
+	}
+}
+
 std::string ZobFilePath::Serialize()
 {
 	std::string s = m_name;
@@ -109,11 +156,11 @@ std::string ZobFilePath::Serialize()
 	{
 		m_bAbsolute = false;
 		i = rsc.length();
-		m_path = m_path.substr(i, m_path.length()-i-1);
-		if (m_path.length() == 0 || m_path[m_path.length()-1] != '/')
+		m_path = '/' + m_path.substr(i, m_path.length() - i - 1);
+		/*if (m_path.length() == 0 || m_path[m_path.length() - 1] != '/')
 		{
 			m_path.append(std::string("/"));
-		}
+		}*/
 	}
 	s = s.append(";").append(m_path).append(";").append(m_file).append(";").append(m_bAbsolute?"1":"0");
 	return s;
@@ -160,16 +207,6 @@ void ZobFilePath::LoadData()
 	else
 	{
 		std::string f = GetFullPath();
-		/*
-		FILE* fp;
-		fp = fopen(f.c_str(), "r");
-		fseek(fp, 0, SEEK_END);
-		m_bufLen = ftell(fp);
-		rewind(fp);
-		m_buf = (char*)malloc(sizeof(char) * (m_bufLen + 1));
-		fread(m_buf, sizeof(unsigned char), m_bufLen, fp);
-		m_buf[m_bufLen] = '\0';
-		*/
 		std::ifstream infile;
 		infile.open(f, std::ios::in | std::ios::binary);
 		if (infile.good())
@@ -211,6 +248,7 @@ void ZobFilePath::Unserialize(std::string s)
 		if (del1 != std::string::npos)
 		{
 			m_path = s.substr(del1 + 1, del2 - (del1 + 1));
+			NormalizePath(m_path);
 			del3 = s.find(';', del2 + 1);
 			if (del1 != std::string::npos)
 			{

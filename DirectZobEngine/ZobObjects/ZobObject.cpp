@@ -77,7 +77,7 @@ ZobObject::ZobObject(zobId id, TiXmlElement* node, ZobObject* parent)
 	sObjectNumber++;
 	float x, y, z;
 	TiXmlElement* f;
-	DirectZob::LogInfo("ZobObject %i creation", id);
+	DirectZob::LogInfo("ZobObject %llu creation", id);
 	DirectZob::AddIndent();
 	if (!parent && m_name != "root")
 	{

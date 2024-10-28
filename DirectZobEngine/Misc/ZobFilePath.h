@@ -21,13 +21,15 @@ public:
 	ZobFilePath(std::string name, std::string path, std::string file, bool bAbsolute);
 	ZobFilePath(std::string name, char* buffer, long len);
 	~ZobFilePath();
+	static void					NormalizePath(std::string& path);
+	bool						IsValid();
 	bool						IsDefined();
 	std::string					GetFullPath();
 	std::string					GetFullPathWithoutFile();
 	std::string					Serialize();
 	void						Unserialize(std::string s);
 	void						Reset();
-	void						ChangePath(std::string& path, std::string& file);
+	void						ChangePath(std::string& path, std::string& file, bool bAbsolute);
 	
 	eFileType					GetFileType() const { return m_fileType; }
 	void						SetFileType(eFileType t) { m_fileType = t; }
@@ -44,6 +46,7 @@ private:
 	std::string					m_name;
 	std::string					m_path;
 	std::string					m_file;
+	std::string					m_fullPath;
 	bool						m_bAbsolute;
 	eFileType					m_fileType;
 	char*						m_buf;

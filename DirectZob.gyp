@@ -4,10 +4,8 @@
 	],
 	'targets': [
 		{
-			'target_name':
-			'DirectZobEngine',
-			'type':
-			'static_library',
+			'target_name':'DirectZobEngine',
+			'type':'static_library',
 			'dependencies': [
 				'dependencies/minifb/minifb.gyp:minifb',
 				'dependencies/tinyxml/tinyxml.gyp:tinyxml',
@@ -338,10 +336,8 @@
 			],
 		},
 		{
-			'target_name':
-			'DirectZobEditor',
-			'type':
-			'executable',
+			'target_name':'DirectZobEditor',
+			'type':'executable',
 			'dependencies': [
 				'DirectZobEngine',
 			],
@@ -367,10 +363,10 @@
 					'OS=="win"',
 					{
 						'include_dirs': [
-							#'.',
 							'dependencies/wxwidgets/include',
 						],
 						'defines': [
+							'UNICODE',
 						],
 						'link_settings': {
 							# links fbxsdk as dll
@@ -382,9 +378,6 @@
 								'user32.lib',
 								'gdi32.lib',
 							],
-							#		'library_dirs': [
-							#			'/usr/lib',
-							#		],
 						},
 						'copies': [
 							{

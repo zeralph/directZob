@@ -154,7 +154,7 @@ void ZobVariablesExposer::wrapperData::Load(bool callCb)
 	{
 		assert(false);
 	}
-	if (/*callCb && */callback)
+	if (callCb && callback)
 	{
 		((ZobVariablesExposer::wrapperCallback)callback)(id);
 	}

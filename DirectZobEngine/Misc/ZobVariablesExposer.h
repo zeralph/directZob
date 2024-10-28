@@ -242,13 +242,11 @@ public:
 		w.ptr = ptr;
 		w.callback = cb;
 		w.bSave = bSave;
+		w.enumValues.resize(nbParams);
+		w.enumNames.resize(nbParams);
 		for (int i = 0; i < nbParams; i++)
 		{
 			int v = (int)enumValues[i];
-			//E val = E[i];
-			//int v = (int)ptr[i];
-			//E e0 = static_cast<std::underlying_type<E>::type>(0);
-			//E e1 = static_cast<std::underlying_type<E>::type>(1);
 			w.enumValues.push_back(v);
 			w.enumNames.push_back(enumNames[i]);
 		}

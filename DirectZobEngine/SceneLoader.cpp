@@ -24,7 +24,7 @@ void SceneLoader::Update()
 	{
 		m_loadNextScene = false;
 		m_path = m_nextScenePath;
-		CleanPath(m_path);
+		ZobFilePath::NormalizePath(m_path);
 		m_file = m_nextSceneName;
 		if(m_loadFromArchive)
 		{
@@ -398,6 +398,7 @@ void SceneLoader::SaveScene(std::string &path, std::string &file)
 	std::string fullPath;
 	m_file = file;
 	m_path = path;
+	ZobFilePath::NormalizePath(m_path);
 	fullPath = path + file;
 	TiXmlDocument doc(XML_ELEMENT_SCENE);
 	TiXmlDeclaration* decl = new TiXmlDeclaration("1.0", "", "");
@@ -454,11 +455,3 @@ bool SceneLoader::SaveZobObjectRecusrive(TiXmlNode* node, ZobObject* z)
 	}
 }
 
-void SceneLoader::CleanPath(std::string& p)
-{
-	std::replace(p.begin(), p.end(), '\\', '/');
-	if (p[p.length() - 1] != '/')
-	{
-		p.append("/");
-	}
-}

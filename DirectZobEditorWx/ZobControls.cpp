@@ -504,7 +504,7 @@ void ZobPathControl::OnOpen(wxCommandEvent& event)
 	m_path = std::string(openFileDialog.GetDirectory().mb_str()) + '\\';
 	m_file = std::string(openFileDialog.GetFilename().mb_str());
 	m_fullPath = m_path + m_file;
-	zfp->ChangePath(m_path, m_file);
+	zfp->ChangePath(m_path, m_file, true);
 	if (m_vars->callback)
 	{
 		m_vars->callback(m_vars->id);

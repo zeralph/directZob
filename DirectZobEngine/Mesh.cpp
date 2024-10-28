@@ -180,8 +180,6 @@ Mesh::Mesh(const std::string& name, ZobComponent* zm)
 	m_triangleUvs = NULL;
 	m_triangleColors = NULL;
 	m_name = name;
-	m_fileName = emptyStr;
-	m_path = emptyStr;
 	m_size = 0;
 	DirectZob::RemoveIndent();
 }
@@ -189,6 +187,12 @@ Mesh::Mesh(const std::string& name, ZobComponent* zm)
 Mesh::Mesh(ZobFilePath* zfp, ZobComponent* zm):Mesh(zfp->GetName(), zm)
 {
 	DirectZob::AddIndent();
+	if (!zfp->IsValid())
+	{
+		DirectZob::LogError("[MESH] / '%s' not found", zfp->GetFullPath().c_str());
+		DirectZob::RemoveIndent();
+		return;
+	}
 	std::string fullPath = zfp->GetFullPath();
 	if (fullPath.length())
 	{ 
@@ -245,8 +249,6 @@ Mesh::Mesh(std::string& name, tinygltf::Model& model, tinygltf::Mesh& mesh, ZobM
 	m_triangleUvs = NULL;
 	m_triangleColors = NULL;
 	m_name = name;
-	m_fileName = emptyStr;
-	m_path = emptyStr;
 	m_size = 0;
 	m_name = name;
 	DirectZob::LogInfo("create GlTF submesh %s", name.c_str());
@@ -412,8 +414,6 @@ Mesh::Mesh(std::string& name, tinygltf::Model& model, tinygltf::Mesh& mesh, ZobC
 	m_triangleUvs = NULL;
 	m_triangleColors = NULL;
 	m_name = name;
-	m_fileName = emptyStr;
-	m_path = emptyStr;
 	m_size = 0;
 	m_name = name;
 	DirectZob::LogInfo("create GlTF submesh %s", name.c_str());

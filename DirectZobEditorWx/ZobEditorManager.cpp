@@ -40,7 +40,7 @@ void ZobEditorManager::UpdateInterface()
 	if(m_init)
 	{
 		MainWindowInterface::UpdateControls();	
-		MainWindowInterface::AddLog(m_logTmpData);
+		MainWindowInterface::FlushLog();
 	}
 }
 
@@ -591,18 +591,13 @@ void ZobEditorManager::UpdateGizmos()
 
 void ZobEditorManager::UpdateLog()
 {
-	//m_logTmpData = "";
-	std:stringstream ss;
 	std::vector<Events::event>* ev = DirectZob::GetInstance()->GetEventManager()->GetEventsStruct();
 	for (std::vector<Events::event>::const_iterator iter = ev->begin(); iter != ev->end(); iter++)
 	{
-		ss << (*iter).m << "\n";
-		//m_logTmpData += (*iter);
-		//m_logTmpData += ('\n');
-		//MainWindowInterface::AddLog(*iter);
+		MainWindowInterface::AddLog(*iter);
 	}
 	DirectZob::GetInstance()->GetEventManager()->ClearEvents();
-	m_logTmpData = ss.str();
+	
 }
 
 void ZobEditorManager::OnNewScene()
@@ -901,7 +896,7 @@ void ZobEditorManager::LoadMesh(std::string& p, std::string& f)
 {
 	std::string name = std::string("");
 	ZobObject* z = DirectZob::GetInstance()->GetZobObjectManager()->CreateZobObject(m_selectedObject, name);
-	ZobFilePath zfp = ZobFilePath(f, p, f, false);
+	ZobFilePath zfp = ZobFilePath(f, p, f, true);
 	z->LoadMesh(zfp, false);
 	m_selectedObject = z;
 }

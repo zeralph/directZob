@@ -428,10 +428,36 @@ void MainWindowInterface::BuildObjectTree(ZobObject* z, wxTreeItemId node)
         }
     }
  }
-
-void MainWindowInterface::AddLog(std::string& s)
+void MainWindowInterface::FlushLog()
 {
-    /*
+    std::vector<Events::event>* ev = DirectZob::GetInstance()->GetEventManager()->GetEventsStruct();
+    if (ev->size())
+    {
+        for (std::vector<Events::event>::const_iterator iter = ev->begin(); iter != ev->end(); iter++)
+        {
+
+            switch ((*iter).t)
+            {
+            case Events::LogError:
+                m_singleton->m_log->BeginTextColour(wxColour(255, 0, 0));
+                break;
+            case Events::LogWarning:
+                m_singleton->m_log->BeginTextColour(wxColour(128, 128, 0));
+                break;
+            default:
+                m_singleton->m_log->BeginTextColour(wxColour(0, 0, 200));
+                break;
+            }
+            m_singleton->m_log->WriteText((*iter).m);
+            m_singleton->m_log->Newline();
+        }
+        DirectZob::GetInstance()->GetEventManager()->ClearEvents();
+        m_singleton->m_log->ScrollIntoView(m_singleton->m_log->GetCaretPosition(), WXK_PAGEDOWN);
+    }
+}
+void MainWindowInterface::AddLog(const Events::event &e)
+{
+    return;
     switch (e.t)
     {
     case Events::LogError:
@@ -447,12 +473,13 @@ void MainWindowInterface::AddLog(std::string& s)
     m_singleton->m_log->WriteText(e.m);
     m_singleton->m_log->Newline();
     m_singleton->m_log->ScrollIntoView(m_singleton->m_log->GetCaretPosition(), WXK_PAGEDOWN);
-    */
+    /*
     if (s.length() > 0)
     {
         m_singleton->m_log->AppendText(s);
         m_singleton->m_log->AppendText("\n");
     }
+    */
 }
 
 void MainWindowInterface::UpdateControls()

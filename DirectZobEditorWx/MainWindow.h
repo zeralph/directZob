@@ -26,7 +26,7 @@
 #include <wx/combobox.h>
 #include <wx/button.h>
 #include <wx/toolbar.h>
-#include <wx/textctrl.h>
+#include <wx/richtext/richtextctrl.h>
 #include <wx/splitter.h>
 #include <wx/scrolwin.h>
 #include <wx/notebook.h>
@@ -64,6 +64,7 @@ class MainWindow : public wxFrame
 		wxToggleButton* m_LR;
 		wxButton* m_Snap;
 		wxPanel* m_panel10;
+		wxRichTextCtrl* m_log;
 		wxPanel* m_panelRight;
 		wxNotebook* m_notebookInspector;
 		wxScrolledWindow* m_panelInspector;
@@ -121,7 +122,6 @@ class MainWindow : public wxFrame
 	public:
 		wxTreeCtrl* m_treeNode;
 		wxPanel* m_renderPanel;
-		wxTextCtrl* m_log;
 
 		MainWindow( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 1397,762 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
 

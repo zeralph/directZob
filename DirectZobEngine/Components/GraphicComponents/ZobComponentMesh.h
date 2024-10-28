@@ -27,6 +27,7 @@ public:
 	void						SetVisible(bool v);
 	Triangle::RenderOptions*	GetRenderOptions() { return &m_renderOptions; }
 	const Mesh*					GetMesh() const { return m_mesh; }
+	static void					ChangeMesh(zobId id);
 private:
 								ZobComponentMesh(ZobObject* zobObject, bool bEditorZobComponent);
 	bool						LoadMeshInternal();

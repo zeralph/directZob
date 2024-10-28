@@ -39,8 +39,6 @@ public:
 	const std::vector<Triangle>*		GetTriangles() const { return &m_triangles; }
 	const uint*							GetIndices() const { return m_indices; }
 	const std::string&					GetName() const { return m_name; }
-	const std::string&					GetPath() const { return m_path; }
-	const std::string&					GetFileName() const { return m_fileName; }
 	bool								IsDrawn() const;
 	const int							GetNbSubMeshes() const { return m_subMeshes.size(); }
 	const Mesh*							GetSubMesh(int idx) const { return (m_subMeshes.size()>idx)?m_subMeshes.at(idx):NULL; }
@@ -79,8 +77,6 @@ protected:
 	bool m_visible;
 	bool m_hasNormals;
 	std::string m_name;
-	std::string m_fileName;
-	std::string m_path;
 	ZobVector3 m_minBoundingBox;
 	ZobVector3 m_maxBoundingBox;
 	ZobVector3 m_pivot;
